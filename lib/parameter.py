@@ -15,8 +15,8 @@ for the Parameter:
         self.min = min
         self.max = max
         self.expr = expr
-        self.uncertainty = 0.0
-        self.correlation = None
+        self.stderr = 0.0
+        self.correl = None
 
     def __repr__(self):
         s = []
@@ -29,5 +29,3 @@ for the Parameter:
             s.append("expr='%s'" % (self.expr))
 
         return "<Parameter %s>" % ', '.join(s)
-
-
