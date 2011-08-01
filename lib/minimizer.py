@@ -29,13 +29,10 @@ class Minimizer(object):
         """
         wrapper function for least-squares fit
         """
-        # unwrap parameters...
-        print 'F Wrapper: ', vars
+        # set parameter values
+        for varname, val in zip(self.var_map, vars):
+            self.params[varname].value = val
 
-        for varname, value in zip(self.var_map, vars):
-            self.params[varname].value = value
-
-        current_params = {}
         for name, par in self.params.items():
             val = par.value
             if par.expr is not None:
@@ -45,12 +42,10 @@ class Minimizer(object):
             if par.max is not None:
                 val = min(val, par.max)
 
-            current_params[name] = val
+            self.params[name].value = val
 
-            # print "Param: %s: %s" % (name, repr(val))
-        # call user-function
-        return self.userfcn(current_params, *self.userargs)
-    
+        return self.userfcn(self.params, *self.userargs)
+
     def runfit(self):
         """run the actual fit."""
         lsargs = {'full_output': 1, 'maxfev': 10000000,
@@ -64,16 +59,36 @@ class Minimizer(object):
                 self.var_map.append(pname)
                 vars.append(param.value)
         
-        self.output = leastsq(self.func_wrapper, vars, **lsargs)
+        lsout = leastsq(self.func_wrapper, vars, **lsargs)
+        vbest, cov, infodict, errmsg, ier = lsout
+            
+        if cov is not None:
+            resid = self.func_wrapper(vbest)
+            cov = cov * (resid**2).sum()/(len(resid)-len(vbest))
+
+        self.nfev =  infodict['nfev']
+        self.errmsg = errmsg
+        
+        for par in self.params.values():
+            par.stderr = 0
+            par.correl = None
+
+        sqrt = numpy.sqrt
+        
+        for ivar, varname in enumerate(self.var_map):
+            par = self.params[varname]
+            par.stderr = sqrt(cov[ivar, ivar])
+            par.correl = {}
+            for jvar, varn2 in enumerate(self.var_map):
+                if jvar != ivar:
+                    par.correl[varn2] = cov[ivar, jvar]/( sqrt(cov[ivar, ivar]) *
+                                                          sqrt(cov[jvar, jvar]))
 
 
 def minimize(fcn, params, args=None, **kws):
-    print 'Minimize! '
-    for nam, par in params.items():
-        print nam, par
-    print '-------------'
     m = Minimizer(userfcn=fcn, params=params, userargs=args)
     m.runfit()
+    return m
 
 # lsout = leastsq(misfit, vinit, args=(x, data), full_output=1,
 #                 maxfev=1000000, xtol=1.e-4, ftol=1.e-4)
