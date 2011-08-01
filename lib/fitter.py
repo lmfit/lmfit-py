@@ -1,6 +1,8 @@
 import pylab
 from numpy import linspace, sin, exp, random, sqrt, pi, sign
-from scipy.optimize import leastsq, curve_fit
+from scipy.optimize import leastsq
+
+# , curve_fit
 
 ## Generating noisy data to fit
 n = 2500
@@ -8,10 +10,10 @@ xmin = 0.
 xmax = 250.0
 
 vtrue = [14.0,  4.5, 0.123456, 0.010]
-vinit = [5,  2.2,   0.0, 1.e-7]
+vinit = [1.1,    1.2,   0.0, 0.001]
 
 x     = linspace(xmin, xmax, n)
-noise = random.normal(scale=3.5, size=n)
+noise = random.normal(scale=0.25, size=n)
 
 def model(x, *vars):
     amp, period, shift, decay = vars
@@ -20,6 +22,7 @@ def model(x, *vars):
     return amp*sin(shift + x/period) * exp(-x*x*decay*decay)
 
 def misfit(vars, x, data):
+    print 'misfit vars : ', vars
     return data - model(x, *vars)
 
 data  = model(x, *vtrue) + noise

@@ -2,17 +2,16 @@
 Fit Parameter for making Fitting Models
 """
 
-class FitParameter(object):
+class Parameter(object):
     """A FitParameter is the basic Parameter going
 into Fit Model.  The FitParameter holds many attributes
 for the Parameter:
-  name, value, max, min value, constraint expression.
+  value, vary, max_value, min_value, constraint expression.
     """
-    def __init__(self, name, value=None, float=True,
+    def __init__(self, value=None, vary=True,
                  min=None, max=None, expr=None, **kws):
-        self.name = name
         self.value = value
-        self.float = float
+        self.vary = vary
         self.min = min
         self.max = max
         self.expr = expr
@@ -20,10 +19,15 @@ for the Parameter:
         self.correlation = None
 
     def __repr__(self):
-        sout = "'%s', value=%s" % (self.name, repr(self.value))
-        sout = "%s, bounds=[%s:%s]" % (sout, repr(self.min),
-                                        repr(self.max))
+        s = []
+        vstr = 'fixed'
+        if self.vary:
+            vstr = 'varied'
+        s.append("value=%s (%s)" % (repr(self.value), vstr))
+        s.append("bounds=[%s:%s]" % (repr(self.min),repr(self.max)))
         if self.expr is not None:
-            sout = "%s, expr='%s'" % (sout, self.expr)
+            s.append("expr='%s'" % (self.expr))
 
-        return "<FitParameter %s>" % sout
+        return "<Parameter %s>" % ', '.join(s)
+
+
