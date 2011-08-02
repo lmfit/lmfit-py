@@ -33,70 +33,104 @@ def check_ast_errors(error):
 
 class Minimizer(object):
     """general minimizer"""
-    def __init__(self, userfcn=None, userargs=None,
-                 params=None, minimizer='leastsq'):
+    def __init__(self, userfcn=None, userargs=None, userkws=None,
+                 params=None, engine='leastsq', **kws):
         self.userfcn = userfcn
         self.userargs = userargs
         if self.userargs is None:
             self.userargs = []
+
+        self.userkws = userkws
+        if self.userkws is None:
+            self.userkws = {}
+
         self.params = params
         self.var_map = []
-        self.output = None
+        self.out = None
+        self.engine = engine
         self.asteval = Interpreter()
 
-    def func_wrapper(self, vars):
+    def func_wrapper(self, fvars):
         """
         wrapper function for least-squares fit
         """
         # set parameter values
-        for varname, val in zip(self.var_map, vars):
+        for varname, val in zip(self.var_map, fvars):
             self.params[varname].value = val
 
-        asteval = self.asteval
         for name, par in self.params.items():
             val = par.value
             if par.expr is not None:
-                val = asteval.interp(par.ast)
-                check_ast_errors(asteval.error)
+                val = self.asteval.interp(par.ast)
+                check_ast_errors(self.asteval.error)
             if par.min is not None:
                 val = max(val, par.min)
             if par.max is not None:
                 val = min(val, par.max)
 
             self.params[name].value = val
-            asteval.symtable[name] = val
+            self.asteval.symtable[name] = val
 
-        return self.userfcn(self.params, *self.userargs)
+        return self.userfcn(self.params, *self.userargs, **self.userkws)
 
-    def runfit(self):
-        """run the actual fit."""
-        lsargs = {'full_output': 1, 'maxfev': 10000000,
-                  'xtol': 1.e-7, 'ftol': 1.e-7}
+    def _prep_fit(self):
+        """common pre-fit code"""
 
         # determine which parameters are actually variables
+        # and which are defined expressions.
+        
         self.var_map = []
-        vars = []
-        asteval = self.asteval
-        for pname, param in self.params.items():
+        self.vars = []
+        for name, param in self.params.items():
             if param.expr is not None:
-                param.ast = asteval.compile(param.expr)
-                check_ast_errors(asteval.error)
+                param.ast = self.asteval.compile(param.expr)
+                check_ast_errors(self.asteval.error)
                 param.vary = False
             if param.vary:
-                self.var_map.append(pname)
-                vars.append(param.value)
-            asteval.symtable[pname] = param.value
+                self.var_map.append(name)
+                self.vars.append(param.value)
+            self.asteval.symtable[name] = param.value
+        self.nvarys = len(self.vars)
 
-        lsout = leastsq(self.func_wrapper, vars, **lsargs)
+        
+    def fit_wrapper(self, engine=None):
+        """
+        eventually, we may want to support multiple fitting engines.
+        """
+        if engine is not None:
+            self.engine = engine
+
+        if self.engine == 'leastsq':
+            self.fit_leastsq()
+        else:
+            print('Unknown fit engine')
+            
+    def fit(self):
+        ""
+        "perform fit with scipy optimize leastsq (Levenberg-Marquardt)
+        """
+        
+        self._prep_fit()
+        lsargs = {'full_output': 1, 'xtol': 1.e-7, 'ftol': 1.e-7,
+                  'maxfev': 600 * (self.nvarys + 1)}
+        
+        lsout = leastsq(self.func_wrapper, self.vars, **lsargs)
         vbest, cov, infodict, errmsg, ier = lsout
 
-        if cov is not None:
-            resid = self.func_wrapper(vbest)
-            cov = cov * (resid**2).sum()/(len(resid)-len(vbest))
-
-        self.nfev =  infodict['nfev']
+        self.ier = ier
         self.errmsg = errmsg
+        self.nfev =  infodict['nfev']
+        self.residual = resid = infodict['fvec']
+        nobs = len(resid)
+        
+        sum_sqr = (resid**2).sum()
+        self.chisqr = sum_sqr
+        self.nfree = (nobs - self.nvarys)
+        self.redchi = sum_sqr / self.nfree
 
+        if cov is not None:
+            cov = cov * sum_sqr / self.nfree
+        
         for par in self.params.values():
             par.stderr = 0
             par.correl = None
@@ -113,7 +147,8 @@ class Minimizer(object):
                                                          sqrt(cov[jvar, jvar]))
 
 
-def minimize(fcn, params, args=None, **kws):
-    m = Minimizer(userfcn=fcn, params=params, userargs=args)
-    m.runfit()
-    return m
+def minimize(fcn, params, args=None, kws=None, **extrakws):
+    fitter = Minimizer(userfcn=fcn, params=params,
+                  userargs=args, userkws=kws, **extrakws)
+    fitter.fit()
+    return fitter
