@@ -10,9 +10,26 @@ Parameter list....
 
 """
 
-import numpy
+from numpy import sqrt
 from asteval import Interpreter
 from scipy.optimize import leastsq
+
+class ExpressionException(Exception):
+    """Expression Syntax Exception"""
+    def __init__(self, msg):
+        Exception.__init__(self)
+        self.msg = msg
+
+    def __str__(self):
+        return "\n%s" % (self.msg)
+
+def check_ast_errors(error):
+    if len(error) > 0:
+        msg = []
+        for err in error:
+            msg = '\n'.join(err.get_error())
+        raise ExpressionException(msg)
+
 
 class Minimizer(object):
     """general minimizer"""
@@ -25,7 +42,7 @@ class Minimizer(object):
         self.params = params
         self.var_map = []
         self.output = None
-        self.interpreter = Interpreter()
+        self.asteval = Interpreter()
 
     def func_wrapper(self, vars):
         """
@@ -35,19 +52,21 @@ class Minimizer(object):
         for varname, val in zip(self.var_map, vars):
             self.params[varname].value = val
 
+        asteval = self.asteval
         for name, par in self.params.items():
             val = par.value
             if par.expr is not None:
-                print '%s / Needs Expr Eval / %s' % (name, par.expr)
+                val = asteval.interp(par.ast)
+                check_ast_errors(asteval.error)
             if par.min is not None:
                 val = max(val, par.min)
             if par.max is not None:
                 val = min(val, par.max)
 
             self.params[name].value = val
+            asteval.symtable[name] = val
 
         return self.userfcn(self.params, *self.userargs)
-
 
     def runfit(self):
         """run the actual fit."""
@@ -57,17 +76,17 @@ class Minimizer(object):
         # determine which parameters are actually variables
         self.var_map = []
         vars = []
-
+        asteval = self.asteval
         for pname, param in self.params.items():
+            if param.expr is not None:
+                param.ast = asteval.compile(param.expr)
+                check_ast_errors(asteval.error)
+                param.vary = False
             if param.vary:
                 self.var_map.append(pname)
                 vars.append(param.value)
-            self.interpreter.symtable[pname] = param.value
+            asteval.symtable[pname] = param.value
 
-            if param.expr is not None:
-                if not self.use_asteval:
-                    self.init_asteval()
-                par.ast = None # ....
         lsout = leastsq(self.func_wrapper, vars, **lsargs)
         vbest, cov, infodict, errmsg, ier = lsout
 
@@ -81,8 +100,8 @@ class Minimizer(object):
         for par in self.params.values():
             par.stderr = 0
             par.correl = None
-
-        sqrt = numpy.sqrt
+            if hasattr(par, 'ast'):
+                delattr(par, 'ast')
 
         for ivar, varname in enumerate(self.var_map):
             par = self.params[varname]
@@ -90,14 +109,11 @@ class Minimizer(object):
             par.correl = {}
             for jvar, varn2 in enumerate(self.var_map):
                 if jvar != ivar:
-                    par.correl[varn2] = cov[ivar, jvar]/( sqrt(cov[ivar, ivar]) *
-                                                          sqrt(cov[jvar, jvar]))
+                    par.correl[varn2] = cov[ivar, jvar]/(sqrt(cov[ivar, ivar])*
+                                                         sqrt(cov[jvar, jvar]))
 
 
 def minimize(fcn, params, args=None, **kws):
     m = Minimizer(userfcn=fcn, params=params, userargs=args)
     m.runfit()
     return m
-
-# lsout = leastsq(misfit, vinit, args=(x, data), full_output=1,
-#                 maxfev=1000000, xtol=1.e-4, ftol=1.e-4)
