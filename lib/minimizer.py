@@ -11,6 +11,7 @@ Parameter list....
 """
 
 import numpy
+from asteval import Interpreter
 from scipy.optimize import leastsq
 
 class Minimizer(object):
@@ -24,6 +25,7 @@ class Minimizer(object):
         self.params = params
         self.var_map = []
         self.output = None
+        self.interpreter = Interpreter()
 
     def func_wrapper(self, vars):
         """
@@ -46,6 +48,7 @@ class Minimizer(object):
 
         return self.userfcn(self.params, *self.userargs)
 
+
     def runfit(self):
         """run the actual fit."""
         lsargs = {'full_output': 1, 'maxfev': 10000000,
@@ -54,27 +57,33 @@ class Minimizer(object):
         # determine which parameters are actually variables
         self.var_map = []
         vars = []
+
         for pname, param in self.params.items():
             if param.vary:
                 self.var_map.append(pname)
                 vars.append(param.value)
-        
+            self.interpreter.symtable[pname] = param.value
+
+            if param.expr is not None:
+                if not self.use_asteval:
+                    self.init_asteval()
+                par.ast = None # ....
         lsout = leastsq(self.func_wrapper, vars, **lsargs)
         vbest, cov, infodict, errmsg, ier = lsout
-            
+
         if cov is not None:
             resid = self.func_wrapper(vbest)
             cov = cov * (resid**2).sum()/(len(resid)-len(vbest))
 
         self.nfev =  infodict['nfev']
         self.errmsg = errmsg
-        
+
         for par in self.params.values():
             par.stderr = 0
             par.correl = None
 
         sqrt = numpy.sqrt
-        
+
         for ivar, varname in enumerate(self.var_map):
             par = self.params[varname]
             par.stderr = sqrt(cov[ivar, ivar])
