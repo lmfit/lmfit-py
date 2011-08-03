@@ -1,19 +1,19 @@
-.. lmfitpy documentation master file, 
+.. lmfit documentation master file, 
 
 Non-Linear Least-Square Minimization for Python
 ================================================
 
-The lmfit-py Python package provides a simple, flexible interface to
-non-linear least-squares fitting.  Lmfit-py uses the Levenburg-Marquardt
+The lmfit Python package provides a simple, flexible interface to
+non-linear least-squares fitting.  LMFIT uses the Levenburg-Marquardt
 from MINPACK-1 as implemented in scipy.optimize.leastsq.  While that
 function provides the core numerical routine for non-linear least-squares
-minimization, the lmfit-py packaage adds a few simple conveniences.
+minimization, the lmfit packaage adds a few simple conveniences.
 
 For any least-squares minimization, the programmer must provide a function
 that takes a set of values for the variables in the fit, and produces the
 residual function to be minimized in the least-squares sense. 
 
-The lmfit-py package allows models to be written in terms of Parameters,
+The lmfit package allows models to be written in terms of Parameters,
 which are extensions of simple numerical variables with the following
 properties:
 
@@ -30,7 +30,7 @@ or what constraints are placed on the fit.  The programmer can write a
 fairly general model, and allow a user of the model to change what is
 varied and what constraints are placed on the model.
 
-In addition, lmfit-py calculates are reports the estimated uncertainties
+In addition, lmfit calculates are reports the estimated uncertainties
 and correlation between fitted variables. 
 
 .. toctree::
