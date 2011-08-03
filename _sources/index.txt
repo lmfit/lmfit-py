@@ -41,4 +41,3 @@ and correlation between fitted variables.
    outputs
    constraints
 
-

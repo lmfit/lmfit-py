@@ -48,7 +48,8 @@
   <ul>
 <li><a class="reference internal" href="#">Non-Linear Least-Squares Fitting with lmfit-py</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
-<li><a class="reference internal" href="#examples">Examples</a></li>
+<li><a class="reference internal" href="#using-parameters">Using Parameters</a></li>
+<li><a class="reference internal" href="#the-parameter-class">The <tt class="docutils literal"><span class="pre">Parameter</span></tt> class</a></li>
 </ul>
 </li>
 </ul>
@@ -87,12 +88,140 @@
             
   <div class="section" id="non-linear-least-squares-fitting-with-lmfit-py">
 <h1>Non-Linear Least-Squares Fitting with lmfit-py<a class="headerlink" href="#non-linear-least-squares-fitting-with-lmfit-py" title="Permalink to this headline">¶</a></h1>
+<p>The lmfit package is designed to provide a simple way to build complex
+fitting models and apply them to real data.   This chapter describes how to
+set up and perform simple fits, but does assume some basic knowledge of
+Python, Numpy, and modeling data.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>To model data in the least-squares sense, the most important step is
+writing a function that takes the values of the fitting variables and
+calculates a residual function (data-model) that is to be minimized in the
+least-squares sense</p>
+<div class="math">
+<p><img src="_images/math/0999ab8f1f536075a4ce7cab471c891041d7ac6c.png" alt="\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}" /></p>
+</div><p>where <img class="math" src="_images/math/46c77f95690c67f66ff8f15c8b7b287fc72ddb51.png" alt="y_i^{\rm meas}"/> is the set of measured data, <img class="math" src="_images/math/5701af25a70669f531ef4c956d9f8d6227175071.png" alt="y_i^{\rm
+model}({\bf{v}})"/> is the model calculation, <img class="math" src="_images/math/83f0be20c5972fb3136e8e37f24ac4a6cce2fbf4.png" alt="{\bf{v}}"/> is the set of
+variables in the model to be optimized in the fit, and <img class="math" src="_images/math/319593f7ae7122d7910bdf87a156b25f7588f1ad.png" alt="\epsilon_i"/>
+is the estimated uncertainty in the data.</p>
+<p>In a traditional non-linear fit, one must write a function that takes the
+variable values and calculates the residual <img class="math" src="_images/math/e5ba98e136ed2f40b3c5119abb1d1b9719da124f.png" alt="y^{\rm meas}_i -
+y_i^{\rm model}({\bf{v}})"/>, perhaps something like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">phaseshift</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">freq</span>  <span class="o">+</span> <span class="n">phaseshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="examples">
-<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
-<p>A simple example ...</p>
+<p>To perform the minimization with scipy, one would do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
+
+<span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Though in python, this is not terribly different from how one would do the
+same fit in C or Fortran.</p>
+</div>
+<div class="section" id="using-parameters">
+<h2>Using Parameters<a class="headerlink" href="#using-parameters" title="Permalink to this headline">¶</a></h2>
+<p>The challenges in the approach above approach are that</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li>The user has to keep track of the order of the variables, and their
+meaning -- vars[2] is the frequency.</li>
+<li>If the user wants to fix the phase-shift (<em>not</em> vary it in the fit),
+the residual function has to be altered.  While reasonable for simple
+cases, this quickly becomes significant work.</li>
+<li>There is no way to put bounds on values for the variables, or enforce
+mathematical relationships between the variables.</li>
+</ol>
+</div></blockquote>
+<p>LMFIT is designed to void these shortcomings.</p>
+<p>The key idea of LMFIT is to use a python dictionary of <cite>Parameters</cite>, which
+have more attributes than simply their value.  The above example would be
+translated to look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameter</span>
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">pshift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;phase&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">freq</span>  <span class="o">+</span> <span class="n">pshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;amp&#39;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+          <span class="s">&#39;decay&#39;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">),</span>
+          <span class="s">&#39;phase&#39;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span>
+          <span class="s">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)}</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>So far, this simply looks like it replaced a list of values with a
+dictionary.  But Parameters objects can hold additional attributes to
+modify the value during the fit.  For example, Parameters can be fixed or
+bounded:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;amp&#39;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+          <span class="s">&#39;decay&#39;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span>
+          <span class="s">&#39;phase&#39;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">),</span>
+          <span class="s">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)}</span>
+</pre></div>
+</div>
+<p>Now the fit will <strong>not</strong> vary the amplitude parameter, and will also impose
+a lower bound on the decay factor and an upper bound on the frequency.
+Importantly, the residual function remains unchanged.</p>
+</div>
+<div class="section" id="the-parameter-class">
+<h2>The <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> class<a class="headerlink" href="#the-parameter-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Parameter">
+<em class="property">class </em><tt class="descname">Parameter</tt><big>(</big><em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a Parameter object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> -- the numerical value for the parameter</li>
+<li><strong>vary</strong> (boolean (<tt class="xref docutils literal"><span class="pre">True</span></tt>/<tt class="xref docutils literal"><span class="pre">False</span></tt>)) -- whether to vary the parameter or not.</li>
+<li><strong>min</strong> -- lower bound for value (<tt class="xref docutils literal"><span class="pre">None</span></tt> = no lower bound).</li>
+<li><strong>max</strong> -- upper bound for value (<tt class="xref docutils literal"><span class="pre">None</span></tt> = no upper bound).</li>
+<li><strong>name</strong> (<tt class="xref docutils literal"><span class="pre">None</span></tt> or string -- will be overwritten during fit if <tt class="xref docutils literal"><span class="pre">None</span></tt>.) -- parameter name</li>
+<li><strong>expr</strong> (<tt class="xref docutils literal"><span class="pre">None</span></tt> or string) -- mathematical expression to use to evaluate value during fit.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Each of these inputs is turned into an attribute of the same name.   As
+above, one hands a dictionary of Parameters to the fitting routines.   The
+name for the Parameter will be set to be consistent</p>
+<p>After a fit, a Parameter for a fitted variable (ie with vary = <tt class="xref docutils literal"><span class="pre">True</span></tt>)
+will have the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> attribute holding the best-fit value, and may
+(depending on the success of the fit) have obtain additional attributes.</p>
+<dl class="attribute">
+<dt id="stderr">
+<tt class="descname">stderr</tt><a class="headerlink" href="#stderr" title="Permalink to this definition">¶</a></dt>
+<dd><p>the estimated standard error for the best-fit value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="correl">
+<tt class="descname">correl</tt><a class="headerlink" href="#correl" title="Permalink to this definition">¶</a></dt>
+<dd><p>a dictionary of the correlation with the other fitted variables in the
+fit, of the form  `  {'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`</p>
+</dd></dl>
+
 </div>
 </div>
 
