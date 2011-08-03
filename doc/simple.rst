@@ -143,3 +143,9 @@ will have the :attr:`value` attribute holding the best-fit value, and may
    fit, of the form  `  {'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
 
 
+The :attr:`expr` attribute can contain a mathematical expression that will
+be used to compute the value for the Parameter at each step in the fit.
+See :ref:`math-constraints-label` for more details and examples of this
+feature.
+
+.. _math-constraints-label:
