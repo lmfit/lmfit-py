@@ -36,7 +36,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'lmfit-py'
+project = u'lmfit'
 copyright = u'2011, Matthew Newville, The University of Chicago'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -113,7 +113,7 @@ html_theme = 'sphinxdoc'
 html_title = 'Least-Squares Minimization with Constraints for Python'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = 'Least-Squares Minimization for Python'
+html_short_title = 'Least-Squares Minimization with Constraints for Python'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.

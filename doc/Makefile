@@ -25,12 +25,12 @@ html:
 
 lmfit.pdf: latex
 	cd $(BUILDDIR)/latex && make all-pdf
-	cp -pr $(BUILDDIR)/latex/epics.pdf ./lmfit.pdf
+	cp -pr $(BUILDDIR)/latex/lmfit.pdf ./lmfit.pdf
 
 all: html lmfit.pdf
 
 install: all
-	cp -pr $(BUILDDIR)/latex/epics.pdf $(INSTALLDIR)/lmfit.pdf
+	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(INSTALLDIR)/lmfit.pdf
 	cp -pr $(BUILDDIR)/html/* $(INSTALLDIR)/.
 
 help:
@@ -69,15 +69,6 @@ htmlhelp:
 	@echo
 	@echo "Build finished; now you can run HTML Help Workshop with the" \
 	      ".hhp project file in $(BUILDDIR)/htmlhelp."
-
-qthelp:
-	$(SPHINXBUILD) -b qthelp $(ALLSPHINXOPTS) $(BUILDDIR)/qthelp
-	@echo
-	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
-	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/epics.qhcp"
-	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/epics.qhc"
 
 latex:
 	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) _build/latex
