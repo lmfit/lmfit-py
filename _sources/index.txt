@@ -4,7 +4,7 @@ Non-Linear Least-Square Minimization for Python
 ================================================
 
 The lmfit Python package provides a simple, flexible interface to
-non-linear least-squares fitting.  LMFIT uses the Levenburg-Marquardt
+non-linear least-squares fitting.  LMFIT uses the Levenberg-Marquardt
 from MINPACK-1 as implemented in scipy.optimize.leastsq.  While that
 function provides the core numerical routine for non-linear least-squares
 minimization, the lmfit packaage adds a few simple conveniences.
