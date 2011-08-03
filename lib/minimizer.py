@@ -108,24 +108,24 @@ class Minimizer(object):
         # and which are defined expressions.
         self.var_map = []
         self.vars = []
-        for name, param in self.params.items():
-            if param.expr is not None:
-                param.ast = self.asteval.compile(param.expr)
+        for name, par in self.params.items():
+            if par.expr is not None:
+                par.ast = self.asteval.compile(par.expr)
                 check_ast_errors(self.asteval.error)
-                param.vary = False
-                param.deps = []
+                par.vary = False
+                par.deps = []
                 self.namefinder.names = []
-                self.namefinder.generic_visit(param.ast)
+                self.namefinder.generic_visit(par.ast)
                 for symname in self.namefinder.names:
                     if (symname in self.params and
-                        symname not in params.deps):
-                        param.deps.append(symname)
+                        symname not in par.deps):
+                        par.deps.append(symname)
 
-            elif param.vary:
+            elif par.vary:
                 self.var_map.append(name)
-                self.vars.append(param.value)
+                self.vars.append(par.value)
 
-            self.asteval.symtable[name] = param.value
+            self.asteval.symtable[name] = par.value
         self.nvarys = len(self.vars)
 
         # now evaluate make sure initial values
@@ -149,13 +149,14 @@ class Minimizer(object):
 
     def fit(self):
         """
-        perform fit with scipy optimize leastsq (Levenberg-Marquardt)
+        perform fit with scipy optimize leastsq (Levenberg-Marquardt),
+        calculate estimated uncertainties and variable correlations.
         """
         self.prepare_fit()
         lsargs = {'full_output': 1, 'xtol': 1.e-7, 'ftol': 1.e-7,
                   'maxfev': 600 * (self.nvarys + 1)}
 
-        lsout = leastsq(self.eval_residual, self.vars, **lsargs)
+        lsout = leastsq(self.calc_residual, self.vars, **lsargs)
         vbest, cov, infodict, errmsg, ier = lsout
 
         self.ier = ier

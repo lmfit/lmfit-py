@@ -8,8 +8,8 @@ dictionary supporting a simple, flat namespace.
 
 Expressions can be compiled into ast node and then evaluated
 later, using the current values in the symtable.
-
 '''
+
 from __future__ import division, print_function
 import os
 import sys
