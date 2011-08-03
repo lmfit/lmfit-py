@@ -11,7 +11,8 @@ Parameter list....
 """
 
 from numpy import sqrt
-from asteval import Interpreter
+from asteval import Interpreter, NameFinder
+
 from scipy.optimize import leastsq
 
 class ExpressionException(Exception):
@@ -33,52 +34,78 @@ def check_ast_errors(error):
 
 class Minimizer(object):
     """general minimizer"""
-    def __init__(self, userfcn=None, userargs=None, userkws=None,
-                 params=None, engine='leastsq', **kws):
+    def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
+                 engine='leastsq', **kws):
         self.userfcn = userfcn
-        self.userargs = userargs
+        self.params = params
+
+        self.userargs = fcn_args
         if self.userargs is None:
             self.userargs = []
 
-        self.userkws = userkws
+        self.userkws = fcn_kws
         if self.userkws is None:
             self.userkws = {}
 
-        self.params = params
         self.var_map = []
         self.out = None
         self.engine = engine
         self.asteval = Interpreter()
+        self.namefinder = NameFinder()
 
-    def func_wrapper(self, fvars):
+    def __update_paramval(self, name):
         """
-        wrapper function for least-squares fit
+        update parameter value, including setting bounds.
+        For a constrained parameter (one with an expr defined),
+        this first updates (recursively) all parameters on which
+        the parameter depends (using the 'deps' field).
+
+       """
+        # Has this param already been updated?
+        # if this is called as an expression dependency,
+        # it may have been!
+        if self.updated[name]:
+            return
+
+        par = self.params[name]
+        val = par.value
+        if par.expr is not None:
+            for dep in par.deps:
+                self.__update_paramval(dep)
+            val = self.asteval.interp(par.ast)
+            check_ast_errors(self.asteval.error)
+        # apply min/max
+        if par.min is not None:
+            val = max(val, par.min)
+        if par.max is not None:
+            val = min(val, par.max)
+
+        self.asteval.symtable[name] = par.value = val
+        self.updated[name] = True
+
+    def calc_residual(self, fvars):
+        """
+        residual function used for least-squares fit.
+        With the new, candidate values of fvars (the fitting variables),
+        this evaluates all parameters, including setting bounds and
+        evaluating constraints, and then passes those to the
+        user-supplied function to calculate the residual.
         """
         # set parameter values
         for varname, val in zip(self.var_map, fvars):
             self.params[varname].value = val
 
-        for name, par in self.params.items():
-            val = par.value
-            if par.expr is not None:
-                val = self.asteval.interp(par.ast)
-                check_ast_errors(self.asteval.error)
-            if par.min is not None:
-                val = max(val, par.min)
-            if par.max is not None:
-                val = min(val, par.max)
-
-            self.params[name].value = val
-            self.asteval.symtable[name] = val
+        self.updated = dict([(name, False) for name in self.params])
+        for name in self.params:
+            self.__update_paramval(name)
 
         return self.userfcn(self.params, *self.userargs, **self.userkws)
 
-    def _prep_fit(self):
-        """common pre-fit code"""
+    def prepare_fit(self):
+        """prepare parameters for fit"""
 
         # determine which parameters are actually variables
         # and which are defined expressions.
-        
         self.var_map = []
         self.vars = []
         for name, param in self.params.items():
@@ -86,13 +113,28 @@ class Minimizer(object):
                 param.ast = self.asteval.compile(param.expr)
                 check_ast_errors(self.asteval.error)
                 param.vary = False
-            if param.vary:
+                param.deps = []
+                self.namefinder.names = []
+                self.namefinder.generic_visit(param.ast)
+                for symname in self.namefinder.names:
+                    if (symname in self.params and
+                        symname not in params.deps):
+                        param.deps.append(symname)
+
+            elif param.vary:
                 self.var_map.append(name)
                 self.vars.append(param.value)
+
             self.asteval.symtable[name] = param.value
         self.nvarys = len(self.vars)
 
-        
+        # now evaluate make sure initial values
+        # are used to set values of the defined expressions.
+        # this also acts as a check of expression syntax.
+        self.updated = dict([(name, False) for name in self.params])
+        for name in self.params:
+            self.__update_paramval(name)
+
     def fit_wrapper(self, engine=None):
         """
         eventually, we may want to support multiple fitting engines.
@@ -104,17 +146,16 @@ class Minimizer(object):
             self.fit_leastsq()
         else:
             print('Unknown fit engine')
-            
+
     def fit(self):
-        ""
-        "perform fit with scipy optimize leastsq (Levenberg-Marquardt)
         """
-        
-        self._prep_fit()
+        perform fit with scipy optimize leastsq (Levenberg-Marquardt)
+        """
+        self.prepare_fit()
         lsargs = {'full_output': 1, 'xtol': 1.e-7, 'ftol': 1.e-7,
                   'maxfev': 600 * (self.nvarys + 1)}
-        
-        lsout = leastsq(self.func_wrapper, self.vars, **lsargs)
+
+        lsout = leastsq(self.eval_residual, self.vars, **lsargs)
         vbest, cov, infodict, errmsg, ier = lsout
 
         self.ier = ier
@@ -122,7 +163,7 @@ class Minimizer(object):
         self.nfev =  infodict['nfev']
         self.residual = resid = infodict['fvec']
         nobs = len(resid)
-        
+
         sum_sqr = (resid**2).sum()
         self.chisqr = sum_sqr
         self.nfree = (nobs - self.nvarys)
@@ -130,7 +171,7 @@ class Minimizer(object):
 
         if cov is not None:
             cov = cov * sum_sqr / self.nfree
-        
+
         for par in self.params.values():
             par.stderr = 0
             par.correl = None
@@ -148,7 +189,6 @@ class Minimizer(object):
 
 
 def minimize(fcn, params, args=None, kws=None, **extrakws):
-    fitter = Minimizer(userfcn=fcn, params=params,
-                  userargs=args, userkws=kws, **extrakws)
+    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws, **extrakws)
     fitter.fit()
     return fitter
