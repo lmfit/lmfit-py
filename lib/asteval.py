@@ -138,6 +138,20 @@ class Procedure(object):
         symlocals = None
         return retval
 
+
+class NameFinder(ast.NodeVisitor):
+    """find all symbol names used by a parsed node"""
+    def __init__(self):
+        self.names = []
+
+    def generic_visit(self, node):
+        nodename = node.__class__.__name__.lower()
+        if nodename == 'name':
+            if (node.ctx.__class__ == ast.Load and
+                node.id not in self.names):
+                self.names.append(node.id)
+        ast.NodeVisitor.generic_visit(self, node)
+
 class Interpreter:
     """expression compiler and interpreter.
   This module compiles expressions and statements to AST representation,
