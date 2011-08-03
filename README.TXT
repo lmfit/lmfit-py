@@ -44,7 +44,7 @@ to have best-fit values, estimated standard deviations, and correlations
 with other variables in the fit, while the results dictionary holds fit
 statistics and information.
 
-Initially, the underlying fit algorithm is the Levenburg-Marquart algorithm
+Initially, the underlying fit algorithm is the Levenberg-Marquart algorithm
 with numerically-calculated derivatives from MINPACK's lmdif function, as
 used by scipy.optimize.leastsq.  Other solvers will be considered once the
 code is working well.
