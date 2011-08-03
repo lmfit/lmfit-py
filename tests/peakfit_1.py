@@ -1,15 +1,12 @@
-
-from parameter import Parameter
-from minimizer import Minimizer
+from lmfit import Parameter, Minimizer
+from lmfit.utilfuncs import gauss, loren
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
 
-from utilfuncs import gauss, loren
+from testutils import report_errors
 
 import pylab
-
-
 
 def residual(pars, x, data=None):
     # print 'RESID ', pars['w1'].value, pars['w2'].value
@@ -38,7 +35,7 @@ data  = residual(fit_params, x) + noise
 
 pylab.plot(x, data, 'r+')
 
-fit_params = {'a1': Parameter(value=5.50),
+fit_params = {'a1': Parameter(value=5.50, max=13.0),
               'c1': Parameter(value=4.4),
               'w1': Parameter(value=0.2),
               'a2': Parameter(value=3.0),
@@ -60,16 +57,8 @@ myfit.prepare_fit()
 print ' N fev = ', myfit.nfev
 print myfit.chisqr, myfit.redchi, myfit.nfree
 
-parnames = sorted(fit_params)
-for name, par in fit_params.items():
-    print "%s: %.4g +/- %.4g" % (name, par.value, par.stderr)
-print 'Correlations:'
-for i, name in enumerate(parnames):
-    par = fit_params[name]
-    for name2 in parnames[i+1:]:
-        if name != name2 and name2 in par.correl:
-            print '  C(%s, %s) = %.3f ' % (name, name2,
-                                           par.correl[name2])
+report_errors(fit_params)
+
 fit = residual(fit_params, x)
 
 pylab.plot(x, fit, 'k-')

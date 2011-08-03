@@ -170,23 +170,24 @@ class Minimizer(object):
         self.nfree = (nobs - self.nvarys)
         self.redchi = sum_sqr / self.nfree
 
-        if cov is not None:
-            cov = cov * sum_sqr / self.nfree
-
         for par in self.params.values():
             par.stderr = 0
             par.correl = None
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
 
-        for ivar, varname in enumerate(self.var_map):
-            par = self.params[varname]
-            par.stderr = sqrt(cov[ivar, ivar])
-            par.correl = {}
-            for jvar, varn2 in enumerate(self.var_map):
-                if jvar != ivar:
-                    par.correl[varn2] = cov[ivar, jvar]/(sqrt(cov[ivar, ivar])*
-                                                         sqrt(cov[jvar, jvar]))
+        if cov is None:
+            print 'Warning: cannot estimate uncertainties!'
+        else:
+            cov = cov * sum_sqr / self.nfree
+            for ivar, varname in enumerate(self.var_map):
+                par = self.params[varname]
+                par.stderr = sqrt(cov[ivar, ivar])
+                par.correl = {}
+                for jvar, varn2 in enumerate(self.var_map):
+                    if jvar != ivar:
+                        par.correl[varn2] = (cov[ivar, jvar]/
+                                        (par.stderr * sqrt(cov[jvar, jvar])))
 
 
 def minimize(fcn, params, args=None, kws=None, **extrakws):
