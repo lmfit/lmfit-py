@@ -126,6 +126,9 @@ class Minimizer(object):
                 self.vars.append(par.value)
 
             self.asteval.symtable[name] = par.value
+            if par.name is None:
+                par.name = name
+
         self.nvarys = len(self.vars)
 
         # now evaluate make sure initial values

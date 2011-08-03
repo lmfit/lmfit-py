@@ -26,7 +26,7 @@ xmin = 0.
 xmax = 20.0
 x     = linspace(xmin, xmax, n)
 
-noise = random.normal(scale=.3315, size=n) + x*0.41 + 0.023
+noise = random.normal(scale=.715, size=n) + x*0.41 + 0.023
 
 
 t_params = {'amp': Parameter(value=12.0),
@@ -43,15 +43,15 @@ data = pvoigt(x,
 
 pylab.plot(x, data, 'r+')
 
-fit_params = {'ag': Parameter(value=13.0),
-              'cg': Parameter(value=8.),
-              'wg': Parameter(value=4),
-              'frac': Parameter(value=0.70), 
+fit_params = {'ag': Parameter(value=16.0),
+              'cg': Parameter(value=8.3),
+              'wg': Parameter(value=1),
+              'frac': Parameter(value=0.50, max=1), 
               'al': Parameter(expr='ag'),
               'cl': Parameter(expr='cg'),
               'wl': Parameter(expr='wg'), 
-              'slope': Parameter(value=0.3),
-              'offset': Parameter(value=0.2),
+              'slope': Parameter(value=0.1),
+              'offset': Parameter(value=0.0),
               
               }
 
@@ -67,13 +67,14 @@ pylab.plot(x, init, 'b--')
 myfit.fit()
 
 myfit.prepare_fit()
-print ' N fev = ', myfit.nfev
+print ' Nfev = ', myfit.nfev
 print myfit.chisqr, myfit.redchi, myfit.nfree
 
 report_errors(fit_params)
 
 fit = residual(fit_params, x)
 
+    
 pylab.plot(x, fit, 'k-')
 pylab.show()
 

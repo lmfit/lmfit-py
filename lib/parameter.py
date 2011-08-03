@@ -7,22 +7,27 @@ class Parameter(object):
 into Fit Model.  The Parameter holds many attributes:
   value, vary, max_value, min_value, constraint expression.
     """
-    def __init__(self, value=None, vary=True,
+    def __init__(self, value=None, vary=True, name=None,
                  min=None, max=None, expr=None, **kws):
         self.value = value
         self.vary = vary
         self.min = min
         self.max = max
         self.expr = expr
-        self.stderr = 0.0
+        self.name = None
+        self.stderr = None
         self.correl = None
 
     def __repr__(self):
         s = []
-        vstr = 'varied'
-        if not self.vary:
-            vstr = 'fixed'
-        s.append("value=%s (%s)" % (repr(self.value), vstr))
+        if self.name is not None:
+            s.append("'%s'" % self.name)
+        val = repr(self.value)
+        if self.vary and self.stderr is not None:
+            val = "value=%s +/- %.3g" % (repr(self.value), self.stderr)
+        elif not self.vary:
+            val = "value=%s (fixed)" % (repr(self.value))
+        s.append(val)
         s.append("bounds=[%s:%s]" % (repr(self.min),repr(self.max)))
         if self.expr is not None:
             s.append("expr='%s'" % (self.expr))
