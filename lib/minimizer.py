@@ -12,11 +12,46 @@ Parameter list....
 
 from numpy import sqrt
 from asteval import Interpreter, NameFinder
+from astutils import valid_symbol_name
 
 from scipy.optimize import leastsq
 
-class ExpressionException(Exception):
-    """Expression Syntax Exception"""
+class Parameter(object):
+    """A Parameter is the basic Parameter going
+into Fit Model.  The Parameter holds many attributes:
+  value, vary, max_value, min_value, constraint expression.
+    """
+    def __init__(self, value=None, vary=True, name=None,
+                 min=None, max=None, expr=None, **leastsq_kws):
+        self.value = value
+        self.vary = vary
+        self.min = min
+        self.max = max
+        self.expr = expr
+        self.name = None
+        self.stderr = None
+        self.correl = None
+        self.leastsq_kws = leastsq_kws
+
+
+    def __repr__(self):
+        s = []
+        if self.name is not None:
+            s.append("'%s'" % self.name)
+        val = repr(self.value)
+        if self.vary and self.stderr is not None:
+            val = "value=%s +/- %.3g" % (repr(self.value), self.stderr)
+        elif not self.vary:
+            val = "value=%s (fixed)" % (repr(self.value))
+        s.append(val)
+        s.append("bounds=[%s:%s]" % (repr(self.min),repr(self.max)))
+        if self.expr is not None:
+            s.append("expr='%s'" % (self.expr))
+
+        return "<Parameter %s>" % ', '.join(s)
+
+class MinimizerException(Exception):
+    """General Purpose Exception"""
     def __init__(self, msg):
         Exception.__init__(self)
         self.msg = msg
@@ -29,11 +64,18 @@ def check_ast_errors(error):
         msg = []
         for err in error:
             msg = '\n'.join(err.get_error())
-        raise ExpressionException(msg)
+        raise MinimizernException(msg)
 
 
 class Minimizer(object):
     """general minimizer"""
+    err_nondict  = "Parameter argument must be a dictionary"
+    err_nonparam = "Param entry for '%%s' must be a lmfit.Parameter"
+    err_symname  = "'%%s' is not a valid parameter name"
+    err_maxfev   = """Too many function calls (max set to  %%i)!  Use:
+    minimize(func, params, ...., maxfev=NNN)
+or set  leastsq_kws['maxfev']  to increase this maximum."""
+        
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  engine='leastsq', **kws):
         self.userfcn = userfcn
@@ -48,7 +90,6 @@ class Minimizer(object):
             self.userkws = {}
 
         self.var_map = []
-        self.out = None
         self.engine = engine
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
@@ -106,6 +147,15 @@ class Minimizer(object):
 
         # determine which parameters are actually variables
         # and which are defined expressions.
+        try:
+            for name, par in self.params.items():
+                if not valid_symbol_name(name):
+                    raise MinimizerException(self.err_symname % name)
+                if not isinstance(par, Parameter):
+                    raise MinimizerException(self.err_nonparam % name)
+        except TypeError:
+            raise MinimizerException(self.err_nondict)
+            
         self.var_map = []
         self.vars = []
         for name, par in self.params.items():
@@ -156,21 +206,33 @@ class Minimizer(object):
         calculate estimated uncertainties and variable correlations.
         """
         self.prepare_fit()
-        lsargs = {'full_output': 1, 'xtol': 1.e-7, 'ftol': 1.e-7,
-                  'maxfev': 600 * (self.nvarys + 1)}
-
-        lsout = leastsq(self.calc_residual, self.vars, **lsargs)
+        lskws = {'full_output': 1, 'xtol': 1.e-7, 'ftol': 1.e-7,
+                  'maxfev': 1000 * (self.nvarys + 1)}
+        lskws.update(self.leastsq_kws)
+        
+        lsout = leastsq(self.calc_residual, self.vars, **lskws)
         vbest, cov, infodict, errmsg, ier = lsout
 
-        self.ier = ier
-        self.errmsg = errmsg
-        self.nfev =  infodict['nfev']
         self.residual = resid = infodict['fvec']
-        nobs = len(resid)
+
+        self.ier = ier
+        self.lmdif_message = errmsg
+        self.message = 'Fit succeeded'
+        self.success = ier in [1, 2, 3, 4]
+        
+        if ier == 0:
+            self.message = 'Invalid Input Parameters'
+        elif ier == 5:
+            self.message = self.err_maxfev % lskws['maxfev']
+        else:
+            self.message = 'Tolerance seems to be too small.'
+            
+        self.nfev =  infodict['nfev']
+        self.ndata = len(resid)
 
         sum_sqr = (resid**2).sum()
         self.chisqr = sum_sqr
-        self.nfree = (nobs - self.nvarys)
+        self.nfree = (self.ndata - self.nvarys)
         self.redchi = sum_sqr / self.nfree
 
         for par in self.params.values():
@@ -181,7 +243,9 @@ class Minimizer(object):
 
         if cov is None:
             print 'Warning: cannot estimate uncertainties!'
+            self.errorbars = False
         else:
+            self.errorbars = True
             cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
@@ -192,8 +256,7 @@ class Minimizer(object):
                         par.correl[varn2] = (cov[ivar, jvar]/
                                         (par.stderr * sqrt(cov[jvar, jvar])))
 
-
-def minimize(fcn, params, args=None, kws=None, **extrakws):
-    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws, **extrakws)
+def minimize(fcn, params, args=None, kws=None, **leastsq_kws):
+    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws, **leastsq_kws)
     fitter.fit()
     return fitter

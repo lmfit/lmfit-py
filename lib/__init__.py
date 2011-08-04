@@ -1,7 +1,6 @@
 __version__ = '0.1'
 
-from parameter import Parameter
-from minimizer import Minimizer, minimize
-from asteval import Interpreter
+from minimizer import minimize, Minimizer, Parameter
+from asteval import Interpreter, NameFinder
 
-__all__ = [Minimizer, minimize, Parameter, Interpreter]
+__all__ = [Minimizer, minimize, Parameter, Interpreter, NameFinder]

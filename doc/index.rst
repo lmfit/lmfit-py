@@ -37,7 +37,7 @@ and correlation between fitted variables.
    :maxdepth: 2
 
    installation  
-   simple
-   outputs
+   parameters
+   fitting
    constraints
-
+   

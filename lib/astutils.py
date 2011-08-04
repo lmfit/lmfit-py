@@ -1,5 +1,22 @@
 import ast
 import sys
+import re
+
+RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'continue', 'def',
+                  'del', 'elif', 'else', 'except', 'finally', 'for',
+                  'from', 'if', 'import', 'in', 'is', 'not', 'or',
+                  'pass', 'print', 'raise', 'return', 'try', 'while',
+                  'group', 'end', 'endwhile', 'endif', 'endfor',
+                  'endtry', 'enddef', 'True', 'False', 'None')
+
+NAME_MATCH = re.compile(r"[a-z_][a-z0-9_]*$").match
+
+def valid_symbol_name(name):
+    "input is a valid name"
+    lname = name[:].lower()
+    if lname in RESERVED_WORDS:
+        return False
+    return NAME_MATCH(lname) is not None
 
 # inherit these from python's __builtins__
 FROM_PY = ('ArithmeticError', 'AssertionError', 'AttributeError',
