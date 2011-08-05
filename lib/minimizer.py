@@ -22,7 +22,7 @@ into Fit Model.  The Parameter holds many attributes:
   value, vary, max_value, min_value, constraint expression.
     """
     def __init__(self, value=None, vary=True, name=None,
-                 min=None, max=None, expr=None, **leastsq_kws):
+                 min=None, max=None, expr=None, **kws):
         self.value = value
         self.vary = vary
         self.min = min
@@ -31,8 +31,6 @@ into Fit Model.  The Parameter holds many attributes:
         self.name = None
         self.stderr = None
         self.correl = None
-        self.leastsq_kws = leastsq_kws
-
 
     def __repr__(self):
         s = []
@@ -75,9 +73,9 @@ class Minimizer(object):
     err_maxfev   = """Too many function calls (max set to  %%i)!  Use:
     minimize(func, params, ...., maxfev=NNN)
 or set  leastsq_kws['maxfev']  to increase this maximum."""
-        
+
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
-                 engine='leastsq', **kws):
+                 engine='leastsq', **leastsq_kws):
         self.userfcn = userfcn
         self.params = params
 
@@ -89,6 +87,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if self.userkws is None:
             self.userkws = {}
 
+        self.leastsq_kws = leastsq_kws
         self.var_map = []
         self.engine = engine
         self.asteval = Interpreter()
@@ -155,7 +154,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                     raise MinimizerException(self.err_nonparam % name)
         except TypeError:
             raise MinimizerException(self.err_nondict)
-            
+
         self.var_map = []
         self.vars = []
         for name, par in self.params.items():
@@ -176,6 +175,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                 self.vars.append(par.value)
 
             self.asteval.symtable[name] = par.value
+            par.init_value = par.value
             if par.name is None:
                 par.name = name
 
@@ -208,8 +208,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.prepare_fit()
         lskws = {'full_output': 1, 'xtol': 1.e-7, 'ftol': 1.e-7,
                   'maxfev': 1000 * (self.nvarys + 1)}
-        lskws.update(self.leastsq_kws)
-        
+        if self.leastsq_kws is not None:
+            lskws.update(self.leastsq_kws)
+
         lsout = leastsq(self.calc_residual, self.vars, **lskws)
         vbest, cov, infodict, errmsg, ier = lsout
 
@@ -219,14 +220,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.lmdif_message = errmsg
         self.message = 'Fit succeeded'
         self.success = ier in [1, 2, 3, 4]
-        
+
         if ier == 0:
             self.message = 'Invalid Input Parameters'
         elif ier == 5:
             self.message = self.err_maxfev % lskws['maxfev']
         else:
             self.message = 'Tolerance seems to be too small.'
-            
+
         self.nfev =  infodict['nfev']
         self.ndata = len(resid)
 
@@ -242,7 +243,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                 delattr(par, 'ast')
 
         if cov is None:
-            print 'Warning: cannot estimate uncertainties!'
             self.errorbars = False
         else:
             self.errorbars = True
