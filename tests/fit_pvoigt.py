@@ -9,13 +9,16 @@ from testutils import report_errors
 import pylab
 
 def residual(pars, x, data=None):
-    # print 'RESID ', pars['w1'].value, pars['w2'].value
-    yg = gauss(x, pars['ag'].value, pars['cg'].value, pars['wg'].value)
-    yl = loren(x, pars['al'].value, pars['cl'].value, pars['wl'].value)
+    # print 'RESID ', pars['amp_g'].value, pars['amp_g'].init_value
+    yg = gauss(x, pars['amp_g'].value,
+               pars['cen_g'].value, pars['wid_g'].value)
+    yl = loren(x, pars['amp_l'].value,
+               pars['cen_l'].value, pars['wid_l'].value)
+
     frac = pars['frac'].value
-    slope = pars['slope'].value
-    offset = pars['offset'].value
-    
+    slope = pars['line_slope'].value
+    offset = pars['line_off'].value
+
     model = (1-frac) * yg + frac * yl + offset + x * slope
     if data is None:
         return model
@@ -24,49 +27,44 @@ def residual(pars, x, data=None):
 n = 601
 xmin = 0.
 xmax = 20.0
-x     = linspace(xmin, xmax, n)
+x = linspace(xmin, xmax, n)
 
-noise = random.normal(scale=.715, size=n) + x*0.41 + 0.023
+noise = random.normal(scale=2.5, size=n) + x*0.62 + -1.023
 
-
-t_params = {'amp': Parameter(value=12.0),
+true_params = {'amp': Parameter(value=21.0),
             'cen': Parameter(value=8.3),
             'wid': Parameter(value=1.6),
-            'frac': Parameter(value=0.357),
+            'frac': Parameter(value=0.37),
             }
 
-data = pvoigt(x,
-              t_params['amp'].value,
-              t_params['cen'].value,
-              t_params['wid'].value,
-              t_params['frac'].value) + noise
+data = pvoigt(x, true_params['amp'].value,
+              true_params['cen'].value,
+              true_params['wid'].value,
+              true_params['frac'].value) + noise
 
 pylab.plot(x, data, 'r+')
 
-fit_params = {'ag': Parameter(value=16.0),
-              'cg': Parameter(value=8.3),
-              'wg': Parameter(value=1),
-              'frac': Parameter(value=0.50, max=1), 
-              'al': Parameter(expr='ag'),
-              'cl': Parameter(expr='cg'),
-              'wl': Parameter(expr='wg'), 
-              'slope': Parameter(value=0.1),
-              'offset': Parameter(value=0.0),
-              
+fit_params = {'amp_g': Parameter(value=10.0),
+              'cen_g': Parameter(value=8.5),
+              'wid_g': Parameter(value=1.6),
+              'frac': Parameter(value=0.50, max=1.3),
+              'amp_l': Parameter(expr='amp_g'),
+              'cen_l': Parameter(expr='cen_g'),
+              'wid_l': Parameter(expr='wid_g'),
+              'line_slope': Parameter(value=0.0),
+              'line_off': Parameter(value=0.0),
               }
 
 myfit = Minimizer(residual, fit_params,
                   fcn_args=(x,), fcn_kws={'data':data})
 
 myfit.prepare_fit()
-
 init = residual(fit_params, x)
 
 pylab.plot(x, init, 'b--')
-
 myfit.fit()
 
-myfit.prepare_fit()
+
 print ' Nfev = ', myfit.nfev
 print myfit.chisqr, myfit.redchi, myfit.nfree
 
@@ -74,7 +72,7 @@ report_errors(fit_params)
 
 fit = residual(fit_params, x)
 
-    
+
 pylab.plot(x, fit, 'k-')
 pylab.show()
 
