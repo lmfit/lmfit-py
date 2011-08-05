@@ -3,13 +3,13 @@
 Performing Fits, Analyzing Outputs
 =======================================
 
-As shown in the previous sections, a simple fit can be performed with 
-the :func:`minimize` function.    For more sophisticated modeling, 
+As shown in the previous sections, a simple fit can be performed with
+the :func:`minimize` function.    For more sophisticated modeling,
 the :class:`Minimizer` class can be used to gain a bit more control,
 especially when using complicated constraints.
 
 
-The :func:`minimize` function 
+The :func:`minimize` function
 ===============================
 
 The minimize function takes a function to minimze, a dictionary of
@@ -33,12 +33,12 @@ The minimize function takes a function to minimze, a dictionary of
    :type  kws:  dict
    :param leastsq_kws:  dictionary to pass to scipy.optimize.leastsq
    :type  leastsq_kws:  dict
-   :return: Minimizer object, which can be used to inspect goodness-of-fit 
+   :return: Minimizer object, which can be used to inspect goodness-of-fit
             statistics, or to re-run fit.
 
    On output, the params will be updated with best-fit values and, where
    appropriate, estimated uncertainties and correlations.  See
-   :ref:`fit-results-label` for further details. 
+   :ref:`fit-results-label` for further details.
 
 ..  _fit-func-label:
 
@@ -73,7 +73,7 @@ advisable to unpack these to get numerical values at the top of the function.  A
 simple example would look like::
 
     def residual(pars, x, data=None):
-        # unpack parameters: 
+        # unpack parameters:
         #  extract .value attribute for each parametr
         amp = pars['amp'].value
         period = pars['period'].value
@@ -94,8 +94,8 @@ simple example would look like::
 
 In this example, ``x`` is a positional (required) argument, while the ``data``
 array is actually optional (so that the function returns the model calculation
-if the data is neglected).   Also note that the model calculation will divide 
-``x`` by the varied value of the 'period' Parameter.  It might be wise to 
+if the data is neglected).   Also note that the model calculation will divide
+``x`` by the varied value of the 'period' Parameter.  It might be wise to
 make sure this parameter cannot be 0.   It would be possible to use the bounds
 on the :class:`Parameter` to do this::
 
@@ -126,39 +126,58 @@ of the corresponding :class:`Parameter`.
 
  Table of Goodness-of-Fit Statistics:  These statistics are all attributes of the :class:`Minimizer` object returned by :func:`minimize`.
 
-+----------------------+--------------------------------------------------------------------------+
-| Minimizer Attribute  |  Description / Formula                                                   +
-+======================+==========================================================================+
-| ``nfev``             |  number of function evaluations                                          |
-+----------------------+--------------------------------------------------------------------------+
-| ``success``          | boolean (``True``/``False``) for whether fit succeeded.                  |
-+----------------------+--------------------------------------------------------------------------+
-| ``errorbars``        | boolean (``True``/``False``) for whether uncertainities were estimated.  |
-+----------------------+--------------------------------------------------------------------------+
-| ``message``          | message about fit success.                                               |
-+----------------------+--------------------------------------------------------------------------+
-|  ``ier``             | integer error value from scipy.optimize.leastsq                          |
-+----------------------+--------------------------------------------------------------------------+
-|  ``lmdif_message``   | message from scipy.optimize.leastsq                                      |
-+----------------------+--------------------------------------------------------------------------+
-|   ``nvarys``         |  number of variables in fit  :math:`N_{\rm varys}`                       |
-+----------------------+--------------------------------------------------------------------------+
-|   ``ndata``          |  number of data points:  :math:`N`                                       |
-+----------------------+--------------------------------------------------------------------------+
-|   ``nfree``          |  degrees of freedom in fit:  :math:`N - N_{\rm varys}`                   |
-+----------------------+--------------------------------------------------------------------------+
-|   ``residual``       |  residual array (return of :func:`func`:  :math:`{\rm Resid}`            |
-+----------------------+--------------------------------------------------------------------------+
-|   ``chisqr``         |  chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`                 |
-+----------------------+--------------------------------------------------------------------------+
-|   ``redchi``         | reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {N - N_{\rm varys}}` |                    
-+----------------------+--------------------------------------------------------------------------+
+
++----------------------+----------------------------------------------------------------------------+
+| Minimizer Attribute  |  Description / Formula                                                     |
++======================+============================================================================+
+| ``nfev``             |  number of function evaluations                                            |
++----------------------+----------------------------------------------------------------------------+
+| ``success``          | boolean (``True``/``False``) for whether fit succeeded.                    |
++----------------------+----------------------------------------------------------------------------+
+| ``errorbars``        | boolean (``True``/``False``) for whether uncertainities were estimated.    |
++----------------------+----------------------------------------------------------------------------+
+| ``message``          | message about fit success.                                                 |
++----------------------+----------------------------------------------------------------------------+
+|  ``ier``             | integer error value from scipy.optimize.leastsq                            |
++----------------------+----------------------------------------------------------------------------+
+|  ``lmdif_message``   | message from scipy.optimize.leastsq                                        |
++----------------------+----------------------------------------------------------------------------+
+|   ``nvarys``         |  number of variables in fit  :math:`N_{\rm varys}`                         |
++----------------------+----------------------------------------------------------------------------+
+|   ``ndata``          |  number of data points:  :math:`N`                                         |
++----------------------+----------------------------------------------------------------------------+
+|   ``nfree``          |  degrees of freedom in fit:  :math:`N - N_{\rm varys}`                     |
++----------------------+----------------------------------------------------------------------------+
+|   ``residual``       |  residual array (return of :func:`func`:  :math:`{\rm Resid}`              |
++----------------------+----------------------------------------------------------------------------+
+|   ``chisqr``         | chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`                    |
++----------------------+----------------------------------------------------------------------------+
+|   ``redchi``         | reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}` |
++----------------------+----------------------------------------------------------------------------+
+
+
+
 
 Note that the calculation of chi-square and reduced chi-square assume that the
 returned residual function is scaled properly to the uncertainties in the data.
 For these statistics to be meaningful, the person writing the function to
 function to be minimized must scale them properly.
 
+When possible, standard errors for the fitted variables, and correlations
+between pairs of fitted variables are automatically calculated after the
+fit is performed.  The standard error (estimated :math:`1\sigma` error-bar)
+go into the :attr:`stderr` attribute of the Parameter.  The correlations
+with all other variables will be put into the :attr:`correl` attribute of
+the Parameter -- a dictionary with keys for all other Parameters and values
+of the corresponding correlation.
+
+In some cases, it may not be possible to estimate the errors and correlations.
+For example, if a variable actually has no practical effect on the fit, it will
+likely cause the covariance matrix to be singular, so that errors cannot be
+estimated.  Placing bounds on varied Parameters makes it more likely that errors
+cannot be estimated, as being near the maximum or minimum value makes the
+covariance matrix singular.  In these cases, the :attr:`errorbars` attribute of
+the fit result (:class:`Minimizer` object) will be ``False``.
 
 
 ..  _fit-minimizer-label:
@@ -168,14 +187,26 @@ Using the :class:`Minimizer` class
 
 For full control of the fitting process, you'll want to create a
 :class:`Minimizer` object, or at least use the one returned from the
-:func:`minimize` function. 
+:func:`minimize` function.
 
-.. class:: Minimizer(fcn, params[, fcn_args=None[, fcn_kwsn=None[, engine='leastsq'[, **kws]]]])
+.. class:: Minimizer(function params[, fcn_args=None[, fcn_kwsn=None[, engine='leastsq'[, **kws]]]])
 
-   create a Minimizer object.
+   creates a Minimizer object.
+
+   :param function:  function to return fit residual.  See :ref:`fit-func-label` for details.
+   :type  function:  callable.
+   :param params:  a dictionary of Parameters.  Keywords must be strings
+                   that match ``[a-z_][a-z0-9_]*`` and is not a python
+                   reserved word.  Each value must be :class:`Parameter`.
+   :type  params:  dict
+   :param fcn_args:  arguments tuple to pass to the residual function as  positional arguments.
+   :type  fcn_args:  tuple
+   :param fcn_kws:   dictionary to pass to the residual function as keyword arguments.
+   :type  fcn_kws:  dict
+   :param leastsq_kws:  dictionary to pass to scipy.optimize.leastsq
+   :type  leastsq_kws:  dict
+   :return: Minimizer object, which can be used to inspect goodness-of-fit
+            statistics, or to re-run fit.
 
 
-
-As 
-
-
+The Minimizer object has only a few methods.

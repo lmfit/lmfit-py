@@ -208,6 +208,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.prepare_fit()
         lskws = {'full_output': 1, 'xtol': 1.e-7, 'ftol': 1.e-7,
                   'maxfev': 1000 * (self.nvarys + 1)}
+
         if self.leastsq_kws is not None:
             lskws.update(self.leastsq_kws)
 
@@ -218,11 +219,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.ier = ier
         self.lmdif_message = errmsg
-        self.message = 'Fit succeeded'
+        self.message = 'Fit succeeded.'
         self.success = ier in [1, 2, 3, 4]
 
         if ier == 0:
-            self.message = 'Invalid Input Parameters'
+            self.message = 'Invalid Input Parameters.'
         elif ier == 5:
             self.message = self.err_maxfev % lskws['maxfev']
         else:
@@ -244,6 +245,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         if cov is None:
             self.errorbars = False
+            self.message = '%s. Could not estimate error-bars'
         else:
             self.errorbars = True
             cov = cov * sum_sqr / self.nfree

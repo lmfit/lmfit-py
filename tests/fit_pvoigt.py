@@ -18,7 +18,6 @@ def residual(pars, x, data=None):
     frac = pars['frac'].value
     slope = pars['line_slope'].value
     offset = pars['line_off'].value
-
     model = (1-frac) * yg + frac * yl + offset + x * slope
     if data is None:
         return model
