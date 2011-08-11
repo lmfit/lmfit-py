@@ -210,3 +210,4 @@ For full control of the fitting process, you'll want to create a
 
 
 The Minimizer object has only a few methods.
+

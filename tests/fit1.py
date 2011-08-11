@@ -1,4 +1,4 @@
-from lmfit import Parameter, minimize
+from lmfit import Parameters, minimize
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
@@ -6,10 +6,11 @@ import pylab
 
 from testutils import report_errors
 
-fit_params = {'amp': Parameter(value=14.0),
-             'period': Parameter(value=5.33),
-             'shift': Parameter(value=0.123),
-             'decay': Parameter(value=0.010)}
+p_true = Parameters()
+p_true.add('amp', value=14.0)
+p_true.add('period', value=5.33)
+p_true.add('shift', value=0.123)
+p_true.add('decay', value=0.010)
 
 def residual(pars, x, data=None):
     amp = pars['amp'].value
@@ -29,12 +30,13 @@ xmin = 0.
 xmax = 250.0
 noise = random.normal(scale=0.7215, size=n)
 x     = linspace(xmin, xmax, n)
-data  = residual(fit_params, x) + noise
+data  = residual(p_true, x) + noise
 
-fit_params = {'amp': Parameter(value=13.0), 
-             'period': Parameter(value=2), 
-             'shift': Parameter(value=0.0),
-             'decay': Parameter(value=0.02)}
+fit_params = Parameters()
+fit_params.add('amp', value=13.0)
+fit_params.add('period', value=2)
+fit_params.add('shift', value=0.0)
+fit_params.add('decay', value=0.02)
 
 out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 

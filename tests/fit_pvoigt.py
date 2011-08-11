@@ -1,4 +1,4 @@
-from lmfit import Parameter, Minimizer
+from lmfit import Parameters, Minimizer
 from lmfit.utilfuncs import gauss, loren, pvoigt
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
@@ -30,47 +30,46 @@ x = linspace(xmin, xmax, n)
 
 noise = random.normal(scale=2.5, size=n) + x*0.62 + -1.023
 
-true_params = {'amp': Parameter(value=21.0),
-            'cen': Parameter(value=8.3),
-            'wid': Parameter(value=1.6),
-            'frac': Parameter(value=0.37),
-            }
+p_true = Parameters()
+p_true.add('amp', value=21.0)
+p_true.add('cen', value=8.3)
+p_true.add('wid', value=1.6)
+p_true.add('frac', value=0.37)
 
-data = pvoigt(x, true_params['amp'].value,
-              true_params['cen'].value,
-              true_params['wid'].value,
-              true_params['frac'].value) + noise
+
+data = pvoigt(x, p_true['amp'].value,
+              p_true['cen'].value,
+              p_true['wid'].value,
+              p_true['frac'].value) + noise
 
 pylab.plot(x, data, 'r+')
 
-fit_params = {'amp_g': Parameter(value=10.0),
-              'cen_g': Parameter(value=8.5),
-              'wid_g': Parameter(value=1.6),
-              'frac': Parameter(value=0.50, max=1.3),
-              'amp_l': Parameter(expr='amp_g'),
-              'cen_l': Parameter(expr='cen_g'),
-              'wid_l': Parameter(expr='wid_g'),
-              'line_slope': Parameter(value=0.0),
-              'line_off': Parameter(value=0.0),
-              }
+p_fit = Parameters()
+p_fit.add('amp_g', value=10.0)
+p_fit.add('cen_g', value=8.5)
+p_fit.add('wid_g', value=1.6)
+p_fit.add('frac', value=0.50, max=1.3)
+p_fit.add('amp_l', expr='amp_g')
+p_fit.add('cen_l', expr='cen_g')
+p_fit.add('wid_l', expr='wid_g')
+p_fit.add('line_slope', value=0.0)
+p_fit.add('line_off', value=0.0)
 
-myfit = Minimizer(residual, fit_params,
+myfit = Minimizer(residual, p_fit,
                   fcn_args=(x,), fcn_kws={'data':data})
 
 myfit.prepare_fit()
-init = residual(fit_params, x)
+init = residual(p_fit, x)
 
 pylab.plot(x, init, 'b--')
-myfit.fit()
-
+myfit.leastsq()
 
 print ' Nfev = ', myfit.nfev
 print myfit.chisqr, myfit.redchi, myfit.nfree
 
-report_errors(fit_params)
+report_errors(p_fit)
 
-fit = residual(fit_params, x)
-
+fit = residual(p_fit, x)
 
 pylab.plot(x, fit, 'k-')
 pylab.show()

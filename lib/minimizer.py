@@ -4,10 +4,8 @@ user to build a fitting model as a function of general purpose
 Fit Parameters that can be fixed or floated, bounded, and written
 as a simple expression of other Fit Parameters.
 
-The user sets up a model in terms of a list of Parameters, writes
-a function-to-be-minimized (residual function) in terms of the
-Parameter list....
-
+The user sets up a model in terms of instance of Parameters, writes a
+function-to-be-minimized (residual function) in terms of these Parameters.
 """
 
 from numpy import sqrt
@@ -16,17 +14,68 @@ from astutils import valid_symbol_name
 
 from scipy.optimize import leastsq
 
+from UserDict import DictMixin
+
+class Parameters(dict, DictMixin):
+    """a custom dictionary of Parameters.  All keys must be
+    strings, and valid Python symbol names, and all values
+    must be Parameters.
+
+    Custom methods:
+    ---------------
+
+    add()
+    add_many()
+    """
+    def __init__(self, *args, **kwds):
+        self.update(*args, **kwds)
+
+    def __setitem__(self, key, value):
+        if key not in self:
+            if not valid_symbol_name(key):
+                raise KeyError("'%s' is not a valid Parameters name" % key)
+        if value is not None and not isinstance(value, Parameter):
+            raise ValueError("'%s' is not a Parameter" % value)
+        dict.__setitem__(self, key, value)
+        value.name = key
+
+    def add(self, name, value=None, vary=True, expr=None,
+            min=None, max=None, **kws):
+        """convenience function for adding a Parameter:
+        with   p = Parameters()
+        p.add(name, value=XX, ....)
+
+        is equivalent to
+        p[name] = Parameter(name=name, value=XX, ....
+        """
+        self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
+                                         expr=expr, min=min, max=max, **kws))
+
+    def add_many(self, *parlist):
+        """convenience function for adding a list of Parameters:
+        Here, you must provide a sequence of tuples, each containing:
+            name, value, vary, min, max
+        with   p = Parameters()
+        p.add_many( (name1, val1, True, None, None),
+                    (name2, val2, True,  0.0, None),
+                    (name3, val3, False, None, None))
+
+        """
+        for name, value, vary, min, max in parlist:
+            self.add(name, value=value, vary=vary, min=min, max=max)
+
 class Parameter(object):
     """A Parameter is the basic Parameter going
-into Fit Model.  The Parameter holds many attributes:
-  value, vary, max_value, min_value, constraint expression.
+    into Fit Model.  The Parameter holds many attributes:
+    value, vary, max_value, min_value, constraint expression.
+    The value and min/max values will be be set to floats.
     """
     def __init__(self, value=None, vary=True, name=None,
                  min=None, max=None, expr=None, **kws):
         self.value = value
-        self.vary = vary
         self.min = min
         self.max = max
+        self.vary = vary
         self.expr = expr
         self.name = None
         self.stderr = None
@@ -67,15 +116,12 @@ def check_ast_errors(error):
 
 class Minimizer(object):
     """general minimizer"""
-    err_nondict  = "Parameter argument must be a dictionary"
-    err_nonparam = "Param entry for '%%s' must be a lmfit.Parameter"
-    err_symname  = "'%%s' is not a valid parameter name"
+    err_nonparam = "params must be a minimizer.Parameters() instance"
     err_maxfev   = """Too many function calls (max set to  %%i)!  Use:
     minimize(func, params, ...., maxfev=NNN)
 or set  leastsq_kws['maxfev']  to increase this maximum."""
 
-    def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
-                 engine='leastsq', **leastsq_kws):
+    def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None):
         self.userfcn = userfcn
         self.params = params
 
@@ -87,9 +133,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if self.userkws is None:
             self.userkws = {}
 
-        self.leastsq_kws = leastsq_kws
         self.var_map = []
-        self.engine = engine
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
 
@@ -99,7 +143,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         For a constrained parameter (one with an expr defined),
         this first updates (recursively) all parameters on which
         the parameter depends (using the 'deps' field).
-
        """
         # Has this param already been updated?
         # if this is called as an expression dependency,
@@ -120,7 +163,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if par.max is not None:
             val = min(val, par.max)
 
-        self.asteval.symtable[name] = par.value = val
+        self.asteval.symtable[name] = par.value = float(val)
         self.updated[name] = True
 
     def calc_residual(self, fvars):
@@ -146,14 +189,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         # determine which parameters are actually variables
         # and which are defined expressions.
-        try:
-            for name, par in self.params.items():
-                if not valid_symbol_name(name):
-                    raise MinimizerException(self.err_symname % name)
-                if not isinstance(par, Parameter):
-                    raise MinimizerException(self.err_nonparam % name)
-        except TypeError:
-            raise MinimizerException(self.err_nondict)
+        if not isinstance(self.params, Parameters):
+            raise MinimizerException(self.err_nonparam)
 
         self.var_map = []
         self.vars = []
@@ -188,29 +225,34 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         for name in self.params:
             self.__update_paramval(name)
 
-    def fit_wrapper(self, engine=None):
+    def anneal(self, *args):
         """
-        eventually, we may want to support multiple fitting engines.
+        use simulated annealing
         """
-        if engine is not None:
-            self.engine = engine
-
-        if self.engine == 'leastsq':
-            self.fit_leastsq()
-        else:
-            print('Unknown fit engine')
-
-    def fit(self):
-        """
-        perform fit with scipy optimize leastsq (Levenberg-Marquardt),
-        calculate estimated uncertainties and variable correlations.
-        """
+        print("Not yet implemented....")
         self.prepare_fit()
-        lskws = {'full_output': 1, 'xtol': 1.e-7, 'ftol': 1.e-7,
-                  'maxfev': 1000 * (self.nvarys + 1)}
+        return
 
-        if self.leastsq_kws is not None:
-            lskws.update(self.leastsq_kws)
+    def leastsq(self, **kws):
+        """
+        use Levenberg-Marquardt minimization to perform fit.
+        This assumes that ModelParameters have been stored into
+        and a function to mi
+
+        This wraps scipy.optimize.leastsq, and keyward arguments are passed
+        directly as options to scipy.optimize.leastsq
+
+        When possible, this calculates the estimated uncertainties and
+        variable correlations from the covariance matrix.
+
+        writes outputs to many internal attributes, and
+        returns True if fit was successful, False if not.
+        """
+
+        self.prepare_fit()
+        lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
+                     maxfev= 1000 * (self.nvarys + 1))
+        lskws.update(kws)
 
         lsout = leastsq(self.calc_residual, self.vars, **lskws)
         vbest, cov, infodict, errmsg, ier = lsout
@@ -258,7 +300,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         par.correl[varn2] = (cov[ivar, jvar]/
                                         (par.stderr * sqrt(cov[jvar, jvar])))
 
+        return self.success
+
 def minimize(fcn, params, args=None, kws=None, **leastsq_kws):
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws, **leastsq_kws)
-    fitter.fit()
+    fitter.leastsq()
     return fitter

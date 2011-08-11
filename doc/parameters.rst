@@ -14,8 +14,8 @@ calculates a residual function (data-model) that is to be minimized in the
 least-squares sense
 
 .. math::
- 
- \chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2} 
+
+ \chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}
 
 where :math:`y_i^{\rm meas}` is the set of measured data, :math:`y_i^{\rm
 model}({\bf{v}})` is the model calculation, :math:`{\bf{v}}` is the set of
@@ -37,7 +37,7 @@ y_i^{\rm model}({\bf{v}})`, perhaps something like::
         return (data-model)
 
 To perform the minimization with scipy, one would do::
- 
+
     from scipy.optimize import leastsq
     vars = [10.0, 0.2, 3.0, 0.007]
     out = leastsq(residual, vars, args=(x, data))
@@ -58,17 +58,17 @@ scipy.optimize.leastsq, and most other) in which a list of fitting
 variables to the function to be minimized.  These challenges include:
 
   a) The user has to keep track of the order of the variables, and their
-     meaning -- vars[2] is the frequency, and so on.  
+     meaning -- vars[2] is the frequency, and so on.
 
   b) If the user wants to fix a particular variable (*not* vary it in the fit),
      the residual function has to be altered.  While reasonable for simple
      cases, this quickly becomes significant work for more complex models,
      and greatly complicates modeling for people not intimately familiar
-     with the code. 
+     with the code.
 
   c) There is no way to put bounds on values for the variables, or enforce
      mathematical relationships between the variables.
- 
+
 LMFIT is designed to void these shortcomings.
 
 The key ideas of LMFIT are to expand a numerical variable with a
@@ -95,7 +95,7 @@ would be translated to look like::
 	      'frequency': Parameter(value=3.0)}
 
     out = minimize(residual, params, args=(x, data))
- 
+
 
 
 So far, this simply looks like it replaced a list of values with a
@@ -121,8 +121,8 @@ The :class:`Parameter` class
    create a Parameter object
 
    :param value: the numerical value for the parameter
-   :param vary:  whether to vary the parameter or not. 
-   :type vary:  boolean (``True``/``False``) 
+   :param vary:  whether to vary the parameter or not.
+   :type vary:  boolean (``True``/``False``)
    :param min:  lower bound for value (``None`` = no lower bound).
    :param max:  upper bound for value (``None`` = no upper bound).
 
@@ -134,18 +134,18 @@ The :class:`Parameter` class
 
 Each of these inputs is turned into an attribute of the same name.   As
 above, one hands a dictionary of Parameters to the fitting routines.   The
-name for the Parameter will be set to be consistent 
+name for the Parameter will be set to be consistent
 
 After a fit, a Parameter for a fitted variable (ie with vary = ``True``)
 will have the :attr:`value` attribute holding the best-fit value, and may
 (depending on the success of the fit) have obtain additional attributes.
 
 .. attribute:: stderr
-   
+
    the estimated standard error for the best-fit value.
 
 .. attribute:: correl
-   
+
    a dictionary of the correlation with the other fitted variables in the
    fit, of the form::
 
@@ -159,8 +159,7 @@ feature.
 
 
 Simple Example:
-================== 
-
+==================
 
 Putting it all together, a simple example of using a dictionary of
 :class:`Parameter` s  and :func:`minimize` might look like this::
@@ -183,12 +182,16 @@ Putting it all together, a simple example of using a dictionary of
 	      'omega': Parameter(value=3.0)}
 
     result = minimize(residual, params, args=(x, data))
- 
+
     print result.chisqr
     print 'Best-Fit Values:'
     for name, par in params.items():
-        print '  %s = %.4f +/- %.4f ' % (name, par.value, par.stderr) 
+        print '  %s = %.4f +/- %.4f ' % (name, par.value, par.stderr)
 
-The results of this ...
+The results of this fit looks like this::
 
-   
+   OUTPUT HERE...
+
+
+
+

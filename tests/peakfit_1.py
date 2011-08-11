@@ -2,7 +2,7 @@ from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
 import pylab
 
-from lmfit import Parameter, Minimizer
+from lmfit import Parameters, Minimizer
 from lmfit.utilfuncs import gauss, loren
 
 from testutils import report_errors
@@ -21,23 +21,25 @@ xmax = 15.0
 noise = random.normal(scale=.65, size=n)
 x = linspace(xmin, xmax, n)
 
-fit_params = {'a1': Parameter(value=12.0),
-              'c1': Parameter(value=5.3),
-              'w1': Parameter(value=0.6),
-              'a2': Parameter(value=13.0),
-              'c2': Parameter(value=8.25),
-              'w2': Parameter(value=2.5)}
+fit_params = Parameters()
+fit_params.add_many(('a1', 12.0, True, None, None),
+                    ('c1',  5.3, True, None, None),
+                    ('w1',  1.0, True, None, None),
+                    ('a2',  9.1, True, None, None),
+                    ('c2',  8.1, True, None, None),
+                    ('w2',  2.5, True, None, None))
 
 data  = residual(fit_params, x) + noise
 
 pylab.plot(x, data, 'r+')
 
-fit_params = {'a1': Parameter(value=3.0, max=13.0),
-              'c1': Parameter(value=5.0),
-              'w1': Parameter(value=0.1),
-              'a2': Parameter(value=4.0),
-              'c2': Parameter(value=8.8),
-              'w2': Parameter(expr='4*w1')}
+fit_params = Parameters()
+fit_params.add_many(('a1',  8.0, True, None, 14.),
+                    ('c1',  5.0, True, None, None),
+                    ('w1',  0.7, True, None, None),
+                    ('a2',  3.1, True, None, None),
+                    ('c2',  8.8, True, None, None))
+fit_params.add('w2', expr='2.5*w1')
 
 myfit = Minimizer(residual, fit_params,
                   fcn_args=(x,), fcn_kws={'data':data})
@@ -48,9 +50,8 @@ init = residual(fit_params, x)
 
 pylab.plot(x, init, 'b--')
 
-myfit.fit()
+myfit.leastsq()
 
-myfit.prepare_fit()
 print ' N fev = ', myfit.nfev
 print myfit.chisqr, myfit.redchi, myfit.nfree
 

@@ -2,6 +2,25 @@
 Fit Parameter for making Fitting Models
 """
 
+from astutils import valid_symbol_name
+
+class Parameters(dict):
+    """a dictionay of Parameters.  all keys must be strings
+    that are valid symbol Python names, and all values must
+    be Parameters"""
+    def __init__(self, *args, **kwds):
+        self.update(*args, **kwds)
+
+    def __setitem__(self, key, value):
+        if key not in self:
+            if not valid_symbol_name(key):
+                raise KeyError("'%s' is not a valid Parameters name" % key)
+        if value is not None and not isinstance(value, Parameter):
+            raise ValueError("'%s' is not a Parameter" % value)
+        dict.__setitem__(self, key, value)
+        value.name = key
+
+
 class Parameter(object):
     """A Parameter is the basic Parameter going
 into Fit Model.  The Parameter holds many attributes:

@@ -1,23 +1,29 @@
-.. lmfit documentation master file, 
+.. lmfit documentation master file,
 
 Non-Linear Least-Square Minimization for Python
 ================================================
 
+.. _scipy_opt_link: http://example.com/
+
 The lmfit Python package provides a simple, flexible interface to
-non-linear least-squares fitting.  LMFIT uses the Levenberg-Marquardt
-from MINPACK-1 as implemented in scipy.optimize.leastsq.  While that
-function provides the core numerical routine for non-linear least-squares
-minimization, the lmfit packaage adds a few simple conveniences.
+non-linear least-squares fitting.  Currently, LMFIT uses the
+Levenberg-Marquardt from MINPACK-1 as implemented in `Link
+scipy.optimize.leastsq
+http://docs.scipy.org/doc/scipy/reference/optimize.html`_, but the
+intention is that will soon support other optimization routines.  While
+these functions provide the core numerical algorithm for non-linear
+least-squares minimization, the lmfit package adds a few simple
+conveniences.
 
-For any least-squares minimization, the programmer must provide a function
-that takes a set of values for the variables in the fit, and produces the
-residual function to be minimized in the least-squares sense. 
+For any minimization problem, the programmer must provide a function that
+takes a set of values for the variables in the fit, and produces the
+residual function to be minimized in the least-squares sense.
 
-The lmfit package allows models to be written in terms of Parameters,
-which are extensions of simple numerical variables with the following
-properties:
+The lmfit package allows models to be written in terms of a set of
+Parameters, which are extensions of simple numerical variables with the
+following properties:
 
- * Parameters can be fixed or floated in the fit.  
+ * Parameters can be fixed or floated in the fit.
  * Parameters can be bounded with a minimum and/or maximum value.
  * Parameters can be written as simple mathematical expressions of
    other Parameters.  These values will be re-evaluated at each
@@ -31,13 +37,13 @@ fairly general model, and allow a user of the model to change what is
 varied and what constraints are placed on the model.
 
 In addition, lmfit calculates are reports the estimated uncertainties
-and correlation between fitted variables. 
+and correlation between fitted variables.
 
 .. toctree::
    :maxdepth: 2
 
-   installation  
+   installation
    parameters
    fitting
    constraints
-   
+

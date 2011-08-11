@@ -5,18 +5,21 @@ def report_errors(params):
     parnames = sorted(params)
     print('-------------------------------------')
     print( 'Best Fit Values and Standard Errors:')
+    namelen = max([len(n) for n in parnames])
     for name in parnames:
         par = params[name]
+        space = ' '*(namelen+2 - len(name))
+        nout = " %s: %s" % (name, space)
         if par.vary:
-            print(" %s: % .6f +/- %.6f (inital = % .6f)" % (name,
-                                                            par.value,
-                                                            par.stderr,
-                                                            par.init_value))
+            print(" %s % .6f +/- %.6f (inital = % .6f)" % (nout,
+                                                          par.value,
+                                                          par.stderr,
+                                                          par.init_value))
         elif par.expr is not None:
-            print(" %s: % .6f   (== '%s')" % (name, par.value,
-                                                   par.expr))
+            print(" %s % .6f  == '%s'" % (nout, par.value,
+                                                par.expr))
         else:
-            print(" %s: fixed" % (name))
+            print(" %s fixed" % (nout))
 
     print( 'Correlations:')
     correls = {}
