@@ -83,7 +83,7 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/lmf
 optimization, or curve fitting.  By default, LMFIT uses the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a>
 minimization algorithm from <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>, but
 it can also use the <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a> (limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm
-as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> or the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
+as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> or the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
 implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html">scipy.optimize.anneal</a>.  Support for other optimization routines may be
 added in the future.  While these functions from scipy.optimize provide the core numerical
 algorithm for non-linear least-squares minimization, the lmfit package adds a few simple
@@ -139,8 +139,7 @@ and correlation between fitted variables.</p>
 <li class="toctree-l1"><a class="reference internal" href="constraints.html">Using Mathematical Constraints</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="constraints.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constraints.html#supported-operators-functions-and-constants">Supported Operators, Functions, and Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="constraints.html#some-implementation-details">Some Implementation Details</a></li>
-<li class="toctree-l2"><a class="reference internal" href="constraints.html#advanced-usage-beyond-lmfit">Advanced usage -- beyond LMFIT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constraints.html#advanced-usage-of-expressions-in-lmfit">Advanced usage of Expressions in LMFIT</a></li>
 </ul>
 </li>
 </ul>

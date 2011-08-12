@@ -45,8 +45,7 @@
 <li><a class="reference internal" href="#">Using Mathematical Constraints</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-operators-functions-and-constants">Supported Operators, Functions, and Constants</a></li>
-<li><a class="reference internal" href="#some-implementation-details">Some Implementation Details</a></li>
-<li><a class="reference internal" href="#advanced-usage-beyond-lmfit">Advanced usage -- beyond LMFIT</a></li>
+<li><a class="reference internal" href="#advanced-usage-of-expressions-in-lmfit">Advanced usage of Expressions in LMFIT</a></li>
 </ul>
 </li>
 </ul>
@@ -88,18 +87,97 @@ to place mathematical constraints on parameters.  This section describes
 how to do this, and what sort of parameterizations are possible.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>Just as one</p>
+<p>Just as one can place bounds on a Parameter, or keep it fixed during the
+fit, so too can one place mathematical constraints on parameters.  The way
+this is done with LMFIT is to write a Parameter as a mathematical
+expression of the other parameters and a set of pre-defined operators and
+functions.   The constraint expressions are simple Python statements,
+allowing one to place constraints like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frac_curve1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frac_curve2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;1 - frac_curve1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>as the <cite>frac_curve1</cite> parameter is updated at each step in the fit, the
+value of <cite>frac_curve2</cite> will be updated so that the two values are
+constrained to add to 1.0.  Of course, such a constraint could be placed in
+the fitting function, but the use of such constraints allows the end-user
+to modify the model of a more general-purpose fitting function.</p>
+<p>Nearly any valid mathematical expression can be used, and a variety of
+built-in functions are available for flexible modeling.</p>
 </div>
 <div class="section" id="supported-operators-functions-and-constants">
 <h2>Supported Operators, Functions, and Constants<a class="headerlink" href="#supported-operators-functions-and-constants" title="Permalink to this headline">¶</a></h2>
 <p>The mathematicl expressions used to define constrained Parameters need to
-be valid python expressions.   The full set of built-in</p>
+be valid python expressions.  As you'd expect, the operators '+', '-', '*',
+'/', '**', are supported.  In fact, a much more complete set can be used,
+including Python's bit- and logical operators:</p>
+<div class="highlight-python"><pre>&amp;, |, ^, &lt;&lt;, &gt;&gt;, %, and, or, ==, &gt;, &gt;=, &lt;, &lt;=, !=, ~, not, is, is not,
+in, not in</pre>
 </div>
-<div class="section" id="some-implementation-details">
-<h2>Some Implementation Details<a class="headerlink" href="#some-implementation-details" title="Permalink to this headline">¶</a></h2>
+<p>The values for <cite>e</cite> (2.7182818...) and <cite>pi</cite> (3.1415926...) are available, as
+are  several supported mathematical and trigonometric function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">abs</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">acosh</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">asinh</span><span class="p">,</span> <span class="n">atan</span><span class="p">,</span> <span class="n">atan2</span><span class="p">,</span> <span class="n">atanh</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">copysign</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span>
+<span class="n">cosh</span><span class="p">,</span> <span class="n">degrees</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">fmod</span><span class="p">,</span> <span class="n">frexp</span><span class="p">,</span> <span class="n">fsum</span><span class="p">,</span> <span class="n">hypot</span><span class="p">,</span>
+<span class="n">isinf</span><span class="p">,</span> <span class="n">isnan</span><span class="p">,</span> <span class="n">ldexp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="n">log1p</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">modf</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">radians</span><span class="p">,</span>
+<span class="n">sin</span><span class="p">,</span> <span class="n">sinh</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">tan</span><span class="p">,</span> <span class="n">tanh</span><span class="p">,</span> <span class="n">trunc</span>
+</pre></div>
 </div>
-<div class="section" id="advanced-usage-beyond-lmfit">
-<h2>Advanced usage -- beyond LMFIT<a class="headerlink" href="#advanced-usage-beyond-lmfit" title="Permalink to this headline">¶</a></h2>
+<p>In addition, all Parameter names will be available in the mathematical
+expressions.  Thus, with parameters for a few peak-like functions:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;cen_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.2</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;wid_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The following expression are all valid:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;(2.0 - amp_1**2)&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;cen_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;cen_1 * wid_2 / max(wid_1, 0.001)&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;wid_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;sqrt(pi)*wid_1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In fact, almost any valid Python expression is allowed.  A notable example
+is that Python's 1-line <em>if expression</em> is supported:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;bounded&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;param_a if test_val/2. &gt; 100 else param_b&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which is equivalent to the more familiar:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">test_val</span><span class="o">/</span><span class="mf">2.</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+    <span class="n">bounded</span> <span class="o">=</span> <span class="n">param_a</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">bounded</span> <span class="o">=</span> <span class="n">param_b</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="advanced-usage-of-expressions-in-lmfit">
+<h2>Advanced usage of Expressions in LMFIT<a class="headerlink" href="#advanced-usage-of-expressions-in-lmfit" title="Permalink to this headline">¶</a></h2>
+<p>The expression is converted to a Python <a class="reference external" href="http://docs.python.org/library/ast.html">Abstract Syntax Tree</a>, which is an intermediate
+version of the expression -- partially compiled.  This means that Python's
+own parser is used to convert the expression into something that can easily
+be evaluated.</p>
+<p>In fact, the AST allows a nearly full version of Python to be supported,
+and the <tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> included with LMFIT support most of Python syntax,
+including for- and while-loops, conditional expressions, and user-defined
+functions.  There are several unsupported Python constructs, most notably
+the import statement, which helps make the <tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module safe from
+malicious use.</p>
+<p>Among other things, this means that one can pre-load domain-specific
+functions into the <tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module for later use in constrain
+expressions.</p>
+<p>The <a class="reference internal" href="fitting.html#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class contains a <tt class="docutils literal"><span class="pre">astevel</span></tt> attribute.  This has
+contains a complete AST interpreter, which (as used in LMFIT) uses a
+flat namespace, implemented as a single dictionary. That means you can
+preload symbols into the namespace for the constraints:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">custom_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;In custom function!&#39;</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span>
+
+<span class="n">fitter</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">()</span>
+<span class="n">fitter</span><span class="o">.</span><span class="n">asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s">&#39;myfunc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_function</span>
+</pre></div>
+</div>
+<p>and this <tt class="docutils literal"><span class="pre">myfunc</span></tt> can now be used inside constraints.</p>
 </div>
 </div>
 

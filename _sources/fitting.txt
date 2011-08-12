@@ -109,8 +109,6 @@ but might be wiser to put this directly in the function with::
             period = sign(period)*1.e-10
 
 
-
-
 ..  _fit-engines-label:
 
 Choosing Different Fitting Engines
@@ -118,13 +116,36 @@ Choosing Different Fitting Engines
 
 By default, the `Levenberg-Marquardt
 <http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm>`_ algorithm is
-for fitting.  While often criticized as finding only *local* minima, this
-approach has some distinct advantages, in that it is fast, well-behaved for
-most curve-fitting needs, and makes it easy to estimate uncertainties for
-and correlations between pairs of fit variables, as discussed in
-:ref:`fit-results-label`.
+used for fitting.  While often criticized, including the fact it finds a
+*local* minima, this approach has some distinct advantages.  These include
+being fast, and well-behaved for most curve-fitting needs, and making it
+easy to estimate uncertainties for and correlations between pairs of fit
+variables, as discussed in :ref:`fit-results-label`.
 
-Alternative algorithms can also be used.
+Alternative algorithms can also be used. These include `simulated annealing
+<http://en.wikipedia.org/wiki/Simulated_annealing>`_ which promises a
+better ability to avoid local minima, and `BFGS
+<http://en.wikipedia.org/wiki/Limited-memory_BFGS>`_, which is a
+modification of the quasi-Newton method.   
+
+To Select which of these algorithms to use, use the ``engine`` keyword to
+the :func:`minimize` function or use the corresponding method name from the
+:class:`Minimizer` class as listed in the :ref:`Table of Supported Fitting Engines <fit-engine-table>`. 
+
+.. _fit-engine-table:
+
+ Table of Supported Fitting Engines:
+
++------------------------+-------------------------------------+------------------------------+
+| Engine                 |  ``engine`` arg to :func:`minimize` | :class:`Minimizer` method    |
++========================+============+========================+==============================+
+| Levenberg-Marquardt    |  ``leastsq``                        |  :meth:`leastsq`             |
++------------------------+-------------------------------------+------------------------------+
+| Simulated Annealing    |  ``anneal``                         |  :meth:`.anneal`             |
++------------------------+-------------------------------------+------------------------------+
+| L-BFGS-B               |  ``lbfgsb``                         |  :meth:`lbfgsb`              |
++------------------------+-------------------------------------+------------------------------+
+
 
 
 
@@ -210,9 +231,9 @@ For full control of the fitting process, you'll want to create a
 :class:`Minimizer` object, or at least use the one returned from the
 :func:`minimize` function.
 
-.. class:: Minimizer(function params[, fcn_args=None[, fcn_kwsn=None[, engine='leastsq'[, **kws]]]])
+.. class:: Minimizer(function, params[, fcn_args=None[, fcn_kwsn=None[, **kws]]]])
 
-   creates a Minimizer object.
+   creates a Minimizer, for fine-grain access to fitting methods and attributes.
 
    :param function:  function to return fit residual.  See :ref:`fit-func-label` for details.
    :type  function:  callable.
@@ -230,5 +251,32 @@ For full control of the fitting process, you'll want to create a
             statistics, or to re-run fit.
 
 
-The Minimizer object has only a few methods.
+The Minimizer object has a few public methods:
+
+.. method:: leastsq(**kws)
+
+   perform fit with Levenberg-Marquardt algorithm.  Keywords will be passed directly to
+   `scipy.optimize.leastsq <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html>`_. 
+   By default, numerical derivatives are used, and the following arguments are set:
+   
+ 
+    +----------------------+----------------+------------------------------------------------------------+
+    | ``leastsq`` argument |  Defautl Value | Description                                                |
+    +======================+================+============================================================+
+    | ``xtol``             |  1.e-7         | Relative error in the approximate solution                 |
+    +----------------------+----------------+------------------------------------------------------------+
+    | ``ftol``             |  1.e-7         | Relative error in the desired sum of squares               |
+    +----------------------+----------------+------------------------------------------------------------+
+    | ``maxfev``           | 1000*(nvar + 1)| maximum number of function calls (nvar= # of variables)    |
+    +----------------------+----------------+------------------------------------------------------------+
+
+.. method:: anneal(**kws)
+
+   perform fit with Simulated Annealing.  Keywords will be passed directly to
+   `scipy.optimize.anneal <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html>`_. 
+
+.. method:: lbfgsb(**kws)
+
+   perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
+   `scipy.optimize.fmin_l_bfgs_b <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html>`_. 
 

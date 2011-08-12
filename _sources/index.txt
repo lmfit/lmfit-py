@@ -4,11 +4,11 @@ Non-Linear Least-Square Minimization for Python
 ================================================
 
 .. _scipy.optimize.leastsq: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html
-.. _scipy.optimize.l_bfgs_b: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.l_bfgs_b.html
+.. _scipy.optimize.l_bfgs_b: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html
 .. _scipy.optimize.anneal: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html
 
-.. _L-BFGS:  http://en.wikipedia.org/wiki/Limited-memory_BFGS
 .. _Levenberg-Marquardt: http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
+.. _L-BFGS:  http://en.wikipedia.org/wiki/Limited-memory_BFGS
 .. _simulated annealing: http://en.wikipedia.org/wiki/Simulated_annealing
 
 .. _MINPACK-1: http://en.wikipedia.org/wiki/MINPACK

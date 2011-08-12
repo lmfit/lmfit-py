@@ -210,12 +210,47 @@ on the <a class="reference internal" href="parameters.html#Parameter" title="Par
 <div class="section" id="choosing-different-fitting-engines">
 <span id="fit-engines-label"></span><h2>Choosing Different Fitting Engines<a class="headerlink" href="#choosing-different-fitting-engines" title="Permalink to this headline">¶</a></h2>
 <p>By default, the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm is
-for fitting.  While often criticized as finding only <em>local</em> minima, this
-approach has some distinct advantages, in that it is fast, well-behaved for
-most curve-fitting needs, and makes it easy to estimate uncertainties for
-and correlations between pairs of fit variables, as discussed in
-<a class="reference internal" href="#fit-results-label"><em>Goodness-of-Fit and estimated uncertainty and correlations</em></a>.</p>
-<p>Alternative algorithms can also be used.</p>
+used for fitting.  While often criticized, including the fact it finds a
+<em>local</em> minima, this approach has some distinct advantages.  These include
+being fast, and well-behaved for most curve-fitting needs, and making it
+easy to estimate uncertainties for and correlations between pairs of fit
+variables, as discussed in <a class="reference internal" href="#fit-results-label"><em>Goodness-of-Fit and estimated uncertainty and correlations</em></a>.</p>
+<p>Alternative algorithms can also be used. These include <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> which promises a
+better ability to avoid local minima, and <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">BFGS</a>, which is a
+modification of the quasi-Newton method.</p>
+<p>To Select which of these algorithms to use, use the <tt class="docutils literal"><span class="pre">engine</span></tt> keyword to
+the <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function or use the corresponding method name from the
+<a class="reference internal" href="#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class as listed in the <a class="reference internal" href="#fit-engine-table"><em>Table of Supported Fitting Engines</em></a>.</p>
+<blockquote id="fit-engine-table">
+<div>Table of Supported Fitting Engines:</div></blockquote>
+<table border="1" class="docutils">
+<colgroup>
+<col width="27%" />
+<col width="13%" />
+<col width="27%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">Engine</th>
+<th class="head" colspan="2"><tt class="docutils literal"><span class="pre">engine</span></tt> arg to <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a></th>
+<th class="head"><a class="reference internal" href="#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> method</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>Levenberg-Marquardt</td>
+<td colspan="2"><tt class="docutils literal"><span class="pre">leastsq</span></tt></td>
+<td><a class="reference internal" href="#leastsq" title="leastsq"><tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt></a></td>
+</tr>
+<tr><td>Simulated Annealing</td>
+<td colspan="2"><tt class="docutils literal"><span class="pre">anneal</span></tt></td>
+<td><a class="reference internal" href="#anneal" title="anneal"><tt class="xref py py-meth docutils literal"><span class="pre">anneal()</span></tt></a></td>
+</tr>
+<tr><td>L-BFGS-B</td>
+<td colspan="2"><tt class="docutils literal"><span class="pre">lbfgsb</span></tt></td>
+<td><a class="reference internal" href="#lbfgsb" title="lbfgsb"><tt class="xref py py-meth docutils literal"><span class="pre">lbfgsb()</span></tt></a></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="goodness-of-fit-and-estimated-uncertainty-and-correlations">
 <span id="fit-results-label"></span><h2>Goodness-of-Fit and estimated uncertainty and correlations<a class="headerlink" href="#goodness-of-fit-and-estimated-uncertainty-and-correlations" title="Permalink to this headline">¶</a></h2>
@@ -304,8 +339,8 @@ the fit result (<a class="reference internal" href="#Minimizer" title="Minimizer
 <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function.</p>
 <dl class="class">
 <dt id="Minimizer">
-<em class="property">class </em><tt class="descname">Minimizer</tt><big>(</big><em>function params</em><span class="optional">[</span>, <em>fcn_args=None</em><span class="optional">[</span>, <em>fcn_kwsn=None</em><span class="optional">[</span>, <em>engine='leastsq'</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Minimizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a Minimizer object.</p>
+<em class="property">class </em><tt class="descname">Minimizer</tt><big>(</big><em>function, params[, fcn_args=None[, fcn_kwsn=None[, **kws]]]]</em><big>)</big><a class="headerlink" href="#Minimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a Minimizer, for fine-grain access to fitting methods and attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -329,7 +364,58 @@ statistics, or to re-run fit.</p>
 </table>
 </dd></dl>
 
-<p>The Minimizer object has only a few methods.</p>
+<p>The Minimizer object has a few public methods:</p>
+<dl class="method">
+<dt id="leastsq">
+<tt class="descname">leastsq</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#leastsq" title="Permalink to this definition">¶</a></dt>
+<dd><p>perform fit with Levenberg-Marquardt algorithm.  Keywords will be passed directly to
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.
+By default, numerical derivatives are used, and the following arguments are set:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="16%" />
+<col width="61%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head"><tt class="docutils literal"><span class="pre">leastsq</span></tt> argument</th>
+<th class="head">Defautl Value</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td><tt class="docutils literal"><span class="pre">xtol</span></tt></td>
+<td>1.e-7</td>
+<td>Relative error in the approximate solution</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">ftol</span></tt></td>
+<td>1.e-7</td>
+<td>Relative error in the desired sum of squares</td>
+</tr>
+<tr><td><tt class="docutils literal"><span class="pre">maxfev</span></tt></td>
+<td>1000*(nvar + 1)</td>
+<td>maximum number of function calls (nvar= # of variables)</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="anneal">
+<tt class="descname">anneal</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#anneal" title="Permalink to this definition">¶</a></dt>
+<dd><p>perform fit with Simulated Annealing.  Keywords will be passed directly to
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html">scipy.optimize.anneal</a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="lbfgsb">
+<tt class="descname">lbfgsb</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#lbfgsb" title="Permalink to this definition">¶</a></dt>
+<dd><p>perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.fmin_l_bfgs_b</a>.</p>
+</dd></dl>
+
 </div>
 </div>
 

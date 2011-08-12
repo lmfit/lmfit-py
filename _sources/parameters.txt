@@ -253,10 +253,5 @@ Putting it all together, a simple example of using a dictionary of
     for name, par in params.items():
         print '  %s = %.4f +/- %.4f ' % (name, par.value, par.stderr)
 
-The results of this fit looks like this::
-
-   OUTPUT HERE...
-
-
 
 
