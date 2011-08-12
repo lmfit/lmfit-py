@@ -1,20 +1,29 @@
+
 LMfit-py is a Least-Squares Fitting routine with a simple, flexible
-approach to Parameterizing a Mdel.
+approach to parameterizing a model for fitting to data.
 
 With LMfit-py, the programmer creates a model that is a function of a set
 of named Parameters.  Each Parameter can be fixed, adjusted in the fit, or
-constrained as a simple mathematical expression of other Parameters.  In
-addition, upper and lower Bounds can be placed on any Parameter.
+held between upper and lower Bounds.  In addition, a parameter can be
+constrained as a simple mathematical expression of other Parameters.
 
-The programmer defines a Python dictionary of named Parameters, such as:
+To do this, the programmer defines a Parameters object, an enhanced
+dictionary, containing named parameters:
 
-fit_params = {'amp': Parameter(value=1.2, min=0.1, max=1000),
-              'cen': Parameter(value=40.0, vary=False),
-              'wid': Parameter(value=4, min=0)}
+    fit_params = Parameters()
+    fit_params['amp'] = Parameter(value=1.2, min=0.1, max=1000)
+    fit_params['cen'] = Parameter(value=40.0, vary=False),
+    fit_params['wid'] = Parameter(value=4, min=0)}
 
-and also writes a function to be minimized (in the least-squares sense)
-with its first argument being a dictionary of Parameter names and values,
-and additional positional and keyword arguments as needed:
+or using the equivalent
+    fit_params = Parameters()
+    fit_params.add('amp', value=1.2, min=0.1, max=1000)
+    fit_params.add('cen', value=40.0, vary=False),
+    fit_params.add('wid', value=4, min=0)
+
+The programmer will also write a function to be minimized (in the
+least-squares sense) with its first argument being this Parameters object,
+and additional positional and keyword arguments as desired:
 
   def myfunc(params, x, data, someflag=True):
       amp = params['amp'].value
@@ -25,7 +34,7 @@ and additional positional and keyword arguments as needed:
 
 For each call of this function, the values for the params may have changed,
 subject to the bounds and constraint settings for each Parameter.  The function
-should return the residual array (ie, data-model) to be minimized.
+should return the residual (ie, data-model) array to be minimized.
 
 The advantage here is that the function to be minimized does not have to be
 changed if different bounds or constraints are placed on the fitting
@@ -44,7 +53,8 @@ to have best-fit values, estimated standard deviations, and correlations
 with other variables in the fit, while the results dictionary holds fit
 statistics and information.
 
-Initially, the underlying fit algorithm is the Levenberg-Marquart algorithm
-with numerically-calculated derivatives from MINPACK's lmdif function, as
-used by scipy.optimize.leastsq.  Other solvers will be considered once the
-code is working well.
+By default, the underlying fit algorithm is the Levenberg-Marquart
+algorithm with numerically-calculated derivatives from MINPACK's lmdif
+function, as used by scipy.optimize.leastsq.  Other solvers (currently
+Simulated Annealing and L-BFGS-B) are also available, though slightly less
+well-tested and supported.
