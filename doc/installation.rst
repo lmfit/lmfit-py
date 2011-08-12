@@ -15,9 +15,10 @@ Downloads
 
 The latest stable version is available from a few sources:
 
-.. _lmfit-0.1.tar.gz (CARS):   http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.1.tar.gz
-.. _lmfit-0.1.win32-py2.6.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.1-py2.6.exe
-.. _lmfit-0.1.win32-py2.7.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.1-py2.7.exe
+.. _lmfit-0.2.tar.gz (CARS):   http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.2.tar.gz
+.. _lmfit-0.2.tar.gz (PyPI):   http://pypi.python.org/packages/source/l/lmfit/lmfit-0.2.tar.gz
+.. _lmfit-0.2.win32-py2.6.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.2-py2.6.exe
+.. _lmfit-0.2.win32-py2.7.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.2-py2.7.exe
 
 .. _lmfit github repository:   http://github.com/newville/lmfit-py
 .. _lmfit at pypi:             http://pypi.python.org/pypi/lmfit/
@@ -26,10 +27,11 @@ The latest stable version is available from a few sources:
 +---------------------------+------------------------------------------+
 |  Download Option          |  Location                                |
 +===========================+==========================================+
-|  Source Kit               |  `lmfit-0.1.tar.gz (CARS)`_  or          |
+|  Source Kit               |  `lmfit-0.2.tar.gz (CARS)`_  or          |
+|                           |  `lmfit-0.2.tar.gz (PyPI)`_              |
 +---------------------------+------------------------------------------+
-|  Windows Installers       |  `lmfit-0.1.win32-py2.6.exe`_  or        |
-|                           |  `lmfit-0.1.win32-py2.7.exe`_            |
+|  Windows Installers       |  `lmfit-0.2.win32-py2.6.exe`_  or        |
+|                           |  `lmfit-0.2.win32-py2.7.exe`_            |
 +---------------------------+------------------------------------------+
 |  Development Version      |  use `lmfit github repository`_          |
 +---------------------------+------------------------------------------+
