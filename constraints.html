@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Constraints &mdash; Least-Squares Minimization with Constraints for Python</title>
+    <title>Using Mathematical Constraints &mdash; Least-Squares Minimization with Constraints for Python</title>
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Least-Squares Minimization with Constraints for Python" href="index.html" />
-    <link rel="prev" title="Outputs" href="outputs.html" /> 
+    <link rel="prev" title="Performing Fits, Analyzing Outputs" href="fitting.html" /> 
   </head>
   <body>
     <div class="related">
@@ -33,7 +33,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="outputs.html" title="Outputs"
+          <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
       </ul>
@@ -42,15 +42,18 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Constraints</a><ul>
+<li><a class="reference internal" href="#">Using Mathematical Constraints</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
+<li><a class="reference internal" href="#supported-operators-functions-and-constants">Supported Operators, Functions, and Constants</a></li>
+<li><a class="reference internal" href="#some-implementation-details">Some Implementation Details</a></li>
+<li><a class="reference internal" href="#advanced-usage-beyond-lmfit">Advanced usage -- beyond LMFIT</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="outputs.html"
-                        title="previous chapter">Outputs</a></p>
+  <p class="topless"><a href="fitting.html"
+                        title="previous chapter">Performing Fits, Analyzing Outputs</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/constraints.txt"
@@ -77,10 +80,26 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="constraints">
-<h1>Constraints<a class="headerlink" href="#constraints" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="using-mathematical-constraints">
+<span id="math-constraints-label"></span><h1>Using Mathematical Constraints<a class="headerlink" href="#using-mathematical-constraints" title="Permalink to this headline">¶</a></h1>
+<p>While being able to fix variables and place upper and lower bounds on their
+values are key parts of LMFIT, an equally important feature is the ability
+to place mathematical constraints on parameters.  This section describes
+how to do this, and what sort of parameterizations are possible.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Just as one</p>
+</div>
+<div class="section" id="supported-operators-functions-and-constants">
+<h2>Supported Operators, Functions, and Constants<a class="headerlink" href="#supported-operators-functions-and-constants" title="Permalink to this headline">¶</a></h2>
+<p>The mathematicl expressions used to define constrained Parameters need to
+be valid python expressions.   The full set of built-in</p>
+</div>
+<div class="section" id="some-implementation-details">
+<h2>Some Implementation Details<a class="headerlink" href="#some-implementation-details" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="advanced-usage-beyond-lmfit">
+<h2>Advanced usage -- beyond LMFIT<a class="headerlink" href="#advanced-usage-beyond-lmfit" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -97,7 +116,7 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="outputs.html" title="Outputs"
+          <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
              >previous</a> |</li>
         <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
       </ul>
