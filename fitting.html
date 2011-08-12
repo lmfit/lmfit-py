@@ -222,35 +222,37 @@ modification of the quasi-Newton method.</p>
 the <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function or use the corresponding method name from the
 <a class="reference internal" href="#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class as listed in the <a class="reference internal" href="#fit-engine-table"><em>Table of Supported Fitting Engines</em></a>.</p>
 <blockquote id="fit-engine-table">
-<div>Table of Supported Fitting Engines:</div></blockquote>
-<table border="1" class="docutils">
+<div><p>Table of Supported Fitting Engines:</p>
+<blockquote>
+<div><table border="1" class="docutils">
 <colgroup>
-<col width="27%" />
-<col width="13%" />
-<col width="27%" />
+<col width="26%" />
+<col width="41%" />
 <col width="33%" />
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head">Engine</th>
-<th class="head" colspan="2"><tt class="docutils literal"><span class="pre">engine</span></tt> arg to <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a></th>
+<th class="head"><tt class="docutils literal"><span class="pre">engine</span></tt> arg to <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a></th>
 <th class="head"><a class="reference internal" href="#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> method</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr><td>Levenberg-Marquardt</td>
-<td colspan="2"><tt class="docutils literal"><span class="pre">leastsq</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">leastsq</span></tt></td>
 <td><a class="reference internal" href="#leastsq" title="leastsq"><tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt></a></td>
 </tr>
 <tr><td>Simulated Annealing</td>
-<td colspan="2"><tt class="docutils literal"><span class="pre">anneal</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">anneal</span></tt></td>
 <td><a class="reference internal" href="#anneal" title="anneal"><tt class="xref py py-meth docutils literal"><span class="pre">anneal()</span></tt></a></td>
 </tr>
 <tr><td>L-BFGS-B</td>
-<td colspan="2"><tt class="docutils literal"><span class="pre">lbfgsb</span></tt></td>
+<td><tt class="docutils literal"><span class="pre">lbfgsb</span></tt></td>
 <td><a class="reference internal" href="#lbfgsb" title="lbfgsb"><tt class="xref py py-meth docutils literal"><span class="pre">lbfgsb()</span></tt></a></td>
 </tr>
 </tbody>
 </table>
+</div></blockquote>
+</div></blockquote>
 </div>
 <div class="section" id="goodness-of-fit-and-estimated-uncertainty-and-correlations">
 <span id="fit-results-label"></span><h2>Goodness-of-Fit and estimated uncertainty and correlations<a class="headerlink" href="#goodness-of-fit-and-estimated-uncertainty-and-correlations" title="Permalink to this headline">¶</a></h2>
@@ -394,7 +396,7 @@ By default, numerical derivatives are used, and the following arguments are set:
 <td>Relative error in the desired sum of squares</td>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">maxfev</span></tt></td>
-<td>1000*(nvar + 1)</td>
+<td>1000*(nvar+1)</td>
 <td>maximum number of function calls (nvar= # of variables)</td>
 </tr>
 </tbody>

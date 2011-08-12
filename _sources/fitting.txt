@@ -136,16 +136,15 @@ the :func:`minimize` function or use the corresponding method name from the
 
  Table of Supported Fitting Engines:
 
-+------------------------+-------------------------------------+------------------------------+
-| Engine                 |  ``engine`` arg to :func:`minimize` | :class:`Minimizer` method    |
-+========================+============+========================+==============================+
-| Levenberg-Marquardt    |  ``leastsq``                        |  :meth:`leastsq`             |
-+------------------------+-------------------------------------+------------------------------+
-| Simulated Annealing    |  ``anneal``                         |  :meth:`.anneal`             |
-+------------------------+-------------------------------------+------------------------------+
-| L-BFGS-B               |  ``lbfgsb``                         |  :meth:`lbfgsb`              |
-+------------------------+-------------------------------------+------------------------------+
-
+  +------------------------+-------------------------------------+------------------------------+
+  | Engine                 |  ``engine`` arg to :func:`minimize` | :class:`Minimizer` method    |
+  +========================+=====================================+==============================+
+  | Levenberg-Marquardt    |  ``leastsq``                        |  :meth:`leastsq`             |
+  +------------------------+-------------------------------------+------------------------------+
+  | Simulated Annealing    |  ``anneal``                         |  :meth:`.anneal`             |
+  +------------------------+-------------------------------------+------------------------------+
+  | L-BFGS-B               |  ``lbfgsb``                         |  :meth:`lbfgsb`              |
+  +------------------------+-------------------------------------+------------------------------+
 
 
 
@@ -167,6 +166,7 @@ the corresponding :class:`Parameter`.
 .. _goodfit-table:
 
  Table of Goodness-of-Fit Statistics:  These statistics are all attributes of the :class:`Minimizer` object returned by :func:`minimize`.
+
 
 
 +----------------------+----------------------------------------------------------------------------+
@@ -196,7 +196,6 @@ the corresponding :class:`Parameter`.
 +----------------------+----------------------------------------------------------------------------+
 |   ``redchi``         | reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}` |
 +----------------------+----------------------------------------------------------------------------+
-
 
 
 
@@ -259,7 +258,6 @@ The Minimizer object has a few public methods:
    `scipy.optimize.leastsq <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html>`_. 
    By default, numerical derivatives are used, and the following arguments are set:
    
- 
     +----------------------+----------------+------------------------------------------------------------+
     | ``leastsq`` argument |  Defautl Value | Description                                                |
     +======================+================+============================================================+
@@ -267,8 +265,9 @@ The Minimizer object has a few public methods:
     +----------------------+----------------+------------------------------------------------------------+
     | ``ftol``             |  1.e-7         | Relative error in the desired sum of squares               |
     +----------------------+----------------+------------------------------------------------------------+
-    | ``maxfev``           | 1000*(nvar + 1)| maximum number of function calls (nvar= # of variables)    |
+    | ``maxfev``           | 1000*(nvar+1)  | maximum number of function calls (nvar= # of variables)    |
     +----------------------+----------------+------------------------------------------------------------+
+
 
 .. method:: anneal(**kws)
 

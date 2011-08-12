@@ -27,7 +27,7 @@ The latest stable version is available from a few sources:
 +---------------------------+------------------------------------------+
 |  Download Option          |  Location                                |
 +===========================+==========================================+
-|  Source Kit               |  `lmfit-0.2.tar.gz (CARS)`_  or          |
+|  Source Kit               |  `lmfit-0.2.tar.gz (CARS)`_              |
 |                           |  `lmfit-0.2.tar.gz (PyPI)`_              |
 +---------------------------+------------------------------------------+
 |  Windows Installers       |  `lmfit-0.2.win32-py2.6.exe`_  or        |
