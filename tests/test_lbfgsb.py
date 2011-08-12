@@ -32,21 +32,29 @@ x     = linspace(xmin, xmax, n)
 data  = residual(p_true, x) + noise
 
 fit_params = Parameters()
-fit_params.add('amp', value=13.0)
-fit_params.add('period', value=2)
-fit_params.add('shift', value=0.0)
-fit_params.add('decay', value=0.02)
+fit_params.add('amp', value=11.0, min=5, max=20) 
+fit_params.add('period', value=5., min=1., max=7)
+fit_params.add('shift', value=.10,  min=0.0, max=0.2)
+fit_params.add('decay', value=6.e-3, min=0, max=0.1)
+
+init = residual(fit_params, x)
+
+# out = minimize(residual, fit_params, engine='leastsq', args=(x,), kws={'data':data})
 
 out = minimize(residual, fit_params, engine='lbfgsb', args=(x,), kws={'data':data})
 
 fit = residual(fit_params, x)
 
-print ' N fev = ', out.nfev
-print out.chisqr, out.redchi, out.nfree
+for name, par in fit_params.items():
+    nout = "%s:%s" % (name, ' '*(20-len(name)))
+    print "%s: %s (%s) " % (nout, par.value, p_true[name].value)
+    
+#print out.chisqr, out.redchi, out.nfree
+#
+#report_errors(fit_params)
 
-report_errors(fit_params)
-
-pylab.plot(x, data, 'ro')
+pylab.plot(x, data, 'r--')
+pylab.plot(x, init, 'k')
 pylab.plot(x, fit, 'b')
 pylab.show()
 

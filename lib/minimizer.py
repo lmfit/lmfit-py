@@ -187,8 +187,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         sout = []
         for i in self.params.values():
-            sout.append('%s=%s'  % (i.name, repr(i.value)))
-        print '%s: %s' % ('ITER : ', ','.join(sout))
+            sout.append('%s=%.5f'  % (i.name, (i.value)))
+        # print '%s: %s' % ('ITER : ', ','.join(sout))
         return self.userfcn(self.params, *self.userargs, **self.userkws)
 
     def prepare_fit(self):
@@ -268,14 +268,22 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.prepare_fit()
         lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
                       maxfun = 2000 * (self.nvarys + 1),
-                      bounds = zip(self.vmax, self.vmin))
+                      bounds = zip(self.vmin, self.vmax))
         lb_kws.update(self.kws)
         lb_kws.update(kws)
-        print lb_kws
-        print self.vars
-        xout, fout, info = scipy_lbfgsb(self.calc_residual, self.vars, **lb_kws)
+        def penalty(params):
+            r =self.calc_residual(params)
+            return (r*r).sum()
+        
+        xout, fout, info = scipy_lbfgsb(penalty, self.vars, **lb_kws)
 
+        for k, v in info.items():
+            print k, v
+            
+        self.nfev =  info['funcalls']
+        self.message = info['task']
 
+        
     def leastsq(self, **kws):
         """
         use Levenberg-Marquardt minimization to perform fit.
