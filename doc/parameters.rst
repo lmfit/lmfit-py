@@ -71,13 +71,14 @@ variables to the function to be minimized.  These challenges include:
 
 LMFIT is designed to void these shortcomings.
 
-The key ideas of LMFIT are to expand a numerical variable with a
+The main idea of LMFIT is to expand a numerical variable with a
 :class:`Parameter`, which have more attributes than simply their value.
-Instead of a list of numbers, a dcitionary of these Parameters is used in
-the function to be minimized.  With this transformation, the above example
-would be translated to look like::
+Instead of a pass a list of numbers to the function to minimize, you create
+a :class:`Parameters` object, add parameters to this object, and pass along
+this object to your function to be minimized.  With this transformation,
+the above example would be translated to look like::
 
-    from lmfit import minimize, Parameter
+    from lmfit import minimize, Parameters
 
     def residual(params, x, data):
         amp = params['amp'].value
@@ -89,28 +90,42 @@ would be translated to look like::
 
         return (data-model)
 
-    params = {'amp': Parameter(value=10),
-              'decay': Parameter(value=0.007),
-              'phase': Parameter(value=0.2),
-	      'frequency': Parameter(value=3.0)}
+    params = Parameters()
+    params.add('amp', value=10)
+    params.add('decay', value=0.007)
+    params.add('phase', value=0.2)
+    params.add('frequency', value=3.0)
 
     out = minimize(residual, params, args=(x, data))
 
 
-
 So far, this simply looks like it replaced a list of values with a
-dictionary.  But Parameters objects can hold additional attributes to
-modify the value during the fit.  For example, Parameters can be fixed or
-bounded::
+dictionary, accessed by name.  But each of the named :class:`Parameter` in
+the :class:`Parameters` object hold additional attributes to modify the
+value during the fit.  For example, Parameters can be fixed or bounded, and
+this can be done when being defined::
 
-    params = {'amp': Parameter(value=10, vary=False),
-              'decay': Parameter(value=0.007, min=0.0),
-              'phase': Parameter(value=0.2),
-	      'frequency': Parameter(value=3.0, max=10.0)}
+    params = Parameters()
+    params.add('amp', value=10, vary=False)
+    params.add('decay', value=0.007, min=0.0)
+    params.add('phase', value=0.2)
+    params.add('frequency', value=3.0, max=10)
 
-Now the fit will **not** vary the amplitude parameter, and will also impose
-a lower bound on the decay factor and an upper bound on the frequency.
-Importantly, the residual function remains unchanged.
+or later::
+
+    params['amp'].vary = True
+    params['decay'].max = 0.10
+
+
+Now the fit will *not* vary the amplitude parameter, and will also impose a
+lower bound on the decay factor and an upper bound on the frequency.
+Importantly, our function to be minimized remains unchanged.
+
+An important point here is that the `params` object can be copied and
+modified to make many user-level changes to the model and fitting process.
+Of course, most of the inormation about how your data is modeled goes into
+the fitting function, but the approach here allows some external control as
+well.
 
 
 The :class:`Parameter` class
@@ -118,7 +133,9 @@ The :class:`Parameter` class
 
 .. class:: Parameter(value=None[, vary=True[, min=None[, max=None[, name=None[, expr=None]]]]])
 
-   create a Parameter object
+   create a Parameter object.   These are the fundamental extension of a
+   fit variable within LMFIT, but you will probably create most of these
+   with the :class:`Parameters` class.
 
    :param value: the numerical value for the parameter
    :param vary:  whether to vary the parameter or not.
@@ -158,13 +175,60 @@ See :ref:`math-constraints-label` for more details and examples of this
 feature.
 
 
+The :class:`Parameters` class
+========================================
+
+.. class:: Parameters()
+
+   create a Parameters object.  This is little more than a fancy
+   dictionary, with the restrictions that
+
+   1. keys must be valid Python symbol names (so that they can be used in
+   expressions of mathematical constraints).  This means the names must
+   match ``[a-z_][a-z0-9_]*``  and cannot be a Python reserved word.
+
+   2. values must be vaild :class:`Parameter` objects.
+
+
+   Two methods for provided for convenience of initializing Parameters.
+
+.. method:: add(name[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
+
+   add a named parameter.  This simply creates a :class:`Parameter`
+   object associated with the key `name`, with optional arguments
+   passed to :class:`Parameter`::
+
+     p = Parameters()
+     p.add('myvar', value=1, vary=True)
+
+.. method:: add_many(self, paramlist)
+
+   add a list of named parameters.  Each entry must be a tuple
+   with the following entries::
+
+        name, value, vary, min, max, expr
+
+   That is, this method is somewhat rigid and verbose (no default values),
+   but can be useful when initially defining a parameter list so that it
+   looks table-like::
+
+     p = Parameters()
+     #           (Name,  Value,  Vary,   Min,  Max,  Expr)
+     p.add_many(('amp1',    10,  True, None, None,  None),
+                ('cen1',   1.2,  True,  0.5,  2.0,  None),
+                ('wid1',   0.8,  True,  0.1, None,  None),
+                ('amp2',   7.5,  True, None, None,  None),
+                ('cen2',   1.9,  True,  1.0,  3.0,  None),
+                ('wid2',  None, False, None, None, '2*wid1/3'))
+
+
 Simple Example:
 ==================
 
 Putting it all together, a simple example of using a dictionary of
 :class:`Parameter` s  and :func:`minimize` might look like this::
 
-    from lmfit import minimize, Parameter
+    from lmfit import minimize, Parameters
 
     def residual(params, x, data=None):
         amp = params['amp'].value
@@ -176,10 +240,11 @@ Putting it all together, a simple example of using a dictionary of
 
         return (data-model)
 
-    params = {'amp': Parameter(value=10),
-              'decay': Parameter(value=0.007, vary=False),
-              'phase_shift': Parameter(value=0.2),
-	      'omega': Parameter(value=3.0)}
+    params = Parameters()
+    params.add('amp', value=10)
+    params.add('decay', value=0.007, vary=False)
+    params.add('phase_shift', value=0.2)
+    params.add('omega', value=3.0)
 
     result = minimize(residual, params, args=(x, data))
 

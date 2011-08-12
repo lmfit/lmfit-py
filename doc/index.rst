@@ -3,17 +3,17 @@
 Non-Linear Least-Square Minimization for Python
 ================================================
 
-.. _scipy_opt_link: http://example.com/
+.. _scipy.optimize.leastsq: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html
+.. _scipy.optimize.anneal: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html
 
 The lmfit Python package provides a simple, flexible interface to
-non-linear least-squares fitting.  Currently, LMFIT uses the
-Levenberg-Marquardt from MINPACK-1 as implemented in `Link
-scipy.optimize.leastsq
-http://docs.scipy.org/doc/scipy/reference/optimize.html`_, but the
-intention is that will soon support other optimization routines.  While
-these functions provide the core numerical algorithm for non-linear
-least-squares minimization, the lmfit package adds a few simple
-conveniences.
+non-linear least-squares optimization, or curve fitting.  Currently, LMFIT
+can use either the Levenberg-Marquardt from MINPACK-1 as implemented in
+`scipy.optimize.leastsq`_, or the simulated annealing approach as
+implemented in `scipy.optimize.anneal`_.  Support for other optimization
+routines may be added as well.  While these functions provide the core
+numerical algorithm for non-linear least-squares minimization, the lmfit
+package adds a few simple conveniences.
 
 For any minimization problem, the programmer must provide a function that
 takes a set of values for the variables in the fit, and produces the
