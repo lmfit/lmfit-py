@@ -13,7 +13,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.1',
+        VERSION:     '0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -414,6 +414,30 @@ By default, numerical derivatives are used, and the following arguments are set:
 <tt class="descname">lbfgsb</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#lbfgsb" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
 <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.fmin_l_bfgs_b</a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="prepare_fit">
+<tt class="descname">prepare_fit</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#prepare_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>prepares and initializes model and Parameters for subsequent
+fitting. This routine prepares the conversion of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>
+into fit variables, organizes parameter bounds, and parses, checks and
+&quot;compiles&quot; constrain expressions.</p>
+<p>This is called directly by the fitting methods, and it is generally not
+necessary to call this function explicitly.  An exception is when you
+would like to call your function to minimize prior to running one of the
+minimization routines, for example, to calculate the initial residual
+function.  In that case, you might want to do something like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">myfit</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">my_residual</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>  <span class="n">fcn_args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">fcn_kws</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">})</span>
+
+<span class="n">myfit</span><span class="o">.</span><span class="n">prepare_fit</span><span class="p">()</span>
+<span class="n">init</span> <span class="o">=</span> <span class="n">my_residual</span><span class="p">(</span><span class="n">p_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">init</span><span class="p">,</span> <span class="s">&#39;b--&#39;</span><span class="p">)</span>
+
+<span class="n">myfit</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>That is, this method should be called prior to your fitting function being called.</p>
 </dd></dl>
 
 </div>
