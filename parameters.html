@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting started with Non-Linear Least-Squares Fitting &mdash; Least-Squares Minimization with Constraints for Python</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Least-Squares Minimization with Constraints for Python" href="index.html" />
+    <link rel="next" title="Performing Fits, Analyzing Outputs" href="fitting.html" />
+    <link rel="prev" title="Downloading and Installation" href="installation.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Downloading and Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting started with Non-Linear Least-Squares Fitting</a><ul>
+<li><a class="reference internal" href="#using-parameters-instead-of-variables">Using <tt class="docutils literal"><span class="pre">Parameters</span></tt> instead of Variables</a></li>
+<li><a class="reference internal" href="#the-parameter-class">The <tt class="docutils literal"><span class="pre">Parameter</span></tt> class</a></li>
+<li><a class="reference internal" href="#the-parameters-class">The <tt class="docutils literal"><span class="pre">Parameters</span></tt> class</a></li>
+<li><a class="reference internal" href="#simple-example">Simple Example:</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation.html"
+                        title="previous chapter">Downloading and Installation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fitting.html"
+                        title="next chapter">Performing Fits, Analyzing Outputs</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/parameters.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started-with-non-linear-least-squares-fitting">
+<h1>Getting started with Non-Linear Least-Squares Fitting<a class="headerlink" href="#getting-started-with-non-linear-least-squares-fitting" title="Permalink to this headline">¶</a></h1>
+<p>The lmfit package is designed to provide a simple way to build complex
+fitting models and apply them to real data.   This chapter describes how to
+set up and perform simple fits, but does assume some basic knowledge of
+Python, Numpy, and modeling data.</p>
+<p>To model data in the least-squares sense, the most important step is
+writing a function that takes the values of the fitting variables and
+calculates a residual function (data-model) that is to be minimized in the
+least-squares sense</p>
+<div class="math">
+<p><img src="_images/math/0999ab8f1f536075a4ce7cab471c891041d7ac6c.png" alt="\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}" /></p>
+</div><p>where <img class="math" src="_images/math/46c77f95690c67f66ff8f15c8b7b287fc72ddb51.png" alt="y_i^{\rm meas}"/> is the set of measured data, <img class="math" src="_images/math/5701af25a70669f531ef4c956d9f8d6227175071.png" alt="y_i^{\rm
+model}({\bf{v}})"/> is the model calculation, <img class="math" src="_images/math/83f0be20c5972fb3136e8e37f24ac4a6cce2fbf4.png" alt="{\bf{v}}"/> is the set of
+variables in the model to be optimized in the fit, and <img class="math" src="_images/math/319593f7ae7122d7910bdf87a156b25f7588f1ad.png" alt="\epsilon_i"/>
+is the estimated uncertainty in the data.</p>
+<p>In a traditional non-linear fit, one writes a function that takes the
+variable values and calculates the residual <img class="math" src="_images/math/e5ba98e136ed2f40b3c5119abb1d1b9719da124f.png" alt="y^{\rm meas}_i -
+y_i^{\rm model}({\bf{v}})"/>, perhaps something like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">phaseshift</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">freq</span>  <span class="o">+</span> <span class="n">phaseshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To perform the minimization with scipy, one would do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
+<span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Though in python, and fairly easy to use, this is not terribly different
+from how one would do the same fit in C or Fortran.</p>
+<div class="section" id="using-parameters-instead-of-variables">
+<span id="parameters-label"></span><h2>Using <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> instead of Variables<a class="headerlink" href="#using-parameters-instead-of-variables" title="Permalink to this headline">¶</a></h2>
+<p>As described above, there are several practical challenges in doing
+least-squares fit with the traditional implementation (Fortran,
+scipy.optimize.leastsq, and most other) in which a list of fitting
+variables to the function to be minimized.  These challenges include:</p>
+<blockquote>
+<div><ol class="loweralpha simple">
+<li>The user has to keep track of the order of the variables, and their
+meaning -- vars[2] is the frequency, and so on.</li>
+<li>If the user wants to fix a particular variable (<em>not</em> vary it in the fit),
+the residual function has to be altered.  While reasonable for simple
+cases, this quickly becomes significant work for more complex models,
+and greatly complicates modeling for people not intimately familiar
+with the code.</li>
+<li>There is no way to put bounds on values for the variables, or enforce
+mathematical relationships between the variables.</li>
+</ol>
+</div></blockquote>
+<p>LMFIT is designed to void these shortcomings.</p>
+<p>The main idea of LMFIT is to expand a numerical variable with a
+<a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>, which have more attributes than simply their value.
+Instead of a pass a list of numbers to the function to minimize, you create
+a <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> object, add parameters to this object, and pass along
+this object to your function to be minimized.  With this transformation,
+the above example would be translated to look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">pshift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;phase&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">freq</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;frequency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">freq</span>  <span class="o">+</span> <span class="n">pshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;phase&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>So far, this simply looks like it replaced a list of values with a
+dictionary, accessed by name.  But each of the named <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> in
+the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> object hold additional attributes to modify the
+value during the fit.  For example, Parameters can be fixed or bounded, and
+this can be done when being defined:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;phase&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or later:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="mf">0.10</span>
+</pre></div>
+</div>
+<p>Now the fit will <em>not</em> vary the amplitude parameter, and will also impose a
+lower bound on the decay factor and an upper bound on the frequency.
+Importantly, our function to be minimized remains unchanged.</p>
+<p>An important point here is that the <cite>params</cite> object can be copied and
+modified to make many user-level changes to the model and fitting process.
+Of course, most of the inormation about how your data is modeled goes into
+the fitting function, but the approach here allows some external control as
+well.</p>
+</div>
+<div class="section" id="the-parameter-class">
+<h2>The <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> class<a class="headerlink" href="#the-parameter-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Parameter">
+<em class="property">class </em><tt class="descname">Parameter</tt><big>(</big><em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a Parameter object.   These are the fundamental extension of a
+fit variable within LMFIT, but you will probably create most of these
+with the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>value</strong> -- the numerical value for the parameter</li>
+<li><strong>vary</strong> (boolean (<tt class="xref docutils literal"><span class="pre">True</span></tt>/<tt class="xref docutils literal"><span class="pre">False</span></tt>)) -- whether to vary the parameter or not.</li>
+<li><strong>min</strong> -- lower bound for value (<tt class="xref docutils literal"><span class="pre">None</span></tt> = no lower bound).</li>
+<li><strong>max</strong> -- upper bound for value (<tt class="xref docutils literal"><span class="pre">None</span></tt> = no upper bound).</li>
+<li><strong>name</strong> (<tt class="xref docutils literal"><span class="pre">None</span></tt> or string -- will be overwritten during fit if <tt class="xref docutils literal"><span class="pre">None</span></tt>.) -- parameter name</li>
+<li><strong>expr</strong> (<tt class="xref docutils literal"><span class="pre">None</span></tt> or string) -- mathematical expression to use to evaluate value during fit.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Each of these inputs is turned into an attribute of the same name.   As
+above, one hands a dictionary of Parameters to the fitting routines.   The
+name for the Parameter will be set to be consistent</p>
+<p>After a fit, a Parameter for a fitted variable (ie with vary = <tt class="xref docutils literal"><span class="pre">True</span></tt>)
+will have the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> attribute holding the best-fit value, and may
+(depending on the success of the fit) have obtain additional attributes.</p>
+<dl class="attribute">
+<dt id="stderr">
+<tt class="descname">stderr</tt><a class="headerlink" href="#stderr" title="Permalink to this definition">¶</a></dt>
+<dd><p>the estimated standard error for the best-fit value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="correl">
+<tt class="descname">correl</tt><a class="headerlink" href="#correl" title="Permalink to this definition">¶</a></dt>
+<dd><p>a dictionary of the correlation with the other fitted variables in the
+fit, of the form:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;decay&#39;</span><span class="p">:</span> <span class="mf">0.404</span><span class="p">,</span> <span class="s">&#39;phase&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.020</span><span class="p">,</span> <span class="s">&#39;frequency&#39;</span><span class="p">:</span> <span class="mf">0.102</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>The <tt class="xref py py-attr docutils literal"><span class="pre">expr</span></tt> attribute can contain a mathematical expression that will
+be used to compute the value for the Parameter at each step in the fit.
+See <a class="reference internal" href="constraints.html#math-constraints-label"><em>Using Mathematical Constraints</em></a> for more details and examples of this
+feature.</p>
+</div>
+<div class="section" id="the-parameters-class">
+<h2>The <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class<a class="headerlink" href="#the-parameters-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Parameters">
+<em class="property">class </em><tt class="descname">Parameters</tt><a class="headerlink" href="#Parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a Parameters object.  This is little more than a fancy
+dictionary, with the restrictions that</p>
+<p>1. keys must be valid Python symbol names (so that they can be used in
+expressions of mathematical constraints).  This means the names must
+match <tt class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></tt>  and cannot be a Python reserved word.</p>
+<ol class="arabic simple" start="2">
+<li>values must be vaild <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects.</li>
+</ol>
+<p>Two methods for provided for convenience of initializing Parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="add">
+<tt class="descname">add</tt><big>(</big><em>name</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#add" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a named parameter.  This simply creates a <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
+object associated with the key <cite>name</cite>, with optional arguments
+passed to <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;myvar&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="add_many">
+<tt class="descname">add_many</tt><big>(</big><em>self</em>, <em>paramlist</em><big>)</big><a class="headerlink" href="#add_many" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a list of named parameters.  Each entry must be a tuple
+with the following entries:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">vary</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">expr</span>
+</pre></div>
+</div>
+<p>That is, this method is somewhat rigid and verbose (no default values),
+but can be useful when initially defining a parameter list so that it
+looks table-like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="c">#           (Name,  Value,  Vary,   Min,  Max,  Expr)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s">&#39;amp1&#39;</span><span class="p">,</span>    <span class="mi">10</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s">&#39;cen1&#39;</span><span class="p">,</span>   <span class="mf">1.2</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">2.0</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s">&#39;wid1&#39;</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s">&#39;amp2&#39;</span><span class="p">,</span>   <span class="mf">7.5</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s">&#39;cen2&#39;</span><span class="p">,</span>   <span class="mf">1.9</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s">&#39;wid2&#39;</span><span class="p">,</span>  <span class="bp">None</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;2*wid1/3&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="simple-example">
+<h2>Simple Example:<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
+<p>Putting it all together, a simple example of using a dictionary of
+<a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> s  and <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> might look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;phase_shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;omega&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;phase_shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+
+<span class="k">print</span> <span class="n">result</span><span class="o">.</span><span class="n">chisqr</span>
+<span class="k">print</span> <span class="s">&#39;Best-Fit Values:&#39;</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">par</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&#39;  </span><span class="si">%s</span><span class="s"> = </span><span class="si">%.4f</span><span class="s"> +/- </span><span class="si">%.4f</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The results of this fit looks like this:</p>
+<div class="highlight-python"><pre>OUTPUT HERE...</pre>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="installation.html" title="Downloading and Installation"
+             >previous</a> |</li>
+        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>
