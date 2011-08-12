@@ -258,7 +258,7 @@ The Minimizer object has a few public methods:
    `scipy.optimize.leastsq <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html>`_. 
    By default, numerical derivatives are used, and the following arguments are set:
    
-     +----------------------+----------------+------------------------------------------------------------+
+    +----------------------+----------------+------------------------------------------------------------+
     | ``leastsq`` argument |  Defautl Value | Description                                                |
     +======================+================+============================================================+
     | ``xtol``             |  1.e-7         | Relative error in the approximate solution                 |
