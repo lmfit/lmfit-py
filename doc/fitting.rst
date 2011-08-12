@@ -16,7 +16,7 @@ The minimize function takes a function to minimze, a dictionary of
 :class:`Parameter` , and several optional arguments.    See
 :ref:`fit-func-label` for details on writing the function to minimize.
 
-.. function:: minimize(function, params[, args=None[, kws=None[, **leastsq_kws]]])
+.. function:: minimize(function, params[, args=None[, kws=None[, engine='leastsq'[, **leastsq_kws]]]])
 
    find values for the params so that the sum-of-squares of the returned array
    from function is minimized.
@@ -31,6 +31,8 @@ The minimize function takes a function to minimze, a dictionary of
    :type  args:  tuple
    :param kws:   dictionary to pass to the residual function as keyword arguments.
    :type  kws:  dict
+   :param engine:  name of fitting engine to use. See  :ref:`fit-engines-label` for details
+   :type  engine:  string
    :param leastsq_kws:  dictionary to pass to scipy.optimize.leastsq
    :type  leastsq_kws:  dict
    :return: Minimizer object, which can be used to inspect goodness-of-fit
@@ -109,17 +111,36 @@ but might be wiser to put this directly in the function with::
 
 
 
+..  _fit-engines-label:
+
+Choosing Different Fitting Engines
+===========================================
+
+By default, the `Levenberg-Marquardt
+<http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm>`_ algorithm is
+for fitting.  While often criticized as finding only *local* minima, this
+approach has some distinct advantages, in that it is fast, well-behaved for
+most curve-fitting needs, and makes it easy to estimate uncertainties for
+and correlations between pairs of fit variables, as discussed in
+:ref:`fit-results-label`.
+
+Alternative algorithms can also be used.
+
+
+
 ..  _fit-results-label:
 
 Goodness-of-Fit and estimated uncertainty and correlations
 ===================================================================
 
-On a successful fit, several goodness-of-fit statistics and values related to the uncertainty in
-the fitted variables will be calculated.  These are all encapsulated in the :class:`Minimizer`
-object for the fit, as returned by :func:`minimize`.  The values related to the entire fit are
-stored in attributes of the :class:`Minimizer` object, as shown in :ref:`Table of Goodness-of-Fit
-Statistics <goodfit-table>` while those related to each fitted variables are stored as attributes
-of the corresponding :class:`Parameter`.
+On a successful fit using the `leastsq` engine, several goodness-of-fit
+statistics and values related to the uncertainty in the fitted variables
+will be calculated.  These are all encapsulated in the :class:`Minimizer`
+object for the fit, as returned by :func:`minimize`.  The values related to
+the entire fit are stored in attributes of the :class:`Minimizer` object,
+as shown in :ref:`Table of Goodness-of-Fit Statistics <goodfit-table>`
+while those related to each fitted variables are stored as attributes of
+the corresponding :class:`Parameter`.
 
 
 .. _goodfit-table:

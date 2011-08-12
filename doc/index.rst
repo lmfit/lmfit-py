@@ -4,24 +4,33 @@ Non-Linear Least-Square Minimization for Python
 ================================================
 
 .. _scipy.optimize.leastsq: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html
+.. _scipy.optimize.l_bfgs_b: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.l_bfgs_b.html
 .. _scipy.optimize.anneal: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html
 
-The lmfit Python package provides a simple, flexible interface to
-non-linear least-squares optimization, or curve fitting.  Currently, LMFIT
-can use either the Levenberg-Marquardt from MINPACK-1 as implemented in
-`scipy.optimize.leastsq`_, or the simulated annealing approach as
-implemented in `scipy.optimize.anneal`_.  Support for other optimization
-routines may be added as well.  While these functions provide the core
-numerical algorithm for non-linear least-squares minimization, the lmfit
-package adds a few simple conveniences.
+.. _L-BFGS:  http://en.wikipedia.org/wiki/Limited-memory_BFGS
+.. _Levenberg-Marquardt: http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
+.. _simulated annealing: http://en.wikipedia.org/wiki/Simulated_annealing
 
-For any minimization problem, the programmer must provide a function that
-takes a set of values for the variables in the fit, and produces the
-residual function to be minimized in the least-squares sense.
+.. _MINPACK-1: http://en.wikipedia.org/wiki/MINPACK
 
-The lmfit package allows models to be written in terms of a set of
-Parameters, which are extensions of simple numerical variables with the
-following properties:
+The lmfit Python package provides a simple, flexible interface to non-linear least-squares
+optimization, or curve fitting.  By default, LMFIT uses the `Levenberg-Marquardt`_
+minimization algorithm from `MINPACK-1`_ as implemented in `scipy.optimize.leastsq`_, but
+it can also use the `L-BFGS`_ (limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm
+as implemented in `scipy.optimize.l_bfgs_b`_ or the `simulated annealing`_ algorithm as
+implemented in `scipy.optimize.anneal`_.  Support for other optimization routines may be
+added in the future.  While these functions from scipy.optimize provide the core numerical
+algorithm for non-linear least-squares minimization, the lmfit package adds a few simple
+conveniences.  Most of this document will assume that the Levenberg-Marquardt algorithm is
+being discussed, as it appears to be the most robust for finding local minima of
+well-described models of scientific measurements.
+
+For any minimization problem, the programmer must provide a function that takes a set of
+values for the variables in the fit, and produces the residual function to be minimized in
+the least-squares sense.
+
+The lmfit package allows models to be written in terms of a set of Parameters, which are
+extensions of simple numerical variables with the following properties:
 
  * Parameters can be fixed or floated in the fit.
  * Parameters can be bounded with a minimum and/or maximum value.
@@ -30,11 +39,10 @@ following properties:
    step in the fit, so that the expression is statisfied.  This gives
    a simple but flexible approach to constraining fit variables.
 
-The main advantage to using Parameters instead of fit variables is that the
-model function does not have to be rewritten for a change in what is varied
-or what constraints are placed on the fit.  The programmer can write a
-fairly general model, and allow a user of the model to change what is
-varied and what constraints are placed on the model.
+The main advantage to using Parameters instead of fit variables is that the model function
+does not have to be rewritten for a change in what is varied or what constraints are
+placed on the fit.  The programmer can write a fairly general model, and allow a user of
+the model to change what is varied and what constraints are placed on the model.
 
 In addition, lmfit calculates are reports the estimated uncertainties
 and correlation between fitted variables.
