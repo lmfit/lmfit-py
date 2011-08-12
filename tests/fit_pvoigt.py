@@ -28,27 +28,26 @@ xmin = 0.
 xmax = 20.0
 x = linspace(xmin, xmax, n)
 
-noise = random.normal(scale=2.5, size=n) + x*0.62 + -1.023
-
 p_true = Parameters()
-p_true.add('amp', value=21.0)
-p_true.add('cen', value=8.3)
-p_true.add('wid', value=1.6)
+p_true.add('amp_g', value=21.0)
+p_true.add('cen_g', value=8.1)
+p_true.add('wid_g', value=1.6)
 p_true.add('frac', value=0.37)
+p_true.add('line_off', value=-1.023)
+p_true.add('line_slope', value=0.62)
 
-
-data = pvoigt(x, p_true['amp'].value,
-              p_true['cen'].value,
-              p_true['wid'].value,
-              p_true['frac'].value) + noise
+data = (pvoigt(x, p_true['amp_g'].value, p_true['cen_g'].value,
+              p_true['wid_g'].value, p_true['frac'].value) +
+        random.normal(scale=0.23,  size=n) +
+        x*p_true['line_slope'].value + p_true['line_off'].value )
 
 pylab.plot(x, data, 'r+')
 
 p_fit = Parameters()
 p_fit.add('amp_g', value=10.0)
-p_fit.add('cen_g', value=8.5)
-p_fit.add('wid_g', value=1.6)
-p_fit.add('frac', value=0.50, max=1.3)
+p_fit.add('cen_g', value=9)
+p_fit.add('wid_g', value=1)
+p_fit.add('frac', value=0.50)
 p_fit.add('amp_l', expr='amp_g')
 p_fit.add('cen_l', expr='cen_g')
 p_fit.add('wid_l', expr='wid_g')
@@ -67,7 +66,7 @@ myfit.leastsq()
 print ' Nfev = ', myfit.nfev
 print myfit.chisqr, myfit.redchi, myfit.nfree
 
-report_errors(p_fit)
+report_errors(p_fit, modelpars=p_true)
 
 fit = residual(p_fit, x)
 

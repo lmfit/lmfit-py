@@ -22,23 +22,24 @@ noise = random.normal(scale=.65, size=n)
 x = linspace(xmin, xmax, n)
 
 fit_params = Parameters()
-fit_params.add_many(('a1', 12.0, True, None, None),
-                    ('c1',  5.3, True, None, None),
-                    ('w1',  1.0, True, None, None),
-                    ('a2',  9.1, True, None, None),
-                    ('c2',  8.1, True, None, None),
-                    ('w2',  2.5, True, None, None))
+fit_params.add_many(('a1', 12.0, True, None, None, None),
+                    ('c1',  5.3, True, None, None, None),
+                    ('w1',  1.0, True, None, None, None),
+                    ('a2',  9.1, True, None, None, None),
+                    ('c2',  8.1, True, None, None, None),
+                    ('w2',  2.5, True, None, None, None))
 
 data  = residual(fit_params, x) + noise
 
 pylab.plot(x, data, 'r+')
 
 fit_params = Parameters()
-fit_params.add_many(('a1',  8.0, True, None, 14.),
-                    ('c1',  5.0, True, None, None),
-                    ('w1',  0.7, True, None, None),
-                    ('a2',  3.1, True, None, None),
-                    ('c2',  8.8, True, None, None))
+fit_params.add_many(('a1',  8.0, True, None, 14., None),
+                    ('c1',  5.0, True, None, None, None),
+                    ('w1',  0.7, True, None, None, None),
+                    ('a2',  3.1, True, None, None, None),
+                    ('c2',  8.8, True, None, None, None))
+
 fit_params.add('w2', expr='2.5*w1')
 
 myfit = Minimizer(residual, fit_params,

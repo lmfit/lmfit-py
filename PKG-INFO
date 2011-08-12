@@ -1,7 +1,7 @@
 Metadata-Version: 1.0
-Name: lmfit-py
-Version: 1.0
-Summary: Least-Squares Minimization with Constraints
+Name: lmfit
+Version: 0.2
+Summary: Least-Squares Minimization with Constraints for Python
 Home-page: http://cars9.uchicago.edu/software/lmfit/
 Author: Matthew Newville
 Author-email: newville@cars.uchicago.edu

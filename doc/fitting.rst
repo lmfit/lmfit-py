@@ -280,3 +280,29 @@ The Minimizer object has a few public methods:
    perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
    `scipy.optimize.fmin_l_bfgs_b <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html>`_. 
 
+
+.. method:: prepare_fit(**kws)
+
+   prepares and initializes model and Parameters for subsequent
+   fitting. This routine prepares the conversion of :class:`Parameters`
+   into fit variables, organizes parameter bounds, and parses, checks and
+   "compiles" constrain expressions.
+
+
+   This is called directly by the fitting methods, and it is generally not
+   necessary to call this function explicitly.  An exception is when you
+   would like to call your function to minimize prior to running one of the
+   minimization routines, for example, to calculate the initial residual
+   function.  In that case, you might want to do something like::
+
+      myfit = Minimizer(my_residual, params,  fcn_args=(x,), fcn_kws={'data':data})
+
+      myfit.prepare_fit()
+      init = my_residual(p_fit, x)
+      pylab.plot(x, init, 'b--')
+   
+      myfit.leastsq()
+
+   That is, this method should be called prior to your fitting function being called.
+
+

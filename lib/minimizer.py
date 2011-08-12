@@ -191,7 +191,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # print '%s: %s' % ('ITER : ', ','.join(sout))
         return self.userfcn(self.params, *self.userargs, **self.userkws)
 
-    def __prepare_fit(self):
+    def prepare_fit(self):
         """prepare parameters for fit"""
 
         # determine which parameters are actually variables
@@ -245,7 +245,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if schedule in ('cauchy', 'boltzmann'):
             sched = schedule
 
-        self.__prepare_fit()
+        self.prepare_fit()
         sakws = dict(full_output=1, schedule=sched,
                      maxiter = 2000 * (self.nvarys + 1),
                      upper = self.vmax, lower=self.vmin)
@@ -265,7 +265,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         use l-bfgs-b minimization
         """
-        self.__prepare_fit()
+        self.prepare_fit()
         lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
                       maxfun = 2000 * (self.nvarys + 1),
                       bounds = zip(self.vmin, self.vmax))
@@ -300,7 +300,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         returns True if fit was successful, False if not.
         """
 
-        self.__prepare_fit()
+        self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
                      maxfev= 1000 * (self.nvarys + 1))
         lskws.update(self.kws)

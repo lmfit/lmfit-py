@@ -1,4 +1,4 @@
-installdir='/home/newville/public_html/lmfit'
+installdir='/www/apache/htdocs/software/python/lmfit'
 docbuild='doc/_build'
 
 cd doc 

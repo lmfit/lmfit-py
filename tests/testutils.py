@@ -1,20 +1,23 @@
 from __future__ import print_function
 
-def report_errors(params):
+def report_errors(params, modelpars=None):
     """write report for fitted params"""
     parnames = sorted(params)
     print('-------------------------------------')
     print( 'Best Fit Values and Standard Errors:')
     namelen = max([len(n) for n in parnames])
+
     for name in parnames:
         par = params[name]
         space = ' '*(namelen+2 - len(name))
         nout = " %s: %s" % (name, space)
+        initval = 'inital= % .6f' % par.init_value
+        if modelpars is not None and name in modelpars:
+            initval = '%s, model_value=% .6f' % (initval, modelpars[name].value)
         if par.vary:
-            print(" %s % .6f +/- %.6f (inital = % .6f)" % (nout,
-                                                          par.value,
-                                                          par.stderr,
-                                                          par.init_value))
+            print(" %s % .6f +/- %.6f (%s)" % (nout, par.value,
+                                               par.stderr, initval))
+
         elif par.expr is not None:
             print(" %s % .6f  == '%s'" % (nout, par.value,
                                                 par.expr))
