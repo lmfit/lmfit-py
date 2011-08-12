@@ -169,7 +169,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.asteval.symtable[name] = par.value = float(val)
         self.updated[name] = True
 
-    def calc_residual(self, fvars):
+    def __residual(self, fvars):
         """
         residual function used for least-squares fit.
         With the new, candidate values of fvars (the fitting variables),
@@ -191,7 +191,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # print '%s: %s' % ('ITER : ', ','.join(sout))
         return self.userfcn(self.params, *self.userargs, **self.userkws)
 
-    def prepare_fit(self):
+    def __prepare_fit(self):
         """prepare parameters for fit"""
 
         # determine which parameters are actually variables
@@ -245,7 +245,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if schedule in ('cauchy', 'boltzmann'):
             sched = schedule
 
-        self.prepare_fit()
+        self.__prepare_fit()
         sakws = dict(full_output=1, schedule=sched,
                      maxiter = 2000 * (self.nvarys + 1),
                      upper = self.vmax, lower=self.vmin)
@@ -254,7 +254,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         sakws.update(kws)
 
         def penalty(params):
-            r =self.calc_residual(params)
+            r =self.__residual(params)
             return (r*r).sum()
 
         saout = scipy_anneal(penalty, self.vars, **sakws)
@@ -265,14 +265,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         use l-bfgs-b minimization
         """
-        self.prepare_fit()
+        self.__prepare_fit()
         lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
                       maxfun = 2000 * (self.nvarys + 1),
                       bounds = zip(self.vmin, self.vmax))
         lb_kws.update(self.kws)
         lb_kws.update(kws)
         def penalty(params):
-            r =self.calc_residual(params)
+            r =self.__residual(params)
             return (r*r).sum()
         
         xout, fout, info = scipy_lbfgsb(penalty, self.vars, **lb_kws)
@@ -300,12 +300,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         returns True if fit was successful, False if not.
         """
 
-        self.prepare_fit()
+        self.__prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
                      maxfev= 1000 * (self.nvarys + 1))
+        lskws.update(self.kws)
         lskws.update(kws)
 
-        lsout = scipy_leastsq(self.calc_residual, self.vars, **lskws)
+        lsout = scipy_leastsq(self.__residual, self.vars, **lskws)
         vbest, cov, infodict, errmsg, ier = lsout
 
         self.residual = resid = infodict['fvec']
