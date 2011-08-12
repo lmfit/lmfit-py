@@ -12,7 +12,9 @@ from numpy import sqrt
 from asteval import Interpreter, NameFinder
 from astutils import valid_symbol_name
 
-from scipy.optimize import leastsq
+from scipy.optimize import leastsq as scipy_leastsq
+from scipy.optimize import anneal as scipy_anneal
+from scipy.optimize import fmin_l_bfgs_b as scipy_lbfgsb
 
 from UserDict import DictMixin
 
@@ -40,7 +42,7 @@ class Parameters(dict, DictMixin):
         value.name = key
 
     def add(self, name, value=None, vary=True, expr=None,
-            min=None, max=None, **kws):
+            min=None, max=None):
         """convenience function for adding a Parameter:
         with   p = Parameters()
         p.add(name, value=XX, ....)
@@ -49,20 +51,21 @@ class Parameters(dict, DictMixin):
         p[name] = Parameter(name=name, value=XX, ....
         """
         self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
-                                         expr=expr, min=min, max=max, **kws))
+                                         expr=expr, min=min, max=max))
 
     def add_many(self, *parlist):
         """convenience function for adding a list of Parameters:
         Here, you must provide a sequence of tuples, each containing:
-            name, value, vary, min, max
+            name, value, vary, min, max, expr
         with   p = Parameters()
-        p.add_many( (name1, val1, True, None, None),
-                    (name2, val2, True,  0.0, None),
-                    (name3, val3, False, None, None))
+        p.add_many( (name1, val1, True, None, None, None),
+                    (name2, val2, True,  0.0, None, None),
+                    (name3, val3, False, None, None, None))
 
         """
-        for name, value, vary, min, max in parlist:
-            self.add(name, value=value, vary=vary, min=min, max=max)
+        for name, value, vary, min, max, expr in parlist:
+            self.add(name, value=value, vary=vary,
+                     min=min, max=max, expr=expr)
 
 class Parameter(object):
     """A Parameter is the basic Parameter going
@@ -121,7 +124,7 @@ class Minimizer(object):
     minimize(func, params, ...., maxfev=NNN)
 or set  leastsq_kws['maxfev']  to increase this maximum."""
 
-    def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None):
+    def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None, **kws):
         self.userfcn = userfcn
         self.params = params
 
@@ -132,7 +135,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.userkws = fcn_kws
         if self.userkws is None:
             self.userkws = {}
-
+        self.kws = kws
         self.var_map = []
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
@@ -182,6 +185,10 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         for name in self.params:
             self.__update_paramval(name)
 
+        sout = []
+        for i in self.params.values():
+            sout.append('%s=%s'  % (i.name, repr(i.value)))
+        print '%s: %s' % ('ITER : ', ','.join(sout))
         return self.userfcn(self.params, *self.userargs, **self.userkws)
 
     def prepare_fit(self):
@@ -194,6 +201,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.var_map = []
         self.vars = []
+        self.vmin = []
+        self.vmax = []
         for name, par in self.params.items():
             if par.expr is not None:
                 par.ast = self.asteval.compile(par.expr)
@@ -210,6 +219,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             elif par.vary:
                 self.var_map.append(name)
                 self.vars.append(par.value)
+                self.vmin.append(par.min)
+                self.vmax.append(par.max)
 
             self.asteval.symtable[name] = par.value
             par.init_value = par.value
@@ -225,13 +236,45 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         for name in self.params:
             self.__update_paramval(name)
 
-    def anneal(self, *args):
+    def anneal(self, schedule='cauchy', **kws):
         """
         use simulated annealing
         """
-        print("Not yet implemented....")
+        print("Simulated Annealing...")
+        sched = 'fast'
+        if schedule in ('cauchy', 'boltzmann'):
+            sched = schedule
+
         self.prepare_fit()
+        sakws = dict(full_output=1, schedule=sched,
+                     maxiter = 2000 * (self.nvarys + 1),
+                     upper = self.vmax, lower=self.vmin)
+
+        sakws.update(self.kws)
+        sakws.update(kws)
+
+        def penalty(params):
+            r =self.calc_residual(params)
+            return (r*r).sum()
+
+        saout = scipy_anneal(penalty, self.vars, **sakws)
+        self.sa_out = saout
         return
+
+    def lbfgsb(self, **kws):
+        """
+        use l-bfgs-b minimization
+        """
+        self.prepare_fit()
+        lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
+                      maxfun = 2000 * (self.nvarys + 1),
+                      bounds = zip(self.vmax, self.vmin))
+        lb_kws.update(self.kws)
+        lb_kws.update(kws)
+        print lb_kws
+        print self.vars
+        xout, fout, info = scipy_lbfgsb(self.calc_residual, self.vars, **lb_kws)
+
 
     def leastsq(self, **kws):
         """
@@ -254,7 +297,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                      maxfev= 1000 * (self.nvarys + 1))
         lskws.update(kws)
 
-        lsout = leastsq(self.calc_residual, self.vars, **lskws)
+        lsout = scipy_leastsq(self.calc_residual, self.vars, **lskws)
         vbest, cov, infodict, errmsg, ier = lsout
 
         self.residual = resid = infodict['fvec']
@@ -302,7 +345,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         return self.success
 
-def minimize(fcn, params, args=None, kws=None, **leastsq_kws):
-    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws, **leastsq_kws)
-    fitter.leastsq()
+def minimize(fcn, params, engine='leastsq', args=None, kws=None, **fit_kws):
+    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws, **fit_kws)
+    if engine == 'anneal':
+        fitter.anneal()
+    elif engine == 'lbfgsb':
+        fitter.lbfgsb()
+    else:
+        fitter.leastsq()
     return fitter
