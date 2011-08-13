@@ -7,4 +7,7 @@ python setup.py bdist_wininst --target-version=2.6 upload
 SET PATH=C:\Python27;%PATH%
 python setup.py bdist_wininst --target-version=2.7 upload
 
+SET PATH=C:\Python31;%PATH%
+python setup.py bdist_wininst --target-version=3.1 upload
+
 

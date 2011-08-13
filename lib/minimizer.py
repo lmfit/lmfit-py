@@ -13,16 +13,14 @@ function-to-be-minimized (residual function) in terms of these Parameters.
 """
 
 from numpy import sqrt
-from asteval import Interpreter, NameFinder
-from astutils import valid_symbol_name
+from .asteval import Interpreter, NameFinder
+from .astutils import valid_symbol_name
 
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import anneal as scipy_anneal
 from scipy.optimize import fmin_l_bfgs_b as scipy_lbfgsb
 
-from UserDict import DictMixin
-
-class Parameters(dict, DictMixin):
+class Parameters(dict):
     """a custom dictionary of Parameters.  All keys must be
     strings, and valid Python symbol names, and all values
     must be Parameters.
@@ -34,6 +32,7 @@ class Parameters(dict, DictMixin):
     add_many()
     """
     def __init__(self, *args, **kwds):
+        dict.__init__(self)
         self.update(*args, **kwds)
 
     def __setitem__(self, key, value):

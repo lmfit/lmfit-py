@@ -35,7 +35,7 @@ import sys
 import ast
 import math
 
-from astutils import (FROM_PY, FROM_MATH, FROM_NUMPY,
+from .astutils import (FROM_PY, FROM_MATH, FROM_NUMPY,
                       NUMPY_RENAMES, op2func,
                       ExceptionHolder)
 try:
