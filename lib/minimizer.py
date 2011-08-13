@@ -80,7 +80,7 @@ class Parameter(object):
         self.max = max
         self.vary = vary
         self.expr = expr
-        self.name = None
+        self.name = name
         self.stderr = None
         self.correl = None
 
@@ -94,7 +94,7 @@ class Parameter(object):
         elif not self.vary:
             val = "value=%s (fixed)" % (repr(self.value))
         s.append(val)
-        s.append("bounds=[%s:%s]" % (repr(self.min),repr(self.max)))
+        s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
         if self.expr is not None:
             s.append("expr='%s'" % (self.expr))
 
@@ -110,11 +110,12 @@ class MinimizerException(Exception):
         return "\n%s" % (self.msg)
 
 def check_ast_errors(error):
+    """check for errors derived from asteval, raise MinimizerException"""
     if len(error) > 0:
         msg = []
         for err in error:
             msg = '\n'.join(err.get_error())
-        raise MinimizernException(msg)
+        raise MinimizerException(msg)
 
 
 class Minimizer(object):
@@ -188,7 +189,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         sout = []
         for i in self.params.values():
             sout.append('%s=%.5f'  % (i.name, (i.value)))
-        # print '%s: %s' % ('ITER : ', ','.join(sout))
         return self.userfcn(self.params, *self.userargs, **self.userkws)
 
     def prepare_fit(self):
@@ -240,7 +240,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         use simulated annealing
         """
-        print("Simulated Annealing...")
         sched = 'fast'
         if schedule in ('cauchy', 'boltzmann'):
             sched = schedule
@@ -254,7 +253,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         sakws.update(kws)
 
         def penalty(params):
-            r =self.__residual(params)
+            "local penalty function -- anneal wants sum-squares residual"
+            r = self.__residual(params)
             return (r*r).sum()
 
         saout = scipy_anneal(penalty, self.vars, **sakws)
@@ -272,18 +272,16 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         lb_kws.update(self.kws)
         lb_kws.update(kws)
         def penalty(params):
-            r =self.__residual(params)
+            "local penalty function -- lbgfsb wants sum-squares residual"
+            r = self.__residual(params)
             return (r*r).sum()
-        
+
         xout, fout, info = scipy_lbfgsb(penalty, self.vars, **lb_kws)
 
-        for k, v in info.items():
-            print k, v
-            
         self.nfev =  info['funcalls']
         self.message = info['task']
 
-        
+
     def leastsq(self, **kws):
         """
         use Levenberg-Marquardt minimization to perform fit.
@@ -355,6 +353,10 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         return self.success
 
 def minimize(fcn, params, engine='leastsq', args=None, kws=None, **fit_kws):
+    """simple minimization function,
+    finding the values for the params which give the
+    minimal sum-of-squares of the array return by fcn
+    """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws, **fit_kws)
     if engine == 'anneal':
         fitter.anneal()
