@@ -1,4 +1,4 @@
-'''
+"""
 Safe(ish) evaluator of python expressions, using ast module.
 Emphasis is on mathematical expressions, and so uses numpy
 functions if available.
@@ -8,7 +8,26 @@ dictionary supporting a simple, flat namespace.
 
 Expressions can be compiled into ast node and then evaluated
 later, using the current values in the symtable.
-'''
+
+   Copyright (c) 2011 Matthew Newville, The University of Chicago
+   <newville@cars.uchicago.edu>
+
+  Permission to use and redistribute the source code or binary forms of this
+  software and its documentation, with or without modification is hereby
+  granted provided that the above notice of copyright, these terms of use,
+  and the disclaimer of warranty below appear in the source code and
+  documentation, and that none of the names of The University of Chicago or
+  the authors appear in advertising or endorsement of works derived from this
+  software without specific prior written permission from all parties.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+  DEALINGS IN THIS SOFTWARE.
+"""
 
 from __future__ import division, print_function
 import os
@@ -153,15 +172,29 @@ class NameFinder(ast.NodeVisitor):
         ast.NodeVisitor.generic_visit(self, node)
 
 class Interpreter:
-    """expression compiler and interpreter.
+    """mathematical expression compiler and interpreter.
+
   This module compiles expressions and statements to AST representation,
   using python's ast module, and then executes the AST representation
   using a dictionary of named object (variable, functions).
-  This then gives a restricted version of Python, with slightly modified
-  namespace rules. The program syntax here is expected to be valid Python.
 
-  The following Python syntax is not supported:
-      Exec, Lambda, Class, Global, Generators, Yield, Decorators
+  This then gives a restricted version of Python, being a procedural
+  language (though working on Python objects) with a simplified, flat
+  namespace (this is overcome in related implementaions). The program
+  syntax here is expected to be valid Python.
+
+  The following Python syntax elements are not supported:
+      Import, Exec, Lambda, Class, Global, Generators,
+      Yield, Decorators,  Else and Finally for Try-Except
+
+  Many parts of Python syntax are supported, including:
+     advanced slicing:    a[::-1], array[-3:, :, ::2]
+     if-expressions:      out = one_thing if TEST else other
+     list comprehension
+     for-loops, while-loops
+     if-then-elif-else conditionals
+     try-except (but not the 'else' or 'finally' variants ...)
+     function definitions with def
 
   """
 
@@ -223,7 +256,7 @@ class Interpreter:
         self.error.append(err)
 
     # main entry point for Ast node evaluation
-    #  compile:  string statement -> ast
+    #  compile:  text of statement -> ast
     #  interp :  ast -> result
     #  eval   :  string statement -> result = interp(compile(statement))
     def compile(self, text, lineno=-4):

@@ -1,3 +1,9 @@
+"""
+utility functions for asteval
+
+   Matthew Newville <newville@cars.uchicago.edu>,
+   The University of Chicago
+"""
 import ast
 import sys
 import re

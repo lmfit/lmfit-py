@@ -6,6 +6,10 @@ as a simple expression of other Fit Parameters.
 
 The user sets up a model in terms of instance of Parameters, writes a
 function-to-be-minimized (residual function) in terms of these Parameters.
+
+   Copyright (c) 2011 Matthew Newville, The University of Chicago
+   <newville@cars.uchicago.edu>
+
 """
 
 from numpy import sqrt

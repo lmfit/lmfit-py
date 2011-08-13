@@ -1,11 +1,9 @@
-
-LMfit-py is a Least-Squares Fitting routine with a simple, flexible
-approach to parameterizing a model for fitting to data.
-
-With LMfit-py, the programmer creates a model that is a function of a set
-of named Parameters.  Each Parameter can be fixed, adjusted in the fit, or
-held between upper and lower Bounds.  In addition, a parameter can be
-constrained as a simple mathematical expression of other Parameters.
+LMfit-py provides a Least-Squares Minimization routine and class
+with a simple, flexible approach to parameterizing a model for
+fitting to data.  Named Parameters can be held fixed or freely
+adjusted in the fit, or held between lower and upper bounds.  In
+addition, parameters can be constrained as a simple mathematical
+expression of other Parameters.
 
 To do this, the programmer defines a Parameters object, an enhanced
 dictionary, containing named parameters:
