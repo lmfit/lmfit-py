@@ -6,15 +6,15 @@
    and upper bounds.  In addition, parameters can be constrained
    as a simple mathematical expression of other Parameters.
 
-   version: 0.2
-   last update:  12-Aug-2011
+   version: 0.3
+   last update:  15-Aug-2011
    License:  BSD
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
             The University of Chicago
 
 """
-__version__ = '0.2'
+__version__ = '0.3'
 
 from .minimizer import minimize, Minimizer, Parameter, Parameters
 from .asteval import Interpreter, NameFinder
