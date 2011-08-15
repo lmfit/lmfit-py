@@ -69,9 +69,9 @@ variables to the function to be minimized.  These challenges include:
   c) There is no way to put bounds on values for the variables, or enforce
      mathematical relationships between the variables.
 
-LMFIT is designed to void these shortcomings.
+The lmfit module is designed to void these shortcomings.
 
-The main idea of LMFIT is to expand a numerical variable with a
+The main idea of lmfit is to expand a numerical variable with a
 :class:`Parameter`, which have more attributes than simply their value.
 Instead of a pass a list of numbers to the function to minimize, you create
 a :class:`Parameters` object, add parameters to this object, and pass along
@@ -123,7 +123,7 @@ Importantly, our function to be minimized remains unchanged.
 
 An important point here is that the `params` object can be copied and
 modified to make many user-level changes to the model and fitting process.
-Of course, most of the inormation about how your data is modeled goes into
+Of course, most of the information about how your data is modeled goes into
 the fitting function, but the approach here allows some external control as
 well.
 
@@ -134,7 +134,7 @@ The :class:`Parameter` class
 .. class:: Parameter(value=None[, vary=True[, min=None[, max=None[, name=None[, expr=None]]]]])
 
    create a Parameter object.   These are the fundamental extension of a
-   fit variable within LMFIT, but you will probably create most of these
+   fit variable within lmfit, but you will probably create most of these
    with the :class:`Parameters` class.
 
    :param value: the numerical value for the parameter
@@ -187,7 +187,7 @@ The :class:`Parameters` class
    expressions of mathematical constraints).  This means the names must
    match ``[a-z_][a-z0-9_]*``  and cannot be a Python reserved word.
 
-   2. values must be vaild :class:`Parameter` objects.
+   2. values must be valid :class:`Parameter` objects.
 
 
    Two methods for provided for convenience of initializing Parameters.

@@ -13,17 +13,22 @@ Non-Linear Least-Square Minimization for Python
 
 .. _MINPACK-1: http://en.wikipedia.org/wiki/MINPACK
 
-The lmfit Python package provides a simple, flexible interface to non-linear least-squares
-optimization, or curve fitting.  By default, LMFIT uses the `Levenberg-Marquardt`_
-minimization algorithm from `MINPACK-1`_ as implemented in `scipy.optimize.leastsq`_, but
-it can also use the `L-BFGS`_ (limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm
-as implemented in `scipy.optimize.l_bfgs_b`_ or the `simulated annealing`_ algorithm as
-implemented in `scipy.optimize.anneal`_.  Support for other optimization routines may be
-added in the future.  While these functions from scipy.optimize provide the core numerical
-algorithm for non-linear least-squares minimization, the lmfit package adds a few simple
-conveniences.  Most of this document will assume that the Levenberg-Marquardt algorithm is
-being discussed, as it appears to be the most robust for finding local minima of
-well-described models of scientific measurements.
+The lmfit Python package provides a simple, flexible interface to
+non-linear least-squares optimization, or curve fitting.  By default, lmfit
+uses the `Levenberg-Marquardt`_ minimization algorithm from `MINPACK-1`_ as
+implemented in `scipy.optimize.leastsq`_.  Support for other optimization
+routines is being added.  Currently, the `L-BFGS`_ (limited memory
+Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented in
+`scipy.optimize.l_bfgs_b`_ or the `simulated annealing`_ algorithm as
+implemented in `scipy.optimize.anneal`_ are both implemented and partially
+tested, and other optimization routines are being considered.
+
+While these functions from scipy.optimize provide the core numerical
+algorithm for non-linear least-squares minimization, the lmfit package adds
+a few simple conveniences.  Most of this document will assume that the
+Levenberg-Marquardt algorithm is being discussed, as it appears to be the
+most robust for finding local minima of well-described models of scientific
+measurements.
 
 For any minimization problem, the programmer must provide a function that takes a set of
 values for the variables in the fit, and produces the residual function to be minimized in
@@ -36,7 +41,7 @@ extensions of simple numerical variables with the following properties:
  * Parameters can be bounded with a minimum and/or maximum value.
  * Parameters can be written as simple mathematical expressions of
    other Parameters.  These values will be re-evaluated at each
-   step in the fit, so that the expression is statisfied.  This gives
+   step in the fit, so that the expression is satisfied.  This gives
    a simple but flexible approach to constraining fit variables.
 
 The main advantage to using Parameters instead of fit variables is that the model function
