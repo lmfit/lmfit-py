@@ -81,19 +81,17 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/lmf
 <h1>Non-Linear Least-Square Minimization for Python<a class="headerlink" href="#non-linear-least-square-minimization-for-python" title="Permalink to this headline">¶</a></h1>
 <p>The lmfit Python package provides a simple, flexible interface to
 non-linear least-squares optimization, or curve fitting.  By default, lmfit
-uses the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> minimization algorithm from <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> as
-implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.  Support for other optimization
-routines is being added.  Currently, the <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a> (limited memory
-Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented in
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> or the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
+uses and builds upon he <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> minimization algorithm from
+<a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.  Support for
+other optimization routines is being added.  Currently, the <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a>
+(limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented
+in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> or the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
 implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html">scipy.optimize.anneal</a> are both implemented and partially
-tested, and other optimization routines are being considered.</p>
-<p>While these functions from scipy.optimize provide the core numerical
-algorithm for non-linear least-squares minimization, the lmfit package adds
-a few simple conveniences.  Most of this document will assume that the
-Levenberg-Marquardt algorithm is being discussed, as it appears to be the
-most robust for finding local minima of well-described models of scientific
-measurements.</p>
+tested, and other optimization routines are being considered.  As the
+Levenberg-Marquardt algorithm is the most tested and appears to be the most
+robust for finding local minima of well-described models of scientific
+measurements, parts of this document may assume that it Levenberg-Marquardt
+algorithm is being discussed.</p>
 <p>For any minimization problem, the programmer must provide a function that takes a set of
 values for the variables in the fit, and produces the residual function to be minimized in
 the least-squares sense.</p>
@@ -113,8 +111,8 @@ a simple but flexible approach to constraining fit variables.</li>
 does not have to be rewritten for a change in what is varied or what constraints are
 placed on the fit.  The programmer can write a fairly general model, and allow a user of
 the model to change what is varied and what constraints are placed on the model.</p>
-<p>In addition, lmfit calculates are reports the estimated uncertainties
-and correlation between fitted variables.</p>
+<p>For the Levenberg-Marquardt algorithm, lmfit also calculates and reports the
+estimated uncertainties and correlation between fitted variables.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Downloading and Installation</a><ul>
