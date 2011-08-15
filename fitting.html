@@ -96,7 +96,7 @@ the <a class="reference internal" href="#Minimizer" title="Minimizer"><tt class=
 especially when using complicated constraints.</p>
 <div class="section" id="the-minimize-function">
 <h2>The <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function<a class="headerlink" href="#the-minimize-function" title="Permalink to this headline">¶</a></h2>
-<p>The minimize function takes a function to minimze, a dictionary of
+<p>The minimize function takes a function to minimize, a dictionary of
 <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> , and several optional arguments.    See
 <a class="reference internal" href="#fit-func-label"><em>Writing a Fitting Function</em></a> for details on writing the function to minimize.</p>
 <dl class="function">
@@ -173,7 +173,7 @@ advisable to unpack these to get numerical values at the top of the function.  A
 simple example would look like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="c"># unpack parameters:</span>
-    <span class="c">#  extract .value attribute for each parametr</span>
+    <span class="c">#  extract .value attribute for each parameter</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
     <span class="n">period</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;period&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
     <span class="n">shift</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -284,7 +284,7 @@ the corresponding <a class="reference internal" href="parameters.html#Parameter"
 <td>boolean (<tt class="xref docutils literal"><span class="pre">True</span></tt>/<tt class="xref docutils literal"><span class="pre">False</span></tt>) for whether fit succeeded.</td>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">errorbars</span></tt></td>
-<td>boolean (<tt class="xref docutils literal"><span class="pre">True</span></tt>/<tt class="xref docutils literal"><span class="pre">False</span></tt>) for whether uncertainities were estimated.</td>
+<td>boolean (<tt class="xref docutils literal"><span class="pre">True</span></tt>/<tt class="xref docutils literal"><span class="pre">False</span></tt>) for whether uncertainties were estimated.</td>
 </tr>
 <tr><td><tt class="docutils literal"><span class="pre">message</span></tt></td>
 <td>message about fit success.</td>
@@ -341,7 +341,7 @@ the fit result (<a class="reference internal" href="#Minimizer" title="Minimizer
 <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function.</p>
 <dl class="class">
 <dt id="Minimizer">
-<em class="property">class </em><tt class="descname">Minimizer</tt><big>(</big><em>function, params[, fcn_args=None[, fcn_kwsn=None[, **kws]]]]</em><big>)</big><a class="headerlink" href="#Minimizer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Minimizer</tt><big>(</big><em>function, params[, fcn_args=None[, fcn_kws=None[, **kws]]]]</em><big>)</big><a class="headerlink" href="#Minimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>creates a Minimizer, for fine-grain access to fitting methods and attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -382,7 +382,7 @@ By default, numerical derivatives are used, and the following arguments are set:
 </colgroup>
 <thead valign="bottom">
 <tr><th class="head"><tt class="docutils literal"><span class="pre">leastsq</span></tt> argument</th>
-<th class="head">Defautl Value</th>
+<th class="head">Default Value</th>
 <th class="head">Description</th>
 </tr>
 </thead>

@@ -45,7 +45,7 @@
 <li><a class="reference internal" href="#">Using Mathematical Constraints</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-operators-functions-and-constants">Supported Operators, Functions, and Constants</a></li>
-<li><a class="reference internal" href="#advanced-usage-of-expressions-in-lmfit">Advanced usage of Expressions in LMFIT</a></li>
+<li><a class="reference internal" href="#advanced-usage-of-expressions-in-lmfit">Advanced usage of Expressions in lmfit</a></li>
 </ul>
 </li>
 </ul>
@@ -82,24 +82,24 @@
   <div class="section" id="using-mathematical-constraints">
 <span id="math-constraints-label"></span><h1>Using Mathematical Constraints<a class="headerlink" href="#using-mathematical-constraints" title="Permalink to this headline">¶</a></h1>
 <p>While being able to fix variables and place upper and lower bounds on their
-values are key parts of LMFIT, an equally important feature is the ability
+1values are key parts of lmfit, an equally important feature is the ability
 to place mathematical constraints on parameters.  This section describes
 how to do this, and what sort of parameterizations are possible.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Just as one can place bounds on a Parameter, or keep it fixed during the
 fit, so too can one place mathematical constraints on parameters.  The way
-this is done with LMFIT is to write a Parameter as a mathematical
+this is done with lmfit is to write a Parameter as a mathematical
 expression of the other parameters and a set of pre-defined operators and
 functions.   The constraint expressions are simple Python statements,
 allowing one to place constraints like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frac_curve1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frac_curve2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;1 - frac_curve1&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frac_curve2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;1-frac_curve1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>as the <cite>frac_curve1</cite> parameter is updated at each step in the fit, the
-value of <cite>frac_curve2</cite> will be updated so that the two values are
+<p>as the value of the <cite>frac_curve1</cite> parameter is updated at each step in the
+fit, the value of <cite>frac_curve2</cite> will be updated so that the two values are
 constrained to add to 1.0.  Of course, such a constraint could be placed in
 the fitting function, but the use of such constraints allows the end-user
 to modify the model of a more general-purpose fitting function.</p>
@@ -108,19 +108,18 @@ built-in functions are available for flexible modeling.</p>
 </div>
 <div class="section" id="supported-operators-functions-and-constants">
 <h2>Supported Operators, Functions, and Constants<a class="headerlink" href="#supported-operators-functions-and-constants" title="Permalink to this headline">¶</a></h2>
-<p>The mathematicl expressions used to define constrained Parameters need to
+<p>The mathematical expressions used to define constrained Parameters need to
 be valid python expressions.  As you'd expect, the operators '+', '-', '*',
 '/', '**', are supported.  In fact, a much more complete set can be used,
 including Python's bit- and logical operators:</p>
-<div class="highlight-python"><pre>&amp;, |, ^, &lt;&lt;, &gt;&gt;, %, and, or, ==, &gt;, &gt;=, &lt;, &lt;=, !=, ~, not, is, is not,
-in, not in</pre>
+<div class="highlight-python"><pre>+, -, *, /, **, &amp;, |, ^, &lt;&lt;, &gt;&gt;, %, and, or,
+==, &gt;, &gt;=, &lt;, &lt;=, !=, ~, not, is, is not, in, not in</pre>
 </div>
 <p>The values for <cite>e</cite> (2.7182818...) and <cite>pi</cite> (3.1415926...) are available, as
 are  several supported mathematical and trigonometric function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nb">abs</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">acosh</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">asinh</span><span class="p">,</span> <span class="n">atan</span><span class="p">,</span> <span class="n">atan2</span><span class="p">,</span> <span class="n">atanh</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">copysign</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span>
-<span class="n">cosh</span><span class="p">,</span> <span class="n">degrees</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">fmod</span><span class="p">,</span> <span class="n">frexp</span><span class="p">,</span> <span class="n">fsum</span><span class="p">,</span> <span class="n">hypot</span><span class="p">,</span>
-<span class="n">isinf</span><span class="p">,</span> <span class="n">isnan</span><span class="p">,</span> <span class="n">ldexp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="n">log1p</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">modf</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">radians</span><span class="p">,</span>
-<span class="n">sin</span><span class="p">,</span> <span class="n">sinh</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">tan</span><span class="p">,</span> <span class="n">tanh</span><span class="p">,</span> <span class="n">trunc</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">abs</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">acosh</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">asinh</span><span class="p">,</span> <span class="n">atan</span><span class="p">,</span> <span class="n">atan2</span><span class="p">,</span> <span class="n">atanh</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">copysign</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">cosh</span><span class="p">,</span> <span class="n">degrees</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span>
+<span class="n">fabs</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">fmod</span><span class="p">,</span> <span class="n">frexp</span><span class="p">,</span> <span class="n">fsum</span><span class="p">,</span> <span class="n">hypot</span><span class="p">,</span> <span class="n">isinf</span><span class="p">,</span> <span class="n">isnan</span><span class="p">,</span> <span class="n">ldexp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="n">log1p</span><span class="p">,</span>
+<span class="nb">max</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">modf</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">radians</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">sinh</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">tan</span><span class="p">,</span> <span class="n">tanh</span><span class="p">,</span> <span class="n">trunc</span>
 </pre></div>
 </div>
 <p>In addition, all Parameter names will be available in the mathematical
@@ -151,33 +150,37 @@ is that Python's 1-line <em>if expression</em> is supported:</p>
 </div>
 </div>
 <div class="section" id="advanced-usage-of-expressions-in-lmfit">
-<h2>Advanced usage of Expressions in LMFIT<a class="headerlink" href="#advanced-usage-of-expressions-in-lmfit" title="Permalink to this headline">¶</a></h2>
+<h2>Advanced usage of Expressions in lmfit<a class="headerlink" href="#advanced-usage-of-expressions-in-lmfit" title="Permalink to this headline">¶</a></h2>
 <p>The expression is converted to a Python <a class="reference external" href="http://docs.python.org/library/ast.html">Abstract Syntax Tree</a>, which is an intermediate
-version of the expression -- partially compiled.  This means that Python's
-own parser is used to convert the expression into something that can easily
-be evaluated.</p>
-<p>In fact, the AST allows a nearly full version of Python to be supported,
-and the <tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> included with LMFIT support most of Python syntax,
+version of the expression -- a syntax-checked, partially compiled
+expression.  Among other things, this means that Python's own parser is
+used to parse and convert the expression into something that can easily be
+evaluated within Python.  It also means that the symbols in the expressions
+can point to any Python object.</p>
+<p>In fact, the use of Python's AST allows a nearly full version of Python to
+be supported, without using Python's built-in <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> function.  The
+<tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module included with lmfit actually supports most Python syntax,
 including for- and while-loops, conditional expressions, and user-defined
 functions.  There are several unsupported Python constructs, most notably
-the import statement, which helps make the <tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module safe from
-malicious use.</p>
-<p>Among other things, this means that one can pre-load domain-specific
-functions into the <tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module for later use in constrain
-expressions.</p>
-<p>The <a class="reference internal" href="fitting.html#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class contains a <tt class="docutils literal"><span class="pre">astevel</span></tt> attribute.  This has
-contains a complete AST interpreter, which (as used in LMFIT) uses a
-flat namespace, implemented as a single dictionary. That means you can
-preload symbols into the namespace for the constraints:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">custom_function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
-    <span class="k">print</span> <span class="s">&#39;In custom function!&#39;</span>
-    <span class="k">return</span> <span class="n">x</span><span class="o">+</span><span class="n">y</span>
+the class statement, so that new classes cannot be created, and the import
+statement, which helps make the <tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module safe from malicious use.</p>
+<p>This means that you can add domain-specific functions into the
+<tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module for later use in constraint expressions.  To do this,
+you would use the <tt class="xref py py-attr docutils literal"><span class="pre">asteval</span></tt> attribute of the <a class="reference internal" href="fitting.html#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a>
+class, which contains a complete AST interpreter.  As used in lmfit, the
+<tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module uses a flat namespace, implemented as a single
+dictionary. That means you can preload any Python symbol into the namespace
+for the constraints:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">lorenztian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
+    <span class="s">&quot;lorenztian function: wid = half-width at half-max&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">amp</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">/</span><span class="n">wid</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 
 <span class="n">fitter</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">()</span>
-<span class="n">fitter</span><span class="o">.</span><span class="n">asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s">&#39;myfunc&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">custom_function</span>
+<span class="n">fitter</span><span class="o">.</span><span class="n">asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s">&#39;lorenztian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lorenztian</span>
 </pre></div>
 </div>
-<p>and this <tt class="docutils literal"><span class="pre">myfunc</span></tt> can now be used inside constraints.</p>
+<p>and this <tt class="xref py py-meth docutils literal"><span class="pre">lorenztian()</span></tt> function can now be used in constraint
+expressions.</p>
 </div>
 </div>
 

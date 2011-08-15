@@ -144,8 +144,8 @@ with the code.</li>
 mathematical relationships between the variables.</li>
 </ol>
 </div></blockquote>
-<p>LMFIT is designed to void these shortcomings.</p>
-<p>The main idea of LMFIT is to expand a numerical variable with a
+<p>The lmfit module is designed to void these shortcomings.</p>
+<p>The main idea of lmfit is to expand a numerical variable with a
 <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>, which have more attributes than simply their value.
 Instead of a pass a list of numbers to the function to minimize, you create
 a <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> object, add parameters to this object, and pass along
@@ -194,7 +194,7 @@ lower bound on the decay factor and an upper bound on the frequency.
 Importantly, our function to be minimized remains unchanged.</p>
 <p>An important point here is that the <cite>params</cite> object can be copied and
 modified to make many user-level changes to the model and fitting process.
-Of course, most of the inormation about how your data is modeled goes into
+Of course, most of the information about how your data is modeled goes into
 the fitting function, but the approach here allows some external control as
 well.</p>
 </div>
@@ -204,7 +204,7 @@ well.</p>
 <dt id="Parameter">
 <em class="property">class </em><tt class="descname">Parameter</tt><big>(</big><em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>create a Parameter object.   These are the fundamental extension of a
-fit variable within LMFIT, but you will probably create most of these
+fit variable within lmfit, but you will probably create most of these
 with the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -262,7 +262,7 @@ dictionary, with the restrictions that</p>
 expressions of mathematical constraints).  This means the names must
 match <tt class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></tt>  and cannot be a Python reserved word.</p>
 <ol class="arabic simple" start="2">
-<li>values must be vaild <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects.</li>
+<li>values must be valid <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects.</li>
 </ol>
 <p>Two methods for provided for convenience of initializing Parameters.</p>
 </dd></dl>
