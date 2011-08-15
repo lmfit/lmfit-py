@@ -79,17 +79,21 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/lmf
             
   <div class="section" id="non-linear-least-square-minimization-for-python">
 <h1>Non-Linear Least-Square Minimization for Python<a class="headerlink" href="#non-linear-least-square-minimization-for-python" title="Permalink to this headline">¶</a></h1>
-<p>The lmfit Python package provides a simple, flexible interface to non-linear least-squares
-optimization, or curve fitting.  By default, LMFIT uses the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a>
-minimization algorithm from <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>, but
-it can also use the <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a> (limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm
-as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> or the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
-implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html">scipy.optimize.anneal</a>.  Support for other optimization routines may be
-added in the future.  While these functions from scipy.optimize provide the core numerical
-algorithm for non-linear least-squares minimization, the lmfit package adds a few simple
-conveniences.  Most of this document will assume that the Levenberg-Marquardt algorithm is
-being discussed, as it appears to be the most robust for finding local minima of
-well-described models of scientific measurements.</p>
+<p>The lmfit Python package provides a simple, flexible interface to
+non-linear least-squares optimization, or curve fitting.  By default, lmfit
+uses the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> minimization algorithm from <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> as
+implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.  Support for other optimization
+routines is being added.  Currently, the <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a> (limited memory
+Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented in
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> or the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
+implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html">scipy.optimize.anneal</a> are both implemented and partially
+tested, and other optimization routines are being considered.</p>
+<p>While these functions from scipy.optimize provide the core numerical
+algorithm for non-linear least-squares minimization, the lmfit package adds
+a few simple conveniences.  Most of this document will assume that the
+Levenberg-Marquardt algorithm is being discussed, as it appears to be the
+most robust for finding local minima of well-described models of scientific
+measurements.</p>
 <p>For any minimization problem, the programmer must provide a function that takes a set of
 values for the variables in the fit, and produces the residual function to be minimized in
 the least-squares sense.</p>
@@ -101,7 +105,7 @@ extensions of simple numerical variables with the following properties:</p>
 <li>Parameters can be bounded with a minimum and/or maximum value.</li>
 <li>Parameters can be written as simple mathematical expressions of
 other Parameters.  These values will be re-evaluated at each
-step in the fit, so that the expression is statisfied.  This gives
+step in the fit, so that the expression is satisfied.  This gives
 a simple but flexible approach to constraining fit variables.</li>
 </ul>
 </div></blockquote>
@@ -139,7 +143,7 @@ and correlation between fitted variables.</p>
 <li class="toctree-l1"><a class="reference internal" href="constraints.html">Using Mathematical Constraints</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="constraints.html#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="constraints.html#supported-operators-functions-and-constants">Supported Operators, Functions, and Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="constraints.html#advanced-usage-of-expressions-in-lmfit">Advanced usage of Expressions in LMFIT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constraints.html#advanced-usage-of-expressions-in-lmfit">Advanced usage of Expressions in lmfit</a></li>
 </ul>
 </li>
 </ul>

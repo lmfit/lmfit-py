@@ -12,7 +12,7 @@ especially when using complicated constraints.
 The :func:`minimize` function
 ===============================
 
-The minimize function takes a function to minimze, a dictionary of
+The minimize function takes a function to minimize, a dictionary of
 :class:`Parameter` , and several optional arguments.    See
 :ref:`fit-func-label` for details on writing the function to minimize.
 
@@ -76,7 +76,7 @@ simple example would look like::
 
     def residual(pars, x, data=None):
         # unpack parameters:
-        #  extract .value attribute for each parametr
+        #  extract .value attribute for each parameter
         amp = pars['amp'].value
         period = pars['period'].value
         shift = pars['shift'].value
@@ -126,11 +126,11 @@ Alternative algorithms can also be used. These include `simulated annealing
 <http://en.wikipedia.org/wiki/Simulated_annealing>`_ which promises a
 better ability to avoid local minima, and `BFGS
 <http://en.wikipedia.org/wiki/Limited-memory_BFGS>`_, which is a
-modification of the quasi-Newton method.   
+modification of the quasi-Newton method.
 
 To Select which of these algorithms to use, use the ``engine`` keyword to
 the :func:`minimize` function or use the corresponding method name from the
-:class:`Minimizer` class as listed in the :ref:`Table of Supported Fitting Engines <fit-engine-table>`. 
+:class:`Minimizer` class as listed in the :ref:`Table of Supported Fitting Engines <fit-engine-table>`.
 
 .. _fit-engine-table:
 
@@ -168,7 +168,6 @@ the corresponding :class:`Parameter`.
  Table of Goodness-of-Fit Statistics:  These statistics are all attributes of the :class:`Minimizer` object returned by :func:`minimize`.
 
 
-
 +----------------------+----------------------------------------------------------------------------+
 | Minimizer Attribute  |  Description / Formula                                                     |
 +======================+============================================================================+
@@ -176,7 +175,7 @@ the corresponding :class:`Parameter`.
 +----------------------+----------------------------------------------------------------------------+
 | ``success``          | boolean (``True``/``False``) for whether fit succeeded.                    |
 +----------------------+----------------------------------------------------------------------------+
-| ``errorbars``        | boolean (``True``/``False``) for whether uncertainities were estimated.    |
+| ``errorbars``        | boolean (``True``/``False``) for whether uncertainties were estimated.     |
 +----------------------+----------------------------------------------------------------------------+
 | ``message``          | message about fit success.                                                 |
 +----------------------+----------------------------------------------------------------------------+
@@ -230,7 +229,7 @@ For full control of the fitting process, you'll want to create a
 :class:`Minimizer` object, or at least use the one returned from the
 :func:`minimize` function.
 
-.. class:: Minimizer(function, params[, fcn_args=None[, fcn_kwsn=None[, **kws]]]])
+.. class:: Minimizer(function, params[, fcn_args=None[, fcn_kws=None[, **kws]]]])
 
    creates a Minimizer, for fine-grain access to fitting methods and attributes.
 
@@ -255,11 +254,11 @@ The Minimizer object has a few public methods:
 .. method:: leastsq(**kws)
 
    perform fit with Levenberg-Marquardt algorithm.  Keywords will be passed directly to
-   `scipy.optimize.leastsq <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html>`_. 
+   `scipy.optimize.leastsq <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html>`_.
    By default, numerical derivatives are used, and the following arguments are set:
-   
+
     +----------------------+----------------+------------------------------------------------------------+
-    | ``leastsq`` argument |  Defautl Value | Description                                                |
+    | ``leastsq`` argument |  Default Value | Description                                                |
     +======================+================+============================================================+
     | ``xtol``             |  1.e-7         | Relative error in the approximate solution                 |
     +----------------------+----------------+------------------------------------------------------------+
@@ -272,12 +271,12 @@ The Minimizer object has a few public methods:
 .. method:: anneal(**kws)
 
    perform fit with Simulated Annealing.  Keywords will be passed directly to
-   `scipy.optimize.anneal <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html>`_. 
+   `scipy.optimize.anneal <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html>`_.
 
 .. method:: lbfgsb(**kws)
 
    perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
-   `scipy.optimize.fmin_l_bfgs_b <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html>`_. 
+   `scipy.optimize.fmin_l_bfgs_b <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html>`_.
 
 
 .. method:: prepare_fit(**kws)
@@ -299,7 +298,7 @@ The Minimizer object has a few public methods:
       myfit.prepare_fit()
       init = my_residual(p_fit, x)
       pylab.plot(x, init, 'b--')
-   
+
       myfit.leastsq()
 
    That is, this method should be called prior to your fitting function being called.

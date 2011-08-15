@@ -15,10 +15,10 @@ Downloads
 
 The latest stable version is available from a few sources:
 
-.. _lmfit-0.2.tar.gz (CARS):   http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.2.tar.gz
-.. _lmfit-0.2.tar.gz (PyPI):   http://pypi.python.org/packages/source/l/lmfit/lmfit-0.2.tar.gz
-.. _lmfit-0.2.win32-py2.6.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.2-py2.6.exe
-.. _lmfit-0.2.win32-py2.7.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.2-py2.7.exe
+.. _lmfit-0.3.tar.gz (CARS):   http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.3.tar.gz
+.. _lmfit-0.3.tar.gz (PyPI):   http://pypi.python.org/packages/source/l/lmfit/lmfit-0.3.tar.gz
+.. _lmfit-0.3.win32-py2.6.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.3-py2.6.exe
+.. _lmfit-0.3.win32-py2.7.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.3-py2.7.exe
 
 .. _lmfit github repository:   http://github.com/newville/lmfit-py
 .. _lmfit at pypi:             http://pypi.python.org/pypi/lmfit/
@@ -27,11 +27,11 @@ The latest stable version is available from a few sources:
 +---------------------------+------------------------------------------+
 |  Download Option          |  Location                                |
 +===========================+==========================================+
-|  Source Kit               |  `lmfit-0.2.tar.gz (CARS)`_              |
-|                           |  `lmfit-0.2.tar.gz (PyPI)`_              |
+|  Source Kit               |  `lmfit-0.3.tar.gz (CARS)`_              |
+|                           |  `lmfit-0.3.tar.gz (PyPI)`_              |
 +---------------------------+------------------------------------------+
-|  Windows Installers       |  `lmfit-0.2.win32-py2.6.exe`_  or        |
-|                           |  `lmfit-0.2.win32-py2.7.exe`_            |
+|  Windows Installers       |  `lmfit-0.3.win32-py2.6.exe`_  or        |
+|                           |  `lmfit-0.3.win32-py2.7.exe`_            |
 +---------------------------+------------------------------------------+
 |  Development Version      |  use `lmfit github repository`_          |
 +---------------------------+------------------------------------------+
@@ -61,7 +61,7 @@ License
 ~~~~~~~~~~~~~
 
 The LMFIT-py code is distribution under the following license:
-  
+
   Copyright (c) 2011 Matthew Newville, The University of Chicago
 
   Permission to use and redistribute the source code or binary forms of this
