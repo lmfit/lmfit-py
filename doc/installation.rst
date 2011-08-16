@@ -47,8 +47,7 @@ The latest stable version is available from a few sources:
 |                      |                  | -  `lmfit-0.3.win32-py3.1.exe (CARS)`_     |
 +----------------------+------------------+--------------------------------------------+
 |  Development Version |   all            |  use `lmfit github repository`_            |
-+======================+==================+============================================+
-
++----------------------+------------------+--------------------------------------------+
  
 if you have `Python Setup Tools`_  installed, you can download and install
 the PyEpics Package simply with::
