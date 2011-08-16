@@ -15,26 +15,37 @@ Downloads
 
 The latest stable version is available from a few sources:
 
-.. _lmfit-0.3.tar.gz (CARS):   http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.3.tar.gz
-.. _lmfit-0.3.tar.gz (PyPI):   http://pypi.python.org/packages/source/l/lmfit/lmfit-0.3.tar.gz
-.. _lmfit-0.3.win32-py2.6.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.3-py2.6.exe
-.. _lmfit-0.3.win32-py2.7.exe: http://cars9.uchicago.edu/~newville/lmfit/src/lmfit-0.3-py2.7.exe
+.. _lmfit-0.3.tar.gz (CARS):   http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.tar.gz
+.. _lmfit-0.3.win32-py2.6.exe (CARS): http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.win32-py2.6.exe
+.. _lmfit-0.3.win32-py2.7.exe (CARS): http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.win32-py2.7.exe
+.. _lmfit-0.3.win32-py3.1.exe (CARS): http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.win32-py3.1.exe
+
+.. _lmfit-0.3.tar.gz (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.3.tar.gz
+.. _lmfit-0.3.win32-py2.6.exe (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.3.win32-py2.6.exe
+.. _lmfit-0.3.win32-py2.7.exe (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.3.win32-py2.7.exe
+.. _lmfit-0.3.win32-py3.1.exe (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.3.win32-py3.1.exe
 
 .. _lmfit github repository:   http://github.com/newville/lmfit-py
 .. _lmfit at pypi:             http://pypi.python.org/pypi/lmfit/
 .. _Python Setup Tools:        http://pypi.python.org/pypi/setuptools
 
-+---------------------------+------------------------------------------+
-|  Download Option          |  Location                                |
-+===========================+==========================================+
-|  Source Kit               |  `lmfit-0.3.tar.gz (CARS)`_              |
-|                           |  `lmfit-0.3.tar.gz (PyPI)`_              |
-+---------------------------+------------------------------------------+
-|  Windows Installers       |  `lmfit-0.3.win32-py2.6.exe`_  or        |
-|                           |  `lmfit-0.3.win32-py2.7.exe`_            |
-+---------------------------+------------------------------------------+
-|  Development Version      |  use `lmfit github repository`_          |
-+---------------------------+------------------------------------------+
++---------------------------+--------------------------------------------+
+|  Download Option          |  Location                                  |
++===========================+============================================+
+|  Source Kit               |  `lmfit-0.3.tar.gz (PyPI)`_  or            |
+|                           |  `lmfit-0.3.tar.gz (CARS)`_                |
++---------------------------+--------------------------------------------+
+|  Win32 Installer Py2.6    |  `lmfit-0.3.win32-py2.6.exe (PyPI)`_  or   |
+|                           |  `lmfit-0.3.win32-py2.6.exe (CARS)`_       |
++---------------------------+--------------------------------------------+
+|  Win32 Installer Py2.7    |  `lmfit-0.3.win32-py2.7.exe (PyPI)`_  or   |
+|                           |  `lmfit-0.3.win32-py2.7.exe (CARS)`_       |
++---------------------------+--------------------------------------------+
+|  Win32 Installer Py3.1    |  `lmfit-0.3.win32-py3.1.exe (PyPI)`_  or   |
+|                           |  `lmfit-0.3.win32-py3.1.exe (CARS)`_       |
++---------------------------+--------------------------------------------+
+|  Development Version      |  use `lmfit github repository`_            |
++---------------------------+--------------------------------------------+
 
 if you have `Python Setup Tools`_  installed, you can download and install
 the PyEpics Package simply with::
