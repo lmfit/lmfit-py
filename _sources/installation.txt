@@ -8,14 +8,14 @@ Prerequisites
 The lmfit package requires Python, Numpy, and Scipy.  Extensive testing on
 version compatibility has not yet been done.  Initial tests work with
 Python 3.1, but no testing with Python 3.2 has yet been done.  No testing
-has been done with 64-bit architectures, but as this model is pure Python,
-no significan troubles are expected.
+has been done with 64-bit architectures, but as this package is pure Python,
+no significant troubles are expected.
 
 
 Downloads
 ~~~~~~~~~~~~~
 
-The latest stable version is available from a few sources:
+The latest stable version is available from PyPI or CARS (Univ of Chicago):
 
 .. _lmfit-0.3.tar.gz (CARS):   http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.tar.gz
 .. _lmfit-0.3.win32-py2.6.exe (CARS): http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.win32-py2.6.exe
