@@ -1,7 +1,13 @@
 from lmfit import Parameters, minimize
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
-import pylab
+
+try:
+    import pylab
+    HASPYLAB = True
+except ImportError:
+    HASPYLAB = False
+
 
 from testutils import report_errors
 
@@ -50,9 +56,10 @@ for key, par in fit_params.items():
     print key, par, p_true[key].value
 
 
-#pylab.plot(x, data, 'ro')
-#pylab.plot(x, fit, 'b')
-#pylab.show()
+if HASPYLAB:
+    pylab.plot(x, data, 'ro')
+    pylab.plot(x, fit, 'b')
+    pylab.show()
 
 
 

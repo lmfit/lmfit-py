@@ -2,7 +2,13 @@ from lmfit import Parameters, minimize
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
-import pylab
+
+try:
+    import pylab
+    HASPYLAB = True
+except ImportError:
+    HASPYLAB = False
+
 
 from testutils import report_errors
 
@@ -47,9 +53,11 @@ print out.chisqr, out.redchi, out.nfree
 
 report_errors(fit_params)
 
-pylab.plot(x, data, 'ro')
-pylab.plot(x, fit, 'b')
-pylab.show()
+
+if HASPYLAB:
+    pylab.plot(x, data, 'ro')
+    pylab.plot(x, fit, 'b')
+    pylab.show()
 
 
 

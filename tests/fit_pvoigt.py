@@ -7,8 +7,13 @@ from scipy.optimize import leastsq
 from testutils import report_errors
 
 import sys
-if sys.version_info[0] == 2:
+
+try:
     import pylab
+    HASPYLAB = True
+except ImportError:
+    HASPYLAB = False
+
 
 def residual(pars, x, data=None):
     # print 'RESID ', pars['amp_g'].value, pars['amp_g'].init_value
@@ -43,7 +48,7 @@ data = (pvoigt(x, p_true['amp_g'].value, p_true['cen_g'].value,
         random.normal(scale=0.23,  size=n) +
         x*p_true['line_slope'].value + p_true['line_off'].value )
 
-if sys.version_info[0] == 2:
+if HASPYLAB:
     pylab.plot(x, data, 'r+')
 
 p_fit = Parameters()
@@ -63,7 +68,7 @@ myfit = Minimizer(residual, p_fit,
 myfit.prepare_fit()
 init = residual(p_fit, x)
 
-if sys.version_info[0] == 2:
+if HASPYLAB:
     pylab.plot(x, init, 'b--')
 
 myfit.leastsq()
@@ -75,7 +80,7 @@ report_errors(p_fit, modelpars=p_true)
 
 fit = residual(p_fit, x)
 
-if sys.version_info[0] == 2:
+if HASPYLAB:
     pylab.plot(x, fit, 'k-')
     pylab.show()
 

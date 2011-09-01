@@ -1,6 +1,11 @@
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
-import pylab
+try:
+    import pylab
+    HASPYLAB = True
+except ImportError:
+    HASPYLAB = False
+    
 
 from lmfit import Parameters, Minimizer
 from lmfit.utilfuncs import gauss, loren
@@ -31,7 +36,8 @@ fit_params.add_many(('a1', 12.0, True, None, None, None),
 
 data  = residual(fit_params, x) + noise
 
-pylab.plot(x, data, 'r+')
+if HASPYLAB:
+    pylab.plot(x, data, 'r+')
 
 fit_params = Parameters()
 fit_params.add_many(('a1',  8.0, True, None, 14., None),
@@ -49,7 +55,8 @@ myfit.prepare_fit()
 
 init = residual(fit_params, x)
 
-pylab.plot(x, init, 'b--')
+if HASPYLAB:
+    pylab.plot(x, init, 'b--')
 
 myfit.leastsq()
 
@@ -60,8 +67,9 @@ report_errors(fit_params)
 
 fit = residual(fit_params, x)
 
-pylab.plot(x, fit, 'k-')
-pylab.show()
+if HASPYLAB:
+    pylab.plot(x, fit, 'k-')
+    pylab.show()
 
 
 
