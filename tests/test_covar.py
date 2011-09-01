@@ -64,10 +64,11 @@ myfit = Minimizer(residual, p_fit,
 
 myfit.prepare_fit()
 # 
-for sigma in (0.1, 0.2, 0.5):
-    for scale_covar in (True, False):
+for scale_covar in (True, False):
+    myfit.scale_covar = scale_covar
+    print '  ====  scale_covar = ', myfit.scale_covar, ' ==='
+    for sigma in (0.1, 0.2, 0.23, 0.5):
         myfit.userkws['sigma'] = sigma
-        myfit.scale_covar = scale_covar
 
         p_fit['amp_g'].value  = 10
         p_fit['cen_g'].value  =  9
@@ -76,13 +77,12 @@ for sigma in (0.1, 0.2, 0.5):
         p_fit['line_off'].value   =0.0
 
         myfit.leastsq()
-        print '========================================='
-        print ' scale_covar    = ', myfit.scale_covar
-        print ' data sigma     = ', sigma
-        print ' chisqr         = ', myfit.chisqr
-        print ' reduced_chisqr = ', myfit.redchi
+        print '  sigma          = ', sigma
+        print '  chisqr         = ', myfit.chisqr
+        print '  reduced_chisqr = ', myfit.redchi
 
         report_errors(p_fit, modelpars=p_true, show_correl=False)
+        print '  =============================='
 
         
 # if HASPYLAB:
