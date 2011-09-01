@@ -25,9 +25,7 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-
 class Parameters(OrderedDict):
-# class Parameters(dict):
     """a custom dictionary of Parameters.  All keys must be
     strings, and valid Python symbol names, and all values
     must be Parameters.
@@ -40,8 +38,6 @@ class Parameters(OrderedDict):
     """
     def __init__(self, *args, **kwds):
         OrderedDict.__init__(self)
-        # dict.__init__(self)
-        
         self.update(*args, **kwds)
 
     def __setitem__(self, key, value):
