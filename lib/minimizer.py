@@ -20,7 +20,14 @@ from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import anneal as scipy_anneal
 from scipy.optimize import fmin_l_bfgs_b as scipy_lbfgsb
 
-class Parameters(dict):
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
+
+
+class Parameters(OrderedDict):
+# class Parameters(dict):
     """a custom dictionary of Parameters.  All keys must be
     strings, and valid Python symbol names, and all values
     must be Parameters.
@@ -32,7 +39,9 @@ class Parameters(dict):
     add_many()
     """
     def __init__(self, *args, **kwds):
-        dict.__init__(self)
+        OrderedDict.__init__(self)
+        # dict.__init__(self)
+        
         self.update(*args, **kwds)
 
     def __setitem__(self, key, value):
@@ -41,7 +50,7 @@ class Parameters(dict):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
         if value is not None and not isinstance(value, Parameter):
             raise ValueError("'%s' is not a Parameter" % value)
-        dict.__setitem__(self, key, value)
+        OrderedDict.__setitem__(self, key, value)
         value.name = key
 
     def add(self, name, value=None, vary=True, expr=None,
@@ -128,7 +137,8 @@ class Minimizer(object):
     minimize(func, params, ...., maxfev=NNN)
 or set  leastsq_kws['maxfev']  to increase this maximum."""
 
-    def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None, **kws):
+    def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
+                 iter_cb=None, **kws):
         self.userfcn = userfcn
         self.params = params
 
@@ -140,6 +150,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if self.userkws is None:
             self.userkws = {}
         self.kws = kws
+        self.iter_cb = iter_cb
+        self.nfev_calls = 0
         self.var_map = []
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
@@ -184,6 +196,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # set parameter values
         for varname, val in zip(self.var_map, fvars):
             self.params[varname].value = val
+        self.nfev_calls = self.nfev_calls + 1
 
         self.updated = dict([(name, False) for name in self.params])
         for name in self.params:
@@ -192,7 +205,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         sout = []
         for i in self.params.values():
             sout.append('%s=%.5f'  % (i.name, (i.value)))
-        return self.userfcn(self.params, *self.userargs, **self.userkws)
+            out = self.userfcn(self.params, *self.userargs, **self.userkws)
+        if hasattr(self.iter_cb, '__call__'):
+            self.iter_cb(self.params, self.nfev_calls, out,
+                         *self.userargs, **self.userkws)
+        return out
 
     def prepare_fit(self):
         """prepare parameters for fit"""
@@ -202,6 +219,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if not isinstance(self.params, Parameters):
             raise MinimizerException(self.err_nonparam)
 
+        self.nfev_calls = 0
         self.var_map = []
         self.vars = []
         self.vmin = []
@@ -224,6 +242,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                 self.vars.append(par.value)
                 self.vmin.append(par.min)
                 self.vmax.append(par.max)
+
 
             self.asteval.symtable[name] = par.value
             par.init_value = par.value
@@ -343,6 +362,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.message = '%s. Could not estimate error-bars'
         else:
             self.errorbars = True
+            self.covar = cov
             cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
@@ -355,12 +375,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         return self.success
 
-def minimize(fcn, params, engine='leastsq', args=None, kws=None, **fit_kws):
+def minimize(fcn, params, engine='leastsq', args=None, kws=None,
+             iter_cb=None, **fit_kws):
     """simple minimization function,
     finding the values for the params which give the
     minimal sum-of-squares of the array return by fcn
     """
-    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws, **fit_kws)
+    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
+                       iter_cb=iter_cb, **fit_kws)
     if engine == 'anneal':
         fitter.anneal()
     elif engine == 'lbfgsb':

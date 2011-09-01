@@ -15,8 +15,13 @@ except ImportError:
     HASPYLAB = False
 
 
+def per_iteration(pars, i, resid, x, *args, **kws):
+    if i < 10 or i % 10 == 0:
+        print '====== Iteration ', i
+        for p in pars.values():
+            print p.name , p.value
+
 def residual(pars, x, data=None):
-    # print 'RESID ', pars['amp_g'].value, pars['amp_g'].init_value
     yg = gauss(x, pars['amp_g'].value,
                pars['cen_g'].value, pars['wid_g'].value)
     yl = loren(x, pars['amp_l'].value,
@@ -62,7 +67,7 @@ p_fit.add('wid_l', expr='wid_g')
 p_fit.add('line_slope', value=0.0)
 p_fit.add('line_off', value=0.0)
 
-myfit = Minimizer(residual, p_fit,
+myfit = Minimizer(residual, p_fit, iter_cb=per_iteration,
                   fcn_args=(x,), fcn_kws={'data':data})
 
 myfit.prepare_fit()
