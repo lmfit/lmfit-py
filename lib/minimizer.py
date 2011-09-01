@@ -134,7 +134,7 @@ class Minimizer(object):
 or set  leastsq_kws['maxfev']  to increase this maximum."""
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
-                 iter_cb=None, **kws):
+                 iter_cb=None, scale_covar=True, **kws):
         self.userfcn = userfcn
         self.params = params
 
@@ -147,6 +147,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.userkws = {}
         self.kws = kws
         self.iter_cb = iter_cb
+        self.scale_covar = scale_covar
         self.nfev_calls = 0
         self.var_map = []
         self.asteval = Interpreter()
@@ -300,7 +301,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.message = info['task']
 
 
-    def leastsq(self, **kws):
+    def leastsq(self, scale_covar=True, **kws):
         """
         use Levenberg-Marquardt minimization to perform fit.
         This assumes that ModelParameters have been stored into
@@ -315,10 +316,10 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         writes outputs to many internal attributes, and
         returns True if fit was successful, False if not.
         """
-
         self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
                      maxfev= 1000 * (self.nvarys + 1))
+        
         lskws.update(self.kws)
         lskws.update(kws)
 
@@ -359,7 +360,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         else:
             self.errorbars = True
             self.covar = cov
-            cov = cov * sum_sqr / self.nfree
+            if self.scale_covar:
+                cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(cov[ivar, ivar])
@@ -372,13 +374,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         return self.success
 
 def minimize(fcn, params, engine='leastsq', args=None, kws=None,
+             scale_covar=True,
              iter_cb=None, **fit_kws):
     """simple minimization function,
     finding the values for the params which give the
     minimal sum-of-squares of the array return by fcn
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
-                       iter_cb=iter_cb, **fit_kws)
+                       iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
     if engine == 'anneal':
         fitter.anneal()
     elif engine == 'lbfgsb':

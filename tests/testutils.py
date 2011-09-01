@@ -1,10 +1,10 @@
 from __future__ import print_function
 
-def report_errors(params, modelpars=None):
+def report_errors(params, modelpars=None, show_correl=True):
     """write report for fitted params"""
     parnames = sorted(params)
-    print('-------------------------------------')
-    print( 'Best Fit Values and Standard Errors:')
+    #print('   -------------------------------------')
+    #print( '  Best Fit Values and Standard Errors:')
     namelen = max([len(n) for n in parnames])
 
     for name in parnames:
@@ -15,29 +15,30 @@ def report_errors(params, modelpars=None):
         if modelpars is not None and name in modelpars:
             initval = '%s, model_value=% .6f' % (initval, modelpars[name].value)
         if par.vary:
-            print(" %s % .6f +/- %.6f (%s)" % (nout, par.value,
+            print(" %s % .5f+/- %.5f (%s)" % (nout, par.value,
                                                par.stderr, initval))
 
         elif par.expr is not None:
-            print(" %s % .6f  == '%s'" % (nout, par.value,
+            print(" %s % .5f == '%s'" % (nout, par.value,
                                                 par.expr))
         else:
             print(" %s fixed" % (nout))
 
-    print( 'Correlations:')
-    correls = {}
-    for i, name in enumerate(parnames):
-        par = params[name]
-        if not par.vary:
-            continue
-        if hasattr(par, 'correl') and par.correl is not None:
-            for name2 in parnames[i+1:]:
-                if name != name2 and name2 in par.correl:
-                    correls["%s, %s" % (name, name2)] = par.correl[name2]
+    if show_correl:
+        print( 'Correlations:')
+        correls = {}
+        for i, name in enumerate(parnames):
+            par = params[name]
+            if not par.vary:
+                continue
+            if hasattr(par, 'correl') and par.correl is not None:
+                for name2 in parnames[i+1:]:
+                    if name != name2 and name2 in par.correl:
+                        correls["%s, %s" % (name, name2)] = par.correl[name2]
 
-    sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
-    sort_correl.reverse()
-    for name, val in sort_correl:
-        lspace = max(1, 25 - len(name))
-        print('    C(%s)%s = % .3f ' % (name, (' '*30)[:lspace], val))
-    print('-------------------------------------')
+        sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
+        sort_correl.reverse()
+        for name, val in sort_correl:
+            lspace = max(1, 25 - len(name))
+            print('    C(%s)%s = % .3f ' % (name, (' '*30)[:lspace], val))
+    #print('-------------------------------------')
