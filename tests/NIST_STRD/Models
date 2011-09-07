@@ -1,0 +1,215 @@
+Bennett5.dat:Model:         Miscellaneous Class
+Bennett5.dat-               3 Parameters (b1 to b3)
+Bennett5.dat-
+Bennett5.dat-               y = b1 * (b2+x)**(-1/b3)  +  e
+Bennett5.dat-
+Bennett5.dat- 
+Bennett5.dat- 
+--
+BoxBOD.dat:Model:         Exponential Class
+BoxBOD.dat-               2 Parameters (b1 and b2)
+BoxBOD.dat-
+BoxBOD.dat-               y = b1*(1-exp[-b2*x])  +  e
+BoxBOD.dat-
+BoxBOD.dat-
+BoxBOD.dat- 
+--
+Chwirut1.dat:Model:         Exponential Class
+Chwirut1.dat-               3 Parameters (b1 to b3)
+Chwirut1.dat-
+Chwirut1.dat-               y = exp[-b1*x]/(b2+b3*x)  +  e
+Chwirut1.dat-
+Chwirut1.dat-
+Chwirut1.dat-
+--
+Chwirut2.dat:Model:         Exponential Class
+Chwirut2.dat-               3 Parameters (b1 to b3)
+Chwirut2.dat-
+Chwirut2.dat-               y = exp(-b1*x)/(b2+b3*x)  +  e
+Chwirut2.dat-
+Chwirut2.dat-
+Chwirut2.dat-
+--
+DanWood.dat:Model:         Miscellaneous Class
+DanWood.dat-               2 Parameters (b1 and b2)
+DanWood.dat-
+DanWood.dat-               y  = b1*x**b2  +  e
+DanWood.dat-
+DanWood.dat-
+DanWood.dat- 
+--
+ENSO.dat:Model:         Miscellaneous Class
+ENSO.dat-               9 Parameters (b1 to b9)
+ENSO.dat-
+ENSO.dat-               y = b1 + b2*cos( 2*pi*x/12 ) + b3*sin( 2*pi*x/12 ) 
+ENSO.dat-                      + b5*cos( 2*pi*x/b4 ) + b6*sin( 2*pi*x/b4 )
+ENSO.dat-                      + b8*cos( 2*pi*x/b7 ) + b9*sin( 2*pi*x/b7 )  + e
+ENSO.dat- 
+--
+Eckerle4.dat:Model:         Exponential Class
+Eckerle4.dat-               3 Parameters (b1 to b3)
+Eckerle4.dat-
+Eckerle4.dat-               y = (b1/b2) * exp[-0.5*((x-b3)/b2)**2]  +  e
+Eckerle4.dat-
+Eckerle4.dat-
+Eckerle4.dat-
+--
+Gauss1.dat:Model:         Exponential Class
+Gauss1.dat-               8 Parameters (b1 to b8) 
+Gauss1.dat- 
+Gauss1.dat-               y = b1*exp( -b2*x ) + b3*exp( -(x-b4)**2 / b5**2 )
+Gauss1.dat-                                   + b6*exp( -(x-b7)**2 / b8**2 ) + e
+Gauss1.dat- 
+Gauss1.dat- 
+--
+Gauss2.dat:Model:         Exponential Class
+Gauss2.dat-               8 Parameters (b1 to b8)
+Gauss2.dat-
+Gauss2.dat-               y = b1*exp( -b2*x ) + b3*exp( -(x-b4)**2 / b5**2 ) 
+Gauss2.dat-                                   + b6*exp( -(x-b7)**2 / b8**2 ) + e
+Gauss2.dat-
+Gauss2.dat-
+--
+Gauss3.dat:Model:         Exponential Class
+Gauss3.dat-               8 Parameters (b1 to b8)
+Gauss3.dat-
+Gauss3.dat-               y = b1*exp( -b2*x ) + b3*exp( -(x-b4)**2 / b5**2 )
+Gauss3.dat-                                   + b6*exp( -(x-b7)**2 / b8**2 ) + e
+Gauss3.dat- 
+Gauss3.dat- 
+--
+Hahn1.dat:Model:         Rational Class (cubic/cubic)
+Hahn1.dat-               7 Parameters (b1 to b7)
+Hahn1.dat-
+Hahn1.dat-               y = (b1+b2*x+b3*x**2+b4*x**3) /
+Hahn1.dat-                   (1+b5*x+b6*x**2+b7*x**3)  +  e
+Hahn1.dat-
+Hahn1.dat-
+--
+Kirby2.dat:Model:         Rational Class (quadratic/quadratic)
+Kirby2.dat-               5 Parameters (b1 to b5)
+Kirby2.dat-
+Kirby2.dat-               y = (b1 + b2*x + b3*x**2) /
+Kirby2.dat-                   (1 + b4*x + b5*x**2)  +  e
+Kirby2.dat-
+Kirby2.dat- 
+--
+Lanczos1.dat:Model:         Exponential Class
+Lanczos1.dat-               6 Parameters (b1 to b6)
+Lanczos1.dat-
+Lanczos1.dat-               y = b1*exp(-b2*x) + b3*exp(-b4*x) + b5*exp(-b6*x)  +  e
+Lanczos1.dat-
+Lanczos1.dat-
+Lanczos1.dat- 
+--
+Lanczos2.dat:Model:         Exponential Class
+Lanczos2.dat-               6 Parameters (b1 to b6)
+Lanczos2.dat- 
+Lanczos2.dat-               y = b1*exp(-b2*x) + b3*exp(-b4*x) + b5*exp(-b6*x)  +  e
+Lanczos2.dat- 
+Lanczos2.dat-
+Lanczos2.dat-
+--
+Lanczos3.dat:Model:         Exponential Class
+Lanczos3.dat-               6 Parameters (b1 to b6)
+Lanczos3.dat- 
+Lanczos3.dat-               y = b1*exp(-b2*x) + b3*exp(-b4*x) + b5*exp(-b6*x)  +  e
+Lanczos3.dat-
+Lanczos3.dat-
+Lanczos3.dat-
+--
+MGH09.dat:Model:         Rational Class (linear/quadratic)
+MGH09.dat-               4 Parameters (b1 to b4)
+MGH09.dat- 
+MGH09.dat-               y = b1*(x**2+x*b2) / (x**2+x*b3+b4)  +  e
+MGH09.dat- 
+MGH09.dat-
+MGH09.dat- 
+--
+MGH10.dat:Model:         Exponential Class
+MGH10.dat-               3 Parameters (b1 to b3)
+MGH10.dat- 
+MGH10.dat-               y = b1 * exp[b2/(x+b3)]  +  e
+MGH10.dat-
+MGH10.dat-
+MGH10.dat-
+--
+MGH17.dat:Model:         Exponential Class
+MGH17.dat-               5 Parameters (b1 to b5)
+MGH17.dat-
+MGH17.dat-               y = b1 + b2*exp[-x*b4] + b3*exp[-x*b5]  +  e
+MGH17.dat-
+MGH17.dat-
+MGH17.dat-
+--
+Misra1a.dat:Model:         Exponential Class
+Misra1a.dat-               2 Parameters (b1 and b2)
+Misra1a.dat-
+Misra1a.dat-               y = b1*(1-exp[-b2*x])  +  e
+Misra1a.dat-
+Misra1a.dat-
+Misra1a.dat- 
+--
+Misra1b.dat:Model:         Miscellaneous Class
+Misra1b.dat-               2 Parameters (b1 and b2)
+Misra1b.dat-
+Misra1b.dat-               y = b1 * (1-(1+b2*x/2)**(-2))  +  e
+Misra1b.dat-
+Misra1b.dat-
+Misra1b.dat-
+--
+Misra1c.dat:Model:         Miscellaneous Class
+Misra1c.dat-               2 Parameters (b1 and b2)
+Misra1c.dat-
+Misra1c.dat-               y = b1 * (1-(1+2*b2*x)**(-.5))  +  e
+Misra1c.dat-
+Misra1c.dat-
+Misra1c.dat-
+--
+Misra1d.dat:Model:         Miscellaneous Class
+Misra1d.dat-               2 Parameters (b1 and b2)
+Misra1d.dat-
+Misra1d.dat-               y = b1*b2*x*((1+b2*x)**(-1))  +  e
+Misra1d.dat-
+Misra1d.dat-
+Misra1d.dat-
+--
+Nelson.dat:Model:         Exponential Class
+Nelson.dat-               3 Parameters (b1 to b3)
+Nelson.dat-
+Nelson.dat-               log[y] = b1 - b2*x1 * exp[-b3*x2]  +  e
+Nelson.dat-
+Nelson.dat-
+Nelson.dat-
+--
+Rat42.dat:Model:         Exponential Class
+Rat42.dat-               3 Parameters (b1 to b3)
+Rat42.dat-
+Rat42.dat-               y = b1 / (1+exp[b2-b3*x])  +  e
+Rat42.dat-
+Rat42.dat-
+Rat42.dat-
+--
+Rat43.dat:Model:         Exponential Class
+Rat43.dat-               4 Parameters (b1 to b4)
+Rat43.dat-
+Rat43.dat-               y = b1 / ((1+exp[b2-b3*x])**(1/b4))  +  e
+Rat43.dat-
+Rat43.dat-
+Rat43.dat-
+--
+Roszman1.dat:Model:         Miscellaneous Class
+Roszman1.dat-               4 Parameters (b1 to b4)
+Roszman1.dat-
+Roszman1.dat-               pi = 3.141592653589793238462643383279E0
+Roszman1.dat-               y =  b1 - b2*x - arctan[b3/(x-b4)]/pi  +  e
+Roszman1.dat-
+Roszman1.dat-
+--
+Thurber.dat:Model:         Rational Class (cubic/cubic)
+Thurber.dat-               7 Parameters (b1 to b7)
+Thurber.dat-
+Thurber.dat-               y = (b1 + b2*x + b3*x**2 + b4*x**3) / 
+Thurber.dat-                   (1 + b5*x + b6*x**2 + b7*x**3)  +  e
+Thurber.dat-
+Thurber.dat-
