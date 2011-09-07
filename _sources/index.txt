@@ -15,22 +15,6 @@ Non-Linear Least-Square Minimization for Python
 
 The lmfit Python package provides a simple, flexible interface to
 non-linear least-squares optimization, or curve fitting.  By default, lmfit
-<<<<<<< HEAD
-uses the `Levenberg-Marquardt`_ minimization algorithm from `MINPACK-1`_ as
-implemented in `scipy.optimize.leastsq`_.  Support for other optimization
-routines is being added.  Currently, the `L-BFGS`_ (limited memory
-Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented in
-`scipy.optimize.l_bfgs_b`_ or the `simulated annealing`_ algorithm as
-implemented in `scipy.optimize.anneal`_ are both implemented and partially
-tested, and other optimization routines are being considered.
-
-While these functions from scipy.optimize provide the core numerical
-algorithm for non-linear least-squares minimization, the lmfit package adds
-a few simple conveniences.  Most of this document will assume that the
-Levenberg-Marquardt algorithm is being discussed, as it appears to be the
-most robust for finding local minima of well-described models of scientific
-measurements.
-=======
 uses and builds upon he `Levenberg-Marquardt`_ minimization algorithm from
 `MINPACK-1`_ as implemented in `scipy.optimize.leastsq`_.  Support for
 other optimization routines is being added.  Currently, the `L-BFGS`_
@@ -42,7 +26,6 @@ Levenberg-Marquardt algorithm is the most tested and appears to be the most
 robust for finding local minima of well-described models of scientific
 measurements, parts of this document may assume that it Levenberg-Marquardt
 algorithm is being discussed.
->>>>>>> 8db3d9f6871118875f4e2335d1042435610985ba
 
 For any minimization problem, the programmer must provide a function that takes a set of
 values for the variables in the fit, and produces the residual function to be minimized in
