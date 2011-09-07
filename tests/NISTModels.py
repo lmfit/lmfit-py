@@ -27,6 +27,8 @@ def DanWood(b, x, y=0):
 
 def ENSO(b, x, y=0):
     b = read_params(b)
+    pi = 3.141592653589793238462643383279
+   
     return y - b[0] + (b[1]*cos( 2*pi*x/12 ) + b[2]*sin( 2*pi*x/12 ) +
                        b[4]*cos( 2*pi*x/b[3] ) + b[5]*sin( 2*pi*x/b[3] ) +
                        b[7]*cos( 2*pi*x/b[6] ) + b[8]*sin( 2*pi*x/b[6] ) )
@@ -40,7 +42,7 @@ def Gauss(b, x, y=0):
     return y - b[0]*exp( -b[1]*x ) + (b[2]*exp( -(x-b[3])**2 / b[4]**2 ) +
                                       b[5]*exp( -(x-b[6])**2 / b[7]**2 ) )
 
-def Hahn(b, x, y=0):
+def Hahn1(b, x, y=0):
     b = read_params(b)
     return y - ((b[0]+b[1]*x+b[2]*x**2+b[3]*x**3) /
                 (1+b[4]*x+b[5]*x**2+b[6]*x**3)  )
@@ -81,11 +83,13 @@ def Misra1d(b, x, y=0):
     b = read_params(b)
     return y - b[0]*b[1]*x*((1+b[1]*x)**(-1))
 
-def Nelson(b, x, y=0):
+def Nelson(b, x, y=None):
     b = read_params(b)
-    if y == 0:
-        return  - b[0] - b[1]*x[0,:] * exp(-b[2]*x[1,:])
-    return log(y) - b[0] - b[1]*x[0,:] * exp(-b[2]*x[1,:])
+    xt = x[:,0]
+    xa = x[:,1]
+    if y is None:
+        return  - b[0] - b[1]*xt * exp(-b[2]*xa)
+    return log(y) - b[0] - b[1]*xa * exp(-b[2]*xt)
 
 def Rat42(b, x, y=0):
     b = read_params(b)
@@ -108,7 +112,7 @@ def Thurber(b, x, y=0):
 #  Model name        fcn,    #fitting params, dim of x
 Models = {'Bennett5':  (Bennet5,  3, 1),
           'BoxBOD':    (BoxBOD,   2, 1),
-          'Chwirut1':  (Chwirut,  2, 1),
+          'Chwirut1':  (Chwirut,  3, 1),
           'Chwirut2':  (Chwirut,  3, 1),
           'DanWood':   (DanWood,  2, 1),
           'ENSO':      (ENSO,     9, 1),
@@ -116,12 +120,12 @@ Models = {'Bennett5':  (Bennet5,  3, 1),
           'Gauss1':    (Gauss,    8, 1),
           'Gauss2':    (Gauss,    8, 1),
           'Gauss3':    (Gauss,    8, 1),
-          'Hahn':      (Hahn,     7, 1),
+          'Hahn1':     (Hahn1,    7, 1),
           'Kirby2':    (Kirby,    5, 1),
           'Lanczos1':  (Lanczos,  6, 1),
           'Lanczos2':  (Lanczos,  6, 1),
           'Lanczos3':  (Lanczos,  6, 1),
-          'MGH09.dat': (MGH09,    4, 1),
+          'MGH09':     (MGH09,    4, 1),
           'MGH10':     (MGH10,    3, 1),
           'MGH17':     (MGH17,    5, 1),
           'Misra1a':   (Misra1a,  2, 1),

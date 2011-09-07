@@ -1,4 +1,6 @@
 import sys
+import math
+
 try:
     import matplotlib
     matplotlib.use('WXAgg')
@@ -12,50 +14,103 @@ from testutils import report_errors
 
 from NISTModels import Models, ReadNistData
 
-NISTData = ReadNistData('Gauss2')
-resid, npar, dimx = Models['Gauss2']
-
-p_cert = Parameters()
-params = Parameters()
-for i in range(npar):
-    pname = 'b%i' % (i+1)
-    cval  = NISTData['cert_values'][i]
-    cerr  = NISTData['cert_stderr'][i]
-    pval1 = NISTData['start1'][i]
-    p_cert.add(pname, value=cval)
-    p_cert.stderr = cerr
-    params.add(pname, value=pval1)
-    print pname, cval, cerr,  pval1
-y = NISTData['y']
-x = NISTData['x']
-
-if HASPYLAB:
-    pylab.plot(x, y, 'r+')
 
 
-myfit = Minimizer(resid, params,
-                  fcn_args=(x,), fcn_kws={'y':y},
-                  scale_covar=True)
+def ndig(a, b):
+    return -math.log10(abs(abs(a)-abs(b))/abs(b))
 
-myfit.prepare_fit()
-init = resid(params, x)
+def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
+    print ' ======================================'
+    print ' %s: ' % DataSet
+    print ' | Parameter Name |  Value Found   |  Certified Value | # Matching Digits |'
+    print ' |----------------+----------------+------------------+-------------------|'
 
-if HASPYLAB:
-    pylab.plot(x, init, 'b--')
+    val_dig_min = 1000
+    err_dig_min = 1000
+    for i in range(NISTdata['nparams']):
+        parname = 'b%i' % (i+1)
+        par = params[parname]
+        thisval = par.value
+        certval = NISTdata['cert_values'][i]
 
-myfit.leastsq()
-print ' Nfev = ', myfit.nfev
-print myfit.chisqr, myfit.redchi, myfit.nfree
-report_errors(params, modelpars=p_cert, show_correl=False)
+        thiserr = par.stderr
+        certerr = NISTdata['cert_stderr'][i]
+        vdig   = ndig(thisval, certval)
+        edig   = ndig(thiserr, certerr)
+        
+        pname = (parname + ' value ' + ' '*14)[:14]
+        ename = (parname + ' stderr' + ' '*14)[:14]
+        print ' | %s | % -.7e | % -.7e   | %2i                |' % (pname, thisval, certval, vdig)
+        print ' | %s | % -.7e | % -.7e   | %2i                |' % (ename, thiserr, certerr, edig)
 
-fit = -resid(params, x, )
+        val_dig_min = min(val_dig_min, vdig)
+        err_dig_min = min(err_dig_min, edig)        
 
-if HASPYLAB:
-    pylab.plot(x, fit, 'k-')
+    print ' |----------------+----------------+------------------+-------------------|'    
+    sumsq = NISTdata['sum_squares']
+    chi2 = myfit.chisqr
+    print ' | Sum of Squares | %.7e  | %.7e    |  %2i               |' % (chi2, sumsq,
+                                                                          ndig(chi2, sumsq))
+    print ' |----------------+----------------+------------------+-------------------|'
 
-pylab.show()
-#
+    print ' Worst agreement: %i digits for value, %i digits for error ' % (val_dig_min, err_dig_min)
+
+    return val_dig_min
+
+def NIST_Test(DataSet, start='start2', plot=True):
+    
+    NISTdata = ReadNistData(DataSet)
+    resid, npar, dimx = Models[DataSet]
+    y = NISTdata['y']
+    x = NISTdata['x']
+
+    params = Parameters()
+    for i in range(npar):
+        pname = 'b%i' % (i+1)
+        cval  = NISTdata['cert_values'][i]
+        cerr  = NISTdata['cert_stderr'][i]
+        pval1 = NISTdata[start][i]
+        params.add(pname, value=pval1)
 
 
+    myfit = Minimizer(resid, params, fcn_args=(x,), fcn_kws={'y':y},
+                      scale_covar=True)
+    
+    myfit.prepare_fit()
+    myfit.leastsq()
 
 
+    dig_agree = Compare_NIST_Results(DataSet, myfit, params, NISTdata)
+
+    if plot and HASPYLAB:
+        fit = -resid(params, x, )
+        pylab.plot(x, y, 'r+')
+        pylab.plot(x, fit, 'ko--')
+        pylab.show()
+
+    return dig_agree > 2
+
+
+if __name__  == '__main__':
+    dset = 'Bennett5'
+    if len(sys.argv) > 1:
+        dset = sys.argv[1]
+    if dset.lower() == 'all':
+        tpass = 0
+        tfail = 0
+        failures = []
+        dsets = sorted(Models.keys())
+        for dset in dsets:
+            if NIST_Test(dset, plot=False):
+                tpass += 1
+            else:
+                tfail += 1
+                failures.append(dset)
+
+        print '--------------------------------------'
+        print ' Final Results: %i pass, %i fail.' % (tpass, tfail)
+        print ' Tests Failed for: %s' % ', '.join(failures)
+        print '--------------------------------------'
+    else:
+        NIST_Test(dset, plot=True)        
+        
