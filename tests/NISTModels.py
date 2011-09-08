@@ -1,5 +1,5 @@
 import os
-from numpy import exp, log, sin, cos, arctan, array
+from numpy import exp, log, log10, sin, cos, arctan, array
 from lmfit import Parameters
 NIST_DIR = 'NIST_STRD'
 
@@ -28,7 +28,7 @@ def DanWood(b, x, y=0):
 def ENSO(b, x, y=0):
     b = read_params(b)
     pi = 3.141592653589793238462643383279
-   
+
     return y - b[0] + (b[1]*cos( 2*pi*x/12 ) + b[2]*sin( 2*pi*x/12 ) +
                        b[4]*cos( 2*pi*x/b[3] ) + b[5]*sin( 2*pi*x/b[3] ) +
                        b[7]*cos( 2*pi*x/b[6] ) + b[8]*sin( 2*pi*x/b[6] ) )
@@ -85,11 +85,11 @@ def Misra1d(b, x, y=0):
 
 def Nelson(b, x, y=None):
     b = read_params(b)
-    xt = x[:,0]
-    xa = x[:,1]
+    x1 = x[:,0]
+    x2 = x[:,1]
     if y is None:
-        return  - b[0] - b[1]*xt * exp(-b[2]*xa)
-    return log(y) - b[0] - b[1]*xa * exp(-b[2]*xt)
+        return  - exp(b[0] - b[1]*x1 * exp(-b[2]*x2))
+    return log(y) - (b[0] - b[1]*x1 * exp(-b[2]*x2) )
 
 def Rat42(b, x, y=0):
     b = read_params(b)
