@@ -15,9 +15,8 @@ from testutils import report_errors
 from NISTModels import Models, ReadNistData
 
 
-
 def ndig(a, b):
-    return -math.log10(abs(abs(a)-abs(b))/abs(b))
+    return int(0.5-math.log10(abs(abs(a)-abs(b))/abs(b)))
 
 def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
     print ' ======================================'
@@ -37,16 +36,16 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
         certerr = NISTdata['cert_stderr'][i]
         vdig   = ndig(thisval, certval)
         edig   = ndig(thiserr, certerr)
-        
+
         pname = (parname + ' value ' + ' '*14)[:14]
         ename = (parname + ' stderr' + ' '*14)[:14]
         print ' | %s | % -.7e | % -.7e   | %2i                |' % (pname, thisval, certval, vdig)
         print ' | %s | % -.7e | % -.7e   | %2i                |' % (ename, thiserr, certerr, edig)
 
         val_dig_min = min(val_dig_min, vdig)
-        err_dig_min = min(err_dig_min, edig)        
+        err_dig_min = min(err_dig_min, edig)
 
-    print ' |----------------+----------------+------------------+-------------------|'    
+    print ' |----------------+----------------+------------------+-------------------|'
     sumsq = NISTdata['sum_squares']
     chi2 = myfit.chisqr
     print ' | Sum of Squares | %.7e  | %.7e    |  %2i               |' % (chi2, sumsq,
@@ -58,7 +57,7 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
     return val_dig_min
 
 def NIST_Test(DataSet, start='start2', plot=True):
-    
+
     NISTdata = ReadNistData(DataSet)
     resid, npar, dimx = Models[DataSet]
     y = NISTdata['y']
@@ -75,12 +74,11 @@ def NIST_Test(DataSet, start='start2', plot=True):
 
     myfit = Minimizer(resid, params, fcn_args=(x,), fcn_kws={'y':y},
                       scale_covar=True)
-    
+
     myfit.prepare_fit()
     myfit.leastsq()
 
-
-    dig_agree = Compare_NIST_Results(DataSet, myfit, params, NISTdata)
+    digs = Compare_NIST_Results(DataSet, myfit, params, NISTdata)
 
     if plot and HASPYLAB:
         fit = -resid(params, x, )
@@ -88,29 +86,33 @@ def NIST_Test(DataSet, start='start2', plot=True):
         pylab.plot(x, fit, 'ko--')
         pylab.show()
 
-    return dig_agree > 2
+    return digs > 2
 
 
 if __name__  == '__main__':
     dset = 'Bennett5'
+    start = 'start2'
     if len(sys.argv) > 1:
         dset = sys.argv[1]
+    if len(sys.argv) > 2:
+        start = sys.argv[2]
     if dset.lower() == 'all':
         tpass = 0
         tfail = 0
         failures = []
         dsets = sorted(Models.keys())
         for dset in dsets:
-            if NIST_Test(dset, plot=False):
-                tpass += 1
-            else:
-                tfail += 1
-                failures.append(dset)
+            for start in ('start1', 'start2'):
+                if NIST_Test(dset, start=start, plot=False):
+                    tpass += 1
+                else:
+                    tfail += 1
+                    failures.append("   %s (starting at '%s')" % (dset, start))
 
         print '--------------------------------------'
         print ' Final Results: %i pass, %i fail.' % (tpass, tfail)
-        print ' Tests Failed for: %s' % ', '.join(failures)
+        print ' Tests Failed for:\n %s' % '\n '.join(failures)
         print '--------------------------------------'
     else:
-        NIST_Test(dset, plot=True)        
-        
+        NIST_Test(dset, start=start, plot=True)
+

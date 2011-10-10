@@ -129,7 +129,7 @@ def check_ast_errors(error):
 class Minimizer(object):
     """general minimizer"""
     err_nonparam = "params must be a minimizer.Parameters() instance"
-    err_maxfev   = """Too many function calls (max set to  %%i)!  Use:
+    err_maxfev   = """Too many function calls (max set to  %i)!  Use:
     minimize(func, params, ...., maxfev=NNN)
 or set  leastsq_kws['maxfev']  to increase this maximum."""
 
@@ -317,8 +317,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
-                     maxfev= 1000 * (self.nvarys + 1))
-        
+                     gtol=1.e-7, maxfev=1000*(self.nvarys+1))
+
         lskws.update(self.kws)
         lskws.update(kws)
 
