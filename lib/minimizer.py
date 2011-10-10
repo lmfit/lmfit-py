@@ -265,9 +265,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.prepare_fit()
         sakws = dict(full_output=1, schedule=sched,
-                     maxiter = 2000 * (self.nvarys + 1),
-                     upper = self.vmax, lower=self.vmin)
-
+                     maxiter = 2000 * (self.nvarys + 1))
+        
         sakws.update(self.kws)
         sakws.update(kws)
 
