@@ -48,9 +48,9 @@ The latest stable version is available from PyPI or CARS (Univ of Chicago):
 +----------------------+------------------+--------------------------------------------+
 |  Development Version |   all            |  use `lmfit github repository`_            |
 +----------------------+------------------+--------------------------------------------+
- 
+
 if you have `Python Setup Tools`_  installed, you can download and install
-the PyEpics Package simply with::
+the lmfit-py Package simply with::
 
    easy_install -U lmfit
 

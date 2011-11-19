@@ -128,9 +128,10 @@ better ability to avoid local minima, and `BFGS
 <http://en.wikipedia.org/wiki/Limited-memory_BFGS>`_, which is a
 modification of the quasi-Newton method.
 
-To Select which of these algorithms to use, use the ``engine`` keyword to
-the :func:`minimize` function or use the corresponding method name from the
-:class:`Minimizer` class as listed in the :ref:`Table of Supported Fitting Engines <fit-engine-table>`.
+To Select which of these algorithms to use, use the ``engine`` keyword to the
+:func:`minimize` function or use the corresponding method name from the
+:class:`Minimizer` class as listed in the
+:ref:`Table of Supported Fitting Engines <fit-engine-table>`.
 
 .. _fit-engine-table:
 
@@ -154,49 +155,46 @@ Goodness-of-Fit and estimated uncertainty and correlations
 ===================================================================
 
 On a successful fit using the `leastsq` engine, several goodness-of-fit
-statistics and values related to the uncertainty in the fitted variables
-will be calculated.  These are all encapsulated in the :class:`Minimizer`
-object for the fit, as returned by :func:`minimize`.  The values related to
-the entire fit are stored in attributes of the :class:`Minimizer` object,
-as shown in :ref:`Table of Goodness-of-Fit Statistics <goodfit-table>`
-while those related to each fitted variables are stored as attributes of
-the corresponding :class:`Parameter`.
+statistics and values related to the uncertainty in the fitted variables will be
+calculated.  These are all encapsulated in the :class:`Minimizer` object for the
+fit, as returned by :func:`minimize`.  The values related to the entire fit are
+stored in attributes of the :class:`Minimizer` object, as shown in :ref:`Table
+of Fit Results <goodfit-table>` while those related to each fitted variables are
+stored as attributes of the corresponding :class:`Parameter`.
 
 
 .. _goodfit-table:
 
- Table of Goodness-of-Fit Statistics:  These statistics are all attributes of the :class:`Minimizer` object returned by :func:`minimize`.
-
+ Table of Fit Results:  These values, including the standard Goodness-of-Fit statistics,
+ are all attributes of the :class:`Minimizer` object returned by :func:`minimize`.
 
 +----------------------+----------------------------------------------------------------------------+
-| Minimizer Attribute  |  Description / Formula                                                     |
+| Minimizer Attribute  | Description / Formula                                                      |
 +======================+============================================================================+
-| ``nfev``             |  number of function evaluations                                            |
+|  ``nfev``            | number of function evaluations                                             |
 +----------------------+----------------------------------------------------------------------------+
-| ``success``          | boolean (``True``/``False``) for whether fit succeeded.                    |
+|  ``success``         | boolean (``True``/``False``) for whether fit succeeded.                    |
 +----------------------+----------------------------------------------------------------------------+
-| ``errorbars``        | boolean (``True``/``False``) for whether uncertainties were estimated.     |
+|  ``errorbars``       | boolean (``True``/``False``) for whether uncertainties were estimated.     |
 +----------------------+----------------------------------------------------------------------------+
-| ``message``          | message about fit success.                                                 |
+|  ``message``         | message about fit success.                                                 |
 +----------------------+----------------------------------------------------------------------------+
 |  ``ier``             | integer error value from scipy.optimize.leastsq                            |
 +----------------------+----------------------------------------------------------------------------+
 |  ``lmdif_message``   | message from scipy.optimize.leastsq                                        |
 +----------------------+----------------------------------------------------------------------------+
-|   ``nvarys``         |  number of variables in fit  :math:`N_{\rm varys}`                         |
+|  ``nvarys``          | number of variables in fit  :math:`N_{\rm varys}`                          |
 +----------------------+----------------------------------------------------------------------------+
-|   ``ndata``          |  number of data points:  :math:`N`                                         |
+|  ``ndata``           | number of data points:  :math:`N`                                          |
 +----------------------+----------------------------------------------------------------------------+
-|   ``nfree``          |  degrees of freedom in fit:  :math:`N - N_{\rm varys}`                     |
+|  ``nfree``           | degrees of freedom in fit:  :math:`N - N_{\rm varys}`                      |
 +----------------------+----------------------------------------------------------------------------+
-|   ``residual``       |  residual array (return of :func:`func`:  :math:`{\rm Resid}`              |
+|  ``residual``        | residual array (return of :func:`func`:  :math:`{\rm Resid}`               |
 +----------------------+----------------------------------------------------------------------------+
-|   ``chisqr``         | chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`                    |
+|  ``chisqr``          | chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`                    |
 +----------------------+----------------------------------------------------------------------------+
-|   ``redchi``         | reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}` |
+|  ``redchi``          | reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}` |
 +----------------------+----------------------------------------------------------------------------+
-
-
 
 Note that the calculation of chi-square and reduced chi-square assume that the
 returned residual function is scaled properly to the uncertainties in the data.
