@@ -221,15 +221,19 @@ class Interpreter:
         self.lineno    = 0
 
         for sym in FROM_PY:
-            symtable[sym] = __builtins__[sym]
+            if sym in __builtins__:
+                symtable[sym] = __builtins__[sym]
         for sym in FROM_MATH:
-            symtable[sym] = getattr(math, sym)
+            if hasattr(math, sym):            
+                symtable[sym] = getattr(math, sym)
 
         if HAS_NUMPY:
             for sym in FROM_NUMPY:
-                symtable[sym] = getattr(numpy, sym)
+                if hasattr(numpy, sym):
+                    symtable[sym] = getattr(numpy, sym)
             for name, sym in NUMPY_RENAMES.items():
-                symtable[name] = getattr(numpy, sym)
+                if hasattr(numpy, sym):                
+                    symtable[name] = getattr(numpy, sym)
 
         self.node_handlers = {}
         for tnode in self.supported_nodes:
