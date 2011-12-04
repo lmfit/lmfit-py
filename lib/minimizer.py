@@ -199,10 +199,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         for name in self.params:
             self.__update_paramval(name)
 
-        sout = []
-        for i in self.params.values():
-            sout.append('%s=%.5f'  % (i.name, (i.value)))
-            out = self.userfcn(self.params, *self.userargs, **self.userkws)
+        out = self.userfcn(self.params, *self.userargs, **self.userkws)
         if hasattr(self.iter_cb, '__call__'):
             self.iter_cb(self.params, self.nfev_calls, out,
                          *self.userargs, **self.userkws)
@@ -266,7 +263,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.prepare_fit()
         sakws = dict(full_output=1, schedule=sched,
                      maxiter = 2000 * (self.nvarys + 1))
-        
+
         sakws.update(self.kws)
         sakws.update(kws)
 
