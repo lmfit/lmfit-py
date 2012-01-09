@@ -150,6 +150,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.scale_covar = scale_covar
         self.nfev_calls = 0
         self.var_map = []
+        self.jacfcn = None
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
 
@@ -204,6 +205,23 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.iter_cb(self.params, self.nfev_calls, out,
                          *self.userargs, **self.userkws)
         return out
+
+    def __jacobian(self, fvars):
+        """
+        analytical jacobian to be used with the Levenberg-Marquardt
+
+        modified 02-01-2012 by Glenn Jones, Aberystwyth University
+        """
+        for varname, val in zip(self.var_map, fvars):
+            self.params[varname].value = val
+        self.nfev_calls = self.nfev_calls + 1
+
+        self.updated = dict([(name, False) for name in self.params])
+        for name in self.params:
+            self.__update_paramval(name)
+
+        # computing the jacobian
+        return self.jacfcn(self.params, *self.userargs, **self.userkws)
 
     def prepare_fit(self):
         """prepare parameters for fit"""
@@ -300,8 +318,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
     def leastsq(self, scale_covar=True, **kws):
         """
         use Levenberg-Marquardt minimization to perform fit.
-        This assumes that ModelParameters have been stored into
-        and a function to mi
+        This assumes that ModelParameters have been stored,
+        and a function to minimize has been properly set up.
 
         This wraps scipy.optimize.leastsq, and keyward arguments are passed
         directly as options to scipy.optimize.leastsq
@@ -314,10 +332,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
-                     gtol=1.e-7, maxfev=1000*(self.nvarys+1))
+                     gtol=1.e-7, maxfev=1000*(self.nvarys+1), Dfun=None)
 
         lskws.update(self.kws)
         lskws.update(kws)
+
+        if lskws['Dfun'] is not None:
+            self.jacfcn = lskws['Dfun']
+            lskws['Dfun'] = self.__jacobian
 
         lsout = scipy_leastsq(self.__residual, self.vars, **lskws)
         vbest, cov, infodict, errmsg, ier = lsout
