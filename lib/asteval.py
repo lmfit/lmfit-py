@@ -36,8 +36,7 @@ import ast
 import math
 
 from .astutils import (FROM_PY, FROM_MATH, FROM_NUMPY,
-                      NUMPY_RENAMES, op2func,
-                      ExceptionHolder)
+                      NUMPY_RENAMES, op2func, ExceptionHolder)
 try:
     import numpy
     HAS_NUMPY = True
@@ -171,6 +170,7 @@ class NameFinder(ast.NodeVisitor):
                 self.names.append(node.id)
         ast.NodeVisitor.generic_visit(self, node)
 
+
 class Interpreter:
     """mathematical expression compiler and interpreter.
 
@@ -224,7 +224,7 @@ class Interpreter:
             if sym in __builtins__:
                 symtable[sym] = __builtins__[sym]
         for sym in FROM_MATH:
-            if hasattr(math, sym):            
+            if hasattr(math, sym):
                 symtable[sym] = getattr(math, sym)
 
         if HAS_NUMPY:
@@ -232,7 +232,7 @@ class Interpreter:
                 if hasattr(numpy, sym):
                     symtable[sym] = getattr(numpy, sym)
             for name, sym in NUMPY_RENAMES.items():
-                if hasattr(numpy, sym):                
+                if hasattr(numpy, sym):
                     symtable[name] = getattr(numpy, sym)
 
         self.node_handlers = {}
@@ -541,7 +541,7 @@ class Interpreter:
 
     def on_boolop(self, node):    # ('op', 'values')
         "boolean operator"
-        val = self.interp(node.values.pop(0))
+        val = self.interp(node.values[0])
         is_and = ast.Or != node.op.__class__
         if (is_and and val) or (not is_and and not val):
             for n in node.values:
@@ -704,9 +704,10 @@ class Interpreter:
         kwargs.reverse()
         args = [tnode.id for tnode in node.args.args]
         doc = None
-        if isinstance(node.body[0], ast.Expr):
+        if (isinstance(node.body[0], ast.Expr) and
+            isinstance(node.body[0].value, ast.Str)):
             docnode = node.body.pop(0)
-            doc = self.interp(docnode.value)
+            doc = docnode.value.s
 
         self.symtable[node.name] = Procedure(node.name, self, doc=doc,
                                              body = node.body,
