@@ -6,9 +6,8 @@ To install the lmfit python module, use::
    python setup.py build
    python setup.py install
 
-This assumes that Python 2.5 or higher is installed.
+This assumes that Python 2.6 or higher is installed.
 In addition, numpy and scipy are required.
 
 Matt Newville <newville@cars.uchicago.edu>
-Last Update:  03-August-2011
-
+Last Update:  16-March-2012
