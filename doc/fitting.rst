@@ -142,12 +142,21 @@ To Select which of these algorithms to use, use the ``engine`` keyword to the
   +========================+=====================================+==============================+
   | Levenberg-Marquardt    |  ``leastsq``                        |  :meth:`leastsq`             |
   +------------------------+-------------------------------------+------------------------------+
-  | Simulated Annealing    |  ``anneal``                         |  :meth:`.anneal`             |
-  +------------------------+-------------------------------------+------------------------------+
   | L-BFGS-B               |  ``lbfgsb``                         |  :meth:`lbfgsb`              |
   +------------------------+-------------------------------------+------------------------------+
+  | Simulated Annealing    |  ``anneal``                         |  :meth:`anneal`              |
+  +------------------------+-------------------------------------+------------------------------+
 
+.. warning::
 
+The Levenberg-Marquardt method is *by far* the most tested fit method, and
+much of this documentation assumes that this is the method used.  For
+example, many of the fit statistics and estimates for uncertainties in
+parameters discussed in :ref:`fit-results-label` are done only for the
+``leastsq`` method.
+
+In particular, the simulated annealing method appears to not work
+correctly.... understanding this is on the ToDo list.
 
 ..  _fit-results-label:
 
@@ -201,21 +210,23 @@ returned residual function is scaled properly to the uncertainties in the data.
 For these statistics to be meaningful, the person writing the function to
 function to be minimized must scale them properly.
 
-When possible, standard errors for the fitted variables, and correlations
-between pairs of fitted variables are automatically calculated after the
-fit is performed.  The standard error (estimated :math:`1\sigma` error-bar)
-go into the :attr:`stderr` attribute of the Parameter.  The correlations
-with all other variables will be put into the :attr:`correl` attribute of
-the Parameter -- a dictionary with keys for all other Parameters and values
-of the corresponding correlation.
+After a fit using using the `leastsq` engine has completed succsessfully,
+standard errors for the fitted variables and correlations between pairs of
+fitted variables are automatically calculated from the covariance matrix.
+The standard error (estimated :math:`1\sigma` error-bar) go into the
+:attr:`stderr` attribute of the Parameter.  The correlations with all other
+variables will be put into the :attr:`correl` attribute of the Parameter --
+a dictionary with keys for all other Parameters and values of the
+corresponding correlation.
 
-In some cases, it may not be possible to estimate the errors and correlations.
-For example, if a variable actually has no practical effect on the fit, it will
-likely cause the covariance matrix to be singular, so that errors cannot be
-estimated.  Placing bounds on varied Parameters makes it more likely that errors
-cannot be estimated, as being near the maximum or minimum value makes the
-covariance matrix singular.  In these cases, the :attr:`errorbars` attribute of
-the fit result (:class:`Minimizer` object) will be ``False``.
+In some cases, it may not be possible to estimate the errors and
+correlations.  For example, if a variable actually has no practical effect
+on the fit, it will likely cause the covariance matrix to be singular,
+making standard errors impossible to estimate.  Placing bounds on varied
+Parameters makes it more likely that errors cannot be estimated, as being
+near the maximum or minimum value makes the covariance matrix singular.  In
+these cases, the :attr:`errorbars` attribute of the fit result
+(:class:`Minimizer` object) will be ``False``.
 
 
 ..  _fit-minimizer-label:
