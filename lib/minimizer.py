@@ -9,7 +9,6 @@ function-to-be-minimized (residual function) in terms of these Parameters.
 
    Copyright (c) 2011 Matthew Newville, The University of Chicago
    <newville@cars.uchicago.edu>
-
 """
 
 from numpy import sqrt
@@ -71,9 +70,9 @@ class Parameters(OrderedDict):
                     (name3, val3, False, None, None, None))
 
         """
-        for name, value, vary, min, max, expr in parlist:
+        for name, value, vary, vmin, vmax, expr in parlist:
             self.add(name, value=value, vary=vary,
-                     min=min, max=max, expr=expr)
+                     min=vmin, max=vmax, expr=expr)
 
 class Parameter(object):
     """A Parameter is the basic Parameter going
@@ -81,14 +80,15 @@ class Parameter(object):
     value, vary, max_value, min_value, constraint expression.
     The value and min/max values will be be set to floats.
     """
-    def __init__(self, value=None, vary=True, name=None,
+    def __init__(self, name=None, value=None, vary=True,
                  min=None, max=None, expr=None, **kws):
+        self.name = name
         self.value = value
+        self.init_value = value
         self.min = min
         self.max = max
         self.vary = vary
         self.expr = expr
-        self.name = name
         self.stderr = None
         self.correl = None
 
@@ -105,7 +105,6 @@ class Parameter(object):
         s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
         if self.expr is not None:
             s.append("expr='%s'" % (self.expr))
-
         return "<Parameter %s>" % ', '.join(s)
 
 class MinimizerException(Exception):
@@ -128,7 +127,8 @@ def check_ast_errors(error):
 
 class Minimizer(object):
     """general minimizer"""
-    err_nonparam = "params must be a minimizer.Parameters() instance"
+    err_nonparam = \
+     "params must be a minimizer.Parameters() instance or list of Parameters()"
     err_maxfev   = """Too many function calls (max set to  %i)!  Use:
     minimize(func, params, ...., maxfev=NNN)
 or set  leastsq_kws['maxfev']  to increase this maximum."""
@@ -136,8 +136,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **kws):
         self.userfcn = userfcn
-        self.params = params
-
+        self.__set_params(params)
         self.userargs = fcn_args
         if self.userargs is None:
             self.userargs = []
@@ -148,11 +147,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.kws = kws
         self.iter_cb = iter_cb
         self.scale_covar = scale_covar
-        self.nfev_calls = 0
+        self.nfev = 0
+        self.nfree = 0
+        self.message = None
         self.var_map = []
         self.jacfcn = None
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
+        self.__prepared = False
 
     def __update_paramval(self, name):
         """
@@ -194,7 +196,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # set parameter values
         for varname, val in zip(self.var_map, fvars):
             self.params[varname].value = val
-        self.nfev_calls = self.nfev_calls + 1
+        self.nfev = self.nfev + 1
 
         self.updated = dict([(name, False) for name in self.params])
         for name in self.params:
@@ -202,7 +204,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         out = self.userfcn(self.params, *self.userargs, **self.userkws)
         if hasattr(self.iter_cb, '__call__'):
-            self.iter_cb(self.params, self.nfev_calls, out,
+            self.iter_cb(self.params, self.nfev, out,
                          *self.userargs, **self.userkws)
         return out
 
@@ -214,7 +216,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         for varname, val in zip(self.var_map, fvars):
             self.params[varname].value = val
-        self.nfev_calls = self.nfev_calls + 1
+        self.nfev = self.nfev + 1
 
         self.updated = dict([(name, False) for name in self.params])
         for name in self.params:
@@ -223,15 +225,31 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # computing the jacobian
         return self.jacfcn(self.params, *self.userargs, **self.userkws)
 
-    def prepare_fit(self):
-        """prepare parameters for fit"""
-
-        # determine which parameters are actually variables
-        # and which are defined expressions.
-        if not isinstance(self.params, Parameters):
+    def __set_params(self, params):
+        """ set internal self.params from a Parameters object or
+        a list/tuple of Parameters"""
+        if params is None or isinstance(params, Parameters):
+            self.params = params
+        elif isinstance(params, (list, tuple)):
+            _params = Parameters()
+            for _par in params:
+                if not isinstance(_par, Parameter):
+                    raise MinimizerException(self.err_nonparam)
+                else:
+                    _params[_par.name] = _par
+            self.params = _params
+        else:
             raise MinimizerException(self.err_nonparam)
 
-        self.nfev_calls = 0
+    def prepare_fit(self, params=None):
+        """prepare parameters for fit"""
+        # determine which parameters are actually variables
+        # and which are defined expressions.
+        if params is None and self.params is not None and self.__prepared:
+            return
+        if params is not None and self.params is None:
+            self.__set_params(params)
+        self.nfev = 0
         self.var_map = []
         self.vars = []
         self.vmin = []
@@ -248,13 +266,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                     if (symname in self.params and
                         symname not in par.deps):
                         par.deps.append(symname)
-
             elif par.vary:
                 self.var_map.append(name)
                 self.vars.append(par.value)
                 self.vmin.append(par.min)
                 self.vmax.append(par.max)
-
 
             self.asteval.symtable[name] = par.value
             par.init_value = par.value
@@ -269,6 +285,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.updated = dict([(name, False) for name in self.params])
         for name in self.params:
             self.__update_paramval(name)
+        self.__prepared = True
 
     def anneal(self, schedule='cauchy', **kws):
         """
