@@ -1,19 +1,18 @@
-from lmfit import Parameters, Minimizer
+import sys
+
+from lmfit import Parameters, Parameter, Minimizer
 from lmfit.utilfuncs import gauss, loren, pvoigt
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
-from scipy.optimize import leastsq
-
 from testutils import report_errors
 
-import sys
-
 try:
+    import matplotlib
+    matplotlib.use('WXAGG')
     import pylab
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
-
 
 def per_iteration(pars, i, resid, x, *args, **kws):
     if i < 10 or i % 10 == 0:
@@ -36,7 +35,7 @@ def residual(pars, x, sigma=None, data=None):
     if sigma is  None:
         return (model - data)
     return (model - data)/sigma
-    
+
 
 n = 601
 xmin = 0.
@@ -59,26 +58,25 @@ data = (pvoigt(x, p_true['amp_g'].value, p_true['cen_g'].value,
 if HASPYLAB:
     pylab.plot(x, data, 'r+')
 
-p_fit = Parameters()
-p_fit.add('amp_g', value=10.0)
-p_fit.add('cen_g', value=9)
-p_fit.add('wid_g', value=1)
-p_fit.add('frac', value=0.50)
-p_fit.add('amp_l', expr='amp_g')
-p_fit.add('cen_l', expr='cen_g')
-p_fit.add('wid_l', expr='wid_g')
-p_fit.add('line_slope', value=0.0)
-p_fit.add('line_off', value=0.0)
+pfit = [Parameter(name='amp_g', value=10),
+        Parameter(name='amp_g', value=10.0),
+        Parameter(name='cen_g', value=9),
+        Parameter(name='wid_g', value=1),
+        Parameter(name='frac', value=0.50),
+        Parameter(name='amp_l', expr='amp_g'),
+        Parameter(name='cen_l', expr='cen_g'),
+        Parameter(name='wid_l', expr='wid_g'),
+        Parameter(name='line_slope', value=0.0),
+        Parameter(name='line_off', value=0.0)]
 
 sigma = 0.021  # estimate of data error (for all data points)
 
-myfit = Minimizer(residual, p_fit,
-                  # iter_cb=per_iteration,
+myfit = Minimizer(residual, pfit, iter_cb=per_iteration,
                   fcn_args=(x,), fcn_kws={'sigma':sigma, 'data':data},
                   scale_covar=True)
 
 myfit.prepare_fit()
-init = residual(p_fit, x)
+init = residual(myfit.params, x)
 
 if HASPYLAB:
     pylab.plot(x, init, 'b--')
@@ -88,9 +86,9 @@ myfit.leastsq()
 print(' Nfev = ', myfit.nfev)
 print( myfit.chisqr, myfit.redchi, myfit.nfree)
 
-report_errors(p_fit, modelpars=p_true)
+report_errors(myfit.params, modelpars=p_true)
 
-fit = residual(p_fit, x)
+fit = residual(myfit.params, x)
 
 if HASPYLAB:
     pylab.plot(x, fit, 'k-')
