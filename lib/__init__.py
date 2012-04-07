@@ -6,17 +6,16 @@
    and upper bounds.  In addition, parameters can be constrained
    as a simple mathematical expression of other Parameters.
 
-   version: 0.3
-   last update:  15-Aug-2011
-   License:  BSD
+   version: 0.4
+   last update:  7-Apr-2012
+   License: BSD
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
             The University of Chicago
 
 """
-__version__ = '0.3'
+__version__ = '0.4'
 
 from .minimizer import minimize, Minimizer, Parameter, Parameters
-from .asteval import Interpreter, NameFinder
 
-__all__ = [Minimizer, minimize, Parameter, Parameters, Interpreter, NameFinder]
+__all__ = [minimize, Minimizer, Parameter, Parameters]
