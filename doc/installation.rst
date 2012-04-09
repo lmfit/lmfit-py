@@ -7,9 +7,9 @@ Prerequisites
 
 The lmfit package requires Python, Numpy, and Scipy.  Extensive testing on
 version compatibility has not yet been done.  Initial tests work with
-Python 3.1, but no testing with Python 3.2 has yet been done.  No testing
-has been done with 64-bit architectures, but as this package is pure Python,
-no significant troubles are expected.
+Python 3.2, but no testing with Python 3 has yet been done.  No testing has
+been done with 64-bit architectures, but as this package is pure Python, no
+significant troubles are expected.
 
 
 Downloads
@@ -17,15 +17,15 @@ Downloads
 
 The latest stable version is available from PyPI or CARS (Univ of Chicago):
 
-.. _lmfit-0.3.tar.gz (CARS):   http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.tar.gz
-.. _lmfit-0.3.win32-py2.6.exe (CARS): http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.win32-py2.6.exe
-.. _lmfit-0.3.win32-py2.7.exe (CARS): http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.win32-py2.7.exe
-.. _lmfit-0.3.win32-py3.1.exe (CARS): http://cars9.uchicago.edu/software/lmfit/src/lmfit-0.3.win32-py3.1.exe
+.. _lmfit-0.4.tar.gz (CARS):   http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.4.tar.gz
+.. _lmfit-0.4.win32-py2.6.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.4.win32-py2.6.exe
+.. _lmfit-0.4.win32-py2.7.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.4.win32-py2.7.exe
+.. _lmfit-0.4.win32-py3.2.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.4.win32-py3.2.exe
 
-.. _lmfit-0.3.tar.gz (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.3.tar.gz
-.. _lmfit-0.3.win32-py2.6.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.3.win32-py2.6.exe
-.. _lmfit-0.3.win32-py2.7.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.3.win32-py2.7.exe
-.. _lmfit-0.3.win32-py3.1.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.3.win32-py3.1.exe
+.. _lmfit-0.4.tar.gz (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.4.tar.gz
+.. _lmfit-0.4.win32-py2.6.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.4.win32-py2.6.exe
+.. _lmfit-0.4.win32-py2.7.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.4.win32-py2.7.exe
+.. _lmfit-0.4.win32-py3.2.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.4.win32-py3.2.exe
 
 .. _lmfit github repository:   http://github.com/newville/lmfit-py
 .. _lmfit at pypi:             http://pypi.python.org/pypi/lmfit/
@@ -34,17 +34,17 @@ The latest stable version is available from PyPI or CARS (Univ of Chicago):
 +----------------------+------------------+--------------------------------------------+
 |  Download Option     | Python Versions  |  Location                                  |
 +======================+==================+============================================+
-|  Source Kit          | 2.6, 2.7, 3.1    | -  `lmfit-0.3.tar.gz (PyPI)`_              |
-|                      |                  | -  `lmfit-0.3.tar.gz (CARS)`_              |
+|  Source Kit          | 2.6, 2.7, 3.2    | -  `lmfit-0.4.tar.gz (PyPI)`_              |
+|                      |                  | -  `lmfit-0.4.tar.gz (CARS)`_              |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   2.6            | -  `lmfit-0.3.win32-py2.6.exe (PyPI)`_     |
-|                      |                  | -  `lmfit-0.3.win32-py2.6.exe (CARS)`_     |
+|  Win32 Installer     |   2.6            | -  `lmfit-0.4.win32-py2.6.exe (PyPI)`_     |
+|                      |                  | -  `lmfit-0.4.win32-py2.6.exe (CARS)`_     |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   2.7            | -  `lmfit-0.3.win32-py2.7.exe (PyPI)`_     |
-|                      |                  | -  `lmfit-0.3.win32-py2.7.exe (CARS)`_     |
+|  Win32 Installer     |   2.7            | -  `lmfit-0.4.win32-py2.7.exe (PyPI)`_     |
+|                      |                  | -  `lmfit-0.4.win32-py2.7.exe (CARS)`_     |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   3.1            | -  `lmfit-0.3.win32-py3.1.exe (PyPI)`_     |
-|                      |                  | -  `lmfit-0.3.win32-py3.1.exe (CARS)`_     |
+|  Win32 Installer     |   3.2            | -  `lmfit-0.4.win32-py3.2.exe (PyPI)`_     |
+|                      |                  | -  `lmfit-0.4.win32-py3.2.exe (CARS)`_     |
 +----------------------+------------------+--------------------------------------------+
 |  Development Version |   all            |  use `lmfit github repository`_            |
 +----------------------+------------------+--------------------------------------------+
