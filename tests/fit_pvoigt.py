@@ -16,9 +16,9 @@ except ImportError:
 
 def per_iteration(pars, i, resid, x, *args, **kws):
     if i < 10 or i % 10 == 0:
-        print '====== Iteration ', i
+        print( '====== Iteration ', i)
         for p in pars.values():
-            print p.name , p.value
+            print( p.name , p.value)
 
 def residual(pars, x, sigma=None, data=None):
     yg = gauss(x, pars['amp_g'].value,
