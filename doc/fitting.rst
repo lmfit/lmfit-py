@@ -147,13 +147,14 @@ To Select which of these algorithms to use, use the ``engine`` keyword to the
   | Simulated Annealing    |  ``anneal``                         |  :meth:`anneal`              |
   +------------------------+-------------------------------------+------------------------------+
 
+
 .. warning::
 
-The Levenberg-Marquardt method is *by far* the most tested fit method, and
-much of this documentation assumes that this is the method used.  For
-example, many of the fit statistics and estimates for uncertainties in
-parameters discussed in :ref:`fit-results-label` are done only for the
-``leastsq`` method.
+  The Levenberg-Marquardt method is *by far* the most tested fit method,
+  and much of this documentation assumes that this is the method used.  For
+  example, many of the fit statistics and estimates for uncertainties in
+  parameters discussed in :ref:`fit-results-label` are done only for the
+  ``leastsq`` method.
 
 In particular, the simulated annealing method appears to not work
 correctly.... understanding this is on the ToDo list.

@@ -14,6 +14,7 @@ dictionary, containing named parameters:
     fit_params['wid'] = Parameter(value=4, min=0)}
 
 or using the equivalent
+
     fit_params = Parameters()
     fit_params.add('amp', value=1.2, min=0.1, max=1000)
     fit_params.add('cen', value=40.0, vary=False),
