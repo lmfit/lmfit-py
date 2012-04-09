@@ -12,6 +12,7 @@ Non-Linear Least-Square Minimization for Python
 .. _simulated annealing: http://en.wikipedia.org/wiki/Simulated_annealing
 
 .. _MINPACK-1: http://en.wikipedia.org/wiki/MINPACK
+.. _asteval: http://newville.github.com/asteval/
 
 The lmfit Python package provides a simple, flexible interface to
 non-linear least-squares optimization, or curve fitting.  By default, lmfit
@@ -37,9 +38,10 @@ extensions of simple numerical variables with the following properties:
  * Parameters can be fixed or floated in the fit.
  * Parameters can be bounded with a minimum and/or maximum value.
  * Parameters can be written as simple mathematical expressions of
-   other Parameters.  These values will be re-evaluated at each
-   step in the fit, so that the expression is satisfied.  This gives
-   a simple but flexible approach to constraining fit variables.
+   other Parameters, using the `asteval`_ module (which must be installed
+   separately). These values will be re-evaluated at each step in the fit,
+   so that the expression is satisfied.  This gives a simple but flexible
+   approach to constraining fit variables.
 
 The main advantage to using Parameters instead of fit variables is that the model function
 does not have to be rewritten for a change in what is varied or what constraints are

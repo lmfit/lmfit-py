@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Getting started with Non-Linear Least-Squares Fitting &mdash; Least-Squares Minimization with Constraints for Python</title>
+    
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -69,7 +72,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -98,7 +101,7 @@ writing a function that takes the values of the fitting variables and
 calculates a residual function (data-model) that is to be minimized in the
 least-squares sense</p>
 <div class="math">
-<p><img src="_images/math/0999ab8f1f536075a4ce7cab471c891041d7ac6c.png" alt="\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}" /></p>
+<p><img src="_images/math/0999ab8f1f536075a4ce7cab471c891041d7ac6c.png" alt="\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}"/></p>
 </div><p>where <img class="math" src="_images/math/46c77f95690c67f66ff8f15c8b7b287fc72ddb51.png" alt="y_i^{\rm meas}"/> is the set of measured data, <img class="math" src="_images/math/5701af25a70669f531ef4c956d9f8d6227175071.png" alt="y_i^{\rm
 model}({\bf{v}})"/> is the model calculation, <img class="math" src="_images/math/83f0be20c5972fb3136e8e37f24ac4a6cce2fbf4.png" alt="{\bf{v}}"/> is the set of
 variables in the model to be optimized in the fit, and <img class="math" src="_images/math/319593f7ae7122d7910bdf87a156b25f7588f1ad.png" alt="\epsilon_i"/>
@@ -210,13 +213,13 @@ with the <a class="reference internal" href="#Parameters" title="Parameters"><tt
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>value</strong> -- the numerical value for the parameter</li>
-<li><strong>vary</strong> (boolean (<tt class="xref docutils literal"><span class="pre">True</span></tt>/<tt class="xref docutils literal"><span class="pre">False</span></tt>)) -- whether to vary the parameter or not.</li>
-<li><strong>min</strong> -- lower bound for value (<tt class="xref docutils literal"><span class="pre">None</span></tt> = no lower bound).</li>
-<li><strong>max</strong> -- upper bound for value (<tt class="xref docutils literal"><span class="pre">None</span></tt> = no upper bound).</li>
-<li><strong>name</strong> (<tt class="xref docutils literal"><span class="pre">None</span></tt> or string -- will be overwritten during fit if <tt class="xref docutils literal"><span class="pre">None</span></tt>.) -- parameter name</li>
-<li><strong>expr</strong> (<tt class="xref docutils literal"><span class="pre">None</span></tt> or string) -- mathematical expression to use to evaluate value during fit.</li>
+<li><strong>vary</strong> (boolean (<tt class="docutils literal"><span class="pre">True</span></tt>/<tt class="docutils literal"><span class="pre">False</span></tt>)) -- whether to vary the parameter or not.</li>
+<li><strong>min</strong> -- lower bound for value (<tt class="docutils literal"><span class="pre">None</span></tt> = no lower bound).</li>
+<li><strong>max</strong> -- upper bound for value (<tt class="docutils literal"><span class="pre">None</span></tt> = no upper bound).</li>
+<li><strong>name</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> or string -- will be overwritten during fit if <tt class="docutils literal"><span class="pre">None</span></tt>.) -- parameter name</li>
+<li><strong>expr</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> or string) -- mathematical expression to use to evaluate value during fit.</li>
 </ul>
 </td>
 </tr>
@@ -227,7 +230,7 @@ with the <a class="reference internal" href="#Parameters" title="Parameters"><tt
 <p>Each of these inputs is turned into an attribute of the same name.   As
 above, one hands a dictionary of Parameters to the fitting routines.   The
 name for the Parameter will be set to be consistent</p>
-<p>After a fit, a Parameter for a fitted variable (ie with vary = <tt class="xref docutils literal"><span class="pre">True</span></tt>)
+<p>After a fit, a Parameter for a fitted variable (ie with vary = <tt class="docutils literal"><span class="pre">True</span></tt>)
 will have the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> attribute holding the best-fit value, and may
 (depending on the success of the fit) have obtain additional attributes.</p>
 <dl class="attribute">
@@ -359,7 +362,7 @@ looks table-like:</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

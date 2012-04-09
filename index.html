@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Non-Linear Least-Square Minimization for Python &mdash; Least-Squares Minimization with Constraints for Python</title>
+    
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -40,7 +43,7 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper"><h3>Downloads</h3>
-<p>Current version: <b>0.3</b></p>
+<p>Current version: <b>0.4</b></p>
 <p>Downloads:
 <ul>
   <li>&nbsp; &nbsp; <a href="http://cars.uchicago.edu/software/python/lmfit/src/">cars.uchicago.edu</a>
@@ -59,7 +62,7 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/lmf
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -102,9 +105,10 @@ extensions of simple numerical variables with the following properties:</p>
 <li>Parameters can be fixed or floated in the fit.</li>
 <li>Parameters can be bounded with a minimum and/or maximum value.</li>
 <li>Parameters can be written as simple mathematical expressions of
-other Parameters.  These values will be re-evaluated at each
-step in the fit, so that the expression is satisfied.  This gives
-a simple but flexible approach to constraining fit variables.</li>
+other Parameters, using the <a class="reference external" href="http://newville.github.com/asteval/">asteval</a> module (which must be installed
+separately). These values will be re-evaluated at each step in the fit,
+so that the expression is satisfied.  This gives a simple but flexible
+approach to constraining fit variables.</li>
 </ul>
 </div></blockquote>
 <p>The main advantage to using Parameters instead of fit variables is that the model function
@@ -168,7 +172,7 @@ estimated uncertainties and correlation between fitted variables.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

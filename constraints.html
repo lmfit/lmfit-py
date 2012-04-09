@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
     <title>Using Mathematical Constraints &mdash; Least-Squares Minimization with Constraints for Python</title>
+    
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.3',
+        VERSION:     '0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -61,7 +64,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -82,9 +85,10 @@
   <div class="section" id="using-mathematical-constraints">
 <span id="math-constraints-label"></span><h1>Using Mathematical Constraints<a class="headerlink" href="#using-mathematical-constraints" title="Permalink to this headline">¶</a></h1>
 <p>While being able to fix variables and place upper and lower bounds on their
-1values are key parts of lmfit, an equally important feature is the ability
-to place mathematical constraints on parameters.  This section describes
-how to do this, and what sort of parameterizations are possible.</p>
+1values are key parts of lmfit, the ability to place mathematical
+constraints on parameters is also highly desirable.  This section describes
+how to do this, and what sort of parameterizations are possible.  In order
+to use this functionality, the <a class="reference external" href="http://newville.github.com/asteval/">asteval</a> module must be installed.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Just as one can place bounds on a Parameter, or keep it fixed during the
@@ -159,16 +163,16 @@ evaluated within Python.  It also means that the symbols in the expressions
 can point to any Python object.</p>
 <p>In fact, the use of Python's AST allows a nearly full version of Python to
 be supported, without using Python's built-in <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> function.  The
-<tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module included with lmfit actually supports most Python syntax,
+<a class="reference external" href="http://newville.github.com/asteval/">asteval</a> module actually supports most Python syntax,
 including for- and while-loops, conditional expressions, and user-defined
 functions.  There are several unsupported Python constructs, most notably
 the class statement, so that new classes cannot be created, and the import
-statement, which helps make the <tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module safe from malicious use.</p>
-<p>This means that you can add domain-specific functions into the
-<tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module for later use in constraint expressions.  To do this,
-you would use the <tt class="xref py py-attr docutils literal"><span class="pre">asteval</span></tt> attribute of the <a class="reference internal" href="fitting.html#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a>
-class, which contains a complete AST interpreter.  As used in lmfit, the
-<tt class="xref py py-mod docutils literal"><span class="pre">asteval</span></tt> module uses a flat namespace, implemented as a single
+statement, which helps make the <a class="reference external" href="http://newville.github.com/asteval/">asteval</a> module safe from malicious use.</p>
+<p>One important feature of the <a class="reference external" href="http://newville.github.com/asteval/">asteval</a> module is that you can add
+domain-specific functions into the it, for later use in constraint
+expressions.  To do this, you would use the <tt class="xref py py-attr docutils literal"><span class="pre">asteval</span></tt> attribute of
+the <a class="reference internal" href="fitting.html#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class, which contains a complete AST interpreter.
+The <a class="reference external" href="http://newville.github.com/asteval/">asteval</a> interpreter uses a flat namespace, implemented as a single
 dictionary. That means you can preload any Python symbol into the namespace
 for the constraints:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">lorenztian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
@@ -204,7 +208,7 @@ expressions.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>
