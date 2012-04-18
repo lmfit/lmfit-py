@@ -17,5 +17,5 @@
 """
 __version__ = '0.4'
 from .minimizer import minimize, Minimizer, Parameter, Parameters
-
-__all__ = [minimize, Minimizer, Parameter, Parameters]
+from .diagnostics import calc_ci
+__all__ = [minimize, Minimizer, Parameter, Parameters, calc_ci]
