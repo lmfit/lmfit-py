@@ -34,8 +34,7 @@ def p_trace_to_dict(p_tr,params):
         ([[p1, p2,...],[p1, p2,...]],[res_prob1,res_prob2..])
     Returns a dict with p-names and prob as keys and lists as their values. 
     """
-    out={}
-    print params.keys(), p_tr[0]
+    out={}    
     for name in params.keys():       
         out[name]=np.array([l.pop(0) for l in p_tr[0]])
     out['prob']=np.array(p_tr[1])
@@ -44,7 +43,12 @@ def p_trace_to_dict(p_tr,params):
 def calc_ci(minimizer, maxiter=200, verbose=1, 
             prob_func=f_compare, sigmas=[0.674,0.95,0.997],
             trace_params=False):
-    "Calculates coinfidance intervals using the "
+    """
+    Calculates coinfidance interval. While varying one parameter, the others
+    are optimized for minimizing chi^2. With the resulting chi^2 we can 
+    calculate a coinfidance for varying parameter for a given statstic e.g. 
+    F-statistic
+    """
     fit_params=minimizer.params
     #copy the best fit values.
     if trace_params: 
