@@ -4,8 +4,10 @@ Created on Sun Apr 15 19:47:45 2012
 
 @author: Tillsten
 """
-
+import numpy as np
+import matplotlib.pyplot as plt
 from lmfit import Parameters, minimize, calc_ci
+from lmfit.printfuncs import *
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
@@ -16,8 +18,6 @@ try:
 except ImportError:
     HASPYLAB = False
 
-
-from testutils import report_errors
 
 p_true = Parameters()
 p_true.add('amp', value=14.0)
@@ -59,9 +59,58 @@ print ' N fev = ', out.nfev
 print out.chisqr, out.redchi, out.nfree
 
 report_errors(fit_params)
-ci=calc_ci(out)
+#ci=calc_ci(out)
+ci, tr=calc_ci(out, trace_params=True)
 for row in ci:    
     conv=lambda x: "%.5f" % x
-    print "".join([row[0].rjust(10)]+[i.rjust(10) for i in map(conv,row[1:])])
+    print("".join([row[0].rjust(10)]+[i.rjust(10) for i in map(conv,row[1:])]))
+
+    
+if HASPYLAB:
+    names=fit_params.keys()
+    i=0  
+    gs=pylab.GridSpec(4,4)
+    sx={}
+    sy={}
+    for fixed in names:   
+        j=0        
+        for free in names:                                         
+            if j in sx and i in sy:                
+                ax=pylab.subplot(gs[i,j],sharex=sx[j],sharey=sy[i])                                        
+            elif i in sy:
+                ax=pylab.subplot(gs[i,j],sharey=sy[i])
+                sx[j]=ax
+            elif j in sx:
+                ax=pylab.subplot(gs[i,j],sharex=sx[j])
+                sy[i]=ax
+            else:
+                ax=pylab.subplot(gs[i,j])
+                sy[i]=ax
+                sx[j]=ax
+            if i<3:
+                pylab.setp( ax.get_xticklabels(), visible=False)
+            else:
+                ax.set_xlabel(free)
+
+            if j>0:                    
+                pylab.setp( ax.get_yticklabels(), visible=False)
+            else:
+                ax.set_ylabel(fixed)        
+            #print i,j i*4+j
+            res=tr[fixed]                
+            prob=res['prob']
+            f=prob<0.96
+            
+            x,y=res[free], res[fixed]
+            ax.scatter(x[f],y[f],
+                  c=1-prob[f],s=200*(1-prob[f]+0.5))
+            ax.autoscale(1,1)
+            
+               
+            
+            j=j+1         
+        i=i+1
+    
+    pylab.show()
 
 
