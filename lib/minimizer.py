@@ -75,17 +75,18 @@ class Parameters(OrderedDict):
 
     def add_many(self, *parlist):
         """convenience function for adding a list of Parameters:
-        Here, you must provide a sequence of tuples, each containing:
+        Here, you must provide a sequence of tuples, each containing
+        at least the name. The order in each tuple is the following:
             name, value, vary, min, max, expr
         with   p = Parameters()
         p.add_many( (name1, val1, True, None, None, None),
                     (name2, val2, True,  0.0, None, None),
-                    (name3, val3, False, None, None, None))
+                    (name3, val3, False, None, None, None),
+                    (name4, val4))
 
         """
-        for name, value, vary, vmin, vmax, expr in parlist:
-            self.add(name, value=value, vary=vary,
-                     min=vmin, max=vmax, expr=expr)
+        for para in parlist:            
+            self.add(*para)
 
 class Parameter(object):
     """A Parameter is the basic Parameter going
