@@ -13,7 +13,9 @@ def calc_max_chi(N,P,best_chi):
 def f_compare(N,P,new_chi,best_chi,nfix=1.):
     """
     Returns the probalitiy for two given parameter sets.
-    nfix is the number of fixed parameters.   
+    nfix is the number of fixed parameters.
+    
+    
     """  
     #print new_chi, best_chi, N, P
     P=P+nfix
@@ -37,7 +39,8 @@ def p_trace_to_dict(p_tr,params):
         ([[p1, p2,...],[p1, p2,...]],[res_prob1,res_prob2..])
     Returns a dict with p-names and prob as keys and lists as their values. 
     """
-    out={}    
+    out={}   
+    print params.keys()
     for name in params.keys():       
         out[name]=np.array([l.pop(0) for l in p_tr[0]])
     out['prob']=np.array(p_tr[1])
@@ -62,8 +65,7 @@ def calc_ci(minimizer, maxiter=200, verbose=1,
     
     for para in fit_params.values():     
         if trace_params:             
-            trace[para.name]=([],[])
-            p_trace=trace[para.name]
+            p_trace=([],[])
         if verbose:
             print 'Calculating CI for '+ para.name
         restore_vals(org,fit_params)
@@ -85,7 +87,7 @@ def calc_ci(minimizer, maxiter=200, verbose=1,
             if trace_params:                
                 #print 'trace'+para.name
                 p=copy_vals(out.params).values()    
-                p_trace[0].append(p)
+                p_trace[0].append([i.value for i in out.params.values()])
                 p_trace[1].append(prob)                
             return prob-offset
                         
@@ -136,11 +138,11 @@ def calc_2dmap(minimizer,x_name,y_name,nx=10,ny=10):
     org=copy_vals(minimizer.params)
     
     x=minimizer.params[x_name]
-    x_upper, x_lower=x.value+3*x.stderr, x.value-3*x.stderr
+    x_upper, x_lower=x.value+3*x.stderr, x.value-5*x.stderr
     x_points=np.linspace(x_lower,x_upper,nx)
     
     y=minimizer.params[y_name]
-    y_upper, y_lower=y.value+3*y.stderr, y.value-3*y.stderr
+    y_upper, y_lower=y.value+3*y.stderr, y.value-5*y.stderr
     y_points=np.linspace(y_lower,y_upper,ny)
 
     x.vary=False
