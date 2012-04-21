@@ -44,7 +44,7 @@ fit_params.add('decay2', value=0.050)
 
 out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 out.leastsq()
-ci=calc_ci(out)
+ci, trace=calc_ci(out, trace_params=True)
 for row in ci:    
     conv=lambda x: "%.5f" % x
     print("".join([row[0].rjust(10)]+[i.rjust(10) for i in map(conv,row[1:])]))
@@ -55,17 +55,30 @@ for row in ci:
 pylab.plot(x,data)
 pylab.figure()
 names=fit_params.keys()
+pylab.hot()
 
 for i in range(4):
-    for j in range(i):
-        pylab.subplot(4,4,16-i*4-j)
-        x,y,m=calc_2dmap(out,names[i],names[j],20,20)
-        #print x,y,m
-        for p in out.params:
-            print p, out.params[p].value
-        pylab.contourf(x,y,m,20)
+    for j in range(4):
+        if i!=j:
+            pylab.subplot(4,4,16-i*4-j)
+            x,y,m=calc_2dmap(out,names[i],names[j],20,20)
+            #print x,y,m
+            pylab.contourf(x,y,m,20)
+            pylab.xlabel(names[i])
+            pylab.ylabel(names[j])
+            
+            x=trace[names[i]][names[i]]            
+            y=trace[names[i]][names[j]]
+            pr=trace[names[i]]['prob']
+            s=np.argsort(x)
+            pylab.plot(x[s],y[s],'g',lw=1)
+            pylab.scatter(x[s],y[s],c=pr[s],s=30,lw=1)
         #print "jo"
 #pylab.colorbar()
 pylab.show()
+
+
+    
+
 
 
