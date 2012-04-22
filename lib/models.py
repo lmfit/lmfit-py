@@ -102,9 +102,9 @@ class Gaussian(LmModel):
         self.parameters['w'].value=w
         
     def func(self,paras):
-        c=paras['a'].value 
-        xc=paras['b'].value 
-        a=paras['c'].value
+        c=paras['c'].value 
+        xc=paras['xc'].value 
+        a=paras['a'].value
         w=paras['w'].value
         return a*np.exp(-(self.x-xc)**2/(2*w))+c
     
