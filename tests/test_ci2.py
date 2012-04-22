@@ -57,11 +57,12 @@ pylab.hot()
 from scipy.interpolate import interp1d
 for i in range(4):
     for j in range(4):
-        pylab.subplot(4,4,16-i*4-j)
+        pylab.subplot(4,4,16-j*4-i)
         if i!=j:
             x,y,m=coinf_2d(out,names[i],names[j],20,20)
             #print x,y,m
             pylab.contourf(x,y,m,20)
+
             pylab.xlabel(names[i])
             pylab.ylabel(names[j])
             
