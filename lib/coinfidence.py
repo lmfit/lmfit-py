@@ -13,13 +13,15 @@ def calc_max_chi(N,P,best_chi):
 def f_compare(N,P,new_chi,best_chi,nfix=1.):
     """
     Returns the probalitiy for two given parameter sets.
-    nfix is the number of fixed parameters.
-    
+    nfix is the number of fixed parameters.   
     
     """  
     #print new_chi, best_chi, N, P
     P=P+nfix
     return f.cdf((new_chi/best_chi-1)*(N-P)/nfix,nfix,N-P)
+    
+def log_compare(N,P,new_chi,best_chi,nfix=1.):
+    pass
 
 def copy_vals(params):
     "Saves the values of paras and errs in temporay dict"
@@ -45,48 +47,58 @@ def p_trace_to_dict(p_tr,params):
     out['prob']=np.array(p_tr[1])
     return out 
     
-def calc_ci(minimizer, maxiter=200, verbose=1, 
+def coinf(minimizer, p_names=None, maxiter=200, verbose=1, 
             prob_func=f_compare, sigmas=[0.674,0.95,0.997],
-            trace_params=False):
+            trace=False):
     """
-    Calculates coinfidance interval. While varying one parameter, the others
+    Calculates coinfidence interval. While varying one parameter, the others
     are optimized for minimizing chi^2. With the resulting chi^2 we can 
-    calculate a coinfidance for varying parameter for a given statstic e.g. 
-    F-statistic
+    calculate a coinfidence for varying parameter for a given statstic e.g. 
+    F-statistic.
     """
-    fit_params=minimizer.params
+    if p_names==None:
+        p_names=minimizer.params.keys()    
+    fit_params=[minimizer.params[p] for p in p_names]
+    
     #copy the best fit values.
-    if trace_params: 
-        trace={}
-    org=copy_vals(fit_params)
+    if trace: 
+        trace_dict={}
+    org=copy_vals(minimizer.params)
     output=[]
     best_chi=minimizer.chisqr
     
-    for para in fit_params.values():     
-        if trace_params:             
+    for para in fit_params:     
+        if trace:             
             p_trace=([],[])
         if verbose:
             print 'Calculating CI for '+ para.name
-        restore_vals(org,fit_params)
-        step=para.stderr
+        restore_vals(org,minimizer.params)
+        
+        if para.stderr>0:
+            step=para.stderr
+        else:
+            step=max(para.value*0.05,0.01)
+
         para.vary=False    
         start_val=para.value
         #minimizer.leastsq()                
+
         
         def calc_prob(val, offset=0.,restore=False):
             "Returns the probabilty for given Value."
-            if restore: restore_vals(org,fit_params)       
+            if restore: restore_vals(org,minimizer.params)       
             para.value=val
             minimizer.prepare_fit(para)
             minimizer.leastsq()
             out=minimizer                      
-            prob=f_compare(out.ndata,out.ndata-out.nfree,out.chisqr,best_chi)                    
+            prob=prob_func(out.ndata,out.ndata-out.nfree,out.chisqr,best_chi)                    
             
-            if trace_params:
+            if trace:
                 p_trace[0].append([i.value for i in out.params.values()])
                 p_trace[1].append(prob) 
                 
             return prob-offset
+            
                         
         def search_limits(direction):
             """
@@ -97,6 +109,7 @@ def calc_ci(minimizer, maxiter=200, verbose=1,
             old_prob=0
             i=0
             limit=start_val
+            
             #Find a upper limit,
             while change>0.001 and old_prob<max(sigmas):
                 i+=1
@@ -104,50 +117,60 @@ def calc_ci(minimizer, maxiter=200, verbose=1,
                 new_prob=calc_prob(limit)
                 change=new_prob-old_prob
                 old_prob=new_prob
-                if i>maxiter:
-                    print "Reached maxiter, last val: ", limit, " with ", old_prob
+                if i>maxiter:                    
                     break
-                #print change, limit, old_prob
-            restore_vals(org,fit_params)
-            #use brentq to find sigmas.            
-            
-            ret = [brentq(calc_prob,start_val,limit, args=(p)) 
+                
+            restore_vals(org,minimizer.params)
+            #use brentq to find sigmas.                        
+            ret = [(p,brentq(calc_prob,start_val,limit, args=(p), rtol=0.001)) 
                     for p in sigmas if p<old_prob]            
             return ret
         
         
         upper_err=search_limits(1)
-        restore_vals(org,fit_params)        
+        restore_vals(org,minimizer.params)        
         lower_err=search_limits(-1)
-        if trace_params:
-            trace[para.name]=p_trace_to_dict(p_trace,fit_params)
+        
+        if trace:
+            trace_dict[para.name]=p_trace_to_dict(p_trace,minimizer.params)
+            
         para.vary=True          
-        output.append([para.name]+list(lower_err[::-1])+[start_val]+list(upper_err))
+        output.append([para.name]+list(lower_err[::-1])+[(0,start_val)]+list(upper_err))
    
-    restore_vals(org,fit_params)
-    if trace_params: 
-           return output, trace
+    restore_vals(org,minimizer.params)
+    if trace: 
+           return output, trace_dict
     return output
     
 
-def calc_2dmap(minimizer,x_name,y_name,nx=10,ny=10):
+def coinf_2d(minimizer,x_name,y_name,nx=10,ny=10, 
+             limits=None,
+             prob_func=f_compare):
+    """
+    Calculates coinfidence regions for two fixed parameters.
+    """
+    
     best_chi=minimizer.chisqr
     org=copy_vals(minimizer.params)
     
     x=minimizer.params[x_name]
-    x_upper, x_lower=x.value+3*x.stderr, x.value-5*x.stderr
-    x_points=np.linspace(x_lower,x_upper,nx)
-    
-    y=minimizer.params[y_name]
-    y_upper, y_lower=y.value+3*y.stderr, y.value-5*y.stderr
+    y=minimizer.params[y_name]    
+
+    if limits==None:
+        x_upper, x_lower=x.value+5*x.stderr, x.value-5*x.stderr
+        y_upper, y_lower=y.value+5*y.stderr, y.value-5*y.stderr
+    elif len(limits)==2:
+        x_upper, x_lower=limits[0]
+        y_upper, y_lower=limits[1]
+        
+    x_points=np.linspace(x_lower,x_upper,nx)   
     y_points=np.linspace(y_lower,y_upper,ny)
+    grid=np.dstack(np.meshgrid(x_points,y_points))
 
     x.vary=False
     y.vary=False
-    grid=np.dstack(np.meshgrid(x_points,y_points))
-
     
-    def calc_prob(vals, offset=0.,restore=False):
+    def calc_prob(vals, restore=False):
             "Returns the probabilty for given Value."
             if restore: restore_vals(org,minimizer.params)       
             x.value=vals[0]
@@ -159,7 +182,7 @@ def calc_2dmap(minimizer,x_name,y_name,nx=10,ny=10):
             
             #print "calc"
             #print calc_max_chi(out.ndata, out.ndata-out.nfree,best_chi)
-            prob=f_compare(out.ndata,out.ndata-out.nfree,out.chisqr,best_chi,
+            prob=prob_func(out.ndata,out.ndata-out.nfree,out.chisqr,best_chi,
                            nfix=2.)    
             return prob
     out=x_points, y_points, np.apply_along_axis(calc_prob,-1,grid)

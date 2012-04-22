@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from lmfit import Parameters, Minimizer, calc_ci, calc_2dmap, minimize
+from lmfit import Parameters, Minimizer, coinf, coinf_2d, minimize
 import numpy as np
 try:
     import pylab
@@ -44,13 +44,11 @@ fit_params.add('decay2', value=0.050)
 
 out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 out.leastsq()
-ci, trace=calc_ci(out, trace_params=True)
+ci, trace=coinf(out, trace=True)
 for row in ci:    
-    conv=lambda x: "%.5f" % x
+    conv=lambda x: "%.5f" % x[1]
     print("".join([row[0].rjust(10)]+[i.rjust(10) for i in map(conv,row[1:])]))
 
-for row in ci:
-    print out.params[row[0]].stderr, row[4]-row[3], row[3]-row[2]
 
 pylab.plot(x,data)
 pylab.figure()
@@ -61,7 +59,7 @@ for i in range(4):
     for j in range(4):
         pylab.subplot(4,4,16-i*4-j)
         if i!=j:
-            x,y,m=calc_2dmap(out,names[i],names[j],20,20)
+            x,y,m=coinf_2d(out,names[i],names[j],20,20)
             #print x,y,m
             pylab.contourf(x,y,m,20)
             pylab.xlabel(names[i])

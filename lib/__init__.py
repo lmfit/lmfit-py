@@ -17,5 +17,6 @@
 """
 __version__ = '0.4'
 from .minimizer import minimize, Minimizer, Parameter, Parameters
-from .diagnostics import calc_ci
-__all__ = [minimize, Minimizer, Parameter, Parameters, calc_ci]
+from .coinfidence import coinf, coinf_2d
+
+__all__ = [minimize, Minimizer, Parameter, Parameters, coinf, coinf_2d]

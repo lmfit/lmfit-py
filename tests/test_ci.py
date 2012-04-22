@@ -6,7 +6,7 @@ Created on Sun Apr 15 19:47:45 2012
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from lmfit import Parameters, minimize, calc_ci
+from lmfit import Parameters, minimize, coinf
 from lmfit.printfuncs import *
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
@@ -60,10 +60,7 @@ print out.chisqr, out.redchi, out.nfree
 
 report_errors(fit_params)
 #ci=calc_ci(out)
-ci, tr=calc_ci(out, trace_params=True)
-for row in ci:    
-    conv=lambda x: "%.5f" % x
-    print("".join([row[0].rjust(10)]+[i.rjust(10) for i in map(conv,row[1:])]))
+ci, tr=coinf(out, trace=True)
 
     
 if HASPYLAB:
