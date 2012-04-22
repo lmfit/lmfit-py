@@ -47,7 +47,7 @@ out.leastsq()
 ci, trace=coinf(out, trace=True)
 
 
-
+pylab.rcParams['font.size']=8
 pylab.plot(x,data)
 pylab.figure()
 names=fit_params.keys()

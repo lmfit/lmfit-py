@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 """
 Contains functions to calculate coinfidence intervals.
 """
@@ -52,7 +51,9 @@ def restore_vals(tmp_params, params):
 def p_trace_to_dict(p_tr, params):
     """
     p_tr has following form:
+        
         ([[p1, p2,...],[p1, p2,...]],[res_prob1,res_prob2..])
+        
     Returns a dict with p-names and prob as keys and lists as their values.
     """
 
@@ -63,39 +64,38 @@ def p_trace_to_dict(p_tr, params):
     return out
 
 
-def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
-          trace=False,maxiter=200, verbose=1, prob_func=f_compare):
-    """
-    Calculates the coinfidence interval (ci) for parameters of the given
-    minimizer.
 
+def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
+          trace=False,maxiter=200, verbose=1, prob_func='f_test'):
+    r"""Calculates the coinfidence interval for parameters from the given minimizer.
+
+    
     The parameter for which the ci is calculated will be varied, while
     the remaining parameters are reoptimized for minimizing chi-square.
     The resulting chi-square is used  to calculate the probability with 
-    a given statistic e.g. F-statistic.
-
-    The function uses a 1d-rootfinder from scipy to find the values 
-    resulting in the searched coinfidance.
+    a given statistic e.g. F-statistic. This function uses a 1d-rootfinder
+    from scipy to find the values resulting in the searched coinfidance.
 
     Parameters
-    ----------
-    minimizer: minimizer
-        Should allready be optimized.
-    p_names: list, optional
-        Names of the parameters for which the ci is calculated. If None,
-        the ci is calculated for every parameter.
-    sigmas: list, optional
-        The probabilities (1-alpha) to find. Default is 1,2 and 3-sigma.
-    trace: bool, optional
-        Defaults to False, if true, each result of a probability calculation 
-        is saved along with the parameter. This can be used to plot so
-        called "profile traces".
+    ----------          
+    minimizer : Minimizer
+      The minimizer to use, should be already fitted via leastsq.
+    p_names : list, optional
+      Names of the parameters for which the ci is calculated. If None,
+      the ci is calculated for every parameter.
+    sigmas : list, optional
+      The probabilities (1-alpha) to find. Default is 1,2 and 3-sigma.
+    trace : bool, optional
+      Defaults to False, if true, each result of a probability calculation 
+      is saved along with the parameter. This can be used to plot so
+      called "profile traces".
+
 
     Returns
     -------
-    output: dict
+    output : dict
         A dict, which contais a list of (sigma, vals)-tuples for each name.
-    trace_dict: dict of dicts, optional
+    trace_dict : dict 
         Only if trace is set true. Is a dict, the key is the parameter which
         was fixed.The values are again a dict with the names as keys, but with
         an additional key 'prob'. Each contains an array of the corresponding 
@@ -103,14 +103,19 @@ def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
         
     Other Parameters
     ----------------
-    maxiter: int
+    maxiter : int
         Maximum of iteration to find an upper limit.
-    prob_func: function
+    prob_func : function
         Function to calculate the probality from the opimized chi-square.
         At the moment only f_compare is avaliable.
-        
+    
+    See also
+    --------
+    coinf_2d    
+    
     Examples
     --------
+    
     >>> from lmfit.printfuncs import *
     >>> mini=minimize(some_func, params)
     >>> mini.leastsq()
@@ -134,6 +139,7 @@ def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     if p_names == None:
         p_names = minimizer.params.keys()
     fit_params = [minimizer.params[p] for p in p_names]
+    prob_func=f_compare
 
     if trace:
         trace_dict = {}
@@ -187,7 +193,7 @@ def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
             """
 
             change = 1
-            old_prob = 0  
+            old_prob = 0
             i = 0
             limit = start_val
 
@@ -230,38 +236,37 @@ def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
 
 def coinf_2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
              prob_func=f_compare):
-    """
-    Calculates coinfidence regions for two fixed parameters.
+    r"""Calculates coinfidence regions for two fixed parameters.
     
     The method is explained in *coninf*: here we are fixing
     two parameters.
     
     Parameters
     ----------
-    minimizer: minimizer
-        The minimizer to use, should be allready fitted via leastsq.
-    x_name: string
+    minimizer : minimizer
+        The minimizer to use, should be already fitted via leastsq.
+    x_name : string
         The name of the parameter which will be the x direction.
-    y_name: string
+    y_name : string
         The name of the parameter which will be the y direction.
-    nx, ny: ints, optional
+    nx, ny : ints, optional
         Number of points.
-    limits: tuple: optional
+    limits : tuple: optional
         Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
         given, the default is 5 stderrs in each direction.
         
     Returns
     -------
-    x: (nx)-array
+    x : (nx)-array
         x-coordinates
-    y: (ny)-array
+    y : (ny)-array
         y-coordinates
-    grid: (nx,ny)-array
+    grid : (nx,ny)-array
         grid contains the calculated probabilities.
  
     Other Parameters
     ----------------
-    prob_func: function
+    prob_func : function
         Function to calculate the probality from the opimized chi-square.
         At the moment only f_compare is avaliable.
         
