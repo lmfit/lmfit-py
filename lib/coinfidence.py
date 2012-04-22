@@ -6,22 +6,22 @@ from scipy.stats import f
 from scipy.optimize import brentq
 
 
-def calc_max_chi(N,P,best_chi):
-    fval=f.isf(0.05,P,N-P)
-    return best_chi*(fval*P/float(N-P)+1)
+def calc_max_chi(Ndata, Npara, best_chi):
+    fval=f.isf(0.05,Npara, Ndata-Npara)
+    return best_chi*(fval*Npara/float(Ndata-Npara)+1)
 
-def f_compare(N,P,new_chi,best_chi,nfix=1.):
+def f_compare(Ndata, Nparas, new_chi,best_chi,Nfix=1.):
     """
     Returns the probalitiy for two given parameter sets.
-    nfix is the number of fixed parameters.   
+    Nfix is the number of fixed parameters.   
     
     """  
-    #print new_chi, best_chi, N, P
-    P=P+nfix
-    return f.cdf((new_chi/best_chi-1)*(N-P)/nfix,nfix,N-P)
+    #print new_chi, best_chi, Ndata, Nparas
+    Nparas=Nparas+Nfix
+    return f.cdf((new_chi/best_chi-1)*(Ndata-Nparas)/Nfix,Nfix,Ndata-Nparas)
     
-def log_compare(N,P,new_chi,best_chi,nfix=1.):
-    pass
+#def log_compare(Ndata,Nparas,new_chi,best_chi,Nfix=1.):
+#    pass
 
 def copy_vals(params):
     "Saves the values of paras and errs in temporay dict"
@@ -47,14 +47,34 @@ def p_trace_to_dict(p_tr,params):
     out['prob']=np.array(p_tr[1])
     return out 
     
-def coinf(minimizer, p_names=None, maxiter=200, verbose=1, 
-            prob_func=f_compare, sigmas=[0.674,0.95,0.997],
-            trace=False):
+def coinf(minimizer, p_names=None, sigmas=[0.674,0.95,0.997],
+          maxiter=200, verbose=1, prob_func=f_compare, 
+          trace=False):
     """
-    Calculates coinfidence interval. While varying one parameter, the others
-    are optimized for minimizing chi^2. With the resulting chi^2 we can 
-    calculate a coinfidence for varying parameter for a given statstic e.g. 
-    F-statistic.
+    Calculates the coinfidence interval (ci) for parameters of the given
+    minimizer. 
+    
+    The parameter for which the ci is calculated will be varied while
+    the remaining parameters are reoptimized for minimizing chi^2. 
+    With the resulting chi^2 we calculate a probability with a
+    given statstic e.g. F-statistic. 
+    
+    The functions uses a 1d-root finder to find the critical values, 
+    given in sigmas, of the varied parameter.
+    
+    Parameters
+    ----------
+    minimizer: minimizer
+        Should allready be optimized.
+    p_names: list, optional
+        Names of the parameters for which the ci is calculated. If None,
+        the ci is calculated for every parameter.
+    sigmas: list, optional
+        The probabilities (1-alpha) to find. Defaults to 1,2 and 3-sigmas.
+        
+    Returns
+    -------
+    todo
     """
     if p_names==None:
         p_names=minimizer.params.keys()    
@@ -85,7 +105,7 @@ def coinf(minimizer, p_names=None, maxiter=200, verbose=1,
 
         
         def calc_prob(val, offset=0.,restore=False):
-            "Returns the probabilty for given Value."
+            "Returns the probability for given Value."
             if restore: restore_vals(org,minimizer.params)       
             para.value=val
             minimizer.prepare_fit(para)
@@ -139,7 +159,7 @@ def coinf(minimizer, p_names=None, maxiter=200, verbose=1,
    
     restore_vals(org,minimizer.params)
     if trace: 
-           return output, trace_dict
+        return output, trace_dict
     return output
     
 
@@ -171,20 +191,21 @@ def coinf_2d(minimizer,x_name,y_name,nx=10,ny=10,
     y.vary=False
     
     def calc_prob(vals, restore=False):
-            "Returns the probabilty for given Value."
-            if restore: restore_vals(org,minimizer.params)       
-            x.value=vals[0]
-            y.value=vals[1]
-            #minimizer.__prepared=False
-            minimizer.prepare_fit([x,y])
-            minimizer.leastsq()
-            out=minimizer            
-            
-            #print "calc"
-            #print calc_max_chi(out.ndata, out.ndata-out.nfree,best_chi)
-            prob=prob_func(out.ndata,out.ndata-out.nfree,out.chisqr,best_chi,
-                           nfix=2.)    
-            return prob
+        "Returns the probabilty for given Value."
+        if restore: restore_vals(org,minimizer.params)       
+        x.value=vals[0]
+        y.value=vals[1]
+        #minimizer.__prepared=False
+        minimizer.prepare_fit([x,y])
+        minimizer.leastsq()
+        out=minimizer            
+        
+        #print "calc"
+        #print calc_max_chi(out.ndata, out.ndata-out.nfree,best_chi)
+        prob=prob_func(out.ndata,out.ndata-out.nfree,out.chisqr,best_chi,
+                       nfix=2.)    
+        return prob
+        
     out=x_points, y_points, np.apply_along_axis(calc_prob,-1,grid)
     
     x.vary, y.vary=True, True
