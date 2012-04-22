@@ -64,7 +64,7 @@ def p_trace_to_dict(p_tr, params):
 
 
 def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
-          maxiter=200, verbose=1, prob_func=f_compare, trace=False):
+          trace=False,maxiter=200, verbose=1, prob_func=f_compare):
     """
     Calculates the coinfidence interval (ci) for parameters of the given
     minimizer.
@@ -86,10 +86,35 @@ def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
         the ci is calculated for every parameter.
     sigmas: list, optional
         The probabilities (1-alpha) to find. Defaults to 1,2 and 3-sigmas.
+    trace: bool
+        Defaults to False, if true, each result of a probability calculation 
+        is saved along with the parameter. This can be used to plot so
+        called "profile traces".
 
     Returns
     -------
-    todo
+    minimizer: minimizer
+        minimizer.coinf now contains a dict with the critical values.    
+    trace_dict: dict of dicts, optional
+        Only if trace is set true. Is a dict, the key is the parameter which
+        was fixed.The values are again a dict with the names as keys, but with
+        an additional key 'prob'. Each contains an array of the corresponding 
+        values.
+        
+    Other Parameters
+    ----------------
+    maxiter: int
+        Maximum of iteration to find an upper limit.
+    prob_func: function
+        Function to calculate the probality from the opimized chi-square.
+        At the moment only f_compare is avaliable.
+        
+    Examples
+    --------
+    
+    >>>min=minimize(some_func, params)
+    >>>min.leastsq()
+    >>>min=coinf(min)
     """
 
     if p_names == None:
@@ -104,7 +129,7 @@ def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     org = copy_vals(minimizer.params)
     best_chi = minimizer.chisqr
 
-    output = []
+    output = {}
 
     for para in fit_params:
         if trace:
@@ -180,8 +205,8 @@ def coinf(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
                     minimizer.params)
 
         para.vary = True
-        output.append([para.name] + list(lower_err[::-1]) + [(0,
-                      start_val)] + list(upper_err))
+        output[para.name]= list(lower_err[::-1]) + [(0, start_val)] \
+                            + list(upper_err)
 
     restore_vals(org, minimizer.params)
     if trace:

@@ -45,9 +45,7 @@ fit_params.add('decay2', value=0.050)
 out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 out.leastsq()
 ci, trace=coinf(out, trace=True)
-for row in ci:    
-    conv=lambda x: "%.5f" % x[1]
-    print("".join([row[0].rjust(10)]+[i.rjust(10) for i in map(conv,row[1:])]))
+
 
 
 pylab.plot(x,data)

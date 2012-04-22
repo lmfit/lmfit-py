@@ -61,7 +61,7 @@ print out.chisqr, out.redchi, out.nfree
 report_errors(fit_params)
 #ci=calc_ci(out)
 ci, tr=coinf(out, trace=True)
-
+report_ci(ci)
     
 if HASPYLAB:
     names=fit_params.keys()

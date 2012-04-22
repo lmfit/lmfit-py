@@ -53,9 +53,13 @@ def report_errors(params, modelpars=None, show_correl=True):
     #print('-------------------------------------')
 
 
-def report_ci(output):    
-    for row in ci:    
+def report_ci(ci):    
+    for name in ci:    
+        convp=lambda x: ("%.2f" % (x[0]*100))+'%'
         conv=lambda x: "%.5f" % x[1]
-        print("".join([row[0].rjust(10)]+[i.rjust(10) for i in map(conv,row[1:])]))
+        row=ci[name]
+        print("".join([''.rjust(10)]+[i.rjust(10) for i in map(convp,row)]))
+        print("".join([name.rjust(10)]+[i.rjust(10) for i in map(conv,row)]))
+        
 
     
