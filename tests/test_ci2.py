@@ -56,11 +56,11 @@ pylab.plot(x,data)
 pylab.figure()
 names=fit_params.keys()
 pylab.hot()
-
+from scipy.interpolate import interp1d
 for i in range(4):
     for j in range(4):
+        pylab.subplot(4,4,16-i*4-j)
         if i!=j:
-            pylab.subplot(4,4,16-i*4-j)
             x,y,m=calc_2dmap(out,names[i],names[j],20,20)
             #print x,y,m
             pylab.contourf(x,y,m,20)
@@ -71,8 +71,17 @@ for i in range(4):
             y=trace[names[i]][names[j]]
             pr=trace[names[i]]['prob']
             s=np.argsort(x)
-            pylab.plot(x[s],y[s],'g',lw=1)
             pylab.scatter(x[s],y[s],c=pr[s],s=30,lw=1)
+        else:
+            x=trace[names[i]][names[i]]            
+            y=trace[names[i]]['prob']
+            
+            t,s=np.unique(x,True)                       
+            f=interp1d(t,y[s],'slinear')
+            xn=np.linspace(x.min(),x.max(),50)
+            pylab.plot(xn,f(xn),'g',lw=1)
+            pylab.xlabel(names[i])
+            pylab.ylabel('prob')
         #print "jo"
 #pylab.colorbar()
 pylab.show()
