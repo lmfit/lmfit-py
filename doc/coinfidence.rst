@@ -23,37 +23,120 @@ a certain coinfidence.
 
  F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}
 
+N is the number of data-points, P the number of parameter of the null model.
+:math:`P_{fix}` is the number of fixed parameters (or to be more clear, the 
+difference of number of parameters betweeen our null model and the alternate
+model).
+
 A log-likelihood method will be added soon.
 
-Usage
------
-There a two methods, both are easy use. First you need a minimizer object
-which is already fitted. Then you only have to call 
+A basic example
+---------------
 
-     ci=coinf(min)
+First we generate a toy problem.
 
-and lmfit calculates the coinfidence interval for each parameter. If you set 
-trace to true, you can observe the dependency between two parameter. To
-calculate the coinfidence in a region, use 
+.. ipython:: python
+   
+    import lmfit
+    import numpy as np     
+    x=np.linspace(0.3,10,100)
+    y=1/(0.1*x)+2+0.1*np.random.randn(x.size)
+    p=lmfit.Parameters()
+    p.add_many(('a',0.1),('b',1))    
+    def residual(p):
+        a=p['a'].value
+        b=p['b'].value
+        return 1/(a*x)+b-y
+
+We have to fit it before we can generate the coinfidence intervals.
+
+.. ipython:: python
+        
+    mi=lmfit.minimize(residual, p)
+    mi.leastsq()
+    lmfit.printfuncs.report_errors(mi.params)
+
+Now it just a simple function call:
+
+.. ipython:: python    
+
+    ci=lmfit.coinf(mi)
+    lmfit.printfuncs.report_ci(ci)
+
+As we can see, it is not necessery to caclulate ci's for this problem.
+
+An advanced example
+-------------------
+Now we look at a problem, where calculating the error from approimated 
+covariance can lead to wrong results.
+
+.. ipython:: python
+
+    @suppress
+    np.random.seed(1)
+    y=3*np.exp(-x/2.)-5*np.exp(-x/10.)+0.2*np.random.randn(x.size)
+    p=lmfit.Parameters()
+    p.add_many(('a1',5),('a2',-5),('t1',2),('t2',5))
+    def residual(p):
+        a1,a2,t1,t2=[i.value for i in p.values()]        
+        return a1*np.exp(-x/t1)+a2*np.exp(-x/t2)-y
+
+Now lets fit it:
+
+.. ipython:: python
+
+    mi=lmfit.minimize(residual, p)
+    mi.leastsq() 
+    lmfit.printfuncs.report_errors(mi.params, show_correl=False)
+
+Again we call coinf, this time with tracing and only for 1- and 2-sigma:
+
+.. ipython:: python
     
-     x,y,grid=coinf_2d(min,'para1','para2')
+    ci, trace=lmfit.coinf(mi,sigmas=[0.68,0.95],trace=True, verbose=0)
+    lmfit.printfuncs.report_ci(ci)
 
-In the test directory is the file `test_ci2.py`, which uses both methods on
-a simulated model of a sum of two decays. The result can be seen in the graphic
-below. The scatter points are from the traceof `coinf` and the filled contour 
-from `coinf_2d`. WARNING: calculating the the coinfidence intervals can be
-a very expensive operation for complex models.
+If you compare the calculated error estimates, you will see that the 
+regular estimate is too small. Now let's plot a coninfidance region:
 
-.. image:: test_ci2_result.png
-    :width: 80%
+.. ipython:: python
+    
+    import matplotlib.pylab as plt
+    x, y, grid=lmfit.coinf_2d(mi,'a1','t2',30,30)    
+    plt.contourf(x,y,grid,np.linspace(0,1,11))    
+    plt.xlabel('a1');
+    plt.colorbar();    
+    @savefig coinf.png width=7in
+    plt.ylabel('t2');
+
+Remember the trace? 
+
+.. ipython:: python
+    
+    @suppress
+    plt.contourf(x,y,grid,np.linspace(0,1,11))    
+    @suppress
+    plt.xlabel('a1')
+    @suppress
+    plt.colorbar()
+    @suppress  
+    plt.ylabel('t2')
+
+    
+    x,y,prob=trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
+    x2,y2,prob2=trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
+    @savefig coinf2.png width=7in
+    plt.scatter(x,y,c=prob,s=30)
+    plt.scatter(x2,y2,c=prob2,s=30)
+    
 
 
-Documentation of the methods
-----------------------------
+Documentation of methods
+------------------------
 
 .. py:module:: coinfidence
 .. autofunction:: coinf
 .. autofunction:: coinf_2d
-.. autofunction:: cumulative_distribution
+
 
     
