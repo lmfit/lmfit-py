@@ -51,7 +51,7 @@ pylab.rcParams['font.size']=8
 pylab.plot(x,data)
 pylab.figure()
 names=fit_params.keys()
-pylab.hot()
+cm=pylab.cm.coolwarm
 from scipy.interpolate import interp1d
 for i in range(4):
     for j in range(4):
@@ -59,7 +59,7 @@ for i in range(4):
         if i!=j:
             x,y,m=coinf_2d(out,names[i],names[j],20,20)
             #print x,y,m
-            pylab.contourf(x,y,m,20)
+            pylab.contourf(x,y,m,np.linspace(0,1,10),cmap=cm)
 
             pylab.xlabel(names[i])
             pylab.ylabel(names[j])
@@ -68,7 +68,7 @@ for i in range(4):
             y=trace[names[i]][names[j]]
             pr=trace[names[i]]['prob']
             s=np.argsort(x)
-            pylab.scatter(x[s],y[s],c=pr[s],s=30,lw=1)
+            pylab.scatter(x[s],y[s],c=pr[s],s=30,lw=1, cmap=cm)
         else:
             x=trace[names[i]][names[i]]            
             y=trace[names[i]]['prob']

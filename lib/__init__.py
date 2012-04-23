@@ -18,5 +18,6 @@
 __version__ = '0.4'
 from .minimizer import minimize, Minimizer, Parameter, Parameters
 from .coinfidence import coinf, coinf_2d
-
-__all__ = [minimize, Minimizer, Parameter, Parameters, coinf, coinf_2d]
+import printfuncs
+__all__ = [minimize, Minimizer, Parameter, Parameters, coinf, coinf_2d,
+           printfuncs]
