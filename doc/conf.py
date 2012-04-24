@@ -187,8 +187,9 @@ htmlhelp_basename = 'lmfitdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'lmfit.tex', u'lmfit documentation',
-   u'Matthew Newville', 'manual'),
+  ('index', 'lmfit.tex',
+   'Least-Squares Minimization with Constraints for Python',
+   'Matthew Newville', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
