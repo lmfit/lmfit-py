@@ -73,11 +73,13 @@ Installation from source on any platform is::
 Acknowledgements
 ~~~~~~~~~~~~~~~~~~
 
-Substantial code and documentation improvements, especially for improved
-estimates of confidence intervals was provided by Tillsten.  Many valuable
-suggestions for improvements have come from Christoph Deil.  Several
+LMFIT was originally written by Matthew Newville.  Substantial code and
+documentation improvements, especially for improved estimates of confidence
+intervals was provided by Till Stensitzki.  Many valuable suggestions for
+improvements have come from Christoph Deil.  The code obviously depends on,
+and owes a very large debt to the code in scipy.optimize.  Several
 discussions on the scipy mailing lists have also led to improvements in
-this code. 
+this code.
 
 
 License
@@ -86,13 +88,14 @@ License
 The LMFIT-py code is distribution under the following license:
 
   Copyright (c) 2012 Matthew Newville, The University of Chicago
+                     Till Stensitzki, Freie Universitat Berlin'
 
   Permission to use and redistribute the source code or binary forms of this
   software and its documentation, with or without modification is hereby
   granted provided that the above notice of copyright, these terms of use,
   and the disclaimer of warranty below appear in the source code and
-  documentation, and that none of the names of The University of Chicago or
-  the authors appear in advertising or endorsement of works derived from this
+  documentation, and that none of the names of above institutions or 
+  authors appear in advertising or endorsement of works derived from this
   software without specific prior written permission from all parties.
 
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
