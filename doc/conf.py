@@ -15,8 +15,8 @@ import sys, os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-sys.path.append(os.path.abspath('..\lib'))
-sys.path.append(os.path.abspath('.\ext'))
+sys.path.append(os.path.abspath(os.path.join('..', 'lib')))
+sys.path.append(os.path.abspath(os.path.join('.', 'ext')))
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
@@ -42,7 +42,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'lmfit'
-copyright = u'2011, Matthew Newville, The University of Chicago'
+copyright = u'2012, Matthew Newville, The University of Chicago'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

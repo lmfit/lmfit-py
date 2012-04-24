@@ -70,12 +70,22 @@ Installation from source on any platform is::
 
    python setup.py install
 
+Acknowledgements
+~~~~~~~~~~~~~~~~~~
+
+Substantial code and documentation improvements, especially for improved
+estimates of confidence intervals was provided by Tillsten.  Many valuable
+suggestions for improvements have come from Christoph Deil.  Several
+discussions on the scipy mailing lists have also led to improvements in
+this code. 
+
+
 License
 ~~~~~~~~~~~~~
 
 The LMFIT-py code is distribution under the following license:
 
-  Copyright (c) 2011 Matthew Newville, The University of Chicago
+  Copyright (c) 2012 Matthew Newville, The University of Chicago
 
   Permission to use and redistribute the source code or binary forms of this
   software and its documentation, with or without modification is hereby
