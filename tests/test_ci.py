@@ -6,7 +6,7 @@ Created on Sun Apr 15 19:47:45 2012
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from lmfit import Parameters, minimize, coinf
+from lmfit import Parameters, minimize, conf_interval
 from lmfit.printfuncs import *
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
@@ -60,7 +60,7 @@ print out.chisqr, out.redchi, out.nfree
 
 report_errors(fit_params)
 #ci=calc_ci(out)
-ci, tr=coinf(out, trace=True)
+ci, tr = conf_interval(out, trace=True)
 report_ci(ci)
     
 if HASPYLAB:

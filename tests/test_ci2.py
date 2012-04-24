@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from lmfit import Parameters, Minimizer, coinf, coinf_2d, minimize
+from lmfit import Parameters, Minimizer, conf_interval, conf_interval2d, minimize
 import numpy as np
 try:
     import pylab
@@ -44,7 +44,7 @@ fit_params.add('decay2', value=0.050)
 
 out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 out.leastsq()
-ci, trace=coinf(out, trace=True)
+ci, trace = conf_interval(out, trace=True)
 
 
 pylab.rcParams['font.size']=8
@@ -57,7 +57,7 @@ for i in range(4):
     for j in range(4):
         pylab.subplot(4,4,16-j*4-i)
         if i!=j:
-            x,y,m=coinf_2d(out,names[i],names[j],20,20)
+            x,y,m = conf_interval2d(out,names[i],names[j],20,20)
             #print x,y,m
             pylab.contourf(x,y,m,np.linspace(0,1,10),cmap=cm)
 

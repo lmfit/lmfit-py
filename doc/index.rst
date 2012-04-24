@@ -57,6 +57,6 @@ estimated uncertainties and correlation between fitted variables.
    installation
    parameters
    fitting
-   coinfidence
+   confidence
    constraints
 
