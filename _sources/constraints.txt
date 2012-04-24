@@ -9,8 +9,8 @@ Using Mathematical Constraints
 While being able to fix variables and place upper and lower bounds on their
 1values are key parts of lmfit, the ability to place mathematical
 constraints on parameters is also highly desirable.  This section describes
-how to do this, and what sort of parameterizations are possible.  In order
-to use this functionality, the `asteval`_ module must be installed.
+how to do this, and what sort of parameterizations are possible -- see 
+the `asteval`_ for further documentation.
 
 Overview
 ===========
@@ -95,11 +95,11 @@ can point to any Python object.
 
 In fact, the use of Python's AST allows a nearly full version of Python to
 be supported, without using Python's built-in :meth:`eval` function.  The
-`asteval`_ module actually supports most Python syntax,
-including for- and while-loops, conditional expressions, and user-defined
-functions.  There are several unsupported Python constructs, most notably
-the class statement, so that new classes cannot be created, and the import
-statement, which helps make the `asteval`_ module safe from malicious use.
+`asteval`_ module actually supports most Python syntax, including for- and
+while-loops, conditional expressions, and user-defined functions.  There
+are several unsupported Python constructs, most notably the class
+statement, so that new classes cannot be created, and the import statement,
+which helps make the `asteval`_ module safe from malicious use.
 
 One important feature of the `asteval`_ module is that you can add
 domain-specific functions into the it, for later use in constraint

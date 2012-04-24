@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.4',
+        VERSION:     '0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -37,6 +37,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="parameters.html" title="Getting started with Non-Linear Least-Squares Fitting"
              accesskey="N">next</a> |</li>
         <li class="right" >
@@ -54,6 +57,7 @@
 <li><a class="reference internal" href="#downloads">Downloads</a></li>
 <li><a class="reference internal" href="#development-version">Development Version</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
 <li><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
@@ -120,32 +124,32 @@ significant troubles are expected.</p>
 <tr class="row-even"><td>Source Kit</td>
 <td>2.6, 2.7, 3.2</td>
 <td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/source/l/lmfit/lmfit-0.4.tar.gz">lmfit-0.4.tar.gz (PyPI)</a></li>
-<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.4.tar.gz">lmfit-0.4.tar.gz (CARS)</a></li>
+<li><a class="reference external" href="http://pypi.python.org/packages/source/l/lmfit/lmfit-0.5.tar.gz">lmfit-0.5.tar.gz (PyPI)</a></li>
+<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.5.tar.gz">lmfit-0.5.tar.gz (CARS)</a></li>
 </ul>
 </td>
 </tr>
 <tr class="row-odd"><td>Win32 Installer</td>
 <td>2.6</td>
 <td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.4.win32-py2.6.exe">lmfit-0.4.win32-py2.6.exe (PyPI)</a></li>
-<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.4.win32-py2.6.exe">lmfit-0.4.win32-py2.6.exe (CARS)</a></li>
+<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.5.win32-py2.6.exe">lmfit-0.5.win32-py2.6.exe (PyPI)</a></li>
+<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.5.win32-py2.6.exe">lmfit-0.5.win32-py2.6.exe (CARS)</a></li>
 </ul>
 </td>
 </tr>
 <tr class="row-even"><td>Win32 Installer</td>
 <td>2.7</td>
 <td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.4.win32-py2.7.exe">lmfit-0.4.win32-py2.7.exe (PyPI)</a></li>
-<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.4.win32-py2.7.exe">lmfit-0.4.win32-py2.7.exe (CARS)</a></li>
+<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.5.win32-py2.7.exe">lmfit-0.5.win32-py2.7.exe (PyPI)</a></li>
+<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.5.win32-py2.7.exe">lmfit-0.5.win32-py2.7.exe (CARS)</a></li>
 </ul>
 </td>
 </tr>
 <tr class="row-odd"><td>Win32 Installer</td>
 <td>3.2</td>
 <td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.4.win32-py3.2.exe">lmfit-0.4.win32-py3.2.exe (PyPI)</a></li>
-<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.4.win32-py3.2.exe">lmfit-0.4.win32-py3.2.exe (CARS)</a></li>
+<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.5.win32-py3.2.exe">lmfit-0.5.win32-py3.2.exe (PyPI)</a></li>
+<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.5.win32-py3.2.exe">lmfit-0.5.win32-py3.2.exe (CARS)</a></li>
 </ul>
 </td>
 </tr>
@@ -172,11 +176,19 @@ the lmfit-py Package simply with:</p>
 <div class="highlight-python"><pre>python setup.py install</pre>
 </div>
 </div>
+<div class="section" id="acknowledgements">
+<h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
+<p>Substantial code and documentation improvements, especially for improved
+estimates of confidence intervals was provided by Tillsten.  Many valuable
+suggestions for improvements have come from Christoph Deil.  Several
+discussions on the scipy mailing lists have also led to improvements in
+this code.</p>
+</div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p>The LMFIT-py code is distribution under the following license:</p>
 <blockquote>
-<div><p>Copyright (c) 2011 Matthew Newville, The University of Chicago</p>
+<div><p>Copyright (c) 2012 Matthew Newville, The University of Chicago</p>
 <p>Permission to use and redistribute the source code or binary forms of this
 software and its documentation, with or without modification is hereby
 granted provided that the above notice of copyright, these terms of use,
@@ -208,6 +220,9 @@ DEALINGS IN THIS SOFTWARE.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="parameters.html" title="Getting started with Non-Linear Least-Squares Fitting"
              >next</a> |</li>
         <li class="right" >
@@ -217,8 +232,8 @@ DEALINGS IN THIS SOFTWARE.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2011, Matthew Newville, The University of Chicago.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+        &copy; Copyright 2012, Matthew Newville, The University of Chicago.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>
