@@ -23,6 +23,7 @@ except ImportError:
     from ordereddict import OrderedDict
 
 import re
+global NAME_MATCH, HAS_ASTEVAL
 NAME_MATCH = re.compile(r"[a-z_][a-z0-9_]*$").match
 
 def _issymbol_name(name):
@@ -30,13 +31,14 @@ def _issymbol_name(name):
     lname = name[:].lower()
     return NAME_MATCH(lname) is not None
 
+valid_symbol_name = _issymbol_name
+
 try:
     from asteval import Interpreter, NameFinder, valid_symbol_name
     HAS_ASTEVAL = True
-except:
+except ImportError:
     HAS_ASTEVAL = False
-    valid_symbol_name = _issymbol_name
-
+    
 class Parameters(OrderedDict):
     """a custom dictionary of Parameters.  All keys must be
     strings, and valid Python symbol names, and all values
@@ -106,7 +108,7 @@ class Parameter(object):
         self.stderr = None
         self.correl = None
         if not HAS_ASTEVAL and expr is not None:
-            raise Warning("cannot use constraint expressions -- asteval not installed!")
+            print "Warning: cannot use constraint expressions. Is asteval installed?"
 
     def __repr__(self):
         s = []
@@ -151,6 +153,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **kws):
+        global HAS_ASTEVAL
         self.userfcn = userfcn
         self.__set_params(params)
         self.userargs = fcn_args
@@ -187,6 +190,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if self.updated[name]:
             return
 
+        global HAS_ASTEVAL
         par = self.params[name]
         val = par.value
         if HAS_ASTEVAL and par.expr is not None:
@@ -273,6 +277,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.vars = []
         self.vmin = []
         self.vmax = []
+        global HAS_ASTEVAL
         for name, par in self.params.items():
             if HAS_ASTEVAL and par.expr is not None:
                 par.ast = self.asteval.parse(par.expr)
