@@ -38,15 +38,16 @@ extensions of simple numerical variables with the following properties:
  * Parameters can be fixed or floated in the fit.
  * Parameters can be bounded with a minimum and/or maximum value.
  * Parameters can be written as simple mathematical expressions of
-   other Parameters, using the `asteval`_ module (which must be installed
-   separately). These values will be re-evaluated at each step in the fit,
+   other Parameters, using the `asteval`_ module (which is included with
+   lmfit).  These values will be re-evaluated at each step in the fit,
    so that the expression is satisfied.  This gives a simple but flexible
    approach to constraining fit variables.
 
-The main advantage to using Parameters instead of fit variables is that the model function
-does not have to be rewritten for a change in what is varied or what constraints are
-placed on the fit.  The programmer can write a fairly general model, and allow a user of
-the model to change what is varied and what constraints are placed on the model.
+The main advantage to using Parameters instead of fit variables is that the
+model function does not have to be rewritten for a change in what is varied
+or what constraints are placed on the fit.  The programmer can write a
+fairly general model, and allow a user of the model to change what is
+varied and what constraints are placed on the model.
 
 For the Levenberg-Marquardt algorithm, lmfit also calculates and reports the
 estimated uncertainties and correlation between fitted variables.
