@@ -14,30 +14,16 @@ function-to-be-minimized (residual function) in terms of these Parameters.
 from numpy import sqrt
 
 from scipy.optimize import leastsq as scipy_leastsq
-#from scipy.optimize import anneal as scipy_anneal
-#from scipy.optimize import fmin_l_bfgs_b as scipy_lbfgsb
+from scipy.optimize import anneal as scipy_anneal
+from scipy.optimize import fmin_l_bfgs_b as scipy_lbfgsb
 
 try:
     from collections import OrderedDict
 except ImportError:
     from ordereddict import OrderedDict
 
-import re
-global NAME_MATCH, HAS_ASTEVAL
-NAME_MATCH = re.compile(r"[a-z_][a-z0-9_]*$").match
-
-def _issymbol_name(name):
-    "input is a valid name"
-    lname = name[:].lower()
-    return NAME_MATCH(lname) is not None
-
-valid_symbol_name = _issymbol_name
-
-try:
-    from asteval import Interpreter, NameFinder, valid_symbol_name
-    HAS_ASTEVAL = True
-except ImportError:
-    HAS_ASTEVAL = False
+from asteval import Interpreter
+from astutils import NameFinder, valid_symbol_name
     
 class Parameters(OrderedDict):
     """a custom dictionary of Parameters.  All keys must be
@@ -107,8 +93,6 @@ class Parameter(object):
         self.expr = expr
         self.stderr = None
         self.correl = None
-        if not HAS_ASTEVAL and expr is not None:
-            print "Warning: cannot use constraint expressions. Is asteval installed?"
 
     def __repr__(self):
         s = []
@@ -153,7 +137,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **kws):
-        global HAS_ASTEVAL
         self.userfcn = userfcn
         self.__set_params(params)
         self.userargs = fcn_args
@@ -171,10 +154,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.message = None
         self.var_map = []
         self.jacfcn = None
-        self.asteval = None
-        if HAS_ASTEVAL:
-            self.asteval = Interpreter()
-            self.namefinder = NameFinder()
+        self.asteval = Interpreter()
+        self.namefinder = NameFinder()
         self.__prepared = False
 
     def __update_paramval(self, name):
@@ -190,10 +171,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if self.updated[name]:
             return
 
-        global HAS_ASTEVAL
         par = self.params[name]
         val = par.value
-        if HAS_ASTEVAL and par.expr is not None:
+        if par.expr is not None:
             for dep in par.deps:
                 self.__update_paramval(dep)
             val = self.asteval.run(par.ast)
@@ -204,8 +184,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if par.max is not None:
             val = min(val, par.max)
 
-        if HAS_ASTEVAL:
-            self.asteval.symtable[name] = par.value = float(val)
+        self.asteval.symtable[name] = par.value = float(val)
         self.updated[name] = True
 
     def __residual(self, fvars):
@@ -277,9 +256,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.vars = []
         self.vmin = []
         self.vmax = []
-        global HAS_ASTEVAL
         for name, par in self.params.items():
-            if HAS_ASTEVAL and par.expr is not None:
+            if par.expr is not None:
                 par.ast = self.asteval.parse(par.expr)
                 check_ast_errors(self.asteval.error)
                 par.vary = False
@@ -296,8 +274,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                 self.vmin.append(par.min)
                 self.vmax.append(par.max)
 
-            if HAS_ASTEVAL:
-                self.asteval.symtable[name] = par.value
+            self.asteval.symtable[name] = par.value
             par.init_value = par.value
             if par.name is None:
                 par.name = name
