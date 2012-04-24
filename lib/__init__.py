@@ -7,17 +7,18 @@
    installed, parameters can be constrained as a simple
    mathematical expression of other Parameters.
 
-   version: 0.4
-   last update:  8-Apr-2012
+   version: 0.5
+   last update:  24-Apr-2012
    License: BSD
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
             The University of Chicago
 
 """
-__version__ = '0.4'
+__version__ = '0.5'
 from .minimizer import minimize, Minimizer, Parameter, Parameters
-from .coinfidence import coinf, coinf_2d
+from .confidence import conf_interval, conf_interval2d
 import printfuncs
-__all__ = [minimize, Minimizer, Parameter, Parameters, coinf, coinf_2d,
+__all__ = [minimize, Minimizer, Parameter, Parameters,
+           conf_interval, conf_interval2d,
            printfuncs]
