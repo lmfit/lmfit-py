@@ -1,7 +1,7 @@
 Calculation of confidence intervals
 ====================================
 
-.. module:: confidence
+.. py:module:: confidence
 
 Since version `0.5`, lmfit is also capable of calculating the confidence 
 intervals directly. For most models, it is not necessery: the estimation
@@ -139,7 +139,6 @@ Remember the trace?
 Documentation of methods
 ------------------------
 
-.. py:module:: confidence
 .. autofunction:: conf_interval
 .. autofunction:: conf_interval2d
 
