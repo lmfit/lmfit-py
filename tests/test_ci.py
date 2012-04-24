@@ -5,14 +5,13 @@ Created on Sun Apr 15 19:47:45 2012
 @author: Tillsten
 """
 import numpy as np
-import matplotlib.pyplot as plt
-from lmfit import Parameters, minimize, conf_interval
-from lmfit.printfuncs import *
+from lmfit import Parameters, minimize, conf_interval, report_errors, report_ci
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
 
 try:
+    import matplotlib.pyplot as plt
     import pylab
     HASPYLAB = True
 except ImportError:
@@ -55,8 +54,8 @@ out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 
 fit = residual(fit_params, x)
 
-print ' N fev = ', out.nfev
-print out.chisqr, out.redchi, out.nfree
+print( ' N fev = ', out.nfev)
+print( out.chisqr, out.redchi, out.nfree)
 
 report_errors(fit_params)
 #ci=calc_ci(out)
@@ -93,7 +92,7 @@ if HASPYLAB:
                 pylab.setp( ax.get_yticklabels(), visible=False)
             else:
                 ax.set_ylabel(fixed)        
-            #print i,j i*4+j
+
             res=tr[fixed]                
             prob=res['prob']
             f=prob<0.96

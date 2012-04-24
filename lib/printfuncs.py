@@ -61,6 +61,11 @@ def report_ci(ci):
         row=ci[name]
         print("".join([''.rjust(max_name_length)]+[i.rjust(10) for i in map(convp,row)]))
         print("".join([name.rjust(max_name_length)]+[i.rjust(10) for i in map(conv,row)]))
+
+
+#
+
         
 
-    
+
+

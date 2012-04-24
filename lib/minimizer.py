@@ -22,8 +22,8 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-from asteval import Interpreter
-from astutils import NameFinder, valid_symbol_name
+from .asteval import Interpreter
+from .astutils import NameFinder, valid_symbol_name
     
 class Parameters(OrderedDict):
     """a custom dictionary of Parameters.  All keys must be

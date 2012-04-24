@@ -62,9 +62,8 @@ def p_trace_to_dict(p_tr, params):
     return out
 
 
-
 def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
-                  trace=False, maxiter=200, verbose=1, prob_func=None):
+                  trace=False, maxiter=200, verbose=False, prob_func=None):
     r"""Calculates the confidence interval for parameters
     from the given minimizer.
     
@@ -156,7 +155,7 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
         if trace:
             p_trace = ([], [])
         if verbose:
-            print 'Calculating CI for ' + para.name
+            print('Calculating CI for ' + para.name)
 
         restore_vals(org, minimizer.params)
 

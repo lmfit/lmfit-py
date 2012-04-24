@@ -18,7 +18,7 @@
 __version__ = '0.5'
 from .minimizer import minimize, Minimizer, Parameter, Parameters
 from .confidence import conf_interval, conf_interval2d
-import printfuncs
+from .printfuncs import report_errors, report_ci
 __all__ = [minimize, Minimizer, Parameter, Parameters,
            conf_interval, conf_interval2d,
-           printfuncs]
+           report_errors, report_ci]
