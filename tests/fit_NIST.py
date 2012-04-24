@@ -92,6 +92,26 @@ def NIST_Test(DataSet, start='start2', plot=True):
 if __name__  == '__main__':
     dset = 'Bennett5'
     start = 'start2'
+    if len(sys.argv) < 2:
+        print "----- NIST StRD Models -----"
+        print "Select one of the Models listed below:"
+        print "and a starting point of 'start1' or 'start2'"
+        print " "
+        out = ''
+        for d in sorted(Models.keys()):
+            out = out + ' %s ' % d
+            if len(out) > 55:
+                print out
+                out = ''
+        print out
+        print " "
+        print " That is, use"
+        print "     python fit_NIST.py Bennet5 start1"
+        print " or go through all models and starting points with:"
+        print "     python fit_NIST.py all"
+       
+        sys.exit()
+
     if len(sys.argv) > 1:
         dset = sys.argv[1]
     if len(sys.argv) > 2:
