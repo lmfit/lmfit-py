@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'lmfit'
-copyright = u'2012, Matthew Newville, The University of Chicago'
+copyright = u'2012, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
