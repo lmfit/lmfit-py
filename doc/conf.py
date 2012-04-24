@@ -21,12 +21,14 @@ sys.path.append(os.path.abspath(os.path.join('.', 'ext')))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.todo', 'sphinx.ext.coverage',
-              'sphinx.ext.pngmath','ipython_directive', 
+extensions = ['sphinx.ext.autodoc',
+              'sphinx.ext.todo',
+              'sphinx.ext.coverage',
+              'sphinx.ext.pngmath',
+              'ipython_directive', 
               'ipython_console_highlighting',
               'numpydoc']
               
-
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -151,6 +153,7 @@ html_sidebars = {'index': ['indexsidebar.html','searchbox.html']}
 
 # If false, no module index is generated.
 #html_use_modindex = True
+html_use_modindex = False
 
 # If false, no index is generated.
 #html_use_index = True
