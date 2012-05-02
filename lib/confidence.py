@@ -29,7 +29,7 @@ def f_compare(Ndata, Nparas, new_chi, best_chi, Nfix=1.):
 #    pass
 
 def copy_vals(params):
-    '''Saves the values of paras and errs in temporay dict'''
+    '''Saves the values and stderrs of params in temporay dict'''
 
     tmp_params = {}
     for para_key in params:
@@ -39,7 +39,7 @@ def copy_vals(params):
 
 
 def restore_vals(tmp_params, params):
-    '''Restores the values of params from a temporay dict'''
+    '''restores values and stderrs of params in temporay dict'''
 
     for para_key in params:
         params[para_key].value, params[para_key].stderr = \
@@ -143,9 +143,12 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
 
     if trace:
         trace_dict = {}
-
+    
+    #We later need sigma to be sorted.
+    sigmas.sort()
+    
     # copy the best fit values.
-
+    
     org = copy_vals(minimizer.params)
     best_chi = minimizer.chisqr
 
@@ -212,8 +215,17 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
 
             # use brentq to find sigmas.
 
-            ret = [(p, brentq(calc_prob, start_val, limit, args=p,
-                   rtol=0.001)) for p in sigmas if p < old_prob]
+            #ret = [(p, brentq(calc_prob, start_val, limit, args=p,
+              #     rtol=0.001)) for p in sigmas if p < old_prob]
+            ret=[]
+            for p in sigmas:
+                if p < old_prb:
+                    val=brentq(calc_prob, start_val, limit, args=p, rtol=0.001)
+                    #we don't know which side of zero we are                    
+                    start_val=val-0.001*direction                    
+                    ret.append((p,val))
+                else: 
+                    ret.append((p,np.nan))
             return ret
 
         upper_err = search_limits(1)
