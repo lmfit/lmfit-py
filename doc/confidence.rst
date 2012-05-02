@@ -17,11 +17,11 @@ are more robust.
 
 Method used for calculating confidence intervals
 -------------------------------------------------
-The F-test is used to compare our null model, which is the best fit we found,
-with an alternate model, where on of the parameters is fixed to a specific value. 
-The value is changed util the differnce between :math:`\chi^2_0` and 
-:math:`\chi^2_{f}` can't be explained by the loss of a degree of freedom with
-a certain confidence. 
+The F-test is used to compare our null model, which is the best fit we have 
+found,with an alternate model, where on of the parameters is fixed to a
+specific value. The value is changed util the differnce between :math:`\chi^2_0` 
+and :math:`\chi^2_{f}` can't be explained by the loss of a degree of freedom 
+within a certain confidence. 
 
 .. math::
 
@@ -37,7 +37,7 @@ A log-likelihood method will be added soon.
 A basic example
 ---------------
 
-First we generate a toy problem.
+First we create a toy problem:
 
 .. ipython:: python
    
@@ -52,7 +52,7 @@ First we generate a toy problem.
         b=p['b'].value
         return 1/(a*x)+b-y
 
-We have to fit it before we can generate the confidence intervals.
+We have to fit it, before we can generate the confidence intervals.
 
 .. ipython:: python
         
@@ -60,19 +60,20 @@ We have to fit it before we can generate the confidence intervals.
     mi.leastsq()
     lmfit.printfuncs.report_errors(mi.params)
 
-Now it just a simple function call:
+Now it just a simple function call to start the calculation:
 
 .. ipython:: python    
 
     ci=lmfit.conf_interval(mi)
     lmfit.printfuncs.report_ci(ci)
 
-As we can see, it is not necessery to caclulate ci's for this problem.
+As we can see, the estimated error is almost the same:
+it is not necessery to caclulate ci's for this problem.
 
 An advanced example
 -------------------
-Now we look at a problem, where calculating the error from approimated 
-covariance can lead to wrong results.
+Now we look at a problem, where calculating the error from approximated 
+covariance can lead to wrong results:
 
 .. ipython:: python
 
@@ -114,7 +115,7 @@ regular estimate is too small. Now let's plot a coninfidance region:
     @savefig conf_interval.png width=7in
     plt.ylabel('t2');
 
-Remember the trace? 
+Remember the trace? It shows the dependence between two parameters.
 
 .. ipython:: python
     
