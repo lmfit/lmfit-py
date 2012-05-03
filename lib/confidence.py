@@ -145,6 +145,7 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
         trace_dict = {}
     
     #We later need sigma to be sorted.
+    sigmas=list(sigmas)
     sigmas.sort()
     
     # copy the best fit values.
@@ -218,11 +219,15 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
             #ret = [(p, brentq(calc_prob, start_val, limit, args=p,
               #     rtol=0.001)) for p in sigmas if p < old_prob]
             ret=[]
+            val_limit = start_val
             for p in sigmas:
-                if p < old_prb:
-                    val=brentq(calc_prob, start_val, limit, args=p, rtol=0.001)
-                    #we don't know which side of zero we are                    
-                    start_val=val-0.001*direction                    
+                if p < old_prob:
+                    try:
+                        val=brentq(calc_prob, val_limit, limit, args=p, xtol=0.001)
+                    except ValueError:
+                        val=brentq(calc_prob, start_val, limit, args=p, xtol=0.001)
+                                   #we don't know which side of zero we are                    
+                    val_limit=val-0.001*direction                    
                     ret.append((p,val))
                 else: 
                     ret.append((p,np.nan))
