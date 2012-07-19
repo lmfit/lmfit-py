@@ -88,7 +88,7 @@ simple example would look like::
         if abs(period) < 1.e-10:
             period = sign(period)*1.e-10
 
-        model = amp * sin(shift + x/per) * exp(-x*x*decay*decay)
+        model = amp * sin(shift + x/period) * exp(-x*x*decay*decay)
 
         if data is None:
             return model
