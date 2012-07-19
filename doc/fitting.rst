@@ -128,7 +128,7 @@ better ability to avoid local minima, and `BFGS
 <http://en.wikipedia.org/wiki/Limited-memory_BFGS>`_, which is a
 modification of the quasi-Newton method.
 
-To Select which of these algorithms to use, use the ``engine`` keyword to the
+To select which of these algorithms to use, use the ``engine`` keyword to the
 :func:`minimize` function or use the corresponding method name from the
 :class:`Minimizer` class as listed in the
 :ref:`Table of Supported Fitting Engines <fit-engine-table>`.
@@ -208,8 +208,8 @@ stored as attributes of the corresponding :class:`Parameter`.
 
 Note that the calculation of chi-square and reduced chi-square assume that the
 returned residual function is scaled properly to the uncertainties in the data.
-For these statistics to be meaningful, the person writing the function to
-function to be minimized must scale them properly.
+For these statistics to be meaningful, the person writing the function to 
+be minimized must scale them properly.
 
 After a fit using using the `leastsq` engine has completed succsessfully,
 standard errors for the fitted variables and correlations between pairs of
