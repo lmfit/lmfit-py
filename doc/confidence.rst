@@ -4,7 +4,7 @@ Calculation of confidence intervals
 .. py:module:: confidence
 
 Since version `0.5`, lmfit is also capable of calculating the confidence 
-intervals directly. For most models, it is not necessery: the estimation
+intervals directly. For most models, it is not necessary: the estimation
 of the standard error from the estimated covariance matrix is normally quite 
 good. 
 
@@ -18,8 +18,8 @@ are more robust.
 Method used for calculating confidence intervals
 -------------------------------------------------
 The F-test is used to compare our null model, which is the best fit we have 
-found,with an alternate model, where on of the parameters is fixed to a
-specific value. The value is changed util the differnce between :math:`\chi^2_0` 
+found,with an alternate model, where one of the parameters is fixed to a
+specific value. The value is changed until the differnce between :math:`\chi^2_0` 
 and :math:`\chi^2_{f}` can't be explained by the loss of a degree of freedom 
 within a certain confidence. 
 
@@ -68,7 +68,7 @@ Now it just a simple function call to start the calculation:
     lmfit.printfuncs.report_ci(ci)
 
 As we can see, the estimated error is almost the same:
-it is not necessery to caclulate ci's for this problem.
+it is not necessary to caclulate ci's for this problem.
 
 An advanced example
 -------------------
@@ -103,7 +103,7 @@ and 2-sigma:
     lmfit.printfuncs.report_ci(ci)
 
 If you compare the calculated error estimates, you will see that the 
-regular estimate is too small. Now let's plot a coninfidance region:
+regular estimate is too small. Now let's plot a confidence region:
 
 .. ipython:: python
     

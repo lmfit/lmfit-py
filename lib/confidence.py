@@ -91,7 +91,7 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     Returns
     -------
     output : dict
-        A dict, which contais a list of (sigma, vals)-tuples for each name.
+        A dict, which contains a list of (sigma, vals)-tuples for each name.
     trace_dict : dict 
         Only if trace is set true. Is a dict, the key is the parameter which
         was fixed.The values are again a dict with the names as keys, but with
