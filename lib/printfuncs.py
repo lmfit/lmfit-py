@@ -54,18 +54,18 @@ def report_errors(params, modelpars=None, show_correl=True):
 
 
 def report_ci(ci):    
-    max_name_length=max([len(i[0]) for i in ci])
+    max_name_length=max([len(i) for i in ci])
     for name in ci:            
         convp=lambda x: ("%.2f" % (x[0]*100))+'%'
         conv=lambda x: "%.5f" % x[1]
         row=ci[name]
-        print("".join([''.rjust(max_name_length)]+[i.rjust(10) for i in map(convp,row)]))
+        print("".join([''.rjust(max_name_length)]+[i.rjust(10) for i in map(convp,row)])) 
         print("".join([name.rjust(max_name_length)]+[i.rjust(10) for i in map(conv,row)]))
-
+        
 
 #
 
-        
+
 
 
 

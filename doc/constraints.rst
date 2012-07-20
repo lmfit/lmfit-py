@@ -7,7 +7,7 @@ Using Mathematical Constraints
 =================================
 
 While being able to fix variables and place upper and lower bounds on their
-1values are key parts of lmfit, the ability to place mathematical
+values are key parts of lmfit, the ability to place mathematical
 constraints on parameters is also highly desirable.  This section describes
 how to do this, and what sort of parameterizations are possible -- see 
 the `asteval`_ for further documentation.
