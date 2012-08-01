@@ -96,7 +96,7 @@
   <div class="section" id="module-confidence">
 <span id="calculation-of-confidence-intervals"></span><h1>Calculation of confidence intervals<a class="headerlink" href="#module-confidence" title="Permalink to this headline">¶</a></h1>
 <p>Since version <cite>0.5</cite>, lmfit is also capable of calculating the confidence
-intervals directly. For most models, it is not necessery: the estimation
+intervals directly. For most models, it is not necessary: the estimation
 of the standard error from the estimated covariance matrix is normally quite
 good.</p>
 <p>But for some models, e.g. a sum of two exponentials, the approximation
@@ -106,11 +106,11 @@ than using the errors estimated from the covariance matrix, but the results
 are more robust.</p>
 <div class="section" id="method-used-for-calculating-confidence-intervals">
 <h2>Method used for calculating confidence intervals<a class="headerlink" href="#method-used-for-calculating-confidence-intervals" title="Permalink to this headline">¶</a></h2>
-<p>The F-test is used to compare our null model, which is the best fit we found,
-with an alternate model, where on of the parameters is fixed to a specific value.
-The value is changed util the differnce between <img class="math" src="_images/math/acb9d765c82fe7a759b335312ef06d5567bd212c.png" alt="\chi^2_0"/> and
-<img class="math" src="_images/math/8728c116517f713ff567f44440936980c54bd3d1.png" alt="\chi^2_{f}"/> can't be explained by the loss of a degree of freedom with
-a certain confidence.</p>
+<p>The F-test is used to compare our null model, which is the best fit we have
+found,with an alternate model, where one of the parameters is fixed to a
+specific value. The value is changed until the differnce between <img class="math" src="_images/math/acb9d765c82fe7a759b335312ef06d5567bd212c.png" alt="\chi^2_0"/>
+and <img class="math" src="_images/math/8728c116517f713ff567f44440936980c54bd3d1.png" alt="\chi^2_{f}"/> can't be explained by the loss of a degree of freedom
+within a certain confidence.</p>
 <div class="math">
 <p><img src="_images/math/27572e489544b9e87a1bc1a87fea16fadda23e1d.png" alt="F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}"/></p>
 </div><p>N is the number of data-points, P the number of parameter of the null model.
@@ -121,7 +121,7 @@ model).</p>
 </div>
 <div class="section" id="a-basic-example">
 <h2>A basic example<a class="headerlink" href="#a-basic-example" title="Permalink to this headline">¶</a></h2>
-<p>First we generate a toy problem.</p>
+<p>First we create a toy problem:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">lmfit</span>
 
 <span class="gp">In [2]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -141,35 +141,36 @@ model).</p>
 <span class="gp">   ...:</span> 
 </pre></div>
 </div>
-<p>We have to fit it before we can generate the confidence intervals.</p>
+<p>We have to fit it, before we can generate the confidence intervals.</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [8]: </span><span class="n">mi</span><span class="o">=</span><span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">mi</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
 <span class="gr">Out[9]: </span><span class="bp">True</span>
 
 <span class="gp">In [10]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_errors</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
-<span class="go">  a:     0.09996+/- 0.00020 (inital=  0.100000)</span>
-<span class="go">  b:     2.00692+/- 0.01239 (inital=  1.000000)</span>
+<span class="go">  a:     0.09992+/- 0.00019 (inital=  0.100000)</span>
+<span class="go">  b:     2.00189+/- 0.01196 (inital=  1.000000)</span>
 <span class="go">Correlations:</span>
 <span class="go">    C(a, b)                      =  0.601 </span>
 </pre></div>
 </div>
-<p>Now it just a simple function call:</p>
+<p>Now it just a simple function call to start the calculation:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [11]: </span><span class="n">ci</span><span class="o">=</span><span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
 <span class="go">     99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%</span>
-<span class="go">a   0.09936   0.09956   0.09976   0.09996   0.10015   0.10035   0.10056</span>
+<span class="go">a   0.09916   0.09916   0.09916   0.09992   0.10069   0.10069   0.10069</span>
 <span class="go">     99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%</span>
-<span class="go">b   1.96921   1.98233   1.99469   2.00692   2.01916   2.03151   2.04464</span>
+<span class="go">b   1.96591   1.97831   1.99041   2.00189   2.01337   2.02547   2.03787</span>
 </pre></div>
 </div>
-<p>As we can see, it is not necessery to caclulate ci's for this problem.</p>
+<p>As we can see, the estimated error is almost the same:
+it is not necessary to caclulate ci's for this problem.</p>
 </div>
 <div class="section" id="an-advanced-example">
 <h2>An advanced example<a class="headerlink" href="#an-advanced-example" title="Permalink to this headline">¶</a></h2>
-<p>Now we look at a problem, where calculating the error from approimated
-covariance can lead to wrong results.</p>
+<p>Now we look at a problem, where calculating the error from approximated
+covariance can lead to wrong results:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [14]: </span><span class="n">y</span><span class="o">=</span><span class="mi">3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">-</span><span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
 <span class="gp">In [15]: </span><span class="n">p</span><span class="o">=</span><span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
@@ -200,24 +201,24 @@ and 2-sigma:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.68</span><span class="p">,</span><span class="mf">0.95</span><span class="p">],</span><span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="gp">In [22]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
-<span class="go">     95.00%    68.00%     0.00%    68.00%    95.00%</span>
-<span class="go">a1   2.11682   2.33695   2.61101   3.06638   4.28694</span>
-<span class="go">     95.00%    68.00%     0.00%    68.00%    95.00%</span>
-<span class="go">a2  -6.39449  -5.05978  -4.51293  -4.19527  -3.97856</span>
-<span class="go">     95.00%    68.00%     0.00%    68.00%    95.00%</span>
-<span class="go">t2   8.00415   9.62699  10.96137  12.17903  13.34866</span>
-<span class="go">     95.00%    68.00%     0.00%    68.00%    95.00%</span>
-<span class="go">t1   1.07010   1.28481   1.56948   1.97509   2.64342</span>
+<span class="go">      95.00%    68.00%     0.00%    68.00%    95.00%</span>
+<span class="go">a1   2.11696   2.33696   2.61101   3.06631   4.28728</span>
+<span class="go">      95.00%    68.00%     0.00%    68.00%    95.00%</span>
+<span class="go">a2  -6.39492  -5.05982  -4.51293  -4.19528  -3.97850</span>
+<span class="go">      95.00%    68.00%     0.00%    68.00%    95.00%</span>
+<span class="go">t2   8.00414   9.62688  10.96137  12.17947  13.34824</span>
+<span class="go">      95.00%    68.00%     0.00%    68.00%    95.00%</span>
+<span class="go">t1   1.07036   1.28482   1.56948   1.97534   2.64341</span>
 </pre></div>
 </div>
 <p>If you compare the calculated error estimates, you will see that the
-regular estimate is too small. Now let's plot a coninfidance region:</p>
+regular estimate is too small. Now let's plot a confidence region:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [23]: </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="gp">In [24]: </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="s">&#39;a1&#39;</span><span class="p">,</span><span class="s">&#39;t2&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
 
 <span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">QuadContourSet</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0xba591cc</span><span class="o">&gt;</span>
+<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">QuadContourSet</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0x4e56c38</span><span class="o">&gt;</span>
 
 <span class="gp">In [26]: </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;a1&#39;</span><span class="p">);</span>
 
@@ -227,16 +228,16 @@ regular estimate is too small. Now let's plot a coninfidance region:</p>
 </pre></div>
 </div>
 <img alt="_images/conf_interval.png" src="_images/conf_interval.png" style="width: 7in;" />
-<p>Remember the trace?</p>
+<p>Remember the trace? It shows the dependence between two parameters.</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [33]: </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">prob</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
 
 <span class="gp">In [34]: </span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">prob2</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
 
 <span class="gp">In [35]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gr">Out[35]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0xbd3baec</span><span class="o">&gt;</span>
+<span class="gr">Out[35]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x5146850</span><span class="o">&gt;</span>
 
 <span class="gp">In [36]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">prob2</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gr">Out[36]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0xbd5276c</span><span class="o">&gt;</span>
+<span class="gr">Out[36]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x51864d0</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="_images/conf_interval2.png" src="_images/conf_interval2.png" style="width: 7in;" />
@@ -245,7 +246,7 @@ regular estimate is too small. Now let's plot a coninfidance region:</p>
 <h2>Documentation of methods<a class="headerlink" href="#documentation-of-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="confidence.conf_interval">
-<tt class="descname">conf_interval</tt><big>(</big><em>minimizer</em>, <em>p_names=None</em>, <em>sigmas=(0.67400000000000004</em>, <em>0.94999999999999996</em>, <em>0.997)</em>, <em>trace=False</em>, <em>maxiter=200</em>, <em>verbose=False</em>, <em>prob_func=None</em><big>)</big><a class="headerlink" href="#confidence.conf_interval" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">conf_interval</tt><big>(</big><em>minimizer</em>, <em>p_names=None</em>, <em>sigmas=(0.674</em>, <em>0.95</em>, <em>0.997)</em>, <em>trace=False</em>, <em>maxiter=200</em>, <em>verbose=False</em>, <em>prob_func=None</em><big>)</big><a class="headerlink" href="#confidence.conf_interval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the confidence interval for parameters
 from the given minimizer.</p>
 <p>The parameter for which the ci is calculated will be varied, while
@@ -281,7 +282,7 @@ called &quot;profile traces&quot;.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>output</strong> : dict</p>
 <blockquote>
-<div><p>A dict, which contais a list of (sigma, vals)-tuples for each name.</p>
+<div><p>A dict, which contains a list of (sigma, vals)-tuples for each name.</p>
 </div></blockquote>
 <p><strong>trace_dict</strong> : dict</p>
 <blockquote>
@@ -293,7 +294,7 @@ values.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first"><strong>maxiter</strong> : int</p>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>maxiter</strong> : int</p>
 <blockquote>
 <div><p>Maximum of iteration to find an upper limit.</p>
 </div></blockquote>
@@ -380,7 +381,7 @@ given, the default is 5 stderrs in each direction.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr><td>&nbsp;</td><td class="field-body"><p class="first"><strong>prob_func</strong> : <tt class="docutils literal"><span class="pre">None</span></tt> or callable</p>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>prob_func</strong> : <tt class="docutils literal"><span class="pre">None</span></tt> or callable</p>
 <blockquote class="last">
 <div><p>Function to calculate the probality from the opimized chi-square.
 Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses built-in f_compare (F test).</p>

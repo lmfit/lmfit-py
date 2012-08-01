@@ -191,7 +191,7 @@ simple example would look like:</p>
     <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">period</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.e-10</span><span class="p">:</span>
         <span class="n">period</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">period</span><span class="p">)</span><span class="o">*</span><span class="mf">1.e-10</span>
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">shift</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="n">per</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">shift</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="n">period</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">model</span>
@@ -224,7 +224,7 @@ variables, as discussed in <a class="reference internal" href="#fit-results-labe
 <p>Alternative algorithms can also be used. These include <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> which promises a
 better ability to avoid local minima, and <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">BFGS</a>, which is a
 modification of the quasi-Newton method.</p>
-<p>To Select which of these algorithms to use, use the <tt class="docutils literal"><span class="pre">engine</span></tt> keyword to the
+<p>To select which of these algorithms to use, use the <tt class="docutils literal"><span class="pre">engine</span></tt> keyword to the
 <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function or use the corresponding method name from the
 <a class="reference internal" href="#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class as listed in the
 <a class="reference internal" href="#fit-engine-table"><em>Table of Supported Fitting Engines</em></a>.</p>
@@ -335,7 +335,7 @@ are all attributes of the <a class="reference internal" href="#Minimizer" title=
 <p>Note that the calculation of chi-square and reduced chi-square assume that the
 returned residual function is scaled properly to the uncertainties in the data.
 For these statistics to be meaningful, the person writing the function to
-function to be minimized must scale them properly.</p>
+be minimized must scale them properly.</p>
 <p>After a fit using using the <cite>leastsq</cite> engine has completed succsessfully,
 standard errors for the fitted variables and correlations between pairs of
 fitted variables are automatically calculated from the covariance matrix.
