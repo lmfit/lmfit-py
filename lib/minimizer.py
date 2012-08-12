@@ -11,7 +11,10 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    <newville@cars.uchicago.edu>
 """
 
-from numpy import sqrt
+from numpy import arcsin, array, cos, dot, eye, \
+     ones_like, sqrt, take, transpose, triu
+from numpy.dual import inv
+from numpy.linalg import LinAlgError
 
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import anneal as scipy_anneal
@@ -24,7 +27,7 @@ except ImportError:
 
 from .asteval import Interpreter
 from .astutils import NameFinder, valid_symbol_name
-    
+
 class Parameters(OrderedDict):
     """a custom dictionary of Parameters.  All keys must be
     strings, and valid Python symbol names, and all values
@@ -73,7 +76,7 @@ class Parameters(OrderedDict):
                     (name4, val4))
 
         """
-        for para in parlist:            
+        for para in parlist:
             self.add(*para)
 
 class Parameter(object):
@@ -86,6 +89,7 @@ class Parameter(object):
                  min=None, max=None, expr=None, **kws):
         self.name = name
         self.value = value
+        self.user_value = value
         self.init_value = value
         self.min = min
         self.max = max
@@ -93,6 +97,7 @@ class Parameter(object):
         self.expr = expr
         self.stderr = None
         self.correl = None
+        self.from_internal = lambda val: val
 
     def __repr__(self):
         s = []
@@ -108,6 +113,49 @@ class Parameter(object):
         if self.expr is not None:
             s.append("expr='%s'" % (self.expr))
         return "<Parameter %s>" % ', '.join(s)
+
+    def setup_bounds(self):
+        """set up Minuit-style internal/external parameter transformation
+        of min/max bounds.
+
+        returns internal value for parameter from self.value (which holds
+        the external, user-expected value).   This internal values should
+        actually be used in a fit....
+
+        As a side-effect, this also defines the self.from_internal method
+        used to re-calculate self.value from the internal value, applying
+        the inverse Minuit-style transformation.  This method should be
+        called prior to passing a Parameter to the user-defined objective
+        function.
+        """
+        if self.min is None and self.max is None:
+            self.from_internal = lambda val: val
+            _val  = self.value
+        elif self.max is None:
+            self.from_internal = lambda val: self.min - 1 + sqrt(val*val + 1)
+            _val  = sqrt((self.value - self.min + 1)**2 - 1)
+        elif self.min is None:
+            self.from_internal = lambda val: self.max + 1 - sqrt(val*val + 1)
+            _val  = sqrt((self.max - self.value + 1)**2 - 1)
+        else:
+            self.from_internal = lambda val: self.min + (sin(val) + 1) * \
+                                 (self.max - self.min) / 2
+            _val  = arcsin(2*(self.value - self.min)/(self.max - self.min) - 1)
+        return _val
+
+    def scale_gradient(self):
+        """returns scaling factor for gradient according the Minuit-style
+        transformation.
+        """
+        if self.min is None and self.max is None:
+            gscale = 1.0
+        elif self.max is None:
+            gscale =  self.val / sqrt(self.val*self.val + 1.0)
+        elif self.min is None:
+            gscale = -self.val / sqrt(self.val*self.val + 1.0)
+        else:
+            gscale = cos(val) * (self.max - self.min) / 2.0
+        return gscale
 
 class MinimizerException(Exception):
     """General Purpose Exception"""
@@ -172,19 +220,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             return
 
         par = self.params[name]
-        val = par.value
         if par.expr is not None:
             for dep in par.deps:
                 self.__update_paramval(dep)
-            val = self.asteval.run(par.ast)
+            par.value = self.asteval.run(par.ast)
             check_ast_errors(self.asteval.error)
-        # apply min/max
-        if par.min is not None:
-            val = max(val, par.min)
-        if par.max is not None:
-            val = min(val, par.max)
-
-        self.asteval.symtable[name] = par.value = float(val)
+        self.asteval.symtable[name] = par.value
         self.updated[name] = True
 
     def __residual(self, fvars):
@@ -197,7 +238,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         # set parameter values
         for varname, val in zip(self.var_map, fvars):
-            self.params[varname].value = val
+            # self.params[varname].value = val
+            par = self.params[varname]
+            par.value = par.from_internal(val)
         self.nfev = self.nfev + 1
 
         self.updated = dict([(name, False) for name in self.params])
@@ -217,7 +260,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         """
         for varname, val in zip(self.var_map, fvars):
-            self.params[varname].value = val
+            # self.params[varname].value = val
+            self.params[varname].from_internal(val)
+
         self.nfev = self.nfev + 1
 
         self.updated = dict([(name, False) for name in self.params])
@@ -254,8 +299,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfev = 0
         self.var_map = []
         self.vars = []
-        self.vmin = []
-        self.vmax = []
+        self.vmin, self.vmax = [], []
         for name, par in self.params.items():
             if par.expr is not None:
                 par.ast = self.asteval.parse(par.expr)
@@ -270,9 +314,10 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         par.deps.append(symname)
             elif par.vary:
                 self.var_map.append(name)
-                self.vars.append(par.value)
-                self.vmin.append(par.min)
-                self.vmax.append(par.max)
+                self.vars.append(par.setup_bounds())
+                # self.vars.append(par.set_internal_value())
+                #self.vmin.append(par.min)
+                #self.vmax.append(par.max)
 
             self.asteval.symtable[name] = par.value
             par.init_value = par.value
@@ -320,7 +365,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.prepare_fit()
         lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
                       maxfun = 2000 * (self.nvarys + 1),
-                      bounds = zip(self.vmin, self.vmax))
+                      # bounds = zip(self.vmin, self.vmax),
+                      )
         lb_kws.update(self.kws)
         lb_kws.update(kws)
         def penalty(params):
@@ -361,7 +407,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             lskws['Dfun'] = self.__jacobian
 
         lsout = scipy_leastsq(self.__residual, self.vars, **lskws)
-        vbest, cov, infodict, errmsg, ier = lsout
+        _best, _cov, infodict, errmsg, ier = lsout
 
         self.residual = resid = infodict['fvec']
 
@@ -385,6 +431,32 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfree = (self.ndata - self.nvarys)
         self.redchi = sum_sqr / self.nfree
 
+        # need to map _best values to params, then calc grad for variable params
+        # grad = _internal2external_grad(_best, bounds)
+        print 'SCALING Gradient: '
+        grad = ones_like(_best)
+        for ivar, varname in enumerate(self.var_map):
+            par = self.params[varname]
+            print ' == ', ivar, varname
+            print _best[ivar], par.value
+            val_ = par.value
+            par.from_internal(_best[ivar])
+            print par.value, par.value == val_
+
+            print par.scale_gradient()
+            grad[ivar] = par.scale_gradient()
+        print 'IPVT   : ', infodict['ipvt']
+        print 'IPVT-1 : ', infodict['ipvt'] - 1
+        print '============'
+        infodict['fjac'] = transpose(transpose(infodict['fjac']) /
+                                     take(grad, infodict['ipvt'] - 1))
+        rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys,:]),
+                   take(eye(self.nvarys),infodict['ipvt'] - 1, 0))
+        try:
+            cov = inv(dot(transpose(rvec),rvec))
+        except LinAlgError:
+            pass
+
         for par in self.params.values():
             par.stderr = 0
             par.correl = None
@@ -398,7 +470,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.errorbars = True
             self.covar = cov
             if self.scale_covar:
-                cov = cov * sum_sqr / self.nfree
+                 cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(cov[ivar, ivar])
