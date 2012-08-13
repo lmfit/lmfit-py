@@ -64,7 +64,7 @@ It bears repeating that code from `leastsqbound`_ was adopted to implement
 the transformation described above.  The challenging part (Thanks again to
 Jonathan J. Helmus!) here is to re-transform the covariance matrix so that
 the uncertainties can be estimated for bounded Parameters, and this is
-included, by using the derivate :math:`dP__{rm internal}/dP_{\rm bounded}`.
+included, by using the derivate :math:`dP_{\rm internal}/dP_{\rm bounded}`.
 Tests show that this works quite well, and that uncertainties estimated for
 bounded are quite reasonable.  Of course, if the best fit value is very
 close to a boundary, the estimated uncertainty and correlations for that
