@@ -12,7 +12,7 @@ function-to-be-minimized (residual function) in terms of these Parameters.
 """
 
 from numpy import arcsin, array, cos, dot, eye, \
-     ones_like, sqrt, take, transpose, triu
+     ones_like, sin, sqrt, take, transpose, triu
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 
@@ -127,6 +127,8 @@ class Parameter(object):
         the inverse Minuit-style transformation.  This method should be
         called prior to passing a Parameter to the user-defined objective
         function.
+
+        This code borrows heavily from JJ Helmus' leastsqbound.py
         """
         if self.min is None and self.max is None:
             self.from_internal = lambda val: val
@@ -143,19 +145,18 @@ class Parameter(object):
             _val  = arcsin(2*(self.value - self.min)/(self.max - self.min) - 1)
         return _val
 
-    def scale_gradient(self):
-        """returns scaling factor for gradient according the Minuit-style
+    def scale_gradient(self, val):
+        """returns scaling factor for gradient the according to Minuit-style
         transformation.
         """
         if self.min is None and self.max is None:
-            gscale = 1.0
+            return 1.0
         elif self.max is None:
-            gscale =  self.val / sqrt(self.val*self.val + 1.0)
+            return val / sqrt(val*val + 1)
         elif self.min is None:
-            gscale = -self.val / sqrt(self.val*self.val + 1.0)
+            return -val / sqrt(val*val + 1)
         else:
-            gscale = cos(val) * (self.max - self.min) / 2.0
-        return gscale
+            return cos(val) * (self.max - self.min) / 2.0
 
 class MinimizerException(Exception):
     """General Purpose Exception"""
@@ -431,23 +432,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfree = (self.ndata - self.nvarys)
         self.redchi = sum_sqr / self.nfree
 
-        # need to map _best values to params, then calc grad for variable params
-        # grad = _internal2external_grad(_best, bounds)
-        print 'SCALING Gradient: '
+        # need to map _best values to params, then calculate the
+        # grad for the variable parameters
         grad = ones_like(_best)
         for ivar, varname in enumerate(self.var_map):
             par = self.params[varname]
-            print ' == ', ivar, varname
-            print _best[ivar], par.value
-            val_ = par.value
-            par.from_internal(_best[ivar])
-            print par.value, par.value == val_
-
-            print par.scale_gradient()
-            grad[ivar] = par.scale_gradient()
-        print 'IPVT   : ', infodict['ipvt']
-        print 'IPVT-1 : ', infodict['ipvt'] - 1
-        print '============'
+            grad[ivar] = par.scale_gradient(_best[ivar])
+        # modified from JJ Helmus' leastsqbound.py
         infodict['fjac'] = transpose(transpose(infodict['fjac']) /
                                      take(grad, infodict['ipvt'] - 1))
         rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys,:]),
@@ -455,7 +446,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         try:
             cov = inv(dot(transpose(rvec),rvec))
         except LinAlgError:
-            pass
+            cov = None
 
         for par in self.params.values():
             par.stderr = 0
@@ -463,12 +454,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
 
+        self.covar = cov
         if cov is None:
             self.errorbars = False
             self.message = '%s. Could not estimate error-bars'
         else:
             self.errorbars = True
-            self.covar = cov
             if self.scale_covar:
                  cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
