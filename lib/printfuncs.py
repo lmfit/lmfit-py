@@ -24,11 +24,11 @@ def report_errors(params, modelpars=None, show_correl=True):
         if modelpars is not None and name in modelpars:
             initval = '%s, model_value=% .6f' % (initval, modelpars[name].value)
         if par.vary:
-            print(" %s % .5f+/- %.5f (%s)" % (nout, par.value,
+            print(" %s % .6f +/- %.6f (%s)" % (nout, par.value,
                                                par.stderr, initval))
 
         elif par.expr is not None:
-            print(" %s % .5f == '%s'" % (nout, par.value,
+            print(" %s % .6f == '%s'" % (nout, par.value,
                                                 par.expr))
         else:
             print(" %s fixed" % (nout))
@@ -53,15 +53,15 @@ def report_errors(params, modelpars=None, show_correl=True):
     #print('-------------------------------------')
 
 
-def report_ci(ci):    
+def report_ci(ci):
     max_name_length=max([len(i) for i in ci])
-    for name in ci:            
+    for name in ci:
         convp=lambda x: ("%.2f" % (x[0]*100))+'%'
         conv=lambda x: "%.5f" % x[1]
         row=ci[name]
-        print("".join([''.rjust(max_name_length)]+[i.rjust(10) for i in map(convp,row)])) 
-        print("".join([name.rjust(max_name_length)]+[i.rjust(10) for i in map(conv,row)]))
-        
+        print("".join([''.rjust(max_name_length)]+[i.rjust(10)   for i in map(convp, row)]))
+        print("".join([name.rjust(max_name_length)]+[i.rjust(10) for i in map(conv,  row)]))
+
 
 #
 
