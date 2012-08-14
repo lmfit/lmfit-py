@@ -83,8 +83,8 @@ def NIST_Test(DataSet, start='start2', plot=True):
 
     if plot and HASPYLAB:
         fit = -resid(params, x, )
-        pylab.plot(x, y, 'r+')
-        pylab.plot(x, fit, 'ko--')
+        pylab.plot(x, y, 'ro')
+        pylab.plot(x, fit, 'k+-')
         pylab.show()
 
     return digs > 2
