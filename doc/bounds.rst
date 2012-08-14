@@ -64,16 +64,16 @@ It bears repeating that code from `leastsqbound`_ was adopted to implement
 the transformation described above.  The challenging part (Thanks again to
 Jonathan J. Helmus!) here is to re-transform the covariance matrix so that
 the uncertainties can be estimated for bounded Parameters, and this is
-included, by using the derivate :math:`dP_{\rm internal}/dP_{\rm bounded}`.
-Tests show that this works quite well, and that uncertainties estimated for
-bounded are quite reasonable.  Of course, if the best fit value is very
-close to a boundary, the estimated uncertainty and correlations for that
-parameter may not be reliable.
+included, by using the derivate :math:`dP_{\rm internal}/dP_{\rm bounded}`
+from the equations above.  Tests show that this works quite well, and that
+uncertainties estimated for bounded are quite reasonable.  Of course, if
+the best fit value is very close to a boundary, the estimated uncertainty
+and correlations for that parameter may not be reliable.
 
-The `MINUIT`_ documentation recommends to not use bounds unless absolutely
-needed.  It can certainly increase the number of function evaluations (and
-so computation time), and in some cases may still cause some instabilities,
-as the range of acceptable parameter values is not fully explored.  On the
+The `MINUIT`_ documentation recommends caution in using bounds.  Setting
+bounds can certainly increase the number of function evaluations (and so
+computation time), and in some cases may still cause some instabilities, as
+the range of acceptable parameter values is not fully explored.  On the
 other hand, preliminary tests suggest that using `max` and `min` to set
 clearly outlandish bounds does not greatly affect performance or results.
 
