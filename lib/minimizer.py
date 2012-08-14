@@ -11,103 +11,17 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    <newville@cars.uchicago.edu>
 """
 
-from numpy import sqrt
+from numpy import array, dot, eye, ones_like, sqrt, take, transpose, triu
+from numpy.dual import inv
+from numpy.linalg import LinAlgError
 
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import anneal as scipy_anneal
 from scipy.optimize import fmin_l_bfgs_b as scipy_lbfgsb
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
-
 from .asteval import Interpreter
-from .astutils import NameFinder, valid_symbol_name
-    
-class Parameters(OrderedDict):
-    """a custom dictionary of Parameters.  All keys must be
-    strings, and valid Python symbol names, and all values
-    must be Parameters.
-
-    Custom methods:
-    ---------------
-
-    add()
-    add_many()
-    """
-    def __init__(self, *args, **kwds):
-        OrderedDict.__init__(self)
-        self.update(*args, **kwds)
-
-    def __setitem__(self, key, value):
-        if key not in self:
-            if not valid_symbol_name(key):
-                raise KeyError("'%s' is not a valid Parameters name" % key)
-        if value is not None and not isinstance(value, Parameter):
-            raise ValueError("'%s' is not a Parameter" % value)
-        OrderedDict.__setitem__(self, key, value)
-        value.name = key
-
-    def add(self, name, value=None, vary=True, expr=None,
-            min=None, max=None):
-        """convenience function for adding a Parameter:
-        with   p = Parameters()
-        p.add(name, value=XX, ....)
-
-        is equivalent to
-        p[name] = Parameter(name=name, value=XX, ....
-        """
-        self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
-                                         expr=expr, min=min, max=max))
-
-    def add_many(self, *parlist):
-        """convenience function for adding a list of Parameters:
-        Here, you must provide a sequence of tuples, each containing
-        at least the name. The order in each tuple is the following:
-            name, value, vary, min, max, expr
-        with   p = Parameters()
-        p.add_many( (name1, val1, True, None, None, None),
-                    (name2, val2, True,  0.0, None, None),
-                    (name3, val3, False, None, None, None),
-                    (name4, val4))
-
-        """
-        for para in parlist:            
-            self.add(*para)
-
-class Parameter(object):
-    """A Parameter is the basic Parameter going
-    into Fit Model.  The Parameter holds many attributes:
-    value, vary, max_value, min_value, constraint expression.
-    The value and min/max values will be be set to floats.
-    """
-    def __init__(self, name=None, value=None, vary=True,
-                 min=None, max=None, expr=None, **kws):
-        self.name = name
-        self.value = value
-        self.init_value = value
-        self.min = min
-        self.max = max
-        self.vary = vary
-        self.expr = expr
-        self.stderr = None
-        self.correl = None
-
-    def __repr__(self):
-        s = []
-        if self.name is not None:
-            s.append("'%s'" % self.name)
-        val = repr(self.value)
-        if self.vary and self.stderr is not None:
-            val = "value=%s +/- %.3g" % (repr(self.value), self.stderr)
-        elif not self.vary:
-            val = "value=%s (fixed)" % (repr(self.value))
-        s.append(val)
-        s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
-        if self.expr is not None:
-            s.append("expr='%s'" % (self.expr))
-        return "<Parameter %s>" % ', '.join(s)
+from .astutils import NameFinder
+from .parameter import Parameter, Parameters
 
 class MinimizerException(Exception):
     """General Purpose Exception"""
@@ -172,19 +86,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             return
 
         par = self.params[name]
-        val = par.value
         if par.expr is not None:
             for dep in par.deps:
                 self.__update_paramval(dep)
-            val = self.asteval.run(par.ast)
+            par.value = self.asteval.run(par.ast)
             check_ast_errors(self.asteval.error)
-        # apply min/max
-        if par.min is not None:
-            val = max(val, par.min)
-        if par.max is not None:
-            val = min(val, par.max)
-
-        self.asteval.symtable[name] = par.value = float(val)
+        self.asteval.symtable[name] = par.value
         self.updated[name] = True
 
     def __residual(self, fvars):
@@ -197,7 +104,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         # set parameter values
         for varname, val in zip(self.var_map, fvars):
-            self.params[varname].value = val
+            # self.params[varname].value = val
+            par = self.params[varname]
+            par.value = par.from_internal(val)
         self.nfev = self.nfev + 1
 
         self.updated = dict([(name, False) for name in self.params])
@@ -217,7 +126,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         """
         for varname, val in zip(self.var_map, fvars):
-            self.params[varname].value = val
+            # self.params[varname].value = val
+            self.params[varname].from_internal(val)
+
         self.nfev = self.nfev + 1
 
         self.updated = dict([(name, False) for name in self.params])
@@ -254,8 +165,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfev = 0
         self.var_map = []
         self.vars = []
-        self.vmin = []
-        self.vmax = []
+        self.vmin, self.vmax = [], []
         for name, par in self.params.items():
             if par.expr is not None:
                 par.ast = self.asteval.parse(par.expr)
@@ -270,9 +180,10 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         par.deps.append(symname)
             elif par.vary:
                 self.var_map.append(name)
-                self.vars.append(par.value)
-                self.vmin.append(par.min)
-                self.vmax.append(par.max)
+                self.vars.append(par.setup_bounds())
+                # self.vars.append(par.set_internal_value())
+                #self.vmin.append(par.min)
+                #self.vmax.append(par.max)
 
             self.asteval.symtable[name] = par.value
             par.init_value = par.value
@@ -320,7 +231,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.prepare_fit()
         lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
                       maxfun = 2000 * (self.nvarys + 1),
-                      bounds = zip(self.vmin, self.vmax))
+                      # bounds = zip(self.vmin, self.vmax),
+                      )
         lb_kws.update(self.kws)
         lb_kws.update(kws)
         def penalty(params):
@@ -361,7 +273,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             lskws['Dfun'] = self.__jacobian
 
         lsout = scipy_leastsq(self.__residual, self.vars, **lskws)
-        vbest, cov, infodict, errmsg, ier = lsout
+        _best, _cov, infodict, errmsg, ier = lsout
 
         self.residual = resid = infodict['fvec']
 
@@ -385,20 +297,36 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfree = (self.ndata - self.nvarys)
         self.redchi = sum_sqr / self.nfree
 
+        # need to map _best values to params, then calculate the
+        # grad for the variable parameters
+        grad = ones_like(_best)
+        for ivar, varname in enumerate(self.var_map):
+            par = self.params[varname]
+            grad[ivar] = par.scale_gradient(_best[ivar])
+        # modified from JJ Helmus' leastsqbound.py
+        infodict['fjac'] = transpose(transpose(infodict['fjac']) /
+                                     take(grad, infodict['ipvt'] - 1))
+        rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys,:]),
+                   take(eye(self.nvarys),infodict['ipvt'] - 1, 0))
+        try:
+            cov = inv(dot(transpose(rvec),rvec))
+        except LinAlgError:
+            cov = None
+
         for par in self.params.values():
             par.stderr = 0
             par.correl = None
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
 
+        self.covar = cov
         if cov is None:
             self.errorbars = False
             self.message = '%s. Could not estimate error-bars'
         else:
             self.errorbars = True
-            self.covar = cov
             if self.scale_covar:
-                cov = cov * sum_sqr / self.nfree
+                 cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(cov[ivar, ivar])
