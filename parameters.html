@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.5',
+        VERSION:     '0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -56,7 +56,7 @@
 <li><a class="reference internal" href="#using-parameters-instead-of-variables">Using <tt class="docutils literal"><span class="pre">Parameters</span></tt> instead of Variables</a></li>
 <li><a class="reference internal" href="#the-parameter-class">The <tt class="docutils literal"><span class="pre">Parameter</span></tt> class</a></li>
 <li><a class="reference internal" href="#the-parameters-class">The <tt class="docutils literal"><span class="pre">Parameters</span></tt> class</a></li>
-<li><a class="reference internal" href="#simple-example">Simple Example:</a></li>
+<li><a class="reference internal" href="#simple-example">Simple Example</a></li>
 </ul>
 </li>
 </ul>
@@ -209,9 +209,9 @@ well.</p>
 <dl class="class">
 <dt id="Parameter">
 <em class="property">class </em><tt class="descname">Parameter</tt><big>(</big><em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>create a Parameter object.   These are the fundamental extension of a
-fit variable within lmfit, but you will probably create most of these
-with the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class.</p>
+<dd><p>create a Parameter object.  These are the fundamental extension of a fit
+variable within lmfit, but you will probably create most of these with
+the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -252,6 +252,8 @@ fit, of the form:</p>
 </div>
 </dd></dl>
 
+<p>For details of the use of the bounds <tt class="xref py py-attr docutils literal"><span class="pre">min</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">max</span></tt>,
+see <a class="reference internal" href="bounds.html#parameter-bounds-label"><em>Bounds Implementation</em></a>.</p>
 <p>The <tt class="xref py py-attr docutils literal"><span class="pre">expr</span></tt> attribute can contain a mathematical expression that will
 be used to compute the value for the Parameter at each step in the fit.
 See <a class="reference internal" href="constraints.html#math-constraints-label"><em>Using Mathematical Constraints</em></a> for more details and examples of this
@@ -310,9 +312,9 @@ looks table-like:</p>
 
 </div>
 <div class="section" id="simple-example">
-<h2>Simple Example:<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
+<h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
 <p>Putting it all together, a simple example of using a dictionary of
-<a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> s  and <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> might look like this:</p>
+<a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects and <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> might look like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
 
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>

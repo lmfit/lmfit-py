@@ -1,0 +1,171 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bounds Implementation &mdash; Least-Squares Minimization with Constraints for Python</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Least-Squares Minimization with Constraints for Python" href="index.html" />
+    <link rel="next" title="Using Mathematical Constraints" href="constraints.html" />
+    <link rel="prev" title="Calculation of confidence intervals" href="confidence.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="constraints.html" title="Using Mathematical Constraints"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="confidence.html" title="Calculation of confidence intervals"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="confidence.html"
+                        title="previous chapter">Calculation of confidence intervals</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="constraints.html"
+                        title="next chapter">Using Mathematical Constraints</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/bounds.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bounds-implementation">
+<span id="parameter-bounds-label"></span><h1>Bounds Implementation<a class="headerlink" href="#bounds-implementation" title="Permalink to this headline">¶</a></h1>
+<p>This section describes the implementation of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> bounds.
+The <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> implementation used in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> for the
+Levenberg-Marquardt algorithm does not explicitly support bounds on
+parameters, and expects to be able to fully explore the available range of
+values for any Parameter.  Simply placing hard constraints (that is,
+resetting the value when it exceeds the desired bounds) prevents the
+algorithm from determining the partial derivatives, and leads to unstable
+results.</p>
+<p>Instead of placing such hard constraints, bounded parameters are
+mathematically transformed using the formulation devised (and documented)
+for <a class="reference external" href="http://en.wikipedia.org/wiki/MINUIT">MINUIT</a>.  This is implemented following (and borrowing heavily from)
+the <a class="reference external" href="https://github.com/jjhelmus/leastsqbound-scipy">leastsqbound</a> from J. J. Helmus.   Parameter values are mapped from
+internally used, freely variable values <img class="math" src="_images/math/78242af2e8aed3f74dd9f5725e1598fdd3515f75.png" alt="P_{\rm internal}"/> to bounded
+parameters <img class="math" src="_images/math/bc7fac413821deccdfba38ff99642124fc1e63b1.png" alt="P_{\rm bounded}"/>.   When both <tt class="docutils literal"><span class="pre">min</span></tt> and <tt class="docutils literal"><span class="pre">max</span></tt> bounds
+are specified, the mapping is</p>
+<div class="math">
+<p><img src="_images/math/d10510955ef4ce03678ad4ecbba89ae69d202ca3.png" alt="\begin{eqnarray*}
+     P_{\rm internal} &amp;=&amp; \arcsin\big(\frac{2 (P_{\rm bounded} - {\rm min})}{({\rm max} - {\rm min})} - 1\big) \\
+     P_{\rm bounded}  &amp;=&amp; {\rm min} + \big(\sin(P_{\rm internal}) + 1\big) \frac{({\rm max} - {\rm min})}{2}
+ \end{eqnarray*}"/></p>
+</div><p>With only an upper limit <tt class="docutils literal"><span class="pre">max</span></tt> supplied, but <tt class="docutils literal"><span class="pre">min</span></tt> left unbounded, the
+mapping is:</p>
+<div class="math">
+<p><img src="_images/math/5b49de513b8b915c72a6629638e9c9ee434a6d31.png" alt="\begin{eqnarray*}
+     P_{\rm internal} &amp;=&amp; \sqrt{({\rm max} - P_{\rm bounded} + 1)^2 - 1} \\
+     P_{\rm bounded}  &amp;=&amp; {\rm max} + 1 - \sqrt{P_{\rm internal}^2 + 1}
+ \end{eqnarray*}"/></p>
+</div><p>With only a lower limit <tt class="docutils literal"><span class="pre">min</span></tt> supplied, but <tt class="docutils literal"><span class="pre">max</span></tt> left unbounded, the
+mapping is:</p>
+<div class="math">
+<p><img src="_images/math/7b7ecd447ce237fa6bb6b96897b90360385e1808.png" alt="\begin{eqnarray*}
+     P_{\rm internal} &amp;=&amp; \sqrt{(P_{\rm bounded} - {\rm min} + 1)^2 - 1} \\
+     P_{\rm bounded}  &amp;=&amp; {\rm min} - 1 + \sqrt{P_{\rm internal}^2 + 1}
+\end{eqnarray*}"/></p>
+</div><p>With these mappings, the value for the bounded Parameter cannot exceed the
+specified bounds, though the internally varied value can be freely varied.</p>
+<p>It bears repeating that code from <a class="reference external" href="https://github.com/jjhelmus/leastsqbound-scipy">leastsqbound</a> was adopted to implement
+the transformation described above.  The challenging part (Thanks again to
+Jonathan J. Helmus!) here is to re-transform the covariance matrix so that
+the uncertainties can be estimated for bounded Parameters.  This is
+included by using the derivate <img class="math" src="_images/math/bd716f62b24ab4b66ad50cc50ea168a970cca815.png" alt="dP_{\rm internal}/dP_{\rm bounded}"/>
+from the equations above to re-scale the jacobian matrix before
+constructing the covariance matrix from it.  Tests show that this
+re-scaling of the covariance matrix works quite well, and that
+uncertainties estimated for bounded are quite reasonable.  Of course, if
+the best fit value is very close to a boundary, the derivative estimated
+uncertainty and correlations for that parameter may not be reliable.</p>
+<p>The <a class="reference external" href="http://en.wikipedia.org/wiki/MINUIT">MINUIT</a> documentation recommends caution in using bounds.  Setting
+bounds can certainly increase the number of function evaluations (and so
+computation time), and in some cases may cause some instabilities, as the
+range of acceptable parameter values is not fully explored.  On the other
+hand, prelminary tests suggest that using <tt class="docutils literal"><span class="pre">max</span></tt> and <tt class="docutils literal"><span class="pre">min</span></tt> to set
+clearly outlandish bounds does not greatly affect performance or results.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="constraints.html" title="Using Mathematical Constraints"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="confidence.html" title="Calculation of confidence intervals"
+             >previous</a> |</li>
+        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2012, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

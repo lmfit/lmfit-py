@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.5',
+        VERSION:     '0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -101,9 +101,9 @@
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <p>The lmfit package requires Python, Numpy, and Scipy.  Extensive testing on
 version compatibility has not yet been done.  Initial tests work with
-Python 3.2, but no testing with Python 3 has yet been done.  No testing has
-been done with 64-bit architectures, but as this package is pure Python, no
-significant troubles are expected.</p>
+Python 3.2, but little testing with Python 3 has yet been done.  No testing
+has been done with 64-bit architectures, but as this package is pure
+Python, no significant troubles are expected.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
@@ -124,32 +124,32 @@ significant troubles are expected.</p>
 <tr class="row-even"><td>Source Kit</td>
 <td>2.6, 2.7, 3.2</td>
 <td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/source/l/lmfit/lmfit-0.5.tar.gz">lmfit-0.5.tar.gz (PyPI)</a></li>
-<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.5.tar.gz">lmfit-0.5.tar.gz (CARS)</a></li>
+<li><a class="reference external" href="http://pypi.python.org/packages/source/l/lmfit/lmfit-0.6.tar.gz">lmfit-0.6.tar.gz (PyPI)</a></li>
+<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.6.tar.gz">lmfit-0.6.tar.gz (CARS)</a></li>
 </ul>
 </td>
 </tr>
 <tr class="row-odd"><td>Win32 Installer</td>
 <td>2.6</td>
 <td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.5.win32-py2.6.exe">lmfit-0.5.win32-py2.6.exe (PyPI)</a></li>
-<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.5.win32-py2.6.exe">lmfit-0.5.win32-py2.6.exe (CARS)</a></li>
+<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.6.win32-py2.6.exe">lmfit-0.6.win32-py2.6.exe (PyPI)</a></li>
+<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.6.win32-py2.6.exe">lmfit-0.6.win32-py2.6.exe (CARS)</a></li>
 </ul>
 </td>
 </tr>
 <tr class="row-even"><td>Win32 Installer</td>
 <td>2.7</td>
 <td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.5.win32-py2.7.exe">lmfit-0.5.win32-py2.7.exe (PyPI)</a></li>
-<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.5.win32-py2.7.exe">lmfit-0.5.win32-py2.7.exe (CARS)</a></li>
+<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.6.win32-py2.7.exe">lmfit-0.6.win32-py2.7.exe (PyPI)</a></li>
+<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.6.win32-py2.7.exe">lmfit-0.6.win32-py2.7.exe (CARS)</a></li>
 </ul>
 </td>
 </tr>
 <tr class="row-odd"><td>Win32 Installer</td>
 <td>3.2</td>
 <td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.5.win32-py3.2.exe">lmfit-0.5.win32-py3.2.exe (PyPI)</a></li>
-<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.5.win32-py3.2.exe">lmfit-0.5.win32-py3.2.exe (CARS)</a></li>
+<li><a class="reference external" href="http://pypi.python.org/packages/any/l/lmfit/lmfit-0.6.win32-py3.2.exe">lmfit-0.6.win32-py3.2.exe (PyPI)</a></li>
+<li><a class="reference external" href="http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.6.win32-py3.2.exe">lmfit-0.6.win32-py3.2.exe (CARS)</a></li>
 </ul>
 </td>
 </tr>
@@ -180,9 +180,11 @@ the lmfit-py Package simply with:</p>
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
 <p>LMFIT was originally written by Matthew Newville.  Substantial code and
 documentation improvements, especially for improved estimates of confidence
-intervals was provided by Till Stensitzki.  Many valuable suggestions for
-improvements have come from Christoph Deil.  The code obviously depends on,
-and owes a very large debt to the code in scipy.optimize.  Several
+intervals was provided by Till Stensitzki.  The implemenation of parameter
+bounds as described in the MINUIT documentation is taken from Jonathan
+J. Helmus' leastsqbound code, with permission. Many valuable suggestions
+for improvements have come from Christoph Deil.  The code obviously depends
+on, and owes a very large debt to the code in scipy.optimize.  Several
 discussions on the scipy mailing lists have also led to improvements in
 this code.</p>
 </div>

@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.5',
+        VERSION:     '0.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="Least-Squares Minimization with Constraints for Python" href="index.html" />
-    <link rel="next" title="Using Mathematical Constraints" href="constraints.html" />
+    <link rel="next" title="Bounds Implementation" href="bounds.html" />
     <link rel="prev" title="Performing Fits, Analyzing Outputs" href="fitting.html" /> 
   </head>
   <body>
@@ -40,7 +40,7 @@
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="constraints.html" title="Using Mathematical Constraints"
+          <a href="bounds.html" title="Bounds Implementation"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
@@ -65,8 +65,8 @@
   <p class="topless"><a href="fitting.html"
                         title="previous chapter">Performing Fits, Analyzing Outputs</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="constraints.html"
-                        title="next chapter">Using Mathematical Constraints</a></p>
+  <p class="topless"><a href="bounds.html"
+                        title="next chapter">Bounds Implementation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/confidence.txt"
@@ -148,8 +148,8 @@ model).</p>
 <span class="gr">Out[9]: </span><span class="bp">True</span>
 
 <span class="gp">In [10]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_errors</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
-<span class="go">  a:     0.09992+/- 0.00019 (inital=  0.100000)</span>
-<span class="go">  b:     2.00189+/- 0.01196 (inital=  1.000000)</span>
+<span class="go">  a:     0.099825 +/- 0.000212 (inital=  0.100000)</span>
+<span class="go">  b:     2.002829 +/- 0.013282 (inital=  1.000000)</span>
 <span class="go">Correlations:</span>
 <span class="go">    C(a, b)                      =  0.601 </span>
 </pre></div>
@@ -159,9 +159,9 @@ model).</p>
 
 <span class="gp">In [12]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
 <span class="go">     99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%</span>
-<span class="go">a   0.09916   0.09916   0.09916   0.09992   0.10069   0.10069   0.10069</span>
+<span class="go">a   0.09898   0.09898   0.09898   0.09983   0.10067   0.10067   0.10067</span>
 <span class="go">     99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%</span>
-<span class="go">b   1.96591   1.97831   1.99041   2.00189   2.01337   2.02547   2.03787</span>
+<span class="go">b   1.96279   1.97664   1.98997   2.00283   2.01568   2.02902   2.04287</span>
 </pre></div>
 </div>
 <p>As we can see, the estimated error is almost the same:
@@ -190,10 +190,10 @@ covariance can lead to wrong results:</p>
 <span class="gr">Out[19]: </span><span class="bp">True</span>
 
 <span class="gp">In [20]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_errors</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">show_correl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="go">  a1:     2.61101+/- 0.32796 (inital=  5.000000)</span>
-<span class="go">  a2:    -4.51293+/- 0.39919 (inital= -5.000000)</span>
-<span class="go">  t1:     1.56948+/- 0.33450 (inital=  2.000000)</span>
-<span class="go">  t2:     10.96137+/- 1.26387 (inital=  5.000000)</span>
+<span class="go">  a1:     2.611014 +/- 0.327959 (inital=  5.000000)</span>
+<span class="go">  a2:    -4.512928 +/- 0.399194 (inital= -5.000000)</span>
+<span class="go">  t1:     1.569477 +/- 0.334505 (inital=  2.000000)</span>
+<span class="go">  t2:     10.961366 +/- 1.263868 (inital=  5.000000)</span>
 </pre></div>
 </div>
 <p>Again we call <a class="reference internal" href="#confidence.conf_interval" title="confidence.conf_interval"><tt class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></tt></a>, this time with tracing and only for 1-
@@ -218,7 +218,7 @@ regular estimate is too small. Now let's plot a confidence region:</p>
 <span class="gp">In [24]: </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="s">&#39;a1&#39;</span><span class="p">,</span><span class="s">&#39;t2&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
 
 <span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">QuadContourSet</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0x4e56c38</span><span class="o">&gt;</span>
+<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">QuadContourSet</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0x4e687b0</span><span class="o">&gt;</span>
 
 <span class="gp">In [26]: </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;a1&#39;</span><span class="p">);</span>
 
@@ -234,10 +234,10 @@ regular estimate is too small. Now let's plot a confidence region:</p>
 <span class="gp">In [34]: </span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">prob2</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
 
 <span class="gp">In [35]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gr">Out[35]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x5146850</span><span class="o">&gt;</span>
+<span class="gr">Out[35]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x50e09d0</span><span class="o">&gt;</span>
 
 <span class="gp">In [36]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">prob2</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gr">Out[36]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x51864d0</span><span class="o">&gt;</span>
+<span class="gr">Out[36]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x50ef270</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <img alt="_images/conf_interval2.png" src="_images/conf_interval2.png" style="width: 7in;" />
@@ -420,7 +420,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
           <a href="np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="constraints.html" title="Using Mathematical Constraints"
+          <a href="bounds.html" title="Bounds Implementation"
              >next</a> |</li>
         <li class="right" >
           <a href="fitting.html" title="Performing Fits, Analyzing Outputs"

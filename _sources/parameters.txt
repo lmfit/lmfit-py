@@ -46,7 +46,6 @@ Though in python, and fairly easy to use, this is not terribly different
 from how one would do the same fit in C or Fortran.
 
 
-
 .. _parameters-label:
 
 Using :class:`Parameters` instead of Variables
@@ -133,9 +132,9 @@ The :class:`Parameter` class
 
 .. class:: Parameter(value=None[, vary=True[, min=None[, max=None[, name=None[, expr=None]]]]])
 
-   create a Parameter object.   These are the fundamental extension of a
-   fit variable within lmfit, but you will probably create most of these
-   with the :class:`Parameters` class.
+   create a Parameter object.  These are the fundamental extension of a fit
+   variable within lmfit, but you will probably create most of these with
+   the :class:`Parameters` class.
 
    :param value: the numerical value for the parameter
    :param vary:  whether to vary the parameter or not.
@@ -168,6 +167,8 @@ will have the :attr:`value` attribute holding the best-fit value, and may
 
    {'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}
 
+For details of the use of the bounds :attr:`min` and :attr:`max`,
+see :ref:`parameter-bounds-label`.
 
 The :attr:`expr` attribute can contain a mathematical expression that will
 be used to compute the value for the Parameter at each step in the fit.
@@ -222,11 +223,11 @@ The :class:`Parameters` class
                 ('wid2',  None, False, None, None, '2*wid1/3'))
 
 
-Simple Example:
+Simple Example
 ==================
 
 Putting it all together, a simple example of using a dictionary of
-:class:`Parameter` s  and :func:`minimize` might look like this::
+:class:`Parameter` objects and :func:`minimize` might look like this::
 
     from lmfit import minimize, Parameters
 
