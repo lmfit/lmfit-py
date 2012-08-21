@@ -51,6 +51,7 @@
 <li><a class="reference internal" href="#">Using Mathematical Constraints</a><ul>
 <li><a class="reference internal" href="#overview">Overview</a></li>
 <li><a class="reference internal" href="#supported-operators-functions-and-constants">Supported Operators, Functions, and Constants</a></li>
+<li><a class="reference internal" href="#using-inequality-constraints">Using Inequality Constraints</a></li>
 <li><a class="reference internal" href="#advanced-usage-of-expressions-in-lmfit">Advanced usage of Expressions in lmfit</a></li>
 </ul>
 </li>
@@ -124,9 +125,11 @@ including Python's bit- and logical operators:</p>
 </div>
 <p>The values for <cite>e</cite> (2.7182818...) and <cite>pi</cite> (3.1415926...) are available, as
 are  several supported mathematical and trigonometric function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nb">abs</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">acosh</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">asinh</span><span class="p">,</span> <span class="n">atan</span><span class="p">,</span> <span class="n">atan2</span><span class="p">,</span> <span class="n">atanh</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">copysign</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">cosh</span><span class="p">,</span> <span class="n">degrees</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span>
-<span class="n">fabs</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span> <span class="n">floor</span><span class="p">,</span> <span class="n">fmod</span><span class="p">,</span> <span class="n">frexp</span><span class="p">,</span> <span class="n">fsum</span><span class="p">,</span> <span class="n">hypot</span><span class="p">,</span> <span class="n">isinf</span><span class="p">,</span> <span class="n">isnan</span><span class="p">,</span> <span class="n">ldexp</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="n">log1p</span><span class="p">,</span>
-<span class="nb">max</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">modf</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">radians</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">sinh</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">tan</span><span class="p">,</span> <span class="n">tanh</span><span class="p">,</span> <span class="n">trunc</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">abs</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">acosh</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">asinh</span><span class="p">,</span> <span class="n">atan</span><span class="p">,</span> <span class="n">atan2</span><span class="p">,</span> <span class="n">atanh</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span>
+<span class="n">copysign</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">cosh</span><span class="p">,</span> <span class="n">degrees</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span>
+<span class="n">floor</span><span class="p">,</span> <span class="n">fmod</span><span class="p">,</span> <span class="n">frexp</span><span class="p">,</span> <span class="n">fsum</span><span class="p">,</span> <span class="n">hypot</span><span class="p">,</span> <span class="n">isinf</span><span class="p">,</span> <span class="n">isnan</span><span class="p">,</span> <span class="n">ldexp</span><span class="p">,</span>
+<span class="n">log</span><span class="p">,</span> <span class="n">log10</span><span class="p">,</span> <span class="n">log1p</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="n">modf</span><span class="p">,</span> <span class="nb">pow</span><span class="p">,</span> <span class="n">radians</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span>
+<span class="n">sinh</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">tan</span><span class="p">,</span> <span class="n">tanh</span><span class="p">,</span> <span class="n">trunc</span>
 </pre></div>
 </div>
 <p>In addition, all Parameter names will be available in the mathematical
@@ -156,14 +159,38 @@ is that Python's 1-line <em>if expression</em> is supported:</p>
 </pre></div>
 </div>
 </div>
+<div class="section" id="using-inequality-constraints">
+<h2>Using Inequality Constraints<a class="headerlink" href="#using-inequality-constraints" title="Permalink to this headline">¶</a></h2>
+<p>A rather common question about how to set up constraints
+that use an inequality, say, <img class="math" src="_images/math/13f9d7b5d404afcad6e9f90f134a4113ad6c1eb6.png" alt="x + y \le 10"/>.  This
+can be done with algebraic constraints by recasting the
+problem, as <img class="math" src="_images/math/536c6e5dd43ba307a428e60e41b3d5e08c745ee6.png" alt="x + y = \delta"/> and <img class="math" src="_images/math/c202b1c17dfdce466635d7d9190fa44350a6915a.png" alt="\delta \le
+10"/>.  That is, first, allow <img class="math" src="_images/math/26eeb5258ca5099acf8fe96b2a1049c48c89a5e6.png" alt="x"/> to be held by the
+freely varying parameter <cite>x</cite>.  Next, define a parameter
+<cite>delta</cite> to be variable with a maximum value of 10, and
+define parameter <cite>y</cite> as <cite>delta - x</cite>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span>     <span class="n">value</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;delta&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span>     <span class="n">expr</span><span class="o">=</span><span class="s">&#39;delta-x&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The essential point is that an inequality still implies
+that a variable (here, <cite>delta</cite>) is needed to describe the
+constraint.  The secondary point is that upper and lower
+bounds can be used as part of the inequality to make the
+definitions more convenient.</p>
+</div>
 <div class="section" id="advanced-usage-of-expressions-in-lmfit">
 <h2>Advanced usage of Expressions in lmfit<a class="headerlink" href="#advanced-usage-of-expressions-in-lmfit" title="Permalink to this headline">¶</a></h2>
-<p>The expression is converted to a Python <a class="reference external" href="http://docs.python.org/library/ast.html">Abstract Syntax Tree</a>, which is an intermediate
-version of the expression -- a syntax-checked, partially compiled
-expression.  Among other things, this means that Python's own parser is
-used to parse and convert the expression into something that can easily be
-evaluated within Python.  It also means that the symbols in the expressions
-can point to any Python object.</p>
+<p>The expression used in a constraint is converted to a
+Python <a class="reference external" href="http://docs.python.org/library/ast.html">Abstract Syntax Tree</a>, which is an
+intermediate version of the expression -- a syntax-checked,
+partially compiled expression.  Among other things, this
+means that Python's own parser is used to parse and convert
+the expression into something that can easily be evaluated
+within Python.  It also means that the symbols in the
+expressions can point to any Python object.</p>
 <p>In fact, the use of Python's AST allows a nearly full version of Python to
 be supported, without using Python's built-in <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> function.  The
 <a class="reference external" href="http://newville.github.com/asteval/">asteval</a> module actually supports most Python syntax, including for- and

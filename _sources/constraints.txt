@@ -9,7 +9,7 @@ Using Mathematical Constraints
 While being able to fix variables and place upper and lower bounds on their
 values are key parts of lmfit, the ability to place mathematical
 constraints on parameters is also highly desirable.  This section describes
-how to do this, and what sort of parameterizations are possible -- see 
+how to do this, and what sort of parameterizations are possible -- see
 the `asteval`_ for further documentation.
 
 Overview
@@ -50,9 +50,11 @@ including Python's bit- and logical operators::
 The values for `e` (2.7182818...) and `pi` (3.1415926...) are available, as
 are  several supported mathematical and trigonometric function::
 
-  abs, acos, acosh, asin, asinh, atan, atan2, atanh, ceil, copysign, cos, cosh, degrees, exp,
-  fabs, factorial, floor, fmod, frexp, fsum, hypot, isinf, isnan, ldexp, log, log10, log1p,
-  max, min, modf, pow, radians, sin, sinh, sqrt, tan, tanh, trunc
+  abs, acos, acosh, asin, asinh, atan, atan2, atanh, ceil,
+  copysign, cos, cosh, degrees, exp, fabs, factorial,
+  floor, fmod, frexp, fsum, hypot, isinf, isnan, ldexp,
+  log, log10, log1p, max, min, modf, pow, radians, sin,
+  sinh, sqrt, tan, tanh, trunc
 
 
 In addition, all Parameter names will be available in the mathematical
@@ -81,17 +83,42 @@ which is equivalent to the more familiar::
    else:
        bounded = param_b
 
+Using Inequality Constraints
+==============================
+
+A rather common question about how to set up constraints
+that use an inequality, say, :math:`x + y \le 10`.  This
+can be done with algebraic constraints by recasting the
+problem, as :math:`x + y = \delta` and :math:`\delta \le
+10`.  That is, first, allow :math:`x` to be held by the
+freely varying parameter `x`.  Next, define a parameter
+`delta` to be variable with a maximum value of 10, and
+define parameter `y` as `delta - x`::
+
+    pars = Parameters()
+    pars.add('x',     value = 5, vary=True)
+    pars.add('delta', value = 5, max=10, vary=True)
+    pars.add('y',     expr='delta-x')
+
+The essential point is that an inequality still implies
+that a variable (here, `delta`) is needed to describe the
+constraint.  The secondary point is that upper and lower
+bounds can be used as part of the inequality to make the
+definitions more convenient.
+
 
 Advanced usage of Expressions in lmfit
 =============================================
 
-The expression is converted to a Python `Abstract Syntax Tree
-<http://docs.python.org/library/ast.html>`_, which is an intermediate
-version of the expression -- a syntax-checked, partially compiled
-expression.  Among other things, this means that Python's own parser is
-used to parse and convert the expression into something that can easily be
-evaluated within Python.  It also means that the symbols in the expressions
-can point to any Python object.
+The expression used in a constraint is converted to a
+Python `Abstract Syntax Tree
+<http://docs.python.org/library/ast.html>`_, which is an
+intermediate version of the expression -- a syntax-checked,
+partially compiled expression.  Among other things, this
+means that Python's own parser is used to parse and convert
+the expression into something that can easily be evaluated
+within Python.  It also means that the symbols in the
+expressions can point to any Python object.
 
 In fact, the use of Python's AST allows a nearly full version of Python to
 be supported, without using Python's built-in :meth:`eval` function.  The
