@@ -18,7 +18,7 @@ are more robust.
 Method used for calculating confidence intervals
 -------------------------------------------------
 The F-test is used to compare our null model, which is the best fit we have 
-found,with an alternate model, where one of the parameters is fixed to a
+found, with an alternate model, where one of the parameters is fixed to a
 specific value. The value is changed until the differnce between :math:`\chi^2_0` 
 and :math:`\chi^2_{f}` can't be explained by the loss of a degree of freedom 
 within a certain confidence. 
