@@ -18,14 +18,15 @@ def report_errors(params, modelpars=None, show_correl=True):
         par = params[name]
         space = ' '*(namelen+2 - len(name))
         nout = " %s: %s" % (name, space)
-        initval = 'inital= ?'
+        initval = 'inital = ?'
         if par.init_value is not None:
-            initval = 'inital= % .6f' % par.init_value
+            initval = 'initial = % .6f' % par.init_value
         if modelpars is not None and name in modelpars:
-            initval = '%s, model_value=% .6f' % (initval, modelpars[name].value)
+            initval = '%s, model_value =% .6f' % (initval, modelpars[name].value)
         if par.vary:
-            print(" %s % .6f +/- %.6f (%s)" % (nout, par.value,
-                                               par.stderr, initval))
+            print(" %s % .6f +/- %.6f (%.2f%%) %s" % (nout, par.value,
+                                               par.stderr, abs(par.stderr/par.value)*100,
+                                               initval))
 
         elif par.expr is not None:
             print(" %s % .6f == '%s'" % (nout, par.value,
