@@ -55,12 +55,15 @@ def report_errors(params, modelpars=None, show_correl=True):
 
 def report_ci(ci):
     """Print a report for confidence intervals"""
-    max_name_length=max([len(i) for i in ci])
-    for name in ci:
-        convp=lambda x: ("%.2f" % (x[0]*100))+'%'
-        conv=lambda x: "%.5f" % x[1]
-        row=ci[name]
-        print("".join([''.rjust(max_name_length)]+[i.rjust(10)   for i in map(convp, row)]))
+    max_name_length = max([len(i) for i in ci])
+    for count, name in enumerate(ci):
+        convp = lambda x: ("%.2f" % (x[0]*100))+'%'
+        conv = lambda x: "%.5f" % x[1]
+        row = ci[name]
+        
+        #Print title once
+        if count == 0:
+            print("".join([''.rjust(max_name_length)]+[i.rjust(10)   for i in map(convp, row)]))
         print("".join([name.rjust(max_name_length)]+[i.rjust(10) for i in map(conv,  row)]))
 
 
