@@ -230,15 +230,22 @@ Putting it all together, a simple example of using a dictionary of
 :class:`Parameter` objects and :func:`minimize` might look like this::
 
     from lmfit import minimize, Parameters
+    import numpy as np
 
     def residual(params, x, data=None):
+	"""
+	Define the residual
+	If data == None, return the model.
+	"""
         amp = params['amp'].value
         shift = params['phase_shift'].value
 	omega = params['omega'].value
         decay = params['decay'].value
 
-	model = amp * sin(x * omega + shift) * exp(-x*x*decay)
+	model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
 
+	if data == None:
+	    return model
         return (data-model)
 
     params = Parameters()

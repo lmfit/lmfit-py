@@ -8,7 +8,7 @@ Created on Fri Apr 20 19:24:21 2012
 from __future__ import print_function
 
 def report_errors(params, modelpars=None, show_correl=True):
-    """write report for fitted params"""
+    """Print a report for fitted params"""
     parnames = sorted(params)
     #print('   -------------------------------------')
     #print( '  Best Fit Values and Standard Errors:')
@@ -18,14 +18,15 @@ def report_errors(params, modelpars=None, show_correl=True):
         par = params[name]
         space = ' '*(namelen+2 - len(name))
         nout = " %s: %s" % (name, space)
-        initval = 'inital= ?'
+        initval = 'inital = ?'
         if par.init_value is not None:
-            initval = 'inital= % .6f' % par.init_value
+            initval = 'initial = % .6f' % par.init_value
         if modelpars is not None and name in modelpars:
-            initval = '%s, model_value=% .6f' % (initval, modelpars[name].value)
+            initval = '%s, model_value =% .6f' % (initval, modelpars[name].value)
         if par.vary:
-            print(" %s % .6f +/- %.6f (%s)" % (nout, par.value,
-                                               par.stderr, initval))
+            print(" %s % .6f +/- %.6f (%.2f%%) %s" % (nout, par.value,
+                                               par.stderr, abs(par.stderr/par.value)*100,
+                                               initval))
 
         elif par.expr is not None:
             print(" %s % .6f == '%s'" % (nout, par.value,
@@ -54,16 +55,18 @@ def report_errors(params, modelpars=None, show_correl=True):
 
 
 def report_ci(ci):
-    max_name_length=max([len(i) for i in ci])
-    for name in ci:
-        convp=lambda x: ("%.2f" % (x[0]*100))+'%'
-        conv=lambda x: "%.5f" % x[1]
-        row=ci[name]
-        print("".join([''.rjust(max_name_length)]+[i.rjust(10)   for i in map(convp, row)]))
+    """Print a report for confidence intervals"""
+    max_name_length = max([len(i) for i in ci])
+    for count, name in enumerate(ci):
+        convp = lambda x: ("%.2f" % (x[0]*100))+'%'
+        conv = lambda x: "%.5f" % x[1]
+        row = ci[name]
+        
+        #Print title once
+        if count == 0:
+            print("".join([''.rjust(max_name_length)]+[i.rjust(10)   for i in map(convp, row)]))
         print("".join([name.rjust(max_name_length)]+[i.rjust(10) for i in map(conv,  row)]))
 
-
-#
 
 
 
