@@ -97,7 +97,7 @@ and a starting point of 'start1' or 'start2'
 
 msg2 = """
 That is, use
-    python fit_NIST.py Bennet5 start1
+    python fit_NIST.py Bennett5 start1
 or go through all models and starting points with:
     python fit_NIST.py all
 """
@@ -115,7 +115,7 @@ if __name__  == '__main__':
                 out = ''
         print(out)
         print(msg2)
-       
+
         sys.exit()
 
     if len(sys.argv) > 1:
