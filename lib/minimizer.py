@@ -20,10 +20,19 @@ from scipy.optimize import fmin as scipy_fmin
 from scipy.optimize import lbfgsb as scipy_lbfgsb
 from scipy.optimize import anneal as scipy_anneal
 
+# check for scipy.optimize.minimize
 HAS_SCALAR_MIN = False
 try:
     from scipy.optimize import minimize as scipy_minimize
     HAS_SCALAR_MIN = True
+except ImportError:
+    pass
+
+# uncertainties package
+HAS_UNCERT = False
+try:
+    import uncertainties
+    HAS_UNCERT = True
 except ImportError:
     pass
     
@@ -209,6 +218,39 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.__update_paramval(name)
         self.__prepared = True
 
+
+    def __set_constrained_uncertainties(self):
+        """set uncertainties on constrained parameters.
+
+        Note that this requires a modified version of the
+        uncertainties package
+        """
+        if not HAS_UNCERT:
+            return
+
+        vals = []
+        for name in self.var_map:
+            for pname, par in self.params.items():
+                if name == pname:
+                    vals.append(par.value)
+
+        uvars = uncertainties.correlated_values(vals, self.covar)
+        def par_eval(vals, par=None):
+            for v, nam in zip(vals, self.var_map):
+                self.asteval.symtable[nam] = v
+            return self.asteval.run(self.asteval.parse(par.expr))
+
+        ucalc = uncertainties.wrap(par_eval)
+        # print 'Derived Uncertainties: ', 
+        for pname, par in self.params.items():
+            print pname , par, par.expr
+            if par.expr is not None:
+                out = ucalc(uvars, par=par)
+                par.stderr = out.std_dev()
+                print 'StdErr: ', par.stderr
+                
+
+        
     def anneal(self, schedule='cauchy', **kws):
         """
         use simulated annealing
@@ -401,7 +443,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
 
-        self.covar = cov
+        # self.covar = cov
         if cov is None:
             self.errorbars = False
             self.message = '%s. Could not estimate error-bars'
@@ -418,6 +460,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         par.correl[varn2] = (cov[ivar, jvar]/
                                         (par.stderr * sqrt(cov[jvar, jvar])))
 
+        self.covar = cov
+
+        self.__set_constrained_uncertainties()
         return self.success
 
 def minimize(fcn, params, engine='leastsq', args=None, kws=None,
