@@ -11,13 +11,22 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    <newville@cars.uchicago.edu>
 """
 
-from numpy import array, dot, eye, ones_like, sqrt, take, transpose, triu
+from numpy import array, dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 
 from scipy.optimize import leastsq as scipy_leastsq
+from scipy.optimize import fmin as scipy_fmin
+from scipy.optimize import lbfgsb as scipy_lbfgsb
 from scipy.optimize import anneal as scipy_anneal
-from scipy.optimize import fmin_l_bfgs_b as scipy_lbfgsb
+
+HAS_SCALAR_MIN = False
+try:
+    from scipy.optimize import minimize as scipy_minimize
+    HAS_SCALAR_MIN = True
+except ImportError:
+    pass
+    
 
 from .asteval import Interpreter
 from .astutils import NameFinder
@@ -218,7 +227,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         def penalty(params):
             "local penalty function -- anneal wants sum-squares residual"
             r = self.__residual(params)
-            return (r*r).sum()
+            if isinstance(r, ndarray):
+                r = (r*r).sum()
+            return r
 
         saout = scipy_anneal(penalty, self.vars, **sakws)
         self.sa_out = saout
@@ -238,12 +249,83 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         def penalty(params):
             "local penalty function -- lbgfsb wants sum-squares residual"
             r = self.__residual(params)
-            return (r*r).sum()
+            if isinstance(r, ndarray):
+                r = (r*r).sum()
+            return r
 
         xout, fout, info = scipy_lbfgsb(penalty, self.vars, **lb_kws)
 
         self.nfev =  info['funcalls']
         self.message = info['task']
+
+
+    def fmin(self, **kws):
+        """
+        use nelder-mead (simplex) minimization
+        """
+        self.prepare_fit()
+        fmin_kws = dict(full_output=True, disp=False, retall=True,
+                        ftol=1.e-4, xtol=1.e-4,
+                        maxfun = 5000 * (self.nvarys + 1))
+
+        fmin_kws.update(kws)
+        def penalty(params):
+            "local penalty function -- eval sum-squares residual"
+            r = self.__residual(params)
+            if isinstance(r, ndarray):
+                r = (r*r).sum()
+            return r
+
+        ret = scipy_fmin(penalty, self.vars, **fmin_kws)
+        xout, fout, iter, funccalls, warnflag, allvecs = ret
+        self.nfev =  funccalls
+
+
+    def scalar_minimize(self, method='Nelder-Mead', hess=None,
+                        tol=None, **kws):
+        """
+        use one of the scaler minimization methods from scipy.
+        Available methods include:
+          Nelder-Mead
+          Powell
+          CG  (conjugate gradient)
+          BFGS
+          Newton-CG
+          Anneal
+          L-BFGS-B
+          TNC
+          COBYLA
+          SLSQP
+
+        If the objective function returns a numpy array instead
+        of the expected scalar, the sum of squares of the array
+        will be used.
+
+        Note that bounds and constraints can be set on Parameters
+        for any of these methods, so are not supported separately
+        for those designed to use bounds.
+        
+        """
+        if not HAS_SCALAR_MIN :
+            raise NotImplementedError
+        
+        self.prepare_fit()
+
+        fmin_kws = dict(method=method, hess=hess, tol=tol)
+
+        # fmin_kws.update(self.kws)
+        fmin_kws.update(kws)
+        def penalty(params):
+            "local penalty function -- eval sum-squares residual"
+            r = self.__residual(params)
+            if isinstance(r, ndarray):
+                r = (r*r).sum()
+            return r
+
+        ret = scipy_minimize(penalty, self.vars, **fmin_kws)
+        xout = ret.x
+        self.message = ret.message
+        self.nfev = ret.nfev
 
 
     def leastsq(self, scale_covar=True, **kws):
