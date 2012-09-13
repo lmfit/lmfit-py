@@ -320,7 +320,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         fmin_kws = dict(method=method, hess=hess, tol=tol)
 
-        # fmin_kws.update(self.kws)
+        fmin_kws.update(self.kws)
         fmin_kws.update(kws)
         def penalty(params):
             "local penalty function -- eval sum-squares residual"
@@ -352,7 +352,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
-                     gtol=1.e-7, maxfev=1000*(self.nvarys+1), Dfun=None)
+                     gtol=1.e-7, maxfev=2000*(self.nvarys+1), Dfun=None)
 
         lskws.update(self.kws)
         lskws.update(kws)
@@ -446,8 +446,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                 delattr(par, 'ast')
         return self.success
 
-def minimize(fcn, params, engine='leastsq', args=None, kws=None,
-             scale_covar=True,
+def minimize(fcn, params, method='leastsq', args=None, kws=None,
+             scale_covar=True, engine=None, 
              iter_cb=None, **fit_kws):
     """simple minimization function,
     finding the values for the params which give the
@@ -455,10 +455,41 @@ def minimize(fcn, params, engine='leastsq', args=None, kws=None,
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
-    if engine == 'anneal':
-        fitter.anneal()
-    elif engine == 'lbfgsb':
-        fitter.lbfgsb()
+
+
+    _methods = {'anneal': 'anneal',
+               'nelder': 'fmin',
+               'lbfgsb': 'lbfgsb',
+               'leastsq': 'leastsq'}
+    
+    _scalar_methods = {'nelder': 'Nelder-Mead',
+                       'powell': 'Powell',
+                       'cg': 'CG ',
+                       'bfgs': 'BFGS',
+                       'newton': 'Newton-CG',
+                       'anneal': 'Anneal',
+                       'lbfgs': 'L-BFGS-B',
+                       'l-bfgs': 'L-BFGS-B',
+                       'tnc': 'TNC',
+                       'cobyla': 'COBYLA',
+                       'slsqp': 'SLSQP'}
+
+    found = False
+    if engine is not None:
+        method = engine
+    meth = method.lower()
+    if HAS_SCALAR_MIN:
+        for name, method in _scalar_methods.items():
+            if meth.startswith(name):
+                found = True
+                fitter.scalar_minimize(method=method)
     else:
+        for name, method in _map.items():
+            if meth.startwith(name):
+                found = True
+                method = getattr(fitter, _methods[meth], 'leastsq')
+                method()
+    if not found:
         fitter.leastsq()
+
     return fitter
