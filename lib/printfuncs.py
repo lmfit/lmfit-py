@@ -16,6 +16,8 @@ def report_errors(params, modelpars=None, show_correl=True):
 
     for name in parnames:
         par = params[name]
+        # print( 'PAR : ', par, par.value, par.stderr, par.expr)
+        
         space = ' '*(namelen+2 - len(name))
         nout = " %s: %s" % (name, space)
         initval = 'inital = ?'
@@ -23,14 +25,16 @@ def report_errors(params, modelpars=None, show_correl=True):
             initval = 'initial = % .6f' % par.init_value
         if modelpars is not None and name in modelpars:
             initval = '%s, model_value =% .6f' % (initval, modelpars[name].value)
-        if par.vary:
-            print(" %s % .6f +/- %.6f (%.2f%%) %s" % (nout, par.value,
-                                               par.stderr, abs(par.stderr/par.value)*100,
-                                               initval))
 
+        sval = '% .6f' % par.value
+        if par.stderr is not None:
+            sval = '% .6f +/- %.6f (%.2f%%)' % (par.value, par.stderr,
+                                                abs(par.stderr/par.value)*100)
+
+        if par.vary:
+            print(" %s %s %s" % (nout, sval, initval))
         elif par.expr is not None:
-            print(" %s % .6f == '%s'" % (nout, par.value,
-                                                par.expr))
+            print(" %s %s == '%s'" % (nout, sval, par.expr))
         else:
             print(" %s fixed" % (nout))
 
@@ -61,7 +65,7 @@ def report_ci(ci):
         convp = lambda x: ("%.2f" % (x[0]*100))+'%'
         conv = lambda x: "%.5f" % x[1]
         row = ci[name]
-        
+
         #Print title once
         if count == 0:
             print("".join([''.rjust(max_name_length)]+[i.rjust(10)   for i in map(convp, row)]))

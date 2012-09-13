@@ -47,7 +47,7 @@ fit_params.add('decay', value=0.02, min=0, max=1.0)
 #p_true.add('shift', value=0.123)
 #p_true.add('decay', value=0.010)
 
-out = minimize(residual, fit_params, engine='anneal',
+out = minimize(residual, fit_params, method='anneal',
                Tf= 1000,
                args=(x,), kws={'data':data})
 

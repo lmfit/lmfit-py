@@ -45,9 +45,7 @@ fit_params.add('decay', value=6.e-3, min=0, max=0.1)
 
 init = residual(fit_params, x)
 
-# out = minimize(residual, fit_params, engine='leastsq', args=(x,), kws={'data':data})
-
-out = minimize(residual, fit_params, engine='lbfgsb', args=(x,), kws={'data':data})
+out = minimize(residual, fit_params, method='lbfgsb', args=(x,), kws={'data':data})
 
 fit = residual(fit_params, x)
 

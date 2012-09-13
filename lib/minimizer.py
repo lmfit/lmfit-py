@@ -11,13 +11,31 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    <newville@cars.uchicago.edu>
 """
 
-from numpy import array, dot, eye, ones_like, sqrt, take, transpose, triu
+from numpy import array, dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 
 from scipy.optimize import leastsq as scipy_leastsq
+from scipy.optimize import fmin as scipy_fmin
+from scipy.optimize import lbfgsb as scipy_lbfgsb
 from scipy.optimize import anneal as scipy_anneal
-from scipy.optimize import fmin_l_bfgs_b as scipy_lbfgsb
+
+# check for scipy.optimize.minimize
+HAS_SCALAR_MIN = False
+try:
+    from scipy.optimize import minimize as scipy_minimize
+    HAS_SCALAR_MIN = True
+except ImportError:
+    pass
+
+# uncertainties package
+HAS_UNCERT = False
+try:
+    import uncertainties
+    HAS_UNCERT = True
+except ImportError:
+    pass
+
 
 from .asteval import Interpreter
 from .astutils import NameFinder
@@ -94,6 +112,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.asteval.symtable[name] = par.value
         self.updated[name] = True
 
+    def update_constraints(self):
+        """update all constrained parameters, checking that
+        dependencies are evaluated as needed."""
+        self.updated = dict([(name, False) for name in self.params])
+        for name in self.params:
+            self.__update_paramval(name)
+
     def __residual(self, fvars):
         """
         residual function used for least-squares fit.
@@ -109,10 +134,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             par.value = par.from_internal(val)
         self.nfev = self.nfev + 1
 
-        self.updated = dict([(name, False) for name in self.params])
-        for name in self.params:
-            self.__update_paramval(name)
-
+        self.update_constraints()
         out = self.userfcn(self.params, *self.userargs, **self.userkws)
         if hasattr(self.iter_cb, '__call__'):
             self.iter_cb(self.params, self.nfev, out,
@@ -130,11 +152,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.params[varname].from_internal(val)
 
         self.nfev = self.nfev + 1
-
-        self.updated = dict([(name, False) for name in self.params])
-        for name in self.params:
-            self.__update_paramval(name)
-
+        self.update_constraints()
         # computing the jacobian
         return self.jacfcn(self.params, *self.userargs, **self.userkws)
 
@@ -195,9 +213,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # now evaluate make sure initial values
         # are used to set values of the defined expressions.
         # this also acts as a check of expression syntax.
-        self.updated = dict([(name, False) for name in self.params])
-        for name in self.params:
-            self.__update_paramval(name)
+        self.update_constraints()
         self.__prepared = True
 
     def anneal(self, schedule='cauchy', **kws):
@@ -218,7 +234,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         def penalty(params):
             "local penalty function -- anneal wants sum-squares residual"
             r = self.__residual(params)
-            return (r*r).sum()
+            if isinstance(r, ndarray):
+                r = (r*r).sum()
+            return r
 
         saout = scipy_anneal(penalty, self.vars, **sakws)
         self.sa_out = saout
@@ -238,12 +256,83 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         def penalty(params):
             "local penalty function -- lbgfsb wants sum-squares residual"
             r = self.__residual(params)
-            return (r*r).sum()
+            if isinstance(r, ndarray):
+                r = (r*r).sum()
+            return r
 
         xout, fout, info = scipy_lbfgsb(penalty, self.vars, **lb_kws)
 
         self.nfev =  info['funcalls']
         self.message = info['task']
+
+
+    def fmin(self, **kws):
+        """
+        use nelder-mead (simplex) minimization
+        """
+        self.prepare_fit()
+        fmin_kws = dict(full_output=True, disp=False, retall=True,
+                        ftol=1.e-4, xtol=1.e-4,
+                        maxfun = 5000 * (self.nvarys + 1))
+
+        fmin_kws.update(kws)
+        def penalty(params):
+            "local penalty function -- eval sum-squares residual"
+            r = self.__residual(params)
+            if isinstance(r, ndarray):
+                r = (r*r).sum()
+            return r
+
+        ret = scipy_fmin(penalty, self.vars, **fmin_kws)
+        xout, fout, iter, funccalls, warnflag, allvecs = ret
+        self.nfev =  funccalls
+
+
+    def scalar_minimize(self, method='Nelder-Mead', hess=None,
+                        tol=None, **kws):
+        """
+        use one of the scaler minimization methods from scipy.
+        Available methods include:
+          Nelder-Mead
+          Powell
+          CG  (conjugate gradient)
+          BFGS
+          Newton-CG
+          Anneal
+          L-BFGS-B
+          TNC
+          COBYLA
+          SLSQP
+
+        If the objective function returns a numpy array instead
+        of the expected scalar, the sum of squares of the array
+        will be used.
+
+        Note that bounds and constraints can be set on Parameters
+        for any of these methods, so are not supported separately
+        for those designed to use bounds.
+
+        """
+        if not HAS_SCALAR_MIN :
+            raise NotImplementedError
+
+        self.prepare_fit()
+
+        fmin_kws = dict(method=method, hess=hess, tol=tol)
+
+        fmin_kws.update(self.kws)
+        fmin_kws.update(kws)
+        def penalty(params):
+            "local penalty function -- eval sum-squares residual"
+            r = self.__residual(params)
+            if isinstance(r, ndarray):
+                r = (r*r).sum()
+            return r
+
+        ret = scipy_minimize(penalty, self.vars, **fmin_kws)
+        xout = ret.x
+        self.message = ret.message
+        self.nfev = ret.nfev
 
 
     def leastsq(self, scale_covar=True, **kws):
@@ -263,7 +352,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
-                     gtol=1.e-7, maxfev=1000*(self.nvarys+1), Dfun=None)
+                     gtol=1.e-7, maxfev=2000*(self.nvarys+1), Dfun=None)
 
         lskws.update(self.kws)
         lskws.update(kws)
@@ -314,10 +403,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             cov = None
 
         for par in self.params.values():
-            par.stderr = 0
-            par.correl = None
-            if hasattr(par, 'ast'):
-                delattr(par, 'ast')
+            par.stderr, par.correl = 0, None
 
         self.covar = cov
         if cov is None:
@@ -326,7 +412,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         else:
             self.errorbars = True
             if self.scale_covar:
-                 cov = cov * sum_sqr / self.nfree
+                 self.covar = cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(cov[ivar, ivar])
@@ -336,10 +422,32 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         par.correl[varn2] = (cov[ivar, jvar]/
                                         (par.stderr * sqrt(cov[jvar, jvar])))
 
+
+        # set uncertainties on constrained parameters.
+        # Note that this requires a modified version of the
+        # uncertainties package
+        def par_eval(vals, par=None):
+            if par is None: return 0
+            for v, nam in zip(vals, self.var_map):
+                self.asteval.symtable[nam] = v
+            return self.asteval.run(par.ast)
+
+        if HAS_UNCERT:
+            uvars = uncertainties.correlated_values(_best, self.covar)
+            ueval = uncertainties.wrap(par_eval)
+            for pname, par in self.params.items():
+                if hasattr(par, 'ast'):
+                    out = ueval(uvars, par=par)
+                    print 'OUT ', out
+                    par.stderr = out.std_dev()
+
+        for par in self.params.values():
+            if hasattr(par, 'ast'):
+                delattr(par, 'ast')
         return self.success
 
-def minimize(fcn, params, engine='leastsq', args=None, kws=None,
-             scale_covar=True,
+def minimize(fcn, params, method='leastsq', args=None, kws=None,
+             scale_covar=True, engine=None, 
              iter_cb=None, **fit_kws):
     """simple minimization function,
     finding the values for the params which give the
@@ -347,10 +455,41 @@ def minimize(fcn, params, engine='leastsq', args=None, kws=None,
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
-    if engine == 'anneal':
-        fitter.anneal()
-    elif engine == 'lbfgsb':
-        fitter.lbfgsb()
+
+
+    _methods = {'anneal': 'anneal',
+               'nelder': 'fmin',
+               'lbfgsb': 'lbfgsb',
+               'leastsq': 'leastsq'}
+    
+    _scalar_methods = {'nelder': 'Nelder-Mead',
+                       'powell': 'Powell',
+                       'cg': 'CG ',
+                       'bfgs': 'BFGS',
+                       'newton': 'Newton-CG',
+                       'anneal': 'Anneal',
+                       'lbfgs': 'L-BFGS-B',
+                       'l-bfgs': 'L-BFGS-B',
+                       'tnc': 'TNC',
+                       'cobyla': 'COBYLA',
+                       'slsqp': 'SLSQP'}
+
+    found = False
+    if engine is not None:
+        method = engine
+    meth = method.lower()
+    if HAS_SCALAR_MIN:
+        for name, method in _scalar_methods.items():
+            if meth.startswith(name):
+                found = True
+                fitter.scalar_minimize(method=method)
     else:
+        for name, method in _map.items():
+            if meth.startwith(name):
+                found = True
+                method = getattr(fitter, _methods[meth], 'leastsq')
+                method()
+    if not found:
         fitter.leastsq()
+
     return fitter

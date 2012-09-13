@@ -1,10 +1,10 @@
-from lmfit import Parameters, Minimizer
-from lmfit.utilfuncs import gauss, loren, pvoigt
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign, where
-from scipy.optimize import leastsq
 
-from testutils import report_errors
+from lmfit import Parameters, Minimizer
+from lmfit.utilfuncs import gauss, loren, pvoigt
+from lmfit.printfuncs import report_errors
+
 
 import sys
 
