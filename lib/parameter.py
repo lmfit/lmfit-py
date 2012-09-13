@@ -82,12 +82,12 @@ class Parameter(object):
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)
-        val = repr(self.value)
-        if self.vary and self.stderr is not None:
-            val = "value=%s +/- %.3g" % (repr(self.value), self.stderr)
-        elif not self.vary:
-            val = "value=%s (fixed)" % (repr(self.value))
-        s.append(val)
+        sval = repr(self.value)
+        if self.stderr is not None:
+            sval = "value=%s +/- %.3g" % (sval, self.stderr)
+        if not self.vary and self.expr is None:
+            sval = "value=%s (fixed)" % (sval)
+        s.append(sval)
         s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
         if self.expr is not None:
             s.append("expr='%s'" % (self.expr))

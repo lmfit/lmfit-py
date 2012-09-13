@@ -112,6 +112,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.asteval.symtable[name] = par.value
         self.updated[name] = True
 
+    def update_constraints(self):
+        """update all constrained parameters, checking that
+        dependencies are evaluated as needed."""
+        self.updated = dict([(name, False) for name in self.params])
+        for name in self.params:
+            self.__update_paramval(name)
+
     def __residual(self, fvars):
         """
         residual function used for least-squares fit.
@@ -127,10 +134,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             par.value = par.from_internal(val)
         self.nfev = self.nfev + 1
 
-        self.updated = dict([(name, False) for name in self.params])
-        for name in self.params:
-            self.__update_paramval(name)
-
+        self.update_constraints()
         out = self.userfcn(self.params, *self.userargs, **self.userkws)
         if hasattr(self.iter_cb, '__call__'):
             self.iter_cb(self.params, self.nfev, out,
@@ -148,11 +152,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.params[varname].from_internal(val)
 
         self.nfev = self.nfev + 1
-
-        self.updated = dict([(name, False) for name in self.params])
-        for name in self.params:
-            self.__update_paramval(name)
-
+        self.update_constraints()
         # computing the jacobian
         return self.jacfcn(self.params, *self.userargs, **self.userkws)
 
@@ -213,11 +213,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # now evaluate make sure initial values
         # are used to set values of the defined expressions.
         # this also acts as a check of expression syntax.
-        self.updated = dict([(name, False) for name in self.params])
-        for name in self.params:
-            self.__update_paramval(name)
+        self.update_constraints()
         self.__prepared = True
-
 
     def anneal(self, schedule='cauchy', **kws):
         """
@@ -406,19 +403,16 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             cov = None
 
         for par in self.params.values():
-            par.stderr = 0
-            par.correl = None
-            if hasattr(par, 'ast'):
-                delattr(par, 'ast')
+            par.stderr, par.correl = 0, None
 
-        # self.covar = cov
+        self.covar = cov
         if cov is None:
             self.errorbars = False
             self.message = '%s. Could not estimate error-bars'
         else:
             self.errorbars = True
             if self.scale_covar:
-                 self.cov = cov = cov * sum_sqr / self.nfree
+                 self.covar = cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(cov[ivar, ivar])
@@ -436,15 +430,20 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             if par is None: return 0
             for v, nam in zip(vals, self.var_map):
                 self.asteval.symtable[nam] = v
-            return self.asteval.eval(par.expr)
+            return self.asteval.run(par.ast)
 
         if HAS_UNCERT:
             uvars = uncertainties.correlated_values(_best, self.covar)
-            u_eval = uncertainties.wrap(par_eval)
+            ueval = uncertainties.wrap(par_eval)
             for pname, par in self.params.items():
-                if par.expr is not None:
-                    out = u_eval(uvars, par=par)
+                if hasattr(par, 'ast'):
+                    out = ueval(uvars, par=par)
+                    print 'OUT ', out
                     par.stderr = out.std_dev()
+
+        for par in self.params.values():
+            if hasattr(par, 'ast'):
+                delattr(par, 'ast')
         return self.success
 
 def minimize(fcn, params, engine='leastsq', args=None, kws=None,

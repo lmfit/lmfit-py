@@ -16,6 +16,8 @@ def report_errors(params, modelpars=None, show_correl=True):
 
     for name in parnames:
         par = params[name]
+        # print( 'PAR : ', par, par.value, par.stderr, par.expr)
+        
         space = ' '*(namelen+2 - len(name))
         nout = " %s: %s" % (name, space)
         initval = 'inital = ?'
@@ -30,7 +32,7 @@ def report_errors(params, modelpars=None, show_correl=True):
                                                 abs(par.stderr/par.value)*100)
 
         if par.vary:
-            print(" %s %s %s" % (nout, sval, initval)
+            print(" %s %s %s" % (nout, sval, initval))
         elif par.expr is not None:
             print(" %s %s == '%s'" % (nout, sval, par.expr))
         else:
