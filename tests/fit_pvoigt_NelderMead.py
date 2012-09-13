@@ -71,7 +71,7 @@ pfit = [Parameter(name='amp_g', value=10),
 
 sigma = 0.021  # estimate of data error (for all data points)
 
-myfit = Minimizer(residual, pfit, iter_cb=per_iteration,
+myfit = Minimizer(residual, pfit, # iter_cb=per_iteration,
                   fcn_args=(x,), fcn_kws={'sigma':sigma, 'data':data},
                   scale_covar=True)
 
