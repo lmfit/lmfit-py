@@ -35,7 +35,7 @@ try:
     HAS_UNCERT = True
 except ImportError:
     pass
-    
+
 
 from .asteval import Interpreter
 from .astutils import NameFinder
@@ -219,38 +219,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.__prepared = True
 
 
-    def __set_constrained_uncertainties(self):
-        """set uncertainties on constrained parameters.
-
-        Note that this requires a modified version of the
-        uncertainties package
-        """
-        if not HAS_UNCERT:
-            return
-
-        vals = []
-        for name in self.var_map:
-            for pname, par in self.params.items():
-                if name == pname:
-                    vals.append(par.value)
-
-        uvars = uncertainties.correlated_values(vals, self.covar)
-        def par_eval(vals, par=None):
-            for v, nam in zip(vals, self.var_map):
-                self.asteval.symtable[nam] = v
-            return self.asteval.run(self.asteval.parse(par.expr))
-
-        ucalc = uncertainties.wrap(par_eval)
-        # print 'Derived Uncertainties: ', 
-        for pname, par in self.params.items():
-            print pname , par, par.expr
-            if par.expr is not None:
-                out = ucalc(uvars, par=par)
-                par.stderr = out.std_dev()
-                print 'StdErr: ', par.stderr
-                
-
-        
     def anneal(self, schedule='cauchy', **kws):
         """
         use simulated annealing
@@ -346,11 +314,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         Note that bounds and constraints can be set on Parameters
         for any of these methods, so are not supported separately
         for those designed to use bounds.
-        
+
         """
         if not HAS_SCALAR_MIN :
             raise NotImplementedError
-        
+
         self.prepare_fit()
 
         fmin_kws = dict(method=method, hess=hess, tol=tol)
@@ -450,7 +418,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         else:
             self.errorbars = True
             if self.scale_covar:
-                 cov = cov * sum_sqr / self.nfree
+                 self.cov = cov = cov * sum_sqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(cov[ivar, ivar])
@@ -460,9 +428,23 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         par.correl[varn2] = (cov[ivar, jvar]/
                                         (par.stderr * sqrt(cov[jvar, jvar])))
 
-        self.covar = cov
 
-        self.__set_constrained_uncertainties()
+        # set uncertainties on constrained parameters.
+        # Note that this requires a modified version of the
+        # uncertainties package
+        def par_eval(vals, par=None):
+            if par is None: return 0
+            for v, nam in zip(vals, self.var_map):
+                self.asteval.symtable[nam] = v
+            return self.asteval.eval(par.expr)
+
+        if HAS_UNCERT:
+            uvars = uncertainties.correlated_values(_best, self.covar)
+            u_eval = uncertainties.wrap(par_eval)
+            for pname, par in self.params.items():
+                if par.expr is not None:
+                    out = u_eval(uvars, par=par)
+                    par.stderr = out.std_dev()
         return self.success
 
 def minimize(fcn, params, engine='leastsq', args=None, kws=None,
