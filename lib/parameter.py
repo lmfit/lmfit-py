@@ -76,6 +76,8 @@ class Parameter(object):
         self.expr = expr
         self.stderr = None
         self.correl = None
+        if self.max is not None and value > self.max: self.value = self.max
+        if self.min is not None and value < self.min: self.value = self.min
         self.from_internal = lambda val: val
 
     def __repr__(self):
