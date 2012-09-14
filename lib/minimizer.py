@@ -432,13 +432,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                 self.asteval.symtable[nam] = v
             return self.asteval.run(par.ast)
 
-        if HAS_UNCERT:
+        if HAS_UNCERT and self.covar is not None:
             uvars = uncertainties.correlated_values(_best, self.covar)
             ueval = uncertainties.wrap(par_eval)
             for pname, par in self.params.items():
                 if hasattr(par, 'ast'):
                     out = ueval(uvars, par=par)
-                    print 'OUT ', out
                     par.stderr = out.std_dev()
 
         for par in self.params.values():
@@ -447,7 +446,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         return self.success
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
-             scale_covar=True, engine=None, 
+             scale_covar=True, engine=None,
              iter_cb=None, **fit_kws):
     """simple minimization function,
     finding the values for the params which give the
@@ -461,7 +460,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
                'nelder': 'fmin',
                'lbfgsb': 'lbfgsb',
                'leastsq': 'leastsq'}
-    
+
     _scalar_methods = {'nelder': 'Nelder-Mead',
                        'powell': 'Powell',
                        'cg': 'CG ',
