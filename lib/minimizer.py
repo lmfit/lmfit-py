@@ -288,10 +288,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfev =  funccalls
 
 
-    def scalar_minimize(self, method='Nelder-Mead', hess=None,
-                        tol=None, **kws):
-        """
-        use one of the scaler minimization methods from scipy.
+    def scalar_minimize(self, method='Nelder-Mead', hess=None, tol=None, **kws):
+        """use one of the scaler minimization methods from scipy.
         Available methods include:
           Nelder-Mead
           Powell
@@ -318,8 +316,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.prepare_fit()
 
-        fmin_kws = dict(method=method, hess=hess, tol=tol)
+        maxfev = 1000*(self.nvarys + 1)
+        opts = {'maxiter': maxfev}
+        if method not in ('L-BFGS-B','TNC'):
+            opts['maxfev'] = maxfev
 
+        fmin_kws = dict(method=method, tol=tol, hess=hess, options=opts)
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
         def penalty(params):
@@ -389,9 +391,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # need to map _best values to params, then calculate the
         # grad for the variable parameters
         grad = ones_like(_best)
+        vbest = ones_like(_best)
         for ivar, varname in enumerate(self.var_map):
             par = self.params[varname]
             grad[ivar] = par.scale_gradient(_best[ivar])
+            vbest[ivar] = par.value
         # modified from JJ Helmus' leastsqbound.py
         infodict['fjac'] = transpose(transpose(infodict['fjac']) /
                                      take(grad, infodict['ipvt'] - 1))
@@ -430,15 +434,19 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             if par is None: return 0
             for v, nam in zip(vals, self.var_map):
                 self.asteval.symtable[nam] = v
-            return self.asteval.run(par.ast)
+            out = self.asteval.run(par.ast)
+            return out
 
         if HAS_UNCERT and self.covar is not None:
-            uvars = uncertainties.correlated_values(_best, self.covar)
+            uvars = uncertainties.correlated_values(vbest, self.covar)
             ueval = uncertainties.wrap(par_eval)
             for pname, par in self.params.items():
                 if hasattr(par, 'ast'):
-                    out = ueval(uvars, par=par)
-                    par.stderr = out.std_dev()
+                    try:
+                        out = ueval(uvars, par=par)
+                        par.stderr = out.std_dev()
+                    except:
+                        pass
 
         for par in self.params.values():
             if hasattr(par, 'ast'):
