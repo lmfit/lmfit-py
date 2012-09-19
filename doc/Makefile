@@ -16,20 +16,23 @@ PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 .PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex changes linkcheck doctest latexpdf
-.PHONY: all install
+.PHONY: all install pdf
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
 
-lmfit.pdf: latex
+pdf: latex
 	cd $(BUILDDIR)/latex && make all-pdf
-	cp -pr $(BUILDDIR)/latex/lmfit.pdf ./lmfit.pdf
+	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(BUILDDIR)/html/.
 
-all: html lmfit.pdf
+all: html pdf
 
 install: all
+	cd $(BUILDDIR)/latex && pdflatex lmfit.tex
+	cd $(BUILDDIR)/latex && makeindex -s python.ist lmfit.idx
+	cd $(BUILDDIR)/latex && pdflatex lmfit.tex
 	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(INSTALLDIR)/lmfit.pdf
 	cp -pr $(BUILDDIR)/html/* $(INSTALLDIR)/.
 
