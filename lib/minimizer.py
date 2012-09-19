@@ -487,18 +487,13 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     found = False
     if engine is not None:
         method = engine
+
     meth = method.lower()
     if HAS_SCALAR_MIN:
         for name, method in _scalar_methods.items():
             if meth.startswith(name):
                 found = True
                 fitter.scalar_minimize(method=method)
-    else:
-        for name, method in _map.items():
-            if meth.startwith(name):
-                found = True
-                method = getattr(fitter, _methods[meth], 'leastsq')
-                method()
     if not found:
         fitter.leastsq()
 
