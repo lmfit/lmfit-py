@@ -74,6 +74,7 @@ class Parameter(object):
         self.max = max
         self.vary = vary
         self.expr = expr
+        self.deps   = None
         self.stderr = None
         self.correl = None
         if self.max is not None and value > self.max: self.value = self.max
