@@ -2,6 +2,9 @@ from __future__ import print_function
 import sys
 import math
 
+from optparse import OptionParser
+
+
 try:
     import matplotlib
     matplotlib.use('WXAgg')
@@ -10,7 +13,7 @@ try:
 except ImportError:
     HASPYLAB = False
 
-from lmfit import Parameters, Minimizer
+from lmfit import Parameters, minimize
 from testutils import report_errors
 
 from NISTModels import Models, ReadNistData
@@ -23,41 +26,44 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
     print(' ======================================')
     print(' %s: ' % DataSet)
     print(' | Parameter Name |  Value Found   |  Certified Value | # Matching Digits |')
-    print( ' |----------------+----------------+------------------+-------------------|')
+    print(' |----------------+----------------+------------------+-------------------|')
 
-    val_dig_min = 1000
-    err_dig_min = 1000
+    val_dig_min = 200
+    err_dig_min = 200
     for i in range(NISTdata['nparams']):
         parname = 'b%i' % (i+1)
         par = params[parname]
         thisval = par.value
         certval = NISTdata['cert_values'][i]
-
+        vdig    = ndig(thisval, certval)
+        pname   = (parname + ' value ' + ' '*14)[:14]
+        print(' | %s | % -.7e | % -.7e   | %2i                |' % (pname, thisval, certval, vdig))
+        val_dig_min = min(val_dig_min, vdig)
+        
         thiserr = par.stderr
         certerr = NISTdata['cert_stderr'][i]
-        vdig   = ndig(thisval, certval)
-        edig   = ndig(thiserr, certerr)
-
-        pname = (parname + ' value ' + ' '*14)[:14]
-        ename = (parname + ' stderr' + ' '*14)[:14]
-        print(' | %s | % -.7e | % -.7e   | %2i                |' % (pname, thisval, certval, vdig))
-        print(' | %s | % -.7e | % -.7e   | %2i                |' % (ename, thiserr, certerr, edig))
-
-        val_dig_min = min(val_dig_min, vdig)
-        err_dig_min = min(err_dig_min, edig)
+        if thiserr is not None:
+            edig   = ndig(thiserr, certerr)
+            ename = (parname + ' stderr' + ' '*14)[:14]
+            print(' | %s | % -.7e | % -.7e   | %2i                |' % (ename, thiserr, certerr, edig))
+            err_dig_min = min(err_dig_min, edig)
 
     print(' |----------------+----------------+------------------+-------------------|')
     sumsq = NISTdata['sum_squares']
-    chi2 = myfit.chisqr
-    print(' | Sum of Squares | %.7e  | %.7e    |  %2i               |' % (chi2, sumsq,
-                                                                          ndig(chi2, sumsq)))
+    try:
+        chi2 = myfit.chisqr
+        print(' | Sum of Squares | %.7e  | %.7e    |  %2i               |' % (chi2, sumsq,
+                                                                              ndig(chi2, sumsq)))
+    except:
+        pass
     print(' |----------------+----------------+------------------+-------------------|')
-
-    print(' Worst agreement: %i digits for value, %i digits for error ' % (val_dig_min, err_dig_min))
-
+    if err_dig_min < 199:
+        print(' Worst agreement: %i digits for value, %i digits for error ' % (val_dig_min, err_dig_min))
+    else:
+        print(' Worst agreement: %i digits' % (val_dig_min))
     return val_dig_min
 
-def NIST_Test(DataSet, start='start2', plot=True):
+def NIST_Test(DataSet, method='leastsq', start='start2', plot=True):
 
     NISTdata = ReadNistData(DataSet)
     resid, npar, dimx = Models[DataSet]
@@ -73,11 +79,8 @@ def NIST_Test(DataSet, start='start2', plot=True):
         params.add(pname, value=pval1)
 
 
-    myfit = Minimizer(resid, params, fcn_args=(x,), fcn_kws={'y':y},
-                      scale_covar=True)
+    myfit = minimize(resid, params, method=method, args=(x,), kws={'y':y})
 
-    myfit.prepare_fit()
-    myfit.leastsq()
 
     digs = Compare_NIST_Results(DataSet, myfit, params, NISTdata)
 
@@ -89,56 +92,73 @@ def NIST_Test(DataSet, start='start2', plot=True):
 
     return digs > 2
 
-msg1 = """
------ NIST StRD Models -----
-Select one of the Models listed below:
-and a starting point of 'start1' or 'start2'
-"""
 
-msg2 = """
-That is, use
-    python fit_NIST.py Bennett5 start1
-or go through all models and starting points with:
-    python fit_NIST.py all
-"""
+modelnames = []
+ms = ''
+for d in sorted(Models.keys()):
+    ms = ms + ' %s ' % d
+    if len(ms) > 55:
+        modelnames.append(ms)
+        ms = '    '
+modelnames.append(ms)        
+modelnames = '\n'.join(modelnames)
 
-if __name__  == '__main__':
-    dset = 'Bennett5'
-    start = 'start2'
-    if len(sys.argv) < 2:
-        print(msg1)
-        out = ''
-        for d in sorted(Models.keys()):
-            out = out + ' %s ' % d
-            if len(out) > 55:
-                print( out)
-                out = ''
-        print(out)
-        print(msg2)
+usage = """
+ === Test Fit to NIST StRD Models ===
 
-        sys.exit()
+usage:
+------
+    python fit_NIST.py [options] Model Start
 
-    if len(sys.argv) > 1:
-        dset = sys.argv[1]
-    if len(sys.argv) > 2:
-        start = sys.argv[2]
-    if dset.lower() == 'all':
-        tpass = 0
-        tfail = 0
-        failures = []
-        dsets = sorted(Models.keys())
-        for dset in dsets:
-            for start in ('start1', 'start2'):
-                if NIST_Test(dset, start=start, plot=False):
-                    tpass += 1
-                else:
-                    tfail += 1
-                    failures.append("   %s (starting at '%s')" % (dset, start))
+where Start is either 'start1' or 'start2', for different
+starting values, and Model is one of
 
-        print('--------------------------------------')
-        print(' Final Results: %i pass, %i fail.' % (tpass, tfail))
-        print(' Tests Failed for:\n %s' % '\n '.join(failures))
-        print('--------------------------------------')
-    else:
-        NIST_Test(dset, start=start, plot=True)
+    %s
 
+if Model = 'all', all models and starting values will be run.
+
+options:
+--------
+  -m  name of fitting method.  One of:
+          leastsq, nelder, powell, lbfgsb, bfgs,
+          tnc, cobyla, slsqp, cg, newto-cg
+      leastsq (Levenberg-Marquardt) is the default
+""" % modelnames
+
+############################
+parser = OptionParser(usage=usage, prog="fit-NIST.py")
+
+parser.add_option("-m", "--method", dest="method", metavar='METH',
+                  default='leastsq', help="set method name, default = 'leastsq'")
+
+(opts, args) = parser.parse_args()
+dset = ''
+start = 'start1'
+if len(args) > 0:
+    dset = args[0]
+if len(args) > 1:
+    start = args[1]
+
+if dset.lower() == 'all':
+    tpass = 0
+    tfail = 0
+    failures = []
+    dsets = sorted(Models.keys())
+    for dset in dsets:
+        for start in ('start1', 'start2'):
+            if NIST_Test(dset, method=opts.method, start=start, plot=False):
+                tpass += 1
+            else:
+                tfail += 1
+                failures.append("   %s (starting at '%s')" % (dset, start))
+
+    print('--------------------------------------')
+    print(' Fit Method: %s ' %  opts.method)
+    print(' Final Results: %i pass, %i fail.' % (tpass, tfail))
+    print(' Tests Failed for:\n %s' % '\n '.join(failures))
+    print('--------------------------------------')
+elif dset not in Models:
+    print(usage)
+else:
+    NIST_Test(dset, method=opts.method, start=start, plot=True)
+        
