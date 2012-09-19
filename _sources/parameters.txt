@@ -4,14 +4,20 @@ Getting started with Non-Linear Least-Squares Fitting
 ===========================================================
 
 The lmfit package is designed to provide a simple way to build complex
-fitting models and apply them to real data.   This chapter describes how to
-set up and perform simple fits, but does assume some basic knowledge of
-Python, Numpy, and modeling data.
+fitting models and apply them to real data.  This chapter describes how to
+set up and perform simple fits.  Some basic knowledge of Python, Numpy, and
+modeling data are assumed.
 
-To model data in the least-squares sense, the most important step is
-writing a function that takes the values of the fitting variables and
-calculates a residual function (data-model) that is to be minimized in the
-least-squares sense
+To do a least-squares fit of a model to data, or for a host of other
+optimization problems, the main task is to write an *objective function*
+that takes the values of the fitting variables and calculates either a
+scalar value to be minimized or an array of values that is to be minimized
+in the least-squares sense.  For many data fitting processes, the
+least-squaers approach is used, and the the objective function should
+return an array of (data-model), perhaps scaled by some weighting factor
+such as the inverse of the uncertainty in the data.  For such a problem,
+the chi-square (:math:`\chi^2`) statistic is often defined as:
+
 
 .. math::
 
@@ -21,6 +27,7 @@ where :math:`y_i^{\rm meas}` is the set of measured data, :math:`y_i^{\rm
 model}({\bf{v}})` is the model calculation, :math:`{\bf{v}}` is the set of
 variables in the model to be optimized in the fit, and :math:`\epsilon_i`
 is the estimated uncertainty in the data.
+
 
 In a traditional non-linear fit, one writes a function that takes the
 variable values and calculates the residual :math:`y^{\rm meas}_i -
@@ -42,8 +49,9 @@ To perform the minimization with scipy, one would do::
     vars = [10.0, 0.2, 3.0, 0.007]
     out = leastsq(residual, vars, args=(x, data))
 
-Though in python, and fairly easy to use, this is not terribly different
-from how one would do the same fit in C or Fortran.
+Though it is wonderful to be able to use python for such optimization
+problems, and the scipy library is fairly easy to use, the approach here is
+not terribly different from how one would do the same fit in C or Fortran.
 
 
 .. _parameters-label:
@@ -52,9 +60,10 @@ Using :class:`Parameters` instead of Variables
 =============================================================
 
 As described above, there are several practical challenges in doing
-least-squares fit with the traditional implementation (Fortran,
-scipy.optimize.leastsq, and most other) in which a list of fitting
-variables to the function to be minimized.  These challenges include:
+least-squares fits and other optimizations with the traditional
+implementation (Fortran, scipy.optimize.leastsq, and most other) in which a
+list of fitting variables to the function to be minimized.  These
+challenges include:
 
   a) The user has to keep track of the order of the variables, and their
      meaning -- vars[2] is the frequency, and so on.
@@ -65,8 +74,9 @@ variables to the function to be minimized.  These challenges include:
      and greatly complicates modeling for people not intimately familiar
      with the code.
 
-  c) There is no way to put bounds on values for the variables, or enforce
-     mathematical relationships between the variables.
+  c) There is no simple, robust way to put bounds on values for the
+     variables, or enforce mathematical relationships between the
+     variables.
 
 The lmfit module is designed to void these shortcomings.
 
@@ -227,39 +237,8 @@ Simple Example
 ==================
 
 Putting it all together, a simple example of using a dictionary of
-:class:`Parameter` objects and :func:`minimize` might look like this::
+:class:`Parameter` objects and :func:`minimize` might look like this:
 
-    from lmfit import minimize, Parameters
-    import numpy as np
-
-    def residual(params, x, data=None):
-	"""
-	Define the residual
-	If data == None, return the model.
-	"""
-        amp = params['amp'].value
-        shift = params['phase_shift'].value
-	omega = params['omega'].value
-        decay = params['decay'].value
-
-	model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
-
-	if data == None:
-	    return model
-        return (data-model)
-
-    params = Parameters()
-    params.add('amp', value=10)
-    params.add('decay', value=0.007, vary=False)
-    params.add('phase_shift', value=0.2)
-    params.add('omega', value=3.0)
-
-    result = minimize(residual, params, args=(x, data))
-
-    print result.chisqr
-    print 'Best-Fit Values:'
-    for name, par in params.items():
-        print '  %s = %.4f +/- %.4f ' % (name, par.value, par.stderr)
-
+.. literalinclude:: ../tests/simple.py
 
 

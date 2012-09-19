@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '',
-        VERSION:     '0.6',
+        VERSION:     '0.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -96,13 +96,18 @@
   <div class="section" id="getting-started-with-non-linear-least-squares-fitting">
 <h1>Getting started with Non-Linear Least-Squares Fitting<a class="headerlink" href="#getting-started-with-non-linear-least-squares-fitting" title="Permalink to this headline">¶</a></h1>
 <p>The lmfit package is designed to provide a simple way to build complex
-fitting models and apply them to real data.   This chapter describes how to
-set up and perform simple fits, but does assume some basic knowledge of
-Python, Numpy, and modeling data.</p>
-<p>To model data in the least-squares sense, the most important step is
-writing a function that takes the values of the fitting variables and
-calculates a residual function (data-model) that is to be minimized in the
-least-squares sense</p>
+fitting models and apply them to real data.  This chapter describes how to
+set up and perform simple fits.  Some basic knowledge of Python, Numpy, and
+modeling data are assumed.</p>
+<p>To do a least-squares fit of a model to data, or for a host of other
+optimization problems, the main task is to write an <em>objective function</em>
+that takes the values of the fitting variables and calculates either a
+scalar value to be minimized or an array of values that is to be minimized
+in the least-squares sense.  For many data fitting processes, the
+least-squaers approach is used, and the the objective function should
+return an array of (data-model), perhaps scaled by some weighting factor
+such as the inverse of the uncertainty in the data.  For such a problem,
+the chi-square (<img class="math" src="_images/math/a61c1e51680e27d35d05bebed87d474972fc70bd.png" alt="\chi^2"/>) statistic is often defined as:</p>
 <div class="math">
 <p><img src="_images/math/0999ab8f1f536075a4ce7cab471c891041d7ac6c.png" alt="\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}"/></p>
 </div><p>where <img class="math" src="_images/math/46c77f95690c67f66ff8f15c8b7b287fc72ddb51.png" alt="y_i^{\rm meas}"/> is the set of measured data, <img class="math" src="_images/math/5701af25a70669f531ef4c956d9f8d6227175071.png" alt="y_i^{\rm
@@ -129,14 +134,16 @@ y_i^{\rm model}({\bf{v}})"/>, perhaps something like:</p>
 <span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Though in python, and fairly easy to use, this is not terribly different
-from how one would do the same fit in C or Fortran.</p>
+<p>Though it is wonderful to be able to use python for such optimization
+problems, and the scipy library is fairly easy to use, the approach here is
+not terribly different from how one would do the same fit in C or Fortran.</p>
 <div class="section" id="using-parameters-instead-of-variables">
 <span id="parameters-label"></span><h2>Using <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> instead of Variables<a class="headerlink" href="#using-parameters-instead-of-variables" title="Permalink to this headline">¶</a></h2>
 <p>As described above, there are several practical challenges in doing
-least-squares fit with the traditional implementation (Fortran,
-scipy.optimize.leastsq, and most other) in which a list of fitting
-variables to the function to be minimized.  These challenges include:</p>
+least-squares fits and other optimizations with the traditional
+implementation (Fortran, scipy.optimize.leastsq, and most other) in which a
+list of fitting variables to the function to be minimized.  These
+challenges include:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
 <li>The user has to keep track of the order of the variables, and their
@@ -146,8 +153,9 @@ the residual function has to be altered.  While reasonable for simple
 cases, this quickly becomes significant work for more complex models,
 and greatly complicates modeling for people not intimately familiar
 with the code.</li>
-<li>There is no way to put bounds on values for the variables, or enforce
-mathematical relationships between the variables.</li>
+<li>There is no simple, robust way to put bounds on values for the
+variables, or enforce mathematical relationships between the
+variables.</li>
 </ol>
 </div></blockquote>
 <p>The lmfit module is designed to void these shortcomings.</p>
@@ -315,37 +323,50 @@ looks table-like:</p>
 <h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
 <p>Putting it all together, a simple example of using a dictionary of
 <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects and <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> might look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">report_errors</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Define the residual</span>
-<span class="sd">    If data == None, return the model.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="c"># create data to be fitted</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">301</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="mf">5.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="mf">0.025</span><span class="p">)</span> <span class="o">+</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c"># define objective function: returns the array to be minimized</span>
+<span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; model decaying sine wave, subtract data&quot;&quot;&quot;</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-    <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;phase_shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
     <span class="n">omega</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;omega&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
     <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-
+    
     <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span> <span class="o">-</span> <span class="n">data</span>
 
-    <span class="k">if</span> <span class="n">data</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">model</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
-
+<span class="c"># create a set of Parameters</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;phase_shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span>   <span class="n">value</span><span class="o">=</span> <span class="mi">10</span><span class="p">,</span>  <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span> 
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">3.0</span><span class="p">)</span>
 
-<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
 
-<span class="k">print</span> <span class="n">result</span><span class="o">.</span><span class="n">chisqr</span>
-<span class="k">print</span> <span class="s">&#39;Best-Fit Values:&#39;</span>
-<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">par</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">print</span> <span class="s">&#39;  </span><span class="si">%s</span><span class="s"> = </span><span class="si">%.4f</span><span class="s"> +/- </span><span class="si">%.4f</span><span class="s"> &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">par</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+<span class="c"># do fit, here with leastsq model</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">fcn2min</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+
+<span class="c"># calculate final result</span>
+<span class="n">final</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">residual</span>
+
+<span class="c"># write error report</span>
+<span class="n">report_errors</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+<span class="c"># try to plot results</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pylab</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s">&#39;k+&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">final</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
 </pre></div>
 </div>
 </div>
