@@ -53,10 +53,10 @@ class MinimizerException(Exception):
 def check_ast_errors(error):
     """check for errors derived from asteval, raise MinimizerException"""
     if len(error) > 0:
-        msg = []
         for err in error:
-            msg = '\n'.join(err.get_error())
-        raise MinimizerException(msg)
+            msg = '%s: %s' % (err.get_error())
+            return msg
+    return None
 
 
 class Minimizer(object):
@@ -70,7 +70,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **kws):
         self.userfcn = userfcn
-        self.__set_params(params)
         self.userargs = fcn_args
         if self.userargs is None:
             self.userargs = []
@@ -89,6 +88,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
         self.__prepared = False
+        self.__set_params(params)
+        self.prepare_fit()
 
     def __update_paramval(self, name):
         """
@@ -102,13 +103,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # it may have been!
         if self.updated[name]:
             return
-
         par = self.params[name]
         if par.expr is not None:
             for dep in par.deps:
                 self.__update_paramval(dep)
             par.value = self.asteval.run(par.ast)
-            check_ast_errors(self.asteval.error)
+            out = check_ast_errors(self.asteval.error)
+            if out is not None:
+                self.asteval.raise_exception(msg=msg)
         self.asteval.symtable[name] = par.value
         self.updated[name] = True
 
@@ -171,6 +173,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.params = _params
         else:
             raise MinimizerException(self.err_nonparam)
+
 
     def prepare_fit(self, params=None):
         """prepare parameters for fit"""
@@ -428,25 +431,25 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
 
         # set uncertainties on constrained parameters.
-        # Note that this requires a modified version of the
-        # uncertainties package
-        def par_eval(vals, par=None):
-            if par is None: return 0
-            for v, nam in zip(vals, self.var_map):
-                self.asteval.symtable[nam] = v
-            out = self.asteval.run(par.ast)
-            return out
-
+        # Note that first we set all named params to
+        # have values that include uncertainties, then
+        # evaluate all constrained parameters, then set
+        # the values back to the nominal values.
         if HAS_UNCERT and self.covar is not None:
             uvars = uncertainties.correlated_values(vbest, self.covar)
-            ueval = uncertainties.wrap(par_eval)
+            for v, nam in zip(uvars, self.var_map):
+                self.asteval.symtable[nam] = v
+
             for pname, par in self.params.items():
                 if hasattr(par, 'ast'):
                     try:
-                        out = ueval(uvars, par=par)
+                        out = self.asteval.run(par.ast)
                         par.stderr = out.std_dev()
                     except:
                         pass
+
+            for v, nam in zip(uvars, self.var_map):
+                self.asteval.symtable[nam] = v.nominal_value
 
         for par in self.params.values():
             if hasattr(par, 'ast'):
