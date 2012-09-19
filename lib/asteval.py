@@ -25,7 +25,12 @@ try:
 except ImportError:
     print("Warning: numpy not available... functionality will be limited.")
 
-__version__ = '0.3'
+__version__ = '0.3.1'
+
+# holder for 'returned None' from Larch procedure
+class Empty:
+    def __nonzero__(self): return False
+ReturnedNone = Empty()
 
 class Interpreter:
     """mathematical expression compiler and interpreter.
@@ -73,6 +78,7 @@ class Interpreter:
         self.error      = []
         self.expr       = None
         self.retval     = None
+        self.errmsg =  None
         self.lineno    = 0
         global HAS_NUMPY
         if not use_numpy:
@@ -109,12 +115,15 @@ class Interpreter:
             self.error = []
         if expr  is None:
             expr  = self.expr
+
         if len(self.error) > 0 and not isinstance(node, ast.Module):
             msg = '%s' % msg
-        err = ExceptionHolder(node, exc=exc, msg=msg, expr=expr, lineno=lineno)
+        if self.errmsg is None:
+            self.errmsg = msg
+        err = ExceptionHolder(node, exc=exc, msg=self.errmsg, expr=expr, lineno=lineno)
         self._interrupt = ast.Break()
         self.error.append(err)
-        raise RuntimeError
+        raise RuntimeError(err.msg)
 
     # main entry point for Ast node evaluation
     #  parse:  text of statements -> ast
@@ -133,6 +142,8 @@ class Interpreter:
         """executes parsed Ast representation for an expression"""
         # Note: keep the 'node is None' test: internal code here may run
         #    run(None) and expect a None in return.
+        if len(self.error)>0:
+            return
         if node is None:
             return None
         if isinstance(node, str):
@@ -167,6 +178,7 @@ class Interpreter:
     def eval(self, expr, lineno=0, show_errors=True):
         """evaluates a single statement"""
         self.lineno = lineno
+        self.errmsg =  None
         self.error = []
         try:
             node = self.parse(expr)
@@ -204,8 +216,9 @@ class Interpreter:
         return self.run(node.value)  # ('value',)
 
     def on_return(self, node): # ('value',)
-        "return statement"
+        "return statement: look for None, return special sentinal"
         self.retval = self.run(node.value)
+        if ret is None: ret = ReturnedNone
         return
 
     def on_repr(self, node):
@@ -719,6 +732,7 @@ class Procedure(object):
                 break
             if self.interpreter.retval is not None:
                 retval = self.interpreter.retval
+                if retval is ReturnedNone: retval = None
                 break
 
         self.interpreter.symtable = save_symtable
