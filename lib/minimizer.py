@@ -321,7 +321,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         maxfev = 1000*(self.nvarys + 1)
         opts = {'maxiter': maxfev}
-        if method not in ('L-BFGS-B','TNC'):
+        if method not in ('L-BFGS-B','TNC', 'SLSQP'):
             opts['maxfev'] = maxfev
 
         fmin_kws = dict(method=method, tol=tol, hess=hess, options=opts)
