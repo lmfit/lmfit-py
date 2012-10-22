@@ -32,8 +32,8 @@ is the estimated uncertainty in the data.
 In a traditional non-linear fit, one writes an objective function that takes the
 variable values and calculates the residual :math:`y^{\rm meas}_i -
 y_i^{\rm model}({\bf{v}})`, or the residual scaled by the data
-uncertainties, :math:`(y^{\rm meas}_i - y_i^{\rm
-model}({\bf{v}}))/{\epsilon_i}`, or some other weighting factor.  As a
+uncertainties, :math:`[y^{\rm meas}_i - y_i^{\rm
+model}({\bf{v}})]/{\epsilon_i}`, or some other weighting factor.  As a
 simple example, one might write an objective function like this::
 
     def residual(vars, x, data, eps_data):
