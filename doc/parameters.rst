@@ -13,7 +13,7 @@ optimization problems, the main task is to write an *objective function*
 that takes the values of the fitting variables and calculates either a
 scalar value to be minimized or an array of values that is to be minimized
 in the least-squares sense.  For many data fitting processes, the
-least-squaers approach is used, and the the objective function should
+least-squares approach is used, and the the objective function should
 return an array of (data-model), perhaps scaled by some weighting factor
 such as the inverse of the uncertainty in the data.  For such a problem,
 the chi-square (:math:`\chi^2`) statistic is often defined as:
@@ -29,11 +29,14 @@ variables in the model to be optimized in the fit, and :math:`\epsilon_i`
 is the estimated uncertainty in the data.
 
 
-In a traditional non-linear fit, one writes a function that takes the
+In a traditional non-linear fit, one writes an objective function that takes the
 variable values and calculates the residual :math:`y^{\rm meas}_i -
-y_i^{\rm model}({\bf{v}})`, perhaps something like::
+y_i^{\rm model}({\bf{v}})`, or the residual scaled by the data
+uncertainties, :math:`(y^{\rm meas}_i - y_i^{\rm
+model}({\bf{v}}))/{\epsilon_i}`, or some other weighting factor.  As a
+simple example, one might write an objective function like this::
 
-    def residual(vars, x, data):
+    def residual(vars, x, data, eps_data):
         amp = vars[0]
         phaseshift = vars[1]
 	freq = vars[2]
@@ -41,17 +44,18 @@ y_i^{\rm model}({\bf{v}})`, perhaps something like::
 
 	model = amp * sin(x * freq  + phaseshift) * exp(-x*x*decay)
 
-        return (data-model)
+        return (data-model)/eps_data
 
 To perform the minimization with scipy, one would do::
 
     from scipy.optimize import leastsq
     vars = [10.0, 0.2, 3.0, 0.007]
-    out = leastsq(residual, vars, args=(x, data))
+    out = leastsq(residual, vars, args=(x, data, eps_data))
 
 Though it is wonderful to be able to use python for such optimization
-problems, and the scipy library is fairly easy to use, the approach here is
-not terribly different from how one would do the same fit in C or Fortran.
+problems, and the scipy library is robust and easy to use, the approach
+here is not terribly different from how one would do the same fit in C or
+Fortran.
 
 
 .. _parameters-label:
@@ -89,7 +93,7 @@ the above example would be translated to look like::
 
     from lmfit import minimize, Parameters
 
-    def residual(params, x, data):
+    def residual(params, x, data, eps_data):
         amp = params['amp'].value
         pshift = params['phase'].value
 	freq = params['frequency'].value
@@ -97,7 +101,7 @@ the above example would be translated to look like::
 
 	model = amp * sin(x * freq  + pshift) * exp(-x*x*decay)
 
-        return (data-model)
+        return (data-model)/eps_data
 
     params = Parameters()
     params.add('amp', value=10)
@@ -105,7 +109,7 @@ the above example would be translated to look like::
     params.add('phase', value=0.2)
     params.add('frequency', value=3.0)
 
-    out = minimize(residual, params, args=(x, data))
+    out = minimize(residual, params, args=(x, data, eps_data))
 
 
 So far, this simply looks like it replaced a list of values with a

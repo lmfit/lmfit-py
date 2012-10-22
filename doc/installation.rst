@@ -14,9 +14,9 @@ are expected.
 
 .. _uncertainties: http://packages.python.org/uncertainties/
 
-If installed, the `uncertainties`_ package will be used for propogation of
+If installed, the `uncertainties`_ package will be used for propagation of
 uncertainties to constrained parameters.
- 
+
 
 Downloads
 ~~~~~~~~~~~~~
@@ -81,7 +81,7 @@ Acknowledgements
 
 LMFIT was originally written by Matthew Newville.  Substantial code and
 documentation improvements, especially for improved estimates of confidence
-intervals was provided by Till Stensitzki.  The implemenation of parameter
+intervals was provided by Till Stensitzki.  The implementation of parameter
 bounds as described in the MINUIT documentation is taken from Jonathan
 J. Helmus' leastsqbound code, with permission. Many valuable suggestions
 for improvements have come from Christoph Deil.  The code obviously depends
