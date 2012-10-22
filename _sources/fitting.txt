@@ -39,7 +39,7 @@ The minimize function takes a function to minimize, a dictionary of
             statistics, or to re-run fit.
 
    For backward compatibility, the keyword `engine` is retained as a synonym for `method`,
-   but this should be considered depracated.
+   but this should be considered deprecated.
 
    On output, the params will be updated with best-fit values and, where
    appropriate, estimated uncertainties and correlations.  See
@@ -85,7 +85,7 @@ Since the function will be passed in a dictionary of :class:`Parameters`, it is 
 to unpack these to get numerical values at the top of the function.  A simple example
 would look like::
 
-    def residual(pars, x, data=None):
+    def residual(pars, x, data=None, eps=None):
         # unpack parameters:
         #  extract .value attribute for each parameter
         amp = pars['amp'].value
@@ -103,7 +103,9 @@ would look like::
 
         if data is None:
             return model
-        return (model - data)
+	if eps is None
+            return (model - data)
+        return (model - data)/eps
 
 In this example, ``x`` is a positional (required) argument, while the ``data``
 array is actually optional (so that the function returns the model calculation
@@ -118,7 +120,6 @@ but might be wiser to put this directly in the function with::
 
         if abs(period) < 1.e-10:
             period = sign(period)*1.e-10
-
 
 
 ..  _fit-engines-label:
@@ -174,17 +175,15 @@ To select which of these algorithms to use, use the ``method`` keyword to the
  +-----------------------+--------------------+---------------------+-------------------------+
 
 
-
 .. note::
 
    Use of :meth:`scipy.optimize.minimize` requires scipy 0.11 or higher.
 
 .. note::
 
-   The objective function for the Levenberg-Marquardt method **must** return an array,
-   with more elements than variables.  All other methods can return either a scalar value
-   or an array.
-
+   The objective function for the Levenberg-Marquardt method **must**
+   return an array, with more elements than variables.  All other methods
+   can return either a scalar value or an array.
 
 
 .. warning::
@@ -248,10 +247,10 @@ stored as attributes of the corresponding :class:`Parameter`.
 
 Note that the calculation of chi-square and reduced chi-square assume that the
 returned residual function is scaled properly to the uncertainties in the data.
-For these statistics to be meaningful, the person writing the function to 
+For these statistics to be meaningful, the person writing the function to
 be minimized must scale them properly.
 
-After a fit using using the :meth:`leastsq` method has completed succsessfully,
+After a fit using using the :meth:`leastsq` method has completed successfully,
 standard errors for the fitted variables and correlations between pairs of
 fitted variables are automatically calculated from the covariance matrix.
 The standard error (estimated :math:`1\sigma` error-bar) go into the
@@ -293,7 +292,7 @@ For full control of the fitting process, you'll want to create a
    :type  fcn_args: tuple
    :param fcn_kws:  dictionary to pass to the residual function as keyword arguments.
    :type  fcn_kws:  dict
-   :param iter_cb:  function to be called at each fit iteration 
+   :param iter_cb:  function to be called at each fit iteration
    :type  iter_cb:  callable or ``None``
    :param scale_covar:  flag for scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
    :type  scale_cover:  boolean, default ``True``
@@ -377,7 +376,7 @@ The Minimizer object has a few public methods:
 
 .. method:: scalar_minimize(method='Nelder-Mead', hess=None, tol=None, **kws)
 
-   perform fit with any of the scalar minimimization algorithms supported by
+   perform fit with any of the scalar minimization algorithms supported by
    `scipy.optimize.minimize <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html>`_.
 
     +-------------------------+-----------------+-----------------------------------------------------+

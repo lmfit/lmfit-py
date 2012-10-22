@@ -65,7 +65,7 @@ the transformation described above.  The challenging part (Thanks again to
 Jonathan J. Helmus!) here is to re-transform the covariance matrix so that
 the uncertainties can be estimated for bounded Parameters.  This is
 included by using the derivate :math:`dP_{\rm internal}/dP_{\rm bounded}`
-from the equations above to re-scale the jacobian matrix before
+from the equations above to re-scale the Jacobin matrix before
 constructing the covariance matrix from it.  Tests show that this
 re-scaling of the covariance matrix works quite well, and that
 uncertainties estimated for bounded are quite reasonable.  Of course, if
@@ -76,6 +76,6 @@ The `MINUIT`_ documentation recommends caution in using bounds.  Setting
 bounds can certainly increase the number of function evaluations (and so
 computation time), and in some cases may cause some instabilities, as the
 range of acceptable parameter values is not fully explored.  On the other
-hand, prelminary tests suggest that using ``max`` and ``min`` to set
+hand, preliminary tests suggest that using ``max`` and ``min`` to set
 clearly outlandish bounds does not greatly affect performance or results.
 

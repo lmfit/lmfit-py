@@ -133,7 +133,7 @@ statistics, or to re-run fit.</p>
 </tbody>
 </table>
 <p>For backward compatibility, the keyword <cite>engine</cite> is retained as a synonym for <cite>method</cite>,
-but this should be considered depracated.</p>
+but this should be considered deprecated.</p>
 <p>On output, the params will be updated with best-fit values and, where
 appropriate, estimated uncertainties and correlations.  See
 <a class="reference internal" href="#fit-results-label"><em>Goodness-of-Fit and estimated uncertainty and correlations</em></a> for further details.</p>
@@ -185,26 +185,27 @@ method, effectively doing a least-squares optimization of the return values.</p>
 <p>Since the function will be passed in a dictionary of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>, it is advisable
 to unpack these to get numerical values at the top of the function.  A simple example
 would look like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="c"># unpack parameters:</span>
-    <span class="c">#  extract .value attribute for each parameter</span>
-    <span class="n">amp</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-    <span class="n">period</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;period&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-    <span class="n">shift</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-    <span class="n">decay</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+<div class="highlight-python"><pre>def residual(pars, x, data=None, eps=None):
+    # unpack parameters:
+    #  extract .value attribute for each parameter
+    amp = pars['amp'].value
+    period = pars['period'].value
+    shift = pars['shift'].value
+    decay = pars['decay'].value
 
-    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
-        <span class="n">shift</span> <span class="o">=</span> <span class="n">shift</span> <span class="o">-</span> <span class="n">sign</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span>
+    if abs(shift) &gt; pi/2:
+        shift = shift - sign(shift)*pi
 
-    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">period</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1.e-10</span><span class="p">:</span>
-        <span class="n">period</span> <span class="o">=</span> <span class="n">sign</span><span class="p">(</span><span class="n">period</span><span class="p">)</span><span class="o">*</span><span class="mf">1.e-10</span>
+    if abs(period) &lt; 1.e-10:
+        period = sign(period)*1.e-10
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">shift</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="n">period</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    model = amp * sin(shift + x/period) * exp(-x*x*decay*decay)
 
-    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">model</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">model</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span>
-</pre></div>
+    if data is None:
+        return model
+    if eps is None
+        return (model - data)
+    return (model - data)/eps</pre>
 </div>
 <p>In this example, <tt class="docutils literal"><span class="pre">x</span></tt> is a positional (required) argument, while the <tt class="docutils literal"><span class="pre">data</span></tt>
 array is actually optional (so that the function returns the model calculation
@@ -312,9 +313,9 @@ Squares Programming</td>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The objective function for the Levenberg-Marquardt method <strong>must</strong> return an array,
-with more elements than variables.  All other methods can return either a scalar value
-or an array.</p>
+<p class="last">The objective function for the Levenberg-Marquardt method <strong>must</strong>
+return an array, with more elements than variables.  All other methods
+can return either a scalar value or an array.</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -393,7 +394,7 @@ Attribute</th>
 returned residual function is scaled properly to the uncertainties in the data.
 For these statistics to be meaningful, the person writing the function to
 be minimized must scale them properly.</p>
-<p>After a fit using using the <a class="reference internal" href="#leastsq" title="leastsq"><tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt></a> method has completed succsessfully,
+<p>After a fit using using the <a class="reference internal" href="#leastsq" title="leastsq"><tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt></a> method has completed successfully,
 standard errors for the fitted variables and correlations between pairs of
 fitted variables are automatically calculated from the covariance matrix.
 The standard error (estimated <img class="math" src="_images/math/070fe743455ad95e644411607dc18d8e72f1d23f.png" alt="1\sigma"/> error-bar) go into the
@@ -598,7 +599,7 @@ arg</th>
 <dl class="method">
 <dt id="scalar_minimize">
 <tt class="descname">scalar_minimize</tt><big>(</big><em>method='Nelder-Mead'</em>, <em>hess=None</em>, <em>tol=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#scalar_minimize" title="Permalink to this definition">¶</a></dt>
-<dd><p>perform fit with any of the scalar minimimization algorithms supported by
+<dd><p>perform fit with any of the scalar minimization algorithms supported by
 <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p>
 <blockquote>
 <div><table border="1" class="docutils">
@@ -685,7 +686,7 @@ function.  In that case, you might want to do something like:</p>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2pre.
     </div>
   </body>
 </html>
