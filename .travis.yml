@@ -1,0 +1,20 @@
+# Config file for automatic testing at travis-ci.org
+
+language: python
+
+python:
+  - 2.7
+
+install: 
+  # deactivate the virtualenv so that numpy and scipy are available
+  - deactivate 
+  - time sudo apt-get install -qq python-numpy python-scipy
+  - time pip -q install --use-mirrors uncertainties asteval
+script:
+  # Execute the unit tests
+  # For now running nosetests doesn't work.
+  - cd tests
+  - python test_covar.py
+  # Generate the docs
+  - cd ../doc
+  - make html
