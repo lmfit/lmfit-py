@@ -10,7 +10,7 @@ env:
 install:
   # Deactivate the virtualenv to get fast install of dependencies
   - deactivate
-  - time sudo apt-get install -qq $PYTHON-numpy $PYTHON-scipy $PYTHON-sphinx $PYTHON-nose $PYTHON-pip
+  - time sudo apt-get install -qq $PYTHON-numpy $PYTHON-scipy $PYTHON-matplotlib $PYTHON-sphinx $PYTHON-nose
   - time sudo pip -q install --use-mirrors uncertainties asteval
   - sudo python$PYSUF setup.py install
 script:
