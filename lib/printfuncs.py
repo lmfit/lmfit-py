@@ -17,7 +17,7 @@ def report_errors(params, modelpars=None, show_correl=True):
     for name in parnames:
         par = params[name]
         # print( 'PAR : ', par, par.value, par.stderr, par.expr)
-        
+
         space = ' '*(namelen+2 - len(name))
         nout = " %s: %s" % (name, space)
         initval = 'inital = ?'
@@ -28,8 +28,11 @@ def report_errors(params, modelpars=None, show_correl=True):
 
         sval = '% .6f' % par.value
         if par.stderr is not None:
-            sval = '% .6f +/- %.6f (%.2f%%)' % (par.value, par.stderr,
-                                                abs(par.stderr/par.value)*100)
+            sval = '% .6f +/- %.6f' % (par.value, par.stderr)
+            try:
+                sval = '%s (%.2f%%)' % (sval, abs(par.stderr/par.value)*100)
+            except ZeroDivisionError:
+                pass
 
         if par.vary:
             print(" %s %s %s" % (nout, sval, initval))
