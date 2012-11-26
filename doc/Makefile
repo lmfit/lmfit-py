@@ -21,19 +21,22 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
-	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+	@echo "html build finished: $(BUILDDIR)/html."
+
+epub:
+	$(SPHINXBUILD) -b epub $(ALLSPHINXOPTS) $(BUILDDIR)/epub
+	cp -pr $(BUILDDIR)/epub/*.epub $(BUILDDIR)/html/.
 
 pdf: latex
 	cd $(BUILDDIR)/latex && make all-pdf
 	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(BUILDDIR)/html/.
 
-all: html pdf
+all: html epub pdf
 
 install: all
 	cd $(BUILDDIR)/latex && pdflatex lmfit.tex
 	cd $(BUILDDIR)/latex && makeindex -s python.ist lmfit.idx
 	cd $(BUILDDIR)/latex && pdflatex lmfit.tex
-	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(INSTALLDIR)/lmfit.pdf
 	cp -pr $(BUILDDIR)/html/* $(INSTALLDIR)/.
 
 help:
