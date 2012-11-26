@@ -314,6 +314,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         for those designed to use bounds.
 
         """
+	# print 'RUN SCALAR MIN with method ', method
         if not HAS_SCALAR_MIN :
             raise NotImplementedError
 
@@ -346,7 +347,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         This assumes that ModelParameters have been stored,
         and a function to minimize has been properly set up.
 
-        This wraps scipy.optimize.leastsq, and keyward arguments are passed
+        This wraps scipy.optimize.leastsq, and keyword arguments are passed
         directly as options to scipy.optimize.leastsq
 
         When possible, this calculates the estimated uncertainties and
@@ -355,6 +356,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         writes outputs to many internal attributes, and
         returns True if fit was successful, False if not.
         """
+	# print 'RUNNING LEASTSQ'
         self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
                      gtol=1.e-7, maxfev=2000*(self.nvarys+1), Dfun=None)

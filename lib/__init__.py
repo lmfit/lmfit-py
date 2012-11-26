@@ -19,6 +19,6 @@ from .minimizer import minimize, Minimizer
 from .parameter import Parameter, Parameters
 from .confidence import conf_interval, conf_interval2d
 from .printfuncs import report_errors, report_ci
-__all__ = [minimize, Minimizer, Parameter, Parameters,
-           conf_interval, conf_interval2d,
-           report_errors, report_ci]
+__all__ = ['minimize', 'Minimizer', 'Parameter', 'Parameters',
+           'conf_interval', 'conf_interval2d',
+           'report_errors', 'report_ci']
