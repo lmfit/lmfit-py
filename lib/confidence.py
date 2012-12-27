@@ -35,36 +35,20 @@ def restore_vals(tmp_params, params):
         tmp_params[para_key]
 
 
-
-def p_trace_to_dict(p_tr, params):
-    """
-    p_tr has following form:
-        
-        ([[p1, p2,...],[p1, p2,...]],[res_prob1,res_prob2..])
-        
-    Returns a dict with p-names and prob as keys and lists as their values.
-    """
-    out = {}
-    for name in params.keys():
-        out[name] = np.array([l.pop(0) for l in p_tr[0]])
-    out['prob'] = np.array(p_tr[1])
-    return out
-
-
 def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
     r"""Calculates the confidence interval for parameters
     from the given minimizer.
-    
+
     The parameter for which the ci is calculated will be varied, while
     the remaining parameters are re-optimized for minimizing chi-square.
-    The resulting chi-square is used  to calculate the probability with 
+    The resulting chi-square is used  to calculate the probability with
     a given statistic e.g. F-statistic. This function uses a 1d-rootfinder
     from scipy to find the values resulting in the searched confidence
-    region. 
+    region.
 
     Parameters
-    ----------          
+    ----------
     minimizer : Minimizer
         The minimizer to use, should be already fitted via leastsq.
     p_names : list, optional
@@ -73,7 +57,7 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     sigmas : list, optional
         The probabilities (1-alpha) to find. Default is 1,2 and 3-sigma.
     trace : bool, optional
-        Defaults to False, if true, each result of a probability calculation 
+        Defaults to False, if true, each result of a probability calculation
         is saved along with the parameter. This can be used to plot so
         called "profile traces".
 
@@ -81,16 +65,16 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     -------
     output : dict
         A dict, which contains a list of (sigma, vals)-tuples for each name.
-    trace_dict : dict 
+    trace_dict : dict
         Only if trace is set true. Is a dict, the key is the parameter which
         was fixed.The values are again a dict with the names as keys, but with
-        an additional key 'prob'. Each contains an array of the corresponding 
+        an additional key 'prob'. Each contains an array of the corresponding
         values.
-    
+
     See also
     --------
-    conf_interval2d     
-    
+    conf_interval2d
+
     Other Parameters
     ----------------
     maxiter : int
@@ -98,12 +82,12 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     prob_func : ``None`` or callable
         Function to calculate the probability from the optimized chi-square.
         Default (``None``) uses built-in f_compare (F test).
-    
-   
-    
+
+
+
     Examples
     --------
-    
+
     >>> from lmfit.printfuncs import *
     >>> mini=minimize(some_func, params)
     >>> mini.leastsq()
@@ -113,134 +97,176 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     >>> ci=conf_interval(mini)
     >>> report_ci(ci)
     ... #report
-    
+
     Now with quantiles for the sigmas and using the trace.
-    
+
     >>> ci, trace=conf_interval(mini, sigmas=(0.25,0.5,0.75,0.999),trace=True)
     >>> fixed=trace['para1']['para1']
     >>> free=trace['para1']['not_para1']
     >>> prob=trace['para1']['prob']
-    
+
     This makes it possible to plot the dependence between free and fixed.
     """
-
-    if p_names == None:
-        p_names = minimizer.params.keys()
-    fit_params = [minimizer.params[p] for p in p_names]
-    if prob_func is None or not hasattr(prob_func, '__call__'):
-        prob_func = f_compare
+    ci = ConfidenceInterval(minimizer, p_names, prob_func, sigmas, trace,
+                            verbose, maxiter)
+    output = ci.calc_all_ci()
     if trace:
-        trace_dict = {}
+        return output, ci.trace_dict
+    return output
 
-    #later sigma needs to be sorted
-    sigmas = list(sigmas)
-    sigmas.sort()
+def map_trace_to_names(trace, params):
+    out = {}
+    for name in trace.keys():
+        tmp_dict = {}
+        tmp = np.array(trace[name])
+        for para_name, values in zip(params.keys() + ['prob'], tmp.T):
+            tmp_dict[para_name] = values
+        out[name] = tmp_dict
+    return out
 
-    # copy the best fit values.
-    org = copy_vals(minimizer.params)
-    best_chi = minimizer.chisqr
 
-    output = {}
 
-    for para in fit_params:
+class ConfidenceInterval(object):
+    """
+    Class used to calculate the confidence interval.
+    """
+    def __init__(self, minimizer, p_names=None, prob_func=None,
+                 sigmas=(0.674, 0.95, 0.997), trace=False, verbose=True,
+                 maxiter=20):
+        """
+        Set starting conditions.
+        """
+        if p_names is None:
+            self.p_names = minimizer.params.keys()
+        self.fit_params = [minimizer.params[p] for p in self.p_names]
+        if prob_func is None or not hasattr(prob_func, '__call__'):
+            self.prob_func = f_compare
         if trace:
-            p_trace = ([], [])
-        if verbose:
+            self.trace_dict = {i:[] for i in self.p_names}
+
+
+        self.verbose = verbose
+        self.minimizer = minimizer
+        self.params = minimizer.params
+        self.trace = trace
+        self.maxiter = maxiter
+
+        self.sigmas = list(sigmas)
+        self.sigmas.sort()
+
+        # copy the best fit values.
+        self.org = copy_vals(minimizer.params)
+        self.best_chi = minimizer.chisqr
+
+
+    def calc_all_ci(self):
+        """
+        Calculates all cis.
+        """
+        out = {}
+        for p in self.p_names:
+            out[p] = self.calc_ci(p, -1)[::-1] + [(0., self.params[p].value)] \
+                     + self.calc_ci(p, 1)
+        if self.trace:
+            self.trace_dict = map_trace_to_names(self.trace_dict, self.minimizer.params)
+
+        return out
+
+    def calc_ci(self, para, direction):
+        """
+        Calculate the ci for a single parameter for a single direction.
+        """
+        if isinstance(para, str):
+            para = self.minimizer.params[para]
+
+        calc_prob = lambda val, prob: self.calc_prob(para, val, prob)
+        if self.trace:
+            x = [i.value for i in self.minimizer.params.values()]
+            self.trace_dict[para.name].append(x + [0])
+
+        para.vary = False
+        self.minimizer.prepare_fit(self.params)
+        limit = self.find_limit(para, direction)
+        start_val = para.value
+        a_limit = start_val
+        ret = []
+
+        for prob in self.sigmas:
+            try:
+                val = brentq(calc_prob, a_limit, limit, rtol=.5e-4, args=prob)
+            except ValueError:
+                self.reset_vals()
+                val = brentq(calc_prob, start_val, limit, rtol=.5e-4, args=prob)
+            a_limit = val
+            ret.append((prob, val))
+
+        para.vary = True
+        self.reset_vals()
+        return ret
+
+
+    def reset_vals(self):
+        restore_vals(self.org, self.minimizer.params)
+
+
+    def find_limit(self, para, direction):
+        """
+        For given para, search a value so that prob(val) > sigmas.
+        """
+        if self.verbose:
             print('Calculating CI for ' + para.name)
-        restore_vals(org, minimizer.params)
+        self.reset_vals()
         #starting step:
         if para.stderr > 0:
             step = para.stderr
         else:
-            step = max(para.value * 0.05, 0.01)
+            step = max(abs(para.value) * 0.05, 0.01)
         para.vary = False
         start_val = para.value
 
-        def calc_prob(val, offset=0., restore=False):
-            """Returns the probability for given Value."""
+        change = 1
+        old_prob = 0
+        i = 0
+        limit = start_val
+        # Find an upper limit,
+        # TODO: also use the change as an stopping condition.
+        while change > 0.001 and old_prob < max(self.sigmas):
+            i += 1
+            limit += step * direction
+            new_prob = self.calc_prob(para, limit)
+            change = new_prob - old_prob
+            old_prob = new_prob
+            if i > self.maxiter:
+                break
+        self.reset_vals()
+        return limit
 
-            if restore:
-                restore_vals(org, minimizer.params)
-            para.value = val
-            minimizer.prepare_fit(para)
-            minimizer.leastsq()
-            out = minimizer
-            prob = prob_func(out.ndata, out.ndata - out.nfree,
-                out.chisqr, best_chi)
 
-            if trace:
-                p_trace[0].append([i.value for i in
-                                   out.params.values()])
-                p_trace[1].append(prob)
+    def calc_prob(self, para, val, offset=0., restore=False):
+        """Returns the probability for given Value."""
+        if restore:
+            restore_vals(self.org, self.minimizer.params)
+        para.value = val
+        self.minimizer.prepare_fit(para)
+        self.minimizer.leastsq()
+        out = self.minimizer
+        prob = self.prob_func(out.ndata, out.ndata - out.nfree,
+            out.chisqr, self.best_chi)
 
-            return prob - offset
+        if self.trace:
+            x = [i.value for i in out.params.values()]
+            self.trace_dict[para.name].append(x + [prob])
+        return prob - offset
 
-        def search_limits(direction):
-            """
-            Searches for the limits. First it looks for a upper limit and
-            then finds the sigma-limits with help of scipy root finder.
-            """
-            change = 1
-            old_prob = 0
-            i = 0
-            limit = start_val
-            # Find an upper limit,
-            # TODO: also use the change as an stopping condition.
-            while change > 0.001 and old_prob < max(sigmas):
-                i += 1
-                limit += step * direction
-                new_prob = calc_prob(limit)
-                change = new_prob - old_prob
-                old_prob = new_prob
-                if i > maxiter:
-                    break
-
-            restore_vals(org, minimizer.params)
-
-            # use brentq to find sigmas.
-            ret = []
-            val_limit = start_val
-            for para in sigmas:
-                if para < old_prob:
-                    try:
-                        val = brentq(calc_prob, val_limit, limit, args=para,
-                            xtol=0.001)
-                    except ValueError:
-                        restore_vals(org, minimizer.params)
-                        val = brentq(calc_prob, start_val, limit, args=para,
-                            xtol=0.001)
-                        #we don't know which side of zero we are
-                    val_limit = val - 0.001 * direction
-                    ret.append((para, val))
-                else:
-                    ret.append((para, np.nan))
-            return ret
-
-        upper_err = search_limits(1)
-        restore_vals(org, minimizer.params)
-        lower_err = search_limits(-1)
-
-        if trace:
-            trace_dict[para.name] = p_trace_to_dict(p_trace,
-                minimizer.params)
-
-        para.vary = True
-        output[para.name] = list(lower_err[::-1]) + [(0, start_val)]\
-                            + list(upper_err)
-
-    restore_vals(org, minimizer.params)
-    if trace:
-        return (output, trace_dict)
-    return output
 
 
 def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
                     prob_func=None):
     r"""Calculates confidence regions for two fixed parameters.
-    
+
     The method is explained in *conf_interval*: here we are fixing
     two parameters.
-    
+
     Parameters
     ----------
     minimizer : minimizer
@@ -254,7 +280,7 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
     limits : tuple: optional
         Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
         given, the default is 5 std-errs in each direction.
-        
+
     Returns
     -------
     x : (nx)-array
@@ -263,20 +289,20 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
         y-coordinates
     grid : (nx,ny)-array
         grid contains the calculated probabilities.
-        
+
     Examples
     --------
-    
+
     >>> from lmfit.printfuncs import *
     >>> mini=minimize(some_func, params)
     >>> mini.leastsq()
     True
     >>> x,y,gr=conf_interval2d('para1','para2')
     >>> plt.contour(x,y,gr)
- 
+
     Other Parameters
     ----------------
-    prob_func : ``None`` or callable 
+    prob_func : ``None`` or callable
         Function to calculate the probability from the optimized chi-square.
         Default (``None``) uses built-in f_compare (F test).
     """
@@ -290,7 +316,7 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
     x = minimizer.params[x_name]
     y = minimizer.params[y_name]
 
-    if limits == None:
+    if limits is None:
         (x_upper, x_lower) = (x.value + 5 * x.stderr, x.value - 5
                                                       * x.stderr)
         (y_upper, y_lower) = (y.value + 5 * y.stderr, y.value - 5
@@ -326,5 +352,6 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
     restore_vals(org, minimizer.params)
     minimizer.chisqr = best_chi
     return out
+
 
 
