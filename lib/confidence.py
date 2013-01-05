@@ -142,8 +142,7 @@ class ConfidenceInterval(object):
         if prob_func is None or not hasattr(prob_func, '__call__'):
             self.prob_func = f_compare
         if trace:
-            self.trace_dict = {i:[] for i in self.p_names}
-
+            self.trace_dict = dict([(i, []) for i in self.p_names])
 
         self.verbose = verbose
         self.minimizer = minimizer
