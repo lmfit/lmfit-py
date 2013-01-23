@@ -174,6 +174,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         else:
             raise MinimizerException(self.err_nonparam)
 
+    def penalty(self, params):
+        "local penalty function -- eval sum-squares residual"
+        r = self.__residual(params)
+        if isinstance(r, ndarray):
+           r = (r*r).sum()
+        return r
 
     def prepare_fit(self, params=None):
         """prepare parameters for fit"""
@@ -234,14 +240,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         sakws.update(self.kws)
         sakws.update(kws)
 
-        def penalty(params):
-            "local penalty function -- anneal wants sum-squares residual"
-            r = self.__residual(params)
-            if isinstance(r, ndarray):
-                r = (r*r).sum()
-            return r
-
-        saout = scipy_anneal(penalty, self.vars, **sakws)
+        saout = scipy_anneal(self.penalty, self.vars, **sakws)
         self.sa_out = saout
         return
 
@@ -256,17 +255,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                       )
         lb_kws.update(self.kws)
         lb_kws.update(kws)
-        def penalty(params):
-            "local penalty function -- lbgfsb wants sum-squares residual"
-            r = self.__residual(params)
-            if isinstance(r, ndarray):
-                r = (r*r).sum()
-            return r
 
-        xout, fout, info = scipy_lbfgsb(penalty, self.vars, **lb_kws)
+        xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
 
         self.nfev =  info['funcalls']
         self.message = info['task']
+
 
 
     def fmin(self, **kws):
@@ -279,14 +273,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         maxfun = 5000 * (self.nvarys + 1))
 
         fmin_kws.update(kws)
-        def penalty(params):
-            "local penalty function -- eval sum-squares residual"
-            r = self.__residual(params)
-            if isinstance(r, ndarray):
-                r = (r*r).sum()
-            return r
-
-        ret = scipy_fmin(penalty, self.vars, **fmin_kws)
+        ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
         xout, fout, iter, funccalls, warnflag, allvecs = ret
         self.nfev =  funccalls
 
@@ -328,14 +315,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         fmin_kws = dict(method=method, tol=tol, hess=hess, options=opts)
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
-        def penalty(params):
-            "local penalty function -- eval sum-squares residual"
-            r = self.__residual(params)
-            if isinstance(r, ndarray):
-                r = (r*r).sum()
-            return r
 
-        ret = scipy_minimize(penalty, self.vars, **fmin_kws)
+        ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
         xout = ret.x
         self.message = ret.message
         self.nfev = ret.nfev
