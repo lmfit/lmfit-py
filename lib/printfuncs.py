@@ -16,8 +16,6 @@ def report_errors(params, modelpars=None, show_correl=True):
 
     for name in parnames:
         par = params[name]
-        # print( 'PAR : ', par, par.value, par.stderr, par.expr)
-
         space = ' '*(namelen+2 - len(name))
         nout = " %s: %s" % (name, space)
         initval = 'inital = ?'
@@ -26,7 +24,11 @@ def report_errors(params, modelpars=None, show_correl=True):
         if modelpars is not None and name in modelpars:
             initval = '%s, model_value =% .6f' % (initval, modelpars[name].value)
 
-        sval = '% .6f' % par.value
+        try:
+            sval = '% .6f' % par.value
+        except TypeError, ValueError:
+            sval = 'Non Numeric Value?'
+
         if par.stderr is not None:
             sval = '% .6f +/- %.6f' % (par.value, par.stderr)
             try:
@@ -63,16 +65,15 @@ def report_errors(params, modelpars=None, show_correl=True):
 
 def report_ci(ci):
     """Print a report for confidence intervals"""
-    max_name_length = max([len(i) for i in ci])
-    for count, name in enumerate(ci):
-        convp = lambda x: ("%.2f" % (x[0]*100))+'%'
-        conv = lambda x: "%.5f" % x[1]
-        row = ci[name]
-
-        #Print title once
-        if count == 0:
-            print("".join([''.rjust(max_name_length)]+[i.rjust(10)   for i in map(convp, row)]))
-        print("".join([name.rjust(max_name_length)]+[i.rjust(10) for i in map(conv,  row)]))
+    maxlen = max([len(i) for i in ci])
+    convp = lambda x: ("%.2f" % (x[0]*100))+'%'
+    conv = lambda x: "%.5f" % x[1]
+    title_shown = False
+    for name, row in ci.items():
+        if not title_shown:
+            print("".join([''.rjust(maxlen)]+[i.rjust(10)   for i in map(convp, row)]))
+            title_shown = True
+        print("".join([name.rjust(maxlen)]+[i.rjust(10) for i in map(conv,  row)]))
 
 
 
