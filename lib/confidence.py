@@ -34,7 +34,6 @@ def restore_vals(tmp_params, params):
         params[para_key].value, params[para_key].stderr =\
         tmp_params[para_key]
 
-
 def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
     r"""Calculates the confidence interval for parameters
@@ -131,7 +130,7 @@ class ConfidenceInterval(object):
     Class used to calculate the confidence interval.
     """
     def __init__(self, minimizer, p_names=None, prob_func=None,
-                 sigmas=(0.674, 0.95, 0.997), trace=False, verbose=True,
+                 sigmas=(0.674, 0.95, 0.997), trace=False, verbose=False,
                  maxiter=20):
         """
         Set starting conditions.
