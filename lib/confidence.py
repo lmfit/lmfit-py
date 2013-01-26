@@ -124,8 +124,6 @@ def map_trace_to_names(trace, params):
         out[name] = tmp_dict
     return out
 
-
-
 class ConfidenceInterval(object):
     """
     Class used to calculate the confidence interval.
@@ -307,6 +305,9 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
         Function to calculate the probability from the optimized chi-square.
         Default (``None``) uses built-in f_compare (F test).
     """
+
+    if not hasattr(minimizer, 'chisqr'):  # used to detect that .leastsq() has run!
+        minimizer.leastsq()
 
     best_chi = minimizer.chisqr
     org = copy_vals(minimizer.params)
