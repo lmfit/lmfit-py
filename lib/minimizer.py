@@ -175,7 +175,10 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             raise MinimizerException(self.err_nonparam)
 
     def penalty(self, params):
-        "local penalty function -- eval sum-squares residual"
+        """penalty function for scalar minimizers:
+        evaluates user-supplied objective function,
+        if result is an array, return array sum-of-squares.
+        """
         r = self.__residual(params)
         if isinstance(r, ndarray):
            r = (r*r).sum()
@@ -239,7 +242,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         sakws.update(self.kws)
         sakws.update(kws)
-
+        print("WARNING:  scipy anneal appears unusable!")
         saout = scipy_anneal(self.penalty, self.vars, **sakws)
         self.sa_out = saout
         return
@@ -257,11 +260,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         lb_kws.update(kws)
 
         xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
-
         self.nfev =  info['funcalls']
         self.message = info['task']
-
-
+        self.chisqr = (self.penalty(xout)**2).sum()
 
     def fmin(self, **kws):
         """
@@ -276,7 +277,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
         xout, fout, iter, funccalls, warnflag, allvecs = ret
         self.nfev =  funccalls
-
+        self.chisqr = (self.penalty(xout)**2).sum()
 
     def scalar_minimize(self, method='Nelder-Mead', hess=None, tol=None, **kws):
         """use one of the scaler minimization methods from scipy.
@@ -301,7 +302,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         for those designed to use bounds.
 
         """
-	# print 'RUN SCALAR MIN with method ', method
         if not HAS_SCALAR_MIN :
             raise NotImplementedError
 
@@ -320,7 +320,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         xout = ret.x
         self.message = ret.message
         self.nfev = ret.nfev
-
+        self.chisqr = (self.penalty(xout)**2).sum()
 
     def leastsq(self, scale_covar=True, **kws):
         """
@@ -440,8 +440,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         return self.success
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
-             scale_covar=True, engine=None,
-             iter_cb=None, **fit_kws):
+             scale_covar=True, engine=None, iter_cb=None, **fit_kws):
     """simple minimization function,
     finding the values for the params which give the
     minimal sum-of-squares of the array return by fcn
@@ -449,35 +448,37 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
 
-
-    _methods = {'anneal': 'anneal',
-               'nelder': 'fmin',
-               'lbfgsb': 'lbfgsb',
-               'leastsq': 'leastsq'}
-
-    _scalar_methods = {'nelder': 'Nelder-Mead',
-                       'powell': 'Powell',
-                       'cg': 'CG ',
-                       'bfgs': 'BFGS',
-                       'newton': 'Newton-CG',
-                       'anneal': 'Anneal',
-                       'lbfgs': 'L-BFGS-B',
-                       'l-bfgs': 'L-BFGS-B',
-                       'tnc': 'TNC',
-                       'cobyla': 'COBYLA',
+    _scalar_methods = {'nelder': 'Nelder-Mead',     'powell': 'Powell',
+                       'cg': 'CG ',                 'bfgs': 'BFGS',
+                       'newton': 'Newton-CG',       'anneal': 'Anneal',
+                       'lbfgs': 'L-BFGS-B',         'l-bfgs': 'L-BFGS-B',
+                       'tnc': 'TNC',                'cobyla': 'COBYLA',
                        'slsqp': 'SLSQP'}
 
-    found = False
+    _fitmethods = {'anneal': 'anneal',               'nelder': 'fmin',
+                   'lbfgsb': 'lbfgsb',               'leastsq': 'leastsq'}
+
     if engine is not None:
         method = engine
-
     meth = method.lower()
-    if HAS_SCALAR_MIN:
-        for name, method in _scalar_methods.items():
-            if meth.startswith(name):
-                found = True
-                fitter.scalar_minimize(method=method)
-    if not found:
-        fitter.leastsq()
 
+    fitfunction = None
+    kwargs = {}
+    # default and most common option: use leastsq method.
+    if meth == 'leastsq':
+        fitfunction = fitter.leastsq
+    else:
+        # if scalar_minimize() is supported and method is in list, use it.
+        if HAS_SCALAR_MIN:
+            for name, method in _scalar_methods.items():
+                if meth.startswith(name):
+                    fitfunction = fitter.scalar_minimize
+                    kwargs = dict(method=method)
+        # look for other built-in methods
+        if fitfunction is None:
+            for name, method in _fitmethods.items():
+                if meth.startswith(name):
+                    fitfunction = getattr(fitter, method)
+    if fitfunction is not None:
+        fitfunction(**kwargs)
     return fitter
