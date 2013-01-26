@@ -137,7 +137,7 @@ class ConfidenceInterval(object):
         if p_names is None:
             self.p_names = minimizer.params.keys()
 
-        if not hasattr(minimizer, 'chisqr'):  # used to detect that .leastsq() has run!
+        if not hasattr(minimizer, 'covar'):  # used to detect that .leastsq() has run!
             minimizer.leastsq()
 
         self.fit_params = [minimizer.params[p] for p in self.p_names]
@@ -306,7 +306,7 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
         Default (``None``) uses built-in f_compare (F test).
     """
 
-    if not hasattr(minimizer, 'chisqr'):  # used to detect that .leastsq() has run!
+    if not hasattr(minimizer, 'covar'):  # used to detect that .leastsq() has run!
         minimizer.leastsq()
 
     best_chi = minimizer.chisqr
