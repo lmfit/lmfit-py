@@ -99,7 +99,7 @@ and 2-sigma:
 
 .. ipython:: python
 
-    ci, trace = lmfit.conf_interval(mi,sigmas=[0.68,0.95],trace=True, verbose=0)
+    ci, trace = lmfit.conf_interval(mi,sigmas=[0.68,0.95],trace=True, verbose=False)
     lmfit.printfuncs.report_ci(ci)
 
 If you compare the calculated error estimates, you will see that the
