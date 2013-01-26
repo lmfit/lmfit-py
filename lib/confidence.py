@@ -81,7 +81,8 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     prob_func : ``None`` or callable
         Function to calculate the probability from the optimized chi-square.
         Default (``None``) uses built-in f_compare (F test).
-
+    verbose: bool
+        print extra debuggin information. Default is ``False``.
 
 
     Examples
@@ -133,10 +134,14 @@ class ConfidenceInterval(object):
                  sigmas=(0.674, 0.95, 0.997), trace=False, verbose=False,
                  maxiter=20):
         """
-        Set starting conditions.
+
         """
         if p_names is None:
             self.p_names = minimizer.params.keys()
+
+        if not hasattr(minimizer, 'chisqr'):  # used to detect that .leastsq() has run!
+            minimizer.leastsq()
+
         self.fit_params = [minimizer.params[p] for p in self.p_names]
         if prob_func is None or not hasattr(prob_func, '__call__'):
             self.prob_func = f_compare
@@ -155,7 +160,6 @@ class ConfidenceInterval(object):
         # copy the best fit values.
         self.org = copy_vals(minimizer.params)
         self.best_chi = minimizer.chisqr
-
 
     def calc_all_ci(self):
         """
@@ -238,7 +242,6 @@ class ConfidenceInterval(object):
                 break
         self.reset_vals()
         return limit
-
 
     def calc_prob(self, para, val, offset=0., restore=False):
         """Returns the probability for given Value."""
