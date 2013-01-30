@@ -7,6 +7,7 @@ Contains functions to calculate confidence intervals.
 import numpy as np
 from scipy.stats import f
 from scipy.optimize import brentq
+from .minimizer import MinimizerException
 
 def f_compare(Ndata, Nparas, new_chi, best_chi, Nfix=1.):
     """
@@ -136,11 +137,23 @@ class ConfidenceInterval(object):
         """
         if p_names is None:
             self.p_names = minimizer.params.keys()
+        else:
+            self.p_names = p_names
 
         if not hasattr(minimizer, 'covar'):  # used to detect that .leastsq() has run!
             minimizer.leastsq()
 
         self.fit_params = [minimizer.params[p] for p in self.p_names]
+
+        # check that there are at least 2 true variables!
+        nvars = 0
+        for p in self.p_names:
+            if minimizer.params[p].vary:
+                nvars  += 1
+        if nvars < 2:
+            raise MinimizerException(
+                'Cannot determine Confidence Intervals with < 2 variables!')
+
         if prob_func is None or not hasattr(prob_func, '__call__'):
             self.prob_func = f_compare
         if trace:
@@ -204,10 +217,8 @@ class ConfidenceInterval(object):
         self.reset_vals()
         return ret
 
-
     def reset_vals(self):
         restore_vals(self.org, self.minimizer.params)
-
 
     def find_limit(self, para, direction):
         """
