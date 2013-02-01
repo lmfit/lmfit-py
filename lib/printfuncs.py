@@ -26,7 +26,7 @@ def report_errors(params, modelpars=None, show_correl=True):
 
         try:
             sval = '% .6f' % par.value
-        except TypeError, ValueError:
+        except (TypeError, ValueError):
             sval = 'Non Numeric Value?'
 
         if par.stderr is not None:
