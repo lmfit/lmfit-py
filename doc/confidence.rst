@@ -58,7 +58,7 @@ We have to fit it, before we can generate the confidence intervals.
 
     mi=lmfit.minimize(residual, p)
     mi.leastsq()
-    lmfit.printfuncs.report_errors(mi.params)
+    lmfit.printfuncs.report_fit(mi.params)
 
 Now it just a simple function call to start the calculation:
 
@@ -92,7 +92,7 @@ Now lets fit it:
 
     mi=lmfit.minimize(residual, p)
     mi.leastsq()
-    lmfit.printfuncs.report_errors(mi.params, show_correl=False)
+    lmfit.printfuncs.report_fit(mi.params, show_correl=False)
 
 Again we call :func:`conf_interval`, this time with tracing and only for 1-
 and 2-sigma:
