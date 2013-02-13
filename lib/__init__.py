@@ -18,7 +18,8 @@ __version__ = '0.7'
 from .minimizer import minimize, Minimizer
 from .parameter import Parameter, Parameters
 from .confidence import conf_interval, conf_interval2d
-from .printfuncs import report_errors, report_ci
+from .printfuncs import fit_report, ci_report, report_fit, report_ci
 __all__ = ['minimize', 'Minimizer', 'Parameter', 'Parameters',
            'conf_interval', 'conf_interval2d',
-           'report_errors', 'report_ci']
+           'fit_report', 'ci_report',
+           'report_fit', 'report_ci']
