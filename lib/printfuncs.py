@@ -67,7 +67,7 @@ def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
             add("    %s fixed" % (nout))
 
     if show_correl:
-        add('[[Correlations]] (unreported correlations are < % .3f' % min_correl)
+        add('[[Correlations]] (unreported correlations are < % .3f)' % min_correl)
         correls = {}
         for i, name in enumerate(parnames):
             par = params[name]
