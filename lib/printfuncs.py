@@ -3,15 +3,28 @@
 Created on Fri Apr 20 19:24:21 2012
 
 @author: Tillsten
+
+Changes:
+  -  13-Feb-2013 M Newville
+     complemented  "report_errors" and "report_ci" with
+     "error_report" and "ci_report" (respectively) which
+     return the text of the report.  Thus report_errors()
+     is simply:
+        def report_errors(params, modelpars=None, show_correl=True):
+            print error_report(params, modelpars=modelpars,
+                               show_correl=show_correl)
+     and similar for report_ci() / ci_report()
+
 """
 
 from __future__ import print_function
 
-def report_errors(params, modelpars=None, show_correl=True):
-    """Print a report for fitted params"""
+
+def error_report(params, modelpars=None, show_correl=True):
+    """return text of a report for fitted params"""
     parnames = sorted(params)
-    #print('   -------------------------------------')
-    #print( '  Best Fit Values and Standard Errors:')
+    buff = []
+    add = buff.append
     namelen = max([len(n) for n in parnames])
 
     for name in parnames:
@@ -37,14 +50,14 @@ def report_errors(params, modelpars=None, show_correl=True):
                 pass
 
         if par.vary:
-            print(" %s %s %s" % (nout, sval, initval))
+            add(" %s %s %s" % (nout, sval, initval))
         elif par.expr is not None:
-            print(" %s %s == '%s'" % (nout, sval, par.expr))
+            add(" %s %s == '%s'" % (nout, sval, par.expr))
         else:
-            print(" %s fixed" % (nout))
+            add(" %s fixed" % (nout))
 
     if show_correl:
-        print( 'Correlations:')
+        add( 'Correlations:')
         correls = {}
         for i, name in enumerate(parnames):
             par = params[name]
@@ -59,24 +72,32 @@ def report_errors(params, modelpars=None, show_correl=True):
         sort_correl.reverse()
         for name, val in sort_correl:
             lspace = max(1, 25 - len(name))
-            print('    C(%s)%s = % .3f ' % (name, (' '*30)[:lspace], val))
-    #print('-------------------------------------')
+            add('    C(%s)%s = % .3f ' % (name, (' '*30)[:lspace], val))
+    return '\n'.join(buff)
 
+def report_errors(params, modelpars=None, show_correl=True):
+    """print a report for fitted params"""
+    print(error_report(params, modelpars=modelpars,
+                       show_correl=show_correl))
 
-def report_ci(ci):
-    """Print a report for confidence intervals"""
+def ci_report(ci):
+    """return text of a report for confidence intervals"""
     maxlen = max([len(i) for i in ci])
+    buff = []
+    add = buff.append
     convp = lambda x: ("%.2f" % (x[0]*100))+'%'
     conv = lambda x: "%.5f" % x[1]
     title_shown = False
     for name, row in ci.items():
         if not title_shown:
-            print("".join([''.rjust(maxlen)]+[i.rjust(10)   for i in map(convp, row)]))
+            add("".join([''.rjust(maxlen)]+[i.rjust(10)   for i in map(convp, row)]))
             title_shown = True
-        print("".join([name.rjust(maxlen)]+[i.rjust(10) for i in map(conv,  row)]))
+        add("".join([name.rjust(maxlen)]+[i.rjust(10) for i in map(conv,  row)]))
+    return '\n'.join(buff)
 
-
-
+def report_ci(ci):
+    """print a report for confidence intervals"""
+    print(ci_report(ci))
 
 
 
