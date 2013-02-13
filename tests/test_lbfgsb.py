@@ -1,4 +1,4 @@
-from lmfit import Parameters, minimize, report_errors
+from lmfit import Parameters, minimize, report_fit
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
@@ -52,7 +52,7 @@ for name, par in fit_params.items():
 
 #print out.chisqr, out.redchi, out.nfree
 #
-#report_errors(fit_params)
+#report_fit(fit_params)
 
 if HASPYLAB:
     pylab.plot(x, data, 'r--')

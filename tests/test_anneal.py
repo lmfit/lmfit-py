@@ -1,7 +1,6 @@
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
-from lmfit import Parameters, minimize, report_errors
-
+from lmfit import Parameters, minimize
 try:
     import pylab
     HASPYLAB = True

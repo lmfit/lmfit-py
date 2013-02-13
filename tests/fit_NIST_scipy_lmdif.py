@@ -16,7 +16,6 @@ import math
 import numpy as np
 
 from scipy.optimize import _minpack
-from lmdif import report_errors
 
 from NISTModels import Models, ReadNistData
 

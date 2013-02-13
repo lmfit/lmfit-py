@@ -4,7 +4,7 @@ from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
 from lmfit import Parameters, Parameter, Minimizer
 from lmfit.utilfuncs import gauss, loren, pvoigt
-from lmfit.printfuncs import report_errors
+from lmfit.printfuncs import report_fit
 
 try:
     import matplotlib
@@ -74,7 +74,7 @@ myfit.leastsq()
 print(' Nfev = ', myfit.nfev)
 print( myfit.chisqr, myfit.redchi, myfit.nfree)
 
-report_errors(myfit.params)
+report_fit(myfit.params)
 
 fit = residual(myfit.params, x)
 

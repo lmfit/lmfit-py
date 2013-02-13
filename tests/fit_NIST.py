@@ -13,7 +13,7 @@ try:
 except ImportError:
     HASPYLAB = False
 
-from lmfit import Parameters, minimize,  report_errors
+from lmfit import Parameters, minimize
 
 from NISTModels import Models, ReadNistData
 

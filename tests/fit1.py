@@ -1,4 +1,4 @@
-from lmfit import Parameters, minimize, report_errors
+from lmfit import Parameters, minimize, report_fit
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
@@ -49,7 +49,7 @@ print ' N fev = ', out.nfev
 print out.chisqr, out.redchi, out.nfree
 
 print '### Error Report:'
-report_errors(fit_params)
+report_fit(fit_params)
 
 
 if HASPYLAB:

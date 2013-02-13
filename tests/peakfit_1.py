@@ -7,7 +7,7 @@ except ImportError:
     HASPYLAB = False
 
 
-from lmfit import Parameters, Minimizer, report_errors
+from lmfit import Parameters, Minimizer, report_fit
 from lmfit.utilfuncs import gauss, loren
 
 def residual(pars, x, data=None):
@@ -61,7 +61,7 @@ myfit.leastsq()
 print ' N fev = ', myfit.nfev
 print myfit.chisqr, myfit.redchi, myfit.nfree
 
-report_errors(fit_params)
+report_fit(fit_params)
 
 fit = residual(fit_params, x)
 

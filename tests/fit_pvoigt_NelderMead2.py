@@ -1,7 +1,7 @@
 import sys
 from numpy import linspace, exp, random
 
-from lmfit import Parameters, minimize, report_errors
+from lmfit import Parameters, minimize
 from lmfit.utilfuncs import gauss, loren, pvoigt
 
 try:

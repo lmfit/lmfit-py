@@ -1,6 +1,6 @@
 import sys
 
-from lmfit import Parameters, Parameter, Minimizer, report_errors
+from lmfit import Parameters, Parameter, Minimizer, report_fit
 from lmfit.utilfuncs import gauss, loren, pvoigt
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
@@ -85,7 +85,7 @@ myfit.leastsq()
 print(' Nfev = ', myfit.nfev)
 print( myfit.chisqr, myfit.redchi, myfit.nfree)
 
-report_errors(myfit.params, modelpars=p_true)
+report_fit(myfit.params, modelpars=p_true)
 
 fit = residual(myfit.params, x)
 

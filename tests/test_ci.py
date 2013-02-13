@@ -5,7 +5,7 @@ Created on Sun Apr 15 19:47:45 2012
 @author: Tillsten
 """
 import numpy as np
-from lmfit import Parameters, minimize, conf_interval, report_errors, report_ci
+from lmfit import Parameters, minimize, conf_interval, report_fit, report_ci
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
@@ -57,7 +57,7 @@ fit = residual(fit_params, x)
 print( ' N fev = ', out.nfev)
 print( out.chisqr, out.redchi, out.nfree)
 
-report_errors(fit_params)
+report_fit(fit_params)
 #ci=calc_ci(out)
 ci, tr = conf_interval(out, trace=True)
 report_ci(ci)

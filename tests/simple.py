@@ -1,5 +1,5 @@
 
-from lmfit import minimize, Parameters, Parameter, report_errors
+from lmfit import minimize, Parameters, Parameter, report_fit
 import numpy as np
 
 # create data to be fitted
@@ -33,7 +33,7 @@ result = minimize(fcn2min, params, args=(x, data))
 final = data + result.residual
 
 # write error report
-report_errors(params)
+report_fit(params)
 
 # try to plot results
 try:

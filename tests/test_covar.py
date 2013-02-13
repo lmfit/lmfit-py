@@ -2,7 +2,7 @@ import sys
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
 
-from lmfit import Parameters, Minimizer, report_errors
+from lmfit import Parameters, Minimizer, report_fit
 from lmfit.utilfuncs import gauss, loren, pvoigt
 
 try:
@@ -78,7 +78,7 @@ for scale_covar in (True, False):
         print '  chisqr         = ', myfit.chisqr
         print '  reduced_chisqr = ', myfit.redchi
 
-        report_errors(p_fit, modelpars=p_true, show_correl=False)
+        report_fit(p_fit, modelpars=p_true, show_correl=False)
         print '  =============================='
 
 

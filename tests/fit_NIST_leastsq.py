@@ -11,7 +11,6 @@ except ImportError:
     HASPYLAB = False
 
 from scipy.optimize import leastsq, curve_fit
-from lmfit import report_errors
 
 from NISTModels import Models, ReadNistData
 
