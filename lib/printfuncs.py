@@ -20,13 +20,23 @@ Changes:
 from __future__ import print_function
 
 
-def error_report(params, modelpars=None, show_correl=True):
-    """return text of a report for fitted params"""
+def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
+    """return text of a report for fitted params best-fit values,
+    uncertainties and correlations
+
+    arguments
+    ----------
+       params       Parameters from fit
+       modelpars    Optional Known Model Parameters [None]
+       show_correl  whether to show list of sorted correlations [True]
+       min_correl   smallest correlation absolute value to show [0.1]
+
+    """
     parnames = sorted(params)
     buff = []
     add = buff.append
     namelen = max([len(n) for n in parnames])
-
+    add("[[Variables]]")
     for name in parnames:
         par = params[name]
         space = ' '*(namelen+2 - len(name))
@@ -50,14 +60,14 @@ def error_report(params, modelpars=None, show_correl=True):
                 pass
 
         if par.vary:
-            add(" %s %s %s" % (nout, sval, initval))
+            add("    %s %s %s" % (nout, sval, initval))
         elif par.expr is not None:
-            add(" %s %s == '%s'" % (nout, sval, par.expr))
+            add("    %s %s == '%s'" % (nout, sval, par.expr))
         else:
-            add(" %s fixed" % (nout))
+            add("    %s fixed" % (nout))
 
     if show_correl:
-        add( 'Correlations:')
+        add('[[Correlations]] (unreported correlations are < % .3f' % min_correl)
         correls = {}
         for i, name in enumerate(parnames):
             par = params[name]
@@ -71,14 +81,19 @@ def error_report(params, modelpars=None, show_correl=True):
         sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
         sort_correl.reverse()
         for name, val in sort_correl:
+            if abs(val) < min_correl:
+                break
             lspace = max(1, 25 - len(name))
             add('    C(%s)%s = % .3f ' % (name, (' '*30)[:lspace], val))
     return '\n'.join(buff)
 
-def report_errors(params, modelpars=None, show_correl=True):
-    """print a report for fitted params"""
-    print(error_report(params, modelpars=modelpars,
-                       show_correl=show_correl))
+def report_errors(params, **kws):
+    """print a report for fitted params:  see error_report()"""
+    print(fit_report(params, **kws))
+
+def report_fit(params, **kws):
+    """print a report for fitted params:  see error_report()"""
+    print(fit_report(params, **kws))
 
 def ci_report(ci):
     """return text of a report for confidence intervals"""
