@@ -13,8 +13,7 @@ try:
 except ImportError:
     HASPYLAB = False
 
-from lmfit import Parameters, minimize
-from testutils import report_errors
+from lmfit import Parameters, minimize,  report_errors
 
 from NISTModels import Models, ReadNistData
 
@@ -39,7 +38,7 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
         pname   = (parname + ' value ' + ' '*14)[:14]
         print(' | %s | % -.7e | % -.7e   | %2i                |' % (pname, thisval, certval, vdig))
         val_dig_min = min(val_dig_min, vdig)
-        
+
         thiserr = par.stderr
         certerr = NISTdata['cert_stderr'][i]
         if thiserr is not None:
@@ -100,7 +99,7 @@ for d in sorted(Models.keys()):
     if len(ms) > 55:
         modelnames.append(ms)
         ms = '    '
-modelnames.append(ms)        
+modelnames.append(ms)
 modelnames = '\n'.join(modelnames)
 
 usage = """
@@ -161,4 +160,4 @@ elif dset not in Models:
     print(usage)
 else:
     NIST_Test(dset, method=opts.method, start=start, plot=True)
-        
+

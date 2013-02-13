@@ -5,12 +5,10 @@ try:
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
-    
 
-from lmfit import Parameters, Minimizer
+
+from lmfit import Parameters, Minimizer, report_errors
 from lmfit.utilfuncs import gauss, loren
-
-from testutils import report_errors
 
 def residual(pars, x, data=None):
     g1 = gauss(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)

@@ -11,7 +11,7 @@ except ImportError:
     HASPYLAB = False
 
 from scipy.optimize import leastsq, curve_fit
-from testutils import report_errors
+from lmfit import report_errors
 
 from NISTModels import Models, ReadNistData
 
@@ -77,7 +77,7 @@ def NIST_Test(DataSet, start='start2', plot=True):
 
         #     myfit = Minimizer(resid, params, fcn_args=(x,), fcn_kws={'y':y},
         #                       scale_covar=True)
-        # 
+        #
     print 'lsout ', params
     lsout = leastsq(resid, params, args=(x, y), full_output=True)
 
@@ -120,7 +120,7 @@ if __name__  == '__main__':
                 out = ''
         print(out)
         print(msg2)
-       
+
         sys.exit()
 
     if len(sys.argv) > 1:

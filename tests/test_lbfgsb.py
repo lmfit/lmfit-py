@@ -1,4 +1,4 @@
-from lmfit import Parameters, minimize
+from lmfit import Parameters, minimize, report_errors
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
@@ -7,9 +7,6 @@ try:
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
-
-
-from testutils import report_errors
 
 p_true = Parameters()
 p_true.add('amp', value=14.0)
@@ -38,7 +35,7 @@ x     = linspace(xmin, xmax, n)
 data  = residual(p_true, x) + noise
 
 fit_params = Parameters()
-fit_params.add('amp', value=11.0, min=5, max=20) 
+fit_params.add('amp', value=11.0, min=5, max=20)
 fit_params.add('period', value=5., min=1., max=7)
 fit_params.add('shift', value=.10,  min=0.0, max=0.2)
 fit_params.add('decay', value=6.e-3, min=0, max=0.1)
@@ -52,7 +49,7 @@ fit = residual(fit_params, x)
 for name, par in fit_params.items():
     nout = "%s:%s" % (name, ' '*(20-len(name)))
     print "%s: %s (%s) " % (nout, par.value, p_true[name].value)
-    
+
 #print out.chisqr, out.redchi, out.nfree
 #
 #report_errors(fit_params)

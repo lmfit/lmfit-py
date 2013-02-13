@@ -1,10 +1,8 @@
 import sys
-
-from lmfit import Parameters, Parameter, Minimizer
+from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
+from lmfit import Parameters, Parameter, Minimizer, report_errors
 from lmfit.utilfuncs import gauss, loren, pvoigt
 
-from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
-from testutils import report_errors
 
 try:
     import matplotlib

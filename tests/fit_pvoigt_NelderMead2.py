@@ -1,10 +1,8 @@
 import sys
-
-from lmfit import Parameters, minimize
-from lmfit.utilfuncs import gauss, loren, pvoigt
-
 from numpy import linspace, exp, random
-from testutils import report_errors
+
+from lmfit import Parameters, minimize, report_errors
+from lmfit.utilfuncs import gauss, loren, pvoigt
 
 try:
     import matplotlib
@@ -67,7 +65,7 @@ pfit.add('wid_l', expr='wid_g')
 pfit.add('line_slope', value=0.0)
 pfit.add('line_off', value=0.0)
 
-sigma = 0.021  
+sigma = 0.021
 
 myfit = minimize(residual, pfit, method='nelder',
                  args=(x,), kws={'sigma':sigma, 'data':data})

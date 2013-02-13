@@ -1,15 +1,12 @@
-from lmfit import Parameters, minimize
-
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
+
+from lmfit import Parameters, minimize, report_errors
 
 try:
     import pylab
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
-
-
-from testutils import report_errors
 
 p_true = Parameters()
 p_true.add('amp', value=14.0)
