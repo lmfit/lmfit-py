@@ -15,7 +15,7 @@
             The University of Chicago
 """
 __version__ = '0.7.1'
-from .minimizer import minimize, Minimizer
+from .minimizer import minimize, Minimizer, MinimizerException
 from .parameter import Parameter, Parameters
 from .confidence import conf_interval, conf_interval2d
 from .printfuncs import (fit_report, ci_report,

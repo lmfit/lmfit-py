@@ -7,7 +7,7 @@ Contains functions to calculate confidence intervals.
 import numpy as np
 from scipy.stats import f
 from scipy.optimize import brentq
-from .minimizer import MinimizerException
+from lmfit.minimizer import MinimizerException
 
 def f_compare(Ndata, Nparas, new_chi, best_chi, Nfix=1.):
     """

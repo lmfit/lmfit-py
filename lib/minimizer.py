@@ -37,9 +37,9 @@ except ImportError:
     pass
 
 
-from .asteval import Interpreter
-from .astutils import NameFinder
-from .parameter import Parameter, Parameters
+from lmfit.asteval import Interpreter
+from lmfit.astutils import NameFinder
+from lmfit.parameter import Parameter, Parameters
 
 class MinimizerException(Exception):
     """General Purpose Exception"""
