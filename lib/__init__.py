@@ -14,12 +14,14 @@
             Center for Advanced Radiation Sources,
             The University of Chicago
 """
-__version__ = '0.7'
+__version__ = '0.7.1'
 from .minimizer import minimize, Minimizer
 from .parameter import Parameter, Parameters
 from .confidence import conf_interval, conf_interval2d
-from .printfuncs import fit_report, ci_report, report_fit, report_ci
+from .printfuncs import (fit_report, ci_report,
+                         report_fit, report_ci, report_errors)
+
 __all__ = ['minimize', 'Minimizer', 'Parameter', 'Parameters',
            'conf_interval', 'conf_interval2d',
-           'fit_report', 'ci_report',
+           'fit_report', 'ci_report', 'report_errors',
            'report_fit', 'report_ci']
