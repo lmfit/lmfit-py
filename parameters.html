@@ -15,8 +15,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.7',
+        URL_ROOT:    './',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -327,7 +327,7 @@ looks table-like:</p>
 <h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
 <p>Putting it all together, a simple example of using a dictionary of
 <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects and <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> might look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">report_errors</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">report_fit</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="c"># create data to be fitted</span>
@@ -361,7 +361,7 @@ looks table-like:</p>
 <span class="n">final</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">residual</span>
 
 <span class="c"># write error report</span>
-<span class="n">report_errors</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
 <span class="c"># try to plot results</span>
 <span class="k">try</span><span class="p">:</span>
@@ -402,7 +402,7 @@ looks table-like:</p>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2pre.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2pre.
     </div>
   </body>
 </html>

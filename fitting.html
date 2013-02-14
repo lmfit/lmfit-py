@@ -15,8 +15,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.7',
+        URL_ROOT:    './',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -58,6 +58,7 @@
 <li><a class="reference internal" href="#choosing-different-fitting-methods">Choosing Different Fitting Methods</a></li>
 <li><a class="reference internal" href="#goodness-of-fit-and-estimated-uncertainty-and-correlations">Goodness-of-Fit and estimated uncertainty and correlations</a></li>
 <li><a class="reference internal" href="#using-the-minimizer-class">Using the <tt class="docutils literal"><span class="pre">Minimizer</span></tt> class</a></li>
+<li><a class="reference internal" href="#getting-and-printing-fit-reports">Getting and Printing Fit Reports</a></li>
 </ul>
 </li>
 </ul>
@@ -658,6 +659,85 @@ function.  In that case, you might want to do something like:</p>
 </dd></dl>
 
 </div>
+<div class="section" id="getting-and-printing-fit-reports">
+<h2>Getting and Printing Fit Reports<a class="headerlink" href="#getting-and-printing-fit-reports" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="fit_report">
+<tt class="descname">fit_report</tt><big>(</big><em>params</em>, <em>modelpars=None</em>, <em>show_correl=True</em>, <em>min_correl=0.1</em><big>)</big><a class="headerlink" href="#fit_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate and return text of report of best-fit values, uncertainties,
+and correlations from fit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>params</strong> -- Parameters from fit.</li>
+<li><strong>modelpars</strong> -- Parameters with &quot;Known Values&quot; (optional, default None)</li>
+<li><strong>show_correl</strong> -- whether to show list of sorted correlations [<tt class="docutils literal"><span class="pre">True</span></tt>]</li>
+<li><strong>min_correl</strong> -- smallest correlation absolute value to show [0.1]</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="report_fit">
+<tt class="descname">report_fit</tt><big>(</big><em>params</em>, <em>modelpars=None</em>, <em>show_correl=True</em>, <em>min_correl=0.1</em><big>)</big><a class="headerlink" href="#report_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>print text of report from <a class="reference internal" href="#fit_report" title="fit_report"><tt class="xref py py-func docutils literal"><span class="pre">fit_report()</span></tt></a>.</p>
+</dd></dl>
+
+<p>An example fit with an error report:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p_true</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">14.0</span><span class="p">)</span>
+<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;period&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">5.33</span><span class="p">)</span>
+<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.123</span><span class="p">)</span>
+<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.010</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">per</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;period&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">shift</span> <span class="o">=</span> <span class="n">shift</span> <span class="o">-</span> <span class="n">sign</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">shift</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="n">per</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">model</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">model</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">2500</span>
+<span class="n">xmin</span> <span class="o">=</span> <span class="mf">0.</span>
+<span class="n">xmax</span> <span class="o">=</span> <span class="mf">250.0</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.7215</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+<span class="n">x</span>     <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+<span class="n">data</span>  <span class="o">=</span> <span class="n">residual</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span>
+
+<span class="n">fit_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">13.0</span><span class="p">)</span>
+<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;period&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">fit_params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">kws</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">})</span>
+
+<span class="n">fit</span> <span class="o">=</span> <span class="n">residual</span><span class="p">(</span><span class="n">fit_params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">report_errors</span><span class="p">(</span><span class="n">fit_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>would generate this report:</p>
+<div class="highlight-python"><pre>[[Variables]]
+     amp:        13.969724 +/- 0.050145 (0.36%) initial =  13.000000
+     decay:      0.009990 +/- 0.000042 (0.42%) initial =  0.020000
+     period:     5.331423 +/- 0.002788 (0.05%) initial =  2.000000
+     shift:      0.125333 +/- 0.004938 (3.94%) initial =  0.000000
+[[Correlations]] (unreported correlations are &lt;  0.100)
+    C(period, shift)             =  0.800
+    C(amp, decay)                =  0.576</pre>
+</div>
+</div>
 </div>
 
 
@@ -686,7 +766,7 @@ function.  In that case, you might want to do something like:</p>
     </div>
     <div class="footer">
         &copy; Copyright 2012, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2pre.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2pre.
     </div>
   </body>
 </html>

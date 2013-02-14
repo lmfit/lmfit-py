@@ -15,8 +15,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.7',
+        URL_ROOT:    './',
+        VERSION:     '0.7.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -147,10 +147,11 @@ model).</p>
 <span class="gp">In [9]: </span><span class="n">mi</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
 <span class="gr">Out[9]: </span><span class="bp">True</span>
 
-<span class="gp">In [10]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_errors</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
-<span class="go">  a:     0.099631 +/- 0.000191 (0.19%) initial =  0.100000</span>
-<span class="go">  b:     1.981126 +/- 0.012047 (0.61%) initial =  1.000000</span>
-<span class="go">Correlations:</span>
+<span class="gp">In [10]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+<span class="go">[[Variables]]</span>
+<span class="go">     a:     0.100113 +/- 0.000195 (0.19%) initial =  0.100000</span>
+<span class="go">     b:     1.988335 +/- 0.012185 (0.61%) initial =  1.000000</span>
+<span class="go">[[Correlations]] (unreported correlations are &lt;  0.100)</span>
 <span class="go">    C(a, b)                      =  0.601 </span>
 </pre></div>
 </div>
@@ -159,8 +160,8 @@ model).</p>
 
 <span class="gp">In [12]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
 <span class="go">     99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%</span>
-<span class="go">a   0.09887   0.09887   0.09887   0.09963   0.10040   0.10040   0.10040</span>
-<span class="go">b   1.94488   1.95737   1.96956   1.98113   1.99269   2.00488   2.01737</span>
+<span class="go">a   0.09952   0.09973   0.09992   0.10011   0.10031   0.10050   0.10071</span>
+<span class="go">b   1.95125   1.96416   1.97631   1.98833   2.00036   2.01251   2.02542</span>
 </pre></div>
 </div>
 <p>As we can see, the estimated error is almost the same:
@@ -188,23 +189,24 @@ covariance can lead to wrong results:</p>
 <span class="gp">In [19]: </span><span class="n">mi</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
 <span class="gr">Out[19]: </span><span class="bp">True</span>
 
-<span class="gp">In [20]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_errors</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">show_correl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="go">  a1:     2.611014 +/- 0.327959 (12.56%) initial =  5.000000</span>
-<span class="go">  a2:    -4.512928 +/- 0.399194 (8.85%) initial = -5.000000</span>
-<span class="go">  t1:     1.569477 +/- 0.334505 (21.31%) initial =  2.000000</span>
-<span class="go">  t2:     10.961366 +/- 1.263868 (11.53%) initial =  5.000000</span>
+<span class="gp">In [20]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">show_correl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">[[Variables]]</span>
+<span class="go">     a1:     2.611014 +/- 0.327959 (12.56%) initial =  5.000000</span>
+<span class="go">     a2:    -4.512928 +/- 0.399194 (8.85%) initial = -5.000000</span>
+<span class="go">     t1:     1.569477 +/- 0.334505 (21.31%) initial =  2.000000</span>
+<span class="go">     t2:     10.961366 +/- 1.263868 (11.53%) initial =  5.000000</span>
 </pre></div>
 </div>
 <p>Again we call <a class="reference internal" href="#confidence.conf_interval" title="confidence.conf_interval"><tt class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></tt></a>, this time with tracing and only for 1-
 and 2-sigma:</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.68</span><span class="p">,</span><span class="mf">0.95</span><span class="p">],</span><span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.68</span><span class="p">,</span><span class="mf">0.95</span><span class="p">],</span><span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 <span class="gp">In [22]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
 <span class="go">      95.00%    68.00%     0.00%    68.00%    95.00%</span>
-<span class="go">a1   2.11696   2.33696   2.61101   3.06631   4.28728</span>
-<span class="go">a2  -6.39492  -5.05982  -4.51293  -4.19528  -3.97850</span>
-<span class="go">t2   8.00414   9.62688  10.96137  12.17947  13.34824</span>
-<span class="go">t1   1.07036   1.28482   1.56948   1.97534   2.64341</span>
+<span class="go">a1   2.11682   2.33695   2.61101   3.06638   4.28694</span>
+<span class="go">a2  -6.39449  -5.05978  -4.51293  -4.19527  -3.97856</span>
+<span class="go">t2   8.00415   9.62699  10.96137  12.17903  13.34866</span>
+<span class="go">t1   1.07010   1.28481   1.56948   1.97509   2.64342</span>
 </pre></div>
 </div>
 <p>If you compare the calculated error estimates, you will see that the
@@ -214,7 +216,7 @@ regular estimate is too small. Now let's plot a confidence region:</p>
 <span class="gp">In [24]: </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="s">&#39;a1&#39;</span><span class="p">,</span><span class="s">&#39;t2&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
 
 <span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">grid</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">QuadContourSet</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0x4f84b20</span><span class="o">&gt;</span>
+<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">QuadContourSet</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0x4e4b7d8</span><span class="o">&gt;</span>
 
 <span class="gp">In [26]: </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;a1&#39;</span><span class="p">);</span>
 
@@ -230,10 +232,10 @@ regular estimate is too small. Now let's plot a confidence region:</p>
 <span class="gp">In [34]: </span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">prob2</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
 
 <span class="gp">In [35]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gr">Out[35]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x538a970</span><span class="o">&gt;</span>
+<span class="gr">Out[35]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x52645f0</span><span class="o">&gt;</span>
 
 <span class="gp">In [36]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span><span class="n">y2</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">prob2</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gr">Out[36]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x53a31b0</span><span class="o">&gt;</span>
+<span class="gr">Out[36]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0x5276e30</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/conf_interval2.png"><img alt="_images/conf_interval2.png" src="_images/conf_interval2.png" style="width: 7in;" /></a>
@@ -246,8 +248,8 @@ regular estimate is too small. Now let's plot a confidence region:</p>
 <dd><p>Calculates the confidence interval for parameters
 from the given minimizer.</p>
 <p>The parameter for which the ci is calculated will be varied, while
-the remaining parameters are reoptimized for minimizing chi-square.
-The resulting chi-square is used  to calculate the probability with 
+the remaining parameters are re-optimized for minimizing chi-square.
+The resulting chi-square is used  to calculate the probability with
 a given statistic e.g. F-statistic. This function uses a 1d-rootfinder
 from scipy to find the values resulting in the searched confidence
 region.</p>
@@ -270,7 +272,7 @@ the ci is calculated for every parameter.</p>
 </div></blockquote>
 <p><strong>trace</strong> : bool, optional</p>
 <blockquote>
-<div><p>Defaults to False, if true, each result of a probability calculation 
+<div><p>Defaults to False, if true, each result of a probability calculation
 is saved along with the parameter. This can be used to plot so
 called &quot;profile traces&quot;.</p>
 </div></blockquote>
@@ -284,7 +286,7 @@ called &quot;profile traces&quot;.</p>
 <blockquote>
 <div><p>Only if trace is set true. Is a dict, the key is the parameter which
 was fixed.The values are again a dict with the names as keys, but with
-an additional key 'prob'. Each contains an array of the corresponding 
+an additional key 'prob'. Each contains an array of the corresponding
 values.</p>
 </div></blockquote>
 </td>
@@ -295,9 +297,13 @@ values.</p>
 <div><p>Maximum of iteration to find an upper limit.</p>
 </div></blockquote>
 <p><strong>prob_func</strong> : <tt class="docutils literal"><span class="pre">None</span></tt> or callable</p>
-<blockquote class="last">
-<div><p>Function to calculate the probality from the opimized chi-square.
+<blockquote>
+<div><p>Function to calculate the probability from the optimized chi-square.
 Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses built-in f_compare (F test).</p>
+</div></blockquote>
+<p><strong>verbose: bool</strong> :</p>
+<blockquote class="last">
+<div><p>print extra debuggin information. Default is <tt class="docutils literal"><span class="pre">False</span></tt>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -319,7 +325,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
 <span class="gp">... </span><span class="c">#report</span>
 </pre></div>
 </div>
-<p>Now with quantils for the sigmas and using the trace.</p>
+<p>Now with quantiles for the sigmas and using the trace.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span><span class="o">=</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.75</span><span class="p">,</span><span class="mf">0.999</span><span class="p">),</span><span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fixed</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;para1&#39;</span><span class="p">][</span><span class="s">&#39;para1&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">free</span><span class="o">=</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;para1&#39;</span><span class="p">][</span><span class="s">&#39;not_para1&#39;</span><span class="p">]</span>
@@ -358,7 +364,7 @@ two parameters.</p>
 <p><strong>limits</strong> : tuple: optional</p>
 <blockquote>
 <div><p>Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
-given, the default is 5 stderrs in each direction.</p>
+given, the default is 5 std-errs in each direction.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -379,7 +385,7 @@ given, the default is 5 stderrs in each direction.</p>
 <tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>prob_func</strong> : <tt class="docutils literal"><span class="pre">None</span></tt> or callable</p>
 <blockquote class="last">
-<div><p>Function to calculate the probality from the opimized chi-square.
+<div><p>Function to calculate the probability from the optimized chi-square.
 Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses built-in f_compare (F test).</p>
 </div></blockquote>
 </td>
@@ -426,7 +432,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
     </div>
     <div class="footer">
         &copy; Copyright 2012, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.2pre.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2pre.
     </div>
   </body>
 </html>

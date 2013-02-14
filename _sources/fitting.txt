@@ -416,3 +416,71 @@ The Minimizer object has a few public methods:
    That is, this method should be called prior to your fitting function being called.
 
 
+Getting and Printing Fit Reports
+===========================================
+
+.. function:: fit_report(params, modelpars=None, show_correl=True, min_correl=0.1)
+
+   generate and return text of report of best-fit values, uncertainties,
+   and correlations from fit.
+
+   :param params:       Parameters from fit.
+   :param modelpars:    Parameters with "Known Values" (optional, default None)
+   :param show_correl:  whether to show list of sorted correlations [``True``]
+   :param min_correl:   smallest correlation absolute value to show [0.1]
+
+
+.. function:: report_fit(params, modelpars=None, show_correl=True, min_correl=0.1)
+
+   print text of report from :func:`fit_report`.
+
+An example fit with an error report::
+
+    p_true = Parameters()
+    p_true.add('amp', value=14.0)
+    p_true.add('period', value=5.33)
+    p_true.add('shift', value=0.123)
+    p_true.add('decay', value=0.010)
+
+    def residual(pars, x, data=None):
+        amp = pars['amp'].value
+        per = pars['period'].value
+        shift = pars['shift'].value
+        decay = pars['decay'].value
+
+        if abs(shift) > pi/2:
+            shift = shift - sign(shift)*pi
+        model = amp*sin(shift + x/per) * exp(-x*x*decay*decay)
+        if data is None:
+            return model
+        return (model - data)
+
+    n = 2500
+    xmin = 0.
+    xmax = 250.0
+    noise = random.normal(scale=0.7215, size=n)
+    x     = linspace(xmin, xmax, n)
+    data  = residual(p_true, x) + noise
+
+    fit_params = Parameters()
+    fit_params.add('amp', value=13.0)
+    fit_params.add('period', value=2)
+    fit_params.add('shift', value=0.0)
+    fit_params.add('decay', value=0.02)
+
+    out = minimize(residual, fit_params, args=(x,), kws={'data':data})
+
+    fit = residual(fit_params, x)
+    report_errors(fit_params)
+
+would generate this report::
+
+    [[Variables]]
+         amp:        13.969724 +/- 0.050145 (0.36%) initial =  13.000000
+         decay:      0.009990 +/- 0.000042 (0.42%) initial =  0.020000
+         period:     5.331423 +/- 0.002788 (0.05%) initial =  2.000000
+         shift:      0.125333 +/- 0.004938 (3.94%) initial =  0.000000
+    [[Correlations]] (unreported correlations are <  0.100)
+        C(period, shift)             =  0.800
+        C(amp, decay)                =  0.576
+
