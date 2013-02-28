@@ -144,20 +144,19 @@ well.
 The :class:`Parameter` class
 ========================================
 
-.. class:: Parameter(value=None[, vary=True[, min=None[, max=None[, name=None[, expr=None]]]]])
+.. class:: Parameter(name=None[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
 
    create a Parameter object.  These are the fundamental extension of a fit
    variable within lmfit, but you will probably create most of these with
    the :class:`Parameters` class.
 
+   :param name: parameter name
+   :type name: ``None`` or string -- will be overwritten during fit if ``None``.
    :param value: the numerical value for the parameter
    :param vary:  whether to vary the parameter or not.
    :type vary:  boolean (``True``/``False``)
    :param min:  lower bound for value (``None`` = no lower bound).
    :param max:  upper bound for value (``None`` = no upper bound).
-
-   :param name: parameter name
-   :type name: ``None`` or string -- will be overwritten during fit if ``None``.
    :param expr:  mathematical expression to use to evaluate value during fit.
    :type expr: ``None`` or string
 
