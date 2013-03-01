@@ -220,7 +220,7 @@ well.</p>
 <h2>The <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> class<a class="headerlink" href="#the-parameter-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="Parameter">
-<em class="property">class </em><tt class="descname">Parameter</tt><big>(</big><em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Parameter</tt><big>(</big><em>name=None</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>create a Parameter object.  These are the fundamental extension of a fit
 variable within lmfit, but you will probably create most of these with
 the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class.</p>
@@ -229,11 +229,11 @@ the <a class="reference internal" href="#Parameters" title="Parameters"><tt clas
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> or string -- will be overwritten during fit if <tt class="docutils literal"><span class="pre">None</span></tt>.) -- parameter name</li>
 <li><strong>value</strong> -- the numerical value for the parameter</li>
 <li><strong>vary</strong> (boolean (<tt class="docutils literal"><span class="pre">True</span></tt>/<tt class="docutils literal"><span class="pre">False</span></tt>)) -- whether to vary the parameter or not.</li>
 <li><strong>min</strong> -- lower bound for value (<tt class="docutils literal"><span class="pre">None</span></tt> = no lower bound).</li>
 <li><strong>max</strong> -- upper bound for value (<tt class="docutils literal"><span class="pre">None</span></tt> = no upper bound).</li>
-<li><strong>name</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> or string -- will be overwritten during fit if <tt class="docutils literal"><span class="pre">None</span></tt>.) -- parameter name</li>
 <li><strong>expr</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> or string) -- mathematical expression to use to evaluate value during fit.</li>
 </ul>
 </td>
