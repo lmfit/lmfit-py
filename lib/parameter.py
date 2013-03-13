@@ -31,8 +31,7 @@ class Parameters(OrderedDict):
         OrderedDict.__setitem__(self, key, value)
         value.name = key
 
-    def add(self, name, value=None, vary=True, expr=None,
-            min=None, max=None):
+    def add(self, name, value=None, vary=True, min=None, max=None, expr=None):
         """convenience function for adding a Parameter:
         with   p = Parameters()
         p.add(name, value=XX, ....)
@@ -41,7 +40,7 @@ class Parameters(OrderedDict):
         p[name] = Parameter(name=name, value=XX, ....
         """
         self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
-                                         expr=expr, min=min, max=max))
+                                         min=min, max=max, expr=expr))
 
     def add_many(self, *parlist):
         """convenience function for adding a list of Parameters:
