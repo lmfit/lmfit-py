@@ -51,11 +51,11 @@ def asteval_with_uncertainties(*vals,  **kwargs):
         _pars is None or
         _names is None or
         _asteval is None or
-        _obj._ast is None):
+        _obj.ast is None):
         return 0
     for val, name in zip(vals, _names):
         _pars[name]._val = val
-    return _asteval.eval(_obj._ast)
+    return _asteval.eval(_obj.ast)
 
 wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
 
@@ -66,11 +66,9 @@ def eval_stderr(obj, uvars, _names, _pars, _asteval):
     objects, keyed by name.
 
     This uses the uncertainties package wrapped function to evaluate
-    the uncertainty for an arbitrary expression (in obj._ast) of parameters.
+    the uncertainty for an arbitrary expression (in obj.ast) of parameters.
     """
-    if not isParameter(obj):
-        return
-    if obj._ast is None:
+    if not isinstance(obj, Parameter) or not hasattr(obj, 'ast'):
         return
     uval = wrap_ueval(*uvars, _obj=obj, _names=_names,
                       _pars=_pars, _asteval=_asteval)
@@ -443,6 +441,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.errorbars = True
             if self.scale_covar:
                  self.covar = cov = cov * sum_sqr / self.nfree
+
+            # uncertainties on constrained parameters:
+            #   get values with uncertainties (including correlations),
+            #   temporarily set Parameter values to these,
+            #   re-evaluate contrained parameters to extract stderr
+            #   and then set Parameters back to best-fit value
+            uvars = uncertainties.correlated_values(vbest, self.covar)
+
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(cov[ivar, ivar])
@@ -452,25 +458,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         par.correl[varn2] = (cov[ivar, jvar]/
                                         (par.stderr * sqrt(cov[jvar, jvar])))
 
-
-        # set uncertainties on constrained parameters.
-        # Note that first we set all named params to
-        # have values that include uncertainties, then
-        # evaluate all constrained parameters, then set
-        # the values back to the nominal values.
-        if self.covar is not None:
-            uvars = uncertainties.correlated_values(vbest, self.covar)
             for v, nam in zip(uvars, self.var_map):
                 self.asteval.symtable[nam] = v
 
             for pname, par in self.params.items():
-                if hasattr(par, 'ast'):
-                    try:
-                        out = self.asteval.run(par.ast)
-                        par.stderr = out.std_dev()
-                    except:
-                        pass
+                eval_stderr(par, uvars, self.var_map,
+                            self.params, self.asteval)
 
+            # restore nominal values
             for v, nam in zip(uvars, self.var_map):
                 self.asteval.symtable[nam] = v.nominal_value
 
