@@ -37,9 +37,9 @@ except ImportError:
     pass
 
 
-from lmfit.asteval import Interpreter
-from lmfit.astutils import NameFinder
-from lmfit.parameter import Parameter, Parameters
+from .asteval import Interpreter
+from .astutils import NameFinder
+from .parameter import Parameter, Parameters
 
 class MinimizerException(Exception):
     """General Purpose Exception"""
@@ -482,45 +482,45 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     if fitfunction is not None:
         fitfunction(**kwargs)
     return fitter
-    
+
 
 def make_paras_and_func(fcn, x0, used_kwargs=None):
     """
-    A function which takes a function a makes a parameters-dict 
+    A function which takes a function a makes a parameters-dict
     for it.
-        
+
     Takes the function fcn. A starting guess x0 for the
     non kwargs paramter must be also given. If kwargs
-    are used, used_kwargs is dict were the keys are the 
+    are used, used_kwargs is dict were the keys are the
     used kwarg and the values are the starting values.
     """
-    import inspect    
+    import inspect
     args = inspect.getargspec(fcn)
     defaults = args[-1]
     have_defaults = args[-len(defaults):]
     args_without_defaults = len(args[0])-len(defaults)
-    
-    
+
+
     if len(x0) < args_without_defaults:
-         raise ValueError, 'x0 to short'        
-    
+         raise ValueError( 'x0 to short')
+
     p = Parameters()
-    
-    for i, val in enumerate(x0):        
+
+    for i, val in enumerate(x0):
         p.add(args[0][i], val)
-    
+
     if used_kwargs:
         for arg, val in used_kwargs.items():
             p.add(arg, val)
-    
+
     def func(para):
         kwdict = {}
         for arg in used_kwargs.keys():
             kwdict[arg] = para[arg].value
-            
+
         vals = [para[:len(x0)].values().value for i in p]
-        
+
     return p, func
 
 
-    
+

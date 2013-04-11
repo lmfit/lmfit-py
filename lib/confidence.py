@@ -3,11 +3,11 @@
 """
 Contains functions to calculate confidence intervals.
 """
-
+from __future__ import print_function
 import numpy as np
 from scipy.stats import f
 from scipy.optimize import brentq
-from lmfit.minimizer import MinimizerException
+from .minimizer import MinimizerException
 
 def f_compare(Ndata, Nparas, new_chi, best_chi, Nfix=1.):
     """

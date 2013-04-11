@@ -7,7 +7,7 @@ from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
 try:
     import matplotlib
-    matplotlib.use('WXAGG')
+    # matplotlib.use('WXAGG')
     import pylab
     HASPYLAB = True
 except ImportError:
