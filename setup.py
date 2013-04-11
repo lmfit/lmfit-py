@@ -29,7 +29,7 @@ setup(name = 'lmfit',
       author_email = 'newville@cars.uchicago.edu',
       url          = 'http://cars9.uchicago.edu/software/python/lmfit/',
       download_url = 'http://newville.github.com/lmfit-py/',
-      requires = ('numpy', 'scipy'),      
+      requires = ('numpy', 'scipy'),
       license = 'BSD',
       description = "Least-Squares Minimization with Bounds and Constraints",
       long_description = long_desc,
@@ -39,8 +39,8 @@ setup(name = 'lmfit',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
                    ],
-      
+
       package_dir = {'lmfit': 'lib'},
-      packages = ['lmfit'],
+      packages = ['lmfit', 'lmfit.uncertainties'],
       )
 

@@ -28,18 +28,58 @@ try:
 except ImportError:
     pass
 
-# uncertainties package
-HAS_UNCERT = False
-try:
-    import uncertainties
-    HAS_UNCERT = True
-except ImportError:
-    pass
-
-
 from .asteval import Interpreter
 from .astutils import NameFinder
 from .parameter import Parameter, Parameters
+
+# use locally modified version of uncertainties package
+from . import uncertainties
+
+def asteval_with_uncertainties(*vals,  **kwargs):
+    """
+    given values for variables, calculate object value.
+    This is used by the uncertainties package to calculate
+    the uncertainty in an object even with a complicated
+    expression.
+    """
+    _obj   = kwargs.get('_obj', None)
+    _pars  = kwargs.get('_pars', None)
+    _names = kwargs.get('_names', None)
+    _asteval = kwargs.get('_asteval', None)
+
+    if (_obj is None or
+        _pars is None or
+        _names is None or
+        _asteval is None or
+        _obj._ast is None):
+        return 0
+    for val, name in zip(vals, _names):
+        _pars[name]._val = val
+    return _asteval.eval(_obj._ast)
+
+wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
+
+def eval_stderr(obj, uvars, _names, _pars, _asteval):
+    """evaluate uncertainty and set .stderr for a parameter `obj`
+    given the uncertain values `uvars` (a list of uncertainties.ufloats),
+    a list of parameter names that matches uvars, and a dict of param
+    objects, keyed by name.
+
+    This uses the uncertainties package wrapped function to evaluate
+    the uncertainty for an arbitrary expression (in obj._ast) of parameters.
+    """
+    if not isParameter(obj):
+        return
+    if obj._ast is None:
+        return
+    uval = wrap_ueval(*uvars, _obj=obj, _names=_names,
+                      _pars=_pars, _asteval=_asteval)
+    try:
+        obj.stderr = uval.std_dev()
+        obj._uval  = uval
+    except:
+        obj.stderr = 0
+        obj._uval  = None
 
 class MinimizerException(Exception):
     """General Purpose Exception"""
@@ -418,7 +458,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # have values that include uncertainties, then
         # evaluate all constrained parameters, then set
         # the values back to the nominal values.
-        if HAS_UNCERT and self.covar is not None:
+        if self.covar is not None:
             uvars = uncertainties.correlated_values(vbest, self.covar)
             for v, nam in zip(uvars, self.var_map):
                 self.asteval.symtable[nam] = v
