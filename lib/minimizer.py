@@ -10,7 +10,7 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    Copyright (c) 2011 Matthew Newville, The University of Chicago
    <newville@cars.uchicago.edu>
 """
-
+import ast
 from numpy import array, dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
@@ -46,7 +46,6 @@ def asteval_with_uncertainties(*vals,  **kwargs):
     _pars  = kwargs.get('_pars', None)
     _names = kwargs.get('_names', None)
     _asteval = kwargs.get('_asteval', None)
-
     if (_obj is None or
         _pars is None or
         _names is None or
@@ -54,7 +53,7 @@ def asteval_with_uncertainties(*vals,  **kwargs):
         _obj.ast is None):
         return 0
     for val, name in zip(vals, _names):
-        _pars[name]._val = val
+        _asteval.symtable[name] = val
     return _asteval.eval(_obj.ast)
 
 wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
@@ -74,10 +73,8 @@ def eval_stderr(obj, uvars, _names, _pars, _asteval):
                       _pars=_pars, _asteval=_asteval)
     try:
         obj.stderr = uval.std_dev()
-        obj._uval  = uval
     except:
         obj.stderr = 0
-        obj._uval  = None
 
 class MinimizerException(Exception):
     """General Purpose Exception"""
@@ -392,6 +389,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.residual = resid = infodict['fvec']
 
+
         self.ier = ier
         self.lmdif_message = errmsg
         self.message = 'Fit succeeded.'
@@ -420,7 +418,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             par = self.params[varname]
             grad[ivar] = par.scale_gradient(_best[ivar])
             vbest[ivar] = par.value
+
         # modified from JJ Helmus' leastsqbound.py
+        
         infodict['fjac'] = transpose(transpose(infodict['fjac']) /
                                      take(grad, infodict['ipvt'] - 1))
         rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys,:]),
@@ -458,10 +458,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         par.correl[varn2] = (cov[ivar, jvar]/
                                         (par.stderr * sqrt(cov[jvar, jvar])))
 
-            for v, nam in zip(uvars, self.var_map):
-                self.asteval.symtable[nam] = v
-
             for pname, par in self.params.items():
+                obj = self.asteval.symtable[pname]
                 eval_stderr(par, uvars, self.var_map,
                             self.params, self.asteval)
 
