@@ -1,11 +1,30 @@
-from numpy import arcsin, cos, sin, sqrt
+from numpy import arcsin, cos, sin, sqrt, inf, nan
 
 try:
     from collections import OrderedDict
 except ImportError:
     from ordereddict import OrderedDict
 
-from .astutils import valid_symbol_name
+import re
+from . import uncertainties
+
+
+
+RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'class', 'continue',
+                  'def', 'del', 'elif', 'else', 'except', 'exec',
+                  'finally', 'for', 'from', 'global', 'if', 'import', 'in',
+                  'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise',
+                  'return', 'try', 'while', 'with', 'True', 'False',
+                  'None', 'eval', 'execfile', '__import__', '__package__')
+
+NAME_MATCH = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*$").match
+
+def valid_symbol_name(name):
+    "input is a valid name"
+    if name in RESERVED_WORDS:
+        return False
+    return NAME_MATCH(name) is not None
+
 
 class Parameters(OrderedDict):
     """a custom dictionary of Parameters.  All keys must be
@@ -66,7 +85,7 @@ class Parameter(object):
     def __init__(self, name=None, value=None, vary=True,
                  min=None, max=None, expr=None, **kws):
         self.name = name
-        self.value = value
+        self._val = value
         self.user_value = value
         self.init_value = value
         self.min = min
@@ -76,15 +95,15 @@ class Parameter(object):
         self.deps   = None
         self.stderr = None
         self.correl = None
-        if self.max is not None and value > self.max: self.value = self.max
-        if self.min is not None and value < self.min: self.value = self.min
+        if self.max is not None and value > self.max: self._val = self.max
+        if self.min is not None and value < self.min: self._val = self.min
         self.from_internal = lambda val: val
 
     def __repr__(self):
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)
-        sval = repr(self.value)
+        sval = repr(self._val)
         if self.stderr is not None:
             sval = "value=%s +/- %.3g" % (sval, self.stderr)
         if not self.vary and self.expr is None:
@@ -113,32 +132,104 @@ class Parameter(object):
         """
         if self.min is None and self.max is None:
             self.from_internal = lambda val: val
-            _val  = self.value
+            _val  = self._val
         elif self.max is None:
             self.from_internal = lambda val: self.min - 1 + sqrt(val*val + 1)
-            _val  = sqrt((self.value - self.min + 1)**2 - 1)
+            _val  = sqrt((self._val - self.min + 1)**2 - 1)
         elif self.min is None:
             self.from_internal = lambda val: self.max + 1 - sqrt(val*val + 1)
-            _val  = sqrt((self.max - self.value + 1)**2 - 1)
+            _val  = sqrt((self.max - self._val + 1)**2 - 1)
         else:
             self.from_internal = lambda val: self.min + (sin(val) + 1) * \
                                  (self.max - self.min) / 2
-            _val  = arcsin(2*(self.value - self.min)/(self.max - self.min) - 1)
+            _val  = arcsin(2*(self._val - self.min)/(self.max - self.min) - 1)
         return _val
 
     def scale_gradient(self, val):
         """returns scaling factor for gradient the according to Minuit-style
         transformation.
         """
-        if self.min is None and self.max is None:
+        if self.min in (None, -inf) and self.max in (None, inf):
             return 1.0
-        elif self.max is None:
+        elif self.max in (None, inf):
             return val / sqrt(val*val + 1)
-        elif self.min is None:
+        elif self.min in (None, -inf):
             return -val / sqrt(val*val + 1)
         else:
             return cos(val) * (self.max - self.min) / 2.0
 
+
+    def _getval(self):
+        """get value, with bounds applied"""
+        if isinstance(self._val, uncertainties.Variable):
+            print 'GetVal for uvar! ', self._val
+            self._val = self._val.nominal_value
+            
+        if self.min is None: self.min = -inf
+        if self.max is None: self.max =  inf
+        if self.max < self.min:
+            self.max, self.min = self.min, self.max
+
+        try:
+            if self.min > -inf:
+               self._val = max(self.min, self._val)
+            if self.max < inf:
+                self._val = min(self.max, self._val)
+        except(TypeError, ValueError):
+            self._val = nan
+        return self._val
+
+    @property
+    def value(self):
+        return self._getval()
+
+    @value.setter
+    def value(self, val):
+        self._val = val
+
+
+    def __str__(self):         return self.__repr__()
+
+    def __abs__(self):         return abs(self._getval())
+    def __neg__(self):         return -self._getval()
+    def __pos__(self):         return +self._getval()
+    def __nonzero__(self):     return self._getval() != 0
+
+    def __int__(self):         return int(self._getval())
+    def __long__(self):        return long(self._getval())
+    def __float__(self):       return float(self._getval())
+    def __trunc__(self):       return self._getval().__trunc__()
+
+    def __add__(self, other):  return self._getval() + other
+    def __sub__(self, other):  return self._getval() - other
+    def __div__(self, other):  return self._getval() / other
+    __truediv__ = __div__
+
+    def __floordiv__(self, other):
+        return self._getval() // other
+    def __divmod__(self, other): return divmod(self._getval(), other)
+
+    def __mod__(self, other):  return self._getval() % other
+    def __mul__(self, other):  return self._getval() * other
+    def __pow__(self, other):  return self._getval() ** other
+
+    def __gt__(self, other):   return self._getval() > other
+    def __ge__(self, other):   return self._getval() >= other
+    def __le__(self, other):   return self._getval() <= other
+    def __lt__(self, other):   return self._getval() < other
+    def __eq__(self, other):   return self._getval() == other
+    def __ne__(self, other):   return self._getval() != other
+
+    def __radd__(self, other):  return other + self._getval()
+    def __rdiv__(self, other):  return other / self._getval()
+    __rtruediv__ = __rdiv__
+
+    def __rdivmod__(self, other):  return divmod(other, self._getval())
+    def __rfloordiv__(self, other): return other // self._getval()
+    def __rmod__(self, other):  return other % self._getval()
+    def __rmul__(self, other):  return other * self._getval()
+    def __rpow__(self, other):  return other ** self._getval()
+    def __rsub__(self, other):  return other - self._getval()
 
 def isParameter(x):
     return (isinstance(x, Parameter) or
