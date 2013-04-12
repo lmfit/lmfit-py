@@ -14,16 +14,55 @@ from __future__ import division, print_function
 from sys import exc_info, stdout, version_info
 import ast
 import math
-
+import re
 from .astutils import (FROM_PY, FROM_MATH, FROM_NUMPY,
-                       NUMPY_RENAMES, op2func, ExceptionHolder,
-                       valid_symbol_name)
+                       NUMPY_RENAMES, ExceptionHolder)
+
+from parameter import isParameter, valid_symbol_name
+
 HAS_NUMPY = False
 try:
     import numpy
     HAS_NUMPY = True
 except ImportError:
     print("Warning: numpy not available... functionality will be limited.")
+
+
+
+
+OPERATORS = {
+    ast.Add:    lambda a, b: b.__radd__(a) if isParameter(b) else a + b,
+    ast.Sub:    lambda a, b: b.__rsub__(a) if isParameter(b) else a - b,
+    ast.Mult:   lambda a, b: b.__rmul__(a) if isParameter(b) else a * b,
+    ast.Div:    lambda a, b: b.__rdiv__(a) if isParameter(b) else a / b,
+    ast.FloorDiv: lambda a, b: b.__rfloordiv__(a) if isParameter(b) else a // b,
+    ast.Mod:    lambda a, b: b.__rmod__(a) if isParameter(b) else a % b,
+    ast.Pow:    lambda a, b: b.__rpow__(a) if isParameter(b) else a ** b,
+    ast.Eq:     lambda a, b: b.__eq__(a)  if isParameter(b) else a == b,
+    ast.Gt:     lambda a, b: b.__le__(a) if isParameter(b) else a > b,
+    ast.GtE:    lambda a, b: b.__lt__(a) if isParameter(b) else a >= b,
+    ast.Lt:     lambda a, b: b.__ge__(a) if isParameter(b) else a < b,
+    ast.LtE:    lambda a, b: b.__gt__(a) if isParameter(b) else a <= b,
+    ast.NotEq:  lambda a, b: b.__ne__(a) if isParameter(b) else a != b,
+    ast.Is:     lambda a, b: a is b,
+    ast.IsNot:  lambda a, b: a is not b,
+    ast.In:     lambda a, b: a in b,
+    ast.NotIn:  lambda a, b: a not in b,
+    ast.BitAnd: lambda a, b: a & b,
+    ast.BitOr:  lambda a, b: a | b,
+    ast.BitXor: lambda a, b: a ^ b,
+    ast.LShift: lambda a, b: a << b,
+    ast.RShift: lambda a, b: a >> b,
+    ast.And:    lambda a, b: a and b,
+    ast.Or:     lambda a, b: a or b,
+    ast.Invert: lambda a: ~a,
+    ast.Not:    lambda a: not a,
+    ast.UAdd:   lambda a: +a,
+    ast.USub:   lambda a: -a}
+
+def op2func(op):
+    "return function for operator nodes"
+    return OPERATORS[op.__class__]
 
 __version__ = '0.3.1'
 
@@ -292,6 +331,7 @@ class Interpreter:
             else:
                 msg = "name '%s' is not defined" % node.id
                 self.raise_exception(node, exc=NameError, msg=msg)
+
 
     def node_assign(self, node, val):
         """here we assign a value (not the node.value object) to a node
