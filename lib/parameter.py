@@ -9,7 +9,6 @@ import re
 from . import uncertainties
 
 
-
 RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'class', 'continue',
                   'def', 'del', 'elif', 'else', 'except', 'exec',
                   'finally', 'for', 'from', 'global', 'if', 'import', 'in',
@@ -130,13 +129,13 @@ class Parameter(object):
 
         This code borrows heavily from JJ Helmus' leastsqbound.py
         """
-        if self.min is None and self.max is None:
+        if self.min in (None, -inf) and self.max in (None, inf):
             self.from_internal = lambda val: val
             _val  = self._val
-        elif self.max is None:
+        elif self.max in (None, inf):
             self.from_internal = lambda val: self.min - 1 + sqrt(val*val + 1)
             _val  = sqrt((self._val - self.min + 1)**2 - 1)
-        elif self.min is None:
+        elif self.min in (None, -inf):
             self.from_internal = lambda val: self.max + 1 - sqrt(val*val + 1)
             _val  = sqrt((self.max - self._val + 1)**2 - 1)
         else:
@@ -164,7 +163,7 @@ class Parameter(object):
         if isinstance(self._val, uncertainties.Variable):
             print 'GetVal for uvar! ', self._val
             self._val = self._val.nominal_value
-            
+
         if self.min is None: self.min = -inf
         if self.max is None: self.max =  inf
         if self.max < self.min:
