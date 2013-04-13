@@ -10,15 +10,16 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    Copyright (c) 2011 Matthew Newville, The University of Chicago
    <newville@cars.uchicago.edu>
 """
-import ast
-from numpy import array, dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
+
+from numpy import (dot, eye, ndarray, ones_like,
+                   sqrt, take, transpose, triu)
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import fmin as scipy_fmin
-from scipy.optimize import lbfgsb as scipy_lbfgsb
 from scipy.optimize import anneal as scipy_anneal
+from scipy.optimize.lbfgsb import fmin_l_bfgs_b as scipy_lbfgsb
 
 # check for scipy.optimize.minimize
 HAS_SCALAR_MIN = False
@@ -145,7 +146,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             par.value = self.asteval.run(par.ast)
             out = check_ast_errors(self.asteval.error)
             if out is not None:
-                self.asteval.raise_exception(msg=msg)
+                self.asteval.raise_exception(None)
         self.asteval.symtable[name] = par.value
         self.updated[name] = True
 
@@ -216,7 +217,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         r = self.__residual(params)
         if isinstance(r, ndarray):
-           r = (r*r).sum()
+            r = (r*r).sum()
         return r
 
     def prepare_fit(self, params=None):
@@ -344,7 +345,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         maxfev = 1000*(self.nvarys + 1)
         opts = {'maxiter': maxfev}
-        if method not in ('L-BFGS-B','TNC', 'SLSQP'):
+        if method not in ('L-BFGS-B', 'TNC', 'SLSQP'):
             opts['maxfev'] = maxfev
 
         fmin_kws = dict(method=method, tol=tol, hess=hess, options=opts)
@@ -357,7 +358,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfev = ret.nfev
         self.chisqr = (self.penalty(xout)**2).sum()
 
-    def leastsq(self, scale_covar=True, **kws):
+    def leastsq(self, **kws):
         """
         use Levenberg-Marquardt minimization to perform fit.
         This assumes that ModelParameters have been stored,
@@ -372,7 +373,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         writes outputs to many internal attributes, and
         returns True if fit was successful, False if not.
         """
-	# print 'RUNNING LEASTSQ'
         self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
                      gtol=1.e-7, maxfev=2000*(self.nvarys+1), Dfun=None)
@@ -420,13 +420,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             vbest[ivar] = par.value
 
         # modified from JJ Helmus' leastsqbound.py
-        
+
         infodict['fjac'] = transpose(transpose(infodict['fjac']) /
                                      take(grad, infodict['ipvt'] - 1))
-        rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys,:]),
-                   take(eye(self.nvarys),infodict['ipvt'] - 1, 0))
+        rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys, :]),
+                   take(eye(self.nvarys), infodict['ipvt'] - 1, 0))
         try:
-            cov = inv(dot(transpose(rvec),rvec))
+            cov = inv(dot(transpose(rvec), rvec))
         except (LinAlgError, ValueError):
             cov = None
 
@@ -440,7 +440,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         else:
             self.errorbars = True
             if self.scale_covar:
-                 self.covar = cov = cov * sum_sqr / self.nfree
+                self.covar = cov = cov * sum_sqr / self.nfree
 
             # uncertainties on constrained parameters:
             #   get values with uncertainties (including correlations),
@@ -459,7 +459,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                                         (par.stderr * sqrt(cov[jvar, jvar])))
 
             for pname, par in self.params.items():
-                obj = self.asteval.symtable[pname]
                 eval_stderr(par, uvars, self.var_map,
                             self.params, self.asteval)
 
@@ -516,7 +515,6 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         fitfunction(**kwargs)
     return fitter
 
-
 def make_paras_and_func(fcn, x0, used_kwargs=None):
     """
     A function which takes a function a makes a parameters-dict
@@ -530,15 +528,14 @@ def make_paras_and_func(fcn, x0, used_kwargs=None):
     import inspect
     args = inspect.getargspec(fcn)
     defaults = args[-1]
-    have_defaults = args[-len(defaults):]
+    # have_defaults = args[-len(defaults):]
     args_without_defaults = len(args[0])-len(defaults)
 
 
     if len(x0) < args_without_defaults:
-         raise ValueError( 'x0 to short')
+        raise ValueError( 'x0 to short')
 
     p = Parameters()
-
     for i, val in enumerate(x0):
         p.add(args[0][i], val)
 
@@ -547,6 +544,7 @@ def make_paras_and_func(fcn, x0, used_kwargs=None):
             p.add(arg, val)
 
     def func(para):
+        "wrapped func"
         kwdict = {}
         for arg in used_kwargs.keys():
             kwdict[arg] = para[arg].value

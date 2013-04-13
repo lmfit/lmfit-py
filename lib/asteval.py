@@ -9,12 +9,10 @@ dictionary supporting a simple, flat namespace.
 Expressions can be compiled into ast node and then evaluated
 later, using the current values in the
 """
-
 from __future__ import division, print_function
 from sys import exc_info, stdout, version_info
 import ast
 import math
-import re
 from .astutils import (FROM_PY, FROM_MATH, FROM_NUMPY,
                        NUMPY_RENAMES, ExceptionHolder)
 
@@ -26,8 +24,6 @@ try:
     HAS_NUMPY = True
 except ImportError:
     print("Warning: numpy not available... functionality will be limited.")
-
-
 
 
 OPERATORS = {
@@ -68,7 +64,10 @@ __version__ = '0.3.1'
 
 # holder for 'returned None' from Larch procedure
 class Empty:
-    def __nonzero__(self): return False
+    """basic empty containter"""
+    def __nonzero__(self):
+        return False
+
 ReturnedNone = Empty()
 
 class Interpreter:
@@ -145,7 +144,7 @@ class Interpreter:
     def unimplemented(self, node):
         "unimplemented nodes"
         self.raise_exception(node, exc=NotImplementedError,
-                             msg="'%s' not supported" % (node.__class__.__name__))
+             msg="'%s' not supported" % (node.__class__.__name__))
 
     def raise_exception(self, node, exc=None, msg='', expr=None,
                         lineno=None):
@@ -159,7 +158,8 @@ class Interpreter:
             msg = '%s' % msg
         if self.errmsg is None:
             self.errmsg = msg
-        err = ExceptionHolder(node, exc=exc, msg=self.errmsg, expr=expr, lineno=lineno)
+        err = ExceptionHolder(node, exc=exc, msg=self.errmsg,
+                              expr=expr, lineno=lineno)
         self._interrupt = ast.Break()
         self.error.append(err)
         raise RuntimeError(err.msg)
@@ -229,7 +229,6 @@ class Interpreter:
                 raise RuntimeError(errmsg)
             print(errmsg, file=self.writer)
             return
-        out = None
         try:
             return self.run(node, expr=expr, lineno=lineno)
         except RuntimeError:
@@ -257,7 +256,8 @@ class Interpreter:
     def on_return(self, node): # ('value',)
         "return statement: look for None, return special sentinal"
         self.retval = self.run(node.value)
-        if ret is None: ret = ReturnedNone
+        if self.retval is None:
+            self.retval = ReturnedNone
         return
 
     def on_repr(self, node):
@@ -489,13 +489,13 @@ class Interpreter:
     def _printer(self, *out, **kws):
         "generic print function"
         flush = kws.pop('flush', True)
-        file = kws.pop('file', self.writer)
+        fileh = kws.pop('file', self.writer)
         sep = kws.pop('sep', ' ')
         end = kws.pop('sep', '\n')
 
-        print(*out, file=file, sep=sep, end=end)
+        print(*out, file=fileh, sep=sep, end=end)
         if flush:
-            file.flush()
+            fileh.flush()
 
     def on_if(self, node):    # ('test', 'body', 'orelse')
         "regular if-then-else statement"
@@ -624,7 +624,8 @@ class Interpreter:
         try:
             return func(*args, **keywords)
         except:
-            self.raise_exception(node, exc=RuntimeError, msg = "Error running %s" % (func))
+            self.raise_exception(node, exc=RuntimeError,
+                                 msg = "Error running %s" % (func))
 
     def on_arg(self, node):    # ('test', 'msg')
         "arg for function definitions"
@@ -719,7 +720,7 @@ class Procedure(object):
             n_kws = len(kwargs)
 
         if len(self.argnames) > 0 and kwargs is not None:
-            msg = "got multiple values for keyword argument '%s' in Procedure %s"
+            msg = "multiple values for keyword argument '%s' in Procedure %s"
             for targ in self.argnames:
                 if targ in kwargs:
                     self.raise_exc(None, exc=TypeError,

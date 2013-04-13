@@ -1,3 +1,6 @@
+"""
+Parameter class
+"""
 from numpy import arcsin, cos, sin, sqrt, inf, nan
 
 try:
@@ -82,7 +85,7 @@ class Parameter(object):
     The value and min/max values will be be set to floats.
     """
     def __init__(self, name=None, value=None, vary=True,
-                 min=None, max=None, expr=None, **kws):
+                 min=None, max=None, expr=None):
         self.name = name
         self._val = value
         self.user_value = value
@@ -94,8 +97,10 @@ class Parameter(object):
         self.deps   = None
         self.stderr = None
         self.correl = None
-        if self.max is not None and value > self.max: self._val = self.max
-        if self.min is not None and value < self.min: self._val = self.min
+        if self.max is not None and value > self.max:
+            self._val = self.max
+        if self.min is not None and value < self.min:
+            self._val = self.min
         self.from_internal = lambda val: val
 
     def __repr__(self):
@@ -160,18 +165,20 @@ class Parameter(object):
 
     def _getval(self):
         """get value, with bounds applied"""
-        if isinstance(self._val, uncertainties.Variable):
-            print 'GetVal for uvar! ', self._val
+        if (self._val is not nan and
+            isinstance(self._val, uncertainties.Variable)):
             self._val = self._val.nominal_value
 
-        if self.min is None: self.min = -inf
-        if self.max is None: self.max =  inf
+        if self.min is None:
+            self.min = -inf
+        if self.max is None:
+            self.max =  inf
         if self.max < self.min:
             self.max, self.min = self.min, self.max
 
         try:
             if self.min > -inf:
-               self._val = max(self.min, self._val)
+                self._val = max(self.min, self._val)
             if self.max < inf:
                 self._val = min(self.max, self._val)
         except(TypeError, ValueError):
@@ -180,57 +187,140 @@ class Parameter(object):
 
     @property
     def value(self):
+        "get value"
         return self._getval()
 
     @value.setter
     def value(self, val):
+        "set value"
         self._val = val
+    def __str__(self):
+        "string"
+        return self.__repr__()
 
+    def __abs__(self):
+        "abs"
+        return abs(self._getval())
 
-    def __str__(self):         return self.__repr__()
+    def __neg__(self):
+        "neg"
+        return -self._getval()
 
-    def __abs__(self):         return abs(self._getval())
-    def __neg__(self):         return -self._getval()
-    def __pos__(self):         return +self._getval()
-    def __nonzero__(self):     return self._getval() != 0
+    def __pos__(self):
+        "positive"
+        return +self._getval()
 
-    def __int__(self):         return int(self._getval())
-    def __long__(self):        return long(self._getval())
-    def __float__(self):       return float(self._getval())
-    def __trunc__(self):       return self._getval().__trunc__()
+    def __nonzero__(self):
+        "not zero"
+        return self._getval() != 0
 
-    def __add__(self, other):  return self._getval() + other
-    def __sub__(self, other):  return self._getval() - other
-    def __div__(self, other):  return self._getval() / other
+    def __int__(self):
+        "int"
+        return int(self._getval())
+
+    def __long__(self):
+        "long"
+        return long(self._getval())
+
+    def __float__(self):
+        "float"
+        return float(self._getval())
+
+    def __trunc__(self):
+        "trunc"
+        return self._getval().__trunc__()
+
+    def __add__(self, other):
+        "+"
+        return self._getval() + other
+
+    def __sub__(self, other):
+        "-"
+        return self._getval() - other
+
+    def __div__(self, other):
+        "/"
+        return self._getval() / other
     __truediv__ = __div__
 
     def __floordiv__(self, other):
+        "//"
         return self._getval() // other
-    def __divmod__(self, other): return divmod(self._getval(), other)
 
-    def __mod__(self, other):  return self._getval() % other
-    def __mul__(self, other):  return self._getval() * other
-    def __pow__(self, other):  return self._getval() ** other
+    def __divmod__(self, other):
+        "divmod"
+        return divmod(self._getval(), other)
 
-    def __gt__(self, other):   return self._getval() > other
-    def __ge__(self, other):   return self._getval() >= other
-    def __le__(self, other):   return self._getval() <= other
-    def __lt__(self, other):   return self._getval() < other
-    def __eq__(self, other):   return self._getval() == other
-    def __ne__(self, other):   return self._getval() != other
+    def __mod__(self, other):
+        "%"
+        return self._getval() % other
 
-    def __radd__(self, other):  return other + self._getval()
-    def __rdiv__(self, other):  return other / self._getval()
+    def __mul__(self, other):
+        "*"
+        return self._getval() * other
+
+    def __pow__(self, other):
+        "**"
+        return self._getval() ** other
+
+    def __gt__(self, other):
+        ">"
+        return self._getval() > other
+
+    def __ge__(self, other):
+        ">="
+        return self._getval() >= other
+
+    def __le__(self, other):
+        "<="
+        return self._getval() <= other
+
+    def __lt__(self, other):
+        "<"
+        return self._getval() < other
+
+    def __eq__(self, other):
+        "=="
+        return self._getval() == other
+    def __ne__(self, other):
+        "!="
+        return self._getval() != other
+
+    def __radd__(self, other):
+        "+ (right)"
+        return other + self._getval()
+
+    def __rdiv__(self, other):
+        "/ (right)"
+        return other / self._getval()
     __rtruediv__ = __rdiv__
 
-    def __rdivmod__(self, other):  return divmod(other, self._getval())
-    def __rfloordiv__(self, other): return other // self._getval()
-    def __rmod__(self, other):  return other % self._getval()
-    def __rmul__(self, other):  return other * self._getval()
-    def __rpow__(self, other):  return other ** self._getval()
-    def __rsub__(self, other):  return other - self._getval()
+    def __rdivmod__(self, other):
+        "divmod (right)"
+        return divmod(other, self._getval())
+
+    def __rfloordiv__(self, other):
+        "// (right)"
+        return other // self._getval()
+
+    def __rmod__(self, other):
+        "% (right)"
+        return other % self._getval()
+
+    def __rmul__(self, other):
+        "* (right)"
+        return other * self._getval()
+
+    def __rpow__(self, other):
+        "** (right)"
+        return other ** self._getval()
+
+    def __rsub__(self, other):
+        "- (right)"
+        return other - self._getval()
 
 def isParameter(x):
+    "test for Parameter-ness"
     return (isinstance(x, Parameter) or
             x.__class__.__name__ == 'Parameter')
 

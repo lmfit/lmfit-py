@@ -7,18 +7,18 @@ from __future__ import print_function
 import numpy as np
 from scipy.stats import f
 from scipy.optimize import brentq
-from .minimizer import MinimizerException
+from lmfit.minimizer import MinimizerException
 
-def f_compare(Ndata, Nparas, new_chi, best_chi, Nfix=1.):
+def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
     """
     Returns the probalitiy for two given parameter sets.
-    Nfix is the number of fixed parameters.
+    nfix is the number of fixed parameters.
     """
-
-    Nparas = Nparas + Nfix
-    return f.cdf((new_chi / best_chi - 1) * (Ndata - Nparas) / Nfix,
-        Nfix, Ndata - Nparas)
-#    pass
+    nparas = nparas + nfix
+    nfree = ndata - nparas
+    nfix = 1.0*nfix
+    dchi = new_chi / best_chi - 1.0
+    return f.cdf(chi_diff * nfree / nfix, nfix, nfree)
 
 def copy_vals(params):
     """Saves the values and stderrs of params in temporay dict"""
@@ -32,8 +32,7 @@ def copy_vals(params):
 def restore_vals(tmp_params, params):
     """Restores values and stderrs of params in temporay dict"""
     for para_key in params:
-        params[para_key].value, params[para_key].stderr =\
-        tmp_params[para_key]
+        params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
 def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
@@ -116,6 +115,7 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     return output
 
 def map_trace_to_names(trace, params):
+    "maps trace to param names"
     out = {}
     for name in trace.keys():
         tmp_dict = {}
@@ -140,7 +140,8 @@ class ConfidenceInterval(object):
         else:
             self.p_names = p_names
 
-        if not hasattr(minimizer, 'covar'):  # used to detect that .leastsq() has run!
+        # used to detect that .leastsq() has run!
+        if not hasattr(minimizer, 'covar'):
             minimizer.leastsq()
 
         self.fit_params = [minimizer.params[p] for p in self.p_names]
@@ -178,10 +179,12 @@ class ConfidenceInterval(object):
         """
         out = {}
         for p in self.p_names:
-            out[p] = self.calc_ci(p, -1)[::-1] + [(0., self.params[p].value)] \
-                     + self.calc_ci(p, 1)
+            out[p] = (self.calc_ci(p, -1)[::-1] +
+                      [(0., self.params[p].value)]  +
+                      self.calc_ci(p, 1))
         if self.trace:
-            self.trace_dict = map_trace_to_names(self.trace_dict, self.minimizer.params)
+            self.trace_dict = map_trace_to_names(self.trace_dict,
+                                                 self.minimizer.params)
 
         return out
 
@@ -316,8 +319,8 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
         Function to calculate the probability from the optimized chi-square.
         Default (``None``) uses built-in f_compare (F test).
     """
-
-    if not hasattr(minimizer, 'covar'):  # used to detect that .leastsq() has run!
+    # used to detect that .leastsq() has run!
+    if not hasattr(minimizer, 'covar'):
         minimizer.leastsq()
 
     best_chi = minimizer.chisqr
