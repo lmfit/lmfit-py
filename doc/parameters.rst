@@ -28,7 +28,6 @@ model}({\bf{v}})` is the model calculation, :math:`{\bf{v}}` is the set of
 variables in the model to be optimized in the fit, and :math:`\epsilon_i`
 is the estimated uncertainty in the data.
 
-
 In a traditional non-linear fit, one writes an objective function that takes the
 variable values and calculates the residual :math:`y^{\rm meas}_i -
 y_i^{\rm model}({\bf{v}})`, or the residual scaled by the data
