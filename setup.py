@@ -39,7 +39,7 @@ setup(name = 'lmfit',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
                    ],
-
+      extra_requires = {'testing': ['nose']},
       package_dir = {'lmfit': 'lib'},
       packages = ['lmfit', 'lmfit.uncertainties'],
       )
