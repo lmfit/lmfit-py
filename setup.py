@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-import lib as lmfit
+import lmfit as lmfit
 import numpy, scipy
 
 long_desc = """A library for least-squares minimization and data fitting in
@@ -39,8 +39,9 @@ setup(name = 'lmfit',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
                    ],
-
-      package_dir = {'lmfit': 'lib'},
+      test_suite='nose.collector',
+      test_requires=['Nose'],
+      package_dir = {'lmfit': 'lmfit'},
       packages = ['lmfit', 'lmfit.uncertainties'],
       )
 

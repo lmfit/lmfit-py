@@ -10,7 +10,7 @@ higher is recommended, but extensive testing on version compatibility has
 not been done.  Initial tests do work with Python 3.2, but little testing
 with Python 3 has yet been done.  No testing has been done with 64-bit
 architectures, but as this package is pure Python, no significant troubles
-are expected.
+are expected. Nose is a requirement for running the test suite.
 
 .. _uncertainties: http://packages.python.org/uncertainties/
 
