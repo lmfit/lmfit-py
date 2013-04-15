@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from lmfit.minimizer import make_paras_and_func
+import lmfit
 
 
 def test_wrap_function():
@@ -22,7 +22,6 @@ def test_wrap_function():
     y1 = f(para)
     y2 = func(*x0)
     assert(y1==y2)
-
 
     x0 = [1, 2, 3]
     para, f = lmfit.make_paras_and_func(func, x0, {'e': 3})
