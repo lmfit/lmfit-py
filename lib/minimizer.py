@@ -516,7 +516,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     return fitter
 
 def make_paras_and_func(fcn, x0, used_kwargs=None):
-    """
+    """nach 
     A function which takes a function a makes a parameters-dict
     for it.
 
@@ -528,9 +528,10 @@ def make_paras_and_func(fcn, x0, used_kwargs=None):
     import inspect
     args = inspect.getargspec(fcn)
     defaults = args[-1]
+    len_def = len(defaults) if defaults is not None else 0
     # have_defaults = args[-len(defaults):]
-    args_without_defaults = len(args[0])-len(defaults)
-
+    
+    args_without_defaults = len(args[0])- len_def
 
     if len(x0) < args_without_defaults:
         raise ValueError( 'x0 to short')
@@ -542,15 +543,19 @@ def make_paras_and_func(fcn, x0, used_kwargs=None):
     if used_kwargs:
         for arg, val in used_kwargs.items():
             p.add(arg, val)
+    else:
+        used_kwargs = {}
 
     def func(para):
         "wrapped func"
         kwdict = {}
+        
         for arg in used_kwargs.keys():
             kwdict[arg] = para[arg].value
 
-        vals = [para[:len(x0)].values().value for i in p]
-
+        vals = [para[i].value for i in p]
+        return fcn(*vals[:len(x0)], **kwdict)
+        
     return p, func
 
 
