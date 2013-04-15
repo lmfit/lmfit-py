@@ -25,10 +25,10 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
               'sphinx.ext.coverage',
               'sphinx.ext.pngmath',
-              'ipython_directive', 
+              'ipython_directive',
               'ipython_console_highlighting',
               'numpydoc']
-              
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'lmfit'
-copyright = u'2012, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin'
+copyright = u'2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

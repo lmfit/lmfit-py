@@ -43,20 +43,20 @@ First we create a toy problem:
 
     import lmfit
     import numpy as np
-    x=np.linspace(0.3,10,100)
-    y=1/(0.1*x)+2+0.1*np.random.randn(x.size)
-    p=lmfit.Parameters()
+    x = np.linspace(0.3,10,100)
+    y = 1/(0.1*x)+2+0.1*np.random.randn(x.size)
+    p = lmfit.Parameters()
     p.add_many(('a',0.1),('b',1))
     def residual(p):
-        a=p['a'].value
-        b=p['b'].value
+        a = p['a'].value
+        b = p['b'].value
         return 1/(a*x)+b-y
 
 We have to fit it, before we can generate the confidence intervals.
 
 .. ipython:: python
 
-    mi=lmfit.minimize(residual, p)
+    mi = lmfit.minimize(residual, p)
     mi.leastsq()
     lmfit.printfuncs.report_fit(mi.params)
 
@@ -64,7 +64,7 @@ Now it just a simple function call to start the calculation:
 
 .. ipython:: python
 
-    ci=lmfit.conf_interval(mi)
+    ci = lmfit.conf_interval(mi)
     lmfit.printfuncs.report_ci(ci)
 
 As we can see, the estimated error is almost the same:
@@ -79,18 +79,18 @@ covariance can lead to wrong results:
 
     @suppress
     np.random.seed(1)
-    y=3*np.exp(-x/2.)-5*np.exp(-x/10.)+0.2*np.random.randn(x.size)
-    p=lmfit.Parameters()
-    p.add_many(('a1',5),('a2',-5),('t1',2),('t2',5))
+    y = 3*np.exp(-x/2.)-5*np.exp(-x/10.)+0.2*np.random.randn(x.size)
+    p = lmfit.Parameters()
+    p.add_many(('a1', 5), ('a2', -5), ('t1', 2), ('t2', 5))
     def residual(p):
-        a1,a2,t1,t2=[i.value for i in p.values()]
+        a1, a2, t1, t2 = [i.value for i in p.values()]
         return a1*np.exp(-x/t1)+a2*np.exp(-x/t2)-y
 
 Now lets fit it:
 
 .. ipython:: python
 
-    mi=lmfit.minimize(residual, p)
+    mi = lmfit.minimize(residual, p)
     mi.leastsq()
     lmfit.printfuncs.report_fit(mi.params, show_correl=False)
 
@@ -99,7 +99,7 @@ and 2-sigma:
 
 .. ipython:: python
 
-    ci, trace = lmfit.conf_interval(mi,sigmas=[0.68,0.95],trace=True, verbose=False)
+    ci, trace = lmfit.conf_interval(mi, sigmas=[0.68,0.95], trace=True, verbose=False)
     lmfit.printfuncs.report_ci(ci)
 
 If you compare the calculated error estimates, you will see that the
@@ -108,8 +108,9 @@ regular estimate is too small. Now let's plot a confidence region:
 .. ipython:: python
 
     import matplotlib.pylab as plt
-    x, y, grid=lmfit.conf_interval2d(mi,'a1','t2',30,30)
-    plt.contourf(x,y,grid,np.linspace(0,1,11))
+
+    x, y, grid = lmfit.conf_interval2d(mi,'a1','t2',30,30)
+    plt.contourf(x, y, grid, np.linspace(0,1,11))
     plt.xlabel('a1');
     plt.colorbar();
     @savefig conf_interval.png width=7in
@@ -120,7 +121,7 @@ Remember the trace? It shows the dependence between two parameters.
 .. ipython:: python
 
     @suppress
-    plt.contourf(x,y,grid,np.linspace(0,1,11))
+    plt.contourf(x, y, grid, np.linspace(0,1,11))
     @suppress
     plt.xlabel('a1')
     @suppress
@@ -129,19 +130,18 @@ Remember the trace? It shows the dependence between two parameters.
     plt.ylabel('t2')
 
 
-    x,y,prob=trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
-    x2,y2,prob2=trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
+    x, y, prob = trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
+    x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
     @savefig conf_interval2.png width=7in
-    plt.scatter(x,y,c=prob,s=30)
-    plt.scatter(x2,y2,c=prob2,s=30)
-
+    plt.scatter(x, y, c=prob ,s=30)
+    plt.scatter(x2, y2, c=prob2, s=30)
 
 
 Documentation of methods
 ------------------------
 
-.. autofunction:: conf_interval
-.. autofunction:: conf_interval2d
+.. autofunction:: lmfit.conf_interval
+.. autofunction:: lmfit.conf_interval2d
 
 
 
