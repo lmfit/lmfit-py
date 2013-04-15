@@ -18,7 +18,7 @@ def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
     nfree = ndata - nparas
     nfix = 1.0*nfix
     dchi = new_chi / best_chi - 1.0
-    return f.cdf(chi_diff * nfree / nfix, nfix, nfree)
+    return f.cdf(dchi * nfree / nfix, nfix, nfree)
 
 def copy_vals(params):
     """Saves the values and stderrs of params in temporay dict"""
@@ -359,7 +359,7 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
         out = minimizer
 
         prob = prob_func(out.ndata, out.ndata - out.nfree, out.chisqr,
-            best_chi, Nfix=2.)
+                         best_chi, nfix=2.)
         return prob
 
     out = x_points, y_points, np.apply_along_axis(calc_prob, -1, grid)
