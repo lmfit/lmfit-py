@@ -1,4 +1,3 @@
-
 ===========================================================
 Getting started with Non-Linear Least-Squares Fitting
 ===========================================================
@@ -13,7 +12,7 @@ optimization problems, the main task is to write an *objective function*
 that takes the values of the fitting variables and calculates either a
 scalar value to be minimized or an array of values that is to be minimized
 in the least-squares sense.  For many data fitting processes, the
-least-squares approach is used, and the the objective function should
+least-squares approach is used, and the objective function should
 return an array of (data-model), perhaps scaled by some weighting factor
 such as the inverse of the uncertainty in the data.  For such a problem,
 the chi-square (:math:`\chi^2`) statistic is often defined as:
