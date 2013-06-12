@@ -9,15 +9,15 @@ dictionary supporting a simple, flat namespace.
 Expressions can be compiled into ast node and then evaluated
 later, using the current values in the
 """
-
 from __future__ import division, print_function
 from sys import exc_info, stdout, version_info
 import ast
 import math
-
 from .astutils import (FROM_PY, FROM_MATH, FROM_NUMPY,
-                       NUMPY_RENAMES, op2func, ExceptionHolder,
-                       valid_symbol_name)
+                       NUMPY_RENAMES, ExceptionHolder)
+
+from parameter import isParameter, valid_symbol_name
+
 HAS_NUMPY = False
 try:
     import numpy
@@ -25,7 +25,50 @@ try:
 except ImportError:
     print("Warning: numpy not available... functionality will be limited.")
 
-__version__ = '0.3'
+
+OPERATORS = {
+    ast.Add:    lambda a, b: b.__radd__(a) if isParameter(b) else a + b,
+    ast.Sub:    lambda a, b: b.__rsub__(a) if isParameter(b) else a - b,
+    ast.Mult:   lambda a, b: b.__rmul__(a) if isParameter(b) else a * b,
+    ast.Div:    lambda a, b: b.__rdiv__(a) if isParameter(b) else a / b,
+    ast.FloorDiv: lambda a, b: b.__rfloordiv__(a) if isParameter(b) else a // b,
+    ast.Mod:    lambda a, b: b.__rmod__(a) if isParameter(b) else a % b,
+    ast.Pow:    lambda a, b: b.__rpow__(a) if isParameter(b) else a ** b,
+    ast.Eq:     lambda a, b: b.__eq__(a)  if isParameter(b) else a == b,
+    ast.Gt:     lambda a, b: b.__le__(a) if isParameter(b) else a > b,
+    ast.GtE:    lambda a, b: b.__lt__(a) if isParameter(b) else a >= b,
+    ast.Lt:     lambda a, b: b.__ge__(a) if isParameter(b) else a < b,
+    ast.LtE:    lambda a, b: b.__gt__(a) if isParameter(b) else a <= b,
+    ast.NotEq:  lambda a, b: b.__ne__(a) if isParameter(b) else a != b,
+    ast.Is:     lambda a, b: a is b,
+    ast.IsNot:  lambda a, b: a is not b,
+    ast.In:     lambda a, b: a in b,
+    ast.NotIn:  lambda a, b: a not in b,
+    ast.BitAnd: lambda a, b: a & b,
+    ast.BitOr:  lambda a, b: a | b,
+    ast.BitXor: lambda a, b: a ^ b,
+    ast.LShift: lambda a, b: a << b,
+    ast.RShift: lambda a, b: a >> b,
+    ast.And:    lambda a, b: a and b,
+    ast.Or:     lambda a, b: a or b,
+    ast.Invert: lambda a: ~a,
+    ast.Not:    lambda a: not a,
+    ast.UAdd:   lambda a: +a,
+    ast.USub:   lambda a: -a}
+
+def op2func(op):
+    "return function for operator nodes"
+    return OPERATORS[op.__class__]
+
+__version__ = '0.3.1'
+
+# holder for 'returned None' from Larch procedure
+class Empty:
+    """basic empty containter"""
+    def __nonzero__(self):
+        return False
+
+ReturnedNone = Empty()
 
 class Interpreter:
     """mathematical expression compiler and interpreter.
@@ -73,6 +116,7 @@ class Interpreter:
         self.error      = []
         self.expr       = None
         self.retval     = None
+        self.errmsg =  None
         self.lineno    = 0
         global HAS_NUMPY
         if not use_numpy:
@@ -100,7 +144,7 @@ class Interpreter:
     def unimplemented(self, node):
         "unimplemented nodes"
         self.raise_exception(node, exc=NotImplementedError,
-                             msg="'%s' not supported" % (node.__class__.__name__))
+             msg="'%s' not supported" % (node.__class__.__name__))
 
     def raise_exception(self, node, exc=None, msg='', expr=None,
                         lineno=None):
@@ -109,12 +153,16 @@ class Interpreter:
             self.error = []
         if expr  is None:
             expr  = self.expr
+
         if len(self.error) > 0 and not isinstance(node, ast.Module):
             msg = '%s' % msg
-        err = ExceptionHolder(node, exc=exc, msg=msg, expr=expr, lineno=lineno)
+        if self.errmsg is None:
+            self.errmsg = msg
+        err = ExceptionHolder(node, exc=exc, msg=self.errmsg,
+                              expr=expr, lineno=lineno)
         self._interrupt = ast.Break()
         self.error.append(err)
-        raise RuntimeError
+        raise RuntimeError(err.msg)
 
     # main entry point for Ast node evaluation
     #  parse:  text of statements -> ast
@@ -133,6 +181,8 @@ class Interpreter:
         """executes parsed Ast representation for an expression"""
         # Note: keep the 'node is None' test: internal code here may run
         #    run(None) and expect a None in return.
+        if len(self.error)>0:
+            return
         if node is None:
             return None
         if isinstance(node, str):
@@ -167,6 +217,7 @@ class Interpreter:
     def eval(self, expr, lineno=0, show_errors=True):
         """evaluates a single statement"""
         self.lineno = lineno
+        self.errmsg =  None
         self.error = []
         try:
             node = self.parse(expr)
@@ -178,7 +229,6 @@ class Interpreter:
                 raise RuntimeError(errmsg)
             print(errmsg, file=self.writer)
             return
-        out = None
         try:
             return self.run(node, expr=expr, lineno=lineno)
         except RuntimeError:
@@ -204,8 +254,10 @@ class Interpreter:
         return self.run(node.value)  # ('value',)
 
     def on_return(self, node): # ('value',)
-        "return statement"
+        "return statement: look for None, return special sentinal"
         self.retval = self.run(node.value)
+        if self.retval is None:
+            self.retval = ReturnedNone
         return
 
     def on_repr(self, node):
@@ -279,6 +331,7 @@ class Interpreter:
             else:
                 msg = "name '%s' is not defined" % node.id
                 self.raise_exception(node, exc=NameError, msg=msg)
+
 
     def node_assign(self, node, val):
         """here we assign a value (not the node.value object) to a node
@@ -436,13 +489,13 @@ class Interpreter:
     def _printer(self, *out, **kws):
         "generic print function"
         flush = kws.pop('flush', True)
-        file = kws.pop('file', self.writer)
+        fileh = kws.pop('file', self.writer)
         sep = kws.pop('sep', ' ')
         end = kws.pop('sep', '\n')
 
-        print(*out, file=file, sep=sep, end=end)
+        print(*out, file=fileh, sep=sep, end=end)
         if flush:
-            file.flush()
+            fileh.flush()
 
     def on_if(self, node):    # ('test', 'body', 'orelse')
         "regular if-then-else statement"
@@ -571,7 +624,8 @@ class Interpreter:
         try:
             return func(*args, **keywords)
         except:
-            self.raise_exception(node, exc=RuntimeError, msg = "Error running %s" % (func))
+            self.raise_exception(node, exc=RuntimeError,
+                                 msg = "Error running %s" % (func))
 
     def on_arg(self, node):    # ('test', 'msg')
         "arg for function definitions"
@@ -666,7 +720,7 @@ class Procedure(object):
             n_kws = len(kwargs)
 
         if len(self.argnames) > 0 and kwargs is not None:
-            msg = "got multiple values for keyword argument '%s' in Procedure %s"
+            msg = "multiple values for keyword argument '%s' in Procedure %s"
             for targ in self.argnames:
                 if targ in kwargs:
                     self.raise_exc(None, exc=TypeError,
@@ -719,6 +773,7 @@ class Procedure(object):
                 break
             if self.interpreter.retval is not None:
                 retval = self.interpreter.retval
+                if retval is ReturnedNone: retval = None
                 break
 
         self.interpreter.symtable = save_symtable

@@ -1,5 +1,5 @@
 from lmfit import Parameters, minimize
-from lmfit.printfuncs import report_errors
+from lmfit.printfuncs import report_fit
 
 from numpy import linspace, zeros, sin, exp, random, pi, sign
 
@@ -50,7 +50,7 @@ fit = residual(fit_params, x)
 print '# N_func_evals, N_free = ', out.nfev, out.nfree
 print '# chi-square, reduced chi-square = % .7g, % .7g' % (out.chisqr, out.redchi)
 
-report_errors(fit_params, show_correl=True, modelpars=p_true)
+report_fit(fit_params, show_correl=True, modelpars=p_true)
 
 print 'Raw (unordered, unscaled) Covariance Matrix:'
 print out.covar

@@ -1,12 +1,9 @@
-from lmfit import Parameters, Minimizer
-from lmfit.utilfuncs import gauss, loren, pvoigt
-
+import sys
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
 
-from testutils import report_errors
-
-import sys
+from lmfit import Parameters, Minimizer, report_fit
+from lmfit.utilfuncs import gauss, loren, pvoigt
 
 try:
     import pylab
@@ -19,7 +16,7 @@ HASPYLAB = False
 def residual(pars, x, sigma=None, data=None):
     yg = gauss(x, pars['amp_g'].value,
                   pars['cen_g'].value, pars['wid_g'].value)
-    
+
     slope = pars['line_slope'].value
     offset = pars['line_off'].value
     model = yg + offset + x * slope
@@ -29,7 +26,7 @@ def residual(pars, x, sigma=None, data=None):
         return (model - data)
 
     return (model - data)/sigma
-   
+
 
 n = 201
 xmin = 0.
@@ -59,11 +56,11 @@ p_fit.add('line_slope', value=0.0)
 p_fit.add('line_off', value=0.0)
 
 myfit = Minimizer(residual, p_fit,
-                  fcn_args=(x,), 
+                  fcn_args=(x,),
                   fcn_kws={'sigma':0.2, 'data':data})
 
 myfit.prepare_fit()
-# 
+#
 for scale_covar in (True, False):
     myfit.scale_covar = scale_covar
     print '  ====  scale_covar = ', myfit.scale_covar, ' ==='
@@ -81,10 +78,10 @@ for scale_covar in (True, False):
         print '  chisqr         = ', myfit.chisqr
         print '  reduced_chisqr = ', myfit.redchi
 
-        report_errors(p_fit, modelpars=p_true, show_correl=False)
+        report_fit(p_fit, modelpars=p_true, show_correl=False)
         print '  =============================='
 
-        
+
 # if HASPYLAB:
 #     fit = residual(p_fit, x)
 #     pylab.plot(x, fit, 'k-')

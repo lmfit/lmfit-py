@@ -1,4 +1,4 @@
-from lmfit import Parameters, minimize
+from lmfit import Parameters, minimize, report_fit
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
@@ -8,9 +8,6 @@ try:
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
-
-
-from testutils import report_errors
 
 p_true = Parameters()
 p_true.add('amp', value=14.0)
@@ -51,7 +48,8 @@ fit = residual(fit_params, x)
 print ' N fev = ', out.nfev
 print out.chisqr, out.redchi, out.nfree
 
-report_errors(fit_params)
+print '### Error Report:'
+report_fit(fit_params)
 
 
 if HASPYLAB:

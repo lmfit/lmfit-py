@@ -1,0 +1,14 @@
+This is a modified version of the uncertainties package Eric O. Lebigot.  See the Python Package
+Index (PyPI) and/or the github source repository (at https://github.com/lebigot/uncertainties) for
+more complete documentation on this package.
+
+The changes here were forked from version 0.9 of the uncertainties packages, and add the ability
+to calculate uncertainties on wrapped python functions that include keyword arguments.  This is
+important for lmfit, as it allows estimates of uncertainties in constrained parameters.
+
+The changes made here were submitted for inclusion in the uncertainties package, but not
+accepted. Since the enhancement is useful for lmfit, the forked version is included here.
+
+--Matt Newville
+
+

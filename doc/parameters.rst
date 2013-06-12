@@ -1,17 +1,22 @@
-
 ===========================================================
 Getting started with Non-Linear Least-Squares Fitting
 ===========================================================
 
 The lmfit package is designed to provide a simple way to build complex
-fitting models and apply them to real data.   This chapter describes how to
-set up and perform simple fits, but does assume some basic knowledge of
-Python, Numpy, and modeling data.
+fitting models and apply them to real data.  This chapter describes how to
+set up and perform simple fits.  Some basic knowledge of Python, Numpy, and
+modeling data are assumed.
 
-To model data in the least-squares sense, the most important step is
-writing a function that takes the values of the fitting variables and
-calculates a residual function (data-model) that is to be minimized in the
-least-squares sense
+To do a least-squares fit of a model to data, or for a host of other
+optimization problems, the main task is to write an *objective function*
+that takes the values of the fitting variables and calculates either a
+scalar value to be minimized or an array of values that is to be minimized
+in the least-squares sense.  For many data fitting processes, the
+least-squares approach is used, and the objective function should
+return an array of (data-model), perhaps scaled by some weighting factor
+such as the inverse of the uncertainty in the data.  For such a problem,
+the chi-square (:math:`\chi^2`) statistic is often defined as:
+
 
 .. math::
 
@@ -22,11 +27,14 @@ model}({\bf{v}})` is the model calculation, :math:`{\bf{v}}` is the set of
 variables in the model to be optimized in the fit, and :math:`\epsilon_i`
 is the estimated uncertainty in the data.
 
-In a traditional non-linear fit, one writes a function that takes the
+In a traditional non-linear fit, one writes an objective function that takes the
 variable values and calculates the residual :math:`y^{\rm meas}_i -
-y_i^{\rm model}({\bf{v}})`, perhaps something like::
+y_i^{\rm model}({\bf{v}})`, or the residual scaled by the data
+uncertainties, :math:`[y^{\rm meas}_i - y_i^{\rm
+model}({\bf{v}})]/{\epsilon_i}`, or some other weighting factor.  As a
+simple example, one might write an objective function like this::
 
-    def residual(vars, x, data):
+    def residual(vars, x, data, eps_data):
         amp = vars[0]
         phaseshift = vars[1]
 	freq = vars[2]
@@ -34,16 +42,18 @@ y_i^{\rm model}({\bf{v}})`, perhaps something like::
 
 	model = amp * sin(x * freq  + phaseshift) * exp(-x*x*decay)
 
-        return (data-model)
+        return (data-model)/eps_data
 
 To perform the minimization with scipy, one would do::
 
     from scipy.optimize import leastsq
     vars = [10.0, 0.2, 3.0, 0.007]
-    out = leastsq(residual, vars, args=(x, data))
+    out = leastsq(residual, vars, args=(x, data, eps_data))
 
-Though in python, and fairly easy to use, this is not terribly different
-from how one would do the same fit in C or Fortran.
+Though it is wonderful to be able to use python for such optimization
+problems, and the scipy library is robust and easy to use, the approach
+here is not terribly different from how one would do the same fit in C or
+Fortran.
 
 
 .. _parameters-label:
@@ -52,9 +62,10 @@ Using :class:`Parameters` instead of Variables
 =============================================================
 
 As described above, there are several practical challenges in doing
-least-squares fit with the traditional implementation (Fortran,
-scipy.optimize.leastsq, and most other) in which a list of fitting
-variables to the function to be minimized.  These challenges include:
+least-squares fits and other optimizations with the traditional
+implementation (Fortran, scipy.optimize.leastsq, and most other) in which a
+list of fitting variables to the function to be minimized.  These
+challenges include:
 
   a) The user has to keep track of the order of the variables, and their
      meaning -- vars[2] is the frequency, and so on.
@@ -65,8 +76,9 @@ variables to the function to be minimized.  These challenges include:
      and greatly complicates modeling for people not intimately familiar
      with the code.
 
-  c) There is no way to put bounds on values for the variables, or enforce
-     mathematical relationships between the variables.
+  c) There is no simple, robust way to put bounds on values for the
+     variables, or enforce mathematical relationships between the
+     variables.
 
 The lmfit module is designed to void these shortcomings.
 
@@ -79,7 +91,7 @@ the above example would be translated to look like::
 
     from lmfit import minimize, Parameters
 
-    def residual(params, x, data):
+    def residual(params, x, data, eps_data):
         amp = params['amp'].value
         pshift = params['phase'].value
 	freq = params['frequency'].value
@@ -87,7 +99,7 @@ the above example would be translated to look like::
 
 	model = amp * sin(x * freq  + pshift) * exp(-x*x*decay)
 
-        return (data-model)
+        return (data-model)/eps_data
 
     params = Parameters()
     params.add('amp', value=10)
@@ -95,7 +107,7 @@ the above example would be translated to look like::
     params.add('phase', value=0.2)
     params.add('frequency', value=3.0)
 
-    out = minimize(residual, params, args=(x, data))
+    out = minimize(residual, params, args=(x, data, eps_data))
 
 
 So far, this simply looks like it replaced a list of values with a
@@ -130,20 +142,19 @@ well.
 The :class:`Parameter` class
 ========================================
 
-.. class:: Parameter(value=None[, vary=True[, min=None[, max=None[, name=None[, expr=None]]]]])
+.. class:: Parameter(name=None[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
 
    create a Parameter object.  These are the fundamental extension of a fit
    variable within lmfit, but you will probably create most of these with
    the :class:`Parameters` class.
 
+   :param name: parameter name
+   :type name: ``None`` or string -- will be overwritten during fit if ``None``.
    :param value: the numerical value for the parameter
    :param vary:  whether to vary the parameter or not.
    :type vary:  boolean (``True``/``False``)
    :param min:  lower bound for value (``None`` = no lower bound).
    :param max:  upper bound for value (``None`` = no upper bound).
-
-   :param name: parameter name
-   :type name: ``None`` or string -- will be overwritten during fit if ``None``.
    :param expr:  mathematical expression to use to evaluate value during fit.
    :type expr: ``None`` or string
 
@@ -227,39 +238,8 @@ Simple Example
 ==================
 
 Putting it all together, a simple example of using a dictionary of
-:class:`Parameter` objects and :func:`minimize` might look like this::
+:class:`Parameter` objects and :func:`minimize` might look like this:
 
-    from lmfit import minimize, Parameters
-    import numpy as np
-
-    def residual(params, x, data=None):
-	"""
-	Define the residual
-	If data == None, return the model.
-	"""
-        amp = params['amp'].value
-        shift = params['phase_shift'].value
-	omega = params['omega'].value
-        decay = params['decay'].value
-
-	model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
-
-	if data == None:
-	    return model
-        return (data-model)
-
-    params = Parameters()
-    params.add('amp', value=10)
-    params.add('decay', value=0.007, vary=False)
-    params.add('phase_shift', value=0.2)
-    params.add('omega', value=3.0)
-
-    result = minimize(residual, params, args=(x, data))
-
-    print result.chisqr
-    print 'Best-Fit Values:'
-    for name, par in params.items():
-        print '  %s = %.4f +/- %.4f ' % (name, par.value, par.stderr)
-
+.. literalinclude:: ../tests/simple.py
 
 

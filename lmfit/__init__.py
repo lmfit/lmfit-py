@@ -7,18 +7,25 @@
    installed, parameters can be constrained as a simple
    mathematical expression of other Parameters.
 
-   version: 0.6
-   last update:  13-Aug-2012
+   version: 0.7
+   last update:  14-Sept-2012
    License: BSD
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
             The University of Chicago
 """
-__version__ = '0.6'
-from .minimizer import minimize, Minimizer
+__version__ = '0.7.2'
+from .minimizer import minimize, Minimizer, MinimizerException, make_paras_and_func
 from .parameter import Parameter, Parameters
 from .confidence import conf_interval, conf_interval2d
-from .printfuncs import report_errors, report_ci
-__all__ = [minimize, Minimizer, Parameter, Parameters,
-           conf_interval, conf_interval2d,
-           report_errors, report_ci]
+from .printfuncs import (fit_report, ci_report,
+                         report_fit, report_ci, report_errors)
+
+from . import uncertainties
+from .uncertainties import ufloat, correlated_values
+
+__xall__ = ['minimize', 'Minimizer', 'Parameter', 'Parameters',
+           'conf_interval', 'conf_interval2d', 'make_paras_and_func',
+           'fit_report', 'ci_report', 'report_errors',
+           'report_fit', 'report_ci', 'ufloat',
+           'correlated_values']

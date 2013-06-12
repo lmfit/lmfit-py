@@ -7,22 +7,6 @@ utility functions for asteval
 from __future__ import division, print_function
 import ast
 from sys import exc_info
-import re
-
-RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'class', 'continue',
-                  'def', 'del', 'elif', 'else', 'except', 'exec',
-                  'finally', 'for', 'from', 'global', 'if', 'import', 'in',
-                  'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise',
-                  'return', 'try', 'while', 'with', 'True', 'False',
-                  'None', 'eval', 'execfile', '__import__', '__package__')
-
-NAME_MATCH = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*$").match
-
-def valid_symbol_name(name):
-    "input is a valid name"
-    if name in RESERVED_WORDS:
-        return False
-    return NAME_MATCH(name) is not None
 
 # inherit these from python's __builtins__
 FROM_PY = ('ArithmeticError', 'AssertionError', 'AttributeError',
@@ -151,39 +135,6 @@ FROM_NUMPY = ('Inf', 'NAN', 'abs', 'absolute', 'add', 'alen', 'all',
 NUMPY_RENAMES = {'ln':'log', 'asin':'arcsin', 'acos':'arccos',
                  'atan':'arctan', 'atan2':'arctan2', 'atanh':'arctanh',
                  'acosh':'arccosh', 'asinh':'arcsinh'}
-
-OPERATORS = {ast.Is:     lambda a, b: a is b,
-             ast.IsNot:  lambda a, b: a is not b,
-             ast.In:     lambda a, b: a in b,
-             ast.NotIn:  lambda a, b: a not in b,
-             ast.Add:    lambda a, b: a + b,
-             ast.BitAnd: lambda a, b: a & b,
-             ast.BitOr:  lambda a, b: a | b,
-             ast.BitXor: lambda a, b: a ^ b,
-             ast.Div:    lambda a, b: a / b,
-             ast.FloorDiv: lambda a, b: a // b,
-             ast.LShift: lambda a, b: a << b,
-             ast.RShift: lambda a, b: a >> b,
-             ast.Mult:   lambda a, b: a * b,
-             ast.Pow:    lambda a, b: a ** b,
-             ast.Sub:    lambda a, b: a - b,
-             ast.Mod:    lambda a, b: a % b,
-             ast.And:    lambda a, b: a and b,
-             ast.Or:     lambda a, b: a or b,
-             ast.Eq:     lambda a, b: a == b,
-             ast.Gt:     lambda a, b: a > b,
-             ast.GtE:    lambda a, b: a >= b,
-             ast.Lt:     lambda a, b: a < b,
-             ast.LtE:    lambda a, b: a <= b,
-             ast.NotEq:  lambda a, b: a != b,
-             ast.Invert: lambda a: ~a,
-             ast.Not:    lambda a: not a,
-             ast.UAdd:   lambda a: +a,
-             ast.USub:   lambda a: -a}
-
-def op2func(op):
-    "return function for operator nodes"
-    return OPERATORS[op.__class__]
 
 class ExceptionHolder(object):
     "basic exception handler"

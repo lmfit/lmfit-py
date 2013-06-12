@@ -1,13 +1,12 @@
 import sys
-
+from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from lmfit import Parameters, Parameter, Minimizer, report_fit
 from lmfit.utilfuncs import gauss, loren, pvoigt
 
-from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
 try:
     import matplotlib
-    # matplotlib.use('WXAGG')
+    matplotlib.use('WXAGG')
     import pylab
     HASPYLAB = True
 except ImportError:
@@ -70,7 +69,7 @@ pfit = [Parameter(name='amp_g', value=10),
 
 sigma = 0.021  # estimate of data error (for all data points)
 
-myfit = Minimizer(residual, pfit, iter_cb=per_iteration,
+myfit = Minimizer(residual, pfit, # iter_cb=per_iteration,
                   fcn_args=(x,), fcn_kws={'sigma':sigma, 'data':data},
                   scale_covar=True)
 
@@ -80,12 +79,14 @@ init = residual(myfit.params, x)
 if HASPYLAB:
     pylab.plot(x, init, 'b--')
 
-myfit.leastsq()
+# fit with Nelder-Mead simplex method
+supported_methods = ('BFGS', 'COBYLA', 'SLSQP', 'Powell', 'Nelder-Mead')
+myfit.scalar_minimize(method='Nelder-Mead')
+
 
 print(' Nfev = ', myfit.nfev)
-print( myfit.chisqr, myfit.redchi, myfit.nfree)
-
-report_fit(myfit.params, modelpars=p_true)
+# print( myfit.chisqr, myfit.redchi, myfit.nfree)
+# report_fit(myfit.params, modelpars=p_true)
 
 fit = residual(myfit.params, x)
 

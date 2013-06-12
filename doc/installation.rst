@@ -5,11 +5,17 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The lmfit package requires Python, Numpy, and Scipy.  Extensive testing on
-version compatibility has not yet been done.  Initial tests work with
-Python 3.2, but little testing with Python 3 has yet been done.  No testing
-has been done with 64-bit architectures, but as this package is pure
-Python, no significant troubles are expected.
+The lmfit package requires Python, Numpy, and Scipy.  Scipy version 0.11 or
+higher is recommended, but extensive testing on version compatibility has
+not been done.  Initial tests do work with Python 3.2, but little testing
+with Python 3 has yet been done.  No testing has been done with 64-bit
+architectures, but as this package is pure Python, no significant troubles
+are expected. Nose is a requirement for running the test suite.
+
+.. _uncertainties: http://packages.python.org/uncertainties/
+
+If installed, the `uncertainties`_ package will be used for propagation of
+uncertainties to constrained parameters.
 
 
 Downloads
@@ -17,15 +23,15 @@ Downloads
 
 The latest stable version is available from PyPI or CARS (Univ of Chicago):
 
-.. _lmfit-0.6.tar.gz (CARS):   http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.6.tar.gz
-.. _lmfit-0.6.win32-py2.6.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.6.win32-py2.6.exe
-.. _lmfit-0.6.win32-py2.7.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.6.win32-py2.7.exe
-.. _lmfit-0.6.win32-py3.2.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.6.win32-py3.2.exe
+.. _lmfit-0.7.tar.gz (CARS):   http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.7.tar.gz
+.. _lmfit-0.7.win32-py2.6.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.7.win32-py2.6.exe
+.. _lmfit-0.7.win32-py2.7.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.7.win32-py2.7.exe
+.. _lmfit-0.7.win32-py3.2.exe (CARS): http://cars9.uchicago.edu/software/python/lmfit/src/lmfit-0.7.win32-py3.2.exe
 
-.. _lmfit-0.6.tar.gz (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.6.tar.gz
-.. _lmfit-0.6.win32-py2.6.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.6.win32-py2.6.exe
-.. _lmfit-0.6.win32-py2.7.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.6.win32-py2.7.exe
-.. _lmfit-0.6.win32-py3.2.exe (PyPI): http://pypi.python.org/packages/any/l/lmfit/lmfit-0.6.win32-py3.2.exe
+.. _lmfit-0.7.tar.gz (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.7.tar.gz
+.. _lmfit-0.7.win32-py2.6.exe (PyPI): http://pypi.python.org/packages/2.6/l/lmfit/lmfit-0.7.win32-py2.6.exe
+.. _lmfit-0.7.win32-py2.7.exe (PyPI): http://pypi.python.org/packages/2.7/l/lmfit/lmfit-0.7.win32-py2.7.exe
+.. _lmfit-0.7.win32-py3.2.exe (PyPI): http://pypi.python.org/packages/3.2/l/lmfit/lmfit-0.7.win32-py3.2.exe
 
 .. _lmfit github repository:   http://github.com/newville/lmfit-py
 .. _lmfit at pypi:             http://pypi.python.org/pypi/lmfit/
@@ -34,17 +40,17 @@ The latest stable version is available from PyPI or CARS (Univ of Chicago):
 +----------------------+------------------+--------------------------------------------+
 |  Download Option     | Python Versions  |  Location                                  |
 +======================+==================+============================================+
-|  Source Kit          | 2.6, 2.7, 3.2    | -  `lmfit-0.6.tar.gz (PyPI)`_              |
-|                      |                  | -  `lmfit-0.6.tar.gz (CARS)`_              |
+|  Source Kit          | 2.6, 2.7, 3.2    | -  `lmfit-0.7.tar.gz (PyPI)`_              |
+|                      |                  | -  `lmfit-0.7.tar.gz (CARS)`_              |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   2.6            | -  `lmfit-0.6.win32-py2.6.exe (PyPI)`_     |
-|                      |                  | -  `lmfit-0.6.win32-py2.6.exe (CARS)`_     |
+|  Win32 Installer     |   2.6            | -  `lmfit-0.7.win32-py2.6.exe (PyPI)`_     |
+|                      |                  | -  `lmfit-0.7.win32-py2.6.exe (CARS)`_     |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   2.7            | -  `lmfit-0.6.win32-py2.7.exe (PyPI)`_     |
-|                      |                  | -  `lmfit-0.6.win32-py2.7.exe (CARS)`_     |
+|  Win32 Installer     |   2.7            | -  `lmfit-0.7.win32-py2.7.exe (PyPI)`_     |
+|                      |                  | -  `lmfit-0.7.win32-py2.7.exe (CARS)`_     |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   3.2            | -  `lmfit-0.6.win32-py3.2.exe (PyPI)`_     |
-|                      |                  | -  `lmfit-0.6.win32-py3.2.exe (CARS)`_     |
+|  Win32 Installer     |   3.2            | -  `lmfit-0.7.win32-py3.2.exe (PyPI)`_     |
+|                      |                  | -  `lmfit-0.7.win32-py3.2.exe (CARS)`_     |
 +----------------------+------------------+--------------------------------------------+
 |  Development Version |   all            |  use `lmfit github repository`_            |
 +----------------------+------------------+--------------------------------------------+
@@ -75,7 +81,7 @@ Acknowledgements
 
 LMFIT was originally written by Matthew Newville.  Substantial code and
 documentation improvements, especially for improved estimates of confidence
-intervals was provided by Till Stensitzki.  The implemenation of parameter
+intervals was provided by Till Stensitzki.  The implementation of parameter
 bounds as described in the MINUIT documentation is taken from Jonathan
 J. Helmus' leastsqbound code, with permission. Many valuable suggestions
 for improvements have come from Christoph Deil.  The code obviously depends

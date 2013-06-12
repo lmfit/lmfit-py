@@ -5,12 +5,10 @@ try:
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
-    
 
-from lmfit import Parameters, Minimizer
+
+from lmfit import Parameters, Minimizer, report_fit
 from lmfit.utilfuncs import gauss, loren
-
-from testutils import report_errors
 
 def residual(pars, x, data=None):
     g1 = gauss(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)
@@ -63,7 +61,7 @@ myfit.leastsq()
 print ' N fev = ', myfit.nfev
 print myfit.chisqr, myfit.redchi, myfit.nfree
 
-report_errors(fit_params)
+report_fit(fit_params)
 
 fit = residual(fit_params, x)
 

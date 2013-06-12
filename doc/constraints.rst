@@ -136,8 +136,8 @@ The `asteval`_ interpreter uses a flat namespace, implemented as a single
 dictionary. That means you can preload any Python symbol into the namespace
 for the constraints::
 
-    def lorenztian(x, amp, cen, wid):
-        "lorenztian function: wid = half-width at half-max"
+    def lorentzian(x, amp, cen, wid):
+        "lorentzian function: wid = half-width at half-max"
         return (amp  / (1 + ((x-cen)/wid)**2))
 
     fitter = Minimizer()

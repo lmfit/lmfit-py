@@ -1,23 +1,19 @@
 import sys
 
-from lmfit import Parameters, Parameter, Minimizer, report_fit
-from lmfit.utilfuncs import gauss, loren, pvoigt
-
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
+
+from lmfit import Parameters, Parameter, Minimizer
+from lmfit.utilfuncs import gauss, loren, pvoigt
+from lmfit.printfuncs import report_fit
 
 try:
     import matplotlib
-    # matplotlib.use('WXAGG')
+    matplotlib.use('WXAGG')
     import pylab
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
 
-def per_iteration(pars, i, resid, x, *args, **kws):
-    if i < 10 or i % 10 == 0:
-        print( '====== Iteration ', i)
-        for p in pars.values():
-            print( p.name , p.value)
 
 def residual(pars, x, sigma=None, data=None):
     yg = gauss(x, pars['amp_g'].value,
@@ -25,10 +21,9 @@ def residual(pars, x, sigma=None, data=None):
     yl = loren(x, pars['amp_l'].value,
                pars['cen_l'].value, pars['wid_l'].value)
 
-    frac = pars['frac'].value
     slope = pars['line_slope'].value
     offset = pars['line_off'].value
-    model = (1-frac) * yg + frac * yl + offset + x * slope
+    model =  yg +  yl + offset + x * slope
     if data is None:
         return model
     if sigma is  None:
@@ -41,36 +36,30 @@ xmin = 0.
 xmax = 20.0
 x = linspace(xmin, xmax, n)
 
-p_true = Parameters()
-p_true.add('amp_g', value=21.0)
-p_true.add('cen_g', value=8.1)
-p_true.add('wid_g', value=1.6)
-p_true.add('frac', value=0.37)
-p_true.add('line_off', value=-1.023)
-p_true.add('line_slope', value=0.62)
-
-data = (pvoigt(x, p_true['amp_g'].value, p_true['cen_g'].value,
-              p_true['wid_g'].value, p_true['frac'].value) +
+data = (gauss(x, 21, 8.1, 1.2) + 
+        loren(x, 10, 9.6, 2.4) +
         random.normal(scale=0.23,  size=n) +
-        x*p_true['line_slope'].value + p_true['line_off'].value )
+        x*0.5)
+
 
 if HASPYLAB:
     pylab.plot(x, data, 'r+')
 
-pfit = [Parameter(name='amp_g', value=10),
-        Parameter(name='amp_g', value=10.0),
-        Parameter(name='cen_g', value=9),
-        Parameter(name='wid_g', value=1),
-        Parameter(name='frac', value=0.50),
-        Parameter(name='amp_l', expr='amp_g'),
-        Parameter(name='cen_l', expr='cen_g'),
-        Parameter(name='wid_l', expr='wid_g'),
+pfit = [Parameter(name='amp_g',  value=10),
+        Parameter(name='cen_g',  value=9),
+        Parameter(name='wid_g',  value=1),
+
+        Parameter(name='amp_tot',  value=20),
+        Parameter(name='amp_l',  expr='amp_tot - amp_g'),
+        Parameter(name='cen_l',  expr='1.5+cen_g'),
+        Parameter(name='wid_l',  expr='2*wid_g'),
+        
         Parameter(name='line_slope', value=0.0),
         Parameter(name='line_off', value=0.0)]
 
 sigma = 0.021  # estimate of data error (for all data points)
 
-myfit = Minimizer(residual, pfit, iter_cb=per_iteration,
+myfit = Minimizer(residual, pfit, 
                   fcn_args=(x,), fcn_kws={'sigma':sigma, 'data':data},
                   scale_covar=True)
 
@@ -85,14 +74,13 @@ myfit.leastsq()
 print(' Nfev = ', myfit.nfev)
 print( myfit.chisqr, myfit.redchi, myfit.nfree)
 
-report_fit(myfit.params, modelpars=p_true)
+report_fit(myfit.params)
 
 fit = residual(myfit.params, x)
 
 if HASPYLAB:
     pylab.plot(x, fit, 'k-')
     pylab.show()
-
 
 
 
