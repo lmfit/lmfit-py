@@ -196,8 +196,8 @@ The :class:`Parameters` class
    dictionary, with the restrictions that
 
    1. keys must be valid Python symbol names (so that they can be used in
-   expressions of mathematical constraints).  This means the names must
-   match ``[a-z_][a-z0-9_]*``  and cannot be a Python reserved word.
+      expressions of mathematical constraints).  This means the names must
+      match ``[a-z_][a-z0-9_]*``  and cannot be a Python reserved word.
 
    2. values must be valid :class:`Parameter` objects.
 
