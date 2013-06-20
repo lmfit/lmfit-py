@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-from setuptools import setup
+from distutils.core import setup
+# from setuptools import setup
 
 import lmfit as lmfit
 import numpy, scipy
@@ -39,8 +40,8 @@ setup(name = 'lmfit',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
                    ],
-      test_suite='nose.collector',
-      test_requires=['Nose'],
+      # test_suite='nose.collector',
+      # test_requires=['Nose'],
       package_dir = {'lmfit': 'lmfit'},
       packages = ['lmfit', 'lmfit.uncertainties'],
       )
