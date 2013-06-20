@@ -301,7 +301,7 @@ var Search = {
   },
 
   query : function(query) {
-    var stopwords = ["a","and","are","as","at","be","but","by","for","if","in","into","is","it","near","no","not","of","on","or","such","that","the","their","then","there","these","they","this","to","was","will","with"];
+    var stopwords = ["and","then","into","it","as","are","in","if","for","no","there","their","was","is","be","to","that","but","they","not","such","with","by","a","on","these","of","will","this","near","the","or","at"];
 
     // Stem the searchterms and add them to the correct list
     var stemmer = new Stemmer();
@@ -332,7 +332,7 @@ var Search = {
         hlterms.push(tmp[i].toLowerCase());
       }
       // only add if not already in the list
-      if (!$u.contains(toAppend, word))
+      if (!$.contains(toAppend, word))
         toAppend.push(word);
     };
     var highlightstring = '?highlight=' + $.urlencode(hlterms.join(" "));
@@ -399,7 +399,7 @@ var Search = {
       // search result.
       for (var i = 0; i < excluded.length; i++) {
         if (terms[excluded[i]] == file ||
-            $u.contains(terms[excluded[i]] || [], file)) {
+            $.contains(terms[excluded[i]] || [], file)) {
           valid = false;
           break;
         }

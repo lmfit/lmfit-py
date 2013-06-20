@@ -15,8 +15,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.7.1',
+        URL_ROOT:    '',
+        VERSION:     '0.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -46,7 +46,7 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper"><h3>Downloads</h3>
-<p>Current version: <b>0.7.1</b></p>
+<p>Current version: <b>0.7.2</b></p>
 <p>Downloads:
 <ul>
   <li>&nbsp; &nbsp; <a href="http://cars.uchicago.edu/software/python/lmfit/src/">cars.uchicago.edu</a>
@@ -86,58 +86,44 @@ Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/lmf
   <div class="section" id="non-linear-least-square-minimization-for-python">
 <h1>Non-Linear Least-Square Minimization for Python<a class="headerlink" href="#non-linear-least-square-minimization-for-python" title="Permalink to this headline">¶</a></h1>
 <p>The lmfit Python package provides a simple, flexible interface to
-non-linear optimization or curve fitting problems.  The default
-optimization method used is the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm from
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>, but other optimization procedures such as
-<a class="reference external" href="http://en.wikipedia.org/wiki/Nelder-Mead_method">Nelder-Mead</a> downhill simplex, Powell's method, COBYLA, Sequential Least
-Squares, and a few other optimization approaches available from
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a> can also be used.</p>
-<p>For any optimization problem, the programmer must write an objective
-function that takes a set of values for the variables in the fit, and
-produces either a scalar value to be minimized or a residual array to be
-minimized in the least-squares sense.  Generally, the set of variables can
-all be varied freely by the algorithm calling the objective functions,
-though some algorithms allow some sorts of constraints or bounds to be
-placed on the values.</p>
-<p>With the lmfit package, one writes an objective function in terms of a set
-of Parameter objects, where a Parameter has the following properties:</p>
-<blockquote>
-<div><ul class="simple">
-<li>Parameters have values that can be fixed or floated in the fit.</li>
-<li>Upper and/or lower bounds can be placed on Parameter values.</li>
-<li>Parameters can be written as algebraic expressions of other Parameters.
-These values will be re-evaluated at each step in the fit, giving a
-a simple and very flexible approach to constraining fit variables.</li>
-</ul>
-</div></blockquote>
-<p>The principle advantage of using Parameters instead of fit variables is
-that the objective function does not have to be rewritten for a change in
-what is varied or what constraints are placed on the fit.  A programmer can
-write a general model that encapsulates the phenomenon to be optimized, and
-then allow a user of the model to change what is varied and what
-constraints are placed on the model.  The ability to easily change whether
-a Parameter is floated or fixed also allows one to easily test the
-significance of certain Parameters to the fitting model.  A second
-advantage is that Parameters can be used and objective function using them
-can be given to a number of fitting algorithms without any change.</p>
-<p>By default, lmfit uses and the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> minimization
-algorithm from <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.
+non-linear optimization or curve fitting problems.  The package extends the
+optimization capabilities of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a> by replacing floating
+pointing values for the variables to be optimized with Parameter objects.
+These Parameters can be fixed or varied, have upper and/or lower bounds
+placed on its value, or written as an algebraic expression of other
+Parameters.</p>
+<p>The principal advantage of using Parameters instead of simple variables is
+that the objective function does not have to be rewritten to reflect every
+change of what is varied in the fit, or what relationships or constraints
+are placed on the Parameters.  This means a scientific programmer can write
+a general model that encapsulates the phenomenon to be optimized, and then
+allow user of that model to change what is varied and fixed, what range of
+values is acceptable for Parameters, and what constraints are placed on the
+model.  The ease with which the model can be changed also allows one to
+easily test the significance of certain Parameters in a fitting model.</p>
+<p>The lmfit package allows a choice of several optimization methods available
+from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a>.  The default, and by far best tested optimization
+method used is the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm from
+from <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.
 This method is by far the most tested and best support method in lmfit, and
 much of this document assumes this algorithm is used unless explicitly
 stated. An important point for many scientific analysis is that this is
 only method that automatically estimates uncertainties and correlations
-between fitted variables from the covariance matrix used in the fit.</p>
+between fitted variables from the covariance matrix calculated during the fit.</p>
 <p>A few other optimization routines are also supported, including
-<a class="reference external" href="http://en.wikipedia.org/wiki/Nelder-Mead_method">Nelder-Mead</a> simplex downhill method as implemented in
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html">scipy.optimize.fmin</a>, and several others from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a>. Some
-methods, including the <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a> (limited memory
-Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented in
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> and the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
+<a class="reference external" href="http://en.wikipedia.org/wiki/Nelder-Mead_method">Nelder-Mead</a> simplex downhill, Powell's method, COBYLA, Sequential Least
+Squares methods as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html">scipy.optimize.fmin</a>, and several
+others from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a>. Some methods, including the <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a>
+(limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented
+in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> and the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
 implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html">scipy.optimize.anneal</a> are implemented, but appear to not
 work very well.  In their native form, some of these methods setting upper
 or lower bounds on parameters, or adding constraints on fitted variables.
 By using Parameter objects, lmfit allows bounds and constraints for all of
-these methods, and makes it easy to swap between methods.</p>
+these methods, and makes it easy to swap between methods.  These algorithms
+generally perform worse for most data fitting problems, but they are
+available and can be easily tried without changing the objective function
+or set of Parameters.</p>
 <p>Finally, because this approach of using the covariance matrix to determine
 uncertainties is sometimes questioned (and sometimes rightly so), lmfit
 supports methods to do a brute force search of the confidence intervals and
@@ -211,8 +197,8 @@ correlations for sets of parameters.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2012, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2pre.
+        &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

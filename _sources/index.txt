@@ -19,61 +19,47 @@ Non-Linear Least-Square Minimization for Python
 .. _asteval: http://newville.github.com/asteval/
 
 The lmfit Python package provides a simple, flexible interface to
-non-linear optimization or curve fitting problems.  The default
-optimization method used is the `Levenberg-Marquardt`_ algorithm from
-`scipy.optimize.leastsq`_, but other optimization procedures such as
-`Nelder-Mead`_ downhill simplex, Powell's method, COBYLA, Sequential Least
-Squares, and a few other optimization approaches available from
-`scipy.optimize`_ can also be used.
+non-linear optimization or curve fitting problems.  The package extends the
+optimization capabilities of `scipy.optimize`_ by replacing floating
+pointing values for the variables to be optimized with Parameter objects.
+These Parameters can be fixed or varied, have upper and/or lower bounds
+placed on its value, or written as an algebraic expression of other
+Parameters.
 
-For any optimization problem, the programmer must write an objective
-function that takes a set of values for the variables in the fit, and
-produces either a scalar value to be minimized or a residual array to be
-minimized in the least-squares sense.  Generally, the set of variables can
-all be varied freely by the algorithm calling the objective functions,
-though some algorithms allow some sorts of constraints or bounds to be
-placed on the values.
+The principal advantage of using Parameters instead of simple variables is
+that the objective function does not have to be rewritten to reflect every
+change of what is varied in the fit, or what relationships or constraints
+are placed on the Parameters.  This means a scientific programmer can write
+a general model that encapsulates the phenomenon to be optimized, and then
+allow user of that model to change what is varied and fixed, what range of
+values is acceptable for Parameters, and what constraints are placed on the
+model.  The ease with which the model can be changed also allows one to
+easily test the significance of certain Parameters in a fitting model.
 
-With the lmfit package, one writes an objective function in terms of a set
-of Parameter objects, where a Parameter has the following properties:
-
- * Parameters have values that can be fixed or floated in the fit.
- * Upper and/or lower bounds can be placed on Parameter values.
- * Parameters can be written as algebraic expressions of other Parameters. 
-   These values will be re-evaluated at each step in the fit, giving a 
-   a simple and very flexible approach to constraining fit variables.
-
-The principle advantage of using Parameters instead of fit variables is
-that the objective function does not have to be rewritten for a change in
-what is varied or what constraints are placed on the fit.  A programmer can
-write a general model that encapsulates the phenomenon to be optimized, and
-then allow a user of the model to change what is varied and what
-constraints are placed on the model.  The ability to easily change whether
-a Parameter is floated or fixed also allows one to easily test the
-significance of certain Parameters to the fitting model.  A second
-advantage is that Parameters can be used and objective function using them
-can be given to a number of fitting algorithms without any change.
-
-By default, lmfit uses and the `Levenberg-Marquardt`_ minimization
-algorithm from `MINPACK-1`_ as implemented in `scipy.optimize.leastsq`_.
+The lmfit package allows a choice of several optimization methods available
+from `scipy.optimize`_.  The default, and by far best tested optimization
+method used is the `Levenberg-Marquardt`_ algorithm from
+from `MINPACK-1`_ as implemented in `scipy.optimize.leastsq`_.
 This method is by far the most tested and best support method in lmfit, and
 much of this document assumes this algorithm is used unless explicitly
 stated. An important point for many scientific analysis is that this is
 only method that automatically estimates uncertainties and correlations
-between fitted variables from the covariance matrix used in the fit.
-
+between fitted variables from the covariance matrix calculated during the fit.
 
 A few other optimization routines are also supported, including
-`Nelder-Mead`_ simplex downhill method as implemented in
-`scipy.optimize.fmin`_, and several others from `scipy.optimize`_. Some
-methods, including the `L-BFGS`_ (limited memory
-Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented in
-`scipy.optimize.l_bfgs_b`_ and the `simulated annealing`_ algorithm as
+`Nelder-Mead`_ simplex downhill, Powell's method, COBYLA, Sequential Least
+Squares methods as implemented in `scipy.optimize.fmin`_, and several
+others from `scipy.optimize`_. Some methods, including the `L-BFGS`_
+(limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented
+in `scipy.optimize.l_bfgs_b`_ and the `simulated annealing`_ algorithm as
 implemented in `scipy.optimize.anneal`_ are implemented, but appear to not
 work very well.  In their native form, some of these methods setting upper
 or lower bounds on parameters, or adding constraints on fitted variables.
 By using Parameter objects, lmfit allows bounds and constraints for all of
-these methods, and makes it easy to swap between methods.
+these methods, and makes it easy to swap between methods.  These algorithms
+generally perform worse for most data fitting problems, but they are
+available and can be easily tried without changing the objective function
+or set of Parameters.
 
 Finally, because this approach of using the covariance matrix to determine
 uncertainties is sometimes questioned (and sometimes rightly so), lmfit
@@ -91,4 +77,3 @@ lmfit and this document are a work in progress.
    confidence
    bounds
    constraints
-
