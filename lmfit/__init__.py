@@ -7,8 +7,8 @@
    installed, parameters can be constrained as a simple
    mathematical expression of other Parameters.
 
-   version: 0.7
-   last update:  14-Sept-2012
+   version: 0.7.2
+   last update: 20-June-2013
    License: BSD
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
