@@ -16,7 +16,7 @@ import math
 from .astutils import (FROM_PY, FROM_MATH, FROM_NUMPY,
                        NUMPY_RENAMES, ExceptionHolder)
 
-from parameter import isParameter, valid_symbol_name
+from .parameter import isParameter, valid_symbol_name
 
 HAS_NUMPY = False
 try:
