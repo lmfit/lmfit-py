@@ -1,4 +1,3 @@
-
 =======================================
 Performing Fits, Analyzing Outputs
 =======================================
@@ -103,7 +102,7 @@ would look like::
 
         if data is None:
             return model
-	if eps is None
+	if eps is None:
             return (model - data)
         return (model - data)/eps
 
