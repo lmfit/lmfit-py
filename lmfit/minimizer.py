@@ -11,6 +11,7 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    <newville@cars.uchicago.edu>
 """
 
+import numpy as np
 from numpy import (dot, eye, ndarray, ones_like,
                    sqrt, take, transpose, triu)
 from numpy.dual import inv
@@ -414,6 +415,16 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # grad for the variable parameters
         grad = ones_like(_best)
         vbest = ones_like(_best)
+      
+        # ensure that _best, vbest, and grad are not
+        # broken 1-element ndarrays.
+        if len(np.shape(_best))==0:
+            _best = np.array([_best])
+        if len(np.shape(vbest))==0:
+            vbest = np.array([vbest])
+        if len(np.shape(grad))==0:
+            grad = np.array([grad])
+
         for ivar, varname in enumerate(self.var_map):
             par = self.params[varname]
             grad[ivar] = par.scale_gradient(_best[ivar])
