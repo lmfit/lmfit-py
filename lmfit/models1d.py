@@ -31,7 +31,7 @@ from lmfit import Parameter, Parameters, Minimizer
 VALID_BKGS = ('constant', 'linear', 'quadratic')
 
 LOG2 = np.log(2)
-SQRT2   = np.sqrt(2))
+SQRT2   = np.sqrt(2)
 SQRT2PI = np.sqrt(2*np.pi)
 SQRTPI  = np.sqrt(np.pi)
 
@@ -160,9 +160,10 @@ class ExponentialModel(FitModel):
         decay = params['decay'].value
         return amp*np.exp(-x / decay)
 
-class GaussianModel(PeakModel):
+class PeakModel(FitModel):
     """Generalization for Gaussian/Lorenztian/Voigt Model:
        amplitude, center, sigma, optional background
+       sets bounds: sigma >= 0
        """
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
@@ -174,11 +175,11 @@ class GaussianModel(PeakModel):
     def guess_starting_values(self, y, x):
         """could probably improve this"""
         maxy = max(y)
-        self.params['amplitude'].value =(maxy - min(y))*3.0
+        self.params['amplitude'].value =(maxy - min(y))*5.0
         imaxy = np.abs(y - maxy).argmin()
         # print imaxy, np.abs(y - maxy).argmin()
         self.params['center'].value = x[imaxy]
-        self.params['sigma'].value = (max(x)-min(x))/4.0
+        self.params['sigma'].value = (max(x)-min(x))/6.0
 
     def model(self, params=None, x=None, **kws):
         pass
@@ -223,7 +224,7 @@ class VoigtModel(PeakModel):
     """
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
-        PeakModel.__init__(self, amplitude=1, cen<ter=0, sigma=1,
+        PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
 
     def model(self, params=None, x=None, **kws):
