@@ -1,5 +1,6 @@
 import numpy as np
-from lmfit.models1d import LinearModel, QuadraticModel, ExponentialModel, GaussianModel
+from lmfit.models1d import LinearModel, QuadraticModel, ExponentialModel
+from lmfit.models1d import  LorenztianModel, GaussianModel, VoigtModel
 import matplotlib.pyplot as plt
 
 
@@ -7,18 +8,30 @@ x  = np.linspace(0, 10, 101)
 # dat = 118.0 + 10.0*np.exp(-x/7.0) + 5e-2*np.random.randn(len(x))
 # dat = 18.0 + 1.5*x  + 5.6*np.random.randn(len(x))
 
-sca = 1./(2.0*np.sqrt(2*np.pi))
-noise =  5e-2*np.random.randn(len(x))
-dat = 2.60 -0.04*x + 7.5 * np.exp(-(x-4.0)**2 / (2*0.35)**2) + noise
+sig = 0.47
+amp = 12.00
+cen = 5.66
+eps = 0.15
+off = 9
+slo = 0.2
+sca = 1./(2.0*np.sqrt(2*np.pi))/sig
+
+noise =  eps*np.random.randn(len(x))
+
+dat = off +slo*x + amp*sca* np.exp(-(x-cen)**2 / (2*sig)**2) + noise
 
 # mod = ExponentialModel(background='linear')
-mod = GaussianModel(background='linear')
 # mod = LinearModel()
-mod.guess_starting_values(dat, x)
-mod.params['bkg_offset'].value=2.0
+
+mod = GaussianModel(background='quad')
+mod = VoigtModel(background='quad')
+mod = LorenztianModel(background='quad')
+mod.guess_starting_values(dat, x, negative=False)
+mod.params['bkg_offset'].value=min(dat)
 
 init = mod.model(x=x)+mod.calc_background(x)
 mod.fit(dat, x=x)
+
 
 print mod.fit_report()
 

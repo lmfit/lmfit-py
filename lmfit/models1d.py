@@ -172,15 +172,23 @@ class PeakModel(FitModel):
         self.params.add('center',  value=center)
         self.params.add('sigma',  value=sigma, min=0)
 
-    def guess_starting_values(self, y, x):
+    def guess_starting_values(self, y, x, negative=False):
         """could probably improve this"""
-        maxy = max(y)
-        self.params['amplitude'].value =(maxy - min(y))*5.0
-        imaxy = np.abs(y - maxy).argmin()
+        maxy, miny = max(y), min(y)
+        extremey = maxy
+        self.params['amplitude'].value =(maxy - miny)*5.0
+        if negative: 
+            extremey = miny
+            self.params['amplitude'].value = -(maxy - miny)*5.0
+        imaxy = np.abs(y - extremey).argmin()
         # print imaxy, np.abs(y - maxy).argmin()
         self.params['center'].value = x[imaxy]
         self.params['sigma'].value = (max(x)-min(x))/6.0
-
+        if 'bkg_offset' in self.params:
+            bkg_off = miny
+            if negative:  bkg_off = maxy
+            self.params['bkg_offset'].value = bkg_off
+            
     def model(self, params=None, x=None, **kws):
         pass
 
@@ -233,6 +241,5 @@ class VoigtModel(PeakModel):
         amp = params['amplitude'].value
         cen = params['center'].value
         sig = params['sigma'].value
-        gam = sig
-        z = (x-cen + 1j*gam)/ (sig*SQRT2)
-        return wofz(z).real / (sig*SQRT2PI)
+        z = (x-cen + 1j*sig) / (sig*SQRT2)
+        return amp*wofz(z).real / (sig*SQRT2PI)
