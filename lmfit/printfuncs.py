@@ -64,7 +64,7 @@ def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
         elif par.expr is not None:
             add("    %s %s == '%s'" % (nout, sval, par.expr))
         else:
-            add("    %s fixed" % (nout))
+            add("    %s % .6f (fixed)" % (nout, par.value))
 
     if show_correl:
         add('[[Correlations]] (unreported correlations are < % .3f)' % min_correl)
