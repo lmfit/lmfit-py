@@ -11,12 +11,8 @@ Models:
      Gaussian
      Lorentzian
      Voigt
-
-Coming Soon....:
-     * Step (linear / errorfunc / atan)
-     * Rectangular (linear / errorfunc / atan)
-     * Sine
-     * ErrorFunction
+     Step (linear / erf / atan)
+     Rectangular (linear / erf / atan)
 
   Original concept and code by Tillsten,
   adopted and expanded by Matt Newville
@@ -34,6 +30,15 @@ LOG2 = np.log(2)
 SQRT2   = np.sqrt(2)
 SQRT2PI = np.sqrt(2*np.pi)
 SQRTPI  = np.sqrt(np.pi)
+
+def index_of(arr, val):
+    """return index of array *at or below* value
+    returns 0 if value < min(array)
+    """
+    if val < min(arr):
+        return 0
+    return max(np.where(arr<=val)[0])
+
 
 class FitModel(object):
     """base class for fitting models"""
@@ -177,18 +182,17 @@ class PeakModel(FitModel):
         maxy, miny = max(y), min(y)
         extremey = maxy
         self.params['amplitude'].value =(maxy - miny)*5.0
-        if negative: 
+        if negative:
             extremey = miny
             self.params['amplitude'].value = -(maxy - miny)*5.0
-        imaxy = np.abs(y - extremey).argmin()
-        # print imaxy, np.abs(y - maxy).argmin()
+        imaxy = index_of(y, extremey)
         self.params['center'].value = x[imaxy]
         self.params['sigma'].value = (max(x)-min(x))/6.0
         if 'bkg_offset' in self.params:
             bkg_off = miny
             if negative:  bkg_off = maxy
             self.params['bkg_offset'].value = bkg_off
-            
+
     def model(self, params=None, x=None, **kws):
         pass
 
@@ -243,3 +247,92 @@ class VoigtModel(PeakModel):
         sig = params['sigma'].value
         z = (x-cen + 1j*sig) / (sig*SQRT2)
         return amp*wofz(z).real / (sig*SQRT2PI)
+
+class StepModel(FitModel):
+    """Step Model: height, center, width, optional background
+    a step can have a form of 'linear' (default), 'atan', or 'erfc'
+    which will give the functional form for going from 0 to height
+   """
+    def __init__(self, height=1, center=0, width=1, form='linear',
+                 background=None, **kws):
+        FitModel.__init__(self, background=background, **kws)
+        self.params.add('height', value=height)
+        self.params.add('center',  value=center)
+        self.params.add('width',  value=width, min=0)
+        self.form = form
+
+    def guess_starting_values(self, y, x):
+        ymin, ymax = min(y), max(y)
+        xmin, xmax = min(x), max(x)
+        self.params['height'].value = (ymax-ymin)
+        self.params['center'].value = (xmax+xmin)/2.0
+        self.params['width'].value  = (xmax-xmin)/7.0
+
+    def model(self, params=None, x=None, **kws):
+        if params is None:
+            params = self.params
+        height = params['height'].value
+        center = params['center'].value
+        width  = params['width'].value
+        out = (x - center)/max(width, 1.e-13)
+        if self.form == 'linear':
+            out[np.where(out<0)] = 0.0
+            out[np.where(out>1)] = 1.0
+        elif self.form == 'atan':
+            out = 0.5 + np.arctan(out)/np.pi
+        elif self.form == 'erf':
+            out = 0.5*(1 + erf(out))
+        return height*out
+
+class RectangularModel(FitModel):
+    """Rectangular Model:  a step up and a step down:
+
+    height, center1, center2, width1, width2, optional background
+
+    a step can have a form of 'linear' (default), 'atan', or 'erfc'
+    which will give the functional form for going from 0 to height
+   """
+    def __init__(self, height=1, center1=0, width1=1,
+                 center2=1, width2=1,
+                 form='linear',
+                 background=None, **kws):
+        FitModel.__init__(self, background=background, **kws)
+        self.params.add('height',   value=height)
+        self.params.add('center1',  value=center1)
+        self.params.add('width1',   value=width1, min=0)
+        self.params.add('center2',  value=center2)
+        self.params.add('width2',   value=width2, min=0)
+        self.form = form
+
+    def guess_starting_values(self, y, x):
+        ymin, ymax = min(y), max(y)
+        xmin, xmax = min(x), max(x)
+        self.params['height'].value = (ymax-ymin)
+        self.params['center1'].value = (xmax+xmin)/4.0
+        self.params['width1'].value  = (xmax-xmin)/7.0
+        self.params['center2'].value = 3*(xmax+xmin)/4.0
+        self.params['width2'].value  = (xmax-xmin)/7.0
+
+    def model(self, params=None, x=None, **kws):
+        if params is None:
+            params = self.params
+        height  = params['height'].value
+        center1 = params['center1'].value
+        width1  = params['width1'].value
+        center2 = params['center2'].value
+        width2  = params['width2'].value
+        arg1 = (x - center1)/max(width1, 1.e-13)
+        arg2 = (center2 - x)/max(width2, 1.e-13)
+        if self.form == 'linear':
+            arg1[np.where(arg1<0)] =  0.0
+            arg1[np.where(arg1>1)] =  1.0
+            arg2[np.where(arg2<-1] = -1.0
+            arg2[np.where(arg2>0)] =  0.0
+            out = arg1 + arg2
+        elif self.form == 'atan':
+            out = (1 + np.arctan(arg1)/np.pi +
+                   np.arctan(arg2)/np.pi)/2.0
+        elif self.form == 'erf':
+            out = (2 + erf(arg1) + erf(arg2))/4.0
+        return height*out
+
