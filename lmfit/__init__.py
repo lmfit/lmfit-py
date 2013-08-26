@@ -21,6 +21,7 @@ from .confidence import conf_interval, conf_interval2d
 from .printfuncs import (fit_report, ci_report,
                          report_fit, report_ci, report_errors)
 
+import models1d
 from . import uncertainties
 from .uncertainties import ufloat, correlated_values
 
