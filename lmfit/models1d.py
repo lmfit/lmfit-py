@@ -32,12 +32,11 @@ SQRT2PI = np.sqrt(2*np.pi)
 SQRTPI  = np.sqrt(np.pi)
 
 def index_of(arr, val):
-    """return index of array *at or below* value
-    returns 0 if value < min(array)
+    """return index of array nearest to a value
     """
     if val < min(arr):
         return 0
-    return max(np.where(arr<=val)[0])
+    return np.abs(arr-val).argmin()
 
 
 class FitModel(object):
@@ -166,7 +165,7 @@ class ExponentialModel(FitModel):
         return amp*np.exp(-x / decay)
 
 class PeakModel(FitModel):
-    """Generalization for Gaussian/Lorenztian/Voigt Model:
+    """Generalization for Gaussian/Lorentzian/Voigt Model:
        amplitude, center, sigma, optional background
        sets bounds: sigma >= 0
        """
@@ -188,6 +187,7 @@ class PeakModel(FitModel):
         imaxy = index_of(y, extremey)
         self.params['center'].value = x[imaxy]
         self.params['sigma'].value = (max(x)-min(x))/6.0
+        print 'GUESS center ', imaxy, extremey, x[imaxy]
         if 'bkg_offset' in self.params:
             bkg_off = miny
             if negative:  bkg_off = maxy
@@ -203,6 +203,7 @@ class GaussianModel(PeakModel):
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
+        self.params.add('fwhm',  expr='2.354820*sigma')
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -213,13 +214,14 @@ class GaussianModel(PeakModel):
         amp = amp/(2*SQRT2PI*sig)
         return amp * np.exp(-(x-cen)**2 / (2*sig)**2)
 
-class LorenztianModel(PeakModel):
-    """Lorenztian Model:
+class LorentzianModel(PeakModel):
+    """Lorentzian Model:
     amplitude, center, sigma, optional background"""
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
+        self.params.add('fwhm',  expr='2*sigma')
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -238,6 +240,7 @@ class VoigtModel(PeakModel):
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
+        self.params.add('fwhm',  expr='3.60131*sigma')
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -302,6 +305,7 @@ class RectangularModel(FitModel):
         self.params.add('width1',   value=width1, min=0)
         self.params.add('center2',  value=center2)
         self.params.add('width2',   value=width2, min=0)
+        self.params.add('midpoint',   expr='(center1+center2)/2.0')
         self.form = form
 
     def guess_starting_values(self, y, x):
@@ -326,7 +330,7 @@ class RectangularModel(FitModel):
         if self.form == 'linear':
             arg1[np.where(arg1<0)] =  0.0
             arg1[np.where(arg1>1)] =  1.0
-            arg2[np.where(arg2<-1] = -1.0
+            arg2[np.where(arg2<-1)] = -1.0
             arg2[np.where(arg2>0)] =  0.0
             out = arg1 + arg2
         elif self.form == 'atan':
