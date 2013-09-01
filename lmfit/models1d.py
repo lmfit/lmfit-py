@@ -355,16 +355,15 @@ class RectangularModel(FitModel):
         width2  = params['width2'].value
         arg1 = (x - center1)/max(width1, 1.e-13)
         arg2 = (center2 - x)/max(width2, 1.e-13)
-        if self.form == 'linear':
+        if self.step == 'atan':
+            out = (np.arctan(arg1) + np.arctan(arg2))/np.pi
+        elif self.step == 'erf':
+            out = 0.5*(erf(arg1) + erf(arg2))
+        else: # 'linear'
             arg1[np.where(arg1<0)] =  0.0
             arg1[np.where(arg1>1)] =  1.0
             arg2[np.where(arg2<-1)] = -1.0
             arg2[np.where(arg2>0)] =  0.0
             out = arg1 + arg2
-        elif self.form == 'atan':
-            out = (1 + np.arctan(arg1)/np.pi +
-                   np.arctan(arg2)/np.pi)/2.0
-        elif self.form == 'erf':
-            out = (2 + erf(arg1) + erf(arg2))/4.0
         return height*out
 
