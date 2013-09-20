@@ -211,8 +211,8 @@ class GaussianModel(PeakModel):
         amp = params['amplitude'].value
         cen = params['center'].value
         sig = params['sigma'].value
-        amp = amp/(2*SQRT2PI*sig)
-        return amp * np.exp(-(x-cen)**2 / (2*sig)**2)
+        amp = amp/(SQRT2PI*sig)
+        return amp * np.exp(-(x-cen)**2 / (2*sig**2))
 
 class LorentzianModel(PeakModel):
     """Lorentzian Model:
