@@ -38,9 +38,41 @@ def index_of(arr, val):
         return 0
     return np.abs(arr-val).argmin()
 
+class FitBackground(object):
+    """base class for fitting models
+    needs to overwrite calculate() method
+    """
+    def __init__(self, **kws):
+        self.params = Parameters()
+        for key, val in kws.items():
+            if val is not None:
+                self.params.add('bkg_%s' % key, value=val, vary=True)
+
+    def calculate(self, x):
+        pass
+
+class PolyBackground(FitBackground):
+    """polynomial background: constant, linear, or quadratic"""
+    def __init__(self, offset=None, slope=None, quad=None):
+        FitBackground.__init__(self, offset=offset, slope=slope, quad=quad)
+
+    def calculate(self, x):
+        bkg = np.zeros_like(x)
+        if 'bkg_offset' in self.params:
+            bkg += self.params['bkg_offset'].value
+        if 'bkg_slope' in self.params:
+            bkg += x*self.params['bkg_slope'].value
+        if 'bkg_quad' in self.params:
+            bkg += x*x*self.params['bkg_quad'].value
+        return bkg
+
 
 class FitModel(object):
-    """base class for fitting models"""
+    """base class for fitting models
+
+    only supports polynomial background (offset, slop, quad)
+
+    """
     invalid_bkg_msg = """Warning: unrecoginzed background option '%s'
 expected one of the following:
    %s
@@ -58,23 +90,19 @@ expected one of the following:
             print self.invalid_bkg_msg % (repr(background),
                                           ', '.join(VALID_BKGS))
 
-        self.params.add('bkg_offset', value=offset, vary=True)
+        kwargs = {'offset':offset}
         if background.startswith('line'):
-            self.params.add('bkg_slope', value=slope, vary=True)
-        elif background.startswith('quad'):
-            self.params.add('bkg_slope', value=slope, vary=True)
-            self.params.add('bkg_quad', value=slope, vary=True)
+            kwargs['slope'] = slope
+        if background.startswith('quad'):
+            kwargs['quad'] = quad
 
+        self.bkg = PolyBackground(**kwargs)
+
+        for nam, par in self.bkg.params.items():
+            self.params[nam] = par
 
     def calc_background(self, x):
-        bkg = np.zeros_like(x)
-        if 'bkg_offset' in self.params:
-            bkg += self.params['bkg_offset'].value
-        if 'bkg_slope' in self.params:
-            bkg += x*self.params['bkg_slope'].value
-        if 'bkg_quad' in self.params:
-            bkg += x*x*self.params['bkg_quad'].value
-        return bkg
+        return self.bkg.calculate(x)
 
     def __objective(self, params, y=None, x=None, dy=None, **kws):
         """fit objective function"""
@@ -327,16 +355,15 @@ class RectangularModel(FitModel):
         width2  = params['width2'].value
         arg1 = (x - center1)/max(width1, 1.e-13)
         arg2 = (center2 - x)/max(width2, 1.e-13)
-        if self.form == 'linear':
+        if self.step == 'atan':
+            out = (np.arctan(arg1) + np.arctan(arg2))/np.pi
+        elif self.step == 'erf':
+            out = 0.5*(erf(arg1) + erf(arg2))
+        else: # 'linear'
             arg1[np.where(arg1<0)] =  0.0
             arg1[np.where(arg1>1)] =  1.0
             arg2[np.where(arg2<-1)] = -1.0
             arg2[np.where(arg2>0)] =  0.0
             out = arg1 + arg2
-        elif self.form == 'atan':
-            out = (1 + np.arctan(arg1)/np.pi +
-                   np.arctan(arg2)/np.pi)/2.0
-        elif self.form == 'erf':
-            out = (2 + erf(arg1) + erf(arg2))/4.0
         return height*out
 
