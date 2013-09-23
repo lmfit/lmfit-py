@@ -97,12 +97,28 @@ class Parameter(object):
         self.deps   = None
         self.stderr = None
         self.correl = None
-        if self.max is not None and value > self.max:
-            self._val = self.max
-        if self.min is not None and value < self.min:
-            self._val = self.min
-        self.from_internal = lambda val: val
+        self._init_bounds()
 
+    def _init_bounds(self):
+        """make sure initial bounds are self-consistent"""
+        if self.max is not None and self._val > self.max:
+            self._val = self.max
+        if self.min is not None and self._val < self.min:
+            self._val = self.min
+        self.setup_bounds()
+
+    def __getstate__(self):
+        """get state for pickle"""
+        return (self.name, self.value, self.vary, self.expr, self.min,
+                self.max, self.stderr, self.correl, self.init_value)
+    
+    def __setstate__(self, state):
+        """set state for pickle"""
+        (self.name, self.value, self.vary, self.expr, self.min,
+         self.max, self.stderr, self.correl, self.init_value) = state
+        self._val = self.value
+        self._init_bounds()
+        
     def __repr__(self):
         s = []
         if self.name is not None:
