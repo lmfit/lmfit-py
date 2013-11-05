@@ -136,7 +136,8 @@ class ConfidenceInterval(object):
 
         """
         if p_names is None:
-            self.p_names = minimizer.params.keys()
+            params = minimizer.params
+            self.p_names = [i for i in params if params[i].vary]
         else:
             self.p_names = p_names
 
