@@ -445,11 +445,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             par.stderr, par.correl = 0, None
 
         self.covar = cov
-        if cov is None:
-            self.errorbars = False
-            self.message = '%s. Could not estimate error-bars'
-        else:
-            self.errorbars = True
+        if cov is not None:
             if self.scale_covar:
                 self.covar = cov = cov * sum_sqr / self.nfree
 
@@ -458,8 +454,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             #   temporarily set Parameter values to these,
             #   re-evaluate contrained parameters to extract stderr
             #   and then set Parameters back to best-fit value
-            uvars = uncertainties.correlated_values(vbest, self.covar)
-
+            try:
+                uvars = uncertainties.correlated_values(vbest, self.covar)
+            except (LinAlgError, ValueError):
+                cov, uvars = None, None
+                
+        if uvars is not None:
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(cov[ivar, ivar])
@@ -476,6 +476,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             # restore nominal values
             for v, nam in zip(uvars, self.var_map):
                 self.asteval.symtable[nam] = v.nominal_value
+
+        self.errorbars = True
+        if cov is None:
+            self.errorbars = False
+            self.message = '%s. Could not estimate error-bars'
 
         for par in self.params.values():
             if hasattr(par, 'ast'):
