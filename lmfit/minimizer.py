@@ -385,12 +385,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.jacfcn = lskws['Dfun']
             lskws['Dfun'] = self.__jacobian
 
+        # suppress runtime warnings during fit and error analysis
+        orig_warn_settings = np.geterr()
+        np.seterr(all='ignore')        
         lsout = scipy_leastsq(self.__residual, self.vars, **lskws)
         _best, _cov, infodict, errmsg, ier = lsout
 
         self.residual = resid = infodict['fvec']
-
-
         self.ier = ier
         self.lmdif_message = errmsg
         self.message = 'Fit succeeded.'
@@ -431,60 +432,62 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             vbest[ivar] = par.value
 
         # modified from JJ Helmus' leastsqbound.py
-
         infodict['fjac'] = transpose(transpose(infodict['fjac']) /
                                      take(grad, infodict['ipvt'] - 1))
         rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys, :]),
                    take(eye(self.nvarys), infodict['ipvt'] - 1, 0))
         try:
-            cov = inv(dot(transpose(rvec), rvec))
+            self.covar = inv(dot(transpose(rvec), rvec))
         except (LinAlgError, ValueError):
-            cov = None
+            self.covar = None
 
+        has_expr = False
         for par in self.params.values():
             par.stderr, par.correl = 0, None
-
-        self.covar = cov
-        if cov is not None:
+            has_expr = has_expr or par.expr is not None
+            
+        if self.covar is not None:
             if self.scale_covar:
-                self.covar = cov = cov * sum_sqr / self.nfree
+                self.covar = self.covar * sum_sqr / self.nfree
 
-            # uncertainties on constrained parameters:
-            #   get values with uncertainties (including correlations),
-            #   temporarily set Parameter values to these,
-            #   re-evaluate contrained parameters to extract stderr
-            #   and then set Parameters back to best-fit value
-            try:
-                uvars = uncertainties.correlated_values(vbest, self.covar)
-            except (LinAlgError, ValueError):
-                cov, uvars = None, None
-                
-        if uvars is not None:
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
-                par.stderr = sqrt(cov[ivar, ivar])
+                par.stderr = sqrt(self.covar[ivar, ivar])
                 par.correl = {}
                 for jvar, varn2 in enumerate(self.var_map):
                     if jvar != ivar:
-                        par.correl[varn2] = (cov[ivar, jvar]/
-                                        (par.stderr * sqrt(cov[jvar, jvar])))
-
-            for pname, par in self.params.items():
-                eval_stderr(par, uvars, self.var_map,
-                            self.params, self.asteval)
-
-            # restore nominal values
-            for v, nam in zip(uvars, self.var_map):
-                self.asteval.symtable[nam] = v.nominal_value
-
-        self.errorbars = True
-        if cov is None:
-            self.errorbars = False
-            self.message = '%s. Could not estimate error-bars'
-
+                        par.correl[varn2] = (self.covar[ivar, jvar]/
+                             (par.stderr * sqrt(self.covar[jvar, jvar])))
+                        
+            uvars = None
+            if has_expr:
+                # uncertainties on constrained parameters:
+                #   get values with uncertainties (including correlations),
+                #   temporarily set Parameter values to these,
+                #   re-evaluate contrained parameters to extract stderr
+                #   and then set Parameters back to best-fit value
+                try:
+                    uvars = uncertainties.correlated_values(vbest, self.covar)
+                except (LinAlgError, ValueError):
+                    uvars = None
+                
+                if uvars is not None:
+                    for pname, par in self.params.items():
+                        eval_stderr(par, uvars, self.var_map,
+                                    self.params, self.asteval)
+                    # restore nominal values
+                    for v, nam in zip(uvars, self.var_map):
+                        self.asteval.symtable[nam] = v.nominal_value
         for par in self.params.values():
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
+
+        self.errorbars = True
+        if self.covar is None:
+            self.errorbars = False
+            self.message = '%s. Could not estimate error-bars'
+
+        np.seterr(**orig_warn_settings)        
         return self.success
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
