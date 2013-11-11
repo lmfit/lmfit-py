@@ -6,3 +6,5 @@ doc/*.pdf
 build
 dist
 lmfit.egg-info
+sandbox/
+
