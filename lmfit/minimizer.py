@@ -265,6 +265,17 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.update_constraints()
         self.__prepared = True
 
+    def unprepare_fit(self):
+        """unprepare fit, so that subsequent fits will be
+        forced to run re-prepare the fit
+
+        removes ast compilations of constraint expressions
+        """
+        self.__prepared = False
+        for par in self.params.values():
+            if hasattr(par, 'ast'):
+                delattr(par, 'ast')
+
     def anneal(self, schedule='cauchy', **kws):
         """
         use simulated annealing
@@ -282,6 +293,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         print("WARNING:  scipy anneal appears unusable!")
         saout = scipy_anneal(self.penalty, self.vars, **sakws)
         self.sa_out = saout
+        self.unprepare_fit()
         return
 
     def lbfgsb(self, **kws):
@@ -300,6 +312,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfev =  info['funcalls']
         self.message = info['task']
         self.chisqr = (self.penalty(xout)**2).sum()
+        self.unprepare_fit()
+        return
 
     def fmin(self, **kws):
         """
@@ -315,6 +329,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         xout, fout, iter, funccalls, warnflag, allvecs = ret
         self.nfev =  funccalls
         self.chisqr = (self.penalty(xout)**2).sum()
+        self.unprepare_fit()
+        return
 
     def scalar_minimize(self, method='Nelder-Mead', hess=None, tol=None, **kws):
         """use one of the scaler minimization methods from scipy.
@@ -358,6 +374,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.message = ret.message
         self.nfev = ret.nfev
         self.chisqr = (self.penalty(xout)**2).sum()
+        self.unprepare_fit()
+        return
 
     def leastsq(self, **kws):
         """
@@ -387,7 +405,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         # suppress runtime warnings during fit and error analysis
         orig_warn_settings = np.geterr()
-        np.seterr(all='ignore')        
+        np.seterr(all='ignore')
         lsout = scipy_leastsq(self.__residual, self.vars, **lskws)
         _best, _cov, infodict, errmsg, ier = lsout
 
@@ -416,7 +434,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # grad for the variable parameters
         grad = ones_like(_best)
         vbest = ones_like(_best)
-      
+
         # ensure that _best, vbest, and grad are not
         # broken 1-element ndarrays.
         if len(np.shape(_best))==0:
@@ -445,7 +463,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         for par in self.params.values():
             par.stderr, par.correl = 0, None
             has_expr = has_expr or par.expr is not None
-            
+
         if self.covar is not None:
             if self.scale_covar:
                 self.covar = self.covar * sum_sqr / self.nfree
@@ -458,7 +476,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                     if jvar != ivar:
                         par.correl[varn2] = (self.covar[ivar, jvar]/
                              (par.stderr * sqrt(self.covar[jvar, jvar])))
-                        
+
             uvars = None
             if has_expr:
                 # uncertainties on constrained parameters:
@@ -470,7 +488,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                     uvars = uncertainties.correlated_values(vbest, self.covar)
                 except (LinAlgError, ValueError):
                     uvars = None
-                
+
                 if uvars is not None:
                     for pname, par in self.params.items():
                         eval_stderr(par, uvars, self.var_map,
@@ -478,16 +496,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                     # restore nominal values
                     for v, nam in zip(uvars, self.var_map):
                         self.asteval.symtable[nam] = v.nominal_value
-        for par in self.params.values():
-            if hasattr(par, 'ast'):
-                delattr(par, 'ast')
 
         self.errorbars = True
         if self.covar is None:
             self.errorbars = False
             self.message = '%s. Could not estimate error-bars'
 
-        np.seterr(**orig_warn_settings)        
+        np.seterr(**orig_warn_settings)
+        self.unprepare_fit()
         return self.success
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
@@ -535,7 +551,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     return fitter
 
 def make_paras_and_func(fcn, x0, used_kwargs=None):
-    """nach 
+    """nach
     A function which takes a function a makes a parameters-dict
     for it.
 
@@ -549,7 +565,7 @@ def make_paras_and_func(fcn, x0, used_kwargs=None):
     defaults = args[-1]
     len_def = len(defaults) if defaults is not None else 0
     # have_defaults = args[-len(defaults):]
-    
+
     args_without_defaults = len(args[0])- len_def
 
     if len(x0) < args_without_defaults:
@@ -568,13 +584,13 @@ def make_paras_and_func(fcn, x0, used_kwargs=None):
     def func(para):
         "wrapped func"
         kwdict = {}
-        
+
         for arg in used_kwargs.keys():
             kwdict[arg] = para[arg].value
 
         vals = [para[i].value for i in p]
         return fcn(*vals[:len(x0)], **kwdict)
-        
+
     return p, func
 
 
