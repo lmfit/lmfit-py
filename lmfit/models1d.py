@@ -87,8 +87,8 @@ expected one of the following:
         if background is None:
             return
         if background not in VALID_BKGS:
-            print self.invalid_bkg_msg % (repr(background),
-                                          ', '.join(VALID_BKGS))
+            print( self.invalid_bkg_msg % (repr(background),
+                                          ', '.join(VALID_BKGS)))
 
         kwargs = {'offset':offset}
         if background.startswith('line'):
@@ -215,7 +215,6 @@ class PeakModel(FitModel):
         imaxy = index_of(y, extremey)
         self.params['center'].value = x[imaxy]
         self.params['sigma'].value = (max(x)-min(x))/6.0
-        print 'GUESS center ', imaxy, extremey, x[imaxy]
         if 'bkg_offset' in self.params:
             bkg_off = miny
             if negative:  bkg_off = maxy
