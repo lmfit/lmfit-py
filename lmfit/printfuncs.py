@@ -43,17 +43,17 @@ def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
         nout = " %s: %s" % (name, space)
         initval = 'inital = ?'
         if par.init_value is not None:
-            initval = 'initial = % .6f' % par.init_value
+            initval = 'initial = % .7g' % par.init_value
         if modelpars is not None and name in modelpars:
-            initval = '%s, model_value =% .6f' % (initval, modelpars[name].value)
+            initval = '%s, model_value =% .7g' % (initval, modelpars[name].value)
 
         try:
-            sval = '% .6f' % par.value
+            sval = '% .7g' % par.value
         except (TypeError, ValueError):
             sval = 'Non Numeric Value?'
 
         if par.stderr is not None:
-            sval = '% .6f +/- %.6f' % (par.value, par.stderr)
+            sval = '% .7g +/- %.7g' % (par.value, par.stderr)
             try:
                 sval = '%s (%.2f%%)' % (sval, abs(par.stderr/par.value)*100)
             except ZeroDivisionError:
@@ -64,7 +64,7 @@ def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
         elif par.expr is not None:
             add("    %s %s == '%s'" % (nout, sval, par.expr))
         else:
-            add("    %s % .6f (fixed)" % (nout, par.value))
+            add("    %s % .7g (fixed)" % (nout, par.value))
 
     if show_correl:
         add('[[Correlations]] (unreported correlations are < % .3f)' % min_correl)
