@@ -188,7 +188,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         for varname, val in zip(self.var_map, fvars):
             # self.params[varname].value = val
-            self.params[varname].from_internal(val)
+            self.params[varname].value = self.params[varname].from_internal(val)
 
         self.nfev = self.nfev + 1
         self.update_constraints()
