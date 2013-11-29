@@ -77,3 +77,4 @@ lmfit and this document are a work in progress.
    confidence
    bounds
    constraints
+   models1d

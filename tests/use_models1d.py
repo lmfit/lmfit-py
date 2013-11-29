@@ -13,7 +13,7 @@ amp = 12.00
 cen = 5.66
 eps = 0.15
 off = 9
-slo = 0.2
+slo = 0.0012
 sca = 1./(2.0*np.sqrt(2*np.pi))/sig
 
 noise =  eps*np.random.randn(len(x))
