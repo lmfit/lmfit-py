@@ -79,6 +79,8 @@ expected one of the following:
 """
     def __init__(self, background=None, **kws):
         self.params = Parameters()
+        self.has_initial_guess = False
+        self.bkg = None
         self.initialize_background(background=background, **kws)
 
     def initialize_background(self, background=None,
@@ -102,6 +104,8 @@ expected one of the following:
             self.params[nam] = par
 
     def calc_background(self, x):
+        if self.bkg is None:
+            return 0
         return self.bkg.calculate(x)
 
     def __objective(self, params, y=None, x=None, dy=None, **kws):
@@ -119,14 +123,16 @@ expected one of the following:
     def guess_starting_values(self, params, y, x=None, **kws):
         raise NotImplementedError
 
-    def fit_report(self, params=None):
+    def fit_report(self, params=None, **kws):
         if params is None:
             params = self.params
-        return lmfit.fit_report(params)
+        return lmfit.fit_report(params, **kws)
 
     def fit(self, y, x=None, dy=None, **kws):
         fcn_kws={'y':y, 'x':x, 'dy':dy}
         fcn_kws.update(kws)
+        if not self.has_initial_guess:
+            self.guess_starting_values(y, x=x, **kws)
         self.minimizer = Minimizer(self.__objective, self.params,
                                    fcn_kws=fcn_kws, scale_covar=True)
         self.minimizer.prepare_fit()
@@ -140,10 +146,14 @@ class LinearModel(FitModel):
         self.params.add('offset', value=offset)
         self.params.add('slope',  value=slope)
 
-    def guess_starting_values(self, y, x):
-        sval, oval = np.polyfit(x, y, 1)
+    def guess_starting_values(self, y, x=None, **kws):
+        if x is None:
+            sval, oval = 0., 0.
+        else:
+            sval, oval = np.polyfit(x, y, 1)
         self.params['offset'].value = oval
         self.params['slope'].value = sval
+        self.has_initial_guess = True
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -158,11 +168,15 @@ class QuadraticModel(FitModel):
         self.params.add('slope',  value=slope)
         self.params.add('quad',  value=quad)
 
-    def guess_starting_values(self, y, x):
-        qval, sval, oval = np.polyfit(x, y, 2)
+    def guess_starting_values(self, y, x=None, **kws):
+        if x is None:
+            qval, sval, oval = 0., 0., 0.
+        else:
+            qval, sval, oval = np.polyfit(x, y, 2)
         self.params['offset'].value = oval
         self.params['slope'].value = sval
         self.params['quad'].value = qval
+        self.has_initial_guess = True
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -177,13 +191,14 @@ class ExponentialModel(FitModel):
         self.params.add('amplitude', value=amplitude)
         self.params.add('decay',  value=decay)
 
-    def guess_starting_values(self, y, x):
+    def guess_starting_values(self, y, x=None, **kws):
         try:
             sval, oval = np.polyfit(x, np.log(abs(y)), 1)
         except:
             sval, oval = 1., np.log(abs(max(y)+1.e-9))
         self.params['amplitude'].value = np.exp(oval)
         self.params['decay'].value = (max(x)-min(x))/10.
+        self.has_initial_guess = True
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -197,28 +212,38 @@ class PeakModel(FitModel):
        amplitude, center, sigma, optional background
        sets bounds: sigma >= 0
        """
+    fwhm_factor = 2.0
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         FitModel.__init__(self, background=background, **kws)
         self.params.add('amplitude', value=amplitude)
         self.params.add('center',  value=center)
         self.params.add('sigma',  value=sigma, min=0)
+        self.params.add('fwhm',  expr='%.6f*sigma' % self.fwhm_factor)
 
-    def guess_starting_values(self, y, x, negative=False):
+    def guess_starting_values(self, y, x=None, negative=False, **kws):
         """could probably improve this"""
+        if x is None:
+            return
         maxy, miny = max(y), min(y)
         extremey = maxy
-        self.params['amplitude'].value =(maxy - miny)*5.0
+        self.params['amplitude'].value =(maxy - miny)*1.5
         if negative:
             extremey = miny
-            self.params['amplitude'].value = -(maxy - miny)*5.0
+            self.params['amplitude'].value = -(maxy - miny)*1.5
         imaxy = index_of(y, extremey)
+        sigma_guess = (max(x)-min(x))/6.0
+        halfmax_vals = np.where(y > extremey/2.0)[0]
+        if len(halfmax_vals) > 3:
+            sigma_guess = (x[halfmax_vals[-1]] - x[halfmax_vals[0]])/self.fwhm_factor
+
         self.params['center'].value = x[imaxy]
-        self.params['sigma'].value = (max(x)-min(x))/6.0
+        self.params['sigma'].value = sigma_guess
         if 'bkg_offset' in self.params:
             bkg_off = miny
             if negative:  bkg_off = maxy
             self.params['bkg_offset'].value = bkg_off
+        self.has_initial_guess = True
 
     def model(self, params=None, x=None, **kws):
         pass
@@ -226,11 +251,12 @@ class PeakModel(FitModel):
 class GaussianModel(PeakModel):
     """Gaussian Model:
     amplitude, center, sigma, optional background"""
+    fwhm_factor = 2.354820
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
-        self.params.add('fwhm',  expr='2.354820*sigma')
+        self.params.add('fwhm',  expr='%g*sigma' % self.fwhm_factor)
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -244,11 +270,12 @@ class GaussianModel(PeakModel):
 class LorentzianModel(PeakModel):
     """Lorentzian Model:
     amplitude, center, sigma, optional background"""
+    fwhm_factor = 2.0
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
-        self.params.add('fwhm',  expr='2*sigma')
+        self.params.add('fwhm',  expr='%.6f*sigma' % self.fwhm_factor)
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -263,11 +290,12 @@ class VoigtModel(PeakModel):
     amplitude, center, sigma, optional background
     this version sets gamma=sigma
     """
+    fwhm_factor = 3.60131
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
-        self.params.add('fwhm',  expr='3.60131*sigma')
+
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -291,12 +319,15 @@ class StepModel(FitModel):
         self.params.add('width',  value=width, min=0)
         self.form = form
 
-    def guess_starting_values(self, y, x):
+    def guess_starting_values(self, y, x=None, **kws):
+        if x is None:
+            return
         ymin, ymax = min(y), max(y)
         xmin, xmax = min(x), max(x)
         self.params['height'].value = (ymax-ymin)
         self.params['center'].value = (xmax+xmin)/2.0
         self.params['width'].value  = (xmax-xmin)/7.0
+        self.has_initial_guess = True
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -335,7 +366,9 @@ class RectangularModel(FitModel):
         self.params.add('midpoint',   expr='(center1+center2)/2.0')
         self.form = form
 
-    def guess_starting_values(self, y, x):
+    def guess_starting_values(self, y, x=None, **kws):
+        if x is None:
+            return
         ymin, ymax = min(y), max(y)
         xmin, xmax = min(x), max(x)
         self.params['height'].value = (ymax-ymin)
@@ -343,6 +376,7 @@ class RectangularModel(FitModel):
         self.params['width1'].value  = (xmax-xmin)/7.0
         self.params['center2'].value = 3*(xmax+xmin)/4.0
         self.params['width2'].value  = (xmax-xmin)/7.0
+        self.has_initial_guess = True
 
     def model(self, params=None, x=None, **kws):
         if params is None:
