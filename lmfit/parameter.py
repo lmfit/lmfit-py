@@ -8,25 +8,9 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-import re
 from . import uncertainties
 
-
-RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'class', 'continue',
-                  'def', 'del', 'elif', 'else', 'except', 'exec',
-                  'finally', 'for', 'from', 'global', 'if', 'import', 'in',
-                  'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise',
-                  'return', 'try', 'while', 'with', 'True', 'False',
-                  'None', 'eval', 'execfile', '__import__', '__package__')
-
-NAME_MATCH = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*$").match
-
-def valid_symbol_name(name):
-    "input is a valid name"
-    if name in RESERVED_WORDS:
-        return False
-    return NAME_MATCH(name) is not None
-
+from .astutils import valid_symbol_name
 
 class Parameters(OrderedDict):
     """a custom dictionary of Parameters.  All keys must be
@@ -111,14 +95,14 @@ class Parameter(object):
         """get state for pickle"""
         return (self.name, self.value, self.vary, self.expr, self.min,
                 self.max, self.stderr, self.correl, self.init_value)
-    
+
     def __setstate__(self, state):
         """set state for pickle"""
         (self.name, self.value, self.vary, self.expr, self.min,
          self.max, self.stderr, self.correl, self.init_value) = state
         self._val = self.value
         self._init_bounds()
-        
+
     def __repr__(self):
         s = []
         if self.name is not None:
