@@ -174,8 +174,11 @@ class Model(object):
         if self.missing != 'none':
             mask = self._handle_missing(data)  # This can raise.
             data = data[mask]
+            if sigma is not None:
+                sigma = sigma[mask]
             for var in self.independent_vars:
-                kwargs[var] = kwargs[var][mask]
+                if not np.isscalar(self.independent_vars):  # just in case
+                    kwargs[var] = kwargs[var][mask]
 
         result = lmfit.minimize(self._residual, params,
                                 args=(data, sigma), kws=kwargs)
