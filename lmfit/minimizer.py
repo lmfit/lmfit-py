@@ -128,6 +128,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.__set_params(params)
         self.prepare_fit()
 
+    @property
+    def values(self):
+        "Convenience function that returns Parameter values as a simple dict."
+        return {name: p.value for name, p in self.params.items()}
+
     def __update_paramval(self, name):
         """
         update parameter value, including setting bounds.
