@@ -17,6 +17,25 @@ except ImportError:
 else:
     isnull = pandas.isnull
 
+# When handling missing data or data not the same size as independent vars,
+# use pandas to align. If pandas is not available, data and vars must be the
+# same size, but missing data can still be handled with masks.
+try:
+    import pandas
+except ImportError:
+    def _align(var, mask, data):
+        if mask is not None:
+            return var[mask]
+        return var
+else:
+    def _align(var, mask, data):
+        if isinstance(data, pandas.Series) and isinstance(var, pandas.Series):
+            return var.reindex_like(data).dropna()
+        elif mask is not None:
+            return var[mask]
+        else:
+            return var
+
 class Model(object):
 
     def __init__(self, func, independent_vars=[], missing='none'):
@@ -90,7 +109,8 @@ class Model(object):
                 e = f - data
             else:
                 e = (f - data)/sigma
-            return e
+            return np.asarray(e)  # for compatibility with pandas.Series
+
         return residual
 
     def _handle_missing(self, data):
@@ -99,6 +119,8 @@ class Model(object):
                 raise ValueError("Data contains a null value.")
         elif self.missing == 'drop':
             mask = ~isnull(data)
+            if np.all(mask):
+                return None # short-circuit this -- no missing values
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
 
@@ -171,14 +193,19 @@ class Model(object):
                              "fit().")
 
         # Handle null/missing values.
+        mask = None
         if self.missing != 'none':
             mask = self._handle_missing(data)  # This can raise.
-            data = data[mask]
+            if mask is not None:
+                data = data[mask]
             if sigma is not None:
-                sigma = sigma[mask]
-            for var in self.independent_vars:
-                if not np.isscalar(self.independent_vars):  # just in case
-                    kwargs[var] = kwargs[var][mask]
+                sigma = _align(sigma, mask, data)
+
+        # If independent_vars and data are alignable (pandas), align them,
+        # and apply the mask from above if there is one.
+        for var in self.independent_vars:
+            if not np.isscalar(self.independent_vars):  # just in case
+                kwargs[var] = _align(kwargs[var], mask, data)
 
         result = lmfit.minimize(self._residual, params,
                                 args=(data, sigma), kws=kwargs)
