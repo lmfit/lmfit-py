@@ -19,13 +19,13 @@ else:
 
 class Model(object):
 
-    def __init__(self, model_func, independent_vars=[], missing='none'):
+    def __init__(self, func, independent_vars=[], missing='none'):
         """Create a model.
         Parameters
         ----------
-        model_func: function
+        func: function
         independent_vars: list of strings, optional
-            matching argument(s) to model_func
+            matching argument(s) to func
         missing: 'none', 'drop', or 'raise'
             'none': Do not check for null or missing values.
             'drop': Drop null or missing observations in data. 
@@ -46,7 +46,7 @@ class Model(object):
         ...
         >>> my_model = Model(decay, independent_vars = 't')    
         """
-        self.model_arg_names = inspect.getargspec(model_func)[0]
+        self.model_arg_names = inspect.getargspec(func)[0]
         # The implicit magic in fit() requires us to disallow some
         # variable names.
         forbidden_args = ['data', 'sigma', 'params']
@@ -56,7 +56,7 @@ class Model(object):
                                  "argument named %s. " % arg +
                                  "Choose a different name.")
         self.param_names = set(self.model_arg_names) - set(independent_vars)
-        self.model_func = model_func
+        self.func = func
         self.independent_vars = independent_vars
         if not missing in ['none', 'drop', 'raise']:
             raise ValueError("missing must be 'none', 'drop', or 'raise'.")
@@ -85,7 +85,7 @@ class Model(object):
             data, sigma = args
             params = {name: p.value for name, p in params.items()}
             kwargs = dict(params.items() + kwargs.items())
-            f = self.model_func(**kwargs)
+            f = self.func(**kwargs)
             if sigma is None:
                 e = f - data
             else:
