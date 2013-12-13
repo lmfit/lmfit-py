@@ -22,6 +22,7 @@ from .printfuncs import (fit_report, ci_report,
                          report_fit, report_ci, report_errors)
 
 from .wrap      import wrap_function, make_paras_and_func
+from .model import Model
 
 from . import models1d
 from . import uncertainties
