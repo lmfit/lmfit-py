@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,8 +13,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.7.2',
+        URL_ROOT:    './',
+        VERSION:     '0.7.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -202,14 +200,15 @@ this can be done when being defined:</p>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>or later:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="mf">0.10</span>
+<p>or after being defined by setting the corresponding attributes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mf">0.10</span>
 </pre></div>
 </div>
-<p>Now the fit will <em>not</em> vary the amplitude parameter, and will also impose a
-lower bound on the decay factor and an upper bound on the frequency.
-Importantly, our function to be minimized remains unchanged.</p>
+<p>In either case, the fit will <em>not</em> vary the amplitude parameter.  In
+addition, a lower bound will be placed on the decay factor, and upper
+bounds placed on two parameters. Importantly, our function to be minimized
+remains unchanged.</p>
 <p>An important point here is that the <cite>params</cite> object can be copied and
 modified to make many user-level changes to the model and fitting process.
 Of course, most of the information about how your data is modeled goes into
@@ -402,7 +401,7 @@ looks table-like:</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>

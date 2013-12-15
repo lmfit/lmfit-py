@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -15,8 +13,8 @@
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '',
-        VERSION:     '0.7.2',
+        URL_ROOT:    './',
+        VERSION:     '0.7.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -143,25 +141,98 @@ model).</p>
 </div>
 <p>We have to fit it, before we can generate the confidence intervals.</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [8]: </span><span class="n">mi</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="go">(&#39;   _set_params &#39;, True, Parameters([(&#39;a&#39;, &lt;Parameter &#39;a&#39;, 0.1, bounds=[None:None]&gt;), (&#39;b&#39;, &lt;Parameter &#39;b&#39;, 1, bounds=[None:None]&gt;)]))</span>
+<span class="go"> A</span>
+<span class="go"> D</span>
+<span class="go">Before  [0.1, 1]</span>
+<span class="go">After  [0.1, 1] &lt;type &#39;list&#39;&gt;</span>
+<span class="go">After  [ 0.0999186   1.98957831]</span>
 
 <span class="gp">In [9]: </span><span class="n">mi</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
+<span class="go">Before  [0.099918600947856609, 1.9895783083874108]</span>
+<span class="go">After  [0.099918600947856609, 1.9895783083874108] &lt;type &#39;list&#39;&gt;</span>
+<span class="go">After  [ 0.0999186   1.98957831]</span>
 <span class="gr">Out[9]: </span><span class="bp">True</span>
 
 <span class="gp">In [10]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 <span class="go">[[Variables]]</span>
-<span class="go">     a:     0.100083 +/- 0.000219 (0.22%) initial =  0.100000</span>
-<span class="go">     b:     2.010992 +/- 0.013691 (0.68%) initial =  1.000000</span>
+<span class="go">     a:     0.0999186 +/- 0.0001976605 (0.20%) initial =  0.0999186</span>
+<span class="go">     b:     1.989578 +/- 0.0123883 (0.62%) initial =  1.989578</span>
 <span class="go">[[Correlations]] (unreported correlations are &lt;  0.100)</span>
 <span class="go">    C(a, b)                      =  0.601 </span>
 </pre></div>
 </div>
 <p>Now it just a simple function call to start the calculation:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [11]: </span><span class="n">ci</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">)</span>
+<span class="go">(&#39;   _set_params &#39;, True, Parameters([(&#39;a&#39;, &lt;Parameter &#39;a&#39;, value=0.099918600947856609 (fixed), bounds=[-inf:inf]&gt;), (&#39;b&#39;, &lt;Parameter &#39;b&#39;, value=1.9895783380344378 +/- 0.0124, bounds=[-inf:inf]&gt;)]))</span>
+<span class="go"> A</span>
+<span class="go"> D</span>
+<span class="go">(&#39;   _set_params &#39;, False, &lt;Parameter &#39;a&#39;, value=0.099720940403733402 (fixed), bounds=[-inf:inf]&gt;)</span>
+<span class="go"> C</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">MinimizerException                        Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-11-283bc3409ed1&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 ci = lmfit.conf_interval(mi)</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in conf_interval(minimizer, p_names, sigmas, trace, maxiter, verbose, prob_func)</span>
+<span class="go">    110     ci = ConfidenceInterval(minimizer, p_names, prob_func, sigmas, trace,</span>
+<span class="go">    111                             verbose, maxiter)</span>
+<span class="go">--&gt; 112     output = ci.calc_all_ci()</span>
+<span class="go">    113     if trace:</span>
+<span class="go">    114         return output, ci.trace_dict</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in calc_all_ci(self)</span>
+<span class="go">    182         for p in self.p_names:</span>
+<span class="go">    183             out[p] = (self.calc_ci(p, -1)[::-1] +</span>
+<span class="go">--&gt; 184                       [(0., self.params[p].value)]  +</span>
+<span class="go">    185                       self.calc_ci(p, 1))</span>
+<span class="go">    186         if self.trace:</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in calc_ci(self, para, direction)</span>
+<span class="go">    204         para.vary = False</span>
+<span class="go">    205         self.minimizer.prepare_fit(self.params)</span>
+<span class="go">--&gt; 206         limit = self.find_limit(para, direction)</span>
+<span class="go">    207         start_val = para.value</span>
+<span class="go">    208         a_limit = start_val</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in find_limit(self, para, direction)</span>
+<span class="go">    249             i += 1</span>
+<span class="go">    250             limit += step * direction</span>
+<span class="go">--&gt; 251             new_prob = self.calc_prob(para, limit)</span>
+<span class="go">    252             change = new_prob - old_prob</span>
+<span class="go">    253             old_prob = new_prob</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in calc_prob(self, para, val, offset, restore)</span>
+<span class="go">    262             restore_vals(self.org, self.minimizer.params)</span>
+<span class="go">    263         para.value = val</span>
+<span class="go">--&gt; 264         self.minimizer.prepare_fit(para)</span>
+<span class="go">    265         self.minimizer.leastsq()</span>
+<span class="go">    266         out = self.minimizer</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/minimizer.pyc in prepare_fit(self, params)</span>
+<span class="go">    237             return</span>
+<span class="go">    238         if params is not None:</span>
+<span class="go">--&gt; 239             self.__set_params(params)</span>
+<span class="go">    240         self.nfev = 0</span>
+<span class="go">    241         self.var_map = []</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/minimizer.pyc in __set_params(self, params)</span>
+<span class="go">    217         else:</span>
+<span class="go">    218             print(&quot; C&quot;)</span>
+<span class="go">--&gt; 219             raise MinimizerException(self.err_nonparam)</span>
+<span class="go">    220         print(&quot; D&quot;)</span>
+<span class="go">    221 </span>
+
+<span class="go">MinimizerException: </span>
+<span class="go">params must be a list of Parameter()s or instance of Parameters()</span>
 
 <span class="gp">In [12]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
-<span class="go">     99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%</span>
-<span class="go">a   0.09942   0.09965   0.09987   0.10008   0.10030   0.10052   0.10075</span>
-<span class="go">b   1.96932   1.98382   1.99748   2.01099   2.02451   2.03816   2.05267</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-12-109e8590aa63&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 lmfit.printfuncs.report_ci(ci)</span>
+
+<span class="go">NameError: name &#39;ci&#39; is not defined</span>
 </pre></div>
 </div>
 <p>As we can see, the estimated error is almost the same:
@@ -185,28 +256,99 @@ covariance can lead to wrong results:</p>
 </div>
 <p>Now lets fit it:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [18]: </span><span class="n">mi</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+<span class="go">(&#39;   _set_params &#39;, True, Parameters([(&#39;a1&#39;, &lt;Parameter &#39;a1&#39;, 5, bounds=[None:None]&gt;), (&#39;a2&#39;, &lt;Parameter &#39;a2&#39;, -5, bounds=[None:None]&gt;), (&#39;t1&#39;, &lt;Parameter &#39;t1&#39;, 2, bounds=[None:None]&gt;), (&#39;t2&#39;, &lt;Parameter &#39;t2&#39;, 5, bounds=[None:None]&gt;)]))</span>
+<span class="go"> A</span>
+<span class="go"> D</span>
+<span class="go">Before  [5, -5, 2, 5]</span>
+<span class="go">After  [5, -5, 2, 5] &lt;type &#39;list&#39;&gt;</span>
+<span class="go">After  [  2.61101347  -4.51292759   1.56947733  10.96136643]</span>
 
 <span class="gp">In [19]: </span><span class="n">mi</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
+<span class="go">Before  [2.611013468631163, -4.5129275905744413, 1.5694773304740601, 10.961366426022575]</span>
+<span class="go">After  [2.611013468631163, -4.5129275905744413, 1.5694773304740601, 10.961366426022575] &lt;type &#39;list&#39;&gt;</span>
+<span class="go">After  [  2.61101347  -4.51292759   1.56947733  10.96136643]</span>
 <span class="gr">Out[19]: </span><span class="bp">True</span>
 
 <span class="gp">In [20]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">show_correl</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="go">[[Variables]]</span>
-<span class="go">     a1:     2.611014 +/- 0.327959 (12.56%) initial =  5.000000</span>
-<span class="go">     a2:    -4.512928 +/- 0.399194 (8.85%) initial = -5.000000</span>
-<span class="go">     t1:     1.569477 +/- 0.334505 (21.31%) initial =  2.000000</span>
-<span class="go">     t2:     10.961366 +/- 1.263868 (11.53%) initial =  5.000000</span>
+<span class="go">     a1:     2.611013 +/- 0.3279648 (12.56%) initial =  2.611013</span>
+<span class="go">     a2:    -4.512928 +/- 0.3991997 (8.85%) initial = -4.512928</span>
+<span class="go">     t1:     1.569477 +/- 0.3345078 (21.31%) initial =  1.569477</span>
+<span class="go">     t2:     10.96137 +/- 1.263874 (11.53%) initial =  10.96137</span>
 </pre></div>
 </div>
 <p>Again we call <tt class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></tt>, this time with tracing and only for 1-
 and 2-sigma:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [21]: </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.68</span><span class="p">,</span><span class="mf">0.95</span><span class="p">],</span> <span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">(&#39;   _set_params &#39;, True, Parameters([(&#39;a1&#39;, &lt;Parameter &#39;a1&#39;, value=2.611013468631163 (fixed), bounds=[-inf:inf]&gt;), (&#39;a2&#39;, &lt;Parameter &#39;a2&#39;, value=-4.5129275905744413 +/- 0.399, bounds=[-inf:inf]&gt;), (&#39;t1&#39;, &lt;Parameter &#39;t1&#39;, value=1.5694773304740601 +/- 0.335, bounds=[-inf:inf]&gt;), (&#39;t2&#39;, &lt;Parameter &#39;t2&#39;, value=10.961366589359663 +/- 1.26, bounds=[-inf:inf]&gt;)]))</span>
+<span class="go"> A</span>
+<span class="go"> D</span>
+<span class="go">(&#39;   _set_params &#39;, False, &lt;Parameter &#39;a1&#39;, value=2.2830487128691401 (fixed), bounds=[-inf:inf]&gt;)</span>
+<span class="go"> C</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">MinimizerException                        Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-21-ffc48cd474ab&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 ci, trace = lmfit.conf_interval(mi, sigmas=[0.68,0.95], trace=True, verbose=False)</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in conf_interval(minimizer, p_names, sigmas, trace, maxiter, verbose, prob_func)</span>
+<span class="go">    110     ci = ConfidenceInterval(minimizer, p_names, prob_func, sigmas, trace,</span>
+<span class="go">    111                             verbose, maxiter)</span>
+<span class="go">--&gt; 112     output = ci.calc_all_ci()</span>
+<span class="go">    113     if trace:</span>
+<span class="go">    114         return output, ci.trace_dict</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in calc_all_ci(self)</span>
+<span class="go">    182         for p in self.p_names:</span>
+<span class="go">    183             out[p] = (self.calc_ci(p, -1)[::-1] +</span>
+<span class="go">--&gt; 184                       [(0., self.params[p].value)]  +</span>
+<span class="go">    185                       self.calc_ci(p, 1))</span>
+<span class="go">    186         if self.trace:</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in calc_ci(self, para, direction)</span>
+<span class="go">    204         para.vary = False</span>
+<span class="go">    205         self.minimizer.prepare_fit(self.params)</span>
+<span class="go">--&gt; 206         limit = self.find_limit(para, direction)</span>
+<span class="go">    207         start_val = para.value</span>
+<span class="go">    208         a_limit = start_val</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in find_limit(self, para, direction)</span>
+<span class="go">    249             i += 1</span>
+<span class="go">    250             limit += step * direction</span>
+<span class="go">--&gt; 251             new_prob = self.calc_prob(para, limit)</span>
+<span class="go">    252             change = new_prob - old_prob</span>
+<span class="go">    253             old_prob = new_prob</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in calc_prob(self, para, val, offset, restore)</span>
+<span class="go">    262             restore_vals(self.org, self.minimizer.params)</span>
+<span class="go">    263         para.value = val</span>
+<span class="go">--&gt; 264         self.minimizer.prepare_fit(para)</span>
+<span class="go">    265         self.minimizer.leastsq()</span>
+<span class="go">    266         out = self.minimizer</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/minimizer.pyc in prepare_fit(self, params)</span>
+<span class="go">    237             return</span>
+<span class="go">    238         if params is not None:</span>
+<span class="go">--&gt; 239             self.__set_params(params)</span>
+<span class="go">    240         self.nfev = 0</span>
+<span class="go">    241         self.var_map = []</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/minimizer.pyc in __set_params(self, params)</span>
+<span class="go">    217         else:</span>
+<span class="go">    218             print(&quot; C&quot;)</span>
+<span class="go">--&gt; 219             raise MinimizerException(self.err_nonparam)</span>
+<span class="go">    220         print(&quot; D&quot;)</span>
+<span class="go">    221 </span>
+
+<span class="go">MinimizerException: </span>
+<span class="go">params must be a list of Parameter()s or instance of Parameters()</span>
 
 <span class="gp">In [22]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
-<span class="go">      95.00%    68.00%     0.00%    68.00%    95.00%</span>
-<span class="go">a1   2.11682   2.33695   2.61101   3.06638   4.28694</span>
-<span class="go">a2  -6.39449  -5.05978  -4.51293  -4.19527  -3.97856</span>
-<span class="go">t2   8.00415   9.62699  10.96137  12.17903  13.34866</span>
-<span class="go">t1   1.07010   1.28481   1.56948   1.97509   2.64342</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-22-109e8590aa63&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 lmfit.printfuncs.report_ci(ci)</span>
+
+<span class="go">NameError: name &#39;ci&#39; is not defined</span>
 </pre></div>
 </div>
 <p>If you compare the calculated error estimates, you will see that the
@@ -214,9 +356,81 @@ regular estimate is too small. Now let's plot a confidence region:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [23]: </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="gp">In [24]: </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grid</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="s">&#39;a1&#39;</span><span class="p">,</span><span class="s">&#39;t2&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+<span class="go">(&#39;   _set_params &#39;, False, [&lt;Parameter &#39;a1&#39;, value=0.64322493405902614 (fixed), bounds=[-inf:inf]&gt;, &lt;Parameter &#39;t2&#39;, value=4.6419982428026998 (fixed), bounds=[-inf:inf]&gt;])</span>
+<span class="go"> B</span>
+<span class="go">(&#39;  Bx &#39;, True, &lt;Parameter &#39;a1&#39;, value=0.64322493405902614 (fixed), bounds=[-inf:inf]&gt;)</span>
+<span class="go">(&#39;  Bx &#39;, True, &lt;Parameter &#39;t2&#39;, value=4.6419982428026998 (fixed), bounds=[-inf:inf]&gt;)</span>
+<span class="go"> D</span>
+<span class="go">Before  []</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">ValueError                                Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-24-d6d597bf8ca0&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 x, y, grid = lmfit.conf_interval2d(mi,&#39;a1&#39;,&#39;t2&#39;,30,30)</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in conf_interval2d(minimizer, x_name, y_name, nx, ny, limits, prob_func)</span>
+<span class="go">    364         return prob</span>
+<span class="go">    365 </span>
+<span class="go">--&gt; 366     out = x_points, y_points, np.apply_along_axis(calc_prob, -1, grid)</span>
+<span class="go">    367 </span>
+<span class="go">    368     x.vary, y.vary = True, True</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/numpy/lib/shape_base.pyc in apply_along_axis(func1d, axis, arr, *args)</span>
+<span class="go">     78     outshape = asarray(arr.shape).take(indlist)</span>
+<span class="go">     79     i.put(indlist, ind)</span>
+<span class="go">---&gt; 80     res = func1d(arr[tuple(i.tolist())],*args)</span>
+<span class="go">     81     #  if res is a number, then we have a smaller output array</span>
+<span class="go">     82     if isscalar(res):</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/confidence.pyc in calc_prob(vals, restore)</span>
+<span class="go">    357 </span>
+<span class="go">    358         minimizer.prepare_fit([x, y])</span>
+<span class="go">--&gt; 359         minimizer.leastsq()</span>
+<span class="go">    360         out = minimizer</span>
+<span class="go">    361 </span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/minimizer.pyc in leastsq(self, **kws)</span>
+<span class="go">    416         np.seterr(all=&#39;ignore&#39;)</span>
+<span class="go">    417         print &#39;Before &#39;, self.vars</span>
+<span class="go">--&gt; 418         lsout = scipy_leastsq(self.__residual, self.vars, **lskws)</span>
+<span class="go">    419         print &#39;After &#39;, self.vars, type(self.vars)</span>
+<span class="go">    420         _best, _cov, infodict, errmsg, ier = lsout</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/scipy/optimize/minpack.pyc in leastsq(func, x0, args, Dfun, full_output, col_deriv, ftol, xtol, gtol, maxfev, epsfcn, factor, diag)</span>
+<span class="go">    366     if not isinstance(args, tuple):</span>
+<span class="go">    367         args = (args,)</span>
+<span class="go">--&gt; 368     shape, dtype = _check_func(&#39;leastsq&#39;, &#39;func&#39;, func, x0, args, n)</span>
+<span class="go">    369     m = shape[0]</span>
+<span class="go">    370     if n &gt; m:</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/scipy/optimize/minpack.pyc in _check_func(checker, argname, thefunc, x0, args, numinputs, output_shape)</span>
+<span class="go">     17 def _check_func(checker, argname, thefunc, x0, args, numinputs,</span>
+<span class="go">     18                 output_shape=None):</span>
+<span class="go">---&gt; 19     res = atleast_1d(thefunc(*((x0[:numinputs],) + args)))</span>
+<span class="go">     20     if (output_shape is not None) and (shape(res) != output_shape):</span>
+<span class="go">     21         if (output_shape[0] != 1):</span>
+
+<span class="go">/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/lmfit-0.7.3-py2.7.egg/lmfit/minimizer.pyc in __residual(self, fvars)</span>
+<span class="go">    178 </span>
+<span class="go">    179         self.update_constraints()</span>
+<span class="go">--&gt; 180         out = self.userfcn(self.params, *self.userargs, **self.userkws)</span>
+<span class="go">    181         if hasattr(self.iter_cb, &#39;__call__&#39;):</span>
+<span class="go">    182             self.iter_cb(self.params, self.nfev, out,</span>
+
+<span class="go">&lt;ipython-input-17-aa70f655e340&gt; in residual(p)</span>
+<span class="go">      1 def residual(p):</span>
+<span class="go">----&gt; 2      a1, a2, t1, t2 = [i.value for i in p.values()]</span>
+<span class="go">      3      return a1*np.exp(-x/t1)+a2*np.exp(-x/t2)-y</span>
+<span class="go">      4 </span>
+
+<span class="go">ValueError: need more than 2 values to unpack</span>
 
 <span class="gp">In [25]: </span><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
-<span class="gr">Out[25]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">QuadContourSet</span> <span class="n">instance</span> <span class="n">at</span> <span class="mh">0xbd443ac</span><span class="o">&gt;</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-25-7bae90e87b03&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 plt.contourf(x, y, grid, np.linspace(0,1,11))</span>
+
+<span class="go">NameError: name &#39;grid&#39; is not defined</span>
 
 <span class="gp">In [26]: </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;a1&#39;</span><span class="p">);</span>
 
@@ -225,20 +439,42 @@ regular estimate is too small. Now let's plot a confidence region:</p>
 <span class="gp">In [28]: </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;t2&#39;</span><span class="p">);</span>
 </pre></div>
 </div>
-<img alt="_images/conf_interval.png" src="_images/conf_interval.png" style="width: 7in;" />
+<a class="reference internal image-reference" href="_images/conf_interval.png"><img alt="_images/conf_interval.png" src="_images/conf_interval.png" style="width: 7in;" /></a>
 <p>Remember the trace? It shows the dependence between two parameters.</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [33]: </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-33-f5718771d672&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 x, y, prob = trace[&#39;a1&#39;][&#39;a1&#39;], trace[&#39;a1&#39;][&#39;t2&#39;],trace[&#39;a1&#39;][&#39;prob&#39;]</span>
+
+<span class="go">NameError: name &#39;trace&#39; is not defined</span>
 
 <span class="gp">In [34]: </span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">prob2</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-34-effaea300ab2&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 x2, y2, prob2 = trace[&#39;t2&#39;][&#39;t2&#39;], trace[&#39;t2&#39;][&#39;a1&#39;],trace[&#39;t2&#39;][&#39;prob&#39;]</span>
+
+<span class="go">NameError: name &#39;trace&#39; is not defined</span>
 
 <span class="gp">In [35]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob</span> <span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gr">Out[35]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0xbe1f50c</span><span class="o">&gt;</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-35-9c78ccc4b98f&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 plt.scatter(x, y, c=prob ,s=30)</span>
+
+<span class="go">NameError: name &#39;prob&#39; is not defined</span>
 
 <span class="gp">In [36]: </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<span class="gr">Out[36]: </span><span class="o">&lt;</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">collections</span><span class="o">.</span><span class="n">PathCollection</span> <span class="n">at</span> <span class="mh">0xbea59cc</span><span class="o">&gt;</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">NameError                                 Traceback (most recent call last)</span>
+<span class="go">&lt;ipython-input-36-26c3af366335&gt; in &lt;module&gt;()</span>
+<span class="go">----&gt; 1 plt.scatter(x2, y2, c=prob2, s=30)</span>
+
+<span class="go">NameError: name &#39;x2&#39; is not defined</span>
 </pre></div>
 </div>
-<img alt="_images/conf_interval2.png" src="_images/conf_interval2.png" style="width: 7in;" />
+<a class="reference internal image-reference" href="_images/conf_interval2.png"><img alt="_images/conf_interval2.png" src="_images/conf_interval2.png" style="width: 7in;" /></a>
 </div>
 <div class="section" id="documentation-of-methods">
 <h2>Documentation of methods<a class="headerlink" href="#documentation-of-methods" title="Permalink to this headline">¶</a></h2>
@@ -309,7 +545,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
 </tr>
 </tbody>
 </table>
-<div class="admonition-see-also admonition seealso">
+<div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">conf_interval2d</span></tt></p>
 </div>
@@ -432,7 +668,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
     </div>
     <div class="footer">
         &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
     </div>
   </body>
 </html>
