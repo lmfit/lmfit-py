@@ -57,7 +57,7 @@ Development Version
 
 To get the latest development version, use::
 
-   git clone http://github.com/newville/lmfit-py.git
+   git clone http://github.com/lmfit/lmfit-py.git
 
 
 Installation

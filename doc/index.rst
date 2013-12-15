@@ -13,10 +13,8 @@ Non-Linear Least-Square Minimization for Python
 .. _Nelder-Mead: http://en.wikipedia.org/wiki/Nelder-Mead_method
 .. _Levenberg-Marquardt: http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
 .. _L-BFGS:  http://en.wikipedia.org/wiki/Limited-memory_BFGS
-.. _simulated annealing: http://en.wikipedia.org/wiki/Simulated_annealing
 
 .. _MINPACK-1: http://en.wikipedia.org/wiki/MINPACK
-.. _asteval: http://newville.github.io/asteval/
 
 The lmfit Python package provides a simple, flexible interface to
 non-linear optimization or curve fitting problems.  The package extends the
@@ -49,22 +47,17 @@ between fitted variables from the covariance matrix calculated during the fit.
 A few other optimization routines are also supported, including
 `Nelder-Mead`_ simplex downhill, Powell's method, COBYLA, Sequential Least
 Squares methods as implemented in `scipy.optimize.fmin`_, and several
-others from `scipy.optimize`_. Some methods, including the `L-BFGS`_
-(limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented
-in `scipy.optimize.l_bfgs_b`_ and the `simulated annealing`_ algorithm as
-implemented in `scipy.optimize.anneal`_ are implemented, but appear to not
-work very well.  In their native form, some of these methods setting upper
-or lower bounds on parameters, or adding constraints on fitted variables.
-By using Parameter objects, lmfit allows bounds and constraints for all of
-these methods, and makes it easy to swap between methods.  These algorithms
-generally perform worse for most data fitting problems, but they are
-available and can be easily tried without changing the objective function
-or set of Parameters.
+others from `scipy.optimize`_.  In their native form, some of these methods
+setting allow upper or lower bounds on parameter variables, or adding
+constraints on fitted variables.  By using Parameter objects, lmfit allows
+bounds and constraints for *all* of these methods, and makes it easy to
+swap between methods without hanging the objective function or set of
+Parameters.
 
-Finally, because this approach of using the covariance matrix to determine
-uncertainties is sometimes questioned (and sometimes rightly so), lmfit
-supports methods to do a brute force search of the confidence intervals and
-correlations for sets of parameters.
+Finally, because the approach derived from `MINPACK-1`_ usin the covariance
+matrix to determine uncertainties is sometimes questioned (and sometimes
+rightly so), lmfit supports methods to do a brute force search of the
+confidence intervals and correlations for sets of parameters.
 
 lmfit and this document are a work in progress.
 
