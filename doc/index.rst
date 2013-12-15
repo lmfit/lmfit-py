@@ -16,7 +16,7 @@ Non-Linear Least-Square Minimization for Python
 .. _simulated annealing: http://en.wikipedia.org/wiki/Simulated_annealing
 
 .. _MINPACK-1: http://en.wikipedia.org/wiki/MINPACK
-.. _asteval: http://newville.github.com/asteval/
+.. _asteval: http://newville.github.io/asteval/
 
 The lmfit Python package provides a simple, flexible interface to
 non-linear optimization or curve fitting problems.  The package extends the
