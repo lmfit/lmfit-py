@@ -47,13 +47,12 @@
 <p>Current version: <b>0.7.3</b></p>
 <p>Downloads:
 <ul>
-  <li>&nbsp; &nbsp; <a href="http://cars.uchicago.edu/software/python/lmfit/src/">cars.uchicago.edu</a>
   <li>&nbsp; &nbsp; <a href="http://pypi.python.org/pypi/lmfit/">PyPI (Python.org)</a> <p>
        try <tt>easy_install -U lmfit</tt>
 </ul>
 <p>
 
-Development version: <br> &nbsp; &nbsp; <a href="https://github.com/newville/lmfit-py/">github.com</a> <br>
+Development version: <br> &nbsp; &nbsp; <a href="https://github.com/lmfit/lmfit-py/">github.com</a> <br>
 
 <h3>Documentation</h3>
 
@@ -111,21 +110,16 @@ between fitted variables from the covariance matrix calculated during the fit.</
 <p>A few other optimization routines are also supported, including
 <a class="reference external" href="http://en.wikipedia.org/wiki/Nelder-Mead_method">Nelder-Mead</a> simplex downhill, Powell's method, COBYLA, Sequential Least
 Squares methods as implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html">scipy.optimize.fmin</a>, and several
-others from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a>. Some methods, including the <a class="reference external" href="http://en.wikipedia.org/wiki/Limited-memory_BFGS">L-BFGS</a>
-(limited memory Broyden-Fletcher-Goldfarb-Shanno) algorithm as implemented
-in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">scipy.optimize.l_bfgs_b</a> and the <a class="reference external" href="http://en.wikipedia.org/wiki/Simulated_annealing">simulated annealing</a> algorithm as
-implemented in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html">scipy.optimize.anneal</a> are implemented, but appear to not
-work very well.  In their native form, some of these methods setting upper
-or lower bounds on parameters, or adding constraints on fitted variables.
-By using Parameter objects, lmfit allows bounds and constraints for all of
-these methods, and makes it easy to swap between methods.  These algorithms
-generally perform worse for most data fitting problems, but they are
-available and can be easily tried without changing the objective function
-or set of Parameters.</p>
-<p>Finally, because this approach of using the covariance matrix to determine
-uncertainties is sometimes questioned (and sometimes rightly so), lmfit
-supports methods to do a brute force search of the confidence intervals and
-correlations for sets of parameters.</p>
+others from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a>.  In their native form, some of these methods
+setting allow upper or lower bounds on parameter variables, or adding
+constraints on fitted variables.  By using Parameter objects, lmfit allows
+bounds and constraints for <em>all</em> of these methods, and makes it easy to
+swap between methods without hanging the objective function or set of
+Parameters.</p>
+<p>Finally, because the approach derived from <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> usin the covariance
+matrix to determine uncertainties is sometimes questioned (and sometimes
+rightly so), lmfit supports methods to do a brute force search of the
+confidence intervals and correlations for sets of parameters.</p>
 <p>lmfit and this document are a work in progress.</p>
 <div class="toctree-wrapper compound">
 <ul>

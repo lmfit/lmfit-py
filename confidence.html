@@ -146,28 +146,28 @@ model).</p>
 <span class="go"> D</span>
 <span class="go">Before  [0.1, 1]</span>
 <span class="go">After  [0.1, 1] &lt;type &#39;list&#39;&gt;</span>
-<span class="go">After  [ 0.0999186   1.98957831]</span>
+<span class="go">After  [ 0.10000145  1.98962734]</span>
 
 <span class="gp">In [9]: </span><span class="n">mi</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
-<span class="go">Before  [0.099918600947856609, 1.9895783083874108]</span>
-<span class="go">After  [0.099918600947856609, 1.9895783083874108] &lt;type &#39;list&#39;&gt;</span>
-<span class="go">After  [ 0.0999186   1.98957831]</span>
+<span class="go">Before  [0.10000145078576318, 1.9896273648599498]</span>
+<span class="go">After  [0.10000145078576318, 1.9896273648599498] &lt;type &#39;list&#39;&gt;</span>
+<span class="go">After  [ 0.10000145  1.98962734]</span>
 <span class="gr">Out[9]: </span><span class="bp">True</span>
 
 <span class="gp">In [10]: </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 <span class="go">[[Variables]]</span>
-<span class="go">     a:     0.0999186 +/- 0.0001976605 (0.20%) initial =  0.0999186</span>
-<span class="go">     b:     1.989578 +/- 0.0123883 (0.62%) initial =  1.989578</span>
+<span class="go">     a:     0.1000015 +/- 0.0001836303 (0.18%) initial =  0.1000015</span>
+<span class="go">     b:     1.989627 +/- 0.01148989 (0.58%) initial =  1.989627</span>
 <span class="go">[[Correlations]] (unreported correlations are &lt;  0.100)</span>
 <span class="go">    C(a, b)                      =  0.601 </span>
 </pre></div>
 </div>
 <p>Now it just a simple function call to start the calculation:</p>
 <div class="highlight-ipython"><div class="highlight"><pre><span class="gp">In [11]: </span><span class="n">ci</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">)</span>
-<span class="go">(&#39;   _set_params &#39;, True, Parameters([(&#39;a&#39;, &lt;Parameter &#39;a&#39;, value=0.099918600947856609 (fixed), bounds=[-inf:inf]&gt;), (&#39;b&#39;, &lt;Parameter &#39;b&#39;, value=1.9895783380344378 +/- 0.0124, bounds=[-inf:inf]&gt;)]))</span>
+<span class="go">(&#39;   _set_params &#39;, True, Parameters([(&#39;a&#39;, &lt;Parameter &#39;a&#39;, value=0.10000145080497619 (fixed), bounds=[-inf:inf]&gt;), (&#39;b&#39;, &lt;Parameter &#39;b&#39;, value=1.9896273351420422 +/- 0.0115, bounds=[-inf:inf]&gt;)]))</span>
 <span class="go"> A</span>
 <span class="go"> D</span>
-<span class="go">(&#39;   _set_params &#39;, False, &lt;Parameter &#39;a&#39;, value=0.099720940403733402 (fixed), bounds=[-inf:inf]&gt;)</span>
+<span class="go">(&#39;   _set_params &#39;, False, &lt;Parameter &#39;a&#39;, value=0.09981782052882425 (fixed), bounds=[-inf:inf]&gt;)</span>
 <span class="go"> C</span>
 <span class="go">---------------------------------------------------------------------------</span>
 <span class="go">MinimizerException                        Traceback (most recent call last)</span>
