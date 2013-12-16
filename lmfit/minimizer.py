@@ -281,61 +281,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
 
-    def anneal(self, schedule='cauchy', **kws):
-        """
-        use simulated annealing
-        """
-        sched = 'fast'
-        if schedule in ('cauchy', 'boltzmann'):
-            sched = schedule
-
-        self.prepare_fit()
-        sakws = dict(full_output=1, schedule=sched,
-                     maxiter = 2000 * (self.nvarys + 1))
-
-        sakws.update(self.kws)
-        sakws.update(kws)
-        print("WARNING:  scipy anneal appears unusable!")
-        saout = scipy_anneal(self.penalty, self.vars, **sakws)
-        self.sa_out = saout
-        self.unprepare_fit()
-        return
-
-    def lbfgsb(self, **kws):
-        """
-        use l-bfgs-b minimization
-        """
-        self.prepare_fit()
-        lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
-                      maxfun = 2000 * (self.nvarys + 1),
-                      # bounds = zip(self.vmin, self.vmax),
-                      )
-        lb_kws.update(self.kws)
-        lb_kws.update(kws)
-
-        xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
-        self.nfev =  info['funcalls']
-        self.message = info['task']
-        self.chisqr = (self.penalty(xout)**2).sum()
-        self.unprepare_fit()
-        return
-
-    def fmin(self, **kws):
-        """
-        use nelder-mead (simplex) minimization
-        """
-        self.prepare_fit()
-        fmin_kws = dict(full_output=True, disp=False, retall=True,
-                        ftol=1.e-4, xtol=1.e-4,
-                        maxfun = 5000 * (self.nvarys + 1))
-
-        fmin_kws.update(kws)
-        ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
-        xout, fout, iter, funccalls, warnflag, allvecs = ret
-        self.nfev =  funccalls
-        self.chisqr = (self.penalty(xout)**2).sum()
-        self.unprepare_fit()
-        return
 
     def scalar_minimize(self, method='Nelder-Mead', hess=None, tol=None, **kws):
         """use one of the scaler minimization methods from scipy.
@@ -527,8 +472,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
                        'tnc': 'TNC',                'cobyla': 'COBYLA',
                        'slsqp': 'SLSQP'}
 
-    _fitmethods = {'anneal': 'anneal',               'nelder': 'fmin',
-                   'lbfgsb': 'lbfgsb',               'leastsq': 'leastsq'}
+    _fitmethods = {'leastsq': 'leastsq'}
 
     if engine is not None:
         method = engine
