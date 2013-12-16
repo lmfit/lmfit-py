@@ -87,13 +87,16 @@ def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
             add('    C(%s)%s = % .3f ' % (name, (' '*30)[:lspace], val))
     return '\n'.join(buff)
 
+
 def report_errors(params, **kws):
     """print a report for fitted params:  see error_report()"""
     print(fit_report(params, **kws))
 
+
 def report_fit(params, **kws):
     """print a report for fitted params:  see error_report()"""
     print(fit_report(params, **kws))
+
 
 def ci_report(ci):
     """return text of a report for confidence intervals"""
@@ -110,9 +113,7 @@ def ci_report(ci):
         add("".join([name.rjust(maxlen)]+[i.rjust(10) for i in map(conv,  row)]))
     return '\n'.join(buff)
 
+
 def report_ci(ci):
     """print a report for confidence intervals"""
     print(ci_report(ci))
-
-
-
