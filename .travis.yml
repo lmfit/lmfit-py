@@ -2,22 +2,57 @@
 
 language: python
 
-env:
-    - PYTHON=python PYSUF='' # uses Python 2.7
-    - PYTHON=python3 PYSUF=3 # uses Python 3.2
+python:
+    - 2.6
 
-# command to install dependencies
+matrix:
+    include:
+        - python: 2.7
+          env:
+            - PYTHON=python
+            - PYVER=2.x
+        - python: 3.2
+          env:
+            - PYTHON=python3
+            - PYVER=3.x
+    exclude:
+        - python: 2.6
+
+virtualenv:
+    system_site_packages: true
+
+before_install:
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+
+    - sudo apt-get update
+    - sudo apt-get install $PYTHON-setuptools
+    - sudo apt-get install $PYTHON-numpy
+    - sudo apt-get install $PYTHON-scipy
+    - sudo apt-get install $PYTHON-sphinx
+    - sudo apt-get install $PYTHON-nose
+    - sudo pip -q install --use-mirrors uncertainties asteval
+
+    - if [[ $PYVER == '2.x' ]]; then
+    -   sudo apt-get install $PYTHON-matplotlib;
+    -   sudo apt-get install ipython
+    - fi
+    - if [[ $PYVER == '3.x' ]]; then
+    -   pip install --use-mirrors matplotlib;
+    -   sudo apt-get install ipython3
+    - fi
+
+
 install:
-  # Deactivate the virtualenv to get fast install of dependencies
-  - deactivate
-  - time sudo apt-get install -qq $PYTHON-numpy $PYTHON-scipy $PYTHON-matplotlib $PYTHON-sphinx $PYTHON-nose $PYTHON-ipython
-  - time sudo pip -q install --use-mirrors uncertainties asteval
-  - sudo python$PYSUF setup.py install
+    - sudo $PYTHON setup.py install
+
 script:
-  # Execute the unit tests
-  # For now running nosetests doesn't work.
-  - cd tests
-  - $PYTHON test_covar.py
-  # Generate the docs
-  - cd ../doc
-  - make html
+    # Execute the unit tests
+    # For now running nosetests doesn't work.
+    - cd tests
+    # - nosetests
+    # Generate the docs
+    - if [[ $PYVER == '2.x' ]]; then
+    -   cd ../doc
+    -   make html
+    - fi
