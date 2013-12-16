@@ -47,8 +47,8 @@ class Model(object):
             matching argument(s) to func
         missing: 'none', 'drop', or 'raise'
             'none': Do not check for null or missing values.
-            'drop': Drop null or missing observations in data. 
-                Use pandas.isnull if pandas is available; otherwise, 
+            'drop': Drop null or missing observations in data.
+                Use pandas.isnull if pandas is available; otherwise,
                 silently fall back to numpy.isnan.
             'raise': Raise a (more helpful) exception when data contains null
                 or missing values.
@@ -63,7 +63,7 @@ class Model(object):
         >>> def decay(t, tau, N):
         ...     return N*np.exp(-t/tau)
         ...
-        >>> my_model = Model(decay, independent_vars = 't')    
+        >>> my_model = Model(decay, independent_vars = 't')
         """
         self.model_arg_names = inspect.getargspec(func)[0]
         # The implicit magic in fit() requires us to disallow some
@@ -84,7 +84,7 @@ class Model(object):
 
     def params(self):
         """Return a blank copy of model params.
-        
+
         Example
         -------
         >>> params = my_model.params()
@@ -133,7 +133,7 @@ class Model(object):
         params: Parameters object, optional
         sigma: array-like of same size as data
             used for weighted fit, sigma=1/weights
-        keyword arguments: optional, named like the arguments of the 
+        keyword arguments: optional, named like the arguments of the
             model function, will override params. See examples below.
 
         Returns
