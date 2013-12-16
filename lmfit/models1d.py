@@ -21,15 +21,15 @@ Models:
 import numpy as np
 from scipy.special import gamma, gammaln, beta, betaln, erf, erfc, wofz
 
-import lmfit
-from lmfit import Parameter, Parameters, Minimizer
+from lmfit import Parameters, Minimizer, fit_report
 
 VALID_BKGS = ('constant', 'linear', 'quadratic')
 
 LOG2 = np.log(2)
-SQRT2   = np.sqrt(2)
+SQRT2  = np.sqrt(2)
 SQRT2PI = np.sqrt(2*np.pi)
-SQRTPI  = np.sqrt(np.pi)
+SQRTPI = np.sqrt(np.pi)
+
 
 def index_of(arr, val):
     """return index of array nearest to a value
@@ -37,6 +37,7 @@ def index_of(arr, val):
     if val < min(arr):
         return 0
     return np.abs(arr-val).argmin()
+
 
 class FitBackground(object):
     """base class for fitting models
@@ -50,6 +51,7 @@ class FitBackground(object):
 
     def calculate(self, x):
         pass
+
 
 class PolyBackground(FitBackground):
     """polynomial background: constant, linear, or quadratic"""
@@ -77,6 +79,7 @@ class FitModel(object):
 expected one of the following:
    %s
 """
+
     def __init__(self, background=None, **kws):
         self.params = Parameters()
         self.has_initial_guess = False
@@ -89,10 +92,10 @@ expected one of the following:
         if background is None:
             return
         if background not in VALID_BKGS:
-            print( self.invalid_bkg_msg % (repr(background),
+            print(self.invalid_bkg_msg % (repr(background),
                                           ', '.join(VALID_BKGS)))
 
-        kwargs = {'offset':offset}
+        kwargs = {'offset': offset}
         if background.startswith('line'):
             kwargs['slope'] = slope
         if background.startswith('quad'):
@@ -126,10 +129,10 @@ expected one of the following:
     def fit_report(self, params=None, **kws):
         if params is None:
             params = self.params
-        return lmfit.fit_report(params, **kws)
+        return fit_report(params, **kws)
 
     def fit(self, y, x=None, dy=None, **kws):
-        fcn_kws={'y':y, 'x':x, 'dy':dy}
+        fcn_kws = {'y': y, 'x': x, 'dy': dy}
         fcn_kws.update(kws)
         if not self.has_initial_guess:
             self.guess_starting_values(y, x=x, **kws)
@@ -138,6 +141,7 @@ expected one of the following:
         self.minimizer.prepare_fit()
         self.init = self.model(self.params, x=x, **kws)
         self.minimizer.leastsq()
+
 
 class LinearModel(FitModel):
     """Linear Model: slope, offset, no background"""
@@ -159,6 +163,7 @@ class LinearModel(FitModel):
         if params is None:
             params = self.params
         return params['offset'].value +  x * params['slope'].value
+
 
 class QuadraticModel(FitModel):
     """Quadratic Model: slope, offset, quad, no background"""
@@ -184,6 +189,7 @@ class QuadraticModel(FitModel):
         return params['offset'].value +  x * (params['slope'].value +
                                               x * params['quad'].value)
 
+
 class ExponentialModel(FitModel):
     """Exponential Model: amplitude, decay, optional background"""
     def __init__(self, amplitude=1, decay=1, background=None, **kws):
@@ -207,12 +213,14 @@ class ExponentialModel(FitModel):
         decay = params['decay'].value
         return amp*np.exp(-x / decay)
 
+
 class PeakModel(FitModel):
     """Generalization for Gaussian/Lorentzian/Voigt Model:
        amplitude, center, sigma, optional background
        sets bounds: sigma >= 0
        """
     fwhm_factor = 2.0
+
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         FitModel.__init__(self, background=background, **kws)
@@ -227,12 +235,12 @@ class PeakModel(FitModel):
             return
         maxy, miny = max(y), min(y)
         extremey = maxy
-        self.params['amplitude'].value =(maxy - miny)*1.5
+        self.params['amplitude'].value =(maxy - miny) * 1.5
         if negative:
             extremey = miny
-            self.params['amplitude'].value = -(maxy - miny)*1.5
+            self.params['amplitude'].value = -(maxy - miny) * 1.5
         imaxy = index_of(y, extremey)
-        sigma_guess = (max(x)-min(x))/6.0
+        sigma_guess = (max(x)-min(x)) / 6.0
         halfmax_vals = np.where(y > extremey/2.0)[0]
         if len(halfmax_vals) > 3:
             sigma_guess = (x[halfmax_vals[-1]] - x[halfmax_vals[0]])/self.fwhm_factor
@@ -241,17 +249,20 @@ class PeakModel(FitModel):
         self.params['sigma'].value = sigma_guess
         if 'bkg_offset' in self.params:
             bkg_off = miny
-            if negative:  bkg_off = maxy
+            if negative:
+                bkg_off = maxy
             self.params['bkg_offset'].value = bkg_off
         self.has_initial_guess = True
 
     def model(self, params=None, x=None, **kws):
         pass
 
+
 class GaussianModel(PeakModel):
     """Gaussian Model:
     amplitude, center, sigma, optional background"""
     fwhm_factor = 2.354820
+
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
@@ -267,10 +278,12 @@ class GaussianModel(PeakModel):
         amp = amp/(SQRT2PI*sig)
         return amp * np.exp(-(x-cen)**2 / (2*sig**2))
 
+
 class LorentzianModel(PeakModel):
     """Lorentzian Model:
     amplitude, center, sigma, optional background"""
     fwhm_factor = 2.0
+
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
@@ -285,17 +298,18 @@ class LorentzianModel(PeakModel):
         sig = params['sigma'].value
         return (amp/(1 + ((x-cen)/sig)**2))/(np.pi*sig)
 
+
 class VoigtModel(PeakModel):
     """Voigt Model:
     amplitude, center, sigma, optional background
     this version sets gamma=sigma
     """
     fwhm_factor = 3.60131
+
     def __init__(self, amplitude=1, center=0, sigma=1,
                  background=None, **kws):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
-
 
     def model(self, params=None, x=None, **kws):
         if params is None:
@@ -305,6 +319,7 @@ class VoigtModel(PeakModel):
         sig = params['sigma'].value
         z = (x-cen + 1j*sig) / (sig*SQRT2)
         return amp*wofz(z).real / (sig*SQRT2PI)
+
 
 class StepModel(FitModel):
     """Step Model: height, center, width, optional background
@@ -337,13 +352,14 @@ class StepModel(FitModel):
         width  = params['width'].value
         out = (x - center)/max(width, 1.e-13)
         if self.form == 'linear':
-            out[np.where(out<0)] = 0.0
-            out[np.where(out>1)] = 1.0
+            out[np.where(out < 0)] = 0.0
+            out[np.where(out > 1)] = 1.0
         elif self.form == 'atan':
             out = 0.5 + np.arctan(out)/np.pi
         elif self.form == 'erf':
             out = 0.5*(1 + erf(out))
         return height*out
+
 
 class RectangularModel(FitModel):
     """Rectangular Model:  a step up and a step down:
@@ -392,11 +408,10 @@ class RectangularModel(FitModel):
             out = (np.arctan(arg1) + np.arctan(arg2))/np.pi
         elif self.step == 'erf':
             out = 0.5*(erf(arg1) + erf(arg2))
-        else: # 'linear'
-            arg1[np.where(arg1<0)] =  0.0
-            arg1[np.where(arg1>1)] =  1.0
-            arg2[np.where(arg2<-1)] = -1.0
-            arg2[np.where(arg2>0)] =  0.0
+        else:  # 'linear'
+            arg1[np.where(arg1 < 0)] = 0.0
+            arg1[np.where(arg1 > 1)] = 1.0
+            arg2[np.where(arg2 < -1)] = -1.0
+            arg2[np.where(arg2 > 0)] = 0.0
             out = arg1 + arg2
         return height*out
-

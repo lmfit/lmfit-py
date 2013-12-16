@@ -37,6 +37,7 @@ from .parameter import Parameter, Parameters
 # use locally modified version of uncertainties package
 from . import uncertainties
 
+
 def asteval_with_uncertainties(*vals,  **kwargs):
     """
     given values for variables, calculate object value.
@@ -45,7 +46,7 @@ def asteval_with_uncertainties(*vals,  **kwargs):
     expression.
     """
     _obj   = kwargs.get('_obj', None)
-    _pars  = kwargs.get('_pars', None)
+    _pars = kwargs.get('_pars', None)
     _names = kwargs.get('_names', None)
     _asteval = kwargs.get('_asteval', None)
     if (_obj is None or
@@ -59,6 +60,7 @@ def asteval_with_uncertainties(*vals,  **kwargs):
     return _asteval.eval(_obj.ast)
 
 wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
+
 
 def eval_stderr(obj, uvars, _names, _pars, _asteval):
     """evaluate uncertainty and set .stderr for a parameter `obj`
@@ -78,6 +80,7 @@ def eval_stderr(obj, uvars, _names, _pars, _asteval):
     except:
         obj.stderr = 0
 
+
 class MinimizerException(Exception):
     """General Purpose Exception"""
     def __init__(self, msg):
@@ -86,6 +89,7 @@ class MinimizerException(Exception):
 
     def __str__(self):
         return "\n%s" % (self.msg)
+
 
 def check_ast_errors(error):
     """check for errors derived from asteval, raise MinimizerException"""
@@ -100,7 +104,7 @@ class Minimizer(object):
     """general minimizer"""
     err_nonparam = \
      "params must be a minimizer.Parameters() instance or list of Parameters()"
-    err_maxfev   = """Too many function calls (max set to  %i)!  Use:
+    err_maxfev = """Too many function calls (max set to  %i)!  Use:
     minimize(func, params, ...., maxfev=NNN)
 or set  leastsq_kws['maxfev']  to increase this maximum."""
 
@@ -314,7 +318,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         lb_kws.update(kws)
 
         xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
-        self.nfev =  info['funcalls']
+        self.nfev = info['funcalls']
         self.message = info['task']
         self.chisqr = (self.penalty(xout)**2).sum()
         self.unprepare_fit()
@@ -332,7 +336,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         fmin_kws.update(kws)
         ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
         xout, fout, iter, funccalls, warnflag, allvecs = ret
-        self.nfev =  funccalls
+        self.nfev = funccalls
         self.chisqr = (self.penalty(xout)**2).sum()
         self.unprepare_fit()
         return
@@ -360,7 +364,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         for those designed to use bounds.
 
         """
-        if not HAS_SCALAR_MIN :
+        if not HAS_SCALAR_MIN:
             raise NotImplementedError
 
         self.prepare_fit()
@@ -427,7 +431,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         else:
             self.message = 'Tolerance seems to be too small.'
 
-        self.nfev =  infodict['nfev']
+        self.nfev = infodict['nfev']
         self.ndata = len(resid)
 
         sum_sqr = (resid**2).sum()
@@ -442,11 +446,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         # ensure that _best, vbest, and grad are not
         # broken 1-element ndarrays.
-        if len(np.shape(_best))==0:
+        if len(np.shape(_best)) == 0:
             _best = np.array([_best])
-        if len(np.shape(vbest))==0:
+        if len(np.shape(vbest)) == 0:
             vbest = np.array([vbest])
-        if len(np.shape(grad))==0:
+        if len(np.shape(grad)) == 0:
             grad = np.array([grad])
 
         for ivar, varname in enumerate(self.var_map):
@@ -511,6 +515,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.unprepare_fit()
         return self.success
 
+
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, engine=None, iter_cb=None, **fit_kws):
     """simple minimization function,
@@ -554,4 +559,3 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     if fitfunction is not None:
         fitfunction(**kwargs)
     return fitter
-
