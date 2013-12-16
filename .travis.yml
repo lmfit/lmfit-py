@@ -44,13 +44,15 @@ before_install:
 
 
 install:
-  - sudo $PYTHON setup.py install
+    - sudo $PYTHON setup.py install
 
 script:
-  # Execute the unit tests
-  # For now running nosetests doesn't work.
-  - cd tests
-  # - nosetests
-  # Generate the docs
-  - cd ../doc
-  - make html
+    # Execute the unit tests
+    # For now running nosetests doesn't work.
+    - cd tests
+    # - nosetests
+    # Generate the docs
+    - if [[ $PYVER == '2.x' ]]; then
+    -   cd ../doc
+    -   make html
+    - fi
