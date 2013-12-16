@@ -65,22 +65,29 @@ class Model(object):
         ...
         >>> my_model = Model(decay, independent_vars = 't')    
         """
-        self.model_arg_names = inspect.getargspec(func)[0]
-        # The implicit magic in fit() requires us to disallow some
-        # variable names.
-        forbidden_args = ['data', 'sigma', 'params']
-        for arg in forbidden_args:
-            if arg in self.model_arg_names:
-                raise ValueError("The model function cannot have an " +
-                                 "argument named %s. " % arg +
-                                 "Choose a different name.")
-        self.param_names = set(self.model_arg_names) - set(independent_vars)
         self.func = func
         self.independent_vars = independent_vars
         if not missing in ['none', 'drop', 'raise']:
             raise ValueError("missing must be 'none', 'drop', or 'raise'.")
         self.missing = missing
+        self._parse_params()
         self._residual = self._build_residual()
+
+    def _parse_params(self):
+        model_arg_names = inspect.getargspec(self.func)[0]
+        # The implicit magic in fit() requires us to disallow some
+        # variable names.
+        forbidden_args = ['data', 'sigma', 'params']
+        for arg in forbidden_args:
+            if arg in model_arg_names:
+                raise ValueError("The model function cannot have an " +
+                                 "argument named %s. " % arg +
+                                 "Choose a different name.")
+        self.param_names = set(model_arg_names) - set(self.independent_vars)
+
+    def __set_param_names(self, param_names):
+        # used when models are added
+        self.param_names = param_names
 
     def params(self):
         """Return a blank copy of model params.
@@ -180,9 +187,9 @@ class Model(object):
         # All remaining kwargs should correspond to independent variables.
         for name in kwargs.keys():
             if not name in self.independent_vars:
-                warnings.warn(UserWarning, "The keyword argument %s " % name +
-                              "does not match any arguments of the model " +
-                              "function. It will be ignored.")
+                warnings.warn("The keyword argument %s does not" % name +
+                              "match any arguments of the model function." +
+                              "It will be ignored.", UserWarning)
 
         # If any parameter is not initialized raise a more helpful error.
         missing_param = set(params.keys()) != self.param_names
@@ -210,3 +217,21 @@ class Model(object):
         result = lmfit.minimize(self._residual, params,
                                 args=(data, sigma), kws=kwargs)
         return result
+
+    def __add__(self, other):
+        colliding_param_names = self.param_names & other.param_names
+        if len(colliding_param_names) != 0:
+            collision = colliding_param_names.pop()
+            raise NameError("Both models have parameters called " +
+                            "%s. Redefine the models " % collision +
+                            "with distinct names.")
+        def func(**kwargs):
+            self_kwargs = {k: kwargs.get(k) for k in self.param_names | set(self.independent_vars)}
+            other_kwargs = {k: kwargs.get(k) for k in other.param_names | set(other.independent_vars)}
+            return self.func(**self_kwargs) + other.func(**other_kwargs)
+
+        model = Model(func=func,
+                      independent_vars=self.independent_vars,
+                      missing=self.missing)
+        model.__set_param_names(self.param_names | other.param_names)
+        return model

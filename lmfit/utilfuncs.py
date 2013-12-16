@@ -1,6 +1,7 @@
 """Utility mathematical functions and common lineshapes for minimizer
 """
 import numpy
+from numpy.testing import assert_allclose
 import scipy
 from scipy.special import gamma
 
@@ -51,6 +52,12 @@ def pearson7_area(x, amp, cen, wid, expon):
     return scale * pearson7(x, amp, cen, wid, xp) / (wid*sqrt(pi))
 
     return scale * pearson7(x, amp, cen, sigma, expon) / (sigma*sqrt(pi))
+
+def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03, 
+                         err_msg='', verbose=True):
+    for param_name, value in desired.iteritems():
+        assert_allclose(actual[param_name], value, rtol, atol, 
+                        err_msg, verbose)
 
 CUSTOM_FUNCTIONS = {'gauss': gauss, 'gauss_area': gauss_area,
                     'loren': loren, 'loren_area': loren_area,
