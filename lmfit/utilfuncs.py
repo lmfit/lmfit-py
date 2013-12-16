@@ -14,7 +14,7 @@ def gauss(x, amp, cen, wid):
     return amp * numpy.exp(-log2 * (x-cen) **2 / wid**2)
 
 def loren(x, amp, cen, wid):
-    "lorenztian function: wid = half-width at half-max"
+    "lorentzian function: wid = half-width at half-max"
     return (amp  / (1 + ((x-cen)/wid)**2))
 
 def gauss_area(x, amp, cen, wid):

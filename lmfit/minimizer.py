@@ -11,6 +11,7 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    <newville@cars.uchicago.edu>
 """
 
+import numpy as np
 from numpy import (dot, eye, ndarray, ones_like,
                    sqrt, take, transpose, triu)
 from numpy.dual import inv
@@ -127,6 +128,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.__set_params(params)
         self.prepare_fit()
 
+    @property
+    def values(self):
+        "Convenience function that returns Parameter values as a simple dict."
+        return {name: p.value for name, p in self.params.items()}
+
     def __update_paramval(self, name):
         """
         update parameter value, including setting bounds.
@@ -187,7 +193,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         """
         for varname, val in zip(self.var_map, fvars):
             # self.params[varname].value = val
-            self.params[varname].from_internal(val)
+            self.params[varname].value = self.params[varname].from_internal(val)
 
         self.nfev = self.nfev + 1
         self.update_constraints()
@@ -264,6 +270,17 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.update_constraints()
         self.__prepared = True
 
+    def unprepare_fit(self):
+        """unprepare fit, so that subsequent fits will be
+        forced to run re-prepare the fit
+
+        removes ast compilations of constraint expressions
+        """
+        self.__prepared = False
+        for par in self.params.values():
+            if hasattr(par, 'ast'):
+                delattr(par, 'ast')
+
     def anneal(self, schedule='cauchy', **kws):
         """
         use simulated annealing
@@ -281,6 +298,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         print("WARNING:  scipy anneal appears unusable!")
         saout = scipy_anneal(self.penalty, self.vars, **sakws)
         self.sa_out = saout
+        self.unprepare_fit()
         return
 
     def lbfgsb(self, **kws):
@@ -299,6 +317,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfev =  info['funcalls']
         self.message = info['task']
         self.chisqr = (self.penalty(xout)**2).sum()
+        self.unprepare_fit()
+        return
 
     def fmin(self, **kws):
         """
@@ -314,6 +334,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         xout, fout, iter, funccalls, warnflag, allvecs = ret
         self.nfev =  funccalls
         self.chisqr = (self.penalty(xout)**2).sum()
+        self.unprepare_fit()
+        return
 
     def scalar_minimize(self, method='Nelder-Mead', hess=None, tol=None, **kws):
         """use one of the scaler minimization methods from scipy.
@@ -357,6 +379,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.message = ret.message
         self.nfev = ret.nfev
         self.chisqr = (self.penalty(xout)**2).sum()
+        self.unprepare_fit()
+        return
 
     def leastsq(self, **kws):
         """
@@ -384,12 +408,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.jacfcn = lskws['Dfun']
             lskws['Dfun'] = self.__jacobian
 
+        # suppress runtime warnings during fit and error analysis
+        orig_warn_settings = np.geterr()
+        np.seterr(all='ignore')
         lsout = scipy_leastsq(self.__residual, self.vars, **lskws)
         _best, _cov, infodict, errmsg, ier = lsout
 
         self.residual = resid = infodict['fvec']
-
-
         self.ier = ier
         self.lmdif_message = errmsg
         self.message = 'Fit succeeded.'
@@ -414,61 +439,76 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         # grad for the variable parameters
         grad = ones_like(_best)
         vbest = ones_like(_best)
+
+        # ensure that _best, vbest, and grad are not
+        # broken 1-element ndarrays.
+        if len(np.shape(_best))==0:
+            _best = np.array([_best])
+        if len(np.shape(vbest))==0:
+            vbest = np.array([vbest])
+        if len(np.shape(grad))==0:
+            grad = np.array([grad])
+
         for ivar, varname in enumerate(self.var_map):
             par = self.params[varname]
             grad[ivar] = par.scale_gradient(_best[ivar])
             vbest[ivar] = par.value
 
         # modified from JJ Helmus' leastsqbound.py
-
         infodict['fjac'] = transpose(transpose(infodict['fjac']) /
                                      take(grad, infodict['ipvt'] - 1))
         rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys, :]),
                    take(eye(self.nvarys), infodict['ipvt'] - 1, 0))
         try:
-            cov = inv(dot(transpose(rvec), rvec))
+            self.covar = inv(dot(transpose(rvec), rvec))
         except (LinAlgError, ValueError):
-            cov = None
+            self.covar = None
 
+        has_expr = False
         for par in self.params.values():
             par.stderr, par.correl = 0, None
+            has_expr = has_expr or par.expr is not None
 
-        self.covar = cov
-        if cov is None:
-            self.errorbars = False
-            self.message = '%s. Could not estimate error-bars'
-        else:
-            self.errorbars = True
+        if self.covar is not None:
             if self.scale_covar:
-                self.covar = cov = cov * sum_sqr / self.nfree
-
-            # uncertainties on constrained parameters:
-            #   get values with uncertainties (including correlations),
-            #   temporarily set Parameter values to these,
-            #   re-evaluate contrained parameters to extract stderr
-            #   and then set Parameters back to best-fit value
-            uvars = uncertainties.correlated_values(vbest, self.covar)
+                self.covar = self.covar * sum_sqr / self.nfree
 
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
-                par.stderr = sqrt(cov[ivar, ivar])
+                par.stderr = sqrt(self.covar[ivar, ivar])
                 par.correl = {}
                 for jvar, varn2 in enumerate(self.var_map):
                     if jvar != ivar:
-                        par.correl[varn2] = (cov[ivar, jvar]/
-                                        (par.stderr * sqrt(cov[jvar, jvar])))
+                        par.correl[varn2] = (self.covar[ivar, jvar]/
+                             (par.stderr * sqrt(self.covar[jvar, jvar])))
 
-            for pname, par in self.params.items():
-                eval_stderr(par, uvars, self.var_map,
-                            self.params, self.asteval)
+            uvars = None
+            if has_expr:
+                # uncertainties on constrained parameters:
+                #   get values with uncertainties (including correlations),
+                #   temporarily set Parameter values to these,
+                #   re-evaluate contrained parameters to extract stderr
+                #   and then set Parameters back to best-fit value
+                try:
+                    uvars = uncertainties.correlated_values(vbest, self.covar)
+                except (LinAlgError, ValueError):
+                    uvars = None
 
-            # restore nominal values
-            for v, nam in zip(uvars, self.var_map):
-                self.asteval.symtable[nam] = v.nominal_value
+                if uvars is not None:
+                    for pname, par in self.params.items():
+                        eval_stderr(par, uvars, self.var_map,
+                                    self.params, self.asteval)
+                    # restore nominal values
+                    for v, nam in zip(uvars, self.var_map):
+                        self.asteval.symtable[nam] = v.nominal_value
 
-        for par in self.params.values():
-            if hasattr(par, 'ast'):
-                delattr(par, 'ast')
+        self.errorbars = True
+        if self.covar is None:
+            self.errorbars = False
+            self.message = '%s. Could not estimate error-bars'
+
+        np.seterr(**orig_warn_settings)
+        self.unprepare_fit()
         return self.success
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
@@ -514,49 +554,4 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     if fitfunction is not None:
         fitfunction(**kwargs)
     return fitter
-
-def make_paras_and_func(fcn, x0, used_kwargs=None):
-    """nach 
-    A function which takes a function a makes a parameters-dict
-    for it.
-
-    Takes the function fcn. A starting guess x0 for the
-    non kwargs paramter must be also given. If kwargs
-    are used, used_kwargs is dict were the keys are the
-    used kwarg and the values are the starting values.
-    """
-    import inspect
-    args = inspect.getargspec(fcn)
-    defaults = args[-1]
-    len_def = len(defaults) if defaults is not None else 0
-    # have_defaults = args[-len(defaults):]
-    
-    args_without_defaults = len(args[0])- len_def
-
-    if len(x0) < args_without_defaults:
-        raise ValueError( 'x0 to short')
-
-    p = Parameters()
-    for i, val in enumerate(x0):
-        p.add(args[0][i], val)
-
-    if used_kwargs:
-        for arg, val in used_kwargs.items():
-            p.add(arg, val)
-    else:
-        used_kwargs = {}
-
-    def func(para):
-        "wrapped func"
-        kwdict = {}
-        
-        for arg in used_kwargs.keys():
-            kwdict[arg] = para[arg].value
-
-        vals = [para[i].value for i in p]
-        return fcn(*vals[:len(x0)], **kwdict)
-        
-    return p, func
-
-
 

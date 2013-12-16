@@ -122,15 +122,15 @@ this can be done when being defined::
     params.add('phase', value=0.2)
     params.add('frequency', value=3.0, max=10)
 
-or later::
+or after being defined by setting the corresponding attributes::
 
-    params['amp'].vary = True
-    params['decay'].max = 0.10
+    params['amp'].vary = False
+    params['decay'].min = 0.10
 
-
-Now the fit will *not* vary the amplitude parameter, and will also impose a
-lower bound on the decay factor and an upper bound on the frequency.
-Importantly, our function to be minimized remains unchanged.
+In either case, the fit will *not* vary the amplitude parameter.  In
+addition, a lower bound will be placed on the decay factor, and upper
+bounds placed on two parameters. Importantly, our function to be minimized
+remains unchanged.
 
 An important point here is that the `params` object can be copied and
 modified to make many user-level changes to the model and fitting process.
@@ -196,8 +196,8 @@ The :class:`Parameters` class
    dictionary, with the restrictions that
 
    1. keys must be valid Python symbol names (so that they can be used in
-   expressions of mathematical constraints).  This means the names must
-   match ``[a-z_][a-z0-9_]*``  and cannot be a Python reserved word.
+      expressions of mathematical constraints).  This means the names must
+      match ``[a-z_][a-z0-9_]*``  and cannot be a Python reserved word.
 
    2. values must be valid :class:`Parameter` objects.
 

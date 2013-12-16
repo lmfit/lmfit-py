@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# from distutils.core import setup
 from setuptools import setup
 
 import lmfit as lmfit
@@ -25,10 +26,10 @@ questionable. """
 
 setup(name = 'lmfit',
       version = lmfit.__version__,
-      author = 'Matthew Newville',
-      author_email = 'newville@cars.uchicago.edu',
-      url          = 'http://cars9.uchicago.edu/software/python/lmfit/',
-      download_url = 'http://newville.github.com/lmfit-py/',
+      author = 'LM-Fit Development Team',
+      author_email = 'matt.newville@gmail.com',
+      url          = 'http://lmfit.github.io/lmfit-py/',
+      download_url = 'http://lmfit.github.io//lmfit-py/',
       requires = ('numpy', 'scipy'),
       license = 'BSD',
       description = "Least-Squares Minimization with Bounds and Constraints",
@@ -39,8 +40,8 @@ setup(name = 'lmfit',
                    'Programming Language :: Python',
                    'Topic :: Scientific/Engineering',
                    ],
-      test_suite='nose.collector',
-      test_requires=['Nose'],
+      # test_suite='nose.collector',
+      # test_requires=['Nose'],
       package_dir = {'lmfit': 'lmfit'},
       packages = ['lmfit', 'lmfit.uncertainties'],
       )

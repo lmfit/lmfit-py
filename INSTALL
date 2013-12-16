@@ -8,9 +8,5 @@ To install the lmfit python module, use::
 
 Python 2.6 or higher is required, as are numpy and scipy.
 
-In order to use constraint expressions for parameters, the
-asteval module (http://github.com/newville/asteval) must be
-installed.
-
 Matt Newville <newville@cars.uchicago.edu>
-Last Update:  8-April-2012
+Last Update:  2013-Dec-15

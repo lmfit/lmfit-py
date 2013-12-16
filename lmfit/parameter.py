@@ -8,25 +8,9 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-import re
 from . import uncertainties
 
-
-RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'class', 'continue',
-                  'def', 'del', 'elif', 'else', 'except', 'exec',
-                  'finally', 'for', 'from', 'global', 'if', 'import', 'in',
-                  'is', 'lambda', 'not', 'or', 'pass', 'print', 'raise',
-                  'return', 'try', 'while', 'with', 'True', 'False',
-                  'None', 'eval', 'execfile', '__import__', '__package__')
-
-NAME_MATCH = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*$").match
-
-def valid_symbol_name(name):
-    "input is a valid name"
-    if name in RESERVED_WORDS:
-        return False
-    return NAME_MATCH(name) is not None
-
+from .astutils import valid_symbol_name
 
 class Parameters(OrderedDict):
     """a custom dictionary of Parameters.  All keys must be
@@ -97,21 +81,37 @@ class Parameter(object):
         self.deps   = None
         self.stderr = None
         self.correl = None
-        if self.max is not None and value > self.max:
+        self._init_bounds()
+
+    def _init_bounds(self):
+        """make sure initial bounds are self-consistent"""
+        if self.max is not None and self._val > self.max:
             self._val = self.max
-        if self.min is not None and value < self.min:
+        if self.min is not None and self._val < self.min:
             self._val = self.min
-        self.from_internal = lambda val: val
+        self.setup_bounds()
+
+    def __getstate__(self):
+        """get state for pickle"""
+        return (self.name, self.value, self.vary, self.expr, self.min,
+                self.max, self.stderr, self.correl, self.init_value)
+
+    def __setstate__(self, state):
+        """set state for pickle"""
+        (self.name, self.value, self.vary, self.expr, self.min,
+         self.max, self.stderr, self.correl, self.init_value) = state
+        self._val = self.value
+        self._init_bounds()
 
     def __repr__(self):
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)
         sval = repr(self._val)
-        if self.stderr is not None:
-            sval = "value=%s +/- %.3g" % (sval, self.stderr)
         if not self.vary and self.expr is None:
             sval = "value=%s (fixed)" % (sval)
+        elif self.stderr is not None:
+            sval = "value=%s +/- %.3g" % (sval, self.stderr)
         s.append(sval)
         s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
         if self.expr is not None:

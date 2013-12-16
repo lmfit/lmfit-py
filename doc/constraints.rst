@@ -1,4 +1,4 @@
-.. _asteval: http://newville.github.com/asteval/
+.. _asteval: http://newville.github.io/asteval/
 
 .. _math-constraints-label:
 
