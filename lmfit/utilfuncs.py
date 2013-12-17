@@ -1,25 +1,45 @@
 """Utility mathematical functions and common lineshapes for minimizer
 """
-import numpy
+import numpy as np
+from numpy.testing import assert_allclose
 import scipy
 from scipy.special import gamma
 
 CUSTOM_FUNCTIONS = {}
 
-log2 = numpy.log(2)
-pi = numpy.pi
+log2 = np.log(2)
+pi = np.pi
 
-def gauss(x, amp, cen, wid):
-    "gaussian function: wid = half-width at half-max"
-    return amp * numpy.exp(-log2 * (x-cen) **2 / wid**2)
+def gaussian(x, height, center, sigma):
+    "unnormalized 1-dimensional gaussian"
+    const = 2  # for future generalization to N dimensions
+    return height * np.exp(-(x - center)**2 / (const*sigma**2))
+
+def normalized_gaussian(x, center, sigma):
+    "normalized 1-dimensional gaussian"
+    const = 2  # for future generalization to N dimensions
+    normalization = 1/(sigma*np.sqrt(const*pi))
+    return normalization * np.exp(-(x - center)**2 / (const*sigma**2))
+
+def exponential(x, amplitude, decay):
+    "exponential decay"
+    return amplitude * np.exp(-x/decay)
+
+def powerlaw(x, coefficient, exponent):
+    "power law"
+    return coefficient * x**exponent
+
+def linear(x, slope, intercept):
+    "linear (for background)"
+    return slope*x + intercept
+
+def parabolic(x, a, b, c):
+    "parabolic (for background)"
+    return a * x**2 + b * x + c
 
 def loren(x, amp, cen, wid):
     "lorentzian function: wid = half-width at half-max"
     return (amp  / (1 + ((x-cen)/wid)**2))
-
-def gauss_area(x, amp, cen, wid):
-    "scaled gaussian function: wid = half-width at half-max"
-    return numpy.sqrt(log2/pi) * gauss(x, amp, cen, wid) / wid
 
 def loren_area(x, amp, cen, wid):
     "scaled lorenztian function: wid = half-width at half-max"
@@ -52,9 +72,8 @@ def pearson7_area(x, amp, cen, wid, expon):
 
     return scale * pearson7(x, amp, cen, sigma, expon) / (sigma*sqrt(pi))
 
-CUSTOM_FUNCTIONS = {'gauss': gauss, 'gauss_area': gauss_area,
-                    'loren': loren, 'loren_area': loren_area,
-                    'pvoigt': pvoigt, 'pvoigt_area': pvoigt_area,
-                    'pearson7': pearson7, 'pearson7_area': pearson7_area}
-
-
+def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03, 
+                         err_msg='', verbose=True):
+    for param_name, value in desired.iteritems():
+        assert_allclose(actual[param_name], value, rtol, atol, 
+                        err_msg, verbose)
