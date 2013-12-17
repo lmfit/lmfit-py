@@ -11,6 +11,7 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    <newville@cars.uchicago.edu>
 """
 
+from copy import deepcopy
 import numpy as np
 from numpy import (dot, eye, ndarray, ones_like,
                    sqrt, take, transpose, triu)
@@ -277,6 +278,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         removes ast compilations of constraint expressions
         """
         self.__prepared = False
+        self.params = deepcopy(self.params)
         for par in self.params.values():
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
