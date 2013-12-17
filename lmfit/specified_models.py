@@ -2,6 +2,8 @@ import numpy as np
 from scipy.special import gamma, gammaln, beta, betaln, erf, erfc, wofz
 from numpy import pi
 from lmfit import Model
+from lmfit.utilfuncs import (gaussian, normalized_gaussian, exponential,
+                             powerlaw, linear, parabolic)
 
 
 class DimensionalError(Exception):
@@ -47,7 +49,7 @@ class Parabolic(BaseModel):
             b = kwargs[p['b']]
             c = kwargs[p['c']]
             var = kwargs[var_name]
-            return a*var**2 + b*var + c
+            return parabolic(var, a, b, c)
         super(Parabolic, self).__init__(func, independent_vars, missing)
 
 
@@ -65,7 +67,7 @@ class Linear(BaseModel):
             slope = kwargs[p['slope']]
             intercept = kwargs[p['intercept']]
             var = kwargs[var_name]
-            return slope*var + intercept
+            return linear(var, slope, intercept)
         super(Linear, self).__init__(func, independent_vars, missing)
 
 
@@ -108,7 +110,7 @@ class Exponential(BaseModel):
             amplitude = kwargs[p['amplitude']]
             decay = kwargs[p['decay']]
             var = kwargs[var_name]
-            return amplitude*np.exp(-var/decay)
+            return exponential(var, amplitude, decay)
         super(Exponential, self).__init__(func, independent_vars, missing)
 
 
@@ -119,15 +121,13 @@ class NormalizedGaussian(BaseModel):
         if self.dim == 1:
             var_name, = independent_vars
             self.suffix = suffix
-            self._param_names = ['center', 'sd']
+            self._param_names = ['center', 'sigma']
             p = self._parse_params()
             def func(**kwargs):
                 center = kwargs[p['center']]
-                sd = kwargs[p['sd']]
+                sigma = kwargs[p['sigma']]
                 var = kwargs[var_name]
-                const = 2
-                normalization = 1/(sd*np.sqrt(const*pi))
-                return normalization*np.exp(-(var - center)**2/(const*sd**2))
+                return normalized_gaussian(var, center, sigma)
         else:
             raise NotImplementedError("I only do 1d gaussians for now.")
             # TODO: Detect dimensionality from number of independent vars
@@ -142,15 +142,14 @@ class Gaussian(BaseModel):
         if self.dim == 1:
             var_name, = independent_vars
             self.suffix = suffix
-            self._param_names = ['height', 'center', 'sd']
+            self._param_names = ['height', 'center', 'sigma']
             p = self._parse_params()
             def func(**kwargs):
                 height = kwargs[p['height']]
                 center = kwargs[p['center']]
-                sd = kwargs[p['sd']]
+                sigma = kwargs[p['sigma']]
                 var = kwargs[var_name]
-                const = 2
-                return height*np.exp(-(var - center)**2/(const*sd**2))
+                return gaussian(var, height, center, sigma)
         else:
             raise NotImplementedError("I only do 1d gaussians for now.")
             # TODO: Detect dimensionality from number of independent vars
@@ -166,7 +165,7 @@ class PowerLaw(BaseModel):
         p = self._parse_params()
         def func(**kwargs):
             coefficient = kwargs[p['coefficient']]
-            power = kwargs[p['exponent']]
+            exponent = kwargs[p['exponent']]
             var = kwargs[var_name]
-            return coefficient*var**power
+            return powerlaw(var, coefficient, exponent)
         super(PowerLaw, self).__init__(func, independent_vars, missing)

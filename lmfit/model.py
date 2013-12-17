@@ -77,7 +77,7 @@ class Model(object):
         model_arg_names = inspect.getargspec(self.func)[0]
         # The implicit magic in fit() requires us to disallow some
         # variable names.
-        forbidden_args = ['data', 'sigma', 'params']
+        forbidden_args = ['data', 'weights', 'params']
         for arg in forbidden_args:
             if arg in model_arg_names:
                 raise ValueError("The model function cannot have an " +
@@ -108,14 +108,14 @@ class Model(object):
         def residual(params, *args, **kwargs):
             # Unpack Parameter objects into simple key -> value pairs,
             # and combine them with any non-parameter kwargs.
-            data, sigma = args
+            data, weights = args
             params = {name: p.value for name, p in params.items()}
             kwargs = dict(params.items() + kwargs.items())
             f = self.func(**kwargs)
-            if sigma is None:
+            if weights is None:
                 e = f - data
             else:
-                e = (f - data)/sigma
+                e = (f - data)*weights
             return np.asarray(e)  # for compatibility with pandas.Series
 
         return residual
@@ -131,15 +131,15 @@ class Model(object):
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
 
-    def fit(self, data, params=None, sigma=None, **kwargs):
+    def fit(self, data, params=None, weights=None, **kwargs):
         """Fit the model to the data.
 
         Parameters
         ----------
         data: array-like
         params: Parameters object, optional
-        sigma: array-like of same size as data
-            used for weighted fit, sigma=1/weights
+        weights: array-like of same size as data
+            used for weighted fit, weights=1/weights
         keyword arguments: optional, named like the arguments of the 
             model function, will override params. See examples below.
 
@@ -205,8 +205,8 @@ class Model(object):
             mask = self._handle_missing(data)  # This can raise.
             if mask is not None:
                 data = data[mask]
-            if sigma is not None:
-                sigma = _align(sigma, mask, data)
+            if weights is not None:
+                weights = _align(weights, mask, data)
 
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
@@ -215,7 +215,7 @@ class Model(object):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
         result = lmfit.minimize(self._residual, params,
-                                args=(data, sigma), kws=kwargs)
+                                args=(data, weights), kws=kwargs)
         return result
 
     def __add__(self, other):
