@@ -185,6 +185,9 @@ class Model(object):
                 params[name] = lmfit.Parameter(name=name, value=p)
             del kwargs[name]
 
+        # Keep a pristine copy of the initial params.
+        init_params = copy.deepcopy(params)
+
         # All remaining kwargs should correspond to independent variables.
         for name in kwargs.keys():
             if not name in self.independent_vars:
@@ -217,6 +220,20 @@ class Model(object):
 
         result = lmfit.minimize(self._residual, params,
                                 args=(data, weights), kws=kwargs)
+
+        # Monkey-patch the Minimizer object with some extra information.
+        result.model = self
+        result.init_params = init_params
+        result.init_values = {name: p.value for name, p 
+                              in init_params.items()}
+        indep_vars = {k: v for k, v in kwargs.items() if k in 
+                      self.independent_vars}
+        evaluation_kwargs = dict(indep_vars.items() +
+                                 result.init_values.items())
+        result.init_fit = self.func(**evaluation_kwargs)
+        evaluation_kwargs = dict(indep_vars.items() +
+                                 result.values.items())
+        result.best_fit = self.func(**evaluation_kwargs)
         return result
 
     def __add__(self, other):
