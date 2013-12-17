@@ -27,7 +27,7 @@ def _suffixer(suffix, coded_param_names):
 
 
 class BaseModel(Model):
-    """Whereas Model takes a user-provided function, BaseModel should be
+    """Whereas Model takes a user-provided function, BaseModel is
     subclassed with a hard-coded function."""
 
     def _parse_params(self):
@@ -37,7 +37,25 @@ class BaseModel(Model):
         return param_names  # a lookup dictionary
 
 
+COMMON_DOC = """
+
+Parameters
+----------
+independent_vars: list of strings to be set as variable names
+missing: 'none', 'drop', or 'raise'
+    'none': Do not check for null or missing values.
+    'drop': Drop null or missing observations in data. 
+        Use pandas.isnull if pandas is available; otherwise, 
+        silently fall back to numpy.isnan.
+    'raise': Raise a (more helpful) exception when data contains null
+        or missing values.
+suffix: string to append to paramter names, needed to add two Models that
+    have parameter names in common. None by default.
+"""
+
+
 class Parabolic(BaseModel):
+    __doc__ = parabolic.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing='none', suffix=None):
         _validate_1d(independent_vars)
         var_name, = independent_vars
@@ -57,6 +75,7 @@ Quadratic = Parabolic  # synonym
 
 
 class Linear(BaseModel):
+    __doc__ = linear.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing='none', suffix=None):
         _validate_1d(independent_vars)
         var_name, = independent_vars
@@ -72,6 +91,7 @@ class Linear(BaseModel):
 
 
 class Constant(BaseModel):
+    __doc__ = "x -> c" + COMMON_DOC
     def __init__(self, independent_vars=[], missing='none', suffix=None):
         # special case with default []
         self.suffix = suffix
@@ -84,6 +104,7 @@ class Constant(BaseModel):
 
 
 class Polynomial(BaseModel):
+    __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ..." + COMMON_DOC
     def __init__(self, order, independent_vars, missing='none', suffix=None):
         if not isinstance(order, int):
             raise TypeError("order must be an integer.")
@@ -100,6 +121,7 @@ class Polynomial(BaseModel):
 
 
 class Exponential(BaseModel):
+    __doc__ = exponential.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing='none', suffix=None):
         _validate_1d(independent_vars)
         var_name, = independent_vars
@@ -115,6 +137,7 @@ class Exponential(BaseModel):
 
 
 class NormalizedGaussian(BaseModel):
+    __doc__ = normalized_gaussian.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing='none', suffix=None):
         self.dim = len(independent_vars)
 
@@ -136,6 +159,7 @@ class NormalizedGaussian(BaseModel):
 
 
 class Gaussian(BaseModel):
+    __doc__ = gaussian.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing='none', suffix=None):
         self.dim = len(independent_vars)
 
@@ -157,6 +181,7 @@ class Gaussian(BaseModel):
 
 
 class PowerLaw(BaseModel):
+    __doc__ = powerlaw.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing='none', suffix=None):
         _validate_1d(independent_vars)
         var_name, = independent_vars
