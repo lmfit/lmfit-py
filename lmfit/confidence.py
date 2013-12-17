@@ -4,6 +4,7 @@
 Contains functions to calculate confidence intervals.
 """
 from __future__ import print_function
+from warnings import warn
 import numpy as np
 from scipy.stats import f
 from scipy.optimize import brentq
@@ -26,7 +27,7 @@ def copy_vals(params):
     for para_key in params:
         tmp_params[para_key] = (params[para_key].value,
                                 params[para_key].stderr)
-    return tmp_params
+    return tmp_params    
 
 
 def restore_vals(tmp_params, params):
@@ -131,7 +132,7 @@ class ConfidenceInterval(object):
     """
     def __init__(self, minimizer, p_names=None, prob_func=None,
                  sigmas=(0.674, 0.95, 0.997), trace=False, verbose=False,
-                 maxiter=20):
+                 maxiter=50):
         """
 
         """
@@ -166,6 +167,7 @@ class ConfidenceInterval(object):
         self.params = minimizer.params
         self.trace = trace
         self.maxiter = maxiter
+        self.min_rel_change = 1e-5
 
         self.sigmas = list(sigmas)
         self.sigmas.sort()
@@ -192,10 +194,13 @@ class ConfidenceInterval(object):
     def calc_ci(self, para, direction):
         """
         Calculate the ci for a single parameter for a single direction.
+        Direction is either positive or negative 1.
         """
+
         if isinstance(para, str):
             para = self.minimizer.params[para]
 
+        #function used to calculate the pro
         calc_prob = lambda val, prob: self.calc_prob(para, val, prob)
         if self.trace:
             x = [i.value for i in self.minimizer.params.values()]
@@ -203,17 +208,25 @@ class ConfidenceInterval(object):
 
         para.vary = False
         self.minimizer.prepare_fit(self.params)
-        limit = self.find_limit(para, direction)
-        start_val = para.value
-        a_limit = start_val
+        limit, max_prob = self.find_limit(para, direction)
+        start_val = para.value.copy()
+        a_limit = start_val.copy()
         ret = []
 
         for prob in self.sigmas:
+            if prob > max_prob:
+                ret.append((prob, direction*np.inf))
+                continue
+            
             try:
-                val = brentq(calc_prob, a_limit, limit, rtol=.5e-4, args=prob)
+                val = brentq(calc_prob, a_limit,
+                             limit, rtol=.5e-4, args=prob)                                   
+
             except ValueError:
                 self.reset_vals()
-                val = brentq(calc_prob, start_val, limit, rtol=.5e-4, args=prob)
+                val = brentq(calc_prob, start_val, 
+                             limit, rtol=.5e-4, args=prob)
+                
             a_limit = val
             ret.append((prob, val))
 
@@ -231,30 +244,42 @@ class ConfidenceInterval(object):
         if self.verbose:
             print('Calculating CI for ' + para.name)
         self.reset_vals()
-        #starting step:
-        if para.stderr > 0:
+        
+        #starting steps:
+        if para.stderr > 0 and para.stderr < abs(para.value):
             step = para.stderr
         else:
-            step = max(abs(para.value) * 0.05, 0.01)
+            step = max(abs(para.value) * 0.2, 0.001)
         para.vary = False
         start_val = para.value
-
-        change = 1
-        old_prob = 0
-        i = 0
+        
+        old_prob = 0        
         limit = start_val
-        # Find an upper limit,
-        # TODO: also use the change as an stopping condition.
-        while change > 0.001 and old_prob < max(self.sigmas):
-            i += 1
+        i = 0
+        
+        while old_prob < max(self.sigmas):
+            i = i + 1
             limit += step * direction
             new_prob = self.calc_prob(para, limit)
-            change = new_prob - old_prob
-            old_prob = new_prob
+            rel_change = (new_prob - old_prob) / old_prob
+            old_prob = new_prob        
+        
+            # Check convergence.
             if i > self.maxiter:
+                errmsg = "Warning, maxiter={0} reached".format(self.maxiter)
+                errmsg += "and prob({0}={1}) = {2} < max(sigmas).".format(para.name, limit, new_prob)
+                warn(errmsg)
                 break
-        self.reset_vals()
-        return limit
+            
+            if rel_change < self.min_rel_change:
+                errmsg = "Warning, rel_change={0} < 0.01 ".format(rel_change)
+                errmsg += " at iteration {3} and prob({0}={1}) = {2} < max(sigmas).".format(para.name, limit, new_prob, i)
+                warn(errmsg)
+                break        
+        
+        self.reset_vals()            
+        
+        return limit, new_prob
 
     def calc_prob(self, para, val, offset=0., restore=False):
         """Returns the probability for given Value."""
