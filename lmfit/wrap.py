@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 from inspect import getargspec
-from lmfit.parameter import Parameter, Parameters
-
+from lmfit.parameter import Parameters
 
 
 def make_paras_and_func(fcn, x0, used_kwargs=None):
@@ -19,10 +18,10 @@ def make_paras_and_func(fcn, x0, used_kwargs=None):
     len_def = len(defaults) if defaults is not None else 0
     # have_defaults = args[-len(defaults):]
 
-    args_without_defaults = len(args[0])- len_def
+    args_without_defaults = len(args[0]) - len_def
 
     if len(x0) < args_without_defaults:
-        raise ValueError( 'x0 to short')
+        raise ValueError('x0 to short')
     p = Parameters()
     for i, val in enumerate(x0):
         p.add(args[0][i], val)
@@ -69,7 +68,7 @@ def wrap_function(fcn, x0=None, non_params=None):
      >>>
      >>> pars, fwrap = wrap_function(lorentz, x0=(5., 0., 1.2),
      ...                             non_params=['x'])
-     >>> for p in pars.values(): print p
+     >>> for p in pars.values(): print(p)
      <Parameter 'amp', 5.0, bounds=[-inf:inf]>
      <Parameter 'cen', 0.0, bounds=[-inf:inf]>
      <Parameter 'wid', 1.2, bounds=[-inf:inf]>
@@ -82,10 +81,10 @@ def wrap_function(fcn, x0=None, non_params=None):
     required_kwargs = []
     kwargs = {}
 
-    argspec  = getargspec(fcn)
+    argspec = getargspec(fcn)
     defaults = argspec.defaults
-    len_def  = len(defaults) if defaults is not None else 0
-    nposargs = len(argspec.args)- len_def
+    len_def = len(defaults) if defaults is not None else 0
+    nposargs = len(argspec.args) - len_def
 
     p = Parameters()
     # positional arguments
@@ -135,8 +134,5 @@ def wrap_function(fcn, x0=None, non_params=None):
         return fcn(*vals, **kwdict)
 
     tmpl = "wrapping of %s for Parameters. Original doc:\n%s"
-    func.__doc__ = tmpl  % (fcn.__name__, fcn.__doc__)
+    func.__doc__ = tmpl % (fcn.__name__, fcn.__doc__)
     return p, func
-
-make_paras_and_func = wrap_function
-
