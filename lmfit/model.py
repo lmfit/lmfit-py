@@ -39,7 +39,8 @@ else:
 class Model(object):
 
     def __init__(self, func, independent_vars=[], missing='none'):
-        """Create a model.
+        """Create a model from a user-defined function.
+
         Parameters
         ----------
         func: function
@@ -63,7 +64,7 @@ class Model(object):
         >>> def decay(t, tau, N):
         ...     return N*np.exp(-t/tau)
         ...
-        >>> my_model = Model(decay, independent_vars = 't')    
+        >>> my_model = Model(decay, independent_vars=['t'])    
         """
         self.func = func
         self.independent_vars = independent_vars
@@ -139,7 +140,7 @@ class Model(object):
         data: array-like
         params: Parameters object, optional
         weights: array-like of same size as data
-            used for weighted fit, weights=1/weights
+            used for weighted fit
         keyword arguments: optional, named like the arguments of the 
             model function, will override params. See examples below.
 
@@ -153,14 +154,14 @@ class Model(object):
         # curve we will fit.
 
         # Using keyword arguments to set initial guesses
-        >>> result = fit(my_model, data, tau=5, N=3, t=t)
+        >>> result = my_model.fit(data, tau=5, N=3, t=t)
 
         # Or, for more control, pass a Parameters object.
         # See docstring for Model.params()
-        >>> result = fit(my_model, data, params, t=t)
+        >>> result = my_model.fit(data, params, t=t)
 
         # Keyword arguments override Parameters.
-        >>> result = fit(my_model, data, params, tau=5, t=t)
+        >>> result = my_model.fit(data, params, tau=5, t=t)
 
         Note
         ----
@@ -183,6 +184,9 @@ class Model(object):
             else:
                 params[name] = lmfit.Parameter(name=name, value=p)
             del kwargs[name]
+
+        # Keep a pristine copy of the initial params.
+        init_params = copy.deepcopy(params)
 
         # All remaining kwargs should correspond to independent variables.
         for name in kwargs.keys():
@@ -216,6 +220,20 @@ class Model(object):
 
         result = lmfit.minimize(self._residual, params,
                                 args=(data, weights), kws=kwargs)
+
+        # Monkey-patch the Minimizer object with some extra information.
+        result.model = self
+        result.init_params = init_params
+        result.init_values = {name: p.value for name, p 
+                              in init_params.items()}
+        indep_vars = {k: v for k, v in kwargs.items() if k in 
+                      self.independent_vars}
+        evaluation_kwargs = dict(indep_vars.items() +
+                                 result.init_values.items())
+        result.init_fit = self.func(**evaluation_kwargs)
+        evaluation_kwargs = dict(indep_vars.items() +
+                                 result.values.items())
+        result.best_fit = self.func(**evaluation_kwargs)
         return result
 
     def __add__(self, other):

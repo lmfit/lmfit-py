@@ -5,36 +5,34 @@ from numpy.testing import assert_allclose
 import scipy
 from scipy.special import gamma
 
-CUSTOM_FUNCTIONS = {}
-
 log2 = np.log(2)
 pi = np.pi
 
 def gaussian(x, height, center, sigma):
-    "unnormalized 1-dimensional gaussian"
+    "x -> height * exp(-(x - center)**2 / (const*sigma**2))"
     const = 2  # for future generalization to N dimensions
     return height * np.exp(-(x - center)**2 / (const*sigma**2))
 
 def normalized_gaussian(x, center, sigma):
-    "normalized 1-dimensional gaussian"
+    "x -> 1/(sigma*sqrt(2*pi)) * exp(-(x - center)**2 / (const*sigma**2))"
     const = 2  # for future generalization to N dimensions
     normalization = 1/(sigma*np.sqrt(const*pi))
     return normalization * np.exp(-(x - center)**2 / (const*sigma**2))
 
 def exponential(x, amplitude, decay):
-    "exponential decay"
+    "x -> amplitude * exp(-x/decay)"
     return amplitude * np.exp(-x/decay)
 
 def powerlaw(x, coefficient, exponent):
-    "power law"
+    "x -> coefficient * x**exponent"
     return coefficient * x**exponent
 
 def linear(x, slope, intercept):
-    "linear (for background)"
-    return slope*x + intercept
+    "x -> slope * x + intercept"
+    return slope * x + intercept
 
 def parabolic(x, a, b, c):
-    "parabolic (for background)"
+    "x -> a * x**2 + b * x + c"
     return a * x**2 + b * x + c
 
 def loren(x, amp, cen, wid):

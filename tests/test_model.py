@@ -1,5 +1,6 @@
 import unittest
 import warnings
+from numpy.testing import assert_allclose
 from lmfit.utilfuncs import assert_results_close
 import numpy as np
 
@@ -77,6 +78,29 @@ class TestUserDefiniedModel(unittest.TestCase):
         true_values['center'] = 1.3
         result = self.model.fit(self.data, x=self.x, **guess)
         assert_results_close(result.values, true_values, rtol=0.05)
+
+    def test_result_attributes(self):
+
+        # result.init_values
+        result = self.model.fit(self.data, x=self.x, **self.guess())
+        assert_results_close(result.values, self.true_values())
+        self.assertTrue(result.init_values == self.guess())
+
+        # result.init_params
+        params = self.model.params()
+        for param_name, value in self.guess().items():
+            params[param_name].value = value
+        self.assertTrue(result.init_params == params)
+
+        # result.best_fit
+        assert_allclose(result.best_fit, self.data, atol=self.noise.max())
+
+        # result.init_fit
+        init_fit = self.model.func(x=self.x, **self.guess())
+        assert_allclose(result.init_fit, init_fit)
+
+        # result.model
+        self.assertTrue(result.model is self.model)
 
     # testing model addition...
 
