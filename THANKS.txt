@@ -1,0 +1,15 @@
+Many people have contributed to lmfit.
+
+Matthew Newville wrote the original implementation.
+Till Stensitzki wrote the improved estimates of confidence intervals, 
+     and contributed many tests, bug fixes, and documentation.
+Daniel B. Allan wrote much of the high level Models, and many 
+     improvements to the testing and documentation.
+J. J. Helmus wrote the MINUT bounds for leastsq, originally in
+     leastsqbounds.py, and ported to lmfit.
+E. O. Lebigot wrote the uncertainties package, a version of which is 
+     used here. 
+
+Additional patches, bug fixes, and suggestions have come from 
+  Christohp Deil, Francois Boulonge, Colin Brosseau, nmearl, 
+  Gustavo Pasquevich, and Ben Gamari
