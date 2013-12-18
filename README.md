@@ -1,3 +1,8 @@
+LMfit-py
+========
+
+[![build status](https://travis-ci.org/lmfit/lmfit-py.png?branch=master)](https://travis-ci.org/lmfit/lmfit-py)
+
 LMfit-py provides a Least-Squares Minimization routine and class
 with a simple, flexible approach to parameterizing a model for
 fitting to data.  Named Parameters can be held fixed or freely
@@ -24,12 +29,12 @@ The programmer will also write a function to be minimized (in the
 least-squares sense) with its first argument being this Parameters object,
 and additional positional and keyword arguments as desired:
 
-  def myfunc(params, x, data, someflag=True):
-      amp = params['amp'].value
-      cen = params['cen'].value
-      wid = params['wid'].value
-      ...
-      return residual_array
+    def myfunc(params, x, data, someflag=True):
+        amp = params['amp'].value
+        cen = params['cen'].value
+        wid = params['wid'].value
+        ...
+        return residual_array
 
 For each call of this function, the values for the params may have changed,
 subject to the bounds and constraint settings for each Parameter.  The function
@@ -45,9 +50,10 @@ changing what is varied and what constraints are placed on the parameters
 can easily be modified by the consumer in real-time data analysis.
 
 To perform the fit, the user calls
-  result = minimize(myfunc, fit_params, args=(x, data), kws={'someflag':True}, ....)
 
-After the fit, each real variable in the fit_params dictionary is updated
+    result = minimize(myfunc, fit_params, args=(x, data), kws={'someflag':True}, ....)
+
+After the fit, each real variable in the ``fit_params`` dictionary is updated
 to have best-fit values, estimated standard deviations, and correlations
 with other variables in the fit, while the results dictionary holds fit
 statistics and information.
