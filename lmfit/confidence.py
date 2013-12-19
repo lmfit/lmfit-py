@@ -261,7 +261,7 @@ class ConfidenceInterval(object):
             i = i + 1
             limit += step * direction
             new_prob = self.calc_prob(para, limit)
-            rel_change = (new_prob - old_prob) / old_prob
+            rel_change = (new_prob - old_prob) / max(new_prob, old_prob, 1.e-12)
             old_prob = new_prob
 
             # Check convergence.
