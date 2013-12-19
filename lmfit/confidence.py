@@ -27,7 +27,7 @@ def copy_vals(params):
     for para_key in params:
         tmp_params[para_key] = (params[para_key].value,
                                 params[para_key].stderr)
-    return tmp_params    
+    return tmp_params
 
 
 def restore_vals(tmp_params, params):
@@ -217,16 +217,16 @@ class ConfidenceInterval(object):
             if prob > max_prob:
                 ret.append((prob, direction*np.inf))
                 continue
-            
+
             try:
                 val = brentq(calc_prob, a_limit,
-                             limit, rtol=.5e-4, args=prob)                                   
+                             limit, rtol=.5e-4, args=prob)
 
             except ValueError:
                 self.reset_vals()
-                val = brentq(calc_prob, start_val, 
+                val = brentq(calc_prob, start_val,
                              limit, rtol=.5e-4, args=prob)
-                
+
             a_limit = val
             ret.append((prob, val))
 
@@ -244,7 +244,7 @@ class ConfidenceInterval(object):
         if self.verbose:
             print('Calculating CI for ' + para.name)
         self.reset_vals()
-        
+
         #starting steps:
         if para.stderr > 0 and para.stderr < abs(para.value):
             step = para.stderr
@@ -252,33 +252,33 @@ class ConfidenceInterval(object):
             step = max(abs(para.value) * 0.2, 0.001)
         para.vary = False
         start_val = para.value
-        
-        old_prob = 0        
+
+        old_prob = 0
         limit = start_val
         i = 0
-        
+
         while old_prob < max(self.sigmas):
             i = i + 1
             limit += step * direction
             new_prob = self.calc_prob(para, limit)
             rel_change = (new_prob - old_prob) / old_prob
-            old_prob = new_prob        
-        
+            old_prob = new_prob
+
             # Check convergence.
             if i > self.maxiter:
                 errmsg = "Warning, maxiter={0} reached".format(self.maxiter)
                 errmsg += "and prob({0}={1}) = {2} < max(sigmas).".format(para.name, limit, new_prob)
                 warn(errmsg)
                 break
-            
+
             if rel_change < self.min_rel_change:
                 errmsg = "Warning, rel_change={0} < 0.01 ".format(rel_change)
                 errmsg += " at iteration {3} and prob({0}={1}) = {2} < max(sigmas).".format(para.name, limit, new_prob, i)
                 warn(errmsg)
-                break        
-        
-        self.reset_vals()            
-        
+                break
+
+        self.reset_vals()
+
         return limit, new_prob
 
     def calc_prob(self, para, val, offset=0., restore=False):
@@ -286,6 +286,8 @@ class ConfidenceInterval(object):
         if restore:
             restore_vals(self.org, self.minimizer.params)
         para.value = val
+        save_para = self.minimizer.params[para.name]
+        self.minimizer.params[para.name] = para
         self.minimizer.prepare_fit(para)
         self.minimizer.leastsq()
         out = self.minimizer
@@ -295,6 +297,7 @@ class ConfidenceInterval(object):
         if self.trace:
             x = [i.value for i in out.params.values()]
             self.trace_dict[para.name].append(x + [prob])
+        self.minimizer.params[para.name] = save_para
         return prob - offset
 
 
@@ -379,13 +382,17 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
             restore_vals(org, minimizer.params)
         x.value = vals[0]
         y.value = vals[1]
-
+        save_x = minimizer.params[x.name]
+        save_y = minimizer.params[y.name]
+        minimizer.params[x.name] = x
+        minimizer.params[y.name] = y
         minimizer.prepare_fit([x, y])
         minimizer.leastsq()
         out = minimizer
-
         prob = prob_func(out.ndata, out.ndata - out.nfree, out.chisqr,
                          best_chi, nfix=2.)
+        minimizer.params[x.name] = save_x
+        minimizer.params[y.name] = save_y
         return prob
 
     out = x_points, y_points, np.apply_along_axis(calc_prob, -1, grid)
