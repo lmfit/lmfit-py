@@ -110,7 +110,7 @@ class Model(object):
             # Unpack Parameter objects into simple key -> value pairs,
             # and combine them with any non-parameter kwargs.
             data, weights = args
-            params = {name: p.value for name, p in params.items()}
+            params = dict([(name, p.value) for name, p in params.items()])
             kwargs = dict(params.items() + kwargs.items())
             f = self.func(**kwargs)
             if weights is None:
@@ -224,10 +224,10 @@ class Model(object):
         # Monkey-patch the Minimizer object with some extra information.
         result.model = self
         result.init_params = init_params
-        result.init_values = {name: p.value for name, p 
-                              in init_params.items()}
-        indep_vars = {k: v for k, v in kwargs.items() if k in 
-                      self.independent_vars}
+        result.init_values =dict([(name, p.value) for name, p
+                                  in init_params.items()])
+        indep_vars = dict([(k, v) for k, v in kwargs.items() if k in 
+                           self.independent_vars])
         evaluation_kwargs = dict(indep_vars.items() +
                                  result.init_values.items())
         result.init_fit = self.func(**evaluation_kwargs)
@@ -244,8 +244,10 @@ class Model(object):
                             "%s. Redefine the models " % collision +
                             "with distinct names.")
         def func(**kwargs):
-            self_kwargs = {k: kwargs.get(k) for k in self.param_names | set(self.independent_vars)}
-            other_kwargs = {k: kwargs.get(k) for k in other.param_names | set(other.independent_vars)}
+            self_kwargs = dict([(k, kwargs.get(k)) for k in
+                                self.param_names | set(self.independent_vars)])
+            other_kwargs = dict([(k, kwargs.get(k)) for k in
+                                 other.param_names | set(other.independent_vars)])
             return self.func(**self_kwargs) + other.func(**other_kwargs)
 
         model = Model(func=func,
