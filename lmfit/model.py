@@ -231,8 +231,8 @@ class Model(object):
         evaluation_kwargs = dict(indep_vars.items() +
                                  result.init_values.items())
         result.init_fit = self.func(**evaluation_kwargs)
-        evaluation_kwargs = dict(indep_vars.items() +
-                                 result.values.items())
+        evaluation_kwargs = dict(list(indep_vars.items()) +
+                                 list(result.values.items()))
         result.best_fit = self.func(**evaluation_kwargs)
         return result
 

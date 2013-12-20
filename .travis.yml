@@ -33,13 +33,14 @@ before_install:
     - sudo apt-get install $PYTHON-nose
     - sudo pip -q install --use-mirrors uncertainties asteval
 
+
     - if [[ $PYVER == '2.x' ]]; then
-    -   sudo apt-get install $PYTHON-matplotlib;
     -   sudo apt-get install ipython
+    -   sudo apt-get install $PYTHON-matplotlib;
     - fi
     - if [[ $PYVER == '3.x' ]]; then
-    -   pip install --use-mirrors matplotlib;
     -   sudo apt-get install ipython3
+    -   pip install --use-mirrors matplotlib;
     - fi
 
 
@@ -48,11 +49,9 @@ install:
 
 script:
     # Execute the unit tests
-    # For now running nosetests doesn't work.
-    - cd tests
-    # - nosetests
+    - nosetests tests
     # Generate the docs
     - if [[ $PYVER == '2.x' ]]; then
-    -   cd ../doc
+    -   cd doc
     -   make html
     - fi

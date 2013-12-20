@@ -3,7 +3,9 @@ from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
 import numpy as np
 pi = np.pi
+import unittest
 import nose
+from nose import SkipTest
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
@@ -176,10 +178,10 @@ def test_derive():
     check_wo_stderr(params1['c'], params2['c'].value, 0.000001)
 
 def test_peakfit():
-    from lmfit.utilfuncs import gauss
+    from lmfit.utilfuncs import gaussian
     def residual(pars, x, data=None):
-        g1 = gauss(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)
-        g2 = gauss(x, pars['a2'].value, pars['c2'].value, pars['w2'].value)
+        g1 = gaussian(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)
+        g2 = gaussian(x, pars['a2'].value, pars['c2'].value, pars['w2'].value)
         model = g1 + g2
         if data is None:
             return model
@@ -230,20 +232,39 @@ def test_peakfit():
     check_paras(fit_params, org_params)
 
 
-def test_minizers():
-    """
-    test scale minimizers except newton-cg (needs jacobian) and
-    anneal (doesn't work out of the box).
-    """
-    methods = ['Nelder-Mead', 'Powell', 'CG', 'BFGS',
-               'L-BFGS-B', 'TNC', 'COBYLA', 'SLSQP']
-    p_true = Parameters()
-    p_true.add('amp', value=14.0)
-    p_true.add('period', value=5.33)
-    p_true.add('shift', value=0.123)
-    p_true.add('decay', value=0.010)
+class CommonMinimizerTest(object):
 
-    def residual(pars, x, data=None):
+    def setUp(self):
+        """
+        test scale minimizers except newton-cg (needs jacobian) and
+        anneal (doesn't work out of the box).
+        """
+        p_true = Parameters()
+        p_true.add('amp', value=14.0)
+        p_true.add('period', value=5.33)
+        p_true.add('shift', value=0.123)
+        p_true.add('decay', value=0.010)
+        self.p_true = p_true
+
+
+        n = 2500
+        xmin = 0.
+        xmax = 250.0
+        noise = np.random.normal(scale=0.7215, size=n)
+        self.x     = np.linspace(xmin, xmax, n)
+        data  = self.residual(p_true, self.x) + noise
+
+        fit_params = Parameters()
+        fit_params.add('amp', value=11.0, min=5, max=20)
+        fit_params.add('period', value=5., min=1., max=7)
+        fit_params.add('shift', value=.10,  min=0.0, max=0.2)
+        fit_params.add('decay', value=6.e-3, min=0, max=0.1)
+        self.fit_params = fit_params
+
+        init = self.residual(fit_params, self.x)
+        self.mini = Minimizer(self.residual, fit_params, [self.x, data])
+
+    def residual(self, pars, x, data=None):
         amp = pars['amp'].value
         per = pars['period'].value
         shift = pars['shift'].value
@@ -256,33 +277,99 @@ def test_minizers():
             return model
         return (model - data)
 
-    n = 2500
-    xmin = 0.
-    xmax = 250.0
-    noise = np.random.normal(scale=0.7215, size=n)
-    x     = np.linspace(xmin, xmax, n)
-    data  = residual(p_true, x) + noise
+    def test_scalar_minimizer(self):
+        try:
+            from scipy.optimize import minimize as scipy_minimize
+        except ImportError:
+            raise SkipTest
 
-    fit_params = Parameters()
-    fit_params.add('amp', value=11.0, min=5, max=20)
-    fit_params.add('period', value=5., min=1., max=7)
-    fit_params.add('shift', value=.10,  min=0.0, max=0.2)
-    fit_params.add('decay', value=6.e-3, min=0, max=0.1)
+        print(self.minimizer)
+        self.mini.scalar_minimize(self.minimizer, self.x)
 
-    init = residual(fit_params, x)
-    mini = Minimizer(residual, fit_params, [x, data])
-    for m in methods:
-        print(m)
-        mini.scalar_minimize(m, x)
+        fit = self.residual(self.fit_params, self.x)
 
-        fit = residual(fit_params, x)
-
-        for name, par in fit_params.items():
+        for name, par in self.fit_params.items():
             nout = "%s:%s" % (name, ' '*(20-len(name)))
-            print("%s: %s (%s) " % (nout, par.value, p_true[name].value))
+            print("%s: %s (%s) " % (nout, par.value, self.p_true[name].value))
 
-        for para, true_para in zip(fit_params.values(), p_true.values()):
+        for para, true_para in zip(self.fit_params.values(), 
+                                   self.p_true.values()):
             check_wo_stderr(para, true_para.value)
+
+
+class TestNelder_Mead(CommonMinimizerTest, unittest.TestCase):
+
+    def setUp(self):
+        self.minimizer = 'Nelder-Mead'
+        super(TestNelder_Mead, self).setUp()
+
+    # override default because Nelder-Mead is less precise
+    def test_scalar_minimizer(self):
+        try:
+            from scipy.optimize import minimize as scipy_minimize
+        except ImportError:
+            raise SkipTest
+
+        print(self.minimizer)
+        self.mini.scalar_minimize(self.minimizer, self.x)
+
+        fit = self.residual(self.fit_params, self.x)
+
+        for name, par in self.fit_params.items():
+            nout = "%s:%s" % (name, ' '*(20-len(name)))
+            print("%s: %s (%s) " % (nout, par.value, self.p_true[name].value))
+
+        for para, true_para in zip(self.fit_params.values(), 
+                                   self.p_true.values()):
+            check_wo_stderr(para, true_para.value, sig=0.2)
+
+
+class TestL_BFGS_B(CommonMinimizerTest, unittest.TestCase):
+
+    def setUp(self):
+        self.minimizer = 'L-BFGS-B'
+        super(TestL_BFGS_B, self).setUp()
+
+
+class TestTNC(CommonMinimizerTest, unittest.TestCase):
+
+    def setUp(self):
+        self.minimizer = 'TNC'
+        super(TestTNC, self).setUp()
+
+
+class TestCOBYLA(CommonMinimizerTest, unittest.TestCase):
+
+    def setUp(self):
+        self.minimizer = 'COBYLA'
+        super(TestCOBYLA, self).setUp()
+
+
+class TestSLSQP(CommonMinimizerTest, unittest.TestCase):
+
+    def setUp(self):
+        self.minimizer = 'SLSQP'
+        super(TestSLSQP, self).setUp()
+
+class TestBFGS(CommonMinimizerTest, unittest.TestCase):
+
+    def setUp(self):
+        self.minimizer = 'BFGS'
+        super(TestBFGS, self).setUp()
+
+
+class TestCG(CommonMinimizerTest, unittest.TestCase):
+
+    def setUp(self):
+        self.minimizer = 'CG'
+        super(TestCG, self).setUp()
+
+
+class TestPowell(CommonMinimizerTest, unittest.TestCase):
+
+    def setUp(self):
+        self.minimizer = 'Powell'
+        super(TestPowell, self).setUp()
 
 
 if __name__ == '__main__':
