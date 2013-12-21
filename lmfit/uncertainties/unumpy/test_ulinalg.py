@@ -48,13 +48,13 @@ def test_list_inverse():
     assert not isinstance(mat_list_inv, unumpy.matrix)
 
     # Individual element check:
-    assert isinstance(mat_list_inv[1,1], float)    
-    assert mat_list_inv[1,1] == -1
+    assert isinstance(mat_list_inv[1, 1], float)
+    assert mat_list_inv[1, 1] == -1
 
     x = ufloat((1, 0.1))
     y = ufloat((2, 0.1))
     mat = unumpy.matrix([[x, x], [y, 0]])
-    
+
     # Internal consistency: ulinalg.inv() must coincide with the
     # unumpy.matrix inverse, for square matrices (.I is the
     # pseudo-inverse, for non-square matrices, but inv() is not).
@@ -75,7 +75,7 @@ def test_list_pseudo_inverse():
                           # Support for the optional pinv argument is
                           # tested:
                           unumpy.ulinalg.pinv(mat, 1e-15), 1e-4)
-    
+
     # Non-square matrices:
     x = ufloat((1, 0.1))
     y = ufloat((2, 0.1))

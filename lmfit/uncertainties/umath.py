@@ -6,7 +6,7 @@ uncertainties.
 Examples:
 
   from umath import sin
-  
+
   # Manipulation of numbers with uncertainties:
   x = uncertainties.ufloat((3, 0.1))
   print sin(x)  # prints 0.141120008...+/-0.098999...
@@ -20,7 +20,7 @@ calculator.  Example:
 
   import uncertainties
   from uncertainties.umath import *  # Imports tan(), etc.
-  
+
   x = uncertainties.ufloat((3, 0.1))
   print tan(x)  # tan() is the uncertainties.umath.tan function
 
@@ -126,14 +126,14 @@ def log_der0(*args):
     Derivative of math.log() with respect to its first argument.
 
     Works whether 1 or 2 arguments are given.
-    """    
+    """
     if len(args) == 1:
         return 1/args[0]
     else:
         return 1/args[0]/math.log(args[1])  # 2-argument form
 
     # The following version goes about as fast:
-    
+
     ## A 'try' is used for the most common case because it is fast when no
     ## exception is raised:
     #try:
@@ -199,14 +199,14 @@ for name in dir(math):
         continue  # 'name' not wrapped by this module (__doc__, e, etc.)
 
     func = getattr(math, name)
-    
+
     setattr(this_module, name,
             wraps(uncertainties.wrap(func, derivatives), func))
-    
+
     many_scalars_to_scalar_funcs.append(name)
 
 ###############################################################################
-    
+
 ########################################
 # Special cases: some of the functions from no_std_wrapping:
 
@@ -222,7 +222,7 @@ for name in dir(math):
 # However, each of the arguments inside this single list can
 # be a variable.  We handle this in a specific way:
 
-if sys.version_info[:2] >= (2, 6):    
+if sys.version_info[:2] >= (2, 6):
 
     # For drop-in compatibility with the math module:
     factorial = math.factorial
@@ -262,11 +262,11 @@ def modf(x):
     Version of modf that works for numbers with uncertainty, and also
     for regular numbers.
     """
-    
+
     # The code below is inspired by uncertainties.wrap().  It is
     # simpler because only 1 argument is given, and there is no
     # delegation to other functions involved (as for __mul__, etc.).
-    
+
     aff_func = to_affine_scalar(x)
 
     (frac_part, int_part) = math.modf(aff_func.nominal_value)
@@ -279,7 +279,7 @@ def modf(x):
         # This function was not called with an AffineScalarFunc
         # argument: there is no need to return numbers with uncertainties:
         return (frac_part, int_part)
-    
+
 many_scalars_to_scalar_funcs.append('modf')
 
 @uncertainties.set_doc(math.ldexp.__doc__)

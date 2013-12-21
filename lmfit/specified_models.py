@@ -32,7 +32,7 @@ class BaseModel(Model):
 
     def _parse_params(self):
         # overrides method of Model that inspects func
-        param_names = _suffixer(self.suffix, self._param_names) 
+        param_names = _suffixer(self.suffix, self._param_names)
         self.param_names = set(param_names.values())  # used by Model
         return param_names  # a lookup dictionary
 
@@ -44,8 +44,8 @@ Parameters
 independent_vars: list of strings to be set as variable names
 missing: 'none', 'drop', or 'raise'
     'none': Do not check for null or missing values.
-    'drop': Drop null or missing observations in data. 
-        Use pandas.isnull if pandas is available; otherwise, 
+    'drop': Drop null or missing observations in data.
+        Use pandas.isnull if pandas is available; otherwise,
         silently fall back to numpy.isnan.
     'raise': Raise a (more helpful) exception when data contains null
         or missing values.
@@ -115,7 +115,7 @@ class Polynomial(BaseModel):
         p = self._parse_params()
         def func(**kwargs):
             var = kwargs[var_name]
-            return np.sum([kwargs[p[name]]*var**i for 
+            return np.sum([kwargs[p[name]]*var**i for
                            i, name in enumerate(self._param_names)], 0)
         super(Polynomial, self).__init__(func, independent_vars, missing)
 
