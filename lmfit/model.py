@@ -9,25 +9,23 @@ import copy
 import lmfit
 import numpy as np
 
-# Use pandas.isnull if available. Fall back on numpy.isnan.
 try:
     import pandas
 except ImportError:
+    # Use pandas.isnull if available. Fall back on numpy.isnan.
     isnull = np.isnan
-else:
-    isnull = pandas.isnull
 
-# When handling missing data or data not the same size as independent vars,
-# use pandas to align. If pandas is not available, data and vars must be the
-# same size, but missing data can still be handled with masks.
-try:
-    import pandas
-except ImportError:
+    # When handling missing data or data not the same size as independent vars,
+    # use pandas to align. If pandas is not available, data and vars must be
+    # the same size, but missing data can still be handled with masks.
+
     def _align(var, mask, data):
         if mask is not None:
             return var[mask]
         return var
 else:
+    isnull = pandas.isnull
+
     def _align(var, mask, data):
         if isinstance(data, pandas.Series) and isinstance(var, pandas.Series):
             return var.reindex_like(data).dropna()
@@ -35,6 +33,7 @@ else:
             return var[mask]
         else:
             return var
+
 
 class Model(object):
 
@@ -48,8 +47,8 @@ class Model(object):
             matching argument(s) to func
         missing: 'none', 'drop', or 'raise'
             'none': Do not check for null or missing values.
-            'drop': Drop null or missing observations in data. 
-                Use pandas.isnull if pandas is available; otherwise, 
+            'drop': Drop null or missing observations in data.
+                Use pandas.isnull if pandas is available; otherwise,
                 silently fall back to numpy.isnan.
             'raise': Raise a (more helpful) exception when data contains null
                 or missing values.
@@ -64,7 +63,7 @@ class Model(object):
         >>> def decay(t, tau, N):
         ...     return N*np.exp(-t/tau)
         ...
-        >>> my_model = Model(decay, independent_vars=['t'])    
+        >>> my_model = Model(decay, independent_vars=['t'])
         """
         self.func = func
         self.independent_vars = independent_vars
@@ -92,7 +91,7 @@ class Model(object):
 
     def params(self):
         """Return a blank copy of model params.
-        
+
         Example
         -------
         >>> params = my_model.params()
@@ -128,7 +127,7 @@ class Model(object):
         elif self.missing == 'drop':
             mask = ~isnull(data)
             if np.all(mask):
-                return None # short-circuit this -- no missing values
+                return None  # short-circuit this -- no missing values
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
 
@@ -141,7 +140,7 @@ class Model(object):
         params: Parameters object, optional
         weights: array-like of same size as data
             used for weighted fit
-        keyword arguments: optional, named like the arguments of the 
+        keyword arguments: optional, named like the arguments of the
             model function, will override params. See examples below.
 
         Returns
@@ -224,9 +223,9 @@ class Model(object):
         # Monkey-patch the Minimizer object with some extra information.
         result.model = self
         result.init_params = init_params
-        result.init_values =dict([(name, p.value) for name, p
+        result.init_values = dict([(name, p.value) for name, p
                                   in init_params.items()])
-        indep_vars = dict([(k, v) for k, v in kwargs.items() if k in 
+        indep_vars = dict([(k, v) for k, v in kwargs.items() if k in
                            self.independent_vars])
         evaluation_kwargs = dict(indep_vars.items() +
                                  result.init_values.items())
@@ -243,6 +242,7 @@ class Model(object):
             raise NameError("Both models have parameters called " +
                             "%s. Redefine the models " % collision +
                             "with distinct names.")
+
         def func(**kwargs):
             self_kwargs = dict([(k, kwargs.get(k)) for k in
                                 self.param_names | set(self.independent_vars)])
