@@ -11,5 +11,5 @@ E. O. Lebigot wrote the uncertainties package, a version of which is
      used here. 
 
 Additional patches, bug fixes, and suggestions have come from 
-  Christohp Deil, Francois Boulonge, Colin Brosseau, nmearl, 
+  Christohp Deil, Francois Boulogne, Colin Brosseau, nmearl, 
   Gustavo Pasquevich, and Ben Gamari

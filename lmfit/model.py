@@ -111,7 +111,7 @@ class Model(object):
             # and combine them with any non-parameter kwargs.
             data, weights = args
             params = dict([(name, p.value) for name, p in params.items()])
-            kwargs = dict(params.items() + kwargs.items())
+            kwargs = dict(list(params.items()) + list(kwargs.items()))
             f = self.func(**kwargs)
             if weights is None:
                 e = f - data
@@ -228,8 +228,8 @@ class Model(object):
                                   in init_params.items()])
         indep_vars = dict([(k, v) for k, v in kwargs.items() if k in 
                            self.independent_vars])
-        evaluation_kwargs = dict(indep_vars.items() +
-                                 result.init_values.items())
+        evaluation_kwargs = dict(list(indep_vars.items()) +
+                                 list(result.init_values.items()))
         result.init_fit = self.func(**evaluation_kwargs)
         evaluation_kwargs = dict(list(indep_vars.items()) +
                                  list(result.values.items()))

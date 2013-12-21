@@ -6,7 +6,7 @@ uncertainties.
 Examples:
 
   from umath import sin
-  
+
   # Manipulation of numbers with uncertainties:
   x = uncertainties.ufloat((3, 0.1))
   print sin(x)  # prints 0.141120008...+/-0.098999...
@@ -20,7 +20,7 @@ calculator.  Example:
 
   import uncertainties
   from uncertainties.umath import *  # Imports tan(), etc.
-  
+
   x = uncertainties.ufloat((3, 0.1))
   print tan(x)  # tan() is the uncertainties.umath.tan function
 
@@ -42,7 +42,6 @@ import math
 import sys
 import itertools
 import functools
-import inspect
 
 # Local modules
 import uncertainties
@@ -121,19 +120,20 @@ wraps = functools.partial(functools.update_wrapper,
 #    """
 #    return 1/x
 
+
 def log_der0(*args):
     """
     Derivative of math.log() with respect to its first argument.
 
     Works whether 1 or 2 arguments are given.
-    """    
+    """
     if len(args) == 1:
         return 1/args[0]
     else:
         return 1/args[0]/math.log(args[1])  # 2-argument form
 
     # The following version goes about as fast:
-    
+
     ## A 'try' is used for the most common case because it is fast when no
     ## exception is raised:
     #try:
@@ -159,8 +159,8 @@ fixed_derivatives = {
     'cos': [lambda x: -math.sin(x)],
     'cosh': [math.sinh],
     'degrees': [lambda x: math.degrees(1)],
-    'erf': [lambda x: exp(-x**2)*_erf_coef],
-    'erfc': [lambda x: -exp(-x**2)*_erf_coef],
+    'erf': [lambda x: math.exp(-x**2)*_erf_coef],
+    'erfc': [lambda x: -math.exp(-x**2)*_erf_coef],
     'exp': [math.exp],
     'expm1': [math.exp],
     'fabs': [lambda x: 1 if x >= 0 else -1],
@@ -199,14 +199,14 @@ for name in dir(math):
         continue  # 'name' not wrapped by this module (__doc__, e, etc.)
 
     func = getattr(math, name)
-    
+
     setattr(this_module, name,
             wraps(uncertainties.wrap(func, derivatives), func))
-    
+
     many_scalars_to_scalar_funcs.append(name)
 
 ###############################################################################
-    
+
 ########################################
 # Special cases: some of the functions from no_std_wrapping:
 
@@ -222,7 +222,7 @@ for name in dir(math):
 # However, each of the arguments inside this single list can
 # be a variable.  We handle this in a specific way:
 
-if sys.version_info[:2] >= (2, 6):    
+if sys.version_info[:2] >= (2, 6):
 
     # For drop-in compatibility with the math module:
     factorial = math.factorial
@@ -230,7 +230,6 @@ if sys.version_info[:2] >= (2, 6):
 
 
     # We wrap math.fsum
-
     original_func = math.fsum  # For optimization purposes
 
     # The function below exists so that temporary variables do not
@@ -255,18 +254,18 @@ if sys.version_info[:2] >= (2, 6):
     fsum = wrapped_fsum()
     non_std_wrapped_funcs.append('fsum')
 
-##########
+
 @uncertainties.set_doc(math.modf.__doc__)
 def modf(x):
     """
     Version of modf that works for numbers with uncertainty, and also
     for regular numbers.
     """
-    
+
     # The code below is inspired by uncertainties.wrap().  It is
     # simpler because only 1 argument is given, and there is no
     # delegation to other functions involved (as for __mul__, etc.).
-    
+
     aff_func = to_affine_scalar(x)
 
     (frac_part, int_part) = math.modf(aff_func.nominal_value)
@@ -279,8 +278,9 @@ def modf(x):
         # This function was not called with an AffineScalarFunc
         # argument: there is no need to return numbers with uncertainties:
         return (frac_part, int_part)
-    
+
 many_scalars_to_scalar_funcs.append('modf')
+
 
 @uncertainties.set_doc(math.ldexp.__doc__)
 def ldexp(x, y):
@@ -312,6 +312,7 @@ def ldexp(x, y):
         # instance]):
         return math.ldexp(x, y)
 many_scalars_to_scalar_funcs.append('ldexp')
+
 
 @uncertainties.set_doc(math.frexp.__doc__)
 def frexp(x):
@@ -349,4 +350,3 @@ non_std_wrapped_funcs.append('frexp')
 # Exported functions:
 
 __all__ = many_scalars_to_scalar_funcs + non_std_wrapped_funcs
-

@@ -10,6 +10,7 @@ from scipy.stats import f
 from scipy.optimize import brentq
 from .minimizer import MinimizerException
 
+
 def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
     """
     Returns the probalitiy for two given parameter sets.
@@ -20,6 +21,7 @@ def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
     nfix = 1.0*nfix
     dchi = new_chi / best_chi - 1.0
     return f.cdf(dchi * nfree / nfix, nfix, nfree)
+
 
 def copy_vals(params):
     """Saves the values and stderrs of params in temporay dict"""
@@ -34,6 +36,7 @@ def restore_vals(tmp_params, params):
     """Restores values and stderrs of params in temporay dict"""
     for para_key in params:
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
+
 
 def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
@@ -90,21 +93,21 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     --------
 
     >>> from lmfit.printfuncs import *
-    >>> mini=minimize(some_func, params)
+    >>> mini = minimize(some_func, params)
     >>> mini.leastsq()
     True
     >>> report_errors(params)
     ... #report
-    >>> ci=conf_interval(mini)
+    >>> ci = conf_interval(mini)
     >>> report_ci(ci)
     ... #report
 
     Now with quantiles for the sigmas and using the trace.
 
-    >>> ci, trace=conf_interval(mini, sigmas=(0.25,0.5,0.75,0.999),trace=True)
-    >>> fixed=trace['para1']['para1']
-    >>> free=trace['para1']['not_para1']
-    >>> prob=trace['para1']['prob']
+    >>> ci, trace = conf_interval(mini, sigmas=(0.25, 0.5, 0.75, 0.999), trace=True)
+    >>> fixed = trace['para1']['para1']
+    >>> free = trace['para1']['not_para1']
+    >>> prob = trace['para1']['prob']
 
     This makes it possible to plot the dependence between free and fixed.
     """
@@ -114,6 +117,7 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     if trace:
         return output, ci.trace_dict
     return output
+
 
 def map_trace_to_names(trace, params):
     "maps trace to param names"
@@ -125,6 +129,7 @@ def map_trace_to_names(trace, params):
             tmp_dict[para_name] = values
         out[name] = tmp_dict
     return out
+
 
 class ConfidenceInterval(object):
     """
@@ -152,7 +157,7 @@ class ConfidenceInterval(object):
         nvars = 0
         for p in self.p_names:
             if minimizer.params[p].vary:
-                nvars  += 1
+                nvars += 1
         if nvars < 2:
             raise MinimizerException(
                 'Cannot determine Confidence Intervals with < 2 variables!')
@@ -183,7 +188,7 @@ class ConfidenceInterval(object):
         out = {}
         for p in self.p_names:
             out[p] = (self.calc_ci(p, -1)[::-1] +
-                      [(0., self.params[p].value)]  +
+                      [(0., self.params[p].value)] +
                       self.calc_ci(p, 1))
         if self.trace:
             self.trace_dict = map_trace_to_names(self.trace_dict,
@@ -301,7 +306,6 @@ class ConfidenceInterval(object):
         return prob - offset
 
 
-
 def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
                     prob_func=None):
     r"""Calculates confidence regions for two fixed parameters.
@@ -335,11 +339,10 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
     Examples
     --------
 
-    >>> from lmfit.printfuncs import *
-    >>> mini=minimize(some_func, params)
+    >>> mini = minimize(some_func, params)
     >>> mini.leastsq()
     True
-    >>> x,y,gr=conf_interval2d('para1','para2')
+    >>> x,y,gr = conf_interval2d('para1','para2')
     >>> plt.contour(x,y,gr)
 
     Other Parameters
@@ -401,6 +404,3 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
     restore_vals(org, minimizer.params)
     minimizer.chisqr = best_chi
     return out
-
-
-
