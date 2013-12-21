@@ -13,7 +13,7 @@ try:
     import numpy
 except ImportError:
     import sys
-    sys.exit()  # There is no reason to test the interface to NumPy    
+    sys.exit()  # There is no reason to test the interface to NumPy
 
 # Local modules:
 import uncertainties
@@ -23,7 +23,7 @@ from uncertainties.test_uncertainties import _numbers_close, matrices_close
 from uncertainties import __author__
 
 def test_numpy():
-    
+
     """
     Interaction with NumPy, including matrix inversion and correlated_values.
     """
@@ -126,7 +126,7 @@ def test_inverse():
     # m (because we started with a triangular matrix):
     assert _numbers_close(1/m_nominal_values[0, 0],
                           m_inv_uncert[0, 0].nominal_value), "Wrong value"
-    
+
     assert _numbers_close(1/m_nominal_values[1, 1],
                           m_inv_uncert[1, 1].nominal_value), "Wrong value"
 
@@ -139,7 +139,7 @@ def test_inverse():
                        [0, 3+2*x]])
 
     m_inverse = m.I
-    
+
     # Check of the properties of the inverse:
     m_double_inverse = m_inverse.I
     # The initial matrix should be recovered, including its
@@ -194,14 +194,14 @@ def test_pseudo_inverse():
     m_pinv_num = pinv_num(m, rcond)
     m_pinv_package = core._pinv(m, rcond)
     assert matrices_close(m_pinv_num, m_pinv_package)
-    
+
     ##########
     # Example with a non-full-rank square matrix:
     m = unumpy.matrix([[ufloat((10, 1)), 0], [3, 0]])
     m_pinv_num = pinv_num(m, rcond)
     m_pinv_package = core._pinv(m, rcond)
     assert matrices_close(m_pinv_num, m_pinv_package)
-    
+
 def test_broadcast_funcs():
     """
     Test of mathematical functions that work with NumPy arrays of
@@ -222,7 +222,7 @@ def test_broadcast_funcs():
 
     # Test of the __all__ variable:
     assert 'acos' not in unumpy.__all__
-    
+
 def test_array_and_matrix_creation():
     "Test of custom array creation"
 
@@ -233,9 +233,9 @@ def test_array_and_matrix_creation():
 
     # Same thing for matrices:
     mat = unumpy.umatrix(([1, 2], [0.1, 0.2]))
-    assert mat[0,1].nominal_value == 2
-    assert mat[0,1].std_dev() == 0.2
-    
+    assert mat[0, 1].nominal_value == 2
+    assert mat[0, 1].std_dev() == 0.2
+
 def test_component_extraction():
     "Extracting the nominal values and standard deviations from an array"
 
@@ -251,7 +251,7 @@ def test_component_extraction():
     assert numpy.all(unumpy.nominal_values(mat) == [1, 2])
     assert numpy.all(unumpy.std_devs(mat) == [0.1, 0.2])
     assert type(unumpy.nominal_values(mat)) == numpy.matrix
-    
+
 
 def test_array_comparisons():
     "Test of array and matrix comparisons"
@@ -261,5 +261,5 @@ def test_array_comparisons():
 
     # For matrices, 1D arrays are converted to 2D arrays:
     mat = unumpy.umatrix(([1, 2], [1, 4]))
-    assert numpy.all((mat == [mat[0,0], 4]) == [True, False])
+    assert numpy.all((mat == [mat[0, 0], 4]) == [True, False])
 

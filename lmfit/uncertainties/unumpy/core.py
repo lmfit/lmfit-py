@@ -57,11 +57,11 @@ to_nominal_values = numpy.vectorize(
     uncertainties.nominal_value,
     otypes=[float],  # Because vectorize() has side effects (dtype setting)
     doc=("Applies uncertainties.nominal_value to the elements of"
-         " a NumPy (or unumpy) array (this includes matrices)."))    
+         " a NumPy (or unumpy) array (this includes matrices)."))
 
 to_std_devs = numpy.vectorize(
     uncertainties.std_dev,
-    otypes=[float],  # Because vectorize() has side effects (dtype setting)    
+    otypes=[float],  # Because vectorize() has side effects (dtype setting)
     doc=("Returns the standard deviation of the numbers with uncertainties"
          " contained in a NumPy array, or zero for other objects."))
 
@@ -71,7 +71,7 @@ def unumpy_to_numpy_matrix(arr):
     Otherwise, it is returned unchanged.
     """
 
-    return arr.view(numpy.matrix) if isinstance(arr, matrix) else arr        
+    return arr.view(numpy.matrix) if isinstance(arr, matrix) else arr
 
 def nominal_values(arr):
     """
@@ -129,19 +129,19 @@ def wrap_array_func(func):
 
     This wrapper is similar to uncertainties.wrap(), except that it
     handles an array argument instead of float arguments.
-    
+
     func -- version that takes and returns a single NumPy array.
     """
 
     @uncertainties.set_doc("""\
     Version of %s(...) that works even when its first argument is a NumPy
     array that contains numbers with uncertainties.
-    
+
     Warning: elements of the first argument array that are not
     AffineScalarFunc objects must not depend on uncertainties.Variable
     objects in any way.  Otherwise, the dependence of the result in
     uncertainties.Variable objects will be incorrect.
-    
+
     Original documentation:
     %s""" % (func.__name__, func.__doc__))
     def wrapped_func(arr, *args):
@@ -193,7 +193,7 @@ def wrap_array_func(func):
             # The standard deviation might be numerically too small
             # for the evaluation of the derivative, though: we set the
             # minimum variable shift.
-            
+
             shift_var = max(var._std_dev/1e5, 1e-8*abs(var._nominal_value))
             # An exceptional case is that of var being exactly zero.
             # In this case, an arbitrary shift is used for the
@@ -216,7 +216,7 @@ def wrap_array_func(func):
             # derivatives, for each element:
             for (derivative_dict, derivative_value) in (
                 zip(derivatives.flat, numerical_deriv.flat)):
-                
+
                 if derivative_value:
                     derivative_dict[var] = derivative_value
 
@@ -269,7 +269,7 @@ def array_derivative(array_like, var):
     scalars or numbers with uncertainties.
 
     var -- Variable object.
-    """    
+    """
     return numpy.vectorize(lambda u: derivative(u, var),
                            # The type is set because an
                            # integer derivative should not
@@ -282,12 +282,12 @@ def func_with_deriv_to_uncert_func(func_with_derivatives):
     Returns a function that can be applied to array-like objects that
     contain numbers with uncertainties (lists, lists of lists, Numpy
     arrays, etc.).
-    
+
     func_with_derivatives -- defines a function that takes array-like
     objects containing scalars and returns an array.  Both the value
     and the derivatives of this function with respect to multiple
     scalar parameters are calculated by func_with_derivatives().
-    
+
     func_with_derivatives(arr, input_type, derivatives, *args) returns
     an iterator.  The first element is the value of the function at
     point 'arr' (with the correct type).  The following elements are
@@ -312,7 +312,7 @@ def func_with_deriv_to_uncert_func(func_with_derivatives):
 
     Examples of func_with_derivatives: inv_with_derivatives().
     """
-    
+
     def wrapped_func(array_like, *args):
         """
         array_like -- array-like object that contains numbers with
@@ -347,7 +347,7 @@ def func_with_deriv_to_uncert_func(func_with_derivatives):
 
         if not variables:
             return func_nominal_value
-        
+
         # The result is built progressively, with the contribution of
         # each variable added in turn:
 
@@ -382,9 +382,9 @@ def func_with_deriv_to_uncert_func(func_with_derivatives):
         # better as unumpy matrices:
         if isinstance(result, numpy.matrix):
             result = result.view(matrix)
-                    
+
         return result
-    
+
     return wrapped_func
 
 ########## Matrix inverse
@@ -420,7 +420,7 @@ _inv.__doc__ = """\
 
     The result is a unumpy.matrix if numpy.linalg.pinv would return a
     matrix for the array of nominal values.
-    
+
     Analytical formulas are used.
 
     Original documentation:
@@ -525,7 +525,7 @@ class matrix(numpy.matrix):
     # @uncertainties.set_doc(numpy.matrix.getI.__doc__)
     def getI(self):
         "Matrix inverse of pseudo-inverse"
-        
+
         # numpy.matrix.getI is OK too, but the rest of the code assumes that
         # numpy.matrix.I is a property object anyway:
 
@@ -535,7 +535,7 @@ class matrix(numpy.matrix):
         else:
             func = _pinv
         return func(self)
-        
+
 
     # ! In Python >= 2.6, this could be simplified as:
     # I = numpy.matrix.I.getter(__matrix_inverse)
@@ -548,9 +548,9 @@ class matrix(numpy.matrix):
         Nominal value of all the elements of the matrix.
         """
         return nominal_values(self)
-    
+
     std_devs = std_devs
-    
+
 def umatrix(*args):
     """
     Constructs a matrix that contains numbers with uncertainties.
@@ -583,7 +583,7 @@ def define_vectorized_funcs():
 
     new_func_names = [func_name_translations.get(function_name, function_name)
                       for function_name in umath.many_scalars_to_scalar_funcs]
-        
+
     for (function_name, unumpy_name) in zip(
         umath.many_scalars_to_scalar_funcs, new_func_names):
 
@@ -608,5 +608,5 @@ Original documentation:
 %s""" % (function_name, func.__doc__)))
 
         __all__.append(unumpy_name)
-    
+
 define_vectorized_funcs()

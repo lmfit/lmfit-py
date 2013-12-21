@@ -129,7 +129,7 @@ expected one of the following:
         return lmfit.fit_report(params, **kws)
 
     def fit(self, y, x=None, dy=None, **kws):
-        fcn_kws={'y':y, 'x':x, 'dy':dy}
+        fcn_kws = {'y': y, 'x': x, 'dy': dy}
         fcn_kws.update(kws)
         if not self.has_initial_guess:
             self.guess_starting_values(y, x=x, **kws)
@@ -296,7 +296,6 @@ class VoigtModel(PeakModel):
         PeakModel.__init__(self, amplitude=1, center=0, sigma=1,
                            background=background, **kws)
 
-
     def model(self, params=None, x=None, **kws):
         if params is None:
             params = self.params
@@ -393,10 +392,9 @@ class RectangularModel(FitModel):
         elif self.step == 'erf':
             out = 0.5*(erf(arg1) + erf(arg2))
         else: # 'linear'
-            arg1[np.where(arg1<0)] =  0.0
-            arg1[np.where(arg1>1)] =  1.0
-            arg2[np.where(arg2<-1)] = -1.0
-            arg2[np.where(arg2>0)] =  0.0
+            arg1[np.where(arg1 < 0)] = 0.0
+            arg1[np.where(arg1 > 1)] = 1.0
+            arg2[np.where(arg2 < -1)] = -1.0
+            arg2[np.where(arg2 > 0)] = 0.0
             out = arg1 + arg2
         return height*out
-
