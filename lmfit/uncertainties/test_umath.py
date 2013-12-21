@@ -250,13 +250,13 @@ def test_math_module():
             raise Exception('OverflowError exception expected')
         try:
             umath.log(uncertainties.ufloat((0, 0)))
-        except OverflowError( err_ufloat):  # "as", for Python 2.6+
+        except OverflowError(err_ufloat):  # "as", for Python 2.6+
             assert err_math.args == err_ufloat.args
         else:
             raise Exception('OverflowError exception expected')
         try:
             umath.log(uncertainties.ufloat((0, 1)))
-        except OverflowError( err_ufloat):  # "as", for Python 2.6+
+        except OverflowError(err_ufloat):  # "as", for Python 2.6+
             assert err_math.args == err_ufloat.args
         else:
             raise Exception('OverflowError exception expected')
@@ -265,25 +265,25 @@ def test_math_module():
 
         try:
             math.log(0)
-        except ValueError( err_math):
+        except ValueError(err_math):
             pass
         else:
             raise Exception('ValueError exception expected')
         try:
             umath.log(0)
-        except ValueError( err_ufloat):
+        except ValueError(err_ufloat):
             assert err_math.args == err_ufloat.args
         else:
             raise Exception('ValueError exception expected')
         try:
             umath.log(uncertainties.ufloat((0, 0)))
-        except ValueError( err_ufloat):
+        except ValueError(err_ufloat):
             assert err_math.args == err_ufloat.args
         else:
             raise Exception('ValueError exception expected')
         try:
             umath.log(uncertainties.ufloat((0, 1)))
-        except ValueError( err_ufloat):
+        except ValueError(err_ufloat):
             assert err_math.args == err_ufloat.args
         else:
             raise Exception('ValueError exception expected')
@@ -292,4 +292,3 @@ def test_math_module():
 
         # !!! The tests should be made to work with Python 3 too!
         pass
-
