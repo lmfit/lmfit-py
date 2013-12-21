@@ -85,9 +85,13 @@ class Parameter(object):
 
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
-        if self.max is not None and self._val > self.max:
-            self._val = self.max
-        if self.min is not None and self._val < self.min:
+        #_val is None means - infinity.
+        if self._val is not None:
+            if self.max is not None and self._val > self.max:
+                self._val = self.max
+            if self.min is not None and self._val < self.min:
+                self._val = self.min
+        elif self.min is not None:
             self._val = self.min
         self.setup_bounds()
 
