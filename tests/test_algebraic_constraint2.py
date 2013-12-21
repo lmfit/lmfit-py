@@ -4,17 +4,16 @@ from lmfit.utilfuncs import gaussian, loren, pvoigt
 from lmfit.printfuncs import report_fit
 import sys
 
-try:
-    import matplotlib
-    # matplotlib.use('WXAGG')
-    import pylab
-    HASPYLAB = True
-except ImportError:
-    HASPYLAB = False
 
+HASPYLAB = False
 # Turn off plotting if run by nosetests.
-if sys.argv[0].endswith('nosetests'):
-    HASPYLAB = False 
+if not sys.argv[0].endswith('nosetests'):
+    try:
+        import matplotlib
+        import pylab
+        HASPYLAB = True
+    except ImportError:
+        pass
 
 def test_constraints(with_plot=True):
     with_plot = with_plot and HASPYLAB
