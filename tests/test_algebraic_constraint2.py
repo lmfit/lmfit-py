@@ -15,6 +15,10 @@ if not sys.argv[0].endswith('nosetests'):
     except ImportError:
         pass
 
+# Turn off plotting if run by nosetests.
+if sys.argv[0].endswith('nosetests'):
+    HASPYLAB = False 
+
 def test_constraints(with_plot=True):
     with_plot = with_plot and HASPYLAB
 
