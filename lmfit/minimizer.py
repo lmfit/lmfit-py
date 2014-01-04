@@ -323,6 +323,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfev = info['funcalls']
         self.message = info['task']
         self.chisqr = (self.penalty(xout)**2).sum()
+        self.nfree = (len(fout) - self.nvarys)       
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
@@ -340,6 +342,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         xout, fout, iter, funccalls, warnflag, allvecs = ret
         self.nfev = funccalls
         self.chisqr = (self.penalty(xout)**2).sum()
+        self.nfree = (len(fout) - self.nvarys)       
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
@@ -384,7 +388,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         xout = ret.x
         self.message = ret.message
         self.nfev = ret.nfev
-        self.chisqr = (self.penalty(xout)**2).sum()
+        self.chisqr = (self.penalty(xout)**2).sum()       
+        self.nfree = (len(self.penalty(xout)) - self.nvarys)       
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
