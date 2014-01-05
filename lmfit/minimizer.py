@@ -322,7 +322,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
         self.nfev = info['funcalls']
         self.message = info['task']
-        self.chisqr = (self.penalty(xout)**2).sum()
+        self.residual = self.__residual(xout)
+        self.chisqr = (self.residual**2).sum()
+        self.ndata = len(self.residual)
+        self.nfree = (self.ndata - self.nvarys)       
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
@@ -339,7 +343,11 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
         xout, fout, iter, funccalls, warnflag, allvecs = ret
         self.nfev = funccalls
-        self.chisqr = (self.penalty(xout)**2).sum()
+        self.residual = self.__residual(xout)
+        self.chisqr = (self.residual**2).sum()
+        self.ndata = len(self.residual)
+        self.nfree = (self.ndata - self.nvarys)
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
@@ -382,9 +390,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
         xout = ret.x
-        self.message = ret.message
+        self.message = ret.message        
         self.nfev = ret.nfev
-        self.chisqr = (self.penalty(xout)**2).sum()
+        self.residual = self.__residual(xout)
+        self.chisqr = (self.residual**2).sum()
+        self.ndata = len(self.residual)
+        self.nfree = (self.ndata - self.nvarys)
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
