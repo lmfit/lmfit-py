@@ -357,7 +357,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.unprepare_fit()
         return
 
-    def scalar_minimize(self, method='Nelder-Mead', hess=None, tol=None, **kws):
+    def scalar_minimize(self, method='Nelder-Mead', **kws):
         """use one of the scaler minimization methods from scipy.
         Available methods include:
           Nelder-Mead
@@ -370,6 +370,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
           TNC
           COBYLA
           SLSQP
+          dogleg
+          trust-ncg
 
         If the objective function returns a numpy array instead
         of the expected scalar, the sum of squares of the array
@@ -385,16 +387,23 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.prepare_fit()
 
-        maxfev = 1000*(self.nvarys + 1)
-        opts = {'maxiter': maxfev}
-        if method not in ('L-BFGS-B', 'COBYLA', 'TNC', 'SLSQP', 'BFGS', 'TNC',
-                          'Powell', 'CG'):
-            opts['maxfev'] = maxfev
-        if method in ('Newton-CG', 'dogleg', 'trust-ncg'):
-            opts['hess'] = hess
-        fmin_kws = dict(method=method, tol=tol, options=opts)
+        fmin_kws = dict(method=method,
+                        options={'maxiter': 1000*(self.nvarys + 1)})
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
+
+        # hess supported only in some methods
+        if 'hess' in fmin_kws and method not in ('Newton-CG',
+                                                 'dogleg', 'trust-ncg'):
+            fmin_kws.pop('hess')
+
+        # jac supported only in some methods (and Dfun could be used...)
+        if 'jac' not in fmin_kws and fmin_kws.get('Dfun', None) is not None:
+            fmin_kws['jac'] = fmin_kws.pop('Dfun')
+        if 'jac' in fmin_kws and method not in ('CG', 'BFGS', 'Newton-CG',
+                                                'dogleg', 'trust-ncg'):
+            fmin_kws.pop('jac')
+
         ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
         xout = ret.x
         self.message = ret.message
@@ -549,15 +558,24 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
 
-    _scalar_methods = {'nelder': 'Nelder-Mead',     'powell': 'Powell',
-                       'cg': 'CG',                  'bfgs': 'BFGS',
-                       'newton': 'Newton-CG',       'anneal': 'Anneal',
-                       'lbfgs': 'L-BFGS-B',         'l-bfgs': 'L-BFGS-B',
-                       'tnc': 'TNC',                'cobyla': 'COBYLA',
-                       'slsqp': 'SLSQP'}
+    _scalar_methods = {'nelder': 'Nelder-Mead',
+                       'powell': 'Powell',
+                       'cg': 'CG',
+                       'bfgs': 'BFGS',
+                       'newton': 'Newton-CG',
+                       'anneal': 'Anneal',
+                       'lbfgs': 'L-BFGS-B',
+                       'l-bfgs':'L-BFGS-B',
+                       'tnc': 'TNC',
+                       'cobyla': 'COBYLA',
+                       'slsqp': 'SLSQP',
+                       'dogleg': 'dogleg',
+                       'trust-ncg': 'trust-ncg'}
 
-    _fitmethods = {'anneal': 'anneal',               'nelder': 'fmin',
-                   'lbfgsb': 'lbfgsb',               'leastsq': 'leastsq'}
+    _fitmethods = {'anneal': 'anneal',
+                   'nelder': 'fmin',
+                   'lbfgsb': 'lbfgsb',
+                   'leastsq': 'leastsq'}
 
     if engine is not None:
         method = engine
