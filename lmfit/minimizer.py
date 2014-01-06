@@ -322,10 +322,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
         self.nfev = info['funcalls']
         self.message = info['task']
-        self.residual = self.__residual(xout)
-        self.chisqr = (self.residual**2).sum()
-        self.ndata = len(self.residual)
-        self.nfree = (self.ndata - self.nvarys)       
+        self.chisqr = self.residual = self.__residual(xout)
+        self.ndata = 1
+        self.nfree = 1
+        if isinstance(self.residual, ndarray):
+            self.chisqr = (self.chisqr**2).sum()
+            self.ndata = len(self.residual)
+            self.nfree = self.ndata - self.nvarys
         self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
@@ -343,10 +346,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
         xout, fout, iter, funccalls, warnflag, allvecs = ret
         self.nfev = funccalls
-        self.residual = self.__residual(xout)
-        self.chisqr = (self.residual**2).sum()
-        self.ndata = len(self.residual)
-        self.nfree = (self.ndata - self.nvarys)
+        self.chisqr = self.residual = self.__residual(xout)
+        self.ndata = 1
+        self.nfree = 1
+        if isinstance(self.residual, ndarray):
+            self.chisqr = (self.chisqr**2).sum()
+            self.ndata = len(self.residual)
+            self.nfree = self.ndata - self.nvarys
         self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
@@ -381,21 +387,25 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         maxfev = 1000*(self.nvarys + 1)
         opts = {'maxiter': maxfev}
-        if method not in ('L-BFGS-B', 'TNC', 'SLSQP'):
+        if method not in ('L-BFGS-B', 'COBYLA', 'TNC', 'SLSQP', 'BFGS', 'TNC',
+                          'Powell', 'CG'):
             opts['maxfev'] = maxfev
-
-        fmin_kws = dict(method=method, tol=tol, hess=hess, options=opts)
+        if method in ('Newton-CG', 'dogleg', 'trust-ncg'):
+            opts['hess'] = hess
+        fmin_kws = dict(method=method, tol=tol, options=opts)
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
-
         ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
         xout = ret.x
-        self.message = ret.message        
+        self.message = ret.message
         self.nfev = ret.nfev
-        self.residual = self.__residual(xout)
-        self.chisqr = (self.residual**2).sum()
-        self.ndata = len(self.residual)
-        self.nfree = (self.ndata - self.nvarys)
+        self.chisqr = self.residual = self.__residual(xout)
+        self.ndata = 1
+        self.nfree = 1
+        if isinstance(self.residual, ndarray):
+            self.chisqr = (self.chisqr**2).sum()
+            self.ndata = len(self.residual)
+            self.nfree = self.ndata - self.nvarys
         self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
@@ -540,7 +550,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
 
     _scalar_methods = {'nelder': 'Nelder-Mead',     'powell': 'Powell',
-                       'cg': 'CG ',                 'bfgs': 'BFGS',
+                       'cg': 'CG',                  'bfgs': 'BFGS',
                        'newton': 'Newton-CG',       'anneal': 'Anneal',
                        'lbfgs': 'L-BFGS-B',         'l-bfgs': 'L-BFGS-B',
                        'tnc': 'TNC',                'cobyla': 'COBYLA',
