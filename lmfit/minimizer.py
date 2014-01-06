@@ -399,9 +399,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         # jac supported only in some methods (and Dfun could be used...)
         if 'jac' not in fmin_kws and fmin_kws.get('Dfun', None) is not None:
-            fmin_kws['jac'] = fmin_kws.pop('Dfun')
+            self.jacfcn = fmin_kws.pop('jac')
+            fmin_kws['jac'] = self.__jacobian
+
         if 'jac' in fmin_kws and method not in ('CG', 'BFGS', 'Newton-CG',
                                                 'dogleg', 'trust-ncg'):
+            self.jacfcn = None
             fmin_kws.pop('jac')
 
         ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
