@@ -173,9 +173,9 @@ def test_derive():
             params1['b'].value, params2['b'].value,
             params1['c'].value, params2['c'].value ))
 
-    check_wo_stderr(params1['a'], params2['a'].value, 0.000001)
-    check_wo_stderr(params1['b'], params2['b'].value, 0.000001)
-    check_wo_stderr(params1['c'], params2['c'].value, 0.000001)
+    check_wo_stderr(min1.params['a'], min2.params['a'].value, 0.000001)
+    check_wo_stderr(min1.params['b'], min2.params['b'].value, 0.000001)
+    check_wo_stderr(min1.params['c'], min2.params['c'].value, 0.000001)
 
 def test_peakfit():
     from lmfit.utilfuncs import gaussian
@@ -292,10 +292,9 @@ class CommonMinimizerTest(object):
             nout = "%s:%s" % (name, ' '*(20-len(name)))
             print("%s: %s (%s) " % (nout, par.value, self.p_true[name].value))
 
-        for para, true_para in zip(self.fit_params.values(), 
+        for para, true_para in zip(self.fit_params.values(),
                                    self.p_true.values()):
             check_wo_stderr(para, true_para.value)
-
 
 class TestNelder_Mead(CommonMinimizerTest, unittest.TestCase):
 
@@ -319,7 +318,7 @@ class TestNelder_Mead(CommonMinimizerTest, unittest.TestCase):
             nout = "%s:%s" % (name, ' '*(20-len(name)))
             print("%s: %s (%s) " % (nout, par.value, self.p_true[name].value))
 
-        for para, true_para in zip(self.fit_params.values(), 
+        for para, true_para in zip(self.fit_params.values(),
                                    self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=0.2)
 
@@ -350,6 +349,7 @@ class TestSLSQP(CommonMinimizerTest, unittest.TestCase):
     def setUp(self):
         self.minimizer = 'SLSQP'
         super(TestSLSQP, self).setUp()
+
 
 class TestBFGS(CommonMinimizerTest, unittest.TestCase):
 
