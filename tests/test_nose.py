@@ -284,7 +284,7 @@ class CommonMinimizerTest(object):
             raise SkipTest
 
         print(self.minimizer)
-        self.mini.scalar_minimize(self.minimizer, self.x)
+        self.mini.scalar_minimize(method=self.minimizer)
 
         fit = self.residual(self.fit_params, self.x)
 
@@ -310,7 +310,7 @@ class TestNelder_Mead(CommonMinimizerTest, unittest.TestCase):
             raise SkipTest
 
         print(self.minimizer)
-        self.mini.scalar_minimize(self.minimizer, self.x)
+        self.mini.scalar_minimize(method=self.minimizer)
 
         fit = self.residual(self.fit_params, self.x)
 
