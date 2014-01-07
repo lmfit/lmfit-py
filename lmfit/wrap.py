@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
 from inspect import getargspec
-from lmfit.parameter import Parameters
-
+from .parameter import Parameters
 
 def make_paras_and_func(fcn, x0, used_kwargs=None):
     """A function which takes a function a makes a parameters-dict for it.

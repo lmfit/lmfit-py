@@ -6,8 +6,8 @@ Concise nonlinear curve fitting.
 import warnings
 import inspect
 import copy
-import lmfit
 import numpy as np
+from . import Parameters, Parameter, minimize
 
 try:
     import pandas
@@ -99,7 +99,7 @@ class Model(object):
         >>> params['tau'].value = 2.0  # initial guess
         >>> params['tau'].min = 0  # (optional) lower bound
         """
-        params = lmfit.Parameters()
+        params = Parameters()
         [params.add(name) for name in self.param_names]
         return params
 
@@ -177,11 +177,11 @@ class Model(object):
         param_kwargs = set(kwargs.keys()) & self.param_names
         for name in param_kwargs:
             p = kwargs[name]
-            if isinstance(p, lmfit.Parameter):
+            if isinstance(p, Parameter):
                 p.name = name  # allows N=Parameter(value=5) with implicit name
                 params[name] = copy.deepcopy(p)
             else:
-                params[name] = lmfit.Parameter(name=name, value=p)
+                params[name] = Parameter(name=name, value=p)
             del kwargs[name]
 
         # Keep a pristine copy of the initial params.
@@ -217,8 +217,8 @@ class Model(object):
             if not np.isscalar(self.independent_vars):  # just in case
                 kwargs[var] = _align(kwargs[var], mask, data)
 
-        result = lmfit.minimize(self._residual, params,
-                                args=(data, weights), kws=kwargs)
+        result = minimize(self._residual, params,
+                          args=(data, weights), kws=kwargs)
 
         # Monkey-patch the Minimizer object with some extra information.
         result.model = self
