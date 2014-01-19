@@ -131,7 +131,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.namefinder = NameFinder()
         self.__prepared = False
         self.__set_params(params)
-        self.prepare_fit()
+        # self.prepare_fit()
 
     @property
     def values(self):
@@ -151,9 +151,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if self.updated[name]:
             return
         par = self.params[name]
-        if par.expr is not None:
-            for dep in par.deps:
-                self.__update_paramval(dep)
+        if getattr(par, 'expr', None) is not None:
+            if getattr(par, 'ast', None) is None:
+                par.ast = self.asteval.parse(par.expr)
+            if par.deps is not None:
+                for dep in par.deps:
+                    self.__update_paramval(dep)
             par.value = self.asteval.run(par.ast)
             out = check_ast_errors(self.asteval.error)
             if out is not None:
