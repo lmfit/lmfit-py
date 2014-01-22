@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Simple Builtin Fitting Models &mdash; Least-Squares Minimization with Constraints for Python</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.7.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Least-Squares Minimization with Constraints for Python" href="index.html" />
+    <link rel="prev" title="Using Mathematical Constraints" href="constraints.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="constraints.html" title="Using Mathematical Constraints"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Simple Builtin Fitting Models</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#classes-in-the-models1d-module">classes in the <tt class="docutils literal"><span class="pre">models1d</span></tt> module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="constraints.html"
+                        title="previous chapter">Using Mathematical Constraints</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/models1d.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="simple-builtin-fitting-models">
+<span id="models1d-label"></span><h1>Simple Builtin Fitting Models<a class="headerlink" href="#simple-builtin-fitting-models" title="Permalink to this headline">¶</a></h1>
+<p>It is common to want to fit some 1-dimensional data set to a simple
+peak or line shape, such as Gaussians, Lorentzian, and Voigt peaks,
+Exponential decays, and so on.  These are used in a wide range of
+spectroscopic techniques as well as in basic mathematical analysis.
+In an effort to make make simple things truly simple, the lmfit
+provides a few simple wrappers for doing such fits in its <cite>models1d</cite>
+module.</p>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Let's start with a very simple example.  We'll read data from a simple
+datafile, and fit it to a Gaussian peak.  A script to do this could be:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">lmfit.models1d</span> <span class="kn">import</span>  <span class="n">GaussianModel</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s">&#39;model1d_gauss.dat&#39;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">guess_starting_values</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="c"># model.params[&#39;amplitude&#39;].value=6.0</span>
+
+<span class="n">init_fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+
+<span class="n">final_fit</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">final_fit</span><span class="p">,</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">init_fit</span><span class="p">,</span> <span class="s">&#39;k--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>         <span class="s">&#39;bo&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>First, we read in the data for 'x' and 'y', then build a Gaussian model.
+This 'model' contains all the Parameters for a Gaussian line shape.  We
+then expliticly tell the model to make initial guesses for the Parameters
+based on the data arrays, and save the model predicted with these initial
+Parameter values.  We then perform the actual fit, and print out and
+display the results.  The printed output will be (approximately):</p>
+<div class="highlight-python"><pre>[[Variables]]
+     amplitude:     8.880222 +/- 0.113597 (1.28%) initial =  8.182302
+     center:        5.65866 +/- 0.01030533 (0.18%) initial =  5.5
+     fwhm:          1.642853 +/- 0.02426699 (1.48%) == '2.35482*sigma'
+     sigma:         0.6976553 +/- 0.01030524 (1.48%) initial =  0.6794575
+[[Correlations]] (unreported correlations are &lt;  0.250)
+    C(amplitude, sigma)          =  0.577</pre>
+</div>
+<p>and the resulting plot will look like:</p>
+<a class="reference internal image-reference" href="_images/models1d_doc1.png"><img alt="_images/models1d_doc1.png" src="_images/models1d_doc1.png" style="width: 85%;" /></a>
+<p>which shows a good fit (the data were simulated).</p>
+<p>You can see here that the model created Parameters named 'amplitude',
+'center', 'fwhm', and 'sigma' for the Gaussian model.</p>
+<p>You can also see from the results that the starting guess were a pretty
+good estimate for this simple data set.  In fact, it's generally possible
+to not bother running <tt class="xref py py-meth docutils literal"><span class="pre">guess_starting_values()</span></tt> explicitly.  If this
+method has not been run already, <tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt> will run it for you. Good
+reasons to run this method yourself are if want to save the initial
+estimate of the data, or to alter the starting values by hand.</p>
+</div>
+<div class="section" id="classes-in-the-models1d-module">
+<h2>classes in the <tt class="xref py py-mod docutils literal"><span class="pre">models1d</span></tt> module<a class="headerlink" href="#classes-in-the-models1d-module" title="Permalink to this headline">¶</a></h2>
+<p>Several fitting models are available</p>
+<dl class="class">
+<dt id="GaussianModel">
+<em class="property">class </em><tt class="descname">GaussianModel</tt><a class="headerlink" href="#GaussianModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="LorentzianModel">
+<em class="property">class </em><tt class="descname">LorentzianModel</tt><a class="headerlink" href="#LorentzianModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="VoigtModel">
+<em class="property">class </em><tt class="descname">VoigtModel</tt><a class="headerlink" href="#VoigtModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="PeakModel">
+<em class="property">class </em><tt class="descname">PeakModel</tt><a class="headerlink" href="#PeakModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="ExponentialModel">
+<em class="property">class </em><tt class="descname">ExponentialModel</tt><a class="headerlink" href="#ExponentialModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt>
+<em class="property">class </em><tt class="descname">ExponentialModel</tt></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="StepModel">
+<em class="property">class </em><tt class="descname">StepModel</tt><a class="headerlink" href="#StepModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="RectangleModel">
+<em class="property">class </em><tt class="descname">RectangleModel</tt><a class="headerlink" href="#RectangleModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="constraints.html" title="Using Mathematical Constraints"
+             >previous</a> |</li>
+        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+    </div>
+  </body>
+</html>

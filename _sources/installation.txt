@@ -8,9 +8,10 @@ Prerequisites
 The lmfit package requires Python, Numpy, and Scipy.  Scipy version 0.11 or
 higher is recommended, but extensive testing on version compatibility has
 not been done.  Initial tests do work with Python 3.2, but little testing
-with Python 3 has yet been done.  No testing has been done with 64-bit
-architectures, but as this package is pure Python, no significant troubles
-are expected. Nose is a requirement for running the test suite.
+with Python 3 has yet been done.  Scipy seems to not yet be available for
+Python 3.3.  No testing has been done with 64-bit architectures, but as
+this package is pure Python, no significant troubles are expected. Nose is
+a requirement for running the test suite.
 
 .. _uncertainties: http://packages.python.org/uncertainties/
 
@@ -23,10 +24,10 @@ Downloads
 
 The latest stable version is available from PyPI:
 
-.. _lmfit-0.7.2.tar.gz (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.7.2.tar.gz
-.. _lmfit-0.7.2.win32-py2.6.exe (PyPI): http://pypi.python.org/packages/2.6/l/lmfit/lmfit-0.7.2.win32-py2.6.exe
-.. _lmfit-0.7.2.win32-py2.7.exe (PyPI): http://pypi.python.org/packages/2.7/l/lmfit/lmfit-0.7.2.win32-py2.7.exe
-.. _lmfit-0.7.2.win32-py3.2.exe (PyPI): http://pypi.python.org/packages/3.2/l/lmfit/lmfit-0.7.2.win32-py3.2.exe
+.. _lmfit-0.7.4.tar.gz (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.7.4.tar.gz
+.. _lmfit-0.7.4.win32-py2.6.exe (PyPI): http://pypi.python.org/packages/2.6/l/lmfit/lmfit-0.7.4.win32-py2.6.exe
+.. _lmfit-0.7.4.win32-py2.7.exe (PyPI): http://pypi.python.org/packages/2.7/l/lmfit/lmfit-0.7.4.win32-py2.7.exe
+.. _lmfit-0.7.4.win32-py3.2.exe (PyPI): http://pypi.python.org/packages/3.2/l/lmfit/lmfit-0.7.4.win32-py3.2.exe
 
 .. _lmfit github repository:   http://github.com/lmfit/lmfit-py
 .. _lmfit at pypi:             http://pypi.python.org/pypi/lmfit/
@@ -35,13 +36,13 @@ The latest stable version is available from PyPI:
 +----------------------+------------------+--------------------------------------------+
 |  Download Option     | Python Versions  |  Location                                  |
 +======================+==================+============================================+
-|  Source Kit          | 2.6, 2.7, 3.2    | -  `lmfit-0.7.2.tar.gz (PyPI)`_            |
+|  Source Kit          | 2.6, 2.7, 3.2    | -  `lmfit-0.7.4.tar.gz (PyPI)`_            |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   2.6            | -  `lmfit-0.7.2.win32-py2.6.exe (PyPI)`_   |
+|  Win32 Installer     |   2.6            | -  `lmfit-0.7.4.win32-py2.6.exe (PyPI)`_   |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   2.7            | -  `lmfit-0.7.2.win32-py2.7.exe (PyPI)`_   |
+|  Win32 Installer     |   2.7            | -  `lmfit-0.7.4.win32-py2.7.exe (PyPI)`_   |
 +----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   3.2            | -  `lmfit-0.7.2.win32-py3.2.exe (PyPI)`_   |
+|  Win32 Installer     |   3.2            | -  `lmfit-0.7.4.win32-py3.2.exe (PyPI)`_   |
 +----------------------+------------------+--------------------------------------------+
 |  Development Version |   all            |  use `lmfit github repository`_            |
 +----------------------+------------------+--------------------------------------------+
