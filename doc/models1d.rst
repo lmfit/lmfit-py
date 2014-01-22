@@ -19,7 +19,7 @@ Example
 Let's start with a very simple example.  We'll read data from a simple
 datafile, and fit it to a Gaussian peak.  A script to do this could be:
 
-.. literalinclude:: ../tests/model1d_doc1.py
+.. literalinclude:: ../examples/model1d_doc1.py
 
 First, we read in the data for 'x' and 'y', then build a Gaussian model.
 This 'model' contains all the Parameters for a Gaussian line shape.  We
