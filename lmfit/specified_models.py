@@ -1,9 +1,9 @@
 import numpy as np
 from scipy.special import gamma, gammaln, beta, betaln, erf, erfc, wofz
 from numpy import pi
-from lmfit import Model
-from lmfit.utilfuncs import (gaussian, normalized_gaussian, exponential,
-                             powerlaw, linear, parabolic)
+from . import Model
+from .utilfuncs import (gaussian, normalized_gaussian, exponential,
+                        powerlaw, linear, parabolic)
 
 
 class DimensionalError(Exception):

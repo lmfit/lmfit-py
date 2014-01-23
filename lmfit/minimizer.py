@@ -131,7 +131,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.namefinder = NameFinder()
         self.__prepared = False
         self.__set_params(params)
-        self.prepare_fit()
+        # self.prepare_fit()
 
     @property
     def values(self):
@@ -151,9 +151,12 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if self.updated[name]:
             return
         par = self.params[name]
-        if par.expr is not None:
-            for dep in par.deps:
-                self.__update_paramval(dep)
+        if getattr(par, 'expr', None) is not None:
+            if getattr(par, 'ast', None) is None:
+                par.ast = self.asteval.parse(par.expr)
+            if par.deps is not None:
+                for dep in par.deps:
+                    self.__update_paramval(dep)
             par.value = self.asteval.run(par.ast)
             out = check_ast_errors(self.asteval.error)
             if out is not None:
@@ -322,7 +325,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
         self.nfev = info['funcalls']
         self.message = info['task']
-        self.chisqr = (self.penalty(xout)**2).sum()
+        self.chisqr = self.residual = self.__residual(xout)
+        self.ndata = 1
+        self.nfree = 1
+        if isinstance(self.residual, ndarray):
+            self.chisqr = (self.chisqr**2).sum()
+            self.ndata = len(self.residual)
+            self.nfree = self.ndata - self.nvarys
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
@@ -339,11 +349,18 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
         xout, fout, iter, funccalls, warnflag, allvecs = ret
         self.nfev = funccalls
-        self.chisqr = (self.penalty(xout)**2).sum()
+        self.chisqr = self.residual = self.__residual(xout)
+        self.ndata = 1
+        self.nfree = 1
+        if isinstance(self.residual, ndarray):
+            self.chisqr = (self.chisqr**2).sum()
+            self.ndata = len(self.residual)
+            self.nfree = self.ndata - self.nvarys
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
-    def scalar_minimize(self, method='Nelder-Mead', hess=None, tol=None, **kws):
+    def scalar_minimize(self, method='Nelder-Mead', **kws):
         """use one of the scaler minimization methods from scipy.
         Available methods include:
           Nelder-Mead
@@ -356,6 +373,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
           TNC
           COBYLA
           SLSQP
+          dogleg
+          trust-ncg
 
         If the objective function returns a numpy array instead
         of the expected scalar, the sum of squares of the array
@@ -371,20 +390,38 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.prepare_fit()
 
-        maxfev = 1000*(self.nvarys + 1)
-        opts = {'maxiter': maxfev}
-        if method not in ('L-BFGS-B', 'TNC', 'SLSQP'):
-            opts['maxfev'] = maxfev
-
-        fmin_kws = dict(method=method, tol=tol, hess=hess, options=opts)
+        fmin_kws = dict(method=method,
+                        options={'maxiter': 1000*(self.nvarys + 1)})
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
+
+        # hess supported only in some methods
+        if 'hess' in fmin_kws and method not in ('Newton-CG',
+                                                 'dogleg', 'trust-ncg'):
+            fmin_kws.pop('hess')
+
+        # jac supported only in some methods (and Dfun could be used...)
+        if 'jac' not in fmin_kws and fmin_kws.get('Dfun', None) is not None:
+            self.jacfcn = fmin_kws.pop('jac')
+            fmin_kws['jac'] = self.__jacobian
+
+        if 'jac' in fmin_kws and method not in ('CG', 'BFGS', 'Newton-CG',
+                                                'dogleg', 'trust-ncg'):
+            self.jacfcn = None
+            fmin_kws.pop('jac')
 
         ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
         xout = ret.x
         self.message = ret.message
         self.nfev = ret.nfev
-        self.chisqr = (self.penalty(xout)**2).sum()
+        self.chisqr = self.residual = self.__residual(xout)
+        self.ndata = 1
+        self.nfree = 1
+        if isinstance(self.residual, ndarray):
+            self.chisqr = (self.chisqr**2).sum()
+            self.ndata = len(self.residual)
+            self.nfree = self.ndata - self.nvarys
+        self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
 
@@ -527,15 +564,24 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
 
-    _scalar_methods = {'nelder': 'Nelder-Mead',     'powell': 'Powell',
-                       'cg': 'CG ',                 'bfgs': 'BFGS',
-                       'newton': 'Newton-CG',       'anneal': 'Anneal',
-                       'lbfgs': 'L-BFGS-B',         'l-bfgs': 'L-BFGS-B',
-                       'tnc': 'TNC',                'cobyla': 'COBYLA',
-                       'slsqp': 'SLSQP'}
+    _scalar_methods = {'nelder': 'Nelder-Mead',
+                       'powell': 'Powell',
+                       'cg': 'CG',
+                       'bfgs': 'BFGS',
+                       'newton': 'Newton-CG',
+                       'anneal': 'Anneal',
+                       'lbfgs': 'L-BFGS-B',
+                       'l-bfgs':'L-BFGS-B',
+                       'tnc': 'TNC',
+                       'cobyla': 'COBYLA',
+                       'slsqp': 'SLSQP',
+                       'dogleg': 'dogleg',
+                       'trust-ncg': 'trust-ncg'}
 
-    _fitmethods = {'anneal': 'anneal',               'nelder': 'fmin',
-                   'lbfgsb': 'lbfgsb',               'leastsq': 'leastsq'}
+    _fitmethods = {'anneal': 'anneal',
+                   'nelder': 'fmin',
+                   'lbfgsb': 'lbfgsb',
+                   'leastsq': 'leastsq'}
 
     if engine is not None:
         method = engine

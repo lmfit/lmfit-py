@@ -21,8 +21,8 @@ Models:
 import numpy as np
 from scipy.special import gamma, gammaln, beta, betaln, erf, erfc, wofz
 
-import lmfit
-from lmfit import Parameter, Parameters, Minimizer
+from . import Parameter, Parameters, Minimizer
+from . import fit_report as lmfit_report
 
 VALID_BKGS = ('constant', 'linear', 'quadratic')
 
@@ -126,7 +126,7 @@ expected one of the following:
     def fit_report(self, params=None, **kws):
         if params is None:
             params = self.params
-        return lmfit.fit_report(params, **kws)
+        return lmfit_report(params, **kws)
 
     def fit(self, y, x=None, dy=None, **kws):
         fcn_kws = {'y': y, 'x': x, 'dy': dy}
