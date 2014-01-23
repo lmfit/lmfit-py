@@ -5,19 +5,16 @@ from lmfit.printfuncs import report_fit
 import sys
 
 
-HASPYLAB = False
-# Turn off plotting if run by nosetests.
-if not sys.argv[0].endswith('nosetests'):
-    try:
-        import matplotlib
-        import pylab
-        HASPYLAB = True
-    except ImportError:
-        pass
+try:
+    import matplotlib
+    import pylab
+    HASPYLAB = True
+except ImportError:
+    HASPYLAB = False
 
 # Turn off plotting if run by nosetests.
-if sys.argv[0].endswith('nosetests'):
-    HASPYLAB = False 
+if 'nosetests' in sys.argv[0]:
+    HASPYLAB = False
 
 def test_constraints(with_plot=True):
     with_plot = with_plot and HASPYLAB
@@ -35,7 +32,7 @@ def test_constraints(with_plot=True):
             return model
         if sigma is None:
             return (model - data)
-        return (model - data)/sigma
+        return (model - data) / sigma
 
 
     n = 201
