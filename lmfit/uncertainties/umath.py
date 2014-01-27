@@ -44,9 +44,7 @@ import itertools
 import functools
 
 # Local modules
-import uncertainties
-
-from uncertainties import __author__, to_affine_scalar, AffineScalarFunc
+from __init__ import wrap, set_doc, __author__, to_affine_scalar, AffineScalarFunc
 
 ###############################################################################
 
@@ -201,7 +199,7 @@ for name in dir(math):
     func = getattr(math, name)
 
     setattr(this_module, name,
-            wraps(uncertainties.wrap(func, derivatives), func))
+            wraps(wrap(func, derivatives), func))
 
     many_scalars_to_scalar_funcs.append(name)
 
@@ -245,7 +243,7 @@ if sys.version_info[:2] >= (2, 6):
 
         flat_fsum = lambda *args: original_func(args)
 
-        flat_fsum_wrap = uncertainties.wrap(
+        flat_fsum_wrap = wrap(
             flat_fsum, itertools.repeat(lambda *args: 1))
 
         return wraps(lambda arg_list: flat_fsum_wrap(*arg_list),
@@ -255,14 +253,14 @@ if sys.version_info[:2] >= (2, 6):
     non_std_wrapped_funcs.append('fsum')
 
 
-@uncertainties.set_doc(math.modf.__doc__)
+@set_doc(math.modf.__doc__)
 def modf(x):
     """
     Version of modf that works for numbers with uncertainty, and also
     for regular numbers.
     """
 
-    # The code below is inspired by uncertainties.wrap().  It is
+    # The code below is inspired by wrap().  It is
     # simpler because only 1 argument is given, and there is no
     # delegation to other functions involved (as for __mul__, etc.).
 
@@ -282,14 +280,14 @@ def modf(x):
 many_scalars_to_scalar_funcs.append('modf')
 
 
-@uncertainties.set_doc(math.ldexp.__doc__)
+@set_doc(math.ldexp.__doc__)
 def ldexp(x, y):
-    # The code below is inspired by uncertainties.wrap().  It is
+    # The code below is inspired by wrap().  It is
     # simpler because only 1 argument is given, and there is no
     # delegation to other functions involved (as for __mul__, etc.).
 
     # Another approach would be to add an additional argument to
-    # uncertainties.wrap() so that some arguments are automatically
+    # wrap() so that some arguments are automatically
     # considered as constants.
 
     aff_func = to_affine_scalar(x)  # y must be an integer, for math.ldexp
@@ -314,14 +312,14 @@ def ldexp(x, y):
 many_scalars_to_scalar_funcs.append('ldexp')
 
 
-@uncertainties.set_doc(math.frexp.__doc__)
+@set_doc(math.frexp.__doc__)
 def frexp(x):
     """
     Version of frexp that works for numbers with uncertainty, and also
     for regular numbers.
     """
 
-    # The code below is inspired by uncertainties.wrap().  It is
+    # The code below is inspired by wrap().  It is
     # simpler because only 1 argument is given, and there is no
     # delegation to other functions involved (as for __mul__, etc.).
 
