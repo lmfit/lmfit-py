@@ -22,10 +22,12 @@ import sys
 
 # Local modules
 
-import uncertainties
-from uncertainties import ufloat, AffineScalarFunc, umath
-
-from uncertainties import __author__
+from __init__ import (ufloat, AffineScalarFunc, __author__, Variable,
+                      nominal_value, NumericalDerivatives, to_affine_scalar,
+                      _modified_operators, _modified_ops_with_reflection,
+                      covariance_matrix, wrap, std_dev, correlated_values,
+                      correlated_values_norm)
+import umath
 
 # The following information is useful for making sure that the right
 # version of Python is running the tests (for instance with the Travis
@@ -126,11 +128,11 @@ def _compare_derivatives(func, numerical_derivatives,
                 args = [
                     random.choice(range(-10, 10))
                     if arg_num in integer_arg_nums
-                    else uncertainties.Variable(random.random()*4-2, 0)
+                    else Variable(random.random()*4-2, 0)
                     for arg_num in range(num_args)]
 
                 # 'args', but as scalar values:
-                args_scalar = [uncertainties.nominal_value(v)
+                args_scalar = [nominal_value(v)
                                for v in args]
 
                 func_approx = func(*args)
@@ -174,7 +176,7 @@ def _compare_derivatives(func, numerical_derivatives,
                                     % (arg_num, func.__name__, args,
                                        fixed_deriv_value, num_deriv_value))
 
-            except ValueError(err):  # Arguments out of range, or of wrong type
+            except ValueError as err:  # Arguments out of range, or of wrong type
                 # Factorial(real) lands here:
                 if str(err).startswith('factorial'):
                     integer_arg_nums = set([0])
@@ -210,20 +212,20 @@ def test_fixed_derivatives_basic_funcs():
 
         op_string = "__%s__" % op
         func = getattr(AffineScalarFunc, op_string)
-        numerical_derivatives = uncertainties.NumericalDerivatives(
+        numerical_derivatives = NumericalDerivatives(
             # The __neg__ etc. methods of AffineScalarFunc only apply,
             # by definition, to AffineScalarFunc objects: we first map
             # possible scalar arguments (used for calculating
             # derivatives) to AffineScalarFunc objects:
-            lambda *args: func(*map(uncertainties.to_affine_scalar, args)))
+            lambda *args: func(*map(to_affine_scalar, args)))
         _compare_derivatives(func, numerical_derivatives, [num_args])
 
     # Operators that take 1 value:
-    for op in uncertainties._modified_operators:
+    for op in _modified_operators:
         check_op(op, 1)
 
     # Operators that take 2 values:
-    for op in uncertainties._modified_ops_with_reflection:
+    for op in _modified_ops_with_reflection:
         check_op(op, 2)
 
 # Additional, more complex checks, for use with the nose unit testing
@@ -254,16 +256,16 @@ def test_copy():
     t_copy = copy.copy(t)
     # Shallow copy: the variables on which t depends are not copied:
     assert x in t_copy.derivatives
-    assert (uncertainties.covariance_matrix([t, z]) ==
-            uncertainties.covariance_matrix([t_copy, z]))
+    assert (covariance_matrix([t, z]) ==
+            covariance_matrix([t_copy, z]))
 
     # However, the relationship between a deep copy and the original
     # variables should be broken, since the deep copy created new,
     # independent variables:
     t_deepcopy = copy.deepcopy(t)
     assert x not in t_deepcopy.derivatives
-    assert (uncertainties.covariance_matrix([t, z]) !=
-            uncertainties.covariance_matrix([t_deepcopy, z]))
+    assert (covariance_matrix([t, z]) !=
+            covariance_matrix([t_deepcopy, z]))
 
     # Test of implementations with weak references:
 
@@ -576,7 +578,7 @@ def test_wrapped_func():
     def f(angle, list_var):
         return math.cos(angle) + sum(list_var)
 
-    f_wrapped = uncertainties.wrap(f)
+    f_wrapped = wrap(f)
     my_list = [1, 2, 3]
 
     # Test of a wrapped function that only calls the original function:
@@ -607,10 +609,10 @@ def test_wrapped_func_with_kwargs():
             return math.sin(angle)
 
     # wrappings of these functions
-    wrap_cos_plain  = uncertainties.wrap(cos_plain)
-    wrap_cos_wderiv = uncertainties.wrap(cos_plain, [math.cos])
-    wrap_cos_kwargs = uncertainties.wrap(cos_kwargs)
-    wrap_use_kwargs = uncertainties.wrap(use_kwargs)
+    wrap_cos_plain  = wrap(cos_plain)
+    wrap_cos_wderiv = wrap(cos_plain, [math.cos])
+    wrap_cos_kwargs = wrap(cos_kwargs)
+    wrap_use_kwargs = wrap(use_kwargs)
     umath_cos       = umath.cos
     umath_sin       = umath.sin
 
@@ -649,12 +651,12 @@ def test_access_to_std_dev():
     y = 2*x
 
     # std_dev for Variable and AffineScalarFunc objects:
-    assert uncertainties.std_dev(x) == x.std_dev()
-    assert uncertainties.std_dev(y) == y.std_dev()
+    assert std_dev(x) == x.std_dev()
+    assert std_dev(y) == y.std_dev()
 
     # std_dev for other objects:
-    assert uncertainties.std_dev([]) == 0
-    assert uncertainties.std_dev(None) == 0
+    assert std_dev([]) == 0
+    assert std_dev(None) == 0
 
 ###############################################################################
 
@@ -664,7 +666,7 @@ def test_covariances():
     x = ufloat((1, 0.1))
     y = -2*x+10
     z = -3*x
-    covs = uncertainties.covariance_matrix([x, y, z])
+    covs = covariance_matrix([x, y, z])
     # Diagonal elements are simple:
     assert _numbers_close(covs[0][0], 0.01)
     assert _numbers_close(covs[1][1], 0.04)
@@ -754,13 +756,13 @@ def test_power():
     if sys.version_info < (3,):
         try:
             ufloat((-1, 0))**9.1
-        except Exception( err_ufloat):  # "as", for Python 2.6+
+        except Exception as err_ufloat:  # "as", for Python 2.6+
             pass
         else:
             raise Exception('An exception should have been raised')
         try:
             (-1)**9.1
-        except Exception( err_float):  # "as" for Python 2.6+
+        except Exception as err_float:  # "as" for Python 2.6+
             # UFloat and floats should raise the same error:
             assert err_ufloat.args == err_float.args
         else:
@@ -794,8 +796,8 @@ else:
 
             # For a simpler comparison, both elements are
             # converted to AffineScalarFunc objects:
-            elmt1 = uncertainties.to_affine_scalar(elmt1)
-            elmt2 = uncertainties.to_affine_scalar(elmt2)
+            elmt1 = to_affine_scalar(elmt1)
+            elmt2 = to_affine_scalar(elmt2)
 
             if not _numbers_close(elmt1.nominal_value,
                                   elmt2.nominal_value, precision):
@@ -852,13 +854,13 @@ else:
         Test through the input of the (full) covariance matrix.
         """
 
-        u = uncertainties.ufloat((1, 0.1))
-        cov = uncertainties.covariance_matrix([u])
+        u = ufloat((1, 0.1))
+        cov = covariance_matrix([u])
         # "1" is used instead of u.nominal_value because
         # u.nominal_value might return a float.  The idea is to force
         # the new variable u2 to be defined through an integer nominal
         # value:
-        u2, = uncertainties.correlated_values([1], cov)
+        u2, = correlated_values([1], cov)
         expr = 2*u2  # Calculations with u2 should be possible, like with u
 
         ####################
@@ -869,7 +871,7 @@ else:
         y = ufloat((2, 0.3))
         z = -3*x+y
 
-        covs = uncertainties.covariance_matrix([x, y, z])
+        covs = covariance_matrix([x, y, z])
 
         # Test of the diagonal covariance elements:
         assert matrices_close(
@@ -878,7 +880,7 @@ else:
 
         # "Inversion" of the covariance matrix: creation of new
         # variables:
-        (x_new, y_new, z_new) = uncertainties.correlated_values(
+        (x_new, y_new, z_new) = correlated_values(
             [x.nominal_value, y.nominal_value, z.nominal_value],
             covs,
             tags = ['x', 'y', 'z'])
@@ -890,7 +892,7 @@ else:
         # ... and the covariances too:
         assert matrices_close(
             numpy.array(covs),
-            numpy.array(uncertainties.covariance_matrix([x_new, y_new, z_new])))
+            numpy.array(covariance_matrix([x_new, y_new, z_new])))
 
         assert matrices_close(
             numpy.array([z_new]), numpy.array([-3*x_new+y_new]))
@@ -904,11 +906,11 @@ else:
         sum_value = u+2*v
 
         # Covariance matrices:
-        cov_matrix = uncertainties.covariance_matrix([u, v, sum_value])
+        cov_matrix = covariance_matrix([u, v, sum_value])
 
         # Correlated variables can be constructed from a covariance
         # matrix, if NumPy is available:
-        (u2, v2, sum2) = uncertainties.correlated_values(
+        (u2, v2, sum2) = correlated_values(
             [x.nominal_value for x in [u, v, sum_value]],
             cov_matrix)
 
@@ -933,7 +935,7 @@ else:
         y = ufloat((2, 0.3))
         z = -3*x+y
 
-        cov_mat = uncertainties.covariance_matrix([x, y, z])
+        cov_mat = covariance_matrix([x, y, z])
 
         std_devs = numpy.sqrt(numpy.array(cov_mat).diagonal())
 
@@ -949,7 +951,7 @@ else:
 
         nominal_values = [v.nominal_value for v in (x, y, z)]
         std_devs = [v.std_dev() for v in (x, y, z)]
-        x2, y2, z2 = uncertainties.correlated_values_norm(
+        x2, y2, z2 = correlated_values_norm(
             zip(nominal_values, std_devs), corr_mat)
 
         # matrices_close() is used instead of _numbers_close() because
@@ -966,7 +968,7 @@ else:
         # Test of the full covariance matrix:
         assert matrices_close(
             numpy.array(cov_mat),
-            numpy.array(uncertainties.covariance_matrix([x2, y2, z2])))
+            numpy.array(covariance_matrix([x2, y2, z2])))
 
 
 test_wrapped_func_with_kwargs()
