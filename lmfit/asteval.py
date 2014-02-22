@@ -25,8 +25,6 @@ try:
 except ImportError:
     print("Warning: numpy not available... functionality will be limited.")
 
-__version__ = '0.3'
-
 
 class Interpreter:
     """mathematical expression compiler and interpreter.
@@ -61,8 +59,7 @@ class Interpreter:
                        'functiondef', 'if', 'ifexp', 'index', 'interrupt',
                        'list', 'listcomp', 'module', 'name', 'num', 'pass',
                        'print', 'raise', 'repr', 'return', 'slice', 'str',
-                       'subscript', 'tryexcept', 'tuple', 'unaryop',
-                       'while')
+                       'subscript', 'try', 'tuple', 'unaryop', 'while')
 
     def __init__(self, symtable=None, writer=None, use_numpy=True):
         self.writer = writer or stdout
@@ -75,9 +72,7 @@ class Interpreter:
         self.expr = None
         self.retval = None
         self.lineno = 0
-        global HAS_NUMPY
-        if not use_numpy:
-            HAS_NUMPY = False
+        self.use_numpy = HAS_NUMPY and use_numpy
 
         symtable['print'] = self._printer
         for sym in FROM_PY:
@@ -87,7 +82,7 @@ class Interpreter:
             if hasattr(math, sym):
                 symtable[sym] = getattr(math, sym)
 
-        if HAS_NUMPY:
+        if self.use_numpy:
             for sym in FROM_NUMPY:
                 if hasattr(numpy, sym):
                     symtable[sym] = getattr(numpy, sym)
@@ -97,6 +92,11 @@ class Interpreter:
 
         self.node_handlers = dict(((node, getattr(self, "on_%s" % node))
                                    for node in self.supported_nodes))
+
+        # to rationalize try/except try/finally for Python2.6 through Python3.3
+        self.node_handlers['tryexcept'] = self.node_handlers['try']
+        self.node_handlers['tryfinally'] = self.node_handlers['try']
+
 
     def unimplemented(self, node):
         "unimplemented nodes"
@@ -127,9 +127,12 @@ class Interpreter:
         self.expr = text
         try:
             return ast.parse(text)
-        except:
+        except SyntaxError:
             self.raise_exception(None, exc=SyntaxError,
                                  msg='Syntax Error', expr=text)
+        except RuntimeError:
+            self.raise_exception(None, exc=RuntimeError,
+                                 msg='Runtime Error', expr=text)
 
     def run(self, node, expr=None, lineno=None, with_raise=True):
         """executes parsed Ast representation for an expression"""
@@ -319,21 +322,26 @@ class Interpreter:
     def on_attribute(self, node):    # ('value', 'attr', 'ctx')
         "extract attribute"
         ctx = node.ctx.__class__
-        if ctx == ast.Load:
-            sym = self.run(node.value)
-            if hasattr(sym, node.attr) and node.attr not in UNSAFE_ATTRS:
-                return getattr(sym, node.attr)
-            else:
-                obj = self.run(node.value)
-                fmt = "%s does not have attribute '%s'"
-                msg = fmt % (obj, node.attr)
-                self.raise_exception(node, exc=AttributeError, msg=msg)
-
-        elif ctx == ast.Del:
+        if ctx == ast.Del:
             return delattr(sym, node.attr)
         elif ctx == ast.Store:
             msg = "attribute for storage: shouldn't be here!"
             self.raise_exception(node, exc=RuntimeError, msg=msg)
+
+        # ctx is ast.Load
+        sym = self.run(node.value)
+        fmt = "cannnot access attribute '%s' for %s"
+        if node.attr not in UNSAFE_ATTRS:
+            fmt = "no attribute '%s' for %s"
+            try:
+                return getattr(sym, node.attr)
+            except AttributeError:
+                pass
+
+        # AttributeError or accessed unsafe attribute
+        obj = self.run(node.value)
+        msg = fmt % (node.attr, obj)
+        self.raise_exception(node, exc=AttributeError, msg=msg)
 
     def on_assign(self, node):    # ('targets', 'value')
         "simple assignment"
@@ -419,7 +427,7 @@ class Interpreter:
             rval = self.run(rnode)
             out = op2func(op)(lval, rval)
             lval = rval
-            if HAS_NUMPY and isinstance(out, numpy.ndarray) and out.any():
+            if self.use_numpy and isinstance(out, numpy.ndarray) and out.any():
                 break
             elif not out:
                 break
@@ -511,8 +519,8 @@ class Interpreter:
         "exception handler..."
         return (self.run(node.type), node.name, node.body)
 
-    def on_tryexcept(self, node):    # ('body', 'handlers', 'orelse')
-        "try/except blocks"
+    def on_try(self, node):    # ('body', 'handlers', 'orelse', 'finalbody')
+        "try/except/else/finally blocks"
         no_errors = True
         for tnode in node.body:
             self.run(tnode, with_raise=False)
@@ -530,8 +538,12 @@ class Interpreter:
                         for tline in hnd.body:
                             self.run(tline)
                         break
-        if no_errors:
+        if no_errors and hasattr(node, 'orelse'):
             for tnode in node.orelse:
+                self.run(tnode)
+
+        if hasattr(node, 'finalbody'):
+            for tnode in node.finalbody:
                 self.run(tnode)
 
     def on_raise(self, node):    # ('type', 'inst', 'tback')
@@ -573,7 +585,7 @@ class Interpreter:
 
         try:
             return func(*args, **keywords)
-        except:
+        except RuntimeError:
             self.raise_exception(node, exc=RuntimeError,
                                  msg="Error running %s" % (func))
 

@@ -153,38 +153,42 @@ NUMPY_RENAMES = {'ln': 'log', 'asin': 'arcsin', 'acos': 'arccos',
                  'atan': 'arctan', 'atan2': 'arctan2', 'atanh':
                  'arctanh', 'acosh': 'arccosh', 'asinh': 'arcsinh'}
 
-OPERATORS = {ast.Is:     lambda a, b: a is b,
-             ast.IsNot:  lambda a, b: a is not b,
-             ast.In:     lambda a, b: a in b,
-             ast.NotIn:  lambda a, b: a not in b,
-             ast.Add:    lambda a, b: a + b,
+OPERATORS = {ast.Is: lambda a, b: a is b,
+             ast.IsNot: lambda a, b: a is not b,
+             ast.In: lambda a, b: a in b,
+             ast.NotIn: lambda a, b: a not in b,
+             ast.Add: lambda a, b: a + b,
              ast.BitAnd: lambda a, b: a & b,
-             ast.BitOr:  lambda a, b: a | b,
+             ast.BitOr: lambda a, b: a | b,
              ast.BitXor: lambda a, b: a ^ b,
-             ast.Div:    lambda a, b: a / b,
+             ast.Div: lambda a, b: a / b,
              ast.FloorDiv: lambda a, b: a // b,
              ast.LShift: lambda a, b: a << b,
              ast.RShift: lambda a, b: a >> b,
-             ast.Mult:   lambda a, b: a * b,
-             ast.Pow:    lambda a, b: a ** b,
-             ast.Sub:    lambda a, b: a - b,
-             ast.Mod:    lambda a, b: a % b,
-             ast.And:    lambda a, b: a and b,
-             ast.Or:     lambda a, b: a or b,
-             ast.Eq:     lambda a, b: a == b,
-             ast.Gt:     lambda a, b: a > b,
-             ast.GtE:    lambda a, b: a >= b,
-             ast.Lt:     lambda a, b: a < b,
-             ast.LtE:    lambda a, b: a <= b,
-             ast.NotEq:  lambda a, b: a != b,
+             ast.Mult: lambda a, b: a * b,
+             ast.Pow: lambda a, b: a ** b,
+             ast.Sub: lambda a, b: a - b,
+             ast.Mod: lambda a, b: a % b,
+             ast.And: lambda a, b: a and b,
+             ast.Or: lambda a, b: a or b,
+             ast.Eq: lambda a, b: a == b,
+             ast.Gt: lambda a, b: a > b,
+             ast.GtE: lambda a, b: a >= b,
+             ast.Lt: lambda a, b: a < b,
+             ast.LtE: lambda a, b: a <= b,
+             ast.NotEq: lambda a, b: a != b,
              ast.Invert: lambda a: ~a,
-             ast.Not:    lambda a: not a,
-             ast.UAdd:   lambda a: +a,
-             ast.USub:   lambda a: -a}
+             ast.Not: lambda a: not a,
+             ast.UAdd: lambda a: +a,
+             ast.USub: lambda a: -a}
 
 
 def valid_symbol_name(name):
-    "input is a valid name"
+    """determines whether the input symbol name is a valid name
+
+    This checks for reserved words, and that the name matches the
+    regular expression ``[a-zA-Z_][a-zA-Z0-9_]``
+    """
     if name in RESERVED_WORDS:
         return False
     return NAME_MATCH(name) is not None
@@ -196,6 +200,10 @@ def op2func(op):
 
 
 class Empty:
+    """empty class"""
+    def __init__(self):
+        pass
+
     def __nonzero__(self):
         return False
 
