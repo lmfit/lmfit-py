@@ -512,6 +512,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             par.stderr, par.correl = 0, None
             has_expr = has_expr or par.expr is not None
 
+        # self.errorbars = error bars were successfully estimated
+        self.errorbars = self.covar is not None
+
         if self.covar is not None:
             if self.scale_covar:
                 self.covar = self.covar * sum_sqr / self.nfree
@@ -520,10 +523,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                 par = self.params[varname]
                 par.stderr = sqrt(self.covar[ivar, ivar])
                 par.correl = {}
-                for jvar, varn2 in enumerate(self.var_map):
-                    if jvar != ivar:
-                        par.correl[varn2] = (self.covar[ivar, jvar] /
-                             (par.stderr * sqrt(self.covar[jvar, jvar])))
+                try:
+                    self.errorbars = self.errorbars and (par.stderr > 0.0)
+                    for jvar, varn2 in enumerate(self.var_map):
+                        if jvar != ivar:
+                            par.correl[varn2] = (self.covar[ivar, jvar] /
+                                 (par.stderr * sqrt(self.covar[jvar, jvar])))
+                except:
+                    self.errorbars = False
 
             uvars = None
             if has_expr:
@@ -545,10 +552,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                     for v, nam in zip(uvars, self.var_map):
                         self.asteval.symtable[nam] = v.nominal_value
 
-        self.errorbars = True
-        if self.covar is None:
-            self.errorbars = False
-            self.message = '%s. Could not estimate error-bars'
+        if not self.errorbars:
+            self.message = '%s. Could not estimate error-bars'  % self.message
 
         np.seterr(**orig_warn_settings)
         self.unprepare_fit()
