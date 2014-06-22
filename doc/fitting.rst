@@ -165,14 +165,13 @@ To select which of these algorithms to use, use the ``method`` keyword to the
  +-----------------------+--------------------+---------------------+-------------------------+
  | Conjugate Gradient    |  ``cg``            |                     | ``CG``                  |
  +-----------------------+--------------------+---------------------+-------------------------+
- | Newtown-CG            |  ``newton``        |                     | ``Newton-CG``           |
+ | Newton-CG             |  ``newton``        |                     | ``Newton-CG``           |
  +-----------------------+--------------------+---------------------+-------------------------+
  | COBYLA                |  ``cobyla``        |                     |  ``COBYLA``             |
  +-----------------------+--------------------+---------------------+-------------------------+
  | Sequential Linear     |  ``slsqp``         |                     |  ``SLSQP``              |
  | Squares Programming   |                    |                     |                         |
  +-----------------------+--------------------+---------------------+-------------------------+
-
 
 .. note::
 
@@ -242,6 +241,10 @@ stored as attributes of the corresponding :class:`Parameter`.
 |    chisqr            | chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`                    |
 +----------------------+----------------------------------------------------------------------------+
 |    redchi            | reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}` |
++----------------------+----------------------------------------------------------------------------+
+|    var_map           | list of variable parameter names for rows/columns of covar                 |
++----------------------+----------------------------------------------------------------------------+
+|    covar             | covariance matrix (with rows/columns using var_map                         |
 +----------------------+----------------------------------------------------------------------------+
 
 Note that the calculation of chi-square and reduced chi-square assume that the
