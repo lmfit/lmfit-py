@@ -41,12 +41,12 @@ def parabolic(x, a, b, c):
     return a * x**2 + b * x + c
 
 
-def loren(x, amp, cen, wid):
+def lorentzian(x, amp, cen, wid):
     "lorentzian function: wid = half-width at half-max"
     return (amp / (1 + ((x-cen)/wid)**2))
 
 
-def loren_area(x, amp, cen, wid):
+def lorentzian_area(x, amp, cen, wid):
     "scaled lorenztian function: wid = half-width at half-max"
     return loren(x, amp, cen, wid) / (pi*wid)
 
@@ -54,16 +54,16 @@ def loren_area(x, amp, cen, wid):
 def pvoigt(x, amp, cen, wid, frac):
     """pseudo-voigt function:
     (1-frac)*gauss(amp, cen, wid) + frac*loren(amp, cen, wid)"""
-    return amp * (gauss(x, (1-frac), cen, wid) +
-                  loren(x, frac, cen, wid))
+    return amp * (gaussian(x, (1-frac), cen, wid) +
+                  lorentzian(x, frac, cen, wid))
 
 
 def pvoigt_area(x, amp, cen, wid, frac):
     """scaled pseudo-voigt function:
     (1-frac)*gauss_area(amp, cen, wid) + frac*loren_are(amp, cen, wid)"""
 
-    return amp * (gauss_area(x, (1-frac), cen, wid) +
-                  loren_area(x, frac,     cen, wid))
+    return amp * (gaussian_area(x, (1-frac), cen, wid) +
+                  lorentzian_area(x, frac,     cen, wid))
 
 
 def pearson7(x, amp, cen, wid, expon):
