@@ -3,7 +3,7 @@ from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
 
 from lmfit import Parameters, Minimizer, report_fit
-from lmfit.utilfuncs import gauss, loren, pvoigt
+from lmfit.utilfuncs import gaussian
 
 try:
     import pylab
@@ -14,7 +14,7 @@ except ImportError:
 HASPYLAB = False
 
 def residual(pars, x, sigma=None, data=None):
-    yg = gauss(x, pars['amp_g'].value,
+    yg = gaussian(x, pars['amp_g'].value,
                   pars['cen_g'].value, pars['wid_g'].value)
 
     slope = pars['line_slope'].value
@@ -40,8 +40,8 @@ p_true.add('wid_g', value=1.6)
 p_true.add('line_off', value=-1.023)
 p_true.add('line_slope', value=0.62)
 
-data = (gauss(x, p_true['amp_g'].value, p_true['cen_g'].value,
-              p_true['wid_g'].value) +
+data = (gaussian(x, p_true['amp_g'].value, p_true['cen_g'].value,
+                 p_true['wid_g'].value) +
         random.normal(scale=0.23,  size=n) +
         x*p_true['line_slope'].value + p_true['line_off'].value )
 

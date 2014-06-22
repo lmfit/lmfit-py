@@ -19,7 +19,10 @@ from NISTModels import Models, ReadNistData
 
 
 def ndig(a, b):
-    return int(0.5-math.log10(abs(abs(a)-abs(b))/abs(b)))
+    try:
+        return int(0.5-math.log10(abs(abs(a)-abs(b))/abs(b)))
+    except ValueError:
+        return 0
 
 def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
     print(' ======================================')
@@ -41,7 +44,7 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
 
         thiserr = par.stderr
         certerr = NISTdata['cert_stderr'][i]
-        if thiserr is not None:
+        if thiserr is not None and myfit.errorbars:
             edig   = ndig(thiserr, certerr)
             ename = (parname + ' stderr' + ' '*14)[:14]
             print(' | %s | % -.7e | % -.7e   | %2i                |' % (ename, thiserr, certerr, edig))
@@ -56,6 +59,9 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
     except:
         pass
     print(' |----------------+----------------+------------------+-------------------|')
+    if not myfit.errorbars:
+        print(' |          * * * * COULD NOT ESTIMATE UNCERTAINTIES * * * *              |')
+        err_dig_min = 0
     if err_dig_min < 199:
         print(' Worst agreement: %i digits for value, %i digits for error ' % (val_dig_min, err_dig_min))
     else:
@@ -79,8 +85,6 @@ def NIST_Test(DataSet, method='leastsq', start='start2', plot=True):
 
 
     myfit = minimize(resid, params, method=method, args=(x,), kws={'y':y})
-
-
     digs = Compare_NIST_Results(DataSet, myfit, params, NISTdata)
 
     if plot and HASPYLAB:

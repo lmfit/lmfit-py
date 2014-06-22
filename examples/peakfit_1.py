@@ -8,11 +8,11 @@ except ImportError:
 
 
 from lmfit import Parameters, Minimizer, report_fit
-from lmfit.utilfuncs import gauss, loren
+from lmfit.utilfuncs import gaussian
 
 def residual(pars, x, data=None):
-    g1 = gauss(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)
-    g2 = gauss(x, pars['a2'].value, pars['c2'].value, pars['w2'].value)
+    g1 = gaussian(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)
+    g2 = gaussian(x, pars['a2'].value, pars['c2'].value, pars['w2'].value)
     model = g1 + g2
     if data is None:
         return model

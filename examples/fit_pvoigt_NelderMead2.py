@@ -2,7 +2,7 @@ import sys
 from numpy import linspace, exp, random
 
 from lmfit import Parameters, minimize
-from lmfit.utilfuncs import gauss, loren, pvoigt
+from lmfit.utilfuncs import gaussian, lorentzian, pvoigt
 
 try:
     import matplotlib
@@ -18,10 +18,10 @@ def per_iteration(pars, i, resid, x, *args, **kws):
             print( p.name , p.value)
 
 def residual(pars, x, sigma=None, data=None):
-    yg = gauss(x, pars['amp_g'].value,
-               pars['cen_g'].value, pars['wid_g'].value)
-    yl = loren(x, pars['amp_l'].value,
-               pars['cen_l'].value, pars['wid_l'].value)
+    yg = gaussian(x, pars['amp_g'].value,
+                  pars['cen_g'].value, pars['wid_g'].value)
+    yl = lorentzian(x, pars['amp_l'].value,
+                    pars['cen_l'].value, pars['wid_l'].value)
 
     frac = pars['frac'].value
     slope = pars['line_slope'].value

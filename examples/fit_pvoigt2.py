@@ -3,7 +3,7 @@ import sys
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
 from lmfit import Parameters, Parameter, Minimizer
-from lmfit.utilfuncs import gauss, loren, pvoigt
+from lmfit.utilfuncs import gaussian, lorentzian, pvoigt
 from lmfit.printfuncs import report_fit
 
 try:
@@ -16,10 +16,10 @@ except ImportError:
 
 
 def residual(pars, x, sigma=None, data=None):
-    yg = gauss(x, pars['amp_g'].value,
-               pars['cen_g'].value, pars['wid_g'].value)
-    yl = loren(x, pars['amp_l'].value,
-               pars['cen_l'].value, pars['wid_l'].value)
+    yg = gaussian(x, pars['amp_g'].value,
+                  pars['cen_g'].value, pars['wid_g'].value)
+    yl = lorentzian(x, pars['amp_l'].value,
+                    pars['cen_l'].value, pars['wid_l'].value)
 
     slope = pars['line_slope'].value
     offset = pars['line_off'].value
@@ -36,8 +36,8 @@ xmin = 0.
 xmax = 20.0
 x = linspace(xmin, xmax, n)
 
-data = (gauss(x, 21, 8.1, 1.2) + 
-        loren(x, 10, 9.6, 2.4) +
+data = (gaussian(x, 21, 8.1, 1.2) +
+        lorentzian(x, 10, 9.6, 2.4) +
         random.normal(scale=0.23,  size=n) +
         x*0.5)
 
@@ -53,13 +53,13 @@ pfit = [Parameter(name='amp_g',  value=10),
         Parameter(name='amp_l',  expr='amp_tot - amp_g'),
         Parameter(name='cen_l',  expr='1.5+cen_g'),
         Parameter(name='wid_l',  expr='2*wid_g'),
-        
+
         Parameter(name='line_slope', value=0.0),
         Parameter(name='line_off', value=0.0)]
 
 sigma = 0.021  # estimate of data error (for all data points)
 
-myfit = Minimizer(residual, pfit, 
+myfit = Minimizer(residual, pfit,
                   fcn_args=(x,), fcn_kws={'sigma':sigma, 'data':data},
                   scale_covar=True)
 
