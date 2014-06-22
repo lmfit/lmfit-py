@@ -10,6 +10,9 @@ from scipy.stats import f
 from scipy.optimize import brentq
 from .minimizer import MinimizerException
 
+CONF_ERR_GEN    = 'Cannot determine Confidence Intervals'
+CONF_ERR_STDERR = '%s without sensible uncertainty estimates' % CONF_ERR_GEN
+CONF_ERR_NVARS  = '%s with < 2 variables' % CONF_ERR_GEN
 
 def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
     """
@@ -154,13 +157,18 @@ class ConfidenceInterval(object):
         self.fit_params = [minimizer.params[p] for p in self.p_names]
 
         # check that there are at least 2 true variables!
+        # check that all stderrs are sensible (including not None or NaN)
         nvars = 0
-        for p in self.p_names:
-            if minimizer.params[p].vary:
+        for par in self.fit_params:
+            if par.vary:
                 nvars += 1
+            try:
+                if not (par.vary and par.stderr > 0.0):
+                    raise MinimizerException(CONF_ERROR_BAD_STDERR)
+            except TypeError:
+                raise MinimizerException(CONF_ERROR_BAD_STDERR)
         if nvars < 2:
-            raise MinimizerException(
-                'Cannot determine Confidence Intervals with < 2 variables!')
+            raise MinimizerException(CONF_ERR_NVARS)
 
         if prob_func is None or not hasattr(prob_func, '__call__'):
             self.prob_func = f_compare
