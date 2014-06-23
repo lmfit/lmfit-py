@@ -1,6 +1,6 @@
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from lmfit import Parameters, Parameter, Minimizer
-from lmfit.utilfuncs import gaussian, loren, pvoigt
+from lmfit.utilfuncs import gaussian, lorentzian, pvoigt
 from lmfit.printfuncs import report_fit
 import sys
 
@@ -22,7 +22,7 @@ def test_constraints(with_plot=True):
     def residual(pars, x, sigma=None, data=None):
         yg = gaussian(x, pars['amp_g'].value,
                    pars['cen_g'].value, pars['wid_g'].value)
-        yl = loren(x, pars['amp_l'].value,
+        yl = lorentzian(x, pars['amp_l'].value,
                    pars['cen_l'].value, pars['wid_l'].value)
 
         slope = pars['line_slope'].value
@@ -41,7 +41,7 @@ def test_constraints(with_plot=True):
     x = linspace(xmin, xmax, n)
 
     data = (gaussian(x, 21, 8.1, 1.2) +
-            loren(x, 10, 9.6, 2.4) +
+            lorentzian(x, 10, 9.6, 2.4) +
             random.normal(scale=0.23,  size=n) +
             x*0.5)
 
