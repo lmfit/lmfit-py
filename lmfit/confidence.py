@@ -164,9 +164,9 @@ class ConfidenceInterval(object):
                 nvars += 1
             try:
                 if not (par.vary and par.stderr > 0.0):
-                    raise MinimizerException(CONF_ERROR_BAD_STDERR)
+                    raise MinimizerException(CONF_ERR_STDERR)
             except TypeError:
-                raise MinimizerException(CONF_ERROR_BAD_STDERR)
+                raise MinimizerException(CONF_ERR_STDERR)
         if nvars < 2:
             raise MinimizerException(CONF_ERR_NVARS)
 
