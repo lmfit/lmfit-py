@@ -18,6 +18,7 @@ Changes:
 """
 
 from __future__ import print_function
+from numpy import isnan
 
 
 def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
@@ -78,6 +79,8 @@ def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
                     if name != name2 and name2 in par.correl:
                         correls["%s, %s" % (name, name2)] = par.correl[name2]
 
+        # Remove correlations that are NaN
+        correls = {k: v for k, v in correls.iteritems() if not isnan(v)}
         sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
         sort_correl.reverse()
         for name, val in sort_correl:
