@@ -69,6 +69,7 @@ class Interpreter:
         self.symtable = symtable
         self._interrupt = None
         self.error = []
+        self.error_msg = None
         self.expr = None
         self.retval = None
         self.lineno = 0
@@ -111,12 +112,17 @@ class Interpreter:
             self.error = []
         if expr is None:
             expr = self.expr
+            
         if len(self.error) > 0 and not isinstance(node, ast.Module):
             msg = '%s' % msg
         err = ExceptionHolder(node, exc=exc, msg=msg, expr=expr, lineno=lineno)
         self._interrupt = ast.Break()
         self.error.append(err)
-        raise RuntimeError(err.msg)
+        if self.error_msg is None:
+            self.error_msg = "%s in expr='%s'" % (msg, self.expr)
+        elif len(msg) > 0:
+            self.error_msg = "%s\n %s" % (self.error_msg, msg)
+        raise self.error[0].exc(self.error_msg)
 
     # main entry point for Ast node evaluation
     #  parse:  text of statements -> ast
