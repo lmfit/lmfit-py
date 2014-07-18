@@ -225,7 +225,8 @@ class ConfidenceInterval(object):
         start_val = para.value.copy()
         a_limit = start_val.copy()
         ret = []
-
+        orig_warn_settings = np.geterr()
+        np.seterr(all='ignore')
         for prob in self.sigmas:
             if prob > max_prob:
                 ret.append((prob, direction*np.inf))
@@ -237,14 +238,18 @@ class ConfidenceInterval(object):
 
             except ValueError:
                 self.reset_vals()
-                val = brentq(calc_prob, start_val,
-                             limit, rtol=.5e-4, args=prob)
+                try:
+                    val = brentq(calc_prob, start_val,
+                                 limit, rtol=.5e-4, args=prob)
+                except ValueError:
+                    val = np.nan
 
             a_limit = val
             ret.append((prob, val))
 
         para.vary = True
         self.reset_vals()
+        np.seterr(**orig_warn_settings)
         return ret
 
     def reset_vals(self):
