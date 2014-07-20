@@ -49,7 +49,7 @@ install:
 
 script:
     # Execute the unit tests
-    - nosetests tests
+    - nosetests
     # Generate the docs
     - if [[ $PYVER == '2.x' ]]; then
     -   cd doc
