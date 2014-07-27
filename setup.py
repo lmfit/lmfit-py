@@ -26,7 +26,7 @@ questionable. """
 
 setup(name = 'lmfit',
       version = lmfit.__version__,
-      author = 'LM-Fit Development Team',
+      author = 'LMFit Development Team',
       author_email = 'matt.newville@gmail.com',
       url          = 'http://lmfit.github.io/lmfit-py/',
       download_url = 'http://lmfit.github.io//lmfit-py/',
