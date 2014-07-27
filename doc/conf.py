@@ -27,6 +27,13 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.pngmath',
               'numpydoc']
 
+try:
+    import IPython.sphinxext.ipython_directive
+    extensions.extend(['IPython.sphinxext.ipython_directive',
+                       'IPython.sphinxext.ipython_console_highlighting'])
+except ImportError:
+    pass
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -42,7 +49,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'lmfit'
-copyright = u'2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin'
+copyright = u'2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -187,7 +194,7 @@ htmlhelp_basename = 'lmfitdoc'
 latex_documents = [
   ('index', 'lmfit.tex',
    'Least-Squares Minimization with Constraints for Python',
-   'Matthew Newville', 'manual'),
+   'Matthew Newville, Till Stensitzki, and others', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
