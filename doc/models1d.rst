@@ -38,7 +38,8 @@ display the results.  The printed output will be (approximately)::
 
 and the resulting plot will look like:
 
-.. image:: models1d_doc1.png
+.. image:: _images/models1d_doc1.png
+   :target: _images/models1d_doc1.png
    :width: 85%
 
 which shows a good fit (the data were simulated).

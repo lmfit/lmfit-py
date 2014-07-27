@@ -25,8 +25,6 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
               'sphinx.ext.coverage',
               'sphinx.ext.pngmath',
-              'ipython_directive',
-              'ipython_console_highlighting',
               'numpydoc']
 
 
