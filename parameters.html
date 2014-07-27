@@ -105,17 +105,17 @@ in the least-squares sense.  For many data fitting processes, the
 least-squares approach is used, and the objective function should
 return an array of (data-model), perhaps scaled by some weighting factor
 such as the inverse of the uncertainty in the data.  For such a problem,
-the chi-square (<img class="math" src="_images/math/a61c1e51680e27d35d05bebed87d474972fc70bd.png" alt="\chi^2"/>) statistic is often defined as:</p>
+the chi-square (<img class="math" src="_images/math/8bd0685e3bf9101859d24cf0e851651f182364c9.png" alt="\chi^2"/>) statistic is often defined as:</p>
 <div class="math">
-<p><img src="_images/math/0999ab8f1f536075a4ce7cab471c891041d7ac6c.png" alt="\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}"/></p>
-</div><p>where <img class="math" src="_images/math/46c77f95690c67f66ff8f15c8b7b287fc72ddb51.png" alt="y_i^{\rm meas}"/> is the set of measured data, <img class="math" src="_images/math/5701af25a70669f531ef4c956d9f8d6227175071.png" alt="y_i^{\rm
-model}({\bf{v}})"/> is the model calculation, <img class="math" src="_images/math/83f0be20c5972fb3136e8e37f24ac4a6cce2fbf4.png" alt="{\bf{v}}"/> is the set of
-variables in the model to be optimized in the fit, and <img class="math" src="_images/math/319593f7ae7122d7910bdf87a156b25f7588f1ad.png" alt="\epsilon_i"/>
+<p><img src="_images/math/b9b9abf25dde0121dde82a7fa8a14ea0a7f7acbe.png" alt="\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}"/></p>
+</div><p>where <img class="math" src="_images/math/133de75d5dd641bf6ab9d62618bad1c758bf8232.png" alt="y_i^{\rm meas}"/> is the set of measured data, <img class="math" src="_images/math/fb615c00de41be26d9ef27cdd45064ccd23d9df4.png" alt="y_i^{\rm
+model}({\bf{v}})"/> is the model calculation, <img class="math" src="_images/math/cbfc32f31e802c7ed8161f43448cceceeb2052eb.png" alt="{\bf{v}}"/> is the set of
+variables in the model to be optimized in the fit, and <img class="math" src="_images/math/f48bd294a6bca30ab97b3a92a17698fcde1bbd6e.png" alt="\epsilon_i"/>
 is the estimated uncertainty in the data.</p>
 <p>In a traditional non-linear fit, one writes an objective function that takes the
-variable values and calculates the residual <img class="math" src="_images/math/e5ba98e136ed2f40b3c5119abb1d1b9719da124f.png" alt="y^{\rm meas}_i -
+variable values and calculates the residual <img class="math" src="_images/math/1738a79ca251c7bfc076c76e11c69919d9d0cbb2.png" alt="y^{\rm meas}_i -
 y_i^{\rm model}({\bf{v}})"/>, or the residual scaled by the data
-uncertainties, <img class="math" src="_images/math/6848749ff38f8cf3e6fa94040bbd29d198617e7a.png" alt="[y^{\rm meas}_i - y_i^{\rm
+uncertainties, <img class="math" src="_images/math/013ae8502d795c73486a7784b72c9efa7595e1b1.png" alt="[y^{\rm meas}_i - y_i^{\rm
 model}({\bf{v}})]/{\epsilon_i}"/>, or some other weighting factor.  As a
 simple example, one might write an objective function like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">):</span>
@@ -400,8 +400,8 @@ looks table-like:</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

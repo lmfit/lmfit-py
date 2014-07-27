@@ -94,25 +94,25 @@ results.</p>
 mathematically transformed using the formulation devised (and documented)
 for <a class="reference external" href="http://en.wikipedia.org/wiki/MINUIT">MINUIT</a>.  This is implemented following (and borrowing heavily from)
 the <a class="reference external" href="https://github.com/jjhelmus/leastsqbound-scipy">leastsqbound</a> from J. J. Helmus.   Parameter values are mapped from
-internally used, freely variable values <img class="math" src="_images/math/78242af2e8aed3f74dd9f5725e1598fdd3515f75.png" alt="P_{\rm internal}"/> to bounded
-parameters <img class="math" src="_images/math/bc7fac413821deccdfba38ff99642124fc1e63b1.png" alt="P_{\rm bounded}"/>.   When both <tt class="docutils literal"><span class="pre">min</span></tt> and <tt class="docutils literal"><span class="pre">max</span></tt> bounds
+internally used, freely variable values <img class="math" src="_images/math/a9612e76beb24216f697e72d68e5f0c7a35829a8.png" alt="P_{\rm internal}"/> to bounded
+parameters <img class="math" src="_images/math/1c05a84b982f759c7a5f38fc1521ea76f5a45f1d.png" alt="P_{\rm bounded}"/>.   When both <tt class="docutils literal"><span class="pre">min</span></tt> and <tt class="docutils literal"><span class="pre">max</span></tt> bounds
 are specified, the mapping is</p>
 <div class="math">
-<p><img src="_images/math/d10510955ef4ce03678ad4ecbba89ae69d202ca3.png" alt="\begin{eqnarray*}
+<p><img src="_images/math/e5b005a0e6cc45999d97068077edaee8a1fb203f.png" alt="\begin{eqnarray*}
      P_{\rm internal} &amp;=&amp; \arcsin\big(\frac{2 (P_{\rm bounded} - {\rm min})}{({\rm max} - {\rm min})} - 1\big) \\
      P_{\rm bounded}  &amp;=&amp; {\rm min} + \big(\sin(P_{\rm internal}) + 1\big) \frac{({\rm max} - {\rm min})}{2}
  \end{eqnarray*}"/></p>
 </div><p>With only an upper limit <tt class="docutils literal"><span class="pre">max</span></tt> supplied, but <tt class="docutils literal"><span class="pre">min</span></tt> left unbounded, the
 mapping is:</p>
 <div class="math">
-<p><img src="_images/math/5b49de513b8b915c72a6629638e9c9ee434a6d31.png" alt="\begin{eqnarray*}
+<p><img src="_images/math/8a7f568701632283e0408f3c84455ec3295f92f6.png" alt="\begin{eqnarray*}
      P_{\rm internal} &amp;=&amp; \sqrt{({\rm max} - P_{\rm bounded} + 1)^2 - 1} \\
      P_{\rm bounded}  &amp;=&amp; {\rm max} + 1 - \sqrt{P_{\rm internal}^2 + 1}
  \end{eqnarray*}"/></p>
 </div><p>With only a lower limit <tt class="docutils literal"><span class="pre">min</span></tt> supplied, but <tt class="docutils literal"><span class="pre">max</span></tt> left unbounded, the
 mapping is:</p>
 <div class="math">
-<p><img src="_images/math/7b7ecd447ce237fa6bb6b96897b90360385e1808.png" alt="\begin{eqnarray*}
+<p><img src="_images/math/5cc7e6bf9acc18c6262bacd1eb9c8c41d8f5516d.png" alt="\begin{eqnarray*}
      P_{\rm internal} &amp;=&amp; \sqrt{(P_{\rm bounded} - {\rm min} + 1)^2 - 1} \\
      P_{\rm bounded}  &amp;=&amp; {\rm min} - 1 + \sqrt{P_{\rm internal}^2 + 1}
 \end{eqnarray*}"/></p>
@@ -122,7 +122,7 @@ specified bounds, though the internally varied value can be freely varied.</p>
 the transformation described above.  The challenging part (Thanks again to
 Jonathan J. Helmus!) here is to re-transform the covariance matrix so that
 the uncertainties can be estimated for bounded Parameters.  This is
-included by using the derivate <img class="math" src="_images/math/bd716f62b24ab4b66ad50cc50ea168a970cca815.png" alt="dP_{\rm internal}/dP_{\rm bounded}"/>
+included by using the derivate <img class="math" src="_images/math/f15f552307d84e14a97516678eb579575221c8f7.png" alt="dP_{\rm internal}/dP_{\rm bounded}"/>
 from the equations above to re-scale the Jacobin matrix before
 constructing the covariance matrix from it.  Tests show that this
 re-scaling of the covariance matrix works quite well, and that
@@ -162,8 +162,8 @@ clearly outlandish bounds does not greatly affect performance or results.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

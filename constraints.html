@@ -125,8 +125,9 @@ built-in functions are available for flexible modeling.</p>
 be valid python expressions.  As you'd expect, the operators '+', '-', '*',
 '/', '**', are supported.  In fact, a much more complete set can be used,
 including Python's bit- and logical operators:</p>
-<div class="highlight-python"><pre>+, -, *, /, **, &amp;, |, ^, &lt;&lt;, &gt;&gt;, %, and, or,
-==, &gt;, &gt;=, &lt;, &lt;=, !=, ~, not, is, is not, in, not in</pre>
+<div class="highlight-python"><div class="highlight"><pre>+, -, *, /, **, &amp;, |, ^, &lt;&lt;, &gt;&gt;, %, and, or,
+==, &gt;, &gt;=, &lt;, &lt;=, !=, ~, not, is, is not, in, not in
+</pre></div>
 </div>
 <p>The values for <cite>e</cite> (2.7182818...) and <cite>pi</cite> (3.1415926...) are available, as
 are  several supported mathematical and trigonometric function:</p>
@@ -167,10 +168,10 @@ is that Python's 1-line <em>if expression</em> is supported:</p>
 <div class="section" id="using-inequality-constraints">
 <h2>Using Inequality Constraints<a class="headerlink" href="#using-inequality-constraints" title="Permalink to this headline">¶</a></h2>
 <p>A rather common question about how to set up constraints
-that use an inequality, say, <img class="math" src="_images/math/13f9d7b5d404afcad6e9f90f134a4113ad6c1eb6.png" alt="x + y \le 10"/>.  This
+that use an inequality, say, <img class="math" src="_images/math/fa0abed260b5537d43dad334b6f05e2e12423a72.png" alt="x + y \le 10"/>.  This
 can be done with algebraic constraints by recasting the
-problem, as <img class="math" src="_images/math/536c6e5dd43ba307a428e60e41b3d5e08c745ee6.png" alt="x + y = \delta"/> and <img class="math" src="_images/math/c202b1c17dfdce466635d7d9190fa44350a6915a.png" alt="\delta \le
-10"/>.  That is, first, allow <img class="math" src="_images/math/26eeb5258ca5099acf8fe96b2a1049c48c89a5e6.png" alt="x"/> to be held by the
+problem, as <img class="math" src="_images/math/a18cda76f4887c1e4633ca0e99e94b98f00b06e5.png" alt="x + y = \delta"/> and <img class="math" src="_images/math/83513a7fb9d59300493e8e198eaeef9d3927e12f.png" alt="\delta \le
+10"/>.  That is, first, allow <img class="math" src="_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> to be held by the
 freely varying parameter <cite>x</cite>.  Next, define a parameter
 <cite>delta</cite> to be variable with a maximum value of 10, and
 define parameter <cite>y</cite> as <cite>delta - x</cite>:</p>
@@ -248,8 +249,8 @@ expressions.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

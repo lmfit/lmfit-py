@@ -288,7 +288,7 @@ method</th>
 <td>&nbsp;</td>
 <td><tt class="docutils literal"><span class="pre">CG</span></tt></td>
 </tr>
-<tr class="row-even"><td>Newtown-CG</td>
+<tr class="row-even"><td>Newton-CG</td>
 <td><tt class="docutils literal"><span class="pre">newton</span></tt></td>
 <td>&nbsp;</td>
 <td><tt class="docutils literal"><span class="pre">Newton-CG</span></tt></td>
@@ -371,22 +371,28 @@ Attribute</th>
 <td>message from scipy.optimize.leastsq</td>
 </tr>
 <tr class="row-even"><td>nvarys</td>
-<td>number of variables in fit  <img class="math" src="_images/math/9c67908b81133366b1b38f30fd7194f1bbd83b04.png" alt="N_{\rm varys}"/></td>
+<td>number of variables in fit  <img class="math" src="_images/math/4e161da9354a46d497e649f4818f6793d7cfd54f.png" alt="N_{\rm varys}"/></td>
 </tr>
 <tr class="row-odd"><td>ndata</td>
-<td>number of data points:  <img class="math" src="_images/math/fc97ef67268cd4e91bacdf12b8901d7036c9a056.png" alt="N"/></td>
+<td>number of data points:  <img class="math" src="_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/></td>
 </tr>
 <tr class="row-even"><td>nfree `</td>
-<td>degrees of freedom in fit:  <img class="math" src="_images/math/373c4bb33c40cda719bf67cfffab2fffd862eed1.png" alt="N - N_{\rm varys}"/></td>
+<td>degrees of freedom in fit:  <img class="math" src="_images/math/92dd5758324161e2b928e1a77f74b9b3a7f1d5ef.png" alt="N - N_{\rm varys}"/></td>
 </tr>
 <tr class="row-odd"><td>residual</td>
-<td>residual array (return of <tt class="xref py py-func docutils literal"><span class="pre">func()</span></tt>:  <img class="math" src="_images/math/b66aa1fe66958e09a90fda9742f8e0fe3fbe6695.png" alt="{\rm Resid}"/></td>
+<td>residual array (return of <tt class="xref py py-func docutils literal"><span class="pre">func()</span></tt>:  <img class="math" src="_images/math/4e1de5aff3a09eac3ea49f7b59e878b1f5bcf762.png" alt="{\rm Resid}"/></td>
 </tr>
 <tr class="row-even"><td>chisqr</td>
-<td>chi-square: <img class="math" src="_images/math/aba2739fd441f25640dbe529605937e1f5928adb.png" alt="\chi^2 = \sum_i^N [{\rm Resid}_i]^2"/></td>
+<td>chi-square: <img class="math" src="_images/math/dbff7433b44b1481d8647983c737395b7ab3437b.png" alt="\chi^2 = \sum_i^N [{\rm Resid}_i]^2"/></td>
 </tr>
 <tr class="row-odd"><td>redchi</td>
-<td>reduced chi-square: <img class="math" src="_images/math/42c17311585fbaeea64e3b4f9bde0bcee61537ec.png" alt="\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}"/></td>
+<td>reduced chi-square: <img class="math" src="_images/math/fc570774beab5f59a2fc374a0422e2d4e3290841.png" alt="\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}"/></td>
+</tr>
+<tr class="row-even"><td>var_map</td>
+<td>list of variable parameter names for rows/columns of covar</td>
+</tr>
+<tr class="row-odd"><td>covar</td>
+<td>covariance matrix (with rows/columns using var_map</td>
 </tr>
 </tbody>
 </table>
@@ -397,7 +403,7 @@ be minimized must scale them properly.</p>
 <p>After a fit using using the <a class="reference internal" href="#leastsq" title="leastsq"><tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt></a> method has completed successfully,
 standard errors for the fitted variables and correlations between pairs of
 fitted variables are automatically calculated from the covariance matrix.
-The standard error (estimated <img class="math" src="_images/math/070fe743455ad95e644411607dc18d8e72f1d23f.png" alt="1\sigma"/> error-bar) go into the
+The standard error (estimated <img class="math" src="_images/math/49d4d420882348d6c5361c0cbd5bc58e816ead44.png" alt="1\sigma"/> error-bar) go into the
 <a class="reference internal" href="parameters.html#stderr" title="stderr"><tt class="xref py py-attr docutils literal"><span class="pre">stderr</span></tt></a> attribute of the Parameter.  The correlations with all other
 variables will be put into the <a class="reference internal" href="parameters.html#correl" title="correl"><tt class="xref py py-attr docutils literal"><span class="pre">correl</span></tt></a> attribute of the Parameter --
 a dictionary with keys for all other Parameters and values of the
@@ -727,14 +733,15 @@ and correlations from fit.</p>
 </pre></div>
 </div>
 <p>would generate this report:</p>
-<div class="highlight-python"><pre>[[Variables]]
+<div class="highlight-python"><div class="highlight"><pre>[[Variables]]
      amp:        13.969724 +/- 0.050145 (0.36%) initial =  13.000000
      decay:      0.009990 +/- 0.000042 (0.42%) initial =  0.020000
      period:     5.331423 +/- 0.002788 (0.05%) initial =  2.000000
      shift:      0.125333 +/- 0.004938 (3.94%) initial =  0.000000
 [[Correlations]] (unreported correlations are &lt;  0.100)
     C(period, shift)             =  0.800
-    C(amp, decay)                =  0.576</pre>
+    C(amp, decay)                =  0.576
+</pre></div>
 </div>
 </div>
 </div>
@@ -764,8 +771,8 @@ and correlations from fit.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

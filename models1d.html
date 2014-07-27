@@ -126,16 +126,17 @@ then expliticly tell the model to make initial guesses for the Parameters
 based on the data arrays, and save the model predicted with these initial
 Parameter values.  We then perform the actual fit, and print out and
 display the results.  The printed output will be (approximately):</p>
-<div class="highlight-python"><pre>[[Variables]]
+<div class="highlight-python"><div class="highlight"><pre>[[Variables]]
      amplitude:     8.880222 +/- 0.113597 (1.28%) initial =  8.182302
      center:        5.65866 +/- 0.01030533 (0.18%) initial =  5.5
-     fwhm:          1.642853 +/- 0.02426699 (1.48%) == '2.35482*sigma'
+     fwhm:          1.642853 +/- 0.02426699 (1.48%) == &#39;2.35482*sigma&#39;
      sigma:         0.6976553 +/- 0.01030524 (1.48%) initial =  0.6794575
 [[Correlations]] (unreported correlations are &lt;  0.250)
-    C(amplitude, sigma)          =  0.577</pre>
+    C(amplitude, sigma)          =  0.577
+</pre></div>
 </div>
 <p>and the resulting plot will look like:</p>
-<a class="reference internal image-reference" href="_images/models1d_doc1.png"><img alt="_images/models1d_doc1.png" src="_images/models1d_doc1.png" style="width: 85%;" /></a>
+<a class="reference external image-reference" href="_images/models1d_doc1.png"><img alt="_images/models1d_doc1.png" src="_images/models1d_doc1.png" style="width: 85%;" /></a>
 <p>which shows a good fit (the data were simulated).</p>
 <p>You can see here that the model created Parameters named 'amplitude',
 'center', 'fwhm', and 'sigma' for the Gaussian model.</p>
@@ -214,8 +215,8 @@ estimate of the data, or to alter the starting values by hand.</p>
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2013, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2b1.
+        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

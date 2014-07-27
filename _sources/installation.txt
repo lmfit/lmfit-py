@@ -13,11 +13,6 @@ Python 3.3.  No testing has been done with 64-bit architectures, but as
 this package is pure Python, no significant troubles are expected. Nose is
 a requirement for running the test suite.
 
-.. _uncertainties: http://packages.python.org/uncertainties/
-
-If installed, the `uncertainties`_ package will be used for propagation of
-uncertainties to constrained parameters.
-
 
 Downloads
 ~~~~~~~~~~~~~
@@ -52,6 +47,11 @@ the lmfit-py Package simply with::
 
    easy_install -U lmfit
 
+or::
+
+
+   pip install lmfit
+
 
 Development Version
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -75,9 +75,12 @@ LMFIT was originally written by Matthew Newville.  Substantial code and
 documentation improvements, especially for improved estimates of confidence
 intervals was provided by Till Stensitzki.  The implementation of parameter
 bounds as described in the MINUIT documentation is taken from Jonathan
-J. Helmus' leastsqbound code, with permission. Many valuable suggestions
-for improvements have come from Christoph Deil.  The code obviously depends
-on, and owes a very large debt to the code in scipy.optimize.  Several
+J. Helmus' leastsqbound code, with permission.  The code for propagation of
+uncertainties is taken from Eric O. Le Bigot's uncertainties package, with
+permission.  Much of the work on improved unit testing and high-level model
+functions was done by Daniel B. Allen.  Many valuable suggestions for
+improvements have come from Christoph Deil.  The code obviously depends on,
+and owes a very large debt to the code in scipy.optimize.  Several
 discussions on the scipy mailing lists have also led to improvements in
 this code.
 
