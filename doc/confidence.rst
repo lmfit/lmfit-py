@@ -65,23 +65,27 @@ We have to fit it, before we can generate the confidence intervals::
         C(a, b)                      =  0.601
 
 
-
 Now it just a simple function call to start the calculation::
 
     >>> ci = lmfit.conf_interval(mi)
-    >>>lmfit.printfuncs.report_ci(ci)
+    >>> lmfit.printfuncs.report_ci(ci)
          99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%
     a   0.09960   0.09981   0.10000   0.10019   0.10039   0.10058   0.10079
     b   1.97035   1.98326   1.99544   2.00008   2.01936   2.03154   2.04445
 
 
-As we can see, the estimated error is almost the same:  it is not necessary to calculate ci's for this problem.
+As we can see, the estimated error is almost the same, and the
+uncertainties are well behaved: Going from 1 :math:`\sigma` (68%
+confidence) to 3 :math:`\sigma` (99.7% confidence) uncertainties is fairly
+linear.  For this problem, it is not necessary to calculate confidence
+intervals, and the estimates of the uncertainties from the covariance
+matrix are sufficient.
 
 An advanced example
 -------------------
 
-Now we look at a problem, where calculating the error from approximated
-covariance can lead to wrong results::
+Now we look at a problem where calculating the error from approximated
+covariance can lead to misleading results::
 
     >>> y = 3*np.exp(-x/2.)-5*np.exp(-x/10.)+0.2*np.random.randn(x.size)
     >>> p = lmfit.Parameters()
@@ -102,7 +106,7 @@ covariance can lead to wrong results::
 
 
 Again we call :func:`conf_interval`, this time with tracing and only for 1-
-and 2-sigma::
+and 2 :math:`\sigma`::
 
     >>> ci, trace = lmfit.conf_interval(mi, sigmas=[0.68,0.95], trace=True, verbose=False)
     >>> lmfit.printfuncs.report_ci(ci)
@@ -112,8 +116,13 @@ and 2-sigma::
     t2   8.00414   9.62688  12.17331  12.17886  13.34857
     t1   1.07009   1.28482   1.37407   1.97509   2.64341
 
-If you compare the calculated error estimates, you will see that the
-regular estimate is too small. Now let's plot a confidence region::
+Comparing these two different estimates, we see that the estimate for `a1`
+is reasonable well approximated from the covariance matrix, but the
+estimates for `a2`, `t1`, and `t2` are very asymmetric and that going from
+1 :math:`\sigma` (68% confidence) to 2 :math:`\sigma` (95% confidence) is
+not very predictable.
+
+Now let's plot a confidence region::
 
     >>> import matplotlib.pylab as plt
     >>> x, y, grid = lmfit.conf_interval2d(mi,'a1','t2',30,30)
@@ -129,15 +138,29 @@ which shows:
    :target: _images/conf_interval1.png
    :width: 85%
 
+If we do the same for parameters `a2` and `t2`:
 
-Remember the trace? It shows the dependence between two parameters::
+.. image:: _images/conf_interval1a.png
+   :target: _images/conf_interval1a.png
+   :width: 85%
+
+Neither of these is very much like an ellipse, which is implicitly
+assumed by the approach using the covariance matrix.
+
+Remember the trace? It shows also shows the dependence between two parameters::
 
     >>> x, y, prob = trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
     >>> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
     >>> plt.scatter(x, y, c=prob ,s=30)
     >>> plt.scatter(x2, y2, c=prob2, s=30)
+    >>> plt.gca().set_xlim((1, 5))
+    >>> plt.gca().set_ylim((5, 15))
+    >>> plt.xlabel('a1')
+    >>> plt.ylabel('t2')
+    >>> plt.show()
 
-which shows
+
+which shows the trace of values:
 
 .. image:: _images/conf_interval2.png
    :target: _images/conf_interval2.png
@@ -149,6 +172,3 @@ Documentation of methods
 
 .. autofunction:: lmfit.conf_interval
 .. autofunction:: lmfit.conf_interval2d
-
-
-
