@@ -181,5 +181,4 @@ def parabolic(x, a, b, c):
 def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03,b
                          err_msg='', verbose=True):
     for param_name, value in desired.items():
-        print 'Assert ', param_name, actual[param_name], value
-        assert_allclose(actual[param_name], value, rtol, atol, err_msg, verbose)
+         assert_allclose(actual[param_name], value, rtol, atol, err_msg, verbose)
