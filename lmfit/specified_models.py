@@ -144,13 +144,14 @@ class NormalizedGaussian(BaseModel):
         if self.dim == 1:
             var_name, = independent_vars
             self.suffix = suffix
-            self._param_names = ['center', 'sigma']
+            self._param_names = ['amplitude', 'center', 'sigma']
             p = self._parse_params()
             def func(**kwargs):
+                amplitude = kwargs[p['amplitude']]
                 center = kwargs[p['center']]
                 sigma = kwargs[p['sigma']]
                 var = kwargs[var_name]
-                return normalized_gaussian(var, center, sigma)
+                return normalized_gaussian(var, amplitude, center, sigma)
         else:
             raise NotImplementedError("I only do 1d gaussians for now.")
             # TODO: Detect dimensionality from number of independent vars
@@ -166,14 +167,14 @@ class Gaussian(BaseModel):
         if self.dim == 1:
             var_name, = independent_vars
             self.suffix = suffix
-            self._param_names = ['height', 'center', 'sigma']
+            self._param_names = ['amplitude', 'center', 'sigma']
             p = self._parse_params()
             def func(**kwargs):
-                height = kwargs[p['height']]
+                amplitude = kwargs[p['amplitude']]
                 center = kwargs[p['center']]
                 sigma = kwargs[p['sigma']]
                 var = kwargs[var_name]
-                return gaussian(var, height, center, sigma)
+                return gaussian(var, amplitude, center, sigma)
         else:
             raise NotImplementedError("I only do 1d gaussians for now.")
             # TODO: Detect dimensionality from number of independent vars

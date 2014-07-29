@@ -17,8 +17,8 @@ class TestUserDefiniedModel(unittest.TestCase):
         self.x = np.linspace(-10, 10, num=1000)
         np.random.seed(1)
         self.noise = 0.01*np.random.randn(*self.x.shape)
-        self.true_values = lambda: dict(height=7, center=1, sigma=3)
-        self.guess = lambda: dict(height=5, center=2, sigma=4)
+        self.true_values = lambda: dict(amplitude=7.1, center=1.1, sigma=2.40)
+        self.guess = lambda: dict(amplitude=5, center=2, sigma=4)
         # return a fresh copy
         self.model = Model(gaussian, ['x'])
         self.data = gaussian(x=self.x, **self.true_values()) + self.noise
@@ -53,9 +53,9 @@ class TestUserDefiniedModel(unittest.TestCase):
         guess = self.guess()
         guess['extra'] = 5
 
-        def flexible_func(x, height, center, sigma, **kwargs):
-            return gaussian(x, height, center, sigma)
-        
+        def flexible_func(x, amplitude, center, sigma, **kwargs):
+            return gaussian(x, amplitude, center, sigma)
+
         flexible_model = Model(flexible_func, ['x'])
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
@@ -109,37 +109,38 @@ class TestUserDefiniedModel(unittest.TestCase):
     # testing model addition...
 
     def test_user_defined_gaussian_plus_constant(self):
-        data = self.data + 5
+        data = self.data + 5.0
         model = self.model + specified_models.Constant()
         guess = self.guess()
-        guess['c'] = 10
+        guess['c'] = 10.1
         true_values = self.true_values()
-        true_values['c'] = 5
+        true_values['c'] = 5.0
+
         result = model.fit(data, x=self.x, **guess)
-        assert_results_close(result.values, true_values)
+        assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
     def test_sum_of_two_gaussians(self):
 
         # two user-defined gaussians
         model1 = self.model
-        f2 = lambda x, height_, center_, sigma_: gaussian(
-            x, height_, center_, sigma_)
+        f2 = lambda x, amplitude_, center_, sigma_: gaussian(
+            x, amplitude_, center_, sigma_)
         model2 = Model(f2, ['x'])
         values1 = self.true_values()
         values2 = self.true_values()
         values2['sigma'] = 1.5
-        values2['height'] = 4
-        data = gaussian(x=self.x, **values1)
+        data  = gaussian(x=self.x, **values1)
         data += gaussian(x=self.x, **values2)
         model = self.model + model2
         values2 = {k + '_': v for k, v in values2.items()}
         guess = {'sigma': Parameter(value=2, min=0), 'center': 1,
-                 'height': 1,
+                 'amplitude': Parameter(value=3, min=0),
                  'sigma_': Parameter(value=1, min=0), 'center_': 1,
-                 'height_': 1}
+                 'amplitude_': Parameter(value=2.3)}
 
         true_values = dict(list(values1.items()) + list(values2.items()))
         result = model.fit(data, x=self.x, **guess)
+
         assert_results_close(result.values, true_values)
 
         # user-defined models with common parameter names
@@ -152,13 +153,13 @@ class TestUserDefiniedModel(unittest.TestCase):
         model2 = specified_models.Gaussian(['x'], suffix='_')
         model = model1 + model2
         true_values = {'center': values1['center'],
-                       'height': values1['height'],
+                       'amplitude': values1['amplitude'],
                        'sigma': values1['sigma'],
                        'center_': values2['center_'],
-                       'height_': values2['height_'],
+                       'amplitude_': values2['amplitude_'],
                        'sigma_': values2['sigma_']}
-        guess = {'sigma': 2, 'center': 1, 'height': 1,
-                 'sigma_': 1, 'center_': 1, 'height_': 1}
+        guess = {'sigma': 2, 'center': 1, 'amplitude': 1,
+                 'sigma_': 1, 'center_': 1, 'amplitude_': 1}
         result = model.fit(data, x=self.x, **guess)
         assert_results_close(result.values, true_values)
 
@@ -196,8 +197,8 @@ class CommonTests(object):
 class TestNormalizedGaussian(CommonTests, unittest.TestCase):
 
     def setUp(self):
-        self.true_values = lambda: dict(center=0, sigma=1.5)
-        self.guess = lambda: dict(center=1, sigma=2)
+        self.true_values = lambda: dict(amplitude=3.2, center=0, sigma=1.5)
+        self.guess = lambda: dict(amplitude=2.1, center=1, sigma=2)
         self.model = specified_models.NormalizedGaussian
         super(TestNormalizedGaussian, self).setUp()
 
