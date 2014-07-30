@@ -223,8 +223,8 @@ def test_peakfit():
 
     myfit.leastsq()
 
-    print(' N fev = ', myfit.nfev)
-    print(myfit.chisqr, myfit.redchi, myfit.nfree)
+    # print(' N fev = ', myfit.nfev)
+    # print(myfit.chisqr, myfit.redchi, myfit.nfree)
 
     report_fit(fit_params)
 

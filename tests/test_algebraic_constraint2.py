@@ -5,19 +5,22 @@ from lmfit.printfuncs import report_fit
 import sys
 
 
-try:
-    import matplotlib
-    import pylab
-    HASPYLAB = True
-except ImportError:
-    HASPYLAB = False
-
 # Turn off plotting if run by nosetests.
-if 'nosetests' in sys.argv[0]:
-    HASPYLAB = False
+WITHPLOT = True
+for arg in sys.argv:
+    if 'nose' in arg:
+        WITHPLOT = False
+
+if WITHPLOT:
+    try:
+        import matplotlib
+        import pylab
+    except ImportError:
+        WITHPLOT = False
+
 
 def test_constraints(with_plot=True):
-    with_plot = with_plot and HASPYLAB
+    with_plot = with_plot and WITHPLOT
 
     def residual(pars, x, sigma=None, data=None):
         yg = gaussian(x, pars['amp_g'].value,

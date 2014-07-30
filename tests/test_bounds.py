@@ -3,15 +3,19 @@ from lmfit import minimize, Parameters, Parameter, report_fit
 import numpy as np
 import sys
 
-HASPYLAB = False
 # Turn off plotting if run by nosetests.
-if not sys.argv[0].endswith('nosetests'):
+WITHPLOT = True
+for arg in sys.argv:
+    if 'nose' in arg:
+        WITHPLOT = False
+
+if WITHPLOT:
     try:
         import matplotlib
         import pylab
-        HASPYLAB = True
     except ImportError:
-        pass
+        WITHPLOT = False
+
 
 # create data to be fitted
 x = np.linspace(0, 15, 301)
@@ -49,7 +53,7 @@ report_fit(params, min_correl=0)
 print( "Correl: ", params['amp'].correl)
 
 # try to plot results
-if HASPYLAB:
+if WITHPLOT:
     pylab.plot(x, data, 'k+')
     pylab.plot(x, final, 'r')
     pylab.show()
