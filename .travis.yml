@@ -3,13 +3,19 @@
 language: python
 
 python:
-    - 2.7
-    - 3.2
+    - PYTHON=python PYSUF='' # uses Python 2.7
+    - PYTHON=python3 PYSUF=3 # uses Python 3.2
+
 
 before_install:
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
 
-install: "pip install -r requirements.txt"
+# command to install dependencies
+install:
+  # Deactivate the virtualenv to get fast install of dependencies
+  - deactivate
+  - time sudo apt-get install -qq $PYTHON-numpy $PYTHON-scipy $PYTHON-matplotlib $PYTHON-nose
+  - sudo python$PYSUF setup.py install
 
 script: nosetests tests
