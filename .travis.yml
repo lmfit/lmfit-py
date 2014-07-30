@@ -17,6 +17,7 @@ matrix:
             - PYVER=3.x
     exclude:
         - python: 2.6
+        - python: 3.2
 
 virtualenv:
     system_site_packages: true
