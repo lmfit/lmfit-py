@@ -2,34 +2,37 @@
 
 language: python
 
+python:
+    - 2.6
+    - 2.7
+
 matrix:
     include:
         - python: 2.7
           env:
             - PYTHON=python
+            - PYVER=2.x
+        - python: 3.2
+          env:
+            - PYTHON=python3
+            - PYVER=3.x
     exclude:
-       - python: 2.6
+        - python: 2.6
 
 virtualenv:
     system_site_packages: true
 
- before_install:
-     - export DISPLAY=:99.0
-     - sh -e /etc/init.d/xvfb start
-     - sudo apt-get update
-     - sudo apt-get install $PYTHON-setuptools
-     - sudo apt-get install $PYTHON-numpy
-     - sudo apt-get install $PYTHON-scipy
-
-
 before_install:
     - export DISPLAY=:99.0
     - sh -e /etc/init.d/xvfb start
+    - sudo apt-get update
+    - sudo apt-get install $PYTHON-setuptools
+    - sudo apt-get install $PYTHON-numpy
+    - sudo apt-get install $PYTHON-scipy
 
 # command to install dependencies
 install:
   # Deactivate the virtualenv to get fast install of dependencies
-  - deactivate
   - sudo $PYTHON setup.py install
 
 script: nosetests tests
