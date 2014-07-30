@@ -21,10 +21,6 @@ virtualenv:
      - sudo apt-get install $PYTHON-numpy
      - sudo apt-get install $PYTHON-scipy
 
-python:
-    - PYTHON=python PYSUF='' # uses Python 2.7
-    - PYTHON=python3 PYSUF=3 # uses Python 3.2
-
 
 before_install:
     - export DISPLAY=:99.0
