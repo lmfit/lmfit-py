@@ -19,11 +19,13 @@ RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'class', 'continue',
 
 NAME_MATCH = re.compile(r"[a-zA-Z_][a-zA-Z0-9_]*$").match
 
-UNSAFE_ATTRS = ('__subclasses__', '__bases__', '__globals__',
-                '__code__', '__closure__', '__func__', '__self__',
-                '__module__', '__dict__', '__class__', 'func_globals',
-                'func_code', 'func_closure', 'im_class', 'im_func',
-                'im_self', 'gi_code', 'gi_frame')
+UNSAFE_ATTRS = ('__subclasses__', '__bases__', '__globals__', '__code__',
+                '__closure__', '__func__', '__self__', '__module__',
+                '__dict__', '__class__', '__call__', '__get__',
+                '__getattribute__', '__subclasshook__', '__new__',
+                '__init__', 'func_globals', 'func_code', 'func_closure',
+                'im_class', 'im_func', 'im_self', 'gi_code', 'gi_frame',
+                '__asteval__')
 
 # inherit these from python's __builtins__
 FROM_PY = ('ArithmeticError', 'AssertionError', 'AttributeError',
@@ -40,13 +42,12 @@ FROM_PY = ('ArithmeticError', 'AssertionError', 'AttributeError',
            'UnicodeDecodeError', 'UnicodeEncodeError', 'UnicodeError',
            'UnicodeTranslateError', 'UnicodeWarning', 'ValueError',
            'Warning', 'ZeroDivisionError', 'abs', 'all', 'any', 'bin',
-           'bool', 'bytearray', 'bytes', 'chr', 'complex', 'delattr',
-           'dict', 'dir', 'divmod', 'enumerate', 'filter', 'float',
-           'format', 'frozenset', 'getattr', 'hasattr', 'hash', 'hex',
-           'id', 'int', 'isinstance', 'len', 'list', 'map', 'max', 'min',
-           'oct', 'open', 'ord', 'pow', 'property', 'range', 'repr',
-           'reversed', 'round', 'set', 'setattr', 'slice', 'sorted', 'str',
-           'sum', 'tuple', 'type', 'zip')
+           'bool', 'bytearray', 'bytes', 'chr', 'complex', 'dict', 'dir',
+           'divmod', 'enumerate', 'filter', 'float', 'format', 'frozenset',
+           'hash', 'hex', 'id', 'int', 'isinstance', 'len', 'list', 'map',
+           'max', 'min', 'oct', 'ord', 'pow', 'range', 'repr',
+           'reversed', 'round', 'set', 'slice', 'sorted', 'str', 'sum',
+           'tuple', 'type', 'zip')
 
 # inherit these from python's math
 FROM_MATH = ('acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh',
@@ -130,28 +131,34 @@ FROM_NUMPY = ('Inf', 'NAN', 'abs', 'absolute', 'add', 'alen', 'all',
               'record', 'remainder', 'repeat', 'require', 'reshape',
               'resize', 'restoredot', 'right_shift', 'rint', 'roll',
               'rollaxis', 'roots', 'rot90', 'round', 'round_', 'row_stack',
-              's_', 'safe_eval', 'save', 'savetxt', 'savez', 'sctype2char',
-              'sctypeDict', 'sctypeNA', 'sctypes', 'searchsorted',
-              'select', 'setbufsize', 'setdiff1d', 'seterr', 'setxor1d',
-              'shape', 'short', 'sign', 'signbit', 'signedinteger', 'sin',
-              'sinc', 'single', 'singlecomplex', 'sinh', 'size',
-              'sometrue', 'sort', 'sort_complex', 'source', 'spacing',
-              'split', 'sqrt', 'square', 'squeeze', 'std', 'str', 'str_',
-              'subtract', 'sum', 'swapaxes', 'take', 'tan', 'tanh',
-              'tensordot', 'test', 'testing', 'tile', 'trace', 'transpose',
-              'trapz', 'tri', 'tril', 'tril_indices', 'tril_indices_from',
-              'trim_zeros', 'triu', 'triu_indices', 'triu_indices_from',
-              'true_divide', 'trunc', 'typeDict', 'typeNA', 'typecodes',
-              'typename', 'ubyte', 'ufunc', 'uint', 'uint0', 'uint16',
-              'uint32', 'uint64', 'uint8', 'uintc', 'uintp', 'ulonglong',
-              'union1d', 'unique', 'unravel_index', 'unsignedinteger',
-              'unwrap', 'ushort', 'vander', 'var', 'vdot', 'vectorize',
-              'version', 'void', 'void0', 'vsplit', 'vstack', 'where',
-              'who', 'zeros', 'zeros_like')
+              's_', 'sctype2char', 'sctypeDict', 'sctypeNA', 'sctypes',
+              'searchsorted', 'select', 'setbufsize', 'setdiff1d',
+              'seterr', 'setxor1d', 'shape', 'short', 'sign', 'signbit',
+              'signedinteger', 'sin', 'sinc', 'single', 'singlecomplex',
+              'sinh', 'size', 'sometrue', 'sort', 'sort_complex', 'source',
+              'spacing', 'split', 'sqrt', 'square', 'squeeze', 'std',
+              'str', 'str_', 'subtract', 'sum', 'swapaxes', 'take', 'tan',
+              'tanh', 'tensordot', 'test', 'testing', 'tile', 'trace',
+              'transpose', 'trapz', 'tri', 'tril', 'tril_indices',
+              'tril_indices_from', 'trim_zeros', 'triu', 'triu_indices',
+              'triu_indices_from', 'true_divide', 'trunc', 'typeDict',
+              'typeNA', 'typecodes', 'typename', 'ubyte', 'ufunc', 'uint',
+              'uint0', 'uint16', 'uint32', 'uint64', 'uint8', 'uintc',
+              'uintp', 'ulonglong', 'union1d', 'unique', 'unravel_index',
+              'unsignedinteger', 'unwrap', 'ushort', 'vander', 'var',
+              'vdot', 'vectorize', 'version', 'void', 'void0', 'vsplit',
+              'vstack', 'where', 'who', 'zeros', 'zeros_like')
 
 NUMPY_RENAMES = {'ln': 'log', 'asin': 'arcsin', 'acos': 'arccos',
                  'atan': 'arctan', 'atan2': 'arctan2', 'atanh':
                  'arctanh', 'acosh': 'arccosh', 'asinh': 'arcsinh'}
+
+def _open(filename, mode='r', buffering=0):
+    """read only version of open()"""
+    umode = 'r'
+    return open(filename, umode, buffering)
+
+LOCALFUNCS = {'open': _open}
 
 OPERATORS = {ast.Is: lambda a, b: a is b,
              ast.IsNot: lambda a, b: a is not b,

@@ -16,8 +16,9 @@ import ast
 import math
 
 from .astutils import (FROM_PY, FROM_MATH, FROM_NUMPY, UNSAFE_ATTRS,
-                       NUMPY_RENAMES, op2func, ExceptionHolder,
-                       ReturnedNone, valid_symbol_name)
+                       LOCALFUNCS, NUMPY_RENAMES, op2func,
+                       ExceptionHolder, ReturnedNone, valid_symbol_name)
+
 HAS_NUMPY = False
 try:
     import numpy
@@ -33,23 +34,30 @@ class Interpreter:
   using python's ast module, and then executes the AST representation
   using a dictionary of named object (variable, functions).
 
-  This then gives a restricted version of Python, being a procedural
-  language (though working on Python objects) with a simplified, flat
-  namespace (this is overcome in related implementaions). The program
-  syntax here is expected to be valid Python.
+  The result is a restricted, simplified version of Python meant for
+  numerical caclulations that is somewhat safer than 'eval' because some
+  operations (such as 'import' and 'eval') are simply not allowed.  The
+  resulting language uses a flat namespace that works on Python objects,
+  but does not allow new classes to be defined.
+
+  Many parts of Python syntax are supported, including:
+     for loops, while loops, if-then-elif-else conditionals
+     try-except (including 'finally')
+     function definitions with def
+     advanced slicing:    a[::-1], array[-3:, :, ::2]
+     if-expressions:      out = one_thing if TEST else other
+     list comprehension   out = [sqrt(i) for i in values]
 
   The following Python syntax elements are not supported:
       Import, Exec, Lambda, Class, Global, Generators,
-      Yield, Decorators, Finally for Try-Except
+      Yield, Decorators
 
-  Many parts of Python syntax are supported, including:
-     advanced slicing:    a[::-1], array[-3:, :, ::2]
-     if-expressions:      out = one_thing if TEST else other
-     list comprehension
-     for-loops, while-loops
-     if-then-elif-else conditionals
-     try-except (but not the 'finally' variant...)
-     function definitions with def
+  In addition, while many builtin functions are supported, several
+  builtin functions are missing ('eval', 'exec', and 'getattr' for
+  example) that can be considered unsafe.
+
+  If numpy is installed, many numpy functions are also imported.
+
   """
 
     supported_nodes = ('arg', 'assert', 'assign', 'attribute', 'augassign',
@@ -79,6 +87,10 @@ class Interpreter:
         for sym in FROM_PY:
             if sym in __builtins__:
                 symtable[sym] = __builtins__[sym]
+
+        for symname, obj in LOCALFUNCS.items():
+            symtable[symname] = obj
+
         for sym in FROM_MATH:
             if hasattr(math, sym):
                 symtable[sym] = getattr(math, sym)
@@ -112,7 +124,6 @@ class Interpreter:
             self.error = []
         if expr is None:
             expr = self.expr
-            
         if len(self.error) > 0 and not isinstance(node, ast.Module):
             msg = '%s' % msg
         err = ExceptionHolder(node, exc=exc, msg=msg, expr=expr, lineno=lineno)
@@ -122,7 +133,13 @@ class Interpreter:
             self.error_msg = "%s in expr='%s'" % (msg, self.expr)
         elif len(msg) > 0:
             self.error_msg = "%s\n %s" % (self.error_msg, msg)
-        raise self.error[0].exc(self.error_msg)
+        if exc is None:
+            try:
+                exc = self.error[0].exc
+            except:
+                exc = RuntimeError
+        raise exc(self.error_msg)
+
 
     # main entry point for Ast node evaluation
     #  parse:  text of statements -> ast
@@ -134,11 +151,9 @@ class Interpreter:
         try:
             return ast.parse(text)
         except SyntaxError:
-            self.raise_exception(None, exc=SyntaxError,
-                                 msg='Syntax Error', expr=text)
-        except RuntimeError:
-            self.raise_exception(None, exc=RuntimeError,
-                                 msg='Runtime Error', expr=text)
+            self.raise_exception(None, msg='Syntax Error', expr=text)
+        except:
+            self.raise_exception(None, msg='Runtime Error', expr=text)
 
     def run(self, node, expr=None, lineno=None, with_raise=True):
         """executes parsed Ast representation for an expression"""
@@ -182,22 +197,30 @@ class Interpreter:
         self.error = []
         try:
             node = self.parse(expr)
-        except RuntimeError:
+        except:
             errmsg = exc_info()[1]
             if len(self.error) > 0:
                 errmsg = "\n".join(self.error[0].get_error())
             if not show_errors:
-                raise RuntimeError(errmsg)
+                try:
+                    exc = self.error[0].exc
+                except:
+                    exc = RuntimeError
+                raise exc(errmsg)
             print(errmsg, file=self.writer)
             return
         try:
             return self.run(node, expr=expr, lineno=lineno)
-        except RuntimeError:
+        except:
             errmsg = exc_info()[1]
             if len(self.error) > 0:
                 errmsg = "\n".join(self.error[0].get_error())
             if not show_errors:
-                raise RuntimeError(errmsg)
+                try:
+                    exc = self.error[0].exc
+                except:
+                    exc = RuntimeError
+                raise exc(errmsg)
             print(errmsg, file=self.writer)
             return
 
@@ -591,9 +614,8 @@ class Interpreter:
 
         try:
             return func(*args, **keywords)
-        except RuntimeError:
-            self.raise_exception(node, exc=RuntimeError,
-                                 msg="Error running %s" % (func))
+        except:
+            self.raise_exception(node, msg="Error running %s" % (func))
 
     def on_arg(self, node):    # ('test', 'msg')
         "arg for function definitions"
@@ -641,8 +663,8 @@ class Procedure(object):
                  body=None, args=None, kwargs=None,
                  vararg=None, varkws=None):
         self.name = name
-        self.interpreter = interp
-        self.raise_exc = self.interpreter.raise_exception
+        self.__asteval__ = interp
+        self.raise_exc = self.__asteval__.raise_exception
         self.__doc__ = doc
         self.body = body
         self.argnames = args
@@ -727,22 +749,22 @@ class Procedure(object):
             msg = 'incorrect arguments for Procedure %s' % self.name
             self.raise_exc(None, msg=msg, lineno=self.lineno)
 
-        save_symtable = self.interpreter.symtable.copy()
-        self.interpreter.symtable.update(symlocals)
-        self.interpreter.retval = None
+        save_symtable = self.__asteval__.symtable.copy()
+        self.__asteval__.symtable.update(symlocals)
+        self.__asteval__.retval = None
         retval = None
 
         # evaluate script of function
         for node in self.body:
-            self.interpreter.run(node, expr='<>', lineno=self.lineno)
-            if len(self.interpreter.error) > 0:
+            self.__asteval__.run(node, expr='<>', lineno=self.lineno)
+            if len(self.__asteval__.error) > 0:
                 break
-            if self.interpreter.retval is not None:
-                retval = self.interpreter.retval
+            if self.__asteval__.retval is not None:
+                retval = self.__asteval__.retval
                 if retval is ReturnedNone:
                     retval = None
                 break
 
-        self.interpreter.symtable = save_symtable
+        self.__asteval__.symtable = save_symtable
         symlocals = None
         return retval
