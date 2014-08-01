@@ -36,8 +36,6 @@ constraints are placed between Parameters in the model.  The ease with
 which the model can be changed also allows one to better test the
 significance of certain Parameters in a fitting model.
 
-math test: :math:`\chi=7{\AA}^{-1}`
-
 The lmfit package allows a choice of several optimization methods available
 from `scipy.optimize`_.  The default, and by far best tested optimization
 method used is the `Levenberg-Marquardt`_ algorithm from
