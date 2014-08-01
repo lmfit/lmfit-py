@@ -1,0 +1,37 @@
+{% extends "!layout.html" %}
+
+{%- block extrahead %}
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+{% endblock %}
+
+
+
+{% block rootrellink %}
+   <li><a href="{{ pathto('index') }}">home</a>|</li>
+   <li><a href="{{ pathto('installation') }}">download</a>|</li>
+   <li><a href="{{ pathto('parameters') }}">parameters</a>|</li>
+   <li><a href="{{ pathto('fitting') }}">fitting</a>|</li>
+   <li><a href="{{ pathto('confidence') }}">confidence</a>|</li>
+   <li><a href="{{ pathto('models1d') }}">pre-built models</a>|</li>
+{% endblock %}
+
+{% block relbar1 %}
+<div style=" color: #c5daba;  text-align: left; height:35px; padding: 0px">
+<table><tr>
+  <td width=5% padding=0></td>
+  <td width=90% padding=0 align='center'>
+    <font size=+3>
+      <a href="{{ pathto('index') }}" style="color: #775511">
+          LMFIT: Non-Linear Least-Square Minimization for Python
+      </a>
+    </font>
+  </td>
+  <td width=5% padding=0></td>
+</tr></table>
+</div>
+{{ super() }}
+{% endblock %}

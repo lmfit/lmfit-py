@@ -24,15 +24,19 @@ These Parameters can be fixed or varied, have upper and/or lower bounds
 placed on its value, or written as an algebraic expression of other
 Parameters.
 
-The principal advantage of using Parameters instead of simple variables is
-that the objective function does not have to be rewritten to reflect every
-change of what is varied in the fit, or what relationships or constraints
-are placed on the Parameters.  This means a scientific programmer can write
-a general model that encapsulates the phenomenon to be optimized, and then
-allow user of that model to change what is varied and fixed, what range of
-values is acceptable for Parameters, and what constraints are placed on the
-model.  The ease with which the model can be changed also allows one to
-easily test the significance of certain Parameters in a fitting model.
+
+The main advantage of using Parameters instead of simple variables is that
+the objective function does not have to be rewritten to reflect every
+change of what is varied in the fit, or if relationships or constraints are
+placed on the Parameters.  This means that the scientific programmer can
+write a general model that encapsulates the phenomenon to be modeled and
+optimized, and then allow user of that model to change what is varied, what
+is fixed, what ranges of values are acceptable for Parameters, and what
+constraints are placed between Parameters in the model.  The ease with
+which the model can be changed also allows one to better test the
+significance of certain Parameters in a fitting model.
+
+math test: :math:`\chi=7{\AA}^{-1}`
 
 The lmfit package allows a choice of several optimization methods available
 from `scipy.optimize`_.  The default, and by far best tested optimization
