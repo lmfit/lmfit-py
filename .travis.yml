@@ -6,6 +6,19 @@ python:
     - 2.7
     - 3.2
 
+matrix:
+    include:
+        - python: 2.7
+          env:
+            - PYTHON=python
+            - PYVER=2.x
+        - python: 3.2
+          env:
+            - PYTHON=python3
+            - PYVER=3.x
+    exclude:
+        - python: 2.6
+
 virtualenv:
     system_site_packages: true
 
