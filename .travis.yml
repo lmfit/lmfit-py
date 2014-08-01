@@ -6,9 +6,6 @@ python:
     - 2.7
     - 3.3
 
-virtualenv:
-    system_site_packages: true
-
 before_install:
     - wget http://repo.continuum.io/miniconda/Miniconda3-3.5.5-Linux-x86_64.sh -O miniconda.sh
     - chmod +x miniconda.sh
@@ -16,10 +13,10 @@ before_install:
     - export PATH=/home/travis/miniconda3/bin:$PATH
     - conda config --add channels https://conda.binstar.org/dan_blanchard
     - conda update --yes conda
-    - conda install --yes pip python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib dateutil nose
 
 install:
-    - sudo python setup.py install
+    - conda install --yes pip python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib dateutil nose
+    - python setup.py install
 
 script:
     - nosetests tests
