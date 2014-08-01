@@ -2,25 +2,24 @@
 
 language: python
 
-matrix:
-    include:
-        - python: 2.7
-          env:
-            - PYTHON=python
-    exclude:
-        - python: 2.6
+python:
+    - 2.7
+    - 3.3
 
 virtualenv:
     system_site_packages: true
 
 before_install:
-    - sudo apt-get update
-    - sudo apt-get install $PYTHON-setuptools
-    - sudo apt-get install $PYTHON-numpy
-    - sudo apt-get install $PYTHON-scipy
-    - sudo apt-get install $PYTHON-nose
+    - wget http://repo.continuum.io/miniconda/Miniconda3-3.5.5-Linux-x86_64.sh -O miniconda.sh
+    - chmod +x miniconda.sh
+    - ./miniconda.sh -b
+    - export PATH=/home/travis/miniconda3/bin:$PATH
+    - conda config --add channels https://conda.binstar.org/dan_blanchard
+    - conda update --yes conda
+    - conda install --yes pip python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib dateutil nose
 
 install:
-    - sudo $PYTHON setup.py install
+    - sudo python setup.py install
 
-script: nosetests tests
+script:
+    - nosetests tests
