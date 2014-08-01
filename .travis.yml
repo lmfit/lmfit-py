@@ -18,6 +18,7 @@ before_install:
     - sudo apt-get update
     - sudo apt-get install $PYTHON-setuptools
     - sudo apt-get install $PYTHON-numpy
+    - sudo apt-get install $PYTHON-scipy
     - sudo apt-get install $PYTHON-nose
 
 install:
