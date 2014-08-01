@@ -1,15 +1,9 @@
 # Config file for automatic testing at travis-ci.org
+
 language: python
-
-
-matrix:
-    include:
-        - python: 2.7
-          env:
-            - PYTHON=python
-        - python: 3.2
-          env:
-            - PYTHON=python3
+python:
+    - "2.7_with_system_site_packages"
+    - "3.2_with_system_site_packages"
 
 virtualenv:
     system_site_packages: true
@@ -20,10 +14,10 @@ before_install:
     - sudo apt-get install $PYTHON-numpy
     - sudo apt-get install $PYTHON-scipy
     - sudo apt-get install $PYTHON-nose
+    - sudo pip install numpy
+    - sudo pip install scipy
 
 install:
     - sudo $PYTHON setup.py install
 
-script:
-    - cd tests
-    - nosetests
+script: nosetests tests
