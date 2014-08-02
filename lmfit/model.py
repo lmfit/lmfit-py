@@ -86,7 +86,7 @@ class Model(object):
 
     def _parse_params(self):
         pos_args, kw_args, keywords = funcargs(self.func)
-        all_args = pos_args + kw_args.keys()
+        all_args = pos_args + list(kw_args.keys())
         if len(all_args) == 0 and keywords is not None:
             return
 
@@ -107,7 +107,6 @@ class Model(object):
 
         # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
-        all_args = pos_args + kw_args.keys()
         for arg in self.independent_vars:
             if arg not in all_args or arg in self._forbidden_args:
                 raise ValueError(self._invalid_ivar % (arg, self.func.__name__))
