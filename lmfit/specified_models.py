@@ -42,8 +42,8 @@ COMMON_DOC = """
 Parameters
 ----------
 independent_vars: list of strings to be set as variable names
-missing: 'none', 'drop', or 'raise'
-    'none': Do not check for null or missing values.
+missing: None, 'drop', or 'raise'
+    None: Do not check for null or missing values.
     'drop': Drop null or missing observations in data.
         Use pandas.isnull if pandas is available; otherwise,
         silently fall back to numpy.isnan.
@@ -56,7 +56,7 @@ suffix: string to append to paramter names, needed to add two Models that
 
 class Parabolic(BaseModel):
     __doc__ = parabolic.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing='none', suffix=None):
+    def __init__(self, independent_vars, missing=None, suffix=None):
         _validate_1d(independent_vars)
         var_name, = independent_vars
         self.suffix = suffix
@@ -76,7 +76,7 @@ Quadratic = Parabolic  # synonym
 
 class Linear(BaseModel):
     __doc__ = linear.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing='none', suffix=None):
+    def __init__(self, independent_vars, missing=None, suffix=None):
         _validate_1d(independent_vars)
         var_name, = independent_vars
         self.suffix = suffix
@@ -92,7 +92,7 @@ class Linear(BaseModel):
 
 class Constant(BaseModel):
     __doc__ = "x -> c" + COMMON_DOC
-    def __init__(self, independent_vars=[], missing='none', suffix=None):
+    def __init__(self, independent_vars=None, missing=None, suffix=None):
         # special case with default []
         self.suffix = suffix
         self._param_names = ['c']
@@ -105,7 +105,7 @@ class Constant(BaseModel):
 
 class Polynomial(BaseModel):
     __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ..." + COMMON_DOC
-    def __init__(self, order, independent_vars, missing='none', suffix=None):
+    def __init__(self, order, independent_vars, missing=None, suffix=None):
         if not isinstance(order, int):
             raise TypeError("order must be an integer.")
         _validate_1d(independent_vars)
@@ -122,7 +122,7 @@ class Polynomial(BaseModel):
 
 class Exponential(BaseModel):
     __doc__ = exponential.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing='none', suffix=None):
+    def __init__(self, independent_vars, missing=None, suffix=None):
         _validate_1d(independent_vars)
         var_name, = independent_vars
         self.suffix = suffix
@@ -138,7 +138,7 @@ class Exponential(BaseModel):
 
 class NormalizedGaussian(BaseModel):
     __doc__ = normalized_gaussian.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing='none', suffix=None):
+    def __init__(self, independent_vars, missing=None, suffix=None):
         self.dim = len(independent_vars)
 
         if self.dim == 1:
@@ -161,7 +161,7 @@ class NormalizedGaussian(BaseModel):
 
 class Gaussian(BaseModel):
     __doc__ = gaussian.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing='none', suffix=None):
+    def __init__(self, independent_vars, missing=None, suffix=None):
         self.dim = len(independent_vars)
 
         if self.dim == 1:
@@ -183,7 +183,7 @@ class Gaussian(BaseModel):
 
 class PowerLaw(BaseModel):
     __doc__ = powerlaw.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing='none', suffix=None):
+    def __init__(self, independent_vars, missing=None, suffix=None):
         _validate_1d(independent_vars)
         var_name, = independent_vars
         self.suffix = suffix
