@@ -1,5 +1,5 @@
 import numpy as np
-from lmfit.models1d import StepModel
+from lmfit.old_models1d import StepModel
 
 import matplotlib.pyplot as plt
 

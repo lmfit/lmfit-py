@@ -1,5 +1,5 @@
 import numpy as np
-from lmfit.models1d import  GaussianModel, VoigtModel
+from lmfit.old_models1d import  GaussianModel, VoigtModel
 import matplotlib.pyplot as plt
 
 data = np.loadtxt('model1d_gauss.dat')
