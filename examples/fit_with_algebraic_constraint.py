@@ -3,7 +3,7 @@ import sys
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
 from lmfit import Parameters, Parameter, Minimizer
-from lmfit.utilfuncs import gaussian, lorentzian
+from lmfit.basicmodels import gaussian, lorentzian
 from lmfit.printfuncs import report_fit
 
 try:

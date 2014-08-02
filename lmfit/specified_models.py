@@ -1,10 +1,7 @@
 import numpy as np
-from scipy.special import gamma, gammaln, beta, betaln, erf, erfc, wofz
-from numpy import pi
-from . import Model
-from .utilfuncs import (gaussian, normalized_gaussian, exponential,
-                        powerlaw, linear, parabolic)
-
+from .model import Model
+from .basicmodels import (gaussian, normalized_gaussian, exponential,
+                          powerlaw, linear, parabolic)
 
 class DimensionalError(Exception):
     pass

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
+from lmfit.basicmodels import gaussian
 import numpy as np
 pi = np.pi
 import unittest
@@ -178,7 +179,6 @@ def test_derive():
     check_wo_stderr(min1.params['c'], min2.params['c'].value, 0.00005)
 
 def test_peakfit():
-    from lmfit.utilfuncs import gaussian
     def residual(pars, x, data=None):
         g1 = gaussian(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)
         g2 = gaussian(x, pars['a2'].value, pars['c2'].value, pars['w2'].value)

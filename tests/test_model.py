@@ -1,12 +1,11 @@
 import unittest
 import warnings
 from numpy.testing import assert_allclose
-from lmfit.utilfuncs import assert_results_close
+from lmfit.basicmodels import assert_results_close, gaussian
 import numpy as np
 
 from lmfit import Model, Parameter
 from lmfit import specified_models
-from lmfit.utilfuncs import gaussian, normalized_gaussian
 
 
 class TestUserDefiniedModel(unittest.TestCase):
@@ -192,16 +191,6 @@ class CommonTests(object):
         model = self.model_instance
         result = model.fit(self.data, x=self.x, **self.guess())
         assert_results_close(result.values, self.true_values())
-
-
-class TestNormalizedGaussian(CommonTests, unittest.TestCase):
-
-    def setUp(self):
-        self.true_values = lambda: dict(amplitude=3.2, center=0, sigma=1.5)
-        self.guess = lambda: dict(amplitude=2.1, center=1, sigma=2)
-        self.model = specified_models.NormalizedGaussian
-        super(TestNormalizedGaussian, self).setUp()
-
 
 class TestLinear(CommonTests, unittest.TestCase):
 

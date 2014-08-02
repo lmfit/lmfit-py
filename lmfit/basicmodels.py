@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Some common lineshapes and distribution functions
+basic model line shapes and distribution functions
 """
 
 from numpy import (pi, log, exp, sqrt, arctan, cos, arange,
