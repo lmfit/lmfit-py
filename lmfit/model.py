@@ -11,7 +11,7 @@ from . import Parameters, Parameter, minimize
 # Use pandas.isnull for aligning missing data is pandas is available.
 # otherwise use numpy.isnan
 try:
-    from pandas import isnull, Series
+    from upandas import isnull, Series
 except ImportError:
     isnull = np.isnan
     Series = type(NotImplemented)
@@ -31,9 +31,10 @@ def funcargs(func):
     argspec = inspect.getargspec(func)
     posargs = argspec.args[:]
     kwargs = {}
-    for val in reversed(argspec.defaults):
-        kwargs[posargs.pop()] = val
-    return (posargs, kwargs)
+    if argspec.defaults is not None:
+        for val in reversed(argspec.defaults):
+            kwargs[posargs.pop()] = val
+    return (posargs, kwargs, argspec.keywords)
 
 class Model(object):
     _forbidden_args = ('data', 'weights', 'params')
@@ -41,7 +42,7 @@ class Model(object):
     _invalid_par   = "Invalid parameter name ('%s') for function %s"
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing=None):
+                 missing=None, components=None):
         """Create a model from a user-defined function.
 
         Parameters
@@ -74,14 +75,21 @@ class Model(object):
         self.func = func
         self.param_names = param_names
         self.independent_vars = independent_vars
+        self.components = components
         if not missing in [None, 'drop', 'raise']:
             raise ValueError("missing must be None, 'drop', or 'raise'.")
         self.missing = missing
         self._parse_params()
         self._residual = self._build_residual()
+        if self.independent_vars is None:
+            self.independent_vars = []
 
     def _parse_params(self):
-        pos_args, kw_args = funcargs(self.func)
+        pos_args, kw_args, keywords = funcargs(self.func)
+        all_args = pos_args + kw_args.keys()
+        if len(all_args) == 0 and keywords is not None:
+            return
+
         # default independent_var = 1st argument
         if self.independent_vars is None:
             self.independent_vars = [pos_args[0]]
@@ -94,17 +102,20 @@ class Model(object):
                 if isinstance(val, (float, int)):
                     self.param_names.append(key)
             for p in self.independent_vars:
-                self.param_names.remove(p)
+                if p in self.param_names:
+                    self.param_names.remove(p)
 
         # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
         all_args = pos_args + kw_args.keys()
         for arg in self.independent_vars:
-            if arg not in pos_args or arg in self._forbidden_args:
+            if arg not in all_args or arg in self._forbidden_args:
                 raise ValueError(self._invalid_ivar % (arg, self.func.__name__))
         for arg in self.param_names:
             if arg not in all_args or arg in self._forbidden_args:
                 raise ValueError(self._invalid_par % (arg, self.func.__name__))
+        self.param_names = set(self.param_names)
+
 
     def guess_starting_values(self, values, **kws):
         raise NotImplementedError('must overwrite guess_starting_values')
@@ -237,6 +248,9 @@ class Model(object):
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
         for var in self.independent_vars:
+            #if var not in kwargs:
+            #    raise ValueError("Must include independent variable ('%s') to fit()" % var)
+
             if not np.isscalar(self.independent_vars):  # just in case
                 kwargs[var] = _align(kwargs[var], mask, data)
 
@@ -265,6 +279,9 @@ class Model(object):
             raise NameError("Both models have parameters called " +
                             "%s. Redefine the models " % collision +
                             "with distinct names.")
+        # if self.independent_vars != other.independent_vars:
+        #     raise ValueError("Both models need to have identical " +
+        #                      "independent variables ")
 
         def func(**kwargs):
             self_kwargs = dict([(k, kwargs.get(k)) for k in
@@ -272,8 +289,9 @@ class Model(object):
             other_kwargs = dict([(k, kwargs.get(k)) for k in
                                  other.param_names | set(other.independent_vars)])
             return self.func(**self_kwargs) + other.func(**other_kwargs)
+        components = []
+        out = Model(func=func, independent_vars=self.independent_vars,
+                    param_names=self.param_names | other.param_names,
+                    missing=self.missing, components=(self, other))
 
-        model = Model(func=func, independent_vars=self.independent_vars,
-                      missing=self.missing)
-        model.__set_param_names(self.param_names | other.param_names)
-        return model
+        return out
