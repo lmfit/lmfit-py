@@ -5,8 +5,7 @@ from lmfit.basicmodels import assert_results_close, gaussian
 import numpy as np
 
 from lmfit import Model, Parameter
-from lmfit import specified_models
-
+from lmfit import models
 
 class TestUserDefiniedModel(unittest.TestCase):
     # mainly aimed at checking that the API does what it says it does
@@ -109,7 +108,7 @@ class TestUserDefiniedModel(unittest.TestCase):
 
     def test_user_defined_gaussian_plus_constant(self):
         data = self.data + 5.0
-        model = self.model + specified_models.Constant()
+        model = self.model + models.Constant()
         guess = self.guess()
         guess['c'] = 10.1
         true_values = self.true_values()
@@ -148,8 +147,8 @@ class TestUserDefiniedModel(unittest.TestCase):
         self.assertRaises(NameError, f)
 
         # two predefined_gaussians, using suffix to differentiate
-        model1 = specified_models.Gaussian(['x'])
-        model2 = specified_models.Gaussian(['x'], suffix='_')
+        model1 = models.Gaussian(['x'])
+        model2 = models.Gaussian(['x'], suffix='_')
         model = model1 + model2
         true_values = {'center': values1['center'],
                        'amplitude': values1['amplitude'],
@@ -163,8 +162,8 @@ class TestUserDefiniedModel(unittest.TestCase):
         assert_results_close(result.values, true_values)
 
         # without suffix, the names collide and Model should raise
-        model1 = specified_models.Gaussian(['x'])
-        model2 = specified_models.Gaussian(['x'])
+        model1 = models.Gaussian(['x'])
+        model2 = models.Gaussian(['x'])
         f = lambda: model1 + model2
         self.assertRaises(NameError, f)
 
@@ -197,7 +196,7 @@ class TestLinear(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(slope=5, intercept=2)
         self.guess = lambda: dict(slope=10, intercept=6)
-        self.model = specified_models.Linear
+        self.model = models.Linear
         super(TestLinear, self).setUp()
 
 
@@ -206,7 +205,7 @@ class TestParabolic(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(a=5, b=2, c=8)
         self.guess = lambda: dict(a=1, b=6, c=3)
-        self.model = specified_models.Parabolic
+        self.model = models.Parabolic
         super(TestParabolic, self).setUp()
 
 
@@ -216,7 +215,7 @@ class TestPolynomialOrder2(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(c2=5, c1=2, c0=8)
         self.guess = lambda: dict(c1=1, c2=6, c0=3)
-        self.model = specified_models.Polynomial
+        self.model = models.Polynomial
         self.args = (2,)
         super(TestPolynomialOrder2, self).setUp()
 
@@ -227,7 +226,7 @@ class TestPolynomialOrder3(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(c3=2, c2=5, c1=2, c0=8)
         self.guess = lambda: dict(c3=1, c1=1, c2=6, c0=3)
-        self.model = specified_models.Polynomial
+        self.model = models.Polynomial
         self.args = (3,)
         super(TestPolynomialOrder3, self).setUp()
 
@@ -237,7 +236,7 @@ class TestConstant(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(c=5)
         self.guess = lambda: dict(c=2)
-        self.model = specified_models.Constant
+        self.model = models.Constant
         super(TestConstant, self).setUp()
 
 
@@ -246,7 +245,7 @@ class TestPowerlaw(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(coefficient=5, exponent=3)
         self.guess = lambda: dict(coefficient=2, exponent=8)
-        self.model = specified_models.PowerLaw
+        self.model = models.PowerLaw
         super(TestPowerlaw, self).setUp()
 
 
@@ -255,5 +254,5 @@ class TestExponential(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(amplitude=5, decay=3)
         self.guess = lambda: dict(amplitude=2, decay=8)
-        self.model = specified_models.Exponential
+        self.model = models.Exponential
         super(TestExponential, self).setUp()
