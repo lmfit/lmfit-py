@@ -42,7 +42,7 @@ class Model(object):
     _invalid_par   = "Invalid parameter name ('%s') for function %s"
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing=None, components=None):
+                 missing=None, prefix='', components=None):
         """Create a model from a user-defined function.
 
         Parameters
@@ -73,8 +73,11 @@ class Model(object):
         >>> my_model = Model(decay, independent_vars=['t'])
         """
         self.func = func
+        self.prefix = prefix
         self.param_names = param_names
         self.independent_vars = independent_vars
+        if components is None:
+            components = [self]
         self.components = components
         if not missing in [None, 'drop', 'raise']:
             raise ValueError("missing must be None, 'drop', or 'raise'.")
@@ -113,8 +116,13 @@ class Model(object):
         for arg in self.param_names:
             if arg not in all_args or arg in self._forbidden_args:
                 raise ValueError(self._invalid_par % (arg, self.func.__name__))
-        self.param_names = set(self.param_names)
 
+        names = []
+        for pname in self.param_names:
+            if not pname.startswith(self.prefix):
+                pname = "%s%s" % (self.prefix, pname)
+            names.append(pname)
+        self.param_names = set(names)
 
     def guess_starting_values(self, values, **kws):
         raise NotImplementedError('must overwrite guess_starting_values')
@@ -139,19 +147,28 @@ class Model(object):
 
     def _build_residual(self):
         "Generate and return a residual function."
-        def residual(params, *args, **kwargs):
+        def residual(params, data, weights, **kwargs):
             # Unpack Parameter objects into simple key -> value pairs,
             # and combine them with any non-parameter kwargs.
-            data, weights = args
-            params = dict([(name, p.value) for name, p in params.items()])
-            kwargs = dict(list(params.items()) + list(kwargs.items()))
-            f = self.func(**kwargs)
-            if weights is None:
-                e = f - data
-            else:
-                e = (f - data)*weights
-            return np.asarray(e)  # for compatibility with pandas.Series
+            # params = dict([(name, p.value) for name, p in params.items()])
+            # kwargs = dict(list(params.items()) + list(kwargs.items()))
+            funcargs = self._make_funcargs(params, kwargs)
+            diff = self.func(**funcargs) - data
+            if weights is not None:
+                diff *= weights
+            return np.asarray(diff)  # for compatibility with pandas.Series
         return residual
+
+    def _make_funcargs(self, params, kwargs):
+        out = kwargs
+        npref = len(self.prefix)
+        # print 'MAKE FUNCARGS ',  out.keys()
+        for name, par in params.items():
+            if npref > 0 and name.startswith(self.prefix):
+                name = name[npref:]
+            # print '   Add ARG ', name, par
+            out[name] = par.value
+        return out
 
     def _handle_missing(self, data):
         if self.missing == 'raise':
@@ -259,16 +276,16 @@ class Model(object):
         # Monkey-patch the Minimizer object with some extra information.
         result.model = self
         result.init_params = init_params
-        result.init_values = dict([(name, p.value) for name, p
-                                  in init_params.items()])
-        indep_vars = dict([(k, v) for k, v in kwargs.items() if k in
-                           self.independent_vars])
-        evaluation_kwargs = dict(list(indep_vars.items()) +
-                                 list(result.init_values.items()))
-        result.init_fit = self.func(**evaluation_kwargs)
-        evaluation_kwargs = dict(list(indep_vars.items()) +
-                                 list(result.values.items()))
-        result.best_fit = self.func(**evaluation_kwargs)
+
+        result.init_values = self._make_funcargs(init_params, {})
+        indep_vars = dict([(key, val) for key, val in kwargs.items()
+                           if key in self.independent_vars])
+
+        init_kws = self._make_funcargs(init_params,   indep_vars)
+        result.init_fit = self.func(**init_kws)
+
+        best_kws = self._make_funcargs(result.params, indep_vars)
+        result.best_fit = self.func(**best_kws)
         return result
 
     def __add__(self, other):

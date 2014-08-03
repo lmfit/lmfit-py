@@ -23,7 +23,7 @@ from .printfuncs import (fit_report, ci_report,
 
 from .wrap  import wrap_function, make_paras_and_func
 from .model import Model
-from .specified_models import *
+from . import models
 
 from . import uncertainties
 from .uncertainties import ufloat, correlated_values
