@@ -51,7 +51,7 @@ suffix: string to append to paramter names, needed to add two Models that
 """
 
 
-class Parabolic(BaseModel):
+class QuadraticModel(BaseModel):
     __doc__ = parabolic.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing=None, suffix=None):
         _validate_1d(independent_vars)
@@ -65,13 +65,13 @@ class Parabolic(BaseModel):
             c = kwargs[p['c']]
             var = kwargs[var_name]
             return parabolic(var, a, b, c)
-        super(Parabolic, self).__init__(func, independent_vars, missing)
+        super(QuadraticModel, self).__init__(func, independent_vars, missing)
 
 
-Quadratic = Parabolic  # synonym
+ParabolicModel = QuadraticModel
 
 
-class Linear(BaseModel):
+class LinearModel(BaseModel):
     __doc__ = linear.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing=None, suffix=None):
         _validate_1d(independent_vars)
@@ -84,10 +84,10 @@ class Linear(BaseModel):
             intercept = kwargs[p['intercept']]
             var = kwargs[var_name]
             return linear(var, slope, intercept)
-        super(Linear, self).__init__(func, independent_vars, missing)
+        super(LinearModel, self).__init__(func, independent_vars, missing)
 
 
-class Constant(BaseModel):
+class ConstantModel(BaseModel):
     __doc__ = "x -> c" + COMMON_DOC
     def __init__(self, independent_vars=None, missing=None, suffix=None):
         # special case with default []
@@ -97,10 +97,10 @@ class Constant(BaseModel):
         def func(**kwargs):
             c = kwargs[p['c']]
             return c
-        super(Constant, self).__init__(func, independent_vars, missing)
+        super(ConstantModel, self).__init__(func, independent_vars, missing)
 
 
-class Polynomial(BaseModel):
+class PolynomialModel(BaseModel):
     __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ..." + COMMON_DOC
     def __init__(self, order, independent_vars, missing=None, suffix=None):
         if not isinstance(order, int):
@@ -114,10 +114,10 @@ class Polynomial(BaseModel):
             var = kwargs[var_name]
             return np.sum([kwargs[p[name]]*var**i for
                            i, name in enumerate(self._param_names)], 0)
-        super(Polynomial, self).__init__(func, independent_vars, missing)
+        super(PolynomialModel, self).__init__(func, independent_vars, missing)
 
 
-class Exponential(BaseModel):
+class ExponentialModel(BaseModel):
     __doc__ = exponential.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing=None, suffix=None):
         _validate_1d(independent_vars)
@@ -130,33 +130,10 @@ class Exponential(BaseModel):
             decay = kwargs[p['decay']]
             var = kwargs[var_name]
             return exponential(var, amplitude, decay)
-        super(Exponential, self).__init__(func, independent_vars, missing)
+        super(ExponentialModel, self).__init__(func, independent_vars, missing)
 
 
-class NormalizedGaussian(BaseModel):
-    __doc__ = normalized_gaussian.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing=None, suffix=None):
-        self.dim = len(independent_vars)
-
-        if self.dim == 1:
-            var_name, = independent_vars
-            self.suffix = suffix
-            self._param_names = ['amplitude', 'center', 'sigma']
-            p = self._parse_params()
-            def func(**kwargs):
-                amplitude = kwargs[p['amplitude']]
-                center = kwargs[p['center']]
-                sigma = kwargs[p['sigma']]
-                var = kwargs[var_name]
-                return normalized_gaussian(var, amplitude, center, sigma)
-        else:
-            raise NotImplementedError("I only do 1d gaussians for now.")
-            # TODO: Detect dimensionality from number of independent vars
-        super(NormalizedGaussian, self).__init__(
-            func, independent_vars, missing)
-
-
-class Gaussian(BaseModel):
+class GaussianModel(BaseModel):
     __doc__ = gaussian.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing=None, suffix=None):
         self.dim = len(independent_vars)
@@ -175,10 +152,10 @@ class Gaussian(BaseModel):
         else:
             raise NotImplementedError("I only do 1d gaussians for now.")
             # TODO: Detect dimensionality from number of independent vars
-        super(Gaussian, self).__init__(func, independent_vars, missing)
+        super(GaussianModel, self).__init__(func, independent_vars, missing)
 
 
-class PowerLaw(BaseModel):
+class PowerLawModel(BaseModel):
     __doc__ = powerlaw.__doc__ + COMMON_DOC
     def __init__(self, independent_vars, missing=None, suffix=None):
         _validate_1d(independent_vars)
@@ -191,4 +168,4 @@ class PowerLaw(BaseModel):
             exponent = kwargs[p['exponent']]
             var = kwargs[var_name]
             return powerlaw(var, coefficient, exponent)
-        super(PowerLaw, self).__init__(func, independent_vars, missing)
+        super(PowerLawModel, self).__init__(func, independent_vars, missing)
