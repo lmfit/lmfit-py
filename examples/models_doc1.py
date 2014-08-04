@@ -1,13 +1,13 @@
 from numpy import loadtxt
 from lmfit import fit_report
-from lmfit.models import Gaussian
+from lmfit.models import GaussianModel
 import matplotlib.pyplot as plt
 
 data = loadtxt('model1d_gauss.dat')
 x = data[:, 0]
 y = data[:, 1]
 
-model = Gaussian(['x'])
+model = GaussianModel(['x'])
 pars  = model.params()
 
 pars['amplitude'].value = y.max()
