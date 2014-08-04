@@ -67,4 +67,5 @@ on providing easy-to-use models that for common fitting problems.
    confidence
    bounds
    constraints
-   models1d
+   models
+
