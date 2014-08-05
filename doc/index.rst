@@ -62,6 +62,7 @@ on providing easy-to-use models that for common fitting problems.
    :maxdepth: 2
 
    installation
+   intro
    parameters
    fitting
    confidence
