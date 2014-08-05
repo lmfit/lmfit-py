@@ -76,8 +76,8 @@ class Model(object):
         self.prefix = prefix
         self.param_names = param_names
         self.independent_vars = independent_vars
-        if components is None:
-            components = [self]
+        self.func_allargs = []
+        self.func_haskeywords = False
         self.components = components
         if not missing in [None, 'drop', 'raise']:
             raise ValueError("missing must be None, 'drop', or 'raise'.")
@@ -89,8 +89,11 @@ class Model(object):
 
     def _parse_params(self):
         pos_args, kw_args, keywords = funcargs(self.func)
-        all_args = pos_args + list(kw_args.keys())
-        if len(all_args) == 0 and keywords is not None:
+        self.func_haskeywords = keywords is not None
+        self.func_allargs = pos_args + list(kw_args.keys())
+        allargs = self.func_allargs
+
+        if len(allargs) == 0 and keywords is not None:
             return
 
         # default independent_var = 1st argument
@@ -111,10 +114,10 @@ class Model(object):
         # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
         for arg in self.independent_vars:
-            if arg not in all_args or arg in self._forbidden_args:
+            if arg not in allargs or arg in self._forbidden_args:
                 raise ValueError(self._invalid_ivar % (arg, self.func.__name__))
         for arg in self.param_names:
-            if arg not in all_args or arg in self._forbidden_args:
+            if arg not in allargs or arg in self._forbidden_args:
                 raise ValueError(self._invalid_par % (arg, self.func.__name__))
 
         names = []
@@ -123,6 +126,8 @@ class Model(object):
                 pname = "%s%s" % (self.prefix, pname)
             names.append(pname)
         self.param_names = set(names)
+        self.params = Parameters()
+        [self.params.add(name) for name in self.param_names]
 
     def guess_starting_values(self, values, **kws):
         raise NotImplementedError('must overwrite guess_starting_values')
@@ -130,20 +135,6 @@ class Model(object):
     def __set_param_names(self, param_names):
         # used when models are added
         self.param_names = param_names
-
-    def params(self):
-        """Return a blank copy of model params.
-
-        Example
-        -------
-        >>> params = my_model.params()
-        >>> params['N'].value = 1.0  # initial guess
-        >>> params['tau'].value = 2.0  # initial guess
-        >>> params['tau'].min = 0  # (optional) lower bound
-        """
-        params = Parameters()
-        [params.add(name) for name in self.param_names]
-        return params
 
     def _build_residual(self):
         "Generate and return a residual function."
@@ -153,6 +144,7 @@ class Model(object):
             # params = dict([(name, p.value) for name, p in params.items()])
             # kwargs = dict(list(params.items()) + list(kwargs.items()))
             funcargs = self._make_funcargs(params, kwargs)
+            # print 'This residual ', self.func, funcargs, self.func_haskeywords, kwargs
             diff = self.func(**funcargs) - data
             if weights is not None:
                 diff *= weights
@@ -160,14 +152,19 @@ class Model(object):
         return residual
 
     def _make_funcargs(self, params, kwargs):
-        out = kwargs
+        out = {}
+        # print 'make funcargs ', self.func, self.func_allargs, self.func_haskeywords
+        for key, val in kwargs.items():
+            if key in self.func_allargs or self.func_haskeywords:
+                out[key] = val
         npref = len(self.prefix)
-        # print 'MAKE FUNCARGS ',  out.keys()
         for name, par in params.items():
             if npref > 0 and name.startswith(self.prefix):
                 name = name[npref:]
-            # print '   Add ARG ', name, par
-            out[name] = par.value
+            if name in self.func_allargs or self.func_haskeywords:
+                out[name] = par.value
+        if self.func_haskeywords and self.components is not None:
+            out['__components__'] = self.components
         return out
 
     def _handle_missing(self, data):
@@ -206,7 +203,6 @@ class Model(object):
         >>> result = my_model.fit(data, tau=5, N=3, t=t)
 
         # Or, for more control, pass a Parameters object.
-        # See docstring for Model.params()
         >>> result = my_model.fit(data, params, t=t)
 
         # Keyword arguments override Parameters.
@@ -219,7 +215,7 @@ class Model(object):
 
         """
         if params is None:
-            params = self.params()
+            params = self.params
         else:
             params = copy.deepcopy(params)
 
@@ -270,6 +266,7 @@ class Model(object):
             if not np.isscalar(self.independent_vars):  # just in case
                 kwargs[var] = _align(kwargs[var], mask, data)
 
+        kwargs['__components__'] = self.components
         result = minimize(self._residual, params,
                           args=(data, weights), kws=kwargs)
 
@@ -298,16 +295,40 @@ class Model(object):
         # if self.independent_vars != other.independent_vars:
         #     raise ValueError("Both models need to have identical " +
         #                      "independent variables ")
+        def composite_func(**kwargs):
+            components = kwargs.get('__components__', None)
+            out = None
+            # print '----- COMPOSITE -------'
+            if components is not None:
+                for comp in components:
+                    pars = Parameters()
+                    prefix = comp.prefix
+                    for p in self.params.values():
+                        if p.name.startswith(prefix):
+                            pars.__setitem__(p.name, p)
+                            pars[p.name].value = kwargs[p.name]
 
-        def func(**kwargs):
-            self_kwargs = dict([(k, kwargs.get(k)) for k in
-                                self.param_names | set(self.independent_vars)])
-            other_kwargs = dict([(k, kwargs.get(k)) for k in
-                                 other.param_names | set(other.independent_vars)])
-            return self.func(**self_kwargs) + other.func(**other_kwargs)
-        components = []
-        out = Model(func=func, independent_vars=self.independent_vars,
+                    funcargs = comp._make_funcargs(pars, kwargs)
+                    # print 'composite ', comp.func, pars.keys(), kwargs.keys(), funcargs.keys()
+                    comp_out = comp.func(**funcargs)
+                    if out is None: out = np.zeros_like(comp_out)
+                    out += comp_out
+            return out
+
+        components = self.components
+        if components is None:
+            components = [self]
+        if other.components is None:
+            components.append(other)
+        else:
+            components.extend(other.components)
+        all_params = self.params
+        for key, val in other.params.items():
+            all_params[key] = val
+
+        out = Model(func=composite_func, independent_vars=self.independent_vars,
                     param_names=self.param_names | other.param_names,
-                    missing=self.missing, components=(self, other))
-
+                    missing=self.missing, components=components)
+        out.components = components
+        out.params = all_params
         return out
