@@ -1,7 +1,7 @@
 import numpy as np
 from .model import Model
-from .basicmodels import (gaussian, normalized_gaussian, exponential,
-                          powerlaw, linear, parabolic)
+from .lineshapes import (gaussian, normalized_gaussian, exponential,
+                         powerlaw, linear, parabolic)
 
 class DimensionalError(Exception):
     pass

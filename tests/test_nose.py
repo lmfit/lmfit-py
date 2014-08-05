@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
-from lmfit.basicmodels import gaussian
+from lmfit.lineshapes import gaussian
 import numpy as np
 pi = np.pi
 import unittest

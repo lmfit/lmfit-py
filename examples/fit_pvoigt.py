@@ -1,7 +1,7 @@
 import sys
 
 from lmfit import Parameters, Parameter, Minimizer, report_fit
-from lmfit.basicmodels import gaussian, lorentzian, pvoigt
+from lmfit.lineshapes import gaussian, lorentzian, pvoigt
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 
