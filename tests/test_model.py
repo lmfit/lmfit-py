@@ -18,7 +18,7 @@ class TestUserDefiniedModel(unittest.TestCase):
         self.true_values = lambda: dict(amplitude=7.1, center=1.1, sigma=2.40)
         self.guess = lambda: dict(amplitude=5, center=2, sigma=4)
         # return a fresh copy
-        self.model = Model(gaussian, ['x'])
+        self.model = Model(gaussian)
         self.data = gaussian(x=self.x, **self.true_values()) + self.noise
 
     def test_fit_with_keyword_params(self):
@@ -26,7 +26,7 @@ class TestUserDefiniedModel(unittest.TestCase):
         assert_results_close(result.values, self.true_values())
 
     def test_fit_with_parameters_obj(self):
-        params = self.model.params()
+        params = self.model.params
         for param_name, value in self.guess().items():
             params[param_name].value = value
         result = self.model.fit(self.data, params, x=self.x)
@@ -41,7 +41,7 @@ class TestUserDefiniedModel(unittest.TestCase):
         self.assertRaises(ValueError, f)
 
         # using Parameters
-        params = self.model.params()
+        params = self.model.params
         for param_name, value in guess_missing_sigma.items():
             params[param_name].value = value
         f = lambda: self.model.fit(self.data, params, x=self.x)
@@ -54,7 +54,7 @@ class TestUserDefiniedModel(unittest.TestCase):
         def flexible_func(x, amplitude, center, sigma, **kwargs):
             return gaussian(x, amplitude, center, sigma)
 
-        flexible_model = Model(flexible_func, ['x'])
+        flexible_model = Model(flexible_func)
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
             flexible_model.fit(self.data, x=self.x, **guess)
@@ -82,14 +82,13 @@ class TestUserDefiniedModel(unittest.TestCase):
         assert_results_close(result.values, true_values, rtol=0.05)
 
     def test_result_attributes(self):
-
         # result.init_values
         result = self.model.fit(self.data, x=self.x, **self.guess())
         assert_results_close(result.values, self.true_values())
         self.assertTrue(result.init_values == self.guess())
 
         # result.init_params
-        params = self.model.params()
+        params = self.model.params
         for param_name, value in self.guess().items():
             params[param_name].value = value
         self.assertTrue(result.init_params == params)
@@ -123,7 +122,7 @@ class TestUserDefiniedModel(unittest.TestCase):
         model1 = self.model
         f2 = lambda x, amplitude_, center_, sigma_: gaussian(
             x, amplitude_, center_, sigma_)
-        model2 = Model(f2, ['x'])
+        model2 = Model(f2)
         values1 = self.true_values()
         values2 = self.true_values()
         values2['sigma'] = 1.5
@@ -147,23 +146,23 @@ class TestUserDefiniedModel(unittest.TestCase):
         self.assertRaises(NameError, f)
 
         # two predefined_gaussians, using suffix to differentiate
-        model1 = models.GaussianModel(['x'])
-        model2 = models.GaussianModel(['x'], suffix='_')
+        model1 = models.GaussianModel(prefix='g1_')
+        model2 = models.GaussianModel(prefix='g2_')
         model = model1 + model2
-        true_values = {'center': values1['center'],
-                       'amplitude': values1['amplitude'],
-                       'sigma': values1['sigma'],
-                       'center_': values2['center_'],
-                       'amplitude_': values2['amplitude_'],
-                       'sigma_': values2['sigma_']}
-        guess = {'sigma': 2, 'center': 1, 'amplitude': 1,
-                 'sigma_': 1, 'center_': 1, 'amplitude_': 1}
+        true_values = {'g1_center': values1['center'],
+                       'g1_amplitude': values1['amplitude'],
+                       'g1_sigma': values1['sigma'],
+                       'g2_center': values2['center_'],
+                       'g2_amplitude': values2['amplitude_'],
+                       'g2_sigma': values2['sigma_']}
+        guess = {'g1_sigma': 2, 'g1_center': 1, 'g1_amplitude': 1,
+                 'g2_sigma': 1, 'g2_center': 1, 'g2_amplitude': 1}
         result = model.fit(data, x=self.x, **guess)
         assert_results_close(result.values, true_values)
 
         # without suffix, the names collide and Model should raise
-        model1 = models.GaussianModel(['x'])
-        model2 = models.GaussianModel(['x'])
+        model1 = models.GaussianModel()
+        model2 = models.GaussianModel()
         f = lambda: model1 + model2
         self.assertRaises(NameError, f)
 
@@ -178,12 +177,13 @@ class CommonTests(object):
         try:
             args = self.args
         except AttributeError:
-            self.model_instance = self.model(['x'])
+            self.model_instance = self.model()
             func = self.model_instance.func
 
         else:
             self.model_instance = self.model(*args, independent_vars=['x'])
             func = self.model_instance.func
+        print 'Common Test setUp ', func, self.true_values # .keys()
         self.data = func(x=self.x, **self.true_values()) + noise
 
     def test_fit(self):
@@ -243,8 +243,8 @@ class TestConstant(CommonTests, unittest.TestCase):
 class TestPowerlaw(CommonTests, unittest.TestCase):
 
     def setUp(self):
-        self.true_values = lambda: dict(coefficient=5, exponent=3)
-        self.guess = lambda: dict(coefficient=2, exponent=8)
+        self.true_values = lambda: dict(amplitude=5, exponent=3)
+        self.guess = lambda: dict(amplitude=2, exponent=8)
         self.model = models.PowerLawModel
         super(TestPowerlaw, self).setUp()
 

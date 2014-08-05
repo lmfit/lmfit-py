@@ -6,33 +6,10 @@ from .lineshapes import (gaussian, normalized_gaussian, exponential,
 class DimensionalError(Exception):
     pass
 
-
 def _validate_1d(independent_vars):
     if len(independent_vars) != 1:
         raise DimensionalError(
             "This model requires exactly one independent variable.")
-
-
-def _suffixer(suffix, coded_param_names):
-    """Return a dictionary relating parmeters' hard-coded names to their
-    (possibly) suffixed names."""
-    if suffix is None:
-        param_names = coded_param_names
-    else:
-        param_names = map(lambda p: p + suffix, coded_param_names)
-    return dict(zip(coded_param_names, param_names))
-
-
-class BaseModel(Model):
-    """Whereas Model takes a user-provided function, BaseModel is
-    subclassed with a hard-coded function."""
-
-    def _parse_params(self):
-        # overrides method of Model that inspects func
-        param_names = _suffixer(self.suffix, self._param_names)
-        self.param_names = set(param_names.values())  # used by Model
-        return param_names  # a lookup dictionary
-
 
 COMMON_DOC = """
 
@@ -50,122 +27,53 @@ suffix: string to append to paramter names, needed to add two Models that
     have parameter names in common. None by default.
 """
 
-
-class QuadraticModel(BaseModel):
+class QuadraticModel(Model):
     __doc__ = parabolic.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing=None, suffix=None):
-        _validate_1d(independent_vars)
-        var_name, = independent_vars
-        self.suffix = suffix
-        self._param_names = ['a', 'b', 'c']
-        p = self._parse_params()
-        def func(**kwargs):
-            a = kwargs[p['a']]
-            b = kwargs[p['b']]
-            c = kwargs[p['c']]
-            var = kwargs[var_name]
-            return parabolic(var, a, b, c)
-        super(QuadraticModel, self).__init__(func, independent_vars, missing)
+    def __init__(self, **kwargs):
+        super(QuadraticModel, self).__init__(parabolic, **kwargs)
 
 
 ParabolicModel = QuadraticModel
 
-
-class LinearModel(BaseModel):
+class LinearModel(Model):
     __doc__ = linear.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing=None, suffix=None):
-        _validate_1d(independent_vars)
-        var_name, = independent_vars
-        self.suffix = suffix
-        self._param_names = ['slope', 'intercept']
-        p = self._parse_params()
-        def func(**kwargs):
-            slope = kwargs[p['slope']]
-            intercept = kwargs[p['intercept']]
-            var = kwargs[var_name]
-            return linear(var, slope, intercept)
-        super(LinearModel, self).__init__(func, independent_vars, missing)
+    def __init__(self, **kwargs):
+        super(LinearModel, self).__init__(linear, **kwargs)
 
-
-class ConstantModel(BaseModel):
+class ConstantModel(Model):
     __doc__ = "x -> c" + COMMON_DOC
-    def __init__(self, independent_vars=None, missing=None, suffix=None):
-        # special case with default []
-        self.suffix = suffix
-        self._param_names = ['c']
-        p = self._parse_params()
-        def func(**kwargs):
-            c = kwargs[p['c']]
+    def __init__(self, **kwargs):
+        def func(x, c):
             return c
-        super(ConstantModel, self).__init__(func, independent_vars, missing)
+        super(ConstantModel, self).__init__(func, **kwargs)
 
+class PolynomialModel(Model):
+    __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ... c7 * x**7" + COMMON_DOC
+    def __init__(self, order, **kwargs):
+        if not isinstance(order, int)  or order > 7:
+            raise TypeError("order must be an integer less than 7.")
+        kwargs['param_names'] = ['c%i' % i for i in range(order + 1)]
+        def polynomial(x, c0=1,  c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0):
+            out = np.zeros_like(x)
+            args = dict(c0=c0,  c1=c1, c2=c2, c3=c3, c4=c4,
+                        c5=c5, c6=c6, c7=c7)
+            for i in range(order+1):
+                out += x**i * args.get('c%i' % i, 0)
+            return out
+        super(PolynomialModel, self).__init__(polynomial, **kwargs)
 
-class PolynomialModel(BaseModel):
-    __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ..." + COMMON_DOC
-    def __init__(self, order, independent_vars, missing=None, suffix=None):
-        if not isinstance(order, int):
-            raise TypeError("order must be an integer.")
-        _validate_1d(independent_vars)
-        var_name, = independent_vars
-        self.suffix = suffix
-        self._param_names = ['c' + str(i) for i in range(order + 1)]
-        p = self._parse_params()
-        def func(**kwargs):
-            var = kwargs[var_name]
-            return np.sum([kwargs[p[name]]*var**i for
-                           i, name in enumerate(self._param_names)], 0)
-        super(PolynomialModel, self).__init__(func, independent_vars, missing)
-
-
-class ExponentialModel(BaseModel):
+class ExponentialModel(Model):
     __doc__ = exponential.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing=None, suffix=None):
-        _validate_1d(independent_vars)
-        var_name, = independent_vars
-        self.suffix = suffix
-        self._param_names = ['amplitude', 'decay']
-        p = self._parse_params()
-        def func(**kwargs):
-            amplitude = kwargs[p['amplitude']]
-            decay = kwargs[p['decay']]
-            var = kwargs[var_name]
-            return exponential(var, amplitude, decay)
-        super(ExponentialModel, self).__init__(func, independent_vars, missing)
+    def __init__(self, **kwargs):
+        super(ExponentialModel, self).__init__(exponential, **kwargs)
 
-
-class GaussianModel(BaseModel):
+class GaussianModel(Model):
     __doc__ = gaussian.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing=None, suffix=None):
-        self.dim = len(independent_vars)
+    def __init__(self, **kwargs):
+        super(GaussianModel, self).__init__(gaussian, **kwargs)
 
-        if self.dim == 1:
-            var_name, = independent_vars
-            self.suffix = suffix
-            self._param_names = ['amplitude', 'center', 'sigma']
-            p = self._parse_params()
-            def func(**kwargs):
-                amplitude = kwargs[p['amplitude']]
-                center = kwargs[p['center']]
-                sigma = kwargs[p['sigma']]
-                var = kwargs[var_name]
-                return gaussian(var, amplitude, center, sigma)
-        else:
-            raise NotImplementedError("I only do 1d gaussians for now.")
-            # TODO: Detect dimensionality from number of independent vars
-        super(GaussianModel, self).__init__(func, independent_vars, missing)
-
-
-class PowerLawModel(BaseModel):
+class PowerLawModel(Model):
     __doc__ = powerlaw.__doc__ + COMMON_DOC
-    def __init__(self, independent_vars, missing=None, suffix=None):
-        _validate_1d(independent_vars)
-        var_name, = independent_vars
-        self.suffix = suffix
-        self._param_names = ['coefficient', 'exponent']
-        p = self._parse_params()
-        def func(**kwargs):
-            coefficient = kwargs[p['coefficient']]
-            exponent = kwargs[p['exponent']]
-            var = kwargs[var_name]
-            return powerlaw(var, coefficient, exponent)
-        super(PowerLawModel, self).__init__(func, independent_vars, missing)
+    def __init__(self, **kwargs):
+        super(PowerLawModel, self).__init__(powerlaw, **kwargs)
+
