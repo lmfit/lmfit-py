@@ -183,7 +183,6 @@ class CommonTests(object):
         else:
             self.model_instance = self.model(*args, independent_vars=['x'])
             func = self.model_instance.func
-        print 'Common Test setUp ', func, self.true_values # .keys()
         self.data = func(x=self.x, **self.true_values()) + noise
 
     def test_fit(self):
