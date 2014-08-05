@@ -78,6 +78,7 @@ class Model(object):
         self.independent_vars = independent_vars
         self.func_allargs = []
         self.func_haskeywords = False
+        self.has_initial_guess = False
         self.components = components
         if not missing in [None, 'drop', 'raise']:
             raise ValueError("missing must be None, 'drop', or 'raise'.")
@@ -129,8 +130,10 @@ class Model(object):
         self.params = Parameters()
         [self.params.add(name) for name in self.param_names]
 
-    def guess_starting_values(self, values, **kws):
-        raise NotImplementedError('must overwrite guess_starting_values')
+    def guess_starting_values(self, data, **kws):
+        cname = self.__class__.__name__
+        msg = 'guess_starting_values() not implemented for %s' % cname
+        raise NotImplementedError(msg)
 
     def __set_param_names(self, param_names):
         # used when models are added
