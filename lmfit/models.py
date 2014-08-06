@@ -1,6 +1,7 @@
 import numpy as np
 from .model import Model
-from .lineshapes import (gaussian, normalized_gaussian, exponential,
+from .lineshapes import (gaussian, lorentzian, voigt,
+                         exponential,
                          powerlaw, linear, parabolic)
 
 class DimensionalError(Exception):
@@ -109,11 +110,28 @@ class ExponentialModel(Model):
 
 class GaussianModel(Model):
     __doc__ = gaussian.__doc__ + COMMON_DOC
+    fwhm_factor = 2.354820
     def __init__(self, **kwargs):
         super(GaussianModel, self).__init__(gaussian, **kwargs)
+        self.params.add('%sfwhm' % self.prefix,
+                        expr='%.6f*%ssigma' % (self.fwhm_factor, self.prefix))
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
-        amp, cen, sigma = estimate_peak(data, x, negative)
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
+        self.has_initial_guess = True
+
+class LorentzianModel(Model):
+    __doc__ = gaussian.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(LorentzianModel, self).__init__(lorentzian, **kwargs)
+        self.params.add('%sfwhm' % self.prefix,
+                        expr='2.0*%ssigma' % (self.prefix))
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
         self.params['%samplitude' % self.prefix].value = amp
         self.params['%scenter' % self.prefix].value = cen
         self.params['%ssigma' % self.prefix].value = sig
