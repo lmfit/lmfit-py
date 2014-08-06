@@ -1,11 +1,15 @@
 import unittest
 import warnings
 from numpy.testing import assert_allclose
-from lmfit.lineshapes import assert_results_close, gaussian
 import numpy as np
 
-from lmfit import Model, Parameter
-from lmfit import models
+from lmfit import Model, Parameter, models
+from lmfit.lineshapes import gaussian
+
+def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03,
+                         err_msg='', verbose=True):
+    for param_name, value in desired.items():
+         assert_allclose(actual[param_name], value, rtol, atol, err_msg, verbose)
 
 class TestUserDefiniedModel(unittest.TestCase):
     # mainly aimed at checking that the API does what it says it does
@@ -117,28 +121,25 @@ class TestUserDefiniedModel(unittest.TestCase):
         assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
     def test_sum_of_two_gaussians(self):
-
         # two user-defined gaussians
         model1 = self.model
-        f2 = lambda x, amplitude_, center_, sigma_: gaussian(
-            x, amplitude_, center_, sigma_)
+        f2 = lambda x, amp, cen, sig: gaussian(x, amplitude=amp, center=cen, sigma=sig)
         model2 = Model(f2)
         values1 = self.true_values()
-        values2 = self.true_values()
-        values2['sigma'] = 1.5
-        data  = gaussian(x=self.x, **values1)
-        data += gaussian(x=self.x, **values2)
+        values2 = {'cen': 2.45, 'sig':0.8, 'amp':3.15}
+
+        data  = gaussian(x=self.x, **values1) + f2(x=self.x, **values2) + self.noise/3.0
         model = self.model + model2
-        values2 = {k + '_': v for k, v in values2.items()}
-        guess = {'sigma': Parameter(value=2, min=0), 'center': 1,
+        guess = {'sigma': Parameter(value=2, min=0),
+                 'center': Parameter(value=1, min=0.2, max=1.8),
                  'amplitude': Parameter(value=3, min=0),
-                 'sigma_': Parameter(value=1, min=0), 'center_': 1,
-                 'amplitude_': Parameter(value=2.3)}
+                 'sig':  Parameter(value=1, min=0),
+                 'cen': Parameter(value=2.4, min=2, max=3.5),
+                 'amp': Parameter(value=1, min=0)}
 
         true_values = dict(list(values1.items()) + list(values2.items()))
         result = model.fit(data, x=self.x, **guess)
-
-        assert_results_close(result.values, true_values)
+        assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
         # user-defined models with common parameter names
         # cannot be added, and should raise
@@ -152,13 +153,16 @@ class TestUserDefiniedModel(unittest.TestCase):
         true_values = {'g1_center': values1['center'],
                        'g1_amplitude': values1['amplitude'],
                        'g1_sigma': values1['sigma'],
-                       'g2_center': values2['center_'],
-                       'g2_amplitude': values2['amplitude_'],
-                       'g2_sigma': values2['sigma_']}
-        guess = {'g1_sigma': 2, 'g1_center': 1, 'g1_amplitude': 1,
-                 'g2_sigma': 1, 'g2_center': 1, 'g2_amplitude': 1}
+                       'g2_center': values2['cen'],
+                       'g2_amplitude': values2['amp'],
+                       'g2_sigma': values2['sig']}
+        guess = {'g1_sigma': 2, 'g1_center': 1, 'g1_amplitude': 3,
+                 'g2_sigma': 1, 'g2_center': 2.4, 'g2_amplitude': 1}
+        print '2 GAUSSIANS ', guess
+        print model1.params
+        print model2.params
         result = model.fit(data, x=self.x, **guess)
-        assert_results_close(result.values, true_values)
+        assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
         # without suffix, the names collide and Model should raise
         model1 = models.GaussianModel()
