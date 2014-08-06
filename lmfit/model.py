@@ -147,7 +147,6 @@ class Model(object):
             # params = dict([(name, p.value) for name, p in params.items()])
             # kwargs = dict(list(params.items()) + list(kwargs.items()))
             funcargs = self._make_funcargs(params, kwargs)
-            # print 'This residual ', self.func, funcargs, self.func_haskeywords, kwargs
             diff = self.func(**funcargs) - data
             if weights is not None:
                 diff *= weights
@@ -156,7 +155,6 @@ class Model(object):
 
     def _make_funcargs(self, params, kwargs):
         out = {}
-        # print 'make funcargs ', self.func, self.func_allargs, self.func_haskeywords
         for key, val in kwargs.items():
             if key in self.func_allargs or self.func_haskeywords:
                 out[key] = val
@@ -302,7 +300,6 @@ class Model(object):
         def composite_func(**kwargs):
             components = kwargs.get('__components__', None)
             out = None
-            # print '----- COMPOSITE -------'
             if components is not None:
                 for comp in components:
                     pars = Parameters()
@@ -313,7 +310,6 @@ class Model(object):
                             pars[p.name].value = kwargs[p.name]
 
                     funcargs = comp._make_funcargs(pars, kwargs)
-                    # print 'composite ', comp.func, pars.keys(), kwargs.keys(), funcargs.keys()
                     comp_out = comp.func(**funcargs)
                     if out is None: out = np.zeros_like(comp_out)
                     out += comp_out

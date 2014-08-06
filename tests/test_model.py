@@ -158,9 +158,7 @@ class TestUserDefiniedModel(unittest.TestCase):
                        'g2_sigma': values2['sig']}
         guess = {'g1_sigma': 2, 'g1_center': 1, 'g1_amplitude': 3,
                  'g2_sigma': 1, 'g2_center': 2.4, 'g2_amplitude': 1}
-        print '2 GAUSSIANS ', guess
-        print model1.params
-        print model2.params
+
         result = model.fit(data, x=self.x, **guess)
         assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
