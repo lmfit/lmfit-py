@@ -113,8 +113,8 @@ class GaussianModel(Model):
     fwhm_factor = 2.354820
     def __init__(self, **kwargs):
         super(GaussianModel, self).__init__(gaussian, **kwargs)
-        self.params.add('%sfwhm' % self.prefix,
-                        expr='%.6f*%ssigma' % (self.fwhm_factor, self.prefix))
+        # self.params.add('%sfwhm' % self.prefix,
+        #                 expr='%.6f*%ssigma' % (self.fwhm_factor, self.prefix))
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
