@@ -246,7 +246,7 @@ class Model(object):
         # If any parameter is not initialized raise a more helpful error.
         missing_param = any([p not in params.keys() for p in self.param_names])
 
-        blank_param = any([p.value is None for p in params.values()])
+        blank_param = any([(p.value is None and p.expr is None) for p in params.values()])
         if missing_param or blank_param:
             raise ValueError("""Assign each parameter an initial value by
  passing Parameters or keyword arguments to fit""")
