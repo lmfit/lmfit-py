@@ -42,7 +42,7 @@ def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
          amplitude*fraction*lorentzian(x, center, sigma)
     """
     return ((1-fraction)*gaussian(x, amplitude, center, sigma) +
-                fraction*lorentzian(x, amplitude, center, sigma))
+               fraction*lorentzian(x, amplitude, center, sigma))
 
 def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=0.5):
     """pearson7 lineshape, according to NIST StRD
@@ -92,7 +92,7 @@ def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
     return amplitude*(1 + (x-center)**2/sigma)**(-s1) * gamma(s1) / denom
 
 
-def exgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
+def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
     """exponentially modified Gaussian
 
     = (gamma/2) exp[center*gamma + (gamma*sigma)**2/2 - gamma*x] *
@@ -133,6 +133,57 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     beta = skew/(s2*sigma)
     return (1 + erf(beta*(x-center)))*voigt(x, amplitude, center, sigma, gamma=gamma)
 
+def step(x, ampliude=1.0, center=0.0, sigma=1.0, form='linear'):
+    """step function:
+    starts at 0.0, ends at amplitude, with half-max at center, and
+    rising with form:
+      'linear' (default) = amplitude * min(1, max(0, arg))
+      'atan', 'arctan'   = amplitude * (0.5 + atan(arg)/pi)
+      'erf'              = amplitude * (1 + erf(arg))/2.0
+
+    where arg = (x - center)/sigma
+    """
+    if abs(sigma) <  1.e-13: sigma = 1.e-13
+
+    out = (x - center)/sigma
+    if self.form == 'erf':
+        out = 0.5*(1 + erf(out))
+    elif self.form in ('atan', 'arctan'):
+        out = 0.5 + np.arctan(out)/np.pi
+    else:
+        out[np.where(out < 0)] = 0.0
+        out[np.where(out > 1)] = 1.0
+    return amplitude*out
+
+def rectangle(x, ampliude=1.0, center1=0.0, sigma1=1.0,
+              center2=1.0, sigma2=1.0, form='linear'):
+    """rectangle function: step up, step down  (see step function)
+    starts at 0.0, rises to amplitude (at center1 with width sigma1)
+    then drops to 0.0 (at center2 with width sigma2) with form:
+      'linear' (default) = ramp_up + ramp_down
+      'atan', 'arctan'   = amplitude*(atan(arg1) + atan(arg2))/pi
+      'erf'              = amplitude*(erf(arg1) + erf(arg2))/2.
+
+    where arg1 =  (x - center1)/sigma1
+    and   arg2 = -(x - center2)/sigma2
+    """
+    if abs(sigma1) <  1.e-13: sigma1 = 1.e-13
+    if abs(sigma2) <  1.e-13: sigma2 = 1.e-13
+
+    arg1 = (x - center1)/sigma1
+    arg2 = (center2 - x)/sigma2
+    if self.form == 'erf':
+        out = 0.5*(erf(arg1) + erf(arg2))
+    elif self.form in ('atan', 'arctan'):
+        out = (np.arctan(arg1) + np.arctan(arg2))/np.pi
+    else:
+        arg1[np.where(arg1 <  0)]  = 0.0
+        arg1[np.where(arg1 >  1)]  = 1.0
+        arg2[np.where(arg2 >  0)]  = 0.0
+        arg2[np.where(arg2 < -1)] = -1.0
+        out = arg1 + arg2
+    return amplitude*out
+
 def _erf(x):
     """error function.  = 2/sqrt(pi)*integral(exp(-t**2), t=[0, z])"""
     return erf(x)
@@ -152,10 +203,6 @@ def _gamma(x):
 def _gammaln(x):
     """log of absolute value of gamma function"""
     return gammaln(x)
-
-
-
-normalized_gaussian = gaussian
 
 
 def exponential(x, amplitude=1, decay=1):
