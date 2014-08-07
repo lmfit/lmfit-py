@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#<examples/model_docs1.py>
+#<examples/models_doc1.py>
 from numpy import loadtxt
 from lmfit import fit_report
 from lmfit.models import GaussianModel
@@ -22,4 +22,4 @@ plt.plot(x, result.init_fit, 'k--')
 plt.plot(x, result.best_fit, 'r-')
 plt.show()
 
-#<end examples/model_docs1.py>
+#<end examples/models_doc1.py>
