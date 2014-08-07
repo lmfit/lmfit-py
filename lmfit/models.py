@@ -1,7 +1,11 @@
 import numpy as np
 from .model import Model
-from .lineshapes import (gaussian, lorentzian, voigt,
-                         exponential,
+from .parameter import Parameter
+
+from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, pearson7,
+                         step, rectangle, breit_wigner, logistic,
+                         lognormal, damped_oscillator, students_t,
+                         expgaussian, donaich, skewed_voigt, exponential,
                          powerlaw, linear, parabolic)
 
 class DimensionalError(Exception):
@@ -27,16 +31,17 @@ def estimate_peak(y, x, negative):
     maxx, minx = max(x), min(x)
     imaxy = index_of(y, maxy)
     cen = x[imaxy]
-    amp = (maxy - miny)*1.5
+    amp = (maxy - miny)*2.0
     sig = (maxx-minx)/6.0
 
     halfmax_vals = np.where(y > (maxy+miny)/2.0)[0]
     if negative:
         imaxy = index_of(y, miny)
-        amp = -(maxy - miny)*1.5
+        amp = -(maxy - miny)*2.0
         halfmax_vals = np.where(y < (maxy+miny)/2.0)[0]
     if len(halfmax_vals) > 2:
         sig = (x[halfmax_vals[-1]] - x[halfmax_vals[0]])/2.0
+        cen = x[halfmax_vals].mean()
     return amp, cen, sig
 
 COMMON_DOC = """
@@ -125,7 +130,6 @@ class PolynomialModel(Model):
             self.params['%sc%i' % (self.prefix, i)].value = coefs[i]
         self.has_initial_guess = True
 
-
 class GaussianModel(Model):
     __doc__ = gaussian.__doc__ + COMMON_DOC
     fwhm_factor = 2.354820
@@ -171,7 +175,64 @@ class VoigtModel(Model):
         self.params['%samplitude' % self.prefix].value = amp
         self.params['%scenter' % self.prefix].value = cen
         self.params['%ssigma' % self.prefix].value = sig
+        gam = Parameter(expr = '%ssigma' % self.prefix)
+        self.params['%sgamma' % self.prefix] = gam
         self.has_initial_guess = True
+
+class PseudoVoigtModel(Model):
+    __doc__ = pvoigt.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
+        self.params['%sfraction' % self.prefix].value = 0.5
+        self.params['%sfraction' % self.prefix].vary = False
+        self.has_initial_guess = True
+
+
+class Pearson7Model(Model):
+    __doc__ = pearson7.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(Pearson7Model, self).__init__(pearson7, **kwargs)
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
+        self.params['%sexponent' % self.prefix].value = 0.5
+        self.params['%sexponent' % self.prefix].vary = False
+        self.has_initial_guess = True
+
+class BrietWignerModel(Model):
+    __doc__ = breit_wigner.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
+        self.params['%sq' % self.prefix].value = 1.0
+        self.has_initial_guess = True
+
+class DampedOscillatorModel(Model):
+    __doc__ = damped_oscillator.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
+        self.has_initial_guess = True
+
 
 class PowerLawModel(Model):
     __doc__ = powerlaw.__doc__ + COMMON_DOC
@@ -200,3 +261,38 @@ class ExponentialModel(Model):
         self.params['amplitude'].value = np.exp(oval)
         self.params['decay'].value = -1/sval
         self.has_initial_guess = True
+
+class StepModel(Model):
+    __doc__ = step.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(StepModel, self).__init__(step, **kwargs)
+
+    def guess_starting_values(self, data, x=None, **kws):
+        if x is None:
+            return
+        ymin, ymax = min(data), max(data)
+        xmin, xmax = min(x), max(x)
+        self.params['amplitude'].value = (ymax-ymin)
+        self.params['center'].value = (xmax+xmin)/2.0
+        self.params['sigma'].value  = (xmax-xmin)/7.0
+        self.has_initial_guess = True
+
+class RectangleModel(Model):
+    __doc__ = rectangle.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(RectangleModel, self).__init__(rectangle, **kwargs)
+        self.params.add('%smidpoint' % self.prefix,
+                        expr='(%scenter1+%scenter2)/2.0' % (self.prefix,
+                                                            self.prefix))
+    def guess_starting_values(self, data, x=None, **kws):
+        if x is None:
+            return
+        ymin, ymax = min(data), max(data)
+        xmin, xmax = min(x), max(x)
+        self.params['amplitude'].value =   (ymax-ymin)
+        self.params['center1'].value   =   (xmax+xmin)/4.0
+        self.params['sigma1'].value    =   (xmax-xmin)/7.0
+        self.params['center2'].value   = 3*(xmax+xmin)/4.0
+        self.params['sigma2'].value    =   (xmax-xmin)/7.0
+        self.has_initial_guess = True
+
