@@ -134,49 +134,209 @@ derived from it.
 
 .. class:: Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix=''[, components=None]]]]])
 
-        Create a model based on the user-supplied function.  This uses a
-        fair amount of introspection, automatically converting argument
-        names to Parameter names.
+    Create a model based on the user-supplied function.  This uses a
+    introspection to automatically converting argument names to Parameter names.
 
-        :param func: function to be wrapped
-	:type func: callable
-	:param independent_vars: list of argument names to ``func`` that are independent variables.
-	:type independent_vars: ``None`` (default) or list of strings.
-        :param param_names: list of argument names to ``func`` that should be made into Parameters.
-        :type param_names: ``None`` (default) or list of strings
-	:param missing: how to handle missing values.
-	:type missing: one of ``None`` (default), 'drop', or 'raise'
-	:param prefix: prefix to add to all parameter names to distinguish components.
-	:type prefix: string
-	:param components: list of model components for a composite fit (usually handled internally).
-	:type components: ``None`` or default.
+    :param func: function to be wrapped
+    :type func: callable
+    :param independent_vars: list of argument names to ``func`` that are independent variables.
+    :type independent_vars: ``None`` (default) or list of strings.
+    :param param_names: list of argument names to ``func`` that should be made into Parameters.
+    :type param_names: ``None`` (default) or list of strings
+    :param missing: how to handle missing values.
+    :type missing: one of ``None`` (default), 'drop', or 'raise'
+    :param prefix: prefix to add to all parameter names to distinguish components.
+    :type prefix: string
+    :param components: list of model components for a composite fit (usually handled internally).
+    :type components: ``None`` or default.
 
 
-        Parameter names are inferred from the function arguments,
-        and a residual function is automatically constructed.
+Methods and Attributes of the :class:`Model` class
+----------------------------------------------------
 
-        Example
-        -------
-        >>> def decay(t, tau, N):
-        ...     return N*np.exp(-t/tau)
-        ...
-        >>> my_model = Model(decay, independent_vars=['t'])
+.. attribute:: independent_vars
 
-            None: Do not check for null or missing values (default)
-            'drop': Drop null or missing observations in data.
-                if pandas is installed, pandas.isnull is used, otherwise
-                numpy.isnan is used.
-            'raise': Raise a (more helpful) exception when data contains null
-                or missing values.
+   list of strings for independent variables.
+
+.. attribute:: param_names
+
+   list of strings of parameter names.
+
+
+.. attribute:: params
+
+   :class:`Parameters` object for the model
+
+.. attribute:: prefix
+
+   prefix used for name-mangling of parameter names.  That is, for a
+   :class:`GaussianModel`, the default parameter names would be
+   ``amplitude``, ``center``, and ``sigma``.  These parameters are used for
+   many pre-defined models, and would cause a name collision for a
+   composite model.  Using a prefix of ``g1_`` would convert these
+   parameter names to ``g1_amplitude``, ``g1_center``, and ``g1_sigma``.
+
+.. attribute:: missing
+
+   what to do for missing values.  The choices are
+
+    * ``None``: Do not check for null or missing values (default)
+    * ``'drop'``: Drop null or missing observations in data.  If pandas is
+                installed, ``pandas.isnull`` is used, otherwise ``numpy.isnan`` is used.
+    * ``'raise'``: Raise a (more helpful) exception when data contains null
+                  or missing values.
+
+.. attribute:: components
+
+   a list of instances of :class:`Model` that make up a composite model.
+
+
+.. method:: guess_starting_values(data, **kws)
+
+   by default this is left to raise a ``NotImplementedError``, but may be
+   overwritten by subclasses.  Generally, this method should take some
+   values for ``data`` and use it to construct initial guesses for
+   parameter values.
+
+.. method:: fit(data[, params=None[, weights=None[, **kws]]])
+
+    perform a fit of the model to the ``data`` array.
+
+    :param data: array of data to be fitted.
+    :type data: ndarray-like
+    :param params: parameters to use for fit.
+    :type params: ``None`` (default) or Parameters
+    :param weights: weights to use fit.
+    :type params: ``None`` (default) or ndarray-like.
+    :return:       fit result object.
+
+   If ``params`` is ``None``, the internal ``params`` will be used. If it
+   is supplied, these will replace the internal ones.  If supplied,
+   ``weights`` must is an ndarray-like object of same size and shape as
+   ``data``.
+
+   Note that other parameters for the model function (including all the
+   independent vairables!) will need to be passed in using keyword
+   arguments.
+
+
+   The result returned from :meth:`fit` will contains all of the items
+   returned from :func:`minimize` (see  :ref:`Table of Fit Results
+   <goodfit-table>` plus those listed in the :ref:`Table of Model Fit results <modelfit-table>`
+
+.. _modelfit-table:
+
+ Table of Model Fit Results: These values are included in the return value
+ from :meth:`Model.fit`, in addition to the standard Goodness-of-Fit
+ statistics and fit results given in :ref:`Table of Fit Results
+ <goodfit-table>`.
+
+
++----------------------+----------------------------------------------------------------------------+
+| :class:`Model.fit`   | Description / Formula                                                      |
+| result attribute     |                                                                            |
++======================+============================================================================+
+|    init_params       | initial set of parameters                                                  |
++----------------------+----------------------------------------------------------------------------+
+|    init_fit          | initial estimate of fit to data                                            |
++----------------------+----------------------------------------------------------------------------+
+|    best_fit          | final estimate of fit to data                                              |
++----------------------+----------------------------------------------------------------------------+
+
+
+Determining parameter names and independent variables for a function
+-----------------------------------------------------------------------
+
+The :class:`Model` created from the supplied function ``func`` will create
+a :class:`Parameters` object, and names are inferred from the function
+arguments, and a residual function is automatically constructed.
+
+
+By default, the independent variable is take as the first argument to the
+function.  You can explicitly set this, of course, and will need to if the
+independent variable is not first in the list, or if there are actually more
+than one independent variables.
+
+If not specified, Parameters are constructed from all positional arguments
+and all keyword arguments that have a default value that is numerical, except
+the independent variable, of course.   Importantly, the Parameters can be
+modified after creation.  In fact, you'll have to do this because none of the
+parameters have valid initial values.  You can place bounds and constraints
+on Parameters, or fix their values.
+
+
+
+Simple Examples:  Building a  :class:`Model` from a function
+-----------------------------------------------------------------
+
+A simple exmple of creating a :class:`Model` from a function::
+
+    >>> def decay(t, tau, N):
+    ...    return N*np.exp(-t/tau)
+    ...
+    >>> decay_model = Model(decay)
+    >>> print decay_model.independent_vars
+    ['t']
+    >>> for pname, par in decay_model.params.items():
+    ...     print pname, par
+    ...
+    tau <Parameter 'tau', None, bounds=[None:None]>
+    N <Parameter 'N', None, bounds=[None:None]>
+
+Note that ``t`` is assumed to be the independent variable, and that
+parameters are created from the other parameters.   Note also that the
+parameters are left uninitialized.
+
+If you wanted ``tau`` to be the independent variable in the above example,
+you would just do this::
+
+    >>> decay_model = Model(decay, independent_vars=['tau'])
+    >>> print decay_model.independent_vars
+    ['tau']
+    >>> for pname, par in decay_model.params.items():
+    ...     print pname, par
+    ...
+    t <Parameter 't', None, bounds=[None:None]>
+    N <Parameter 'N', None, bounds=[None:None]>
+
+If the model had keyword parameters, these would be turned into Parameters if
+the supplied default value was a valid number (but not ``None``).
+
+    >>> def decay2(t, tau, N=10, check_positive=False):
+    ...    if check_small:
+    ...        arg = abs(t)/max(1.e-9, abs(tau))
+    ...    else:
+    ...        arg = t/tau
+    ...    return N*np.exp(arg)
+    ...
+    >>> decay_model = Model(decay2)
+    >>> for pname, par in decay_model.params.items():
+    ...     print pname, par
+    ...
+    tau <Parameter 'tau', None, bounds=[None:None]>
+    N <Parameter 'N', 10, bounds=[None:None]>
+
+Here, even though ``N`` is a keyword argument to the function, it is turned
+into a parameter, with the default numerical value as its initial value.  By
+default, it is still permitted to be a varied in the fit.  The
+``check_positive`` argument, with a boolean default value, was not converted
+to a parameter.
 
 
 Available :class:`Model` subclasses in the :mod:`models` module
 ====================================================================
 
-Several fitting models are pre-built and available in the :mod:`models` module.
-
+Several fitting models are pre-built and available in the :mod:`models`
+module.  These are all based on plain python functions defined in the
+:mod:`lineshapes` module.  In addition to wrapping a function, these also
+provide a reasonable :meth:`guess_starting_values` method.
 
 .. class:: GaussianModel()
+
+   A model for Gaussian lineshape.
+
+   Parameter names: ``amplitude``, ``center``, and ``sigma``.  In addition,
+   a constrained parameter ``fwhm`` is included.
 
 .. class:: LorentzianModel()
 
@@ -184,8 +344,14 @@ Several fitting models are pre-built and available in the :mod:`models` module.
 
 .. class:: ExponentialModel()
 
+.. class:: PowerLawModel()
 
-.. class:: ExponentialModel()
+.. class:: ConstantModel()
+
+.. class:: LinearModel()
+
+.. class:: QuadraticModel()
+
 
 .. class:: StepModel()
 
@@ -193,6 +359,3 @@ Several fitting models are pre-built and available in the :mod:`models` module.
 .. class:: RectangleModel()
 
 
-
-Building a  :class:`Model` from your own function
-=============================================================
