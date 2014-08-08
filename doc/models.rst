@@ -232,16 +232,15 @@ Methods and Attributes of the :class:`Model` class
  <goodfit-table>`.
 
 
-+----------------------+----------------------------------------------------------------------------+
-| :class:`Model.fit`   | Description / Formula                                                      |
-| result attribute     |                                                                            |
-+======================+============================================================================+
-|    init_params       | initial set of parameters                                                  |
-+----------------------+----------------------------------------------------------------------------+
-|    init_fit          | initial estimate of fit to data                                            |
-+----------------------+----------------------------------------------------------------------------+
-|    best_fit          | final estimate of fit to data                                              |
-+----------------------+----------------------------------------------------------------------------+
++----------------------------+------------------------------------------------------+
+| result attribute           |  Description / Formula                               |
++============================+======================================================+
+| ``init_params``            | initial set of parameters                            |
++----------------------------+------------------------------------------------------+
+| ``init_fit``               | initial estimate of fit to data                      |
++----------------------------+------------------------------------------------------+
+| ``best_fit``               | final estimate of fit to data                        |
++----------------------------+------------------------------------------------------+
 
 
 Determining parameter names and independent variables for a function
@@ -317,10 +316,11 @@ the supplied default value was a valid number (but not ``None``).
     N <Parameter 'N', 10, bounds=[None:None]>
 
 Here, even though ``N`` is a keyword argument to the function, it is turned
-into a parameter, with the default numerical value as its initial value.  By
-default, it is still permitted to be a varied in the fit.  The
-``check_positive`` argument, with a boolean default value, was not converted
-to a parameter.
+into a parameter, with the default numerical value as its initial value.
+By default, it is still permitted to be varied in the fit.  On the other
+hand, the ``check_positive`` keyword argument, was not converted to a
+parameter beause it has a boolean default value.
+
 
 
 Available :class:`Model` subclasses in the :mod:`models` module
@@ -328,19 +328,87 @@ Available :class:`Model` subclasses in the :mod:`models` module
 
 Several fitting models are pre-built and available in the :mod:`models`
 module.  These are all based on plain python functions defined in the
-:mod:`lineshapes` module.  In addition to wrapping a function, these also
-provide a reasonable :meth:`guess_starting_values` method.
+:mod:`lineshapes` module.  In addition to wrapping a function, these models
+also provide a :meth:`guess_starting_values` method that is intended to
+give a reasonable set of starting values given a data array that closely
+approximates the data to be fit.  
+
+All the models listed below are one dimensional, with an independent
+variable named ``x``.  Many of these models represent a function with a
+distinct peak, and so share common features.  To maintain uniformity,
+common parameter names are used whenever possible.  Thus, most models have
+a parameter called ``amplitude`` that represents the overall height (or
+area of) a peak or function, a ``center`` parameter that represents a peak
+centroid position, and a ``sigma`` parameter that gives a characteristic
+width.   Some peak shapes also have a parameter ``fwhm``, typically
+constrained by ``sigma`` to give the full width at half maximum.
+
 
 .. class:: GaussianModel()
 
-   A model for Gaussian lineshape.
-
+   A model for Gaussian or normal distribution lineshape.  
    Parameter names: ``amplitude``, ``center``, and ``sigma``.  In addition,
    a constrained parameter ``fwhm`` is included.
 
+.. math::
+
+  f(x, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}
+
+where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
+:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
+Half-Maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
+:math:`2.3548\sigma`
+
+
 .. class:: LorentzianModel()
 
+   a Lorentzian or Cauchy-Lorentz distribution function. 
+   Parameter names: ``amplitude``, ``center``, and ``sigma``.  In addition,
+   a constrained parameter ``fwhm`` is included.
+
+.. math::
+
+  f(x, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
+
+where the parameter 
+``amplitude`` corresponds to :math:`A`, ``center`` to
+:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
+Half-Maximum is :math:`2\sigma`.
+
+
 .. class:: VoigtModel()
+
+.. function:: voigt(x, cen=0, sigma=1, gamma=None)
+
+   a Voigt distribution function.   
+
+   Parameter names: ``amplitude``, ``center``, and ``sigma``.  A ``gamma``
+   parameter is also available.  By default, it is constrained to have
+   value equal to ``sigma``, though this can be varied independently.  In
+   addition, a constrained parameter ``fwhm`` is included.  The definition
+   for the Voigt function used here is
+
+.. math::
+
+    f(x, \mu, \sigma, \gamma) = \frac{A \textrm{Re}[w(z)]}{\sigma\sqrt{2 \pi}}
+
+where
+
+.. math::
+   :nowrap:
+
+   \begin{eqnarray*}
+     z &=& \frac{x-\mu +i\gamma}{\sigma\sqrt{2}} \\
+     w(z) &=& e^{-z^2}{\operatorname{erfc}}(-iz)
+   \end{eqnarray*}
+
+and :func:`erfc` is the complimentary error function.  As above,
+``amplitude`` corresponds to :math:`A`, ``center`` to
+:math:`\mu`, and ``sigma`` to :math:`\sigma`. The parameter ``gamma``
+corresponds  to :math:`\gamma`.
+If ``gamma`` is kept at the default value (constrained to ``sigma``), 
+the full width at half maximumn is approximately :math:`3.6013\sigma`.
+
 
 .. class:: ExponentialModel()
 
@@ -358,4 +426,75 @@ provide a reasonable :meth:`guess_starting_values` method.
 
 .. class:: RectangleModel()
 
+
+Other modeles
+-----------------------------------------------
+
+
+.. function:: pvoigt(x, cen=0, sigma=1, frac=0.5)
+
+   a pseudo-Voigt distribution function, which is a weighted sum of a
+   Gaussian and Lorentzian distribution functions with the same values for
+   *cen* (:math:`\mu`) and *sigma* (:math:`\sigma`), and *frac* setting the
+   Lorentzian fraction::
+
+    pvoigt(x, cen, sigma, frac) = (1-frac)*gaussian(x, cen, sigma) + frac*lorentzian(x, cen, sigma)
+
+
+.. function:: pearson7(x, cen=0, sigma=1, expon=0.5)
+
+   a Pearson-7 lineshape.  This is another Voigt-like distribution
+   function, defined as
+
+.. math::
+
+    f(x, \mu, \sigma, p) = \frac{s}{\big\{[1 + (\frac{x-\mu}{\sigma})^2] (2^{1/p} -1)  \big\}^p}
+
+
+where for *cen* (:math:`\mu`) and *sigma* (:math:`\sigma`) are as for the
+above lineshapes, and *expon* is :math:`p`, and
+
+.. math::
+
+    s = \frac{\Gamma(p) \sqrt{2^{1/p} -1}}{ \sigma\sqrt{\pi}\,\Gamma(p-1/2)}
+
+where :math:`\Gamma(x)` is the gamma function.
+
+
+.. function:: students_t(x, cen=0, sigma=1)
+
+   Student's t distribution function.
+
+.. math::
+
+    f(x, \mu, \sigma) = \frac{\Gamma(\frac{\sigma+1}{2})} {\sqrt{\sigma\pi}\,\Gamma(\frac{\sigma}{2})} \Bigl[1+\frac{(x-\mu)^2}{\sigma}\Bigr]^{-\frac{\sigma+1}{2}}
+
+
+where :math:`\Gamma(x)` is the gamma function.
+
+.. function:: breit_wigner(x, cen=0, sigma=1, q=1)
+
+    Breit-Wigner-Fano distribution function.
+
+.. math::
+
+    f(x, \mu, \sigma, q) = \frac{(q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}
+
+
+.. function:: logistic(x, cen=0, sigma=1)
+
+   Logistic lineshape, a sigmoidal curve
+
+.. math::
+
+   f(x, \mu, \sigma) = 1  - \frac{1}{1 + e^{(x-\mu)/\sigma}}
+
+
+.. function:: lognormal(x, cen=0, sigma=1)
+
+   log-normal function
+
+.. math::
+
+    f(x, \mu, \sigma) = \frac{e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}
 
