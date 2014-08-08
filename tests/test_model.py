@@ -41,8 +41,8 @@ class TestUserDefiniedModel(unittest.TestCase):
         # using keyword argument parameters
         guess_missing_sigma = self.guess()
         del guess_missing_sigma['sigma']
-        f = lambda: self.model.fit(self.data, x=self.x, **guess_missing_sigma)
-        self.assertRaises(ValueError, f)
+        #f = lambda: self.model.fit(self.data, x=self.x, **guess_missing_sigma)
+        #self.assertRaises(ValueError, f)
 
         # using Parameters
         params = self.model.params

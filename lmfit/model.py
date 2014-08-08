@@ -103,11 +103,14 @@ class Model(object):
 
         # default param names: all positional args
         # except independent variables
+        def_vals = {}
         if self.param_names is None:
             self.param_names = pos_args[:]
             for key, val in kw_args.items():
-                if isinstance(val, (float, int)):
+                if (not isinstance(val, bool) and
+                    isinstance(val, (float, int))):
                     self.param_names.append(key)
+                    def_vals[key] = val
             for p in self.independent_vars:
                 if p in self.param_names:
                     self.param_names.remove(p)
@@ -129,6 +132,8 @@ class Model(object):
         self.param_names = set(names)
         self.params = Parameters()
         [self.params.add(name) for name in self.param_names]
+        for key, val in def_vals.items():
+            self.params["%s%s" % (self.prefix, key)].value = val
 
     def guess_starting_values(self, data, **kws):
         cname = self.__class__.__name__
