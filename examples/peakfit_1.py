@@ -8,7 +8,7 @@ except ImportError:
 
 
 from lmfit import Parameters, Minimizer, report_fit
-from lmfit.utilfuncs import gaussian
+from lmfit.lineshapes import gaussian
 
 def residual(pars, x, data=None):
     g1 = gaussian(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)

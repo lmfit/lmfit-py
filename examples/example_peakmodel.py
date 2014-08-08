@@ -2,7 +2,7 @@
 Example using the built-in Peak-like models
 """
 import numpy as np
-from lmfit.models1d import GaussianModel, LorentzianModel, VoigtModel
+from lmfit.old_models1d import GaussianModel, LorentzianModel, VoigtModel
 import matplotlib.pyplot as plt
 
 x  = np.linspace(0, 10, 101)

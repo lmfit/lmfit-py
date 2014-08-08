@@ -1,6 +1,5 @@
 """
 Concise nonlinear curve fitting.
-
 """
 
 import warnings
@@ -9,47 +8,55 @@ import copy
 import numpy as np
 from . import Parameters, Parameter, minimize
 
+# Use pandas.isnull for aligning missing data is pandas is available.
+# otherwise use numpy.isnan
 try:
-    import pandas
+    from pandas import isnull, Series
 except ImportError:
-    # Use pandas.isnull if available. Fall back on numpy.isnan.
     isnull = np.isnan
+    Series = type(NotImplemented)
 
-    # When handling missing data or data not the same size as independent vars,
-    # use pandas to align. If pandas is not available, data and vars must be
-    # the same size, but missing data can still be handled with masks.
+def _align(var, mask, data):
+    "align missing data, with pandas is available"
+    if isinstance(data, Series) and isinstance(var, Series):
+        return var.reindex_like(data).dropna()
+    elif mask is not None:
+        return var[mask]
+    return var
 
-    def _align(var, mask, data):
-        if mask is not None:
-            return var[mask]
-        return var
-else:
-    isnull = pandas.isnull
-
-    def _align(var, mask, data):
-        if isinstance(data, pandas.Series) and isinstance(var, pandas.Series):
-            return var.reindex_like(data).dropna()
-        elif mask is not None:
-            return var[mask]
-        else:
-            return var
-
+def funcargs(func):
+    """return names for positional arguments and
+    dict of keyword arguments for a function.
+    """
+    argspec = inspect.getargspec(func)
+    posargs = argspec.args[:]
+    kwargs = {}
+    if argspec.defaults is not None:
+        for val in reversed(argspec.defaults):
+            kwargs[posargs.pop()] = val
+    return (posargs, kwargs, argspec.keywords)
 
 class Model(object):
+    _forbidden_args = ('data', 'weights', 'params')
+    _invalid_ivar  = "Invalid independent variable name ('%s') for function %s"
+    _invalid_par   = "Invalid parameter name ('%s') for function %s"
 
-    def __init__(self, func, independent_vars=[], missing='none'):
+    def __init__(self, func, independent_vars=None, param_names=None,
+                 missing=None, prefix='', components=None):
         """Create a model from a user-defined function.
 
         Parameters
         ----------
-        func: function
-        independent_vars: list of strings, optional
-            matching argument(s) to func
-        missing: 'none', 'drop', or 'raise'
-            'none': Do not check for null or missing values.
+        func: function to be wrapped
+        independent_vars: list of strings or None (default)
+            arguments to func that are independent variables
+        param_names: list of strings or None (default)
+            names of arguments to func that are to be made into parameters
+        missing: None, 'drop', or 'raise'
+            None: Do not check for null or missing values (default)
             'drop': Drop null or missing observations in data.
-                Use pandas.isnull if pandas is available; otherwise,
-                silently fall back to numpy.isnan.
+                if pandas is installed, pandas.isnull is used, otherwise
+                numpy.isnan is used.
             'raise': Raise a (more helpful) exception when data contains null
                 or missing values.
 
@@ -66,59 +73,100 @@ class Model(object):
         >>> my_model = Model(decay, independent_vars=['t'])
         """
         self.func = func
+        self.prefix = prefix
+        self.param_names = param_names
         self.independent_vars = independent_vars
-        if not missing in ['none', 'drop', 'raise']:
-            raise ValueError("missing must be 'none', 'drop', or 'raise'.")
+        self.func_allargs = []
+        self.func_haskeywords = False
+        self.has_initial_guess = False
+        self.components = components
+        if not missing in [None, 'drop', 'raise']:
+            raise ValueError("missing must be None, 'drop', or 'raise'.")
         self.missing = missing
         self._parse_params()
         self._residual = self._build_residual()
+        if self.independent_vars is None:
+            self.independent_vars = []
 
     def _parse_params(self):
-        model_arg_names = inspect.getargspec(self.func)[0]
+        pos_args, kw_args, keywords = funcargs(self.func)
+        self.func_haskeywords = keywords is not None
+        self.func_allargs = pos_args + list(kw_args.keys())
+        allargs = self.func_allargs
+
+        if len(allargs) == 0 and keywords is not None:
+            return
+
+        # default independent_var = 1st argument
+        if self.independent_vars is None:
+            self.independent_vars = [pos_args[0]]
+
+        # default param names: all positional args
+        # except independent variables
+        if self.param_names is None:
+            self.param_names = pos_args[:]
+            for key, val in kw_args.items():
+                if isinstance(val, (float, int)):
+                    self.param_names.append(key)
+            for p in self.independent_vars:
+                if p in self.param_names:
+                    self.param_names.remove(p)
+
+        # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
-        # variable names.
-        forbidden_args = ['data', 'weights', 'params']
-        for arg in forbidden_args:
-            if arg in model_arg_names:
-                raise ValueError("The model function cannot have an " +
-                                 "argument named %s. " % arg +
-                                 "Choose a different name.")
-        self.param_names = set(model_arg_names) - set(self.independent_vars)
+        for arg in self.independent_vars:
+            if arg not in allargs or arg in self._forbidden_args:
+                raise ValueError(self._invalid_ivar % (arg, self.func.__name__))
+        for arg in self.param_names:
+            if arg not in allargs or arg in self._forbidden_args:
+                raise ValueError(self._invalid_par % (arg, self.func.__name__))
+
+        names = []
+        for pname in self.param_names:
+            if not pname.startswith(self.prefix):
+                pname = "%s%s" % (self.prefix, pname)
+            names.append(pname)
+        self.param_names = set(names)
+        self.params = Parameters()
+        [self.params.add(name) for name in self.param_names]
+
+    def guess_starting_values(self, data, **kws):
+        cname = self.__class__.__name__
+        msg = 'guess_starting_values() not implemented for %s' % cname
+        raise NotImplementedError(msg)
 
     def __set_param_names(self, param_names):
         # used when models are added
         self.param_names = param_names
 
-    def params(self):
-        """Return a blank copy of model params.
-
-        Example
-        -------
-        >>> params = my_model.params()
-        >>> params['N'].value = 1.0  # initial guess
-        >>> params['tau'].value = 2.0  # initial guess
-        >>> params['tau'].min = 0  # (optional) lower bound
-        """
-        params = Parameters()
-        [params.add(name) for name in self.param_names]
-        return params
-
     def _build_residual(self):
         "Generate and return a residual function."
-        def residual(params, *args, **kwargs):
+        def residual(params, data, weights, **kwargs):
             # Unpack Parameter objects into simple key -> value pairs,
             # and combine them with any non-parameter kwargs.
-            data, weights = args
-            params = dict([(name, p.value) for name, p in params.items()])
-            kwargs = dict(list(params.items()) + list(kwargs.items()))
-            f = self.func(**kwargs)
-            if weights is None:
-                e = f - data
-            else:
-                e = (f - data)*weights
-            return np.asarray(e)  # for compatibility with pandas.Series
-
+            # params = dict([(name, p.value) for name, p in params.items()])
+            # kwargs = dict(list(params.items()) + list(kwargs.items()))
+            funcargs = self._make_funcargs(params, kwargs)
+            diff = self.func(**funcargs) - data
+            if weights is not None:
+                diff *= weights
+            return np.asarray(diff)  # for compatibility with pandas.Series
         return residual
+
+    def _make_funcargs(self, params, kwargs):
+        out = {}
+        for key, val in kwargs.items():
+            if key in self.func_allargs or self.func_haskeywords:
+                out[key] = val
+        npref = len(self.prefix)
+        for name, par in params.items():
+            if npref > 0 and name.startswith(self.prefix):
+                name = name[npref:]
+            if name in self.func_allargs or self.func_haskeywords:
+                out[name] = par.value
+        if self.func_haskeywords and self.components is not None:
+            out['__components__'] = self.components
+        return out
 
     def _handle_missing(self, data):
         if self.missing == 'raise':
@@ -156,7 +204,6 @@ class Model(object):
         >>> result = my_model.fit(data, tau=5, N=3, t=t)
 
         # Or, for more control, pass a Parameters object.
-        # See docstring for Model.params()
         >>> result = my_model.fit(data, params, t=t)
 
         # Keyword arguments override Parameters.
@@ -169,7 +216,7 @@ class Model(object):
 
         """
         if params is None:
-            params = self.params()
+            params = self.params
         else:
             params = copy.deepcopy(params)
 
@@ -195,16 +242,17 @@ class Model(object):
                               "It will be ignored.", UserWarning)
 
         # If any parameter is not initialized raise a more helpful error.
-        missing_param = set(params.keys()) != self.param_names
-        blank_param = any([p.value is None for p in params.values()])
+        missing_param = any([p not in params.keys() for p in self.param_names])
+
+        blank_param = any([(p.value is None and p.expr is None) for p in params.values()])
         if missing_param or blank_param:
-            raise ValueError("Assign each parameter an initial value by " +
-                             "passing Parameters or keyword arguments to " +
-                             "fit().")
+            raise ValueError("""Assign each parameter an initial value by
+ passing Parameters or keyword arguments to fit""")
+
 
         # Handle null/missing values.
         mask = None
-        if self.missing != 'none':
+        if self.missing is not None:
             mask = self._handle_missing(data)  # This can raise.
             if mask is not None:
                 data = data[mask]
@@ -214,25 +262,29 @@ class Model(object):
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
         for var in self.independent_vars:
+            #if var not in kwargs:
+            #    raise ValueError("Must include independent variable ('%s') to fit()" % var)
+
             if not np.isscalar(self.independent_vars):  # just in case
                 kwargs[var] = _align(kwargs[var], mask, data)
 
+        kwargs['__components__'] = self.components
         result = minimize(self._residual, params,
                           args=(data, weights), kws=kwargs)
 
         # Monkey-patch the Minimizer object with some extra information.
         result.model = self
         result.init_params = init_params
-        result.init_values = dict([(name, p.value) for name, p
-                                  in init_params.items()])
-        indep_vars = dict([(k, v) for k, v in kwargs.items() if k in
-                           self.independent_vars])
-        evaluation_kwargs = dict(list(indep_vars.items()) +
-                                 list(result.init_values.items()))
-        result.init_fit = self.func(**evaluation_kwargs)
-        evaluation_kwargs = dict(list(indep_vars.items()) +
-                                 list(result.values.items()))
-        result.best_fit = self.func(**evaluation_kwargs)
+
+        result.init_values = self._make_funcargs(init_params, {})
+        indep_vars = dict([(key, val) for key, val in kwargs.items()
+                           if key in self.independent_vars])
+
+        init_kws = self._make_funcargs(init_params,   indep_vars)
+        result.init_fit = self.func(**init_kws)
+
+        best_kws = self._make_funcargs(result.params, indep_vars)
+        result.best_fit = self.func(**best_kws)
         return result
 
     def __add__(self, other):
@@ -242,16 +294,41 @@ class Model(object):
             raise NameError("Both models have parameters called " +
                             "%s. Redefine the models " % collision +
                             "with distinct names.")
+        # if self.independent_vars != other.independent_vars:
+        #     raise ValueError("Both models need to have identical " +
+        #                      "independent variables ")
+        def composite_func(**kwargs):
+            components = kwargs.get('__components__', None)
+            out = None
+            if components is not None:
+                for comp in components:
+                    pars = Parameters()
+                    prefix = comp.prefix
+                    for p in self.params.values():
+                        if p.name.startswith(prefix):
+                            pars.__setitem__(p.name, p)
+                            pars[p.name].value = kwargs[p.name]
 
-        def func(**kwargs):
-            self_kwargs = dict([(k, kwargs.get(k)) for k in
-                                self.param_names | set(self.independent_vars)])
-            other_kwargs = dict([(k, kwargs.get(k)) for k in
-                                 other.param_names | set(other.independent_vars)])
-            return self.func(**self_kwargs) + other.func(**other_kwargs)
+                    funcargs = comp._make_funcargs(pars, kwargs)
+                    comp_out = comp.func(**funcargs)
+                    if out is None: out = np.zeros_like(comp_out)
+                    out += comp_out
+            return out
 
-        model = Model(func=func,
-                      independent_vars=self.independent_vars,
-                      missing=self.missing)
-        model.__set_param_names(self.param_names | other.param_names)
-        return model
+        components = self.components
+        if components is None:
+            components = [self]
+        if other.components is None:
+            components.append(other)
+        else:
+            components.extend(other.components)
+        all_params = self.params
+        for key, val in other.params.items():
+            all_params[key] = val
+
+        out = Model(func=composite_func, independent_vars=self.independent_vars,
+                    param_names=self.param_names | other.param_names,
+                    missing=self.missing, components=components)
+        out.components = components
+        out.params = all_params
+        return out

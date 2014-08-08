@@ -3,7 +3,7 @@ from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
 
 from lmfit import Parameters, Minimizer, report_fit
-from lmfit.utilfuncs import gaussian
+from lmfit.lineshapes import gaussian
 
 try:
     import pylab

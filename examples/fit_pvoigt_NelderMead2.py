@@ -2,7 +2,7 @@ import sys
 from numpy import linspace, exp, random
 
 from lmfit import Parameters, minimize
-from lmfit.utilfuncs import gaussian, lorentzian, pvoigt
+from lmfit.lineshapes import gaussian, lorentzian, pvoigt
 
 try:
     import matplotlib

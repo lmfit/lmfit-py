@@ -1,6 +1,6 @@
 import numpy as np
-from lmfit.models1d import LinearModel, QuadraticModel, ExponentialModel
-from lmfit.models1d import  LorenztianModel, GaussianModel, VoigtModel
+from lmfit.old_models1d import LinearModel, QuadraticModel, ExponentialModel
+from lmfit.old_models1d import  LorenztianModel, GaussianModel, VoigtModel
 import matplotlib.pyplot as plt
 
 
