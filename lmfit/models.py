@@ -190,7 +190,6 @@ class PseudoVoigtModel(Model):
         self.params['%scenter' % self.prefix].value = cen
         self.params['%ssigma' % self.prefix].value = sig
         self.params['%sfraction' % self.prefix].value = 0.5
-        self.params['%sfraction' % self.prefix].vary = False
         self.has_initial_guess = True
 
 
@@ -205,7 +204,19 @@ class Pearson7Model(Model):
         self.params['%scenter' % self.prefix].value = cen
         self.params['%ssigma' % self.prefix].value = sig
         self.params['%sexponent' % self.prefix].value = 0.5
-        self.params['%sexponent' % self.prefix].vary = False
+        self.has_initial_guess = True
+
+
+class StudentsTModel(Model):
+    __doc__ = students_t.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(StudentsTModel, self).__init__(students_t, **kwargs)
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
         self.has_initial_guess = True
 
 class BrietWignerModel(Model):
