@@ -1,96 +1,20 @@
 .. _parameters-label:
 
-==============================================================
-Fitting with :class:`Parameter` Objects instead of Variables
-==============================================================
+================================================
+:class:`Parameter`  and :class:`Parameters`
+================================================
 
-
-As described in the previous section, there are several practical
-challenges in doing least-squares fits and other optimizations with the
-traditional implementation (Fortran, scipy.optimize.leastsq, and most
-other) in which a list of fitting variables to the function to be
-minimized.  These challenges include:
-
-  a) The user has to keep track of the order of the variables, and their
-     meaning -- vars[2] is the frequency, and so on.
-
-  b) If the user wants to fix a particular variable (*not* vary it in the fit),
-     the residual function has to be altered.  While reasonable for simple
-     cases, this quickly becomes significant work for more complex models,
-     and greatly complicates modeling for people not intimately familiar
-     with the code.
-
-  c) There is no simple, robust way to put bounds on values for the
-     variables, or enforce mathematical relationships between the
-     variables.
-
-The lmfit module is designed to void these shortcomings.
-
-The main idea of lmfit is to expand a numerical variable with a
-:class:`Parameter`, which have more attributes than simply their value.
-Instead of a pass a list of numbers to the function to minimize, you create
-a :class:`Parameters` object, add parameters to this object, and pass along
-this object to your function to be minimized.  With this transformation,
-the above example would be translated to look like::
-
-    from lmfit import minimize, Parameters
-
-    def residual(params, x, data, eps_data):
-        amp = params['amp'].value
-        pshift = params['phase'].value
-	freq = params['frequency'].value
-        decay = params['decay'].value
-
-	model = amp * sin(x * freq  + pshift) * exp(-x*x*decay)
-
-        return (data-model)/eps_data
-
-    params = Parameters()
-    params.add('amp', value=10)
-    params.add('decay', value=0.007)
-    params.add('phase', value=0.2)
-    params.add('frequency', value=3.0)
-
-    out = minimize(residual, params, args=(x, data, eps_data))
-
-
-So far, this simply looks like it replaced a list of values with a
-dictionary, accessed by name.  But each of the named :class:`Parameter` in
-the :class:`Parameters` object hold additional attributes to modify the
-value during the fit.  For example, Parameters can be fixed or bounded, and
-this can be done when being defined::
-
-    params = Parameters()
-    params.add('amp', value=10, vary=False)
-    params.add('decay', value=0.007, min=0.0)
-    params.add('phase', value=0.2)
-    params.add('frequency', value=3.0, max=10)
-
-or after being defined by setting the corresponding attributes::
-
-    params['amp'].vary = False
-    params['decay'].min = 0.10
-
-In either case, the fit will *not* vary the amplitude parameter.  In
-addition, a lower bound will be placed on the decay factor, and upper
-bounds placed on two parameters. Importantly, our function to be minimized
-remains unchanged.
-
-An important point here is that the `params` object can be copied and
-modified to make many user-level changes to the model and fitting process.
-Of course, most of the information about how your data is modeled goes into
-the fitting function, but the approach here allows some external control as
-well.
-
+This chapter describes :class:`Parameter` objects, which are
+fundamental to the lmfit approach to optimization.   Most real use cases
+will use the :class:`Parameters` class, which provides an (ordered)
+dictionary of :class:`Parameter` objects.
 
 The :class:`Parameter` class
 ========================================
 
 .. class:: Parameter(name=None[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
 
-   create a Parameter object.  These are the fundamental extension of a fit
-   variable within lmfit, but you will probably create most of these with
-   the :class:`Parameters` class.
+   create a Parameter object.
 
    :param name: parameter name
    :type name: ``None`` or string -- will be overwritten during fit if ``None``.
@@ -103,9 +27,7 @@ The :class:`Parameter` class
    :type expr: ``None`` or string
 
 
-Each of these inputs is turned into an attribute of the same name.   As
-above, one hands a dictionary of Parameters to the fitting routines.   The
-name for the Parameter will be set to be consistent
+Each of these inputs is turned into an attribute of the same name.
 
 After a fit, a Parameter for a fitted variable (ie with vary = ``True``)
 will have the :attr:`value` attribute holding the best-fit value, and may

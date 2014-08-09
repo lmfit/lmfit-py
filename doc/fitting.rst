@@ -32,7 +32,7 @@ The minimize function takes a function to minimize, a dictionary of
    :type  kws:  dict
    :param method:  name of fitting method to use. See  :ref:`fit-engines-label` for details
    :type  method:  string
-   :param leastsq_kws:  dictionary to pass to scipy.optimize.leastsq
+   :param leastsq_kws:  dictionary to pass to :func:`scipy.optimize.leastsq`.
    :type  leastsq_kws:  dict
    :return: Minimizer object, which can be used to inspect goodness-of-fit
             statistics, or to re-run fit.
@@ -226,9 +226,9 @@ stored as attributes of the corresponding :class:`Parameter`.
 +----------------------+----------------------------------------------------------------------------+
 |    message           | message about fit success.                                                 |
 +----------------------+----------------------------------------------------------------------------+
-|    ier               | integer error value from scipy.optimize.leastsq                            |
+|    ier               | integer error value from :func:`scipy.optimize.leastsq`                    |
 +----------------------+----------------------------------------------------------------------------+
-|    lmdif_message     | message from scipy.optimize.leastsq                                        |
+|    lmdif_message     | message from :func:`scipy.optimize.leastsq`                                |
 +----------------------+----------------------------------------------------------------------------+
 |    nvarys            | number of variables in fit  :math:`N_{\rm varys}`                          |
 +----------------------+----------------------------------------------------------------------------+
@@ -298,7 +298,7 @@ For full control of the fitting process, you'll want to create a
    :type  iter_cb:  callable or ``None``
    :param scale_covar:  flag for scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
    :type  scale_cover:  boolean, default ``True``
-   :param kws:      dictionary to pass as keywords to the underlying scipy.optimize method.
+   :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
    :type  kws:      dict
    :return: Minimizer object, which can be used to inspect goodness-of-fit
             statistics, or to re-run fit.
@@ -309,7 +309,7 @@ The Minimizer object has a few public methods:
 .. method:: leastsq(scale_covar=True, **kws)
 
    perform fit with Levenberg-Marquardt algorithm.  Keywords will be passed directly to
-   `scipy.optimize.leastsq <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html>`_.
+   :func:`scipy.optimize.leastsq`.
    By default, numerical derivatives are used, and the following arguments are set:
 
     +------------------+----------------+------------------------------------------------------------+
@@ -326,26 +326,11 @@ The Minimizer object has a few public methods:
     +------------------+----------------+------------------------------------------------------------+
 
 
-.. method:: anneal(**kws)
-
-   perform fit with Simulated Annealing.  Keywords will be passed directly to
-   `scipy.optimize.anneal <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html>`_.
-
-    +------------------+----------------+------------------------------------------------------------+
-    | :meth:`anneal`   |  Default Value | Description                                                |
-    | arg              |                |                                                            |
-    +==================+================+============================================================+
-    |   schedule       | ``cauchy``     | annealing schedule                                         |
-    +------------------+----------------+------------------------------------------------------------+
-    |   maxiter        |  2000*(nvar+1) | maximum number of iterations                               |
-    +------------------+----------------+------------------------------------------------------------+
-
-    For me, this Simulated Annealing appears to never work.
 
 .. method:: lbfgsb(**kws)
 
    perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
-   `scipy.optimize.fmin_l_bfgs_b <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html>`_.
+   :func:`scipy.optimize.fmin_l_bfgs_b`.
 
 
     +------------------+----------------+------------------------------------------------------------+
@@ -362,7 +347,7 @@ The Minimizer object has a few public methods:
 .. method:: fmin(**kws)
 
    perform fit with Nelder-Mead downhill simplex algorithm.  Keywords will be passed directly to
-   `scipy.optimize.fmin <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html>`_.
+   :func:`scipy.optimize.fmin`.
 
     +------------------+----------------+------------------------------------------------------------+
     | :meth:`fmin`     |  Default Value | Description                                                |
@@ -379,7 +364,7 @@ The Minimizer object has a few public methods:
 .. method:: scalar_minimize(method='Nelder-Mead', hess=None, tol=None, **kws)
 
    perform fit with any of the scalar minimization algorithms supported by
-   `scipy.optimize.minimize <http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html>`_.
+   :func:`scipy.optimize.minimize`.
 
     +-------------------------+-----------------+-----------------------------------------------------+
     | :meth:`scalar_minimize` | Default Value   | Description                                         |

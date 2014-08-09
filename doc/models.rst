@@ -182,7 +182,7 @@ Methods and Attributes of the :class:`Model` class
 
     * ``None``: Do not check for null or missing values (default)
     * ``'drop'``: Drop null or missing observations in data.  If pandas is
-                installed, ``pandas.isnull`` is used, otherwise ``numpy.isnan`` is used.
+                installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
     * ``'raise'``: Raise a (more helpful) exception when data contains null
                   or missing values.
 
@@ -331,7 +331,7 @@ module.  These are all based on plain python functions defined in the
 :mod:`lineshapes` module.  In addition to wrapping a function, these models
 also provide a :meth:`guess_starting_values` method that is intended to
 give a reasonable set of starting values given a data array that closely
-approximates the data to be fit.  
+approximates the data to be fit.
 
 All the models listed below are one dimensional, with an independent
 variable named ``x``.  Many of these models represent a function with a
@@ -346,9 +346,9 @@ constrained by ``sigma`` to give the full width at half maximum.
 
 .. class:: GaussianModel()
 
-   A model for Gaussian or normal distribution lineshape.  
-   Parameter names: ``amplitude``, ``center``, and ``sigma``.  In addition,
-   a constrained parameter ``fwhm`` is included.
+   A model based on a Gaussian or normal distribution lineshape.  Parameter
+   names: ``amplitude``, ``center``, and ``sigma``.  In addition, a
+   constrained parameter ``fwhm`` is included.
 
 .. math::
 
@@ -362,7 +362,7 @@ Half-Maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
 
 .. class:: LorentzianModel()
 
-   a Lorentzian or Cauchy-Lorentz distribution function. 
+   a model based on a Lorentzian or Cauchy-Lorentz distribution function.
    Parameter names: ``amplitude``, ``center``, and ``sigma``.  In addition,
    a constrained parameter ``fwhm`` is included.
 
@@ -370,7 +370,7 @@ Half-Maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
 
   f(x, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
 
-where the parameter 
+where the parameter
 ``amplitude`` corresponds to :math:`A`, ``center`` to
 :math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
 Half-Maximum is :math:`2\sigma`.
@@ -378,9 +378,7 @@ Half-Maximum is :math:`2\sigma`.
 
 .. class:: VoigtModel()
 
-.. function:: voigt(x, cen=0, sigma=1, gamma=None)
-
-   a Voigt distribution function.   
+   a model based on a Voigt distribution function.
 
    Parameter names: ``amplitude``, ``center``, and ``sigma``.  A ``gamma``
    parameter is also available.  By default, it is constrained to have
@@ -406,7 +404,7 @@ and :func:`erfc` is the complimentary error function.  As above,
 ``amplitude`` corresponds to :math:`A`, ``center`` to
 :math:`\mu`, and ``sigma`` to :math:`\sigma`. The parameter ``gamma``
 corresponds  to :math:`\gamma`.
-If ``gamma`` is kept at the default value (constrained to ``sigma``), 
+If ``gamma`` is kept at the default value (constrained to ``sigma``),
 the full width at half maximumn is approximately :math:`3.6013\sigma`.
 
 
@@ -416,9 +414,62 @@ the full width at half maximumn is approximately :math:`3.6013\sigma`.
 
 .. class:: ConstantModel()
 
+   a class that consists of a single value, ``c``.  This is constant in the
+   sense of having no dependence on the independent variable ``x``, not in
+   the sense of being non-varying.  To be clear, ``c`` will be a variable
+   Parameter.
+
+
 .. class:: LinearModel()
 
+   a class that gives a linear model:
+
+.. math::
+
+    f(x, m, b) = m x + b
+
+with parameters ``slope`` for :math:`m` and  ``intercept`` for :math:`b`.
+
+Of course,  lmfit is a very inefficient way to do linear regression (see
+:func:`numpy.polyfit` or :func:`scipy.stats.linregress`), but this may be
+useful as one of many components of composite model.
+
+
 .. class:: QuadraticModel()
+
+
+   a class that gives a quadratic model:
+
+.. math::
+
+    f(x, a, b, c) = a x^2 + b x + c
+
+with parameters ``a``, ``b``, and ``c``.
+
+See note for :class:`LinearModel` about better approaches for fitting to
+*only* a quadratic model.
+
+
+.. class:: ParabolicModel()
+
+
+   same as :class:`QuadraticModel`.
+
+.. class:: PolynomialModel(degree)
+
+
+   a class that gives a polynomial model up to ``degree`` (with maximum
+   value of 7).
+
+.. math::
+
+    f(x, c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i
+
+with parameters ``c0``, ``c1``, \ldots ``c7``.  The supplied ``degree``
+will specify how many of these are actual variable parameters.
+
+See note for :class:`LinearModel` about better approaches for fitting to
+*only* a polynomial model.
 
 
 .. class:: StepModel()

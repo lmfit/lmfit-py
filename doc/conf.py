@@ -25,6 +25,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
               'sphinx.ext.coverage',
               'sphinx.ext.mathjax',
+              'sphinx.ext.intersphinx',
               'numpydoc']
 
 try:
@@ -34,6 +35,12 @@ try:
 except ImportError:
     pass
 
+
+intersphinx_mapping = {'py': ('http://docs.python.org/2', None),
+                       'numpy': ('http://docs.scipy.org/doc/numpy/', None),
+                       'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None)}
+
+intersphinx_cache_limit = 10
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
