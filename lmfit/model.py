@@ -151,8 +151,7 @@ class Model(object):
             # and combine them with any non-parameter kwargs.
             # params = dict([(name, p.value) for name, p in params.items()])
             # kwargs = dict(list(params.items()) + list(kwargs.items()))
-            funcargs = self._make_funcargs(params, kwargs)
-            diff = self.func(**funcargs) - data
+            diff = self.calc_model(params=params, **kwargs) - data
             if weights is not None:
                 diff *= weights
             return np.asarray(diff)  # for compatibility with pandas.Series
@@ -183,6 +182,14 @@ class Model(object):
                 return None  # short-circuit this -- no missing values
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
+
+    def calc_model(self, params=None, **kwargs):
+        """calculate model with current parameters
+        """
+        if params is None:
+            params = self.params
+        funcargs = self._make_funcargs(params, kwargs)
+        return self.func(**funcargs)
 
     def fit(self, data, params=None, weights=None, **kwargs):
         """Fit the model to the data.
@@ -274,23 +281,16 @@ class Model(object):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
         kwargs['__components__'] = self.components
-        result = minimize(self._residual, params,
-                          args=(data, weights), kws=kwargs)
+        result = minimize(self._residual, params, args=(data, weights), kws=kwargs)
 
         # Monkey-patch the Minimizer object with some extra information.
         result.model = self
         result.init_params = init_params
-
         result.init_values = self._make_funcargs(init_params, {})
-        indep_vars = dict([(key, val) for key, val in kwargs.items()
-                           if key in self.independent_vars])
-
-        init_kws = self._make_funcargs(init_params,   indep_vars)
-        result.init_fit = self.func(**init_kws)
-
-        best_kws = self._make_funcargs(result.params, indep_vars)
-        result.best_fit = self.func(**best_kws)
+        result.init_fit = self.calc_model(params=init_params, **kwargs)
+        result.best_fit = self.calc_model(params=result.params, **kwargs)
         return result
+
 
     def __add__(self, other):
         colliding_param_names = self.param_names & other.param_names
