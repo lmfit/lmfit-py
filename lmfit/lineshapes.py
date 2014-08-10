@@ -3,11 +3,10 @@
 basic model line shapes and distribution functions
 """
 
-from numpy import (pi, log, exp, sqrt, arctan, cos, arange,
-                   concatenate, convolve)
+from numpy import (pi, log, exp, sqrt, arctan, cos, arange, where)
 from numpy.testing import assert_allclose
 
-from scipy.special import gamma, gammaln, beta, betaln, erf, erfc, wofz
+from scipy.special import gamma, gammaln, beta, erf, erfc, wofz
 
 log2 = log(2)
 s2pi = sqrt(2*pi)
@@ -133,29 +132,33 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     beta = skew/(s2*sigma)
     return (1 + erf(beta*(x-center)))*voigt(x, amplitude, center, sigma, gamma=gamma)
 
-def step(x, ampliude=1.0, center=0.0, sigma=1.0, form='linear'):
+def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """step function:
     starts at 0.0, ends at amplitude, with half-max at center, and
     rising with form:
       'linear' (default) = amplitude * min(1, max(0, arg))
       'atan', 'arctan'   = amplitude * (0.5 + atan(arg)/pi)
       'erf'              = amplitude * (1 + erf(arg))/2.0
+      'logistic'         = amplitude * [1 - 1/(1 + exp(arg))]
 
     where arg = (x - center)/sigma
     """
-    if abs(sigma) <  1.e-13: sigma = 1.e-13
+    if abs(sigma) <  1.e-13:
+        sigma = 1.e-13
 
     out = (x - center)/sigma
-    if self.form == 'erf':
+    if form == 'erf':
         out = 0.5*(1 + erf(out))
-    elif self.form in ('atan', 'arctan'):
-        out = 0.5 + np.arctan(out)/np.pi
+    elif form.startswith('logi'):
+        out = (1. - 1./(1. + exp(out)))
+    elif form in ('atan', 'arctan'):
+        out = 0.5 + arctan(out)/pi
     else:
-        out[np.where(out < 0)] = 0.0
-        out[np.where(out > 1)] = 1.0
+        out[where(out < 0)] = 0.0
+        out[where(out > 1)] = 1.0
     return amplitude*out
 
-def rectangle(x, ampliude=1.0, center1=0.0, sigma1=1.0,
+def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
               center2=1.0, sigma2=1.0, form='linear'):
     """rectangle function: step up, step down  (see step function)
     starts at 0.0, rises to amplitude (at center1 with width sigma1)
@@ -163,6 +166,7 @@ def rectangle(x, ampliude=1.0, center1=0.0, sigma1=1.0,
       'linear' (default) = ramp_up + ramp_down
       'atan', 'arctan'   = amplitude*(atan(arg1) + atan(arg2))/pi
       'erf'              = amplitude*(erf(arg1) + erf(arg2))/2.
+      'logisitic'        = amplitude*[1 - 1/(1 + exp(arg1)) - 1/(1+exp(arg2))]
 
     where arg1 =  (x - center1)/sigma1
     and   arg2 = -(x - center2)/sigma2
@@ -172,15 +176,17 @@ def rectangle(x, ampliude=1.0, center1=0.0, sigma1=1.0,
 
     arg1 = (x - center1)/sigma1
     arg2 = (center2 - x)/sigma2
-    if self.form == 'erf':
+    if form == 'erf':
         out = 0.5*(erf(arg1) + erf(arg2))
-    elif self.form in ('atan', 'arctan'):
-        out = (np.arctan(arg1) + np.arctan(arg2))/np.pi
+    elif form.startswith('logi'):
+        out = (1. - 1./(1. + exp(arg1)) - 1./(1. + exp(arg2)))
+    elif form in ('atan', 'arctan'):
+        out = (arctan(arg1) + arctan(arg2))/pi
     else:
-        arg1[np.where(arg1 <  0)]  = 0.0
-        arg1[np.where(arg1 >  1)]  = 1.0
-        arg2[np.where(arg2 >  0)]  = 0.0
-        arg2[np.where(arg2 < -1)] = -1.0
+        arg1[where(arg1 <  0)]  = 0.0
+        arg1[where(arg1 >  1)]  = 1.0
+        arg2[where(arg2 >  0)]  = 0.0
+        arg2[where(arg2 < -1)] = -1.0
         out = arg1 + arg2
     return amplitude*out
 
