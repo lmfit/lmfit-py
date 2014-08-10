@@ -5,13 +5,14 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The lmfit package requires Python, Numpy, and Scipy.  Scipy version 0.11 or
-higher is recommended, but extensive testing on version compatibility has
-not been done.  Initial tests do work with Python 3.2, but little testing
-with Python 3 has yet been done.  Scipy seems to not yet be available for
-Python 3.3.  No testing has been done with 64-bit architectures, but as
-this package is pure Python, no significant troubles are expected. Nose is
-a requirement for running the test suite.
+The lmfit package requires Python, Numpy, and Scipy.  Scipy version 0.13 or
+higher is recommended, but extensive testing on compatibility with various
+versions of scipy has not been done.  Lmfit does work with Python 2.7, 3.2,
+and 3.3.  No testing has been done with Python 3.4, but as the package is
+pure Python, relying only on scipy and numpy, no significant troubles are
+expected.  Nose is required for running the test suite, and IPython and
+matplotib are recommended.  If Pandas is available, it will be used in
+portions of lmfit.
 
 
 Downloads
