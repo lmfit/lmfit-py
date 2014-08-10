@@ -108,7 +108,7 @@ class PolynomialModel(Model):
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
 
         self.poly_degree = degree
-        pnames = ['c%i' % (i) for i in range(deg + 1)]
+        pnames = ['c%i' % (i) for i in range(degree + 1)]
         kwargs['param_names'] = pnames
 
         def polynomial(x, c0=0, c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0):
