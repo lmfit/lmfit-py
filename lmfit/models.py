@@ -4,7 +4,7 @@ from .parameter import Parameter
 
 from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, pearson7,
                          step, rectangle, breit_wigner, logistic,
-                         lognormal, damped_oscillator, students_t,
+                         students_t, lognormal, damped_oscillator,
                          expgaussian, donaich, skewed_voigt, exponential,
                          powerlaw, linear, parabolic)
 
@@ -236,6 +236,31 @@ class DampedOscillatorModel(Model):
     __doc__ = damped_oscillator.__doc__ + COMMON_DOC
     def __init__(self, **kwargs):
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
+        self.has_initial_guess = True
+
+class ExponentialGaussianModel(Model):
+    __doc__ = expgaussian.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
+        self.has_initial_guess = True
+
+
+class DonaichModel(Model):
+    __doc__ = donaich.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(DonaichModel, self).__init__(donaich, **kwargs)
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
