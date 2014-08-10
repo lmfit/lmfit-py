@@ -103,11 +103,11 @@ class PolynomialModel(Model):
     __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ... c7 * x**7" + COMMON_DOC
     MAX_DEGREE=7
     DEGREE_ERR = "degree must be an integer less than %d."
-    def __init__(self, deg, **kwargs):
-        if not isinstance(deg, int)  or deg > self.MAX_DEGREE:
+    def __init__(self, degree, **kwargs):
+        if not isinstance(degree, int)  or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
 
-        self.poly_degree = deg
+        self.poly_degree = degree
         pnames = ['c%i' % (i) for i in range(deg + 1)]
         kwargs['param_names'] = pnames
 
