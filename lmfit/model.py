@@ -299,9 +299,7 @@ class Model(object):
             raise NameError("Both models have parameters called " +
                             "%s. Redefine the models " % collision +
                             "with distinct names.")
-        # if self.independent_vars != other.independent_vars:
-        #     raise ValueError("Both models need to have identical " +
-        #                      "independent variables ")
+
         def composite_func(**kwargs):
             components = kwargs.get('__components__', None)
             out = None
