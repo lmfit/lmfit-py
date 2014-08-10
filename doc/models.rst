@@ -323,7 +323,7 @@ parameter beause it has a boolean default value.
 
 
 
-Available :class:`Model` subclasses in the :mod:`models` module
+Subclasses of :class:`Model` available in the :mod:`models` module
 ====================================================================
 
 Several fitting models are pre-built and available in the :mod:`models`
@@ -344,15 +344,23 @@ width.   Some peak shapes also have a parameter ``fwhm``, typically
 constrained by ``sigma`` to give the full width at half maximum.
 
 
+Peak-like models
+-------------------
+
+There are many peak-like models available.  These include
+:class:`GaussianModel`, :class:`LorentzianModel`, :class:`VoigtModel` and
+some less commonly used variations.
+
 .. class:: GaussianModel()
 
-   A model based on a Gaussian or normal distribution lineshape.  Parameter
-   names: ``amplitude``, ``center``, and ``sigma``.  In addition, a
-   constrained parameter ``fwhm`` is included.
+A model based on a `Gaussian or normal distribution lineshape
+<http://en.wikipedia.org/wiki/Normal_distribution>`_.  Parameter names:
+``amplitude``, ``center``, and ``sigma``.  In addition, a constrained
+parameter ``fwhm`` is included.
 
 .. math::
 
-  f(x, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}
+  f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}
 
 where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
 :math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
@@ -362,33 +370,33 @@ Half-Maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
 
 .. class:: LorentzianModel()
 
-   a model based on a Lorentzian or Cauchy-Lorentz distribution function.
-   Parameter names: ``amplitude``, ``center``, and ``sigma``.  In addition,
-   a constrained parameter ``fwhm`` is included.
+A model based on a `Lorentzian or Cauchy-Lorentz distribution function
+<http://en.wikipedia.org/wiki/Cauchy_distribution>`_.  Parameter names:
+``amplitude``, ``center``, and ``sigma``.  In addition, a constrained
+parameter ``fwhm`` is included.
 
 .. math::
 
-  f(x, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
+  f(x; A, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
 
-where the parameter
-``amplitude`` corresponds to :math:`A`, ``center`` to
+where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
 :math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
 Half-Maximum is :math:`2\sigma`.
 
 
 .. class:: VoigtModel()
 
-   a model based on a Voigt distribution function.
-
-   Parameter names: ``amplitude``, ``center``, and ``sigma``.  A ``gamma``
-   parameter is also available.  By default, it is constrained to have
-   value equal to ``sigma``, though this can be varied independently.  In
-   addition, a constrained parameter ``fwhm`` is included.  The definition
-   for the Voigt function used here is
+A model based on a `Voigt distribution function
+<http://en.wikipedia.org/wiki/Voigt_profile>`_.  Parameter names:
+``amplitude``, ``center``, and ``sigma``.  A ``gamma`` parameter is also
+available.  By default, it is constrained to have value equal to ``sigma``,
+though this can be varied independently.  In addition, a constrained
+parameter ``fwhm`` is included.  The definition for the Voigt function used
+here is
 
 .. math::
 
-    f(x, \mu, \sigma, \gamma) = \frac{A \textrm{Re}[w(z)]}{\sigma\sqrt{2 \pi}}
+    f(x; A, \mu, \sigma, \gamma) = \frac{A \textrm{Re}[w(z)]}{\sigma\sqrt{2 \pi}}
 
 where
 
@@ -408,9 +416,138 @@ If ``gamma`` is kept at the default value (constrained to ``sigma``),
 the full width at half maximumn is approximately :math:`3.6013\sigma`.
 
 
-.. class:: ExponentialModel()
+.. class:: PseudoVoigtModel()
 
-.. class:: PowerLawModel()
+a model based on a `pseudo-Voigt distribution function
+<http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation>`_,
+which is a weighted sum of a Gaussian and Lorentzian distribution functions
+with the same calues for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
+and ``sigma`` (:math:`\sigma`), and a parameter ``fraction`` (:math:`\alpha`)
+in
+
+.. math::
+
+  f(x; A, \mu, \sigma, \alpha) = (1-\alpha)\frac{A}{\pi}
+  \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big] + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
+
+
+The :meth:`guess_starting_values` function always gives a starting
+value for ``fraction`` of 0.5
+
+.. class:: Pearson7Model()
+
+A model based on a `Pearson VII distribution
+<http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution>`_.
+This is another Voigt-like distribution function.  It has the usual
+parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
+``sigma`` (:math:`\sigma`), and also ``exponent`` (:math:`p`) in
+
+.. math::
+
+    f(x; A, \mu, \sigma, p) = \frac{sA}{\big\{[1 + (\frac{x-\mu}{\sigma})^2] (2^{1/p} -1)  \big\}^p}
+
+where
+
+.. math::
+
+    s = \frac{\Gamma(p) \sqrt{2^{1/p} -1}}{ \sigma\sqrt{\pi}\,\Gamma(p-1/2)}
+
+where :math:`\Gamma(x)` is the gamma function.
+
+The :meth:`guess_starting_values` function always gives a starting
+value for ``exponent`` of 0.5.
+
+.. class:: StudentsTModel()
+
+A model based on a `Student's t distribution function
+<http://en.wikipedia.org/wiki/Student%27s_t-distribution>`_, with the usual
+parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
+``sigma`` (:math:`\sigma`) in
+
+.. math::
+
+    f(x; A, \mu, \sigma) = \frac{A \Gamma(\frac{\sigma+1}{2})} {\sqrt{\sigma\pi}\,\Gamma(\frac{\sigma}{2})} \Bigl[1+\frac{(x-\mu)^2}{\sigma}\Bigr]^{-\frac{\sigma+1}{2}}
+
+
+where :math:`\Gamma(x)` is the gamma function.
+
+
+.. class:: BreitWignerModel()
+
+A model based on a `Breit-Wigner-Fano function
+<http://en.wikipedia.org/wiki/Fano_resonance>`_.  It has the usual
+parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
+``sigma`` (:math:`\sigma`), plus ``q`` (:math:`q`) in
+
+.. math::
+
+    f(x; A, \mu, \sigma, q) = \frac{A (q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}
+
+
+.. class:: LognormalModel()
+
+A model based on the `Log-normal distribution function
+<http://en.wikipedia.org/wiki/Lognormal>`_.
+It has the usual parameters
+``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma``
+(:math:`\sigma`) in
+
+.. math::
+
+    f(x; A, \mu, \sigma) = \frac{A e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}
+
+
+
+.. class:: DampedOcsillatorModel()
+
+A model based on the `Damped Harmonic Oscillator Amplitude
+<http://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part>`_.
+It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
+``sigma`` (:math:`\sigma`) in
+
+.. math::
+
+    f(x; A, \mu, \sigma) = \frac{A}{\sqrt{ [1 - (x/\mu)^2]^2 + (2\sigma x/\mu)^2}}
+
+
+.. class:: ExponentialGaussianModel()
+
+A model of an `Exponentially modified Gaussian distribution
+<http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution>`_.
+It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
+``sigma`` (:math:`\sigma`), and also ``gamma`` (:math:`\gamma`) in
+
+.. math::
+
+    f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
+    \exp\bigl[\gamma({\mu - x  + \sigma^2/2})\bigr]
+    {\operatorname{erfc}}\bigl[\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\bigr]
+
+
+where :func:`erfc` is the complimentary error function.
+
+
+.. class:: DonaichModel()
+
+A model of an `Doniach Sunjic asymmetric lineshape
+<http://www.casaxps.com/help_manual/line_shapes.htm>`_, used in
+photo-emission. With the usual parameters ``amplitude`` (:math:`A`),
+``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`), and also ``gamma``
+(:math:`\gamma`) in
+
+.. math::
+
+    f(x; A, \mu, \sigma, \gamma) = A\frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
+    \arctan{(x - \mu)}/\sigma\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
+
+
+Linear and Polynomial Models
+------------------------------------
+
+Thes models correspond to polynomials of some degree.  Of course, lmfit is
+a very inefficient way to do linear regression (see :func:`numpy.polyfit`
+or :func:`scipy.stats.linregress`), but these models may be useful as one
+of many components of composite model.
 
 .. class:: ConstantModel()
 
@@ -419,20 +556,15 @@ the full width at half maximumn is approximately :math:`3.6013\sigma`.
    the sense of being non-varying.  To be clear, ``c`` will be a variable
    Parameter.
 
-
 .. class:: LinearModel()
 
    a class that gives a linear model:
 
 .. math::
 
-    f(x, m, b) = m x + b
+    f(x; m, b) = m x + b
 
 with parameters ``slope`` for :math:`m` and  ``intercept`` for :math:`b`.
-
-Of course,  lmfit is a very inefficient way to do linear regression (see
-:func:`numpy.polyfit` or :func:`scipy.stats.linregress`), but this may be
-useful as one of many components of composite model.
 
 
 .. class:: QuadraticModel()
@@ -442,110 +574,69 @@ useful as one of many components of composite model.
 
 .. math::
 
-    f(x, a, b, c) = a x^2 + b x + c
+    f(x; a, b, c) = a x^2 + b x + c
 
 with parameters ``a``, ``b``, and ``c``.
-
-See note for :class:`LinearModel` about better approaches for fitting to
-*only* a quadratic model.
 
 
 .. class:: ParabolicModel()
 
-
    same as :class:`QuadraticModel`.
 
 .. class:: PolynomialModel(degree)
-
 
    a class that gives a polynomial model up to ``degree`` (with maximum
    value of 7).
 
 .. math::
 
-    f(x, c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i
+    f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i
 
-with parameters ``c0``, ``c1``, \ldots ``c7``.  The supplied ``degree``
+with parameters ``c0``, ``c1``, ..., ``c7``.  The supplied ``degree``
 will specify how many of these are actual variable parameters.
 
-See note for :class:`LinearModel` about better approaches for fitting to
-*only* a polynomial model.
+
+
+
+Other models
+-----------------------------------------------
+
+
+.. class:: ExponentialModel()
+
+A model based on an `exponential decay function
+<http://en.wikipedia.org/wiki/Exponential_decay>`_. With parameters named
+``amplitude`` (:math:`A`), and ``decay`` (:math:`\tau`), this has the form:
+
+.. math::
+
+   f(x; A, \tau) = A e^{-x/\tau}
+
+
+.. class:: PowerLawModel()
+
+A model based on a `Power Law <http://en.wikipedia.org/wiki/Power_law>`_.
+With parameters
+named ``amplitude`` (:math:`A`), and ``exponent`` (:math:`k`), this has the
+form:
+
+.. math::
+
+   f(x; A, k) = A x^k
+
+.. class:: LogisticModel()
+
+A model based on the `logistic function <http://en.wikipedia.org/wiki/Logistic_function>`_. It has the usual
+parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
+``sigma`` (:math:`\sigma`) in
+
+.. math::
+
+   f(x; A, \mu, \sigma) = A \big[ 1  - \frac{1}{1 + e^{(x-\mu)/\sigma}}\bigl]
 
 
 .. class:: StepModel()
 
 
 .. class:: RectangleModel()
-
-
-Other modeles
------------------------------------------------
-
-
-.. function:: pvoigt(x, cen=0, sigma=1, frac=0.5)
-
-   a pseudo-Voigt distribution function, which is a weighted sum of a
-   Gaussian and Lorentzian distribution functions with the same values for
-   *cen* (:math:`\mu`) and *sigma* (:math:`\sigma`), and *frac* setting the
-   Lorentzian fraction::
-
-    pvoigt(x, cen, sigma, frac) = (1-frac)*gaussian(x, cen, sigma) + frac*lorentzian(x, cen, sigma)
-
-
-.. function:: pearson7(x, cen=0, sigma=1, expon=0.5)
-
-   a Pearson-7 lineshape.  This is another Voigt-like distribution
-   function, defined as
-
-.. math::
-
-    f(x, \mu, \sigma, p) = \frac{s}{\big\{[1 + (\frac{x-\mu}{\sigma})^2] (2^{1/p} -1)  \big\}^p}
-
-
-where for *cen* (:math:`\mu`) and *sigma* (:math:`\sigma`) are as for the
-above lineshapes, and *expon* is :math:`p`, and
-
-.. math::
-
-    s = \frac{\Gamma(p) \sqrt{2^{1/p} -1}}{ \sigma\sqrt{\pi}\,\Gamma(p-1/2)}
-
-where :math:`\Gamma(x)` is the gamma function.
-
-
-.. function:: students_t(x, cen=0, sigma=1)
-
-   Student's t distribution function.
-
-.. math::
-
-    f(x, \mu, \sigma) = \frac{\Gamma(\frac{\sigma+1}{2})} {\sqrt{\sigma\pi}\,\Gamma(\frac{\sigma}{2})} \Bigl[1+\frac{(x-\mu)^2}{\sigma}\Bigr]^{-\frac{\sigma+1}{2}}
-
-
-where :math:`\Gamma(x)` is the gamma function.
-
-.. function:: breit_wigner(x, cen=0, sigma=1, q=1)
-
-    Breit-Wigner-Fano distribution function.
-
-.. math::
-
-    f(x, \mu, \sigma, q) = \frac{(q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}
-
-
-.. function:: logistic(x, cen=0, sigma=1)
-
-   Logistic lineshape, a sigmoidal curve
-
-.. math::
-
-   f(x, \mu, \sigma) = 1  - \frac{1}{1 + e^{(x-\mu)/\sigma}}
-
-
-.. function:: lognormal(x, cen=0, sigma=1)
-
-   log-normal function
-
-.. math::
-
-    f(x, \mu, \sigma) = \frac{e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}
 
