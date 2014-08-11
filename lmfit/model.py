@@ -188,7 +188,8 @@ class Model(object):
         funcargs = self._make_funcargs(params, kwargs)
         return self.func(**funcargs)
 
-    def fit(self, data, params=None, weights=None, **kwargs):
+    def fit(self, data, params=None, weights=None, method='leastsq',
+            iter_cb=None, scale_covar=True, **kwargs):
         """Fit the model to the data.
 
         Parameters
@@ -197,6 +198,9 @@ class Model(object):
         params: Parameters object, optional
         weights: array-like of same size as data
             used for weighted fit
+        method: fitting method to use (default = 'leastsq')
+        iter_cb:  None or callable  callback function to call at each iteration.
+        scale_covar:  bool (default True) whether to auto-scale covariance matrix
         keyword arguments: optional, named like the arguments of the
             model function, will override params. See examples below.
 
@@ -278,7 +282,9 @@ class Model(object):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
         kwargs['__components__'] = self.components
-        result = minimize(self._residual, params, args=(data, weights), kws=kwargs)
+        result = minimize(self._residual, params, args=(data, weights),
+                          method=method, iter_cb=iter_cb, scale_covar=scale_covar,
+                          kws=kwargs)
 
         # Monkey-patch the Minimizer object with some extra information.
         result.model = self
