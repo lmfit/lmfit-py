@@ -12,13 +12,62 @@ scientific domains.  In addition, these functions can be easily combined to
 give a composite function -- say, a Lorentzian plus a linear background.
 
 
-
 In an effort to make make simple
 things truly simple, the lmfit package provides canonical definitions for
 many known lineshapes and pre-defined high-level fitting models in
 the :mod:`models` module. These are listed in more detail in the next section
 (:ref:`builtin_models_label`), and you may want to consult that list before
 writing your own model.
+
+
+Example 1: Fit data to Voigt profile
+=================================================
+
+Example 2: Fit data to Voigt profile + Line
+=================================================
+
+We can expand on the model by showing an important feature of the lmfit
+Models derived from the powerful :class:`Model` class: you can add them
+together.  That is, to fit data to a Gaussian plus a linear offset, we
+could use this script (also included in the ``examples`` folder with the
+source code):
+
+.. literalinclude:: ../examples/models_doc2.py
+
+
+This is only slightly more complicated than the script above.  Here, we
+start with a :class:`GaussianModel` as before and use the built-in method
+to guess starting values.  But then we create a :class:`LinearModel` (which
+has parameters named ``slope`` and ``intercept``), and add this to the
+:class:`GaussianModel` with the simple::
+
+    total = gauss + line
+
+and call the :meth:`fit` method of the combined model ``total``.  That will
+fit all the parameters, reporting results of::
+
+    [[Variables]]
+         amplitude:     8.459308 +/- 0.1241455 (1.47%) initial =  11.96192
+         center:        5.655479 +/- 0.009176806 (0.16%) initial =  5.7
+         fwhm:          1.590575 +/- 0.02335249 (1.47%) == '2.354820*sigma'
+         intercept:    -2.968602 +/- 0.03352202 (1.13%) initial = -1
+         sigma:         0.6754549 +/- 0.009916889 (1.47%) initial =  0.9
+         slope:         0.1148441 +/- 0.005748924 (5.01%) initial =  0
+    [[Correlations]] (unreported correlations are <  0.250)
+        C(amplitude, sigma)          =  0.666
+
+and give a plot like this:
+
+.. image:: _images/models_doc2.png
+   :target: _images/models_doc2.png
+   :width: 85%
+
+again showing (simulated) data shown in blue dots, with the best fit as a
+solid red line, and the initial fit in black dashed line.
+
+The emphasis here is that not only is fitting to a single pre-defined
+function a simple matter, but that fitting to a model built up of several
+pre-defined functions is not much more difficult.
 
 
 Subclasses of :class:`Model` available in the :mod:`models` module

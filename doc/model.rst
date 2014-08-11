@@ -36,7 +36,7 @@ use to fit to some data::
     >>>
     >>> def gaussian(x, amp, cen, wid):
     ...    "1-d gaussian: gaussian(x, amp, cen, wid)"
-    ...    return (amp/sqrt(2*pi)*wid) * exp(-(x-cen)**2 /(2*wid**2))
+    ...    return (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
     ...
 
 
@@ -107,114 +107,40 @@ the resulting plot shown below.
 
 So far, this is a slightly long-winded way to plot a Gaussian function.  Of
 course, we can also use the :meth:`fit` method to fit this model to data.
-To do this,
-
-Of course, we could define a model Gaussian function, define the Parameters
-that go into and build a residual function.  But since many people are
-likely to want to do such fits, it's useful xto set up such a model once,
-especially if done in such away as to be easy to extend.
-
-
-the set of Parameters needed for this model.  It also has built-in
-functions for guessing starting values for the Parameters based on some
-data, and fitting the model to a set of data.  This will give a very simple
-interface to fitting data to this well-known function.  Here's a script to
-do this (included in the ``examples`` folder with the source code):
+Putting everything together, the script to do such a fit (included in the
+``examples`` folder with the source code) is:
 
 .. literalinclude:: ../examples/model_gaussian.py
 
-After some imports, we read in the data for ``x`` and ``y`` from a text
-file. We then define a Gaussian model function and create a :class:`Model`
-from this.
-
-
-This mode will automatically contains
-all the Parameters for a Gaussian line shape -- it has parameters named
-``amplitude``, ``center``, and ``sigma``.  We then tell this model to guess
-initial starting values for these parameters based on the data arrays.  We
-then run the :meth:`fit` method of the model, and print out the results,
-which will look like this::
+which is pretty compact and to the point.   The results printed out are::
 
     [[Variables]]
-         amplitude:     8.880221 +/- 0.1135958 (1.28%) initial =  10.90974
-         center:        5.658661 +/- 0.01030511 (0.18%) initial =  5.7
-         fwhm:          1.642852 +/- 0.02426668 (1.48%) == '2.354820*sigma'
-         sigma:         0.6976551 +/- 0.01030511 (1.48%) initial =  0.8
+         amp:     8.880218 +/- 0.1135949 (1.28%) initial =  5
+         cen:     5.658661 +/- 0.01030495 (0.18%) initial =  5
+         wid:     0.6976547 +/- 0.01030495 (1.48%) initial =  1
     [[Correlations]] (unreported correlations are <  0.250)
-        C(amplitude, sigma)          =  0.577
+         C(amp, wid)                  =  0.577
 
-You can see here that the model created Parameters named ``amplitude``,
-``center``, and ``sigma`` for the Gaussian model, and a parameter named
-``fwhm``, constrained with ``sigma`` to report Full Width at Half Maximum.
-Finally, we display the data, best fit and initial guess graphically --
-note that both the initial and best fit are preserved in the ``result``
-returned by :meth:`fit` method.
 
-.. image:: _images/models_doc1.png
-   :target: _images/models_doc1.png
+and the plot generated gives:
+
+
+.. image:: _images/model_fit1.png
+   :target: _images/model_fit1.png
    :width: 85%
+
 
 which shows the data in blue dots, the best fit as a solid red line, and
-the initial fit in black dashed line.  You can also see from the results
-that the starting guess were a pretty good estimate for this simple data
-set.
+the initial fit in black dashed line.
 
-We emphasize here that the fit to this pre-built model really took 3
-lines of code::
+We emphasize here that the fit to this function really took 2 lines of code::
 
-    model = GaussianModel()
-    model.guess_starting_values(y, x=x)
-    result = model.fit(y, x=x)
+    model = Model(gaussian)
+    result = model.fit(data, x=x amp=5, cen=5, wid=1)
 
-Of course, some models are necessarily mode complicated.
-
-
-Example 2: Fit data to Gaussian profile + Line
-=================================================
-
-We can expand on the model by showing an important feature of the lmfit
-Models derived from the powerful :class:`Model` class: you can add them
-together.  That is, to fit data to a Gaussian plus a linear offset, we
-could use this script (also included in the ``examples`` folder with the
-source code):
-
-.. literalinclude:: ../examples/models_doc2.py
-
-
-This is only slightly more complicated than the script above.  Here, we
-start with a :class:`GaussianModel` as before and use the built-in method
-to guess starting values.  But then we create a :class:`LinearModel` (which
-has parameters named ``slope`` and ``intercept``), and add this to the
-:class:`GaussianModel` with the simple::
-
-    total = gauss + line
-
-and call the :meth:`fit` method of the combined model ``total``.  That will
-fit all the parameters, reporting results of::
-
-    [[Variables]]
-         amplitude:     8.459308 +/- 0.1241455 (1.47%) initial =  11.96192
-         center:        5.655479 +/- 0.009176806 (0.16%) initial =  5.7
-         fwhm:          1.590575 +/- 0.02335249 (1.47%) == '2.354820*sigma'
-         intercept:    -2.968602 +/- 0.03352202 (1.13%) initial = -1
-         sigma:         0.6754549 +/- 0.009916889 (1.47%) initial =  0.9
-         slope:         0.1148441 +/- 0.005748924 (5.01%) initial =  0
-    [[Correlations]] (unreported correlations are <  0.250)
-        C(amplitude, sigma)          =  0.666
-
-and give a plot like this:
-
-.. image:: _images/models_doc2.png
-   :target: _images/models_doc2.png
-   :width: 85%
-
-again showing (simulated) data shown in blue dots, with the best fit as a
-solid red line, and the initial fit in black dashed line.
-
-The emphasis here is that not only is fitting to a single pre-defined
-function a simple matter, but that fitting to a model built up of several
-pre-defined functions is not much more difficult.
-
+Of course, some models are necessarily more complicated, and you may want
+to place bounds or constraints on parameter values, but at least it is easy
+to model and fit to simple functions.
 
 The :class:`Model` class
 =======================================
@@ -222,7 +148,6 @@ The :class:`Model` class
 The :class:`Model` class is the most general way to wrap a pre-defined
 function as a fitting model.  All the models described in this chapter are
 derived from it.
-
 
 .. class:: Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix=''[, components=None]]]]])
 
@@ -245,45 +170,6 @@ derived from it.
 
 Methods and Attributes of the :class:`Model` class
 ----------------------------------------------------
-
-.. attribute:: independent_vars
-
-   list of strings for independent variables.
-
-.. attribute:: param_names
-
-   list of strings of parameter names.
-
-
-.. attribute:: params
-
-   :class:`Parameters` object for the model
-
-.. attribute:: prefix
-
-   prefix used for name-mangling of parameter names.  That is, for a
-   :class:`GaussianModel`, the default parameter names would be
-   ``amplitude``, ``center``, and ``sigma``.  These parameters are used for
-   many pre-defined models, and would cause a name collision for a
-   composite model.  Using a prefix of ``g1_`` would convert these
-   parameter names to ``g1_amplitude``, ``g1_center``, and ``g1_sigma``.
-
-.. attribute:: missing
-
-   what to do for missing values.  The choices are
-
-    * ``None``: Do not check for null or missing values (default)
-    * ``'drop'``: Drop null or missing observations in data.  If pandas is
-                installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
-    * ``'raise'``: Raise a (more helpful) exception when data contains null
-                  or missing values.
-
-.. attribute:: components
-
-   a list of instances of :class:`Model` that make up a composite model.
-   Normally, you will not need to use this, but is used my :class:`Model`
-   itself when constructing a composite model (that is adding models together).
-
 
 .. method:: guess_starting_values(data, **kws)
 
@@ -352,6 +238,46 @@ Methods and Attributes of the :class:`Model` class
 +----------------------------+------------------------------------------------------+
 
 
+.. attribute:: independent_vars
+
+   list of strings for independent variables.
+
+.. attribute:: param_names
+
+   list of strings of parameter names.
+
+
+.. attribute:: params
+
+   :class:`Parameters` object for the model
+
+.. attribute:: prefix
+
+   prefix used for name-mangling of parameter names.  That is, for a
+   :class:`GaussianModel`, the default parameter names would be
+   ``amplitude``, ``center``, and ``sigma``.  These parameters are used for
+   many pre-defined models, and would cause a name collision for a
+   composite model.  Using a prefix of ``g1_`` would convert these
+   parameter names to ``g1_amplitude``, ``g1_center``, and ``g1_sigma``.
+
+.. attribute:: missing
+
+   what to do for missing values.  The choices are
+
+    * ``None``: Do not check for null or missing values (default)
+    * ``'drop'``: Drop null or missing observations in data.  If pandas is
+                installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
+    * ``'raise'``: Raise a (more helpful) exception when data contains null
+                  or missing values.
+
+.. attribute:: components
+
+   a list of instances of :class:`Model` that make up a composite model.
+   Normally, you will not need to use this, but is used my :class:`Model`
+   itself when constructing a composite model (that is adding models together).
+
+
+
 Determining parameter names and independent variables for a function
 -----------------------------------------------------------------------
 
@@ -374,10 +300,20 @@ on Parameters, or fix their values.
 
 
 
-Simple Examples:  Building a  :class:`Model` from a function
------------------------------------------------------------------
+More Details on building models from functions
+============================================================
 
-A simple exmple of creating a :class:`Model` from a function::
+
+Here we explore some of the variations of building a :class:`Model` from a
+user-defined function that didn't get mentioned in the example above for
+the Gaussian model.
+
+
+Explicitly specifying ``independent_vars``
+-------------------------------------------------
+
+As for the example above of the Gaussian model, creating a :class:`Model`
+from a function is fairly easy::
 
     >>> def decay(t, tau, N):
     ...    return N*np.exp(-t/tau)
@@ -407,6 +343,9 @@ you would just do this::
     t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
 
+Functions with keyword arguments
+-----------------------------------------
+
 If the model had keyword parameters, these would be turned into Parameters if
 the supplied default value was a valid number (but not ``None``).
 
@@ -430,7 +369,13 @@ By default, it is still permitted to be varied in the fit.  On the other
 hand, the ``check_positive`` keyword argument, was not converted to a
 parameter because it has a boolean default value.
 
-Initializing a :class:`Model`, using it to calculate functions
+Defining a ``prefix`` for the Parameters
+--------------------------------------------
+
+
+
+
+Initializing a :class:`Model`, evaluating model functions
 ====================================================================
 
 To use any model, one needs to initialize the variables (so that no values
