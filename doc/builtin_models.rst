@@ -5,19 +5,17 @@ Built-in Fitting Models
 =================================
 
 Lmfit provides several builtin fitting models, all subclassed from the
-:class:`Model` class of the previous section, and wrapping a relatively
-well-known functional forms, such as  Gaussians, Lorentzian, and
-Exponentials.   These model functions are used in a wide range of
-scientific domains.  In addition, these functions can be easily combined to
-give a composite function -- say, a Lorentzian plus a linear background.
+:class:`Model` class of the previous chapter, and wrapping relatively
+well-known functional forms, such as Gaussians, Lorentzian, and
+Exponentials that are used in a wide range of scientific domains.  As shown
+in the previous chapter, these functions can be easily combined to give a
+composite function -- say, a Lorentzian plus a linear background.  In
+addition, the pre-built models provide a :meth:`guess_starting_values`
+method that can make decent guesses for parameter values.
 
 
-In an effort to make make simple
-things truly simple, the lmfit package provides canonical definitions for
-many known lineshapes and pre-defined high-level fitting models in
-the :mod:`models` module. These are listed in more detail in the next section
-(:ref:`builtin_models_label`), and you may want to consult that list before
-writing your own model.
+
+
 
 
 Example 1: Fit data to Voigt profile
