@@ -15,7 +15,7 @@ turn a model function that calculates a model for your data into a fitting
 model.  In an effort to make simple things truly simple, the lmfit package
 also provides canonical definitions for many known lineshapes and
 pre-defined high-level fitting models in the :mod:`models` module.  These
-are listed in more detail in the next section
+are listed in more detail in the next chapter
 (:ref:`builtin_models_label`), and you may want to consult that list before
 writing your own model.
 
@@ -72,8 +72,8 @@ On creation of the model, the parameters are not initialized (the values
 are all ``None``), and will need to be given initial values before the
 model can be used.  This can be done in one of two ways, or a mixture of
 the two.  First, the initial values for the models parameters can be set
-explicity.  In fact, the parameters can altered in other ways too, as
-described in previous sections, as with::
+explicity.  In fact, the parameter  can altered in other ways too, as
+described in previous chapter (:ref:`parameters_label`), as with::
 
     >>> mod.params['amp'].value = 9.0
     >>> mod.params['amp'].min   = 0.0
@@ -327,9 +327,9 @@ from a function is fairly easy::
     tau <Parameter 'tau', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
 
-Note that ``t`` is assumed to be the independent variable, and that
-parameters are created from the other parameters.   Note also that the
-parameters are left uninitialized.
+Here, ``t`` is assumed to be the independent variable because it comes
+first, and that the other function arguments are used to create the
+remaining parameters are created from the other parameters.
 
 If you wanted ``tau`` to be the independent variable in the above example,
 you would just do this::
@@ -343,11 +343,13 @@ you would just do this::
     t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
 
+
 Functions with keyword arguments
 -----------------------------------------
 
-If the model had keyword parameters, these would be turned into Parameters if
-the supplied default value was a valid number (but not ``None``).
+If the model function had keyword parameters, these would be turned into
+Parameters if the supplied default value was a valid number (but not
+``None``).
 
     >>> def decay2(t, tau, N=10, check_positive=False):
     ...    if check_small:
@@ -356,22 +358,43 @@ the supplied default value was a valid number (but not ``None``).
     ...        arg = t/tau
     ...    return N*np.exp(arg)
     ...
-    >>> decay_model = Model(decay2)
-    >>> for pname, par in decay_model.params.items():
+    >>> mod = Model(decay2)
+    >>> for pname, par in mod.params.items():
     ...     print pname, par
     ...
-    tau <Parameter 'tau', None, bounds=[None:None]>
+    t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', 10, bounds=[None:None]>
 
 Here, even though ``N`` is a keyword argument to the function, it is turned
 into a parameter, with the default numerical value as its initial value.
-By default, it is still permitted to be varied in the fit.  On the other
-hand, the ``check_positive`` keyword argument, was not converted to a
-parameter because it has a boolean default value.
+By default, it is permitted to be varied in the fit -- the 10 is taken as
+an initial value, not a fixed value.  On the other hand, the
+``check_positive`` keyword argument, was not converted to a parameter
+because it has a boolean default value.
 
 Defining a ``prefix`` for the Parameters
 --------------------------------------------
 
+As we will see in the next chapter when combining models, it is sometimes
+necessary to decorate the parameter names in the model, but still have them
+be correctly used in the underlying model function.  This would be
+necessary, for example, if two parameters would have the same name.  To
+avoid this, we can add a ``prefix`` to the :class:`Model` which will
+automatically do this mapping for us.
+
+    >>> def myfunc(x, amplitude=1, center=0, sigma=1):
+    ...
+
+    >>> mod = Model(myfunc, prefix='f1_')
+    >>> for pname, par in mod.params.items():
+    ...     print pname, par
+    ...
+    f1_amplitude <Parameter 'f1_amplitude', None, bounds=[None:None]>
+    f1_center <Parameter 'f1_center', None, bounds=[None:None]>
+    f1_sigma <Parameter 'f1_sigma', None, bounds=[None:None]>
+
+You would refer to these parameters as ``f1_amplitude`` and so forth, and
+the model will know to map these to the ``amplitude`` argument of ``myfunc``.
 
 
 

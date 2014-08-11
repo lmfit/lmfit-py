@@ -1,4 +1,4 @@
-.. _parameters-label:
+.. _parameters_label:
 
 ================================================
 :class:`Parameter`  and :class:`Parameters`
