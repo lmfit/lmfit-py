@@ -27,13 +27,95 @@ Example 1: Fit data to Gaussian profile
 ================================================
 
 Let's start with a simple and common example of fitting data to a Gaussian
-peak.  Of course, we could define a model Gaussian function, define the
-Parameters that go into and build a residual function.  But since many
-people are likely to want to do such fits, it's useful xto set up such a
-model once, especially if done in such away as to be easy to extend.
+peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
+provides a model function for a Gaussian profile, but here we'll build our
+own.  We start with a definition the model function that we might want to
+use to fit to some data::
 
-The :class:`GaussianModel` class provides a model function for a Gaussian
-profile, the set of Parameters needed for this model.  It also has built-in
+    >>> from numpy import sqrt, pi, exp, linspace
+    >>>
+    >>> def gaussian(x, amp, cen, wid):
+    ...    "1-d gaussian: gaussian(x, amp, cen, wid)"
+    ...    return (amp/sqrt(2*pi)*wid) * exp(-(x-cen)**2 /(2*wid**2))
+    ...
+
+
+We could write a residual function for this, but such a residual function
+would be fairly simple (essentially, ``data - model``, possibly with some
+weighting), and we would have to define and use appropriately named
+parameters.  After doing this a few times it appears as a recurring
+pattern, and we can imagine automating this process.  That's where the
+:class:`Model` class comes in.  We can pass it the ``gaussian`` function,
+and it will generate the appropriate residual function and the
+corresponding parameters::
+
+    >>> from lmfit import Model
+    >>> mod = Model(gaussian)
+    >>> for name, par in mod.params.items():
+    ...     print(name, par)
+    ...
+    'amp', <Parameter 'amp', None, bounds=[None:None]>
+    'wid', <Parameter 'wid', None, bounds=[None:None]>
+    'cen', <Parameter 'cen', None, bounds=[None:None]>
+    >>> print("Independent Variables: ", mod.independent_vars)
+    'Independent Variables: ', ['x']
+
+The Model ``mod`` is constructed containing a ``params`` member that holds
+the :class:`Parameters` for the model, and an ``independent_vars`` that
+holds the name of the independent variables.  By default, the first
+argument of the function is taken as the independent variable, and the rest
+of the parameters are used for variable Parameters.  Thus, for the
+``gaussian`` function above, the parameters are named ``amp``, ``cen``, and
+``wid``.  and ``x`` is the independent variable.
+
+On creation of the model, the parameters are not initialized (the values
+are all ``None``), and will need to be given initial values before the
+model can be used.  This can be done in one of two ways, or a mixture of
+the two.  First, the initial values for the models parameters can be set
+explicity.  In fact, the parameters can altered in other ways too, as
+described in previous sections, as with::
+
+    >>> mod.params['amp'].value = 9.0
+    >>> mod.params['amp'].min   = 0.0
+    >>> mod.params['cen'].value = 4.0
+    >>> mod.params['wid'].value = 0.5
+    >>> mod.params['wid'].min   = 0.0
+
+or one can use the :meth:`eval` method (to evaluate the model) or the
+:meth:`fit` method (to fit data to this model) with explicit keyword
+arguments for the parameter values.
+
+To use this model, one can use :meth:`eval` to calculate the predicted
+function::
+
+    >>> x0 = linspace(0, 10, 201)
+    >>> y1 = mod.eval(x=x0)
+    >>> y2 = mod.eval(x=x0, cen=6.2, wid=0.75)
+    >>> import pylab
+    >>> pylab.plot(x0, y1)
+    >>> pylab.plot(x0, y2)
+    >>> pylab.show()
+
+The resulting plot shows that both approaches (explicity setting parameter
+values or passing values as keyword arguments to :meth:`eval`) work, with
+the resulting plot shown below.
+
+.. image:: _images/model_eval.png
+   :target: _images/model_eval.png
+   :width: 85%
+
+
+So far, this is a slightly long-winded way to plot a Gaussian function.  Of
+course, we can also use the :meth:`fit` method to fit this model to data.
+To do this,
+
+Of course, we could define a model Gaussian function, define the Parameters
+that go into and build a residual function.  But since many people are
+likely to want to do such fits, it's useful xto set up such a model once,
+especially if done in such away as to be easy to extend.
+
+
+the set of Parameters needed for this model.  It also has built-in
 functions for guessing starting values for the Parameters based on some
 data, and fitting the model to a set of data.  This will give a very simple
 interface to fitting data to this well-known function.  Here's a script to
@@ -44,7 +126,6 @@ do this (included in the ``examples`` folder with the source code):
 After some imports, we read in the data for ``x`` and ``y`` from a text
 file. We then define a Gaussian model function and create a :class:`Model`
 from this.
-
 
 
 This mode will automatically contains
@@ -211,16 +292,17 @@ Methods and Attributes of the :class:`Model` class
    values for ``data`` and use it to construct reasonable starting values for
    the parameters.
 
-.. method:: calc_model(params=None[, **kws])
+.. method:: eval(params=None[, **kws])
 
-    calculate the model function for a set of parameters
+    evalueate the model function for a set of parameters and inputs.
 
     :param params: parameters to use for fit.
     :type params: ``None`` (default) or Parameters
     :return:       ndarray for model given the parameters and other arguments.
 
    If ``params`` is ``None``, the internal ``params`` will be used.
-   All other arguments for the model function (including all the
+
+   Note that all other arguments for the model function (including all the
    independent vairables!) will need to be passed in using keyword
    arguments.
 
@@ -362,5 +444,7 @@ After that, one can either evaluate the model given parameters and
 independent variables.   Thus, to calculate and display a series of Voigt
 functions, we might do this:
 
-.. literalinclude:: ../examples/models_doc3.py
+.. literalinclude:: ../examples/models_doc2.py
+
+
 
