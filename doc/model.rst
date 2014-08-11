@@ -23,7 +23,7 @@ Here, we focus on turning python function into high-level fittingmodels
 with the :class:`Model` class, and using these to fit data.
 
 
-Example 1: Fit data to Gaussian profile
+Example: Fit data to Gaussian profile
 ================================================
 
 Let's start with a simple and common example of fitting data to a Gaussian
@@ -38,7 +38,6 @@ use to fit to some data::
     ...    "1-d gaussian: gaussian(x, amp, cen, wid)"
     ...    return (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
     ...
-
 
 We could write a residual function for this, but such a residual function
 would be fairly simple (essentially, ``data - model``, possibly with some
@@ -72,45 +71,25 @@ On creation of the model, the parameters are not initialized (the values
 are all ``None``), and will need to be given initial values before the
 model can be used.  This can be done in one of two ways, or a mixture of
 the two.  First, the initial values for the models parameters can be set
-explicity.  In fact, the parameter  can altered in other ways too, as
-described in previous chapter (:ref:`parameters_label`), as with::
+explicity, as with:
 
-    >>> mod.params['amp'].value = 9.0
-    >>> mod.params['amp'].min   = 0.0
-    >>> mod.params['cen'].value = 4.0
-    >>> mod.params['wid'].value = 0.5
-    >>> mod.params['wid'].min   = 0.0
+    >>> mod.params['amp'].value = 10.0
 
-or one can use the :meth:`eval` method (to evaluate the model) or the
-:meth:`fit` method (to fit data to this model) with explicit keyword
-arguments for the parameter values.
+and so on.  Alternatively, one can use the :meth:`eval` method (to evaluate
+the model) or the :meth:`fit` method (to fit data to this model) with
+explicit keyword arguments for the parameter values.  For example, one
+could use :meth:`eval` to calculate the predicted function::
 
-To use this model, one can use :meth:`eval` to calculate the predicted
-function::
+    >>> x = linspace(0, 10, 201)
+    >>> y = mod.eval(x=x, amp=10, cen=6.2, wid=0.75)
 
-    >>> x0 = linspace(0, 10, 201)
-    >>> y1 = mod.eval(x=x0)
-    >>> y2 = mod.eval(x=x0, cen=6.2, wid=0.75)
-    >>> import pylab
-    >>> pylab.plot(x0, y1)
-    >>> pylab.plot(x0, y2)
-    >>> pylab.show()
+So far, this is a slightly long-winded way to calculate a Gaussian
+function.   But now that the model is set up, we can also use its
+:meth:`fit` method to fit this model to data.  Putting everything together,
+the script to do such a fit (included in the ``examples`` folder with the
+source code) is:
 
-The resulting plot shows that both approaches (explicity setting parameter
-values or passing values as keyword arguments to :meth:`eval`) work, with
-the resulting plot shown below.
-
-.. image:: _images/model_eval.png
-   :target: _images/model_eval.png
-   :width: 85%
-
-
-So far, this is a slightly long-winded way to plot a Gaussian function.  Of
-course, we can also use the :meth:`fit` method to fit this model to data.
-Putting everything together, the script to do such a fit (included in the
-``examples`` folder with the source code) is:
-
-.. literalinclude:: ../examples/model_gaussian.py
+.. literalinclude:: ../examples/model_doc1.py
 
 which is pretty compact and to the point.   The results printed out are::
 
@@ -129,18 +108,28 @@ and the plot generated gives:
    :target: _images/model_fit1.png
    :width: 85%
 
-
 which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit in black dashed line.
 
-We emphasize here that the fit to this function really took 2 lines of code::
+We emphasize here that the fit to this model function was really performed
+with 2 lines of code.  These lines clearly express that we want to turn the
+``gaussian`` function into a fitting model, and then fit the :math:`y(x)`
+data to this model, starting with values of 5 for ``amp``, 5 for ``cen``
+and 1 for ``wid``::
 
-    model = Model(gaussian)
-    result = model.fit(data, x=x amp=5, cen=5, wid=1)
+    gmod = Model(gaussian)
+    result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
-Of course, some models are necessarily more complicated, and you may want
-to place bounds or constraints on parameter values, but at least it is easy
-to model and fit to simple functions.
+This is roughly equivalent to using :func:`scipy.optimize.curve_fit`::
+
+    popt, pcov = curve_fit(gaussian, x, y, p0=[5, 5, 1])
+
+except that all the other features of lmfit are available such as named
+parameters, placing bounds or constraints on parameters, easily switching
+fitting algorithms, and automated processing of the covariance matrix.  In
+addition some model functions may be more complicated.  We'll discuss these
+below, but for now we've shown that at least the wrapping of a simple model
+function for curve fitting is easy.
 
 The :class:`Model` class
 =======================================
@@ -149,7 +138,7 @@ The :class:`Model` class is the most general way to wrap a pre-defined
 function as a fitting model.  All the models described in this chapter are
 derived from it.
 
-.. class:: Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix=''[, components=None]]]]])
+.. class:: Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, components=None]]]]])
 
     Create a model based on the user-supplied function.  This uses a
     introspection to automatically converting argument names to Parameter names.
@@ -180,11 +169,12 @@ Methods and Attributes of the :class:`Model` class
 
 .. method:: eval(params=None[, **kws])
 
-    evalueate the model function for a set of parameters and inputs.
+   evalueate the model function for a set of parameters and inputs.
 
-    :param params: parameters to use for fit.
-    :type params: ``None`` (default) or Parameters
-    :return:       ndarray for model given the parameters and other arguments.
+   :param params: parameters to use for fit.
+   :type params: ``None`` (default) or Parameters
+
+   :return:       ndarray for model given the parameters and other arguments.
 
    If ``params`` is ``None``, the internal ``params`` will be used.
 
@@ -193,17 +183,24 @@ Methods and Attributes of the :class:`Model` class
    arguments.
 
 
-.. method:: fit(data[, params=None[, weights=None[, **kws]]])
+.. method:: fit(data[, params=None[, weights=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **kws]]]]]])
 
-    perform a fit of the model to the ``data`` array.
+   perform a fit of the model to the ``data`` array.
 
-    :param data: array of data to be fitted.
-    :type data: ndarray-like
-    :param params: parameters to use for fit.
-    :type params: ``None`` (default) or Parameters
-    :param weights: weights to use fit.
-    :type params: ``None`` (default) or ndarray-like.
-    :return:       fit result object.
+   :param data: array of data to be fitted.
+   :type data: ndarray-like
+   :param params: parameters to use for fit.
+   :type params: ``None`` (default) or Parameters
+   :param weights: weights to use fit.
+   :type weights: ``None`` (default) or ndarray-like.
+   :param method:  name of fitting method to use. See  :ref:`fit-methods-label` for details
+   :type  method:  string (default ``leastsq``)
+   :param scale_covar:  whether to automatically scale covariance matrix (``leastsq`` only)
+   :type  scale_covar:  bool (default ``True``)
+   :param iter_cb:  function to be called at each fit iteration
+   :type  iter_cb:  callable or ``None``
+
+   :return:       fit result object.
 
    If ``params`` is ``None``, the internal ``params`` will be used. If it
    is supplied, these will replace the internal ones.  If supplied,
@@ -214,28 +211,26 @@ Methods and Attributes of the :class:`Model` class
    independent vairables!) will need to be passed in using keyword
    arguments.
 
-
    The result returned from :meth:`fit` will contains all of the items
    returned from :func:`minimize` (see  :ref:`Table of Fit Results
    <goodfit-table>` plus those listed in the :ref:`Table of Model Fit results <modelfit-table>`
 
 .. _modelfit-table:
 
- Table of Model Fit Results: These values are included in the return value
- from :meth:`Model.fit`, in addition to the standard Goodness-of-Fit
- statistics and fit results given in :ref:`Table of Fit Results
- <goodfit-table>`.
+Table of Model Fit Results: These values are included in the return value
+from :meth:`Model.fit`, in addition to the standard Goodness-of-Fit
+statistics and fit results given in :ref:`Table of Fit Results
+<goodfit-table>`.
 
-
-+----------------------------+------------------------------------------------------+
-| result attribute           |  Description / Formula                               |
-+============================+======================================================+
-| ``init_params``            | initial set of parameters                            |
-+----------------------------+------------------------------------------------------+
-| ``init_fit``               | initial estimate of fit to data                      |
-+----------------------------+------------------------------------------------------+
-| ``best_fit``               | final estimate of fit to data                        |
-+----------------------------+------------------------------------------------------+
+   +----------------------------+------------------------------------------------------+
+   | result attribute           |  Description / Formula                               |
+   +============================+======================================================+
+   | ``init_params``            | initial set of parameters                            |
+   +----------------------------+------------------------------------------------------+
+   | ``init_fit``               | initial estimate of fit to data                      |
+   +----------------------------+------------------------------------------------------+
+   | ``best_fit``               | final estimate of fit to data                        |
+   +----------------------------+------------------------------------------------------+
 
 
 .. attribute:: independent_vars
@@ -378,9 +373,10 @@ Defining a ``prefix`` for the Parameters
 As we will see in the next chapter when combining models, it is sometimes
 necessary to decorate the parameter names in the model, but still have them
 be correctly used in the underlying model function.  This would be
-necessary, for example, if two parameters would have the same name.  To
-avoid this, we can add a ``prefix`` to the :class:`Model` which will
-automatically do this mapping for us.
+necessary, for example, if two parameters in a composite model (see
+:ref:`composite_models_label` or examples in the next chapter) would have
+the same name.  To avoid this, we can add a ``prefix`` to the
+:class:`Model` which will automatically do this mapping for us.
 
     >>> def myfunc(x, amplitude=1, center=0, sigma=1):
     ...
@@ -397,22 +393,117 @@ You would refer to these parameters as ``f1_amplitude`` and so forth, and
 the model will know to map these to the ``amplitude`` argument of ``myfunc``.
 
 
+More on initialing model parameters
+-----------------------------------------
 
-Initializing a :class:`Model`, evaluating model functions
-====================================================================
+As mentioned above, the parameters created by :class:`Model` are generally
+created with invalid initial values of ``None``.  These values must be
+initialized in order for the model to be evaluated or used in a fit.  There
+are three ways to do this initialization that can be used in any
+combination:
 
-To use any model, one needs to initialize the variables (so that no values
-are left as ``None``). The pre-built models provide
-a :meth:`guess_starting_values` method that can make decent guesses for
-parameter values, but if you're writing your own model, you may not have such
-a function.  In any event, you need to set non-``None`` values for all
-parameters.
+  1. You can supply initial values in the definition of the model function.
+  2. You can initialize the parameters after the model has been created.
+  3. You can supply initial values for the parameters to the :meth:`eval`
+     or :meth:`fit` methods.
 
-After that, one can either evaluate the model given parameters and
-independent variables.   Thus, to calculate and display a series of Voigt
-functions, we might do this:
+For option 1, consider doing::
 
-.. literalinclude:: ../examples/models_doc2.py
+    >>> def myfunc(x, a=1, b=0):
+    >>>     ...
+
+instead of::
+
+    >>> def myfunc(x, a, b):
+    >>>     ...
+
+For option 2, you can do::
+
+    >>> mod = Model(myfunc)
+    >>> mod.params['a'].value = 1.0
+    >>> mod.params['b'].value = 0.1
+
+An advantage of this approach is that you can set other parameter
+attributes such as bounds and constraints.
+
+For option 3, give explicit initial values for the parameters:
+
+   >>> y1 = mod.eval(x=x, a=1, b=3)
+
+Again, these methods can be combined.  For example, you can set parameter
+values and bounds as with option 2, but then change the initial value with
+option 3.
 
 
+.. _composite_models_label:
+
+Creating composite models
+=============================
+
+
+One of the most interesting features of the :class:`Model` class is that
+models can be added together to give a composite model, with parameters
+from the component models all being available to influence the total sum of
+the separat component models.  This will become even more useful in the
+next chapter, when pre-built subclasses of :class:`Model` are discussed.
+
+For now, we'll consider a simple example will build a model of a Gaussian
+plus a line.  Obviously, we could build a model that included both
+components::
+
+    def gaussian_plus_line(x, amp, cen, wid, slope, intercept):
+        "line + 1-d gaussian"
+    
+        gauss = (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
+        line = slope * x + intercept
+        return gauss + line
+
+and use that with::
+
+    mod = Model(gaussian_plus_line)
+
+but, of course, we already had a function for a gaussian function, and
+maybe we'll discover that a linear background isn't sufficient and we'd
+have to alter the model again.  As an alternative we could just define a
+linear function::
+
+    def line(x, slope, intercept):
+        "a line"
+        return slope * x + intercept
+
+and build a composite model with::
+
+    mod = Model(gaussian) + Model(line)
+
+This model has parameters for both component models, and can be used as:
+
+.. literalinclude:: ../examples/model_doc2.py
+
+which prints out the results::
+
+    [[Variables]]
+         amp:           8.459311 +/- 0.1241451 (1.47%) initial =  5
+         cen:           5.655479 +/- 0.009176784 (0.16%) initial =  5
+         intercept:    -0.968602 +/- 0.03352202 (3.46%) initial =  1
+         slope:         0.264844 +/- 0.005748921 (2.17%) initial =  0
+         wid:           0.6754552 +/- 0.009916862 (1.47%) initial =  1
+    [[Correlations]] (unreported correlations are <  0.100)
+        C(amp, wid)                  =  0.666
+        C(cen, intercept)            =  0.129
+
+and shows the plot:
+
+.. image:: _images/model_fit2.png
+   :target: _images/model_fit2.png
+   :width: 85%
+
+
+which shows the data in blue dots, the best fit as a solid red line, and
+the initial fit in black dashed line.
+
+In this example, the argumnet names for the model functions do not overlap.
+If they had, the ``prefix`` argument to :class:`Model` would have allowed
+us to identify which parameter went with which component model.  As we will
+see in the next chapter, using composite models with the built-in models
+provides a simple way to build up complex models.
 

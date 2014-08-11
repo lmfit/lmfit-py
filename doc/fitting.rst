@@ -15,7 +15,7 @@ The minimize function takes a function to minimize, a dictionary of
 :class:`Parameter` , and several optional arguments.    See
 :ref:`fit-func-label` for details on writing the function to minimize.
 
-.. function:: minimize(function, params, args=None, kws=None, method='leastsq', **leastsq_kws)
+.. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **leastsq_kws]]]]]])
 
    find values for the params so that the sum-of-squares of the returned array
    from function is minimized.
@@ -30,15 +30,17 @@ The minimize function takes a function to minimize, a dictionary of
    :type  args:  tuple
    :param kws:   dictionary to pass to the residual function as keyword arguments.
    :type  kws:  dict
-   :param method:  name of fitting method to use. See  :ref:`fit-engines-label` for details
-   :type  method:  string
+   :param method:  name of fitting method to use. See  :ref:`fit-methods-label` for details
+   :type  method:  string (default ``leastsq``)
+   :param scale_covar:  whether to automatically scale covariance matrix (``leastsq`` only)
+   :type  scale_covar:  bool (default ``True``)
+   :param iter_cb:  function to be called at each fit iteration
+   :type  iter_cb:  callable or ``None``
    :param leastsq_kws:  dictionary to pass to :func:`scipy.optimize.leastsq`.
    :type  leastsq_kws:  dict
+
    :return: Minimizer object, which can be used to inspect goodness-of-fit
             statistics, or to re-run fit.
-
-   For backward compatibility, the keyword `engine` is retained as a synonym for `method`,
-   but this should be considered deprecated.
 
    On output, the params will be updated with best-fit values and, where
    appropriate, estimated uncertainties and correlations.  See
@@ -120,8 +122,7 @@ but might be wiser to put this directly in the function with::
         if abs(period) < 1.e-10:
             period = sign(period)*1.e-10
 
-
-..  _fit-engines-label:
+..  _fit-methods-label:
 
 Choosing Different Fitting Methods
 ===========================================
@@ -143,9 +144,9 @@ modification of the quasi-Newton method.
 To select which of these algorithms to use, use the ``method`` keyword to the
 :func:`minimize` function or use the corresponding method name from the
 :class:`Minimizer` class as listed in the
-:ref:`Table of Supported Fitting Methods <fit-engine-table>`.
+:ref:`Table of Supported Fitting Methods <fit-methods-table>`.
 
-.. _fit-engine-table:
+.. _fit-methods-table:
 
  Table of Supported Fitting Methods:
 
@@ -296,8 +297,8 @@ For full control of the fitting process, you'll want to create a
    :type  fcn_kws:  dict
    :param iter_cb:  function to be called at each fit iteration
    :type  iter_cb:  callable or ``None``
-   :param scale_covar:  flag for scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
-   :type  scale_cover:  boolean, default ``True``
+   :param scale_covar:  flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
+   :type  scale_cover:  bool (default ``True``).
    :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
    :type  kws:      dict
    :return: Minimizer object, which can be used to inspect goodness-of-fit
