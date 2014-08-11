@@ -147,11 +147,7 @@ class Model(object):
     def _build_residual(self):
         "Generate and return a residual function."
         def residual(params, data, weights, **kwargs):
-            # Unpack Parameter objects into simple key -> value pairs,
-            # and combine them with any non-parameter kwargs.
-            # params = dict([(name, p.value) for name, p in params.items()])
-            # kwargs = dict(list(params.items()) + list(kwargs.items()))
-            diff = self.calc_model(params=params, **kwargs) - data
+            diff = self.eval(params=params, **kwargs) - data
             if weights is not None:
                 diff *= weights
             return np.asarray(diff)  # for compatibility with pandas.Series
@@ -159,15 +155,17 @@ class Model(object):
 
     def _make_funcargs(self, params, kwargs):
         out = {}
-        for key, val in kwargs.items():
-            if key in self.func_allargs or self.func_haskeywords:
-                out[key] = val
         npref = len(self.prefix)
         for name, par in params.items():
             if npref > 0 and name.startswith(self.prefix):
                 name = name[npref:]
             if name in self.func_allargs or self.func_haskeywords:
                 out[name] = par.value
+        for name, val in kwargs.items():
+            if name in self.func_allargs or self.func_haskeywords:
+                out[name] = val
+                if name in params:
+                    params[name].value = val
         if self.func_haskeywords and self.components is not None:
             out['__components__'] = self.components
         return out
@@ -183,9 +181,8 @@ class Model(object):
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
 
-    def calc_model(self, params=None, **kwargs):
-        """calculate model with current parameters
-        """
+    def eval(self, params=None, **kwargs):
+        """evaluate the model with the supplied or current parameters"""
         if params is None:
             params = self.params
         funcargs = self._make_funcargs(params, kwargs)
@@ -287,8 +284,8 @@ class Model(object):
         result.model = self
         result.init_params = init_params
         result.init_values = self._make_funcargs(init_params, {})
-        result.init_fit = self.calc_model(params=init_params, **kwargs)
-        result.best_fit = self.calc_model(params=result.params, **kwargs)
+        result.init_fit = self.eval(params=init_params, **kwargs)
+        result.best_fit = self.eval(params=result.params, **kwargs)
         return result
 
 
