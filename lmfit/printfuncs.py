@@ -18,9 +18,20 @@ Changes:
 """
 
 from __future__ import print_function
+from .parameter import Parameters, Parameter
 
-
-def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
+def getfloat_attr(obj, attr, format='%.3f'):
+    val = getattr(obj, attr, None)
+    if val is None:
+        return 'unknown'
+    if isinstance(val, int):
+        return '%d' % val
+    if isinstance(val, float):
+        return format % val
+    else:
+        return repr(val)
+    
+def fit_report(input, modelpars=None, show_correl=True, min_correl=0.1):
     """return text of a report for fitted params best-fit values,
     uncertainties and correlations
 
@@ -32,15 +43,31 @@ def fit_report(params, modelpars=None, show_correl=True, min_correl=0.1):
        min_correl   smallest correlation absolute value to show [0.1]
 
     """
+    if isinstance(input, Parameters):
+        params = input
+        result = None
+    if hasattr(input, 'params'):
+        result = input
+        params = result.params
+        
+    parnames = sorted(params)
     parnames = sorted(params)
     buff = []
     add = buff.append
+    if result is not None:
+        add("[[Fit Statistics]]")
+        add("    # function evals   = %s" % getfloat_attr(result, 'nfev'))
+        add("    # data points      = %s" % getfloat_attr(result, 'ndata'))
+        add("    # variables        = %s" % getfloat_attr(result, 'nvarys'))
+        add("    chi-square         = %s" % getfloat_attr(result, 'chisqr'))
+        add("    reduced chi-square = %s" % getfloat_attr(result, 'redchi'))
+        
     namelen = max([len(n) for n in parnames])
     add("[[Variables]]")
     for name in parnames:
         par = params[name]
         space = ' '*(namelen+2 - len(name))
-        nout = " %s: %s" % (name, space)
+        nout = "%s: %s" % (name, space)
         initval = 'inital = ?'
         if par.init_value is not None:
             initval = 'initial = % .7g' % par.init_value
