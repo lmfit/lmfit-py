@@ -18,40 +18,27 @@ portions of lmfit.
 Downloads
 ~~~~~~~~~~~~~
 
-The latest stable version is available from PyPI:
-
-.. _lmfit-0.7.4.tar.gz (PyPI): http://pypi.python.org/packages/source/l/lmfit/lmfit-0.7.4.tar.gz
-.. _lmfit-0.7.4.win32-py2.6.exe (PyPI): http://pypi.python.org/packages/2.6/l/lmfit/lmfit-0.7.4.win32-py2.6.exe
-.. _lmfit-0.7.4.win32-py2.7.exe (PyPI): http://pypi.python.org/packages/2.7/l/lmfit/lmfit-0.7.4.win32-py2.7.exe
-.. _lmfit-0.7.4.win32-py3.2.exe (PyPI): http://pypi.python.org/packages/3.2/l/lmfit/lmfit-0.7.4.win32-py3.2.exe
-
 .. _lmfit github repository:   http://github.com/lmfit/lmfit-py
-.. _lmfit at pypi:             http://pypi.python.org/pypi/lmfit/
 .. _Python Setup Tools:        http://pypi.python.org/pypi/setuptools
+.. _pip:  https://pip.pypa.io/
 
-+----------------------+------------------+--------------------------------------------+
-|  Download Option     | Python Versions  |  Location                                  |
-+======================+==================+============================================+
-|  Source Kit          | 2.6, 2.7, 3.2    | -  `lmfit-0.7.4.tar.gz (PyPI)`_            |
-+----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   2.6            | -  `lmfit-0.7.4.win32-py2.6.exe (PyPI)`_   |
-+----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   2.7            | -  `lmfit-0.7.4.win32-py2.7.exe (PyPI)`_   |
-+----------------------+------------------+--------------------------------------------+
-|  Win32 Installer     |   3.2            | -  `lmfit-0.7.4.win32-py3.2.exe (PyPI)`_   |
-+----------------------+------------------+--------------------------------------------+
-|  Development Version |   all            |  use `lmfit github repository`_            |
-+----------------------+------------------+--------------------------------------------+
+The latest stable version of lmfit is  available from `PyPi <http://pypi.python.org/pypi/lmfit/>`_.
 
-if you have `Python Setup Tools`_  installed, you can download and install
-the lmfit-py Package simply with::
+Installation
+~~~~~~~~~~~~~~~~~
+
+If you have `pip`_  installed, you can install lmfit with::
+
+    pip install lmfit
+
+or, if  you have `Python Setup Tools`_  installed, you install lmfit with::
 
    easy_install -U lmfit
 
-or::
 
+or, you can download the source kit, unpack it and install with::
 
-   pip install lmfit
+   python setup.py install
 
 
 Development Version
@@ -62,12 +49,10 @@ To get the latest development version, use::
    git clone http://github.com/lmfit/lmfit-py.git
 
 
-Installation
-~~~~~~~~~~~~~~~~~
-
-Installation from source on any platform is::
+and install using::
 
    python setup.py install
+
 
 Acknowledgements
 ~~~~~~~~~~~~~~~~~~

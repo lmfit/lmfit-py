@@ -24,6 +24,7 @@ sys.path.append(os.path.abspath(os.path.join('.', 'ext')))
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
               'sphinx.ext.coverage',
+              # 'sphinx.ext.pngmath',
               'sphinx.ext.mathjax',
               'sphinx.ext.intersphinx',
               'numpydoc']
@@ -113,23 +114,16 @@ pygments_style = 'sphinx'
 html_theme_path = ['theme']
 html_theme = 'lmfitdoc'
 
-# html_theme = 'nature'
-# html_theme = 'agogo'
-# html_theme_options = {'pagewidth':'85em', 'documentwidth':'60em', 'sidebarwidth': '25em',
-#                       # 'headercolor1': '#000080',
-#                       # 'headercolor2': '#0000A0',
-#                       }
-
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
 #html_title = None
-html_title = 'Least-Squares Minimization with Constraints for Python'
+html_title = 'Non-Linear Least-Squares Minimization and Curve-Fitting for Python'
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-html_short_title = 'Least-Squares Minimization with Constraints for Python'
+html_short_title = 'Minimization and Curve-Fitting for Python'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
@@ -151,23 +145,13 @@ html_static_path = ['_static']
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
-html_use_smartypants = False # True
+html_use_smartypants = True
 
 # Custom sidebar templates, maps document names to template names.
 html_sidebars = {'index': ['indexsidebar.html','searchbox.html']}
 
-# Additional templates that should be rendered to pages, maps page names to
-# template names.
-#html_additional_pages = {}
-
-# If false, no module index is generated.
-#html_use_modindex = True
 html_use_modindex = False
-
-# If false, no index is generated.
 #html_use_index = True
-
-# If true, the index is split into individual pages for each letter.
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
@@ -184,36 +168,13 @@ html_show_sourcelink = True
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'lmfitdoc'
 
-
 # -- Options for LaTeX output --------------------------------------------------
-
-# The paper size ('letter' or 'a4').
-#latex_paper_size = 'letter'
-
-# The font size ('10pt', '11pt' or '12pt').
-#latex_font_size = '10pt'
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'lmfit.tex',
-   'Least-Squares Minimization with Constraints for Python',
+   'Non-Linear Least-Squares Minimization and Curve-Fitting for Python',
    'Matthew Newville, Till Stensitzki, and others', 'manual'),
 ]
 
-# The name of an image file (relative to this directory) to place at the top of
-# the title page.
-#latex_logo = None
-
-# For "manual" documents, if this is true, then toplevel headings are parts,
-# not chapters.
-#latex_use_parts = False
-
-# Additional stuff for the LaTeX preamble.
-#latex_preamble = ''
-
-# Documents to append as an appendix to all manuals.
-#latex_appendices = []
-
-# If false, no module index is generated.
-#latex_use_modindex = True

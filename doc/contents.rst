@@ -4,8 +4,8 @@ Contents
 .. toctree::
    :maxdepth: 3
 
-   installation
    intro
+   installation
    parameters
    fitting
    model
@@ -13,4 +13,3 @@ Contents
    confidence
    bounds
    constraints
-

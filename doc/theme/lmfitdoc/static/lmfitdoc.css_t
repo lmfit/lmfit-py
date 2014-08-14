@@ -25,7 +25,7 @@ body {
     color: black;
     padding: 0;
     border: 0px solid #D0D0C0;
-    margin: 5px 25px 0px 25px;
+    margin: 15px 15px 15px 15px;
     min-width: 740px;
 }
 
@@ -56,6 +56,7 @@ div.related ul {
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     background-color: #F0EFE4;
+    color: #157;
 }
 
 div.related ul li {
@@ -76,10 +77,11 @@ div.related ul li a {
     padding: 0 5px 0 5px;
     line-height: 1.75em;
     color: #EE9816;
+    color: #157;
 }
 
 div.related ul li a:hover {
-    color: #3CA8E7;
+    color: #822;
 }
 
 div.sphinxsidebarwrapper {
