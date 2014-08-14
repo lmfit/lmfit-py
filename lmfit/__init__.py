@@ -7,14 +7,14 @@
    installed, parameters can be constrained as a simple
    mathematical expression of other Parameters.
 
-   version: 0.7.4
-   last update: 2014-Jan-22
+   version: 0.8.0-rc1
+   last update: 2014-Aug-13
    License: BSD
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
             The University of Chicago
 """
-__version__ = '0.7.4'
+__version__ = '0.8.0-rc1'
 from .minimizer import minimize, Minimizer, MinimizerException
 from .parameter import Parameter, Parameters
 from .confidence import conf_interval, conf_interval2d
