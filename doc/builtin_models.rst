@@ -14,11 +14,180 @@ addition, the pre-built models provide a :meth:`guess_starting_values`
 method that can make decent guesses for parameter values.
 
 
-Example 1: Fit data to Voigt or Gaussian profiles
-======================================================
+Example 1: Fit Peaked data to Gaussian or Voigt profiles
+===================================================================
 
 Here, we will fit data to two similar lineshapes, in order to decide which
-might be the better model.
+might be the better model.  We will start with a Gaussian profile, as in
+the previous chapter, but use the built-in :class:`GaussianModel` instead
+of one we write ourselves.  This is a slightly different version from the
+one in previous example in that the parameter names are different, and have
+built-in default values.  So, we'll simply use::
+
+    from numpy import loadtxt
+    from lmfit.models import GaussianModel
+    from lmfit import fit_report
+
+    data = loadtxt('test_peak.dat')
+    x = data[:, 0]
+    y = data[:, 1]
+
+    mod = GaussianModel()
+    mod.guess_starting_values(y, x=x)
+    out  = mod.fit(y, x=x)
+    print fit_report(out, min_correl=0.25)
+
+which prints out the results::
+
+    [[Fit Statistics]]
+        # function evals   = 25
+        # data points      = 401
+        # variables        = 3
+        chi-square         = 29.994
+        reduced chi-square = 0.075
+    [[Variables]]
+        amplitude:     30.31352 +/- 0.1571252 (0.52%) initial =  21.54192
+        center:        9.242771 +/- 0.00737481 (0.08%) initial =  9.25
+        fwhm:          2.901562 +/- 0.01736635 (0.60%) == '2.354820*sigma'
+        sigma:         1.23218 +/- 0.00737481 (0.60%) initial =  1.35
+    [[Correlations]] (unreported correlations are <  0.250)
+        C(amplitude, sigma)          =  0.577
+
+We see a few interesting differences from the results of the previous
+chapter.  First, the parameter names are longer.  Second, there is a
+``fwhm``, defined as :math:`\sim 2.355\sigma`.  And third, the automated
+initial guesses are pretty good.  A plot of the fit shows not such a great
+fit:
+
+.. _figA1:
+
+  .. image::  _images/models_peak1.png
+     :target: _images/models_peak1.png
+     :width: 48 %
+  .. image::  _images/models_peak2.png
+     :target: _images/models_peak2.png
+     :width: 48 %
+
+  Fit to peak with Gaussian (left) and Lorentzian (right) models.
+
+suggesting that a different peak shape, with longer tails, should be used.
+Perhaps a Lorentzian would be better?  To do this, we simply replace
+``GaussianModel`` with ``LorentzianModel``::
+ 
+    from lmfit.models import LorentzianModel
+    mod = LorentzianModel()
+    mod.guess_starting_values(y, x=x)
+    out  = mod.fit(y, x=x)
+    print fit_report(out, min_correl=0.25)
+
+The results, or course, are worse::
+
+    [[Fit Statistics]]
+        # function evals   = 29
+        # data points      = 401
+        # variables        = 3
+        chi-square         = 53.754
+        reduced chi-square = 0.135
+    [[Variables]]
+        amplitude:     38.97278 +/- 0.3138612 (0.81%) initial =  21.54192
+        center:        9.244389 +/- 0.009276152 (0.10%) initial =  9.25
+        fwhm:          2.30968 +/- 0.02631297 (1.14%) == '2.0000000*sigma'
+        sigma:         1.15484 +/- 0.01315648 (1.14%) initial =  1.35
+    [[Correlations]] (unreported correlations are <  0.250)
+        C(amplitude, sigma)          =  0.709
+    
+
+with the plot shown in the figure above.
+
+A Voigt model does a better job.  Again, using :class:`VoigtModel`, this is
+as simple as::
+
+    from lmfit.models import LorentzianModel
+    mod = LorentzianModel()
+    mod.guess_starting_values(y, x=x)
+    out  = mod.fit(y, x=x)
+    print fit_report(out, min_correl=0.25)
+
+which gives::
+
+    [[Fit Statistics]]
+        # function evals   = 30
+        # data points      = 401
+        # variables        = 3
+        chi-square         = 14.545
+        reduced chi-square = 0.037
+    [[Variables]]
+        amplitude:     35.75536 +/- 0.1386167 (0.39%) initial =  21.54192
+        center:        9.244111 +/- 0.005055079 (0.05%) initial =  9.25
+        fwhm:          2.629512 +/- 0.01326999 (0.50%) == '3.6013100*sigma'
+        gamma:         0.7301542 +/- 0.003684769 (0.50%) == 'sigma'
+        sigma:         0.7301542 +/- 0.003684769 (0.50%) initial =  1.35
+    [[Correlations]] (unreported correlations are <  0.250)
+        C(amplitude, sigma)          =  0.651
+
+with the much better value for :math:`\chi^2` and the obviously better
+match to the data as seen in the figure below (left).   
+
+.. _figA2:
+
+  .. image::  _images/models_peak3.png
+     :target: _images/models_peak3.png
+     :width: 48 %
+  .. image::  _images/models_peak4.png
+     :target: _images/models_peak4.png
+     :width: 48 %
+
+  Fit to peak with Voigt model (left) and Voigt model with ``gamma``
+  varying independently of ``sigma`` (right).
+
+
+The Voigt function has a :math:`\gamma` parameter (``gamma``) that can be
+distinct from ``sigma``, though in use above the default behaviour of
+constraining  ``gamma`` to have exactly the same value as ``sigma`` was
+used.  If we allow this to vary separately does the fit improve?
+To do this, we have to change the ``gamma`` parameter from a constrained
+expression, and give it a starting value::
+
+    mod = VoigtModel()
+    mod.guess_starting_values(y, x=x)
+    mod.params['gamma'].expr  = None
+    mod.params['gamma'].value = 0.7
+
+    out  = mod.fit(y, x=x)
+    print fit_report(out, min_correl=0.25)
+
+which gives::
+
+    [[Fit Statistics]]
+        # function evals   = 32
+        # data points      = 401
+        # variables        = 4
+        chi-square         = 10.930
+        reduced chi-square = 0.028
+    [[Variables]]
+        amplitude:     34.19147 +/- 0.1794683 (0.52%) initial =  21.54192
+        center:        9.243748 +/- 0.00441902 (0.05%) initial =  9.25
+        fwhm:          3.223856 +/- 0.05097446 (1.58%) == '3.6013100*sigma'
+        gamma:         0.5254013 +/- 0.01857953 (3.54%) initial =  0.7
+        sigma:         0.8951898 +/- 0.01415442 (1.58%) initial =  1.35
+    [[Correlations]] (unreported correlations are <  0.250)
+        C(amplitude, gamma)          =  0.821
+
+and the fit shown above (on the right). 
+
+Comparing the two fits with the Voigt function, we see that :math:`\chi^2`
+is better with a separately varying ``gamma`` parameter.  The two values
+for ``gamma`` and ``sigma`` differ significantly -- well outside the
+estimated uncertainties.  What's more, reduced :math:`\chi^2` is improved
+even though a fourth variable has been added to the fit, justifying it as a
+significant variable in the model.
+
+
+This example shows how easy it can be to alter and compare fitting models
+for simple problems. 
+
+
+
 
 
 Example 2: Fit data to Voigt profile + Line
@@ -361,12 +530,11 @@ The forms are
    :nowrap:
 
    \begin{eqnarray*}
-   & f(x; A, \mu, \sigma, {\mathrm{form='linear'}})   &=& A \min[1, \max(0,  \alpha)] \\
-   & f(x; A, \mu, \sigma, {\mathrm{form='arctan'}})   &=& A [1/2 + \arctan{(\alpha)}/{\pi}] \\
-   & f(x; A, \mu, \sigma, {\mathrm{form='erf'}}) \,\, &=& A [1 + {\operatorname{erf}}(\alpha)]/2 \\
-   & f(x; A, \mu, \sigma, {\mathrm{form='logistic'}}) &=& A [1 - \frac{1}{1 +  e^{\alpha}} ]
+   & f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})  & = A \min{[1, \max{(0,  \alpha)}]} \\
+   & f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})  & = A [1/2 + \arctan{(\alpha)}/{\pi}] \\
+   & f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})     & = A [1 + {\operatorname{erf}}(\alpha)]/2 \\
+   & f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}})& = A [1 - \frac{1}{1 +  e^{\alpha}} ]
    \end{eqnarray*}
-
 
 where :math:`\alpha  = (x - \mu)/{\sigma}`.
 
@@ -385,10 +553,10 @@ with characteristic width :math:`\sigma_2` (``sigma2``).
    :nowrap:
 
    \begin{eqnarray*}
-   & f(x; A, \mu, \sigma, {\mathrm{form='linear'}})  &=& A \{ \min[1, \max(0, \alpha_1)] + \min[-1, \max(0,  \alpha_2)] \} \\
-   &f(x; A, \mu, \sigma, {\mathrm{form='arctan'}})   &=& A [\arctan{(\alpha_1)} + \arctan{(\alpha_2)}]/{\pi} \\
-   &f(x; A, \mu, \sigma, {\mathrm{form='erf'}}) \,\, &=& A [{\operatorname{erf}}(\alpha_1) + {\operatorname{erf}}(\alpha_2)]/2 \\
-   &f(x; A, \mu, \sigma, {\mathrm{form='logistic'}}) &=& A [1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 +  e^{\alpha_2}} ]
+   &f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})   &= A \{ \min{[1, \max{(0, \alpha_1)}]} + \min{[-1, \max{(0,  \alpha_2)}]} \} \\
+   &f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})   &= A [\arctan{(\alpha_1)} + \arctan{(\alpha_2)}]/{\pi} \\
+   &f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})      &= A [{\operatorname{erf}}(\alpha_1) + {\operatorname{erf}}(\alpha_2)]/2 \\
+   &f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}}) &= A [1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 +  e^{\alpha_2}} ]
    \end{eqnarray*}
 
 
