@@ -1,4 +1,4 @@
-.. _parameters_label:
+.. _parameters_chapter:
 
 ================================================
 :class:`Parameter`  and :class:`Parameters`
@@ -45,11 +45,11 @@ will have the :attr:`value` attribute holding the best-fit value, and may
    {'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}
 
 For details of the use of the bounds :attr:`min` and :attr:`max`,
-see :ref:`parameter-bounds-label`.
+see :ref:`bounds_chapter`.
 
 The :attr:`expr` attribute can contain a mathematical expression that will
 be used to compute the value for the Parameter at each step in the fit.
-See :ref:`math-constraints-label` for more details and examples of this
+See :ref:`constraints_chapter` for more details and examples of this
 feature.
 
 

@@ -1,4 +1,4 @@
-.. _builtin_models_label:
+.. _builtin_models_chapter:
 
 =================================
 Built-in Fitting Models
@@ -17,7 +17,8 @@ method that can make decent guesses for parameter values.
 Example 1: Fit data to Voigt or Gaussian profiles
 ======================================================
 
-Here, we will
+Here, we will fit data to two similar lineshapes, in order to decide which
+might be the better model.
 
 
 Example 2: Fit data to Voigt profile + Line

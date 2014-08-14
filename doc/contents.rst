@@ -8,9 +8,9 @@ Contents
    intro
    parameters
    fitting
+   model
+   builtin_models
    confidence
    bounds
    constraints
-   model
-   builtin_models
 

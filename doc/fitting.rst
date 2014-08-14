@@ -1,8 +1,10 @@
+.. _minimize_chapter:
+
 =======================================
 Performing Fits, Analyzing Outputs
 =======================================
 
-As shown in the previous sections, a simple fit can be performed with
+As shown in the introduction, a simple fit can be performed with
 the :func:`minimize` function.    For more sophisticated modeling,
 the :class:`Minimizer` class can be used to gain a bit more control,
 especially when using complicated constraints.

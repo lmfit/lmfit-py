@@ -1,4 +1,4 @@
-.. _model_label:
+.. _model_chapter:
 
 =================================================
 Modeling Data and Curve Fitting
@@ -6,7 +6,7 @@ Modeling Data and Curve Fitting
 
 A very common application of least-squares minimization is *curve fitting*,
 where one has a parametrized model function meant to explain some
-phenomena, and then wants to adjust the numerical values for the model to
+phenomena, and wants to adjust the numerical values for the model to
 most closely match some particular data.  Within the :mod:`scipy` world,
 such curve fitting problems are commonly solved with
 :func:`scipy.optimize.curve_fit`, which simply calls
@@ -21,7 +21,7 @@ make simple things truly simple, lmfit also provides canonical definitions
 for many known lineshapes such as Gaussian or Lorentzian peaks and
 Exponential decays that are widely used in many scientific domains.  These
 are available in the :mod:`models` module that will be discussed in more
-detail in the next chapter (:ref:`builtin_models_label`).  We mention it
+detail in the next chapter (:ref:`builtin_models_chapter`).  We mention it
 here as you may want to consult that list before writing your own model.
 For now, we focus on turning python function into high-level fitting models
 with the :class:`Model` class, and using these to fit data.
@@ -405,7 +405,7 @@ As we will see in the next chapter when combining models, it is sometimes
 necessary to decorate the parameter names in the model, but still have them
 be correctly used in the underlying model function.  This would be
 necessary, for example, if two parameters in a composite model (see
-:ref:`composite_models_label` or examples in the next chapter) would have
+:ref:`composite_models_section` or examples in the next chapter) would have
 the same name.  To avoid this, we can add a ``prefix`` to the
 :class:`Model` which will automatically do this mapping for us.
 
@@ -466,7 +466,7 @@ values and bounds as with option 2, but then change the initial value with
 option 3.
 
 
-.. _composite_models_label:
+.. _composite_models_section:
 
 Creating composite models
 =============================

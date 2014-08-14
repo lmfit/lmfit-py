@@ -1,10 +1,10 @@
-.. _asteval: http://newville.github.io/asteval/
-
-.. _math-constraints-label:
+.. _constraints_chapter:
 
 =================================
 Using Mathematical Constraints
 =================================
+
+.. _asteval: http://newville.github.io/asteval/
 
 While being able to fix variables and place upper and lower bounds on their
 values are key parts of lmfit, the ability to place mathematical
