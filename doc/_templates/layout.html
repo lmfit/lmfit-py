@@ -12,27 +12,28 @@
 
 {% block rootrellink %}
    <li><a href="{{ pathto('parameters') }}">parameters</a>|</li>
-   <li><a href="{{ pathto('fitting') }}">fitting</a>|</li>
+   <li><a href="{{ pathto('fitting') }}"> minimization</a>|</li>
    <li><a href="{{ pathto('confidence') }}">confidence intervals</a>|</li>
-   <li><a href="{{ pathto('model') }}"> making models</a>|</li>
+   <li><a href="{{ pathto('model') }}"> modeling data</a>|</li>
    <li><a href="{{ pathto('builtin_models') }}">builtin models</a>|</li>
 {% endblock %}
 
 {% block relbar1 %}
-<div style="background color: #d5daaa">
+<div>
 <table border=0>
-  <tr><td width=5%></td> <td width=85% padding=5 align=left>
-       <a href="index.html" style="color: #444400; text-align: left;"> <font size=+2>LMFIT</font></a>
+  <tr><td></td> <td width=80% padding=5 align=left>
+       <a href="index.html" style="color: #157; text-align: left;"> <font size=+4>LMFIT</font></a>
+     </td>
+     <td width=10% align=left>  <a href="contents.html" style="color: #882222;  text-align: left;"> contents</a> </td>
+     <td width=10% align=left>  <a href="intro.html" style="color: #882222;     text-align: left;"> introduction</a> </td>
+	</td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="index.html" style="color: #157; text-align: left;"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
      </td>
      <td width=10% align=left> <a href="installation.html" style="color: #882222; text-align: left;"> download</a>
-     </td>
-  </tr>
-  <tr><td width=5%></td> <td width=85% padding=5 align=left>
-        <a href="index.html" style="color: #444400; text-align: left;"> <font size=+1>Non-Linear Least-Squares Minimization for Python</font></a>
-     </td>
-     <td width=10% align=left>  <a href="intro.html" style="color: #882222;   text-align: left;"> introduction</a> </td>
-
-  </tr>
+     <td width=10% align=left> <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222; text-align: left;"> develop</a>  </tr>
 </table>
 </div>
 {{ super() }}

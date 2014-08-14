@@ -110,14 +110,11 @@ pygments_style = 'sphinx'
 
 # -- Options for HTML output ---------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  Major themes that come with
-# Sphinx are currently 'default' and 'sphinxdoc'.
-#html_theme = 'default'
-
-html_theme = 'sphinxdoc'
+html_theme_path = ['theme']
+html_theme = 'lmfitdoc'
 
 # html_theme = 'nature'
-#html_theme = 'agogo'
+# html_theme = 'agogo'
 # html_theme_options = {'pagewidth':'85em', 'documentwidth':'60em', 'sidebarwidth': '25em',
 #                       # 'headercolor1': '#000080',
 #                       # 'headercolor2': '#0000A0',
