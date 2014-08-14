@@ -17,8 +17,8 @@ gresult = gmodel.fit(y, x=x)
 print 'With Gaussian: '
 print fit_report(gresult.params, min_correl=0.25)
 print 'Chi-square = %.3f, Reduced Chi-square = %.3f' % (gresult.chisqr, gresult.redchi)
-plt.plot(x, y,         'ko')
-plt.plot(x, gresult.best_fit, 'r-')
+plt.plot(x, y,         'k')
+plt.plot(x, 10*(y-gresult.best_fit), 'r-')
 
 
 vmodel = VoigtModel()
@@ -29,7 +29,7 @@ print 'With Voigt: '
 print fit_report(vresult.params, min_correl=0.25)
 print 'Chi-square = %.3f, Reduced Chi-square = %.3f' % (vresult.chisqr, vresult.redchi)
 
-plt.plot(x, vresult.best_fit, 'b-')
+plt.plot(x, 10*(y-vresult.best_fit), 'b-')
 
 
 vmodel.params['gamma'].vary = True
@@ -40,7 +40,7 @@ vresult2 = vmodel.fit(y, x=x)
 print 'With Voigt, varying gamma: '
 print fit_report(vresult2.params, min_correl=0.25)
 print 'Chi-square = %.3f, Reduced Chi-square = %.3f' % (vresult2.chisqr, vresult2.redchi)
-plt.plot(x, vresult.best_fit, 'g-')
+plt.plot(x, 10*(y-vresult2.best_fit), 'g-')
 
 plt.show()
 
