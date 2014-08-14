@@ -142,7 +142,7 @@ function, but the approach here allows some external control, that is by
 the **user** of the objective function instead of just by the author of the
 objective function.
 
-Finally, in addition to the :class:`Parameters`` approach to fitting data,
+Finally, in addition to the :class:`Parameters` approach to fitting data,
 lmfit allows you to easily switch optimization methods without rewriting
 your objective function, and provides tools for writing fitting reports and
 for better determining the confidence levels for Parameters.

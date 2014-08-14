@@ -1,19 +1,22 @@
 .. lmfit documentation master file,
 
-Non-Linear Least-Square Minimization for Python
-================================================
+Non-Linear Least-Square Minimization and Curve-Fitting for Python
+===========================================================================
 
 .. _Levenberg-Marquardt:     http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
 .. _MINPACK-1:               http://en.wikipedia.org/wiki/MINPACK
 .. _Nelder-Mead:             http://en.wikipedia.org/wiki/Nelder-Mead_method
 
 The lmfit python package provides a simple and flexible interface to
-non-linear optimization or curve fitting problems.  Lmfit extends the
+non-linear optimization and curve fitting problems.  Lmfit extends the
 optimization capabilities of :mod:`scipy.optimize`.  Initially designed to
 extend the the `Levenberg-Marquardt`_ algorithm from `MINPACK-1`_ as
 implemented in :func:`scipy.optimize.leastsq`, lmfit supports most of the
 optimization methods from :mod:`scipy.optimize`, including `Nelder-Mead` and
-all the methods available from :func:`scipy.optimize.minimize`.
+all the methods available from :func:`scipy.optimize.minimize`.  It also
+provides a simple way to solve *curve fitting* problems in which one
+adjusts the numerical values of some parametrized function to most closely
+match some data.
 
 The key concept for lmfit is that instead of using plain floating pointing
 values for the variables to be optimized (as all the optimization routines
@@ -39,11 +42,12 @@ automated) testing the significance of individual Parameters in a fitting
 model.
 
 As mentioned above, the lmfit package allows a choice of several
-optimization methods available from :mod:`scipy.optimize`.  The default, and by
-far best tested optimization method used (and the origin of the name) is
-the `Levenberg-Marquardt`_ algorithm of :func:`scipy.optimize.leastsq`.  Much of
-this document assumes this algorithm is used unless explicitly stated.  An
-important point for many scientific analysis is that this is only method
+optimization methods available from :mod:`scipy.optimize`.  The default,
+and by far best tested optimization method used (and the origin of the
+name) is the `Levenberg-Marquardt`_ algorithm of
+:func:`scipy.optimize.leastsq` and :func:`scipy.optimize.curve_fit`.  Much
+of this document assumes this algorithm is used unless explicitly stated.
+An important point for many scientific analysis is that this is only method
 that automatically estimates uncertainties and correlations between fitted
 variables from the covariance matrix calculated during the fit.
 
@@ -52,19 +56,16 @@ determine uncertainties is sometimes questioned (and sometimes rightly so),
 lmfit supports methods to do a brute force search of the confidence
 intervals and correlations for sets of parameters.
 
-lmfit and this document are a work in progress.  We are currently working
-on providing easy-to-use models that for common fitting problems.
+.. _lmfit github repository:   http://github.com/lmfit/lmfit-py
+
+The lmfit package is an open-source project, and this document are a works
+in progress.  If you are interested in participating in this effort please
+use the `lmfit github repository`_.
+
 
 .. toctree::
    :maxdepth: 2
 
-   installation
-   intro
-   parameters
-   fitting
-   confidence
-   bounds
-   constraints
-   model
-   builtin_models
+   contents
+
 

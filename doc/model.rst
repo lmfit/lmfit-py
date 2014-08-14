@@ -1,25 +1,29 @@
 .. _model_label:
 
 =================================================
-Creating Fitting Models from model functions
+Modeling Data and Curve Fitting
 =================================================
 
-It is very common to want to fit some data to a model function, as is
-commonly done with :func:`scipy.optimize.curve_fit`).  Indeed, it is common
-to want to fit data to well-known functional form such as Gaussian or
-Lorentzian peaks, Exponential decays, and so on, that are widely used in
-many scientific domains.
+A very common application of least-squares minimization is *curve fitting*,
+where one has a parametrized model function meant to explain some
+phenomena, and then wants to adjust the numerical values for the model to
+most closely match some particular data.  Within the :mod:`scipy` world,
+such curve fitting problems are commonly solved with
+:func:`scipy.optimize.curve_fit`, which simply calls
+:func:`scipy.optimize.leastsq`.  As lmfit is a high-level wrapper around
+:func:`scipy.optimize.leastsq`, it can be used for curve-fitting problems,
+but here we discuss an even easier way to do it that is closer in spirit to
+:func:`scipy.optimize.curve_fit`, but better.
 
-The lmfit package provides a :class:`Model` class that makes it easy to
-turn a model function that calculates a model for your data into a fitting
-model.  In an effort to make simple things truly simple, the lmfit package
-also provides canonical definitions for many known lineshapes and
-pre-defined high-level fitting models in the :mod:`models` module.  These
-are listed in more detail in the next chapter
-(:ref:`builtin_models_label`), and you may want to consult that list before
-writing your own model.
-
-Here, we focus on turning python function into high-level fittingmodels
+The :class:`Model` class makes it easy to turn a model function that
+calculates a model for your data into a fitting model.  In an effort to
+make simple things truly simple, lmfit also provides canonical definitions
+for many known lineshapes such as Gaussian or Lorentzian peaks and
+Exponential decays that are widely used in many scientific domains.  These
+are available in the :mod:`models` module that will be discussed in more
+detail in the next chapter (:ref:`builtin_models_label`).  We mention it
+here as you may want to consult that list before writing your own model.
+For now, we focus on turning python function into high-level fitting models
 with the :class:`Model` class, and using these to fit data.
 
 
@@ -39,33 +43,55 @@ use to fit to some data::
     ...    return (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
     ...
 
-We could write a residual function for this, but such a residual function
-would be fairly simple (essentially, ``data - model``, possibly with some
-weighting), and we would have to define and use appropriately named
-parameters.  After doing this a few times it appears as a recurring
-pattern, and we can imagine automating this process.  That's where the
-:class:`Model` class comes in.  We can pass it the ``gaussian`` function,
-and it will generate the appropriate residual function and the
-corresponding parameters::
+To some data :math:`y(x)` represented by the arrays ``y`` and ``x`` with we
+would do something like::
+
+    >>> from scipy.optimize import curve_fit
+    >>>
+    >>> x, y = read_data_from_somewhere(....)
+    >>>
+    >>> init_vals = [5, 5, 1]     # for [amp, cen, wid]
+    >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
+    >>> print best_vals
+
+
+That is, we read in data from somewhere, make an initial guess of the model
+values, and run ``curve_fit`` with the model function, data arrays, and
+initial guesses.  The results returned are the optimal values for the
+parameters and the covariance matrix.   It's pretty simple to do, but
+misses many of the key benefits of lmfit.
+
+
+To solve this with lmit we could write a residual function but such a
+residual function would be fairly simple (essentially, ``data - model``,
+possibly with some weighting), and we would need to define and use
+appropriately named parameters.  Though convenient, it also becomes
+somewhat of a burden to keep all the parameter names straight.  After doing
+this a few times it appears as a recurring pattern, and we can imagine
+automating this process.  That's where the :class:`Model` class comes in.
+We can pass this class the ``gaussian`` function, and it will automatically
+generate the appropriate residual function and the corresponding parameters
+from the function signature itself::
 
     >>> from lmfit import Model
-    >>> mod = Model(gaussian)
-    >>> for name, par in mod.params.items():
+    >>> gmod = Model(gaussian)
+    >>> for name, par in gmod.params.items():
     ...     print(name, par)
     ...
     'amp', <Parameter 'amp', None, bounds=[None:None]>
     'wid', <Parameter 'wid', None, bounds=[None:None]>
     'cen', <Parameter 'cen', None, bounds=[None:None]>
-    >>> print("Independent Variables: ", mod.independent_vars)
+    >>> print("Independent Variables: ", gmod.independent_vars)
     'Independent Variables: ', ['x']
 
-The Model ``mod`` is constructed containing a ``params`` member that holds
-the :class:`Parameters` for the model, and an ``independent_vars`` that
-holds the name of the independent variables.  By default, the first
-argument of the function is taken as the independent variable, and the rest
-of the parameters are used for variable Parameters.  Thus, for the
-``gaussian`` function above, the parameters are named ``amp``, ``cen``, and
-``wid``.  and ``x`` is the independent variable.
+The Model ``gmod`` is constructed to have a ``params`` member that holds the
+:class:`Parameters` for the model, and an ``independent_vars`` that holds
+the name of the independent variables.  By default, the first argument of
+the function is taken as the independent variable, and the rest of the
+parameters are used for variable Parameters.  Thus, for the ``gaussian``
+function above, the parameters are named ``amp``, ``cen``, and ``wid``, and
+``x`` is the independent variable -- taken directly from the signature of
+the model function.
 
 On creation of the model, the parameters are not initialized (the values
 are all ``None``), and will need to be given initial values before the
@@ -73,25 +99,31 @@ model can be used.  This can be done in one of two ways, or a mixture of
 the two.  First, the initial values for the models parameters can be set
 explicity, as with:
 
-    >>> mod.params['amp'].value = 10.0
+    >>> gmod.params['amp'].value = 10.0
 
-and so on.  Alternatively, one can use the :meth:`eval` method (to evaluate
-the model) or the :meth:`fit` method (to fit data to this model) with
-explicit keyword arguments for the parameter values.  For example, one
-could use :meth:`eval` to calculate the predicted function::
+and so on.  This is also useful to setting parameter bounds and so forth.
+Alternatively, one can use the :meth:`eval` method (to evaluate the model)
+or the :meth:`fit` method (to fit data to this model) with explicit keyword
+arguments for the parameter values.  For example, one could use
+:meth:`eval` to calculate the predicted function::
 
     >>> x = linspace(0, 10, 201)
-    >>> y = mod.eval(x=x, amp=10, cen=6.2, wid=0.75)
+    >>> y = gmod.eval(x=x, amp=10, cen=6.2, wid=0.75)
 
 So far, this is a slightly long-winded way to calculate a Gaussian
 function.   But now that the model is set up, we can also use its
-:meth:`fit` method to fit this model to data.  Putting everything together,
-the script to do such a fit (included in the ``examples`` folder with the
-source code) is:
+:meth:`fit` method to fit this model to data, as with::
+
+    result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+
+Putting everything together, the script to do such a fit (included in the
+``examples`` folder with the source code) is:
 
 .. literalinclude:: ../examples/model_doc1.py
 
-which is pretty compact and to the point.   The results printed out are::
+which is pretty compact and to the point.  Of course, the parameter in the
+returned ``result`` have pulled apart the covariance matrix, so that the
+results printed out are::
 
     [[Variables]]
          amp:     8.880218 +/- 0.1135949 (1.28%) initial =  5
@@ -120,28 +152,28 @@ and 1 for ``wid``::
     gmod = Model(gaussian)
     result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
-This is roughly equivalent to using :func:`scipy.optimize.curve_fit`::
+which compares well to :func:`scipy.optimize.curve_fit`::
 
-    popt, pcov = curve_fit(gaussian, x, y, p0=[5, 5, 1])
+    best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
-except that all the other features of lmfit are available such as named
-parameters, placing bounds or constraints on parameters, easily switching
-fitting algorithms, and automated processing of the covariance matrix.  In
-addition some model functions may be more complicated.  We'll discuss these
-below, but for now we've shown that at least the wrapping of a simple model
-function for curve fitting is easy.
+except that all the other features of lmfit are included.
+
+Some model functions may be more complicated than the Gaussian function
+here.  We'll discuss these below, but for now we've shown that at least the
+wrapping of a simple model function for curve fitting is easy.
+
 
 The :class:`Model` class
 =======================================
 
-The :class:`Model` class is the most general way to wrap a pre-defined
-function as a fitting model.  All the models described in this chapter are
-derived from it.
+The :class:`Model` class provides a general way to wrap a pre-defined
+function as a fitting model.
 
 .. class:: Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, components=None]]]]])
 
-    Create a model based on the user-supplied function.  This uses a
-    introspection to automatically converting argument names to Parameter names.
+    Create a model based on the user-supplied function.  This uses
+    introspection to automatically converting argument names of the
+    function to Parameter names.
 
     :param func: function to be wrapped
     :type func: callable
@@ -169,7 +201,7 @@ Methods and Attributes of the :class:`Model` class
 
 .. method:: eval(params=None[, **kws])
 
-   evalueate the model function for a set of parameters and inputs.
+   evaluate the model function for a set of parameters and inputs.
 
    :param params: parameters to use for fit.
    :type params: ``None`` (default) or Parameters
@@ -241,25 +273,25 @@ statistics and fit results given in :ref:`Table of Fit Results
 
    list of strings of parameter names.
 
-
 .. attribute:: params
 
    :class:`Parameters` object for the model
 
 .. attribute:: prefix
 
-   prefix used for name-mangling of parameter names.  That is, for a
-   :class:`GaussianModel`, the default parameter names would be
-   ``amplitude``, ``center``, and ``sigma``.  These parameters are used for
-   many pre-defined models, and would cause a name collision for a
-   composite model.  Using a prefix of ``g1_`` would convert these
-   parameter names to ``g1_amplitude``, ``g1_center``, and ``g1_sigma``.
+   prefix used for name-mangling of parameter names.  The default is ''.
+   If a particular :class:`Model` has arguments ``amplitude``,
+   ``center``, and ``sigma``, these would become the parameter names.
+   Using a prefix of ``g1_`` would convert these parameter names to
+   ``g1_amplitude``, ``g1_center``, and ``g1_sigma``.   This can be
+   essential to avoid name collision in composite models.
 
 .. attribute:: missing
 
    what to do for missing values.  The choices are
 
     * ``None``: Do not check for null or missing values (default)
+    * ``'none'``: Do not check for null or missing values.
     * ``'drop'``: Drop null or missing observations in data.  If pandas is
                 installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
     * ``'raise'``: Raise a (more helpful) exception when data contains null
@@ -270,7 +302,6 @@ statistics and fit results given in :ref:`Table of Fit Results
    a list of instances of :class:`Model` that make up a composite model.
    Normally, you will not need to use this, but is used my :class:`Model`
    itself when constructing a composite model (that is adding models together).
-
 
 
 Determining parameter names and independent variables for a function
@@ -453,7 +484,7 @@ components::
 
     def gaussian_plus_line(x, amp, cen, wid, slope, intercept):
         "line + 1-d gaussian"
-    
+
         gauss = (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
         line = slope * x + intercept
         return gauss + line

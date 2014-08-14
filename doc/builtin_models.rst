@@ -14,12 +14,11 @@ addition, the pre-built models provide a :meth:`guess_starting_values`
 method that can make decent guesses for parameter values.
 
 
+Example 1: Fit data to Voigt or Gaussian profiles
+======================================================
 
+Here, we will
 
-
-
-Example 1: Fit data to Voigt profile
-=================================================
 
 Example 2: Fit data to Voigt profile + Line
 =================================================
