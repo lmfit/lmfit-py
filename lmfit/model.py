@@ -42,7 +42,7 @@ class Model(object):
     _invalid_par   = "Invalid parameter name ('%s') for function %s"
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing=None, prefix='', components=None):
+                 missing='none', prefix='', components=None):
         """Create a model from a user-defined function.
 
         Parameters
@@ -52,8 +52,8 @@ class Model(object):
             arguments to func that are independent variables
         param_names: list of strings or None (default)
             names of arguments to func that are to be made into parameters
-        missing: None, 'drop', or 'raise'
-            None: Do not check for null or missing values (default)
+        missing: None, 'none', 'drop', or 'raise'
+            'none' or None: Do not check for null or missing values (default)
             'drop': Drop null or missing observations in data.
                 if pandas is installed, pandas.isnull is used, otherwise
                 numpy.isnan is used.
@@ -80,8 +80,8 @@ class Model(object):
         self.func_haskeywords = False
         self.has_initial_guess = False
         self.components = components
-        if not missing in [None, 'drop', 'raise']:
-            raise ValueError("missing must be None, 'drop', or 'raise'.")
+        if not missing in [None, 'none', 'drop', 'raise']:
+            raise ValueError("missing must be None, 'none', 'drop', or 'raise'.")
         self.missing = missing
         self._parse_params()
         self._residual = self._build_residual()
@@ -265,7 +265,7 @@ class Model(object):
 
         # Handle null/missing values.
         mask = None
-        if self.missing is not None:
+        if self.missing not in (None, 'none'):
             mask = self._handle_missing(data)  # This can raise.
             if mask is not None:
                 data = data[mask]
