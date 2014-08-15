@@ -414,11 +414,13 @@ Getting and Printing Fit Reports
    generate and return text of report of best-fit values, uncertainties,
    and correlations from fit.
 
-   :param params:       Parameters from fit.
+   :param params:       Parameters from fit, or Minimizer object as returned by :func:`minimize`.
    :param modelpars:    Parameters with "Known Values" (optional, default None)
    :param show_correl:  whether to show list of sorted correlations [``True``]
    :param min_correl:   smallest correlation absolute value to show [0.1]
 
+   If the first argument is a Minimizer object, as returned from
+   :func:`minimize`, the report will include some goodness-of-fit statistics.
 
 .. function:: report_fit(params, modelpars=None, show_correl=True, min_correl=0.1)
 
