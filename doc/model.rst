@@ -512,6 +512,13 @@ This model has parameters for both component models, and can be used as:
 
 which prints out the results::
 
+
+    [[Fit Statistics]]
+        # function evals   = 44
+        # data points      = 101
+        # variables        = 5
+        chi-square         = 2.579
+        reduced chi-square = 0.027
     [[Variables]]
          amp:           8.459311 +/- 0.1241451 (1.47%) initial =  5
          cen:           5.655479 +/- 0.009176784 (0.16%) initial =  5

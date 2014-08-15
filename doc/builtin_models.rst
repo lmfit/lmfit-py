@@ -72,8 +72,9 @@ fit:
 
 suggesting that a different peak shape, with longer tails, should be used.
 Perhaps a Lorentzian would be better?  To do this, we simply replace
-``GaussianModel`` with ``LorentzianModel``::
- 
+``GaussianModel`` with ``LorentzianModel`` to get a
+:class:`LorentzianModel`::
+
     from lmfit.models import LorentzianModel
     mod = LorentzianModel()
     mod.guess_starting_values(y, x=x)
@@ -95,11 +96,11 @@ The results, or course, are worse::
         sigma:         1.15484 +/- 0.01315648 (1.14%) initial =  1.35
     [[Correlations]] (unreported correlations are <  0.250)
         C(amplitude, sigma)          =  0.709
-    
+
 
 with the plot shown in the figure above.
 
-A Voigt model does a better job.  Again, using :class:`VoigtModel`, this is
+A Voigt model does a better job.  Using :class:`VoigtModel`, this is
 as simple as::
 
     from lmfit.models import LorentzianModel
@@ -126,7 +127,7 @@ which gives::
         C(amplitude, sigma)          =  0.651
 
 with the much better value for :math:`\chi^2` and the obviously better
-match to the data as seen in the figure below (left).   
+match to the data as seen in the figure below (left).
 
 .. _figA2:
 
@@ -142,11 +143,11 @@ match to the data as seen in the figure below (left).
 
 
 The Voigt function has a :math:`\gamma` parameter (``gamma``) that can be
-distinct from ``sigma``, though in use above the default behaviour of
-constraining  ``gamma`` to have exactly the same value as ``sigma`` was
-used.  If we allow this to vary separately does the fit improve?
-To do this, we have to change the ``gamma`` parameter from a constrained
-expression, and give it a starting value::
+distinct from ``sigma``.  The default behaviour used above constrains
+``gamma`` to have exactly the same value as ``sigma``.  If we allow these
+to vary separately, does the fit improve?  To do this, we have to change
+the ``gamma`` parameter from a constrained expression and give it a
+starting value::
 
     mod = VoigtModel()
     mod.guess_starting_values(y, x=x)
@@ -173,68 +174,63 @@ which gives::
     [[Correlations]] (unreported correlations are <  0.250)
         C(amplitude, gamma)          =  0.821
 
-and the fit shown above (on the right). 
+and the fit shown above (on the right).
 
 Comparing the two fits with the Voigt function, we see that :math:`\chi^2`
-is better with a separately varying ``gamma`` parameter.  The two values
-for ``gamma`` and ``sigma`` differ significantly -- well outside the
-estimated uncertainties.  What's more, reduced :math:`\chi^2` is improved
-even though a fourth variable has been added to the fit, justifying it as a
-significant variable in the model.
+is definitely better with a separately varying ``gamma`` parameter.  In
+addition, the two values for ``gamma`` and ``sigma`` differ significantly
+-- well outside the estimated uncertainties.  Even more compelling, reduced
+:math:`\chi^2` is improved even though a fourth variable has been added to
+the fit, justifying it as a significant variable in the model.
 
 
 This example shows how easy it can be to alter and compare fitting models
-for simple problems. 
+for simple problems.
 
 
+Example 2: Fit data to a Composite Model with pre-defined models
+====================================================================
+
+Here, we repeat the point made at the end of the last chaper that instances
+of :class:`Model` class can be added them together to make a *composite
+model*.  But using the built-in models, this is even easier than shown
+above::
+
+    from lmfit.models import GaussianModel, LinearModel
+
+    gauss = GaussianModel()
+    gauss.guess_starting_values(y, x=x)
+
+    line = LinearModel()
+    line.params['slope'].value = 0
+    line.params['intercept'].value = 0
+
+    mod =  gauss + line
+    result = mod.fit(y, x=x)
+
+    print(fit_report(result))
+
+The results are nearly identical to those of the last chapter, though the
+initial guesses are a little better here, and the parameter names are
+slightly changed::
 
 
-
-Example 2: Fit data to Voigt profile + Line
-=================================================
-
-We can expand on the model by showing an important feature of the lmfit
-Models derived from the powerful :class:`Model` class: you can add them
-together.  That is, to fit data to a Gaussian plus a linear offset, we
-could use this script (also included in the ``examples`` folder with the
-source code):
-
-.. literalinclude:: ../examples/models_doc2.py
-
-
-This is only slightly more complicated than the script above.  Here, we
-start with a :class:`GaussianModel` as before and use the built-in method
-to guess starting values.  But then we create a :class:`LinearModel` (which
-has parameters named ``slope`` and ``intercept``), and add this to the
-:class:`GaussianModel` with the simple::
-
-    total = gauss + line
-
-and call the :meth:`fit` method of the combined model ``total``.  That will
-fit all the parameters, reporting results of::
-
+    [[Fit Statistics]]
+        # function evals   = 31
+        # data points      = 101
+        # variables        = 5
+        chi-square         = 2.579
+        reduced chi-square = 0.027
     [[Variables]]
-         amplitude:     8.459308 +/- 0.1241455 (1.47%) initial =  11.96192
-         center:        5.655479 +/- 0.009176806 (0.16%) initial =  5.7
-         fwhm:          1.590575 +/- 0.02335249 (1.47%) == '2.354820*sigma'
-         intercept:    -2.968602 +/- 0.03352202 (1.13%) initial = -1
-         sigma:         0.6754549 +/- 0.009916889 (1.47%) initial =  0.9
-         slope:         0.1148441 +/- 0.005748924 (5.01%) initial =  0
-    [[Correlations]] (unreported correlations are <  0.250)
+        amplitude:     8.459312 +/- 0.1241436 (1.47%) initial =  13.61192
+        center:        5.655479 +/- 0.009176658 (0.16%) initial =  5.75
+        fwhm:          1.590576 +/- 0.02335207 (1.47%) == '2.354820*sigma'
+        intercept:    -0.9686019 +/- 0.03352198 (3.46%) initial =  0
+        sigma:         0.6754554 +/- 0.009916711 (1.47%) initial =  0.95
+        slope:         0.264844 +/- 0.005748916 (2.17%) initial =  0
+    [[Correlations]] (unreported correlations are <  0.100)
         C(amplitude, sigma)          =  0.666
-
-and give a plot like this:
-
-.. image:: _images/models_doc2.png
-   :target: _images/models_doc2.png
-   :width: 85%
-
-again showing (simulated) data shown in blue dots, with the best fit as a
-solid red line, and the initial fit in black dashed line.
-
-The emphasis here is that not only is fitting to a single pre-defined
-function a simple matter, but that fitting to a model built up of several
-pre-defined functions is not much more difficult.
+        C(center, intercept)         =  0.129
 
 
 Subclasses of :class:`Model` available in the :mod:`models` module
