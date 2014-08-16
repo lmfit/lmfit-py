@@ -20,7 +20,6 @@ from numpy.linalg import LinAlgError
 
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import fmin as scipy_fmin
-from scipy.optimize import anneal as scipy_anneal
 from scipy.optimize.lbfgsb import fmin_l_bfgs_b as scipy_lbfgsb
 
 # check for scipy.optimize.minimize
@@ -291,24 +290,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                 delattr(par, 'ast')
 
     def anneal(self, schedule='cauchy', **kws):
-        """
-        use simulated annealing
-        """
-        sched = 'fast'
-        if schedule in ('cauchy', 'boltzmann'):
-            sched = schedule
-
-        self.prepare_fit()
-        sakws = dict(full_output=1, schedule=sched,
-                     maxiter=2000 * (self.nvarys + 1))
-
-        sakws.update(self.kws)
-        sakws.update(kws)
-        print("WARNING:  scipy anneal appears unusable!")
-        saout = scipy_anneal(self.penalty, self.vars, **sakws)
-        self.sa_out = saout
-        self.unprepare_fit()
-        return
+        """scipy simulated annealing is broken"""
+        raise NotImplementedError("scipy simulated annealing is broken")
 
     def lbfgsb(self, **kws):
         """
@@ -368,7 +351,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
           CG  (conjugate gradient)
           BFGS
           Newton-CG
-          Anneal
           L-BFGS-B
           TNC
           COBYLA
@@ -574,7 +556,6 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
                        'cg': 'CG',
                        'bfgs': 'BFGS',
                        'newton': 'Newton-CG',
-                       'anneal': 'Anneal',
                        'lbfgs': 'L-BFGS-B',
                        'l-bfgs':'L-BFGS-B',
                        'tnc': 'TNC',
@@ -583,8 +564,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
                        'dogleg': 'dogleg',
                        'trust-ncg': 'trust-ncg'}
 
-    _fitmethods = {'anneal': 'anneal',
-                   'nelder': 'fmin',
+    _fitmethods = {'nelder': 'fmin',
                    'lbfgsb': 'lbfgsb',
                    'leastsq': 'leastsq'}
 
