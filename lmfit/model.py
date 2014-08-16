@@ -24,54 +24,43 @@ def _align(var, mask, data):
         return var[mask]
     return var
 
-def funcargs(func):
-    """return names for positional arguments and
-    dict of keyword arguments for a function.
-    """
-    argspec = inspect.getargspec(func)
-    posargs = argspec.args[:]
-    kwargs = {}
-    if argspec.defaults is not None:
-        for val in reversed(argspec.defaults):
-            kwargs[posargs.pop()] = val
-    return (posargs, kwargs, argspec.keywords)
-
 class Model(object):
+    """Create a model from a user-defined function.
+
+    Parameters
+    ----------
+    func: function to be wrapped
+    independent_vars: list of strings or None (default)
+        arguments to func that are independent variables
+    param_names: list of strings or None (default)
+        names of arguments to func that are to be made into parameters
+    missing: None, 'none', 'drop', or 'raise'
+        'none' or None: Do not check for null or missing values (default)
+        'drop': Drop null or missing observations in data.
+            if pandas is installed, pandas.isnull is used, otherwise
+            numpy.isnan is used.
+        'raise': Raise a (more helpful) exception when data contains null
+            or missing values.
+
+    Note
+    ----
+    Parameter names are inferred from the function arguments,
+    and a residual function is automatically constructed.
+
+    Example
+    -------
+    >>> def decay(t, tau, N):
+    ...     return N*np.exp(-t/tau)
+    ...
+    >>> my_model = Model(decay, independent_vars=['t'])
+    """
+
     _forbidden_args = ('data', 'weights', 'params')
     _invalid_ivar  = "Invalid independent variable name ('%s') for function %s"
     _invalid_par   = "Invalid parameter name ('%s') for function %s"
-
+    _invalid_missing = "missing must be None, 'none', 'drop', or 'raise'."
     def __init__(self, func, independent_vars=None, param_names=None,
                  missing='none', prefix='', components=None):
-        """Create a model from a user-defined function.
-
-        Parameters
-        ----------
-        func: function to be wrapped
-        independent_vars: list of strings or None (default)
-            arguments to func that are independent variables
-        param_names: list of strings or None (default)
-            names of arguments to func that are to be made into parameters
-        missing: None, 'none', 'drop', or 'raise'
-            'none' or None: Do not check for null or missing values (default)
-            'drop': Drop null or missing observations in data.
-                if pandas is installed, pandas.isnull is used, otherwise
-                numpy.isnan is used.
-            'raise': Raise a (more helpful) exception when data contains null
-                or missing values.
-
-        Note
-        ----
-        Parameter names are inferred from the function arguments,
-        and a residual function is automatically constructed.
-
-        Example
-        -------
-        >>> def decay(t, tau, N):
-        ...     return N*np.exp(-t/tau)
-        ...
-        >>> my_model = Model(decay, independent_vars=['t'])
-        """
         self.func = func
         self.prefix = prefix
         self.param_names = param_names
@@ -81,15 +70,24 @@ class Model(object):
         self.has_initial_guess = False
         self.components = components
         if not missing in [None, 'none', 'drop', 'raise']:
-            raise ValueError("missing must be None, 'none', 'drop', or 'raise'.")
+            raise ValueError(self._invalid_missing)
         self.missing = missing
+        self.params = Parameters()
         self._parse_params()
         self._residual = self._build_residual()
         if self.independent_vars is None:
             self.independent_vars = []
 
     def _parse_params(self):
-        pos_args, kw_args, keywords = funcargs(self.func)
+        "build params from function arguments"
+        argspec = inspect.getargspec(self.func)
+        pos_args = argspec.args[:]
+        keywords = argspec.keywords
+        kw_args = {}
+        if argspec.defaults is not None:
+            for val in reversed(argspec.defaults):
+                kw_args[pos_args.pop()] = val
+        #
         self.func_haskeywords = keywords is not None
         self.func_allargs = pos_args + list(kw_args.keys())
         allargs = self.func_allargs
@@ -117,12 +115,13 @@ class Model(object):
 
         # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
+        fname = self.func.__name__
         for arg in self.independent_vars:
             if arg not in allargs or arg in self._forbidden_args:
-                raise ValueError(self._invalid_ivar % (arg, self.func.__name__))
+                raise ValueError(self._invalid_ivar % (arg, fname))
         for arg in self.param_names:
             if arg not in allargs or arg in self._forbidden_args:
-                raise ValueError(self._invalid_par % (arg, self.func.__name__))
+                raise ValueError(self._invalid_par % (arg, fname))
 
         names = []
         for pname in self.param_names:
@@ -130,30 +129,31 @@ class Model(object):
                 pname = "%s%s" % (self.prefix, pname)
             names.append(pname)
         self.param_names = set(names)
-        self.params = Parameters()
-        [self.params.add(name) for name in self.param_names]
+        for name in self.param_names:
+            self.params.add(name)
         for key, val in def_vals.items():
             self.params["%s%s" % (self.prefix, key)].value = val
 
-    def guess_starting_values(self, data, **kws):
+    def guess_starting_values(self, data=None, **kws):
+        """stub for guess starting values --
+        should be implemented for each model subclass
+        """
         cname = self.__class__.__name__
         msg = 'guess_starting_values() not implemented for %s' % cname
         raise NotImplementedError(msg)
 
-    def __set_param_names(self, param_names):
-        # used when models are added
-        self.param_names = param_names
-
     def _build_residual(self):
         "Generate and return a residual function."
         def residual(params, data, weights, **kwargs):
+            "default residual:  (data-model)*weights"
             diff = self.eval(params=params, **kwargs) - data
             if weights is not None:
                 diff *= weights
             return np.asarray(diff)  # for compatibility with pandas.Series
         return residual
 
-    def _make_funcargs(self, params, kwargs):
+    def make_funcargs(self, params, kwargs):
+        """convert parameter values and keywords to function arguments"""
         out = {}
         npref = len(self.prefix)
         for name, par in params.items():
@@ -171,6 +171,7 @@ class Model(object):
         return out
 
     def _handle_missing(self, data):
+        "handle missing data"
         if self.missing == 'raise':
             if np.any(isnull(data)):
                 raise ValueError("Data contains a null value.")
@@ -185,8 +186,8 @@ class Model(object):
         """evaluate the model with the supplied or current parameters"""
         if params is None:
             params = self.params
-        funcargs = self._make_funcargs(params, kwargs)
-        return self.func(**funcargs)
+        fcnargs = self.make_funcargs(params, kwargs)
+        return self.func(**fcnargs)
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, **kwargs):
@@ -255,9 +256,10 @@ class Model(object):
                               "It will be ignored.", UserWarning)
 
         # If any parameter is not initialized raise a more helpful error.
-        missing_param = any([p not in params.keys() for p in self.param_names])
-
-        blank_param = any([(p.value is None and p.expr is None) for p in params.values()])
+        missing_param = any([p not in params.keys()
+                             for p in self.param_names])
+        blank_param = any([(p.value is None and p.expr is None)
+                           for p in params.values()])
         if missing_param or blank_param:
             raise ValueError("""Assign each parameter an initial value by
  passing Parameters or keyword arguments to fit""")
@@ -275,21 +277,18 @@ class Model(object):
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
         for var in self.independent_vars:
-            #if var not in kwargs:
-            #    raise ValueError("Must include independent variable ('%s') to fit()" % var)
-
             if not np.isscalar(self.independent_vars):  # just in case
                 kwargs[var] = _align(kwargs[var], mask, data)
 
         kwargs['__components__'] = self.components
         result = minimize(self._residual, params, args=(data, weights),
-                          method=method, iter_cb=iter_cb, scale_covar=scale_covar,
-                          kws=kwargs)
+                          method=method, iter_cb=iter_cb,
+                          scale_covar=scale_covar, kws=kwargs)
 
         # Monkey-patch the Minimizer object with some extra information.
         result.model = self
         result.init_params = init_params
-        result.init_values = self._make_funcargs(init_params, {})
+        result.init_values = self.make_funcargs(init_params, {})
         result.init_fit = self.eval(params=init_params, **kwargs)
         result.best_fit = self.eval(params=result.params, **kwargs)
         return result
@@ -304,6 +303,7 @@ class Model(object):
                             "with distinct names.")
 
         def composite_func(**kwargs):
+            "composite model function"
             components = kwargs.get('__components__', None)
             out = None
             if components is not None:
@@ -315,9 +315,10 @@ class Model(object):
                             pars.__setitem__(p.name, p)
                             pars[p.name].value = kwargs[p.name]
 
-                    funcargs = comp._make_funcargs(pars, kwargs)
-                    comp_out = comp.func(**funcargs)
-                    if out is None: out = np.zeros_like(comp_out)
+                    fcnargs = comp.make_funcargs(pars, kwargs)
+                    comp_out = comp.func(**fcnargs)
+                    if out is None:
+                        out = np.zeros_like(comp_out)
                     out += comp_out
             return out
 
