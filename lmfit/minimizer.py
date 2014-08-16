@@ -123,8 +123,21 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.scale_covar = scale_covar
         self.nfev = 0
         self.nfree = 0
+        self.ndata = 0
+        self.nvarys = 0
+        self.ier = 0
+        self.success = None
         self.message = None
+        self.lmdif_message = None
+        self.chisqr = None
+        self.redchi = None
+        self.covar = None
+        self.errorbars = None
+        self.residual = None
         self.var_map = []
+        self.vars = []
+        self.params = []
+        self.updated = []
         self.jacfcn = None
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
@@ -244,7 +257,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.nfev = 0
         self.var_map = []
         self.vars = []
-        self.vmin, self.vmax = [], []
         for name, par in self.params.items():
             if par.expr is not None:
                 par.ast = self.asteval.parse(par.expr)
@@ -260,9 +272,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             elif par.vary:
                 self.var_map.append(name)
                 self.vars.append(par.setup_bounds())
-                # self.vars.append(par.set_internal_value())
-                #self.vmin.append(par.min)
-                #self.vmax.append(par.max)
 
             self.asteval.symtable[name] = par.value
             par.init_value = par.value
@@ -300,7 +309,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.prepare_fit()
         lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
                       maxfun=2000 * (self.nvarys + 1),
-                      # bounds = zip(self.vmin, self.vmax),
                       )
         lb_kws.update(self.kws)
         lb_kws.update(kws)
@@ -330,7 +338,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         fmin_kws.update(kws)
         ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
-        xout, fout, iter, funccalls, warnflag, allvecs = ret
+        xout, fout, niter, funccalls, warnflag, allvecs = ret
         self.nfev = funccalls
         self.chisqr = self.residual = self.__residual(xout)
         self.ndata = 1
@@ -527,7 +535,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                     uvars = None
 
                 if uvars is not None:
-                    for pname, par in self.params.items():
+                    for par in self.params.values():
                         eval_stderr(par, uvars, self.var_map,
                                     self.params, self.asteval)
                     # restore nominal values
