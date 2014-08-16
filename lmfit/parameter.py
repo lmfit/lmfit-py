@@ -24,7 +24,7 @@ class Parameters(OrderedDict):
     add_many()
     """
     def __init__(self, *args, **kwds):
-        OrderedDict.__init__(self)
+        super(Parameters, self).__init__(self)
         self.update(*args, **kwds)
 
     def __setitem__(self, key, value):
@@ -81,6 +81,7 @@ class Parameter(object):
         self.deps   = None
         self.stderr = None
         self.correl = None
+        self.from_internal = lambda val: val
         self._init_bounds()
 
     def _init_bounds(self):
@@ -171,7 +172,10 @@ class Parameter(object):
         """get value, with bounds applied"""
         if (self._val is not nan and
             isinstance(self._val, uncertainties.Variable)):
-            self._val = self._val.nominal_value
+            try:
+                self._val = self._val.nominal_value
+            except AttributeError:
+                pass
 
         if self.min is None:
             self.min = -inf
