@@ -18,38 +18,40 @@ Changes:
 """
 
 from __future__ import print_function
-from .parameter import Parameters, Parameter
+from .parameter import Parameters
 
-def getfloat_attr(obj, attr, format='%.3f'):
+def getfloat_attr(obj, attr, fmt='%.3f'):
+    "format an attribute of an object for printing"
     val = getattr(obj, attr, None)
     if val is None:
         return 'unknown'
     if isinstance(val, int):
         return '%d' % val
     if isinstance(val, float):
-        return format % val
+        return fmt % val
     else:
         return repr(val)
-    
-def fit_report(input, modelpars=None, show_correl=True, min_correl=0.1):
+
+CORREL_HEAD = '[[Correlations]] (unreported correlations are < % .3f)'
+
+def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
     """return text of a report for fitted params best-fit values,
     uncertainties and correlations
 
     arguments
     ----------
-       params       Parameters from fit
+       inpars       Parameters from fit or Minizer object returned from a fit.
        modelpars    Optional Known Model Parameters [None]
        show_correl  whether to show list of sorted correlations [True]
        min_correl   smallest correlation absolute value to show [0.1]
 
     """
-    if isinstance(input, Parameters):
-        params = input
-        result = None
-    if hasattr(input, 'params'):
-        result = input
-        params = result.params
-        
+    if isinstance(inpars, Parameters):
+        result, params = None, inpars
+    if hasattr(inpars, 'params'):
+        result = inpars
+        params = inpars.params
+
     parnames = sorted(params)
     parnames = sorted(params)
     buff = []
@@ -61,18 +63,18 @@ def fit_report(input, modelpars=None, show_correl=True, min_correl=0.1):
         add("    # variables        = %s" % getfloat_attr(result, 'nvarys'))
         add("    chi-square         = %s" % getfloat_attr(result, 'chisqr'))
         add("    reduced chi-square = %s" % getfloat_attr(result, 'redchi'))
-        
+
     namelen = max([len(n) for n in parnames])
     add("[[Variables]]")
     for name in parnames:
         par = params[name]
         space = ' '*(namelen+2 - len(name))
         nout = "%s: %s" % (name, space)
-        initval = 'inital = ?'
+        inval = 'inital = ?'
         if par.init_value is not None:
-            initval = 'initial = % .7g' % par.init_value
+            inval = 'initial = % .7g' % par.init_value
         if modelpars is not None and name in modelpars:
-            initval = '%s, model_value =% .7g' % (initval, modelpars[name].value)
+            inval = '%s, model_value =% .7g' % (inval, modelpars[name].value)
 
         try:
             sval = '% .7g' % par.value
@@ -87,14 +89,14 @@ def fit_report(input, modelpars=None, show_correl=True, min_correl=0.1):
                 pass
 
         if par.vary:
-            add("    %s %s %s" % (nout, sval, initval))
+            add("    %s %s %s" % (nout, sval, inval))
         elif par.expr is not None:
             add("    %s %s == '%s'" % (nout, sval, par.expr))
         else:
             add("    %s % .7g (fixed)" % (nout, par.value))
 
     if show_correl:
-        add('[[Correlations]] (unreported correlations are < % .3f)' % min_correl)
+        add(CORREL_HEAD % min_correl)
         correls = {}
         for i, name in enumerate(parnames):
             par = params[name]
@@ -134,9 +136,11 @@ def ci_report(ci):
     title_shown = False
     for name, row in ci.items():
         if not title_shown:
-            add("".join([''.rjust(maxlen)]+[i.rjust(10) for i in map(convp, row)]))
+            add("".join([''.rjust(maxlen)]+[i.rjust(10)
+                                            for i in map(convp, row)]))
             title_shown = True
-        add("".join([name.rjust(maxlen)]+[i.rjust(10) for i in map(conv,  row)]))
+        add("".join([name.rjust(maxlen)]+[i.rjust(10)
+                                          for i in map(conv,  row)]))
     return '\n'.join(buff)
 
 
