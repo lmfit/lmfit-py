@@ -156,6 +156,8 @@ NUMPY_RENAMES = {'ln': 'log', 'asin': 'arcsin', 'acos': 'arccos',
 def _open(filename, mode='r', buffering=0):
     """read only version of open()"""
     umode = 'r'
+    if mode == 'rb':
+        umode = 'rb'
     return open(filename, umode, buffering)
 
 LOCALFUNCS = {'open': _open}

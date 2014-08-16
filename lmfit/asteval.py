@@ -351,14 +351,15 @@ class Interpreter:
     def on_attribute(self, node):    # ('value', 'attr', 'ctx')
         "extract attribute"
         ctx = node.ctx.__class__
-        if ctx == ast.Del:
-            return delattr(sym, node.attr)
-        elif ctx == ast.Store:
+        if ctx == ast.Store:
             msg = "attribute for storage: shouldn't be here!"
             self.raise_exception(node, exc=RuntimeError, msg=msg)
 
-        # ctx is ast.Load
         sym = self.run(node.value)
+        if ctx == ast.Del:
+            return delattr(sym, node.attr)
+
+        # ctx is ast.Load
         fmt = "cannnot access attribute '%s' for %s"
         if node.attr not in UNSAFE_ATTRS:
             fmt = "no attribute '%s' for %s"
