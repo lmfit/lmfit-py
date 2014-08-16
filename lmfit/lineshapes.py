@@ -2,11 +2,11 @@
 """
 basic model line shapes and distribution functions
 """
-
-from numpy import (pi, log, exp, sqrt, arctan, cos, arange, where)
+from numpy import (pi, log, exp, sqrt, arctan, cos, where)
 from numpy.testing import assert_allclose
 
-from scipy.special import gamma, gammaln, beta, erf, erfc, wofz
+from scipy.special import gamma as gamfcn
+from scipy.special import gammaln, erf, erfc, wofz
 
 log2 = log(2)
 s2pi = sqrt(2*pi)
@@ -48,9 +48,9 @@ def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=0.5):
     though it seems wikpedia gives a different formula...
     pearson7(x, center, sigma, expon)
     """
-    scale = amplitude * gamma(expon) * (sqrt((2**(1/expon) -1)) /
-                                        (gamma(expon-0.5)) / (sigma*spi))
-    return scale / (1 + ( ((1.0*x-center)/sigma)**2) * (2**(1/expon) -1) )**expon
+    scale = amplitude * gamfcn(expon) * (sqrt((2**(1/expon) -1)) /
+                                         (gamfcn(expon-0.5)) / (sigma*spi))
+    return scale/(1 + (((1.0*x-center)/sigma)**2) * (2**(1/expon) -1))**expon
 
 def breit_wigner(x, amplitude=1.0, center=0.0, sigma=1.0, q=1.0):
     """Breit-Wigner-Fano lineshape:
@@ -77,7 +77,7 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
     lognormal(x, center, sigma)
         = (amplitude/x) * exp(-(ln(x) - center)/ (2* sigma**2))
     """
-    return (amplitude/(x*sigma*s2pi)) * exp(-(log(x) - center)**2/ (2* sigma**2))
+    return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2/ (2* sigma**2))
 
 def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
     """Student's t distribution:
@@ -87,8 +87,8 @@ def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
 
     """
     s1  = (sigma+1)/2.0
-    denom = (sqrt(sigma*pi)*gamma(sigma/2))
-    return amplitude*(1 + (x-center)**2/sigma)**(-s1) * gamma(s1) / denom
+    denom = (sqrt(sigma*pi)*gamfcn(sigma/2))
+    return amplitude*(1 + (x-center)**2/sigma)**(-s1) * gamfcn(s1) / denom
 
 
 def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
@@ -130,7 +130,8 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     see http://en.wikipedia.org/wiki/Skew_normal_distribution
     """
     beta = skew/(s2*sigma)
-    return (1 + erf(beta*(x-center)))*voigt(x, amplitude, center, sigma, gamma=gamma)
+    asym = 1 + erf(beta*(x-center))
+    return asym * voigt(x, amplitude, center, sigma, gamma=gamma)
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """step function:
@@ -171,8 +172,10 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
     where arg1 =  (x - center1)/sigma1
     and   arg2 = -(x - center2)/sigma2
     """
-    if abs(sigma1) <  1.e-13: sigma1 = 1.e-13
-    if abs(sigma2) <  1.e-13: sigma2 = 1.e-13
+    if abs(sigma1) <  1.e-13:
+        sigma1 = 1.e-13
+    if abs(sigma2) <  1.e-13:
+        sigma2 = 1.e-13
 
     arg1 = (x - center1)/sigma1
     arg2 = (center2 - x)/sigma2
@@ -204,7 +207,7 @@ def _wofz(x):
 
 def _gamma(x):
     """gamma function"""
-    return gamma(x)
+    return gamfcn(x)
 
 def _gammaln(x):
     """log of absolute value of gamma function"""
@@ -233,5 +236,8 @@ def parabolic(x, a, b, c):
 
 def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03,
                          err_msg='', verbose=True):
+    """returns whether all parameter values in actual are close to
+    those in desired"""
     for param_name, value in desired.items():
-         assert_allclose(actual[param_name], value, rtol, atol, err_msg, verbose)
+        assert_allclose(actual[param_name], value, rtol,
+                        atol, err_msg, verbose)
