@@ -1,60 +1,54 @@
+from lmfit import Parameters, minimize, fit_report
+from lmfit_testutils import assert_paramval, assert_paramattr
 
-from lmfit import minimize, Parameters, Parameter, report_fit
-import numpy as np
-import sys
+from numpy import linspace, zeros, sin, exp, random, pi, sign
 
-# Turn off plotting if run by nosetests.
-WITHPLOT = True
-for arg in sys.argv:
-    if 'nose' in arg:
-        WITHPLOT = False
+def test_bounds():
+    p_true = Parameters()
+    p_true.add('amp', value=14.0)
+    p_true.add('period', value=5.4321)
+    p_true.add('shift', value=0.12345)
+    p_true.add('decay', value=0.01000)
 
-if WITHPLOT:
-    try:
-        import matplotlib
-        import pylab
-    except ImportError:
-        WITHPLOT = False
+    def residual(pars, x, data=None):
+        amp = pars['amp'].value
+        per = pars['period'].value
+        shift = pars['shift'].value
+        decay = pars['decay'].value
 
+        if abs(shift) > pi/2:
+            shift = shift - sign(shift)*pi
 
-# create data to be fitted
-x = np.linspace(0, 15, 301)
-amp, decay, shift, omega = 8,  0.1229, 0.2,  2.75
-data = (amp * np.sin(x*omega + shift) * np.exp(-x*x*decay) +
-        np.random.normal(size=len(x), scale=0.16) )
+        model = amp*sin(shift + x/per) * exp(-x*x*decay*decay)
+        if data is None:
+            return model
+        return (model - data)
 
-# define objective function: returns the array to be minimized
-def fcn2min(params, x, data):
-    """ model decaying sine wave, subtract data"""
-    amp = params['amp'].value
-    shift = params['shift'].value
-    omega = params['omega'].value
-    decay = params['decay'].value
+    n = 1500
+    xmin = 0.
+    xmax = 250.0
+    random.seed(0)
+    noise = random.normal(scale=2.80, size=n)
+    x     = linspace(xmin, xmax, n)
+    data  = residual(p_true, x) + noise
 
-    model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
-    return model - data
+    fit_params = Parameters()
+    fit_params.add('amp', value=13.0, max=20, min=0.0)
+    fit_params.add('period', value=2, max=10)
+    fit_params.add('shift', value=0.0, max=pi/2., min=-pi/2.)
+    fit_params.add('decay', value=0.02, max=0.10, min=0.00)
 
-# create a set of Parameters
-params = Parameters()
-params.add('amp',   value= 10,  min=0)
-params.add('decay', value= 0.3, min=0.123)
-params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
-params.add('omega', value= 3.0)
+    out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 
-# do fit, here with leastsq model
-result = minimize(fcn2min, params, args=(x, data))
+    fit = residual(fit_params, x)
 
-# calculate final result
-final = data + result.residual
+    assert(out.nfev  > 10)
+    assert(out.nfree > 50)
+    assert(out.chisqr > 1.0)
 
-# write error report
-report_fit(params, min_correl=0)
+    print fit_report(out, show_correl=True, modelpars=p_true)
+    assert_paramval(fit_params['decay'], 0.01, tol=1.e-2)
+    assert_paramval(fit_params['shift'], 0.123, tol=1.e-2)
 
-print( "Correl: ", params['amp'].correl)
-
-# try to plot results
-if WITHPLOT:
-    pylab.plot(x, data, 'k+')
-    pylab.plot(x, final, 'r')
-    pylab.show()
-
+if __name__ == '__main__':
+    test_bounds()
