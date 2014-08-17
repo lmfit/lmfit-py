@@ -132,7 +132,7 @@ class Model(object):
         for name in self.param_names:
             self.params.add(name)
         for key, val in def_vals.items():
-            self.params["%s%s" % (self.prefix, key)].value = val
+            self.set_paramval(key, val)
 
     def guess_starting_values(self, data=None, **kws):
         """stub for guess starting values --
@@ -181,6 +181,17 @@ class Model(object):
                 return None  # short-circuit this -- no missing values
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
+
+    def set_paramval(self, paramname, value):
+        """set parameter value, as for initial guess.
+        name can include prefix or not
+        """
+        pname = paramname
+        if pname not in self.params:
+            pname = "%s%s" % (self.prefix, pname)
+        if pname not in self.params:
+            raise KeyError("%s not a parameter name")
+        self.params[pname].value = value
 
     def eval(self, params=None, **kwargs):
         """evaluate the model with the supplied or current parameters"""

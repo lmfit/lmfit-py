@@ -199,6 +199,18 @@ Methods and Attributes of the :class:`Model` class
    values for ``data`` and use it to construct reasonable starting values for
    the parameters.
 
+.. method:: set_paramval(parname, value)
+
+   set the value for a named parameter.  This is convenient for setting
+   initial values.  The ``parname`` can include the models ``prefix`` or
+   not.
+
+   :param parname: parameter name.
+   :type params: string
+   :param value: value for parameter
+   :type params: float
+
+
 .. method:: eval(params=None[, **kws])
 
    evaluate the model function for a set of parameters and inputs.
