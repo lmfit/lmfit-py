@@ -46,7 +46,7 @@ def test_bounds():
     assert(out.nfree > 50)
     assert(out.chisqr > 1.0)
 
-    print fit_report(out, show_correl=True, modelpars=p_true)
+    print(fit_report(out, show_correl=True, modelpars=p_true))
     assert_paramval(fit_params['decay'], 0.01, tol=1.e-2)
     assert_paramval(fit_params['shift'], 0.123, tol=1.e-2)
 
