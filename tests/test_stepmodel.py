@@ -43,7 +43,6 @@ def test_stepmodel_erf():
     mod.set_paramval('c', 3) # *y.min())
 
     out = mod.fit(y, x=x)
-    print 'INIT VALS ', out.init_values
     assert(out.nfev > 5)
     assert(out.nvarys == 4)
     assert(out.chisqr > 1)
