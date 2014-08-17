@@ -64,13 +64,12 @@ def test_multidatasets():
     assert(pars['sig_1'].value > 0.1)
     assert(pars['sig_2'].value == pars['sig_1'].value)
 
-    # plot the data sets and fits
-    plt.figure()
-    for i in range(5):
-        y_fit = gauss_dataset(pars, i, x)
-        plt.plot(x, data[i, :], 'o', x, y_fit, '-')
-
-    plt.show()
+    ## plot the data sets and fits
+    #  plt.figure()
+    #  for i in range(5):
+    #      y_fit = gauss_dataset(pars, i, x)
+    #      plt.plot(x, data[i, :], 'o', x, y_fit, '-')
+    #  plt.show()
 
 if __name__ == '__main__':
     test_multidatasets()
