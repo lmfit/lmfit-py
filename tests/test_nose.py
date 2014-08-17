@@ -294,7 +294,7 @@ class CommonMinimizerTest(object):
 
         for para, true_para in zip(self.fit_params.values(),
                                    self.p_true.values()):
-            check_wo_stderr(para, true_para.value)
+            check_wo_stderr(para, true_para.value, sig=0.15)
 
 class TestNelder_Mead(CommonMinimizerTest, unittest.TestCase):
 
