@@ -60,7 +60,7 @@ class Model(object):
     _invalid_par   = "Invalid parameter name ('%s') for function %s"
     _invalid_missing = "missing must be None, 'none', 'drop', or 'raise'."
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing='none', prefix='', components=None):
+                 missing='none', prefix='', components=None, **kws):
         self.func = func
         self.prefix = prefix
         self.param_names = param_names
@@ -72,6 +72,7 @@ class Model(object):
         if not missing in [None, 'none', 'drop', 'raise']:
             raise ValueError(self._invalid_missing)
         self.missing = missing
+        self.opts = kws
         self.params = Parameters()
         self._parse_params()
         self._residual = self._build_residual()
@@ -155,6 +156,7 @@ class Model(object):
     def make_funcargs(self, params, kwargs):
         """convert parameter values and keywords to function arguments"""
         out = {}
+        out.update(self.opts)
         npref = len(self.prefix)
         for name, par in params.items():
             if npref > 0 and name.startswith(self.prefix):
@@ -300,6 +302,8 @@ class Model(object):
         result.model = self
         result.init_params = init_params
         result.init_values = self.make_funcargs(init_params, {})
+        if '__components__' in result.init_values:
+            result.init_values.pop('__components__')
         result.init_fit = self.eval(params=init_params, **kwargs)
         result.best_fit = self.eval(params=result.params, **kwargs)
         return result
