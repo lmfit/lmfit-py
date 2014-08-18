@@ -7,18 +7,17 @@ from lmfit import Parameters, minimize
 
 from NISTModels import Models, ReadNistData
 
-
-try:
-    import matplotlib
-    matplotlib.use('WXAgg')
-    import pylab
-    HASPYLAB = True
-
-except ImportError:
-    HASPYLAB = False
-
+HASPYLAB = False
 for arg in sys.argv:
     if 'nose' in arg:
+        HASPYLAB = False
+
+if HASPYLAB:
+    try:
+        import matplotlib
+        import pylab
+        HASPYLAB = True
+    except ImportError:
         HASPYLAB = False
 
 def ndig(a, b):
@@ -98,7 +97,7 @@ def NIST_Dataset(DataSet, method='leastsq', start='start2',
         pylab.plot(x, fit, 'k+-')
         pylab.show()
 
-    return digs > 2
+    return digs > 1
 
 def build_usage():
     modelnames = []
