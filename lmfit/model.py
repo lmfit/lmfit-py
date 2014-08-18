@@ -184,7 +184,7 @@ class Model(object):
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
 
-    def set_paramval(self, paramname, value):
+    def set_paramval(self, paramname, value, min=None, max=None, vary=True):
         """set parameter value, as for initial guess.
         name can include prefix or not
         """
@@ -194,6 +194,11 @@ class Model(object):
         if pname not in self.params:
             raise KeyError("%s not a parameter name")
         self.params[pname].value = value
+        self.params[pname].vaary = vary
+        if min is not None:
+            self.params[pname].min = min
+        if max is not None:
+            self.params[pname].max = max
 
     def eval(self, params=None, **kwargs):
         """evaluate the model with the supplied or current parameters"""
