@@ -106,6 +106,6 @@ Simple Example
 Putting it all together, a simple example of using a dictionary of
 :class:`Parameter` objects and :func:`minimize` might look like this:
 
-.. literalinclude:: ../examples/simple.py
+.. literalinclude:: ../examples/doc_basic.py
 
 

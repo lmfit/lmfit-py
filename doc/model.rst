@@ -119,7 +119,7 @@ function.   But now that the model is set up, we can also use its
 Putting everything together, the script to do such a fit (included in the
 ``examples`` folder with the source code) is:
 
-.. literalinclude:: ../examples/model_doc1.py
+.. literalinclude:: ../examples/doc_model1.py
 
 which is pretty compact and to the point.  Of course, the parameter in the
 returned ``result`` have pulled apart the covariance matrix, so that the
@@ -520,7 +520,7 @@ and build a composite model with::
 
 This model has parameters for both component models, and can be used as:
 
-.. literalinclude:: ../examples/model_doc2.py
+.. literalinclude:: ../examples/doc_model2.py
 
 which prints out the results::
 

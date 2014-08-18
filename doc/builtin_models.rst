@@ -141,7 +141,6 @@ match to the data as seen in the figure below (left).
   Fit to peak with Voigt model (left) and Voigt model with ``gamma``
   varying independently of ``sigma`` (right).
 
-
 The Voigt function has a :math:`\gamma` parameter (``gamma``) that can be
 distinct from ``sigma``.  The default behaviour used above constrains
 ``gamma`` to have exactly the same value as ``sigma``.  If we allow these
@@ -193,44 +192,100 @@ Example 2: Fit data to a Composite Model with pre-defined models
 
 Here, we repeat the point made at the end of the last chaper that instances
 of :class:`Model` class can be added them together to make a *composite
-model*.  But using the built-in models, this is even easier than shown
-above::
+model*.  But using the large number of built-in models available, this is
+very simple.  An example of a simple fit to a noisy step function plus a
+constant:
 
-    from lmfit.models import GaussianModel, LinearModel
+.. literalinclude:: ../examples/doc_stepmodel.py
 
-    gauss = GaussianModel()
-    gauss.guess_starting_values(y, x=x)
-
-    line = LinearModel()
-    line.params['slope'].value = 0
-    line.params['intercept'].value = 0
-
-    mod =  gauss + line
-    result = mod.fit(y, x=x)
-
-    print(fit_report(result))
-
-The results are nearly identical to those of the last chapter, though the
-initial guesses are a little better here, and the parameter names are
-slightly changed::
-
+After constructing step-like data, we first create a :class:`StepModel`
+telling it to use the ``erf`` form (see details below), and a
+:class:`ConstantModel`.  We set initial values, in one case using the data
+and :meth:`guess_starting_values` method, and using the explicit
+:meth:`set_paramval` for the initial constant value.    Making a composite
+model, we run :meth:`fit` and report the results, which give::
 
     [[Fit Statistics]]
-        # function evals   = 31
-        # data points      = 101
-        # variables        = 5
-        chi-square         = 2.579
-        reduced chi-square = 0.027
+        # function evals   = 52
+        # data points      = 201
+        # variables        = 4
+        chi-square         = 600.191
+        reduced chi-square = 3.047
     [[Variables]]
-        amplitude:     8.459312 +/- 0.1241436 (1.47%) initial =  13.61192
-        center:        5.655479 +/- 0.009176658 (0.16%) initial =  5.75
-        fwhm:          1.590576 +/- 0.02335207 (1.47%) == '2.354820*sigma'
-        intercept:    -0.9686019 +/- 0.03352198 (3.46%) initial =  0
-        sigma:         0.6754554 +/- 0.009916711 (1.47%) initial =  0.95
-        slope:         0.264844 +/- 0.005748916 (2.17%) initial =  0
+        amplitude:     111.1106 +/- 0.3122441 (0.28%) initial =  115.3431
+        c:             11.31151 +/- 0.2631688 (2.33%) initial =  9.278188
+        center:        3.122191 +/- 0.00506929 (0.16%) initial =  5
+        sigma:         0.6637199 +/- 0.009799607 (1.48%) initial =  1.428571
     [[Correlations]] (unreported correlations are <  0.100)
-        C(amplitude, sigma)          =  0.666
-        C(center, intercept)         =  0.129
+        C(c, center)                 =  0.381
+        C(amplitude, sigma)          =  0.381
+
+with a plot of
+
+.. image::  _images/models_stepfit.png
+   :target: _images/models_stepfit.png
+   :width: 70 %
+
+
+Example 3: Fitting Multiple Peaks -- and using Prefixes
+====================================================================
+
+.. _NIST StRD: http://itl.nist.gov/div898/strd/nls/nls_main.shtml
+
+As can be seen below, many of the models have similar parameter names.
+For composite models, this could lead to a problem of having parameters for
+different parts of the model having the same name.  To overcome this, each
+:class:`Model` can have a ``prefix`` attribute (normally set to a blank
+string)  that will be put at the beginning of each parameter name.  To
+illustrate, we fit one of the classic datasets from the `NIST StRD`_ suite
+involving a decaying exponential and two gaussians.
+
+.. literalinclude:: ../examples/doc_nistgauss.py
+
+
+where we give a separate prefix to each model (they all have an
+``amplitude`` parameter).  The result looks like::
+
+    [[Fit Statistics]]
+        # function evals   = 66
+        # data points      = 250
+        # variables        = 8
+        chi-square         = 1247.528
+        reduced chi-square = 5.155
+    [[Variables]]
+        exp_amplitude:     99.01833 +/- 0.5374884 (0.54%) initial =  162.2102
+        exp_decay:         90.95088 +/- 1.103105 (1.21%) initial =  93.24905
+        g1_amplitude:      4257.774 +/- 42.38366 (1.00%) initial =  500
+        g1_center:         107.031 +/- 0.1500691 (0.14%) initial =  105
+        g1_fwhm:           39.26092 +/- 0.3779083 (0.96%) == '2.354820*g1_sigma'
+        g1_sigma:          16.67258 +/- 0.1604829 (0.96%) initial =  12
+        g2_amplitude:      2493.417 +/- 36.16923 (1.45%) initial =  500
+        g2_center:         153.2701 +/- 0.194667 (0.13%) initial =  150
+        g2_fwhm:           32.51287 +/- 0.4398624 (1.35%) == '2.354820*g2_sigma'
+        g2_sigma:          13.80695 +/- 0.1867924 (1.35%) initial =  12
+    [[Correlations]] (unreported correlations are <  0.100)
+        C(g1_amplitude, g1_sigma)    =  0.824
+        C(g2_amplitude, g2_sigma)    =  0.815
+        C(g1_sigma, g2_center)       =  0.684
+        C(g1_amplitude, g2_center)   =  0.648
+        C(g1_center, g2_center)      =  0.621
+        C(g1_center, g1_sigma)       =  0.507
+        C(g1_amplitude, g1_center)   =  0.418
+        C(exp_amplitude, g2_amplitude)  =  0.282
+        C(exp_amplitude, g2_sigma)   =  0.171
+        C(exp_amplitude, g1_amplitude)  =  0.148
+        C(exp_decay, g1_center)      =  0.105
+
+
+The ``prefix`` values are attached transparently to the models.  The calls
+to :meth:`set_paramval` used the bare name, without the prefix.  As it
+turns out, we also get a very good fit to this challenging problem, here
+applying reasonable initial guesses and put explicit bounds on the
+parameter values.
+
+.. image::  _images/models_nistgauss.png
+   :target: _images/models_nistgauss.png
+   :width: 70 %
 
 
 Subclasses of :class:`Model` available in the :mod:`models` module
