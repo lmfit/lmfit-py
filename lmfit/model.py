@@ -194,7 +194,7 @@ class Model(object):
         if pname not in self.params:
             pname = "%s%s" % (self.prefix, pname)
         if pname not in self.params:
-            raise KeyError("%s not a parameter name")
+            raise KeyError("'%s' not a parameter name" % pname)
         self.params[pname].value = value
         self.params[pname].vaary = vary
         if min is not None:
