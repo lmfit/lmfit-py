@@ -668,7 +668,23 @@ involving a decaying exponential and two gaussians.
 
 
 where we give a separate prefix to each model (they all have an
-``amplitude`` parameter).  The result looks like::
+``amplitude`` parameter).  The ``prefix`` values are attached transparently
+to the models.  Note that the calls to :meth:`set_paramval` used the bare
+name, without the prefix.   We could have used them, but because we used
+the individual model ``gauss1`` and ``gauss2``, there was no need.  Had we
+used the composite model to set the initial parameter values, we would have
+needed to, as with::
+
+    ## WRONG
+    mod.set_paramval('amplitude', 500, min=10)
+
+    ## Raises KeyError: "'amplitude' not a parameter name"
+
+    ## Correct
+    mod.set_paramval('g1_amplitude', 501, min=10)
+
+
+The fit results printed out are::
 
     [[Fit Statistics]]
         # function evals   = 66
@@ -700,14 +716,67 @@ where we give a separate prefix to each model (they all have an
         C(exp_amplitude, g1_amplitude)  =  0.148
         C(exp_decay, g1_center)      =  0.105
 
+We get a very good fit to this challenging problem (described at the NIST
+site as of average difficulty, but the tests there are generally hard) by
+applying reasonable initial guesses and putting modest but explicit bounds
+on the parameter values.  This fit is shown on the left:
 
-The ``prefix`` values are attached transparently to the models.  The calls
-to :meth:`set_paramval` used the bare name, without the prefix.  As it
-turns out, we also get a very good fit to this challenging problem, here
-applying reasonable initial guesses and put explicit bounds on the
-parameter values.
+.. _figA3:
 
-.. image::  _images/models_nistgauss.png
-   :target: _images/models_nistgauss.png
-   :width: 70 %
+  .. image::  _images/models_nistgauss.png
+     :target: _images/models_nistgauss.png
+     :width: 48 %
+  .. image::  _images/models_nistgauss2.png
+     :target: _images/models_nistgauss2.png
+     :width: 48 %
 
+
+One final point on setting initial values.  From looking at the data
+itself, we can see the two Gaussian peaks are reasonably well centered.  We
+can simplify the initial parameter values by using this, and by defining an
+:func:`index_of` function to limit the data range.  That is, with::
+
+    def index_of(arrval, value):
+        "return index of array *at or below* value "
+        if value < min(arrval):  return 0
+        return max(np.where(arrval<=value)[0])
+
+    ix1 = index_of(x,  75)
+    ix2 = index_of(x, 135)
+    ix3 = index_of(x, 175)
+
+    exp_mod.guess_starting_values(y[:ix1], x=x[:ix1])
+    gauss1.guess_starting_values(y[ix1:ix2], x=x[ix1:ix2])
+    gauss2.guess_starting_values(y[ix2:ix3], x=x[ix2:ix3])
+
+we can get a better initial estimate, and the fit converges in fewer steps,
+and without any bounds on parameters::
+
+    [[Fit Statistics]]
+        # function evals   = 46
+        # data points      = 250
+        # variables        = 8
+        chi-square         = 1247.528
+        reduced chi-square = 5.155
+    [[Variables]]
+        exp_amplitude:     99.01833 +/- 0.5374875 (0.54%) initial =  94.53724
+        exp_decay:         90.95089 +/- 1.103105 (1.21%) initial =  111.1985
+        g1_amplitude:      4257.773 +/- 42.38338 (1.00%) initial =  2126.432
+        g1_center:         107.031 +/- 0.1500679 (0.14%) initial =  106.5
+        g1_fwhm:           39.26091 +/- 0.3779053 (0.96%) == '2.354820*g1_sigma'
+        g1_sigma:          16.67258 +/- 0.1604816 (0.96%) initial =  14.5
+        g2_amplitude:      2493.418 +/- 36.16948 (1.45%) initial =  1878.892
+        g2_center:         153.2701 +/- 0.1946675 (0.13%) initial =  150
+        g2_fwhm:           32.51288 +/- 0.4398666 (1.35%) == '2.354820*g2_sigma'
+        g2_sigma:          13.80695 +/- 0.1867942 (1.35%) initial =  15
+    [[Correlations]] (unreported correlations are <  0.500)
+        C(g1_amplitude, g1_sigma)    =  0.824
+        C(g2_amplitude, g2_sigma)    =  0.815
+        C(g1_sigma, g2_center)       =  0.684
+        C(g1_amplitude, g2_center)   =  0.648
+        C(g1_center, g2_center)      =  0.621
+        C(g1_center, g1_sigma)       =  0.507
+
+
+This example is in the file ``doc_nistgauss2.py`` in the examples folder,
+and the fit result shown on the right above.
