@@ -19,7 +19,7 @@ data to be fit.
 .. module:: models
 
 As shown in the previous chapter, a key feature of the :class:`Model` class
-is that modelss can easily be combined to give a composite
+is that models can easily be combined to give a composite
 :class:`Model`. Thus while some of the models listed here may seem pretty
 trivial (notably, :class:`ConstantModel` and :class:`LinearModel`), the
 main point of having these is to be able to used in composite models.  For
@@ -124,7 +124,7 @@ and :func:`erfc` is the complimentary error function.  As above,
 :math:`\mu`, and ``sigma`` to :math:`\sigma`. The parameter ``gamma``
 corresponds  to :math:`\gamma`.
 If ``gamma`` is kept at the default value (constrained to ``sigma``),
-the full width at half maximumn is approximately :math:`3.6013\sigma`.
+the full width at half maximum is approximately :math:`3.6013\sigma`.
 
 
 :class:`PseudoVoigtModel`
@@ -135,7 +135,7 @@ the full width at half maximumn is approximately :math:`3.6013\sigma`.
 a model based on a `pseudo-Voigt distribution function
 <http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation>`_,
 which is a weighted sum of a Gaussian and Lorentzian distribution functions
-with the same calues for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
+with the same values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
 and ``sigma`` (:math:`\sigma`), and a parameter ``fraction`` (:math:`\alpha`)
 in
 
@@ -278,7 +278,7 @@ photo-emission. With the usual parameters ``amplitude`` (:math:`A`),
 Linear and Polynomial Models
 ------------------------------------
 
-Thes models correspond to polynomials of some degree.  Of course, lmfit is
+These models correspond to polynomials of some degree.  Of course, lmfit is
 a very inefficient way to do linear regression (see :func:`numpy.polyfit`
 or :func:`scipy.stats.linregress`), but these models may be useful as one
 of many components of composite model.
@@ -358,7 +358,7 @@ Step-like models
 .. class:: StepModel(form='linear')
 
 A model based on a Step function, with four choices for functional form.
-The step functin starts with a value 0, and ends with a value of :math:`A`
+The step function starts with a value 0, and ends with a value of :math:`A`
 (``amplitude``), rising to :math:`A/2` at :math:`\mu` (``center``),
 with :math:`\sigma` (``sigma``) setting the characteristic width. The
 supported functional forms are ``linear`` (the default), ``atan`` or
@@ -384,14 +384,13 @@ where :math:`\alpha  = (x - \mu)/{\sigma}`.
 
 .. class:: RectangleModel(form='linear')
 
-A model based on a Step-up and Step-down function of the same form.  The same
-choices for functional form as for :class:`StepModel` are supported, with
-``linear`` as the default.
-The step functin starts with a value 0, and ends with a value of :math:`A`
-(``amplitude``), rising to :math:`A/2` at :math:`\mu_1` (``center1``),
-with :math:`\sigma_1` (``sigma1``) setting the characteristic width.  It
-drops to rising to :math:`A/2` at :math:`\mu_2` (``center2``),
-with characteristic width :math:`\sigma_2` (``sigma2``).
+A model based on a Step-up and Step-down function of the same form.  The
+same choices for functional form as for :class:`StepModel` are supported,
+with ``linear`` as the default.  The function starts with a value 0, and
+ends with a value of :math:`A` (``amplitude``), rising to :math:`A/2` at
+:math:`\mu_1` (``center1``), with :math:`\sigma_1` (``sigma1``) setting the
+characteristic width.  It drops to rising to :math:`A/2` at :math:`\mu_2`
+(``center2``), with characteristic width :math:`\sigma_2` (``sigma2``).
 
 .. math::
    :nowrap:
@@ -437,7 +436,6 @@ form:
 .. math::
 
    f(x; A, k) = A x^k
-
 
 
 
@@ -568,7 +566,7 @@ match to the data as seen in the figure below (left).
   varying independently of ``sigma`` (right).
 
 The Voigt function has a :math:`\gamma` parameter (``gamma``) that can be
-distinct from ``sigma``.  The default behaviour used above constrains
+distinct from ``sigma``.  The default behavior used above constrains
 ``gamma`` to have exactly the same value as ``sigma``.  If we allow these
 to vary separately, does the fit improve?  To do this, we have to change
 the ``gamma`` parameter from a constrained expression and give it a
@@ -616,7 +614,7 @@ for simple problems.
 Example 2: Fit data to a Composite Model with pre-defined models
 ====================================================================
 
-Here, we repeat the point made at the end of the last chaper that instances
+Here, we repeat the point made at the end of the last chapter that instances
 of :class:`Model` class can be added them together to make a *composite
 model*.  But using the large number of built-in models available, this is
 very simple.  An example of a simple fit to a noisy step function plus a

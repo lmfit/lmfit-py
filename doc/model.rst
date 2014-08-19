@@ -62,7 +62,7 @@ parameters and the covariance matrix.   It's pretty simple to do, but
 misses many of the key benefits of lmfit.
 
 
-To solve this with lmit we could write a residual function but such a
+To solve this with lmfit we could write a residual function but such a
 residual function would be fairly simple (essentially, ``data - model``,
 possibly with some weighting), and we would need to define and use
 appropriately named parameters.  Though convenient, it also becomes
@@ -97,7 +97,7 @@ On creation of the model, the parameters are not initialized (the values
 are all ``None``), and will need to be given initial values before the
 model can be used.  This can be done in one of two ways, or a mixture of
 the two.  First, the initial values for the models parameters can be set
-explicity, as with:
+explicitly, as with:
 
     >>> gmod.params['amp'].value = 10.0
 
@@ -193,7 +193,7 @@ Methods and Attributes of the :class:`Model` class
 ----------------------------------------------------
 
 .. method:: guess_starting_values(data, **kws)
-
+vary
    by default this is left to raise a ``NotImplementedError``, but may be
    overwritten by subclasses.  Generally, this method should take some
    values for ``data`` and use it to construct reasonable starting values for
@@ -213,7 +213,7 @@ Methods and Attributes of the :class:`Model` class
    :type min: ``None`` or float
    :param max:  upper bound for parameter value
    :type max: ``None`` or float
-   :param vary:  whether to vay parameter in fit.
+   :param vary:  whether to vary parameter in fit.
    :type vary: boolean
 
 
@@ -229,7 +229,7 @@ Methods and Attributes of the :class:`Model` class
    If ``params`` is ``None``, the internal ``params`` will be used.
 
    Note that all other arguments for the model function (including all the
-   independent vairables!) will need to be passed in using keyword
+   independent variables!) will need to be passed in using keyword
    arguments.
 
 
@@ -258,7 +258,7 @@ Methods and Attributes of the :class:`Model` class
    ``data``.
 
    Note that other arguments for the model function (including all the
-   independent vairables!) will need to be passed in using keyword
+   independent variables!) will need to be passed in using keyword
    arguments.
 
    The result returned from :meth:`fit` will contains all of the items
@@ -562,7 +562,7 @@ and shows the plot:
 which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit in black dashed line.
 
-In this example, the argumnet names for the model functions do not overlap.
+In this example, the argument names for the model functions do not overlap.
 If they had, the ``prefix`` argument to :class:`Model` would have allowed
 us to identify which parameter went with which component model.  As we will
 see in the next chapter, using composite models with the built-in models
