@@ -7,6 +7,7 @@ import inspect
 import copy
 import numpy as np
 from . import Parameters, Parameter, minimize
+from .printfuncs import fit_report
 
 # Use pandas.isnull for aligning missing data is pandas is available.
 # otherwise use numpy.isnan
@@ -73,6 +74,7 @@ class Model(object):
             raise ValueError(self._invalid_missing)
         self.missing = missing
         self.opts = kws
+        self.result = None
         self.params = Parameters()
         self._parse_params()
         self._residual = self._build_residual()
@@ -311,8 +313,17 @@ class Model(object):
             result.init_values.pop('__components__')
         result.init_fit = self.eval(params=init_params, **kwargs)
         result.best_fit = self.eval(params=result.params, **kwargs)
+        self.result = result
         return result
 
+    def fit_report(self, modelpars=None, show_correl=True, min_correl=0.1):
+        "return fit report"
+        if self.result is None:
+            raise ValueError("must run .fit() first")
+
+        return fit_report(self.result, modelpars=modelpars,
+                          show_correl=show_correl,
+                          min_correl=min_correl)
 
     def __add__(self, other):
         colliding_param_names = self.param_names & other.param_names

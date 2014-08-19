@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #<examples/doc_model1.py>
 from numpy import sqrt, pi, exp, linspace, loadtxt
-from lmfit import fit_report, Model
+from lmfit import  Model
 
 import matplotlib.pyplot as plt
 
@@ -16,7 +16,7 @@ def gaussian(x, amp, cen, wid):
 gmod = Model(gaussian)
 result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
-print(fit_report(result.params))
+print(gmod.fit_report())
 
 plt.plot(x, y,         'bo')
 plt.plot(x, result.init_fit, 'k--')

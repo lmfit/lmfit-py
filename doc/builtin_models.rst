@@ -453,7 +453,6 @@ built-in default values.  So, we'll simply use::
 
     from numpy import loadtxt
     from lmfit.models import GaussianModel
-    from lmfit import fit_report
 
     data = loadtxt('test_peak.dat')
     x = data[:, 0]
@@ -462,7 +461,7 @@ built-in default values.  So, we'll simply use::
     mod = GaussianModel()
     mod.guess_starting_values(y, x=x)
     out  = mod.fit(y, x=x)
-    print fit_report(out, min_correl=0.25)
+    print(mod.fit_report(min_correl=0.25))
 
 which prints out the results::
 
@@ -506,7 +505,7 @@ Perhaps a Lorentzian would be better?  To do this, we simply replace
     mod = LorentzianModel()
     mod.guess_starting_values(y, x=x)
     out  = mod.fit(y, x=x)
-    print fit_report(out, min_correl=0.25)
+    print(mod.fit_report(min_correl=0.25))
 
 The results, or course, are worse::
 
@@ -534,7 +533,7 @@ as simple as::
     mod = LorentzianModel()
     mod.guess_starting_values(y, x=x)
     out  = mod.fit(y, x=x)
-    print fit_report(out, min_correl=0.25)
+    print(mod.fit_report(min_correl=0.25))
 
 which gives::
 
@@ -581,7 +580,7 @@ starting value::
     mod.params['gamma'].value = 0.7
 
     out  = mod.fit(y, x=x)
-    print fit_report(out, min_correl=0.25)
+    print(mod.fit_report(min_correl=0.25))
 
 which gives::
 

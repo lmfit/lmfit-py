@@ -265,6 +265,11 @@ Methods and Attributes of the :class:`Model` class
    returned from :func:`minimize` (see  :ref:`Table of Fit Results
    <goodfit-table>` plus those listed in the :ref:`Table of Model Fit results <modelfit-table>`
 
+.. method:: fit_report(modelpars=None[, show_correl=True[, min_correl=0.1]])
+
+   return result of :func:`fit_report` after completing :meth:`fit`.
+
+
 .. _modelfit-table:
 
 Table of Model Fit Results: These values are included in the return value

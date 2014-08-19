@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #<examples/model_doc2.py>
 from numpy import sqrt, pi, exp, linspace, loadtxt
-from lmfit import fit_report, Model
+from lmfit import Model
 
 import matplotlib.pyplot as plt
 
@@ -20,7 +20,7 @@ def line(x, slope, intercept):
 mod = Model(gaussian) + Model(line)
 result = mod.fit(y, x=x, amp=5, cen=5, wid=1, slope=0, intercept=1)
 
-print(fit_report(result))
+print(mod.fit_report())
 
 plt.plot(x, y,         'bo')
 plt.plot(x, result.init_fit, 'k--')
