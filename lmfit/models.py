@@ -42,7 +42,7 @@ def estimate_peak(y, x, negative):
     if len(halfmax_vals) > 2:
         sig = (x[halfmax_vals[-1]] - x[halfmax_vals[0]])/2.0
         cen = x[halfmax_vals].mean()
-    return amp, cen, sig
+    return amp*sig, cen, sig
 
 COMMON_DOC = """
 
