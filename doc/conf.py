@@ -38,8 +38,8 @@ except ImportError:
 
 
 intersphinx_mapping = {'py': ('http://docs.python.org/2', None),
-                       'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-                       'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None)}
+                       'numpy': ('http://scipy.org/docs/numpy/', None),
+                       'scipy': ('http://scipy.org/docs/scipy/reference/', None)}
 
 intersphinx_cache_limit = 10
 
