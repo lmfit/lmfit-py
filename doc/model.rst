@@ -166,6 +166,8 @@ wrapping of a simple model function for curve fitting is easy.
 The :class:`Model` class
 =======================================
 
+.. module:: model
+
 The :class:`Model` class provides a general way to wrap a pre-defined
 function as a fitting model.
 
@@ -193,7 +195,7 @@ Methods and Attributes of the :class:`Model` class
 ----------------------------------------------------
 
 .. method:: guess_starting_values(data, **kws)
-vary
+
    by default this is left to raise a ``NotImplementedError``, but may be
    overwritten by subclasses.  Generally, this method should take some
    values for ``data`` and use it to construct reasonable starting values for
