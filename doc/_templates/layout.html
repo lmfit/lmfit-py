@@ -11,20 +11,21 @@
 
 
 {% block rootrellink %}
+   <li>[<a href="{{ pathto('intro') }}">intro</a>|</li>
    <li><a href="{{ pathto('parameters') }}">parameters</a>|</li>
    <li><a href="{{ pathto('fitting') }}"> minimize</a>|</li>
    <li><a href="{{ pathto('model') }}"> model</a>|</li>
    <li><a href="{{ pathto('builtin_models') }}"> builtin models</a>|</li>
    <li><a href="{{ pathto('confidence') }}">confidence intervals</a>|</li>
    <li><a href="{{ pathto('bounds') }}">bounds</a>|</li>
-   <li><a href="{{ pathto('constraints') }}">constraints</a>|</li>
+   <li><a href="{{ pathto('constraints') }}">constraints</a>]</li>
 {% endblock %}
 
 {% block relbar1 %}
 <div>
 <table border=0>
-  <tr><td></td><td width=74% padding=5 align=left>
-       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+  <tr><td></td><td width=75% padding=5 align=left>
+       <a href="index.html" style="color: #157"> <font size=+2>LMFIT</font></a>
      </td><td></td>
      <td width=8% align=left>
          <a href="contents.html" style="color: #882222">
@@ -37,7 +38,7 @@
          <font size+=1>Develop</font></a></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
-        <a href="index.html" style="color: #157"> <font size=+2>
+        <a href="index.html" style="color: #157"> <font size=+1>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
      </td><td></td>
      <td width=8% align=left>
