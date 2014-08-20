@@ -16,7 +16,7 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.append(os.path.abspath(os.path.join('..', 'lmfit')))
-sys.path.append(os.path.abspath(os.path.join('.', 'ext')))
+sys.path.append(os.path.abspath(os.path.join('.', 'sphinx')))
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
@@ -111,7 +111,7 @@ pygments_style = 'sphinx'
 
 # -- Options for HTML output ---------------------------------------------------
 
-html_theme_path = ['theme']
+html_theme_path = ['sphinx/theme']
 html_theme = 'lmfitdoc'
 
 # Add any paths that contain custom themes here, relative to this directory.
