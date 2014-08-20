@@ -439,7 +439,7 @@ form:
 
 
 Example 1: Fit Peaked data to Gaussian or Voigt profiles
-===================================================================
+------------------------------------------------------------------
 
 Here, we will fit data to two similar lineshapes, in order to decide which
 might be the better model.  We will start with a Gaussian profile, as in
@@ -611,7 +611,8 @@ for simple problems.
 
 
 Example 2: Fit data to a Composite Model with pre-defined models
-====================================================================
+------------------------------------------------------------------
+
 
 Here, we repeat the point made at the end of the last chapter that instances
 of :class:`Model` class can be added them together to make a *composite
@@ -651,7 +652,7 @@ with a plot of
 
 
 Example 3: Fitting Multiple Peaks -- and using Prefixes
-====================================================================
+------------------------------------------------------------------
 
 .. _NIST StRD: http://itl.nist.gov/div898/strd/nls/nls_main.shtml
 
