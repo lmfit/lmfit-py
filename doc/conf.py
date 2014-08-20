@@ -17,6 +17,7 @@ import sys, os
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 sys.path.append(os.path.abspath(os.path.join('..', 'lmfit')))
 sys.path.append(os.path.abspath(os.path.join('.', 'sphinx')))
+sys.path.append(os.path.abspath(os.path.join('.')))
 # -- General configuration -----------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
@@ -24,7 +25,6 @@ sys.path.append(os.path.abspath(os.path.join('.', 'sphinx')))
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
               'sphinx.ext.coverage',
-              # 'sphinx.ext.pngmath',
               'sphinx.ext.mathjax',
               'sphinx.ext.intersphinx',
               'numpydoc']

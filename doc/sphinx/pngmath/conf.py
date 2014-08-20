@@ -25,8 +25,7 @@ sys.path.append(os.path.abspath(os.path.join('.')))
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
               'sphinx.ext.coverage',
-              # 'sphinx.ext.pngmath',
-              'sphinx.ext.mathjax',
+              'sphinx.ext.pngmath',
               'sphinx.ext.intersphinx',
               'numpydoc']
 
