@@ -648,7 +648,7 @@ with a plot of
 
 .. image::  _images/models_stepfit.png
    :target: _images/models_stepfit.png
-   :width: 70 %
+   :width: 50 %
 
 
 Example 3: Fitting Multiple Peaks -- and using Prefixes
@@ -656,11 +656,11 @@ Example 3: Fitting Multiple Peaks -- and using Prefixes
 
 .. _NIST StRD: http://itl.nist.gov/div898/strd/nls/nls_main.shtml
 
-As can be seen below, many of the models have similar parameter names.
-For composite models, this could lead to a problem of having parameters for
+As shown above, many of the models have similar parameter names.  For
+composite models, this could lead to a problem of having parameters for
 different parts of the model having the same name.  To overcome this, each
 :class:`Model` can have a ``prefix`` attribute (normally set to a blank
-string)  that will be put at the beginning of each parameter name.  To
+string) that will be put at the beginning of each parameter name.  To
 illustrate, we fit one of the classic datasets from the `NIST StRD`_ suite
 involving a decaying exponential and two gaussians.
 

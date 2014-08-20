@@ -132,19 +132,19 @@ Now let's plot a confidence region::
     >>> plt.ylabel('t2')
     >>> plt.show()
 
-which shows:
+which shows the figure on the left below for ``a1`` and ``t2``, and for
+``a2`` and ``t2`` on the right:
 
-.. image:: _images/conf_interval1.png
-   :target: _images/conf_interval1.png
-   :width: 85%
+.. _figC1:
 
-If we do the same for parameters `a2` and `t2`:
+  .. image:: _images/conf_interval1.png
+     :target: _images/conf_interval1.png
+     :width: 48%
+  .. image:: _images/conf_interval1a.png
+     :target: _images/conf_interval1a.png
+     :width: 48%
 
-.. image:: _images/conf_interval1a.png
-   :target: _images/conf_interval1a.png
-   :width: 85%
-
-Neither of these is very much like an ellipse, which is implicitly
+Neither of these plots is very much like an ellipse, which is implicitly
 assumed by the approach using the covariance matrix.
 
 Remember the trace? It shows also shows the dependence between two parameters::
@@ -164,7 +164,7 @@ which shows the trace of values:
 
 .. image:: _images/conf_interval2.png
    :target: _images/conf_interval2.png
-   :width: 85%
+   :width: 50%
 
 
 Documentation of methods

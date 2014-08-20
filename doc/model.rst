@@ -138,7 +138,7 @@ and the plot generated gives:
 
 .. image:: _images/model_fit1.png
    :target: _images/model_fit1.png
-   :width: 85%
+   :width: 50%
 
 which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit in black dashed line.
@@ -558,7 +558,7 @@ and shows the plot:
 
 .. image:: _images/model_fit2.png
    :target: _images/model_fit2.png
-   :width: 85%
+   :width: 50%
 
 
 which shows the data in blue dots, the best fit as a solid red line, and

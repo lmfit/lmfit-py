@@ -55,8 +55,17 @@ use the `lmfit github repository`_.
 
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
 
-   contents
+   intro
+   installation
+   parameters
+   fitting
+   model
+   builtin_models
+   confidence
+   bounds
+   constraints
+
 
 
