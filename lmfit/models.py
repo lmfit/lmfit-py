@@ -232,6 +232,18 @@ class BrietWignerModel(Model):
         self.params['%sq' % self.prefix].value = 1.0
         self.has_initial_guess = True
 
+class LognormalModel(Model):
+    __doc__ = lognormal.__doc__ + COMMON_DOC
+    def __init__(self, **kwargs):
+        super(LognormalModel, self).__init__(lognormal, **kwargs)
+
+    def guess_starting_values(self, data, x=None, negative=False, **kwargs):
+        amp, cen, sig = estimate_peak(data, x, negative)
+        self.params['%samplitude' % self.prefix].value = amp
+        self.params['%scenter' % self.prefix].value = cen
+        self.params['%ssigma' % self.prefix].value = sig
+        self.has_initial_guess = True
+
 class DampedOscillatorModel(Model):
     __doc__ = damped_oscillator.__doc__ + COMMON_DOC
     def __init__(self, **kwargs):
