@@ -135,7 +135,7 @@ class Model(object):
         for name in self.param_names:
             self.params.add(name)
         for key, val in def_vals.items():
-            self.set_paramval(key, val)
+            self.set_param(key, val)
 
     def guess_starting_values(self, data=None, **kws):
         """stub for guess starting values --
@@ -186,12 +186,14 @@ class Model(object):
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
 
-    def set_paramval(self, paramname, value, min=None, max=None,
-                     vary=True, expr=None):
-        """set parameter value and other attributs (min/max/expr/vary),
-        useful for making and initial guess of parameter value.
+    def set_param(self, paramname, value,
+                  min=None, max=None, vary=True, expr=None):
+        """set parameter value and optionally the other attributes
+        (min/max/expr/vary),
 
-        The  name can include prefix or not
+        this is useful for making and initial guess of parameter value.
+
+        The name can include prefix or not
         """
         pname = paramname
         if pname not in self.params:

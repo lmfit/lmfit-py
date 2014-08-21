@@ -20,7 +20,7 @@ def test_stepmodel_linear():
     stepmod.guess_starting_values(y, x)
 
     mod = stepmod + ConstantModel()
-    mod.set_paramval('c', 3*y.min())
+    mod.set_param('c', 3*y.min())
     out = mod.fit(y, x=x)
 
     assert(out.nfev > 5)
@@ -40,7 +40,7 @@ def test_stepmodel_erf():
     stepmod.guess_starting_values(y, x)
 
     mod = stepmod + ConstantModel()
-    mod.set_paramval('c', 3) # *y.min())
+    mod.set_param('c', 3) # *y.min())
 
     out = mod.fit(y, x=x)
     assert(out.nfev > 5)

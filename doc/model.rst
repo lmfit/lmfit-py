@@ -201,9 +201,10 @@ Methods and Attributes of the :class:`Model` class
    values for ``data`` and use it to construct reasonable starting values for
    the parameters.
 
-.. method:: set_paramval(parname, value[, min=None[, max=None[, vary=True]]])
+.. method:: set_param(parname, value[, min=None[, max=None[, vary=True[, expr=None]]]])
 
-   set the value for a named parameter.  This is convenient for setting
+   set the value for a named parameter, and optionally other
+   :class:`Parameter` attributes.  This is especially convenient for setting
    initial values.  The ``parname`` can include the models ``prefix`` or
    not.
 
@@ -217,6 +218,8 @@ Methods and Attributes of the :class:`Model` class
    :type max: ``None`` or float
    :param vary:  whether to vary parameter in fit.
    :type vary: boolean
+   :param expr:  mathematical expression for constraint
+   :type expr: string
 
 
 .. method:: eval(params=None[, **kws])

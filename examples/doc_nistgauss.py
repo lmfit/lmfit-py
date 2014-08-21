@@ -15,13 +15,13 @@ exp_mod.guess_starting_values(y, x=x)
 gauss1  = GaussianModel(prefix='g1_')
 gauss2  = GaussianModel(prefix='g2_')
 
-gauss1.set_paramval('center',    105, min=75, max=125)
-gauss1.set_paramval('sigma',      15, min=3)
-gauss1.set_paramval('amplitude', 2000, min=10)
+gauss1.set_param('center',    105, min=75, max=125)
+gauss1.set_param('sigma',      15, min=3)
+gauss1.set_param('amplitude', 2000, min=10)
 
-gauss2.set_paramval('center',    155, min=125, max=175)
-gauss2.set_paramval('sigma',      15, min=3)
-gauss2.set_paramval('amplitude', 2000, min=10)
+gauss2.set_param('center',    155, min=125, max=175)
+gauss2.set_param('sigma',      15, min=3)
+gauss2.set_param('amplitude', 2000, min=10)
 
 mod = gauss1 + gauss2 + exp_mod
 

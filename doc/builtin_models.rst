@@ -626,7 +626,7 @@ After constructing step-like data, we first create a :class:`StepModel`
 telling it to use the ``erf`` form (see details below), and a
 :class:`ConstantModel`.  We set initial values, in one case using the data
 and :meth:`guess_starting_values` method, and using the explicit
-:meth:`set_paramval` for the initial constant value.    Making a composite
+:meth:`set_param` for the initial constant value.    Making a composite
 model, we run :meth:`fit` and report the results, which give::
 
     [[Fit Statistics]]
@@ -669,19 +669,19 @@ involving a decaying exponential and two gaussians.
 
 where we give a separate prefix to each model (they all have an
 ``amplitude`` parameter).  The ``prefix`` values are attached transparently
-to the models.  Note that the calls to :meth:`set_paramval` used the bare
+to the models.  Note that the calls to :meth:`set_param` used the bare
 name, without the prefix.   We could have used them, but because we used
 the individual model ``gauss1`` and ``gauss2``, there was no need.  Had we
 used the composite model to set the initial parameter values, we would have
 needed to, as with::
 
     ## WRONG
-    mod.set_paramval('amplitude', 500, min=10)
+    mod.set_param('amplitude', 500, min=10)
 
     ## Raises KeyError: "'amplitude' not a parameter name"
 
     ## Correct
-    mod.set_paramval('g1_amplitude', 501, min=10)
+    mod.set_param('g1_amplitude', 501, min=10)
 
 
 The fit results printed out are::
