@@ -176,7 +176,7 @@ class VoigtModel(Model):
         self.set_paramval('center', cen)
         self.set_paramval('sigma', sig)
         self.params['%sgamma' % self.prefix] = \
-                              Parameter(expr = '%ssigma' % self.prefix)
+                              Parameter('%sgamma' % self.prefix, expr= '%ssigma' % self.prefix)
         self.has_initial_guess = True
 
 class PseudoVoigtModel(Model):
@@ -214,9 +214,9 @@ class StudentsTModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.params['%samplitude' % self.prefix].value = amp
-        self.params['%scenter' % self.prefix].value = cen
-        self.params['%ssigma' % self.prefix].value = sig
+        self.set_paramval('amplitude',  amp)
+        self.set_paramval('center', cen)
+        self.set_paramval('sigma', sig)
         self.has_initial_guess = True
 
 class BrietWignerModel(Model):
@@ -226,10 +226,10 @@ class BrietWignerModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.params['%samplitude' % self.prefix].value = amp
-        self.params['%scenter' % self.prefix].value = cen
-        self.params['%ssigma' % self.prefix].value = sig
-        self.params['%sq' % self.prefix].value = 1.0
+        self.set_paramval('amplitude', amp)
+        self.set_paramval('center', cen)
+        self.set_paramval('sigma', sig)
+        self.set_paramval('q', 1.0)
         self.has_initial_guess = True
 
 class LognormalModel(Model):
@@ -239,9 +239,9 @@ class LognormalModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.params['%samplitude' % self.prefix].value = amp
-        self.params['%scenter' % self.prefix].value = cen
-        self.params['%ssigma' % self.prefix].value = sig
+        self.set_paramval('amplitude', amp)
+        self.set_paramval('center', cen)
+        self.set_paramval('sigma', sig)
         self.has_initial_guess = True
 
 class DampedOscillatorModel(Model):
@@ -251,9 +251,9 @@ class DampedOscillatorModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.params['%samplitude' % self.prefix].value = amp
-        self.params['%scenter' % self.prefix].value = cen
-        self.params['%ssigma' % self.prefix].value = sig
+        self.set_paramval('amplitude', amp)
+        self.set_paramval('center', cen)
+        self.set_paramval('sigma', sig)
         self.has_initial_guess = True
 
 class ExponentialGaussianModel(Model):
@@ -263,9 +263,9 @@ class ExponentialGaussianModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.params['%samplitude' % self.prefix].value = amp
-        self.params['%scenter' % self.prefix].value = cen
-        self.params['%ssigma' % self.prefix].value = sig
+        self.set_paramval('amplitude', amp)
+        self.set_paramval('center', cen)
+        self.set_paramval('sigma', sig)
         self.has_initial_guess = True
 
 
@@ -276,9 +276,9 @@ class DonaichModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.params['%samplitude' % self.prefix].value = amp
-        self.params['%scenter' % self.prefix].value = cen
-        self.params['%ssigma' % self.prefix].value = sig
+        self.set_paramval('amplitude', amp)
+        self.set_paramval('center', cen)
+        self.set_paramval('sigma', sig)
         self.has_initial_guess = True
 
 
@@ -292,8 +292,8 @@ class PowerLawModel(Model):
             expon, amp = np.polyfit(log(x+1.e-14), log(data+1.e-14), 1)
         except:
             expon, amp = 1, np.log(abs(max(data)+1.e-9))
-        self.params['%samplitude' % self.prefix].value = np.exp(amp)
-        self.params['%sexponent' % self.prefix].value = expon
+        self.set_paramval('amplitude', np.exp(amp))
+        self.set_paramval('exponent', expon)
         self.has_initial_guess = True
 
 class ExponentialModel(Model):
@@ -306,8 +306,8 @@ class ExponentialModel(Model):
             sval, oval = np.polyfit(x, np.log(abs(data)+1.e-15), 1)
         except:
             sval, oval = 1., np.log(abs(max(data)+1.e-9))
-        self.params['%samplitude' % self.prefix].value = np.exp(oval)
-        self.params['%sdecay' % self.prefix].value = -1/sval
+        self.set_paramval('amplitude', np.exp(oval))
+        self.set_paramval('decay', -1/sval)
         self.has_initial_guess = True
 
 class StepModel(Model):
