@@ -80,7 +80,7 @@ class LinearModel(Model):
         if x is not None:
             sval, oval = np.polyfit(x, data, 1)
         self.set_param('intercept', oval)
-        self.set_param('sslope' , sval)
+        self.set_param('slope' , sval)
         self.has_initial_guess = True
 
 class QuadraticModel(Model):
@@ -142,7 +142,7 @@ class GaussianModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
 
 class LorentzianModel(Model):
@@ -158,7 +158,7 @@ class LorentzianModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
 
 class VoigtModel(Model):
@@ -174,7 +174,7 @@ class VoigtModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.params['%sgamma' % self.prefix] = \
                               Parameter('%sgamma' % self.prefix, expr= '%ssigma' % self.prefix)
         self.has_initial_guess = True
@@ -188,7 +188,7 @@ class PseudoVoigtModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.set_param('fraction', 0.5)
         self.has_initial_guess = True
 
@@ -202,7 +202,7 @@ class Pearson7Model(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.set_param('exponent', 0.5)
         self.has_initial_guess = True
 
@@ -216,7 +216,7 @@ class StudentsTModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude',  amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
 
 class BrietWignerModel(Model):
@@ -228,7 +228,7 @@ class BrietWignerModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.set_param('q', 1.0)
         self.has_initial_guess = True
 
@@ -241,7 +241,7 @@ class LognormalModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
 
 class DampedOscillatorModel(Model):
@@ -253,7 +253,7 @@ class DampedOscillatorModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
 
 class ExponentialGaussianModel(Model):
@@ -265,7 +265,7 @@ class ExponentialGaussianModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
 
 
@@ -278,7 +278,7 @@ class DonaichModel(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig)
+        self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
 
 
@@ -322,7 +322,7 @@ class StepModel(Model):
         xmin, xmax = min(x), max(x)
         self.set_param('amplitude', (ymax-ymin))
         self.set_param('center',    (xmax+xmin)/2.0)
-        self.set_param('sigma',     (xmax-xmin)/7.0)
+        self.set_param('sigma',     (xmax-xmin)/7.0, min=0.0)
         self.has_initial_guess = True
 
 class RectangleModel(Model):
@@ -339,8 +339,8 @@ class RectangleModel(Model):
         xmin, xmax = min(x), max(x)
         self.set_param('amplitude', (ymax-ymin))
         self.set_param('center1',   (xmax+xmin)/4.0)
-        self.set_param('sigma1' ,   (xmax-xmin)/7.0)
+        self.set_param('sigma1' ,   (xmax-xmin)/7.0, min=0.0)
         self.set_param('center2', 3*(xmax+xmin)/4.0)
-        self.set_param('sigma2',    (xmax-xmin)/7.0)
+        self.set_param('sigma2',    (xmax-xmin)/7.0, min=0.0)
         self.has_initial_guess = True
 
