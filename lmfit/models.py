@@ -112,12 +112,8 @@ class PolynomialModel(Model):
         kwargs['param_names'] = pnames
 
         def polynomial(x, c0=0, c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0):
-            out = np.zeros_like(x)
-            args = dict(c0=c0, c1=c1, c2=c2, c3=c3,
-                        c4=c4, c5=c5, c6=c6, c7=c7)
-            for i in range(self.poly_degree+1):
-                out += x**i * args.get('c%i' % i, 0)
-            return out
+            return np.polyval([c7, c6, c5, c4, c3, c2, c1, c0], x)
+
         super(PolynomialModel, self).__init__(polynomial, **kwargs)
 
     def guess_starting_values(self, data, x=None, **kws):

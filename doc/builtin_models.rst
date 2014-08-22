@@ -336,7 +336,8 @@ with parameters ``a``, ``b``, and ``c``.
     f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i
 
 with parameters ``c0``, ``c1``, ..., ``c7``.  The supplied ``degree``
-will specify how many of these are actual variable parameters.
+will specify how many of these are actual variable parameters.  This uses
+:func:`numpy.polyval` for its calculation of the polynomial.
 
 
 
