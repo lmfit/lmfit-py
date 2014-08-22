@@ -375,5 +375,7 @@ class Model(object):
                     param_names=self.param_names | other.param_names,
                     missing=self.missing, components=components)
         out.components = components
+        for c in components:
+            c.params = self.params
         out.params = all_params
         return out
