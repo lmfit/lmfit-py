@@ -25,15 +25,12 @@ html:
 
 htmlzip: html
 	cp sphinx/ext_pngmath.py extensions.py
-	cp $(PNGMATHCONF) conf.py
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/lmfit_doc
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
 
 epub:
 	cp sphinx/ext_pngmath.py extensions.py
-	cp $(PNGMATHCONF) conf.py
 	$(SPHINXBUILD) -b epub  $(ALLSPHINXOPTS) $(BUILDDIR)/epub
-	cp SAVEconf.py conf.py
 	cp -pr $(BUILDDIR)/epub/*.epub $(BUILDDIR)/html/.
 
 pdf: latex
