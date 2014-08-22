@@ -6,8 +6,6 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 PAPER         =
 BUILDDIR      = _build
-JAXMATHCONF   = sphinx/mathjax/conf.py
-PNGMATHCONF   = sphinx/pngmath/conf.py
 INSTALLDIR = /home/newville/public_html/lmfit/
 
 
@@ -20,22 +18,19 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 .PHONY: all install pdf
 
 html:
-	cp conf.py SAVEconf.py
-	cp $(JAXMATHCONF) conf.py
+	cp sphinx/ext_mathjax.py extensions.py
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
-	cp SAVEconf.py conf.py
 	@echo
 	@echo "html build finished: $(BUILDDIR)/html."
 
 htmlzip: html
-	cp conf.py SAVEconf.py
+	cp sphinx/ext_pngmath.py extensions.py
 	cp $(PNGMATHCONF) conf.py
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/lmfit_doc
-	cp SAVEconf.py conf.py
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
 
 epub:
-	cp conf.py SAVEconf.py
+	cp sphinx/ext_pngmath.py extensions.py
 	cp $(PNGMATHCONF) conf.py
 	$(SPHINXBUILD) -b epub  $(ALLSPHINXOPTS) $(BUILDDIR)/epub
 	cp SAVEconf.py conf.py
