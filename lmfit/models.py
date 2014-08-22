@@ -156,7 +156,7 @@ class LorentzianModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.set_param('amplitude', amp)
+        self.set_param('amplitude', 1.25*amp)
         self.set_param('center', cen)
         self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
@@ -172,9 +172,9 @@ class VoigtModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.set_param('amplitude', amp)
+        self.set_param('amplitude', 1.5*amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig, min=0.0)
+        self.set_param('sigma', 0.65*sig, min=0.0)
         self.params['%sgamma' % self.prefix] = \
                               Parameter('%sgamma' % self.prefix, expr= '%ssigma' % self.prefix)
         self.has_initial_guess = True
@@ -186,7 +186,7 @@ class PseudoVoigtModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.set_param('amplitude', amp)
+        self.set_param('amplitude', 1.25*amp)
         self.set_param('center', cen)
         self.set_param('sigma', sig, min=0.0)
         self.set_param('fraction', 0.5)
@@ -202,8 +202,8 @@ class Pearson7Model(Model):
         amp, cen, sig = estimate_peak(data, x, negative)
         self.set_param('amplitude', amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig, min=0.0)
-        self.set_param('exponent', 0.5)
+        self.set_param('sigma',  sig, min=0.0)
+        self.set_param('expon',  1.5)
         self.has_initial_guess = True
 
 
@@ -219,7 +219,7 @@ class StudentsTModel(Model):
         self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
 
-class BrietWignerModel(Model):
+class BreitWignerModel(Model):
     __doc__ = breit_wigner.__doc__ + COMMON_DOC
     def __init__(self, **kwargs):
         super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
@@ -238,10 +238,9 @@ class LognormalModel(Model):
         super(LognormalModel, self).__init__(lognormal, **kwargs)
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
-        amp, cen, sig = estimate_peak(data, x, negative)
-        self.set_param('amplitude', amp)
-        self.set_param('center', cen)
-        self.set_param('sigma', sig, min=0.0)
+        self.set_param('amplitude', 1.0)
+        self.set_param('center', 0.0)
+        self.set_param('sigma', 0.25, min=0.0)
         self.has_initial_guess = True
 
 class DampedOscillatorModel(Model):
@@ -251,9 +250,9 @@ class DampedOscillatorModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.set_param('amplitude', amp)
+        self.set_param('amplitude', 0.1*amp)
         self.set_param('center', cen)
-        self.set_param('sigma', sig, min=0.0)
+        self.set_param('sigma', 0.1*sig, min=0.0)
         self.has_initial_guess = True
 
 class ExponentialGaussianModel(Model):
@@ -276,7 +275,7 @@ class DonaichModel(Model):
 
     def guess_starting_values(self, data, x=None, negative=False, **kwargs):
         amp, cen, sig = estimate_peak(data, x, negative)
-        self.set_param('amplitude', amp)
+        self.set_param('amplitude', amp/2.0)
         self.set_param('center', cen)
         self.set_param('sigma', sig, min=0.0)
         self.has_initial_guess = True
