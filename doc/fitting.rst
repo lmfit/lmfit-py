@@ -273,6 +273,7 @@ near the maximum or minimum value makes the covariance matrix singular.  In
 these cases, the :attr:`errorbars` attribute of the fit result
 (:class:`Minimizer` object) will be ``False``.
 
+.. module:: Minimizer
 
 ..  _fit-minimizer-label:
 
