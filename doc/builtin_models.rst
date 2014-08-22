@@ -30,8 +30,6 @@ example,  a Lorentzian plus a linear background might be represented as::
     >>> model = peak + background
 
 
-
-
 All the models listed below are one dimensional, with an independent
 variable named ``x``.  Many of these models represent a function with a
 distinct peak, and so share common features.  To maintain uniformity,
@@ -49,7 +47,9 @@ Peak-like models
 
 There are many peak-like models available.  These include
 :class:`GaussianModel`, :class:`LorentzianModel`, :class:`VoigtModel` and
-some less commonly used variations.
+some less commonly used variations.  The :meth:`guess_starting_value`
+methods for all of these make a fairly crude guess for the value of
+``amplitude``, but also set a lower bound of 0 on the value of ``sigma``.
 
 :class:`GaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -154,24 +154,17 @@ value for ``fraction`` of 0.5
 
 A model based on a `Pearson VII distribution
 <http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution>`_.
-This is another Voigt-like distribution function.  It has the usual
+This is a Lorenztian-like distribution function.  It has the usual
 parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-``sigma`` (:math:`\sigma`), and also ``exponent`` (:math:`p`) in
+``sigma`` (:math:`\sigma`), and also an ``exponent`` (:math:`m`) in
 
 .. math::
 
-    f(x; A, \mu, \sigma, p) = \frac{sA}{\big\{[1 + (\frac{x-\mu}{\sigma})^2] (2^{1/p} -1)  \big\}^p}
+    f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
 
-where
-
-.. math::
-
-    s = \frac{\Gamma(p) \sqrt{2^{1/p} -1}}{ \sigma\sqrt{\pi}\,\Gamma(p-1/2)}
-
-where :math:`\Gamma(x)` is the gamma function.
-
-The :meth:`guess_starting_values` function always gives a starting
-value for ``exponent`` of 0.5.
+where :math:`\beta` is the beta functon (see :func:`scipy.optimize.beta` in
+:mod:`scipy.special`).  The :meth:`guess_starting_values` function always
+gives a starting value for ``exponent`` of 1.5.
 
 :class:`StudentsTModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -623,7 +616,7 @@ constant:
 .. literalinclude:: ../examples/doc_stepmodel.py
 
 After constructing step-like data, we first create a :class:`StepModel`
-telling it to use the ``erf`` form (see details below), and a
+telling it to use the ``erf`` form (see details above), and a
 :class:`ConstantModel`.  We set initial values, in one case using the data
 and :meth:`guess_starting_values` method, and using the explicit
 :meth:`set_param` for the initial constant value.    Making a composite

@@ -43,14 +43,18 @@ def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
     return ((1-fraction)*gaussian(x, amplitude, center, sigma) +
                fraction*lorentzian(x, amplitude, center, sigma))
 
-def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=0.5):
-    """pearson7 lineshape, according to NIST StRD
-    though it seems wikpedia gives a different formula...
-    pearson7(x, center, sigma, expon)
+def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
+    """pearson7 lineshape, using the wikipedia definition:
+
+    pearson7(x, center, sigma, expon) =
+      amplitude*(1+arg**2)**(-expon)/(sigma*beta(expon-0.5, 0.5))
+
+    where arg = (x-center)/sigma
+    and beta() is the beta function.
     """
-    scale = amplitude * gamfcn(expon) * (sqrt((2**(1/expon) -1)) /
-                                         (gamfcn(expon-0.5)) / (sigma*spi))
-    return scale/(1 + (((1.0*x-center)/sigma)**2) * (2**(1/expon) -1))**expon
+    arg = (x-center)/sigma
+    scale = amplitude * gamfcn(expon)/(gamfcn(0.5)*gamfcn(expon-0.5))
+    return  scale*(1+arg**2)**(-expon)/sigma
 
 def breit_wigner(x, amplitude=1.0, center=0.0, sigma=1.0, q=1.0):
     """Breit-Wigner-Fano lineshape:
@@ -77,6 +81,7 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
     lognormal(x, center, sigma)
         = (amplitude/x) * exp(-(ln(x) - center)/ (2* sigma**2))
     """
+    x[where(x<=1.e-19)] = 1.e-19
     return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2/ (2* sigma**2))
 
 def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
