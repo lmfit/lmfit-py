@@ -619,7 +619,7 @@ After constructing step-like data, we first create a :class:`StepModel`
 telling it to use the ``erf`` form (see details above), and a
 :class:`ConstantModel`.  We set initial values, in one case using the data
 and :meth:`guess_starting_values` method, and using the explicit
-:meth:`set_param` for the initial constant value.    Making a composite
+:meth:`set_param` for the initial constant value.  After making a composite
 model, we run :meth:`fit` and report the results, which give::
 
     [[Fit Statistics]]
@@ -676,38 +676,36 @@ needed to, as with::
     ## Correct
     mod.set_param('g1_amplitude', 501, min=10)
 
+Note also in the example here that we explicitly set bounds on many of the
+parameter values.
 
 The fit results printed out are::
 
-    [[Fit Statistics]]
-        # function evals   = 66
+    [Fit Statistics]]
+        # function evals   = 55
         # data points      = 250
         # variables        = 8
         chi-square         = 1247.528
         reduced chi-square = 5.155
     [[Variables]]
-        exp_amplitude:     99.01833 +/- 0.5374884 (0.54%) initial =  162.2102
+        exp_amplitude:     99.01833 +/- 0.5374875 (0.54%) initial =  162.2102
         exp_decay:         90.95088 +/- 1.103105 (1.21%) initial =  93.24905
-        g1_amplitude:      4257.774 +/- 42.38366 (1.00%) initial =  500
-        g1_center:         107.031 +/- 0.1500691 (0.14%) initial =  105
-        g1_fwhm:           39.26092 +/- 0.3779083 (0.96%) == '2.354820*g1_sigma'
-        g1_sigma:          16.67258 +/- 0.1604829 (0.96%) initial =  12
-        g2_amplitude:      2493.417 +/- 36.16923 (1.45%) initial =  500
-        g2_center:         153.2701 +/- 0.194667 (0.13%) initial =  150
-        g2_fwhm:           32.51287 +/- 0.4398624 (1.35%) == '2.354820*g2_sigma'
-        g2_sigma:          13.80695 +/- 0.1867924 (1.35%) initial =  12
-    [[Correlations]] (unreported correlations are <  0.100)
+        g1_amplitude:      4257.774 +/- 42.38354 (1.00%) initial =  2000
+        g1_center:         107.031 +/- 0.150068 (0.14%) initial =  105
+        g1_fwhm:           39.26092 +/- 0.3779078 (0.96%) == '2.354820*g1_sigma'
+        g1_sigma:          16.67258 +/- 0.1604827 (0.96%) initial =  15
+        g2_amplitude:      2493.417 +/- 36.16907 (1.45%) initial =  2000
+        g2_center:         153.2701 +/- 0.1946652 (0.13%) initial =  155
+        g2_fwhm:           32.51288 +/- 0.4398601 (1.35%) == '2.354820*g2_sigma'
+        g2_sigma:          13.80695 +/- 0.1867914 (1.35%) initial =  15
+    [[Correlations]] (unreported correlations are <  0.500)
         C(g1_amplitude, g1_sigma)    =  0.824
         C(g2_amplitude, g2_sigma)    =  0.815
         C(g1_sigma, g2_center)       =  0.684
         C(g1_amplitude, g2_center)   =  0.648
         C(g1_center, g2_center)      =  0.621
         C(g1_center, g1_sigma)       =  0.507
-        C(g1_amplitude, g1_center)   =  0.418
-        C(exp_amplitude, g2_amplitude)  =  0.282
-        C(exp_amplitude, g2_sigma)   =  0.171
-        C(exp_amplitude, g1_amplitude)  =  0.148
-        C(exp_decay, g1_center)      =  0.105
+
 
 We get a very good fit to this challenging problem (described at the NIST
 site as of average difficulty, but the tests there are generally hard) by
@@ -725,9 +723,12 @@ on the parameter values.  This fit is shown on the left:
 
 
 One final point on setting initial values.  From looking at the data
-itself, we can see the two Gaussian peaks are reasonably well centered.  We
-can simplify the initial parameter values by using this, and by defining an
-:func:`index_of` function to limit the data range.  That is, with::
+itself, we can see the two Gaussian peaks are reasonably well separated but
+do overlap. Furthermore, we can tell that the initial guess for the
+decaying exponential component was poorly estimated because we used the
+full data range.  We can simplify the initial parameter values by using
+this, and by defining an :func:`index_of` function to limit the data range.
+That is, with::
 
     def index_of(arrval, value):
         "return index of array *at or below* value "
@@ -743,7 +744,8 @@ can simplify the initial parameter values by using this, and by defining an
     gauss2.guess_starting_values(y[ix2:ix3], x=x[ix2:ix3])
 
 we can get a better initial estimate, and the fit converges in fewer steps,
-and without any bounds on parameters::
+getting to identical values (to the precision printed out in the report),
+and without any bounds on parameters at all::
 
     [[Fit Statistics]]
         # function evals   = 46
@@ -772,4 +774,7 @@ and without any bounds on parameters::
 
 
 This example is in the file ``doc_nistgauss2.py`` in the examples folder,
-and the fit result shown on the right above.
+and the fit result shown on the right above shows an improved initial
+estimate of the data.
+
+
