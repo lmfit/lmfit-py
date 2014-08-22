@@ -141,8 +141,8 @@ for the constraints::
         return (amp  / (1 + ((x-cen)/wid)**2))
 
     fitter = Minimizer()
-    fitter.asteval.symtable['lorenztian'] = lorenztian
+    fitter.asteval.symtable['lorentzian'] = lorentzian
 
-and this :meth:`lorenztian` function can now be used in constraint
+and this :meth:`lorentzian` function can now be used in constraint
 expressions.
 

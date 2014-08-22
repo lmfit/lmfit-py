@@ -1,8 +1,8 @@
 .. _builtin_models_chapter:
 
-=================================================
-Built-in Fitting Models in the :mod:`models`
-=================================================
+=====================================================
+Built-in Fitting Models in the :mod:`models` module
+=====================================================
 
 Lmfit provides several builtin fitting models in the :mod:`models` module.
 These pre-defined models each subclass from the :class:`Model` class of the
@@ -28,7 +28,6 @@ example,  a Lorentzian plus a linear background might be represented as::
     >>> peak = LorentzianModel()
     >>> background  = LinearModel()
     >>> model = peak + background
-
 
 All the models listed below are one dimensional, with an independent
 variable named ``x``.  Many of these models represent a function with a
@@ -162,7 +161,7 @@ parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
 
     f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
 
-where :math:`\beta` is the beta functon (see :func:`scipy.optimize.beta` in
+where :math:`\beta` is the beta function (see :func:`scipy.optimize.beta` in
 :mod:`scipy.special`).  The :meth:`guess_starting_values` function always
 gives a starting value for ``exponent`` of 1.5.
 

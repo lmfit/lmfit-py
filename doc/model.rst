@@ -366,8 +366,8 @@ the Gaussian model.
 Explicitly specifying ``independent_vars``
 -------------------------------------------------
 
-As for the example above of the Gaussian model, creating a :class:`Model`
-from a function is fairly easy::
+As we saw for the Gaussian example above, creating a :class:`Model` from a
+function is fairly easy. Let's try another::
 
     >>> def decay(t, tau, N):
     ...    return N*np.exp(-t/tau)
@@ -381,12 +381,12 @@ from a function is fairly easy::
     tau <Parameter 'tau', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
 
-Here, ``t`` is assumed to be the independent variable because it comes
-first, and that the other function arguments are used to create the
-remaining parameters are created from the other parameters.
+Here, ``t`` is assumed to be the independent variable because it is the
+first argument to the function.  The other function arguments are used to
+create parameters for the model.
 
-If you wanted ``tau`` to be the independent variable in the above example,
-you would just do this::
+If you want ``tau`` to be the independent variable in the above example,
+you can say so::
 
     >>> decay_model = Model(decay, independent_vars=['tau'])
     >>> print decay_model.independent_vars
@@ -398,12 +398,27 @@ you would just do this::
     N <Parameter 'N', None, bounds=[None:None]>
 
 
+You can also supply multiple values for multi-dimensional functions with
+multiple independent variables.  In fact, the meaning of *independent
+variable* here is simple, and based on how it treats arguments of the
+function you are modeling:
+
+independent variable
+    a function argument that is not a parameter or otherwise part of the
+    model, and that will be required to be explicitly provided as a
+    keyword argument for each fit with :meth:`fit` or evaluation
+    with :meth:`eval`.
+
+Note that independent variables are not required to be arrays, or even
+floating point numbers.
+
+
 Functions with keyword arguments
 -----------------------------------------
 
 If the model function had keyword parameters, these would be turned into
 Parameters if the supplied default value was a valid number (but not
-``None``).
+``None``, ``True``, or ``False``).
 
     >>> def decay2(t, tau, N=10, check_positive=False):
     ...    if check_small:
@@ -424,7 +439,10 @@ into a parameter, with the default numerical value as its initial value.
 By default, it is permitted to be varied in the fit -- the 10 is taken as
 an initial value, not a fixed value.  On the other hand, the
 ``check_positive`` keyword argument, was not converted to a parameter
-because it has a boolean default value.
+because it has a boolean default value.    In some sense,
+``check_positive`` becomes like an independent variable to the model.
+However, because it has a default value it is not required to be given for
+each model evaluation or fit, as independent variables are.
 
 Defining a ``prefix`` for the Parameters
 --------------------------------------------
@@ -452,40 +470,63 @@ You would refer to these parameters as ``f1_amplitude`` and so forth, and
 the model will know to map these to the ``amplitude`` argument of ``myfunc``.
 
 
-More on initialing model parameters
+Initializing model parameters
 -----------------------------------------
 
 As mentioned above, the parameters created by :class:`Model` are generally
-created with invalid initial values of ``None``.  These values must be
+created with invalid initial values of ``None``.  These values **must** be
 initialized in order for the model to be evaluated or used in a fit.  There
 are three ways to do this initialization that can be used in any
 combination:
 
   1. You can supply initial values in the definition of the model function.
   2. You can initialize the parameters after the model has been created.
-  3. You can supply initial values for the parameters to the :meth:`eval`
-     or :meth:`fit` methods.
+  3. You can supply initial values for the parameters when you use the
+     :meth:`eval` or :meth:`fit` methods.
 
-For option 1, consider doing::
+Of course these methods can be mixed, allowing you to overwrite initial
+values at any point in the process of defining and using the model.
+
+Initializing values in the function definition
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To supply initial values for parameters in the definition of the model
+function, you can simply supply a default value::
 
     >>> def myfunc(x, a=1, b=0):
     >>>     ...
 
-instead of::
+instead of using::
 
     >>> def myfunc(x, a, b):
     >>>     ...
 
-For option 2, you can do::
+This has the advantage of working at the function level -- all parameters
+can be treated as options.
+
+Initializing values after the model is created
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After a model has been created, you can modify its parameters by accessing
+the :attr:`params` attribute (a :class:`Parameters` instance) directly::
 
     >>> mod = Model(myfunc)
     >>> mod.params['a'].value = 1.0
     >>> mod.params['b'].value = 0.1
 
-An advantage of this approach is that you can set other parameter
-attributes such as bounds and constraints.
+or with the :meth:`set_param` method::
 
-For option 3, give explicit initial values for the parameters:
+    >>> mod.set_param('a', 1.0, min=0)
+    >>> mod.set_param('b', 2.0, vary=False)
+
+which has the advantage that you can set other
+parameter attributes such as bounds and constraints in a single line.
+
+Initializing values when using a model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To supply initial values when using a model, you can include values
+as keyword arguments to either the :meth:`eval` or :meth:`fit` methods::
 
    >>> y1 = mod.eval(x=x, a=1, b=3)
 
@@ -557,19 +598,48 @@ which prints out the results::
         C(amp, wid)                  =  0.666
         C(cen, intercept)            =  0.129
 
-and shows the plot:
+and shows the plot on the left.
 
-.. image:: _images/model_fit2.png
-   :target: _images/model_fit2.png
-   :width: 50%
+.. _figModel2:
+
+  .. image:: _images/model_fit2.png
+     :target: _images/model_fit2.png
+     :width: 48%
+  .. image:: _images/model_fit2a.png
+     :target: _images/model_fit2a.png
+     :width: 48%
 
 
-which shows the data in blue dots, the best fit as a solid red line, and
-the initial fit in black dashed line.
+On the left, data is shown in blue dots, the total fit is shown in solid
+red line, and the initial fit is shown as a black dashed line.  In the
+figure on the right, the data is again shown in blue dots, and the Gaussian
+component shown as a black dashed line, and the linear component shown as a
+red dashed line.  These components were generated after the fit using the
+Models :meth:`eval` method::
 
-In this example, the argument names for the model functions do not overlap.
-If they had, the ``prefix`` argument to :class:`Model` would have allowed
-us to identify which parameter went with which component model.  As we will
-see in the next chapter, using composite models with the built-in models
-provides a simple way to build up complex models.
+
+    comp_gauss = mod.components[0].eval(x=x)
+    comp_line  = mod.components[1].eval(x=x)
+
+
+Note that we have to pass in ``x`` here, but not any of the final values
+for the parameters -- the current values for ``mod.params`` will be used,
+and these will be the best-fit values after a fit.  While the model does
+store the best parameters and the estimate of the data in ``mod.best_fit``,
+it does not actually store the data it fit to or the independent variables
+-- here, ``x`` for that data.  That means you can easily apply this model
+to other data sets, or evaluate the model at other values of ``x``.   You
+may want to do this to give a finer or coarser spacing of data point,  or to
+extrapolate the model outside the fitting range.    This can be done with::
+
+    xwide = np.linspace(-5, 25, 3001)
+    predicted = mod.eval(x=xwide)
+
+
+
+A final note: In this example, the argument names for the model functions
+do not overlap.  If they had, the ``prefix`` argument to :class:`Model`
+would have allowed us to identify which parameter went with which component
+model.  As we will see in the next chapter, using composite models with the
+built-in models provides a simple way to build up complex models.
 
