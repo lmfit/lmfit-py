@@ -9,6 +9,8 @@ fundamental to the lmfit approach to optimization.   Most real use cases
 will use the :class:`Parameters` class, which provides an (ordered)
 dictionary of :class:`Parameter` objects.
 
+.. module:: Parameter
+
 The :class:`Parameter` class
 ========================================
 
@@ -52,6 +54,8 @@ be used to compute the value for the Parameter at each step in the fit.
 See :ref:`constraints_chapter` for more details and examples of this
 feature.
 
+
+.. module:: Parameters
 
 The :class:`Parameters` class
 ========================================
@@ -100,6 +104,18 @@ The :class:`Parameters` class
                 ('wid2',  None, False, None, None, '2*wid1/3'))
 
 
+
+.. method:: valuesdict(self)
+
+   return an ordered dictionary of name:value pairs for each Parameter.
+        
+   This is distinct from the Parameters itself, as it has values of
+   the Parameeter values, not the full Parameter object.
+
+   This can be a very convenient way to get Paramater values in a objective
+   function.
+
+
 Simple Example
 ==================
 
@@ -107,5 +123,19 @@ Putting it all together, a simple example of using a dictionary of
 :class:`Parameter` objects and :func:`minimize` might look like this:
 
 .. literalinclude:: ../examples/doc_basic.py
+
+
+Here, the objective function explicitly unpacks each Parameter value.  This
+can be simplified using the :class:`Parameters` :meth:`valuesdict` method,
+which would make the objective function ``fcn2min`` above look like::
+
+    def fcn2min(params, x, data):
+        """ model decaying sine wave, subtract data"""
+        v = params.valuesdict()
+    
+        model = v['amp'] * np.sin(x * v['omega'] + v['shift']) * np.exp(-x*x*v['decay'])
+        return model - data
+
+The results are identical, and the difference is a stylisic choice.
 
 

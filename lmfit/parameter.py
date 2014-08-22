@@ -62,6 +62,15 @@ class Parameters(OrderedDict):
         for para in parlist:
             self.add(*para)
 
+    def valuesdict(self):
+        """return on ordered dictionary of name:value pairs for each Parameter.
+        
+        This is distinct from the Parameters itself, as it has values of
+        the Parameeter values, not the full Parameter object """
+
+        return OrderedDict(((p.name, p.value) for p in self.values()))
+
+
 class Parameter(object):
     """A Parameter is the basic Parameter going
     into Fit Model.  The Parameter holds many attributes:
