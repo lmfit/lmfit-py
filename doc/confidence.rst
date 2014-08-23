@@ -1,12 +1,12 @@
 Calculation of confidence intervals
 ====================================
 
-.. py:module:: confidence
+.. module:: confidence
 
-Since version `0.5`, lmfit is also capable of calculating the confidence
-intervals directly. For most models, it is not necessary: the estimation
-of the standard error from the estimated covariance matrix is normally quite
-good.
+The lmfit :mod:`confidence` module allows you to explicitly calculate
+confidence intervals for variable parameters.  For most models, it is not
+necessary: the estimation of the standard error from the estimated
+covariance matrix is normally quite good.
 
 But for some models, e.g. a sum of two exponentials, the approximation
 begins to fail. For this case, lmfit has the function :func:`conf_interval`
@@ -17,6 +17,7 @@ are more robust.
 
 Method used for calculating confidence intervals
 -------------------------------------------------
+
 The F-test is used to compare our null model, which is the best fit we have
 found, with an alternate model, where one of the parameters is fixed to a
 specific value. The value is changed until the difference between :math:`\chi^2_0`
@@ -32,13 +33,12 @@ N is the number of data-points, P the number of parameter of the null model.
 difference of number of parameters between our null model and the alternate
 model).
 
-A log-likelihood method will be added soon.
+Adding a log-likelihood method is under consideration.
 
 A basic example
 ---------------
 
-First we create a toy problem::
-
+First we create an example problem::
 
     >>> import lmfit
     >>> import numpy as np
@@ -52,7 +52,9 @@ First we create a toy problem::
     ...    return 1/(a*x)+b-y
 
 
-We have to fit it, before we can generate the confidence intervals::
+before we can generate the confidence intervals, we have to run a fit, so
+that the automated estimate of the standard errors can be used as a
+starting point::
 
 
     >>> mi = lmfit.minimize(residual, p)
@@ -65,7 +67,8 @@ We have to fit it, before we can generate the confidence intervals::
         C(a, b)                      =  0.601
 
 
-Now it just a simple function call to start the calculation::
+Now it is just a simple function call to calculate the confidence
+intervals::
 
     >>> ci = lmfit.conf_interval(mi)
     >>> lmfit.printfuncs.report_ci(ci)
@@ -73,13 +76,15 @@ Now it just a simple function call to start the calculation::
     a   0.09960   0.09981   0.10000   0.10019   0.10039   0.10058   0.10079
     b   1.97035   1.98326   1.99544   2.00008   2.01936   2.03154   2.04445
 
-
-As we can see, the estimated error is almost the same, and the
-uncertainties are well behaved: Going from 1 :math:`\sigma` (68%
-confidence) to 3 :math:`\sigma` (99.7% confidence) uncertainties is fairly
-linear.  For this problem, it is not necessary to calculate confidence
-intervals, and the estimates of the uncertainties from the covariance
-matrix are sufficient.
+This shows the best-fit values for the parameters in the `0.00%` column,
+and parameter values that are at the varying confidence levels given by
+steps in :math:`\sigma`.  As we can see, the estimated error is almost the
+same, and the uncertainties are well behaved: Going from 1 :math:`\sigma`
+(68% confidence) to 3 :math:`\sigma` (99.7% confidence) uncertainties is
+fairly linear.  It can also be seen that the errors are fairy symmetric
+around the best fit value.  For this problem, it is not necessary to
+calculate confidence intervals, and the estimates of the uncertainties from
+the covariance matrix are sufficient.
 
 An advanced example
 -------------------
@@ -117,7 +122,7 @@ and 2 :math:`\sigma`::
     t1   1.07009   1.28482   1.37407   1.97509   2.64341
 
 Comparing these two different estimates, we see that the estimate for `a1`
-is reasonable well approximated from the covariance matrix, but the
+is reasonably well approximated from the covariance matrix, but the
 estimates for `a2`, `t1`, and `t2` are very asymmetric and that going from
 1 :math:`\sigma` (68% confidence) to 2 :math:`\sigma` (95% confidence) is
 not very predictable.
