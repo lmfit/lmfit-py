@@ -161,7 +161,7 @@ parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
 
     f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
 
-where :math:`\beta` is the beta function (see :func:`scipy.optimize.beta` in
+where :math:`\beta` is the beta function (see :func:`scipy.special.beta` in
 :mod:`scipy.special`).  The :meth:`guess_starting_values` function always
 gives a starting value for ``exponent`` of 1.5.
 
