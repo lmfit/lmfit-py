@@ -6,14 +6,30 @@ Using Mathematical Constraints
 
 .. _asteval: http://newville.github.io/asteval/
 
-While being able to fix variables and place upper and lower bounds on their
-values are key parts of lmfit, the ability to place mathematical
-constraints on parameters is also highly desirable.  This section describes
-how to do this, and what sort of parameterizations are possible -- see
-the `asteval`_ for further documentation.
+Being able to fix variables to a constant value or place upper and lower
+bounds on their values can greatly simplify modeling real data and are so
+are key parts of lmfit.  In addition, it is sometimes highly desirable to
+place mathematical constraints on parameter values.  For example, one might
+want to require that two Gaussian peaks have the same width, or have
+amplitudes that are constrained to add to some value.  Of course, one could
+rewrite the objective or model function to place such requirements, but
+this limits flexibility, and is somewhat error prone.
+
+For maximum flexibility, lmfit allows you to have any Parameter's value be
+evaluated from a mathematical expression -- a constraint -- using other
+Parameters and several builtin constants and function.  The mathematical
+expressions are evaluated using the `asteval`_ module, which supports
+Python syntax, and evaluates the expressions in an isolated namespace.
+
+In short, this approach to supporting mathematical constraints allows one
+to not have to write a separate model function for two Gaussians where the
+two ``sigma`` values are forced to be equal.  One can simply use a two
+Gaussian model (perhaps using :class:`GaussianModel`) and impose this
+constraint on the Parameters.
+
 
 Overview
-===========
+===============
 
 Just as one can place bounds on a Parameter, or keep it fixed during the
 fit, so too can one place mathematical constraints on parameters.  The way
@@ -136,12 +152,12 @@ The `asteval`_ interpreter uses a flat namespace, implemented as a single
 dictionary. That means you can preload any Python symbol into the namespace
 for the constraints::
 
-    def lorentzian(x, amp, cen, wid):
+    def mylorentzian(x, amp, cen, wid):
         "lorentzian function: wid = half-width at half-max"
         return (amp  / (1 + ((x-cen)/wid)**2))
 
     fitter = Minimizer()
-    fitter.asteval.symtable['lorentzian'] = lorentzian
+    fitter.asteval.symtable['lorentzian'] = mylorentzian
 
 and this :meth:`lorentzian` function can now be used in constraint
 expressions.
