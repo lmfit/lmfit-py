@@ -645,3 +645,39 @@ would have allowed us to identify which parameter went with which component
 model.  As we will see in the next chapter, using composite models with the
 built-in models provides a simple way to build up complex models.
 
+Model names
+-----------------------------------------
+
+By default a `Model` object has a `name` attribute containing the name of
+the model function. This name can be overridden when building a model::
+
+    my_model = Model(gaussian, name='my_gaussian')
+
+or by assigning the `name` attribute::
+
+    my_model = Model(gaussian)
+    my_model.name = 'my_gaussian'
+
+This name is used in the object representation (for example when printing)::
+
+    <lmfit.Model: my_gaussian>
+
+A composite model will have the name `'composite_fun'` by default, but as
+noted, we can overwrite it with a more meaningful string. This can be useful
+when dealing with multiple models.
+
+For example, let assume we want to fit some bi-modal data. We initially try
+two Gaussian peaks::
+
+    model = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_')
+    model.name = '2-Gaussians model'
+
+Here, instead of the standard name `'composite_func'`, we assigned a more
+meaningful name. Now, if we want to also fit with two Lorentzian peaks
+we can do similarly::
+
+    model2 = LorentzianModel(prefix='p1_') + LorentzianModel(prefix='p2_')
+    model2.name = '2-Lorentzians model'
+
+It is evident that assigning names will help to easily distinguish
+the different models.
