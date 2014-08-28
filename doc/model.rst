@@ -189,6 +189,8 @@ function as a fitting model.
     :type prefix: string
     :param components: list of model components for a composite fit (usually handled internally).
     :type components: ``None`` or default.
+    :param name: name for the model. When `None` (default) the name is the same as the model function (`func`).
+    :type name: ``None`` or string.
 
 
 Methods and Attributes of the :class:`Model` class

@@ -42,6 +42,9 @@ class Model(object):
             numpy.isnan is used.
         'raise': Raise a (more helpful) exception when data contains null
             or missing values.
+    name: None or string
+        name for the model. When `None` (default) the name is the same as
+        the model function (`func`).
 
     Note
     ----
@@ -61,7 +64,7 @@ class Model(object):
     _invalid_par   = "Invalid parameter name ('%s') for function %s"
     _invalid_missing = "missing must be None, 'none', 'drop', or 'raise'."
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing='none', prefix='', components=None, **kws):
+                 missing='none', prefix='', components=None, name=None, **kws):
         self.func = func
         self.prefix = prefix
         self.param_names = param_names
@@ -80,6 +83,12 @@ class Model(object):
         self._residual = self._build_residual()
         if self.independent_vars is None:
             self.independent_vars = []
+        if name is None:
+            name = self.func.__name__
+        self.name = name
+
+    def __repr__(self):
+        return  "<lmfit.Model: %s>" % (self.name)
 
     def _parse_params(self):
         "build params from function arguments"
