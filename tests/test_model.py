@@ -120,6 +120,26 @@ class TestUserDefiniedModel(unittest.TestCase):
         result = model.fit(data, x=self.x, **guess)
         assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
+    def test_model_with_prefix(self):
+        # model with prefix of 'a' and 'b'
+        mod = models.GaussianModel(prefix='a')
+        vals = {'center': 2.45, 'sigma':0.8, 'amplitude':3.15}
+        data = gaussian(x=self.x, **vals) + self.noise/3.0
+        mod.guess_starting_values(data, x=self.x)
+        self.assertTrue('aamplitude' in mod.params)
+        self.assertTrue('asigma' in mod.params)
+        mod.fit(data, x=self.x)
+        self.assertTrue(mod.params['aamplitude'].value > 2.0)
+        self.assertTrue(mod.params['acenter'].value > 2.0)
+        self.assertTrue(mod.params['acenter'].value < 3.0)
+
+
+        mod = models.GaussianModel(prefix='b')
+        data = gaussian(x=self.x, **vals) + self.noise/3.0
+        mod.guess_starting_values(data, x=self.x)
+        self.assertTrue('bamplitude' in mod.params)
+        self.assertTrue('bsigma' in mod.params)
+
     def test_sum_of_two_gaussians(self):
         # two user-defined gaussians
         model1 = self.model
