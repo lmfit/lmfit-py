@@ -136,9 +136,10 @@ class Model(object):
                 raise ValueError(self._invalid_par % (arg, fname))
 
         names = []
-        if len(self.prefix) > 0:
-            for pname in self.param_names:
-                names.append("%s%s" % (self.prefix, pname))
+        if self.prefix is None:
+            self.prefix = ''
+        for pname in self.param_names:
+            names.append("%s%s" % (self.prefix, pname))
         self.param_names = set(names)
         for name in self.param_names:
             self.params.add(name)
@@ -204,7 +205,7 @@ class Model(object):
         The name can include prefix or not
         """
         pname = paramname
-        if pname not in self.params:
+        if pname not in self.params and len(self.prefix) > 0:
             pname = "%s%s" % (self.prefix, pname)
         if pname not in self.params:
             raise KeyError("'%s' not a parameter name" % pname)
