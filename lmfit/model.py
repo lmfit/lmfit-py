@@ -136,10 +136,9 @@ class Model(object):
                 raise ValueError(self._invalid_par % (arg, fname))
 
         names = []
-        for pname in self.param_names:
-            if not pname.startswith(self.prefix):
-                pname = "%s%s" % (self.prefix, pname)
-            names.append(pname)
+        if len(self.prefix) > 0:
+            for pname in self.param_names:
+                names.append("%s%s" % (self.prefix, pname))
         self.param_names = set(names)
         for name in self.param_names:
             self.params.add(name)
