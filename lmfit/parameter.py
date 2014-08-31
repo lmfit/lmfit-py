@@ -64,7 +64,6 @@ class Parameters(OrderedDict):
 
     def valuesdict(self):
         """return on ordered dictionary of name:value pairs for each Parameter.
-        
         This is distinct from the Parameters itself, as it has values of
         the Parameeter values, not the full Parameter object """
 
@@ -92,6 +91,19 @@ class Parameter(object):
         self.correl = None
         self.from_internal = lambda val: val
         self._init_bounds()
+
+    def set(self, value=None, vary=None, min=None, max=None, expr=None):
+        "set value, vary, min, max, expr with keyword args"
+        if value is not None:
+            self._val = value
+        if vary is not None:
+            self.vary = vary
+        if min is not None:
+            self.min = min
+        if max is not None:
+            self.max = max
+        if expr is not None:
+            self.expr = expr
 
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
