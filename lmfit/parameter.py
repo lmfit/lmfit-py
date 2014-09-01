@@ -36,6 +36,13 @@ class Parameters(OrderedDict):
         OrderedDict.__setitem__(self, key, value)
         value.name = key
 
+    def __add__(self, other):
+        "add Parameters objects"
+        if not isinstance(other, Parameters):
+            raise ValueError("'%s' is not a Parameters object" % other)
+        self.update(other)
+        return self
+
     def add(self, name, value=None, vary=True, min=None, max=None, expr=None):
         """convenience function for adding a Parameter:
         with   p = Parameters()
