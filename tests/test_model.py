@@ -26,11 +26,12 @@ class TestUserDefiniedModel(unittest.TestCase):
         self.data = gaussian(x=self.x, **self.true_values()) + self.noise
 
     def test_fit_with_keyword_params(self):
-        result = self.model.fit(self.data, x=self.x, **self.guess())
+        params = self.model.make_params(**self.guess())
+        result = self.model.fit(self.data, params, x=self.x)
         assert_results_close(result.values, self.true_values())
 
     def test_fit_with_parameters_obj(self):
-        params = self.model.params
+        params = self.model.make_params()
         for param_name, value in self.guess().items():
             params[param_name].value = value
         result = self.model.fit(self.data, params, x=self.x)
@@ -45,54 +46,54 @@ class TestUserDefiniedModel(unittest.TestCase):
         #self.assertRaises(ValueError, f)
 
         # using Parameters
-        params = self.model.params
+        params = self.model.make_params()
         for param_name, value in guess_missing_sigma.items():
             params[param_name].value = value
         f = lambda: self.model.fit(self.data, params, x=self.x)
 
     def test_extra_param_issues_warning(self):
         # The function accepts extra params, Model will warn but not raise.
-        guess = self.guess()
-        guess['extra'] = 5
-
         def flexible_func(x, amplitude, center, sigma, **kwargs):
             return gaussian(x, amplitude, center, sigma)
 
         flexible_model = Model(flexible_func)
+        pars = flexible_model.make_params(**self.guess())
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter("always")
-            flexible_model.fit(self.data, x=self.x, **guess)
+            flexible_model.fit(self.data, pars, x=self.x, extra=5)
         self.assertTrue(len(w) == 1)
         self.assertTrue(issubclass(w[-1].category, UserWarning))
 
     def test_missing_independent_variable_raises_error(self):
-        f = lambda: self.model.fit(self.data, **self.guess())
+        pars = self.model.make_params(**self.guess())
+        f = lambda: self.model.fit(self.data, pars)
         self.assertRaises(KeyError, f)
 
     def test_bounding(self):
-        guess = self.guess()
-        guess['center'] = Parameter(value=2, min=1.3)
         true_values = self.true_values()
         true_values['center'] = 1.3  # as close as it's allowed to get
-        result = self.model.fit(self.data, x=self.x, **guess)
+        pars = self.model.make_params(**self.guess())
+        pars['center'].set(value=2, min=1.3)
+        result = self.model.fit(self.data, pars, x=self.x)
         assert_results_close(result.values, true_values, rtol=0.05)
 
     def test_vary_false(self):
-        guess = self.guess()
-        guess['center'] = Parameter(value=1.3, vary=False)
         true_values = self.true_values()
         true_values['center'] = 1.3
-        result = self.model.fit(self.data, x=self.x, **guess)
+        pars = self.model.make_params(**self.guess())
+        pars['center'].set(value=1.3, vary=False)
+        result = self.model.fit(self.data, pars, x=self.x)
         assert_results_close(result.values, true_values, rtol=0.05)
 
     def test_result_attributes(self):
         # result.init_values
-        result = self.model.fit(self.data, x=self.x, **self.guess())
+        pars = self.model.make_params(**self.guess())
+        result = self.model.fit(self.data, pars, x=self.x)
         assert_results_close(result.values, self.true_values())
         self.assertTrue(result.init_values == self.guess())
 
         # result.init_params
-        params = self.model.params
+        params = self.model.make_params()
         for param_name, value in self.guess().items():
             params[param_name].value = value
         self.assertTrue(result.init_params == params)
@@ -113,11 +114,11 @@ class TestUserDefiniedModel(unittest.TestCase):
         data = self.data + 5.0
         model = self.model + models.ConstantModel()
         guess = self.guess()
-        guess['c'] = 10.1
+        pars = model.make_params(c= 10.1, **guess)
         true_values = self.true_values()
         true_values['c'] = 5.0
 
-        result = model.fit(data, x=self.x, **guess)
+        result = model.fit(data, pars, x=self.x)
         assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
     def test_model_with_prefix(self):
@@ -125,20 +126,20 @@ class TestUserDefiniedModel(unittest.TestCase):
         mod = models.GaussianModel(prefix='a')
         vals = {'center': 2.45, 'sigma':0.8, 'amplitude':3.15}
         data = gaussian(x=self.x, **vals) + self.noise/3.0
-        mod.guess_starting_values(data, x=self.x)
-        self.assertTrue('aamplitude' in mod.params)
-        self.assertTrue('asigma' in mod.params)
-        mod.fit(data, x=self.x)
-        self.assertTrue(mod.params['aamplitude'].value > 2.0)
-        self.assertTrue(mod.params['acenter'].value > 2.0)
-        self.assertTrue(mod.params['acenter'].value < 3.0)
+        pars = mod.guess(data, x=self.x)
+        self.assertTrue('aamplitude' in pars)
+        self.assertTrue('asigma' in pars)
+        out = mod.fit(data, pars, x=self.x)
+        self.assertTrue(out.params['aamplitude'].value > 2.0)
+        self.assertTrue(out.params['acenter'].value > 2.0)
+        self.assertTrue(out.params['acenter'].value < 3.0)
 
 
         mod = models.GaussianModel(prefix='b')
         data = gaussian(x=self.x, **vals) + self.noise/3.0
-        mod.guess_starting_values(data, x=self.x)
-        self.assertTrue('bamplitude' in mod.params)
-        self.assertTrue('bsigma' in mod.params)
+        pars = mod.guess(data, x=self.x)
+        self.assertTrue('bamplitude' in pars)
+        self.assertTrue('bsigma' in pars)
 
     def test_sum_of_two_gaussians(self):
         # two user-defined gaussians
@@ -150,15 +151,16 @@ class TestUserDefiniedModel(unittest.TestCase):
 
         data  = gaussian(x=self.x, **values1) + f2(x=self.x, **values2) + self.noise/3.0
         model = self.model + model2
-        guess = {'sigma': Parameter(value=2, min=0),
-                 'center': Parameter(value=1, min=0.2, max=1.8),
-                 'amplitude': Parameter(value=3, min=0),
-                 'sig':  Parameter(value=1, min=0),
-                 'cen': Parameter(value=2.4, min=2, max=3.5),
-                 'amp': Parameter(value=1, min=0)}
+        pars = model.make_params()
+        pars['sigma'].set(value=2, min=0)
+        pars['center'].set(value=1, min=0.2, max=1.8)
+        pars['amplitude'].set(value=3, min=0)
+        pars['sig'].set(value=1, min=0)
+        pars['cen'].set(value=2.4, min=2, max=3.5)
+        pars['amp'].set(value=1, min=0)
 
         true_values = dict(list(values1.items()) + list(values2.items()))
-        result = model.fit(data, x=self.x, **guess)
+        result = model.fit(data, pars, x=self.x)
         assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
         # user-defined models with common parameter names
@@ -176,10 +178,15 @@ class TestUserDefiniedModel(unittest.TestCase):
                        'g2_center': values2['cen'],
                        'g2_amplitude': values2['amp'],
                        'g2_sigma': values2['sig']}
-        guess = {'g1_sigma': 2, 'g1_center': 1, 'g1_amplitude': 3,
-                 'g2_sigma': 1, 'g2_center': 2.4, 'g2_amplitude': 1}
+        pars = model.make_params()
+        pars['g1_sigma'].set(2)
+        pars['g1_center'].set(1)
+        pars['g1_amplitude'].set(3)
+        pars['g2_sigma'].set(1)
+        pars['g2_center'].set(2.4)
+        pars['g2_amplitude'].set(1)
 
-        result = model.fit(data, x=self.x, **guess)
+        result = model.fit(data, pars, x=self.x)
         assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
 
         # without suffix, the names collide and Model should raise
@@ -209,7 +216,8 @@ class CommonTests(object):
 
     def test_fit(self):
         model = self.model_instance
-        result = model.fit(self.data, x=self.x, **self.guess())
+        pars = model.make_params(**self.guess())
+        result = model.fit(self.data, pars, x=self.x)
         assert_results_close(result.values, self.true_values())
 
 class TestLinear(CommonTests, unittest.TestCase):
@@ -260,7 +268,6 @@ class TestConstant(CommonTests, unittest.TestCase):
         self.model = models.ConstantModel
         super(TestConstant, self).setUp()
 
-
 class TestPowerlaw(CommonTests, unittest.TestCase):
 
     def setUp(self):
@@ -277,3 +284,4 @@ class TestExponential(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(amplitude=2, decay=8)
         self.model = models.ExponentialModel
         super(TestExponential, self).setUp()
+
