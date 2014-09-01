@@ -99,6 +99,18 @@ def check_ast_errors(error):
             return msg
     return None
 
+SCALAR_METHODS = {'nelder': 'Nelder-Mead',
+                  'powell': 'Powell',
+                  'cg': 'CG',
+                  'bfgs': 'BFGS',
+                  'newton': 'Newton-CG',
+                  'lbfgs': 'L-BFGS-B',
+                  'l-bfgs':'L-BFGS-B',
+                  'tnc': 'TNC',
+                  'cobyla': 'COBYLA',
+                  'slsqp': 'SLSQP',
+                  'dogleg': 'dogleg',
+                  'trust-ncg': 'trust-ncg'}
 
 class Minimizer(object):
     """general minimizer"""
@@ -549,54 +561,36 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.unprepare_fit()
         return self.success
 
+    def minimize(self, method='leastsq'):
+        """perform minimization using supplied method"""
+        function = self.leastsq
+        kwargs = {}
+
+        user_method = method.lower()
+        if user_method.startswith('least'):
+            function = self.leastsq
+        elif HAS_SCALAR_MIN:
+            function = self.scalar_minimize
+            for key, val in SCALAR_METHODS.items():
+                if (key.lower().startswith(user_method) or
+                    val.lower().startswith(user_method)):
+                    kwargs = dict(method=val)
+        elif (user_method.startswith('nelder') or
+              user_method.startswith('fmin')):
+            function = self.fmin
+        elif use_method.startswith('lbfgsb'):
+            function = self.lbfgsb
+
+        return function(**kwargs)
+
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
-             scale_covar=True, engine=None, iter_cb=None, **fit_kws):
+             scale_covar=True, iter_cb=None, **fit_kws):
     """simple minimization function,
     finding the values for the params which give the
     minimal sum-of-squares of the array return by fcn
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
-
-    _scalar_methods = {'nelder': 'Nelder-Mead',
-                       'powell': 'Powell',
-                       'cg': 'CG',
-                       'bfgs': 'BFGS',
-                       'newton': 'Newton-CG',
-                       'lbfgs': 'L-BFGS-B',
-                       'l-bfgs':'L-BFGS-B',
-                       'tnc': 'TNC',
-                       'cobyla': 'COBYLA',
-                       'slsqp': 'SLSQP',
-                       'dogleg': 'dogleg',
-                       'trust-ncg': 'trust-ncg'}
-
-    _fitmethods = {'nelder': 'fmin',
-                   'lbfgsb': 'lbfgsb',
-                   'leastsq': 'leastsq'}
-
-    if engine is not None:
-        method = engine
-    meth = method.lower()
-
-    fitfunction = None
-    kwargs = {}
-    # default and most common option: use leastsq method.
-    if meth == 'leastsq':
-        fitfunction = fitter.leastsq
-    else:
-        # if scalar_minimize() is supported and method is in list, use it.
-        if HAS_SCALAR_MIN:
-            for name, method in _scalar_methods.items():
-                if meth.startswith(name):
-                    fitfunction = fitter.scalar_minimize
-                    kwargs = dict(method=method)
-        # look for other built-in methods
-        if fitfunction is None:
-            for name, method in _fitmethods.items():
-                if meth.startswith(name):
-                    fitfunction = getattr(fitter, method)
-    if fitfunction is not None:
-        fitfunction(**kwargs)
+    fitter.minimize(method=method)
     return fitter
