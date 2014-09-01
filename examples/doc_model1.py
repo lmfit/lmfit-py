@@ -14,9 +14,10 @@ def gaussian(x, amp, cen, wid):
     return (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
 
 gmod = Model(gaussian)
-result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+pars = gmod.make_params(amp=5, cen=5, wid=1)
+result = gmod.fit(y, pars, x=x)
 
-print(gmod.fit_report())
+print(result.fit_report())
 
 plt.plot(x, y,         'bo')
 plt.plot(x, result.init_fit, 'k--')
