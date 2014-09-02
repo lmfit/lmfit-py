@@ -574,7 +574,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         elif (user_method.startswith('nelder') or
               user_method.startswith('fmin')):
             function = self.fmin
-        elif use_method.startswith('lbfgsb'):
+        elif user_method.startswith('lbfgsb'):
             function = self.lbfgsb
 
         return function(**kwargs)
