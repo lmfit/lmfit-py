@@ -14,8 +14,7 @@ def gaussian(x, amp, cen, wid):
     return (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
 
 gmod = Model(gaussian)
-pars = gmod.make_params(amp=5, cen=5, wid=1)
-result = gmod.fit(y, pars, x=x)
+result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
 print(result.fit_report())
 
