@@ -6,7 +6,7 @@ import warnings
 import inspect
 from copy import deepcopy
 import numpy as np
-from . import Parameters, Minimizer
+from . import Parameters, Parameter, Minimizer
 from .printfuncs import fit_report
 
 # Use pandas.isnull for aligning missing data is pandas is available.
@@ -202,8 +202,10 @@ class Model(object):
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
 
-    def make_funcargs(self, params, kwargs, strip=True):
+    def make_funcargs(self, params=None, kwargs=None, strip=True):
         """convert parameter values and keywords to function arguments"""
+        if params is None: params = {}
+        if kwargs is None: kwargs = {}
         out = {}
         out.update(self.opts)
         npref = len(self.prefix)
@@ -211,7 +213,6 @@ class Model(object):
             if strip and npref > 0 and name.startswith(self.prefix):
                 name = name[npref:]
             return name
-
         for name, par in params.items():
             name = strip_prefix(name)
             if name in self.func_allargs or self.func_haskeywords:
@@ -226,7 +227,7 @@ class Model(object):
                     params[name].value = val
         return out
 
-    def _make_all_args(self, params, **kwargs):
+    def _make_all_args(self, params=None, **kwargs):
         """generate **all** function args for all functions"""
         args = {}
         for key, val in self.make_funcargs(params, kwargs).items():
@@ -236,7 +237,7 @@ class Model(object):
             args.update(otherargs)
         return args
 
-    def eval(self, params, **kwargs):
+    def eval(self, params=None, **kwargs):
         """evaluate the model with the supplied parameters"""
         fcnargs = self.make_funcargs(params, kwargs)
         result = self.func(**fcnargs)
@@ -244,7 +245,7 @@ class Model(object):
             result += other.eval(params, **kwargs)
         return result
 
-    def fit(self, data, params, weights=None, method='leastsq',
+    def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, **kwargs):
         """Fit the model to the data.
 
@@ -284,7 +285,10 @@ class Model(object):
         Parameter objects are unchanged.
 
         """
-        params = deepcopy(params)
+        if params is None:
+            params = self.make_params()
+        else:
+            params = deepcopy(params)
 
         # If any kwargs match parameter names, override params.
         param_kwargs = set(kwargs.keys()) & self.param_names
