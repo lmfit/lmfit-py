@@ -310,10 +310,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
 
-    def anneal(self, schedule='cauchy', **kws):
-        """scipy simulated annealing is broken"""
-        raise NotImplementedError("scipy simulated annealing is broken")
-
     def lbfgsb(self, **kws):
         """
         use l-bfgs-b minimization
