@@ -122,6 +122,8 @@ class Parameter(object):
                 self._val = self.min
         elif self.min is not None:
             self._val = self.min
+        elif self.max is not None:
+            self._val = self.max
         self.setup_bounds()
 
     def __getstate__(self):
