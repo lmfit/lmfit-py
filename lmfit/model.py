@@ -173,15 +173,20 @@ class Model(object):
             names.append("%s%s" % (self.prefix, pname))
         self.param_names = set(names)
 
-    def set_param_hint(self, parname, value=None,
+    def set_param_hint(self, name, value=None,
                        min=None, max=None, expr=None):
         """set hints for parameter, including optional bounds and
         constraints  (value, min, max, expr)
         these will be used by make_params() when building
-        default  parameters """
-        if parname not in self.param_hints:
-            self.param_hints[parname] = {}
-        hints = self.param_hints[parname]
+        default  parameters
+        """
+        npref = len(self.prefix)
+        if npref > 0 and name.startswith(self.prefix):
+            name = name[npref:]
+
+        if name not in self.param_hints:
+            self.param_hints[name] = {}
+        hints = self.param_hints[name]
         if value is not None:
             hints['value'] = value
         if expr is not None:
