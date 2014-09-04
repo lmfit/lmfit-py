@@ -23,8 +23,11 @@ def index_of(arr, val):
         return 0
     return np.abs(arr-val).argmin()
 
-def guess_from_peak(model, y, x, negative,
-                    ampscale=1.0, sigscale=1.0, with_fwhm=False):
+def fwhm_expr(model):
+    "return constraint expression for fwhm"
+    return "%.7f*%ssigma" % (model.fwhm_factor, model.prefix)
+
+def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     "estimate amp, cen, sigma for a peak, create params"
     if x is None:
         return 1.0, 0.0, 1.0
@@ -48,9 +51,6 @@ def guess_from_peak(model, y, x, negative,
 
     pars = model.make_params(amplitude=amp, center=cen, sigma=sig)
     pars['%ssigma' % model.prefix].set(min=0.0)
-    if with_fwhm:
-        pars.add('%sfwhm' % model.prefix,
-                 expr='%.7f*%ssigma' % (model.fwhm_factor, model.prefix))
     return pars
 
 def update_param_vals(pars, prefix, **kwargs):
@@ -148,9 +148,11 @@ class GaussianModel(Model):
     fwhm_factor = 2.354820
     def __init__(self, **kwargs):
         super(GaussianModel, self).__init__(gaussian, **kwargs)
+        self._set_param_hint('sigma', Parameter(min=0))
+        self._set_param_hint('fwhm', Parameter(expr=fwhm_expr(self)))
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        pars = guess_from_peak(self, data, x, negative, with_fwhm=True)
+        pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
 
@@ -159,10 +161,11 @@ class LorentzianModel(Model):
     fwhm_factor = 2.0
     def __init__(self, **kwargs):
         super(LorentzianModel, self).__init__(lorentzian, **kwargs)
+        self._set_param_hint('sigma', Parameter(min=0))
+        self._set_param_hint('fwhm', Parameter(expr=fwhm_expr(self)))
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        pars = guess_from_peak(self, data, x, negative,
-                               ampscale=1.25, with_fwhm=True)
+        pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
         return update_param_vals(pars, self.prefix, **kwargs)
 
 
@@ -171,13 +174,13 @@ class VoigtModel(Model):
     fwhm_factor = 3.60131
     def __init__(self, **kwargs):
         super(VoigtModel, self).__init__(voigt, **kwargs)
-
+        self._set_param_hint('sigma',  Parameter(min=0))
+        self._set_param_hint('gamma', Parameter(expr='%ssigma' % self.prefix))
+        self._set_param_hint('fwhm', Parameter(expr=fwhm_expr(self)))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
-                               ampscale=1.5, sigscale=0.65,
-                               with_fwhm=True)
-        pars.add('%sgamma' % self.prefix, expr='%ssigma' % self.prefix)
+                               ampscale=1.5, sigscale=0.65)
         return update_param_vals(pars, self.prefix, **kwargs)
 
 
@@ -185,6 +188,7 @@ class PseudoVoigtModel(Model):
     __doc__ = pvoigt.__doc__ + COMMON_DOC
     def __init__(self, **kwargs):
         super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
+        self._set_param_hint('fraction', Parameter(val=0.5))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
@@ -196,6 +200,7 @@ class Pearson7Model(Model):
     __doc__ = pearson7.__doc__ + COMMON_DOC
     def __init__(self, **kwargs):
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
+        self._set_param_hint('expon',  Parameter(val=1.5))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
