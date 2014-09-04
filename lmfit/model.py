@@ -149,7 +149,7 @@ class Model(object):
         new_opts = {}
         for opt, val in self.opts.items():
             if (opt in self.param_names or opt in might_be_param and
-                isinstance(val, Paameter)):
+                isinstance(val, Parameter)):
                 self.set_param_hint(opt, value=val.value,
                                     min=val.min, max=val.max, expr=val.expr)
             elif opt in self.func_allargs:
@@ -398,7 +398,7 @@ class Model(object):
         colliding_param_names = self.param_names & other.param_names
         if len(colliding_param_names) != 0:
             collision = colliding_param_names.pop()
-            raise NameError(_names_collide % collision)
+            raise NameError(self._names_collide % collision)
 
         new = deepcopy(self)
         new._others.append(other)
