@@ -318,9 +318,9 @@ class RectangleModel(Model):
     __doc__ = rectangle.__doc__ + COMMON_DOC
     def __init__(self, **kwargs):
         super(RectangleModel, self).__init__(rectangle, **kwargs)
-        self.params.add('%smidpoint' % self.prefix,
-                        expr='(%scenter1+%scenter2)/2.0' % (self.prefix,
-                                                            self.prefix))
+        self.set_param_hint('midpoint',
+                            expr='(%scenter1+%scenter2)/2.0' % (self.prefix,
+                                                                self.prefix))
     def guess(self, data, x=None, **kwargs):
         if x is None:
             return
