@@ -79,7 +79,7 @@ class Model(object):
         self.missing = missing
         self.opts = kws
         self.result = None
-        self._param_hints = {}
+        self.param_hints = {}
         self._parse_params()
         if self.independent_vars is None:
             self.independent_vars = []
@@ -147,11 +147,13 @@ class Model(object):
                     self.param_names.remove(p)
 
         new_opts = {}
-        for opt in self.opts:
-            if opt in self.param_names or opt in might_be_param:
-                self._set_param_hint(opt, self.opts[opt])
+        for opt, val in self.opts.items():
+            if (opt in self.param_names or opt in might_be_param and
+                isinstance(val, Paameter)):
+                self.set_param_hint(opt, value=val.value,
+                                    min=val.min, max=val.max, expr=val.expr)
             elif opt in self.func_allargs:
-                new_opts[opt] = self.opts[opt]
+                new_opts[opt] = val
         self.opts = new_opts
 
         # check variables names for validity
@@ -171,22 +173,23 @@ class Model(object):
             names.append("%s%s" % (self.prefix, pname))
         self.param_names = set(names)
 
-    def _set_param_hint(self, parname, param):
-        """set hint for parameter, including optional bounds and constraints
-        these will be used by make_params() when building default parameters
-        """
-        if parname not in self._param_hints:
-            self._param_hints[parname] = {}
-        hint = self._param_hints[parname]
-        if isinstance(param, Parameter):
-            for item in ('value', 'min', 'max', 'expr'):
-                attr = getattr(param, item, None)
-                if attr is not None:
-                    hint[item] = attr
-        elif isinstance(param, dict):
-            for item in ('value', 'min', 'max', 'expr'):
-                if item in param:
-                    hint[item] = param[item]
+    def set_param_hint(self, parname, value=None,
+                       min=None, max=None, expr=None):
+        """set hints for parameter, including optional bounds and
+        constraints  (value, min, max, expr)
+        these will be used by make_params() when building
+        default  parameters """
+        if parname not in self.param_hints:
+            self.param_hints[parname] = {}
+        hints = self.param_hints[parname]
+        if value is not None:
+            hints['value'] = value
+        if expr is not None:
+            hints['expr'] = expr
+        if min not in (None, -np.inf):
+            hints['min'] = min
+        if max not in (None, np.inf):
+            hints['max'] = max
 
     def make_params(self, **kwargs):
         """create and return a Parameters object for a Model.
@@ -202,8 +205,8 @@ class Model(object):
             if basename in self.def_vals:
                 par.value = self.def_vals[basename]
             # apply defaults from parameter hints
-            if basename in self._param_hints:
-                hint = self._param_hints[basename]
+            if basename in self.param_hints:
+                hint = self.param_hints[basename]
                 for item in ('value', 'min', 'max', 'expr'):
                     if item in  hint:
                         setattr(par, item, hint[item])
@@ -211,7 +214,7 @@ class Model(object):
             if basename in kwargs:
                 par.value = kwargs[basename]
             pars[name] = par
-        for basename, hint in self._param_hints.items():
+        for basename, hint in self.param_hints.items():
             name = "%s%s" % (self.prefix, basename)
             if name not in pars:
                 par = pars[name] = Parameter(name=name)

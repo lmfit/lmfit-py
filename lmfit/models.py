@@ -1,6 +1,5 @@
 import numpy as np
 from .model import Model
-from .parameter import Parameter
 
 from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, pearson7,
                          step, rectangle, breit_wigner, logistic,
@@ -148,8 +147,8 @@ class GaussianModel(Model):
     fwhm_factor = 2.354820
     def __init__(self, **kwargs):
         super(GaussianModel, self).__init__(gaussian, **kwargs)
-        self._set_param_hint('sigma', Parameter(min=0))
-        self._set_param_hint('fwhm', Parameter(expr=fwhm_expr(self)))
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -161,8 +160,8 @@ class LorentzianModel(Model):
     fwhm_factor = 2.0
     def __init__(self, **kwargs):
         super(LorentzianModel, self).__init__(lorentzian, **kwargs)
-        self._set_param_hint('sigma', Parameter(min=0))
-        self._set_param_hint('fwhm', Parameter(expr=fwhm_expr(self)))
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
@@ -174,9 +173,9 @@ class VoigtModel(Model):
     fwhm_factor = 3.60131
     def __init__(self, **kwargs):
         super(VoigtModel, self).__init__(voigt, **kwargs)
-        self._set_param_hint('sigma',  Parameter(min=0))
-        self._set_param_hint('gamma', Parameter(expr='%ssigma' % self.prefix))
-        self._set_param_hint('fwhm', Parameter(expr=fwhm_expr(self)))
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
+        self.set_param_hint('fwhm',  expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
@@ -188,7 +187,7 @@ class PseudoVoigtModel(Model):
     __doc__ = pvoigt.__doc__ + COMMON_DOC
     def __init__(self, **kwargs):
         super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
-        self._set_param_hint('fraction', Parameter(val=0.5))
+        self.set_param_hint('fraction', value=0.5)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
@@ -200,7 +199,7 @@ class Pearson7Model(Model):
     __doc__ = pearson7.__doc__ + COMMON_DOC
     def __init__(self, **kwargs):
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
-        self._set_param_hint('expon',  Parameter(val=1.5))
+        self.set_param_hint('expon',  value=1.5)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
