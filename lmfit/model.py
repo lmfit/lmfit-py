@@ -90,8 +90,8 @@ class Model(object):
 
     def _reprstring(self, long=False):
         if not self.is_composite():
-            opts = []
             # base model
+            opts = []
             if len(self.prefix) > 0:
                 opts.append("prefix='%s'" % (self.prefix))
             if long:
@@ -102,6 +102,7 @@ class Model(object):
             if len(opts) > 0:
                 out[0] = "%s(%s)" % (out[0], ','.join(opts))
         else:
+            # composite model
             out = [c._reprstring(long)[0] for c in self.components]
         return out
 
@@ -211,6 +212,7 @@ class Model(object):
         """
         pars = Parameters()
         if not self.is_composite():
+            # base model: build Parameters from scratch
             for name in self.param_names:
                 par = Parameter(name=name)
                 basename = name
@@ -236,7 +238,7 @@ class Model(object):
                     for item in ('value', 'min', 'max', 'expr'):
                         if item in  hint:
                             setattr(par, item, hint[item])
-
+        # composite model: just merge the sub_models parameters
         for sub_model in self.components:
             pars.update(sub_model.make_params(**kwargs))
         return pars
@@ -416,8 +418,10 @@ class Model(object):
             raise NameError(self._names_collide % collision)
 
         if self.is_composite():
+            # If the model is already composite just make a copy
             new = deepcopy(self)
         else:
+            # otherwise create a new Model and put self in components
             new = Model(func=None)
             new.components.append(self)
             new.param_names = set(self.param_names)
