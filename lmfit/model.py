@@ -441,6 +441,8 @@ class Model(object):
             new = Model(func=None)
             new.components.append(self)
             new.param_names = set(self.param_names)
+            # we assume that all the sub-models have the same independent vars
+            new.independent_vars = self.independent_vars[:]  # copy
         new.components.append(other)
         new.param_names |= other.param_names
         return new
