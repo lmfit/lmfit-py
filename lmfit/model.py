@@ -66,14 +66,15 @@ class Model(object):
     _names_collide = "Two models have parameters named %s. Use distinct names"
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing='none', prefix='', name=None, **kws):
+                 missing='none', prefix='', name=None, components=None, **kws):
         self.func = func
         self.prefix = prefix
         self.param_names = param_names
         self.independent_vars = independent_vars
+        if components is None:
+            self.components = []
         self.func_allargs = []
         self.func_haskeywords = False
-        self._others = []
         if not missing in [None, 'none', 'drop', 'raise']:
             raise ValueError(self._invalid_missing)
         self.missing = missing
@@ -85,31 +86,39 @@ class Model(object):
             self.independent_vars = []
         if name is None and hasattr(self.func, '__name__'):
             name = self.func.__name__
-        self.name = name
+        self._name = name
 
     def _reprstring(self, long=False):
-        buff, opts = [], []
-        if len(self.prefix) > 0:
-            opts.append("prefix='%s'" % (self.prefix))
-        if long:
-            for k, v in self.opts.items():
-                opts.append("%s='%s'" % (k, v))
+        if not self.is_composite():
+            opts = []
+            # base model
+            if len(self.prefix) > 0:
+                opts.append("prefix='%s'" % (self.prefix))
+            if long:
+                for k, v in self.opts.items():
+                    opts.append("%s='%s'" % (k, v))
 
-        out = "%s" % self.name
-        if len(opts) > 0:
-            out = "%s(%s)" % (out, ','.join(opts))
-        buff.append(out)
-        for other in self._others:
-            buff.extend(other._reprstring(long=long))
-        return buff
+            out = ["%s" % self._name]
+            if len(opts) > 0:
+                out[0] = "%s(%s)" % (out[0], ','.join(opts))
+        else:
+            out = [c._reprstring(long)[0] for c in self.components]
+        return out
+
+    @property
+    def name(self):
+        return '+'.join(self._reprstring(long=False))
+
+    def is_composite(self):
+        return len(self.components) > 0
 
     def __repr__(self):
-        buff = self._reprstring()
-        out = "+".join(buff)
-        return  "<lmfit.Model: %s>" % (out)
+        return  "<lmfit.Model: %s>" % (self.name)
 
     def _parse_params(self):
         "build params from function arguments"
+        if self.func is None:
+            return
         argspec = inspect.getargspec(self.func)
         pos_args = argspec.args[:]
         keywords = argspec.keywords
@@ -201,34 +210,35 @@ class Model(object):
         This applies any default values
         """
         pars = Parameters()
-        for name in self.param_names:
-            par = Parameter(name=name)
-            basename = name
-            if self.prefix is not None:
-                basename = name[len(self.prefix):]
-            # apply defaults from model function definition
-            if basename in self.def_vals:
-                par.value = self.def_vals[basename]
-            # apply defaults from parameter hints
-            if basename in self.param_hints:
-                hint = self.param_hints[basename]
-                for item in ('value', 'min', 'max', 'expr'):
-                    if item in  hint:
-                        setattr(par, item, hint[item])
-            # apply values passed in through kw args
-            if basename in kwargs:
-                par.value = kwargs[basename]
-            pars[name] = par
-        for basename, hint in self.param_hints.items():
-            name = "%s%s" % (self.prefix, basename)
-            if name not in pars:
-                par = pars[name] = Parameter(name=name)
-                for item in ('value', 'min', 'max', 'expr'):
-                    if item in  hint:
-                        setattr(par, item, hint[item])
+        if not self.is_composite():
+            for name in self.param_names:
+                par = Parameter(name=name)
+                basename = name
+                if self.prefix is not None:
+                    basename = name[len(self.prefix):]
+                # apply defaults from model function definition
+                if basename in self.def_vals:
+                    par.value = self.def_vals[basename]
+                # apply defaults from parameter hints
+                if basename in self.param_hints:
+                    hint = self.param_hints[basename]
+                    for item in ('value', 'min', 'max', 'expr'):
+                        if item in  hint:
+                            setattr(par, item, hint[item])
+                # apply values passed in through kw args
+                if basename in kwargs:
+                    par.value = kwargs[basename]
+                pars[name] = par
+            for basename, hint in self.param_hints.items():
+                name = "%s%s" % (self.prefix, basename)
+                if name not in pars:
+                    par = pars[name] = Parameter(name=name)
+                    for item in ('value', 'min', 'max', 'expr'):
+                        if item in  hint:
+                            setattr(par, item, hint[item])
 
-        for other in self._others:
-            pars.update(other.make_params(**kwargs))
+        for sub_model in self.components:
+            pars.update(sub_model.make_params(**kwargs))
         return pars
 
     def guess(self, data=None, **kws):
@@ -289,17 +299,22 @@ class Model(object):
         args = {}
         for key, val in self.make_funcargs(params, kwargs).items():
             args["%s%s" % (self.prefix, key)] = val
-        for other in self._others:
-            otherargs = other._make_all_args(params, **kwargs)
+        for sub_model in self.components:
+            otherargs = sub_model._make_all_args(params, **kwargs)
             args.update(otherargs)
         return args
 
     def eval(self, params=None, **kwargs):
         """evaluate the model with the supplied parameters"""
-        fcnargs = self.make_funcargs(params, kwargs)
-        result = self.func(**fcnargs)
-        for other in self._others:
-            result += other.eval(params, **kwargs)
+        if not self.is_composite():
+            fcnargs = self.make_funcargs(params, kwargs)
+            result = self.func(**fcnargs)
+        else:
+            for i, sub_model in enumerate(self.components):
+                if i == 0:
+                    result = sub_model.eval(params, **kwargs)
+                else:
+                    result += sub_model.eval(params, **kwargs)
         return result
 
     def fit(self, data, params=None, weights=None, method='leastsq',
@@ -400,8 +415,14 @@ class Model(object):
             collision = colliding_param_names.pop()
             raise NameError(self._names_collide % collision)
 
-        new = deepcopy(self)
-        new._others.append(other)
+        if self.is_composite():
+            new = deepcopy(self)
+        else:
+            new = Model(func=None)
+            new.components.append(self)
+            new.param_names = set(self.param_names)
+        new.components.append(other)
+        new.param_names |= other.param_names
         return new
 
 
