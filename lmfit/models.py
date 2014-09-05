@@ -78,10 +78,10 @@ suffix: string to append to paramter names, needed to add two Models that
 """
 class ConstantModel(Model):
     __doc__ = "x -> c" + COMMON_DOC
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         def constant(x, c):
             return c
-        super(ConstantModel, self).__init__(constant, **kwargs)
+        super(ConstantModel, self).__init__(constant, *args, **kwargs)
 
     def guess(self, data, **kwargs):
         pars = self.make_params()
@@ -91,8 +91,8 @@ class ConstantModel(Model):
 
 class LinearModel(Model):
     __doc__ = linear.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(LinearModel, self).__init__(linear, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(LinearModel, self).__init__(linear, *args, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         sval, oval = 0., 0.
@@ -104,8 +104,8 @@ class LinearModel(Model):
 
 class QuadraticModel(Model):
     __doc__ = parabolic.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(QuadraticModel, self).__init__(parabolic, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(QuadraticModel, self).__init__(parabolic, *args, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         a, b, c = 0., 0., 0.
@@ -120,7 +120,7 @@ class PolynomialModel(Model):
     __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ... c7 * x**7" + COMMON_DOC
     MAX_DEGREE=7
     DEGREE_ERR = "degree must be an integer less than %d."
-    def __init__(self, degree, **kwargs):
+    def __init__(self, degree, *args, **kwargs):
         if not isinstance(degree, int)  or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
 
@@ -131,7 +131,7 @@ class PolynomialModel(Model):
         def polynomial(x, c0=0, c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0):
             return np.polyval([c7, c6, c5, c4, c3, c2, c1, c0], x)
 
-        super(PolynomialModel, self).__init__(polynomial, **kwargs)
+        super(PolynomialModel, self).__init__(polynomial, *args, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         pars = self.make_params()
@@ -145,8 +145,8 @@ class PolynomialModel(Model):
 class GaussianModel(Model):
     __doc__ = gaussian.__doc__ + COMMON_DOC
     fwhm_factor = 2.354820
-    def __init__(self, **kwargs):
-        super(GaussianModel, self).__init__(gaussian, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(GaussianModel, self).__init__(gaussian, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
@@ -158,8 +158,8 @@ class GaussianModel(Model):
 class LorentzianModel(Model):
     __doc__ = lorentzian.__doc__ + COMMON_DOC
     fwhm_factor = 2.0
-    def __init__(self, **kwargs):
-        super(LorentzianModel, self).__init__(lorentzian, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(LorentzianModel, self).__init__(lorentzian, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
@@ -171,8 +171,8 @@ class LorentzianModel(Model):
 class VoigtModel(Model):
     __doc__ = voigt.__doc__ + COMMON_DOC
     fwhm_factor = 3.60131
-    def __init__(self, **kwargs):
-        super(VoigtModel, self).__init__(voigt, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(VoigtModel, self).__init__(voigt, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
         self.set_param_hint('fwhm',  expr=fwhm_expr(self))
@@ -185,8 +185,8 @@ class VoigtModel(Model):
 
 class PseudoVoigtModel(Model):
     __doc__ = pvoigt.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(PseudoVoigtModel, self).__init__(pvoigt, *args, **kwargs)
         self.set_param_hint('fraction', value=0.5)
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -197,8 +197,8 @@ class PseudoVoigtModel(Model):
 
 class Pearson7Model(Model):
     __doc__ = pearson7.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(Pearson7Model, self).__init__(pearson7, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(Pearson7Model, self).__init__(pearson7, *args, **kwargs)
         self.set_param_hint('expon',  value=1.5)
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -209,8 +209,8 @@ class Pearson7Model(Model):
 
 class StudentsTModel(Model):
     __doc__ = students_t.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(StudentsTModel, self).__init__(students_t, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(StudentsTModel, self).__init__(students_t, *args, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -219,8 +219,8 @@ class StudentsTModel(Model):
 
 class BreitWignerModel(Model):
     __doc__ = breit_wigner.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(BreitWignerModel, self).__init__(breit_wigner, *args, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -230,8 +230,8 @@ class BreitWignerModel(Model):
 
 class LognormalModel(Model):
     __doc__ = lognormal.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(LognormalModel, self).__init__(lognormal, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(LognormalModel, self).__init__(lognormal, *args, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = self.make_params(amplitude=1.0, center=0.0, sigma=0.25)
@@ -241,8 +241,8 @@ class LognormalModel(Model):
 
 class DampedOscillatorModel(Model):
     __doc__ = damped_oscillator.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(DampedOscillatorModel, self).__init__(damped_oscillator, *args, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars =guess_from_peak(self, data, x, negative,
@@ -251,8 +251,8 @@ class DampedOscillatorModel(Model):
 
 class ExponentialGaussianModel(Model):
     __doc__ = expgaussian.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ExponentialGaussianModel, self).__init__(expgaussian, *args, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -261,8 +261,8 @@ class ExponentialGaussianModel(Model):
 
 class DonaichModel(Model):
     __doc__ = donaich.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(DonaichModel, self).__init__(donaich, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(DonaichModel, self).__init__(donaich, *args, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5)
@@ -271,8 +271,8 @@ class DonaichModel(Model):
 
 class PowerLawModel(Model):
     __doc__ = powerlaw.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(PowerLawModel, self).__init__(powerlaw, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(PowerLawModel, self).__init__(powerlaw, *args, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         try:
@@ -286,8 +286,8 @@ class PowerLawModel(Model):
 
 class ExponentialModel(Model):
     __doc__ = exponential.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(ExponentialModel, self).__init__(exponential, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(ExponentialModel, self).__init__(exponential, *args, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         try:
@@ -300,8 +300,8 @@ class ExponentialModel(Model):
 
 class StepModel(Model):
     __doc__ = step.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(StepModel, self).__init__(step, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(StepModel, self).__init__(step, *args, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         if x is None:
@@ -316,8 +316,8 @@ class StepModel(Model):
 
 class RectangleModel(Model):
     __doc__ = rectangle.__doc__ + COMMON_DOC
-    def __init__(self, **kwargs):
-        super(RectangleModel, self).__init__(rectangle, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(RectangleModel, self).__init__(rectangle, *args, **kwargs)
         self.set_param_hint('midpoint',
                             expr='(%scenter1+%scenter2)/2.0' % (self.prefix,
                                                                 self.prefix))

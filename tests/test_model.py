@@ -1,5 +1,6 @@
 import unittest
 import warnings
+import nose
 from numpy.testing import assert_allclose
 import numpy as np
 
@@ -11,31 +12,119 @@ def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03,
     for param_name, value in desired.items():
          assert_allclose(actual[param_name], value, rtol, atol, err_msg, verbose)
 
-class TestUserDefiniedModel(unittest.TestCase):
+
+class CommonTests(object):
+    # to be subclassed for testing predefined models
+
+    def setUp(self):
+        np.random.seed(1)
+        self.noise = 0.0001*np.random.randn(*self.x.shape)
+        # Some Models need args (e.g., polynomial order), and others don't.
+        try:
+            args = self.args
+        except AttributeError:
+            self.model = self.model_constructor()
+            self.model_explicit_var = self.model_constructor(['x'])
+            func = self.model.func
+        else:
+            self.model = self.model_constructor(*args)
+            self.model_explicit_var = self.model_constructor(
+                *args, independent_vars=['x'])
+            func = self.model.func
+        self.data = func(x=self.x, **self.true_values()) + self.noise
+
+    @property
+    def x(self):
+        return np.linspace(1, 10, num=1000)
+
+    def test_fit(self):
+        model = self.model
+
+        # Pass Parameters object.
+        params = model.make_params(**self.guess())
+        result = model.fit(self.data, params, x=self.x)
+        assert_results_close(result.values, self.true_values())
+
+        # Pass inidividual Parameter objects as kwargs.
+        kwargs = {name: p for name, p in params.items()}
+        result = self.model.fit(self.data, x=self.x, **kwargs)
+        assert_results_close(result.values, self.true_values())
+
+        # Pass guess values (not Parameter objects) as kwargs.
+        kwargs = {name: p.value for name, p in params.items()}
+        result = self.model.fit(self.data, x=self.x, **kwargs)
+        assert_results_close(result.values, self.true_values())
+
+    def test_explicit_independent_vars(self):
+        self.check_skip_independent_vars()
+        model = self.model_explicit_var
+        pars = model.make_params(**self.guess())
+        result = model.fit(self.data, pars, x=self.x)
+        assert_results_close(result.values, self.true_values())
+
+    def test_result_attributes(self):
+        pars = self.model.make_params(**self.guess())
+        result = self.model.fit(self.data, pars, x=self.x)
+
+        # result.init_values
+        assert_results_close(result.values, self.true_values())
+        self.assertTrue(result.init_values == self.guess())
+
+        # result.init_params
+        params = self.model.make_params()
+        for param_name, value in self.guess().items():
+            params[param_name].value = value
+        self.assertTrue(result.init_params == params)
+
+        # result.best_fit
+        assert_allclose(result.best_fit, self.data, atol=self.noise.max())
+
+        # result.init_fit
+        init_fit = self.model.func(x=self.x, **self.guess())
+        assert_allclose(result.init_fit, init_fit)
+
+        # result.model
+        self.assertTrue(result.model is self.model)
+
+    def test_result_eval(self):
+        # Check eval() output against init_fit and best_fit.
+        pars = self.model.make_params(**self.guess())
+        result = self.model.fit(self.data, pars, x=self.x)
+
+        assert_allclose(result.eval(x=self.x, **result.values),
+                        result.best_fit)
+        assert_allclose(result.eval(x=self.x, **result.init_values),
+                        result.init_fit)
+
+    def test_result_eval_custom_x(self):
+        self.check_skip_independent_vars()
+        pars = self.model.make_params(**self.guess())
+        result = self.model.fit(self.data, pars, x=self.x)
+
+        # Check that the independent variable is respected.
+        short_eval = result.eval(x=np.array([0, 1, 2]), **result.values)
+        self.assertEqual(len(short_eval), 3)
+
+    def check_skip_independent_vars(self):
+        # to be overridden for models that do not accept indep vars
+        pass
+
+
+class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     # mainly aimed at checking that the API does what it says it does
     # and raises the right exceptions or warnings when things are not right
 
     def setUp(self):
-        self.x = np.linspace(-10, 10, num=1000)
-        np.random.seed(1)
-        self.noise = 0.01*np.random.randn(*self.x.shape)
         self.true_values = lambda: dict(amplitude=7.1, center=1.1, sigma=2.40)
         self.guess = lambda: dict(amplitude=5, center=2, sigma=4)
         # return a fresh copy
-        self.model = Model(gaussian)
-        self.data = gaussian(x=self.x, **self.true_values()) + self.noise
+        self.model_constructor = (
+            lambda *args, **kwargs: Model(gaussian, *args, **kwargs))
+        super(TestUserDefiniedModel, self).setUp()
 
-    def test_fit_with_keyword_params(self):
-        params = self.model.make_params(**self.guess())
-        result = self.model.fit(self.data, params, x=self.x)
-        assert_results_close(result.values, self.true_values())
-
-    def test_fit_with_parameters_obj(self):
-        params = self.model.make_params()
-        for param_name, value in self.guess().items():
-            params[param_name].value = value
-        result = self.model.fit(self.data, params, x=self.x)
-        assert_results_close(result.values, self.true_values())
+    @property
+    def x(self):
+        return np.linspace(-10, 10, num=1000)
 
     def test_missing_param_raises_error(self):
 
@@ -84,29 +173,6 @@ class TestUserDefiniedModel(unittest.TestCase):
         pars['center'].set(value=1.3, vary=False)
         result = self.model.fit(self.data, pars, x=self.x)
         assert_results_close(result.values, true_values, rtol=0.05)
-
-    def test_result_attributes(self):
-        # result.init_values
-        pars = self.model.make_params(**self.guess())
-        result = self.model.fit(self.data, pars, x=self.x)
-        assert_results_close(result.values, self.true_values())
-        self.assertTrue(result.init_values == self.guess())
-
-        # result.init_params
-        params = self.model.make_params()
-        for param_name, value in self.guess().items():
-            params[param_name].value = value
-        self.assertTrue(result.init_params == params)
-
-        # result.best_fit
-        assert_allclose(result.best_fit, self.data, atol=self.noise.max())
-
-        # result.init_fit
-        init_fit = self.model.func(x=self.x, **self.guess())
-        assert_allclose(result.init_fit, init_fit)
-
-        # result.model
-        self.assertTrue(result.model is self.model)
 
     # testing model addition...
 
@@ -196,36 +262,12 @@ class TestUserDefiniedModel(unittest.TestCase):
         self.assertRaises(NameError, f)
 
 
-class CommonTests(object):
-    # to be subclassed for testing predefined models
-
-    def setUp(self):
-        self.x = np.linspace(1, 10, num=1000)
-        noise = 0.0001*np.random.randn(*self.x.shape)
-        # Some Models need args (e.g., polynomial order), and others don't.
-        try:
-            args = self.args
-        except AttributeError:
-            self.model_instance = self.model()
-            func = self.model_instance.func
-
-        else:
-            self.model_instance = self.model(*args, independent_vars=['x'])
-            func = self.model_instance.func
-        self.data = func(x=self.x, **self.true_values()) + noise
-
-    def test_fit(self):
-        model = self.model_instance
-        pars = model.make_params(**self.guess())
-        result = model.fit(self.data, pars, x=self.x)
-        assert_results_close(result.values, self.true_values())
-
 class TestLinear(CommonTests, unittest.TestCase):
 
     def setUp(self):
         self.true_values = lambda: dict(slope=5, intercept=2)
         self.guess = lambda: dict(slope=10, intercept=6)
-        self.model = models.LinearModel
+        self.model_constructor = models.LinearModel
         super(TestLinear, self).setUp()
 
 
@@ -234,7 +276,7 @@ class TestParabolic(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(a=5, b=2, c=8)
         self.guess = lambda: dict(a=1, b=6, c=3)
-        self.model = models.ParabolicModel
+        self.model_constructor = models.ParabolicModel
         super(TestParabolic, self).setUp()
 
 
@@ -244,7 +286,7 @@ class TestPolynomialOrder2(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(c2=5, c1=2, c0=8)
         self.guess = lambda: dict(c1=1, c2=6, c0=3)
-        self.model = models.PolynomialModel
+        self.model_constructor = models.PolynomialModel
         self.args = (2,)
         super(TestPolynomialOrder2, self).setUp()
 
@@ -255,7 +297,7 @@ class TestPolynomialOrder3(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(c3=2, c2=5, c1=2, c0=8)
         self.guess = lambda: dict(c3=1, c1=1, c2=6, c0=3)
-        self.model = models.PolynomialModel
+        self.model_constructor = models.PolynomialModel
         self.args = (3,)
         super(TestPolynomialOrder3, self).setUp()
 
@@ -265,15 +307,18 @@ class TestConstant(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(c=5)
         self.guess = lambda: dict(c=2)
-        self.model = models.ConstantModel
+        self.model_constructor = models.ConstantModel
         super(TestConstant, self).setUp()
+
+    def check_skip_independent_vars(self):
+        raise nose.SkipTest("ConstantModel has not independent_vars.")
 
 class TestPowerlaw(CommonTests, unittest.TestCase):
 
     def setUp(self):
         self.true_values = lambda: dict(amplitude=5, exponent=3)
         self.guess = lambda: dict(amplitude=2, exponent=8)
-        self.model = models.PowerLawModel
+        self.model_constructor = models.PowerLawModel
         super(TestPowerlaw, self).setUp()
 
 
@@ -282,6 +327,5 @@ class TestExponential(CommonTests, unittest.TestCase):
     def setUp(self):
         self.true_values = lambda: dict(amplitude=5, decay=3)
         self.guess = lambda: dict(amplitude=2, decay=8)
-        self.model = models.ExponentialModel
+        self.model_constructor = models.ExponentialModel
         super(TestExponential, self).setUp()
-
