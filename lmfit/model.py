@@ -103,12 +103,19 @@ class Model(object):
                 out[0] = "%s(%s)" % (out[0], ','.join(opts))
         else:
             # composite model
-            out = [c._reprstring(long)[0] for c in self.components]
+            if self._name is None:
+                out = [c._reprstring(long)[0] for c in self.components]
+            else:
+                out = [self._name]
         return out
 
     @property
     def name(self):
         return '+'.join(self._reprstring(long=False))
+
+    @name.setter
+    def name(self, value):
+        self._name = value
 
     def is_composite(self):
         return len(self.components) > 0
