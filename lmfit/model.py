@@ -63,7 +63,11 @@ class Model(object):
     _invalid_ivar  = "Invalid independent variable name ('%s') for function %s"
     _invalid_par   = "Invalid parameter name ('%s') for function %s"
     _invalid_missing = "missing must be None, 'none', 'drop', or 'raise'."
+    _valid_missing   = (None, 'none', 'drop', 'raise')
     _names_collide = "Two models have parameters named %s. Use distinct names"
+
+    _invalid_hint = "unknown parameter hint '%s' for param '%s'"
+    _hint_names = ('value', 'vary', 'min', 'max', 'expr')
 
     def __init__(self, func, independent_vars=None, param_names=None,
                  missing='none', prefix='', name=None, components=None, **kws):
@@ -75,7 +79,7 @@ class Model(object):
             self.components = []
         self.func_allargs = []
         self.func_haskeywords = False
-        if not missing in [None, 'none', 'drop', 'raise']:
+        if not missing in self._valid_missing:
             raise ValueError(self._invalid_missing)
         self.missing = missing
         self.opts = kws
@@ -190,12 +194,15 @@ class Model(object):
             names.append("%s%s" % (self.prefix, pname))
         self.param_names = set(names)
 
-    def set_param_hint(self, name, value=None, vary=None,
-                       min=None, max=None, expr=None):
+    def set_param_hint(self, name, **kwargs):
         """set hints for parameter, including optional bounds
         and constraints  (value, vary, min, max, expr)
         these will be used by make_params() when building
         default parameters
+
+        example:
+          model = GaussianModel()
+          model.set_param_hint('amplitude', min=-100.0, max=0.)
         """
         npref = len(self.prefix)
         if npref > 0 and name.startswith(self.prefix):
@@ -204,16 +211,11 @@ class Model(object):
         if name not in self.param_hints:
             self.param_hints[name] = {}
         hints = self.param_hints[name]
-        if value is not None:
-            hints['value'] = value
-        if vary is not None:
-            hints['vary'] = value
-        if expr is not None:
-            hints['expr'] = expr
-        if min not in (None, -np.inf):
-            hints['min'] = min
-        if max not in (None, np.inf):
-            hints['max'] = max
+        for key, val in kwargs.items():
+            if key in self._hint_names:
+                hints[key] = val
+            else:
+                warnings.warn(self._invalid_hint % (key, name))
 
     def make_params(self, **kwargs):
         """create and return a Parameters object for a Model.
@@ -234,7 +236,7 @@ class Model(object):
                 # apply defaults from parameter hints
                 if basename in self.param_hints:
                     hint = self.param_hints[basename]
-                    for item in ('value', 'vary', 'min', 'max', 'expr'):
+                    for item in self._hint_names:
                         if item in  hint:
                             setattr(par, item, hint[item])
                 # apply values passed in through kw args
@@ -253,7 +255,7 @@ class Model(object):
                     # apply composite-model hints
                     if par_name in self.param_hints:
                         hint = self.param_hints[par_name]
-                        for item in ('value', 'vary', 'min', 'max', 'expr'):
+                        for item in self._hint_names:
                             if item in  hint:
                                 setattr(param, item, hint[item])
                 params.update(comp_params)
@@ -270,7 +272,7 @@ class Model(object):
             name = "%s%s" % (self.prefix, basename)
             if name not in params:
                 par = params[name] = Parameter(name=name)
-                for item in ('value', 'vary', 'min', 'max', 'expr'):
+                for item in self._hint_names:
                     if item in  hint:
                         setattr(par, item, hint[item])
                 # Add the new parameter to the self.param_names
@@ -541,8 +543,12 @@ class ModelFitResult(Minimizer):
                                  show_correl=show_correl,
                                  min_correl=min_correl)
         buff = ['[[Model]]']
-        for x in self.model._reprstring(long=True):
-            buff.append('    %s' % x)
+        if len(self.model.components)==0:
+            buff.append('    %s' % self.model._reprstring(long=True))
+        else:
+            buff.append(' Composite Model:')
+            for x in self.model._reprstring(long=True):
+                buff.append('    %s' % x)
         buff = '\n'.join(buff)
         out = '%s\n%s' % (buff, stats_report)
         return out
