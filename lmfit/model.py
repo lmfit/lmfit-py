@@ -544,7 +544,7 @@ class ModelFitResult(Minimizer):
                                  min_correl=min_correl)
         buff = ['[[Model]]']
         if len(self.model.components)==0:
-            buff.append('    %s' % self.model._reprstring(long=True))
+            buff.append('    %s' % self.model._reprstring(long=True)[0])
         else:
             buff.append(' Composite Model:')
             for x in self.model._reprstring(long=True):
