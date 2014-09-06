@@ -190,12 +190,12 @@ class Model(object):
             names.append("%s%s" % (self.prefix, pname))
         self.param_names = set(names)
 
-    def set_param_hint(self, name, value=None,
+    def set_param_hint(self, name, value=None, vary=None,
                        min=None, max=None, expr=None):
-        """set hints for parameter, including optional bounds and
-        constraints  (value, min, max, expr)
+        """set hints for parameter, including optional bounds
+        and constraints  (value, vary, min, max, expr)
         these will be used by make_params() when building
-        default  parameters
+        default parameters
         """
         npref = len(self.prefix)
         if npref > 0 and name.startswith(self.prefix):
@@ -206,6 +206,8 @@ class Model(object):
         hints = self.param_hints[name]
         if value is not None:
             hints['value'] = value
+        if vary is not None:
+            hints['vary'] = value
         if expr is not None:
             hints['expr'] = expr
         if min not in (None, -np.inf):
@@ -232,7 +234,7 @@ class Model(object):
                 # apply defaults from parameter hints
                 if basename in self.param_hints:
                     hint = self.param_hints[basename]
-                    for item in ('value', 'min', 'max', 'expr'):
+                    for item in ('value', 'vary', 'min', 'max', 'expr'):
                         if item in  hint:
                             setattr(par, item, hint[item])
                 # apply values passed in through kw args
@@ -251,7 +253,7 @@ class Model(object):
                     # apply composite-model hints
                     if par_name in self.param_hints:
                         hint = self.param_hints[par_name]
-                        for item in ('value', 'min', 'max', 'expr'):
+                        for item in ('value', 'vary', 'min', 'max', 'expr'):
                             if item in  hint:
                                 setattr(param, item, hint[item])
                 params.update(comp_params)
@@ -268,7 +270,7 @@ class Model(object):
             name = "%s%s" % (self.prefix, basename)
             if name not in params:
                 par = params[name] = Parameter(name=name)
-                for item in ('value', 'min', 'max', 'expr'):
+                for item in ('value', 'vary', 'min', 'max', 'expr'):
                     if item in  hint:
                         setattr(par, item, hint[item])
                 # Add the new parameter to the self.param_names
