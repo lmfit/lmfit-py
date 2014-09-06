@@ -217,7 +217,7 @@ class Model(object):
         """create and return a Parameters object for a Model.
         This applies any default values
         """
-        pars = Parameters()
+        params = Parameters()
         if not self.is_composite():
             # base model: build Parameters from scratch
             for name in self.param_names:
@@ -234,30 +234,41 @@ class Model(object):
                             setattr(par, item, hint[item])
                 # apply values passed in through kw args
                 if basename in kwargs:
+                    # kw parameter names with no prefix
                     par.value = kwargs[basename]
-                pars[name] = par
+                if name in kwargs:
+                    # kw parameter names with prefix
+                    par.value = kwargs[name]
+                params[name] = par
         else:
             # composite model: merge the sub_models parameters adding hints
             for sub_model in self.components:
                 comp_params = sub_model.make_params(**kwargs)
                 for par_name, param in comp_params.items():
-                    # apply defaults from parameter hints
+                    # apply composite-model hints
                     if par_name in self.param_hints:
                         hint = self.param_hints[par_name]
                         for item in ('value', 'min', 'max', 'expr'):
                             if item in  hint:
                                 setattr(param, item, hint[item])
-                pars.update(comp_params)
+                params.update(comp_params)
 
-        # In both cases (base or composite) hints can add parameters
+            # apply defaults passed in through kw args
+            for name in self.param_names:
+                if name in kwargs:
+                    params[name].value = kwargs[name]
+
+        # In both cases (base or composite) add new parameters that have hints
         for basename, hint in self.param_hints.items():
             name = "%s%s" % (self.prefix, basename)
-            if name not in pars:
-                par = pars[name] = Parameter(name=name)
+            if name not in params:
+                par = params[name] = Parameter(name=name)
                 for item in ('value', 'min', 'max', 'expr'):
                     if item in  hint:
                         setattr(par, item, hint[item])
-        return pars
+                # Add the new parameter to the self.param_names
+                self.param_names.add(name)
+        return params
 
     def guess(self, data=None, **kws):
         """stub for guess starting values --
