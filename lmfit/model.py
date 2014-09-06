@@ -261,7 +261,9 @@ class Model(object):
                 if name in kwargs:
                     params[name].value = kwargs[name]
 
-        # In both cases (base or composite) add new parameters that have hints
+        # add any additional parameters defined in param_hints
+        # note that composites may define their own additional
+        # convenience parameters here
         for basename, hint in self.param_hints.items():
             name = "%s%s" % (self.prefix, basename)
             if name not in params:
@@ -339,15 +341,12 @@ class Model(object):
 
     def eval(self, params=None, **kwargs):
         """evaluate the model with the supplied parameters"""
-        if not self.is_composite():
-            fcnargs = self.make_funcargs(params, kwargs)
-            result = self.func(**fcnargs)
+        if len(self.components) > 0:
+            result = self.components[0].eval(params, **kwargs)
+            for model in self.components[1:]:
+                result += model.eval(params, **kwargs)
         else:
-            for i, sub_model in enumerate(self.components):
-                if i == 0:
-                    result = sub_model.eval(params, **kwargs)
-                else:
-                    result += sub_model.eval(params, **kwargs)
+            result = self.func(**self.make_funcargs(params, kwargs))
         return result
 
     def fit(self, data, params=None, weights=None, method='leastsq',
@@ -450,19 +449,19 @@ class Model(object):
             collision = colliding_param_names.pop()
             raise NameError(self._names_collide % collision)
 
-        if self.is_composite():
-            # If the model is already composite just make a copy
-            new = deepcopy(self)
+        if len(self.components) > 0:
+            # If the model is already composite just add other as component
+            self.components.append(other)
+            self.param_names |= other.param_names
+            return self
         else:
-            # otherwise create a new Model and put self in components
+            # make new composite Model, add self and other as components
             new = Model(func=None)
-            new.components.append(self)
-            new.param_names = set(self.param_names)
+            new.components = [self, other]
+            new.param_names = set(self.param_names | other.param_names)
             # we assume that all the sub-models have the same independent vars
-            new.independent_vars = self.independent_vars[:]  # copy
-        new.components.append(other)
-        new.param_names |= other.param_names
-        return new
+            new.independent_vars = self.independent_vars[:]
+            return new
 
 
 class ModelFitResult(Minimizer):
