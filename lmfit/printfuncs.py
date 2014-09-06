@@ -68,21 +68,21 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
     add("[[Variables]]")
     for name in parnames:
         par = params[name]
-        space = ' '*(namelen+2 - len(name))
-        nout = "%s: %s" % (name, space)
-        inval = 'inital = ?'
+        space = ' '*(namelen+1-len(name))
+        nout = "%s:%s" % (name, space)
+        inval = '(init= ?)'
         if par.init_value is not None:
-            inval = 'initial = % .7g' % par.init_value
+            inval = '(init=% .7g)' % par.init_value
         if modelpars is not None and name in modelpars:
             inval = '%s, model_value =% .7g' % (inval, modelpars[name].value)
-
         try:
-            sval = '% .7g' % par.value
+            sval = (('% .7g' % par.value)) #  + '0'*6)[:9]
         except (TypeError, ValueError):
             sval = 'Non Numeric Value?'
 
         if par.stderr is not None:
-            sval = '% .7g +/- %.7g' % (par.value, par.stderr)
+            serr = ('%.5g' % (par.stderr)+'0'*6)[:7]
+            sval = '%s +/- %s' % (sval, serr)
             try:
                 sval = '%s (%.2f%%)' % (sval, abs(par.stderr/par.value)*100)
             except ZeroDivisionError:
@@ -91,7 +91,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
         if par.vary:
             add("    %s %s %s" % (nout, sval, inval))
         elif par.expr is not None:
-            add("    %s %s == '%s'" % (nout, sval, par.expr))
+            add("    %s %s  == '%s'" % (nout, sval, par.expr))
         else:
             add("    %s % .7g (fixed)" % (nout, par.value))
 
