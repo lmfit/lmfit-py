@@ -1,7 +1,7 @@
 """
 Concise nonlinear curve fitting.
 """
-
+from __future__ import print_function
 import warnings
 import inspect
 from copy import deepcopy
@@ -271,7 +271,7 @@ class Model(object):
                         setattr(par, item, hint[item])
                 # Add the new parameter to the self.param_names
                 self.param_names.add(name)
-                if verbose: print ' - Adding parameter "%s"' % name
+                if verbose: print( ' - Adding parameter "%s"' % name)
         return params
 
     def guess(self, data=None, **kws):
