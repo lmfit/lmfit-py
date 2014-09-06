@@ -217,6 +217,9 @@ class Model(object):
         """create and return a Parameters object for a Model.
         This applies any default values
         """
+        verbose = False
+        if 'verbose' in kwargs:
+            verbose = kwargs['verbose']
         params = Parameters()
         if not self.is_composite():
             # base model: build Parameters from scratch
@@ -268,6 +271,7 @@ class Model(object):
                         setattr(par, item, hint[item])
                 # Add the new parameter to the self.param_names
                 self.param_names.add(name)
+                if verbose: print ' - Adding parameter "%s"' % name
         return params
 
     def guess(self, data=None, **kws):
@@ -347,7 +351,7 @@ class Model(object):
         return result
 
     def fit(self, data, params=None, weights=None, method='leastsq',
-            iter_cb=None, scale_covar=True, **kwargs):
+            iter_cb=None, scale_covar=True, verbose=True, **kwargs):
         """Fit the model to the data.
 
         Parameters
@@ -359,6 +363,8 @@ class Model(object):
         method: fitting method to use (default = 'leastsq')
         iter_cb:  None or callable  callback function to call at each iteration.
         scale_covar:  bool (default True) whether to auto-scale covariance matrix
+        verbose: bool (default True) print a message when a new parameter is
+            added because of a hint.
         keyword arguments: optional, named like the arguments of the
             model function, will override params. See examples below.
 
@@ -387,7 +393,7 @@ class Model(object):
 
         """
         if params is None:
-            params = self.make_params()
+            params = self.make_params(verbose=verbose)
         else:
             params = deepcopy(params)
 
