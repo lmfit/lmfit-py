@@ -68,13 +68,13 @@ class CommonTests(object):
 
         # result.init_values
         assert_results_close(result.values, self.true_values())
-        self.assertTrue(result.init_values == self.guess())
+        self.assertEqual(result.init_values, self.guess())
 
         # result.init_params
         params = self.model.make_params()
         for param_name, value in self.guess().items():
             params[param_name].value = value
-        self.assertTrue(result.init_params == params)
+        self.assertEqual(result.init_params, params)
 
         # result.best_fit
         assert_allclose(result.best_fit, self.data, atol=self.noise.max())
@@ -206,6 +206,14 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         pars = mod.guess(data, x=self.x)
         self.assertTrue('bamplitude' in pars)
         self.assertTrue('bsigma' in pars)
+
+    def test_change_prefix(self):
+        mod = models.GaussianModel(prefix='b')
+        mod.prefix = 'c'
+        params = mod.make_params()
+        names = params.keys()
+        all_begin_with_c = all([n.startswith('c') for n in names])
+        self.assertTrue(all_begin_with_c)
 
     def test_sum_of_two_gaussians(self):
         # two user-defined gaussians
