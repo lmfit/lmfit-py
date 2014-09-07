@@ -72,8 +72,8 @@ class Model(object):
     def __init__(self, func, independent_vars=None, param_names=None,
                  missing='none', prefix='', name=None, components=None, **kws):
         self.func = func
-        self.prefix = prefix
-        self.param_names = param_names
+        self._prefix = prefix
+        self._param_root_names = param_names  # will not include prefixes
         self.independent_vars = independent_vars
         if components is None:
             self.components = []
@@ -96,8 +96,8 @@ class Model(object):
         if not self.is_composite():
             # base model
             opts = []
-            if len(self.prefix) > 0:
-                opts.append("prefix='%s'" % (self.prefix))
+            if len(self._prefix) > 0:
+                opts.append("prefix='%s'" % (self._prefix))
             if long:
                 for k, v in self.opts.items():
                     opts.append("%s='%s'" % (k, v))
@@ -120,6 +120,15 @@ class Model(object):
     @name.setter
     def name(self, value):
         self._name = value
+
+    @property
+    def prefix(self):
+        return self._prefix
+
+    @prefix.setter
+    def prefix(self, value):
+        self._prefix = value
+        self._parse_params()
 
     def is_composite(self):
         return len(self.components) > 0
@@ -154,22 +163,22 @@ class Model(object):
         # except independent variables
         self.def_vals = {}
         might_be_param = []
-        if self.param_names is None:
-            self.param_names = pos_args[:]
+        if self._param_root_names is None:
+            self._param_root_names = pos_args[:]
             for key, val in kw_args.items():
                 if (not isinstance(val, bool) and
                     isinstance(val, (float, int))):
-                    self.param_names.append(key)
+                    self._param_root_names.append(key)
                     self.def_vals[key] = val
                 elif val is None:
                     might_be_param.append(key)
             for p in self.independent_vars:
-                if p in self.param_names:
-                    self.param_names.remove(p)
+                if p in self._param_root_names:
+                    self._param_root_names.remove(p)
 
         new_opts = {}
         for opt, val in self.opts.items():
-            if (opt in self.param_names or opt in might_be_param and
+            if (opt in self._param_root_names or opt in might_be_param and
                 isinstance(val, Parameter)):
                 self.set_param_hint(opt, value=val.value,
                                     min=val.min, max=val.max, expr=val.expr)
@@ -177,21 +186,23 @@ class Model(object):
                 new_opts[opt] = val
         self.opts = new_opts
 
+        names = []
+        if self._prefix is None:
+            self._prefix = ''
+        for pname in self._param_root_names:
+            names.append("%s%s" % (self._prefix, pname))
+
         # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
         fname = self.func.__name__
         for arg in self.independent_vars:
             if arg not in allargs or arg in self._forbidden_args:
                 raise ValueError(self._invalid_ivar % (arg, fname))
-        for arg in self.param_names:
-            if arg not in allargs or arg in self._forbidden_args:
+        for arg in names:
+            if (self._strip_prefix(arg) not in allargs or
+                arg in self._forbidden_args):
                 raise ValueError(self._invalid_par % (arg, fname))
 
-        names = []
-        if self.prefix is None:
-            self.prefix = ''
-        for pname in self.param_names:
-            names.append("%s%s" % (self.prefix, pname))
         self.param_names = set(names)
 
     def set_param_hint(self, name, **kwargs):
@@ -204,8 +215,8 @@ class Model(object):
           model = GaussianModel()
           model.set_param_hint('amplitude', min=-100.0, max=0.)
         """
-        npref = len(self.prefix)
-        if npref > 0 and name.startswith(self.prefix):
+        npref = len(self._prefix)
+        if npref > 0 and name.startswith(self._prefix):
             name = name[npref:]
 
         if name not in self.param_hints:
@@ -229,7 +240,7 @@ class Model(object):
             # base model: build Parameters from scratch
             for name in self.param_names:
                 par = Parameter(name=name)
-                basename = name[len(self.prefix):]
+                basename = name[len(self._prefix):]
                 # apply defaults from model function definition
                 if basename in self.def_vals:
                     par.value = self.def_vals[basename]
@@ -269,7 +280,7 @@ class Model(object):
         # note that composites may define their own additional
         # convenience parameters here
         for basename, hint in self.param_hints.items():
-            name = "%s%s" % (self.prefix, basename)
+            name = "%s%s" % (self._prefix, basename)
             if name not in params:
                 par = params[name] = Parameter(name=name)
                 for item in self._hint_names:
@@ -308,25 +319,28 @@ class Model(object):
             mask = np.asarray(mask)  # for compatibility with pandas.Series
             return mask
 
+    def _strip_prefix(self, name):
+        npref = len(self._prefix)
+        if npref > 0 and name.startswith(self._prefix):
+            name = name[npref:]
+        return name
+
     def make_funcargs(self, params=None, kwargs=None, strip=True):
         """convert parameter values and keywords to function arguments"""
         if params is None: params = {}
         if kwargs is None: kwargs = {}
         out = {}
         out.update(self.opts)
-        npref = len(self.prefix)
-        def strip_prefix(name):
-            if strip and npref > 0 and name.startswith(self.prefix):
-                name = name[npref:]
-            return name
         for name, par in params.items():
-            name = strip_prefix(name)
+            if strip:
+                name = self._strip_prefix(name)
             if name in self.func_allargs or self.func_haskeywords:
                 out[name] = par.value
 
         # kwargs handled slightly differently -- may set param value too!
         for name, val in kwargs.items():
-            name = strip_prefix(name)
+            if strip:
+                name = self._strip_prefix(name)
             if name in self.func_allargs or self.func_haskeywords:
                 out[name] = val
                 if name in params:
@@ -337,7 +351,7 @@ class Model(object):
         """generate **all** function args for all functions"""
         args = {}
         for key, val in self.make_funcargs(params, kwargs).items():
-            args["%s%s" % (self.prefix, key)] = val
+            args["%s%s" % (self._prefix, key)] = val
         for sub_model in self.components:
             otherargs = sub_model._make_all_args(params, **kwargs)
             args.update(otherargs)
