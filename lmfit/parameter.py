@@ -36,6 +36,13 @@ class Parameters(OrderedDict):
         OrderedDict.__setitem__(self, key, value)
         value.name = key
 
+    def __add__(self, other):
+        "add Parameters objects"
+        if not isinstance(other, Parameters):
+            raise ValueError("'%s' is not a Parameters object" % other)
+        self.update(other)
+        return self
+
     def add(self, name, value=None, vary=True, min=None, max=None, expr=None):
         """convenience function for adding a Parameter:
         with   p = Parameters()
@@ -64,7 +71,6 @@ class Parameters(OrderedDict):
 
     def valuesdict(self):
         """return on ordered dictionary of name:value pairs for each Parameter.
-        
         This is distinct from the Parameters itself, as it has values of
         the Parameeter values, not the full Parameter object """
 
@@ -93,6 +99,19 @@ class Parameter(object):
         self.from_internal = lambda val: val
         self._init_bounds()
 
+    def set(self, value=None, vary=None, min=None, max=None, expr=None):
+        "set value, vary, min, max, expr with keyword args"
+        if value is not None:
+            self._val = value
+        if vary is not None:
+            self.vary = vary
+        if min is not None:
+            self.min = min
+        if max is not None:
+            self.max = max
+        if expr is not None:
+            self.expr = expr
+
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
         #_val is None means - infinity.
@@ -103,6 +122,8 @@ class Parameter(object):
                 self._val = self.min
         elif self.min is not None:
             self._val = self.min
+        elif self.max is not None:
+            self._val = self.max
         self.setup_bounds()
 
     def __getstate__(self):

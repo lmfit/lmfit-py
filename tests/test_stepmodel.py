@@ -17,41 +17,43 @@ def get_data():
 def test_stepmodel_linear():
     x, y = get_data()
     stepmod = StepModel(form='linear')
-    stepmod.guess_starting_values(y, x)
+    const = ConstantModel()
+    pars = stepmod.guess(y, x)
+    pars = pars + const.make_params(c=3*y.min())
+    mod = stepmod + const
 
-    mod = stepmod + ConstantModel()
-    mod.set_param('c', 3*y.min())
-    out = mod.fit(y, x=x)
+    out = mod.fit(y, pars, x=x)
 
     assert(out.nfev > 5)
     assert(out.nvarys == 4)
     assert(out.chisqr > 1)
-    assert(mod.params['c'].value > 3)
-    assert(mod.params['center'].value > 1)
-    assert(mod.params['center'].value < 4)
-    assert(mod.params['sigma'].value > 0.5)
-    assert(mod.params['sigma'].value < 3.5)
-    assert(mod.params['amplitude'].value > 50)
+    assert(out.params['c'].value > 3)
+    assert(out.params['center'].value > 1)
+    assert(out.params['center'].value < 4)
+    assert(out.params['sigma'].value > 0.5)
+    assert(out.params['sigma'].value < 3.5)
+    assert(out.params['amplitude'].value > 50)
 
 
 def test_stepmodel_erf():
     x, y = get_data()
-    stepmod = StepModel(form='erf')
-    stepmod.guess_starting_values(y, x)
+    stepmod = StepModel(form='linear')
+    const = ConstantModel()
+    pars = stepmod.guess(y, x)
+    pars = pars + const.make_params(c=3*y.min())
+    mod = stepmod + const
 
-    mod = stepmod + ConstantModel()
-    mod.set_param('c', 3) # *y.min())
+    out = mod.fit(y, pars, x=x)
 
-    out = mod.fit(y, x=x)
     assert(out.nfev > 5)
     assert(out.nvarys == 4)
     assert(out.chisqr > 1)
-    assert(mod.params['c'].value > 3)
-    assert(mod.params['center'].value > 1)
-    assert(mod.params['center'].value < 4)
-    assert(mod.params['amplitude'].value > 50)
-    assert(mod.params['sigma'].value > 0.2)
-    assert(mod.params['sigma'].value < 1.5)
+    assert(out.params['c'].value > 3)
+    assert(out.params['center'].value > 1)
+    assert(out.params['center'].value < 4)
+    assert(out.params['amplitude'].value > 50)
+    assert(out.params['sigma'].value > 0.2)
+    assert(out.params['sigma'].value < 1.5)
 
 if __name__ == '__main__':
     # test_stepmodel_linear()

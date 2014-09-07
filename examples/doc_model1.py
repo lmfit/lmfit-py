@@ -16,7 +16,7 @@ def gaussian(x, amp, cen, wid):
 gmod = Model(gaussian)
 result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
-print(gmod.fit_report())
+print(result.fit_report())
 
 plt.plot(x, y,         'bo')
 plt.plot(x, result.init_fit, 'k--')

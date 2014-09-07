@@ -2,7 +2,7 @@
 #<examples/doc_nistgauss.py>
 import numpy as np
 from lmfit.models import GaussianModel, ExponentialModel
-
+import sys
 import matplotlib.pyplot as plt
 
 dat = np.loadtxt('NIST_Gauss2.dat')
@@ -10,27 +10,34 @@ x = dat[:, 1]
 y = dat[:, 0]
 
 exp_mod = ExponentialModel(prefix='exp_')
-exp_mod.guess_starting_values(y, x=x)
+pars = exp_mod.guess(y, x=x)
 
 gauss1  = GaussianModel(prefix='g1_')
+pars.update( gauss1.make_params())
+
+pars['g1_center'].set(105, min=75, max=125)
+pars['g1_sigma'].set(15, min=3)
+pars['g1_amplitude'].set(2000, min=10)
+
 gauss2  = GaussianModel(prefix='g2_')
 
-gauss1.set_param('center',    105, min=75, max=125)
-gauss1.set_param('sigma',      15, min=3)
-gauss1.set_param('amplitude', 2000, min=10)
+pars.update(gauss2.make_params())
 
-gauss2.set_param('center',    155, min=125, max=175)
-gauss2.set_param('sigma',      15, min=3)
-gauss2.set_param('amplitude', 2000, min=10)
+pars['g2_center'].set(155, min=125, max=175)
+pars['g2_sigma'].set(15, min=3)
+pars['g2_amplitude'].set(2000, min=10)
 
 mod = gauss1 + gauss2 + exp_mod
 
-out = mod.fit(y, x=x)
 
-print(mod.fit_report(min_correl=0.5))
-
+init = mod.eval(pars, x=x)
 plt.plot(x, y)
-plt.plot(x, out.init_fit, 'k--')
+plt.plot(x, init, 'k--')
+
+out = mod.fit(y, pars, x=x)
+
+print(out.fit_report(min_correl=0.5))
+
 plt.plot(x, out.best_fit, 'r-')
 plt.show()
 #<end examples/doc_nistgauss.py>

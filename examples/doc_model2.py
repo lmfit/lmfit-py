@@ -18,9 +18,16 @@ def line(x, slope, intercept):
     return slope * x + intercept
 
 mod = Model(gaussian) + Model(line)
-result = mod.fit(y, x=x, amp=5, cen=5, wid=1, slope=0, intercept=1)
+pars  = mod.make_params( amp=5, cen=5, wid=1, slope=0, intercept=1)
 
-print(mod.fit_report())
+print mod
+
+for k, v in pars.items():
+    print k, v
+
+result = mod.fit(y, pars, x=x)
+
+print(result.fit_report())
 
 plt.plot(x, y,         'bo')
 plt.plot(x, result.init_fit, 'k--')

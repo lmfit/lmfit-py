@@ -9,10 +9,11 @@ fundamental to the lmfit approach to optimization.   Most real use cases
 will use the :class:`Parameters` class, which provides an (ordered)
 dictionary of :class:`Parameter` objects.
 
-.. module:: Parameter
 
 The :class:`Parameter` class
 ========================================
+
+.. module:: Parameter
 
 .. class:: Parameter(name=None[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
 
@@ -53,6 +54,43 @@ The :attr:`expr` attribute can contain a mathematical expression that will
 be used to compute the value for the Parameter at each step in the fit.
 See :ref:`constraints_chapter` for more details and examples of this
 feature.
+
+.. method:: set(value=None[, vary=None[, min=None[, max=None[, expr=None]]]])
+
+   set or update a Parameters value or other attributes.
+
+   :param name:  parameter name
+   :param value: the numerical value for the parameter
+   :param vary:  whether to vary the parameter or not.
+   :param min:   lower bound for value
+   :param max:   upper bound for value
+   :param expr:  mathematical expression to use to evaluate value during fit.
+
+   Each parameter has a default value of ``None``, and will be set only if
+   the provided value is not ``None``.   You can use this to update some
+   Parameter attribute without affecting others, for example::
+
+       p1 = Parameter('a', value=2.0)
+       p2 = Parameter('b', value=0.0)
+       p1.set(min=0)
+       p2.set(vary=False)
+
+   to set a lower bound, or to set a Parameter as have a fixed value.
+
+   Note that to use this approach to lift a lower or upper bound, doing::
+
+       p1.set(min=0)
+       .....
+       # now lift the lower bound
+       p1.set(min=None)   # won't work!  lower bound NOT changed
+
+   won't work -- this will not change the current lower bound.  Instead
+   you'll have to use ``np.inf`` to remove a lower or upper bound::
+
+       # now lift the lower bound
+       p1.set(min=-np.inf)   # will work!
+
+
 
 
 .. module:: Parameters
@@ -104,15 +142,14 @@ The :class:`Parameters` class
                 ('wid2',  None, False, None, None, '2*wid1/3'))
 
 
-
 .. method:: valuesdict(self)
 
    return an ordered dictionary of name:value pairs for each Parameter.
-        
+
    This is distinct from the Parameters itself, as it has values of
    the Parameeter values, not the full Parameter object.
 
-   This can be a very convenient way to get Paramater values in a objective
+   This can be a very convenient way to get Parameter values in a objective
    function.
 
 
@@ -132,7 +169,7 @@ which would make the objective function ``fcn2min`` above look like::
     def fcn2min(params, x, data):
         """ model decaying sine wave, subtract data"""
         v = params.valuesdict()
-    
+
         model = v['amp'] * np.sin(x * v['omega'] + v['shift']) * np.exp(-x*x*v['decay'])
         return model - data
 
