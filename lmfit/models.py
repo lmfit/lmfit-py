@@ -276,7 +276,7 @@ class PowerLawModel(Model):
 
     def guess(self, data, x=None, **kwargs):
         try:
-            expon, amp = np.polyfit(log(x+1.e-14), log(data+1.e-14), 1)
+            expon, amp = np.polyfit(np.log(x+1.e-14), np.log(data+1.e-14), 1)
         except:
             expon, amp = 1, np.log(abs(max(data)+1.e-9))
 
