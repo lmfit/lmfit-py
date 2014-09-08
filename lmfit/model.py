@@ -130,6 +130,19 @@ class Model(object):
         self._prefix = value
         self._parse_params()
 
+    @property
+    def param_names(self):
+        if self.is_composite():
+            return self._param_names_from_components()
+        else:
+            return self._param_names
+
+    def _param_names_from_components(self):
+        param_names = set()
+        for sub_model in self.components:
+            param_names |= sub_model.param_names
+        return param_names
+
     def is_composite(self):
         return len(self.components) > 0
 
@@ -203,7 +216,7 @@ class Model(object):
                 arg in self._forbidden_args):
                 raise ValueError(self._invalid_par % (arg, fname))
 
-        self.param_names = set(names)
+        self._param_names = set(names)
 
     def set_param_hint(self, name, **kwargs):
         """set hints for parameter, including optional bounds
@@ -286,8 +299,6 @@ class Model(object):
                 for item in self._hint_names:
                     if item in  hint:
                         setattr(par, item, hint[item])
-                # Add the new parameter to the self.param_names
-                self.param_names.add(name)
                 if verbose: print( ' - Adding parameter "%s"' % name)
         return params
 
@@ -470,13 +481,11 @@ class Model(object):
         if len(self.components) > 0:
             # If the model is already composite just add other as component
             self.components.append(other)
-            self.param_names |= other.param_names
             return self
         else:
             # make new composite Model, add self and other as components
             new = Model(func=None)
             new.components = [self, other]
-            new.param_names = set(self.param_names | other.param_names)
             # we assume that all the sub-models have the same independent vars
             new.independent_vars = self.independent_vars[:]
             return new
