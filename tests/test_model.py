@@ -12,6 +12,12 @@ def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03,
     for param_name, value in desired.items():
          assert_allclose(actual[param_name], value, rtol, atol, err_msg, verbose)
 
+def _skip_if_no_pandas():
+    try:
+        import pandas
+    except ImportError:
+        raise nose.SkipTest("Skipping tests that require pandas.")
+
 
 class CommonTests(object):
     # to be subclassed for testing predefined models
@@ -24,10 +30,14 @@ class CommonTests(object):
             args = self.args
         except AttributeError:
             self.model = self.model_constructor()
+            self.model_drop = self.model_constructor(missing='drop')
+            self.model_raise = self.model_constructor(missing='raise')
             self.model_explicit_var = self.model_constructor(['x'])
             func = self.model.func
         else:
             self.model = self.model_constructor(*args)
+            self.model_drop = self.model_constructor(*args, missing='drop')
+            self.model_raise = self.model_constructor(*args, missing='raise')
             self.model_explicit_var = self.model_constructor(
                 *args, independent_vars=['x'])
             func = self.model.func
@@ -104,6 +114,29 @@ class CommonTests(object):
         # Check that the independent variable is respected.
         short_eval = result.eval(x=np.array([0, 1, 2]), **result.values)
         self.assertEqual(len(short_eval), 3)
+
+    def test_data_alignment(self):
+        _skip_if_no_pandas()
+        from pandas import Series
+
+        # Align data and indep var of different lengths using pandas index. 
+        data = Series(self.data.copy()).iloc[10:-10]
+        x = Series(self.x.copy())
+
+        model = self.model
+        params = model.make_params(**self.guess())
+        result = model.fit(data, params, x=x)
+        result = model.fit(data, params, x=x)
+        assert_results_close(result.values, self.true_values())
+
+        # Skip over missing (NaN) values, aligning via pandas index.
+        data.iloc[500:510] = np.nan
+        result = self.model_drop.fit(data, params, x=x)
+        assert_results_close(result.values, self.true_values())
+
+        # Raise if any NaN values are present.
+        raises = lambda: self.model_raise.fit(data, params, x=x)
+        self.assertRaises(ValueError, raises)
 
     def check_skip_independent_vars(self):
         # to be overridden for models that do not accept indep vars
