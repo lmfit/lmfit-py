@@ -4,16 +4,16 @@
 :class:`Parameter`  and :class:`Parameters`
 ================================================
 
-This chapter describes :class:`Parameter` objects, which are
-fundamental to the lmfit approach to optimization.   Most real use cases
-will use the :class:`Parameters` class, which provides an (ordered)
-dictionary of :class:`Parameter` objects.
+This chapter describes :class:`Parameter` objects which are fundamental to
+the lmfit approach to optimization.  A :class:`Parameter` contains the
+value adjusted in the optimization as well as several other properties that
+control what that value is.  Most real use cases will use more than 1
+:class:`Parameter`, and so use the :class:`Parameters` class, which
+provides an ordered dictionary of :class:`Parameter` objects.
 
 
 The :class:`Parameter` class
 ========================================
-
-.. module:: Parameter
 
 .. class:: Parameter(name=None[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
 
@@ -23,7 +23,7 @@ The :class:`Parameter` class
    :type name: ``None`` or string -- will be overwritten during fit if ``None``.
    :param value: the numerical value for the parameter
    :param vary:  whether to vary the parameter or not.
-   :type vary:  boolean (``True``/``False``)
+   :type vary:  boolean (``True``/``False``) [default ``True``]
    :param min:  lower bound for value (``None`` = no lower bound).
    :param max:  upper bound for value (``None`` = no upper bound).
    :param expr:  mathematical expression to use to evaluate value during fit.
@@ -32,9 +32,10 @@ The :class:`Parameter` class
 
 Each of these inputs is turned into an attribute of the same name.
 
-After a fit, a Parameter for a fitted variable (ie with vary = ``True``)
-will have the :attr:`value` attribute holding the best-fit value, and may
-(depending on the success of the fit) have obtain additional attributes.
+After a fit, a Parameter for a fitted variable (that is with vary =
+``True``) will have the :attr:`value` attribute holding the best-fit value.
+Depending on the success of the fit and fitting algorithm used, it may also 
+have attributes :attr:`stderr` and :attr:`correl`.
 
 .. attribute:: stderr
 
@@ -47,8 +48,8 @@ will have the :attr:`value` attribute holding the best-fit value, and may
 
    {'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}
 
-For details of the use of the bounds :attr:`min` and :attr:`max`,
-see :ref:`bounds_chapter`.
+See :ref:`bounds_chapter` for details on the math used to implement the
+bounds with :attr:`min` and :attr:`max`.
 
 The :attr:`expr` attribute can contain a mathematical expression that will
 be used to compute the value for the Parameter at each step in the fit.
@@ -66,9 +67,9 @@ feature.
    :param max:   upper bound for value
    :param expr:  mathematical expression to use to evaluate value during fit.
 
-   Each parameter has a default value of ``None``, and will be set only if
-   the provided value is not ``None``.   You can use this to update some
-   Parameter attribute without affecting others, for example::
+   Each argument of :meth:`set` has a default value of ``None``, and will
+   be set only if the provided value is not ``None``.  You can use this to
+   update some Parameter attribute without affecting others, for example::
 
        p1 = Parameter('a', value=2.0)
        p2 = Parameter('b', value=0.0)
@@ -91,10 +92,6 @@ feature.
        p1.set(min=-np.inf)   # will work!
 
 
-
-
-.. module:: Parameters
-
 The :class:`Parameters` class
 ========================================
 
@@ -110,11 +107,12 @@ The :class:`Parameters` class
    2. values must be valid :class:`Parameter` objects.
 
 
-   Two methods for provided for convenience of initializing Parameters.
+   Two methods are for provided for convenient initialization of a :class:`Parameters`,
+   and one for extracting :class:`Parameter` values into a plain dictionary.
 
 .. method:: add(name[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
 
-   add a named parameter.  This simply creates a :class:`Parameter`
+   add a named parameter.  This creates a :class:`Parameter`
    object associated with the key `name`, with optional arguments
    passed to :class:`Parameter`::
 
@@ -128,9 +126,9 @@ The :class:`Parameters` class
 
         name, value, vary, min, max, expr
 
-   That is, this method is somewhat rigid and verbose (no default values),
-   but can be useful when initially defining a parameter list so that it
-   looks table-like::
+   This method is somewhat rigid and verbose (no default values), but can
+   be useful when initially defining a parameter list so that it looks
+   table-like::
 
      p = Parameters()
      #           (Name,  Value,  Vary,   Min,  Max,  Expr)
@@ -144,20 +142,20 @@ The :class:`Parameters` class
 
 .. method:: valuesdict(self)
 
-   return an ordered dictionary of name:value pairs for each Parameter.
+   return an ordered dictionary of name:value pairs containing the
+   :attr:`name` and :attr:`value` of a Parameter.
 
-   This is distinct from the Parameters itself, as it has values of
-   the Parameeter values, not the full Parameter object.
-
-   This can be a very convenient way to get Parameter values in a objective
+   This is distinct from the :class:`Parameters` itself, as the dictionary
+   values are not :class:`Parameeter` objects, just the :attr:`value`.
+   This can be a very convenient way to get updated values in a objective
    function.
 
 
 Simple Example
 ==================
 
-Putting it all together, a simple example of using a dictionary of
-:class:`Parameter` objects and :func:`minimize` might look like this:
+Using :class:`Parameters`` and :func:`minimize` function (discussed in the
+next chapter) might look like this:
 
 .. literalinclude:: ../examples/doc_basic.py
 
@@ -174,5 +172,3 @@ which would make the objective function ``fcn2min`` above look like::
         return model - data
 
 The results are identical, and the difference is a stylisic choice.
-
-

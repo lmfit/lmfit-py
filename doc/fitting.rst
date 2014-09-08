@@ -4,30 +4,31 @@
 Performing Fits, Analyzing Outputs
 =======================================
 
-As shown in the introduction, a simple fit can be performed with
-the :func:`minimize` function.    For more sophisticated modeling,
-the :class:`Minimizer` class can be used to gain a bit more control,
-especially when using complicated constraints.
+As shown in the previous chapter, a simple fit can be performed with the
+:func:`minimize` function.  For more sophisticated modeling, the
+:class:`Minimizer` class can be used to gain a bit more control, especially
+when using complicated constraints.
 
 
 The :func:`minimize` function
 ===============================
 
-The minimize function takes a function to minimize, a dictionary of
-:class:`Parameter` , and several optional arguments.    See
-:ref:`fit-func-label` for details on writing the function to minimize.
+The minimize function takes a objective function (the function that
+calculates the array to be minimized), a :class:`Parameters` ordered
+dictionary, and several optional arguments.  See :ref:`fit-func-label` for
+details on writing the function to minimize.
 
 .. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **leastsq_kws]]]]]])
 
-   find values for the params so that the sum-of-squares of the returned array
-   from function is minimized.
+   find values for the ``params`` so that the sum-of-squares of the array returned 
+   from ``function`` is minimized.
 
    :param function:  function to return fit residual.  See :ref:`fit-func-label` for details.
    :type  function:  callable.
-   :param params:  a dictionary of Parameters.  Keywords must be strings
+   :param params:  a :class:`Parameters` dictionary.  Keywords must be strings
                    that match ``[a-z_][a-z0-9_]*`` and is not a python
                    reserved word.  Each value must be :class:`Parameter`.
-   :type  params:  dict
+   :type  params:  dict or :class:`Parameters`.
    :param args:  arguments tuple to pass to the residual function as  positional arguments.
    :type  args:  tuple
    :param kws:   dictionary to pass to the residual function as keyword arguments.
@@ -53,10 +54,10 @@ The minimize function takes a function to minimize, a dictionary of
 Writing a Fitting Function
 ===============================
 
-An important component of a fit is writing a function to be minimized in
-the least-squares sense.   Since this function will be called by other
+An important component of a fit is writing a function to be minimized --
+the *objective function*.  Since this function will be called by other
 routines, there are fairly stringent requirements for its call signature
-and return value.   In principle, your function can be any python callable,
+and return value.  In principle, your function can be any python callable,
 but it must look like this:
 
 .. function:: func(params, *args, **kws):
@@ -85,16 +86,17 @@ method, effectively doing a least-squares optimization of the return values.
 
 
 Since the function will be passed in a dictionary of :class:`Parameters`, it is advisable
-to unpack these to get numerical values at the top of the function.  A simple example
-would look like::
+to unpack these to get numerical values at the top of the function.  A
+simple way to do this is with :meth:`Parameters.valuesdict`, as with::
+
 
     def residual(pars, x, data=None, eps=None):
         # unpack parameters:
         #  extract .value attribute for each parameter
-        amp = pars['amp'].value
-        period = pars['period'].value
-        shift = pars['shift'].value
-        decay = pars['decay'].value
+	parvals = pars.valuesdict()
+        period = parvals['period']
+        shift = parvals['shift']
+        decay = parvals['decay']
 
         if abs(shift) > pi/2:
             shift = shift - sign(shift)*pi
@@ -102,7 +104,7 @@ would look like::
         if abs(period) < 1.e-10:
             period = sign(period)*1.e-10
 
-        model = amp * sin(shift + x/period) * exp(-x*x*decay*decay)
+        model = parvals['amp'] * sin(shift + x/period) * exp(-x*x*decay*decay)
 
         if data is None:
             return model
@@ -110,19 +112,22 @@ would look like::
             return (model - data)
         return (model - data)/eps
 
-In this example, ``x`` is a positional (required) argument, while the ``data``
-array is actually optional (so that the function returns the model calculation
-if the data is neglected).   Also note that the model calculation will divide
-``x`` by the varied value of the 'period' Parameter.  It might be wise to
-make sure this parameter cannot be 0.   It would be possible to use the bounds
-on the :class:`Parameter` to do this::
+In this example, ``x`` is a positional (required) argument, while the
+``data`` array is actually optional (so that the function returns the model
+calculation if the data is neglected).  Also note that the model
+calculation will divide ``x`` by the value of the 'period' Parameter.  It
+might be wise to ensure this parameter cannot be 0.  It would be possible
+to use the bounds on the :class:`Parameter` to do this::
 
     params['period'] = Parameter(value=2, min=1.e-10)
 
-but might be wiser to put this directly in the function with::
+but putting this directly in the function with::
 
         if abs(period) < 1.e-10:
             period = sign(period)*1.e-10
+
+is also a reasonable approach.   Similarly, one could place bounds on the
+``decay`` parameter to take values only between ``-pi/2`` and ``pi/2``.
 
 ..  _fit-methods-label:
 
@@ -137,16 +142,10 @@ being fast, and well-behaved for most curve-fitting needs, and making it
 easy to estimate uncertainties for and correlations between pairs of fit
 variables, as discussed in :ref:`fit-results-label`.
 
-Alternative algorithms can also be used. These include `simulated annealing
-<http://en.wikipedia.org/wiki/Simulated_annealing>`_ which promises a
-better ability to avoid local minima, and `BFGS
-<http://en.wikipedia.org/wiki/Limited-memory_BFGS>`_, which is a
-modification of the quasi-Newton method.
-
-To select which of these algorithms to use, use the ``method`` keyword to the
-:func:`minimize` function or use the corresponding method name from the
-:class:`Minimizer` class as listed in the
-:ref:`Table of Supported Fitting Methods <fit-methods-table>`.
+Alternative algorithms can also be used by providing the ``method`` keyword
+to the :func:`minimize` function or use the corresponding method name from
+the :class:`Minimizer` class as listed in the :ref:`Table of Supported
+Fitting Methods <fit-methods-table>`.
 
 .. _fit-methods-table:
 
@@ -162,8 +161,6 @@ To select which of these algorithms to use, use the ``method`` keyword to the
  +-----------------------+--------------------+---------------------+-------------------------+
  | L-BFGS-B              |  ``lbfgsb``        | :meth:`lbfgsb`      | ``L-BFGS-B``            |
  +-----------------------+--------------------+---------------------+-------------------------+
- | Simulated Annealing   |  ``anneal``        | :meth:`anneal`      | ``Anneal``              |
- +-----------------------+--------------------+---------------------+-------------------------+
  | Powell                |  ``powell``        |                     | ``Powell``              |
  +-----------------------+--------------------+---------------------+-------------------------+
  | Conjugate Gradient    |  ``cg``            |                     | ``CG``                  |
@@ -172,13 +169,17 @@ To select which of these algorithms to use, use the ``method`` keyword to the
  +-----------------------+--------------------+---------------------+-------------------------+
  | COBYLA                |  ``cobyla``        |                     |  ``COBYLA``             |
  +-----------------------+--------------------+---------------------+-------------------------+
+ | COBYLA                |  ``cobyla``        |                     |  ``COBYLA``             |
+ +-----------------------+--------------------+---------------------+-------------------------+
+ | Truncated Newton      |  ``tnc``           |                     |  ``TNC``                |
+ +-----------------------+--------------------+---------------------+-------------------------+
+ | Trust Newton-CGn      |  ``trust-ncg``     |                     |  ``trust-ncg``          |
+ +-----------------------+--------------------+---------------------+-------------------------+
+ | Dogleg                |  ``dogleg``        |                     |  ``dogleg``             |
+ +-----------------------+--------------------+---------------------+-------------------------+
  | Sequential Linear     |  ``slsqp``         |                     |  ``SLSQP``              |
  | Squares Programming   |                    |                     |                         |
  +-----------------------+--------------------+---------------------+-------------------------+
-
-.. note::
-
-   Use of :meth:`scipy.optimize.minimize` requires scipy 0.11 or higher.
 
 .. note::
 
@@ -189,14 +190,11 @@ To select which of these algorithms to use, use the ``method`` keyword to the
 
 .. warning::
 
-  The Levenberg-Marquardt method is *by far* the most tested fit method,
-  and much of this documentation assumes that this is the method used.  For
-  example, many of the fit statistics and estimates for uncertainties in
-  parameters discussed in :ref:`fit-results-label` are done only for the
-  ``leastsq`` method.
+  Much of this documentation assumes that the Levenberg-Marquardt method is
+  the method used.  Many of the fit statistics and estimates for
+  uncertainties in parameters discussed in :ref:`fit-results-label` are
+  done only for this method.
 
-In particular, the simulated annealing method appears to not work
-correctly.... understanding this is on the ToDo list.
 
 ..  _fit-results-label:
 
@@ -427,53 +425,21 @@ Getting and Printing Fit Reports
 
    print text of report from :func:`fit_report`.
 
-An example fit with an error report::
 
-    p_true = Parameters()
-    p_true.add('amp', value=14.0)
-    p_true.add('period', value=5.33)
-    p_true.add('shift', value=0.123)
-    p_true.add('decay', value=0.010)
+An example fit with report would be::
 
-    def residual(pars, x, data=None):
-        amp = pars['amp'].value
-        per = pars['period'].value
-        shift = pars['shift'].value
-        decay = pars['decay'].value
+.. literalinclude:: ../examples/doc_withreport.py
 
-        if abs(shift) > pi/2:
-            shift = shift - sign(shift)*pi
-        model = amp*sin(shift + x/per) * exp(-x*x*decay*decay)
-        if data is None:
-            return model
-        return (model - data)
+which would write out::
 
-    n = 2500
-    xmin = 0.
-    xmax = 250.0
-    noise = random.normal(scale=0.7215, size=n)
-    x     = linspace(xmin, xmax, n)
-    data  = residual(p_true, x) + noise
-
-    fit_params = Parameters()
-    fit_params.add('amp', value=13.0)
-    fit_params.add('period', value=2)
-    fit_params.add('shift', value=0.0)
-    fit_params.add('decay', value=0.02)
-
-    out = minimize(residual, fit_params, args=(x,), kws={'data':data})
-
-    fit = residual(fit_params, x)
-    report_errors(fit_params)
-
-would generate this report::
 
     [[Variables]]
-         amp:        13.969724 +/- 0.050145 (0.36%) initial =  13.000000
-         decay:      0.009990 +/- 0.000042 (0.42%) initial =  0.020000
-         period:     5.331423 +/- 0.002788 (0.05%) initial =  2.000000
-         shift:      0.125333 +/- 0.004938 (3.94%) initial =  0.000000
+        amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
+        decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
+        period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
+        shift:    0.16203677 +/- 0.014056 (8.67%) (init= 0)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(period, shift)             =  0.800
-        C(amp, decay)                =  0.576
+        C(period, shift)             =  0.797 
+        C(amp, decay)                =  0.582 
+
 

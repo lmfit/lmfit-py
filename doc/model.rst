@@ -163,15 +163,15 @@ here.  We'll discuss these below, but for now we've shown that at least the
 wrapping of a simple model function for curve fitting is easy.
 
 
+
 The :class:`Model` class
 =======================================
 
-.. module:: model
 
 The :class:`Model` class provides a general way to wrap a pre-defined
-function as a fitting model.
+function as a fittmodel.
 
-.. class:: Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, components=None]]]]])
+.. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, components=None]]]]])
 
     Create a model based on the user-supplied function.  This uses
     introspection to automatically converting argument names of the
