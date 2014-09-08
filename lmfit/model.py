@@ -94,7 +94,7 @@ class Model(object):
         self._name = name
 
     def _reprstring(self, long=False):
-        if not self.is_composite():
+        if not self.is_composite:
             # base model
             opts = []
             if len(self._prefix) > 0:
@@ -133,7 +133,7 @@ class Model(object):
 
     @property
     def param_names(self):
-        if self.is_composite():
+        if self.is_composite:
             return self._compute_composite_param_names()
         else:
             return self._param_names
@@ -145,6 +145,7 @@ class Model(object):
         param_names |= self._param_names
         return param_names
 
+    @property
     def is_composite(self):
         return len(self.components) > 0
 
@@ -251,7 +252,7 @@ class Model(object):
         if 'verbose' in kwargs:
             verbose = kwargs['verbose']
         params = Parameters()
-        if not self.is_composite():
+        if not self.is_composite:
             # base model: build Parameters from scratch
             for name in self.param_names:
                 par = Parameter(name=name)
