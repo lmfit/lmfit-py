@@ -151,6 +151,12 @@ class Model(object):
     def __repr__(self):
         return  "<lmfit.Model: %s>" % (self.name)
 
+    def copy(self):
+        """Return a completely independent copy of the whole model.
+        
+        This is just thin wrapper to the built-in function copy.deepcopy()"""
+        return deepcopy(self)
+
     def _parse_params(self):
         "build params from function arguments"
         if self.func is None:
