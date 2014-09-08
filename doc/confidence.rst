@@ -45,7 +45,7 @@ First we create an example problem::
     >>> x = np.linspace(0.3,10,100)
     >>> y = 1/(0.1*x)+2+0.1*np.random.randn(x.size)
     >>> p = lmfit.Parameters()
-    >>> p.add_many(('a',0.1),('b',1))
+    >>> p.add_many(('a', 0.1), ('b', 1))
     >>> def residual(p):
     ...    a = p['a'].value
     ...    b = p['b'].value
@@ -58,14 +58,12 @@ starting point::
 
 
     >>> mi = lmfit.minimize(residual, p)
-    >>> mi.leastsq()
     >>> lmfit.printfuncs.report_fit(mi.params)
-    [[Variables]]
-         a:     0.09978076 +/- 0.0002112132 (0.21%) initial =  0.09978076
-         b:     1.992907 +/- 0.0132743 (0.67%) initial =  1.992907
+    [Variables]]
+        a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
+        b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(a, b)                      =  0.601
-
+        C(a, b)                      =  0.601 
 
 Now it is just a simple function call to calculate the confidence
 intervals::
@@ -73,8 +71,8 @@ intervals::
     >>> ci = lmfit.conf_interval(mi)
     >>> lmfit.printfuncs.report_ci(ci)
          99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%
-    a   0.09960   0.09981   0.10000   0.10019   0.10039   0.10058   0.10079
-    b   1.97035   1.98326   1.99544   2.00008   2.01936   2.03154   2.04445
+    a   0.09886   0.09905   0.09925   0.09944   0.09963   0.09982   0.10003
+    b   1.94751   1.96049   1.97274   1.97741   1.99680   2.00905   2.02203
 
 This shows the best-fit values for the parameters in the `0.00%` column,
 and parameter values that are at the varying confidence levels given by
@@ -90,24 +88,38 @@ An advanced example
 -------------------
 
 Now we look at a problem where calculating the error from approximated
-covariance can lead to misleading results::
+covariance can lead to misleading result -- two decaying exponentials.  In
+fact such a problem is particularly hard for the Levenberg-Marquardt
+method, so we fitst estimate the results using the slower but robust
+Nelder-Mead  method, and *then* use Levenberg-Marquardt to estimate the
+uncertainties and correlations::
 
-    >>> y = 3*np.exp(-x/2.)-5*np.exp(-x/10.)+0.2*np.random.randn(x.size)
+
+    >>> x = np.linspace(1, 10, 250)
+    >>> np.random.seed(0)
+    >>> y = 3.0*np.exp(-x/2) -5.0*np.exp(-(x-0.1)/10.) + 0.1*np.random.randn(len(x))
+    >>> 
     >>> p = lmfit.Parameters()
-    >>> p.add_many(('a1', 5), ('a2', -5), ('t1', 2), ('t2', 5))
+    >>> p.add_many(('a1', 4.), ('a2', 4.), ('t1', 3.), ('t2', 3.))
+    >>> 
     >>> def residual(p):
-    ...    a1, a2, t1, t2 = [i.value for i in p.values()]
-    ...    return a1*np.exp(-x/t1)+a2*np.exp(-x/t2)-y
-
+    ...    v = p.valuesdict()
+    ...    return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1)/v['t2'])-y
+    >>> 
+    >>> # first solve with Nelder-Mead
+    >>> mi = lmfit.minimize(residual, p, method='Nelder')
+    >>> # then solve with Levenberg-Marquardt
     >>> mi = lmfit.minimize(residual, p)
-    >>> mi.leastsq()
-    >>> lmfit.printfuncs.report_fit(mi.params, show_correl=False)
+    >>> 
+    >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
 
     [[Variables]]
-         a1:     2.611013 +/- 0.3279648 (12.56%) initial =  2.611013
-         a2:    -4.512928 +/- 0.3991997 (8.85%) initial = -4.512928
-         t1:     1.569477 +/- 0.3345078 (21.31%) initial =  1.569477
-         t2:     10.96137 +/- 1.263874 (11.53%) initial =  10.96137
+        a1:   2.98622120 +/- 0.148671 (4.98%) (init= 2.986237)
+        a2:  -4.33526327 +/- 0.115275 (2.66%) (init=-4.335256)
+        t1:   1.30994233 +/- 0.131211 (10.02%) (init= 1.309932)
+        t2:   11.8240350 +/- 0.463164 (3.92%) (init= 11.82408)
+    [[Correlations]] (unreported correlations are <  0.500)
+        C(a2, t2)                    =  0.987 
 
 
 Again we call :func:`conf_interval`, this time with tracing and only for 1-
@@ -115,17 +127,19 @@ and 2 :math:`\sigma`::
 
     >>> ci, trace = lmfit.conf_interval(mi, sigmas=[0.68,0.95], trace=True, verbose=False)
     >>> lmfit.printfuncs.report_ci(ci)
+
           95.00%    68.00%     0.00%    68.00%    95.00%
-    a1   2.11679   2.33696   2.61101   3.06631   4.28694
-    a2  -6.39449  -5.05982  -4.20173  -4.19528  -3.97850
-    t2   8.00414   9.62688  12.17331  12.17886  13.34857
-    t1   1.07009   1.28482   1.37407   1.97509   2.64341
+    a1   2.71850   2.84525   2.98622   3.14874   3.34076
+    a2  -4.63180  -4.46663  -4.35429  -4.22883  -4.14178
+    t2  10.82699  11.33865  11.78219  12.28195  12.71094
+    t1   1.08014   1.18566   1.38044   1.45566   1.62579
+
 
 Comparing these two different estimates, we see that the estimate for `a1`
 is reasonably well approximated from the covariance matrix, but the
-estimates for `a2`, `t1`, and `t2` are very asymmetric and that going from
-1 :math:`\sigma` (68% confidence) to 2 :math:`\sigma` (95% confidence) is
-not very predictable.
+estimates for `a2` and especially for `t1`, and `t2` are very asymmetric
+and that going from 1 :math:`\sigma` (68% confidence) to 2 :math:`\sigma`
+(95% confidence) is not very predictable.
 
 Now let's plot a confidence region::
 
