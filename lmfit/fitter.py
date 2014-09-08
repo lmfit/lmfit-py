@@ -1,7 +1,8 @@
 from copy import deepcopy
 from itertools import chain
 
-import numpy as np
+from .model import Model
+from .models import ExponentialModel  # arbitrary default for menu
 
 try:
     import IPython
@@ -21,7 +22,7 @@ def build_param_widget(p):
     return param_widget
 
 class Fitter(object):
-    """This an interactive container for fitting a Model to particular data.
+    """This an interactive container for fitting models to particular data.
 
     It maintains the attributes `current_params` and `current_result`. When
     its fit() method is called, the best fit becomes the new `current_params`.
@@ -34,14 +35,22 @@ class Fitter(object):
     If IPython is available, it uses the IPython notebook's rich display
     to fit data interactively in a web-based GUI. The Parameters are
     represented in a web-based form that is kept in sync with `current_params`. 
+    All subclasses to Model, including user-defined ones, are shown in a
+    drop-down menu.
+
     Clicking the "Fit" button updates a plot, as above, and updates the
     Parameters in the form to reflect the best fit.
     
     Examples
     --------
-    >>> fitter = Fitter(model, data, x=x)
+    >>> fitter = Fitter(data, model=SomeModel, x=x)
     # In the IPython notebook, this displays a form with text
     # fields for each Parameter in the model and a "Fit" button.
+
+    >>> fitter.model
+    # This property can be changed, to try different models on the same
+    # data with the same independent vars. 
+    # (This is especially handy in the notebook.)
     
     >>> fitter.current_params
     # This copy of the model's Parameters is updated after each fit.
@@ -58,26 +67,60 @@ class Fitter(object):
     # This is the result of the latest fit. It contain the usual
     # copies of the Parameters, in the attributes params and init_params.
     """
-    def __init__(self, model, data, **kwargs):
-        self.model = model
+    def __init__(self, data, model=None, **kwargs):
         self.data = data
         self.kwargs = kwargs
-        self.current_result = None
-        self._current_params = None
         if has_ipython:
+            # Dropdown menu of all subclasses of Model, incl. user-defined.
+            self.models_menu = widgets.Dropdown()
+            all_models = {m.__name__: m for m in Model.__subclasses__()}
+            self.models_menu.values = all_models
+            self.models_menu.on_trait_change(self._on_model_value_change, 'value')
+            # Button to trigger fitting.
             self.fit_button = widgets.Button(description='Fit')
             self.fit_button.on_click(self._on_button_click)
+            # Parameter widgets are (re-)built when the model is (re-)set.
+        if model is None:
+            model = ExponentialModel
+        self.model = model
+
+    def _on_model_value_change(self, name, value):
+        self.model = value
+
+    @property
+    def model(self):
+        return self._model
+
+    @model.setter
+    def model(self, value):
+        first_run = not hasattr(self, 'param_widgets')
+        if not first_run:
+            # Remove all Parameter widgets, and replace them with widgets
+            # for the new model.
+            for pw in self.param_widgets:
+                pw.close()
+        if callable(value):
+            model = value()
+        else:
+            model = value
+        self._model = model
+        self.current_result = None
+        self._current_params = model.make_params()
+        if has_ipython:
+            self.models_menu.value = value 
             self.param_widgets = [build_param_widget(p)
-                                  for _, p in self.current_params.items()]
-        
+                                  for _, p in self._current_params.items()]
+            if not first_run:
+                for pw in self.param_widgets:
+                    display(pw)
+
     @property
     def current_params(self):
         """Each time fit() is called, these will be updated to reflect
         the latest best params. They will be used as the initial guess
         for the next fit, unless overridden by arguments to fit()."""
-        if self._current_params is None:
-            self._current_params = self.model.make_params()
-        elif has_ipython:
+        if has_ipython:
+            # Sync current_params with widget.
             for pw in self.param_widgets:
                 self._current_params[pw.description].value = pw.value
         return self._current_params
@@ -127,7 +170,8 @@ class Fitter(object):
             ax.plot(indep_var, result.best_fit, color='red')
             
     def _repr_html_(self):
+        display(self.models_menu)
+        display(self.fit_button)
         for pw in self.param_widgets:
             display(pw)
-        display(self.fit_button)
         self.plot()
