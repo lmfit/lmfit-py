@@ -426,7 +426,7 @@ Getting and Printing Fit Reports
    print text of report from :func:`fit_report`.
 
 
-An example fit with report would be::
+An example fit with report would be
 
 .. literalinclude:: ../examples/doc_withreport.py
 
