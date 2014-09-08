@@ -32,6 +32,33 @@ def getfloat_attr(obj, attr, fmt='%.3f'):
     else:
         return repr(val)
 
+def gformat(val, length=11):
+    """format a number with '%g'-like format, except that
+    the return will be length ``length`` (default=12)
+    and have at least length-6 significant digits
+    """
+    length = max(length, 7)
+    fmt = '{: .%ig}' % (length-6)
+    if isinstance(val, int):
+        out = ('{: .%ig}' % (length-2)).format(val)
+        if len(out) > length:
+            out = fmt.format(val)
+    else:
+        out = fmt.format(val)
+    if len(out) < length:
+        if 'e' in out:
+            ie = out.find('e')
+            if '.' not in out[:ie]:
+                out = out[:ie] + '.' + out[ie:]
+            out = out.replace('e', '0'*(length-len(out))+'e')
+        else:
+            fmt = '{: .%ig}' % (length-1)
+            out = fmt.format(val)[:length]
+            if len(out) < length:
+                pad = '0' if '.' in  out else ' '
+                out += pad*(length-len(out))
+    return out
+
 CORREL_HEAD = '[[Correlations]] (unreported correlations are < % .3f)'
 
 def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
@@ -76,17 +103,18 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
         if modelpars is not None and name in modelpars:
             inval = '%s, model_value =% .7g' % (inval, modelpars[name].value)
         try:
-            sval = (('% .7g' % par.value)) #  + '0'*6)[:9]
+            sval = gformat(par.value)
         except (TypeError, ValueError):
             sval = 'Non Numeric Value?'
 
         if par.stderr is not None:
-            serr = ('%.5g' % (par.stderr)+'0'*6)[:7]
-            sval = '%s +/- %s' % (sval, serr)
+            serr = gformat(par.stderr, length=9)
+
             try:
-                sval = '%s (%.2f%%)' % (sval, abs(par.stderr/par.value)*100)
+                spercent = '({:.2%})'.format(abs(par.stderr/par.value))
             except ZeroDivisionError:
-                pass
+                spercent = ''
+            sval = '%s +/-%s %s' % (sval, serr, spercent)
 
         if par.vary:
             add("    %s %s %s" % (nout, sval, inval))
