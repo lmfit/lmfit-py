@@ -85,6 +85,7 @@ class Model(object):
         self.opts = kws
         self.result = None
         self.param_hints = {}
+        self._param_names = set()
         self._parse_params()
         if self.independent_vars is None:
             self.independent_vars = []
@@ -133,14 +134,15 @@ class Model(object):
     @property
     def param_names(self):
         if self.is_composite():
-            return self._param_names_from_components()
+            return self._compute_composite_param_names()
         else:
             return self._param_names
 
-    def _param_names_from_components(self):
+    def _compute_composite_param_names(self):
         param_names = set()
         for sub_model in self.components:
             param_names |= sub_model.param_names
+        param_names |= self._param_names
         return param_names
 
     def is_composite(self):
@@ -299,6 +301,8 @@ class Model(object):
                 for item in self._hint_names:
                     if item in  hint:
                         setattr(par, item, hint[item])
+                # Add the new parameter to the self.param_names
+                self._param_names.add(name)
                 if verbose: print( ' - Adding parameter "%s"' % name)
         return params
 
