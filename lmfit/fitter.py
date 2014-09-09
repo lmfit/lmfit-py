@@ -4,6 +4,11 @@ from itertools import chain
 from .model import Model
 from .models import ExponentialModel  # arbitrary default for menu
 
+from .asteval import Interpreter
+from .astutils import NameFinder
+from .minimizer import check_ast_errors
+
+
 try:
     import IPython
 except ImportError:
@@ -68,7 +73,7 @@ class Fitter(object):
     # copies of the Parameters, in the attributes params and init_params.
     """
     def __init__(self, data, model=None, **kwargs):
-        self.data = data
+        self._data = data
         self.kwargs = kwargs
         if has_ipython:
             # Dropdown menu of all subclasses of Model, incl. user-defined.
@@ -78,7 +83,12 @@ class Fitter(object):
             self.models_menu.on_trait_change(self._on_model_value_change, 'value')
             # Button to trigger fitting.
             self.fit_button = widgets.Button(description='Fit')
-            self.fit_button.on_click(self._on_button_click)
+            self.fit_button.on_click(self._on_fit_button_click)
+
+            # Button to trigger guessing.
+            self.guess_button = widgets.Button(description='Auto-Guess')
+            self.guess_button.on_click(self._on_guess_button_click)
+
             # Parameter widgets are (re-)built when the model is (re-)set.
         if model is None:
             model = ExponentialModel
@@ -87,6 +97,20 @@ class Fitter(object):
     def _on_model_value_change(self, name, value):
         self.model = value
 
+    def _on_fit_button_click(self, b):
+        self.fit()
+
+    def _on_guess_button_click(self, b):
+        self.guess()
+
+    @property
+    def data(self):
+        return self._data
+
+    @data.setter
+    def data(self, value):
+        self._data = value 
+        
     @property
     def model(self):
         return self._model
@@ -106,6 +130,11 @@ class Fitter(object):
         self._model = model
         self.current_result = None
         self._current_params = model.make_params()
+
+        # Use these to evaluate any Parameters that use expressions.
+        self.asteval = Interpreter()
+        self.namefinder = NameFinder()
+
         if has_ipython:
             self.models_menu.value = value 
             self.param_widgets = [build_param_widget(p)
@@ -113,6 +142,8 @@ class Fitter(object):
             if not first_run:
                 for pw in self.param_widgets:
                     display(pw)
+
+        self.guess()
 
     @property
     def current_params(self):
@@ -125,21 +156,77 @@ class Fitter(object):
                 self._current_params[pw.description].value = pw.value
         return self._current_params
             
-    def _update_param_widgets(self):
-        for pw in self.param_widgets:
-            pw.value = self._current_params[pw.description].value
-            
-    def _on_button_click(self, b):
-        self.fit()
-        
+    @current_params.setter
+    def current_params(self, value):
+        self._current_params = value
+        if has_ipython:
+            for pw in self.param_widgets:
+                pw.value = self._current_params[pw.description].value
+
+    def guess(self):
+        count_indep_vars = len(self.model.independent_vars)
+        guessing_disabled = False 
+        try:
+            if count_indep_vars == 0:
+                guess = self.model.guess(self._data)
+            elif count_indep_vars == 1:
+                key = self.model.independent_vars[0]
+                val = self.kwargs[key]
+                d = {key: val}
+                guess = self.model.guess(self._data, **d)
+        except NotImplementedError:
+            guessing_disabled = True 
+        self.guess_button.disabled = guessing_disabled
+
+        # Compute values for expression-based Parameters.
+        self.__assign_deps(guess)
+        for _, p in guess.items():
+            if p.value is None:
+                self.__update_paramval(guess, p.name)
+
+        self.current_params = guess
+
+    def __assign_deps(self, params):
+        # N.B. This does not use self.current_params but rather
+        # new Parameters that are being built by self.guess().
+        for name, par in params.items():
+            if par.expr is not None:
+                par.ast = self.asteval.parse(par.expr)
+                check_ast_errors(self.asteval.error)
+                par.deps = []
+                self.namefinder.names = []
+                self.namefinder.generic_visit(par.ast)
+                for symname in self.namefinder.names:
+                    if (symname in self.current_params and
+                        symname not in par.deps):
+                        par.deps.append(symname)
+                self.asteval.symtable[name] = par.value
+                if par.name is None:
+                    par.name = name
+
+    def __update_paramval(self, params, name):
+        # N.B. This does not use self.current_params but rather
+        # new Parameters that are being built by self.guess().
+        par = params[name]
+        if getattr(par, 'expr', None) is not None:
+            if getattr(par, 'ast', None) is None:
+                par.ast = self.asteval.parse(par.expr)
+            if par.deps is not None:
+                for dep in par.deps:
+                    self.__update_paramval(params, dep)
+            par.value = self.asteval.run(par.ast)
+            out = check_ast_errors(self.asteval.error)
+            if out is not None:
+                self.asteval.raise_exception(None)
+        self.asteval.symtable[name] = par.value
+
     def fit(self, *args, **kwargs):
         "Use current_params unless overridden by arguments passed here."
         guess = dict(self.current_params)
         guess.update(self.kwargs)  # from __init__, e.g. x=x
         guess.update(kwargs)
-        self.current_result = self.model.fit(self.data, *args, **guess) 
-        self._current_params = self.current_result.params
-        self._update_param_widgets()
+        self.current_result = self.model.fit(self._data, *args, **guess) 
+        self.current_params = self.current_result.params
         self.plot()
         
     def plot(self):
@@ -152,10 +239,10 @@ class Fitter(object):
         fig, ax = plt.subplots()
         count_indep_vars = len(self.model.independent_vars)
         if count_indep_vars == 0:
-            ax.plot(self.data)
+            ax.plot(self._data)
         elif count_indep_vars == 1:
             indep_var = self.kwargs[self.model.independent_vars[0]]
-            ax.plot(indep_var, self.data, marker='o', linestyle='none')
+            ax.plot(indep_var, self._data, marker='o', linestyle='none')
         else:
             raise NotImplementedError("Cannot plot models with more than one "
                                       "indepedent variable.")
@@ -172,6 +259,7 @@ class Fitter(object):
     def _repr_html_(self):
         display(self.models_menu)
         display(self.fit_button)
+        display(self.guess_button)
         for pw in self.param_widgets:
             display(pw)
         self.plot()
