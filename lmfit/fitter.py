@@ -1,9 +1,10 @@
 from copy import deepcopy
 from itertools import chain
 
+import numpy as np
+
 from .model import Model
 from .models import ExponentialModel  # arbitrary default for menu
-
 from .asteval import Interpreter
 from .astutils import NameFinder
 from .minimizer import check_ast_errors
@@ -19,12 +20,131 @@ else:
     from IPython.display import HTML, display, clear_output
     from IPython.utils.traitlets import link
 
-def build_param_widget(p):
-    if p.value is not None:
-        param_widget = widgets.FloatText(description=p.name, value=p.value, min=p.min, max=p.max)
-    else:
-        param_widget = widgets.FloatText(description=p.name, min=p.min, max=p.max)
-    return param_widget
+
+class ParameterWidgetGroup(object):
+    """Construct several widgets that together represent a Parameter.
+
+    This will only be used if IPython is available."""
+    def __init__(self, par):
+        self.par = par
+
+        self.value_text = widgets.FloatText(description=par.name,
+                                            min=self.par.min, max=self.par.max)
+        self.min_text = widgets.FloatText(description='min', max=self.par.max)
+        self.max_text = widgets.FloatText(description='max', min=self.par.min)
+        self.min_checkbox = widgets.Checkbox(description='min')
+        self.max_checkbox = widgets.Checkbox(description='max')
+        self.vary_checkbox = widgets.Checkbox(description='vary')
+
+        if par.value is not None:
+            self.value_text.value = self.par.value
+
+        min_unset = self.par.min is None or self.par.min == -np.inf
+        max_unset = self.par.max is None or self.par.max == np.inf
+        self.min_checkbox.value = not min_unset
+        self.min_text.visible = not min_unset
+        self.min_text.value = self.par.min
+        self.max_checkbox.value = not max_unset
+        self.max_text.visible = not max_unset
+        self.max_text.value = self.par.max
+        self.vary_checkbox.value = self.par.vary
+
+        self.value_text.on_trait_change(self._on_value_change, 'value')
+        self.min_text.on_trait_change(self._on_min_value_change, 'value')
+        self.max_text.on_trait_change(self._on_max_value_change, 'value')
+        self.min_checkbox.on_trait_change(self._on_min_checkbox_change, 'value')
+        self.max_checkbox.on_trait_change(self._on_max_checkbox_change, 'value')
+        self.vary_checkbox.on_trait_change(self._on_vary_change, 'value')
+
+    def _on_value_change(self, name, value):
+        self.par.value = value
+
+    def _on_min_checkbox_change(self, name, value):
+        self.min_text.visible = value
+        if value:
+            min_unset = self.par.min is None or self.par.min == -np.inf
+            self.min_text.value = -1 
+            self.par.min = self.min_text.value 
+            self.value_text.min = self.min_text.value
+        else:
+            self.par.min = None
+
+    def _on_max_checkbox_change(self, name, value):
+        self.max_text.visible = value
+        if value:
+            max_unset = self.par.max is None or self.par.max == np.inf
+            self.max_text.value = 1
+            self.par.max = self.max_text.value
+            self.value_text.max = self.max_text.value
+        else:
+            self.par.max = None
+
+    def _on_min_value_change(self, name, value):
+        self.par.min = value
+        self.value_text.min = value
+        self.max_text.min = value
+
+    def _on_max_value_change(self, name, value):
+        self.par.max = value
+        self.value_text.max = value
+        self.min_text.max = value
+
+    def _on_vary_change(self, name, value):
+        self.par.vary = value
+        self.value_text.disabled = not value
+
+    def close(self):
+        self.value_text.close()
+        self.min_text.close()
+        self.max_text.close()
+        self.vary_checkbox.close()
+        self.min_checkbox.close()
+        self.max_checkbox.close()
+
+    def _repr_html_(self):
+        box = widgets.Box()
+        box.children = [self.value_text, self.vary_checkbox, 
+                        self.min_text, self.min_checkbox,
+                        self.max_text, self.max_checkbox]
+        display(box)
+        box.add_class('hbox')
+
+    # Make it easy to set the widget attributes directly.
+    @property
+    def value(self):
+        return self.value_text.value
+
+    @value.setter
+    def value(self, value):
+        self.value_text.value = value
+
+    @property
+    def vary(self):
+        return self.vary_checkbox.value
+
+    @vary.setter
+    def vary(self, value):
+        self.vary_checkbox.value = value
+
+    @property
+    def min(self):
+        return self.min_text.value
+
+    @min.setter
+    def min(self, value):
+        self.min_text.value = value
+
+    @property
+    def max(self):
+        return self.max_text.value
+
+    @min.setter
+    def max(self, value):
+        self.max_text.value = value
+
+    @property
+    def name(self):
+       return self.par.name
 
 class Fitter(object):
     """This an interactive container for fitting models to particular data.
@@ -110,7 +230,7 @@ class Fitter(object):
     @data.setter
     def data(self, value):
         self._data = value 
-        
+
     @property
     def model(self):
         return self._model
@@ -137,7 +257,7 @@ class Fitter(object):
 
         if has_ipython:
             self.models_menu.value = value 
-            self.param_widgets = [build_param_widget(p)
+            self.param_widgets = [ParameterWidgetGroup(p)
                                   for _, p in self._current_params.items()]
             if not first_run:
                 for pw in self.param_widgets:
@@ -150,18 +270,34 @@ class Fitter(object):
         """Each time fit() is called, these will be updated to reflect
         the latest best params. They will be used as the initial guess
         for the next fit, unless overridden by arguments to fit()."""
-        if has_ipython:
-            # Sync current_params with widget.
-            for pw in self.param_widgets:
-                self._current_params[pw.description].value = pw.value
+        # Syncing from widgets to params happens inside ParameterWidgetGroup.
+        # We have nothing to do here.
         return self._current_params
             
     @current_params.setter
-    def current_params(self, value):
-        self._current_params = value
+    def current_params(self, new_params):
+        # Copy contents, but retain original params objects,
+        # which are linked into the widgets (if IPython is present).
+        for name, par in new_params.items():
+            self._current_params[name].value = par.value
+            self._current_params[name].expr = par.expr
+            self._current_params[name].vary = par.vary
+            self._current_params[name].min = par.min
+            self._current_params[name].max = par.max
+
+        # Compute values for expression-based Parameters.
+        # The widget cannot display 'None' in a numeric field.
+        self.__assign_deps(self._current_params)
+        for _, par in self._current_params.items():
+            if par.value is None:
+                self.__update_paramval(self._current_params, par.name)
+
         if has_ipython:
             for pw in self.param_widgets:
-                pw.value = self._current_params[pw.description].value
+                pw.value = self._current_params[pw.name].value
+                pw.min = self._current_params[pw.name].min
+                pw.max = self._current_params[pw.name].max
+                pw.vary = self._current_params[pw.name].vary
 
     def guess(self):
         count_indep_vars = len(self.model.independent_vars)
@@ -177,12 +313,6 @@ class Fitter(object):
         except NotImplementedError:
             guessing_disabled = True 
         self.guess_button.disabled = guessing_disabled
-
-        # Compute values for expression-based Parameters.
-        self.__assign_deps(guess)
-        for _, p in guess.items():
-            if p.value is None:
-                self.__update_paramval(guess, p.name)
 
         self.current_params = guess
 
@@ -258,8 +388,10 @@ class Fitter(object):
             
     def _repr_html_(self):
         display(self.models_menu)
-        display(self.fit_button)
-        display(self.guess_button)
+        button_box = widgets.Box()
+        button_box.children = [self.fit_button, self.guess_button]
+        display(button_box)
+        button_box.add_class('hbox')
         for pw in self.param_widgets:
             display(pw)
         self.plot()
