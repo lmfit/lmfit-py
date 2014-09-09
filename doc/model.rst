@@ -5,15 +5,18 @@ Modeling Data and Curve Fitting
 =================================================
 
 A very common application of least-squares minimization is *curve fitting*,
-where one has a parametrized model function meant to explain some
-phenomena, and wants to adjust the numerical values for the model to
-most closely match some particular data.  Within the :mod:`scipy` world,
-such curve fitting problems are commonly solved with
-:func:`scipy.optimize.curve_fit`, which simply calls
-:func:`scipy.optimize.leastsq`.  As lmfit is a high-level wrapper around
-:func:`scipy.optimize.leastsq`, it can be used for curve-fitting problems,
-but here we discuss an even easier way to do it that is closer in spirit to
-:func:`scipy.optimize.curve_fit`, but better.
+where one has a parametrized model function meant to explain some phenomena
+and wants to adjust the numerical values for the model to most closely
+match some particular data.  Within the :mod:`scipy` world, such curve
+fitting problems are commonly solved with :func:`scipy.optimize.curve_fit`,
+which simply calls :func:`scipy.optimize.leastsq`.  As :func:`minimize` is
+a high-level wrapper around :func:`scipy.optimize.leastsq`, it can be used
+for curve-fitting problems.  But because :func:`minimize` is more a general
+minimization routine, there is a fair amount of repeated code needed for
+all curve-fitting problems.  Here we discuss an even easier way to do it
+that is closer in spirit to :func:`scipy.optimize.curve_fit`, but even
+gives all the advantage using :class:`Parameters` and is better at helping
+you wrap a model function for curve fitting.
 
 The :class:`Model` class makes it easy to turn a model function that
 calculates a model for your data into a fitting model.  In an effort to
@@ -33,18 +36,16 @@ Example: Fit data to Gaussian profile
 Let's start with a simple and common example of fitting data to a Gaussian
 peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
 provides a model function for a Gaussian profile, but here we'll build our
-own.  We start with a definition the model function that we might want to
-use to fit to some data::
+own.  We start with a simple definition the model function:
 
     >>> from numpy import sqrt, pi, exp, linspace
     >>>
     >>> def gaussian(x, amp, cen, wid):
-    ...    "1-d gaussian: gaussian(x, amp, cen, wid)"
-    ...    return (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
+    ...    return amp * exp(-(x-cen)**2 /wid)
     ...
 
-To some data :math:`y(x)` represented by the arrays ``y`` and ``x`` with we
-would do something like::
+that we want to use to fit to some data :math:`y(x)` represented by the
+arrays ``y`` and ``x``.   We would do something like::
 
     >>> from scipy.optimize import curve_fit
     >>>
@@ -56,31 +57,29 @@ would do something like::
 
 
 That is, we read in data from somewhere, make an initial guess of the model
-values, and run ``curve_fit`` with the model function, data arrays, and
-initial guesses.  The results returned are the optimal values for the
-parameters and the covariance matrix.   It's pretty simple to do, but
-misses many of the key benefits of lmfit.
+values, and run :func:`scipy.optimize.curve_fit` with the model function,
+data arrays, and initial guesses.  The results returned are the optimal
+values for the parameters and the covariance matrix.  It's simple and very
+useful, but misses many of the key benefits of lmfit.
 
-
-To solve this with lmfit we could write a residual function but such a
-residual function would be fairly simple (essentially, ``data - model``,
+To solve this with lmfit we would have to write an objective function. But
+such a function would be fairly simple (essentially, ``data - model``,
 possibly with some weighting), and we would need to define and use
-appropriately named parameters.  Though convenient, it also becomes
-somewhat of a burden to keep all the parameter names straight.  After doing
-this a few times it appears as a recurring pattern, and we can imagine
-automating this process.  That's where the :class:`Model` class comes in.
-We can pass this class the ``gaussian`` function, and it will automatically
-generate the appropriate residual function and the corresponding parameters
-from the function signature itself::
+appropriately named parameters.  Though convenient, it is somewhat of a
+burden to keep the named parameter straight (on the other hand, with
+func:`scipy.optimize.curve_fit` you are required to remember the parameter
+order).  After doing this a few times it appears as a recurring pattern,
+and we can imagine automating this process.  That's where the
+:class:`Model` class comes in.  
+
+With the :class:`Model`, we can use the ``gaussian`` function definition to
+automatically generate the appropriate residual function and the
+corresponding parameter names from the function signature itself::
 
     >>> from lmfit import Model
     >>> gmod = Model(gaussian)
-    >>> for name, par in gmod.params.items():
-    ...     print(name, par)
-    ...
-    'amp', <Parameter 'amp', None, bounds=[None:None]>
-    'wid', <Parameter 'wid', None, bounds=[None:None]>
-    'cen', <Parameter 'cen', None, bounds=[None:None]>
+    >>> gmod.param_names
+    set(['amp', 'wid', 'cen'])
     >>> print("Independent Variables: ", gmod.independent_vars)
     'Independent Variables: ', ['x']
 

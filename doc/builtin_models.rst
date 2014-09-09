@@ -15,8 +15,6 @@ wrapping a function into a :class:`Model`, these models also provide a
 set of starting values from a data array that closely approximates the
 data to be fit.
 
-.. module:: models
-
 As shown in the previous chapter, a key feature of the :class:`Model` class
 is that models can easily be combined to give a composite
 :class:`Model`. Thus while some of the models listed here may seem pretty
