@@ -483,9 +483,13 @@ class Model(object):
             collision = colliding_param_names.pop()
             raise NameError(self._names_collide % collision)
 
-        if len(self.components) > 0:
+        if self.is_composite:
             # If the model is already composite just add other as component
-            self.components.append(other)
+            if not other.is_composite:
+                self.components.append(other)
+            else:
+                self.components.extend(other.components)
+                self.param_hints.update(other.param_hints)
             return self
         else:
             # make new composite Model, add self and other as components
