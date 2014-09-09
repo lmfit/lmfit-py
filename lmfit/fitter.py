@@ -11,6 +11,14 @@ from .astutils import NameFinder
 from .minimizer import check_ast_errors
 
 
+# These variables are used at the end of the module to decide
+# which BaseFitter subclass the Fitter will point to.
+try:
+    import matplotlib
+except ImportError:
+    has_matplotlib = False
+else:
+    has_matplotlib = True
 try:
     import IPython
 except ImportError:
@@ -215,6 +223,14 @@ class ParameterWidgetGroup(object):
 
 
 class BaseFitter(object):
+    __doc__ = _COMMON_DOC + """
+
+    Parameters
+    ----------
+    data : array-like
+    model : lmfit.Model
+        optional initial Model to use, maybe be set or changed later
+    """ + _COMMON_EXAMPLES_DOC
     def __init__(self, data, model=None, **kwargs):
         self._data = data
         self.kwargs = kwargs
@@ -356,33 +372,113 @@ class BaseFitter(object):
         self.current_result = self.model.fit(self._data, *args, **guess) 
         self.current_params = self.current_result.params
         
-    def plot(self):
+class MPLFitter(BaseFitter):
+    # This is a small elaboration on BaseModel; it adds a plot()
+    # method that depends on matplotlib. It adds several plot-
+    # styling arguments to the signature.
+    __doc__ = _COMMON_DOC + """
+
+    Parameters
+    ----------
+    data : array-like
+    model : lmfit.Model
+        optional initial Model to use, maybe be set or changed later
+
+    Additional Parameters
+    ---------------------
+    axes_style : dictionary representing style keyword arguments to be
+        passed through to `Axes.set(...)`
+    data_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the data points
+    init_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the initial fit
+        line
+    best_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the best fit
+        line
+    **kwargs : independent variables or extra arguments, passed like `x=x`
+        """ + _COMMON_EXAMPLES_DOC
+    def __init__(self, data, model=None, axes_style={},
+                data_style={}, init_style={}, best_style={}, **kwargs):
+        self.axes_style = axes_style
+        self.data_style = data_style
+        self.init_style = init_style
+        self.best_style = best_style
+        super(MPLFitter, self).__init__(data, model, **kwargs)
+
+    def plot(self, axes_style={}, data_style={}, init_style={}, best_style={},
+             ax=None):
+        """Plot data, initial guess fit, and best fit.
+
+    Optional style arguments pass keyword dictionaries through to their
+    respective components of the matplotlib plot.
+
+    Precedence is:
+    1. arguments passed to this function, plot()
+    2. arguments passed to the Fitter when it was first declared
+    3. hard-coded defaults
+
+    Parameters
+    ---------------------
+    axes_style : dictionary representing style keyword arguments to be
+        passed through to `Axes.set(...)`
+    data_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the data points
+    init_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the initial fit
+        line
+    best_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the best fit
+        line
+    ax : matplotlib.Axes
+            optional `Axes` object. Axes will be generated if not provided.
+        """
         try:
             import matplotlib.pyplot as plt
         except ImportError:
-            pass
-        fig, ax = plt.subplots()
+            raise ImportError("Matplotlib is required to use this Fitter. "
+                              "Use BaseFitter or a subclass thereof "
+                              "that does not depend on matplotlib.")
+
+        # Configure style
+        _axes_style= dict()  # none, but this is here for possible future use
+        _axes_style.update(self.axes_style)
+        _axes_style.update(axes_style)
+        _data_style= dict(color='blue', marker='o', linestyle='none')
+        _data_style.update(**_normalize_kwargs(self.data_style, 'line2d'))
+        _data_style.update(**_normalize_kwargs(data_style, 'line2d'))
+        _init_style = dict(color='gray')
+        _init_style.update(**_normalize_kwargs(self.init_style, 'line2d'))
+        _init_style.update(**_normalize_kwargs(init_style, 'line2d'))
+        _best_style= dict(color='red')
+        _best_style.update(**_normalize_kwargs(self.best_style, 'line2d'))
+        _best_style.update(**_normalize_kwargs(best_style, 'line2d'))
+
+        if ax is None:
+            fig, ax = plt.subplots()
         count_indep_vars = len(self.model.independent_vars)
         if count_indep_vars == 0:
-            ax.plot(self._data)
+            ax.plot(self._data, **_data_style)
         elif count_indep_vars == 1:
             indep_var = self.kwargs[self.model.independent_vars[0]]
-            ax.plot(indep_var, self._data, marker='o', linestyle='none')
+            ax.plot(indep_var, self._data, **_data_style)
         else:
             raise NotImplementedError("Cannot plot models with more than one "
                                       "indepedent variable.")
         result = self.current_result  # alias for brevity
         if not result:
+            ax.set(**_axes_style)
             return  # short-circuit the rest of the plotting
         if count_indep_vars == 0:
-            ax.plot(result.init_fit, color='gray')
-            ax.plot(result.best_fit, color='red')
+            ax.plot(result.init_fit, **_init_style)
+            ax.plot(result.best_fit, **_best_style)
         elif count_indep_vars == 1:
-            ax.plot(indep_var, result.init_fit, color='gray')
-            ax.plot(indep_var, result.best_fit, color='red')
+            ax.plot(indep_var, result.init_fit, **_init_style)
+            ax.plot(indep_var, result.best_fit, **_best_style)
+        ax.set(**_axes_style)
 
 
-class NotebookFitter(BaseFitter):
+class NotebookFitter(MPLFitter):
     __doc__ = _COMMON_DOC + """
     If IPython is available, it uses the IPython notebook's rich display
     to fit data interactively in a web-based GUI. The Parameters are
@@ -392,12 +488,36 @@ class NotebookFitter(BaseFitter):
 
     Clicking the "Fit" button updates a plot, as above, and updates the
     Parameters in the form to reflect the best fit.
-    """ + _COMMON_EXAMPLES_DOC
 
-    def __init__(self, data, model=None, **kwargs):
+    Parameters
+    ----------
+    data : array-like
+    model : lmfit.Model
+        optional initial Model to use, maybe be set or changed later
+    all_models : list
+        optional list of Models to populate drop-down menu, by default
+        all built-in and user-defined subclasses of Model are used 
+
+    Additional Parameters
+    ---------------------
+    axes_style : dictionary representing style keyword arguments to be
+        passed through to `Axes.set(...)`
+    data_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the data points
+    init_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the initial fit
+        line
+    best_style : dictionary representing style keyword arguments to be passed
+        through to the matplotlib `plot()` command the plots the best fit
+        line
+    **kwargs : independent variables or extra arguments, passed like `x=x`
+    """ + _COMMON_EXAMPLES_DOC
+    def __init__(self, data, model=None, all_models=None, axes_style={},
+                data_style={}, init_style={}, best_style={}, **kwargs):
         # Dropdown menu of all subclasses of Model, incl. user-defined.
         self.models_menu = Dropdown()
-        all_models = {m.__name__: m for m in Model.__subclasses__()}
+        if all_models is None:
+            all_models = {m.__name__: m for m in Model.__subclasses__()}
         self.models_menu.values = all_models
         self.models_menu.on_trait_change(self._on_model_value_change,
                                              'value')
@@ -411,7 +531,9 @@ class NotebookFitter(BaseFitter):
 
         # Parameter widgets are not built here. They are (re-)built when
         # the model is (re-)set.
-        super(NotebookFitter, self).__init__(data, model, **kwargs)
+        super(NotebookFitter, self).__init__(data, model, axes_style,
+                                             data_style, init_style,
+                                             best_style, **kwargs)
 
     def _repr_html_(self):
         display(self.models_menu)
@@ -457,7 +579,27 @@ class NotebookFitter(BaseFitter):
         self.plot()
 
 
+def _normalize_kwargs(kwargs, kind='patch'):
+    """Convert matplotlib keywords from short to long form."""
+    # Source:
+    # github.com/tritemio/FRETBursts/blob/fit_experim/fretbursts/burst_plot.py
+    if kind == 'line2d':
+        long_names = dict(c='color', ls='linestyle', lw='linewidth',
+                          mec='markeredgecolor', mew='markeredgewidth',
+                          mfc='markerfacecolor', ms='markersize',)
+    elif kind == 'patch':
+        long_names = dict(c='color', ls='linestyle', lw='linewidth',
+                          ec='edgecolor', fc='facecolor',)
+    for short_name in long_names:
+        if short_name in kwargs:
+            kwargs[long_names[short_name]] = kwargs.pop(short_name)
+    return kwargs
+
+
 if has_ipython:
     Fitter = NotebookFitter
+elif has_matplotlib:
+    Fitter = MPLFitter
 else:
+    # no dependencies beyond core lmfit dependencies
     Fitter = BaseFitter
