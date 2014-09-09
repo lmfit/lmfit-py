@@ -240,11 +240,11 @@ class BaseFitter(object):
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
 
-        self.setup_new_model(value)
+        self._finalize_model(value)
 
         self.guess()
 
-    def setup_new_model(self, value):
+    def _finalize_model(self, value):
         # subclasses optionally override to update display here
         pass 
 
@@ -271,9 +271,9 @@ class BaseFitter(object):
             if par.value is None:
                 self.__update_paramval(self._current_params, par.name)
 
-        self.sync_params()
+        self._finalize_params()
 
-    def sync_params(self):
+    def _finalize_params(self):
         # subclasses can override this to pass params to display
         pass
 
@@ -406,7 +406,7 @@ class NotebookFitter(BaseFitter):
         guessing_successful = super(NotebookFitter, self).guess()
         self.guess_button.disabled = not guessing_successful
 
-    def setup_new_model(self, value):
+    def _finalize_model(self, value):
         first_run = not hasattr(self, 'param_widgets')
         if not first_run:
             # Remove all Parameter widgets, and replace them with widgets
@@ -420,7 +420,7 @@ class NotebookFitter(BaseFitter):
             for pw in self.param_widgets:
                 display(pw)
 
-    def sync_params(self):
+    def _finalize_params(self):
         for pw in self.param_widgets:
             pw.value = self._current_params[pw.name].value
             pw.min = self._current_params[pw.name].min
