@@ -1,5 +1,6 @@
 from copy import deepcopy
 from itertools import chain
+import warnings
 
 import numpy as np
 
@@ -19,6 +20,26 @@ else:
     from IPython.html import widgets
     from IPython.display import HTML, display, clear_output
     from IPython.utils.traitlets import link
+
+    # Widgets were experimental in IPython 2.x, but this does work there.
+    # Handle the change in naming from 2.x to 3.x.
+    if IPython.release.version_info[0] < 2:
+        warnings.warn("IPython versions before 2.0 are not supported. Fitter will operate in "
+                      "basic mode, as it would in a plain python interpreter.")
+        has_ipython = False
+    if IPython.release.version_info[0] == 2:
+        from IPython.html.widgets import DropdownWidget as Dropdown
+        from IPython.html.widgets import ButtonWidget as Button
+        from IPython.html.widgets import ContainerWidget as Box
+        from IPython.html.widgets import FloatTextWidget as FloatText
+        from IPython.html.widgets import CheckboxWidget as Checkbox
+    else:
+        # as of IPython 3.x:
+        from IPython.html.widgets import Dropdown 
+        from IPython.html.widgets import Button
+        from IPython.html.widgets import Box
+        from IPython.html.widgets import FloatText
+        from IPython.html.widgets import Checkbox
 
 
 _COMMON_DOC = """
@@ -67,13 +88,13 @@ class ParameterWidgetGroup(object):
         self.par = par
 
         # Define widgets.
-        self.value_text = widgets.FloatText(description=par.name,
+        self.value_text = FloatText(description=par.name,
                                             min=self.par.min, max=self.par.max)
-        self.min_text = widgets.FloatText(description='min', max=self.par.max)
-        self.max_text = widgets.FloatText(description='max', min=self.par.min)
-        self.min_checkbox = widgets.Checkbox(description='min')
-        self.max_checkbox = widgets.Checkbox(description='max')
-        self.vary_checkbox = widgets.Checkbox(description='vary')
+        self.min_text = FloatText(description='min', max=self.par.max)
+        self.max_text = FloatText(description='max', min=self.par.min)
+        self.min_checkbox = Checkbox(description='min')
+        self.max_checkbox = Checkbox(description='max')
+        self.vary_checkbox = Checkbox(description='vary')
 
         # Set widget values and visibility.
         if par.value is not None:
@@ -148,7 +169,7 @@ class ParameterWidgetGroup(object):
         self.max_checkbox.close()
 
     def _repr_html_(self):
-        box = widgets.Box()
+        box = Box()
         box.children = [self.value_text, self.vary_checkbox, 
                         self.min_text, self.min_checkbox,
                         self.max_text, self.max_checkbox]
@@ -375,17 +396,17 @@ class NotebookFitter(BaseFitter):
 
     def __init__(self, data, model=None, **kwargs):
         # Dropdown menu of all subclasses of Model, incl. user-defined.
-        self.models_menu = widgets.Dropdown()
+        self.models_menu = Dropdown()
         all_models = {m.__name__: m for m in Model.__subclasses__()}
         self.models_menu.values = all_models
         self.models_menu.on_trait_change(self._on_model_value_change,
                                              'value')
         # Button to trigger fitting.
-        self.fit_button = widgets.Button(description='Fit')
+        self.fit_button = Button(description='Fit')
         self.fit_button.on_click(self._on_fit_button_click)
 
         # Button to trigger guessing.
-        self.guess_button = widgets.Button(description='Auto-Guess')
+        self.guess_button = Button(description='Auto-Guess')
         self.guess_button.on_click(self._on_guess_button_click)
 
         # Parameter widgets are not built here. They are (re-)built when
@@ -394,7 +415,7 @@ class NotebookFitter(BaseFitter):
 
     def _repr_html_(self):
         display(self.models_menu)
-        button_box = widgets.Box()
+        button_box = Box()
         button_box.children = [self.fit_button, self.guess_button]
         display(button_box)
         button_box.add_class('hbox')
