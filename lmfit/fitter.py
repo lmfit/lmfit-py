@@ -1,7 +1,4 @@
-from copy import deepcopy
-from itertools import chain
 import warnings
-
 import numpy as np
 
 from .model import Model
@@ -25,9 +22,7 @@ except ImportError:
     has_ipython = False
 else:
     has_ipython = IPython.get_ipython() is not None
-    from IPython.html import widgets
-    from IPython.display import HTML, display, clear_output
-    from IPython.utils.traitlets import link
+    from IPython.display import display, clear_output
 
     # Widgets were experimental in IPython 2.x, but this does work there.
     # Handle the change in naming from 2.x to 3.x.
@@ -43,7 +38,7 @@ else:
         from IPython.html.widgets import CheckboxWidget as Checkbox
     else:
         # as of IPython 3.x:
-        from IPython.html.widgets import Dropdown 
+        from IPython.html.widgets import Dropdown
         from IPython.html.widgets import Button
         from IPython.html.widgets import Box
         from IPython.html.widgets import FloatText
@@ -67,17 +62,17 @@ _COMMON_EXAMPLES_DOC = """
 
     >>> fitter.model
     # This property can be changed, to try different models on the same
-    # data with the same independent vars. 
+    # data with the same independent vars.
     # (This is especially handy in the notebook.)
-    
+
     >>> fitter.current_params
     # This copy of the model's Parameters is updated after each fit.
-    
+
     >>> fitter.fit()
     # Perform a fit using fitter.current_params as a guess.
     # Optionally, pass a params argument or individual keyword arguments
     # to override current_params.
-    
+
     >>> fitter.current_result
     # This is the result of the latest fit. It contain the usual
     # copies of the Parameters, in the attributes params and init_params.
@@ -97,7 +92,7 @@ class ParameterWidgetGroup(object):
 
         # Define widgets.
         self.value_text = FloatText(description=par.name,
-                                            min=self.par.min, max=self.par.max)
+                                    min=self.par.min, max=self.par.max)
         self.min_text = FloatText(description='min', max=self.par.max)
         self.max_text = FloatText(description='max', min=self.par.min)
         self.min_checkbox = Checkbox(description='min')
@@ -121,8 +116,10 @@ class ParameterWidgetGroup(object):
         self.value_text.on_trait_change(self._on_value_change, 'value')
         self.min_text.on_trait_change(self._on_min_value_change, 'value')
         self.max_text.on_trait_change(self._on_max_value_change, 'value')
-        self.min_checkbox.on_trait_change(self._on_min_checkbox_change, 'value')
-        self.max_checkbox.on_trait_change(self._on_max_checkbox_change, 'value')
+        self.min_checkbox.on_trait_change(self._on_min_checkbox_change,
+                                          'value')
+        self.max_checkbox.on_trait_change(self._on_max_checkbox_change,
+                                          'value')
         self.vary_checkbox.on_trait_change(self._on_vary_change, 'value')
 
     def _on_value_change(self, name, value):
@@ -131,11 +128,10 @@ class ParameterWidgetGroup(object):
     def _on_min_checkbox_change(self, name, value):
         self.min_text.visible = value
         if value:
-            min_unset = self.par.min is None or self.par.min == -np.inf
             # -np.inf does not play well with a numerical text field,
-            # so set min to 1 if activated (and back to -inf if deactivated).
-            self.min_text.value = -1 
-            self.par.min = self.min_text.value 
+            # so set min to -1 if activated (and back to -inf if deactivated).
+            self.min_text.value = -1
+            self.par.min = self.min_text.value
             self.value_text.min = self.min_text.value
         else:
             self.par.min = None
@@ -145,7 +141,6 @@ class ParameterWidgetGroup(object):
         if value:
             # np.inf does not play well with a numerical text field,
             # so set max to 1 if activated (and back to inf if deactivated).
-            max_unset = self.par.max is None or self.par.max == np.inf
             self.max_text.value = 1
             self.par.max = self.max_text.value
             self.value_text.max = self.max_text.value
@@ -178,7 +173,7 @@ class ParameterWidgetGroup(object):
 
     def _repr_html_(self):
         box = Box()
-        box.children = [self.value_text, self.vary_checkbox, 
+        box.children = [self.value_text, self.vary_checkbox,
                         self.min_text, self.min_checkbox,
                         self.max_text, self.max_checkbox]
         display(box)
@@ -213,7 +208,7 @@ class ParameterWidgetGroup(object):
     def max(self):
         return self.max_text.value
 
-    @min.setter
+    @max.setter
     def max(self, value):
         self.max_text.value = value
 
@@ -257,7 +252,7 @@ class BaseFitter(object):
 
     @data.setter
     def data(self, value):
-        self._data = value 
+        self._data = value
 
     @property
     def model(self):
@@ -283,7 +278,7 @@ class BaseFitter(object):
 
     def _finalize_model(self, value):
         # subclasses optionally override to update display here
-        pass 
+        pass
 
     @property
     def current_params(self):
@@ -291,7 +286,7 @@ class BaseFitter(object):
         the latest best params. They will be used as the initial guess
         for the next fit, unless overridden by arguments to fit()."""
         return self._current_params
-            
+
     @current_params.setter
     def current_params(self, new_params):
         # Copy contents, but retain original params objects.
@@ -326,7 +321,7 @@ class BaseFitter(object):
                 d = {key: val}
                 guess = self.model.guess(self._data, **d)
         except NotImplementedError:
-            guessing_successful = False 
+            guessing_successful = False
         self.current_params = guess
         return guessing_successful
 
@@ -369,9 +364,9 @@ class BaseFitter(object):
         guess = dict(self.current_params)
         guess.update(self.kwargs)  # from __init__, e.g. x=x
         guess.update(kwargs)
-        self.current_result = self.model.fit(self._data, *args, **guess) 
+        self.current_result = self.model.fit(self._data, *args, **guess)
         self.current_params = self.current_result.params
-        
+
 class MPLFitter(BaseFitter):
     # This is a small elaboration on BaseModel; it adds a plot()
     # method that depends on matplotlib. It adds several plot-
@@ -482,7 +477,7 @@ class NotebookFitter(MPLFitter):
     __doc__ = _COMMON_DOC + """
     If IPython is available, it uses the IPython notebook's rich display
     to fit data interactively in a web-based GUI. The Parameters are
-    represented in a web-based form that is kept in sync with `current_params`. 
+    represented in a web-based form that is kept in sync with `current_params`.
     All subclasses to Model, including user-defined ones, are shown in a
     drop-down menu.
 
@@ -496,7 +491,7 @@ class NotebookFitter(MPLFitter):
         optional initial Model to use, maybe be set or changed later
     all_models : list
         optional list of Models to populate drop-down menu, by default
-        all built-in and user-defined subclasses of Model are used 
+        all built-in and user-defined subclasses of Model are used
 
     Additional Parameters
     ---------------------
@@ -556,7 +551,7 @@ class NotebookFitter(MPLFitter):
             # for the new model.
             for pw in self.param_widgets:
                 pw.close()
-        self.models_menu.value = value 
+        self.models_menu.value = value
         self.param_widgets = [ParameterWidgetGroup(p)
                               for _, p in self._current_params.items()]
         if not first_run:
