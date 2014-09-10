@@ -498,19 +498,21 @@ class Model(object):
 
         if self.is_composite:
             # If the model is already composite just add other as component
-            if not other.is_composite:
-                self.components.append(other)
-            else:
-                self.components.extend(other.components)
-                self.param_hints.update(other.param_hints)
-            return self
+            obj = self
         else:
             # make new composite Model, add self and other as components
-            new = Model(func=None)
-            new.components = [self, other]
+            obj = Model(func=None)
+            obj.components = [self]
             # we assume that all the sub-models have the same independent vars
-            new.independent_vars = self.independent_vars[:]
-            return new
+            obj.independent_vars = self.independent_vars[:]
+
+        if not other.is_composite:
+            obj.components.append(other)
+        else:
+            obj.components.extend(other.components)
+            obj.param_hints.update(other.param_hints)
+
+        return obj
 
 
 class ModelFitResult(Minimizer):
