@@ -394,6 +394,10 @@ class Model(object):
                 result += model.eval(params, **kwargs)
         else:
             result = self.func(**self.make_funcargs(params, kwargs))
+            # Handle special case of constant result and one
+            # independent variable (of any dimension).
+            if np.ndim(result) == 0 and len(self.independent_vars) == 1:
+                result = np.tile(result, kwargs[self.independent_vars[0]].shape)
         return result
 
     def fit(self, data, params=None, weights=None, method='leastsq',
