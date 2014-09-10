@@ -119,7 +119,7 @@ class CommonTests(object):
         _skip_if_no_pandas()
         from pandas import Series
 
-        # Align data and indep var of different lengths using pandas index. 
+        # Align data and indep var of different lengths using pandas index.
         data = Series(self.data.copy()).iloc[10:-10]
         x = Series(self.x.copy())
 
@@ -305,6 +305,25 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         model2 = models.GaussianModel()
         f = lambda: model1 + model2
         self.assertRaises(NameError, f)
+
+    def test_sum_composite_models(self):
+        # test components of composite model created adding composite model
+        model1 = models.GaussianModel(prefix='g1_')
+        model2 = models.GaussianModel(prefix='g2_')
+        model3 = models.GaussianModel(prefix='g3_')
+        model4 = models.GaussianModel(prefix='g4_')
+
+        model_total1 = (model1 + model2) + model3
+        for mod in [model1, model2, model3]:
+            self.assertTrue(mod in model_total1.components)
+
+        model_total2 = model1 + (model2 + model3)
+        for mod in [model1, model2, model3]:
+            self.assertTrue(mod in model_total2.components)
+
+        model_total3 = (model1 + model2) + (model3 + model4)
+        for mod in [model1, model2, model3, model4]:
+            self.assertTrue(mod in model_total3.components)
 
 
 class TestLinear(CommonTests, unittest.TestCase):
