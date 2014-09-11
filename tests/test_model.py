@@ -159,6 +159,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     def x(self):
         return np.linspace(-10, 10, num=1000)
 
+    def test_lists_become_arrays(self):
+        # smoke test
+        self.model.fit([1,2,3], x=[1,2,3], **self.guess())
+
     def test_missing_param_raises_error(self):
 
         # using keyword argument parameters

@@ -394,6 +394,10 @@ class Model(object):
                 result += model.eval(params, **kwargs)
         else:
             result = self.func(**self.make_funcargs(params, kwargs))
+            # Handle special case of constant result and one
+            # independent variable (of any dimension).
+            if np.ndim(result) == 0 and len(self.independent_vars) == 1:
+                result = np.tile(result, kwargs[self.independent_vars[0]].shape)
         return result
 
     def fit(self, data, params=None, weights=None, method='leastsq',
@@ -470,6 +474,15 @@ class Model(object):
             raise ValueError("""Assign each parameter an initial value by
  passing Parameters or keyword arguments to fit""")
 
+        # Do not alter anything that implements the array interface (np.array, pd.Series)
+        # but convert other iterables (e.g., Python lists) to numpy arrays.
+        if not hasattr(data, '__array__'):
+            data = np.array(data)
+        for var in self.independent_vars:
+            var_data = kwargs[var]
+            if (not hasattr(var_data, '__array__')) and (not np.isscalar(var_data)):
+                kwargs[var] = np.asarray(var_data)
+
         # Handle null/missing values.
         mask = None
         if self.missing not in (None, 'none'):
@@ -482,7 +495,7 @@ class Model(object):
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
         for var in self.independent_vars:
-            if not np.isscalar(self.independent_vars):  # just in case
+            if not np.isscalar(kwargs[var]):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
         output = ModelFitResult(self, params, method=method, iter_cb=iter_cb,
