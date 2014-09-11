@@ -509,23 +509,21 @@ class Model(object):
             collision = colliding_param_names.pop()
             raise NameError(self._names_collide % collision)
 
-        if self.is_composite:
-            # If the model is already composite just add other as component
-            obj = self
-        else:
+        # If the model is already composite just add other as component
+        composite = self
+        if not self.is_composite:
             # make new composite Model, add self and other as components
-            obj = Model(func=None)
-            obj.components = [self]
+            composite = Model(func=None)
+            composite.components = [self]
             # we assume that all the sub-models have the same independent vars
-            obj.independent_vars = self.independent_vars[:]
+            composite.independent_vars = self.independent_vars[:]
 
-        if not other.is_composite:
-            obj.components.append(other)
+        if other.is_composite:
+            composite.components.extend(other.components)
+            composite.param_hints.update(other.param_hints)
         else:
-            obj.components.extend(other.components)
-            obj.param_hints.update(other.param_hints)
-
-        return obj
+            composite.components.append(other)
+        return composite
 
 
 class ModelFitResult(Minimizer):
