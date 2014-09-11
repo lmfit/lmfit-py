@@ -477,11 +477,11 @@ class Model(object):
         # Do not alter anything that implements the array interface (np.array, pd.Series)
         # but convert other iterables (e.g., Python lists) to numpy arrays.
         if not hasattr(data, '__array__'):
-            data = np.array(data)
+            data = np.asfarray(data)
         for var in self.independent_vars:
             var_data = kwargs[var]
             if (not hasattr(var_data, '__array__')) and (not np.isscalar(var_data)):
-                kwargs[var] = np.asarray(var_data)
+                kwargs[var] = np.asfarray(var_data)
 
         # Handle null/missing values.
         mask = None
