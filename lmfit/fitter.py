@@ -30,7 +30,7 @@ else:
         warnings.warn("IPython versions before 2.0 are not supported. Fitter will operate in "
                       "basic mode, as it would in a plain python interpreter.")
         has_ipython = False
-    if IPython.release.version_info[0] == 2:
+    elif IPython.release.version_info[0] == 2:
         from IPython.html.widgets import DropdownWidget as Dropdown
         from IPython.html.widgets import ButtonWidget as Button
         from IPython.html.widgets import ContainerWidget as Box
