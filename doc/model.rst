@@ -70,37 +70,48 @@ burden to keep the named parameter straight (on the other hand, with
 func:`scipy.optimize.curve_fit` you are required to remember the parameter
 order).  After doing this a few times it appears as a recurring pattern,
 and we can imagine automating this process.  That's where the
-:class:`Model` class comes in.  
+:class:`Model` class comes in.
 
-With the :class:`Model`, we can use the ``gaussian`` function definition to
-automatically generate the appropriate residual function and the
-corresponding parameter names from the function signature itself::
+The :class:`Model` allows us to easily wrap a model function such as the
+``gaussian`` function.  This automatically generate the appropriate
+residual function, and determines the corresponding parameter names from
+the function signature itself::
 
     >>> from lmfit import Model
     >>> gmod = Model(gaussian)
     >>> gmod.param_names
     set(['amp', 'wid', 'cen'])
-    >>> print("Independent Variables: ", gmod.independent_vars)
-    'Independent Variables: ', ['x']
+    >>> gmod.independent_vars)
+    ['x']
 
-The Model ``gmod`` is constructed to have a ``params`` member that holds the
-:class:`Parameters` for the model, and an ``independent_vars`` that holds
-the name of the independent variables.  By default, the first argument of
-the function is taken as the independent variable, and the rest of the
-parameters are used for variable Parameters.  Thus, for the ``gaussian``
-function above, the parameters are named ``amp``, ``cen``, and ``wid``, and
-``x`` is the independent variable -- taken directly from the signature of
-the model function.
+The Model ``gmod`` knows the names of the parameters and the independent
+variables.  nd an the name of the independent variables.  By default, the
+first argument of the function is taken as the independent variable, held
+in :attr:`independent_vars`, and the rest of the functions positional
+arguments (and, in certain cases, keyword arguments -- see below) are used
+for Parameter names.  Thus, for the ``gaussian`` function above, the
+parameters are named ``amp``, ``cen``, and ``wid``, and ``x`` is the
+independent variable -- all taken directly from the signature of the model
+function.
 
-On creation of the model, the parameters are not initialized (the values
-are all ``None``), and will need to be given initial values before the
-model can be used.  This can be done in one of two ways, or a mixture of
-the two.  First, the initial values for the models parameters can be set
-explicitly, as with:
+On creation of the model, parameters are not created -- you will normally
+have to make these and assign them values and other attributes as part of
+the model.  To help you do this, each model has a :meth:`make_params`
+method that will generate parameters with the expected names:
 
-    >>> gmod.params['amp'].value = 10.0
+    >>> params = gmod.make_params()
 
-and so on.  This is also useful to setting parameter bounds and so forth.
+This creates the :class:`Parameters` but doesn't necessarily give them
+initial values.  You can set initial values for parameters with keyword
+arguments to :meth:`make_params`, as with:
+
+
+    >>> params = gmod.make_params(cen=5, amp=200, wid=1)
+
+or assign them (and other parameter properties) after the
+:class:`Parameters` has been created.
+
+
 Alternatively, one can use the :meth:`eval` method (to evaluate the model)
 or the :meth:`fit` method (to fit data to this model) with explicit keyword
 arguments for the parameter values.  For example, one could use
@@ -168,7 +179,7 @@ The :class:`Model` class
 
 
 The :class:`Model` class provides a general way to wrap a pre-defined
-function as a fittmodel.
+function as a fitting model.
 
 .. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, components=None]]]]])
 
