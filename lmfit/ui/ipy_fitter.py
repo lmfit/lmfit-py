@@ -2,7 +2,8 @@ import warnings
 import numpy as np
 
 from ..model import Model
-from ..fitter import MPLFitter, _COMMON_DOC, _COMMON_EXAMPLES_DOC
+
+from .basefitter import MPLFitter, _COMMON_DOC, _COMMON_EXAMPLES_DOC
 
 # Note: If IPython is not available of the version is < 2,
 # this module will not be imported, and a different Fitter.
