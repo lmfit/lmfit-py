@@ -7,27 +7,27 @@
    installed, parameters can be constrained as a simple
    mathematical expression of other Parameters.
 
-   version: 0.8.0-rc3
-   last update: 2014-Aug-22
+   version: 0.8.0rc4
+   last update: 2014-Sep-12
    License: BSD
    Author:  Matthew Newville <newville@cars.uchicago.edu>
             Center for Advanced Radiation Sources,
             The University of Chicago
 """
-__version__ = '0.8.0-rc3'
+__version__ = '0.8.0rc4'
 from .minimizer import minimize, Minimizer, MinimizerException
 from .parameter import Parameter, Parameters
 from .confidence import conf_interval, conf_interval2d
 from .printfuncs import (fit_report, ci_report,
                          report_fit, report_ci, report_errors)
 
-from .wrap  import wrap_function, make_paras_and_func
 from .model import Model
 from . import models
-from .fitter import Fitter
 
 from . import uncertainties
 from .uncertainties import ufloat, correlated_values
+
+from .ui import Fitter
 
 __xall__ = ['minimize', 'Minimizer', 'Parameter', 'Parameters',
             'conf_interval', 'conf_interval2d', 'wrap_function',
