@@ -8,14 +8,23 @@ else:
     has_matplotlib = True
 try:
     import IPython
-    has_ipython = True
 except ImportError:
     has_ipython = False
 else:
-    if IPython.release.version_info[0] < 2:
-        warnings.warn("IPython versions before 2.0 are not supported. Fitter will operate in "
-                      "basic mode, as it would in a plain python interpreter.")
-        has_ipython = False
+    try:
+        if IPython.release.version_info[0] < 2:
+            warnings.warn("IPython versions before 2.0 are not supported. "
+                          "Fitter will operate in basic mode, as it would "
+                          "in a plain python interpreter.")
+            has_ipython = False
+        elif IPython.get_ipython() is None:
+            has_ipython = False  # It's installed, but we are not in an IPython session.
+        else:
+            has_ipython = True
+    except Exception as e:
+        warnings.warn("An error occurred while trying to detect IPython. "
+                      "Fitter will operate in basic mode. The error is: "
+                      "{0}".format(e))
 
 
 from .basefitter import BaseFitter
