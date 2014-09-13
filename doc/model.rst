@@ -139,7 +139,7 @@ Putting everything together, the script to do such a fit (included in the
 .. literalinclude:: ../examples/doc_model1.py
 
 which is pretty compact and to the point.  The returned ``result`` will be
-a :class:`ModelFitResult` object.  As we will see below, this has many
+a :class:`ModelFit` object.  As we will see below, this has many
 components, including a :meth:`fit_report` method, which will show::
 
     [[Model]]
@@ -404,12 +404,24 @@ on Parameters, or fix their values.
 
 
 
-
-The :class:`ModelFitResult` class
+The :class:`ModelFit` class
 =======================================
 
-A :class:`ModelFitResult` represents the return object of
-:meth:`Model.fit`.
+A :class:`ModelFit` is the object returned by :meth:`Model.fit`.  It is a
+sublcass of :class:`Minimizer`, and so contains many of the fit results.
+Of course, it knows the :class:`Model` and the set of :class:`Parameters`
+used in the fit, and it has methods to evaluate the model, to fit the data
+(or re-fit the data with changes to the parameters, or fit with different
+or modified data) and to print out a report for that fit.
+
+While a :class:`Model` encapsulates your model function, it is fairly
+abstract and does not contain the parameters or data used in a particular
+fit.  A :class:`ModelFit` *does* contain parameters and data as well as
+methods to alter and re-do fits.  Thus the :class:`Model` is the idealized
+model while the :class:`ModelFit` is the messier, more complex (but perhaps
+more useful) object that represents a fit with a set of parameters to data
+with a model.
+
 
 
 .. _modelfit-table:
