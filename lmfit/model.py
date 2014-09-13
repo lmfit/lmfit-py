@@ -70,13 +70,12 @@ class Model(object):
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing='none', prefix='', name=None, components=None, **kws):
+                 missing='none', prefix='', name=None, **kws):
         self.func = func
         self._prefix = prefix
         self._param_root_names = param_names  # will not include prefixes
         self.independent_vars = independent_vars
-        if components is None:
-            self.components = []
+        self.components = []
         self.func_allargs = []
         self.func_haskeywords = False
         if not missing in self._valid_missing:
