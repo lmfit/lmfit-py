@@ -131,19 +131,28 @@ Putting everything together, the script to do such a fit (included in the
 
 .. literalinclude:: ../examples/doc_model1.py
 
-which is pretty compact and to the point.  Of course, the parameter in the
-returned ``result`` have pulled apart the covariance matrix, so that the
-results printed out are::
+which is pretty compact and to the point.  The returned ``result`` will be
+a :class:`ModelFitResult` object.  This has many components, including a
+:meth:`fit_report` method, which will show::
 
+    [[Model]]
+        gaussian
+    [[Fit Statistics]]
+        # function evals   = 33
+        # data points      = 101
+        # variables        = 3
+        chi-square         = 3.409
+        reduced chi-square = 0.035
     [[Variables]]
-         amp:     8.880218 +/- 0.1135949 (1.28%) initial =  5
-         cen:     5.658661 +/- 0.01030495 (0.18%) initial =  5
-         wid:     0.6976547 +/- 0.01030495 (1.48%) initial =  1
-    [[Correlations]] (unreported correlations are <  0.250)
-         C(amp, wid)                  =  0.577
+        amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
+        cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
+        wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
+    [[Correlations]] (unreported correlations are <  0.100)
+        C(amp, wid)                  =  0.577
 
-
-and the plot generated gives:
+The result will also have :attr:`init_fit` for the fit with the initial
+parameter values and a :attr:`best_fit` for the fit with the best fit
+parameter values.  These can be used to generate the following plot:
 
 
 .. image:: _images/model_fit1.png
@@ -154,24 +163,21 @@ which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit in black dashed line.
 
 We emphasize here that the fit to this model function was really performed
-with 2 lines of code.  These lines clearly express that we want to turn the
-``gaussian`` function into a fitting model, and then fit the :math:`y(x)`
-data to this model, starting with values of 5 for ``amp``, 5 for ``cen``
-and 1 for ``wid``::
+with 2 lines of code::
 
     gmod = Model(gaussian)
     result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
-which compares well to :func:`scipy.optimize.curve_fit`::
+These lines clearly express that we want to turn the ``gaussian`` function
+into a fitting model, and then fit the :math:`y(x)` data to this model,
+starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``, and
+compare well to :func:`scipy.optimize.curve_fit`::
 
     best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
-except that all the other features of lmfit are included.
-
-Some model functions may be more complicated than the Gaussian function
-here.  We'll discuss these below, but for now we've shown that at least the
-wrapping of a simple model function for curve fitting is easy.
-
+except that all the other features of lmfit are included such as that the
+:class:`Parameters` can have bounds and constraints and the result is a
+richer object that can be reused to explore the fit in more detail.
 
 
 The :class:`Model` class
@@ -181,7 +187,7 @@ The :class:`Model` class
 The :class:`Model` class provides a general way to wrap a pre-defined
 function as a fitting model.
 
-.. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, components=None]]]]])
+.. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, name=None[, **kws]]]]]])
 
     Create a model based on the user-supplied function.  This uses
     introspection to automatically converting argument names of the
@@ -197,31 +203,46 @@ function as a fitting model.
     :type missing: one of ``None`` (default), 'drop', or 'raise'
     :param prefix: prefix to add to all parameter names to distinguish components.
     :type prefix: string
-    :param components: list of model components for a composite fit (usually handled internally).
-    :type components: ``None`` or default.
     :param name: name for the model. When `None` (default) the name is the same as the model function (`func`).
     :type name: ``None`` or string.
-
+    :param kws:   addtional options to pass to model function.
 
 Methods and Attributes of the :class:`Model` class
 ----------------------------------------------------
 
-.. method:: guess_starting_values(data, **kws)
+.. method:: guess(data, **kws)
+
+   Guess starting values for model parameters.
+
+    :param data: data array used to guess parameter values
+    :type func:  ndarray
+    :param kws:  addtional options to pass to model function.
+    :return: :class:`Parameters` with guessed initial values for each parameter.
 
    by default this is left to raise a ``NotImplementedError``, but may be
    overwritten by subclasses.  Generally, this method should take some
    values for ``data`` and use it to construct reasonable starting values for
    the parameters.
 
-.. method:: set_param(parname, value[, min=None[, max=None[, vary=True[, expr=None]]]])
+.. method:: make_params(**kws)
 
-   set the value for a named parameter, and optionally other
-   :class:`Parameter` attributes.  This is especially convenient for setting
-   initial values.  The ``parname`` can include the models ``prefix`` or
-   not.
+   Create a set of parameters for model.
 
-   :param parname: parameter name.
-   :type parname: string
+    :param kws:  optional keyword/value pairs to set initial values for parameters.
+    :return: :class:`Parameters`.
+
+    The parameters may or may not have decent initial values for each
+    parameter.
+
+
+.. method:: set_param_hint(name, value=None[, min=None[, max=None[, vary=True[, expr=None]]]])
+
+   set *hints* to use when creating parameters with :meth:`make_param` for
+   the named parameter.  This is especially convenient for setting initial
+   values.  The ``name`` can include the models ``prefix`` or not.
+
+   :param name: parameter name.
+   :type name: string
    :param value: value for parameter
    :type value: float
    :param min:  lower bound for parameter value
