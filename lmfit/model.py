@@ -418,7 +418,7 @@ class Model(object):
 
         Returns
         -------
-        lmfit.ModelFitResult
+        lmfit.ModelFit
 
         Examples
         --------
@@ -496,8 +496,8 @@ class Model(object):
             if not np.isscalar(kwargs[var]):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
-        output = ModelFitResult(self, params, method=method, iter_cb=iter_cb,
-                                scale_covar=scale_covar, fcn_kws=kwargs)
+        output = ModelFit(self, params, method=method, iter_cb=iter_cb,
+                          scale_covar=scale_covar, fcn_kws=kwargs)
         output.fit(data=data, weight=weights)
         return output
 
@@ -524,7 +524,7 @@ class Model(object):
         return composite
 
 
-class ModelFitResult(Minimizer):
+class ModelFit(Minimizer):
     """Result from Model fit
 
     Attributes
