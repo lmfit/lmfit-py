@@ -28,9 +28,3 @@ from . import uncertainties
 from .uncertainties import ufloat, correlated_values
 
 from .ui import Fitter
-
-__xall__ = ['minimize', 'Minimizer', 'Parameter', 'Parameters',
-            'conf_interval', 'conf_interval2d', 'wrap_function',
-            'make_paras_and_func', 'fit_report', 'ci_report',
-            'report_errors', 'report_fit', 'report_ci', 'ufloat',
-            'correlated_values']
