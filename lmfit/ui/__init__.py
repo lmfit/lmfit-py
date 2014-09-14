@@ -1,26 +1,28 @@
 # These variables are used at the end of the module to decide
 # which BaseFitter subclass the Fitter will point to.
+
+has_ipython, has_matplotlib = False, False
+
 try:
     import matplotlib
 except ImportError:
-    has_matplotlib = False
+    pass
 else:
     has_matplotlib = True
+
 try:
     import IPython
 except ImportError:
-    has_ipython = False
+    pass
 else:
     try:
         if IPython.release.version_info[0] < 2:
             warnings.warn("IPython versions before 2.0 are not supported. "
                           "Fitter will operate in basic mode, as it would "
                           "in a plain python interpreter.")
-            has_ipython = False
-        elif IPython.get_ipython() is None:
-            has_ipython = False  # It's installed, but we are not in an IPython session.
         else:
-            has_ipython = True
+            # has_ipython = iPython installed and we are in an IPython session.
+            has_ipython = IPython.get_ipython() is not None
     except Exception as e:
         warnings.warn("An error occurred while trying to detect IPython. "
                       "Fitter will operate in basic mode. The error is: "
