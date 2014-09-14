@@ -70,20 +70,18 @@ class Model(object):
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing='none', prefix='', name=None, components=None, **kws):
+                 missing='none', prefix='', name=None, **kws):
         self.func = func
         self._prefix = prefix
         self._param_root_names = param_names  # will not include prefixes
         self.independent_vars = independent_vars
-        if components is None:
-            self.components = []
-        self.func_allargs = []
-        self.func_haskeywords = False
+        self.components = []
+        self._func_allargs = []
+        self._func_haskeywords = False
         if not missing in self._valid_missing:
             raise ValueError(self._invalid_missing)
         self.missing = missing
         self.opts = kws
-        self.result = None
         self.param_hints = {}
         self._param_names = set()
         self._parse_params()
@@ -177,9 +175,9 @@ class Model(object):
             for val in reversed(argspec.defaults):
                 kw_args[pos_args.pop()] = val
         #
-        self.func_haskeywords = keywords is not None
-        self.func_allargs = pos_args + list(kw_args.keys())
-        allargs = self.func_allargs
+        self._func_haskeywords = keywords is not None
+        self._func_allargs = pos_args + list(kw_args.keys())
+        allargs = self._func_allargs
 
         if len(allargs) == 0 and keywords is not None:
             return
@@ -211,7 +209,7 @@ class Model(object):
                 isinstance(val, Parameter)):
                 self.set_param_hint(opt, value=val.value,
                                     min=val.min, max=val.max, expr=val.expr)
-            elif opt in self.func_allargs:
+            elif opt in self._func_allargs:
                 new_opts[opt] = val
         self.opts = new_opts
 
@@ -363,14 +361,14 @@ class Model(object):
         for name, par in params.items():
             if strip:
                 name = self._strip_prefix(name)
-            if name in self.func_allargs or self.func_haskeywords:
+            if name in self._func_allargs or self._func_haskeywords:
                 out[name] = par.value
 
         # kwargs handled slightly differently -- may set param value too!
         for name, val in kwargs.items():
             if strip:
                 name = self._strip_prefix(name)
-            if name in self.func_allargs or self.func_haskeywords:
+            if name in self._func_allargs or self._func_haskeywords:
                 out[name] = val
                 if name in params:
                     params[name].value = val
@@ -420,7 +418,7 @@ class Model(object):
 
         Returns
         -------
-        lmfit.ModelFitResult
+        lmfit.ModelFit
 
         Examples
         --------
@@ -498,8 +496,8 @@ class Model(object):
             if not np.isscalar(kwargs[var]):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
-        output = ModelFitResult(self, params, method=method, iter_cb=iter_cb,
-                                scale_covar=scale_covar, fcn_kws=kwargs)
+        output = ModelFit(self, params, method=method, iter_cb=iter_cb,
+                          scale_covar=scale_covar, fcn_kws=kwargs)
         output.fit(data=data, weight=weights)
         return output
 
@@ -526,7 +524,7 @@ class Model(object):
         return composite
 
 
-class ModelFitResult(Minimizer):
+class ModelFit(Minimizer):
     """Result from Model fit
 
     Attributes
