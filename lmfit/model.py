@@ -502,16 +502,20 @@ class Model(object):
         return output
 
     def __add__(self, other):
+        """A new Model object is created during summation."""
         colliding_param_names = self.param_names & other.param_names
         if len(colliding_param_names) != 0:
             collision = colliding_param_names.pop()
             raise NameError(self._names_collide % collision)
 
+        # assign a new Model object
+        composite = Model(func=None)
+
         # If the model is already composite just add other as component
-        composite = self
-        if not self.is_composite:
-            # make new composite Model, add self and other as components
-            composite = Model(func=None)
+        if self.is_composite:
+            composite.components.extend(self.components)
+            composite.param_hints.update(self.param_hints)
+        else:
             composite.components = [self]
             # we assume that all the sub-models have the same independent vars
             composite.independent_vars = self.independent_vars[:]
