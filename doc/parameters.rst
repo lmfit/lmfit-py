@@ -11,6 +11,7 @@ control what that value is.  Most real use cases will use more than 1
 :class:`Parameter`, and so use the :class:`Parameters` class, which
 provides an ordered dictionary of :class:`Parameter` objects.
 
+.. module:: parameter
 
 The :class:`Parameter` class
 ========================================
@@ -34,7 +35,7 @@ Each of these inputs is turned into an attribute of the same name.
 
 After a fit, a Parameter for a fitted variable (that is with vary =
 ``True``) will have the :attr:`value` attribute holding the best-fit value.
-Depending on the success of the fit and fitting algorithm used, it may also 
+Depending on the success of the fit and fitting algorithm used, it may also
 have attributes :attr:`stderr` and :attr:`correl`.
 
 .. attribute:: stderr
@@ -55,6 +56,8 @@ The :attr:`expr` attribute can contain a mathematical expression that will
 be used to compute the value for the Parameter at each step in the fit.
 See :ref:`constraints_chapter` for more details and examples of this
 feature.
+
+.. index:: Removing a Constraint Expression
 
 .. method:: set(value=None[, vary=None[, min=None[, max=None[, expr=None]]]])
 
@@ -91,6 +94,18 @@ feature.
        # now lift the lower bound
        p1.set(min=-np.inf)   # will work!
 
+   Similarly, to clear an expression of a parameter, you need to pass an
+   empty string, not ``None``.  You also need to give a value and
+   explicitly tell it to vary::
+
+       p3 = Parameter('c', expr='(a+b)/2')
+       p3.set(expr=None)     # won't work!  expression NOT changed
+
+       # remove constraint expression
+       p3.set(value=1.0, vary=True, expr='')  # will work!  parameter now unconstrained
+
+
+.. module:: parameters
 
 The :class:`Parameters` class
 ========================================

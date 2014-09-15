@@ -92,7 +92,7 @@ class Parameter(object):
         self.min = min
         self.max = max
         self.vary = vary
-        self.expr = expr
+        self._expr = expr
         self.deps   = None
         self.stderr = None
         self.correl = None
@@ -232,6 +232,19 @@ class Parameter(object):
     def value(self, val):
         "set value"
         self._val = val
+
+    @property
+    def expr(self):
+        "get expression"
+        return self._expr
+
+    @expr.setter
+    def expr(self, val):
+        "set expr"
+        if val == '':
+            val = None
+        self._expr = val
+
     def __str__(self):
         "string"
         return self.__repr__()

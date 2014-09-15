@@ -4,6 +4,7 @@
 Modeling Data and Curve Fitting
 =================================================
 
+
 A common use of least-squares minimization is *curve fitting*, where one
 has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model to most closely match some
@@ -186,10 +187,10 @@ except that all the other features of lmfit are included such as that the
 :class:`Parameters` can have bounds and constraints and the result is a
 richer object that can be reused to explore the fit in more detail.
 
+.. module:: module
 
 The :class:`Model` class
 =======================================
-
 
 The :class:`Model` class provides a general way to wrap a pre-defined
 function as a fitting model.
@@ -327,7 +328,6 @@ function as a fitting model.
 :class:`Model` class Attributes
 ---------------------------------
 
-
 .. attribute:: components
 
    a list of instances of :class:`Model` that make up a *composite model*.
@@ -402,52 +402,6 @@ modified after creation.  In fact, you'll have to do this because none of the
 parameters have valid initial values.  You can place bounds and constraints
 on Parameters, or fix their values.
 
-
-
-The :class:`ModelFit` class
-=======================================
-
-A :class:`ModelFit` is the object returned by :meth:`Model.fit`.  It is a
-sublcass of :class:`Minimizer`, and so contains many of the fit results.
-Of course, it knows the :class:`Model` and the set of :class:`Parameters`
-used in the fit, and it has methods to evaluate the model, to fit the data
-(or re-fit the data with changes to the parameters, or fit with different
-or modified data) and to print out a report for that fit.
-
-While a :class:`Model` encapsulates your model function, it is fairly
-abstract and does not contain the parameters or data used in a particular
-fit.  A :class:`ModelFit` *does* contain parameters and data as well as
-methods to alter and re-do fits.  Thus the :class:`Model` is the idealized
-model while the :class:`ModelFit` is the messier, more complex (but perhaps
-more useful) object that represents a fit with a set of parameters to data
-with a model.
-
-
-
-.. _modelfit-table:
-
-Table of Model Fit Results: These values are included in the return value
-from :meth:`Model.fit`, in addition to the standard Goodness-of-Fit
-statistics and fit results given in :ref:`Table of Fit Results
-<goodfit-table>`.
-
-   +----------------------------+------------------------------------------------------+
-   | result attribute           |  Description / Formula                               |
-   +============================+======================================================+
-   | ``init_params``            | initial set of parameters                            |
-   +----------------------------+------------------------------------------------------+
-   | ``init_fit``               | initial estimate of fit to data                      |
-   +----------------------------+------------------------------------------------------+
-   | ``best_fit``               | final estimate of fit to data                        |
-   +----------------------------+------------------------------------------------------+
-
-More Details on building models from functions
-============================================================
-
-
-Here we explore some of the variations of building a :class:`Model` from a
-user-defined function that didn't get mentioned in the example above for
-the Gaussian model.
 
 
 Explicitly specifying ``independent_vars``
@@ -560,15 +514,16 @@ the model will know to map these to the ``amplitude`` argument of ``myfunc``.
 Initializing model parameters
 -----------------------------------------
 
-As mentioned above, the parameters created by :class:`Model` are generally
-created with invalid initial values of ``None``.  These values **must** be
-initialized in order for the model to be evaluated or used in a fit.  There
-are three ways to do this initialization that can be used in any
-combination:
+As mentioned above, the parameters created by :meth:`Model.make_params` are
+generally created with invalid initial values of ``None``.  These values
+**must** be initialized in order for the model to be evaluated or used in a
+fit.  There are four different ways to do this initialization that can be
+used in any combination:
 
   1. You can supply initial values in the definition of the model function.
-  2. You can initialize the parameters after the model has been created.
-  3. You can supply initial values for the parameters when you use the
+  2. You can initialize the parameters when creating parameters with :meth:`make_params`.
+  3. You can give parameter hints with :meth:`set_param_hint`.
+  4. You can supply initial values for the parameters when you use the
      :meth:`eval` or :meth:`fit` methods.
 
 Of course these methods can be mixed, allowing you to overwrite initial
@@ -589,50 +544,135 @@ instead of using::
     >>>     ...
 
 This has the advantage of working at the function level -- all parameters
-can be treated as options.
+with keywords can be treated as options.  It also means that some default
+initial value will always be available for the parameter.
 
-Initializing values after the model is created
+
+Initializing values with :meth:`make_params`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-After a model has been created, you can modify its parameters by accessing
-the :attr:`params` attribute (a :class:`Parameters` instance) directly::
+When creating parameters with :meth:`make_params` you can specify initial
+values.  To do this, use keyword arguments for the parameter names and
+initial values::
 
     >>> mod = Model(myfunc)
-    >>> mod.params['a'].value = 1.0
-    >>> mod.params['b'].value = 0.1
+    >>> pars = mod.make_params(a=3, b=0.5)
 
-or with the :meth:`set_param` method::
 
-    >>> mod.set_param('a', 1.0, min=0)
-    >>> mod.set_param('b', 2.0, vary=False)
+Initializing values by setting parameter hints
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-which has the advantage that you can set other
-parameter attributes such as bounds and constraints in a single line.
+After a model has been created, but prior to creating parameters with
+:meth:`make_params`, you can set parameter hints.  These allows you to set
+not only a default initial value but also to set other parameter attributes
+controlling bounds, whether it is varied in the fit, or a constraint
+expression.  To set a parameter hint, you can use :meth:`set_param_hint`,
+as with::
+
+    >>> mod = Model(myfunc)
+    >>> mod.set_param_hint('a', value = 1.0)
+    >>> mod.set_param_hint('b', value = 0.3, min=0, max=1.0)
+    >>> pars = mod.make_params()
+
+Parameter hints are discussed in more detail in section
+:ref:`model_param_hints_section`.
+
 
 Initializing values when using a model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To supply initial values when using a model, you can include values
+Finally, you can explicitly supply initial values when using a model.  That
+is, as with :meth:`make_params`, you can include values
 as keyword arguments to either the :meth:`eval` or :meth:`fit` methods::
 
-   >>> y1 = mod.eval(x=x, a=1, b=3)
+   >>> y1 = mod.eval(x=x, a=7.0, b=-2.0)
 
-Again, these methods can be combined.  For example, you can set parameter
-values and bounds as with option 2, but then change the initial value with
-option 3.
+   >>> out = mod.fit(x=x, pars, a=3.0, b=-0.0)
 
+These approachess to initialization provide many opportunities for setting
+initial values for parameters.  The methods can be combined, so that you
+can set parameter hints but then change the initial value explicitly with
+:meth:`fit`.
 
 .. _model_param_hints_section:
 
-Setting paremeter attributes with :meth:`set_param_hints`
-============================================================
+Using parameter hints
+--------------------------------
 
+
+After a model has been created, you can give it hints for how to create
+parameters with :meth:`make_params`.  This allows you to set not only a
+default initial value but also to set other parameter attributes
+controlling bounds, whether it is varied in the fit, or a constraint
+expression.   To set a parameter hint, you can use :meth:`set_param_hint`,
+as with::
+
+    >>> mod = Model(myfunc)
+    >>> mod.set_param_hint('a', value = 1.0)
+    >>> mod.set_param_hint('b', value = 0.3, min=0, max=1.0)
+
+Parameter hints are stored in a model's :attr:`param_hints` attribute,
+which is simply a nested dictionary::
+
+    >>> print mod.param_hints
+    {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}}
+
+
+You can change this dictionary directly, or with the :meth:`set_param_hint`
+method.  Either way, these parameter hints are used by :meth:`make_params`
+when making parameters.
+
+An important feature of parameter hints is that you can force the creation
+of new parameters with parameter hints.  This can be useful to make derived
+parameters with constraint expressions.  For example to get the full-width
+at half maximum of a Gaussian model, one could use a parameter hint of::
+
+    >>> mod = Model(gaussian)
+    >>> mod.set_param_hint('fwhm', expr='2.3548*sigma')
+
+
+
+The :class:`ModelFit` class
+=======================================
+
+A :class:`ModelFit` is the object returned by :meth:`Model.fit`.  It is a
+sublcass of :class:`Minimizer`, and so contains many of the fit results.
+Of course, it knows the :class:`Model` and the set of :class:`Parameters`
+used in the fit, and it has methods to evaluate the model, to fit the data
+(or re-fit the data with changes to the parameters, or fit with different
+or modified data) and to print out a report for that fit.
+
+While a :class:`Model` encapsulates your model function, it is fairly
+abstract and does not contain the parameters or data used in a particular
+fit.  A :class:`ModelFit` *does* contain parameters and data as well as
+methods to alter and re-do fits.  Thus the :class:`Model` is the idealized
+model while the :class:`ModelFit` is the messier, more complex (but perhaps
+more useful) object that represents a fit with a set of parameters to data
+with a model.
+
+
+
+.. _modelfit-table:
+
+Table of Model Fit Results: These values are included in the return value
+from :meth:`Model.fit`, in addition to the standard Goodness-of-Fit
+statistics and fit results given in :ref:`Table of Fit Results
+<goodfit-table>`.
+
+   +----------------------------+------------------------------------------------------+
+   | result attribute           |  Description / Formula                               |
+   +============================+======================================================+
+   | ``init_params``            | initial set of parameters                            |
+   +----------------------------+------------------------------------------------------+
+   | ``init_fit``               | initial estimate of fit to data                      |
+   +----------------------------+------------------------------------------------------+
+   | ``best_fit``               | final estimate of fit to data                        |
+   +----------------------------+------------------------------------------------------+
 
 .. _composite_models_section:
 
 Creating composite models
 =============================
-
 
 One of the most interesting features of the :class:`Model` class is that
 models can be added together to give a composite model, with parameters
@@ -736,7 +776,7 @@ would have allowed us to identify which parameter went with which component
 model.  As we will see in the next chapter, using composite models with the
 built-in models provides a simple way to build up complex models.
 
-Model names
+Model names for composite models
 -----------------------------------------
 
 By default a `Model` object has a `name` attribute containing the name of
@@ -772,3 +812,4 @@ we can do similarly::
 
 It is evident that assigning names will help to easily distinguish
 the different models.
+

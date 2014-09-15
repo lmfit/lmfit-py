@@ -4,6 +4,9 @@
 Built-in Fitting Models in the :mod:`models` module
 =====================================================
 
+.. module:: models
+
+
 Lmfit provides several builtin fitting models in the :mod:`models` module.
 These pre-defined models each subclass from the :class:`Model` class of the
 previous chapter and wrap relatively well-known functional forms, such as
@@ -11,7 +14,7 @@ Gaussians, Lorentzian, and Exponentials that are used in a wide range of
 scientific domains.  In fact, all the models are all based on simple, plain
 python functions defined in the :mod:`lineshapes` module.  In addition to
 wrapping a function into a :class:`Model`, these models also provide a
-:meth:`guess_starting_values` method that is intended to give a reasonable
+:meth:`guess` method that is intended to give a reasonable
 set of starting values from a data array that closely approximates the
 data to be fit.
 
@@ -44,7 +47,7 @@ Peak-like models
 
 There are many peak-like models available.  These include
 :class:`GaussianModel`, :class:`LorentzianModel`, :class:`VoigtModel` and
-some less commonly used variations.  The :meth:`guess_starting_value`
+some less commonly used variations.  The :meth:`guess`
 methods for all of these make a fairly crude guess for the value of
 ``amplitude``, but also set a lower bound of 0 on the value of ``sigma``.
 
@@ -141,7 +144,7 @@ in
   \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big] + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
 
 
-The :meth:`guess_starting_values` function always gives a starting
+The :meth:`guess` function always gives a starting
 value for ``fraction`` of 0.5
 
 :class:`Pearson7Model`
@@ -160,7 +163,7 @@ parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
     f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
 
 where :math:`\beta` is the beta function (see :func:`scipy.special.beta` in
-:mod:`scipy.special`).  The :meth:`guess_starting_values` function always
+:mod:`scipy.special`).  The :meth:`guess` function always
 gives a starting value for ``exponent`` of 1.5.
 
 :class:`StudentsTModel`
@@ -429,10 +432,10 @@ form:
 
 
 
-Example 1: Fit Peaked data to Gaussian or Voigt profiles
-------------------------------------------------------------------
+Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles
+------------------------------------------------------------------------
 
-Here, we will fit data to two similar lineshapes, in order to decide which
+Here, we will fit data to three similar lineshapes, in order to decide which
 might be the better model.  We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in :class:`GaussianModel` instead
 of one we write ourselves.  This is a slightly different version from the
@@ -447,31 +450,34 @@ built-in default values.  So, we'll simply use::
     y = data[:, 1]
 
     mod = GaussianModel()
-    mod.guess_starting_values(y, x=x)
-    out  = mod.fit(y, x=x)
-    print(mod.fit_report(min_correl=0.25))
+    pars = mod.guess(y, x=x)
+    out  = mod.fit(y, pars, x=x)
+    print(out.fit_report(min_correl=0.25))
 
 which prints out the results::
 
+    [[Model]]
+        gaussian
     [[Fit Statistics]]
-        # function evals   = 25
+        # function evals   = 21
         # data points      = 401
         # variables        = 3
         chi-square         = 29.994
         reduced chi-square = 0.075
     [[Variables]]
-        amplitude:     30.31352 +/- 0.1571252 (0.52%) initial =  21.54192
-        center:        9.242771 +/- 0.00737481 (0.08%) initial =  9.25
-        fwhm:          2.901562 +/- 0.01736635 (0.60%) == '2.354820*sigma'
-        sigma:         1.23218 +/- 0.00737481 (0.60%) initial =  1.35
+        amplitude:   30.3135571 +/- 0.157126 (0.52%) (init= 29.08159)
+        center:      9.24277049 +/- 0.007374 (0.08%) (init= 9.25)
+        fwhm:        2.90156963 +/- 0.017366 (0.60%)  == '2.3548200*sigma'
+        sigma:       1.23218319 +/- 0.007374 (0.60%) (init= 1.35)
     [[Correlations]] (unreported correlations are <  0.250)
         C(amplitude, sigma)          =  0.577
 
-We see a few interesting differences from the results of the previous
-chapter.  First, the parameter names are longer.  Second, there is a
-``fwhm``, defined as :math:`\sim 2.355\sigma`.  And third, the automated
-initial guesses are pretty good.  A plot of the fit shows not such a great
-fit:
+
+[We see a few interesting differences from the results of the previous
+ chapter. First, the parameter names are longer. Second, there is a
+ ``fwhm`` parameter, defined as :math:`\sim 2.355\sigma`. And third, the
+ automated initial guesses are pretty good. A plot of the fit shows not
+ such a great fit:
 
 .. _figA1:
 
@@ -491,54 +497,59 @@ Perhaps a Lorentzian would be better?  To do this, we simply replace
 
     from lmfit.models import LorentzianModel
     mod = LorentzianModel()
-    mod.guess_starting_values(y, x=x)
-    out  = mod.fit(y, x=x)
-    print(mod.fit_report(min_correl=0.25))
+    pars = mod.guess(y, x=x)
+    out  = mod.fit(y, pars, x=x)
+    print(out.fit_report(min_correl=0.25))
 
-The results, or course, are worse::
+Predictably, the first thing we try gives results that are worse::
 
+    [[Model]]
+        lorentzian
     [[Fit Statistics]]
-        # function evals   = 29
+        # function evals   = 25
         # data points      = 401
         # variables        = 3
         chi-square         = 53.754
         reduced chi-square = 0.135
     [[Variables]]
-        amplitude:     38.97278 +/- 0.3138612 (0.81%) initial =  21.54192
-        center:        9.244389 +/- 0.009276152 (0.10%) initial =  9.25
-        fwhm:          2.30968 +/- 0.02631297 (1.14%) == '2.0000000*sigma'
-        sigma:         1.15484 +/- 0.01315648 (1.14%) initial =  1.35
+        amplitude:   38.9728645 +/- 0.313857 (0.81%) (init= 36.35199)
+        center:      9.24438944 +/- 0.009275 (0.10%) (init= 9.25)
+        fwhm:        2.30969034 +/- 0.026312 (1.14%)  == '2.0000000*sigma'
+        sigma:       1.15484517 +/- 0.013156 (1.14%) (init= 1.35)
     [[Correlations]] (unreported correlations are <  0.250)
         C(amplitude, sigma)          =  0.709
 
 
-with the plot shown in the figure above.
+with the plot shown on the right in the figure above.
 
 A Voigt model does a better job.  Using :class:`VoigtModel`, this is
 as simple as::
 
-    from lmfit.models import LorentzianModel
-    mod = LorentzianModel()
-    mod.guess_starting_values(y, x=x)
-    out  = mod.fit(y, x=x)
-    print(mod.fit_report(min_correl=0.25))
+    from lmfit.models import VoigtModel
+    mod = VoigtModel()
+    pars = mod.guess(y, x=x)
+    out  = mod.fit(y, pars, x=x)
+    print(out.fit_report(min_correl=0.25))
 
 which gives::
 
+    [[Model]]
+        voigt
     [[Fit Statistics]]
-        # function evals   = 30
+        # function evals   = 17
         # data points      = 401
         # variables        = 3
         chi-square         = 14.545
         reduced chi-square = 0.037
     [[Variables]]
-        amplitude:     35.75536 +/- 0.1386167 (0.39%) initial =  21.54192
-        center:        9.244111 +/- 0.005055079 (0.05%) initial =  9.25
-        fwhm:          2.629512 +/- 0.01326999 (0.50%) == '3.6013100*sigma'
-        gamma:         0.7301542 +/- 0.003684769 (0.50%) == 'sigma'
-        sigma:         0.7301542 +/- 0.003684769 (0.50%) initial =  1.35
+        amplitude:   35.7554017 +/- 0.138614 (0.39%) (init= 43.62238)
+        center:      9.24411142 +/- 0.005054 (0.05%) (init= 9.25)
+        fwhm:        2.62951718 +/- 0.013269 (0.50%)  == '3.6013100*sigma'
+        gamma:       0.73015574 +/- 0.003684 (0.50%)  == 'sigma'
+        sigma:       0.73015574 +/- 0.003684 (0.50%) (init= 0.8775)
     [[Correlations]] (unreported correlations are <  0.250)
         C(amplitude, sigma)          =  0.651
+
 
 with the much better value for :math:`\chi^2` and the obviously better
 match to the data as seen in the figure below (left).
@@ -563,47 +574,51 @@ the ``gamma`` parameter from a constrained expression and give it a
 starting value::
 
     mod = VoigtModel()
-    mod.guess_starting_values(y, x=x)
-    mod.params['gamma'].expr  = None
-    mod.params['gamma'].value = 0.7
+    pars = mod.guess(y, x=x)
+    pars['gamma'].set(value=0.7, vary=True, expr='')
 
-    out  = mod.fit(y, x=x)
-    print(mod.fit_report(min_correl=0.25))
+    out  = mod.fit(y, pars, x=x)
+    print(out.fit_report(min_correl=0.25))
 
 which gives::
 
+    [[Model]]
+        voigt
     [[Fit Statistics]]
-        # function evals   = 32
+        # function evals   = 21
         # data points      = 401
         # variables        = 4
         chi-square         = 10.930
         reduced chi-square = 0.028
     [[Variables]]
-        amplitude:     34.19147 +/- 0.1794683 (0.52%) initial =  21.54192
-        center:        9.243748 +/- 0.00441902 (0.05%) initial =  9.25
-        fwhm:          3.223856 +/- 0.05097446 (1.58%) == '3.6013100*sigma'
-        gamma:         0.5254013 +/- 0.01857953 (3.54%) initial =  0.7
-        sigma:         0.8951898 +/- 0.01415442 (1.58%) initial =  1.35
+        amplitude:   34.1914716 +/- 0.179468 (0.52%) (init= 43.62238)
+        center:      9.24374845 +/- 0.004419 (0.05%) (init= 9.25)
+        fwhm:        3.22385491 +/- 0.050974 (1.58%)  == '3.6013100*sigma'
+        gamma:       0.52540157 +/- 0.018579 (3.54%) (init= 0.7)
+        sigma:       0.89518950 +/- 0.014154 (1.58%) (init= 0.8775)
     [[Correlations]] (unreported correlations are <  0.250)
         C(amplitude, gamma)          =  0.821
 
-and the fit shown above (on the right).
+
+and the fit shown on the right above.
 
 Comparing the two fits with the Voigt function, we see that :math:`\chi^2`
-is definitely better with a separately varying ``gamma`` parameter.  In
+is definitely improved with a separately varying ``gamma`` parameter.  In
 addition, the two values for ``gamma`` and ``sigma`` differ significantly
 -- well outside the estimated uncertainties.  Even more compelling, reduced
 :math:`\chi^2` is improved even though a fourth variable has been added to
-the fit, justifying it as a significant variable in the model.
+the fit.  In the simplest statistical sense, this suggests that ``gamma``
+is a significant variable in the model.
 
 
 This example shows how easy it can be to alter and compare fitting models
-for simple problems.
+for simple problems.  The example is included in the ``doc_peakmodels.py``
+file in the examples directory.
+
 
 
 Example 2: Fit data to a Composite Model with pre-defined models
 ------------------------------------------------------------------
-
 
 Here, we repeat the point made at the end of the last chapter that instances
 of :class:`Model` class can be added them together to make a *composite
@@ -616,9 +631,10 @@ constant:
 After constructing step-like data, we first create a :class:`StepModel`
 telling it to use the ``erf`` form (see details above), and a
 :class:`ConstantModel`.  We set initial values, in one case using the data
-and :meth:`guess_starting_values` method, and using the explicit
-:meth:`set_param` for the initial constant value.  After making a composite
-model, we run :meth:`fit` and report the results, which give::
+and :meth:`guess` method for the intial step function paramaters, and
+:meth:`make_params` arguments for the linear component.
+After making a composite model, we run :meth:`fit` and report the
+results, which give::
 
     [[Fit Statistics]]
         # function evals   = 52
@@ -660,19 +676,12 @@ involving a decaying exponential and two gaussians.
 
 where we give a separate prefix to each model (they all have an
 ``amplitude`` parameter).  The ``prefix`` values are attached transparently
-to the models.  Note that the calls to :meth:`set_param` used the bare
-name, without the prefix.   We could have used them, but because we used
-the individual model ``gauss1`` and ``gauss2``, there was no need.  Had we
-used the composite model to set the initial parameter values, we would have
-needed to, as with::
+to the models.
 
-    ## WRONG
-    mod.set_param('amplitude', 500, min=10)
+MN----: Note that the calls to :meth:`make_param` used the bare
+name, without the prefix.  We could have used them, but because we used the
+individual model ``gauss1`` and ``gauss2``, there was no need.
 
-    ## Raises KeyError: "'amplitude' not a parameter name"
-
-    ## Correct
-    mod.set_param('g1_amplitude', 501, min=10)
 
 Note also in the example here that we explicitly set bounds on many of the
 parameter values.
@@ -737,9 +746,9 @@ That is, with::
     ix2 = index_of(x, 135)
     ix3 = index_of(x, 175)
 
-    exp_mod.guess_starting_values(y[:ix1], x=x[:ix1])
-    gauss1.guess_starting_values(y[ix1:ix2], x=x[ix1:ix2])
-    gauss2.guess_starting_values(y[ix2:ix3], x=x[ix2:ix3])
+    exp_mod.guess(y[:ix1], x=x[:ix1])
+    gauss1.guess(y[ix1:ix2], x=x[ix1:ix2])
+    gauss2.guess(y[ix2:ix3], x=x[ix2:ix3])
 
 we can get a better initial estimate, and the fit converges in fewer steps,
 getting to identical values (to the precision printed out in the report),
