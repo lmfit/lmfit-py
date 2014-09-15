@@ -200,7 +200,7 @@ class NotebookFitter(MPLFitter):
         # Dropdown menu of all subclasses of Model, incl. user-defined.
         self.models_menu = Dropdown()
         if all_models is None:
-            all_models = {m.__name__: m for m in Model.__subclasses__()}
+            all_models = dict([(m.__name__, m) for m in Model.__subclasses__()])
         self.models_menu.values = all_models
         self.models_menu.on_trait_change(self._on_model_value_change,
                                              'value')
