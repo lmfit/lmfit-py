@@ -63,7 +63,7 @@ starting point::
         a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
         b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(a, b)                      =  0.601 
+        C(a, b)                      =  0.601
 
 Now it is just a simple function call to calculate the confidence
 intervals::
@@ -98,19 +98,19 @@ uncertainties and correlations::
     >>> x = np.linspace(1, 10, 250)
     >>> np.random.seed(0)
     >>> y = 3.0*np.exp(-x/2) -5.0*np.exp(-(x-0.1)/10.) + 0.1*np.random.randn(len(x))
-    >>> 
+    >>>
     >>> p = lmfit.Parameters()
     >>> p.add_many(('a1', 4.), ('a2', 4.), ('t1', 3.), ('t2', 3.))
-    >>> 
+    >>>
     >>> def residual(p):
     ...    v = p.valuesdict()
     ...    return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1)/v['t2'])-y
-    >>> 
+    >>>
     >>> # first solve with Nelder-Mead
     >>> mi = lmfit.minimize(residual, p, method='Nelder')
     >>> # then solve with Levenberg-Marquardt
     >>> mi = lmfit.minimize(residual, p)
-    >>> 
+    >>>
     >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
 
     [[Variables]]
@@ -119,7 +119,7 @@ uncertainties and correlations::
         t1:   1.30994233 +/- 0.131211 (10.02%) (init= 1.309932)
         t2:   11.8240350 +/- 0.463164 (3.92%) (init= 11.82408)
     [[Correlations]] (unreported correlations are <  0.500)
-        C(a2, t2)                    =  0.987 
+        C(a2, t2)                    =  0.987
 
 
 Again we call :func:`conf_interval`, this time with tracing and only for 1-
