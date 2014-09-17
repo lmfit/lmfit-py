@@ -498,7 +498,7 @@ class Model(object):
 
         output = ModelFit(self, params, method=method, iter_cb=iter_cb,
                           scale_covar=scale_covar, fcn_kws=kwargs)
-        output.fit(data=data, weight=weights)
+        output.fit(data=data, weights=weights)
         return output
 
     def __add__(self, other):
