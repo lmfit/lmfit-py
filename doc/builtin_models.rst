@@ -636,20 +636,27 @@ and :meth:`guess` method for the intial step function paramaters, and
 After making a composite model, we run :meth:`fit` and report the
 results, which give::
 
+
+    [[Model]]
+     Composite Model:
+        step(prefix='step_',form='erf')
+        linear(prefix='line_')
     [[Fit Statistics]]
-        # function evals   = 52
+        # function evals   = 49
         # data points      = 201
-        # variables        = 4
-        chi-square         = 600.191
-        reduced chi-square = 3.047
+        # variables        = 5
+        chi-square         = 633.465
+        reduced chi-square = 3.232
     [[Variables]]
-        amplitude:     111.1106 +/- 0.3122441 (0.28%) initial =  115.3431
-        c:             11.31151 +/- 0.2631688 (2.33%) initial =  9.278188
-        center:        3.122191 +/- 0.00506929 (0.16%) initial =  5
-        sigma:         0.6637199 +/- 0.009799607 (1.48%) initial =  1.428571
+        line_intercept:   11.5685248 +/- 0.285611 (2.47%) (init= 10.72406)
+        line_slope:       2.03270159 +/- 0.096041 (4.72%) (init= 0)
+        step_amplitude:   112.270535 +/- 0.674790 (0.60%) (init= 136.3006)
+        step_center:      3.12343845 +/- 0.005370 (0.17%) (init= 2.5)
+        step_sigma:       0.67468813 +/- 0.011336 (1.68%) (init= 1.428571)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(c, center)                 =  0.381
-        C(amplitude, sigma)          =  0.381
+        C(step_amplitude, step_sigma)  =  0.564
+        C(line_intercept, step_center)  =  0.428
+        C(step_amplitude, step_center)  =  0.109
 
 with a plot of
 
@@ -688,23 +695,28 @@ parameter values.
 
 The fit results printed out are::
 
-    [Fit Statistics]]
+    [[Model]]
+     Composite Model:
+        gaussian(prefix='g1_')
+        gaussian(prefix='g2_')
+        exponential(prefix='exp_')
+    [[Fit Statistics]]
         # function evals   = 55
         # data points      = 250
         # variables        = 8
         chi-square         = 1247.528
         reduced chi-square = 5.155
     [[Variables]]
-        exp_amplitude:     99.01833 +/- 0.5374875 (0.54%) initial =  162.2102
-        exp_decay:         90.95088 +/- 1.103105 (1.21%) initial =  93.24905
-        g1_amplitude:      4257.774 +/- 42.38354 (1.00%) initial =  2000
-        g1_center:         107.031 +/- 0.150068 (0.14%) initial =  105
-        g1_fwhm:           39.26092 +/- 0.3779078 (0.96%) == '2.354820*g1_sigma'
-        g1_sigma:          16.67258 +/- 0.1604827 (0.96%) initial =  15
-        g2_amplitude:      2493.417 +/- 36.16907 (1.45%) initial =  2000
-        g2_center:         153.2701 +/- 0.1946652 (0.13%) initial =  155
-        g2_fwhm:           32.51288 +/- 0.4398601 (1.35%) == '2.354820*g2_sigma'
-        g2_sigma:          13.80695 +/- 0.1867914 (1.35%) initial =  15
+        exp_amplitude:   99.0183291 +/- 0.537487 (0.54%) (init= 162.2102)
+        exp_decay:       90.9508788 +/- 1.103104 (1.21%) (init= 93.24905)
+        g1_amplitude:    4257.77384 +/- 42.38354 (1.00%) (init= 2000)
+        g1_center:       107.030955 +/- 0.150068 (0.14%) (init= 105)
+        g1_fwhm:         39.2609205 +/- 0.377907 (0.96%)  == '2.3548200*g1_sigma'
+        g1_sigma:        16.6725781 +/- 0.160482 (0.96%) (init= 15)
+        g2_amplitude:    2493.41747 +/- 36.16907 (1.45%) (init= 2000)
+        g2_center:       153.270103 +/- 0.194665 (0.13%) (init= 155)
+        g2_fwhm:         32.5128760 +/- 0.439860 (1.35%)  == '2.3548200*g2_sigma'
+        g2_sigma:        13.8069474 +/- 0.186791 (1.35%) (init= 15)
     [[Correlations]] (unreported correlations are <  0.500)
         C(g1_amplitude, g1_sigma)    =  0.824
         C(g2_amplitude, g2_sigma)    =  0.815
@@ -712,6 +724,7 @@ The fit results printed out are::
         C(g1_amplitude, g2_center)   =  0.648
         C(g1_center, g2_center)      =  0.621
         C(g1_center, g1_sigma)       =  0.507
+
 
 
 We get a very good fit to this challenging problem (described at the NIST
@@ -754,6 +767,11 @@ we can get a better initial estimate, and the fit converges in fewer steps,
 getting to identical values (to the precision printed out in the report),
 and without any bounds on parameters at all::
 
+    [[Model]]
+     Composite Model:
+        gaussian(prefix='g1_')
+        gaussian(prefix='g2_')
+        exponential(prefix='exp_')
     [[Fit Statistics]]
         # function evals   = 46
         # data points      = 250
@@ -761,16 +779,16 @@ and without any bounds on parameters at all::
         chi-square         = 1247.528
         reduced chi-square = 5.155
     [[Variables]]
-        exp_amplitude:     99.01833 +/- 0.5374875 (0.54%) initial =  94.53724
-        exp_decay:         90.95089 +/- 1.103105 (1.21%) initial =  111.1985
-        g1_amplitude:      4257.773 +/- 42.38338 (1.00%) initial =  2126.432
-        g1_center:         107.031 +/- 0.1500679 (0.14%) initial =  106.5
-        g1_fwhm:           39.26091 +/- 0.3779053 (0.96%) == '2.354820*g1_sigma'
-        g1_sigma:          16.67258 +/- 0.1604816 (0.96%) initial =  14.5
-        g2_amplitude:      2493.418 +/- 36.16948 (1.45%) initial =  1878.892
-        g2_center:         153.2701 +/- 0.1946675 (0.13%) initial =  150
-        g2_fwhm:           32.51288 +/- 0.4398666 (1.35%) == '2.354820*g2_sigma'
-        g2_sigma:          13.80695 +/- 0.1867942 (1.35%) initial =  15
+        exp_amplitude:   99.0183281 +/- 0.537487 (0.54%) (init= 94.53724)
+        exp_decay:       90.9508863 +/- 1.103105 (1.21%) (init= 111.1985)
+        g1_amplitude:    4257.77321 +/- 42.38338 (1.00%) (init= 2126.432)
+        g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 106.5)
+        g1_fwhm:         39.2609141 +/- 0.377905 (0.96%)  == '2.3548200*g1_sigma'
+        g1_sigma:        16.6725754 +/- 0.160481 (0.96%) (init= 14.5)
+        g2_amplitude:    2493.41766 +/- 36.16948 (1.45%) (init= 1878.892)
+        g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 150)
+        g2_fwhm:         32.5128777 +/- 0.439866 (1.35%)  == '2.3548200*g2_sigma'
+        g2_sigma:        13.8069481 +/- 0.186794 (1.35%) (init= 15)
     [[Correlations]] (unreported correlations are <  0.500)
         C(g1_amplitude, g1_sigma)    =  0.824
         C(g2_amplitude, g2_sigma)    =  0.815
@@ -778,6 +796,7 @@ and without any bounds on parameters at all::
         C(g1_amplitude, g2_center)   =  0.648
         C(g1_center, g2_center)      =  0.621
         C(g1_center, g1_sigma)       =  0.507
+
 
 
 This example is in the file ``doc_nistgauss2.py`` in the examples folder,

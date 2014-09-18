@@ -20,7 +20,7 @@ details on writing the function to minimize.
 
 .. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **leastsq_kws]]]]]])
 
-   find values for the ``params`` so that the sum-of-squares of the array returned 
+   find values for the ``params`` so that the sum-of-squares of the array returned
    from ``function`` is minimized.
 
    :param function:  function to return fit residual.  See :ref:`fit-func-label` for details.
@@ -48,6 +48,11 @@ details on writing the function to minimize.
    On output, the params will be updated with best-fit values and, where
    appropriate, estimated uncertainties and correlations.  See
    :ref:`fit-results-label` for further details.
+
+   If provided, the ``iter_cb`` function should take arguments of ``params,
+   iter, resid, *args, **kws``, where ``params`` will have the current
+   parameter values, ``iter`` the iteration, ``resid`` the current residual
+   array, and ``*args`` and ``**kws`` as passed to the objective function.
 
 ..  _fit-func-label:
 
@@ -439,7 +444,7 @@ which would write out::
         period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
         shift:    0.16203677 +/- 0.014056 (8.67%) (init= 0)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(period, shift)             =  0.797 
-        C(amp, decay)                =  0.582 
+        C(period, shift)             =  0.797
+        C(amp, decay)                =  0.582
 
 

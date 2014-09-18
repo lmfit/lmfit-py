@@ -273,10 +273,6 @@ function as a fitting model.
    independent variables!) will need to be passed in using keyword
    arguments.
 
-   The result returned from :meth:`fit` will contains all of the items
-   returned from :func:`minimize` (see  :ref:`Table of Fit Results
-   <goodfit-table>` plus those listed in the :ref:`Table of Model Fit results <modelfit-table>`
-
 
 .. method:: guess(data, **kws)
 
@@ -342,6 +338,10 @@ function as a fitting model.
 .. attribute:: independent_vars
 
    list of strings for names of the independent variables.
+
+.. attribute:: is_composite
+
+   Boolean value for whether model is a composite model.
 
 .. attribute:: missing
 
@@ -650,24 +650,154 @@ model while the :class:`ModelFit` is the messier, more complex (but perhaps
 more useful) object that represents a fit with a set of parameters to data
 with a model.
 
+A :class:`ModelFit` has several attributes holding values for fit results,
+and several methods for working with fits.
+
+:class:`ModelFit` methods
+---------------------------------
+
+These methods are all inherited from :class:`Minimize` or from
+:class:`Model`.
+
+.. method:: eval(**kwargs)
+
+   evaluate the model using the best-fit parameters and supplied
+   independent variables.  The ``**kwargs`` arguments can be used to update
+   parameter values and/or independent variables.
+
+.. method:: fit(data=None[, params=None[, weights=None[, method=None[, **kwargs]]]])
+
+   fit (or re-fit), optionally changing ``data``, ``params``, ``weights``,
+   or ``method``, or changing the independent variable(s) with the
+   ``**kwargs`` argument.  See :meth:`Model.fit` for argument
+   descriptions, and note that any value of ``None`` defaults to the last
+   used value.
+
+.. method:: fit_report(modelpars=None[, show_correl=True[, min_correl=0.1]])
+
+   return a printable fit report for the fit with fit statistics, best-fit
+   values with uncertainties and correlations.  As with :func:`fit_report`.
+
+   :param modelpars:    Parameters with "Known Values" (optional, default None)
+   :param show_correl:  whether to show list of sorted correlations [``True``]
+   :param min_correl:   smallest correlation absolute value to show [0.1]
 
 
-.. _modelfit-table:
 
-Table of Model Fit Results: These values are included in the return value
-from :meth:`Model.fit`, in addition to the standard Goodness-of-Fit
-statistics and fit results given in :ref:`Table of Fit Results
-<goodfit-table>`.
 
-   +----------------------------+------------------------------------------------------+
-   | result attribute           |  Description / Formula                               |
-   +============================+======================================================+
-   | ``init_params``            | initial set of parameters                            |
-   +----------------------------+------------------------------------------------------+
-   | ``init_fit``               | initial estimate of fit to data                      |
-   +----------------------------+------------------------------------------------------+
-   | ``best_fit``               | final estimate of fit to data                        |
-   +----------------------------+------------------------------------------------------+
+:class:`ModelFit` attributes
+---------------------------------
+
+.. attribute:: best_fit
+
+   ndarray result of model function, evaluated at provided
+   independent variables and with best-fit parameters.
+
+.. attribute:: best_values
+
+   dictionary with  parameter names as keys, and best-fit values as values.
+
+.. attribute:: chisqr
+
+   floating point best-fit chi-square statistic.
+
+.. attribute:: covar
+
+   ndarray (square) covariance matrix returned from fit.
+
+.. attribute:: data
+
+   ndarray of data to compare to model.
+
+.. attribute:: errorbars
+
+   boolean for whether error bars were estimated by fit.
+
+.. attribute::  ier
+
+   integer returned code from :func:`scipy.optimize.leastsq`.
+
+.. attribute:: init_fit
+
+   ndarray result of model function, evaluated at provided
+   independent variables and with initial parameters.
+
+.. attribute:: init_params
+
+   initial parameters.
+
+.. attribute:: init_values
+
+   dictionary with  parameter names as keys, and initial values as values.
+
+.. attribute:: iter_cb
+
+   optional callable function, to be called at each fit iteration.  This
+   must take take arguments of ``params, iter, resid, *args, **kws``, where
+   ``params`` will have the current parameter values, ``iter`` the
+   iteration, ``resid`` the current residual array, and ``*args`` and
+   ``**kws`` as passed to the objective function.
+
+.. attribute:: jacfcn
+
+   optional callable function, to be called to calculate jacobian array.
+
+.. attribute::  lmdif_message
+
+   string message returned from :func:`scipy.optimize.leastsq`.
+
+.. attribute::  message
+
+   string message returned from :func:`minimize`.
+
+.. attribute::  method
+
+   string naming fitting method for :func:`minimize`.
+
+.. attribute::  model
+
+   instance of :class:`Model` used for model.
+
+.. attribute::  ndata
+
+    integer number of data points.
+
+.. attribute::  nfev
+
+    integer number of function evaluations used for fit.
+
+.. attribute::  nfree
+
+    integer number of free paramaeters in fit.
+
+.. attribute::  nvarys
+
+    integer number of independent, freely varying variables in fit.
+
+.. attribute::  params
+
+    Parameters used in fit.  Will have best-fit values.
+
+.. attribute::  redchi
+
+    floating point reduced chi-square statistic
+
+.. attribute::  residual
+
+   ndarray for residual.
+
+.. attribute::  scale_covar
+
+   boolean flag for whether to automatically scale covariance matrix.
+
+.. attribute:: success
+
+   boolean value of whether fit succeeded.
+
+.. attribute:: weights
+
+   ndarray (or ``None``) of weighting values used in fit.
+
 
 .. _composite_models_section:
 
@@ -714,7 +844,10 @@ This model has parameters for both component models, and can be used as:
 
 which prints out the results::
 
-
+    [[Model]]
+     Composite Model:
+        gaussian
+        line
     [[Fit Statistics]]
         # function evals   = 44
         # data points      = 101
@@ -722,14 +855,15 @@ which prints out the results::
         chi-square         = 2.579
         reduced chi-square = 0.027
     [[Variables]]
-         amp:           8.459311 +/- 0.1241451 (1.47%) initial =  5
-         cen:           5.655479 +/- 0.009176784 (0.16%) initial =  5
-         intercept:    -0.968602 +/- 0.03352202 (3.46%) initial =  1
-         slope:         0.264844 +/- 0.005748921 (2.17%) initial =  0
-         wid:           0.6754552 +/- 0.009916862 (1.47%) initial =  1
+        amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
+        cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
+        intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
+        slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
+        wid:         0.67545523 +/- 0.009916 (1.47%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
         C(amp, wid)                  =  0.666
         C(cen, intercept)            =  0.129
+
 
 and shows the plot on the left.
 
@@ -767,7 +901,6 @@ extrapolate the model outside the fitting range.    This can be done with::
 
     xwide = np.linspace(-5, 25, 3001)
     predicted = mod.eval(x=xwide)
-
 
 
 A final note: In this example, the argument names for the model functions
