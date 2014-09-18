@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Non-Linear Least-Square Minimization and Curve-Fitting for Python &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <title>Contents &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="#" />
-    <link rel="next" title="Getting started with Non-Linear Least-Squares Fitting" href="intro.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
         "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
@@ -73,9 +72,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="intro.html" title="Getting started with Non-Linear Least-Squares Fitting"
-             accesskey="N">next</a> |</li>
    <li>[<a href="intro.html">intro</a>|</li>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
@@ -89,31 +85,12 @@
     </div>
 
       <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper"><h3>Getting LMFIT</h3>
-<p>Current version: <b>0.8.0rc4</b></p>
-<p>Download: &nbsp; <a href="http://pypi.python.org/pypi/lmfit/">PyPI (Python.org)</a>
-<p>Install:  &nbsp; <tt>pip install lmfit</tt>
-<p>
-<p>Development version: <br> 
-&nbsp; &nbsp; <a href="https://github.com/lmfit/lmfit-py/">github.com</a> <br>
-
-<h3>Support and Feedback</h3>
-
-&nbsp; <a href="https://groups.google.com/group/lmfit-py"> Mailing List</a> 
-
-<br>
-&nbsp; <a href="https://github.com/lmfit/lmfit-py/issues"> Issue Tracker</a>
-
-<h3>Off-line Documentation</h3>
-
-[<a href="http://cars9.uchicago.edu/software/python/lmfit/lmfit.pdf">PDF</a>
-|<a href="http://cars9.uchicago.edu/software/python/lmfit/lmfit.epub">EPUB</a>
-|<a href="http://cars9.uchicago.edu/software/python/lmfit/lmfit_doc.zip">HTML(zip)</a>
-]
-
-
-<hr> 
-<p>
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/contents.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
@@ -135,44 +112,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="non-linear-least-square-minimization-and-curve-fitting-for-python">
-<h1>Non-Linear Least-Square Minimization and Curve-Fitting for Python<a class="headerlink" href="#non-linear-least-square-minimization-and-curve-fitting-for-python" title="Permalink to this headline">¶</a></h1>
-<p>The lmfit python package provides a simple and flexible interface to
-non-linear optimization and curve fitting problems. Initially designed to
-extend the the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm in
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>, lmfit supports most of the optimization
-methods from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  It also provides a simple way to apply
-this extension to <em>curve fitting</em> or <em>data modeling</em> problems.</p>
-<p>The key concept in lmfit is the <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> &#8211; the quantity to be
-optimized in all minimization problems in place of a plain floating point
-number.  A <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> has a value that can be varied in the fit,
-fixed, have upper and/or lower bounds.  It can even have a value that is
-constrained by an algebraic expression of other Parameter values.  Since
-<tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> live outside the core optimization routines, they can
-be used in <strong>all</strong> optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  By
-using <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> objects instead of plain variables, the objective
-function does not have to be modified to reflect every change of what is
-varied in the fit.  This simplifies the writing of models, allowing general
-models that describe the phenomenon to be written, and gives the user more
-flexibility in using and testing variations of that model.</p>
-<p>Lmfit supports several optimization methods from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.
-The default and best tested optimization method (and the origin of the
-name) is the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm of
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.  An important feature of this method is
-that it automatically estimates uncertainties and correlations between
-fitted variables from the covariance matrix used in the fit. But, because
-this approach is sometimes questioned (and rightly so), lmfit also supports
-methods to do a brute force determination of the confidence intervals for
-a set of parameters.</p>
-<p>Lmfit provides high-level curve-fitting or data modeling functionality
-through its <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class, which extends the capabilities of
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>.  This allows you to turn a function that
-models for your data into a python class that helps you parametrize and fit
-data with that model.  Many pre-built models for common lineshapes are
-included and ready to use.</p>
-<p>The lmfit package is an open-source project, and the software and this
-document are works in progress.  If you are interested in participating in
-this effort please use the <a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
+  <div class="section" id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Getting started with Non-Linear Least-Squares Fitting</a></li>
@@ -203,16 +144,61 @@ this effort please use the <a class="reference external" href="http://github.com
 </li>
 <li class="toctree-l1"><a class="reference internal" href="model.html">Modeling Data and Curve Fitting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="model.html#example-fit-data-to-gaussian-profile">Example: Fit data to Gaussian profile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#the-model-class">The <tt class="docutils literal"><span class="pre">Model</span></tt> class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#the-modelfit-class">The <tt class="docutils literal"><span class="pre">ModelFit</span></tt> class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#creating-composite-models">Creating composite models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.html#the-model-class">The <tt class="docutils literal"><span class="pre">Model</span></tt> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model.html#model-class-methods"><tt class="docutils literal"><span class="pre">Model</span></tt> class Methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#model-class-attributes"><tt class="docutils literal"><span class="pre">Model</span></tt> class Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#determining-parameter-names-and-independent-variables-for-a-function">Determining parameter names and independent variables for a function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#explicitly-specifying-independent-vars">Explicitly specifying <tt class="docutils literal"><span class="pre">independent_vars</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#functions-with-keyword-arguments">Functions with keyword arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#defining-a-prefix-for-the-parameters">Defining a <tt class="docutils literal"><span class="pre">prefix</span></tt> for the Parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#initializing-model-parameters">Initializing model parameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#using-parameter-hints">Using parameter hints</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="model.html#the-modelfit-class">The <tt class="docutils literal"><span class="pre">ModelFit</span></tt> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model.html#modelfit-methods"><tt class="docutils literal"><span class="pre">ModelFit</span></tt> methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#modelfit-attributes"><tt class="docutils literal"><span class="pre">ModelFit</span></tt> attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="model.html#creating-composite-models">Creating composite models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model.html#model-names-for-composite-models">Model names for composite models</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="builtin_models.html">Built-in Fitting Models in the <tt class="docutils literal"><span class="pre">models</span></tt> module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#peak-like-models">Peak-like models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#linear-and-polynomial-models">Linear and Polynomial Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#step-like-models">Step-like models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#exponential-and-power-law-models">Exponential and Power law models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#peak-like-models">Peak-like models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#gaussianmodel"><tt class="docutils literal"><span class="pre">GaussianModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#lorentzianmodel"><tt class="docutils literal"><span class="pre">LorentzianModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#voigtmodel"><tt class="docutils literal"><span class="pre">VoigtModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#pseudovoigtmodel"><tt class="docutils literal"><span class="pre">PseudoVoigtModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#pearson7model"><tt class="docutils literal"><span class="pre">Pearson7Model</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#studentstmodel"><tt class="docutils literal"><span class="pre">StudentsTModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#breitwignermodel"><tt class="docutils literal"><span class="pre">BreitWignerModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#lognormalmodel"><tt class="docutils literal"><span class="pre">LognormalModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#dampedocsillatormodel"><tt class="docutils literal"><span class="pre">DampedOcsillatorModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#exponentialgaussianmodel"><tt class="docutils literal"><span class="pre">ExponentialGaussianModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#donaichmodel"><tt class="docutils literal"><span class="pre">DonaichModel</span></tt></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#linear-and-polynomial-models">Linear and Polynomial Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#constantmodel"><tt class="docutils literal"><span class="pre">ConstantModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#linearmodel"><tt class="docutils literal"><span class="pre">LinearModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#quadraticmodel"><tt class="docutils literal"><span class="pre">QuadraticModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#parabolicmodel"><tt class="docutils literal"><span class="pre">ParabolicModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#polynomialmodel"><tt class="docutils literal"><span class="pre">PolynomialModel</span></tt></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#step-like-models">Step-like models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#stepmodel"><tt class="docutils literal"><span class="pre">StepModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#rectanglemodel"><tt class="docutils literal"><span class="pre">RectangleModel</span></tt></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#exponential-and-power-law-models">Exponential and Power law models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#exponentialmodel"><tt class="docutils literal"><span class="pre">ExponentialModel</span></tt></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#powerlawmodel"><tt class="docutils literal"><span class="pre">PowerLawModel</span></tt></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles">Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-2-fit-data-to-a-composite-model-with-pre-defined-models">Example 2: Fit data to a Composite Model with pre-defined models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-3-fitting-multiple-peaks-and-using-prefixes">Example 3: Fitting Multiple Peaks &#8211; and using Prefixes</a></li>
@@ -249,9 +235,6 @@ this effort please use the <a class="reference external" href="http://github.com
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="intro.html" title="Getting started with Non-Linear Least-Squares Fitting"
-             >next</a> |</li>
    <li>[<a href="intro.html">intro</a>|</li>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>

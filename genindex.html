@@ -7,15 +7,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; Least-Squares Minimization with Constraints for Python</title>
+    <title>Index &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.7.4',
+        VERSION:     '0.8.0rc4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,21 +24,67 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Least-Squares Minimization with Constraints for Python" href="index.html" /> 
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
   </head>
   <body>
+<div>
+<table border=0>
+  <tr><td></td><td width=75% padding=5 align=left>
+       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=8% align=left>
+          <a href="installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td width=8% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+  </tr>
+  <tr><td></td><td width=75% padding=5 align=left>
+        <a href="index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="intro.html" style="color: #882222">
+         <font size+=1>Introduction</font></a> </td>
+     <td width=8% align=left>
+         <a href="parameters.html" style="color: #882222">
+         <font size+=1>Parameters</font></a> </td>
+     <td width=8% align=left>
+         <a href="model.html" style="color: #882222">
+         <font size+=1>Models</font></a> </td>
+
+  </tr>
+</table>
+</div>
+
     <div class="related">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="#" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="constraints.html">constraints</a>]</li>
+ 
       </ul>
     </div>
+
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
 
@@ -70,33 +116,57 @@
 
 <div class="genindex-jumpbox">
  <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#W"><strong>W</strong></a>
  
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="parameters.html#add">add()</a>
-  </dt>
-
-      
-  <dt><a href="parameters.html#add_many">add_many()</a>
+  <dt><a href="parameters.html#parameters.add">add() (in module parameters)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#anneal">anneal()</a>
+  <dt><a href="parameters.html#parameters.add_many">add_many() (in module parameters)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.best_fit">best_fit (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.best_values">best_values (in module module)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="builtin_models.html#models.BreitWignerModel">BreitWignerModel (class in models)</a>
   </dt>
 
   </dl></td>
@@ -105,6 +175,14 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.chisqr">chisqr (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.components">components (in module module)</a>
+  </dt>
+
       
   <dt><a href="confidence.html#lmfit.conf_interval">conf_interval() (in module lmfit)</a>
   </dt>
@@ -120,7 +198,35 @@
   </dt>
 
       
-  <dt><a href="parameters.html#correl">correl</a>
+  <dt><a href="builtin_models.html#models.ConstantModel">ConstantModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="parameters.html#parameter.correl">correl (in module parameter)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.covar">covar (in module module)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="builtin_models.html#models.DampedOcsillatorModel">DampedOcsillatorModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.data">data (in module module)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="builtin_models.html#models.DonaichModel">DonaichModel (class in models)</a>
   </dt>
 
   </dl></td>
@@ -130,7 +236,21 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="models1d.html#ExponentialModel">ExponentialModel (built-in class)</a>, <a href="models1d.html#ExponentialModel">[1]</a>
+  <dt><a href="model.html#module.errorbars">errorbars (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.eval">eval() (in module module)</a>, <a href="model.html#module.eval">[1]</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="builtin_models.html#models.ExponentialGaussianModel">ExponentialGaussianModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.ExponentialModel">ExponentialModel (class in models)</a>
   </dt>
 
   </dl></td>
@@ -140,13 +260,27 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#fit_report">fit_report() (built-in function)</a>
+  <dt><a href="model.html#module.fit">fit() (in module module)</a>, <a href="model.html#module.fit">[1]</a>
   </dt>
 
+      
+  <dt><a href="fitting.html#Minimizer.fit_report">fit_report() (in module Minimizer)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="model.html#module.fit_report">(in module module)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#fmin">fmin()</a>
+  <dt><a href="fitting.html#Minimizer.fmin">fmin() (in module Minimizer)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.func">func (in module module)</a>
   </dt>
 
   </dl></td>
@@ -156,7 +290,59 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="models1d.html#GaussianModel">GaussianModel (built-in class)</a>
+  <dt><a href="builtin_models.html#models.GaussianModel">GaussianModel (class in models)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.guess">guess() (in module module)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.ier">ier (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.independent_vars">independent_vars (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.init_fit">init_fit (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.init_params">init_params (in module module)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.init_values">init_values (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.is_composite">is_composite (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.iter_cb">iter_cb (in module module)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.jacfcn">jacfcn (in module module)</a>
   </dt>
 
   </dl></td>
@@ -166,17 +352,29 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#lbfgsb">lbfgsb()</a>
+  <dt><a href="fitting.html#Minimizer.lbfgsb">lbfgsb() (in module Minimizer)</a>
   </dt>
 
       
-  <dt><a href="fitting.html#leastsq">leastsq()</a>
+  <dt><a href="fitting.html#Minimizer.leastsq">leastsq() (in module Minimizer)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.LinearModel">LinearModel (class in models)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="models1d.html#LorentzianModel">LorentzianModel (built-in class)</a>
+  <dt><a href="model.html#module.lmdif_message">lmdif_message (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.LognormalModel">LognormalModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.LorentzianModel">LorentzianModel (class in models)</a>
   </dt>
 
   </dl></td>
@@ -186,13 +384,89 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="model.html#module.make_params">make_params() (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.message">message (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.method">method (in module module)</a>
+  </dt>
+
+      
   <dt><a href="fitting.html#minimize">minimize() (built-in function)</a>
+  </dt>
+
+      
+  <dt><a href="fitting.html#Minimizer.Minimizer">Minimizer (class in Minimizer)</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="fitting.html#module-Minimizer">(module)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.missing">missing (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.Model">Model (class in module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.model">model (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#module-models">models (module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module-module">module (module)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.name">name (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.ndata">ndata (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.nfev">nfev (in module module)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#Minimizer">Minimizer (built-in class)</a>
+  <dt><a href="model.html#module.nfree">nfree (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.nvarys">nvarys (in module module)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.opts">opts (in module module)</a>
   </dt>
 
   </dl></td>
@@ -202,21 +476,71 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="parameters.html#Parameter">Parameter (built-in class)</a>
+  <dt><a href="builtin_models.html#models.ParabolicModel">ParabolicModel (class in models)</a>
   </dt>
 
       
-  <dt><a href="parameters.html#Parameters">Parameters (built-in class)</a>
+  <dt><a href="model.html#module.param_hints">param_hints (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.param_names">param_names (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="parameters.html#parameter.Parameter">Parameter (class in parameter)</a>
+  </dt>
+
+      
+  <dt><a href="parameters.html#module-parameter">parameter (module)</a>
+  </dt>
+
+      
+  <dt><a href="parameters.html#parameters.Parameters">Parameters (class in parameters)</a>
+  </dt>
+
+      
+  <dt><a href="parameters.html#module-parameters">parameters (module)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="models1d.html#PeakModel">PeakModel (built-in class)</a>
+  <dt><a href="model.html#module.params">params (in module module)</a>
   </dt>
 
       
-  <dt><a href="fitting.html#prepare_fit">prepare_fit()</a>
+  <dt><a href="builtin_models.html#models.Pearson7Model">Pearson7Model (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.PolynomialModel">PolynomialModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.PowerLawModel">PowerLawModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.prefix">prefix (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="fitting.html#Minimizer.prepare_fit">prepare_fit() (in module Minimizer)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.PseudoVoigtModel">PseudoVoigtModel (class in models)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="builtin_models.html#models.QuadraticModel">QuadraticModel (class in models)</a>
   </dt>
 
   </dl></td>
@@ -226,13 +550,25 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="models1d.html#RectangleModel">RectangleModel (built-in class)</a>
+  <dt><a href="builtin_models.html#models.RectangleModel">RectangleModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.redchi">redchi (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="parameters.html#index-0">Removing a Constraint Expression</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#report_fit">report_fit() (built-in function)</a>
+  <dt><a href="fitting.html#Minimizer.report_fit">report_fit() (in module Minimizer)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.residual">residual (in module module)</a>
   </dt>
 
   </dl></td>
@@ -242,17 +578,37 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#scalar_minimize">scalar_minimize()</a>
+  <dt><a href="fitting.html#Minimizer.scalar_minimize">scalar_minimize() (in module Minimizer)</a>
   </dt>
 
       
-  <dt><a href="parameters.html#stderr">stderr</a>
+  <dt><a href="model.html#module.scale_covar">scale_covar (in module module)</a>
+  </dt>
+
+      
+  <dt><a href="parameters.html#parameter.set">set() (in module parameter)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.set_param_hint">set_param_hint() (in module module)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="models1d.html#StepModel">StepModel (built-in class)</a>
+  <dt><a href="parameters.html#parameter.stderr">stderr (in module parameter)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.StepModel">StepModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="builtin_models.html#models.StudentsTModel">StudentsTModel (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#module.success">success (in module module)</a>
   </dt>
 
   </dl></td>
@@ -262,7 +618,23 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="models1d.html#VoigtModel">VoigtModel (built-in class)</a>
+  <dt><a href="parameters.html#parameters.valuesdict">valuesdict() (in module parameters)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="builtin_models.html#models.VoigtModel">VoigtModel (class in models)</a>
+  </dt>
+
+  </dl></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="model.html#module.weights">weights (in module module)</a>
   </dt>
 
   </dl></td>
@@ -281,10 +653,15 @@
         <li class="right" style="margin-right: 10px">
           <a href="#" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="constraints.html">constraints</a>]</li>
+ 
       </ul>
     </div>
     <div class="footer">

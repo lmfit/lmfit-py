@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Using Mathematical Constraints &mdash; Least-Squares Minimization with Constraints for Python</title>
+    <title>Using Mathematical Constraints &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.7.4',
+        VERSION:     '0.8.0rc4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,11 +23,50 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Least-Squares Minimization with Constraints for Python" href="index.html" />
-    <link rel="next" title="Simple Builtin Fitting Models" href="models1d.html" />
-    <link rel="prev" title="Bounds Implementation" href="bounds.html" /> 
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="prev" title="Bounds Implementation" href="bounds.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
   </head>
   <body>
+<div>
+<table border=0>
+  <tr><td></td><td width=75% padding=5 align=left>
+       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=8% align=left>
+          <a href="installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td width=8% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+  </tr>
+  <tr><td></td><td width=75% padding=5 align=left>
+        <a href="index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="intro.html" style="color: #882222">
+         <font size+=1>Introduction</font></a> </td>
+     <td width=8% align=left>
+         <a href="parameters.html" style="color: #882222">
+         <font size+=1>Parameters</font></a> </td>
+     <td width=8% align=left>
+         <a href="model.html" style="color: #882222">
+         <font size+=1>Models</font></a> </td>
+
+  </tr>
+</table>
+</div>
+
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -35,17 +74,20 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="models1d.html" title="Simple Builtin Fitting Models"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
           <a href="bounds.html" title="Bounds Implementation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="#">constraints</a>]</li>
+ 
       </ul>
     </div>
+
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
@@ -62,9 +104,6 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="bounds.html"
                         title="previous chapter">Bounds Implementation</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="models1d.html"
-                        title="next chapter">Simple Builtin Fitting Models</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/constraints.txt"
@@ -92,12 +131,27 @@
           <div class="body">
             
   <div class="section" id="using-mathematical-constraints">
-<span id="math-constraints-label"></span><h1>Using Mathematical Constraints<a class="headerlink" href="#using-mathematical-constraints" title="Permalink to this headline">¶</a></h1>
-<p>While being able to fix variables and place upper and lower bounds on their
-values are key parts of lmfit, the ability to place mathematical
-constraints on parameters is also highly desirable.  This section describes
-how to do this, and what sort of parameterizations are possible -- see
-the <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> for further documentation.</p>
+<span id="constraints-chapter"></span><h1>Using Mathematical Constraints<a class="headerlink" href="#using-mathematical-constraints" title="Permalink to this headline">¶</a></h1>
+<p>Being able to fix variables to a constant value or place upper and lower
+bounds on their values can greatly simplify modeling real data.  These
+capabilities are key to lmfit&#8217;s Parameters.  In addition, it is sometimes
+highly desirable to place mathematical constraints on parameter values.
+For example, one might want to require that two Gaussian peaks have the
+same width, or have amplitudes that are constrained to add to some value.
+Of course, one could rewrite the objective or model function to place such
+requirements, but this is somewhat error prone, and limits the flexibility
+so that exploring constraints becomes laborious.</p>
+<p>To simplify the setting of constraints, Parameters can be assigned a
+mathematical expression of other Parameters, builtin constants, and builtin
+mathematical functions that will be used to determine its value.  The
+expressions used for constraints are evaluated using the <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module,
+which uses Python syntax, and evaluates the constraint expressions in a safe
+and isolated  namespace.</p>
+<p>This approach to mathematical constraints allows one to not have to write a
+separate model function for two Gaussians where the two <tt class="docutils literal"><span class="pre">sigma</span></tt> values are
+forced to be equal, or where amplitudes are related.  Instead, one can write a
+more general two Gaussian model (perhaps using <tt class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></tt>) and
+impose such constraints on the Parameters for a particular fit.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Just as one can place bounds on a Parameter, or keep it fixed during the
@@ -122,9 +176,9 @@ built-in functions are available for flexible modeling.</p>
 <div class="section" id="supported-operators-functions-and-constants">
 <h2>Supported Operators, Functions, and Constants<a class="headerlink" href="#supported-operators-functions-and-constants" title="Permalink to this headline">¶</a></h2>
 <p>The mathematical expressions used to define constrained Parameters need to
-be valid python expressions.  As you'd expect, the operators '+', '-', '*',
-'/', '**', are supported.  In fact, a much more complete set can be used,
-including Python's bit- and logical operators:</p>
+be valid python expressions.  As you&#8217;d expect, the operators &#8216;+&#8217;, &#8216;-&#8216;, &#8216;*&#8217;,
+&#8216;/&#8217;, &#8216;**&#8217;, are supported.  In fact, a much more complete set can be used,
+including Python&#8217;s bit- and logical operators:</p>
 <div class="highlight-python"><div class="highlight"><pre>+, -, *, /, **, &amp;, |, ^, &lt;&lt;, &gt;&gt;, %, and, or,
 ==, &gt;, &gt;=, &lt;, &lt;=, !=, ~, not, is, is not, in, not in
 </pre></div>
@@ -153,7 +207,7 @@ expressions.  Thus, with parameters for a few peak-like functions:</p>
 </pre></div>
 </div>
 <p>In fact, almost any valid Python expression is allowed.  A notable example
-is that Python's 1-line <em>if expression</em> is supported:</p>
+is that Python&#8217;s 1-line <em>if expression</em> is supported:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;bounded&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;param_a if test_val/2. &gt; 100 else param_b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -168,10 +222,10 @@ is that Python's 1-line <em>if expression</em> is supported:</p>
 <div class="section" id="using-inequality-constraints">
 <h2>Using Inequality Constraints<a class="headerlink" href="#using-inequality-constraints" title="Permalink to this headline">¶</a></h2>
 <p>A rather common question about how to set up constraints
-that use an inequality, say, <img class="math" src="_images/math/fa0abed260b5537d43dad334b6f05e2e12423a72.png" alt="x + y \le 10"/>.  This
+that use an inequality, say, <span class="math">\(x + y \le 10\)</span>.  This
 can be done with algebraic constraints by recasting the
-problem, as <img class="math" src="_images/math/a18cda76f4887c1e4633ca0e99e94b98f00b06e5.png" alt="x + y = \delta"/> and <img class="math" src="_images/math/83513a7fb9d59300493e8e198eaeef9d3927e12f.png" alt="\delta \le
-10"/>.  That is, first, allow <img class="math" src="_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> to be held by the
+problem, as <span class="math">\(x + y = \delta\)</span> and <span class="math">\(\delta \le
+10\)</span>.  That is, first, allow <span class="math">\(x\)</span> to be held by the
 freely varying parameter <cite>x</cite>.  Next, define a parameter
 <cite>delta</cite> to be variable with a maximum value of 10, and
 define parameter <cite>y</cite> as <cite>delta - x</cite>:</p>
@@ -191,14 +245,14 @@ definitions more convenient.</p>
 <h2>Advanced usage of Expressions in lmfit<a class="headerlink" href="#advanced-usage-of-expressions-in-lmfit" title="Permalink to this headline">¶</a></h2>
 <p>The expression used in a constraint is converted to a
 Python <a class="reference external" href="http://docs.python.org/library/ast.html">Abstract Syntax Tree</a>, which is an
-intermediate version of the expression -- a syntax-checked,
+intermediate version of the expression &#8211; a syntax-checked,
 partially compiled expression.  Among other things, this
-means that Python's own parser is used to parse and convert
+means that Python&#8217;s own parser is used to parse and convert
 the expression into something that can easily be evaluated
 within Python.  It also means that the symbols in the
 expressions can point to any Python object.</p>
-<p>In fact, the use of Python's AST allows a nearly full version of Python to
-be supported, without using Python's built-in <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> function.  The
+<p>In fact, the use of Python&#8217;s AST allows a nearly full version of Python to
+be supported, without using Python&#8217;s built-in <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> function.  The
 <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module actually supports most Python syntax, including for- and
 while-loops, conditional expressions, and user-defined functions.  There
 are several unsupported Python constructs, most notably the class
@@ -207,19 +261,19 @@ which helps make the <a class="reference external" href="http://newville.github.
 <p>One important feature of the <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module is that you can add
 domain-specific functions into the it, for later use in constraint
 expressions.  To do this, you would use the <tt class="xref py py-attr docutils literal"><span class="pre">asteval</span></tt> attribute of
-the <a class="reference internal" href="fitting.html#Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class, which contains a complete AST interpreter.
+the <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class, which contains a complete AST interpreter.
 The <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> interpreter uses a flat namespace, implemented as a single
 dictionary. That means you can preload any Python symbol into the namespace
 for the constraints:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">lorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">mylorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
     <span class="s">&quot;lorentzian function: wid = half-width at half-max&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">amp</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">/</span><span class="n">wid</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 
 <span class="n">fitter</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">()</span>
-<span class="n">fitter</span><span class="o">.</span><span class="n">asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s">&#39;lorenztian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lorenztian</span>
+<span class="n">fitter</span><span class="o">.</span><span class="n">asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s">&#39;lorentzian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mylorentzian</span>
 </pre></div>
 </div>
-<p>and this <tt class="xref py py-meth docutils literal"><span class="pre">lorenztian()</span></tt> function can now be used in constraint
+<p>and this <tt class="xref py py-meth docutils literal"><span class="pre">lorentzian()</span></tt> function can now be used in constraint
 expressions.</p>
 </div>
 </div>
@@ -237,15 +291,17 @@ expressions.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="models1d.html" title="Simple Builtin Fitting Models"
-             >next</a> |</li>
-        <li class="right" >
           <a href="bounds.html" title="Bounds Implementation"
              >previous</a> |</li>
-        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="#">constraints</a>]</li>
+ 
       </ul>
     </div>
     <div class="footer">

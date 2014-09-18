@@ -1,73 +1,68 @@
 .. lmfit documentation master file,
 
-Non-Linear Least-Square Minimization for Python
-================================================
+Non-Linear Least-Square Minimization and Curve-Fitting for Python
+===========================================================================
 
-.. _scipy.optimize.leastsq: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html
-.. _scipy.optimize.l_bfgs_b: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html
-.. _scipy.optimize.anneal: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.anneal.html
-.. _scipy.optimize.fmin:   http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html
-.. _scipy.optimize.cobyla: http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.cobyla.html
-.. _scipy.optimize: http://docs.scipy.org/doc/scipy/reference/optimize.html
+.. _Levenberg-Marquardt:     http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
+.. _MINPACK-1:               http://en.wikipedia.org/wiki/MINPACK
 
-.. _Nelder-Mead: http://en.wikipedia.org/wiki/Nelder-Mead_method
-.. _Levenberg-Marquardt: http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
-.. _L-BFGS:  http://en.wikipedia.org/wiki/Limited-memory_BFGS
 
-.. _MINPACK-1: http://en.wikipedia.org/wiki/MINPACK
+The lmfit python package provides a simple and flexible interface to
+non-linear optimization and curve fitting problems. Initially designed to
+extend the the `Levenberg-Marquardt`_ algorithm in
+:func:`scipy.optimize.leastsq`, lmfit supports most of the optimization
+methods from :mod:`scipy.optimize`.  It also provides a simple way to apply
+this extension to *curve fitting* or *data modeling* problems.
 
-The lmfit Python package provides a simple, flexible interface to
-non-linear optimization or curve fitting problems.  The package extends the
-optimization capabilities of `scipy.optimize`_ by replacing floating
-pointing values for the variables to be optimized with Parameter objects.
-These Parameters can be fixed or varied, have upper and/or lower bounds
-placed on its value, or written as an algebraic expression of other
-Parameters.
+The key concept in lmfit is the :class:`Parameter` -- the quantity to be
+optimized in all minimization problems in place of a plain floating point
+number.  A :class:`Parameter` has a value that can be varied in the fit,
+fixed, have upper and/or lower bounds.  It can even have a value that is
+constrained by an algebraic expression of other Parameter values.  Since
+:class:`Parameters` live outside the core optimization routines, they can
+be used in **all** optimization routines from :mod:`scipy.optimize`.  By
+using :class:`Parameter` objects instead of plain variables, the objective
+function does not have to be modified to reflect every change of what is
+varied in the fit.  This simplifies the writing of models, allowing general
+models that describe the phenomenon to be written, and gives the user more
+flexibility in using and testing variations of that model.
 
-The principal advantage of using Parameters instead of simple variables is
-that the objective function does not have to be rewritten to reflect every
-change of what is varied in the fit, or what relationships or constraints
-are placed on the Parameters.  This means a scientific programmer can write
-a general model that encapsulates the phenomenon to be optimized, and then
-allow user of that model to change what is varied and fixed, what range of
-values is acceptable for Parameters, and what constraints are placed on the
-model.  The ease with which the model can be changed also allows one to
-easily test the significance of certain Parameters in a fitting model.
+Lmfit supports several optimization methods from :mod:`scipy.optimize`.
+The default and best tested optimization method (and the origin of the
+name) is the `Levenberg-Marquardt`_ algorithm of
+:func:`scipy.optimize.leastsq`.  An important feature of this method is
+that it automatically estimates uncertainties and correlations between
+fitted variables from the covariance matrix used in the fit. But, because
+this approach is sometimes questioned (and rightly so), lmfit also supports
+methods to do a brute force determination of the confidence intervals for
+a set of parameters.
 
-The lmfit package allows a choice of several optimization methods available
-from `scipy.optimize`_.  The default, and by far best tested optimization
-method used is the `Levenberg-Marquardt`_ algorithm from
-from `MINPACK-1`_ as implemented in `scipy.optimize.leastsq`_.
-This method is by far the most tested and best support method in lmfit, and
-much of this document assumes this algorithm is used unless explicitly
-stated. An important point for many scientific analysis is that this is
-only method that automatically estimates uncertainties and correlations
-between fitted variables from the covariance matrix calculated during the fit.
+Lmfit provides high-level curve-fitting or data modeling functionality
+through its :class:`Model` class, which extends the capabilities of
+:func:`scipy.optimize.curve_fit`.  This allows you to turn a function that
+models for your data into a python class that helps you parametrize and fit
+data with that model.  Many pre-built models for common lineshapes are
+included and ready to use.
 
-A few other optimization routines are also supported, including
-`Nelder-Mead`_ simplex downhill, Powell's method, COBYLA, Sequential Least
-Squares methods as implemented in `scipy.optimize.fmin`_, and several
-others from `scipy.optimize`_.  In their native form, some of these methods
-setting allow upper or lower bounds on parameter variables, or adding
-constraints on fitted variables.  By using Parameter objects, lmfit allows
-bounds and constraints for *all* of these methods, and makes it easy to
-swap between methods without hanging the objective function or set of
-Parameters.
+.. _lmfit github repository:   http://github.com/lmfit/lmfit-py
 
-Finally, because the approach derived from `MINPACK-1`_ usin the covariance
-matrix to determine uncertainties is sometimes questioned (and sometimes
-rightly so), lmfit supports methods to do a brute force search of the
-confidence intervals and correlations for sets of parameters.
+The lmfit package is an open-source project, and the software and this
+document are works in progress.  If you are interested in participating in
+this effort please use the `lmfit github repository`_.
 
-lmfit and this document are a work in progress.
 
 .. toctree::
    :maxdepth: 2
 
+   intro
    installation
    parameters
    fitting
+   model
+   builtin_models
    confidence
    bounds
    constraints
-   models1d
+
+
+

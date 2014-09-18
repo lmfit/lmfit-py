@@ -1,0 +1,966 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Built-in Fitting Models in the models module &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    
+    <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.8.0rc4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="next" title="Calculation of confidence intervals" href="confidence.html" />
+    <link rel="prev" title="Modeling Data and Curve Fitting" href="model.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head>
+  <body>
+<div>
+<table border=0>
+  <tr><td></td><td width=75% padding=5 align=left>
+       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=8% align=left>
+          <a href="installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td width=8% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+  </tr>
+  <tr><td></td><td width=75% padding=5 align=left>
+        <a href="index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="intro.html" style="color: #882222">
+         <font size+=1>Introduction</font></a> </td>
+     <td width=8% align=left>
+         <a href="parameters.html" style="color: #882222">
+         <font size+=1>Parameters</font></a> </td>
+     <td width=8% align=left>
+         <a href="model.html" style="color: #882222">
+         <font size+=1>Models</font></a> </td>
+
+  </tr>
+</table>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="confidence.html" title="Calculation of confidence intervals"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="Modeling Data and Curve Fitting"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="#"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="constraints.html">constraints</a>]</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Built-in Fitting Models in the <tt class="docutils literal"><span class="pre">models</span></tt> module</a><ul>
+<li><a class="reference internal" href="#peak-like-models">Peak-like models</a><ul>
+<li><a class="reference internal" href="#gaussianmodel"><tt class="docutils literal"><span class="pre">GaussianModel</span></tt></a></li>
+<li><a class="reference internal" href="#lorentzianmodel"><tt class="docutils literal"><span class="pre">LorentzianModel</span></tt></a></li>
+<li><a class="reference internal" href="#voigtmodel"><tt class="docutils literal"><span class="pre">VoigtModel</span></tt></a></li>
+<li><a class="reference internal" href="#pseudovoigtmodel"><tt class="docutils literal"><span class="pre">PseudoVoigtModel</span></tt></a></li>
+<li><a class="reference internal" href="#pearson7model"><tt class="docutils literal"><span class="pre">Pearson7Model</span></tt></a></li>
+<li><a class="reference internal" href="#studentstmodel"><tt class="docutils literal"><span class="pre">StudentsTModel</span></tt></a></li>
+<li><a class="reference internal" href="#breitwignermodel"><tt class="docutils literal"><span class="pre">BreitWignerModel</span></tt></a></li>
+<li><a class="reference internal" href="#lognormalmodel"><tt class="docutils literal"><span class="pre">LognormalModel</span></tt></a></li>
+<li><a class="reference internal" href="#dampedocsillatormodel"><tt class="docutils literal"><span class="pre">DampedOcsillatorModel</span></tt></a></li>
+<li><a class="reference internal" href="#exponentialgaussianmodel"><tt class="docutils literal"><span class="pre">ExponentialGaussianModel</span></tt></a></li>
+<li><a class="reference internal" href="#donaichmodel"><tt class="docutils literal"><span class="pre">DonaichModel</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#linear-and-polynomial-models">Linear and Polynomial Models</a><ul>
+<li><a class="reference internal" href="#constantmodel"><tt class="docutils literal"><span class="pre">ConstantModel</span></tt></a></li>
+<li><a class="reference internal" href="#linearmodel"><tt class="docutils literal"><span class="pre">LinearModel</span></tt></a></li>
+<li><a class="reference internal" href="#quadraticmodel"><tt class="docutils literal"><span class="pre">QuadraticModel</span></tt></a></li>
+<li><a class="reference internal" href="#parabolicmodel"><tt class="docutils literal"><span class="pre">ParabolicModel</span></tt></a></li>
+<li><a class="reference internal" href="#polynomialmodel"><tt class="docutils literal"><span class="pre">PolynomialModel</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#step-like-models">Step-like models</a><ul>
+<li><a class="reference internal" href="#stepmodel"><tt class="docutils literal"><span class="pre">StepModel</span></tt></a></li>
+<li><a class="reference internal" href="#rectanglemodel"><tt class="docutils literal"><span class="pre">RectangleModel</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#exponential-and-power-law-models">Exponential and Power law models</a><ul>
+<li><a class="reference internal" href="#exponentialmodel"><tt class="docutils literal"><span class="pre">ExponentialModel</span></tt></a></li>
+<li><a class="reference internal" href="#powerlawmodel"><tt class="docutils literal"><span class="pre">PowerLawModel</span></tt></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles">Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles</a></li>
+<li><a class="reference internal" href="#example-2-fit-data-to-a-composite-model-with-pre-defined-models">Example 2: Fit data to a Composite Model with pre-defined models</a></li>
+<li><a class="reference internal" href="#example-3-fitting-multiple-peaks-and-using-prefixes">Example 3: Fitting Multiple Peaks &#8211; and using Prefixes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model.html"
+                        title="previous chapter">Modeling Data and Curve Fitting</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="confidence.html"
+                        title="next chapter">Calculation of confidence intervals</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/builtin_models.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-models">
+<span id="built-in-fitting-models-in-the-models-module"></span><span id="builtin-models-chapter"></span><h1>Built-in Fitting Models in the <a class="reference internal" href="#module-models" title="models"><tt class="xref py py-mod docutils literal"><span class="pre">models</span></tt></a> module<a class="headerlink" href="#module-models" title="Permalink to this headline">¶</a></h1>
+<p>Lmfit provides several builtin fitting models in the <a class="reference internal" href="#module-models" title="models"><tt class="xref py py-mod docutils literal"><span class="pre">models</span></tt></a> module.
+These pre-defined models each subclass from the <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class of the
+previous chapter and wrap relatively well-known functional forms, such as
+Gaussians, Lorentzian, and Exponentials that are used in a wide range of
+scientific domains.  In fact, all the models are all based on simple, plain
+python functions defined in the <tt class="xref py py-mod docutils literal"><span class="pre">lineshapes</span></tt> module.  In addition to
+wrapping a function into a <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt>, these models also provide a
+<tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> method that is intended to give a reasonable
+set of starting values from a data array that closely approximates the
+data to be fit.</p>
+<p>As shown in the previous chapter, a key feature of the <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class
+is that models can easily be combined to give a composite
+<tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt>. Thus while some of the models listed here may seem pretty
+trivial (notably, <a class="reference internal" href="#models.ConstantModel" title="models.ConstantModel"><tt class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></tt></a> and <a class="reference internal" href="#models.LinearModel" title="models.LinearModel"><tt class="xref py py-class docutils literal"><span class="pre">LinearModel</span></tt></a>), the
+main point of having these is to be able to used in composite models.  For
+example,  a Lorentzian plus a linear background might be represented as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">LorentzianModel</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">peak</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">background</span>  <span class="o">=</span> <span class="n">LinearModel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">peak</span> <span class="o">+</span> <span class="n">background</span>
+</pre></div>
+</div>
+<p>All the models listed below are one dimensional, with an independent
+variable named <tt class="docutils literal"><span class="pre">x</span></tt>.  Many of these models represent a function with a
+distinct peak, and so share common features.  To maintain uniformity,
+common parameter names are used whenever possible.  Thus, most models have
+a parameter called <tt class="docutils literal"><span class="pre">amplitude</span></tt> that represents the overall height (or
+area of) a peak or function, a <tt class="docutils literal"><span class="pre">center</span></tt> parameter that represents a peak
+centroid position, and a <tt class="docutils literal"><span class="pre">sigma</span></tt> parameter that gives a characteristic
+width.   Some peak shapes also have a parameter <tt class="docutils literal"><span class="pre">fwhm</span></tt>, typically
+constrained by <tt class="docutils literal"><span class="pre">sigma</span></tt> to give the full width at half maximum.</p>
+<p>After a list of builtin models, a few examples of their use is given.</p>
+<div class="section" id="peak-like-models">
+<h2>Peak-like models<a class="headerlink" href="#peak-like-models" title="Permalink to this headline">¶</a></h2>
+<p>There are many peak-like models available.  These include
+<a class="reference internal" href="#models.GaussianModel" title="models.GaussianModel"><tt class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></tt></a>, <a class="reference internal" href="#models.LorentzianModel" title="models.LorentzianModel"><tt class="xref py py-class docutils literal"><span class="pre">LorentzianModel</span></tt></a>, <a class="reference internal" href="#models.VoigtModel" title="models.VoigtModel"><tt class="xref py py-class docutils literal"><span class="pre">VoigtModel</span></tt></a> and
+some less commonly used variations.  The <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt>
+methods for all of these make a fairly crude guess for the value of
+<tt class="docutils literal"><span class="pre">amplitude</span></tt>, but also set a lower bound of 0 on the value of <tt class="docutils literal"><span class="pre">sigma</span></tt>.</p>
+<div class="section" id="gaussianmodel">
+<h3><a class="reference internal" href="#models.GaussianModel" title="models.GaussianModel"><tt class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></tt></a><a class="headerlink" href="#gaussianmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.GaussianModel">
+<em class="property">class </em><tt class="descname">GaussianModel</tt><a class="headerlink" href="#models.GaussianModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Normal_distribution">Gaussian or normal distribution lineshape</a>.  Parameter names:
+<tt class="docutils literal"><span class="pre">amplitude</span></tt>, <tt class="docutils literal"><span class="pre">center</span></tt>, and <tt class="docutils literal"><span class="pre">sigma</span></tt>.  In addition, a constrained
+parameter <tt class="docutils literal"><span class="pre">fwhm</span></tt> is included.</p>
+<div class="math">
+\[f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}\]</div>
+<p>where the parameter <tt class="docutils literal"><span class="pre">amplitude</span></tt> corresponds to <span class="math">\(A\)</span>, <tt class="docutils literal"><span class="pre">center</span></tt> to
+<span class="math">\(\mu\)</span>, and <tt class="docutils literal"><span class="pre">sigma</span></tt> to <span class="math">\(\sigma\)</span>.  The Full-Width at
+Half-Maximum is <span class="math">\(2\sigma\sqrt{2\ln{2}}\)</span>, approximately
+<span class="math">\(2.3548\sigma\)</span></p>
+</div>
+<div class="section" id="lorentzianmodel">
+<h3><a class="reference internal" href="#models.LorentzianModel" title="models.LorentzianModel"><tt class="xref py py-class docutils literal"><span class="pre">LorentzianModel</span></tt></a><a class="headerlink" href="#lorentzianmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.LorentzianModel">
+<em class="property">class </em><tt class="descname">LorentzianModel</tt><a class="headerlink" href="#models.LorentzianModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Cauchy_distribution">Lorentzian or Cauchy-Lorentz distribution function</a>.  Parameter names:
+<tt class="docutils literal"><span class="pre">amplitude</span></tt>, <tt class="docutils literal"><span class="pre">center</span></tt>, and <tt class="docutils literal"><span class="pre">sigma</span></tt>.  In addition, a constrained
+parameter <tt class="docutils literal"><span class="pre">fwhm</span></tt> is included.</p>
+<div class="math">
+\[f(x; A, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]\]</div>
+<p>where the parameter <tt class="docutils literal"><span class="pre">amplitude</span></tt> corresponds to <span class="math">\(A\)</span>, <tt class="docutils literal"><span class="pre">center</span></tt> to
+<span class="math">\(\mu\)</span>, and <tt class="docutils literal"><span class="pre">sigma</span></tt> to <span class="math">\(\sigma\)</span>.  The Full-Width at
+Half-Maximum is <span class="math">\(2\sigma\)</span>.</p>
+</div>
+<div class="section" id="voigtmodel">
+<h3><a class="reference internal" href="#models.VoigtModel" title="models.VoigtModel"><tt class="xref py py-class docutils literal"><span class="pre">VoigtModel</span></tt></a><a class="headerlink" href="#voigtmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.VoigtModel">
+<em class="property">class </em><tt class="descname">VoigtModel</tt><a class="headerlink" href="#models.VoigtModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Voigt_profile">Voigt distribution function</a>.  Parameter names:
+<tt class="docutils literal"><span class="pre">amplitude</span></tt>, <tt class="docutils literal"><span class="pre">center</span></tt>, and <tt class="docutils literal"><span class="pre">sigma</span></tt>.  A <tt class="docutils literal"><span class="pre">gamma</span></tt> parameter is also
+available.  By default, it is constrained to have value equal to <tt class="docutils literal"><span class="pre">sigma</span></tt>,
+though this can be varied independently.  In addition, a constrained
+parameter <tt class="docutils literal"><span class="pre">fwhm</span></tt> is included.  The definition for the Voigt function used
+here is</p>
+<div class="math">
+\[f(x; A, \mu, \sigma, \gamma) = \frac{A \textrm{Re}[w(z)]}{\sigma\sqrt{2 \pi}}\]</div>
+<p>where</p>
+<div class="math">
+\[\begin{eqnarray*}
+  z &=& \frac{x-\mu +i\gamma}{\sigma\sqrt{2}} \\
+  w(z) &=& e^{-z^2}{\operatorname{erfc}}(-iz)
+\end{eqnarray*}\]</div><p>and <tt class="xref py py-func docutils literal"><span class="pre">erfc()</span></tt> is the complimentary error function.  As above,
+<tt class="docutils literal"><span class="pre">amplitude</span></tt> corresponds to <span class="math">\(A\)</span>, <tt class="docutils literal"><span class="pre">center</span></tt> to
+<span class="math">\(\mu\)</span>, and <tt class="docutils literal"><span class="pre">sigma</span></tt> to <span class="math">\(\sigma\)</span>. The parameter <tt class="docutils literal"><span class="pre">gamma</span></tt>
+corresponds  to <span class="math">\(\gamma\)</span>.
+If <tt class="docutils literal"><span class="pre">gamma</span></tt> is kept at the default value (constrained to <tt class="docutils literal"><span class="pre">sigma</span></tt>),
+the full width at half maximum is approximately <span class="math">\(3.6013\sigma\)</span>.</p>
+</div>
+<div class="section" id="pseudovoigtmodel">
+<h3><a class="reference internal" href="#models.PseudoVoigtModel" title="models.PseudoVoigtModel"><tt class="xref py py-class docutils literal"><span class="pre">PseudoVoigtModel</span></tt></a><a class="headerlink" href="#pseudovoigtmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.PseudoVoigtModel">
+<em class="property">class </em><tt class="descname">PseudoVoigtModel</tt><a class="headerlink" href="#models.PseudoVoigtModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>a model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation">pseudo-Voigt distribution function</a>,
+which is a weighted sum of a Gaussian and Lorentzian distribution functions
+with the same values for <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), <tt class="docutils literal"><span class="pre">center</span></tt> (<span class="math">\(\mu\)</span>)
+and <tt class="docutils literal"><span class="pre">sigma</span></tt> (<span class="math">\(\sigma\)</span>), and a parameter <tt class="docutils literal"><span class="pre">fraction</span></tt> (<span class="math">\(\alpha\)</span>)
+in</p>
+<div class="math">
+\[f(x; A, \mu, \sigma, \alpha) = (1-\alpha)\frac{A}{\pi}
+\big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big] + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]\]</div>
+<p>The <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> function always gives a starting
+value for <tt class="docutils literal"><span class="pre">fraction</span></tt> of 0.5</p>
+</div>
+<div class="section" id="pearson7model">
+<h3><a class="reference internal" href="#models.Pearson7Model" title="models.Pearson7Model"><tt class="xref py py-class docutils literal"><span class="pre">Pearson7Model</span></tt></a><a class="headerlink" href="#pearson7model" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.Pearson7Model">
+<em class="property">class </em><tt class="descname">Pearson7Model</tt><a class="headerlink" href="#models.Pearson7Model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution">Pearson VII distribution</a>.
+This is a Lorenztian-like distribution function.  It has the usual
+parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), <tt class="docutils literal"><span class="pre">center</span></tt> (<span class="math">\(\mu\)</span>) and
+<tt class="docutils literal"><span class="pre">sigma</span></tt> (<span class="math">\(\sigma\)</span>), and also an <tt class="docutils literal"><span class="pre">exponent</span></tt> (<span class="math">\(m\)</span>) in</p>
+<div class="math">
+\[f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}\]</div>
+<p>where <span class="math">\(\beta\)</span> is the beta function (see <tt class="xref py py-func docutils literal"><span class="pre">scipy.special.beta()</span></tt> in
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/special.html#module-scipy.special" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.special</span></tt></a>).  The <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> function always
+gives a starting value for <tt class="docutils literal"><span class="pre">exponent</span></tt> of 1.5.</p>
+</div>
+<div class="section" id="studentstmodel">
+<h3><a class="reference internal" href="#models.StudentsTModel" title="models.StudentsTModel"><tt class="xref py py-class docutils literal"><span class="pre">StudentsTModel</span></tt></a><a class="headerlink" href="#studentstmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.StudentsTModel">
+<em class="property">class </em><tt class="descname">StudentsTModel</tt><a class="headerlink" href="#models.StudentsTModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Student%27s_t-distribution">Student&#8217;s t distribution function</a>, with the usual
+parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), <tt class="docutils literal"><span class="pre">center</span></tt> (<span class="math">\(\mu\)</span>) and
+<tt class="docutils literal"><span class="pre">sigma</span></tt> (<span class="math">\(\sigma\)</span>) in</p>
+<div class="math">
+\[f(x; A, \mu, \sigma) = \frac{A \Gamma(\frac{\sigma+1}{2})} {\sqrt{\sigma\pi}\,\Gamma(\frac{\sigma}{2})} \Bigl[1+\frac{(x-\mu)^2}{\sigma}\Bigr]^{-\frac{\sigma+1}{2}}\]</div>
+<p>where <span class="math">\(\Gamma(x)\)</span> is the gamma function.</p>
+</div>
+<div class="section" id="breitwignermodel">
+<h3><a class="reference internal" href="#models.BreitWignerModel" title="models.BreitWignerModel"><tt class="xref py py-class docutils literal"><span class="pre">BreitWignerModel</span></tt></a><a class="headerlink" href="#breitwignermodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.BreitWignerModel">
+<em class="property">class </em><tt class="descname">BreitWignerModel</tt><a class="headerlink" href="#models.BreitWignerModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Fano_resonance">Breit-Wigner-Fano function</a>.  It has the usual
+parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), <tt class="docutils literal"><span class="pre">center</span></tt> (<span class="math">\(\mu\)</span>) and
+<tt class="docutils literal"><span class="pre">sigma</span></tt> (<span class="math">\(\sigma\)</span>), plus <tt class="docutils literal"><span class="pre">q</span></tt> (<span class="math">\(q\)</span>) in</p>
+<div class="math">
+\[f(x; A, \mu, \sigma, q) = \frac{A (q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}\]</div>
+</div>
+<div class="section" id="lognormalmodel">
+<h3><a class="reference internal" href="#models.LognormalModel" title="models.LognormalModel"><tt class="xref py py-class docutils literal"><span class="pre">LognormalModel</span></tt></a><a class="headerlink" href="#lognormalmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.LognormalModel">
+<em class="property">class </em><tt class="descname">LognormalModel</tt><a class="headerlink" href="#models.LognormalModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on the <a class="reference external" href="http://en.wikipedia.org/wiki/Lognormal">Log-normal distribution function</a>.
+It has the usual parameters
+<tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), <tt class="docutils literal"><span class="pre">center</span></tt> (<span class="math">\(\mu\)</span>) and <tt class="docutils literal"><span class="pre">sigma</span></tt>
+(<span class="math">\(\sigma\)</span>) in</p>
+<div class="math">
+\[f(x; A, \mu, \sigma) = \frac{A e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}\]</div>
+</div>
+<div class="section" id="dampedocsillatormodel">
+<h3><a class="reference internal" href="#models.DampedOcsillatorModel" title="models.DampedOcsillatorModel"><tt class="xref py py-class docutils literal"><span class="pre">DampedOcsillatorModel</span></tt></a><a class="headerlink" href="#dampedocsillatormodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.DampedOcsillatorModel">
+<em class="property">class </em><tt class="descname">DampedOcsillatorModel</tt><a class="headerlink" href="#models.DampedOcsillatorModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on the <a class="reference external" href="http://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part">Damped Harmonic Oscillator Amplitude</a>.
+It has the usual parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), <tt class="docutils literal"><span class="pre">center</span></tt> (<span class="math">\(\mu\)</span>) and
+<tt class="docutils literal"><span class="pre">sigma</span></tt> (<span class="math">\(\sigma\)</span>) in</p>
+<div class="math">
+\[f(x; A, \mu, \sigma) = \frac{A}{\sqrt{ [1 - (x/\mu)^2]^2 + (2\sigma x/\mu)^2}}\]</div>
+</div>
+<div class="section" id="exponentialgaussianmodel">
+<h3><a class="reference internal" href="#models.ExponentialGaussianModel" title="models.ExponentialGaussianModel"><tt class="xref py py-class docutils literal"><span class="pre">ExponentialGaussianModel</span></tt></a><a class="headerlink" href="#exponentialgaussianmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.ExponentialGaussianModel">
+<em class="property">class </em><tt class="descname">ExponentialGaussianModel</tt><a class="headerlink" href="#models.ExponentialGaussianModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model of an <a class="reference external" href="http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution">Exponentially modified Gaussian distribution</a>.
+It has the usual parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), <tt class="docutils literal"><span class="pre">center</span></tt> (<span class="math">\(\mu\)</span>) and
+<tt class="docutils literal"><span class="pre">sigma</span></tt> (<span class="math">\(\sigma\)</span>), and also <tt class="docutils literal"><span class="pre">gamma</span></tt> (<span class="math">\(\gamma\)</span>) in</p>
+<div class="math">
+\[f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
+\exp\bigl[\gamma({\mu - x  + \sigma^2/2})\bigr]
+{\operatorname{erfc}}\bigl[\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\bigr]\]</div>
+<p>where <tt class="xref py py-func docutils literal"><span class="pre">erfc()</span></tt> is the complimentary error function.</p>
+</div>
+<div class="section" id="donaichmodel">
+<h3><a class="reference internal" href="#models.DonaichModel" title="models.DonaichModel"><tt class="xref py py-class docutils literal"><span class="pre">DonaichModel</span></tt></a><a class="headerlink" href="#donaichmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.DonaichModel">
+<em class="property">class </em><tt class="descname">DonaichModel</tt><a class="headerlink" href="#models.DonaichModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model of an <a class="reference external" href="http://www.casaxps.com/help_manual/line_shapes.htm">Doniach Sunjic asymmetric lineshape</a>, used in
+photo-emission. With the usual parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>),
+<tt class="docutils literal"><span class="pre">center</span></tt> (<span class="math">\(\mu\)</span>) and <tt class="docutils literal"><span class="pre">sigma</span></tt> (<span class="math">\(\sigma\)</span>), and also <tt class="docutils literal"><span class="pre">gamma</span></tt>
+(<span class="math">\(\gamma\)</span>) in</p>
+<div class="math">
+\[f(x; A, \mu, \sigma, \gamma) = A\frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
+\arctan{(x - \mu)}/\sigma\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}\]</div>
+</div>
+</div>
+<div class="section" id="linear-and-polynomial-models">
+<h2>Linear and Polynomial Models<a class="headerlink" href="#linear-and-polynomial-models" title="Permalink to this headline">¶</a></h2>
+<p>These models correspond to polynomials of some degree.  Of course, lmfit is
+a very inefficient way to do linear regression (see <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html#numpy.polyfit" title="(in NumPy v1.8)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.polyfit()</span></tt></a>
+or <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html#scipy.stats.linregress" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.stats.linregress()</span></tt></a>), but these models may be useful as one
+of many components of composite model.</p>
+<div class="section" id="constantmodel">
+<h3><a class="reference internal" href="#models.ConstantModel" title="models.ConstantModel"><tt class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></tt></a><a class="headerlink" href="#constantmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.ConstantModel">
+<em class="property">class </em><tt class="descname">ConstantModel</tt><a class="headerlink" href="#models.ConstantModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>a class that consists of a single value, <tt class="docutils literal"><span class="pre">c</span></tt>.  This is constant in the
+sense of having no dependence on the independent variable <tt class="docutils literal"><span class="pre">x</span></tt>, not in
+the sense of being non-varying.  To be clear, <tt class="docutils literal"><span class="pre">c</span></tt> will be a variable
+Parameter.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="linearmodel">
+<h3><a class="reference internal" href="#models.LinearModel" title="models.LinearModel"><tt class="xref py py-class docutils literal"><span class="pre">LinearModel</span></tt></a><a class="headerlink" href="#linearmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.LinearModel">
+<em class="property">class </em><tt class="descname">LinearModel</tt><a class="headerlink" href="#models.LinearModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>a class that gives a linear model:</p>
+</dd></dl>
+
+<div class="math">
+\[f(x; m, b) = m x + b\]</div>
+<p>with parameters <tt class="docutils literal"><span class="pre">slope</span></tt> for <span class="math">\(m\)</span> and  <tt class="docutils literal"><span class="pre">intercept</span></tt> for <span class="math">\(b\)</span>.</p>
+</div>
+<div class="section" id="quadraticmodel">
+<h3><a class="reference internal" href="#models.QuadraticModel" title="models.QuadraticModel"><tt class="xref py py-class docutils literal"><span class="pre">QuadraticModel</span></tt></a><a class="headerlink" href="#quadraticmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.QuadraticModel">
+<em class="property">class </em><tt class="descname">QuadraticModel</tt><a class="headerlink" href="#models.QuadraticModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>a class that gives a quadratic model:</p>
+</dd></dl>
+
+<div class="math">
+\[f(x; a, b, c) = a x^2 + b x + c\]</div>
+<p>with parameters <tt class="docutils literal"><span class="pre">a</span></tt>, <tt class="docutils literal"><span class="pre">b</span></tt>, and <tt class="docutils literal"><span class="pre">c</span></tt>.</p>
+</div>
+<div class="section" id="parabolicmodel">
+<h3><a class="reference internal" href="#models.ParabolicModel" title="models.ParabolicModel"><tt class="xref py py-class docutils literal"><span class="pre">ParabolicModel</span></tt></a><a class="headerlink" href="#parabolicmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.ParabolicModel">
+<em class="property">class </em><tt class="descname">ParabolicModel</tt><a class="headerlink" href="#models.ParabolicModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>same as <a class="reference internal" href="#models.QuadraticModel" title="models.QuadraticModel"><tt class="xref py py-class docutils literal"><span class="pre">QuadraticModel</span></tt></a>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="polynomialmodel">
+<h3><a class="reference internal" href="#models.PolynomialModel" title="models.PolynomialModel"><tt class="xref py py-class docutils literal"><span class="pre">PolynomialModel</span></tt></a><a class="headerlink" href="#polynomialmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.PolynomialModel">
+<em class="property">class </em><tt class="descname">PolynomialModel</tt><big>(</big><em>degree</em><big>)</big><a class="headerlink" href="#models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>a class that gives a polynomial model up to <tt class="docutils literal"><span class="pre">degree</span></tt> (with maximum
+value of 7).</p>
+</dd></dl>
+
+<div class="math">
+\[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i\]</div>
+<p>with parameters <tt class="docutils literal"><span class="pre">c0</span></tt>, <tt class="docutils literal"><span class="pre">c1</span></tt>, ..., <tt class="docutils literal"><span class="pre">c7</span></tt>.  The supplied <tt class="docutils literal"><span class="pre">degree</span></tt>
+will specify how many of these are actual variable parameters.  This uses
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html#numpy.polyval" title="(in NumPy v1.8)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.polyval()</span></tt></a> for its calculation of the polynomial.</p>
+</div>
+</div>
+<div class="section" id="step-like-models">
+<h2>Step-like models<a class="headerlink" href="#step-like-models" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="stepmodel">
+<h3><a class="reference internal" href="#models.StepModel" title="models.StepModel"><tt class="xref py py-class docutils literal"><span class="pre">StepModel</span></tt></a><a class="headerlink" href="#stepmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.StepModel">
+<em class="property">class </em><tt class="descname">StepModel</tt><big>(</big><em>form='linear'</em><big>)</big><a class="headerlink" href="#models.StepModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a Step function, with four choices for functional form.
+The step function starts with a value 0, and ends with a value of <span class="math">\(A\)</span>
+(<tt class="docutils literal"><span class="pre">amplitude</span></tt>), rising to <span class="math">\(A/2\)</span> at <span class="math">\(\mu\)</span> (<tt class="docutils literal"><span class="pre">center</span></tt>),
+with <span class="math">\(\sigma\)</span> (<tt class="docutils literal"><span class="pre">sigma</span></tt>) setting the characteristic width. The
+supported functional forms are <tt class="docutils literal"><span class="pre">linear</span></tt> (the default), <tt class="docutils literal"><span class="pre">atan</span></tt> or
+<tt class="docutils literal"><span class="pre">arctan</span></tt> for an arc-tangent function,  <tt class="docutils literal"><span class="pre">erf</span></tt> for an error function, or
+<tt class="docutils literal"><span class="pre">logistic</span></tt> for a <a class="reference external" href="http://en.wikipedia.org/wiki/Logistic_function">logistic function</a>.
+The forms are</p>
+<div class="math">
+\[\begin{eqnarray*}
+& f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})  & = A \min{[1, \max{(0,  \alpha)}]} \\
+& f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})  & = A [1/2 + \arctan{(\alpha)}/{\pi}] \\
+& f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})     & = A [1 + {\operatorname{erf}}(\alpha)]/2 \\
+& f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}})& = A [1 - \frac{1}{1 +  e^{\alpha}} ]
+\end{eqnarray*}\]</div><p>where <span class="math">\(\alpha  = (x - \mu)/{\sigma}\)</span>.</p>
+</div>
+<div class="section" id="rectanglemodel">
+<h3><a class="reference internal" href="#models.RectangleModel" title="models.RectangleModel"><tt class="xref py py-class docutils literal"><span class="pre">RectangleModel</span></tt></a><a class="headerlink" href="#rectanglemodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.RectangleModel">
+<em class="property">class </em><tt class="descname">RectangleModel</tt><big>(</big><em>form='linear'</em><big>)</big><a class="headerlink" href="#models.RectangleModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a Step-up and Step-down function of the same form.  The
+same choices for functional form as for <a class="reference internal" href="#models.StepModel" title="models.StepModel"><tt class="xref py py-class docutils literal"><span class="pre">StepModel</span></tt></a> are supported,
+with <tt class="docutils literal"><span class="pre">linear</span></tt> as the default.  The function starts with a value 0, and
+ends with a value of <span class="math">\(A\)</span> (<tt class="docutils literal"><span class="pre">amplitude</span></tt>), rising to <span class="math">\(A/2\)</span> at
+<span class="math">\(\mu_1\)</span> (<tt class="docutils literal"><span class="pre">center1</span></tt>), with <span class="math">\(\sigma_1\)</span> (<tt class="docutils literal"><span class="pre">sigma1</span></tt>) setting the
+characteristic width.  It drops to rising to <span class="math">\(A/2\)</span> at <span class="math">\(\mu_2\)</span>
+(<tt class="docutils literal"><span class="pre">center2</span></tt>), with characteristic width <span class="math">\(\sigma_2\)</span> (<tt class="docutils literal"><span class="pre">sigma2</span></tt>).</p>
+<div class="math">
+\[\begin{eqnarray*}
+&f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})   &= A \{ \min{[1, \max{(0, \alpha_1)}]} + \min{[-1, \max{(0,  \alpha_2)}]} \} \\
+&f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})   &= A [\arctan{(\alpha_1)} + \arctan{(\alpha_2)}]/{\pi} \\
+&f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})      &= A [{\operatorname{erf}}(\alpha_1) + {\operatorname{erf}}(\alpha_2)]/2 \\
+&f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}}) &= A [1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 +  e^{\alpha_2}} ]
+\end{eqnarray*}\]</div><p>where <span class="math">\(\alpha_1  = (x - \mu_1)/{\sigma_1}\)</span> and <span class="math">\(\alpha_2  = -(x - \mu_2)/{\sigma_2}\)</span>.</p>
+</div>
+</div>
+<div class="section" id="exponential-and-power-law-models">
+<h2>Exponential and Power law models<a class="headerlink" href="#exponential-and-power-law-models" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="exponentialmodel">
+<h3><a class="reference internal" href="#models.ExponentialModel" title="models.ExponentialModel"><tt class="xref py py-class docutils literal"><span class="pre">ExponentialModel</span></tt></a><a class="headerlink" href="#exponentialmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.ExponentialModel">
+<em class="property">class </em><tt class="descname">ExponentialModel</tt><a class="headerlink" href="#models.ExponentialModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on an <a class="reference external" href="http://en.wikipedia.org/wiki/Exponential_decay">exponential decay function</a>. With parameters named
+<tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), and <tt class="docutils literal"><span class="pre">decay</span></tt> (<span class="math">\(\tau\)</span>), this has the form:</p>
+<div class="math">
+\[f(x; A, \tau) = A e^{-x/\tau}\]</div>
+</div>
+<div class="section" id="powerlawmodel">
+<h3><a class="reference internal" href="#models.PowerLawModel" title="models.PowerLawModel"><tt class="xref py py-class docutils literal"><span class="pre">PowerLawModel</span></tt></a><a class="headerlink" href="#powerlawmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.PowerLawModel">
+<em class="property">class </em><tt class="descname">PowerLawModel</tt><a class="headerlink" href="#models.PowerLawModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Power_law">Power Law</a>.
+With parameters
+named <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<span class="math">\(A\)</span>), and <tt class="docutils literal"><span class="pre">exponent</span></tt> (<span class="math">\(k\)</span>), this has the
+form:</p>
+<div class="math">
+\[f(x; A, k) = A x^k\]</div>
+</div>
+</div>
+<div class="section" id="example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles">
+<h2>Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles<a class="headerlink" href="#example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles" title="Permalink to this headline">¶</a></h2>
+<p>Here, we will fit data to three similar lineshapes, in order to decide which
+might be the better model.  We will start with a Gaussian profile, as in
+the previous chapter, but use the built-in <a class="reference internal" href="#models.GaussianModel" title="models.GaussianModel"><tt class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></tt></a> instead
+of one we write ourselves.  This is a slightly different version from the
+one in previous example in that the parameter names are different, and have
+built-in default values.  So, we&#8217;ll simply use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
+<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">GaussianModel</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">loadtxt</span><span class="p">(</span><span class="s">&#39;test_peak.dat&#39;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">mod</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">()</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="n">out</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>which prints out the results:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[Model]]
+    gaussian
+[[Fit Statistics]]
+    # function evals   = 21
+    # data points      = 401
+    # variables        = 3
+    chi-square         = 29.994
+    reduced chi-square = 0.075
+[[Variables]]
+    amplitude:   30.3135571 +/- 0.157126 (0.52%) (init= 29.08159)
+    center:      9.24277049 +/- 0.007374 (0.08%) (init= 9.25)
+    fwhm:        2.90156963 +/- 0.017366 (0.60%)  == &#39;2.3548200*sigma&#39;
+    sigma:       1.23218319 +/- 0.007374 (0.60%) (init= 1.35)
+[[Correlations]] (unreported correlations are &lt;  0.250)
+    C(amplitude, sigma)          =  0.577
+</pre></div>
+</div>
+<dl class="docutils">
+<dt>[We see a few interesting differences from the results of the previous</dt>
+<dd>chapter. First, the parameter names are longer. Second, there is a
+<tt class="docutils literal"><span class="pre">fwhm</span></tt> parameter, defined as <span class="math">\(\sim 2.355\sigma\)</span>. And third, the
+automated initial guesses are pretty good. A plot of the fit shows not
+such a great fit:</dd>
+</dl>
+<blockquote id="figa1">
+<div><a class="reference external image-reference" href="_images/models_peak1.png"><img alt="_images/models_peak1.png" src="_images/models_peak1.png" style="width: 48%;" /></a>
+<a class="reference external image-reference" href="_images/models_peak2.png"><img alt="_images/models_peak2.png" src="_images/models_peak2.png" style="width: 48%;" /></a>
+<p>Fit to peak with Gaussian (left) and Lorentzian (right) models.</p>
+</div></blockquote>
+<p>suggesting that a different peak shape, with longer tails, should be used.
+Perhaps a Lorentzian would be better?  To do this, we simply replace
+<tt class="docutils literal"><span class="pre">GaussianModel</span></tt> with <tt class="docutils literal"><span class="pre">LorentzianModel</span></tt> to get a
+<a class="reference internal" href="#models.LorentzianModel" title="models.LorentzianModel"><tt class="xref py py-class docutils literal"><span class="pre">LorentzianModel</span></tt></a>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LorentzianModel</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="n">out</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Predictably, the first thing we try gives results that are worse:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[Model]]
+    lorentzian
+[[Fit Statistics]]
+    # function evals   = 25
+    # data points      = 401
+    # variables        = 3
+    chi-square         = 53.754
+    reduced chi-square = 0.135
+[[Variables]]
+    amplitude:   38.9728645 +/- 0.313857 (0.81%) (init= 36.35199)
+    center:      9.24438944 +/- 0.009275 (0.10%) (init= 9.25)
+    fwhm:        2.30969034 +/- 0.026312 (1.14%)  == &#39;2.0000000*sigma&#39;
+    sigma:       1.15484517 +/- 0.013156 (1.14%) (init= 1.35)
+[[Correlations]] (unreported correlations are &lt;  0.250)
+    C(amplitude, sigma)          =  0.709
+</pre></div>
+</div>
+<p>with the plot shown on the right in the figure above.</p>
+<p>A Voigt model does a better job.  Using <a class="reference internal" href="#models.VoigtModel" title="models.VoigtModel"><tt class="xref py py-class docutils literal"><span class="pre">VoigtModel</span></tt></a>, this is
+as simple as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">VoigtModel</span>
+<span class="n">mod</span> <span class="o">=</span> <span class="n">VoigtModel</span><span class="p">()</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="n">out</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>which gives:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[Model]]
+    voigt
+[[Fit Statistics]]
+    # function evals   = 17
+    # data points      = 401
+    # variables        = 3
+    chi-square         = 14.545
+    reduced chi-square = 0.037
+[[Variables]]
+    amplitude:   35.7554017 +/- 0.138614 (0.39%) (init= 43.62238)
+    center:      9.24411142 +/- 0.005054 (0.05%) (init= 9.25)
+    fwhm:        2.62951718 +/- 0.013269 (0.50%)  == &#39;3.6013100*sigma&#39;
+    gamma:       0.73015574 +/- 0.003684 (0.50%)  == &#39;sigma&#39;
+    sigma:       0.73015574 +/- 0.003684 (0.50%) (init= 0.8775)
+[[Correlations]] (unreported correlations are &lt;  0.250)
+    C(amplitude, sigma)          =  0.651
+</pre></div>
+</div>
+<p>with the much better value for <span class="math">\(\chi^2\)</span> and the obviously better
+match to the data as seen in the figure below (left).</p>
+<blockquote id="figa2">
+<div><a class="reference external image-reference" href="_images/models_peak3.png"><img alt="_images/models_peak3.png" src="_images/models_peak3.png" style="width: 48%;" /></a>
+<a class="reference external image-reference" href="_images/models_peak4.png"><img alt="_images/models_peak4.png" src="_images/models_peak4.png" style="width: 48%;" /></a>
+<p>Fit to peak with Voigt model (left) and Voigt model with <tt class="docutils literal"><span class="pre">gamma</span></tt>
+varying independently of <tt class="docutils literal"><span class="pre">sigma</span></tt> (right).</p>
+</div></blockquote>
+<p>The Voigt function has a <span class="math">\(\gamma\)</span> parameter (<tt class="docutils literal"><span class="pre">gamma</span></tt>) that can be
+distinct from <tt class="docutils literal"><span class="pre">sigma</span></tt>.  The default behavior used above constrains
+<tt class="docutils literal"><span class="pre">gamma</span></tt> to have exactly the same value as <tt class="docutils literal"><span class="pre">sigma</span></tt>.  If we allow these
+to vary separately, does the fit improve?  To do this, we have to change
+the <tt class="docutils literal"><span class="pre">gamma</span></tt> parameter from a constrained expression and give it a
+starting value:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">mod</span> <span class="o">=</span> <span class="n">VoigtModel</span><span class="p">()</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="n">pars</span><span class="p">[</span><span class="s">&#39;gamma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+
+<span class="n">out</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>which gives:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[Model]]
+    voigt
+[[Fit Statistics]]
+    # function evals   = 21
+    # data points      = 401
+    # variables        = 4
+    chi-square         = 10.930
+    reduced chi-square = 0.028
+[[Variables]]
+    amplitude:   34.1914716 +/- 0.179468 (0.52%) (init= 43.62238)
+    center:      9.24374845 +/- 0.004419 (0.05%) (init= 9.25)
+    fwhm:        3.22385491 +/- 0.050974 (1.58%)  == &#39;3.6013100*sigma&#39;
+    gamma:       0.52540157 +/- 0.018579 (3.54%) (init= 0.7)
+    sigma:       0.89518950 +/- 0.014154 (1.58%) (init= 0.8775)
+[[Correlations]] (unreported correlations are &lt;  0.250)
+    C(amplitude, gamma)          =  0.821
+</pre></div>
+</div>
+<p>and the fit shown on the right above.</p>
+<p>Comparing the two fits with the Voigt function, we see that <span class="math">\(\chi^2\)</span>
+is definitely improved with a separately varying <tt class="docutils literal"><span class="pre">gamma</span></tt> parameter.  In
+addition, the two values for <tt class="docutils literal"><span class="pre">gamma</span></tt> and <tt class="docutils literal"><span class="pre">sigma</span></tt> differ significantly
+&#8211; well outside the estimated uncertainties.  Even more compelling, reduced
+<span class="math">\(\chi^2\)</span> is improved even though a fourth variable has been added to
+the fit.  In the simplest statistical sense, this suggests that <tt class="docutils literal"><span class="pre">gamma</span></tt>
+is a significant variable in the model.</p>
+<p>This example shows how easy it can be to alter and compare fitting models
+for simple problems.  The example is included in the <tt class="docutils literal"><span class="pre">doc_peakmodels.py</span></tt>
+file in the examples directory.</p>
+</div>
+<div class="section" id="example-2-fit-data-to-a-composite-model-with-pre-defined-models">
+<h2>Example 2: Fit data to a Composite Model with pre-defined models<a class="headerlink" href="#example-2-fit-data-to-a-composite-model-with-pre-defined-models" title="Permalink to this headline">¶</a></h2>
+<p>Here, we repeat the point made at the end of the last chapter that instances
+of <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class can be added them together to make a <em>composite
+model</em>.  But using the large number of built-in models available, this is
+very simple.  An example of a simple fit to a noisy step function plus a
+constant:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="c">#&lt;examples/doc_stepmodel.py&gt;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">StepModel</span><span class="p">,</span> <span class="n">LinearModel</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span><span class="p">[:</span><span class="mi">48</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">y</span><span class="p">[</span><span class="mi">48</span><span class="p">:</span><span class="mi">77</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">77</span><span class="o">-</span><span class="mi">48</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">77.0</span><span class="o">-</span><span class="mi">48</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">110.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mf">9e-3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span> <span class="o">+</span> <span class="mf">12.0</span> <span class="o">+</span> <span class="mf">2.22</span><span class="o">*</span><span class="n">x</span>
+
+<span class="n">step_mod</span> <span class="o">=</span> <span class="n">StepModel</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="s">&#39;erf&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s">&#39;step_&#39;</span><span class="p">)</span>
+<span class="n">line_mod</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">&#39;line_&#39;</span><span class="p">)</span>
+
+<span class="n">pars</span> <span class="o">=</span>  <span class="n">line_mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">slope</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pars</span> <span class="o">+=</span> <span class="n">step_mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+
+<span class="n">mod</span> <span class="o">=</span> <span class="n">step_mod</span> <span class="o">+</span> <span class="n">line_mod</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">init_fit</span><span class="p">,</span> <span class="s">&#39;k--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">best_fit</span><span class="p">,</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c">#&lt;end examples/doc_stepmodel.py&gt;</span>
+</pre></div>
+</div>
+<p>After constructing step-like data, we first create a <a class="reference internal" href="#models.StepModel" title="models.StepModel"><tt class="xref py py-class docutils literal"><span class="pre">StepModel</span></tt></a>
+telling it to use the <tt class="docutils literal"><span class="pre">erf</span></tt> form (see details above), and a
+<a class="reference internal" href="#models.ConstantModel" title="models.ConstantModel"><tt class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></tt></a>.  We set initial values, in one case using the data
+and <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> method for the intial step function paramaters, and
+<tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt> arguments for the linear component.
+After making a composite model, we run <tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt> and report the
+results, which give:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[Model]]
+ Composite Model:
+    step(prefix=&#39;step_&#39;,form=&#39;erf&#39;)
+    linear(prefix=&#39;line_&#39;)
+[[Fit Statistics]]
+    # function evals   = 49
+    # data points      = 201
+    # variables        = 5
+    chi-square         = 633.465
+    reduced chi-square = 3.232
+[[Variables]]
+    line_intercept:   11.5685248 +/- 0.285611 (2.47%) (init= 10.72406)
+    line_slope:       2.03270159 +/- 0.096041 (4.72%) (init= 0)
+    step_amplitude:   112.270535 +/- 0.674790 (0.60%) (init= 136.3006)
+    step_center:      3.12343845 +/- 0.005370 (0.17%) (init= 2.5)
+    step_sigma:       0.67468813 +/- 0.011336 (1.68%) (init= 1.428571)
+[[Correlations]] (unreported correlations are &lt;  0.100)
+    C(step_amplitude, step_sigma)  =  0.564
+    C(line_intercept, step_center)  =  0.428
+    C(step_amplitude, step_center)  =  0.109
+</pre></div>
+</div>
+<p>with a plot of</p>
+<a class="reference external image-reference" href="_images/models_stepfit.png"><img alt="_images/models_stepfit.png" src="_images/models_stepfit.png" style="width: 50%;" /></a>
+</div>
+<div class="section" id="example-3-fitting-multiple-peaks-and-using-prefixes">
+<h2>Example 3: Fitting Multiple Peaks &#8211; and using Prefixes<a class="headerlink" href="#example-3-fitting-multiple-peaks-and-using-prefixes" title="Permalink to this headline">¶</a></h2>
+<p>As shown above, many of the models have similar parameter names.  For
+composite models, this could lead to a problem of having parameters for
+different parts of the model having the same name.  To overcome this, each
+<tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> can have a <tt class="docutils literal"><span class="pre">prefix</span></tt> attribute (normally set to a blank
+string) that will be put at the beginning of each parameter name.  To
+illustrate, we fit one of the classic datasets from the <a class="reference external" href="http://itl.nist.gov/div898/strd/nls/nls_main.shtml">NIST StRD</a> suite
+involving a decaying exponential and two gaussians.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
+<span class="c">#&lt;examples/doc_nistgauss.py&gt;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">GaussianModel</span><span class="p">,</span> <span class="n">ExponentialModel</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="n">dat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s">&#39;NIST_Gauss2.dat&#39;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="n">exp_mod</span> <span class="o">=</span> <span class="n">ExponentialModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">&#39;exp_&#39;</span><span class="p">)</span>
+<span class="n">pars</span> <span class="o">=</span> <span class="n">exp_mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="n">gauss1</span>  <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">&#39;g1_&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span> <span class="n">gauss1</span><span class="o">.</span><span class="n">make_params</span><span class="p">())</span>
+
+<span class="n">pars</span><span class="p">[</span><span class="s">&#39;g1_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">105</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">125</span><span class="p">)</span>
+<span class="n">pars</span><span class="p">[</span><span class="s">&#39;g1_sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pars</span><span class="p">[</span><span class="s">&#39;g1_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">gauss2</span>  <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">&#39;g2_&#39;</span><span class="p">)</span>
+
+<span class="n">pars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">gauss2</span><span class="o">.</span><span class="n">make_params</span><span class="p">())</span>
+
+<span class="n">pars</span><span class="p">[</span><span class="s">&#39;g2_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">155</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">125</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">175</span><span class="p">)</span>
+<span class="n">pars</span><span class="p">[</span><span class="s">&#39;g2_sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">pars</span><span class="p">[</span><span class="s">&#39;g2_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">mod</span> <span class="o">=</span> <span class="n">gauss1</span> <span class="o">+</span> <span class="n">gauss2</span> <span class="o">+</span> <span class="n">exp_mod</span>
+
+
+<span class="n">init</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">init</span><span class="p">,</span> <span class="s">&#39;k--&#39;</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">best_fit</span><span class="p">,</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c">#&lt;end examples/doc_nistgauss.py&gt;</span>
+</pre></div>
+</div>
+<p>where we give a separate prefix to each model (they all have an
+<tt class="docutils literal"><span class="pre">amplitude</span></tt> parameter).  The <tt class="docutils literal"><span class="pre">prefix</span></tt> values are attached transparently
+to the models.</p>
+<p>MN&#8212;-: Note that the calls to <tt class="xref py py-meth docutils literal"><span class="pre">make_param()</span></tt> used the bare
+name, without the prefix.  We could have used them, but because we used the
+individual model <tt class="docutils literal"><span class="pre">gauss1</span></tt> and <tt class="docutils literal"><span class="pre">gauss2</span></tt>, there was no need.</p>
+<p>Note also in the example here that we explicitly set bounds on many of the
+parameter values.</p>
+<p>The fit results printed out are:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[Model]]
+ Composite Model:
+    gaussian(prefix=&#39;g1_&#39;)
+    gaussian(prefix=&#39;g2_&#39;)
+    exponential(prefix=&#39;exp_&#39;)
+[[Fit Statistics]]
+    # function evals   = 55
+    # data points      = 250
+    # variables        = 8
+    chi-square         = 1247.528
+    reduced chi-square = 5.155
+[[Variables]]
+    exp_amplitude:   99.0183291 +/- 0.537487 (0.54%) (init= 162.2102)
+    exp_decay:       90.9508788 +/- 1.103104 (1.21%) (init= 93.24905)
+    g1_amplitude:    4257.77384 +/- 42.38354 (1.00%) (init= 2000)
+    g1_center:       107.030955 +/- 0.150068 (0.14%) (init= 105)
+    g1_fwhm:         39.2609205 +/- 0.377907 (0.96%)  == &#39;2.3548200*g1_sigma&#39;
+    g1_sigma:        16.6725781 +/- 0.160482 (0.96%) (init= 15)
+    g2_amplitude:    2493.41747 +/- 36.16907 (1.45%) (init= 2000)
+    g2_center:       153.270103 +/- 0.194665 (0.13%) (init= 155)
+    g2_fwhm:         32.5128760 +/- 0.439860 (1.35%)  == &#39;2.3548200*g2_sigma&#39;
+    g2_sigma:        13.8069474 +/- 0.186791 (1.35%) (init= 15)
+[[Correlations]] (unreported correlations are &lt;  0.500)
+    C(g1_amplitude, g1_sigma)    =  0.824
+    C(g2_amplitude, g2_sigma)    =  0.815
+    C(g1_sigma, g2_center)       =  0.684
+    C(g1_amplitude, g2_center)   =  0.648
+    C(g1_center, g2_center)      =  0.621
+    C(g1_center, g1_sigma)       =  0.507
+</pre></div>
+</div>
+<p>We get a very good fit to this challenging problem (described at the NIST
+site as of average difficulty, but the tests there are generally hard) by
+applying reasonable initial guesses and putting modest but explicit bounds
+on the parameter values.  This fit is shown on the left:</p>
+<blockquote id="figa3">
+<div><a class="reference external image-reference" href="_images/models_nistgauss.png"><img alt="_images/models_nistgauss.png" src="_images/models_nistgauss.png" style="width: 48%;" /></a>
+<a class="reference external image-reference" href="_images/models_nistgauss2.png"><img alt="_images/models_nistgauss2.png" src="_images/models_nistgauss2.png" style="width: 48%;" /></a>
+</div></blockquote>
+<p>One final point on setting initial values.  From looking at the data
+itself, we can see the two Gaussian peaks are reasonably well separated but
+do overlap. Furthermore, we can tell that the initial guess for the
+decaying exponential component was poorly estimated because we used the
+full data range.  We can simplify the initial parameter values by using
+this, and by defining an <tt class="xref py py-func docutils literal"><span class="pre">index_of()</span></tt> function to limit the data range.
+That is, with:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">index_of</span><span class="p">(</span><span class="n">arrval</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="s">&quot;return index of array *at or below* value &quot;</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">(</span><span class="n">arrval</span><span class="p">):</span>  <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">arrval</span><span class="o">&lt;=</span><span class="n">value</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">ix1</span> <span class="o">=</span> <span class="n">index_of</span><span class="p">(</span><span class="n">x</span><span class="p">,</span>  <span class="mi">75</span><span class="p">)</span>
+<span class="n">ix2</span> <span class="o">=</span> <span class="n">index_of</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">135</span><span class="p">)</span>
+<span class="n">ix3</span> <span class="o">=</span> <span class="n">index_of</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">175</span><span class="p">)</span>
+
+<span class="n">exp_mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">[:</span><span class="n">ix1</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[:</span><span class="n">ix1</span><span class="p">])</span>
+<span class="n">gauss1</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">ix1</span><span class="p">:</span><span class="n">ix2</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">ix1</span><span class="p">:</span><span class="n">ix2</span><span class="p">])</span>
+<span class="n">gauss2</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">ix2</span><span class="p">:</span><span class="n">ix3</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">ix2</span><span class="p">:</span><span class="n">ix3</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>we can get a better initial estimate, and the fit converges in fewer steps,
+getting to identical values (to the precision printed out in the report),
+and without any bounds on parameters at all:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[Model]]
+ Composite Model:
+    gaussian(prefix=&#39;g1_&#39;)
+    gaussian(prefix=&#39;g2_&#39;)
+    exponential(prefix=&#39;exp_&#39;)
+[[Fit Statistics]]
+    # function evals   = 46
+    # data points      = 250
+    # variables        = 8
+    chi-square         = 1247.528
+    reduced chi-square = 5.155
+[[Variables]]
+    exp_amplitude:   99.0183281 +/- 0.537487 (0.54%) (init= 94.53724)
+    exp_decay:       90.9508863 +/- 1.103105 (1.21%) (init= 111.1985)
+    g1_amplitude:    4257.77321 +/- 42.38338 (1.00%) (init= 2126.432)
+    g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 106.5)
+    g1_fwhm:         39.2609141 +/- 0.377905 (0.96%)  == &#39;2.3548200*g1_sigma&#39;
+    g1_sigma:        16.6725754 +/- 0.160481 (0.96%) (init= 14.5)
+    g2_amplitude:    2493.41766 +/- 36.16948 (1.45%) (init= 1878.892)
+    g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 150)
+    g2_fwhm:         32.5128777 +/- 0.439866 (1.35%)  == &#39;2.3548200*g2_sigma&#39;
+    g2_sigma:        13.8069481 +/- 0.186794 (1.35%) (init= 15)
+[[Correlations]] (unreported correlations are &lt;  0.500)
+    C(g1_amplitude, g1_sigma)    =  0.824
+    C(g2_amplitude, g2_sigma)    =  0.815
+    C(g1_sigma, g2_center)       =  0.684
+    C(g1_amplitude, g2_center)   =  0.648
+    C(g1_center, g2_center)      =  0.621
+    C(g1_center, g1_sigma)       =  0.507
+</pre></div>
+</div>
+<p>This example is in the file <tt class="docutils literal"><span class="pre">doc_nistgauss2.py</span></tt> in the examples folder,
+and the fit result shown on the right above shows an improved initial
+estimate of the data.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="confidence.html" title="Calculation of confidence intervals"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model.html" title="Modeling Data and Curve Fitting"
+             >previous</a> |</li>
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="#"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="constraints.html">constraints</a>]</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

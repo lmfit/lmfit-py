@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Downloading and Installation &mdash; Least-Squares Minimization with Constraints for Python</title>
+    <title>Downloading and Installation &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
-    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.7.4',
+        VERSION:     '0.8.0rc4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,11 +23,51 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Least-Squares Minimization with Constraints for Python" href="index.html" />
-    <link rel="next" title="Getting started with Non-Linear Least-Squares Fitting" href="parameters.html" />
-    <link rel="prev" title="Non-Linear Least-Square Minimization for Python" href="index.html" /> 
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="next" title="Parameter and Parameters" href="parameters.html" />
+    <link rel="prev" title="Getting started with Non-Linear Least-Squares Fitting" href="intro.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
   </head>
   <body>
+<div>
+<table border=0>
+  <tr><td></td><td width=75% padding=5 align=left>
+       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=8% align=left>
+          <a href="installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td width=8% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+  </tr>
+  <tr><td></td><td width=75% padding=5 align=left>
+        <a href="index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="intro.html" style="color: #882222">
+         <font size+=1>Introduction</font></a> </td>
+     <td width=8% align=left>
+         <a href="parameters.html" style="color: #882222">
+         <font size+=1>Parameters</font></a> </td>
+     <td width=8% align=left>
+         <a href="model.html" style="color: #882222">
+         <font size+=1>Models</font></a> </td>
+
+  </tr>
+</table>
+</div>
+
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -35,17 +75,23 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="parameters.html" title="Getting started with Non-Linear Least-Squares Fitting"
+          <a href="parameters.html" title="Parameter and Parameters"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Non-Linear Least-Square Minimization for Python"
+          <a href="intro.html" title="Getting started with Non-Linear Least-Squares Fitting"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="constraints.html">constraints</a>]</li>
+ 
       </ul>
     </div>
+
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
@@ -53,8 +99,9 @@
 <li><a class="reference internal" href="#">Downloading and Installation</a><ul>
 <li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li><a class="reference internal" href="#downloads">Downloads</a></li>
-<li><a class="reference internal" href="#development-version">Development Version</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#development-version">Development Version</a></li>
+<li><a class="reference internal" href="#testing">Testing</a></li>
 <li><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
 <li><a class="reference internal" href="#license">License</a></li>
 </ul>
@@ -62,11 +109,11 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Non-Linear Least-Square Minimization for Python</a></p>
+  <p class="topless"><a href="intro.html"
+                        title="previous chapter">Getting started with Non-Linear Least-Squares Fitting</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="parameters.html"
-                        title="next chapter">Getting started with Non-Linear Least-Squares Fitting</a></p>
+                        title="next chapter"><tt class="docutils literal"><span class="pre">Parameter</span></tt>  and <tt class="docutils literal"><span class="pre">Parameters</span></tt></a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/installation.txt"
@@ -97,71 +144,31 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The lmfit package requires Python, Numpy, and Scipy.  Scipy version 0.11 or
-higher is recommended, but extensive testing on version compatibility has
-not been done.  Initial tests do work with Python 3.2, but little testing
-with Python 3 has yet been done.  Scipy seems to not yet be available for
-Python 3.3.  No testing has been done with 64-bit architectures, but as
-this package is pure Python, no significant troubles are expected. Nose is
-a requirement for running the test suite.</p>
+<p>The lmfit package requires Python, Numpy, and Scipy.  Scipy version 0.13 or
+higher is recommended, but extensive testing on compatibility with various
+versions of scipy has not been done.  Lmfit does work with Python 2.7, and
+3.2 and 3.3.  No testing has been done with Python 3.4, but as the package
+is pure Python, relying only on scipy and numpy, no significant troubles
+are expected.  The <a class="reference external" href="http://nose.readthedocs.org/">nose</a> frameworkt is required for running the test
+suite, and IPython and matplotib are recommended.  If Pandas is available,
+it will be used in portions of lmfit.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version is available from PyPI:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="26%" />
-<col width="21%" />
-<col width="52%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Download Option</th>
-<th class="head">Python Versions</th>
-<th class="head">Location</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Source Kit</td>
-<td>2.6, 2.7, 3.2</td>
-<td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/source/l/lmfit/lmfit-0.7.4.tar.gz">lmfit-0.7.4.tar.gz (PyPI)</a></li>
-</ul>
-</td>
-</tr>
-<tr class="row-odd"><td>Win32 Installer</td>
-<td>2.6</td>
-<td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/2.6/l/lmfit/lmfit-0.7.4.win32-py2.6.exe">lmfit-0.7.4.win32-py2.6.exe (PyPI)</a></li>
-</ul>
-</td>
-</tr>
-<tr class="row-even"><td>Win32 Installer</td>
-<td>2.7</td>
-<td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/2.7/l/lmfit/lmfit-0.7.4.win32-py2.7.exe">lmfit-0.7.4.win32-py2.7.exe (PyPI)</a></li>
-</ul>
-</td>
-</tr>
-<tr class="row-odd"><td>Win32 Installer</td>
-<td>3.2</td>
-<td><ul class="first last simple">
-<li><a class="reference external" href="http://pypi.python.org/packages/3.2/l/lmfit/lmfit-0.7.4.win32-py3.2.exe">lmfit-0.7.4.win32-py3.2.exe (PyPI)</a></li>
-</ul>
-</td>
-</tr>
-<tr class="row-even"><td>Development Version</td>
-<td>all</td>
-<td>use <a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a></td>
-</tr>
-</tbody>
-</table>
-<p>if you have <a class="reference external" href="http://pypi.python.org/pypi/setuptools">Python Setup Tools</a>  installed, you can download and install
-the lmfit-py Package simply with:</p>
+<p>The latest stable version of lmfit is  available from <a class="reference external" href="http://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>If you have <a class="reference external" href="https://pip.pypa.io/">pip</a>  installed, you can install lmfit with:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install lmfit
+</pre></div>
+</div>
+<p>or, if  you have <a class="reference external" href="http://pypi.python.org/pypi/setuptools">Python Setup Tools</a>  installed, you install lmfit with:</p>
 <div class="highlight-python"><div class="highlight"><pre>easy_install -U lmfit
 </pre></div>
 </div>
-<p>or:</p>
-<div class="highlight-python"><div class="highlight"><pre>pip install lmfit
+<p>or, you can download the source kit, unpack it and install with:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py install
 </pre></div>
 </div>
 </div>
@@ -171,36 +178,44 @@ the lmfit-py Package simply with:</p>
 <div class="highlight-python"><div class="highlight"><pre>git clone http://github.com/lmfit/lmfit-py.git
 </pre></div>
 </div>
-</div>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>Installation from source on any platform is:</p>
+<p>and install using:</p>
 <div class="highlight-python"><div class="highlight"><pre>python setup.py install
 </pre></div>
 </div>
+</div>
+<div class="section" id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<p>A battery of tests scripts that can be run with the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> testing
+framework is distributed with lmfit in the <tt class="docutils literal"><span class="pre">tests</span></tt> folder.  These are
+routinely run on the development version.  Running <tt class="docutils literal"><span class="pre">nosetests</span></tt> should run
+all of these tests to completion without errors or failures.</p>
+<p>Many of the examples in this documentation are distributed with lmfit in
+the <tt class="docutils literal"><span class="pre">examples</span></tt> folder, and sould also run for you.  Many of these require</p>
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
 <p>LMFIT was originally written by Matthew Newville.  Substantial code and
 documentation improvements, especially for improved estimates of confidence
-intervals was provided by Till Stensitzki.  The implementation of parameter
-bounds as described in the MINUIT documentation is taken from Jonathan
-J. Helmus' leastsqbound code, with permission.  The code for propagation of
-uncertainties is taken from Eric O. Le Bigot's uncertainties package, with
-permission.  Much of the work on improved unit testing and high-level model
-functions was done by Daniel B. Allen.  Many valuable suggestions for
-improvements have come from Christoph Deil.  The code obviously depends on,
-and owes a very large debt to the code in scipy.optimize.  Several
-discussions on the scipy mailing lists have also led to improvements in
-this code.</p>
+intervals was provided by Till Stensitzki.  Much of the work on improved
+unit testing and high-level model functions was done by Daniel B. Allen,
+with substantial input from Antonino Ingargiola.  Many valuable suggestions
+for improvements have come from Christoph Deil.  The implementation of
+parameter bounds as described in the MINUIT documentation is taken from
+Jonathan J. Helmus&#8217; leastsqbound code, with permission.  The code for
+propagation of uncertainties is taken from Eric O. Le Bigot&#8217;s uncertainties
+package, with permission.  The code obviously depends on, and owes a very
+large debt to the code in scipy.optimize.  Several discussions on the scipy
+mailing lists have also led to improvements in this code.</p>
 </div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p>The LMFIT-py code is distribution under the following license:</p>
 <blockquote>
 <div><dl class="docutils">
-<dt>Copyright (c) 2012 Matthew Newville, The University of Chicago</dt>
-<dd>Till Stensitzki, Freie Universitat Berlin</dd>
+<dt>Copyright (c) 2014 Matthew Newville, The University of Chicago</dt>
+<dd>Till Stensitzki, Freie Universitat Berlin
+Daniel B. Allen, Johns Hopkins University
+Antonino Ingargiola, University of California, Los Angeles</dd>
 </dl>
 <p>Permission to use and redistribute the source code or binary forms of this
 software and its documentation, with or without modification is hereby
@@ -209,7 +224,7 @@ and the disclaimer of warranty below appear in the source code and
 documentation, and that none of the names of above institutions or
 authors appear in advertising or endorsement of works derived from this
 software without specific prior written permission from all parties.</p>
-<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<p>THE SOFTWARE IS PROVIDED &#8220;AS IS&#8221;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
 THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -233,15 +248,20 @@ DEALINGS IN THIS SOFTWARE.</p>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="parameters.html" title="Getting started with Non-Linear Least-Squares Fitting"
+          <a href="parameters.html" title="Parameter and Parameters"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Non-Linear Least-Square Minimization for Python"
+          <a href="intro.html" title="Getting started with Non-Linear Least-Squares Fitting"
              >previous</a> |</li>
-        <li><a href="index.html">Least-Squares Minimization with Constraints for Python</a> &raquo;</li> 
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="constraints.html">constraints</a>]</li>
+ 
       </ul>
     </div>
     <div class="footer">
