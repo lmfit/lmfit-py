@@ -72,6 +72,24 @@ class CommonTests(object):
         result = model.fit(self.data, pars, x=self.x)
         assert_results_close(result.values, self.true_values())
 
+    def test_fit_with_weights(self):
+        model = self.model
+
+        # fit without weights
+        params = model.make_params(**self.guess())
+        out1 = model.fit(self.data, params, x=self.x)
+
+        # fit with weights
+        weights = 1.0/(0.5 + self.x**2)
+        out2 = model.fit(self.data, params, weights=weights, x=self.x)
+
+        max_diff = 0.0
+        for parname, val1 in out1.values.items():
+            val2 = out2.values[parname]
+            if max_diff < abs(val1-val2):
+                max_diff = abs(val1-val2)
+        assert(max_diff > 1.e-8)
+
     def test_result_attributes(self):
         pars = self.model.make_params(**self.guess())
         result = self.model.fit(self.data, pars, x=self.x)
