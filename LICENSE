@@ -2,15 +2,17 @@ Copyright, Licensing, and Re-distribution
 -----------------------------------------
 
 The LMFIT-py code is distribution under the following license:
-  
-  Copyright (c) 2012 Matthew Newville, The University of Chicago
-                     Till Stensitzki, Freie Universitat Berlin'
+
+  Copyright (c) 2014 Matthew Newville, The University of Chicago
+                     Till Stensitzki, Freie Universitat Berlin
+                     Daniel B. Allen, Johns Hopkins University
+                     Antonino Ingargiola, University of California, Los Angeles
 
   Permission to use and redistribute the source code or binary forms of this
   software and its documentation, with or without modification is hereby
   granted provided that the above notice of copyright, these terms of use,
   and the disclaimer of warranty below appear in the source code and
-  documentation, and that none of the names of above institutions or 
+  documentation, and that none of the names of above institutions or
   authors appear in advertising or endorsement of works derived from this
   software without specific prior written permission from all parties.
 
@@ -21,4 +23,3 @@ The LMFIT-py code is distribution under the following license:
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THIS SOFTWARE.
-
