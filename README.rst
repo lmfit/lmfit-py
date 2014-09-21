@@ -4,8 +4,8 @@ LMfit-py
 .. image:: https://travis-ci.org/lmfit/lmfit-py.png
    :target: https://travis-ci.org/lmfit/lmfit-py
 
-.. image:: https://zenodo.org/badge/4185/lmfit/lmfit-py.png
-   :target: http://dx.doi.org/??/zenodo.?
+.. image:: https://zenodo.org/badge/doi/10.5281/zenodo.11813.png
+   :target: http://dx.doi.org/10.5281/zenodo.11813
 
 LMfit-py provides a Least-Squares Minimization routine and class
 with a simple, flexible approach to parameterizing a model for
