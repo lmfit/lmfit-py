@@ -187,7 +187,7 @@ except that all the other features of lmfit are included such as that the
 :class:`Parameters` can have bounds and constraints and the result is a
 richer object that can be reused to explore the fit in more detail.
 
-.. module:: module
+.. module:: model
 
 The :class:`Model` class
 =======================================
