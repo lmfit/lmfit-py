@@ -349,14 +349,14 @@ compare well to <a class="reference external" href="http://docs.scipy.org/doc/sc
 <p>except that all the other features of lmfit are included such as that the
 <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> can have bounds and constraints and the result is a
 richer object that can be reused to explore the fit in more detail.</p>
-<span class="target" id="module-module"></span></div>
+<span class="target" id="module-model"></span></div>
 <div class="section" id="the-model-class">
-<h2>The <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class<a class="headerlink" href="#the-model-class" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class provides a general way to wrap a pre-defined
+<h2>The <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class<a class="headerlink" href="#the-model-class" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class provides a general way to wrap a pre-defined
 function as a fitting model.</p>
 <dl class="class">
-<dt id="module.Model">
-<em class="property">class </em><tt class="descname">Model</tt><big>(</big><em>func</em><span class="optional">[</span>, <em>independent_vars=None</em><span class="optional">[</span>, <em>param_names=None</em><span class="optional">[</span>, <em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#module.Model" title="Permalink to this definition">¶</a></dt>
+<dt id="model.Model">
+<em class="property">class </em><tt class="descname">Model</tt><big>(</big><em>func</em><span class="optional">[</span>, <em>independent_vars=None</em><span class="optional">[</span>, <em>param_names=None</em><span class="optional">[</span>, <em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#model.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a model based on the user-supplied function.  This uses
 introspection to automatically converting argument names of the
 function to Parameter names.</p>
@@ -383,10 +383,10 @@ also specifying one or more independent variables.</p>
 </dd></dl>
 
 <div class="section" id="model-class-methods">
-<h3><a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class Methods<a class="headerlink" href="#model-class-methods" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class Methods<a class="headerlink" href="#model-class-methods" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
-<dt id="module.eval">
-<tt class="descname">eval</tt><big>(</big><em>params=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#module.eval" title="Permalink to this definition">¶</a></dt>
+<dt id="model.eval">
+<tt class="descname">eval</tt><big>(</big><em>params=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#model.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>evaluate the model function for a set of parameters and inputs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -413,8 +413,8 @@ in using keyword arguments.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="module.fit">
-<tt class="descname">fit</tt><big>(</big><em>data</em><span class="optional">[</span>, <em>params=None</em><span class="optional">[</span>, <em>weights=None</em><span class="optional">[</span>, <em>method='leastsq'</em><span class="optional">[</span>, <em>scale_covar=True</em><span class="optional">[</span>, <em>iter_cb=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#module.fit" title="Permalink to this definition">¶</a></dt>
+<dt id="model.fit">
+<tt class="descname">fit</tt><big>(</big><em>data</em><span class="optional">[</span>, <em>params=None</em><span class="optional">[</span>, <em>weights=None</em><span class="optional">[</span>, <em>method='leastsq'</em><span class="optional">[</span>, <em>scale_covar=True</em><span class="optional">[</span>, <em>iter_cb=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#model.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform a fit of the model to the <tt class="docutils literal"><span class="pre">data</span></tt> array with a set of
 parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -448,8 +448,8 @@ arguments.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="module.guess">
-<tt class="descname">guess</tt><big>(</big><em>data</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#module.guess" title="Permalink to this definition">¶</a></dt>
+<dt id="model.guess">
+<tt class="descname">guess</tt><big>(</big><em>data</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#model.guess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Guess starting values for model parameters.</p>
 <blockquote>
 <div><table class="docutils field-list" frame="void" rules="none">
@@ -474,8 +474,8 @@ the parameters.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="module.make_params">
-<tt class="descname">make_params</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#module.make_params" title="Permalink to this definition">¶</a></dt>
+<dt id="model.make_params">
+<tt class="descname">make_params</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#model.make_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a set of parameters for model.</p>
 <blockquote>
 <div><table class="docutils field-list" frame="void" rules="none">
@@ -494,8 +494,8 @@ parameter.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="module.set_param_hint">
-<tt class="descname">set_param_hint</tt><big>(</big><em>name</em>, <em>value=None</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#module.set_param_hint" title="Permalink to this definition">¶</a></dt>
+<dt id="model.set_param_hint">
+<tt class="descname">set_param_hint</tt><big>(</big><em>name</em>, <em>value=None</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#model.set_param_hint" title="Permalink to this definition">¶</a></dt>
 <dd><p>set <em>hints</em> to use when creating parameters with <tt class="xref py py-meth docutils literal"><span class="pre">make_param()</span></tt> for
 the named parameter.  This is especially convenient for setting initial
 values.  The <tt class="docutils literal"><span class="pre">name</span></tt> can include the models <tt class="docutils literal"><span class="pre">prefix</span></tt> or not.</p>
@@ -520,37 +520,37 @@ values.  The <tt class="docutils literal"><span class="pre">name</span></tt> can
 
 </div>
 <div class="section" id="model-class-attributes">
-<h3><a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class Attributes<a class="headerlink" href="#model-class-attributes" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class Attributes<a class="headerlink" href="#model-class-attributes" title="Permalink to this headline">¶</a></h3>
 <dl class="attribute">
-<dt id="module.components">
-<tt class="descname">components</tt><a class="headerlink" href="#module.components" title="Permalink to this definition">¶</a></dt>
-<dd><p>a list of instances of <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> that make up a <em>composite model</em>.
+<dt id="model.components">
+<tt class="descname">components</tt><a class="headerlink" href="#model.components" title="Permalink to this definition">¶</a></dt>
+<dd><p>a list of instances of <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> that make up a <em>composite model</em>.
 See <a class="reference internal" href="#composite-models-section"><em>Creating composite models</em></a>.  Normally, you will not need to use
-this, but is used by <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> itself when constructing a composite
+this, but is used by <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> itself when constructing a composite
 model from two or more models.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.func">
-<tt class="descname">func</tt><a class="headerlink" href="#module.func" title="Permalink to this definition">¶</a></dt>
+<dt id="model.func">
+<tt class="descname">func</tt><a class="headerlink" href="#model.func" title="Permalink to this definition">¶</a></dt>
 <dd><p>The model function used to calculate the model.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.independent_vars">
-<tt class="descname">independent_vars</tt><a class="headerlink" href="#module.independent_vars" title="Permalink to this definition">¶</a></dt>
+<dt id="model.independent_vars">
+<tt class="descname">independent_vars</tt><a class="headerlink" href="#model.independent_vars" title="Permalink to this definition">¶</a></dt>
 <dd><p>list of strings for names of the independent variables.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.is_composite">
-<tt class="descname">is_composite</tt><a class="headerlink" href="#module.is_composite" title="Permalink to this definition">¶</a></dt>
+<dt id="model.is_composite">
+<tt class="descname">is_composite</tt><a class="headerlink" href="#model.is_composite" title="Permalink to this definition">¶</a></dt>
 <dd><p>Boolean value for whether model is a composite model.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.missing">
-<tt class="descname">missing</tt><a class="headerlink" href="#module.missing" title="Permalink to this definition">¶</a></dt>
+<dt id="model.missing">
+<tt class="descname">missing</tt><a class="headerlink" href="#model.missing" title="Permalink to this definition">¶</a></dt>
 <dd><p>describes what to do for missing values.  The choices are</p>
 <blockquote>
 <div><ul>
@@ -575,36 +575,36 @@ model from two or more models.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.name">
-<tt class="descname">name</tt><a class="headerlink" href="#module.name" title="Permalink to this definition">¶</a></dt>
+<dt id="model.name">
+<tt class="descname">name</tt><a class="headerlink" href="#model.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>name of the model, used only in the string representation of the
 model. By default this will be taken from the model function.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.opts">
-<tt class="descname">opts</tt><a class="headerlink" href="#module.opts" title="Permalink to this definition">¶</a></dt>
+<dt id="model.opts">
+<tt class="descname">opts</tt><a class="headerlink" href="#model.opts" title="Permalink to this definition">¶</a></dt>
 <dd><p>extra keyword arguments to pass to model function.  Normally this will
 be determined internally and should not be changed.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.param_hints">
-<tt class="descname">param_hints</tt><a class="headerlink" href="#module.param_hints" title="Permalink to this definition">¶</a></dt>
+<dt id="model.param_hints">
+<tt class="descname">param_hints</tt><a class="headerlink" href="#model.param_hints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary of parameter hints.  See <a class="reference internal" href="#model-param-hints-section"><em>Using parameter hints</em></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.param_names">
-<tt class="descname">param_names</tt><a class="headerlink" href="#module.param_names" title="Permalink to this definition">¶</a></dt>
+<dt id="model.param_names">
+<tt class="descname">param_names</tt><a class="headerlink" href="#model.param_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>list of strings of parameter names.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.prefix">
-<tt class="descname">prefix</tt><a class="headerlink" href="#module.prefix" title="Permalink to this definition">¶</a></dt>
+<dt id="model.prefix">
+<tt class="descname">prefix</tt><a class="headerlink" href="#model.prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>prefix used for name-mangling of parameter names.  The default is &#8216;&#8217;.
-If a particular <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> has arguments <tt class="docutils literal"><span class="pre">amplitude</span></tt>,
+If a particular <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> has arguments <tt class="docutils literal"><span class="pre">amplitude</span></tt>,
 <tt class="docutils literal"><span class="pre">center</span></tt>, and <tt class="docutils literal"><span class="pre">sigma</span></tt>, these would become the parameter names.
 Using a prefix of <tt class="docutils literal"><span class="pre">g1_</span></tt> would convert these parameter names to
 <tt class="docutils literal"><span class="pre">g1_amplitude</span></tt>, <tt class="docutils literal"><span class="pre">g1_center</span></tt>, and <tt class="docutils literal"><span class="pre">g1_sigma</span></tt>.   This can be
@@ -614,7 +614,7 @@ essential to avoid name collision in composite models.</p>
 </div>
 <div class="section" id="determining-parameter-names-and-independent-variables-for-a-function">
 <h3>Determining parameter names and independent variables for a function<a class="headerlink" href="#determining-parameter-names-and-independent-variables-for-a-function" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> created from the supplied function <tt class="docutils literal"><span class="pre">func</span></tt> will create
+<p>The <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> created from the supplied function <tt class="docutils literal"><span class="pre">func</span></tt> will create
 a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> object, and names are inferred from the function
 arguments, and a residual function is automatically constructed.</p>
 <p>By default, the independent variable is take as the first argument to the
@@ -630,7 +630,7 @@ on Parameters, or fix their values.</p>
 </div>
 <div class="section" id="explicitly-specifying-independent-vars">
 <h3>Explicitly specifying <tt class="docutils literal"><span class="pre">independent_vars</span></tt><a class="headerlink" href="#explicitly-specifying-independent-vars" title="Permalink to this headline">¶</a></h3>
-<p>As we saw for the Gaussian example above, creating a <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> from a
+<p>As we saw for the Gaussian example above, creating a <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> from a
 function is fairly easy. Let&#8217;s try another:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">decay</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">N</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="o">/</span><span class="n">tau</span><span class="p">)</span>
@@ -668,8 +668,8 @@ function you are modeling:</p>
 <dt>independent variable</dt>
 <dd>a function argument that is not a parameter or otherwise part of the
 model, and that will be required to be explicitly provided as a
-keyword argument for each fit with <a class="reference internal" href="#module.fit" title="module.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a> or evaluation
-with <a class="reference internal" href="#module.eval" title="module.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a>.</dd>
+keyword argument for each fit with <a class="reference internal" href="#model.fit" title="model.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a> or evaluation
+with <a class="reference internal" href="#model.eval" title="model.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a>.</dd>
 </dl>
 <p>Note that independent variables are not required to be arrays, or even
 floating point numbers.</p>
@@ -712,7 +712,7 @@ be correctly used in the underlying model function.  This would be
 necessary, for example, if two parameters in a composite model (see
 <a class="reference internal" href="#composite-models-section"><em>Creating composite models</em></a> or examples in the next chapter) would have
 the same name.  To avoid this, we can add a <tt class="docutils literal"><span class="pre">prefix</span></tt> to the
-<a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> which will automatically do this mapping for us.</p>
+<a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> which will automatically do this mapping for us.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="gp">...</span>
 </pre></div>
@@ -739,10 +739,10 @@ used in any combination:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li>You can supply initial values in the definition of the model function.</li>
-<li>You can initialize the parameters when creating parameters with <a class="reference internal" href="#module.make_params" title="module.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>.</li>
-<li>You can give parameter hints with <a class="reference internal" href="#module.set_param_hint" title="module.set_param_hint"><tt class="xref py py-meth docutils literal"><span class="pre">set_param_hint()</span></tt></a>.</li>
+<li>You can initialize the parameters when creating parameters with <a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>.</li>
+<li>You can give parameter hints with <a class="reference internal" href="#model.set_param_hint" title="model.set_param_hint"><tt class="xref py py-meth docutils literal"><span class="pre">set_param_hint()</span></tt></a>.</li>
 <li>You can supply initial values for the parameters when you use the
-<a class="reference internal" href="#module.eval" title="module.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a> or <a class="reference internal" href="#module.fit" title="module.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a> methods.</li>
+<a class="reference internal" href="#model.eval" title="model.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a> or <a class="reference internal" href="#model.fit" title="model.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a> methods.</li>
 </ol>
 </div></blockquote>
 <p>Of course these methods can be mixed, allowing you to overwrite initial
@@ -765,8 +765,8 @@ with keywords can be treated as options.  It also means that some default
 initial value will always be available for the parameter.</p>
 </div>
 <div class="section" id="initializing-values-with-make-params">
-<h4>Initializing values with <a class="reference internal" href="#module.make_params" title="module.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a><a class="headerlink" href="#initializing-values-with-make-params" title="Permalink to this headline">¶</a></h4>
-<p>When creating parameters with <a class="reference internal" href="#module.make_params" title="module.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a> you can specify initial
+<h4>Initializing values with <a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a><a class="headerlink" href="#initializing-values-with-make-params" title="Permalink to this headline">¶</a></h4>
+<p>When creating parameters with <a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a> you can specify initial
 values.  To do this, use keyword arguments for the parameter names and
 initial values:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
@@ -777,10 +777,10 @@ initial values:</p>
 <div class="section" id="initializing-values-by-setting-parameter-hints">
 <h4>Initializing values by setting parameter hints<a class="headerlink" href="#initializing-values-by-setting-parameter-hints" title="Permalink to this headline">¶</a></h4>
 <p>After a model has been created, but prior to creating parameters with
-<a class="reference internal" href="#module.make_params" title="module.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>, you can set parameter hints.  These allows you to set
+<a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>, you can set parameter hints.  These allows you to set
 not only a default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
-expression.  To set a parameter hint, you can use <a class="reference internal" href="#module.set_param_hint" title="module.set_param_hint"><tt class="xref py py-meth docutils literal"><span class="pre">set_param_hint()</span></tt></a>,
+expression.  To set a parameter hint, you can use <a class="reference internal" href="#model.set_param_hint" title="model.set_param_hint"><tt class="xref py py-meth docutils literal"><span class="pre">set_param_hint()</span></tt></a>,
 as with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -794,8 +794,8 @@ as with:</p>
 <div class="section" id="initializing-values-when-using-a-model">
 <h4>Initializing values when using a model<a class="headerlink" href="#initializing-values-when-using-a-model" title="Permalink to this headline">¶</a></h4>
 <p>Finally, you can explicitly supply initial values when using a model.  That
-is, as with <a class="reference internal" href="#module.make_params" title="module.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>, you can include values
-as keyword arguments to either the <a class="reference internal" href="#module.eval" title="module.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a> or <a class="reference internal" href="#module.fit" title="module.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a> methods:</p>
+is, as with <a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>, you can include values
+as keyword arguments to either the <a class="reference internal" href="#model.eval" title="model.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a> or <a class="reference internal" href="#model.fit" title="model.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a> methods:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">7.0</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mf">0.0</span><span class="p">)</span>
@@ -804,30 +804,30 @@ as keyword arguments to either the <a class="reference internal" href="#module.e
 <p>These approachess to initialization provide many opportunities for setting
 initial values for parameters.  The methods can be combined, so that you
 can set parameter hints but then change the initial value explicitly with
-<a class="reference internal" href="#module.fit" title="module.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a>.</p>
+<a class="reference internal" href="#model.fit" title="model.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a>.</p>
 </div>
 </div>
 <div class="section" id="using-parameter-hints">
 <span id="model-param-hints-section"></span><h3>Using parameter hints<a class="headerlink" href="#using-parameter-hints" title="Permalink to this headline">¶</a></h3>
 <p>After a model has been created, you can give it hints for how to create
-parameters with <a class="reference internal" href="#module.make_params" title="module.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>.  This allows you to set not only a
+parameters with <a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>.  This allows you to set not only a
 default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
-expression.   To set a parameter hint, you can use <a class="reference internal" href="#module.set_param_hint" title="module.set_param_hint"><tt class="xref py py-meth docutils literal"><span class="pre">set_param_hint()</span></tt></a>,
+expression.   To set a parameter hint, you can use <a class="reference internal" href="#model.set_param_hint" title="model.set_param_hint"><tt class="xref py py-meth docutils literal"><span class="pre">set_param_hint()</span></tt></a>,
 as with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Parameter hints are stored in a model&#8217;s <a class="reference internal" href="#module.param_hints" title="module.param_hints"><tt class="xref py py-attr docutils literal"><span class="pre">param_hints</span></tt></a> attribute,
+<p>Parameter hints are stored in a model&#8217;s <a class="reference internal" href="#model.param_hints" title="model.param_hints"><tt class="xref py py-attr docutils literal"><span class="pre">param_hints</span></tt></a> attribute,
 which is simply a nested dictionary:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">mod</span><span class="o">.</span><span class="n">param_hints</span>
 <span class="go">{&#39;a&#39;: {&#39;value&#39;: 1}, &#39;b&#39;: {&#39;max&#39;: 1.0, &#39;value&#39;: 0.3, &#39;min&#39;: 0}}</span>
 </pre></div>
 </div>
-<p>You can change this dictionary directly, or with the <a class="reference internal" href="#module.set_param_hint" title="module.set_param_hint"><tt class="xref py py-meth docutils literal"><span class="pre">set_param_hint()</span></tt></a>
-method.  Either way, these parameter hints are used by <a class="reference internal" href="#module.make_params" title="module.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>
+<p>You can change this dictionary directly, or with the <a class="reference internal" href="#model.set_param_hint" title="model.set_param_hint"><tt class="xref py py-meth docutils literal"><span class="pre">set_param_hint()</span></tt></a>
+method.  Either way, these parameter hints are used by <a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>
 when making parameters.</p>
 <p>An important feature of parameter hints is that you can force the creation
 of new parameters with parameter hints.  This can be useful to make derived
@@ -843,14 +843,14 @@ at half maximum of a Gaussian model, one could use a parameter hint of:</p>
 <h2>The <tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> class<a class="headerlink" href="#the-modelfit-class" title="Permalink to this headline">¶</a></h2>
 <p>A <tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> is the object returned by <tt class="xref py py-meth docutils literal"><span class="pre">Model.fit()</span></tt>.  It is a
 sublcass of <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a>, and so contains many of the fit results.
-Of course, it knows the <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> and the set of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>
+Of course, it knows the <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> and the set of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>
 used in the fit, and it has methods to evaluate the model, to fit the data
 (or re-fit the data with changes to the parameters, or fit with different
 or modified data) and to print out a report for that fit.</p>
-<p>While a <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> encapsulates your model function, it is fairly
+<p>While a <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> encapsulates your model function, it is fairly
 abstract and does not contain the parameters or data used in a particular
 fit.  A <tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> <em>does</em> contain parameters and data as well as
-methods to alter and re-do fits.  Thus the <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> is the idealized
+methods to alter and re-do fits.  Thus the <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> is the idealized
 model while the <tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> is the messier, more complex (but perhaps
 more useful) object that represents a fit with a set of parameters to data
 with a model.</p>
@@ -859,7 +859,7 @@ and several methods for working with fits.</p>
 <div class="section" id="modelfit-methods">
 <h3><tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> methods<a class="headerlink" href="#modelfit-methods" title="Permalink to this headline">¶</a></h3>
 <p>These methods are all inherited from <tt class="xref py py-class docutils literal"><span class="pre">Minimize</span></tt> or from
-<a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>.</p>
+<a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>.</p>
 <dl class="method">
 <dt>
 <tt class="descname">eval</tt><big>(</big><em>**kwargs</em><big>)</big></dt>
@@ -879,10 +879,10 @@ used value.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="module.fit_report">
-<tt class="descname">fit_report</tt><big>(</big><em>modelpars=None</em><span class="optional">[</span>, <em>show_correl=True</em><span class="optional">[</span>, <em>min_correl=0.1</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#module.fit_report" title="Permalink to this definition">¶</a></dt>
+<dt id="model.fit_report">
+<tt class="descname">fit_report</tt><big>(</big><em>modelpars=None</em><span class="optional">[</span>, <em>show_correl=True</em><span class="optional">[</span>, <em>min_correl=0.1</em><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#model.fit_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>return a printable fit report for the fit with fit statistics, best-fit
-values with uncertainties and correlations.  As with <a class="reference internal" href="#module.fit_report" title="module.fit_report"><tt class="xref py py-func docutils literal"><span class="pre">fit_report()</span></tt></a>.</p>
+values with uncertainties and correlations.  As with <a class="reference internal" href="#model.fit_report" title="model.fit_report"><tt class="xref py py-func docutils literal"><span class="pre">fit_report()</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -902,70 +902,70 @@ values with uncertainties and correlations.  As with <a class="reference interna
 <div class="section" id="modelfit-attributes">
 <h3><tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> attributes<a class="headerlink" href="#modelfit-attributes" title="Permalink to this headline">¶</a></h3>
 <dl class="attribute">
-<dt id="module.best_fit">
-<tt class="descname">best_fit</tt><a class="headerlink" href="#module.best_fit" title="Permalink to this definition">¶</a></dt>
+<dt id="model.best_fit">
+<tt class="descname">best_fit</tt><a class="headerlink" href="#model.best_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>ndarray result of model function, evaluated at provided
 independent variables and with best-fit parameters.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.best_values">
-<tt class="descname">best_values</tt><a class="headerlink" href="#module.best_values" title="Permalink to this definition">¶</a></dt>
+<dt id="model.best_values">
+<tt class="descname">best_values</tt><a class="headerlink" href="#model.best_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>dictionary with  parameter names as keys, and best-fit values as values.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.chisqr">
-<tt class="descname">chisqr</tt><a class="headerlink" href="#module.chisqr" title="Permalink to this definition">¶</a></dt>
+<dt id="model.chisqr">
+<tt class="descname">chisqr</tt><a class="headerlink" href="#model.chisqr" title="Permalink to this definition">¶</a></dt>
 <dd><p>floating point best-fit chi-square statistic.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.covar">
-<tt class="descname">covar</tt><a class="headerlink" href="#module.covar" title="Permalink to this definition">¶</a></dt>
+<dt id="model.covar">
+<tt class="descname">covar</tt><a class="headerlink" href="#model.covar" title="Permalink to this definition">¶</a></dt>
 <dd><p>ndarray (square) covariance matrix returned from fit.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.data">
-<tt class="descname">data</tt><a class="headerlink" href="#module.data" title="Permalink to this definition">¶</a></dt>
+<dt id="model.data">
+<tt class="descname">data</tt><a class="headerlink" href="#model.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>ndarray of data to compare to model.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.errorbars">
-<tt class="descname">errorbars</tt><a class="headerlink" href="#module.errorbars" title="Permalink to this definition">¶</a></dt>
+<dt id="model.errorbars">
+<tt class="descname">errorbars</tt><a class="headerlink" href="#model.errorbars" title="Permalink to this definition">¶</a></dt>
 <dd><p>boolean for whether error bars were estimated by fit.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.ier">
-<tt class="descname">ier</tt><a class="headerlink" href="#module.ier" title="Permalink to this definition">¶</a></dt>
+<dt id="model.ier">
+<tt class="descname">ier</tt><a class="headerlink" href="#model.ier" title="Permalink to this definition">¶</a></dt>
 <dd><p>integer returned code from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.init_fit">
-<tt class="descname">init_fit</tt><a class="headerlink" href="#module.init_fit" title="Permalink to this definition">¶</a></dt>
+<dt id="model.init_fit">
+<tt class="descname">init_fit</tt><a class="headerlink" href="#model.init_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>ndarray result of model function, evaluated at provided
 independent variables and with initial parameters.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.init_params">
-<tt class="descname">init_params</tt><a class="headerlink" href="#module.init_params" title="Permalink to this definition">¶</a></dt>
+<dt id="model.init_params">
+<tt class="descname">init_params</tt><a class="headerlink" href="#model.init_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>initial parameters.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.init_values">
-<tt class="descname">init_values</tt><a class="headerlink" href="#module.init_values" title="Permalink to this definition">¶</a></dt>
+<dt id="model.init_values">
+<tt class="descname">init_values</tt><a class="headerlink" href="#model.init_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>dictionary with  parameter names as keys, and initial values as values.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.iter_cb">
-<tt class="descname">iter_cb</tt><a class="headerlink" href="#module.iter_cb" title="Permalink to this definition">¶</a></dt>
+<dt id="model.iter_cb">
+<tt class="descname">iter_cb</tt><a class="headerlink" href="#model.iter_cb" title="Permalink to this definition">¶</a></dt>
 <dd><p>optional callable function, to be called at each fit iteration.  This
 must take take arguments of <tt class="docutils literal"><span class="pre">params,</span> <span class="pre">iter,</span> <span class="pre">resid,</span> <span class="pre">*args,</span> <span class="pre">**kws</span></tt>, where
 <tt class="docutils literal"><span class="pre">params</span></tt> will have the current parameter values, <tt class="docutils literal"><span class="pre">iter</span></tt> the
@@ -974,92 +974,92 @@ iteration, <tt class="docutils literal"><span class="pre">resid</span></tt> the 
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.jacfcn">
-<tt class="descname">jacfcn</tt><a class="headerlink" href="#module.jacfcn" title="Permalink to this definition">¶</a></dt>
+<dt id="model.jacfcn">
+<tt class="descname">jacfcn</tt><a class="headerlink" href="#model.jacfcn" title="Permalink to this definition">¶</a></dt>
 <dd><p>optional callable function, to be called to calculate jacobian array.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.lmdif_message">
-<tt class="descname">lmdif_message</tt><a class="headerlink" href="#module.lmdif_message" title="Permalink to this definition">¶</a></dt>
+<dt id="model.lmdif_message">
+<tt class="descname">lmdif_message</tt><a class="headerlink" href="#model.lmdif_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>string message returned from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.message">
-<tt class="descname">message</tt><a class="headerlink" href="#module.message" title="Permalink to this definition">¶</a></dt>
+<dt id="model.message">
+<tt class="descname">message</tt><a class="headerlink" href="#model.message" title="Permalink to this definition">¶</a></dt>
 <dd><p>string message returned from <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.method">
-<tt class="descname">method</tt><a class="headerlink" href="#module.method" title="Permalink to this definition">¶</a></dt>
+<dt id="model.method">
+<tt class="descname">method</tt><a class="headerlink" href="#model.method" title="Permalink to this definition">¶</a></dt>
 <dd><p>string naming fitting method for <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.model">
-<tt class="descname">model</tt><a class="headerlink" href="#module.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>instance of <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> used for model.</p>
+<dt id="model.model">
+<tt class="descname">model</tt><a class="headerlink" href="#model.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>instance of <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> used for model.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.ndata">
-<tt class="descname">ndata</tt><a class="headerlink" href="#module.ndata" title="Permalink to this definition">¶</a></dt>
+<dt id="model.ndata">
+<tt class="descname">ndata</tt><a class="headerlink" href="#model.ndata" title="Permalink to this definition">¶</a></dt>
 <dd><p>integer number of data points.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.nfev">
-<tt class="descname">nfev</tt><a class="headerlink" href="#module.nfev" title="Permalink to this definition">¶</a></dt>
+<dt id="model.nfev">
+<tt class="descname">nfev</tt><a class="headerlink" href="#model.nfev" title="Permalink to this definition">¶</a></dt>
 <dd><p>integer number of function evaluations used for fit.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.nfree">
-<tt class="descname">nfree</tt><a class="headerlink" href="#module.nfree" title="Permalink to this definition">¶</a></dt>
+<dt id="model.nfree">
+<tt class="descname">nfree</tt><a class="headerlink" href="#model.nfree" title="Permalink to this definition">¶</a></dt>
 <dd><p>integer number of free paramaeters in fit.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.nvarys">
-<tt class="descname">nvarys</tt><a class="headerlink" href="#module.nvarys" title="Permalink to this definition">¶</a></dt>
+<dt id="model.nvarys">
+<tt class="descname">nvarys</tt><a class="headerlink" href="#model.nvarys" title="Permalink to this definition">¶</a></dt>
 <dd><p>integer number of independent, freely varying variables in fit.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.params">
-<tt class="descname">params</tt><a class="headerlink" href="#module.params" title="Permalink to this definition">¶</a></dt>
+<dt id="model.params">
+<tt class="descname">params</tt><a class="headerlink" href="#model.params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters used in fit.  Will have best-fit values.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.redchi">
-<tt class="descname">redchi</tt><a class="headerlink" href="#module.redchi" title="Permalink to this definition">¶</a></dt>
+<dt id="model.redchi">
+<tt class="descname">redchi</tt><a class="headerlink" href="#model.redchi" title="Permalink to this definition">¶</a></dt>
 <dd><p>floating point reduced chi-square statistic</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.residual">
-<tt class="descname">residual</tt><a class="headerlink" href="#module.residual" title="Permalink to this definition">¶</a></dt>
+<dt id="model.residual">
+<tt class="descname">residual</tt><a class="headerlink" href="#model.residual" title="Permalink to this definition">¶</a></dt>
 <dd><p>ndarray for residual.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.scale_covar">
-<tt class="descname">scale_covar</tt><a class="headerlink" href="#module.scale_covar" title="Permalink to this definition">¶</a></dt>
+<dt id="model.scale_covar">
+<tt class="descname">scale_covar</tt><a class="headerlink" href="#model.scale_covar" title="Permalink to this definition">¶</a></dt>
 <dd><p>boolean flag for whether to automatically scale covariance matrix.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.success">
-<tt class="descname">success</tt><a class="headerlink" href="#module.success" title="Permalink to this definition">¶</a></dt>
+<dt id="model.success">
+<tt class="descname">success</tt><a class="headerlink" href="#model.success" title="Permalink to this definition">¶</a></dt>
 <dd><p>boolean value of whether fit succeeded.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="module.weights">
-<tt class="descname">weights</tt><a class="headerlink" href="#module.weights" title="Permalink to this definition">¶</a></dt>
+<dt id="model.weights">
+<tt class="descname">weights</tt><a class="headerlink" href="#model.weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>ndarray (or <tt class="docutils literal"><span class="pre">None</span></tt>) of weighting values used in fit.</p>
 </dd></dl>
 
@@ -1067,11 +1067,11 @@ iteration, <tt class="docutils literal"><span class="pre">resid</span></tt> the 
 </div>
 <div class="section" id="creating-composite-models">
 <span id="composite-models-section"></span><h2>Creating composite models<a class="headerlink" href="#creating-composite-models" title="Permalink to this headline">¶</a></h2>
-<p>One of the most interesting features of the <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class is that
+<p>One of the most interesting features of the <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class is that
 models can be added together to give a composite model, with parameters
 from the component models all being available to influence the total sum of
 the separat component models.  This will become even more useful in the
-next chapter, when pre-built subclasses of <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> are discussed.</p>
+next chapter, when pre-built subclasses of <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> are discussed.</p>
 <p>For now, we&#8217;ll consider a simple example will build a model of a Gaussian
 plus a line.  Obviously, we could build a model that included both
 components:</p>
@@ -1171,7 +1171,7 @@ red line, and the initial fit is shown as a black dashed line.  In the
 figure on the right, the data is again shown in blue dots, and the Gaussian
 component shown as a black dashed line, and the linear component shown as a
 red dashed line.  These components were generated after the fit using the
-Models <a class="reference internal" href="#module.eval" title="module.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a> method:</p>
+Models <a class="reference internal" href="#model.eval" title="model.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a> method:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">comp_gauss</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="n">comp_line</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">components</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
@@ -1190,7 +1190,7 @@ extrapolate the model outside the fitting range.    This can be done with:</p>
 </pre></div>
 </div>
 <p>A final note: In this example, the argument names for the model functions
-do not overlap.  If they had, the <tt class="docutils literal"><span class="pre">prefix</span></tt> argument to <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>
+do not overlap.  If they had, the <tt class="docutils literal"><span class="pre">prefix</span></tt> argument to <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a>
 would have allowed us to identify which parameter went with which component
 model.  As we will see in the next chapter, using composite models with the
 built-in models provides a simple way to build up complex models.</p>
