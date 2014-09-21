@@ -244,10 +244,31 @@ It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) 
 
     f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
     \exp\bigl[\gamma({\mu - x  + \sigma^2/2})\bigr]
-    {\operatorname{erfc}}\bigl[\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\bigr]
+    {\operatorname{erfc}}\Bigl(\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\Bigr)
 
 
 where :func:`erfc` is the complimentary error function.
+
+:class:`SkewedGaussianModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. class:: SkewedGaussianModel()
+
+A variation of the above model, this is a `Skewed normal distribution
+<http://en.wikipedia.org/wiki/Skew_normal_distribution>`_.
+It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
+``sigma`` (:math:`\sigma`), and also ``gamma`` (:math:`\gamma`) in
+
+.. math::
+
+    f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
+  e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
+      {\operatorname{erf}}\bigl[
+         \frac{\gamma(x-\mu)}{\sigma\sqrt{2\pi}}
+     \bigr] \Bigr\}
+
+
+where :func:`erf` is the error function.
 
 
 :class:`DonaichModel`
