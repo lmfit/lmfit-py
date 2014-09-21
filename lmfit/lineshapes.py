@@ -122,6 +122,21 @@ def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     scale = amplitude/(sigma**gm1)
     return scale*cos(pi*gamma/2 + gm1*arctan(arg))/(1 + arg**2)**(gm1/2)
 
+def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):
+    """Gaussian, skewed with error function, equal to
+
+     gaussian(x, center, sigma)*(1+erf(beta*(x-center)))
+
+    with beta = gamma/(sigma*sqrt(2))
+
+    with  gamma < 0:  tail to low value of centroid
+          gamma > 0:  tail to high value of centroid
+
+    see http://en.wikipedia.org/wiki/Skew_normal_distribution
+    """
+    asym = 1 + erf(gamma*(x-center)/(s2*sigma))
+    return asym * gaussian(x, amplitude, center, sigma)
+
 def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     """Skewed Voigt lineshape, skewed with error function
     useful for ad-hoc Compton scatter profile

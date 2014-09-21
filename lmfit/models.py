@@ -4,8 +4,9 @@ from .model import Model
 from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, pearson7,
                          step, rectangle, breit_wigner, logistic,
                          students_t, lognormal, damped_oscillator,
-                         expgaussian, donaich, skewed_voigt, exponential,
-                         powerlaw, linear, parabolic)
+                         expgaussian, skewed_gaussian, donaich,
+                         skewed_voigt, exponential, powerlaw, linear,
+                         parabolic)
 
 class DimensionalError(Exception):
     pass
@@ -258,6 +259,16 @@ class ExponentialGaussianModel(Model):
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+class SkewedGaussianModel(Model):
+    __doc__ = skewed_gaussian.__doc__ + COMMON_DOC
+    fwhm_factor = 2.354820
+    def __init__(self, *args, **kwargs):
+        super(SkewedGaussianModel, self).__init__(skewed_gaussian, *args, **kwargs)
+        self.set_param_hint('sigma', min=0)
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        pars = guess_from_peak(self, data, x, negative)
+        return update_param_vals(pars, self.prefix, **kwargs)
 
 class DonaichModel(Model):
     __doc__ = donaich.__doc__ + COMMON_DOC
