@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0rc4',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -148,7 +148,7 @@ when using complicated constraints.</p>
 <div class="section" id="the-minimize-function">
 <h2>The <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function<a class="headerlink" href="#the-minimize-function" title="Permalink to this headline">¶</a></h2>
 <p>The minimize function takes a objective function (the function that
-calculates the array to be minimized), a <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> ordered
+calculates the array to be minimized), a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> ordered
 dictionary, and several optional arguments.  See <a class="reference internal" href="#fit-func-label"><em>Writing a Fitting Function</em></a> for
 details on writing the function to minimize.</p>
 <dl class="function">
@@ -162,9 +162,9 @@ from <tt class="docutils literal"><span class="pre">function</span></tt> is mini
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>function</strong> (<em>callable.</em>) &#8211; function to return fit residual.  See <a class="reference internal" href="#fit-func-label"><em>Writing a Fitting Function</em></a> for details.</li>
-<li><strong>params</strong> (dict or <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt>.) &#8211; a <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> dictionary.  Keywords must be strings
+<li><strong>params</strong> (dict or <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>.) &#8211; a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> dictionary.  Keywords must be strings
 that match <tt class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></tt> and is not a python
-reserved word.  Each value must be <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt>.</li>
+reserved word.  Each value must be <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>.</li>
 <li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
 <li><strong>kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
 <li><strong>method</strong> (string (default <tt class="docutils literal"><span class="pre">leastsq</span></tt>)) &#8211; name of fitting method to use. See  <a class="reference internal" href="#fit-methods-label"><em>Choosing Different Fitting Methods</em></a> for details</li>
@@ -232,7 +232,7 @@ array, with a length greater than or equal to the number of fitting variables in
 model.  For the other methods, the return value can either be a scalar or an array.  If an
 array is returned, the sum of squares of the array will be sent to the underlying fitting
 method, effectively doing a least-squares optimization of the return values.</p>
-<p>Since the function will be passed in a dictionary of <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt>, it is advisable
+<p>Since the function will be passed in a dictionary of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>, it is advisable
 to unpack these to get numerical values at the top of the function.  A
 simple way to do this is with <tt class="xref py py-meth docutils literal"><span class="pre">Parameters.valuesdict()</span></tt>, as with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -263,7 +263,7 @@ simple way to do this is with <tt class="xref py py-meth docutils literal"><span
 calculation if the data is neglected).  Also note that the model
 calculation will divide <tt class="docutils literal"><span class="pre">x</span></tt> by the value of the &#8216;period&#8217; Parameter.  It
 might be wise to ensure this parameter cannot be 0.  It would be possible
-to use the bounds on the <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> to do this:</p>
+to use the bounds on the <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> to do this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">params</span><span class="p">[</span><span class="s">&#39;period&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">1.e-10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -394,7 +394,7 @@ calculated.  These are all encapsulated in the <a class="reference internal" hre
 fit, as returned by <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a>.  The values related to the entire fit are
 stored in attributes of the <a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> object, as shown in <a class="reference internal" href="#goodfit-table"><em>Table
 of Fit Results</em></a> while those related to each fitted variables are
-stored as attributes of the corresponding <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt>.</p>
+stored as attributes of the corresponding <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>.</p>
 <blockquote id="goodfit-table">
 <div>Table of Fit Results:  These values, including the standard Goodness-of-Fit statistics,
 are all attributes of the <a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> object returned by <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a>.</div></blockquote>
@@ -462,8 +462,8 @@ be minimized must scale them properly.</p>
 standard errors for the fitted variables and correlations between pairs of
 fitted variables are automatically calculated from the covariance matrix.
 The standard error (estimated <span class="math">\(1\sigma\)</span> error-bar) go into the
-<tt class="xref py py-attr docutils literal"><span class="pre">stderr</span></tt> attribute of the Parameter.  The correlations with all other
-variables will be put into the <tt class="xref py py-attr docutils literal"><span class="pre">correl</span></tt> attribute of the Parameter &#8211;
+<a class="reference internal" href="parameters.html#stderr" title="stderr"><tt class="xref py py-attr docutils literal"><span class="pre">stderr</span></tt></a> attribute of the Parameter.  The correlations with all other
+variables will be put into the <a class="reference internal" href="parameters.html#correl" title="correl"><tt class="xref py py-attr docutils literal"><span class="pre">correl</span></tt></a> attribute of the Parameter &#8211;
 a dictionary with keys for all other Parameters and values of the
 corresponding correlation.</p>
 <p>In some cases, it may not be possible to estimate the errors and
@@ -492,7 +492,7 @@ these cases, the <tt class="xref py py-attr docutils literal"><span class="pre">
 <li><strong>function</strong> (<em>callable.</em>) &#8211; objective function to return fit residual.  See <a class="reference internal" href="#fit-func-label"><em>Writing a Fitting Function</em></a> for details.</li>
 <li><strong>params</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; a dictionary of Parameters.  Keywords must be strings
 that match <tt class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></tt> and is not a python
-reserved word.  Each value must be <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt>.</li>
+reserved word.  Each value must be <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>.</li>
 <li><strong>fcn_args</strong> (<a class="reference external" href="http://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
 <li><strong>fcn_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
 <li><strong>iter_cb</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) &#8211; function to be called at each fit iteration</li>
@@ -667,7 +667,7 @@ arg</th>
 <dt id="Minimizer.prepare_fit">
 <tt class="descname">prepare_fit</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.prepare_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>prepares and initializes model and Parameters for subsequent
-fitting. This routine prepares the conversion of <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt>
+fitting. This routine prepares the conversion of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>
 into fit variables, organizes parameter bounds, and parses, checks and
 &#8220;compiles&#8221; constrain expressions.</p>
 <p>This is called directly by the fitting methods, and it is generally not
@@ -817,7 +817,7 @@ and correlations from fit.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

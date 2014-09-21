@@ -4,14 +4,33 @@
 :class:`Parameter`  and :class:`Parameters`
 ================================================
 
-This chapter describes :class:`Parameter` objects which are fundamental to
-the lmfit approach to optimization.  A :class:`Parameter` contains the
-value adjusted in the optimization as well as several other properties that
-control what that value is.  Most real use cases will use more than 1
-:class:`Parameter`, and so use the :class:`Parameters` class, which
-provides an ordered dictionary of :class:`Parameter` objects.
+This chapter describes :class:`Parameter` objects which is the key concept
+of lmfit.  A :class:`Parameter` is the quantity to be optimized in all
+minimization problems, replacing the plain floating point number used in
+the optimization routines from :mod:`scipy.optimize`.  A :class:`Parameter`
+has a value that can be varied in the fit, fixed, have upper and/or lower
+bounds.  It can even have a value that is constrained by an algebraic
+expression of other Parameter values.  Since :class:`Parameters` live
+outside the core optimization routines, they can be used in **all**
+optimization routines from :mod:`scipy.optimize`.  By using
+:class:`Parameter` objects instead of plain variables, the objective
+function does not have to be modified to reflect every change of what is
+varied in the fit.  This simplifies the writing of models, allowing general
+models that describe the phenomenon to be written, and gives the user more
+flexibility in using and testing variations of that model.
 
-.. module:: parameter
+Whereas a :class:`Parameter` expands on an individual floating point
+variable, the optimization methods need an ordered group of floating point
+variables.  In the :mod:`scipy.optimize` routines this is required to be a
+1-dimensional numpy ndarray.  For lmfit, where each :class:`Parameter` has
+a name, this is replaced by a :class:`Parameters` class, which works as an
+ordered dictionary of :class:`Parameter` objects, with a few additional
+features and methods.  That is, while the concept of a :class:`Parameter`
+is central to lmfit, one normally creates and interacts with a
+:class:`Parameters` instance that contains many :class:`Parameter`
+objects.  The objective functions you write will take an instance of
+:class:`Parameters` as its first argument.
+
 
 The :class:`Parameter` class
 ========================================
@@ -104,8 +123,6 @@ feature.
        # remove constraint expression
        p3.set(value=1.0, vary=True, expr='')  # will work!  parameter now unconstrained
 
-
-.. module:: parameters
 
 The :class:`Parameters` class
 ========================================

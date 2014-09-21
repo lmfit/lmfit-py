@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0rc4',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -90,7 +90,7 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper"><h3>Getting LMFIT</h3>
-<p>Current version: <b>0.8.0rc4</b></p>
+<p>Current version: <b>0.8.0</b></p>
 <p>Download: &nbsp; <a href="http://pypi.python.org/pypi/lmfit/">PyPI (Python.org)</a>
 <p>Install:  &nbsp; <tt>pip install lmfit</tt>
 <p>
@@ -137,42 +137,36 @@
             
   <div class="section" id="non-linear-least-square-minimization-and-curve-fitting-for-python">
 <h1>Non-Linear Least-Square Minimization and Curve-Fitting for Python<a class="headerlink" href="#non-linear-least-square-minimization-and-curve-fitting-for-python" title="Permalink to this headline">¶</a></h1>
-<p>The lmfit python package provides a simple and flexible interface to
-non-linear optimization and curve fitting problems. Initially designed to
-extend the the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm in
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>, lmfit supports most of the optimization
-methods from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  It also provides a simple way to apply
-this extension to <em>curve fitting</em> or <em>data modeling</em> problems.</p>
-<p>The key concept in lmfit is the <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> &#8211; the quantity to be
-optimized in all minimization problems in place of a plain floating point
-number.  A <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> has a value that can be varied in the fit,
-fixed, have upper and/or lower bounds.  It can even have a value that is
-constrained by an algebraic expression of other Parameter values.  Since
-<tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> live outside the core optimization routines, they can
-be used in <strong>all</strong> optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  By
-using <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> objects instead of plain variables, the objective
-function does not have to be modified to reflect every change of what is
-varied in the fit.  This simplifies the writing of models, allowing general
-models that describe the phenomenon to be written, and gives the user more
-flexibility in using and testing variations of that model.</p>
-<p>Lmfit supports several optimization methods from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.
-The default and best tested optimization method (and the origin of the
-name) is the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm of
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.  An important feature of this method is
-that it automatically estimates uncertainties and correlations between
-fitted variables from the covariance matrix used in the fit. But, because
-this approach is sometimes questioned (and rightly so), lmfit also supports
-methods to do a brute force determination of the confidence intervals for
-a set of parameters.</p>
-<p>Lmfit provides high-level curve-fitting or data modeling functionality
-through its <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class, which extends the capabilities of
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>.  This allows you to turn a function that
-models for your data into a python class that helps you parametrize and fit
-data with that model.  Many pre-built models for common lineshapes are
-included and ready to use.</p>
-<p>The lmfit package is an open-source project, and the software and this
-document are works in progress.  If you are interested in participating in
-this effort please use the <a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
+<p>Lmfit provides a high-level interface to non-linear optimization and
+curve fitting problems for Python. Lmfit builds on
+<a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>, but
+also supports most of the optimization methods from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.
+It has a number of useful enhancements, including:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Using <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects instead of plain floats as variables.
+A <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> has a value that can be varied in the fit, fixed,
+have upper and/or lower bounds.  It can even have a value that is
+constrained by an algebraic expression of other Parameter values.</li>
+<li>Ease of changing fitting algorithms.  Once a fitting model is set up,
+one can change the fitting algorithm without changing the objective
+function.</li>
+<li>Improved estimation of confidence intervals.  While
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a> will automatically calculate
+uncertainties and correlations from the covariance matrix, lmfit also
+has functions to explicitly explore parameter space to determine
+confidence levels even for the most difficult cases.</li>
+<li>Improved curve-fitting with the <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class.  This which
+extends the capabilities of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>, allowing
+you to turn a function that models for your data into a python class
+that helps you parametrize and fit data with that model.</li>
+<li>Many <a class="reference internal" href="builtin_models.html#builtin-models-chapter"><em>pre-built models</em></a> for common
+lineshapes are included and ready to use.</li>
+</ul>
+</div></blockquote>
+<p>The lmfit package is Free software, using an MIT license.  The software and
+this document are works in progress.  If you are interested in
+participating in this effort please use the <a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Getting started with Non-Linear Least-Squares Fitting</a></li>
@@ -265,7 +259,7 @@ this effort please use the <a class="reference external" href="http://github.com
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

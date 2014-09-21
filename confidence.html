@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0rc4',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -107,7 +107,7 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="builtin_models.html"
-                        title="previous chapter">Built-in Fitting Models in the <tt class="docutils literal"><span class="pre">models</span></tt> module</a></p>
+                        title="previous chapter">Built-in Fitting Models in the <tt class="docutils literal docutils literal docutils literal"><span class="pre">models</span></tt> module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="bounds.html"
                         title="next chapter">Bounds Implementation</a></p>
@@ -279,7 +279,11 @@ and that going from 1 <span class="math">\(\sigma\)</span> (68% confidence) to 2
 </div></blockquote>
 <p>Neither of these plots is very much like an ellipse, which is implicitly
 assumed by the approach using the covariance matrix.</p>
-<p>Remember the trace? It shows also shows the dependence between two parameters:</p>
+<p>The trace returned as the optional second argument from
+<tt class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></tt> contains a dictionary for each variable parameter.
+The values are dictionaries with arrays of values for each variable, and an
+array of corresponding probabilities for the corresponding cumulative variables.  This
+can be used to show the dependence between two parameters:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">prob2</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob</span> <span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
@@ -490,7 +494,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

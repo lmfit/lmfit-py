@@ -66,7 +66,7 @@ routinely run on the development version.  Running ``nosetests`` should run
 all of these tests to completion without errors or failures.
 
 Many of the examples in this documentation are distributed with lmfit in
-the ``examples`` folder, and sould also run for you.  Many of these require 
+the ``examples`` folder, and sould also run for you.  Many of these require
 
 
 Acknowledgements
@@ -90,10 +90,9 @@ License
 
 The LMFIT-py code is distribution under the following license:
 
-  Copyright (c) 2014 Matthew Newville, The University of Chicago
-                     Till Stensitzki, Freie Universitat Berlin
-                     Daniel B. Allen, Johns Hopkins University
-                     Antonino Ingargiola, University of California, Los Angeles
+  Copyright (c) 2014 Matthew Newville, The University of Chicago, Till
+  Stensitzki, Freie Universitat Berlin, Daniel B. Allen, Johns Hopkins
+  University, Antonino Ingargiola, University of California, Los Angeles
 
   Permission to use and redistribute the source code or binary forms of this
   software and its documentation, with or without modification is hereby

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0rc4',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -133,7 +133,7 @@
                         title="previous chapter">Performing Fits, Analyzing Outputs</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="builtin_models.html"
-                        title="next chapter">Built-in Fitting Models in the <tt class="docutils literal"><span class="pre">models</span></tt> module</a></p>
+                        title="next chapter">Built-in Fitting Models in the <tt class="docutils literal docutils literal docutils literal docutils literal"><span class="pre">models</span></tt> module</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/model.txt"
@@ -175,7 +175,7 @@ curve-fitting problems, but requires more effort than using
 &#8211; a function that calculates a model for some data &#8211; and provides methods
 to create parameters for that model and to fit data using that model
 function.  This is closer in spirit to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>,
-but with the advantages of using <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> and lmfit.</p>
+but with the advantages of using <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> and lmfit.</p>
 <p>In addition to allowing you turn any model function into a curve-fitting
 method, Lmfit also provides canonical definitions for many known lineshapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
@@ -254,7 +254,7 @@ the expected names:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">gmod</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This creates the <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> but doesn&#8217;t necessarily give them
+<p>This creates the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> but doesn&#8217;t necessarily give them
 initial values &#8211; again, the model has no idea what the scale should be.
 You can set initial values for parameters with keyword arguments to
 <tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt>, as with:</p>
@@ -262,10 +262,10 @@ You can set initial values for parameters with keyword arguments to
 </pre></div>
 </div>
 <p>or assign them (and other parameter properties) after the
-<tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> has been created.</p>
+<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> has been created.</p>
 <p>A <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> has several methods associated with it.  For example, one
 can use the <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> method to evaluate the model or the <tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt>
-method to fit data to this model with a <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> object.  Both of
+method to fit data to this model with a <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> object.  Both of
 these methods can take explicit keyword arguments for the parameter values.
 For example, one could use <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> to calculate the predicted
 function:</p>
@@ -347,7 +347,7 @@ compare well to <a class="reference external" href="http://docs.scipy.org/doc/sc
 </pre></div>
 </div>
 <p>except that all the other features of lmfit are included such as that the
-<tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> can have bounds and constraints and the result is a
+<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> can have bounds and constraints and the result is a
 richer object that can be reused to explore the fit in more detail.</p>
 <span class="target" id="module-module"></span></div>
 <div class="section" id="the-model-class">
@@ -462,7 +462,7 @@ arguments.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">param kws:</th><td class="field-body">addtional options to pass to model function.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">return:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> with guessed initial values for each parameter.</td>
+<tr class="field-even field"><th class="field-name">return:</th><td class="field-body"><a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> with guessed initial values for each parameter.</td>
 </tr>
 </tbody>
 </table>
@@ -484,7 +484,7 @@ the parameters.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">param kws:</th><td class="field-body">optional keyword/value pairs to set initial values for parameters.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">return:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt>.</td>
+<tr class="field-even field"><th class="field-name">return:</th><td class="field-body"><a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>.</td>
 </tr>
 </tbody>
 </table>
@@ -615,7 +615,7 @@ essential to avoid name collision in composite models.</p>
 <div class="section" id="determining-parameter-names-and-independent-variables-for-a-function">
 <h3>Determining parameter names and independent variables for a function<a class="headerlink" href="#determining-parameter-names-and-independent-variables-for-a-function" title="Permalink to this headline">¶</a></h3>
 <p>The <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> created from the supplied function <tt class="docutils literal"><span class="pre">func</span></tt> will create
-a <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> object, and names are inferred from the function
+a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> object, and names are inferred from the function
 arguments, and a residual function is automatically constructed.</p>
 <p>By default, the independent variable is take as the first argument to the
 function.  You can explicitly set this, of course, and will need to if the
@@ -843,7 +843,7 @@ at half maximum of a Gaussian model, one could use a parameter hint of:</p>
 <h2>The <tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> class<a class="headerlink" href="#the-modelfit-class" title="Permalink to this headline">¶</a></h2>
 <p>A <tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> is the object returned by <tt class="xref py py-meth docutils literal"><span class="pre">Model.fit()</span></tt>.  It is a
 sublcass of <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a>, and so contains many of the fit results.
-Of course, it knows the <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> and the set of <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt>
+Of course, it knows the <a class="reference internal" href="#module.Model" title="module.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> and the set of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>
 used in the fit, and it has methods to evaluate the model, to fit the data
 (or re-fit the data with changes to the parameters, or fit with different
 or modified data) and to print out a report for that fit.</p>
@@ -1263,7 +1263,7 @@ the different models.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

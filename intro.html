@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0rc4',
+        VERSION:     '0.8.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -199,10 +199,10 @@ painful if the fitting model needs to change.</li>
 <p>These shortcomings are really do solely to the use of traditional arrays of
 variables, as matches closely the implementation of the Fortran code.  The
 lmfit module overcomes these shortcomings by using a core reason for using
-Python &#8211; objects.  The key concept for lmfit is to use <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt>
+Python &#8211; objects.  The key concept for lmfit is to use <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
 objects instead of plain floating point numbers as the variables for the
-fit.  By using <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> objects (or the closely related
-<tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> &#8211; a dictionary of <tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> objects), one can</p>
+fit.  By using <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects (or the closely related
+<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> &#8211; a dictionary of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects), one can</p>
 <blockquote>
 <div><ol class="loweralpha simple">
 <li>not care about the order of variables, but refer to Parameters
@@ -237,7 +237,7 @@ as:</p>
 </div>
 <p>At first look, we simply replaced a list of values with a dictionary,
 accessed by name &#8211; not a huge improvement.  But each of the named
-<tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt> in the <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> object hold additional
+<a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> in the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> object hold additional
 attributes to modify the value during the fit.  For example, Parameters can
 be fixed or bounded.  This can be done when being defined:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
@@ -262,7 +262,7 @@ information about how your data is modeled goes into the objective
 function, but the approach here allows some external control, that is by
 the <strong>user</strong> of the objective function instead of just by the author of the
 objective function.</p>
-<p>Finally, in addition to the <tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt> approach to fitting data,
+<p>Finally, in addition to the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> approach to fitting data,
 lmfit allows you to easily switch optimization methods without rewriting
 your objective function, and provides tools for writing fitting reports and
 for better determining the confidence levels for Parameters.</p>
@@ -299,7 +299,7 @@ for better determining the confidence levels for Parameters.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

@@ -166,7 +166,11 @@ which shows the figure on the left below for ``a1`` and ``t2``, and for
 Neither of these plots is very much like an ellipse, which is implicitly
 assumed by the approach using the covariance matrix.
 
-Remember the trace? It shows also shows the dependence between two parameters::
+The trace returned as the optional second argument from
+:func:`conf_interval` contains a dictionary for each variable parameter.
+The values are dictionaries with arrays of values for each variable, and an
+array of corresponding probabilities for the corresponding cumulative variables.  This
+can be used to show the dependence between two parameters::
 
     >>> x, y, prob = trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
     >>> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
