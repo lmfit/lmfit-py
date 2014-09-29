@@ -498,8 +498,11 @@ class Model(object):
             if not np.isscalar(kwargs[var]):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
+        if fit_kws is None:
+            fit_kws = {}
+
         output = ModelFit(self, params, method=method, iter_cb=iter_cb,
-                          scale_covar=scale_covar, fcn_kws=kwargs, fit_kws=fit_kws)
+                          scale_covar=scale_covar, fcn_kws=kwargs, **fit_kws)
         output.fit(data=data, weights=weights)
         return output
 
@@ -561,7 +564,7 @@ class ModelFit(Minimizer):
     """
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
-                 iter_cb=None, scale_covar=True, fit_kws=None):
+                 iter_cb=None, scale_covar=True, **fit_kws):
         self.model = model
         self.data = data
         self.weights = weights
@@ -569,7 +572,7 @@ class ModelFit(Minimizer):
         self.init_params = deepcopy(params)
         Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
                            fcn_kws=fcn_kws, iter_cb=iter_cb,
-                           scale_covar=scale_covar, kws=fit_kws)
+                           scale_covar=scale_covar, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None, **kwargs):
         """perform fit for a Model, given data and params"""

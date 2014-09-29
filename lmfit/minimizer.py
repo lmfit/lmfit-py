@@ -121,7 +121,7 @@ class Minimizer(object):
 or set  leastsq_kws['maxfev']  to increase this maximum."""
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
-                 iter_cb=None, scale_covar=True, kws=None):
+                 iter_cb=None, scale_covar=True, **kws):
         self.userfcn = userfcn
         self.userargs = fcn_args
         if self.userargs is None:
@@ -131,8 +131,6 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         if self.userkws is None:
             self.userkws = {}
         self.kws = kws
-        if self.kws is None:
-            self.kws = {}
         self.iter_cb = iter_cb
         self.scale_covar = scale_covar
         self.nfev = 0
