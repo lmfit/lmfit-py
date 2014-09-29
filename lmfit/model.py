@@ -413,6 +413,8 @@ class Model(object):
         scale_covar:  bool (default True) whether to auto-scale covariance matrix
         verbose: bool (default True) print a message when a new parameter is
             added because of a hint.
+        fit_kws: dict
+            default fitting options, such as xtol and maxfev, for scipy optimizer
         keyword arguments: optional, named like the arguments of the
             model function, will override params. See examples below.
 
