@@ -399,7 +399,7 @@ class Model(object):
         return result
 
     def fit(self, data, params=None, weights=None, method='leastsq',
-            iter_cb=None, scale_covar=True, verbose=True, **kwargs):
+            iter_cb=None, scale_covar=True, verbose=True, fit_kws=None, **kwargs):
         """Fit the model to the data.
 
         Parameters
@@ -413,6 +413,8 @@ class Model(object):
         scale_covar:  bool (default True) whether to auto-scale covariance matrix
         verbose: bool (default True) print a message when a new parameter is
             added because of a hint.
+        fit_kws: dict
+            default fitting options, such as xtol and maxfev, for scipy optimizer
         keyword arguments: optional, named like the arguments of the
             model function, will override params. See examples below.
 
@@ -496,8 +498,11 @@ class Model(object):
             if not np.isscalar(kwargs[var]):
                 kwargs[var] = _align(kwargs[var], mask, data)
 
+        if fit_kws is None:
+            fit_kws = {}
+
         output = ModelFit(self, params, method=method, iter_cb=iter_cb,
-                          scale_covar=scale_covar, fcn_kws=kwargs)
+                          scale_covar=scale_covar, fcn_kws=kwargs, **fit_kws)
         output.fit(data=data, weights=weights)
         return output
 

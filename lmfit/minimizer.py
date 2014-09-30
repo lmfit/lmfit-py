@@ -345,6 +345,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
                         maxfun=5000 * (self.nvarys + 1))
 
         fmin_kws.update(kws)
+
         ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
         xout, fout, niter, funccalls, warnflag, allvecs = ret
         self.nfev = funccalls
