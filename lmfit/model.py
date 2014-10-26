@@ -622,7 +622,7 @@ class ModelFit(Minimizer):
         return out
 
     def plot(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-             numpoints=200, independent_var=None):
+             numpoints=200):
         """plot the fit"""
         try:
             from matplotlib import pyplot as plt
@@ -633,15 +633,13 @@ class ModelFit(Minimizer):
         if not ax:
             ax = plt.gca()
 
-        # plot is one-dimensional - have to pick one independent variable
-        if not independent_var:
-            if len(self.model.independent_vars) == 1:
-                independent_var = self.model.independent_vars[0]
-            else:
-                print('The model function has more then one independent '
-                      'variable. You have to specify which to use with the '
-                      'independent_var argument.')
-                return None
+        # plot is one-dimensional
+        if len(self.model.independent_vars) == 1:
+            independent_var = self.model.independent_vars[0]
+        else:
+            print('Fit can only be plotted if the model function has one '
+                  'independent variable.')
+            return None
 
         x_array = self.userkws[independent_var]
 
@@ -670,7 +668,7 @@ class ModelFit(Minimizer):
 
         return ax
 
-    def plot_with_residuals(self, independent_var=None, resfmt='o', fitfmt='-'):
+    def plot_with_residuals(self, resfmt='o', fitfmt='-', **kwargs):
         """plot the fit with residuals"""
         try:
             from matplotlib import pyplot as plt
@@ -678,21 +676,20 @@ class ModelFit(Minimizer):
             print('matplotlib module is required for plotting the results')
             return None
 
-        if not independent_var:
-            if len(self.model.independent_vars) == 1:
-                independent_var = self.model.independent_vars[0]
-            else:
-                print('The model function has more then one independent '
-                      'variable. You have to specify which to use with the '
-                      'independent_var argument.')
-                return None
+        # plot is one-dimensional
+        if len(self.model.independent_vars) == 1:
+            independent_var = self.model.independent_vars[0]
+        else:
+            print('Fit can only be plotted if the model function has one '
+                  'independent variable.')
+            return None
 
         x_array = self.userkws[independent_var]
 
         fig, (ax_res, ax) = plt.subplots(nrows=2, sharex=True,
                                          gridspec_kw=dict(height_ratios=[1, 4]))
 
-        self.plot(ax=ax, independent_var=independent_var)
+        self.plot(ax=ax, fitfmt=fitfmt, **kwargs)
 
         ax_res.axhline(0, label=self.model.name)
         if self.weights is not None:
