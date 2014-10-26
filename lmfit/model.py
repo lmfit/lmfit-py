@@ -657,7 +657,12 @@ class ModelFit(Minimizer):
         ax.plot(x_array_dense, self.model.eval(self.params,
                 **{independent_var: x_array_dense}), fitfmt,
                 label=self.model.name)
-        ax.plot(x_array, self.data, datafmt, label='data')
+
+        if self.weights is not None:
+            ax.errorbar(x_array, self.data, yerr=1/self.weights**2, fmt=datafmt,
+                        label='data')
+        else:
+            ax.plot(x_array, self.data, datafmt, label='data')
 
         ax.set_xlabel(independent_var)
         ax.set_ylabel('y')
@@ -682,16 +687,21 @@ class ModelFit(Minimizer):
                       'independent_var argument.')
                 return None
 
+        x_array = self.userkws[independent_var]
+
         fig, (ax_res, ax) = plt.subplots(nrows=2, sharex=True,
                                          gridspec_kw=dict(height_ratios=[1, 4]))
 
         self.plot(ax=ax, independent_var=independent_var)
 
-        print(self.userkws[independent_var].size, self.residual.size)
-        ax_res.plot(self.userkws[independent_var], self.residual, resfmt,
-                    label='residuals')
         ax_res.axhline(0, label=self.model.name)
+        if self.weights is not None:
+            ax_res.errorbar(x_array, self.residual, yerr=1/self.weights**2,
+                        fmt=resfmt, label='data')
+        else:
+            ax_res.plot(x_array, self.residual, resfmt, label='residuals')
 
         ax_res.legend()
+        ax_res.set_title('residuals')
 
         return fig
