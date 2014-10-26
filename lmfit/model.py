@@ -621,7 +621,11 @@ class ModelFit(Minimizer):
     def plot(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
              numpoints=200, independent_var=None):
         """plot the fit"""
-        from matplotlib import pyplot as plt
+        try:
+            from matplotlib import pyplot as plt
+        except ImportError:
+            print('matplotlib module is required for plotting the results')
+            return None
 
         if not ax:
             ax = plt.gca()
@@ -653,3 +657,5 @@ class ModelFit(Minimizer):
         ax.set_xlabel(independent_var)
         ax.set_ylabel('y')
         ax.legend()
+
+        return ax
