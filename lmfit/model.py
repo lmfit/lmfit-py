@@ -561,6 +561,10 @@ class ModelFit(Minimizer):
    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
          return a fit report.
 
+   plot(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
+            numpoints=200, independent_var=None)
+         plot results of a fit.
+
     """
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
@@ -613,3 +617,39 @@ class ModelFit(Minimizer):
         buff = '\n'.join(buff)
         out = '%s\n%s' % (buff, stats_report)
         return out
+
+    def plot(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
+             numpoints=200, independent_var=None):
+        """plot the fit"""
+        from matplotlib import pyplot as plt
+
+        if not ax:
+            ax = plt.gca()
+
+        # plot is one-dimensional - have to pick one independent variable
+        if not independent_var and len(self.model.independent_vars) == 1:
+            independent_var = self.model.independent_vars[0]
+        else:
+            print('The model function has more then one independent variable.'
+                  'You have to specify which to use with the independent_var '
+                  'argument.')
+            return None
+
+        x_array = self.userkws[independent_var]
+
+        # make a dense array for x-axis if data is not dense
+        if len(self.data) < numpoints:
+            x_array_dense = np.linspace(x_array[0], x_array[-1], numpoints)
+        else:
+            x_array_dense = x_array
+
+        ax.plot(x_array_dense, self.model.eval(self.init_params,
+                **{independent_var: x_array_dense}), initfmt,
+                label='initial for ' + self.model.name)
+        ax.plot(x_array_dense, self.eval(**{independent_var: x_array_dense}),
+                fitfmt, label=self.model.name)
+        ax.plot(x_array, self.data, datafmt, label='data')
+
+        ax.set_xlabel(independent_var)
+        ax.set_ylabel('y')
+        ax.legend()
