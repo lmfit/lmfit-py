@@ -565,6 +565,9 @@ class ModelFit(Minimizer):
             numpoints=200, independent_var=None)
          plot results of a fit.
 
+   plot_with_residuals(self, independent_var=None, resfmt='o', fitfmt='-')
+         plot results with residuals.
+
     """
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
@@ -631,13 +634,14 @@ class ModelFit(Minimizer):
             ax = plt.gca()
 
         # plot is one-dimensional - have to pick one independent variable
-        if not independent_var and len(self.model.independent_vars) == 1:
-            independent_var = self.model.independent_vars[0]
-        else:
-            print('The model function has more then one independent variable.'
-                  'You have to specify which to use with the independent_var '
-                  'argument.')
-            return None
+        if not independent_var:
+            if len(self.model.independent_vars) == 1:
+                independent_var = self.model.independent_vars[0]
+            else:
+                print('The model function has more then one independent '
+                      'variable. You have to specify which to use with the '
+                      'independent_var argument.')
+                return None
 
         x_array = self.userkws[independent_var]
 
@@ -650,8 +654,9 @@ class ModelFit(Minimizer):
         ax.plot(x_array_dense, self.model.eval(self.init_params,
                 **{independent_var: x_array_dense}), initfmt,
                 label='initial for ' + self.model.name)
-        ax.plot(x_array_dense, self.eval(**{independent_var: x_array_dense}),
-                fitfmt, label=self.model.name)
+        ax.plot(x_array_dense, self.model.eval(self.params,
+                **{independent_var: x_array_dense}), fitfmt,
+                label=self.model.name)
         ax.plot(x_array, self.data, datafmt, label='data')
 
         ax.set_xlabel(independent_var)
@@ -659,3 +664,34 @@ class ModelFit(Minimizer):
         ax.legend()
 
         return ax
+
+    def plot_with_residuals(self, independent_var=None, resfmt='o', fitfmt='-'):
+        """plot the fit with residuals"""
+        try:
+            from matplotlib import pyplot as plt
+        except ImportError:
+            print('matplotlib module is required for plotting the results')
+            return None
+
+        if not independent_var:
+            if len(self.model.independent_vars) == 1:
+                independent_var = self.model.independent_vars[0]
+            else:
+                print('The model function has more then one independent '
+                      'variable. You have to specify which to use with the '
+                      'independent_var argument.')
+                return None
+
+        fig, (ax_res, ax) = plt.subplots(nrows=2, sharex=True,
+                                         gridspec_kw=dict(height_ratios=[1, 4]))
+
+        self.plot(ax=ax, independent_var=independent_var)
+
+        print(self.userkws[independent_var].size, self.residual.size)
+        ax_res.plot(self.userkws[independent_var], self.residual, resfmt,
+                    label='residuals')
+        ax_res.axhline(0, label=self.model.name)
+
+        ax_res.legend()
+
+        return fig
