@@ -621,30 +621,24 @@ class ModelFit(Minimizer):
         out = '%s\n%s' % (buff, stats_report)
         return out
 
-    def _import_matplotlib(self):
+    def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
+             numpoints=200):
+        """plot the fit"""
         try:
             from matplotlib import pyplot as plt
-            return True
         except ImportError:
             print('matplotlib module is required for plotting the results')
             return False
 
-    def plot(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-             numpoints=200):
-        """plot the fit"""
-        if not self._import_matplotlib():
-            return None
-
-        if not ax:
-            ax = plt.gca()
-
-        # plot is one-dimensional
         if len(self.model.independent_vars) == 1:
             independent_var = self.model.independent_vars[0]
         else:
             print('Fit can only be plotted if the model function has one '
                   'independent variable.')
-            return None
+            return False
+
+        if not ax:
+            ax = plt.gca()
 
         x_array = self.userkws[independent_var]
 
@@ -673,34 +667,61 @@ class ModelFit(Minimizer):
 
         return ax
 
-    def plot_with_residuals(self, resfmt='o', fitfmt='-', **kwargs):
-        """plot the fit with residuals"""
-        if not self._import_matplotlib():
-            return None
+    def plot_residuals(self, ax=None, resfmt='o', fitfmt='-'):
+        """plot the residuals of the fit"""
+        try:
+            from matplotlib import pyplot as plt
+        except ImportError:
+            print('matplotlib module is required for plotting the results')
+            return False
 
-        # plot is one-dimensional
         if len(self.model.independent_vars) == 1:
             independent_var = self.model.independent_vars[0]
         else:
             print('Fit can only be plotted if the model function has one '
                   'independent variable.')
-            return None
+            return False
+
+        if not ax:
+            ax = plt.gca()
 
         x_array = self.userkws[independent_var]
 
-        fig, (ax_res, ax) = plt.subplots(nrows=2, sharex=True,
+        ax.axhline(0, label=self.model.name)
+
+        if self.weights is not None:
+            ax.errorbar(x_array, self.residual, yerr=1/self.weights**2,
+                        fmt=resfmt, label='residuals')
+        else:
+            ax.plot(x_array, self.residual, resfmt, label='residuals')
+
+        ax.set_xlabel(independent_var)
+        ax.set_ylabel('residuals')
+        ax.legend()
+
+        return ax
+
+    def plot(self, datafmt='o', resfmt='o', fitfmt='-', initfmt='--',
+             numpoints=200):
+        """plot the fit with residuals"""
+        try:
+            from matplotlib import pyplot as plt
+        except ImportError:
+            print('matplotlib module is required for plotting the results')
+            return False
+
+        if len(self.model.independent_vars) == 1:
+            independent_var = self.model.independent_vars[0]
+        else:
+            print('Fit can only be plotted if the model function has one '
+                  'independent variable.')
+            return False
+
+        fig, (ax_res, ax_fit) = plt.subplots(nrows=2, sharex=True,
                                          gridspec_kw=dict(height_ratios=[1, 4]))
 
-        self.plot(ax=ax, fitfmt=fitfmt, **kwargs)
-
-        ax_res.axhline(0, label=self.model.name)
-        if self.weights is not None:
-            ax_res.errorbar(x_array, self.residual, yerr=1/self.weights**2,
-                        fmt=resfmt, label='data')
-        else:
-            ax_res.plot(x_array, self.residual, resfmt, label='residuals')
-
-        ax_res.legend()
-        ax_res.set_title('residuals')
+        self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt,
+                      initfmt=initfmt, numpoints=numpoints)
+        self.plot_residuals(ax=ax_res, resfmt=resfmt, fitfmt=fitfmt)
 
         return fig
