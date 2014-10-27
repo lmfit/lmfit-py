@@ -621,13 +621,18 @@ class ModelFit(Minimizer):
         out = '%s\n%s' % (buff, stats_report)
         return out
 
+    def _import_matplotlib(self):
+        try:
+            from matplotlib import pyplot as plt
+            return True
+        except ImportError:
+            print('matplotlib module is required for plotting the results')
+            return False
+
     def plot(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
              numpoints=200):
         """plot the fit"""
-        try:
-            from matplotlib import pyplot as plt
-        except ImportError:
-            print('matplotlib module is required for plotting the results')
+        if not self._import_matplotlib():
             return None
 
         if not ax:
@@ -670,10 +675,7 @@ class ModelFit(Minimizer):
 
     def plot_with_residuals(self, resfmt='o', fitfmt='-', **kwargs):
         """plot the fit with residuals"""
-        try:
-            from matplotlib import pyplot as plt
-        except ImportError:
-            print('matplotlib module is required for plotting the results')
+        if not self._import_matplotlib():
             return None
 
         # plot is one-dimensional
