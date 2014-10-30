@@ -562,17 +562,19 @@ class ModelFit(Minimizer):
          return a fit report.
 
    plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-            numpoints=200,  data_kw={}, fit_kw={}, init_kw={})
+            numpoints=200,  data_kw={}, fit_kw={}, init_kw={}, ax_kw={})
          plot results of the fit on axes ax. If ax=None, new axes are
          created. The x array for the fit line is made densier to have
          at least numpoints points. Returns an axes instance.
 
-   plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={})
+   plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={},
+                  ax_kw={})
          plot residuals of the fit given by (fit - data) on axes ax.
          If ax=None, new axes are created. Returns an axes instance.
 
    plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
-        data_kw={}, fit_kw={}, init_kw={})
+        data_kw={}, fit_kw={}, init_kw={}, ax_res_kw={}, ax_fit_kw={},
+        fig_kw={})
          create a figure and plot both fit and residuals. The x array
          for the fit line is made densier to have at least numpoints
          points.Returns a figure instance.
@@ -630,7 +632,7 @@ class ModelFit(Minimizer):
         return out
 
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-                 numpoints=200,  data_kw={}, fit_kw={}, init_kw={}):
+                 numpoints=200,  data_kw={}, fit_kw={}, init_kw={}, ax_kw={}):
         """plot results of the fit on axes ax. If ax=None, new axes are
         created. The x array for the fit line is made densier to have
         at least numpoints points. Returns an axes instance."""
@@ -648,7 +650,7 @@ class ModelFit(Minimizer):
             return False
 
         if not ax:
-            ax = plt.gca()
+            ax = plt.gca(**ax_kw)
 
         x_array = self.userkws[independent_var]
 
@@ -658,12 +660,12 @@ class ModelFit(Minimizer):
         else:
             x_array_dense = x_array
 
-        init_line, = ax.plot(x_array_dense, self.model.eval(self.init_params,
-                             **{independent_var: x_array_dense}), initfmt,
-                             label='initial for ' + self.model.name, **init_kw)
+        ax.plot(x_array_dense, self.model.eval(self.init_params,
+                **{independent_var: x_array_dense}), initfmt,
+                label='initial for ' + self.model.name, **init_kw)
         ax.plot(x_array_dense, self.model.eval(self.params,
                 **{independent_var: x_array_dense}), fitfmt,
-                color=init_line.get_color(), label=self.model.name, **fit_kw)
+                label=self.model.name, **fit_kw)
 
         if self.weights is not None:
             ax.errorbar(x_array, self.data, yerr=1/self.weights**0.5,
@@ -677,7 +679,8 @@ class ModelFit(Minimizer):
 
         return ax
 
-    def plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={}):
+    def plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={},
+                       ax_kw={}):
         """plot residuals of the fit given by (fit - data) on axes ax.
         If ax=None, new axes are created. Returns an axes instance."""
         try:
@@ -694,7 +697,7 @@ class ModelFit(Minimizer):
             return False
 
         if not ax:
-            ax = plt.gca()
+            ax = plt.gca(**ax_kw)
 
         x_array = self.userkws[independent_var]
 
@@ -714,7 +717,8 @@ class ModelFit(Minimizer):
         return ax
 
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
-             data_kw={}, fit_kw={}, init_kw={}):
+             data_kw={}, fit_kw={}, init_kw={}, ax_res_kw={}, ax_fit_kw={},
+             fig_kw={}):
         """Create a figure and plot both fit and residuals. The x array
         for the fit line is made densier to have at least numpoints
         points.Returns a figure instance."""
@@ -731,13 +735,15 @@ class ModelFit(Minimizer):
                   'independent variable.')
             return False
 
-        fig, (ax_res, ax_fit) = plt.subplots(nrows=2, sharex=True,
-                                    gridspec_kw=dict(height_ratios=[1, 4]))
+        fig = plt.figure(**fig_kw)
+        gs = plt.GridSpec(nrows=2, ncols=1, height_ratios=[1, 4])
+        ax_res = fig.add_subplot(gs[0], **ax_res_kw)
+        ax_fit = fig.add_subplot(gs[1], sharex=ax_res, **ax_fit_kw)
 
         self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt,
                       initfmt=initfmt, numpoints=numpoints, data_kw=data_kw,
-                      fit_kw=fit_kw, init_kw={})
+                      fit_kw=fit_kw, init_kw={}, ax_kw=ax_fit_kw)
         self.plot_residuals(ax=ax_res, datafmt=datafmt, data_kw=data_kw,
-                            fit_kw=fit_kw)
+                            fit_kw=fit_kw, ax_kw=ax_res_kw)
 
         return fig
