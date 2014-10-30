@@ -622,7 +622,7 @@ class ModelFit(Minimizer):
         return out
 
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-             numpoints=200):
+                 numpoints=200,  data_kw={}, fit_kw={}, init_kw={}):
         """plot the fit"""
         try:
             from matplotlib import pyplot as plt
@@ -648,18 +648,18 @@ class ModelFit(Minimizer):
         else:
             x_array_dense = x_array
 
-        ax.plot(x_array_dense, self.model.eval(self.init_params,
-                **{independent_var: x_array_dense}), initfmt,
-                label='initial for ' + self.model.name)
+        init_line, = ax.plot(x_array_dense, self.model.eval(self.init_params,
+                             **{independent_var: x_array_dense}), initfmt,
+                             label='initial for ' + self.model.name, **init_kw)
         ax.plot(x_array_dense, self.model.eval(self.params,
                 **{independent_var: x_array_dense}), fitfmt,
-                label=self.model.name)
+                color=init_line.get_color(), label=self.model.name, **fit_kw)
 
         if self.weights is not None:
-            ax.errorbar(x_array, self.data, yerr=1/self.weights**2, fmt=datafmt,
-                        label='data')
+            ax.errorbar(x_array, self.data, yerr=1/self.weights**0.5,
+                        fmt=datafmt, label='data', **data_kw)
         else:
-            ax.plot(x_array, self.data, datafmt, label='data')
+            ax.plot(x_array, self.data, datafmt, label='data', **data_kw)
 
         ax.set_xlabel(independent_var)
         ax.set_ylabel('y')
@@ -667,7 +667,7 @@ class ModelFit(Minimizer):
 
         return ax
 
-    def plot_residuals(self, ax=None, resfmt='o', fitfmt='-'):
+    def plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={}):
         """plot the residuals of the fit"""
         try:
             from matplotlib import pyplot as plt
@@ -687,22 +687,23 @@ class ModelFit(Minimizer):
 
         x_array = self.userkws[independent_var]
 
-        ax.axhline(0, label=self.model.name)
+        ax.axhline(0, label=self.model.name, **fit_kw)
 
         if self.weights is not None:
-            ax.errorbar(x_array, self.residual, yerr=1/self.weights**2,
-                        fmt=resfmt, label='residuals')
+            ax.errorbar(x_array, self.eval() - self.data,
+                        yerr=1 / self.weights**0.5, fmt=datafmt,
+                        label='residuals', **data_kw)
         else:
-            ax.plot(x_array, self.residual, resfmt, label='residuals')
+            ax.plot(x_array, self.eval() - self.data, datafmt,
+                    label='residuals', **data_kw)
 
-        ax.set_xlabel(independent_var)
         ax.set_ylabel('residuals')
         ax.legend()
 
         return ax
 
-    def plot(self, datafmt='o', resfmt='o', fitfmt='-', initfmt='--',
-             numpoints=200):
+    def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
+             data_kw={}, fit_kw={}, init_kw={}):
         """plot the fit with residuals"""
         try:
             from matplotlib import pyplot as plt
@@ -718,10 +719,12 @@ class ModelFit(Minimizer):
             return False
 
         fig, (ax_res, ax_fit) = plt.subplots(nrows=2, sharex=True,
-                                         gridspec_kw=dict(height_ratios=[1, 4]))
+                                    gridspec_kw=dict(height_ratios=[1, 4]))
 
         self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt,
-                      initfmt=initfmt, numpoints=numpoints)
-        self.plot_residuals(ax=ax_res, resfmt=resfmt, fitfmt=fitfmt)
+                      initfmt=initfmt, numpoints=numpoints, data_kw=data_kw,
+                      fit_kw=fit_kw, init_kw={})
+        self.plot_residuals(ax=ax_res, datafmt=datafmt, data_kw=data_kw,
+                            fit_kw=fit_kw)
 
         return fig
