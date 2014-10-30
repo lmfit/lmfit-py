@@ -74,7 +74,7 @@ missing: None, 'drop', or 'raise'
         silently fall back to numpy.isnan.
     'raise': Raise a (more helpful) exception when data contains null
         or missing values.
-suffix: string to append to paramter names, needed to add two Models that
+prefix: string to prepend to paramter names, needed to add two Models that
     have parameter names in common. None by default.
 """
 class ConstantModel(Model):
