@@ -561,13 +561,21 @@ class ModelFit(Minimizer):
    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
          return a fit report.
 
-   plot(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-            numpoints=200, independent_var=None)
-         plot results of a fit.
+   plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
+            numpoints=200,  data_kw={}, fit_kw={}, init_kw={})
+         plot results of the fit on axes ax. If ax=None, new axes are
+         created. The x array for the fit line is made densier to have
+         at least numpoints points. Returns an axes instance.
 
-   plot_with_residuals(self, independent_var=None, resfmt='o', fitfmt='-')
-         plot results with residuals.
+   plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={})
+         plot residuals of the fit given by (fit - data) on axes ax.
+         If ax=None, new axes are created. Returns an axes instance.
 
+   plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
+        data_kw={}, fit_kw={}, init_kw={})
+         create a figure and plot both fit and residuals. The x array
+         for the fit line is made densier to have at least numpoints
+         points.Returns a figure instance.
     """
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
@@ -623,7 +631,9 @@ class ModelFit(Minimizer):
 
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
                  numpoints=200,  data_kw={}, fit_kw={}, init_kw={}):
-        """plot the fit"""
+        """plot results of the fit on axes ax. If ax=None, new axes are
+        created. The x array for the fit line is made densier to have
+        at least numpoints points. Returns an axes instance."""
         try:
             from matplotlib import pyplot as plt
         except ImportError:
@@ -668,7 +678,8 @@ class ModelFit(Minimizer):
         return ax
 
     def plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={}):
-        """plot the residuals of the fit"""
+        """plot residuals of the fit given by (fit - data) on axes ax.
+        If ax=None, new axes are created. Returns an axes instance."""
         try:
             from matplotlib import pyplot as plt
         except ImportError:
@@ -704,7 +715,9 @@ class ModelFit(Minimizer):
 
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
              data_kw={}, fit_kw={}, init_kw={}):
-        """plot the fit with residuals"""
+        """Create a figure and plot both fit and residuals. The x array
+        for the fit line is made densier to have at least numpoints
+        points.Returns a figure instance."""
         try:
             from matplotlib import pyplot as plt
         except ImportError:
