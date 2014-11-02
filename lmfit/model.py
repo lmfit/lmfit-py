@@ -737,7 +737,7 @@ class ModelFit(Minimizer):
         return ax
 
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
-             data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
+             fig=None, data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
              ax_fit_kw=None, fig_kw=None):
         """Create a figure and plot both fit and residuals. The x array
         for the fit line is made densier to have at least numpoints
@@ -766,7 +766,9 @@ class ModelFit(Minimizer):
                   'independent variable.')
             return False
 
-        fig = plt.figure(**fig_kw)
+        if not isinstance(fig, plt.Figure):
+            fig = plt.figure(**fig_kw)
+
         gs = plt.GridSpec(nrows=2, ncols=1, height_ratios=[1, 4])
         ax_res = fig.add_subplot(gs[0], **ax_res_kw)
         ax_fit = fig.add_subplot(gs[1], sharex=ax_res, **ax_fit_kw)
