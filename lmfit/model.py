@@ -660,7 +660,7 @@ class ModelFit(Minimizer):
                   'independent variable.')
             return False
 
-        if not ax:
+        if not isinstance(ax, plt.Axes):
             ax = plt.gca(**ax_kw)
 
         x_array = self.userkws[independent_var]
@@ -716,7 +716,7 @@ class ModelFit(Minimizer):
                   'independent variable.')
             return False
 
-        if not ax:
+        if not isinstance(ax, plt.Axes):
             ax = plt.gca(**ax_kw)
 
         x_array = self.userkws[independent_var]
