@@ -562,19 +562,20 @@ class ModelFit(Minimizer):
          return a fit report.
 
    plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-            numpoints=200,  data_kw={}, fit_kw={}, init_kw={}, ax_kw={})
+            numpoints=200,  data_kw=None, fit_kw=None, init_kw=None,
+            ax_kw=None)
          plot results of the fit on axes ax. If ax=None, new axes are
          created. The x array for the fit line is made densier to have
          at least numpoints points. Returns an axes instance.
 
-   plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={},
-                  ax_kw={})
+   plot_residuals(self, ax=None, datafmt='o', data_kw=None, fit_kw=None,
+                  ax_kw=None)
          plot residuals of the fit given by (fit - data) on axes ax.
          If ax=None, new axes are created. Returns an axes instance.
 
    plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
-        data_kw={}, fit_kw={}, init_kw={}, ax_res_kw={}, ax_fit_kw={},
-        fig_kw={})
+        data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
+        ax_fit_kw=None, fig_kw=None)
          create a figure and plot both fit and residuals. The x array
          for the fit line is made densier to have at least numpoints
          points.Returns a figure instance.
@@ -632,7 +633,8 @@ class ModelFit(Minimizer):
         return out
 
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-                 numpoints=200,  data_kw={}, fit_kw={}, init_kw={}, ax_kw={}):
+                 numpoints=200,  data_kw=None, fit_kw=None, init_kw=None,
+                 ax_kw=None):
         """plot results of the fit on axes ax. If ax=None, new axes are
         created. The x array for the fit line is made densier to have
         at least numpoints points. Returns an axes instance."""
@@ -641,6 +643,15 @@ class ModelFit(Minimizer):
         except ImportError:
             print('matplotlib module is required for plotting the results')
             return False
+
+        if data_kw is None:
+            data_kw = {}
+        if fit_kw is None:
+            fit_kw = {}
+        if init_kw is None:
+            init_kw = {}
+        if ax_kw is None:
+            ax_kw = {}
 
         if len(self.model.independent_vars) == 1:
             independent_var = self.model.independent_vars[0]
@@ -679,8 +690,8 @@ class ModelFit(Minimizer):
 
         return ax
 
-    def plot_residuals(self, ax=None, datafmt='o', data_kw={}, fit_kw={},
-                       ax_kw={}):
+    def plot_residuals(self, ax=None, datafmt='o', data_kw=None, fit_kw=None,
+                       ax_kw=None):
         """plot residuals of the fit given by (fit - data) on axes ax.
         If ax=None, new axes are created. Returns an axes instance."""
         try:
@@ -688,6 +699,15 @@ class ModelFit(Minimizer):
         except ImportError:
             print('matplotlib module is required for plotting the results')
             return False
+
+        if data_kw is None:
+            data_kw = {}
+        if fit_kw is None:
+            fit_kw = {}
+        if fit_kw is None:
+            fit_kw = {}
+        if ax_kw is None:
+            ax_kw = {}
 
         if len(self.model.independent_vars) == 1:
             independent_var = self.model.independent_vars[0]
@@ -717,8 +737,8 @@ class ModelFit(Minimizer):
         return ax
 
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
-             data_kw={}, fit_kw={}, init_kw={}, ax_res_kw={}, ax_fit_kw={},
-             fig_kw={}):
+             data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
+             ax_fit_kw=None, fig_kw=None):
         """Create a figure and plot both fit and residuals. The x array
         for the fit line is made densier to have at least numpoints
         points.Returns a figure instance."""
@@ -728,9 +748,20 @@ class ModelFit(Minimizer):
             print('matplotlib module is required for plotting the results')
             return False
 
-        if len(self.model.independent_vars) == 1:
-            independent_var = self.model.independent_vars[0]
-        else:
+        if data_kw is None:
+            data_kw = {}
+        if fit_kw is None:
+            fit_kw = {}
+        if init_kw is None:
+            init_kw = {}
+        if ax_res_kw is None:
+            ax_res_kw = {}
+        if ax_fit_kw is None:
+            ax_fit_kw = {}
+        if fig_kw is None:
+            fig_kw = {}
+
+        if len(self.model.independent_vars) != 1:
             print('Fit can only be plotted if the model function has one '
                   'independent variable.')
             return False
