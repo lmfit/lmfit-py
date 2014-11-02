@@ -562,7 +562,7 @@ class ModelFit(Minimizer):
          return a fit report.
 
    plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-            numpoints=200,  data_kw=None, fit_kw=None, init_kw=None,
+            numpoints=None,  data_kw=None, fit_kw=None, init_kw=None,
             ax_kw=None)
          plot results of the fit on axes ax. If ax=None, new axes are
          created. The x array for the fit line is made densier to have
@@ -573,12 +573,12 @@ class ModelFit(Minimizer):
          plot residuals of the fit given by (fit - data) on axes ax.
          If ax=None, new axes are created. Returns an axes instance.
 
-   plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
+   plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
         data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
         ax_fit_kw=None, fig_kw=None)
          create a figure and plot both fit and residuals. The x array
          for the fit line is made densier to have at least numpoints
-         points.Returns a figure instance.
+         points. Returns a figure instance.
     """
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
@@ -633,7 +633,7 @@ class ModelFit(Minimizer):
         return out
 
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-                 numpoints=200,  data_kw=None, fit_kw=None, init_kw=None,
+                 numpoints=None,  data_kw=None, fit_kw=None, init_kw=None,
                  ax_kw=None):
         """plot results of the fit on axes ax. If ax=None, new axes are
         created. The x array for the fit line is made densier to have
@@ -666,7 +666,7 @@ class ModelFit(Minimizer):
         x_array = self.userkws[independent_var]
 
         # make a dense array for x-axis if data is not dense
-        if len(self.data) < numpoints:
+        if numpoints is not None and len(self.data) < numpoints:
             x_array_dense = np.linspace(x_array[0], x_array[-1], numpoints)
         else:
             x_array_dense = x_array
@@ -736,7 +736,7 @@ class ModelFit(Minimizer):
 
         return ax
 
-    def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=200,
+    def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
              data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
              ax_fit_kw=None, fig_kw=None):
         """Create a figure and plot both fit and residuals. The x array
