@@ -25,6 +25,26 @@ def _align(var, mask, data):
         return var[mask]
     return var
 
+
+try:
+    from matplotlib import pyplot as plt
+    _HAS_MATPLOTLIB = True
+except ImportError:
+    _HAS_MATPLOTLIB = False
+
+
+def _ensureMatplotlib(function):
+    if _HAS_MATPLOTLIB:
+        return function
+    else:
+        print('matplotlib module is required for plotting the results')
+
+        def no_op(*args, **kwargs):
+            pass
+
+        return no_op
+
+
 class Model(object):
     """Create a model from a user-defined function.
 
@@ -632,18 +652,13 @@ class ModelFit(Minimizer):
         out = '%s\n%s' % (buff, stats_report)
         return out
 
+    @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
                  numpoints=None,  data_kw=None, fit_kw=None, init_kw=None,
                  ax_kw=None):
         """plot results of the fit on axes ax. If ax=None, new axes are
         created. The x array for the fit line is made densier to have
         at least numpoints points. Returns an axes instance."""
-        try:
-            from matplotlib import pyplot as plt
-        except ImportError:
-            print('matplotlib module is required for plotting the results')
-            return False
-
         if data_kw is None:
             data_kw = {}
         if fit_kw is None:
@@ -690,16 +705,11 @@ class ModelFit(Minimizer):
 
         return ax
 
+    @_ensureMatplotlib
     def plot_residuals(self, ax=None, datafmt='o', data_kw=None, fit_kw=None,
                        ax_kw=None):
         """plot residuals of the fit given by (fit - data) on axes ax.
         If ax=None, new axes are created. Returns an axes instance."""
-        try:
-            from matplotlib import pyplot as plt
-        except ImportError:
-            print('matplotlib module is required for plotting the results')
-            return False
-
         if data_kw is None:
             data_kw = {}
         if fit_kw is None:
@@ -736,18 +746,13 @@ class ModelFit(Minimizer):
 
         return ax
 
+    @_ensureMatplotlib
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
              fig=None, data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
              ax_fit_kw=None, fig_kw=None):
         """Create a figure and plot both fit and residuals. The x array
         for the fit line is made densier to have at least numpoints
         points.Returns a figure instance."""
-        try:
-            from matplotlib import pyplot as plt
-        except ImportError:
-            print('matplotlib module is required for plotting the results')
-            return False
-
         if data_kw is None:
             data_kw = {}
         if fit_kw is None:
