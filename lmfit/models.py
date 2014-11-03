@@ -373,14 +373,13 @@ class ExpressionModel(Model):
         self.expr = expr
         self.astcode = self.asteval.parse(expr)
 
-        # find all symbol names found in expression,
+        # find all symbol names found in expression
         sym_names = get_ast_names(self.astcode)
 
         if independent_vars is None and 'x' in sym_names:
             independent_vars = ['x']
         if independent_vars is None:
-            raise ValueError(self.idvar_missing % (lost, self.expr))
-
+            raise ValueError(self.idvar_missing % (self.expr))
 
         # determine which named symbols are parameter names,
         # try to find all independent variables
