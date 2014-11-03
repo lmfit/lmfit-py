@@ -6,21 +6,20 @@ Built-in Fitting Models in the :mod:`models` module
 
 .. module:: models
 
-
 Lmfit provides several builtin fitting models in the :mod:`models` module.
-These pre-defined models each subclass from the :class:`Model` class of the
+These pre-defined models each subclass from the :class:`model.Model` class of the
 previous chapter and wrap relatively well-known functional forms, such as
 Gaussians, Lorentzian, and Exponentials that are used in a wide range of
 scientific domains.  In fact, all the models are all based on simple, plain
 python functions defined in the :mod:`lineshapes` module.  In addition to
-wrapping a function into a :class:`Model`, these models also provide a
+wrapping a function into a :class:`model.Model`, these models also provide a
 :meth:`guess` method that is intended to give a reasonable
 set of starting values from a data array that closely approximates the
 data to be fit.
 
-As shown in the previous chapter, a key feature of the :class:`Model` class
+As shown in the previous chapter, a key feature of the :class:`mode.Model` class
 is that models can easily be combined to give a composite
-:class:`Model`. Thus while some of the models listed here may seem pretty
+:class:`model.Model`. Thus while some of the models listed here may seem pretty
 trivial (notably, :class:`ConstantModel` and :class:`LinearModel`), the
 main point of having these is to be able to used in composite models.  For
 example,  a Lorentzian plus a linear background might be represented as::
@@ -54,8 +53,7 @@ methods for all of these make a fairly crude guess for the value of
 :class:`GaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-.. class:: GaussianModel()
+.. class:: GaussianModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on a `Gaussian or normal distribution lineshape
 <http://en.wikipedia.org/wiki/Normal_distribution>`_.  Parameter names:
@@ -75,7 +73,7 @@ Half-Maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
 :class:`LorentzianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: LorentzianModel()
+.. class:: LorentzianModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on a `Lorentzian or Cauchy-Lorentz distribution function
 <http://en.wikipedia.org/wiki/Cauchy_distribution>`_.  Parameter names:
@@ -94,7 +92,7 @@ Half-Maximum is :math:`2\sigma`.
 :class:`VoigtModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: VoigtModel()
+.. class:: VoigtModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on a `Voigt distribution function
 <http://en.wikipedia.org/wiki/Voigt_profile>`_.  Parameter names:
@@ -129,7 +127,7 @@ the full width at half maximum is approximately :math:`3.6013\sigma`.
 :class:`PseudoVoigtModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: PseudoVoigtModel()
+.. class:: PseudoVoigtModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 a model based on a `pseudo-Voigt distribution function
 <http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation>`_,
@@ -150,7 +148,7 @@ value for ``fraction`` of 0.5
 :class:`Pearson7Model`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: Pearson7Model()
+.. class:: Pearson7Model(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on a `Pearson VII distribution
 <http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution>`_.
@@ -169,7 +167,7 @@ gives a starting value for ``exponent`` of 1.5.
 :class:`StudentsTModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: StudentsTModel()
+.. class:: StudentsTModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on a `Student's t distribution function
 <http://en.wikipedia.org/wiki/Student%27s_t-distribution>`_, with the usual
@@ -187,7 +185,7 @@ where :math:`\Gamma(x)` is the gamma function.
 :class:`BreitWignerModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: BreitWignerModel()
+.. class:: BreitWignerModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on a `Breit-Wigner-Fano function
 <http://en.wikipedia.org/wiki/Fano_resonance>`_.  It has the usual
@@ -202,7 +200,7 @@ parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
 :class:`LognormalModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: LognormalModel()
+.. class:: LognormalModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on the `Log-normal distribution function
 <http://en.wikipedia.org/wiki/Lognormal>`_.
@@ -218,7 +216,7 @@ It has the usual parameters
 :class:`DampedOcsillatorModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: DampedOcsillatorModel()
+.. class:: DampedOcsillatorModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on the `Damped Harmonic Oscillator Amplitude
 <http://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part>`_.
@@ -233,7 +231,7 @@ It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) 
 :class:`ExponentialGaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ExponentialGaussianModel()
+.. class:: ExponentialGaussianModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model of an `Exponentially modified Gaussian distribution
 <http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution>`_.
@@ -252,7 +250,7 @@ where :func:`erfc` is the complimentary error function.
 :class:`SkewedGaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: SkewedGaussianModel()
+.. class:: SkewedGaussianModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A variation of the above model, this is a `Skewed normal distribution
 <http://en.wikipedia.org/wiki/Skew_normal_distribution>`_.
@@ -274,7 +272,7 @@ where :func:`erf` is the error function.
 :class:`DonaichModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: DonaichModel()
+.. class:: DonaichModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model of an `Doniach Sunjic asymmetric lineshape
 <http://www.casaxps.com/help_manual/line_shapes.htm>`_, used in
@@ -299,7 +297,7 @@ of many components of composite model.
 :class:`ConstantModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ConstantModel()
+.. class:: ConstantModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
    a class that consists of a single value, ``c``.  This is constant in the
    sense of having no dependence on the independent variable ``x``, not in
@@ -309,7 +307,7 @@ of many components of composite model.
 :class:`LinearModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: LinearModel()
+.. class:: LinearModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
    a class that gives a linear model:
 
@@ -323,7 +321,7 @@ with parameters ``slope`` for :math:`m` and  ``intercept`` for :math:`b`.
 :class:`QuadraticModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: QuadraticModel()
+.. class:: QuadraticModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 
    a class that gives a quadratic model:
@@ -338,7 +336,7 @@ with parameters ``a``, ``b``, and ``c``.
 :class:`ParabolicModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ParabolicModel()
+.. class:: ParabolicModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
    same as :class:`QuadraticModel`.
 
@@ -347,7 +345,7 @@ with parameters ``a``, ``b``, and ``c``.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-.. class:: PolynomialModel(degree)
+.. class:: PolynomialModel(degree, missing=None[, prefix=''[, name=None[, **kws]]])
 
    a class that gives a polynomial model up to ``degree`` (with maximum
    value of 7).
@@ -365,11 +363,12 @@ will specify how many of these are actual variable parameters.  This uses
 Step-like models
 -----------------------------------------------
 
+Two models represent step-like functions, and share many characteristics.
 
 :class:`StepModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: StepModel(form='linear')
+.. class:: StepModel(form='linear'[, missing=None[, prefix=''[, name=None[, **kws]]]])
 
 A model based on a Step function, with four choices for functional form.
 The step function starts with a value 0, and ends with a value of :math:`A`
@@ -396,7 +395,7 @@ where :math:`\alpha  = (x - \mu)/{\sigma}`.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-.. class:: RectangleModel(form='linear')
+.. class:: RectangleModel(form='linear'[, missing=None[, prefix=''[, name=None[, **kws]]]])
 
 A model based on a Step-up and Step-down function of the same form.  The
 same choices for functional form as for :class:`StepModel` are supported,
@@ -426,7 +425,7 @@ Exponential and Power law models
 :class:`ExponentialModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ExponentialModel()
+.. class:: ExponentialModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on an `exponential decay function
 <http://en.wikipedia.org/wiki/Exponential_decay>`_. With parameters named
@@ -440,7 +439,7 @@ A model based on an `exponential decay function
 :class:`PowerLawModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: PowerLawModel()
+.. class:: PowerLawModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 A model based on a `Power Law <http://en.wikipedia.org/wiki/Power_law>`_.
 With parameters
@@ -450,6 +449,102 @@ form:
 .. math::
 
    f(x; A, k) = A x^k
+
+
+User-defined Models
+----------------------------
+
+.. _asteval: http://newville.github.io/asteval/
+
+As shown in the previous chapter (:ref:`model_chapter`), it is fairly
+straightforward to build fitting models from parametrized python functions.
+The number of model classes listed so far in the present chapter should
+make it clear that this process is not too difficult.  Still, it is
+sometimes desirable to build models from a user-supplied function.  This
+may be especially true if model-building is built-in to some larger library
+or application for fitting in which the user may not be able to easily
+build and use a new model from python code.
+
+
+The :class:`ExpressionModel` allows a model to be built from a
+user-supplied expression.  This uses the `asteval`_ module also used for
+mathematical constraints as discussed in :ref:`constraints_chapter`.
+
+
+:class:`ExpressionModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. class:: ExpressionModel(expr, independent_vars=None, init_script=None, missing=None, prefix='', name=None, **kws)
+
+    A model using the user-supplied mathematical expression, which can be nearly any valid Python expresion.
+
+    :param expr: expression use to build model
+    :type expr: string
+    :param init_script: python script to run before parsing and evaluating expression.
+    :type init_script: ``None`` (default) or string
+    :param independent_vars: list of argument names to ``func`` that are independent variables.
+    :type independent_vars: ``None`` (default) or list of strings for independent variables.
+
+with other parameters passed to :class:`model.Model`.
+
+Since the point of this model is that an arbitrary expression will be
+supplied, the determination of what are the parameter names for the model
+happens when the model is created.  To do this, the expression is parsed,
+and all symbol names are found.  Names that are already known (there are
+over 500 function and value names in the asteval namespace, including most
+python builtins, more than 200 functions inherited from numpy, and more
+than 20 common lineshapes defined in the :mod:`lineshapes` module) are not
+converted to parameters.  Unrecognized name are expected to be names either
+of parameters or independent variables.  If `independent_vars` is the
+default value of ``None``, and if the expression contains a variable named
+`x`, that will be used as the independent variable.  Otherwise,
+`independent_vars` must be given.
+
+For example, if one creates an :class:`ExpressionModel` as::
+
+    >>> mod = ExpressionModel('off + amp * exp(-x/x0) * sin(x*phase)')
+
+The name `exp` will be recognized as the exponent function, so the model
+will be interpreted to have parameters named `off`, `amp`, `x0` and
+`phase`, and `x` will be assumed to be the sole independent variable.
+In general, there is no obvious way to set default parameter values or
+parameter hints for bounds, so this will have to be handled explicitly.
+
+To evaluate this model, you might do the following::
+
+    >>> x = numpy.linspace(0, 10, 501)
+    >>> params = mod.make_params(off=0.25, amp=1.0, x0=2.0, phase=0.04)
+    >>> y = mod.eval(params, x=x)
+
+
+While many custom models can be built with a single line expression
+(especially since the names of the lineshapes like `gaussian`, `lorentzian`
+and so on, as well as many numpy functions, are available), more complex
+models will inevitably require multiple line functions.  You can include
+such Python code with the `init_script` argument.  The text of this script
+is evaluated when the model is initialized (and before the actual
+expression is parsed), so that you can define functions to be used
+in your expression.
+
+As a probably unphysical example, to make a model that is the derivative of
+a Gaussian function times the logarithm of a Lorenztian function you may
+could to define this in a script::
+
+    >>> script = """
+    def mycurve(x, amp, cen, sig):
+        loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
+        gauss = gaussian(x, amplitude=ampa, center=cen, sigma=sig)
+        return log(loren)*gradient(gauss)/gradient(x)
+    """
+
+and then use this with :class:`ExpressionModel` as::
+
+    >>> mod = ExpressionModel('mycurve(x, height, mid, wid)',
+                              init_script=script,
+                              independent_vars=['x'])
+
+As above, this will interpret the parameter names to be `height`, `mid`,
+and `wid`, and build a model that can be used to fit data.
 
 
 
@@ -642,7 +737,7 @@ Example 2: Fit data to a Composite Model with pre-defined models
 ------------------------------------------------------------------
 
 Here, we repeat the point made at the end of the last chapter that instances
-of :class:`Model` class can be added them together to make a *composite
+of :class:`model.Model` class can be added them together to make a *composite
 model*.  But using the large number of built-in models available, this is
 very simple.  An example of a simple fit to a noisy step function plus a
 constant:
@@ -694,7 +789,7 @@ Example 3: Fitting Multiple Peaks -- and using Prefixes
 As shown above, many of the models have similar parameter names.  For
 composite models, this could lead to a problem of having parameters for
 different parts of the model having the same name.  To overcome this, each
-:class:`Model` can have a ``prefix`` attribute (normally set to a blank
+:class:`model.Model` can have a ``prefix`` attribute (normally set to a blank
 string) that will be put at the beginning of each parameter name.  To
 illustrate, we fit one of the classic datasets from the `NIST StRD`_ suite
 involving a decaying exponential and two gaussians.
@@ -823,5 +918,3 @@ and without any bounds on parameters at all::
 This example is in the file ``doc_nistgauss2.py`` in the examples folder,
 and the fit result shown on the right above shows an improved initial
 estimate of the data.
-
-
