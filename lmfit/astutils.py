@@ -246,8 +246,13 @@ class NameFinder(ast.NodeVisitor):
         ast.NodeVisitor.__init__(self)
 
     def generic_visit(self, node):
-        nodename = node.__class__.__name__.lower()
-        if nodename == 'name':
+        if node.__class__.__name__ == 'Name':
             if node.ctx.__class__ == ast.Load and node.id not in self.names:
                 self.names.append(node.id)
         ast.NodeVisitor.generic_visit(self, node)
+
+def get_ast_names(astnode):
+    "returns symbol Names from an AST node"
+    finder = NameFinder()
+    finder.generic_visit(astnode)
+    return finder.names
