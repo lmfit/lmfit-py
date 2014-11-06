@@ -4,6 +4,7 @@
 Modeling Data and Curve Fitting
 =================================================
 
+.. module:: model
 
 A common use of least-squares minimization is *curve fitting*, where one
 has a parametrized model function meant to explain some phenomena and wants
@@ -945,4 +946,3 @@ we can do similarly::
 
 It is evident that assigning names will help to easily distinguish
 the different models.
-

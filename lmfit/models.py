@@ -8,6 +8,11 @@ from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, pearson7,
                          skewed_voigt, exponential, powerlaw, linear,
                          parabolic)
 
+from . import lineshapes
+
+from .asteval import Interpreter
+from .astutils import get_ast_names
+
 class DimensionalError(Exception):
     pass
 
@@ -77,6 +82,7 @@ missing: None, 'drop', or 'raise'
 prefix: string to prepend to paramter names, needed to add two Models that
     have parameter names in common. None by default.
 """
+
 class ConstantModel(Model):
     __doc__ = "x -> c" + COMMON_DOC
     def __init__(self, *args, **kwargs):
@@ -344,3 +350,78 @@ class RectangleModel(Model):
         pars['%ssigma2' % self.prefix].set(value=(xmax-xmin)/7.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+
+class ExpressionModel(Model):
+    """Model from User-supplied expression
+
+%s
+    """ % COMMON_DOC
+
+    idvar_missing  = "No independent variable found in\n %s"
+    idvar_notfound = "Cannot find independent variables '%s' in\n %s"
+    def __init__(self, expr, independent_vars=None, init_script=None,
+                 *args, **kwargs):
+
+        # create ast evaluator, load custom functions
+        self.asteval = Interpreter()
+        for name in lineshapes.functions:
+            self.asteval.symtable[name] = getattr(lineshapes, name, None)
+        if init_script is not None:
+            self.asteval.eval(init_script)
+
+        # save expr as text, parse to ast, save for later use
+        self.expr = expr
+        self.astcode = self.asteval.parse(expr)
+
+        # find all symbol names found in expression
+        sym_names = get_ast_names(self.astcode)
+
+        if independent_vars is None and 'x' in sym_names:
+            independent_vars = ['x']
+        if independent_vars is None:
+            raise ValueError(self.idvar_missing % (self.expr))
+
+        # determine which named symbols are parameter names,
+        # try to find all independent variables
+        idvar_found = [False]*len(independent_vars)
+        param_names = []
+        for name in sym_names:
+            if name in independent_vars:
+                idvar_found[independent_vars.index(name)] = True
+            elif name not in self.asteval.symtable:
+                param_names.append(name)
+
+        # make sure we have all independent parameters
+        if not all(idvar_found):
+            lost = []
+            for ix, found in enumerate(idvar_found):
+                if not found:
+                    lost.append(independent_vars[ix])
+            lost = ', '.join(lost)
+            raise ValueError(self.idvar_notfound % (lost, self.expr))
+
+        kwargs['independent_vars'] = independent_vars
+
+        def _eval(**kwargs):
+            for name, val in kwargs.items():
+                self.asteval.symtable[name] = val
+            return self.asteval.run(self.astcode)
+
+        super(ExpressionModel, self).__init__(_eval, *args, **kwargs)
+
+        # set param names here, and other things normally
+        # set in _parse_params(), which will be short-circuited.
+        self.independent_vars = independent_vars
+        self._func_allargs = independent_vars + param_names
+        self._param_names = set(param_names)
+        self._func_haskeywords = True
+        self.def_vals = {}
+
+    def __repr__(self):
+        return  "<lmfit.ExpressionModel('%s')>" % (self.expr)
+
+    def _parse_params(self):
+        """ExpressionModel._parse_params is over-written (as `pass`)
+        to prevent normal parsing of function for parameter names
+        """
+        pass

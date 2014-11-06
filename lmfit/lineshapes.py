@@ -13,6 +13,13 @@ s2pi = sqrt(2*pi)
 spi  = sqrt(pi)
 s2   = sqrt(2.0)
 
+functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'pearson7',
+             'breit_wigner', 'damped_oscillator', 'logistic', 'lognormal',
+             'students_t', 'expgaussian', 'donaich', 'skewed_gaussian',
+             'skewed_voigt', 'step', 'rectangle', 'erf', 'erfc', 'wofz',
+             'gamma', 'gammaln', 'exponential', 'powerlaw', 'linear',
+             'parabolic')
+
 def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
     """1 dimensional gaussian:
     gaussian(x, amplitude, center, sigma)
