@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 # from distutils.core import setup
 from setuptools import setup
-
-import lmfit as lmfit
-import numpy, scipy
+import os.path as osp
 
 long_desc = """A library for least-squares minimization and data fitting in
 Python.  Built on top of scipy.optimize, lmfit provides a Parameter object
@@ -24,8 +22,15 @@ estimating Parameter uncertainties from the covariance matrix is
 questionable. """
 
 
+def read_project_version():
+    local_vars = {}
+    with open(osp.join(osp.dirname(__file__), 'lmfit', '_version.py')) as fd:
+        exec(fd.read(), {}, local_vars)  # To read __version__
+    return local_vars['__version__']
+
+
 setup(name = 'lmfit',
-      version = lmfit.__version__,
+      version = read_project_version(),
       author = 'LMFit Development Team',
       author_email = 'matt.newville@gmail.com',
       url          = 'http://lmfit.github.io/lmfit-py/',
