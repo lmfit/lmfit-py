@@ -33,7 +33,7 @@ from scipy.optimize.  It has a number of useful enhancements, including:
              Daniel B. Allen, Johns Hopkins University
              Antonino Ingargiola, University of California, Los Angeles
 """
-__version__ = '0.8.0'
+from ._version import __version__
 
 from .minimizer import minimize, Minimizer, MinimizerException
 from .parameter import Parameter, Parameters
