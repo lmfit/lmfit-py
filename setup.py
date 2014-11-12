@@ -2,8 +2,13 @@
 # from distutils.core import setup
 from setuptools import setup
 
-import lmfit as lmfit
-import numpy, scipy
+import versioneer
+versioneer.VCS = 'git'
+versioneer.versionfile_source = 'lmfit/_version.py'
+versioneer.versionfile_build = 'lmfit/_version.py'
+versioneer.tag_prefix = ''
+versioneer.parentdir_prefix = 'lmfit-'
+
 
 long_desc = """A library for least-squares minimization and data fitting in
 Python.  Built on top of scipy.optimize, lmfit provides a Parameter object
@@ -25,7 +30,8 @@ questionable. """
 
 
 setup(name = 'lmfit',
-      version = lmfit.__version__,
+      version = versioneer.get_version(),
+      cmdclass = versioneer.get_cmdclass(),
       author = 'LMFit Development Team',
       author_email = 'matt.newville@gmail.com',
       url          = 'http://lmfit.github.io/lmfit-py/',

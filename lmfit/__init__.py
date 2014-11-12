@@ -33,7 +33,6 @@ from scipy.optimize.  It has a number of useful enhancements, including:
              Daniel B. Allen, Johns Hopkins University
              Antonino Ingargiola, University of California, Los Angeles
 """
-__version__ = '0.8.0'
 
 from .minimizer import minimize, Minimizer, MinimizerException
 from .parameter import Parameter, Parameters
@@ -48,3 +47,8 @@ from . import uncertainties
 from .uncertainties import ufloat, correlated_values
 
 from .ui import Fitter
+
+## versioneer code
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
