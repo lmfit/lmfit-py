@@ -1,8 +1,11 @@
-include README.txt INSTALL LICENSE MANIFEST.in PKG-INFO 
+include README.txt INSTALL LICENSE MANIFEST.in PKG-INFO THANKS.txt
 include setup.py publish_docs.sh
+include requirements.txt
 exclude *.pyc core.* *~ *.pdf
 recursive-include lmfit *.py
 recursive-include tests *.py *.dat
 recursive-include doc *
 recursive-exclude doc/_build *
 recursive-exclude doc *.pdf
+include versioneer.py
+include lmfit/_version.py
