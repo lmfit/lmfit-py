@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0',
+        VERSION:     '0.8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -130,6 +130,10 @@
 <li><a class="reference internal" href="#powerlawmodel"><tt class="docutils literal"><span class="pre">PowerLawModel</span></tt></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#user-defined-models">User-defined Models</a><ul>
+<li><a class="reference internal" href="#expressionmodel"><tt class="docutils literal"><span class="pre">ExpressionModel</span></tt></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles">Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles</a></li>
 <li><a class="reference internal" href="#example-2-fit-data-to-a-composite-model-with-pre-defined-models">Example 2: Fit data to a Composite Model with pre-defined models</a></li>
 <li><a class="reference internal" href="#example-3-fitting-multiple-peaks-and-using-prefixes">Example 3: Fitting Multiple Peaks &#8211; and using Prefixes</a></li>
@@ -172,18 +176,18 @@
   <div class="section" id="module-models">
 <span id="built-in-fitting-models-in-the-models-module"></span><span id="builtin-models-chapter"></span><h1>Built-in Fitting Models in the <a class="reference internal" href="#module-models" title="models"><tt class="xref py py-mod docutils literal"><span class="pre">models</span></tt></a> module<a class="headerlink" href="#module-models" title="Permalink to this headline">¶</a></h1>
 <p>Lmfit provides several builtin fitting models in the <a class="reference internal" href="#module-models" title="models"><tt class="xref py py-mod docutils literal"><span class="pre">models</span></tt></a> module.
-These pre-defined models each subclass from the <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class of the
+These pre-defined models each subclass from the <a class="reference internal" href="model.html#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">model.Model</span></tt></a> class of the
 previous chapter and wrap relatively well-known functional forms, such as
 Gaussians, Lorentzian, and Exponentials that are used in a wide range of
 scientific domains.  In fact, all the models are all based on simple, plain
 python functions defined in the <tt class="xref py py-mod docutils literal"><span class="pre">lineshapes</span></tt> module.  In addition to
-wrapping a function into a <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt>, these models also provide a
+wrapping a function into a <a class="reference internal" href="model.html#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">model.Model</span></tt></a>, these models also provide a
 <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> method that is intended to give a reasonable
 set of starting values from a data array that closely approximates the
 data to be fit.</p>
-<p>As shown in the previous chapter, a key feature of the <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class
+<p>As shown in the previous chapter, a key feature of the <tt class="xref py py-class docutils literal"><span class="pre">mode.Model</span></tt> class
 is that models can easily be combined to give a composite
-<tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt>. Thus while some of the models listed here may seem pretty
+<a class="reference internal" href="model.html#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">model.Model</span></tt></a>. Thus while some of the models listed here may seem pretty
 trivial (notably, <a class="reference internal" href="#models.ConstantModel" title="models.ConstantModel"><tt class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></tt></a> and <a class="reference internal" href="#models.LinearModel" title="models.LinearModel"><tt class="xref py py-class docutils literal"><span class="pre">LinearModel</span></tt></a>), the
 main point of having these is to be able to used in composite models.  For
 example,  a Lorentzian plus a linear background might be represented as:</p>
@@ -214,7 +218,7 @@ methods for all of these make a fairly crude guess for the value of
 <h3><a class="reference internal" href="#models.GaussianModel" title="models.GaussianModel"><tt class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></tt></a><a class="headerlink" href="#gaussianmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.GaussianModel">
-<em class="property">class </em><tt class="descname">GaussianModel</tt><a class="headerlink" href="#models.GaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">GaussianModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.GaussianModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Normal_distribution">Gaussian or normal distribution lineshape</a>.  Parameter names:
@@ -231,7 +235,7 @@ Half-Maximum is <span class="math">\(2\sigma\sqrt{2\ln{2}}\)</span>, approximate
 <h3><a class="reference internal" href="#models.LorentzianModel" title="models.LorentzianModel"><tt class="xref py py-class docutils literal"><span class="pre">LorentzianModel</span></tt></a><a class="headerlink" href="#lorentzianmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.LorentzianModel">
-<em class="property">class </em><tt class="descname">LorentzianModel</tt><a class="headerlink" href="#models.LorentzianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">LorentzianModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.LorentzianModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Cauchy_distribution">Lorentzian or Cauchy-Lorentz distribution function</a>.  Parameter names:
@@ -247,7 +251,7 @@ Half-Maximum is <span class="math">\(2\sigma\)</span>.</p>
 <h3><a class="reference internal" href="#models.VoigtModel" title="models.VoigtModel"><tt class="xref py py-class docutils literal"><span class="pre">VoigtModel</span></tt></a><a class="headerlink" href="#voigtmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.VoigtModel">
-<em class="property">class </em><tt class="descname">VoigtModel</tt><a class="headerlink" href="#models.VoigtModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">VoigtModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.VoigtModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Voigt_profile">Voigt distribution function</a>.  Parameter names:
@@ -274,7 +278,7 @@ the full width at half maximum is approximately <span class="math">\(3.6013\sigm
 <h3><a class="reference internal" href="#models.PseudoVoigtModel" title="models.PseudoVoigtModel"><tt class="xref py py-class docutils literal"><span class="pre">PseudoVoigtModel</span></tt></a><a class="headerlink" href="#pseudovoigtmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.PseudoVoigtModel">
-<em class="property">class </em><tt class="descname">PseudoVoigtModel</tt><a class="headerlink" href="#models.PseudoVoigtModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">PseudoVoigtModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.PseudoVoigtModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>a model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation">pseudo-Voigt distribution function</a>,
@@ -292,7 +296,7 @@ value for <tt class="docutils literal"><span class="pre">fraction</span></tt> of
 <h3><a class="reference internal" href="#models.Pearson7Model" title="models.Pearson7Model"><tt class="xref py py-class docutils literal"><span class="pre">Pearson7Model</span></tt></a><a class="headerlink" href="#pearson7model" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.Pearson7Model">
-<em class="property">class </em><tt class="descname">Pearson7Model</tt><a class="headerlink" href="#models.Pearson7Model" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">Pearson7Model</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.Pearson7Model" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution">Pearson VII distribution</a>.
@@ -309,7 +313,7 @@ gives a starting value for <tt class="docutils literal"><span class="pre">expone
 <h3><a class="reference internal" href="#models.StudentsTModel" title="models.StudentsTModel"><tt class="xref py py-class docutils literal"><span class="pre">StudentsTModel</span></tt></a><a class="headerlink" href="#studentstmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.StudentsTModel">
-<em class="property">class </em><tt class="descname">StudentsTModel</tt><a class="headerlink" href="#models.StudentsTModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">StudentsTModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.StudentsTModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Student%27s_t-distribution">Student&#8217;s t distribution function</a>, with the usual
@@ -323,7 +327,7 @@ parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> 
 <h3><a class="reference internal" href="#models.BreitWignerModel" title="models.BreitWignerModel"><tt class="xref py py-class docutils literal"><span class="pre">BreitWignerModel</span></tt></a><a class="headerlink" href="#breitwignermodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.BreitWignerModel">
-<em class="property">class </em><tt class="descname">BreitWignerModel</tt><a class="headerlink" href="#models.BreitWignerModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">BreitWignerModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.BreitWignerModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Fano_resonance">Breit-Wigner-Fano function</a>.  It has the usual
@@ -336,7 +340,7 @@ parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> 
 <h3><a class="reference internal" href="#models.LognormalModel" title="models.LognormalModel"><tt class="xref py py-class docutils literal"><span class="pre">LognormalModel</span></tt></a><a class="headerlink" href="#lognormalmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.LognormalModel">
-<em class="property">class </em><tt class="descname">LognormalModel</tt><a class="headerlink" href="#models.LognormalModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">LognormalModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.LognormalModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on the <a class="reference external" href="http://en.wikipedia.org/wiki/Lognormal">Log-normal distribution function</a>.
@@ -350,7 +354,7 @@ It has the usual parameters
 <h3><a class="reference internal" href="#models.DampedOcsillatorModel" title="models.DampedOcsillatorModel"><tt class="xref py py-class docutils literal"><span class="pre">DampedOcsillatorModel</span></tt></a><a class="headerlink" href="#dampedocsillatormodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.DampedOcsillatorModel">
-<em class="property">class </em><tt class="descname">DampedOcsillatorModel</tt><a class="headerlink" href="#models.DampedOcsillatorModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">DampedOcsillatorModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.DampedOcsillatorModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on the <a class="reference external" href="http://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part">Damped Harmonic Oscillator Amplitude</a>.
@@ -363,7 +367,7 @@ It has the usual parameters <tt class="docutils literal"><span class="pre">ampli
 <h3><a class="reference internal" href="#models.ExponentialGaussianModel" title="models.ExponentialGaussianModel"><tt class="xref py py-class docutils literal"><span class="pre">ExponentialGaussianModel</span></tt></a><a class="headerlink" href="#exponentialgaussianmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.ExponentialGaussianModel">
-<em class="property">class </em><tt class="descname">ExponentialGaussianModel</tt><a class="headerlink" href="#models.ExponentialGaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">ExponentialGaussianModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.ExponentialGaussianModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model of an <a class="reference external" href="http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution">Exponentially modified Gaussian distribution</a>.
@@ -379,7 +383,7 @@ It has the usual parameters <tt class="docutils literal"><span class="pre">ampli
 <h3><a class="reference internal" href="#models.SkewedGaussianModel" title="models.SkewedGaussianModel"><tt class="xref py py-class docutils literal"><span class="pre">SkewedGaussianModel</span></tt></a><a class="headerlink" href="#skewedgaussianmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.SkewedGaussianModel">
-<em class="property">class </em><tt class="descname">SkewedGaussianModel</tt><a class="headerlink" href="#models.SkewedGaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">SkewedGaussianModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.SkewedGaussianModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A variation of the above model, this is a <a class="reference external" href="http://en.wikipedia.org/wiki/Skew_normal_distribution">Skewed normal distribution</a>.
@@ -397,7 +401,7 @@ e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
 <h3><a class="reference internal" href="#models.DonaichModel" title="models.DonaichModel"><tt class="xref py py-class docutils literal"><span class="pre">DonaichModel</span></tt></a><a class="headerlink" href="#donaichmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.DonaichModel">
-<em class="property">class </em><tt class="descname">DonaichModel</tt><a class="headerlink" href="#models.DonaichModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">DonaichModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.DonaichModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model of an <a class="reference external" href="http://www.casaxps.com/help_manual/line_shapes.htm">Doniach Sunjic asymmetric lineshape</a>, used in
@@ -412,14 +416,14 @@ photo-emission. With the usual parameters <tt class="docutils literal"><span cla
 <div class="section" id="linear-and-polynomial-models">
 <h2>Linear and Polynomial Models<a class="headerlink" href="#linear-and-polynomial-models" title="Permalink to this headline">¶</a></h2>
 <p>These models correspond to polynomials of some degree.  Of course, lmfit is
-a very inefficient way to do linear regression (see <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html#numpy.polyfit" title="(in NumPy v1.8)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.polyfit()</span></tt></a>
+a very inefficient way to do linear regression (see <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html#numpy.polyfit" title="(in NumPy v1.9)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.polyfit()</span></tt></a>
 or <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html#scipy.stats.linregress" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.stats.linregress()</span></tt></a>), but these models may be useful as one
 of many components of composite model.</p>
 <div class="section" id="constantmodel">
 <h3><a class="reference internal" href="#models.ConstantModel" title="models.ConstantModel"><tt class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></tt></a><a class="headerlink" href="#constantmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.ConstantModel">
-<em class="property">class </em><tt class="descname">ConstantModel</tt><a class="headerlink" href="#models.ConstantModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">ConstantModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.ConstantModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>a class that consists of a single value, <tt class="docutils literal"><span class="pre">c</span></tt>.  This is constant in the
 sense of having no dependence on the independent variable <tt class="docutils literal"><span class="pre">x</span></tt>, not in
 the sense of being non-varying.  To be clear, <tt class="docutils literal"><span class="pre">c</span></tt> will be a variable
@@ -431,7 +435,7 @@ Parameter.</p>
 <h3><a class="reference internal" href="#models.LinearModel" title="models.LinearModel"><tt class="xref py py-class docutils literal"><span class="pre">LinearModel</span></tt></a><a class="headerlink" href="#linearmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.LinearModel">
-<em class="property">class </em><tt class="descname">LinearModel</tt><a class="headerlink" href="#models.LinearModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">LinearModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.LinearModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>a class that gives a linear model:</p>
 </dd></dl>
 
@@ -443,7 +447,7 @@ Parameter.</p>
 <h3><a class="reference internal" href="#models.QuadraticModel" title="models.QuadraticModel"><tt class="xref py py-class docutils literal"><span class="pre">QuadraticModel</span></tt></a><a class="headerlink" href="#quadraticmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.QuadraticModel">
-<em class="property">class </em><tt class="descname">QuadraticModel</tt><a class="headerlink" href="#models.QuadraticModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">QuadraticModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.QuadraticModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>a class that gives a quadratic model:</p>
 </dd></dl>
 
@@ -455,7 +459,7 @@ Parameter.</p>
 <h3><a class="reference internal" href="#models.ParabolicModel" title="models.ParabolicModel"><tt class="xref py py-class docutils literal"><span class="pre">ParabolicModel</span></tt></a><a class="headerlink" href="#parabolicmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.ParabolicModel">
-<em class="property">class </em><tt class="descname">ParabolicModel</tt><a class="headerlink" href="#models.ParabolicModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">ParabolicModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.ParabolicModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>same as <a class="reference internal" href="#models.QuadraticModel" title="models.QuadraticModel"><tt class="xref py py-class docutils literal"><span class="pre">QuadraticModel</span></tt></a>.</p>
 </dd></dl>
 
@@ -464,7 +468,7 @@ Parameter.</p>
 <h3><a class="reference internal" href="#models.PolynomialModel" title="models.PolynomialModel"><tt class="xref py py-class docutils literal"><span class="pre">PolynomialModel</span></tt></a><a class="headerlink" href="#polynomialmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.PolynomialModel">
-<em class="property">class </em><tt class="descname">PolynomialModel</tt><big>(</big><em>degree</em><big>)</big><a class="headerlink" href="#models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">PolynomialModel</tt><big>(</big><em>degree</em>, <em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>a class that gives a polynomial model up to <tt class="docutils literal"><span class="pre">degree</span></tt> (with maximum
 value of 7).</p>
 </dd></dl>
@@ -473,16 +477,17 @@ value of 7).</p>
 \[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i\]</div>
 <p>with parameters <tt class="docutils literal"><span class="pre">c0</span></tt>, <tt class="docutils literal"><span class="pre">c1</span></tt>, ..., <tt class="docutils literal"><span class="pre">c7</span></tt>.  The supplied <tt class="docutils literal"><span class="pre">degree</span></tt>
 will specify how many of these are actual variable parameters.  This uses
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html#numpy.polyval" title="(in NumPy v1.8)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.polyval()</span></tt></a> for its calculation of the polynomial.</p>
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html#numpy.polyval" title="(in NumPy v1.9)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.polyval()</span></tt></a> for its calculation of the polynomial.</p>
 </div>
 </div>
 <div class="section" id="step-like-models">
 <h2>Step-like models<a class="headerlink" href="#step-like-models" title="Permalink to this headline">¶</a></h2>
+<p>Two models represent step-like functions, and share many characteristics.</p>
 <div class="section" id="stepmodel">
 <h3><a class="reference internal" href="#models.StepModel" title="models.StepModel"><tt class="xref py py-class docutils literal"><span class="pre">StepModel</span></tt></a><a class="headerlink" href="#stepmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.StepModel">
-<em class="property">class </em><tt class="descname">StepModel</tt><big>(</big><em>form='linear'</em><big>)</big><a class="headerlink" href="#models.StepModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">StepModel</tt><big>(</big><em>form='linear'</em><span class="optional">[</span>, <em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.StepModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a Step function, with four choices for functional form.
@@ -505,7 +510,7 @@ The forms are</p>
 <h3><a class="reference internal" href="#models.RectangleModel" title="models.RectangleModel"><tt class="xref py py-class docutils literal"><span class="pre">RectangleModel</span></tt></a><a class="headerlink" href="#rectanglemodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.RectangleModel">
-<em class="property">class </em><tt class="descname">RectangleModel</tt><big>(</big><em>form='linear'</em><big>)</big><a class="headerlink" href="#models.RectangleModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">RectangleModel</tt><big>(</big><em>form='linear'</em><span class="optional">[</span>, <em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.RectangleModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a Step-up and Step-down function of the same form.  The
@@ -530,7 +535,7 @@ characteristic width.  It drops to rising to <span class="math">\(A/2\)</span> a
 <h3><a class="reference internal" href="#models.ExponentialModel" title="models.ExponentialModel"><tt class="xref py py-class docutils literal"><span class="pre">ExponentialModel</span></tt></a><a class="headerlink" href="#exponentialmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.ExponentialModel">
-<em class="property">class </em><tt class="descname">ExponentialModel</tt><a class="headerlink" href="#models.ExponentialModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">ExponentialModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.ExponentialModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on an <a class="reference external" href="http://en.wikipedia.org/wiki/Exponential_decay">exponential decay function</a>. With parameters named
@@ -542,7 +547,7 @@ characteristic width.  It drops to rising to <span class="math">\(A/2\)</span> a
 <h3><a class="reference internal" href="#models.PowerLawModel" title="models.PowerLawModel"><tt class="xref py py-class docutils literal"><span class="pre">PowerLawModel</span></tt></a><a class="headerlink" href="#powerlawmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="models.PowerLawModel">
-<em class="property">class </em><tt class="descname">PowerLawModel</tt><a class="headerlink" href="#models.PowerLawModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descname">PowerLawModel</tt><big>(</big><em>missing=None</em><span class="optional">[</span>, <em>prefix=''</em><span class="optional">[</span>, <em>name=None</em><span class="optional">[</span>, <em>**kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#models.PowerLawModel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Power_law">Power Law</a>.
@@ -551,6 +556,97 @@ named <tt class="docutils literal"><span class="pre">amplitude</span></tt> (<spa
 form:</p>
 <div class="math">
 \[f(x; A, k) = A x^k\]</div>
+</div>
+</div>
+<div class="section" id="user-defined-models">
+<h2>User-defined Models<a class="headerlink" href="#user-defined-models" title="Permalink to this headline">¶</a></h2>
+<p>As shown in the previous chapter (<a class="reference internal" href="model.html#model-chapter"><em>Modeling Data and Curve Fitting</em></a>), it is fairly
+straightforward to build fitting models from parametrized python functions.
+The number of model classes listed so far in the present chapter should
+make it clear that this process is not too difficult.  Still, it is
+sometimes desirable to build models from a user-supplied function.  This
+may be especially true if model-building is built-in to some larger library
+or application for fitting in which the user may not be able to easily
+build and use a new model from python code.</p>
+<p>The <a class="reference internal" href="#models.ExpressionModel" title="models.ExpressionModel"><tt class="xref py py-class docutils literal"><span class="pre">ExpressionModel</span></tt></a> allows a model to be built from a
+user-supplied expression.  This uses the <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module also used for
+mathematical constraints as discussed in <a class="reference internal" href="constraints.html#constraints-chapter"><em>Using Mathematical Constraints</em></a>.</p>
+<div class="section" id="expressionmodel">
+<h3><a class="reference internal" href="#models.ExpressionModel" title="models.ExpressionModel"><tt class="xref py py-class docutils literal"><span class="pre">ExpressionModel</span></tt></a><a class="headerlink" href="#expressionmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="models.ExpressionModel">
+<em class="property">class </em><tt class="descname">ExpressionModel</tt><big>(</big><em>expr</em>, <em>independent_vars=None</em>, <em>init_script=None</em>, <em>missing=None</em>, <em>prefix=''</em>, <em>name=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#models.ExpressionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>A model using the user-supplied mathematical expression, which can be nearly any valid Python expresion.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>expr</strong> (<a class="reference external" href="http://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; expression use to build model</li>
+<li><strong>init_script</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> (default) or string) &#8211; python script to run before parsing and evaluating expression.</li>
+<li><strong>independent_vars</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> (default) or list of strings for independent variables.) &#8211; list of argument names to <tt class="docutils literal"><span class="pre">func</span></tt> that are independent variables.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>with other parameters passed to <a class="reference internal" href="model.html#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">model.Model</span></tt></a>.</p>
+<p>Since the point of this model is that an arbitrary expression will be
+supplied, the determination of what are the parameter names for the model
+happens when the model is created.  To do this, the expression is parsed,
+and all symbol names are found.  Names that are already known (there are
+over 500 function and value names in the asteval namespace, including most
+python builtins, more than 200 functions inherited from numpy, and more
+than 20 common lineshapes defined in the <tt class="xref py py-mod docutils literal"><span class="pre">lineshapes</span></tt> module) are not
+converted to parameters.  Unrecognized name are expected to be names either
+of parameters or independent variables.  If <cite>independent_vars</cite> is the
+default value of <tt class="docutils literal"><span class="pre">None</span></tt>, and if the expression contains a variable named
+<cite>x</cite>, that will be used as the independent variable.  Otherwise,
+<cite>independent_vars</cite> must be given.</p>
+<p>For example, if one creates an <a class="reference internal" href="#models.ExpressionModel" title="models.ExpressionModel"><tt class="xref py py-class docutils literal"><span class="pre">ExpressionModel</span></tt></a> as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s">&#39;off + amp * exp(-x/x0) * sin(x*phase)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The name <cite>exp</cite> will be recognized as the exponent function, so the model
+will be interpreted to have parameters named <cite>off</cite>, <cite>amp</cite>, <cite>x0</cite> and
+<cite>phase</cite>, and <cite>x</cite> will be assumed to be the sole independent variable.
+In general, there is no obvious way to set default parameter values or
+parameter hints for bounds, so this will have to be handled explicitly.</p>
+<p>To evaluate this model, you might do the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">501</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">off</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>While many custom models can be built with a single line expression
+(especially since the names of the lineshapes like <cite>gaussian</cite>, <cite>lorentzian</cite>
+and so on, as well as many numpy functions, are available), more complex
+models will inevitably require multiple line functions.  You can include
+such Python code with the <cite>init_script</cite> argument.  The text of this script
+is evaluated when the model is initialized (and before the actual
+expression is parsed), so that you can define functions to be used
+in your expression.</p>
+<p>As a probably unphysical example, to make a model that is the derivative of
+a Gaussian function times the logarithm of a Lorenztian function you may
+could to define this in a script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">script</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
+<span class="go">def mycurve(x, amp, cen, sig):</span>
+<span class="go">    loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)</span>
+<span class="go">    gauss = gaussian(x, amplitude=ampa, center=cen, sigma=sig)</span>
+<span class="go">    return log(loren)*gradient(gauss)/gradient(x)</span>
+<span class="go">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>and then use this with <a class="reference internal" href="#models.ExpressionModel" title="models.ExpressionModel"><tt class="xref py py-class docutils literal"><span class="pre">ExpressionModel</span></tt></a> as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s">&#39;mycurve(x, height, mid, wid)&#39;</span><span class="p">,</span>
+<span class="go">                          init_script=script,</span>
+<span class="go">                          independent_vars=[&#39;x&#39;])</span>
+</pre></div>
+</div>
+<p>As above, this will interpret the parameter names to be <cite>height</cite>, <cite>mid</cite>,
+and <cite>wid</cite>, and build a model that can be used to fit data.</p>
 </div>
 </div>
 <div class="section" id="example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles">
@@ -718,7 +814,7 @@ file in the examples directory.</p>
 <div class="section" id="example-2-fit-data-to-a-composite-model-with-pre-defined-models">
 <h2>Example 2: Fit data to a Composite Model with pre-defined models<a class="headerlink" href="#example-2-fit-data-to-a-composite-model-with-pre-defined-models" title="Permalink to this headline">¶</a></h2>
 <p>Here, we repeat the point made at the end of the last chapter that instances
-of <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class can be added them together to make a <em>composite
+of <a class="reference internal" href="model.html#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">model.Model</span></tt></a> class can be added them together to make a <em>composite
 model</em>.  But using the large number of built-in models available, this is
 very simple.  An example of a simple fit to a noisy step function plus a
 constant:</p>
@@ -790,7 +886,7 @@ results, which give:</p>
 <p>As shown above, many of the models have similar parameter names.  For
 composite models, this could lead to a problem of having parameters for
 different parts of the model having the same name.  To overcome this, each
-<tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> can have a <tt class="docutils literal"><span class="pre">prefix</span></tt> attribute (normally set to a blank
+<a class="reference internal" href="model.html#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">model.Model</span></tt></a> can have a <tt class="docutils literal"><span class="pre">prefix</span></tt> attribute (normally set to a blank
 string) that will be put at the beginning of each parameter name.  To
 illustrate, we fit one of the classic datasets from the <a class="reference external" href="http://itl.nist.gov/div898/strd/nls/nls_main.shtml">NIST StRD</a> suite
 involving a decaying exponential and two gaussians.</p>
@@ -979,7 +1075,7 @@ estimate of the data.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

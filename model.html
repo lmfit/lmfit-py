@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0',
+        VERSION:     '0.8.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -160,8 +160,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="modeling-data-and-curve-fitting">
-<span id="model-chapter"></span><h1>Modeling Data and Curve Fitting<a class="headerlink" href="#modeling-data-and-curve-fitting" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-model">
+<span id="modeling-data-and-curve-fitting"></span><span id="model-chapter"></span><h1>Modeling Data and Curve Fitting<a class="headerlink" href="#module-model" title="Permalink to this headline">¶</a></h1>
 <p>A common use of least-squares minimization is <em>curve fitting</em>, where one
 has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model to most closely match some
@@ -171,7 +171,7 @@ data.  With <tt class="xref py py-mod docutils literal"><span class="pre">scipy<
 high-level wrapper around <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a> it can be used for
 curve-fitting problems, but requires more effort than using
 <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>.</p>
-<p>Here we discuss lmfit&#8217;s <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class.  This takes a model function
+<p>Here we discuss lmfit&#8217;s <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class.  This takes a model function
 &#8211; a function that calculates a model for some data &#8211; and provides methods
 to create parameters for that model and to fit data using that model
 function.  This is closer in spirit to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>,
@@ -184,7 +184,7 @@ module that will be discussed in more detail in the next chapter
 (<a class="reference internal" href="builtin_models.html#builtin-models-chapter"><em>Built-in Fitting Models in the models module</em></a>).  We mention it here as you may want to
 consult that list before writing your own model.  For now, we focus on
 turning python function into high-level fitting models with the
-<tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class, and using these to fit data.</p>
+<a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class, and using these to fit data.</p>
 <div class="section" id="example-fit-data-to-gaussian-profile">
 <h2>Example: Fit data to Gaussian profile<a class="headerlink" href="#example-fit-data-to-gaussian-profile" title="Permalink to this headline">¶</a></h2>
 <p>Let&#8217;s start with a simple and common example of fitting data to a Gaussian
@@ -223,8 +223,8 @@ burden to keep the named parameter straight (on the other hand, with
 func:<cite>scipy.optimize.curve_fit</cite> you are required to remember the parameter
 order).  After doing this a few times it appears as a recurring pattern,
 and we can imagine automating this process.  That&#8217;s where the
-<tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class comes in.</p>
-<p>The <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> allows us to easily wrap a model function such as the
+<a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class comes in.</p>
+<p>The <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> allows us to easily wrap a model function such as the
 <tt class="docutils literal"><span class="pre">gaussian</span></tt> function.  This automatically generate the appropriate
 residual function, and determines the corresponding parameter names from
 the function signature itself:</p>
@@ -238,7 +238,7 @@ the function signature itself:</p>
 </div>
 <p>The Model <tt class="docutils literal"><span class="pre">gmod</span></tt> knows the names of the parameters and the independent
 variables.  By default, the first argument of the function is taken as the
-independent variable, held in <tt class="xref py py-attr docutils literal"><span class="pre">independent_vars</span></tt>, and the rest of the
+independent variable, held in <a class="reference internal" href="#model.independent_vars" title="model.independent_vars"><tt class="xref py py-attr docutils literal"><span class="pre">independent_vars</span></tt></a>, and the rest of the
 functions positional arguments (and, in certain cases, keyword arguments &#8211;
 see below) are used for Parameter names.  Thus, for the <tt class="docutils literal"><span class="pre">gaussian</span></tt>
 function above, the parameters are named <tt class="docutils literal"><span class="pre">amp</span></tt>, <tt class="docutils literal"><span class="pre">cen</span></tt>, and <tt class="docutils literal"><span class="pre">wid</span></tt>, and
@@ -249,7 +249,7 @@ independent variable is, and you can add or alter parameters too.</p>
 what the parameters should be named, but not anything about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initiald values and other attributes.  To help you do this, each
-model has a <tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt> method that will generate parameters with
+model has a <a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a> method that will generate parameters with
 the expected names:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">gmod</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
 </pre></div>
@@ -257,17 +257,17 @@ the expected names:</p>
 <p>This creates the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> but doesn&#8217;t necessarily give them
 initial values &#8211; again, the model has no idea what the scale should be.
 You can set initial values for parameters with keyword arguments to
-<tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt>, as with:</p>
+<a class="reference internal" href="#model.make_params" title="model.make_params"><tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt></a>, as with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">gmod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">cen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or assign them (and other parameter properties) after the
 <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> has been created.</p>
-<p>A <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> has several methods associated with it.  For example, one
-can use the <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> method to evaluate the model or the <tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt>
+<p>A <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> has several methods associated with it.  For example, one
+can use the <a class="reference internal" href="#model.eval" title="model.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a> method to evaluate the model or the <a class="reference internal" href="#model.fit" title="model.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a>
 method to fit data to this model with a <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> object.  Both of
 these methods can take explicit keyword arguments for the parameter values.
-For example, one could use <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> to calculate the predicted
+For example, one could use <a class="reference internal" href="#model.eval" title="model.eval"><tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt></a> to calculate the predicted
 function:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gmod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">cen</span><span class="o">=</span><span class="mf">6.2</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
@@ -275,7 +275,7 @@ function:</p>
 </div>
 <p>Admittedly, this a slightly long-winded way to calculate a Gaussian
 function.   But now that the model is set up, we can also use its
-<tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt> method to fit this model to data, as with:</p>
+<a class="reference internal" href="#model.fit" title="model.fit"><tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt></a> method to fit this model to data, as with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">gmod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -310,7 +310,7 @@ function.   But now that the model is set up, we can also use its
 </div>
 <p>which is pretty compact and to the point.  The returned <tt class="docutils literal"><span class="pre">result</span></tt> will be
 a <tt class="xref py py-class docutils literal"><span class="pre">ModelFit</span></tt> object.  As we will see below, this has many
-components, including a <tt class="xref py py-meth docutils literal"><span class="pre">fit_report()</span></tt> method, which will show:</p>
+components, including a <a class="reference internal" href="#model.fit_report" title="model.fit_report"><tt class="xref py py-meth docutils literal"><span class="pre">fit_report()</span></tt></a> method, which will show:</p>
 <div class="highlight-python"><div class="highlight"><pre>[[Model]]
     gaussian
 [[Fit Statistics]]
@@ -327,8 +327,8 @@ components, including a <tt class="xref py py-meth docutils literal"><span class
     C(amp, wid)                  =  0.577
 </pre></div>
 </div>
-<p>The result will also have <tt class="xref py py-attr docutils literal"><span class="pre">init_fit</span></tt> for the fit with the initial
-parameter values and a <tt class="xref py py-attr docutils literal"><span class="pre">best_fit</span></tt> for the fit with the best fit
+<p>The result will also have <a class="reference internal" href="#model.init_fit" title="model.init_fit"><tt class="xref py py-attr docutils literal"><span class="pre">init_fit</span></tt></a> for the fit with the initial
+parameter values and a <a class="reference internal" href="#model.best_fit" title="model.best_fit"><tt class="xref py py-attr docutils literal"><span class="pre">best_fit</span></tt></a> for the fit with the best fit
 parameter values.  These can be used to generate the following plot:</p>
 <a class="reference external image-reference" href="_images/model_fit1.png"><img alt="_images/model_fit1.png" src="_images/model_fit1.png" style="width: 50%;" /></a>
 <p>which shows the data in blue dots, the best fit as a solid red line, and
@@ -1263,7 +1263,7 @@ the different models.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
