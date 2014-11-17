@@ -582,20 +582,20 @@ class ModelFit(Minimizer):
          return a fit report.
 
    plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-            numpoints=None,  data_kw=None, fit_kw=None, init_kw=None,
-            ax_kw=None)
+            numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
+            ax_kws=None)
          plot results of the fit on axes ax. If ax=None, new axes are
          created. The x array for the fit line is made densier to have
          at least numpoints points. Returns an axes instance.
 
-   plot_residuals(self, ax=None, datafmt='o', data_kw=None, fit_kw=None,
-                  ax_kw=None)
+   plot_residuals(self, ax=None, datafmt='o', data_kws=None, fit_kws=None,
+                  ax_kws=None)
          plot residuals of the fit given by (fit - data) on axes ax.
          If ax=None, new axes are created. Returns an axes instance.
 
    plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
-        data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
-        ax_fit_kw=None, fig_kw=None)
+        data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None,
+        ax_fit_kws=None, fig_kws=None)
          create a figure and plot both fit and residuals. The x array
          for the fit line is made densier to have at least numpoints
          points. Returns a figure instance.
@@ -654,19 +654,19 @@ class ModelFit(Minimizer):
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
-                 numpoints=None,  data_kw=None, fit_kw=None, init_kw=None,
-                 ax_kw=None):
+                 numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
+                 ax_kws=None):
         """plot results of the fit on axes ax. If ax=None, new axes are
         created. The x array for the fit line is made densier to have
         at least numpoints points. Returns an axes instance."""
-        if data_kw is None:
-            data_kw = {}
-        if fit_kw is None:
-            fit_kw = {}
-        if init_kw is None:
-            init_kw = {}
-        if ax_kw is None:
-            ax_kw = {}
+        if data_kws is None:
+            data_kws = {}
+        if fit_kws is None:
+            fit_kws = {}
+        if init_kws is None:
+            init_kws = {}
+        if ax_kws is None:
+            ax_kws = {}
 
         if len(self.model.independent_vars) == 1:
             independent_var = self.model.independent_vars[0]
@@ -676,7 +676,7 @@ class ModelFit(Minimizer):
             return False
 
         if not isinstance(ax, plt.Axes):
-            ax = plt.gca(**ax_kw)
+            ax = plt.gca(**ax_kws)
 
         x_array = self.userkws[independent_var]
 
@@ -688,16 +688,16 @@ class ModelFit(Minimizer):
 
         ax.plot(x_array_dense, self.model.eval(self.init_params,
                 **{independent_var: x_array_dense}), initfmt,
-                label='initial for ' + self.model.name, **init_kw)
+                label='initial for ' + self.model.name, **init_kws)
         ax.plot(x_array_dense, self.model.eval(self.params,
                 **{independent_var: x_array_dense}), fitfmt,
-                label=self.model.name, **fit_kw)
+                label=self.model.name, **fit_kws)
 
         if self.weights is not None:
             ax.errorbar(x_array, self.data, yerr=1/self.weights**0.5,
-                        fmt=datafmt, label='data', **data_kw)
+                        fmt=datafmt, label='data', **data_kws)
         else:
-            ax.plot(x_array, self.data, datafmt, label='data', **data_kw)
+            ax.plot(x_array, self.data, datafmt, label='data', **data_kws)
 
         ax.set_xlabel(independent_var)
         ax.set_ylabel('y')
@@ -706,18 +706,18 @@ class ModelFit(Minimizer):
         return ax
 
     @_ensureMatplotlib
-    def plot_residuals(self, ax=None, datafmt='o', data_kw=None, fit_kw=None,
-                       ax_kw=None):
+    def plot_residuals(self, ax=None, datafmt='o', data_kws=None, fit_kws=None,
+                       ax_kws=None):
         """plot residuals of the fit given by (fit - data) on axes ax.
         If ax=None, new axes are created. Returns an axes instance."""
-        if data_kw is None:
-            data_kw = {}
-        if fit_kw is None:
-            fit_kw = {}
-        if fit_kw is None:
-            fit_kw = {}
-        if ax_kw is None:
-            ax_kw = {}
+        if data_kws is None:
+            data_kws = {}
+        if fit_kws is None:
+            fit_kws = {}
+        if fit_kws is None:
+            fit_kws = {}
+        if ax_kws is None:
+            ax_kws = {}
 
         if len(self.model.independent_vars) == 1:
             independent_var = self.model.independent_vars[0]
@@ -727,19 +727,19 @@ class ModelFit(Minimizer):
             return False
 
         if not isinstance(ax, plt.Axes):
-            ax = plt.gca(**ax_kw)
+            ax = plt.gca(**ax_kws)
 
         x_array = self.userkws[independent_var]
 
-        ax.axhline(0, label=self.model.name, **fit_kw)
+        ax.axhline(0, label=self.model.name, **fit_kws)
 
         if self.weights is not None:
             ax.errorbar(x_array, self.eval() - self.data,
                         yerr=1 / self.weights**0.5, fmt=datafmt,
-                        label='residuals', **data_kw)
+                        label='residuals', **data_kws)
         else:
             ax.plot(x_array, self.eval() - self.data, datafmt,
-                    label='residuals', **data_kw)
+                    label='residuals', **data_kws)
 
         ax.set_ylabel('residuals')
         ax.legend()
@@ -748,23 +748,23 @@ class ModelFit(Minimizer):
 
     @_ensureMatplotlib
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
-             fig=None, data_kw=None, fit_kw=None, init_kw=None, ax_res_kw=None,
-             ax_fit_kw=None, fig_kw=None):
+             fig=None, data_kws=None, fit_kws=None, init_kws=None,
+             ax_res_kws=None, ax_fit_kws=None, fig_kws=None):
         """Create a figure and plot both fit and residuals. The x array
         for the fit line is made densier to have at least numpoints
         points.Returns a figure instance."""
-        if data_kw is None:
-            data_kw = {}
-        if fit_kw is None:
-            fit_kw = {}
-        if init_kw is None:
-            init_kw = {}
-        if ax_res_kw is None:
-            ax_res_kw = {}
-        if ax_fit_kw is None:
-            ax_fit_kw = {}
-        if fig_kw is None:
-            fig_kw = {}
+        if data_kws is None:
+            data_kws = {}
+        if fit_kws is None:
+            fit_kws = {}
+        if init_kws is None:
+            init_kws = {}
+        if ax_res_kws is None:
+            ax_res_kws = {}
+        if ax_fit_kws is None:
+            ax_fit_kws = {}
+        if fig_kws is None:
+            fig_kws = {}
 
         if len(self.model.independent_vars) != 1:
             print('Fit can only be plotted if the model function has one '
@@ -772,16 +772,16 @@ class ModelFit(Minimizer):
             return False
 
         if not isinstance(fig, plt.Figure):
-            fig = plt.figure(**fig_kw)
+            fig = plt.figure(**fig_kws)
 
         gs = plt.GridSpec(nrows=2, ncols=1, height_ratios=[1, 4])
-        ax_res = fig.add_subplot(gs[0], **ax_res_kw)
-        ax_fit = fig.add_subplot(gs[1], sharex=ax_res, **ax_fit_kw)
+        ax_res = fig.add_subplot(gs[0], **ax_res_kws)
+        ax_fit = fig.add_subplot(gs[1], sharex=ax_res, **ax_fit_kws)
 
         self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt,
-                      initfmt=initfmt, numpoints=numpoints, data_kw=data_kw,
-                      fit_kw=fit_kw, init_kw={}, ax_kw=ax_fit_kw)
-        self.plot_residuals(ax=ax_res, datafmt=datafmt, data_kw=data_kw,
-                            fit_kw=fit_kw, ax_kw=ax_res_kw)
+                      initfmt=initfmt, numpoints=numpoints, data_kws=data_kws,
+                      fit_kws=fit_kws, init_kws={}, ax_kws=ax_fit_kws)
+        self.plot_residuals(ax=ax_res, datafmt=datafmt, data_kws=data_kws,
+                            fit_kws=fit_kws, ax_kws=ax_res_kws)
 
         return fig
