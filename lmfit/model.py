@@ -584,21 +584,16 @@ class ModelFit(Minimizer):
    plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
             numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
             ax_kws=None)
-         plot results of the fit on axes ax. If ax=None, new axes are
-         created. The x array for the fit line is made densier to have
-         at least numpoints points. Returns an axes instance.
+        Plot the fit results using matplotlib.
 
    plot_residuals(self, ax=None, datafmt='o', data_kws=None, fit_kws=None,
                   ax_kws=None)
-         plot residuals of the fit given by (fit - data) on axes ax.
-         If ax=None, new axes are created. Returns an axes instance.
+        Plot the fit residuals using matplotlib.
 
    plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
         data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None,
         ax_fit_kws=None, fig_kws=None)
-         create a figure and plot both fit and residuals. The x array
-         for the fit line is made densier to have at least numpoints
-         points. Returns a figure instance.
+        Plot the fit results and residuals using matplotlib.
     """
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
@@ -656,9 +651,56 @@ class ModelFit(Minimizer):
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
                  numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
                  ax_kws=None):
-        """plot results of the fit on axes ax. If ax=None, new axes are
-        created. The x array for the fit line is made densier to have
-        at least numpoints points. Returns an axes instance."""
+        """Plot the fit results using matplotlib.
+
+        The method will plot results of the fit using matplotlib, including:
+        the data points, the initial fit curve and the fitted curve. If the fit
+        model included weights, errorbars will also be plotted.
+
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes, optional
+            The axes to plot on. The default in None, which means use the
+            current pyplot axis or create one if there is none.
+        datafmt : string, optional
+            matplotlib format string for data points
+        fitfmt : string, optional
+            matplotlib format string for fitted curve
+        initfmt : string, optional
+            matplotlib format string for initial conditions for the fit
+        numpoints : int, optional
+            If provided, the final and initial fit curves are evaluated not
+            only at data points, but refined to contain `numpoints` points in
+            total.
+        data_kws : dictionary, optional
+            keyword arguments passed on to the plot function for data points
+        fit_kws : dictionary, optional
+            keyword arguments passed on to the plot function for fitted curve
+        init_kws : dictionary, optional
+            keyword arguments passed on to the plot function for the initial
+            conditions of the fit
+        ax_kws : dictionary, optional
+            keyword arguments for a new axis, if there is one being created
+
+        Returns
+        -------
+        matplotlib.axes.Axes
+
+        Notes
+        ----
+        For details about plot format strings and keyword arguments see
+        documentation of matplotlib.axes.Axes.plot.
+
+        If the fit model included weights, then matplotlib.axes.Axes.errorbar
+        is used to plot the data, with yerr set to 1 / self.weights**0.5
+
+        If `ax` is None then matplotlib.pyplot.gca(**ax_kws) is called.
+
+        See Also
+        --------
+        ModelFit.plot_residuals : Plot the fit residuals using matplotlib.
+        ModelFit.plot : Plot the fit results and residuals using matplotlib.
+        """
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:
@@ -708,8 +750,45 @@ class ModelFit(Minimizer):
     @_ensureMatplotlib
     def plot_residuals(self, ax=None, datafmt='o', data_kws=None, fit_kws=None,
                        ax_kws=None):
-        """plot residuals of the fit given by (fit - data) on axes ax.
-        If ax=None, new axes are created. Returns an axes instance."""
+        """Plot the fit residuals using matplotlib.
+
+        The method will plot residuals of the fit using matplotlib, including:
+        the data points and the fitted curve (as horizontal line). If the fit
+        model included weights, errorbars will also be plotted.
+
+        Parameters
+        ----------
+        ax : matplotlib.axes.Axes, optional
+            The axes to plot on. The default in None, which means use the
+            current pyplot axis or create one if there is none.
+        datafmt : string, optional
+            matplotlib format string for data points
+        data_kws : dictionary, optional
+            keyword arguments passed on to the plot function for data points
+        fit_kws : dictionary, optional
+            keyword arguments passed on to the plot function for fitted curve
+        ax_kws : dictionary, optional
+            keyword arguments for a new axis, if there is one being created
+
+        Returns
+        -------
+        matplotlib.axes.Axes
+
+        Notes
+        ----
+        For details about plot format strings and keyword arguments see
+        documentation of matplotlib.axes.Axes.plot.
+
+        If the fit model included weights, then matplotlib.axes.Axes.errorbar
+        is used to plot the data, with yerr set to 1 / self.weights**0.5
+
+        If `ax` is None then matplotlib.pyplot.gca(**ax_kws) is called.
+
+        See Also
+        --------
+        ModelFit.plot_fit : Plot the fit results using matplotlib.
+        ModelFit.plot : Plot the fit results and residuals using matplotlib.
+        """
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:
@@ -750,9 +829,59 @@ class ModelFit(Minimizer):
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
              fig=None, data_kws=None, fit_kws=None, init_kws=None,
              ax_res_kws=None, ax_fit_kws=None, fig_kws=None):
-        """Create a figure and plot both fit and residuals. The x array
-        for the fit line is made densier to have at least numpoints
-        points.Returns a figure instance."""
+        """Plot the fit results and residuals using matplotlib.
+
+        The method will produce a matplotlib figure with both results of the
+        fit and the residuals plotted. If the fit model included weights,
+        errorbars will also be plotted.
+
+        Parameters
+        ----------
+        datafmt : string, optional
+            matplotlib format string for data points
+        fitfmt : string, optional
+            matplotlib format string for fitted curve
+        initfmt : string, optional
+            matplotlib format string for initial conditions for the fit
+        numpoints : int, optional
+            If provided, the final and initial fit curves are evaluated not
+            only at data points, but refined to contain `numpoints` points in
+            total.
+        fig : matplotlib.figure.Figure, optional
+            The figure to plot on. The default in None, which means use the
+            current pyplot figure or create one if there is none.
+        data_kws : dictionary, optional
+            keyword arguments passed on to the plot function for data points
+        fit_kws : dictionary, optional
+            keyword arguments passed on to the plot function for fitted curve
+        init_kws : dictionary, optional
+            keyword arguments passed on to the plot function for the initial
+            conditions of the fit
+        ax_res_kws : dictionary, optional
+            keyword arguments for the axes for the residuals plot
+        ax_fit_kws : dictionary, optional
+            keyword arguments for the axes for the fit plot
+        fig_kws : dictionary, optional
+            keyword arguments for a new figure, if there is one being created
+
+        Returns
+        -------
+        matplotlib.figure.Figure
+
+        Notes
+        ----
+        The method combines ModelFit.plot_fit and ModelFit.plot_residuals.
+
+        If the fit model included weights, then matplotlib.axes.Axes.errorbar
+        is used to plot the data, with yerr set to 1 / self.weights**0.5
+
+        If `fig` is None then matplotlib.pyplot.figure(**fig_kws) is called.
+
+        See Also
+        --------
+        ModelFit.plot_fit : Plot the fit results using matplotlib.
+        ModelFit.plot_residuals : Plot the fit residuals using matplotlib.
+        """
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:
