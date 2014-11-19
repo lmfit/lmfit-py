@@ -37,10 +37,8 @@ def _ensureMatplotlib(function):
     if _HAS_MATPLOTLIB:
         return function
     else:
-        print('matplotlib module is required for plotting the results')
-
         def no_op(*args, **kwargs):
-            pass
+            print('matplotlib module is required for plotting the results')
 
         return no_op
 
