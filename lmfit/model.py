@@ -9,6 +9,12 @@ import numpy as np
 from . import Parameters, Parameter, Minimizer
 from .printfuncs import fit_report
 
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
+
+
 # Use pandas.isnull for aligning missing data is pandas is available.
 # otherwise use numpy.isnan
 try:
@@ -400,16 +406,16 @@ class Model(object):
 
     def eval_components(self, params=None, **kwargs):
         """
-        evaluate the model with the supplied parameters and returns a list
-        containing the result of each component.
+        evaluate the model with the supplied parameters and returns a ordered
+        dict containting name, result pairs.
         """        
         if len(self.components) == 0:
             return [self.eval(params=None, **kwargs)]
         else:
-            comp_results = []            
+            comp_results = OrderedDict()
             for model in self.components:
                 result = model.eval(params, **kwargs)
-                comp_results.append(result)
+                comp_results[model.name] = result
         return comp_results            
 
     def fit(self, data, params=None, weights=None, method='leastsq',
@@ -575,7 +581,8 @@ class ModelFit(Minimizer):
     eval_components(**kwargs)
          evaluate the current model, with the current parameter values,
          with values in kwargs sent to the model function and returns 
-         a list with the result of each component.
+         a ordered dict with the model names as the key and the component
+         results as the values.
 
    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
          return a fit report.
