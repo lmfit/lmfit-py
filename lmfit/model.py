@@ -398,6 +398,20 @@ class Model(object):
                 result = np.tile(result, kwargs[self.independent_vars[0]].shape)
         return result
 
+    def eval_components(self, params=None, **kwargs):
+        """
+        evaluate the model with the supplied parameters and returns a list
+        containing the result of each component.
+        """        
+        if len(self.components) == 0:
+            return [self.eval(params=None, **kwargs)]
+        else:
+            comp_results = []            
+            for model in self.components:
+                result = model.eval(params, **kwargs)
+                comp_results.append(result)
+        return comp_results            
+
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=True, fit_kws=None, **kwargs):
         """Fit the model to the data.
@@ -557,6 +571,11 @@ class ModelFit(Minimizer):
     eval(**kwargs)
          evaluate the current model, with the current parameter values,
          with values in kwargs sent to the model function.
+    
+    eval_components(**kwargs)
+         evaluate the current model, with the current parameter values,
+         with values in kwargs sent to the model function and returns 
+         a list with the result of each component.
 
    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
          return a fit report.
@@ -596,7 +615,11 @@ class ModelFit(Minimizer):
 
     def eval(self, **kwargs):
         self.userkws.update(kwargs)
-        return self.model.eval(params=self.params, **self.userkws)
+        return self.model.eval(params=self.params, **self.userkws)        
+            
+    def eval_components(self, **kwargs):
+        self.userkws.update(kwargs)
+        return self.model.eval_components(params=self.params, **self.userkws)
 
     def fit_report(self, modelpars=None, show_correl=True, min_correl=0.1):
         "return fit report"
