@@ -112,7 +112,6 @@ class Model(object):
         if name is None and hasattr(self.func, '__name__'):
             name = self.func.__name__
         self._name = name
-        self.components = [self]
 
     def _reprstring(self, long=False):
         out = self._name
@@ -371,6 +370,11 @@ class Model(object):
         if np.ndim(result) == 0 and len(self.independent_vars) == 1:
             result = np.tile(result, kwargs[self.independent_vars[0]].shape)
         return result
+
+    @property
+    def components(self):
+        """return components for composite model"""
+        return [self]
 
     def eval_components(self, params=None, **kwargs):
         """
