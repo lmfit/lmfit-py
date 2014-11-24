@@ -112,6 +112,7 @@ class Model(object):
         if name is None and hasattr(self.func, '__name__'):
             name = self.func.__name__
         self._name = name
+        self.components = [self]
 
     def _reprstring(self, long=False):
         out = self._name
@@ -529,11 +530,9 @@ class CompositeModel(Model):
         self.left  = left
         self.right = right
         self.op    = op
-
-        colliding_par_names = left.param_names & right.param_names
-        if len(colliding_par_names) > 0:
-            collision = colliding_par_names.pop()
-            raise NameError(self._names_collide % collision)
+        name_collisions = left.param_names & right.param_names
+        if len(name_collisions) > 0:
+            raise NameError(self._names_collide % name_collisions.pop())
 
         if 'independent_vars' not in kws:
             kws['independent_vars'] = self.left.independent_vars
@@ -554,8 +553,8 @@ class CompositeModel(Model):
         self.opts.update(self.left.opts)
 
     def _reprstring(self, long=False):
-        return "%s %s %s" % (self.left._reprstring(long=long), self.op,
-                             self.right._reprstring(long=long))
+        return "(%s %s %s)" % (self.left._reprstring(long=long), self.op,
+                               self.right._reprstring(long=long))
 
     def eval(self, params=None, **kwargs):
         lval = self.left.eval(params=params, **kwargs)
@@ -568,16 +567,21 @@ class CompositeModel(Model):
             return lval * rval
         elif self.op == '/':
             return lval / rval
-        else:
-            raise ValueError('CompositeModel does not support %s' % self.op)
+        raise ValueError('CompositeModel does not support %s' % self.op)
 
     def eval_components(self, **kwargs):
-        comps = self.left.eval_components(**kwargs)
-        return comps.update(self.right.eval_components(**kwargs))
+        """return ordered dict of name, results for each component"""
+        return dict(self.right.eval_components(**kwargs) +
+                    self.left.eval_components(**kwargs).items())
 
     @property
     def param_names(self):
         return self.left.param_names | self.right.param_names
+
+    @property
+    def components(self):
+        """return components for composite model"""        
+        return self.left.components + self.right.components
 
 
 class ModelFit(Minimizer):
