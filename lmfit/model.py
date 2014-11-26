@@ -4,6 +4,7 @@ Concise nonlinear curve fitting.
 from __future__ import print_function
 import warnings
 import inspect
+import operator
 from copy import deepcopy
 import numpy as np
 from . import Parameters, Parameter, Minimizer
@@ -489,19 +490,20 @@ class Model(object):
         output = ModelFit(self, params, method=method, iter_cb=iter_cb,
                           scale_covar=scale_covar, fcn_kws=kwargs, **fit_kws)
         output.fit(data=data, weights=weights)
+        output.components = self.components
         return output
 
     def __add__(self, other):
-        return CompositeModel(self, other, '+')
+        return CompositeModel(self, other, operator.add)
 
     def __sub__(self, other):
-        return CompositeModel(self, other, '-')
+        return CompositeModel(self, other, operator.sub)
 
     def __mul__(self, other):
-        return CompositeModel(self, other, '*')
+        return CompositeModel(self, other, operator.mul)
 
     def __div__(self, other):
-        return CompositeModel(self, other, '/')
+        return CompositeModel(self, other, operator.div)
 
 class CompositeModel(Model):
     """Create a composite model -- a binary operator of two Models
@@ -529,11 +531,16 @@ class CompositeModel(Model):
 
     """
     _names_collide = "Two models have parameters named {clash}. Use distinct names"
-
-    def __init__(self, left, right, op='+', **kws):
+    _unknown_op    = "CompositeModel does not support %s"
+    _known_ops = {operator.add: '+', operator.sub: '-',
+                  operator.mul: '*', operator.div: '/'}
+                           
+    def __init__(self, left, right, op, **kws):
         self.left  = left
         self.right = right
-        self.op    = op
+        self.op  = op
+        if op not in self._known_ops:
+            raise ValueError(self._unknown_op % self.op)
         name_collisions = left.param_names & right.param_names
         if len(name_collisions) > 0:
             raise NameError(self._names_collide.format(clash=name_collisions))
@@ -557,27 +564,18 @@ class CompositeModel(Model):
         self.opts.update(self.left.opts)
 
     def _reprstring(self, long=False):
-        return "(%s %s %s)" % (self.left._reprstring(long=long), self.op,
+        return "(%s %s %s)" % (self.left._reprstring(long=long),
+                               self._known_ops[self.op],
                                self.right._reprstring(long=long))
 
     def eval(self, params=None, **kwargs):
-        lval = self.left.eval(params=params, **kwargs)
-        rval = self.right.eval(params=params, **kwargs)
-        if self.op == '+':
-            return lval + rval
-        elif self.op == '-':
-            return lval - rval
-        elif self.op == '*':
-            return lval * rval
-        elif self.op == '/':
-            return lval / rval
-        raise ValueError('CompositeModel does not support %s' % self.op)
+        return self.op(self.left.eval(params=params, **kwargs),
+                       self.right.eval(params=params, **kwargs))
 
     def eval_components(self, **kwargs):
         """return ordered dict of name, results for each component"""
-        out = OrderedDict()
+        out = OrderedDict(self.left.eval_components(**kwargs))
         out.update(self.right.eval_components(**kwargs))
-        out.update(self.left.eval_components(**kwargs))
         return out
 
     @property
