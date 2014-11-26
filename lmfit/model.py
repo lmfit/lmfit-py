@@ -506,7 +506,7 @@ class Model(object):
         return CompositeModel(self, other, operator.mul)
 
     def __div__(self, other):
-        return CompositeModel(self, other, operator.div)
+        return CompositeModel(self, other, operator.truediv)
 
 class CompositeModel(Model):
     """Create a composite model -- a binary operator of two Models
@@ -536,7 +536,7 @@ class CompositeModel(Model):
     _names_collide = "Two models have parameters named {clash}. Use distinct names"
     _unknown_op    = "CompositeModel does not support %s"
     _known_ops = {operator.add: '+', operator.sub: '-',
-                  operator.mul: '*', operator.div: '/'}
+                  operator.mul: '*', operator.truediv: '/'}
                            
     def __init__(self, left, right, op, **kws):
         self.left  = left
