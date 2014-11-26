@@ -382,7 +382,10 @@ class Model(object):
         evaluate the model with the supplied parameters and returns a ordered
         dict containting name, result pairs.
         """
-        return {self._name: self.eval(params=None, **kwargs)}
+        key = self._prefix
+        if len(key) < 1:
+            key = self._name
+        return {key: self.eval(params=params, **kwargs)}
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=True, fit_kws=None, **kwargs):
