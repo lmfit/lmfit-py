@@ -528,7 +528,7 @@ class CompositeModel(Model):
         the model function (`func`).
 
     """
-    _names_collide = "Two models have parameters named '%s'. Use distinct names"
+    _names_collide = "Two models have parameters named {clash}. Use distinct names"
 
     def __init__(self, left, right, op='+', **kws):
         self.left  = left
@@ -536,7 +536,7 @@ class CompositeModel(Model):
         self.op    = op
         name_collisions = left.param_names & right.param_names
         if len(name_collisions) > 0:
-            raise NameError(self._names_collide % name_collisions.pop())
+            raise NameError(self._names_collide.format(clash=name_collisions))
 
         if 'independent_vars' not in kws:
             kws['independent_vars'] = self.left.independent_vars
