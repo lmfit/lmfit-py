@@ -575,8 +575,10 @@ class CompositeModel(Model):
 
     def eval_components(self, **kwargs):
         """return ordered dict of name, results for each component"""
-        return dict(self.right.eval_components(**kwargs) +
-                    self.left.eval_components(**kwargs).items())
+        out = OrderedDict()
+        out.update(self.right.eval_components(**kwargs))
+        out.update(self.left.eval_components(**kwargs))
+        return out
 
     @property
     def param_names(self):
