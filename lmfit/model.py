@@ -508,6 +508,10 @@ class Model(object):
     def __div__(self, other):
         return CompositeModel(self, other, operator.truediv)
 
+    def __truediv__(self, other):
+        return CompositeModel(self, other, operator.truediv)
+
+
 class CompositeModel(Model):
     """Create a composite model -- a binary operator of two Models
 
