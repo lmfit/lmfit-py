@@ -123,8 +123,8 @@ class Model(object):
             for k, v in self.opts.items():
                 opts.append("%s='%s'" % (k, v))
         if len(opts) > 0:
-            out = "%s(%s)" % (out, ', '.join(opts))
-        return out
+            out = "%s, %s" % (out, ', '.join(opts))
+        return "Model(%s)" % out
 
     @property
     def name(self):
