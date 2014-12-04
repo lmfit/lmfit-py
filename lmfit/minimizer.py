@@ -21,8 +21,12 @@ from numpy.linalg import LinAlgError
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import fmin as scipy_fmin
 from scipy.optimize.lbfgsb import fmin_l_bfgs_b as scipy_lbfgsb
-from scipy.optimize import differential_evolution as scipy_diffev
 
+# differential_evolution is only present in scipy >= 0.15
+try:
+    from scipy.optimize import differential_evolution as scipy_diffev
+except ImportError:
+    from ._differentialevolution import differential_evolution as scipy_diffev
 
 # check for scipy.optimize.minimize
 HAS_SCALAR_MIN = False
@@ -100,7 +104,7 @@ def check_ast_errors(error):
             return msg
     return None
 
-def differential_evolution(func, x0, **kwds):
+def _differential_evolution(func, x0, **kwds):
     """
         A wrapper for differential_evolution that can be used with
         scipy.minimize
@@ -431,7 +435,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             fmin_kws.pop('jac')
 
         if method == 'differential_evolution':
-            fmin_kws['method'] = differential_evolution
+            fmin_kws['method'] = _differential_evolution
             pars = self.params
             bounds = [(pars[par].min, pars[par].max) for par in pars]
             if not np.all(np.isfinite(bounds)):
