@@ -2,6 +2,7 @@ import numpy as np
 from lmfit import minimize, Parameters, Parameter, report_fit
 from lmfit_testutils import assert_paramval, assert_paramattr
 
+
 def test_basic():
     # create data to be fitted
     x = np.linspace(0, 15, 301)
@@ -40,6 +41,7 @@ def test_basic():
     assert(result.nvarys == 4)
     assert_paramval(params['amp'],   5.03, tol=0.05)
     assert_paramval(params['omega'], 2.0, tol=0.05)
+
 
 if __name__ == '__main__':
     test_basic()

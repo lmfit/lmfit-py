@@ -21,6 +21,8 @@ from numpy.linalg import LinAlgError
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import fmin as scipy_fmin
 from scipy.optimize.lbfgsb import fmin_l_bfgs_b as scipy_lbfgsb
+from scipy.optimize import differential_evolution as scipy_diffev
+
 
 # check for scipy.optimize.minimize
 HAS_SCALAR_MIN = False
@@ -38,7 +40,7 @@ from .parameter import Parameter, Parameters
 from . import uncertainties
 
 
-def asteval_with_uncertainties(*vals,  **kwargs):
+def asteval_with_uncertainties(*vals, **kwargs):
     """
     given values for variables, calculate object value.
     This is used by the uncertainties package to calculate
@@ -60,7 +62,6 @@ def asteval_with_uncertainties(*vals,  **kwargs):
     return _asteval.eval(_obj.ast)
 
 wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
-
 
 def eval_stderr(obj, uvars, _names, _pars, _asteval):
     """evaluate uncertainty and set .stderr for a parameter `obj`
@@ -99,6 +100,22 @@ def check_ast_errors(error):
             return msg
     return None
 
+def differential_evolution(func, x0, **kwds):
+    """
+        A wrapper for differential_evolution that can be used with
+        scipy.minimize
+    """
+    kwargs = dict(args=(), strategy='best1bin', maxiter=None, popsize=15,
+                  tol=0.01, mutation=(0.5, 1), recombination=0.7, seed=None,
+                  callback=None, disp=False, polish=True,
+                  init='latinhypercube')
+
+    for k, v in kwds.items():
+        if k in kwargs:
+            kwargs[k] = v
+
+    return scipy_diffev(func, kwds['bounds'], **kwargs)
+
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'powell': 'Powell',
                   'cg': 'CG',
@@ -110,7 +127,9 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'cobyla': 'COBYLA',
                   'slsqp': 'SLSQP',
                   'dogleg': 'dogleg',
-                  'trust-ncg': 'trust-ncg'}
+                  'trust-ncg': 'trust-ncg',
+                  'differential_evolution': 'differential_evolution'}
+
 
 class Minimizer(object):
     """general minimizer"""
@@ -212,7 +231,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.update_constraints()
         out = self.userfcn(self.params, *self.userargs, **self.userkws)
-        if hasattr(self.iter_cb, '__call__'):
+        if callable(self.iter_cb):
             self.iter_cb(self.params, self.nfev, out,
                          *self.userargs, **self.userkws)
         return out
@@ -361,7 +380,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         return
 
     def scalar_minimize(self, method='Nelder-Mead', **kws):
-        """use one of the scaler minimization methods from scipy.
+        """use one of the scalar minimization methods from scipy.
         Available methods include:
           Nelder-Mead
           Powell
@@ -374,6 +393,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
           SLSQP
           dogleg
           trust-ncg
+          differential_evolution
 
         If the objective function returns a numpy array instead
         of the expected scalar, the sum of squares of the array
@@ -381,12 +401,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         Note that bounds and constraints can be set on Parameters
         for any of these methods, so are not supported separately
-        for those designed to use bounds.
+        for those designed to use bounds. However, if you use the
+        differential_evolution option you must specify finite
+        (min, max) for each Parameter.
 
         """
         if not HAS_SCALAR_MIN:
             raise NotImplementedError
-
         self.prepare_fit()
 
         fmin_kws = dict(method=method,
@@ -409,9 +430,20 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.jacfcn = None
             fmin_kws.pop('jac')
 
+        if method == 'differential_evolution':
+            fmin_kws['method'] = differential_evolution
+            pars = self.params
+            bounds = [(pars[par].min, pars[par].max) for par in pars]
+            if not np.all(np.isfinite(bounds)):
+                raise ValueError('With differential evolution finite bounds '
+                                 'are required for each parameter')
+            bounds = [(-np.pi / 2., np.pi / 2.)] * len(self.vars)
+            fmin_kws['bounds'] = bounds
+
         ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
         xout = ret.x
         self.message = ret.message
+
         self.nfev = ret.nfev
         self.chisqr = self.residual = self.__residual(xout)
         self.ndata = 1
@@ -420,7 +452,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.chisqr = (self.chisqr**2).sum()
             self.ndata = len(self.residual)
             self.nfree = self.ndata - self.nvarys
-        self.redchi = self.chisqr/self.nfree
+        self.redchi = self.chisqr / self.nfree
         self.unprepare_fit()
         return
 
@@ -571,7 +603,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             for key, val in SCALAR_METHODS.items():
                 if (key.lower().startswith(user_method) or
                     val.lower().startswith(user_method)):
-                    kwargs = dict(method=val)
+                    kwargs['method'] = val
         elif (user_method.startswith('nelder') or
               user_method.startswith('fmin')):
             function = self.fmin

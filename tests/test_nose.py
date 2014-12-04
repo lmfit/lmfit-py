@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
+from lmfit.minimizer import SCALAR_METHODS
 from lmfit.lineshapes import gaussian
 import numpy as np
-pi = np.pi
+from numpy import pi
 import unittest
 import nose
 from nose import SkipTest
@@ -44,7 +45,7 @@ def test_simple():
     params = Parameters()
     params.add('amp',   value= 10,  min=0)
     params.add('decay', value= 0.1)
-    params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
+    params.add('shift', value= 0.0, min=-pi / 2., max=pi / 2)
     params.add('omega', value= 3.0)
 
 
@@ -76,8 +77,8 @@ def test_lbfgsb():
         decay = pars['decay'].value
 
         if abs(shift) > pi/2:
-            shift = shift - np.sign(shift)*pi
-        model = amp*np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
+            shift = shift - np.sign(shift) * pi
+        model = amp * np.sin(shift + x / per) * np.exp(-x * x * decay * decay)
         if data is None:
             return model
         return (model - data)
@@ -232,7 +233,7 @@ def test_peakfit():
     check_paras(fit_params, org_params)
 
 
-class CommonMinimizerTest(object):
+class CommonMinimizerTest(unittest.TestCase):
 
     def setUp(self):
         """
@@ -245,7 +246,6 @@ class CommonMinimizerTest(object):
         p_true.add('shift', value=0.123)
         p_true.add('decay', value=0.010)
         self.p_true = p_true
-
 
         n = 2500
         xmin = 0.
@@ -271,13 +271,32 @@ class CommonMinimizerTest(object):
         decay = pars['decay'].value
 
         if abs(shift) > pi/2:
-            shift = shift - np.sign(shift)*pi
+            shift = shift - np.sign(shift) * pi
         model = amp*np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
         if data is None:
             return model
         return (model - data)
+        
+    def test_diffev_bounds_check(self):
+        # You need finite (min, max) for each parameter if you're using
+        # differential_evolution.
+        self.fit_params['decay'].min = None
+        self.minimizer = 'differential_evolution'
+        np.testing.assert_raises(ValueError, self.scalar_minimizer)
 
-    def test_scalar_minimizer(self):
+    def test_scalar_minimizers(self):
+        # test all the scalar minimizers
+        for method in SCALAR_METHODS:
+            if method in ['newton', 'dogleg', 'trust-ncg']:
+                continue
+            self.minimizer = SCALAR_METHODS[method]
+            if method == 'Nelder-Mead':
+                sig = 0.2
+            else:
+                sig = 0.15
+            self.scalar_minimizer(sig=sig)
+        
+    def scalar_minimizer(self, sig=0.15):
         try:
             from scipy.optimize import minimize as scipy_minimize
         except ImportError:
@@ -294,82 +313,7 @@ class CommonMinimizerTest(object):
 
         for para, true_para in zip(self.fit_params.values(),
                                    self.p_true.values()):
-            check_wo_stderr(para, true_para.value, sig=0.15)
-
-class TestNelder_Mead(CommonMinimizerTest, unittest.TestCase):
-
-    def setUp(self):
-        self.minimizer = 'Nelder-Mead'
-        super(TestNelder_Mead, self).setUp()
-
-    # override default because Nelder-Mead is less precise
-    def test_scalar_minimizer(self):
-        try:
-            from scipy.optimize import minimize as scipy_minimize
-        except ImportError:
-            raise SkipTest
-
-        print(self.minimizer)
-        self.mini.scalar_minimize(method=self.minimizer)
-
-        fit = self.residual(self.fit_params, self.x)
-
-        for name, par in self.fit_params.items():
-            nout = "%s:%s" % (name, ' '*(20-len(name)))
-            print("%s: %s (%s) " % (nout, par.value, self.p_true[name].value))
-
-        for para, true_para in zip(self.fit_params.values(),
-                                   self.p_true.values()):
-            check_wo_stderr(para, true_para.value, sig=0.2)
-
-
-class TestL_BFGS_B(CommonMinimizerTest, unittest.TestCase):
-
-    def setUp(self):
-        self.minimizer = 'L-BFGS-B'
-        super(TestL_BFGS_B, self).setUp()
-
-
-class TestTNC(CommonMinimizerTest, unittest.TestCase):
-
-    def setUp(self):
-        self.minimizer = 'TNC'
-        super(TestTNC, self).setUp()
-
-
-class TestCOBYLA(CommonMinimizerTest, unittest.TestCase):
-
-    def setUp(self):
-        self.minimizer = 'COBYLA'
-        super(TestCOBYLA, self).setUp()
-
-
-class TestSLSQP(CommonMinimizerTest, unittest.TestCase):
-
-    def setUp(self):
-        self.minimizer = 'SLSQP'
-        super(TestSLSQP, self).setUp()
-
-
-class TestBFGS(CommonMinimizerTest, unittest.TestCase):
-
-    def setUp(self):
-        self.minimizer = 'BFGS'
-        super(TestBFGS, self).setUp()
-
-
-class TestCG(CommonMinimizerTest, unittest.TestCase):
-
-    def setUp(self):
-        self.minimizer = 'CG'
-        super(TestCG, self).setUp()
-
-
-class TestPowell(CommonMinimizerTest, unittest.TestCase):
-
-    def setUp(self):
-        self.minimizer = 'Powell'
-        super(TestPowell, self).setUp()
+            check_wo_stderr(para, true_para.value, sig=sig)
 
 
 if __name__ == '__main__':
