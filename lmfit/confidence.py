@@ -125,10 +125,11 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
 def map_trace_to_names(trace, params):
     "maps trace to param names"
     out = {}
+    allnames = list(params.keys()) + ['prob']
     for name in trace.keys():
         tmp_dict = {}
         tmp = np.array(trace[name])
-        for para_name, values in zip(params.keys() + ['prob'], tmp.T):
+        for para_name, values in zip(allnames, tmp.T):
             tmp_dict[para_name] = values
         out[name] = tmp_dict
     return out
