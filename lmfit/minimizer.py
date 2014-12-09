@@ -212,7 +212,7 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
         self.update_constraints()
         out = self.userfcn(self.params, *self.userargs, **self.userkws)
-        if hasattr(self.iter_cb, '__call__'):
+        if callable(self.iter_cb):
             self.iter_cb(self.params, self.nfev, out,
                          *self.userargs, **self.userkws)
         return out
