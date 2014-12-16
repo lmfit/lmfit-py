@@ -11,7 +11,7 @@ has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model to most closely match some
 data.  With :mod:`scipy`, such problems are commonly solved with
 :func:`scipy.optimize.curve_fit`, which is a wrapper around
-:func:`scipy.optimize.leastsq`.  Since Lmit's :func:`minimize` is also a
+:func:`scipy.optimize.leastsq`.  Since Lmfit's :func:`minimize` is also a
 high-level wrapper around :func:`scipy.optimize.leastsq` it can be used for
 curve-fitting problems, but requires more effort than using
 :func:`scipy.optimize.curve_fit`.
@@ -23,7 +23,7 @@ function.  This is closer in spirit to :func:`scipy.optimize.curve_fit`,
 but with the advantages of using :class:`Parameters` and lmfit.
 
 In addition to allowing you turn any model function into a curve-fitting
-method, Lmfit also provides canonical definitions for many known lineshapes
+method, Lmfit also provides canonical definitions for many known line shapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
 used in many scientific domains.  These are available in the :mod:`models`
 module that will be discussed in more detail in the next chapter
@@ -102,7 +102,7 @@ independent variable is, and you can add or alter parameters too.
 On creation of the model, parameters are *not* created.  The model knows
 what the parameters should be named, but not anything about the scale and
 range of your data.  You will normally have to make these parameters and
-assign initiald values and other attributes.  To help you do this, each
+assign initial values and other attributes.  To help you do this, each
 model has a :meth:`make_params` method that will generate parameters with
 the expected names:
 
@@ -195,7 +195,7 @@ The :class:`Model` class
 The :class:`Model` class provides a general way to wrap a pre-defined
 function as a fitting model.
 
-.. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, name=None[, **kws]]]]]])
+.. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix=''[, name=None[, **kws]]]]]])
 
     Create a model based on the user-supplied function.  This uses
     introspection to automatically converting argument names of the
@@ -213,7 +213,7 @@ function as a fitting model.
     :type prefix: string
     :param name: name for the model. When ``None`` (default) the name is the same  as the model function (``func``).
     :type name: ``None`` or string.
-    :param kws:   addtional keyword arguments to pass to model function.
+    :param kws:   additional keyword arguments to pass to model function.
 
 
 Of course, the model function will have to return an array that will be the
@@ -230,7 +230,7 @@ specifying one or more independent variables.
 
    :param params: parameters to use for fit.
    :type params: ``None`` (default) or Parameters
-   :param kws:    addtional keyword arguments to pass to model function.
+   :param kws:    additional keyword arguments to pass to model function.
    :return:       ndarray for model given the parameters and other arguments.
 
    If ``params`` is ``None``, the values for all parameters are expected to
@@ -262,7 +262,7 @@ specifying one or more independent variables.
    :type  iter_cb:  callable or ``None``
    :param verbose:  print a message when a new parameter is created due to a *hint*
    :type  verbose:  bool (default ``True``)
-   :param kws:      addtional keyword arguments to pass to model function.
+   :param kws:      additional keyword arguments to pass to model function.
    :return:         :class:`ModeFitResult` object.
 
    If ``params`` is ``None``, the internal ``params`` will be used. If it
@@ -281,7 +281,7 @@ specifying one or more independent variables.
 
     :param data: data array used to guess parameter values
     :type func:  ndarray
-    :param kws:  addtional options to pass to model function.
+    :param kws:  additional options to pass to model function.
     :return: :class:`Parameters` with guessed initial values for each parameter.
 
    by default this is left to raise a ``NotImplementedError``, but may be
@@ -579,7 +579,7 @@ as keyword arguments to either the :meth:`Model.eval` or :meth:`Model.fit` metho
 
    >>> out = mod.fit(x=x, pars, a=3.0, b=-0.0)
 
-These approachess to initialization provide many opportunities for setting
+These approaches to initialization provide many opportunities for setting
 initial values for parameters.  The methods can be combined, so that you
 can set parameter hints but then change the initial value explicitly with
 :meth:`Model.fit`.
@@ -626,7 +626,7 @@ The :class:`ModelFit` class
 =======================================
 
 A :class:`ModelFit` is the object returned by :meth:`Model.fit`.  It is a
-sublcass of :class:`Minimizer`, and so contains many of the fit results.
+subclass of :class:`Minimizer`, and so contains many of the fit results.
 Of course, it knows the :class:`Model` and the set of :class:`Parameters`
 used in the fit, and it has methods to evaluate the model, to fit the data
 (or re-fit the data with changes to the parameters, or fit with different
@@ -665,7 +665,7 @@ These methods are all inherited from :class:`Minimize` or from
 .. method:: ModelFit.eval_components(**kwargs)
 
    evaluate each component of a :class:`CompositeModel`, returning an
-   ordered dictionary of with the values for each compoent model.  The
+   ordered dictionary of with the values for each component model.  The
    returned dictionary will have keys of the model prefix or (if no prefix
    is given), the model name.  The ``**kwargs`` arguments can be used to
    update parameter values and/or independent variables.
@@ -678,7 +678,7 @@ These methods are all inherited from :class:`Minimize` or from
    descriptions, and note that any value of ``None`` defaults to the last
    used value.
 
-.. method:: ModelFit.fit_report(modelpars=None[, show_correl=True[, min_correl=0.1]])
+.. method:: ModelFit.fit_report(modelpars=None[, show_correl=True[,`< min_correl=0.1]])
 
    return a printable fit report for the fit with fit statistics, best-fit
    values with uncertainties and correlations.  As with :func:`fit_report`.
@@ -773,7 +773,7 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute::  nfree
 
-    integer number of free paramaeters in fit.
+    integer number of free parameters in fit.
 
 .. attribute::  nvarys
 
@@ -804,25 +804,24 @@ These methods are all inherited from :class:`Minimize` or from
    ndarray (or ``None``) of weighting values used in fit.
 
 
+.. index:: Composite models
+
 .. _composite_models_section:
 
 
-Composite models and the :class:`CompositeModel` class
+Composite Models : adding (or multiplying) Models
 ==============================================================
 
 One of the more interesting features of the :class:`Model` class is that
-models can be added together or otherwise combined with algebraic
-operations (add, subtract, multiply, and divide) to give a composite model.
-Such a combination of two or more models creates a :class:`CompositeModel`,
-which is a simple sub-class of :class:`Model` that supports any combination
-of simple binary operators (add, subtract, multiply, and divide).  This
+Models can be added together or combined with basic algebraic operations
+(add, subtract, multiply, and divide) to give a composite model.  The
 composite model will have parameters from each of the component models,
-with all parameters being available to influence the whole.  This ability
-to combine models will become even more useful in the next chapter, when
-pre-built subclasses of :class:`Model` are discussed.  For now, we'll
-consider a simple example, and build a model of a Gaussian plus a line.
-For such a simple problem, we could just build a model that included both
-components::
+with all parameters being available to influence the whole model.  This
+ability to combine models will become even more useful in the next chapter,
+when pre-built subclasses of :class:`Model` are discussed.  For now, we'll
+consider a simple example, and build a model of a Gaussian plus a line, as
+to model a peak with a background. For such a simple problem, we could just
+build a model that included both components::
 
     def gaussian_plus_line(x, amp, cen, wid, slope, intercept):
         "line + 1-d gaussian"
@@ -844,7 +843,7 @@ a linear function::
         "a line"
         return slope * x + intercept
 
-and build a composite model with::
+and build a composite model with just::
 
     mod = Model(gaussian) + Model(line)
 
@@ -915,40 +914,82 @@ us to identify which parameter went with which component model.  As we will
 see in the next chapter, using composite models with the built-in models
 provides a simple way to build up complex models.
 
+.. class::  CompositeModel(left, right, op[, **kws])
 
-Model names for composite models
------------------------------------------
+    Create a composite model from two models (`left` and `right` and an
+    binary operator (`op`).  Additional keywords are passed to
+    :class:`Model`.
 
-By default a `Model` object has a `name` attribute containing the name of
-the model function. This name can be overridden when building a model::
+    :param left: left-hand side Model
+    :type left: :class:`Model`
+    :param right: right-hand side Model
+    :type right: :class:`Model`
+    :param op: binary operator
+    :type op: callable, and taking 2 arguments (`left` and `right`).
 
-    my_model = Model(gaussian, name='my_gaussian')
+Normally, one does not have to explicitly create a :class:`CompositeModel`,
+as doing::
 
-or by assigning the `name` attribute::
+     mod = Model(fcn1) + Model(fcn2) * Model(fcn3)
 
-    my_model = Model(gaussian)
-    my_model.name = 'my_gaussian'
+will automatically create a :class:`CompositeModel`.  In this example,
+`mod.left` will be `Model(fcn1)`, `mod.op` will be :meth:`operator.add`,
+and `mod.right` will be another CompositeModel that has a `left` attribute
+of `Model(fcn2)`, an `op` of :meth:`operator.mul`, and a `right` of
+`Model(fcn3)`.
 
-This name is used in the object representation (for example when printing)::
+If you want to use a binary operator other than add, subtract, multiply, or
+divide that are supported through normal Python syntax, you'll need to
+explicitly create a :class:`CompositeModel` with the appropriate binary
+operator.  For example, to convolve two models, you could define a simple
+convolution function, perhaps as::
 
-    <lmfit.Model: my_gaussian>
+    import numpy as np
+    def convolve(dat, kernel):
+        # simple convolution
+        npts = min(len(dat), len(kernel))
+        pad  = np.ones(npts)
+        tmp  = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
+        out  = np.convolve(tmp, kernel, mode='valid')
+        noff = int((len(out) - npts)/2)
+        return (out[noff:])[:npts]
 
-A composite model will have the name `'composite_fun'` by default, but as
-noted, we can overwrite it with a more meaningful string. This can be useful
-when dealing with multiple models.
+which extends the data in both directions so that the convolving kernel
+function gives a valid result over the data range.  Because this function
+takes two array arguments and returns an array, it can be used as the
+binary operator.  A full script using this technique is here:
 
-For example, let assume we want to fit some bi-modal data. We initially try
-two Gaussian peaks::
+.. literalinclude:: ../examples/doc_model3.py
 
-    model = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_')
-    model.name = '2-Gaussians model'
+which prints out the results::
 
-Here, instead of the standard name `'composite_func'`, we assigned a more
-meaningful name. Now, if we want to also fit with two Lorentzian peaks
-we can do similarly::
+    [[Model]]
+        (Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
+    [[Fit Statistics]]
+        # function evals   = 25
+        # data points      = 201
+        # variables        = 3
+        chi-square         = 21.692
+        reduced chi-square = 0.110
+    [[Variables]]
+        amplitude:   0.62106099 +/- 0.001783 (0.29%) (init= 1)
+        center:      4.49913218 +/- 0.009373 (0.21%) (init= 3.5)
+        mid:         5 (fixed)
+        sigma:       0.61936067 +/- 0.012977 (2.10%) (init= 1)
+    [[Correlations]] (unreported correlations are <  0.100)
+        C(amplitude, center)         =  0.336
+        C(amplitude, sigma)          =  0.274
 
-    model2 = LorentzianModel(prefix='p1_') + LorentzianModel(prefix='p2_')
-    model2.name = '2-Lorentzians model'
+and shows the plots:
 
-It is evident that assigning names will help to easily distinguish
-the different models.
+.. _figModel3:
+
+  .. image:: _images/model_fit3a.png
+     :target: _images/model_fit3a.png
+     :width: 48%
+  .. image:: _images/model_fit3b.png
+     :target: _images/model_fit3b.png
+     :width: 48%
+
+Using composite models with built-in or custom operators allows you to
+build complex models from testable sub-components.
