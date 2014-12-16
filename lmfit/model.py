@@ -517,9 +517,9 @@ class CompositeModel(Model):
 
     Parameters
     ----------
-    left_model:    model #1 -- must be a Model()
-    right_model:   model #2 -- must be a Model()
-    oper:          string for operator: one of ('+', '-', '*', '/')
+    left_model:    left-hand side model-- must be a Model()
+    right_model:   right-hand side model -- must be a Model()
+    oper:          callable binary operator (typically, operator.add, operator.mul, etc)
 
     independent_vars: list of strings or None (default)
         arguments to func that are independent variables
@@ -538,16 +538,23 @@ class CompositeModel(Model):
 
     """
     _names_collide = "Two models have parameters named {clash}. Use distinct names"
-    _unknown_op    = "CompositeModel does not support %s"
+    _bad_arg   = "CompositeModel: argument {arg} is not a Model"
+    _bad_op    = "CompositeModel: operator {op} is not callable"
     _known_ops = {operator.add: '+', operator.sub: '-',
                   operator.mul: '*', operator.truediv: '/'}
-                           
+
     def __init__(self, left, right, op, **kws):
+        if not isinstance(left, Model):
+            raise ValueError(self._bad_arg.format(arg=left))
+        if not isinstance(right, Model):
+            raise ValueError(self._bad_arg.format(arg=right))
+        if not callable(op):
+            raise ValueError(self._bad_op.format(op=op))
+
         self.left  = left
         self.right = right
-        self.op  = op
-        if op not in self._known_ops:
-            raise ValueError(self._unknown_op % self.op)
+        self.op    = op
+
         name_collisions = left.param_names & right.param_names
         if len(name_collisions) > 0:
             raise NameError(self._names_collide.format(clash=name_collisions))
@@ -572,7 +579,7 @@ class CompositeModel(Model):
 
     def _reprstring(self, long=False):
         return "(%s %s %s)" % (self.left._reprstring(long=long),
-                               self._known_ops[self.op],
+                               self._known_ops.get(self.op, self.op),
                                self.right._reprstring(long=long))
 
     def eval(self, params=None, **kwargs):
@@ -591,7 +598,7 @@ class CompositeModel(Model):
 
     @property
     def components(self):
-        """return components for composite model"""        
+        """return components for composite model"""
         return self.left.components + self.right.components
 
 
