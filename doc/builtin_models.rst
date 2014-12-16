@@ -527,13 +527,13 @@ expression is parsed), so that you can define functions to be used
 in your expression.
 
 As a probably unphysical example, to make a model that is the derivative of
-a Gaussian function times the logarithm of a Lorenztian function you may
+a Gaussian function times the logarithm of a Lorentzian function you may
 could to define this in a script::
 
     >>> script = """
     def mycurve(x, amp, cen, sig):
         loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
-        gauss = gaussian(x, amplitude=ampa, center=cen, sigma=sig)
+        gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)
         return log(loren)*gradient(gauss)/gradient(x)
     """
 
@@ -551,7 +551,7 @@ and `wid`, and build a model that can be used to fit data.
 Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles
 ------------------------------------------------------------------------
 
-Here, we will fit data to three similar lineshapes, in order to decide which
+Here, we will fit data to three similar line shapes, in order to decide which
 might be the better model.  We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in :class:`GaussianModel` instead
 of one we write ourselves.  This is a slightly different version from the
@@ -747,7 +747,7 @@ constant:
 After constructing step-like data, we first create a :class:`StepModel`
 telling it to use the ``erf`` form (see details above), and a
 :class:`ConstantModel`.  We set initial values, in one case using the data
-and :meth:`guess` method for the intial step function paramaters, and
+and :meth:`guess` method for the initial step function paramaters, and
 :meth:`make_params` arguments for the linear component.
 After making a composite model, we run :meth:`fit` and report the
 results, which give::

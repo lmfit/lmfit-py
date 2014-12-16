@@ -90,7 +90,8 @@ feature.
    :param expr:  mathematical expression to use to evaluate value during fit.
 
    Each argument of :meth:`set` has a default value of ``None``, and will
-   be set only if the provided value is not ``None``.  You can use this to
+
+  be set only if the provided value is not ``None``.  You can use this to
    update some Parameter attribute without affecting others, for example::
 
        p1 = Parameter('a', value=2.0)
@@ -178,7 +179,7 @@ The :class:`Parameters` class
    :attr:`name` and :attr:`value` of a Parameter.
 
    This is distinct from the :class:`Parameters` itself, as the dictionary
-   values are not :class:`Parameeter` objects, just the :attr:`value`.
+   values are not :class:`Parameter` objects, just the :attr:`value`.
    This can be a very convenient way to get updated values in a objective
    function.
 
@@ -203,4 +204,4 @@ which would make the objective function ``fcn2min`` above look like::
         model = v['amp'] * np.sin(x * v['omega'] + v['shift']) * np.exp(-x*x*v['decay'])
         return model - data
 
-The results are identical, and the difference is a stylisic choice.
+The results are identical, and the difference is a stylistic choice.
