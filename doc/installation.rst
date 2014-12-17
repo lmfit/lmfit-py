@@ -15,7 +15,7 @@ higher is recommended, but extensive testing on compatibility with various
 versions of scipy has not been done.  Lmfit does work with Python 2.7, and
 3.2 and 3.3.  No testing has been done with Python 3.4, but as the package
 is pure Python, relying only on scipy and numpy, no significant troubles
-are expected.  The `nose`_ frameworkt is required for running the test
+are expected.  The `nose`_ framework is required for running the test
 suite, and IPython and matplotib are recommended.  If Pandas is available,
 it will be used in portions of lmfit.
 
@@ -66,7 +66,7 @@ routinely run on the development version.  Running ``nosetests`` should run
 all of these tests to completion without errors or failures.
 
 Many of the examples in this documentation are distributed with lmfit in
-the ``examples`` folder, and sould also run for you.  Many of these require
+the ``examples`` folder, and should also run for you.  Many of these require
 
 
 Acknowledgements
@@ -109,5 +109,3 @@ The LMFIT-py code is distribution under the following license:
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THIS SOFTWARE.
-
-

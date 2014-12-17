@@ -40,7 +40,7 @@ from .confidence import conf_interval, conf_interval2d
 from .printfuncs import (fit_report, ci_report,
                          report_fit, report_ci, report_errors)
 
-from .model import Model
+from .model import Model, CompositeModel
 from . import models
 
 from . import uncertainties

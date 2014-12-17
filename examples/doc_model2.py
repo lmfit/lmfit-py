@@ -20,11 +20,6 @@ def line(x, slope, intercept):
 mod = Model(gaussian) + Model(line)
 pars  = mod.make_params( amp=5, cen=5, wid=1, slope=0, intercept=1)
 
-print mod
-
-for k, v in pars.items():
-    print k, v
-
 result = mod.fit(y, pars, x=x)
 
 print(result.fit_report())

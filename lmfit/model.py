@@ -4,6 +4,7 @@ Concise nonlinear curve fitting.
 from __future__ import print_function
 import warnings
 import inspect
+import operator
 from copy import deepcopy
 import numpy as np
 from . import Parameters, Parameter, Minimizer
@@ -88,7 +89,6 @@ class Model(object):
     _invalid_par   = "Invalid parameter name ('%s') for function %s"
     _invalid_missing = "missing must be None, 'none', 'drop', or 'raise'."
     _valid_missing   = (None, 'none', 'drop', 'raise')
-    _names_collide = "Two models have parameters named %s. Use distinct names"
 
     _invalid_hint = "unknown parameter hint '%s' for param '%s'"
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
@@ -99,7 +99,6 @@ class Model(object):
         self._prefix = prefix
         self._param_root_names = param_names  # will not include prefixes
         self.independent_vars = independent_vars
-        self.components = []
         self._func_allargs = []
         self._func_haskeywords = False
         if not missing in self._valid_missing:
@@ -116,29 +115,20 @@ class Model(object):
         self._name = name
 
     def _reprstring(self, long=False):
-        if not self.is_composite:
-            # base model
-            opts = []
-            if len(self._prefix) > 0:
-                opts.append("prefix='%s'" % (self._prefix))
-            if long:
-                for k, v in self.opts.items():
-                    opts.append("%s='%s'" % (k, v))
-
-            out = ["%s" % self._name]
-            if len(opts) > 0:
-                out[0] = "%s(%s)" % (out[0], ','.join(opts))
-        else:
-            # composite model
-            if self._name is None:
-                out = [c._reprstring(long)[0] for c in self.components]
-            else:
-                out = [self._name]
-        return out
+        out = self._name
+        opts = []
+        if len(self._prefix) > 0:
+            opts.append("prefix='%s'" % (self._prefix))
+        if long:
+            for k, v in self.opts.items():
+                opts.append("%s='%s'" % (k, v))
+        if len(opts) > 0:
+            out = "%s, %s" % (out, ', '.join(opts))
+        return "Model(%s)" % out
 
     @property
     def name(self):
-        return '+'.join(self._reprstring(long=False))
+        return self._reprstring(long=False)
 
     @name.setter
     def name(self, value):
@@ -155,21 +145,7 @@ class Model(object):
 
     @property
     def param_names(self):
-        if self.is_composite:
-            return self._compute_composite_param_names()
-        else:
-            return self._param_names
-
-    def _compute_composite_param_names(self):
-        param_names = set()
-        for sub_model in self.components:
-            param_names |= sub_model.param_names
-        param_names |= self._param_names
-        return param_names
-
-    @property
-    def is_composite(self):
-        return len(self.components) > 0
+        return self._param_names
 
     def __repr__(self):
         return  "<lmfit.Model: %s>" % (self.name)
@@ -287,45 +263,27 @@ class Model(object):
         if 'verbose' in kwargs:
             verbose = kwargs['verbose']
         params = Parameters()
-        if not self.is_composite:
-            # base model: build Parameters from scratch
-            for name in self.param_names:
-                par = Parameter(name=name)
-                basename = name[len(self._prefix):]
-                # apply defaults from model function definition
-                if basename in self.def_vals:
-                    par.value = self.def_vals[basename]
-                # apply defaults from parameter hints
-                if basename in self.param_hints:
-                    hint = self.param_hints[basename]
-                    for item in self._hint_names:
-                        if item in  hint:
-                            setattr(par, item, hint[item])
-                # apply values passed in through kw args
-                if basename in kwargs:
-                    # kw parameter names with no prefix
-                    par.value = kwargs[basename]
-                if name in kwargs:
-                    # kw parameter names with prefix
-                    par.value = kwargs[name]
-                params[name] = par
-        else:
-            # composite model: merge the sub_models parameters adding hints
-            for sub_model in self.components:
-                comp_params = sub_model.make_params(**kwargs)
-                for par_name, param in comp_params.items():
-                    # apply composite-model hints
-                    if par_name in self.param_hints:
-                        hint = self.param_hints[par_name]
-                        for item in self._hint_names:
-                            if item in  hint:
-                                setattr(param, item, hint[item])
-                params.update(comp_params)
 
-            # apply defaults passed in through kw args
-            for name in self.param_names:
-                if name in kwargs:
-                    params[name].value = kwargs[name]
+        for name in self.param_names:
+            par = Parameter(name=name)
+            basename = name[len(self._prefix):]
+            # apply defaults from model function definition
+            if basename in self.def_vals:
+                par.value = self.def_vals[basename]
+            # apply defaults from parameter hints
+            if basename in self.param_hints:
+                hint = self.param_hints[basename]
+                for item in self._hint_names:
+                    if item in  hint:
+                        setattr(par, item, hint[item])
+            # apply values passed in through kw args
+            if basename in kwargs:
+                # kw parameter names with no prefix
+                par.value = kwargs[basename]
+            if name in kwargs:
+                # kw parameter names with prefix
+                par.value = kwargs[name]
+            params[name] = par
 
         # add any additional parameters defined in param_hints
         # note that composites may define their own additional
@@ -403,38 +361,31 @@ class Model(object):
         args = {}
         for key, val in self.make_funcargs(params, kwargs).items():
             args["%s%s" % (self._prefix, key)] = val
-        for sub_model in self.components:
-            otherargs = sub_model._make_all_args(params, **kwargs)
-            args.update(otherargs)
         return args
 
     def eval(self, params=None, **kwargs):
         """evaluate the model with the supplied parameters"""
-        if len(self.components) > 0:
-            result = self.components[0].eval(params, **kwargs)
-            for model in self.components[1:]:
-                result += model.eval(params, **kwargs)
-        else:
-            result = self.func(**self.make_funcargs(params, kwargs))
-            # Handle special case of constant result and one
-            # independent variable (of any dimension).
-            if np.ndim(result) == 0 and len(self.independent_vars) == 1:
-                result = np.tile(result, kwargs[self.independent_vars[0]].shape)
+        result = self.func(**self.make_funcargs(params, kwargs))
+        # Handle special case of constant result and one
+        # independent variable (of any dimension).
+        if np.ndim(result) == 0 and len(self.independent_vars) == 1:
+            result = np.tile(result, kwargs[self.independent_vars[0]].shape)
         return result
+
+    @property
+    def components(self):
+        """return components for composite model"""
+        return [self]
 
     def eval_components(self, params=None, **kwargs):
         """
         evaluate the model with the supplied parameters and returns a ordered
         dict containting name, result pairs.
-        """        
-        if len(self.components) == 0:
-            return [self.eval(params=None, **kwargs)]
-        else:
-            comp_results = OrderedDict()
-            for model in self.components:
-                result = model.eval(params, **kwargs)
-                comp_results[model.name] = result
-        return comp_results            
+        """
+        key = self._prefix
+        if len(key) < 1:
+            key = self._name
+        return {key: self.eval(params=params, **kwargs)}
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=True, fit_kws=None, **kwargs):
@@ -542,29 +493,113 @@ class Model(object):
         output = ModelFit(self, params, method=method, iter_cb=iter_cb,
                           scale_covar=scale_covar, fcn_kws=kwargs, **fit_kws)
         output.fit(data=data, weights=weights)
+        output.components = self.components
         return output
 
     def __add__(self, other):
-        colliding_param_names = self.param_names & other.param_names
-        if len(colliding_param_names) != 0:
-            collision = colliding_param_names.pop()
-            raise NameError(self._names_collide % collision)
+        return CompositeModel(self, other, operator.add)
 
-        # If the model is already composite just add other as component
-        composite = self
-        if not self.is_composite:
-            # make new composite Model, add self and other as components
-            composite = Model(func=None)
-            composite.components = [self]
-            # we assume that all the sub-models have the same independent vars
-            composite.independent_vars = self.independent_vars[:]
+    def __sub__(self, other):
+        return CompositeModel(self, other, operator.sub)
 
-        if other.is_composite:
-            composite.components.extend(other.components)
-            composite.param_hints.update(other.param_hints)
-        else:
-            composite.components.append(other)
-        return composite
+    def __mul__(self, other):
+        return CompositeModel(self, other, operator.mul)
+
+    def __div__(self, other):
+        return CompositeModel(self, other, operator.truediv)
+
+    def __truediv__(self, other):
+        return CompositeModel(self, other, operator.truediv)
+
+
+class CompositeModel(Model):
+    """Create a composite model -- a binary operator of two Models
+
+    Parameters
+    ----------
+    left_model:    left-hand side model-- must be a Model()
+    right_model:   right-hand side model -- must be a Model()
+    oper:          callable binary operator (typically, operator.add, operator.mul, etc)
+
+    independent_vars: list of strings or None (default)
+        arguments to func that are independent variables
+    param_names: list of strings or None (default)
+        names of arguments to func that are to be made into parameters
+    missing: None, 'none', 'drop', or 'raise'
+        'none' or None: Do not check for null or missing values (default)
+        'drop': Drop null or missing observations in data.
+            if pandas is installed, pandas.isnull is used, otherwise
+            numpy.isnan is used.
+        'raise': Raise a (more helpful) exception when data contains null
+            or missing values.
+    name: None or string
+        name for the model. When `None` (default) the name is the same as
+        the model function (`func`).
+
+    """
+    _names_collide = "Two models have parameters named {clash}. Use distinct names"
+    _bad_arg   = "CompositeModel: argument {arg} is not a Model"
+    _bad_op    = "CompositeModel: operator {op} is not callable"
+    _known_ops = {operator.add: '+', operator.sub: '-',
+                  operator.mul: '*', operator.truediv: '/'}
+
+    def __init__(self, left, right, op, **kws):
+        if not isinstance(left, Model):
+            raise ValueError(self._bad_arg.format(arg=left))
+        if not isinstance(right, Model):
+            raise ValueError(self._bad_arg.format(arg=right))
+        if not callable(op):
+            raise ValueError(self._bad_op.format(op=op))
+
+        self.left  = left
+        self.right = right
+        self.op    = op
+
+        name_collisions = left.param_names & right.param_names
+        if len(name_collisions) > 0:
+            raise NameError(self._names_collide.format(clash=name_collisions))
+
+        if 'independent_vars' not in kws:
+            kws['independent_vars'] = self.left.independent_vars
+        if 'missing' not in kws:
+            kws['missing'] = self.left.missing
+
+        def _tmp(self, *args, **kws): pass
+        Model.__init__(self, _tmp, **kws)
+
+    def _parse_params(self):
+        self._func_haskeywords = (self.left._func_haskeywords or
+                                  self.right._func_haskeywords)
+        self._func_allargs = (self.left._func_allargs +
+                              self.right._func_allargs)
+        self.def_vals = deepcopy(self.right.def_vals)
+        self.def_vals.update(self.left.def_vals)
+        self.opts = deepcopy(self.right.opts)
+        self.opts.update(self.left.opts)
+
+    def _reprstring(self, long=False):
+        return "(%s %s %s)" % (self.left._reprstring(long=long),
+                               self._known_ops.get(self.op, self.op),
+                               self.right._reprstring(long=long))
+
+    def eval(self, params=None, **kwargs):
+        return self.op(self.left.eval(params=params, **kwargs),
+                       self.right.eval(params=params, **kwargs))
+
+    def eval_components(self, **kwargs):
+        """return ordered dict of name, results for each component"""
+        out = OrderedDict(self.left.eval_components(**kwargs))
+        out.update(self.right.eval_components(**kwargs))
+        return out
+
+    @property
+    def param_names(self):
+        return self.left.param_names | self.right.param_names
+
+    @property
+    def components(self):
+        """return components for composite model"""
+        return self.left.components + self.right.components
 
 
 class ModelFit(Minimizer):
@@ -595,10 +630,10 @@ class ModelFit(Minimizer):
     eval(**kwargs)
          evaluate the current model, with the current parameter values,
          with values in kwargs sent to the model function.
-    
+
     eval_components(**kwargs)
          evaluate the current model, with the current parameter values,
-         with values in kwargs sent to the model function and returns 
+         with values in kwargs sent to the model function and returns
          a ordered dict with the model names as the key and the component
          results as the values.
 
@@ -653,8 +688,8 @@ class ModelFit(Minimizer):
 
     def eval(self, **kwargs):
         self.userkws.update(kwargs)
-        return self.model.eval(params=self.params, **self.userkws)        
-            
+        return self.model.eval(params=self.params, **self.userkws)
+
     def eval_components(self, **kwargs):
         self.userkws.update(kwargs)
         return self.model.eval_components(params=self.params, **self.userkws)
@@ -665,12 +700,7 @@ class ModelFit(Minimizer):
                                  show_correl=show_correl,
                                  min_correl=min_correl)
         buff = ['[[Model]]']
-        if len(self.model.components)==0:
-            buff.append('    %s' % self.model._reprstring(long=True)[0])
-        else:
-            buff.append(' Composite Model:')
-            for x in self.model._reprstring(long=True):
-                buff.append('    %s' % x)
+        buff.append('    %s' % self.model._reprstring(long=True))
         buff = '\n'.join(buff)
         out = '%s\n%s' % (buff, stats_report)
         return out
