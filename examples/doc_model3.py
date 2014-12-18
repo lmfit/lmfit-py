@@ -21,22 +21,26 @@ def jump(x, mid):
     return o
 
 def convolve(arr, kernel):
-    # simple convolution
+    # simple convolution of two arrays
     npts = min(len(arr), len(kernel))
     pad  = np.ones(npts)
     tmp  = np.concatenate((pad*arr[0], arr, pad*arr[-1]))
     out  = np.convolve(tmp, kernel, mode='valid')
     noff = int((len(out) - npts)/2)
-    return (out[noff:])[:npts]
-
-mod  = CompositeModel(Model(jump), Model(gaussian), convolve)
-pars = mod.make_params(amplitude=1, center=3.5, sigma=1, mid=5.0)
-
-# 'mid' and 'center' would be completely correlated
-pars['mid'].vary=False
-
-result =  mod.fit(y, params=pars, x=x)
+    return out[noff:noff+npts]
 #
+# create Composite Model using the custom convolution operator
+mod  = CompositeModel(Model(jump), Model(gaussian), convolve)
+
+pars = mod.make_params(amplitude=1, center=3.5, sigma=1.5, mid=5.0)
+
+# 'mid' and 'center' should be completely correlated, and 'mid' is
+# used as an integer index, so a very poor fit variable:
+pars['mid'].vary = False
+
+# fit this model to data array y
+result =  mod.fit(y, params=pars, x=x)
+
 print(result.fit_report())
 
 plot_components = False
