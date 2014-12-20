@@ -15,7 +15,7 @@ from .astutils import valid_symbol_name
 class Parameters(OrderedDict):
     """
     A dictionary of all the Parameters required to specify a fit model.
-    
+
     All keys must be strings, and valid Python symbol names, and all values
     must be Parameters.
 
@@ -63,7 +63,7 @@ class Parameters(OrderedDict):
     def add_many(self, *parlist):
         """
         Convenience function for adding a list of Parameters.
-        
+
         Parameters
         ----------
         parlist : sequence
@@ -86,7 +86,7 @@ class Parameters(OrderedDict):
     def valuesdict(self):
         """
         Returns
-        -------        
+        -------
         An ordered dictionary of name:value pairs for each Parameter.
         This is distinct from the Parameters itself, as it has values of
         the Parameter values, not the full Parameter object.
@@ -232,7 +232,7 @@ class Parameter(object):
         function.
 
         This code borrows heavily from JJ Helmus' leastsqbound.py
-        
+
         Returns
         -------
         The internal value for parameter from self.value (which holds
@@ -257,7 +257,7 @@ class Parameter(object):
     def scale_gradient(self, val):
         """
         Returns
-        -------      
+        -------
         scaling factor for gradient the according to Minuit-style
         transformation.
         """
@@ -315,7 +315,7 @@ class Parameter(object):
 
     @expr.setter
     def expr(self, val):
-        """        
+        """
         The mathematical expression used to constrain the value during the fit.
         To remove a constraint you must supply an empty string.
         """
