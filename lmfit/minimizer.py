@@ -703,18 +703,18 @@ class Minimizer(object):
         method : str, optional
             Name of the fitting method to use.
             One of:
-            `leastsq`                -    Levenberg-Marquardt (default)
-            `nelder`                 -    Nelder-Mead
-            `lbfgsb`                 -    L-BFGS-B
-            `powell`                 -    Powell
-            `cg`                     -    Conjugate-Gradient
-            `newton`                 -    Newton-CG
-            `cobyla`                 -    Cobyla
-            `tnc`                    -    Truncate Newton
-            `trust-ncg`              -    Trust Newton-CGn
-            `dogleg`                 -    Dogleg
-            `slsqp`                  -    Sequential Linear Squares Programming
-            `differential_evolution` -    differential evolution
+            'leastsq'                -    Levenberg-Marquardt (default)
+            'nelder'                 -    Nelder-Mead
+            'lbfgsb'                 -    L-BFGS-B
+            'powell'                 -    Powell
+            'cg'                     -    Conjugate-Gradient
+            'newton'                 -    Newton-CG
+            'cobyla'                 -    Cobyla
+            'tnc'                    -    Truncate Newton
+            'trust-ncg'              -    Trust Newton-CGn
+            'dogleg'                 -    Dogleg
+            'slsqp'                  -    Sequential Linear Squares Programming
+            'differential_evolution' -    differential evolution
 
         Returns
         -------
@@ -763,18 +763,18 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     method : str, optional
         Name of the fitting method to use.
         One of:
-            `leastsq`                -    Levenberg-Marquardt (default)
-            `nelder`                 -    Nelder-Mead
-            `lbfgsb`                 -    L-BFGS-B
-            `powell`                 -    Powell
-            `cg`                     -    Conjugate-Gradient
-            `newton`                 -    Newton-CG
-            `cobyla`                 -    Cobyla
-            `tnc`                    -    Truncate Newton
-            `trust-ncg`              -    Trust Newton-CGn
-            `dogleg`                 -    Dogleg
-            `slsqp`                  -    Sequential Linear Squares Programming
-            `differential_evolution` -    differential evolution
+            'leastsq'                -    Levenberg-Marquardt (default)
+            'nelder'                 -    Nelder-Mead
+            'lbfgsb'                 -    L-BFGS-B
+            'powell'                 -    Powell
+            'cg'                     -    Conjugate-Gradient
+            'newton'                 -    Newton-CG
+            'cobyla'                 -    Cobyla
+            'tnc'                    -    Truncate Newton
+            'trust-ncg'              -    Trust Newton-CGn
+            'dogleg'                 -    Dogleg
+            'slsqp'                  -    Sequential Linear Squares Programming
+            'differential_evolution' -    differential evolution
 
     args : tuple, optional
         Positional arguments to pass to fcn.
