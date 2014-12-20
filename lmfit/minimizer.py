@@ -14,7 +14,7 @@ function-to-be-minimized (residual function) in terms of these Parameters.
 from copy import deepcopy
 import numpy as np
 from numpy import (dot, eye, ndarray, ones_like,
-                   sqrt, take, transpose, triu)
+                   sqrt, take, transpose, triu, deprecate)
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 
@@ -333,6 +333,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
 
+    @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
+                       'and method=\'L-BFGS-B\' instead')
     def lbfgsb(self, **kws):
         """
         use l-bfgs-b minimization
@@ -358,6 +360,8 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.unprepare_fit()
         return
 
+    @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
+                       'and method=\'Nelder-Mead\' instead')
     def fmin(self, **kws):
         """
         use nelder-mead (simplex) minimization
