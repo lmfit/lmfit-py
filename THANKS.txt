@@ -11,6 +11,7 @@ J. J. Helmus wrote the MINUT bounds for leastsq, originally in
      leastsqbounds.py, and ported to lmfit.
 E. O. Le Bigot wrote the uncertainties package, a version of which is
      used is lmfit.
+A. R. J. Nelson added differential_evolution.
 
 Additional patches, bug fixes, and suggestions have come from
   Christohp Deil, Francois Boulogne, Colin Brosseau, nmearl,
