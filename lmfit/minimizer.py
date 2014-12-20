@@ -558,8 +558,7 @@ class Minimizer(object):
         This assumes that ModelParameters have been stored, and a function to
         minimize has been properly set up.
 
-        This wraps scipy.optimize.leastsq, and keyword arguments are passed
-        directly as options to scipy.optimize.leastsq
+        This wraps scipy.optimize.leastsq.
 
         When possible, this calculates the estimated uncertainties and
         variable correlations from the covariance matrix.
