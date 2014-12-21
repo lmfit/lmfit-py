@@ -13,8 +13,10 @@ from . import uncertainties
 from .astutils import valid_symbol_name
 
 class Parameters(OrderedDict):
-    """a custom dictionary of Parameters.  All keys must be
-    strings, and valid Python symbol names, and all values
+    """
+    A dictionary of all the Parameters required to specify a fit model.
+
+    All keys must be strings, and valid Python symbol names, and all values
     must be Parameters.
 
     Custom methods:
@@ -44,22 +46,34 @@ class Parameters(OrderedDict):
         return self
 
     def add(self, name, value=None, vary=True, min=None, max=None, expr=None):
-        """convenience function for adding a Parameter:
-        with   p = Parameters()
-        p.add(name, value=XX, ....)
+        """
+        Convenience function for adding a Parameter:
 
-        is equivalent to
+        Example
+        -------
+        p = Parameters()
+        p.add(name, value=XX, ...)
+
+        is equivalent to:
         p[name] = Parameter(name=name, value=XX, ....
         """
         self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
                                          min=min, max=max, expr=expr))
 
     def add_many(self, *parlist):
-        """convenience function for adding a list of Parameters:
-        Here, you must provide a sequence of tuples, each containing
-        at least the name. The order in each tuple is the following:
+        """
+        Convenience function for adding a list of Parameters.
+
+        Parameters
+        ----------
+        parlist : sequence
+        A sequence of tuples, each containing at least the name. The order in
+        each tuple is the following:
             name, value, vary, min, max, expr
-        with   p = Parameters()
+
+        Example
+        -------
+        p = Parameters()
         p.add_many( (name1, val1, True, None, None, None),
                     (name2, val2, True,  0.0, None, None),
                     (name3, val3, False, None, None, None),
@@ -70,21 +84,58 @@ class Parameters(OrderedDict):
             self.add(*para)
 
     def valuesdict(self):
-        """return on ordered dictionary of name:value pairs for each Parameter.
+        """
+        Returns
+        -------
+        An ordered dictionary of name:value pairs for each Parameter.
         This is distinct from the Parameters itself, as it has values of
-        the Parameeter values, not the full Parameter object """
+        the Parameter values, not the full Parameter object.
+        """
 
         return OrderedDict(((p.name, p.value) for p in self.values()))
 
 
 class Parameter(object):
-    """A Parameter is the basic Parameter going
-    into Fit Model.  The Parameter holds many attributes:
-    value, vary, max_value, min_value, constraint expression.
-    The value and min/max values will be be set to floats.
+    """
+    A Parameter is an object used to define a Fit Model.
+    Attributes
+    ----------
+    name : str
+        Parameter name.
+    value : float
+        The numerical value of the Parameter.
+    vary : bool
+        Whether the Parameter is fixed during a fit.
+    min : float
+        Lower bound for value (None = no lower bound).
+    max : float
+        Upper bound for value (None = no upper bound).
+    expr : str
+        An expression specifying constraints for the parameter.
+    stderr : float
+        The estimated standard error for the best-fit value.
+    correl : dict
+        Specifies correlation with the other fitted Parameter after a fit.
+        Of the form `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
     """
     def __init__(self, name=None, value=None, vary=True,
                  min=None, max=None, expr=None):
+        """
+        Parameters
+        ----------
+        name : str, optional
+            Name of the parameter.
+        value : float, optional
+            Numerical Parameter value.
+        vary : bool, optional
+            Whether the Parameter is fixed during a fit.
+        min : float, optional
+            Lower bound for value (None = no lower bound).
+        max : float, optional
+            Upper bound for value (None = no upper bound).
+        expr : str, optional
+            Mathematical expression used to constrain the value during the fit.
+        """
         self.name = name
         self._val = value
         self.user_value = value
@@ -100,7 +151,23 @@ class Parameter(object):
         self._init_bounds()
 
     def set(self, value=None, vary=None, min=None, max=None, expr=None):
-        "set value, vary, min, max, expr with keyword args"
+        """
+        Set or update Parameter attributes.
+
+        Parameters
+        ----------
+        value : float, optional
+            Numerical Parameter value.
+        vary : bool, optional
+            Whether the Parameter is fixed during a fit.
+        min : float, optional
+            Lower bound for value. To remove a lower bound you must use -np.inf
+        max : float, optional
+            Upper bound for value. To remove an upper bound you must use np.inf
+        expr : str, optional
+            Mathematical expression used to constrain the value during the fit.
+            To remove a constraint you must supply an empty string.
+        """
         if value is not None:
             self._val = value
         if vary is not None:
@@ -154,12 +221,9 @@ class Parameter(object):
         return "<Parameter %s>" % ', '.join(s)
 
     def setup_bounds(self):
-        """set up Minuit-style internal/external parameter transformation
+        """
+        Set up Minuit-style internal/external parameter transformation
         of min/max bounds.
-
-        returns internal value for parameter from self.value (which holds
-        the external, user-expected value).   This internal values should
-        actually be used in a fit....
 
         As a side-effect, this also defines the self.from_internal method
         used to re-calculate self.value from the internal value, applying
@@ -168,7 +232,13 @@ class Parameter(object):
         function.
 
         This code borrows heavily from JJ Helmus' leastsqbound.py
-        """
+
+        Returns
+        -------
+        The internal value for parameter from self.value (which holds
+        the external, user-expected value).   This internal value should
+        actually be used in a fit.
+       """
         if self.min in (None, -inf) and self.max in (None, inf):
             self.from_internal = lambda val: val
             _val  = self._val
@@ -185,7 +255,10 @@ class Parameter(object):
         return _val
 
     def scale_gradient(self, val):
-        """returns scaling factor for gradient the according to Minuit-style
+        """
+        Returns
+        -------
+        scaling factor for gradient the according to Minuit-style
         transformation.
         """
         if self.min in (None, -inf) and self.max in (None, inf):
@@ -225,22 +298,27 @@ class Parameter(object):
 
     @property
     def value(self):
-        "get value"
+        "The numerical value of the Parameter, with bounds applied"
         return self._getval()
 
     @value.setter
     def value(self, val):
-        "set value"
+        "Set the numerical Parameter value."
         self._val = val
 
     @property
     def expr(self):
-        "get expression"
+        """
+        The mathematical expression used to constrain the value during the fit.
+        """
         return self._expr
 
     @expr.setter
     def expr(self, val):
-        "set expr"
+        """
+        The mathematical expression used to constrain the value during the fit.
+        To remove a constraint you must supply an empty string.
+        """
         if val == '':
             val = None
         self._expr = val
