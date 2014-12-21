@@ -1,5 +1,5 @@
 """
-Simple minimizer  is a wrapper around scipy.leastsq, allowing a
+Simple minimizer is a wrapper around scipy.leastsq, allowing a
 user to build a fitting model as a function of general purpose
 Fit Parameters that can be fixed or floated, bounded, and written
 as a simple expression of other Fit Parameters.
@@ -106,8 +106,7 @@ def check_ast_errors(error):
 
 def _differential_evolution(func, x0, **kwds):
     """
-        A wrapper for differential_evolution that can be used with
-        scipy.minimize
+    A wrapper for differential_evolution that can be used with scipy.minimize
     """
     kwargs = dict(args=(), strategy='best1bin', maxiter=None, popsize=15,
                   tol=0.01, mutation=(0.5, 1), recombination=0.7, seed=None,
@@ -136,15 +135,59 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
 
 
 class Minimizer(object):
-    """general minimizer"""
-    err_nonparam = \
-     "params must be a minimizer.Parameters() instance or list of Parameters()"
-    err_maxfev = """Too many function calls (max set to  %i)!  Use:
-    minimize(func, params, ...., maxfev=NNN)
-or set  leastsq_kws['maxfev']  to increase this maximum."""
+    """A general minimizer for curve fitting"""
+    err_nonparam = ("params must be a minimizer.Parameters() instance or list "
+                    "of Parameters()")
+    err_maxfev = ("Too many function calls (max set to %i)!  Use:"
+                  " minimize(func, params, ..., maxfev=NNN)"
+                  "or set leastsq_kws['maxfev']  to increase this maximum.")
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **kws):
+        """
+        Initialization of the Minimzer class
+
+        Parameters
+        ----------
+        userfcn : callable
+            objective function that returns the residual (difference between
+            model and data) to be minimized in a least squares sense.  The
+            function must have the signature:
+            `userfcn(params, *fcn_args, **fcn_kws)`
+        params : lmfit.parameter.Parameters object.
+            contains the Parameters for the model.
+        fcn_args : tuple, optional
+            positional arguments to pass to userfcn.
+        fcn_kws : dict, optional
+            keyword arguments to pass to userfcn.
+        iter_cb : callable, optional
+            Function to be called at each fit iteration. This function should
+            have the signature:
+            `iter_cb(params, iter, resid, *fcn_args, **fcn_kws)`,
+            where where `params` will have the current parameter values, `iter`
+            the iteration, `resid` the current residual array, and `*fcn_args`
+            and `**fcn_kws` as passed to the objective function.
+        scale_covar : bool, optional
+            Whether to automatically scale the covariance matrix (leastsq
+            only).
+        kws : dict, optional
+            Options to pass to the minimizer being used.
+
+        Notes
+        -----
+        The objective function should return the value to be minimized. For the
+        Levenberg-Marquardt algorithm from leastsq(), this returned value must
+        be an array, with a length greater than or equal to the number of
+        fitting variables in the model. For the other methods, the return value
+        can either be a scalar or an array. If an array is returned, the sum of
+        squares of the array will be sent to the underlying fitting method,
+        effectively doing a least-squares optimization of the return values.
+
+        A common use for the fcn_args and fcn_kwds would be to pass in other
+        data needed to calculate the residual, including such things as the
+        data array, dependent variable, uncertainties in the data, and other
+        data structures for the model calculation.
+        """
         self.userfcn = userfcn
         self.userargs = fcn_args
         if self.userargs is None:
@@ -182,7 +225,13 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
     @property
     def values(self):
-        "Convenience function that returns Parameter values as a simple dict."
+        """
+        Returns
+        -------
+        param_values : dict
+            Parameter values in a simple dictionary.
+        """
+
         return dict([(name, p.value) for name, p in self.params.items()])
 
     def __update_paramval(self, name):
@@ -212,19 +261,21 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.updated[name] = True
 
     def update_constraints(self):
-        """update all constrained parameters, checking that
-        dependencies are evaluated as needed."""
+        """
+        Update all constrained parameters, checking that dependencies are
+        evaluated as needed.
+        """
         self.updated = dict([(name, False) for name in self.params])
         for name in self.params:
             self.__update_paramval(name)
 
     def __residual(self, fvars):
         """
-        residual function used for least-squares fit.
-        With the new, candidate values of fvars (the fitting variables),
-        this evaluates all parameters, including setting bounds and
-        evaluating constraints, and then passes those to the
-        user-supplied function to calculate the residual.
+        Residual function used for least-squares fit.
+        With the new, candidate values of fvars (the fitting variables), this
+        evaluates all parameters, including setting bounds and evaluating
+        constraints, and then passes those to the user-supplied function to
+        calculate the residual.
         """
         # set parameter values
         for varname, val in zip(self.var_map, fvars):
@@ -272,9 +323,19 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             raise MinimizerException(self.err_nonparam)
 
     def penalty(self, params):
-        """penalty function for scalar minimizers:
-        evaluates user-supplied objective function,
-        if result is an array, return array sum-of-squares.
+        """
+        Penalty function for scalar minimizers:
+
+        Parameters
+        ----------
+        params : lmfit.parameter.Parameters object
+            The model parameters
+
+        Returns
+        -------
+        r - float
+            The user evaluated user-supplied objective function. If the
+            objective function is an array, return the array sum-of-squares
         """
         r = self.__residual(params)
         if isinstance(r, ndarray):
@@ -282,7 +343,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         return r
 
     def prepare_fit(self, params=None):
-        """prepare parameters for fit"""
+        """
+        Prepares parameters for fitting
+        """
         # determine which parameters are actually variables
         # and which are defined expressions.
         if params is None and self.params is not None and self.__prepared:
@@ -322,8 +385,9 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         self.__prepared = True
 
     def unprepare_fit(self):
-        """unprepare fit, so that subsequent fits will be
-        forced to run re-prepare the fit
+        """
+        Unprepares the fit, so that subsequent fits will be
+        forced to run prepare_fit.
 
         removes ast compilations of constraint expressions
         """
@@ -335,8 +399,16 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
     def lbfgsb(self, **kws):
         """
-        use l-bfgs-b minimization
+        Use l-bfgs-b minimization
+
+        Parameters
+        ----------
+        kws : dict
+            Minimizer options to pass to the
+            scipy.optimize.lbfgsb.fmin_l_bfgs_b function.
+
         """
+
         self.prepare_fit()
         lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
                       maxfun=2000 * (self.nvarys + 1),
@@ -360,8 +432,14 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
     def fmin(self, **kws):
         """
-        use nelder-mead (simplex) minimization
+        Use Nelder-Mead (simplex) minimization
+
+        Parameters
+        ----------
+        kws : dict
+            Minimizer options to pass to the scipy.optimize.fmin minimizer.
         """
+
         self.prepare_fit()
         fmin_kws = dict(full_output=True, disp=False, retall=True,
                         ftol=1.e-4, xtol=1.e-4,
@@ -384,20 +462,29 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         return
 
     def scalar_minimize(self, method='Nelder-Mead', **kws):
-        """use one of the scalar minimization methods from scipy.
-        Available methods include:
-          Nelder-Mead
-          Powell
-          CG  (conjugate gradient)
-          BFGS
-          Newton-CG
-          L-BFGS-B
-          TNC
-          COBYLA
-          SLSQP
-          dogleg
-          trust-ncg
-          differential_evolution
+        """
+        Use one of the scalar minimization methods from
+        scipy.optimize.minimize.
+
+        Parameters
+        ----------
+        method : str, optional
+            Name of the fitting method to use.
+            One of:
+                'Nelder-Mead' (default)
+                'L-BFGS-B'
+                'Powell'
+                'CG'
+                'Newton-CG'
+                'COBYLA'
+                'TNC'
+                'trust-ncg'
+                'dogleg'
+                'SLSQP'
+                'differential_evolution'
+
+        kws : dict, optional
+            Minimizer options pass to scipy.optimize.minimize.
 
         If the objective function returns a numpy array instead
         of the expected scalar, the sum of squares of the array
@@ -409,13 +496,18 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         differential_evolution option you must specify finite
         (min, max) for each Parameter.
 
+        Returns
+        -------
+        success : bool
+            Whether the fit was successful.
+
         """
         if not HAS_SCALAR_MIN:
             raise NotImplementedError
         self.prepare_fit()
 
         fmin_kws = dict(method=method,
-                        options={'maxiter': 1000*(self.nvarys + 1)})
+                        options={'maxiter': 1000 * (self.nvarys + 1)})
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
 
@@ -458,22 +550,30 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
             self.nfree = self.ndata - self.nvarys
         self.redchi = self.chisqr / self.nfree
         self.unprepare_fit()
-        return
+        return ret.success
 
     def leastsq(self, **kws):
         """
-        use Levenberg-Marquardt minimization to perform fit.
-        This assumes that ModelParameters have been stored,
-        and a function to minimize has been properly set up.
+        Use Levenberg-Marquardt minimization to perform a fit.
+        This assumes that ModelParameters have been stored, and a function to
+        minimize has been properly set up.
 
-        This wraps scipy.optimize.leastsq, and keyword arguments are passed
-        directly as options to scipy.optimize.leastsq
+        This wraps scipy.optimize.leastsq.
 
         When possible, this calculates the estimated uncertainties and
         variable correlations from the covariance matrix.
 
-        writes outputs to many internal attributes, and
-        returns True if fit was successful, False if not.
+        Writes outputs to many internal attributes.
+
+        Parameters
+        ----------
+        kws : dict, optional
+            Minimizer options to pass to scipy.optimize.leastsq.
+
+        Returns
+        -------
+        success : bool
+            True if fit was successful, False if not.
         """
         self.prepare_fit()
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
@@ -595,7 +695,33 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
         return self.success
 
     def minimize(self, method='leastsq'):
-        """perform minimization using supplied method"""
+        """
+        Perform the minimization.
+
+        Parameters
+        ----------
+        method : str, optional
+            Name of the fitting method to use.
+            One of:
+            'leastsq'                -    Levenberg-Marquardt (default)
+            'nelder'                 -    Nelder-Mead
+            'lbfgsb'                 -    L-BFGS-B
+            'powell'                 -    Powell
+            'cg'                     -    Conjugate-Gradient
+            'newton'                 -    Newton-CG
+            'cobyla'                 -    Cobyla
+            'tnc'                    -    Truncate Newton
+            'trust-ncg'              -    Trust Newton-CGn
+            'dogleg'                 -    Dogleg
+            'slsqp'                  -    Sequential Linear Squares Programming
+            'differential_evolution' -    differential evolution
+
+        Returns
+        -------
+        success : bool
+            Whether the fit was successful.
+        """
+
         function = self.leastsq
         kwargs = {}
 
@@ -619,9 +745,67 @@ or set  leastsq_kws['maxfev']  to increase this maximum."""
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, iter_cb=None, **fit_kws):
-    """simple minimization function,
-    finding the values for the params which give the
-    minimal sum-of-squares of the array return by fcn
+    """
+    A general purpose curvefitting function
+    The minimize function takes a objective function to be minimized, a
+    dictionary (lmfit.parameter.Parameters) containing the model parameters,
+    and several optional arguments.
+
+    Parameters
+    ----------
+    fcn : callable
+        objective function that returns the residual (difference between
+        model and data) to be minimized in a least squares sense.  The
+        function must have the signature:
+        `fcn(params, *args, **kws)`
+    params : lmfit.parameter.Parameters object.
+        contains the Parameters for the model.
+    method : str, optional
+        Name of the fitting method to use.
+        One of:
+            'leastsq'                -    Levenberg-Marquardt (default)
+            'nelder'                 -    Nelder-Mead
+            'lbfgsb'                 -    L-BFGS-B
+            'powell'                 -    Powell
+            'cg'                     -    Conjugate-Gradient
+            'newton'                 -    Newton-CG
+            'cobyla'                 -    Cobyla
+            'tnc'                    -    Truncate Newton
+            'trust-ncg'              -    Trust Newton-CGn
+            'dogleg'                 -    Dogleg
+            'slsqp'                  -    Sequential Linear Squares Programming
+            'differential_evolution' -    differential evolution
+
+    args : tuple, optional
+        Positional arguments to pass to fcn.
+    kws : dict, optional
+        keyword arguments to pass to fcn.
+    iter_cb : callable, optional
+        Function to be called at each fit iteration. This function should
+        have the signature `iter_cb(params, iter, resid, *args, **kws)`,
+        where where `params` will have the current parameter values, `iter`
+        the iteration, `resid` the current residual array, and `*args`
+        and `**kws` as passed to the objective function.
+    scale_covar : bool, optional
+        Whether to automatically scale the covariance matrix (leastsq
+        only).
+    fit_kws : dict, optional
+        Options to pass to the minimizer being used.
+
+    Notes
+    -----
+    The objective function should return the value to be minimized. For the
+    Levenberg-Marquardt algorithm from leastsq(), this returned value must
+    be an array, with a length greater than or equal to the number of
+    fitting variables in the model. For the other methods, the return value
+    can either be a scalar or an array. If an array is returned, the sum of
+    squares of the array will be sent to the underlying fitting method,
+    effectively doing a least-squares optimization of the return values.
+
+    A common use for `args` and `kwds` would be to pass in other
+    data needed to calculate the residual, including such things as the
+    data array, dependent variable, uncertainties in the data, and other
+    data structures for the model calculation.
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
