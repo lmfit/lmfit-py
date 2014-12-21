@@ -1,18 +1,24 @@
 Many people have contributed to lmfit.
 
-Matthew Newville wrote the original implementation.
-Till Stensitzki wrote the improved estimates of confidence intervals,  and
-     contributed many tests, bug fixes, and documentation.
+Matthew Newville wrote the original version and maintains the project.
+Till Stensitzki wrote the improved estimates of confidence intervals, and
+    contributed many tests, bug fixes, and documentation.
 Daniel B. Allan wrote much of the high level Model code, and many
-     improvements to the testing and documentation.
-Antonino Ingargiola wrote much of the high level Model code and
-     provided many bug fixes.
+    improvements to the testing and documentation.
+Antonino Ingargiola wrote much of the high level Model code and provided
+    many bug fixes.
 J. J. Helmus wrote the MINUT bounds for leastsq, originally in
-     leastsqbounds.py, and ported to lmfit.
-E. O. Le Bigot wrote the uncertainties package, a version of which is
-     used is lmfit.
-A. R. J. Nelson added differential_evolution.
+    leastsqbounds.py, and ported to lmfit.
+E. O. Le Bigot wrote the uncertainties package, a version of which is used
+    by lmfit.
+Michal Rawlik added plotting capabilities for Models.
+A. R. J. Nelson added differential_evolution, and greatly improved the code
+    in the docstrings.
 
-Additional patches, bug fixes, and suggestions have come from
-  Christohp Deil, Francois Boulogne, Colin Brosseau, nmearl,
-  Gustavo Pasquevich, LiCode, and Ben Gamari
+Additional patches, bug fixes, and suggestions have come from Christoph
+    Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau, nmearl,
+    Gustavo Pasquevich, Clemens Prescher, LiCode, and Ben Gamari.
+
+The lmfit code obviously depends on, and owes a very large debt to the code
+in scipy.optimize.  Several discussions on the scipy-user and lmfit mailing
+lists have also led to improvements in this code.

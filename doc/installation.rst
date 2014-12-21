@@ -56,7 +56,6 @@ and install using::
    python setup.py install
 
 
-
 Testing
 ~~~~~~~~~~
 
@@ -72,40 +71,12 @@ the ``examples`` folder, and should also run for you.  Many of these require
 Acknowledgements
 ~~~~~~~~~~~~~~~~~~
 
-LMFIT was originally written by Matthew Newville.  Substantial code and
-documentation improvements, especially for improved estimates of confidence
-intervals was provided by Till Stensitzki.  Much of the work on improved
-unit testing and high-level model functions was done by Daniel B. Allen,
-with substantial input from Antonino Ingargiola.  Many valuable suggestions
-for improvements have come from Christoph Deil.  The implementation of
-parameter bounds as described in the MINUIT documentation is taken from
-Jonathan J. Helmus' leastsqbound code, with permission.  The code for
-propagation of uncertainties is taken from Eric O. Le Bigot's uncertainties
-package, with permission.  The code obviously depends on, and owes a very
-large debt to the code in scipy.optimize.  Several discussions on the scipy
-mailing lists have also led to improvements in this code.
+.. literalinclude:: ../THANKS.txt
+
 
 License
 ~~~~~~~~~~~~~
 
 The LMFIT-py code is distribution under the following license:
 
-  Copyright (c) 2014 Matthew Newville, The University of Chicago, Till
-  Stensitzki, Freie Universitat Berlin, Daniel B. Allen, Johns Hopkins
-  University, Antonino Ingargiola, University of California, Los Angeles
-
-  Permission to use and redistribute the source code or binary forms of this
-  software and its documentation, with or without modification is hereby
-  granted provided that the above notice of copyright, these terms of use,
-  and the disclaimer of warranty below appear in the source code and
-  documentation, and that none of the names of above institutions or
-  authors appear in advertising or endorsement of works derived from this
-  software without specific prior written permission from all parties.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-  DEALINGS IN THIS SOFTWARE.
+.. literalinclude:: ../LICENSE
