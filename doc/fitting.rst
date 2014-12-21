@@ -339,6 +339,7 @@ The Minimizer object has a few public methods:
 
 .. method:: lbfgsb(**kws)
 
+
    perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
    :func:`scipy.optimize.fmin_l_bfgs_b`.
 
@@ -353,6 +354,10 @@ The Minimizer object has a few public methods:
     +------------------+----------------+------------------------------------------------------------+
     |   maxfun         | 2000*(nvar+1)  | maximum number of function calls (nvar= # of variables)    |
     +------------------+----------------+------------------------------------------------------------+
+
+.. warning::
+
+  :meth:`lbfgsb` is deprecated.  Use :meth:`minimize` with ``method='lbfgsb'``.
 
 .. method:: fmin(**kws)
 
@@ -369,6 +374,10 @@ The Minimizer object has a few public methods:
     +------------------+----------------+------------------------------------------------------------+
     |   maxfun         | 5000*(nvar+1)  | maximum number of function calls (nvar= # of variables)    |
     +------------------+----------------+------------------------------------------------------------+
+
+.. warning::
+
+  :meth:`fmin` is deprecated.  Use :meth:`minimize` with ``method='nelder'``.
 
 
 .. method:: scalar_minimize(method='Nelder-Mead', hess=None, tol=None, **kws)
@@ -449,5 +458,3 @@ which would write out::
     [[Correlations]] (unreported correlations are <  0.100)
         C(period, shift)             =  0.797
         C(amp, decay)                =  0.582
-
-
