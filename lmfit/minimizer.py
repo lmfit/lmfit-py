@@ -204,13 +204,13 @@ class Minimizer(object):
         self.ndata = 0
         self.nvarys = 0
         self.ier = 0
-        self.success = None
+        self.success = True
+        self.errorbars = False
         self.message = None
         self.lmdif_message = None
         self.chisqr = None
         self.redchi = None
         self.covar = None
-        self.errorbars = None
         self.residual = None
         self.var_map = []
         self.vars = []
