@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.1',
+        VERSION:     '0.8.2rc1-1-g5d883fd',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -113,7 +113,7 @@
                         title="previous chapter">Getting started with Non-Linear Least-Squares Fitting</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="parameters.html"
-                        title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">Parameter</span></tt>  and <tt class="docutils literal docutils literal"><span class="pre">Parameters</span></tt></a></p>
+                        title="next chapter"><tt class="docutils literal"><span class="pre">Parameter</span></tt>  and <tt class="docutils literal"><span class="pre">Parameters</span></tt></a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/installation.txt"
@@ -149,7 +149,7 @@ higher is recommended, but extensive testing on compatibility with various
 versions of scipy has not been done.  Lmfit does work with Python 2.7, and
 3.2 and 3.3.  No testing has been done with Python 3.4, but as the package
 is pure Python, relying only on scipy and numpy, no significant troubles
-are expected.  The <a class="reference external" href="http://nose.readthedocs.org/">nose</a> frameworkt is required for running the test
+are expected.  The <a class="reference external" href="http://nose.readthedocs.org/">nose</a> framework is required for running the test
 suite, and IPython and matplotib are recommended.  If Pandas is available,
 it will be used in portions of lmfit.</p>
 </div>
@@ -190,45 +190,69 @@ framework is distributed with lmfit in the <tt class="docutils literal"><span cl
 routinely run on the development version.  Running <tt class="docutils literal"><span class="pre">nosetests</span></tt> should run
 all of these tests to completion without errors or failures.</p>
 <p>Many of the examples in this documentation are distributed with lmfit in
-the <tt class="docutils literal"><span class="pre">examples</span></tt> folder, and sould also run for you.  Many of these require</p>
+the <tt class="docutils literal"><span class="pre">examples</span></tt> folder, and should also run for you.  Many of these require</p>
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
-<p>LMFIT was originally written by Matthew Newville.  Substantial code and
-documentation improvements, especially for improved estimates of confidence
-intervals was provided by Till Stensitzki.  Much of the work on improved
-unit testing and high-level model functions was done by Daniel B. Allen,
-with substantial input from Antonino Ingargiola.  Many valuable suggestions
-for improvements have come from Christoph Deil.  The implementation of
-parameter bounds as described in the MINUIT documentation is taken from
-Jonathan J. Helmus&#8217; leastsqbound code, with permission.  The code for
-propagation of uncertainties is taken from Eric O. Le Bigot&#8217;s uncertainties
-package, with permission.  The code obviously depends on, and owes a very
-large debt to the code in scipy.optimize.  Several discussions on the scipy
-mailing lists have also led to improvements in this code.</p>
+<div class="highlight-python"><div class="highlight"><pre>Many people have contributed to lmfit.
+
+Matthew Newville wrote the original version and maintains the project.
+Till Stensitzki wrote the improved estimates of confidence intervals, and
+    contributed many tests, bug fixes, and documentation.
+Daniel B. Allan wrote much of the high level Model code, and many
+    improvements to the testing and documentation.
+Antonino Ingargiola wrote much of the high level Model code and provided
+    many bug fixes.
+J. J. Helmus wrote the MINUT bounds for leastsq, originally in
+    leastsqbounds.py, and ported to lmfit.
+E. O. Le Bigot wrote the uncertainties package, a version of which is used
+    by lmfit.
+Michal Rawlik added plotting capabilities for Models.
+A. R. J. Nelson added differential_evolution, and greatly improved the code
+    in the docstrings.
+
+Additional patches, bug fixes, and suggestions have come from Christoph
+    Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau, nmearl,
+    Gustavo Pasquevich, Clemens Prescher, LiCode, and Ben Gamari.
+
+The lmfit code obviously depends on, and owes a very large debt to the code
+in scipy.optimize.  Several discussions on the scipy-user and lmfit mailing
+lists have also led to improvements in this code.
+</pre></div>
+</div>
 </div>
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p>The LMFIT-py code is distribution under the following license:</p>
-<blockquote>
-<div><p>Copyright (c) 2014 Matthew Newville, The University of Chicago, Till
-Stensitzki, Freie Universitat Berlin, Daniel B. Allen, Johns Hopkins
-University, Antonino Ingargiola, University of California, Los Angeles</p>
-<p>Permission to use and redistribute the source code or binary forms of this
-software and its documentation, with or without modification is hereby
-granted provided that the above notice of copyright, these terms of use,
-and the disclaimer of warranty below appear in the source code and
-documentation, and that none of the names of above institutions or
-authors appear in advertising or endorsement of works derived from this
-software without specific prior written permission from all parties.</p>
-<p>THE SOFTWARE IS PROVIDED &#8220;AS IS&#8221;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THIS SOFTWARE.</p>
-</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre>Copyright, Licensing, and Re-distribution
+-----------------------------------------
+
+The LMFIT-py code is distribution under the following license:
+
+  Copyright (c) 2014 Matthew Newville, The University of Chicago
+                     Till Stensitzki, Freie Universitat Berlin
+                     Daniel B. Allen, Johns Hopkins University
+                     Michal Rawlik, Eidgenossische Technische Hochschule, Zurich
+                     Antonino Ingargiola, University of California, Los Angeles
+                     A. R. J. Nelson, Australian Nuclear Science and Technology Organisation
+
+  Permission to use and redistribute the source code or binary forms of this
+  software and its documentation, with or without modification is hereby
+  granted provided that the above notice of copyright, these terms of use,
+  and the disclaimer of warranty below appear in the source code and
+  documentation, and that none of the names of above institutions or
+  authors appear in advertising or endorsement of works derived from this
+  software without specific prior written permission from all parties.
+
+  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+  DEALINGS IN THIS SOFTWARE.
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -263,7 +287,7 @@ DEALINGS IN THIS SOFTWARE.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

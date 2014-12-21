@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.1',
+        VERSION:     '0.8.2rc1-1-g5d883fd',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -291,14 +291,13 @@ Fitting Methods</em></a>.</p>
 <div><p>Table of Supported Fitting Methods:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="26%" />
 <col width="22%" />
-<col width="24%" />
+<col width="29%" />
+<col width="20%" />
 <col width="28%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Fitting
-Method</th>
+<tr class="row-odd"><th class="head">Fitting Meth</th>
 <th class="head"><tt class="docutils literal"><span class="pre">method</span></tt> arg to
 <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a></th>
 <th class="head"><a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a>
@@ -368,6 +367,12 @@ Squares Programming</td>
 <td><tt class="docutils literal"><span class="pre">slsqp</span></tt></td>
 <td>&nbsp;</td>
 <td><tt class="docutils literal"><span class="pre">SLSQP</span></tt></td>
+</tr>
+<tr class="row-even"><td>Differential
+Evolution</td>
+<td><tt class="docutils literal"><span class="pre">differential_evolution</span></tt></td>
+<td>&nbsp;</td>
+<td><tt class="docutils literal"><span class="pre">differential_evolution</span></tt></td>
 </tr>
 </tbody>
 </table>
@@ -589,6 +594,10 @@ arg</th>
 </div></blockquote>
 </dd></dl>
 
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><a class="reference internal" href="#Minimizer.lbfgsb" title="Minimizer.lbfgsb"><tt class="xref py py-meth docutils literal"><span class="pre">lbfgsb()</span></tt></a> is deprecated.  Use <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-meth docutils literal"><span class="pre">minimize()</span></tt></a> with <tt class="docutils literal"><span class="pre">method='lbfgsb'</span></tt>.</p>
+</div>
 <dl class="method">
 <dt id="Minimizer.fmin">
 <tt class="descname">fmin</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.fmin" title="Permalink to this definition">¶</a></dt>
@@ -626,6 +635,10 @@ arg</th>
 </div></blockquote>
 </dd></dl>
 
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last"><a class="reference internal" href="#Minimizer.fmin" title="Minimizer.fmin"><tt class="xref py py-meth docutils literal"><span class="pre">fmin()</span></tt></a> is deprecated.  Use <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-meth docutils literal"><span class="pre">minimize()</span></tt></a> with <tt class="docutils literal"><span class="pre">method='nelder'</span></tt>.</p>
+</div>
 <dl class="method">
 <dt id="Minimizer.scalar_minimize">
 <tt class="descname">scalar_minimize</tt><big>(</big><em>method='Nelder-Mead'</em>, <em>hess=None</em>, <em>tol=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.scalar_minimize" title="Permalink to this definition">¶</a></dt>
@@ -817,7 +830,7 @@ and correlations from fit.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

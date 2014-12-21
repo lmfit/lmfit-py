@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.1',
+        VERSION:     '0.8.2rc1-1-g5d883fd',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -629,12 +629,12 @@ is evaluated when the model is initialized (and before the actual
 expression is parsed), so that you can define functions to be used
 in your expression.</p>
 <p>As a probably unphysical example, to make a model that is the derivative of
-a Gaussian function times the logarithm of a Lorenztian function you may
+a Gaussian function times the logarithm of a Lorentzian function you may
 could to define this in a script:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">script</span> <span class="o">=</span> <span class="s">&quot;&quot;&quot;</span>
 <span class="go">def mycurve(x, amp, cen, sig):</span>
 <span class="go">    loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)</span>
-<span class="go">    gauss = gaussian(x, amplitude=ampa, center=cen, sigma=sig)</span>
+<span class="go">    gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)</span>
 <span class="go">    return log(loren)*gradient(gauss)/gradient(x)</span>
 <span class="go">&quot;&quot;&quot;</span>
 </pre></div>
@@ -651,7 +651,7 @@ and <cite>wid</cite>, and build a model that can be used to fit data.</p>
 </div>
 <div class="section" id="example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles">
 <h2>Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles<a class="headerlink" href="#example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles" title="Permalink to this headline">¶</a></h2>
-<p>Here, we will fit data to three similar lineshapes, in order to decide which
+<p>Here, we will fit data to three similar line shapes, in order to decide which
 might be the better model.  We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in <a class="reference internal" href="#models.GaussianModel" title="models.GaussianModel"><tt class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></tt></a> instead
 of one we write ourselves.  This is a slightly different version from the
@@ -852,7 +852,7 @@ constant:</p>
 <p>After constructing step-like data, we first create a <a class="reference internal" href="#models.StepModel" title="models.StepModel"><tt class="xref py py-class docutils literal"><span class="pre">StepModel</span></tt></a>
 telling it to use the <tt class="docutils literal"><span class="pre">erf</span></tt> form (see details above), and a
 <a class="reference internal" href="#models.ConstantModel" title="models.ConstantModel"><tt class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></tt></a>.  We set initial values, in one case using the data
-and <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> method for the intial step function paramaters, and
+and <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> method for the initial step function paramaters, and
 <tt class="xref py py-meth docutils literal"><span class="pre">make_params()</span></tt> arguments for the linear component.
 After making a composite model, we run <tt class="xref py py-meth docutils literal"><span class="pre">fit()</span></tt> and report the
 results, which give:</p>
@@ -1075,7 +1075,7 @@ estimate of the data.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

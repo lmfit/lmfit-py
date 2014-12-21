@@ -11,7 +11,7 @@ has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model to most closely match some
 data.  With :mod:`scipy`, such problems are commonly solved with
 :func:`scipy.optimize.curve_fit`, which is a wrapper around
-:func:`scipy.optimize.leastsq`.  Since Lmit's :func:`minimize` is also a
+:func:`scipy.optimize.leastsq`.  Since Lmfit's :func:`minimize` is also a
 high-level wrapper around :func:`scipy.optimize.leastsq` it can be used for
 curve-fitting problems, but requires more effort than using
 :func:`scipy.optimize.curve_fit`.
@@ -23,7 +23,7 @@ function.  This is closer in spirit to :func:`scipy.optimize.curve_fit`,
 but with the advantages of using :class:`Parameters` and lmfit.
 
 In addition to allowing you turn any model function into a curve-fitting
-method, Lmfit also provides canonical definitions for many known lineshapes
+method, Lmfit also provides canonical definitions for many known line shapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
 used in many scientific domains.  These are available in the :mod:`models`
 module that will be discussed in more detail in the next chapter
@@ -102,7 +102,7 @@ independent variable is, and you can add or alter parameters too.
 On creation of the model, parameters are *not* created.  The model knows
 what the parameters should be named, but not anything about the scale and
 range of your data.  You will normally have to make these parameters and
-assign initiald values and other attributes.  To help you do this, each
+assign initial values and other attributes.  To help you do this, each
 model has a :meth:`make_params` method that will generate parameters with
 the expected names:
 
@@ -188,7 +188,6 @@ except that all the other features of lmfit are included such as that the
 :class:`Parameters` can have bounds and constraints and the result is a
 richer object that can be reused to explore the fit in more detail.
 
-.. module:: model
 
 The :class:`Model` class
 =======================================
@@ -196,7 +195,7 @@ The :class:`Model` class
 The :class:`Model` class provides a general way to wrap a pre-defined
 function as a fitting model.
 
-.. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix='' [, name=None[, **kws]]]]]])
+.. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix=''[, name=None[, **kws]]]]]])
 
     Create a model based on the user-supplied function.  This uses
     introspection to automatically converting argument names of the
@@ -210,27 +209,28 @@ function as a fitting model.
     :type param_names: ``None`` (default) or list of strings
     :param missing: how to handle missing values.
     :type missing: one of ``None`` (default), 'none', 'drop', or 'raise'.
-    :param prefix: prefix to add to all parameter names to distinguish components.
+    :param prefix: prefix to add to all parameter names to distinguish components in a :class:`CompositeModel`.
     :type prefix: string
-    :param name: name for the model. When ``None`` (default) the name is the same as the model function (``func``).
+    :param name: name for the model. When ``None`` (default) the name is the same  as the model function (``func``).
     :type name: ``None`` or string.
-    :param kws:   addtional keyword arguments to pass to model function.
+    :param kws:   additional keyword arguments to pass to model function.
 
 
-    Of course, the model function will have to return an array that will be
-    the same size as the data being modeled.  Generally this is handled by
-    also specifying one or more independent variables.
+Of course, the model function will have to return an array that will be the
+same size as the data being modeled.  Generally this is handled by also
+specifying one or more independent variables.
+
 
 :class:`Model` class Methods
 ---------------------------------
 
-.. method:: eval(params=None[, **kws])
+.. method:: Model.eval(params=None[, **kws])
 
    evaluate the model function for a set of parameters and inputs.
 
    :param params: parameters to use for fit.
    :type params: ``None`` (default) or Parameters
-   :param kws:    addtional keyword arguments to pass to model function.
+   :param kws:    additional keyword arguments to pass to model function.
    :return:       ndarray for model given the parameters and other arguments.
 
    If ``params`` is ``None``, the values for all parameters are expected to
@@ -243,7 +243,7 @@ function as a fitting model.
    in using keyword arguments.
 
 
-.. method:: fit(data[, params=None[, weights=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **kws]]]]]])
+.. method:: Model.fit(data[, params=None[, weights=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **kws]]]]]])
 
    perform a fit of the model to the ``data`` array with a set of
    parameters.
@@ -262,7 +262,7 @@ function as a fitting model.
    :type  iter_cb:  callable or ``None``
    :param verbose:  print a message when a new parameter is created due to a *hint*
    :type  verbose:  bool (default ``True``)
-   :param kws:      addtional keyword arguments to pass to model function.
+   :param kws:      additional keyword arguments to pass to model function.
    :return:         :class:`ModeFitResult` object.
 
    If ``params`` is ``None``, the internal ``params`` will be used. If it
@@ -275,13 +275,13 @@ function as a fitting model.
    arguments.
 
 
-.. method:: guess(data, **kws)
+.. method:: Model.guess(data, **kws)
 
    Guess starting values for model parameters.
 
     :param data: data array used to guess parameter values
     :type func:  ndarray
-    :param kws:  addtional options to pass to model function.
+    :param kws:  additional options to pass to model function.
     :return: :class:`Parameters` with guessed initial values for each parameter.
 
    by default this is left to raise a ``NotImplementedError``, but may be
@@ -290,7 +290,7 @@ function as a fitting model.
    the parameters.
 
 
-.. method:: make_params(**kws)
+.. method:: Model.make_params(**kws)
 
    Create a set of parameters for model.
 
@@ -301,9 +301,9 @@ function as a fitting model.
     parameter.
 
 
-.. method:: set_param_hint(name, value=None[, min=None[, max=None[, vary=True[, expr=None]]]])
+.. method:: Model.set_param_hint(name, value=None[, min=None[, max=None[, vary=True[, expr=None]]]])
 
-   set *hints* to use when creating parameters with :meth:`make_param` for
+   set *hints* to use when creating parameters with :meth:`Model.make_param` for
    the named parameter.  This is especially convenient for setting initial
    values.  The ``name`` can include the models ``prefix`` or not.
 
@@ -325,13 +325,6 @@ function as a fitting model.
 :class:`Model` class Attributes
 ---------------------------------
 
-.. attribute:: components
-
-   a list of instances of :class:`Model` that make up a *composite model*.
-   See :ref:`composite_models_section`.  Normally, you will not need to use
-   this, but is used by :class:`Model` itself when constructing a composite
-   model from two or more models.
-
 .. attribute:: func
 
    The model function used to calculate the model.
@@ -339,10 +332,6 @@ function as a fitting model.
 .. attribute:: independent_vars
 
    list of strings for names of the independent variables.
-
-.. attribute:: is_composite
-
-   Boolean value for whether model is a composite model.
 
 .. attribute:: missing
 
@@ -448,8 +437,8 @@ function you are modeling:
 independent variable
     a function argument that is not a parameter or otherwise part of the
     model, and that will be required to be explicitly provided as a
-    keyword argument for each fit with :meth:`fit` or evaluation
-    with :meth:`eval`.
+    keyword argument for each fit with :meth:`Model.fit` or evaluation
+    with :meth:`Model.eval`.
 
 Note that independent variables are not required to be arrays, or even
 floating point numbers.
@@ -522,10 +511,10 @@ fit.  There are four different ways to do this initialization that can be
 used in any combination:
 
   1. You can supply initial values in the definition of the model function.
-  2. You can initialize the parameters when creating parameters with :meth:`make_params`.
-  3. You can give parameter hints with :meth:`set_param_hint`.
+  2. You can initialize the parameters when creating parameters with :meth:`Model.make_params`.
+  3. You can give parameter hints with :meth:`Model.set_param_hint`.
   4. You can supply initial values for the parameters when you use the
-     :meth:`eval` or :meth:`fit` methods.
+     :meth:`Model.eval` or :meth:`Model.fit` methods.
 
 Of course these methods can be mixed, allowing you to overwrite initial
 values at any point in the process of defining and using the model.
@@ -549,10 +538,10 @@ with keywords can be treated as options.  It also means that some default
 initial value will always be available for the parameter.
 
 
-Initializing values with :meth:`make_params`
+Initializing values with :meth:`Model.make_params`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When creating parameters with :meth:`make_params` you can specify initial
+When creating parameters with :meth:`Model.make_params` you can specify initial
 values.  To do this, use keyword arguments for the parameter names and
 initial values::
 
@@ -564,10 +553,10 @@ Initializing values by setting parameter hints
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 After a model has been created, but prior to creating parameters with
-:meth:`make_params`, you can set parameter hints.  These allows you to set
+:meth:`Model.make_params`, you can set parameter hints.  These allows you to set
 not only a default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
-expression.  To set a parameter hint, you can use :meth:`set_param_hint`,
+expression.  To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
     >>> mod = Model(myfunc)
@@ -583,17 +572,17 @@ Initializing values when using a model
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Finally, you can explicitly supply initial values when using a model.  That
-is, as with :meth:`make_params`, you can include values
-as keyword arguments to either the :meth:`eval` or :meth:`fit` methods::
+is, as with :meth:`Model.make_params`, you can include values
+as keyword arguments to either the :meth:`Model.eval` or :meth:`Model.fit` methods::
 
    >>> y1 = mod.eval(x=x, a=7.0, b=-2.0)
 
    >>> out = mod.fit(x=x, pars, a=3.0, b=-0.0)
 
-These approachess to initialization provide many opportunities for setting
+These approaches to initialization provide many opportunities for setting
 initial values for parameters.  The methods can be combined, so that you
 can set parameter hints but then change the initial value explicitly with
-:meth:`fit`.
+:meth:`Model.fit`.
 
 .. _model_param_hints_section:
 
@@ -602,10 +591,10 @@ Using parameter hints
 
 
 After a model has been created, you can give it hints for how to create
-parameters with :meth:`make_params`.  This allows you to set not only a
+parameters with :meth:`Model.make_params`.  This allows you to set not only a
 default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
-expression.   To set a parameter hint, you can use :meth:`set_param_hint`,
+expression.   To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
     >>> mod = Model(myfunc)
@@ -619,8 +608,8 @@ which is simply a nested dictionary::
     {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}}
 
 
-You can change this dictionary directly, or with the :meth:`set_param_hint`
-method.  Either way, these parameter hints are used by :meth:`make_params`
+You can change this dictionary directly, or with the :meth:`Model.set_param_hint`
+method.  Either way, these parameter hints are used by :meth:`Model.make_params`
 when making parameters.
 
 An important feature of parameter hints is that you can force the creation
@@ -637,7 +626,7 @@ The :class:`ModelFit` class
 =======================================
 
 A :class:`ModelFit` is the object returned by :meth:`Model.fit`.  It is a
-sublcass of :class:`Minimizer`, and so contains many of the fit results.
+subclass of :class:`Minimizer`, and so contains many of the fit results.
 Of course, it knows the :class:`Model` and the set of :class:`Parameters`
 used in the fit, and it has methods to evaluate the model, to fit the data
 (or re-fit the data with changes to the parameters, or fit with different
@@ -654,19 +643,34 @@ with a model.
 A :class:`ModelFit` has several attributes holding values for fit results,
 and several methods for working with fits.
 
+.. class:: ModelFit()
+
+    Model fit is intended to be created and returned by :meth:`Model.fit`.
+
+
+
 :class:`ModelFit` methods
 ---------------------------------
 
 These methods are all inherited from :class:`Minimize` or from
 :class:`Model`.
 
-.. method:: eval(**kwargs)
+.. method:: ModelFit.eval(**kwargs)
 
    evaluate the model using the best-fit parameters and supplied
    independent variables.  The ``**kwargs`` arguments can be used to update
    parameter values and/or independent variables.
 
-.. method:: fit(data=None[, params=None[, weights=None[, method=None[, **kwargs]]]])
+
+.. method:: ModelFit.eval_components(**kwargs)
+
+   evaluate each component of a :class:`CompositeModel`, returning an
+   ordered dictionary of with the values for each component model.  The
+   returned dictionary will have keys of the model prefix or (if no prefix
+   is given), the model name.  The ``**kwargs`` arguments can be used to
+   update parameter values and/or independent variables.
+
+.. method:: ModelFit.fit(data=None[, params=None[, weights=None[, method=None[, **kwargs]]]])
 
    fit (or re-fit), optionally changing ``data``, ``params``, ``weights``,
    or ``method``, or changing the independent variable(s) with the
@@ -674,7 +678,7 @@ These methods are all inherited from :class:`Minimize` or from
    descriptions, and note that any value of ``None`` defaults to the last
    used value.
 
-.. method:: fit_report(modelpars=None[, show_correl=True[, min_correl=0.1]])
+.. method:: ModelFit.fit_report(modelpars=None[, show_correl=True[,`< min_correl=0.1]])
 
    return a printable fit report for the fit with fit statistics, best-fit
    values with uncertainties and correlations.  As with :func:`fit_report`.
@@ -769,7 +773,7 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute::  nfree
 
-    integer number of free paramaeters in fit.
+    integer number of free parameters in fit.
 
 .. attribute::  nvarys
 
@@ -800,20 +804,24 @@ These methods are all inherited from :class:`Minimize` or from
    ndarray (or ``None``) of weighting values used in fit.
 
 
+.. index:: Composite models
+
 .. _composite_models_section:
 
-Creating composite models
-=============================
 
-One of the most interesting features of the :class:`Model` class is that
-models can be added together to give a composite model, with parameters
-from the component models all being available to influence the total sum of
-the separat component models.  This will become even more useful in the
-next chapter, when pre-built subclasses of :class:`Model` are discussed.
+Composite Models : adding (or multiplying) Models
+==============================================================
 
-For now, we'll consider a simple example will build a model of a Gaussian
-plus a line.  Obviously, we could build a model that included both
-components::
+One of the more interesting features of the :class:`Model` class is that
+Models can be added together or combined with basic algebraic operations
+(add, subtract, multiply, and divide) to give a composite model.  The
+composite model will have parameters from each of the component models,
+with all parameters being available to influence the whole model.  This
+ability to combine models will become even more useful in the next chapter,
+when pre-built subclasses of :class:`Model` are discussed.  For now, we'll
+consider a simple example, and build a model of a Gaussian plus a line, as
+to model a peak with a background. For such a simple problem, we could just
+build a model that included both components::
 
     def gaussian_plus_line(x, amp, cen, wid, slope, intercept):
         "line + 1-d gaussian"
@@ -826,16 +834,16 @@ and use that with::
 
     mod = Model(gaussian_plus_line)
 
-but, of course, we already had a function for a gaussian function, and
-maybe we'll discover that a linear background isn't sufficient and we'd
-have to alter the model again.  As an alternative we could just define a
-linear function::
+But we already had a function for a gaussian function, and maybe we'll
+discover that a linear background isn't sufficient which would mean the
+model function would have to be changed.  As an alternative we could define
+a linear function::
 
     def line(x, slope, intercept):
         "a line"
         return slope * x + intercept
 
-and build a composite model with::
+and build a composite model with just::
 
     mod = Model(gaussian) + Model(line)
 
@@ -846,9 +854,7 @@ This model has parameters for both component models, and can be used as:
 which prints out the results::
 
     [[Model]]
-     Composite Model:
-        gaussian
-        line
+        (Model(gaussian) + Model(line))
     [[Fit Statistics]]
         # function evals   = 44
         # data points      = 101
@@ -883,66 +889,107 @@ red line, and the initial fit is shown as a black dashed line.  In the
 figure on the right, the data is again shown in blue dots, and the Gaussian
 component shown as a black dashed line, and the linear component shown as a
 red dashed line.  These components were generated after the fit using the
-Models :meth:`eval` method::
+Models :meth:`ModelFit.eval_components` method of the `result`::
 
+    comps = result.eval_components()
 
-    comp_gauss = mod.components[0].eval(x=x)
-    comp_line  = mod.components[1].eval(x=x)
+which returns a dictionary of the components, using keys of the model name
+(or `prefix` if that is set).  This will use the parameter values in
+``result.params`` and the independent variables (``x``) used during the
+fit.  Note that while the :class:`ModelFit` held in `result` does store the
+best parameters and the best estimate of the model in ``result.best_fit``,
+the original model and parameters in ``pars`` are left unaltered.
 
-
-Note that we have to pass in ``x`` here, but not any of the final values
-for the parameters -- the current values for ``mod.params`` will be used,
-and these will be the best-fit values after a fit.  While the model does
-store the best parameters and the estimate of the data in ``mod.best_fit``,
-it does not actually store the data it fit to or the independent variables
--- here, ``x`` for that data.  That means you can easily apply this model
-to other data sets, or evaluate the model at other values of ``x``.   You
-may want to do this to give a finer or coarser spacing of data point,  or to
-extrapolate the model outside the fitting range.    This can be done with::
+You can apply this composite model to other data sets, or evaluate the
+model at other values of ``x``.  You may want to do this to give a finer or
+coarser spacing of data point, or to extrapolate the model outside the
+fitting range.  This can be done with::
 
     xwide = np.linspace(-5, 25, 3001)
     predicted = mod.eval(x=xwide)
 
+In this example, the argument names for the model functions do not overlap.
+If they had, the ``prefix`` argument to :class:`Model` would have allowed
+us to identify which parameter went with which component model.  As we will
+see in the next chapter, using composite models with the built-in models
+provides a simple way to build up complex models.
 
-A final note: In this example, the argument names for the model functions
-do not overlap.  If they had, the ``prefix`` argument to :class:`Model`
-would have allowed us to identify which parameter went with which component
-model.  As we will see in the next chapter, using composite models with the
-built-in models provides a simple way to build up complex models.
+.. class::  CompositeModel(left, right, op[, **kws])
 
-Model names for composite models
------------------------------------------
+    Create a composite model from two models (`left` and `right` and an
+    binary operator (`op`).  Additional keywords are passed to
+    :class:`Model`.
 
-By default a `Model` object has a `name` attribute containing the name of
-the model function. This name can be overridden when building a model::
+    :param left: left-hand side Model
+    :type left: :class:`Model`
+    :param right: right-hand side Model
+    :type right: :class:`Model`
+    :param op: binary operator
+    :type op: callable, and taking 2 arguments (`left` and `right`).
 
-    my_model = Model(gaussian, name='my_gaussian')
+Normally, one does not have to explicitly create a :class:`CompositeModel`,
+as doing::
 
-or by assigning the `name` attribute::
+     mod = Model(fcn1) + Model(fcn2) * Model(fcn3)
 
-    my_model = Model(gaussian)
-    my_model.name = 'my_gaussian'
+will automatically create a :class:`CompositeModel`.  In this example,
+`mod.left` will be `Model(fcn1)`, `mod.op` will be :meth:`operator.add`,
+and `mod.right` will be another CompositeModel that has a `left` attribute
+of `Model(fcn2)`, an `op` of :meth:`operator.mul`, and a `right` of
+`Model(fcn3)`.
 
-This name is used in the object representation (for example when printing)::
+If you want to use a binary operator other than add, subtract, multiply, or
+divide that are supported through normal Python syntax, you'll need to
+explicitly create a :class:`CompositeModel` with the appropriate binary
+operator.  For example, to convolve two models, you could define a simple
+convolution function, perhaps as::
 
-    <lmfit.Model: my_gaussian>
+    import numpy as np
+    def convolve(dat, kernel):
+        # simple convolution
+        npts = min(len(dat), len(kernel))
+        pad  = np.ones(npts)
+        tmp  = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
+        out  = np.convolve(tmp, kernel, mode='valid')
+        noff = int((len(out) - npts)/2)
+        return (out[noff:])[:npts]
 
-A composite model will have the name `'composite_fun'` by default, but as
-noted, we can overwrite it with a more meaningful string. This can be useful
-when dealing with multiple models.
+which extends the data in both directions so that the convolving kernel
+function gives a valid result over the data range.  Because this function
+takes two array arguments and returns an array, it can be used as the
+binary operator.  A full script using this technique is here:
 
-For example, let assume we want to fit some bi-modal data. We initially try
-two Gaussian peaks::
+.. literalinclude:: ../examples/doc_model3.py
 
-    model = GaussianModel(prefix='p1_') + GaussianModel(prefix='p2_')
-    model.name = '2-Gaussians model'
+which prints out the results::
 
-Here, instead of the standard name `'composite_func'`, we assigned a more
-meaningful name. Now, if we want to also fit with two Lorentzian peaks
-we can do similarly::
+    [[Model]]
+        (Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
+    [[Fit Statistics]]
+        # function evals   = 25
+        # data points      = 201
+        # variables        = 3
+        chi-square         = 21.692
+        reduced chi-square = 0.110
+    [[Variables]]
+        amplitude:   0.62106099 +/- 0.001783 (0.29%) (init= 1)
+        center:      4.49913218 +/- 0.009373 (0.21%) (init= 3.5)
+        mid:         5 (fixed)
+        sigma:       0.61936067 +/- 0.012977 (2.10%) (init= 1)
+    [[Correlations]] (unreported correlations are <  0.100)
+        C(amplitude, center)         =  0.336
+        C(amplitude, sigma)          =  0.274
 
-    model2 = LorentzianModel(prefix='p1_') + LorentzianModel(prefix='p2_')
-    model2.name = '2-Lorentzians model'
+and shows the plots:
 
-It is evident that assigning names will help to easily distinguish
-the different models.
+.. _figModel3:
+
+  .. image:: _images/model_fit3a.png
+     :target: _images/model_fit3a.png
+     :width: 48%
+  .. image:: _images/model_fit3b.png
+     :target: _images/model_fit3b.png
+     :width: 48%
+
+Using composite models with built-in or custom operators allows you to
+build complex models from testable sub-components.

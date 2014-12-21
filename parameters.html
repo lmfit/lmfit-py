@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.1',
+        VERSION:     '0.8.2rc1-1-g5d883fd',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -217,26 +217,31 @@ feature.</p>
 <span class="target" id="index-0"></span><dl class="method">
 <dt id="set">
 <tt class="descname">set</tt><big>(</big><em>value=None</em><span class="optional">[</span>, <em>vary=None</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#set" title="Permalink to this definition">¶</a></dt>
-<dd><p>set or update a Parameters value or other attributes.</p>
+<dd><blockquote>
+<div><p>set or update a Parameters value or other attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> &#8211; parameter name</li>
-<li><strong>value</strong> &#8211; the numerical value for the parameter</li>
-<li><strong>vary</strong> &#8211; whether to vary the parameter or not.</li>
-<li><strong>min</strong> &#8211; lower bound for value</li>
-<li><strong>max</strong> &#8211; upper bound for value</li>
-<li><strong>expr</strong> &#8211; mathematical expression to use to evaluate value during fit.</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">param name:</th><td class="field-body">parameter name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param value:</th><td class="field-body">the numerical value for the parameter</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param vary:</th><td class="field-body">whether to vary the parameter or not.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param min:</th><td class="field-body">lower bound for value</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param max:</th><td class="field-body">upper bound for value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param expr:</th><td class="field-body">mathematical expression to use to evaluate value during fit.</td>
 </tr>
 </tbody>
 </table>
-<p>Each argument of <a class="reference internal" href="#set" title="set"><tt class="xref py py-meth docutils literal"><span class="pre">set()</span></tt></a> has a default value of <tt class="docutils literal"><span class="pre">None</span></tt>, and will
-be set only if the provided value is not <tt class="docutils literal"><span class="pre">None</span></tt>.  You can use this to
-update some Parameter attribute without affecting others, for example:</p>
+<p>Each argument of <a class="reference internal" href="#set" title="set"><tt class="xref py py-meth docutils literal"><span class="pre">set()</span></tt></a> has a default value of <tt class="docutils literal"><span class="pre">None</span></tt>, and will</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>be set only if the provided value is not <tt class="docutils literal"><span class="pre">None</span></tt>.  You can use this to</dt>
+<dd><p class="first">update some Parameter attribute without affecting others, for example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">p1</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="n">p2</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -260,13 +265,15 @@ you&#8217;ll have to use <tt class="docutils literal"><span class="pre">np.inf</
 <p>Similarly, to clear an expression of a parameter, you need to pass an
 empty string, not <tt class="docutils literal"><span class="pre">None</span></tt>.  You also need to give a value and
 explicitly tell it to vary:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">p3</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;(a+b)/2&#39;</span><span class="p">)</span>
+<div class="last highlight-python"><div class="highlight"><pre><span class="n">p3</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;(a+b)/2&#39;</span><span class="p">)</span>
 <span class="n">p3</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>     <span class="c"># won&#39;t work!  expression NOT changed</span>
 
 <span class="c"># remove constraint expression</span>
 <span class="n">p3</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>  <span class="c"># will work!  parameter now unconstrained</span>
 </pre></div>
 </div>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -328,7 +335,7 @@ table-like:</p>
 <dd><p>return an ordered dictionary of name:value pairs containing the
 <tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> of a Parameter.</p>
 <p>This is distinct from the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> itself, as the dictionary
-values are not <tt class="xref py py-class docutils literal"><span class="pre">Parameeter</span></tt> objects, just the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt>.
+values are not <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects, just the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt>.
 This can be a very convenient way to get updated values in a objective
 function.</p>
 </dd></dl>
@@ -399,7 +406,7 @@ which would make the objective function <tt class="docutils literal"><span class
     <span class="k">return</span> <span class="n">model</span> <span class="o">-</span> <span class="n">data</span>
 </pre></div>
 </div>
-<p>The results are identical, and the difference is a stylisic choice.</p>
+<p>The results are identical, and the difference is a stylistic choice.</p>
 </div>
 </div>
 
@@ -434,7 +441,7 @@ which would make the objective function <tt class="docutils literal"><span class
     </div>
     <div class="footer">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>
