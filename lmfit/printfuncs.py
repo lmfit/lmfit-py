@@ -19,6 +19,11 @@ Changes:
 
 from __future__ import print_function
 from .parameter import Parameters
+import re
+
+def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
+    return [int(text) if text.isdigit() else text.lower()
+            for text in re.split(_nsre, s)]
 
 def getfloat_attr(obj, attr, fmt='%.3f'):
     "format an attribute of an object for printing"
@@ -79,8 +84,8 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
         result = inpars
         params = inpars.params
 
-    parnames = sorted(params)
-    parnames = sorted(params)
+    parnames = sorted(params, key=natural_sort_key)
+    parnames = sorted(params, key=natural_sort_key)
     buff = []
     add = buff.append
     if result is not None:
