@@ -97,7 +97,9 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             key = natural_sort_key
         parnames = sorted(params, key=key)
     else:
-        parnames = params.keys()
+        # dict.keys() returns a KeysView in py3, and they're indexed further
+        # down
+        parnames = list(params.keys())
 
     buff = []
     add = buff.append
