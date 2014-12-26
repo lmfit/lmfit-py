@@ -20,6 +20,9 @@ details on writing the function to minimize.
 
 .. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **leastsq_kws]]]]]])
 
+   .. warning ::
+       This function mutates the input ``params`` object.
+
    find values for the ``params`` so that the sum-of-squares of the array returned
    from ``function`` is minimized.
 
