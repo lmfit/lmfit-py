@@ -567,6 +567,11 @@ class CompositeModel(Model):
         def _tmp(self, *args, **kws): pass
         Model.__init__(self, _tmp, **kws)
 
+        for side in (left, right):
+            prefix = side.prefix
+            for basename, hint in side.param_hints.items():
+                self.param_hints["%s%s" % (prefix, basename)] = hint
+
     def _parse_params(self):
         self._func_haskeywords = (self.left._func_haskeywords or
                                   self.right._func_haskeywords)
