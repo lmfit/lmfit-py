@@ -36,6 +36,14 @@ try:
 except ImportError:
     pass
 
+# check for pymc
+HAS_PYMC = False
+try:
+    import pymc as pm
+    HAS_PYMC = True
+except ImportError:
+    pass
+
 from .asteval import Interpreter
 from .astutils import NameFinder
 from .parameter import Parameter, Parameters
@@ -219,6 +227,7 @@ class Minimizer(object):
         self.jacfcn = None
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
+        self.MDL = None
         self.__prepared = False
         self.__set_params(params)
         # self.prepare_fit()
@@ -464,6 +473,105 @@ class Minimizer(object):
         self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
+
+    def mcmc(self, samples=1e4, burn=0, thin=1):
+        """
+        Markov Chain Monte Carlo sampling of the posterior distribution for
+        the parameters, given the objective function for this system.
+
+        Parameters
+        ----------
+        samples : int, optional
+            How many draws are made from the posterior distribution.
+        burn : int, optional
+            How many draws are discarded from the start of the sampling
+        thin : int, optional
+            The sampler only saves every thin'th draw.  Increase this number to
+            reduce the autocorrelation of the Markov chains.
+
+        Returns
+        -------
+        MDL : pymc.MCMC instance.
+            Contains the state of the pymc sampler.
+        """
+        if not HAS_PYMC:
+            raise NotImplementedError('You must have pymc for the mcmc method')
+
+        # break link between input params and output params!
+        params = deepcopy(self.params)
+        self.params = params
+
+        # work out which parameters are being fitted
+        fitted = {}
+        self.__fun_evals = 0
+        j = 0
+        for i, par in enumerate(params):
+            parameter = params[par]
+            if parameter.vary:
+                fitted[parameter.name] = (i, j)
+                j += 1
+
+        bounds = [(params[param].min, params[param].max) for param in params]
+        if not np.all(np.isfinite(bounds)):
+            raise ValueError('With mcmc finite (min, max are required for '
+                             ' every parameter')
+
+        p = np.empty(len(fitted), dtype=object)
+        for par, idx in fitted.items():
+            parameter = params[par]
+            p[idx[1]] = pm.Uniform(parameter.name, parameter.min,
+                                     parameter.max, value=parameter.value)
+
+        @pm.observed
+        def likelihood(value=self.__residual(params), p=p):
+            """
+            likelihood function for the objective function. It's
+            normal_like because we expect the residuals to be normally
+            distributed around zero.
+            """
+            self.__fun_evals += 1
+            for name in fitted:
+                params[name].value = p[fitted[name][1]]
+            residuals = self.__residual(params)
+            zero = np.zeros_like(residuals)
+            ones = np.ones_like(residuals)
+            # residuals already encodes mu and tau
+            # http://pymc-devs.github.io/pymc/distributions.html
+            return pm.normal_like(residuals, zero, ones)
+
+        MDL = pm.MCMC([likelihood, p])
+        MDL.sample(samples, burn=burn, thin=thin)
+
+        stats = MDL.stats()
+
+        #work out correlation coefficients
+        corrcoefs = np.corrcoef(np.vstack(
+                     [MDL.trace(par, chain=None)[:] for par in fitted.keys()]))
+
+        for par in self.params:
+            params[par].stderr = None
+            params[par].correl = None
+
+        for par in fitted.keys():
+            i = fitted[par][1]
+            param = params[par]
+            param.correl = {}
+            param.value = stats[par]['mean']
+            param.stderr = stats[par]['standard deviation']
+            for par2 in fitted.keys():
+                j = fitted[par2][1]
+                if i != j:
+                    param.correl[par2] = corrcoefs[i, j]
+
+        residuals = self.__residual(params)
+        self.ndata = residuals.size
+        self.nvarys = len(fitted)
+        self.nfev = self.__fun_evals
+        self.chisqr = np.sum(residuals ** 2)
+        self.redchi = self.chisqr / (self.ndata - self.nvarys)
+        del(self.__fun_evals)
+        self.MDL = MDL
+        return MDL
 
     def scalar_minimize(self, method='Nelder-Mead', **kws):
         """
