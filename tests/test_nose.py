@@ -9,6 +9,11 @@ from numpy import pi
 import unittest
 import nose
 from nose import SkipTest
+try:
+    import pymc as pm
+    HAS_PYMC = True
+except ImportError:
+    HAS_PYMC = False
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
@@ -95,6 +100,8 @@ class test_mcmc(unittest.TestCase):
                               fcn_args=(self.x, self.data))
 
     def test_mcmc(self):
+        if not HAS_PYMC:
+            return True
         np.random.seed(123456)
         self.mini.mcmc(samples=5000, burn=1000, thin=10)
         mc_fit_params = self.mini.params
