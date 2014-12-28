@@ -6,6 +6,7 @@ from lmfit.lineshapes import gaussian
 from lmfit_testutils import assert_paramval
 import numpy as np
 from numpy import pi
+from numpy.testing import assert_allclose
 import unittest
 import nose
 from nose import SkipTest
@@ -72,6 +73,8 @@ def test_simple():
 
 class test_mcmc(unittest.TestCase):
     def setUp(self):
+
+        np.random.seed(123456)
         self.x = np.linspace(0, 15, 301)
         self.data = 5. * np.sin(2 * self.x - 0.1)
         self.data *= np.exp(-self.x * self.x * 0.025)
@@ -105,10 +108,17 @@ class test_mcmc(unittest.TestCase):
         np.random.seed(123456)
         self.mini.mcmc(samples=5000, burn=1000, thin=10)
         mc_fit_params = self.mini.params
-        assert_paramval(mc_fit_params['amp'], 5.03, tol=0.03)
-        assert_paramval(mc_fit_params['omega'], 2.0, tol=0.03)
-        assert_paramval(mc_fit_params['shift'], -0.1, tol=0.03)
-        assert_paramval(mc_fit_params['decay'], 0.025, tol=0.03)
+        # test that fitted parameters are within tolerance.
+        values = mc_fit_params.valuesdict().values()
+        assert_allclose(values, [4.97, 0.025, -0.1, 2.0], atol=0.01)
+        
+        # test that stderrors are similar to those obtained from LM.
+        self.mini.minimize()
+        LM_fit_params = self.mini.params
+        
+        for par in mc_fit_params:
+            assert_allclose(mc_fit_params[par].stderr,
+                            LM_fit_params[par].stderr, atol=0.01)
 
 def test_lbfgsb():
     p_true = Parameters()
