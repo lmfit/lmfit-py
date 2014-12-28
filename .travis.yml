@@ -15,7 +15,7 @@ before_install:
     - conda update --yes conda
 
 install:
-    - conda install --yes pip python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib dateutil nose
+    - conda install --yes pip python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib dateutil nose pymc
     - python setup.py install
 
 script:
