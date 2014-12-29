@@ -337,8 +337,8 @@ class Minimizer(object):
 
         Parameters
         ----------
-        params : lmfit.parameter.Parameters object
-            The model parameters
+        params : sequence
+            The floating point values for the varying paramters
 
         Returns
         -------
@@ -486,7 +486,7 @@ class Minimizer(object):
         burn : int, optional
             How many draws are discarded from the start of the sampling
         thin : int, optional
-            The sampler only saves every thin'th draw.  Increase this number to
+            The sampler only takes every thin'th draw.  Increase this number to
             reduce the autocorrelation of the Markov chains.
 
         Returns
@@ -495,44 +495,47 @@ class Minimizer(object):
             Contains the state of the pymc sampler.
         """
         if not HAS_PYMC:
-            raise NotImplementedError('You must have pymc for the mcmc method')
+            raise NotImplementedError('You must have pymc to use the mcmc '
+                                      'method')
 
-        # break link between input params and output params!
-        params = deepcopy(self.params)
-        self.params = params
+        self.prepare_fit()
+        params = self.params
+        self.nvarys = len(self.var_map)
+        
+        bounds = [(params[var].min, params[var].max) for var
+                  in self.var_map]
 
-        # work out which parameters are being fitted
-        fitted = {}
-        self.__fun_evals = 0
-        j = 0
-        for i, par in enumerate(params):
-            parameter = params[par]
-            if parameter.vary:
-                fitted[parameter.name] = (i, j)
-                j += 1
-
-        bounds = [(params[param].min, params[param].max) for param in params]
         if not np.all(np.isfinite(bounds)):
-            raise ValueError('With mcmc finite (min, max are required for '
-                             ' every parameter')
+            raise ValueError('With mcmc finite (min, max) are required for '
+                             ' every varying parameter')
 
-        p = np.empty(len(fitted), dtype=object)
-        for par, idx in fitted.items():
+        p = np.empty(len(self.var_map), dtype=object)
+        self.vars = []
+        for i, par in enumerate(self.var_map):
             parameter = params[par]
-            p[idx[1]] = pm.Uniform(parameter.name, parameter.min,
+            p[i] = pm.Uniform(parameter.name, parameter.min,
                                      parameter.max, value=parameter.value)
 
+            # every parameter in Parameters has an attribute, from_internal
+            # that scales a fully bounded parameter to (-np.pi/2, np.pi/2).
+            # We have to remove this because the pymc distribution only draws
+            # from between the (min, max) bounds.  This scaling is done from
+            # self.__residual 
+            parameter.from_internal = lambda val: val        
+            self.vars.append(p[i].value)
+
+        self.__fun_evals = 0
+
         @pm.observed
-        def likelihood(value=self.__residual(params), p=p):
+        def likelihood(value=self.__residual(self.vars), p=p):
             """
             likelihood function for the objective function. It's
             normal_like because we expect the residuals to be normally
             distributed around zero.
             """
             self.__fun_evals += 1
-            for name in fitted:
-                params[name].value = p[fitted[name][1]]
-            residuals = self.__residual(params)
+                
+            residuals = self.__residual(p)
             zero = np.zeros_like(residuals)
             ones = np.ones_like(residuals)
             # residuals already encodes mu and tau
@@ -543,34 +546,36 @@ class Minimizer(object):
         MDL.sample(samples, burn=burn, thin=thin)
 
         stats = MDL.stats()
-
         #work out correlation coefficients
         corrcoefs = np.corrcoef(np.vstack(
-                     [MDL.trace(par, chain=None)[:] for par in fitted.keys()]))
+                     [MDL.trace(par, chain=None)[:] for par in self.var_map]))
 
         for par in self.params:
-            params[par].stderr = None
-            params[par].correl = None
+            self.params[par].stderr = None
+            self.params[par].correl = None
 
-        for par in fitted.keys():
-            i = fitted[par][1]
-            param = params[par]
-            param.correl = {}
-            param.value = stats[par]['mean']
-            param.stderr = stats[par]['standard deviation']
-            for par2 in fitted.keys():
-                j = fitted[par2][1]
+        for i, par in enumerate(self.var_map):
+            self.params[par].value = stats[par]['mean']
+            self.vars[i] = stats[par]['mean']
+            self.params[par].stderr = stats[par]['standard deviation']
+            self.params[par].correl = {}
+            for j, par2 in enumerate(self.var_map):
                 if i != j:
-                    param.correl[par2] = corrcoefs[i, j]
+                    self.params[par].correl[par2] = corrcoefs[i, j]
 
-        residuals = self.__residual(params)
+        residuals = self.__residual(self.vars)
         self.ndata = residuals.size
-        self.nvarys = len(fitted)
         self.nfev = self.__fun_evals
         self.chisqr = np.sum(residuals ** 2)
         self.redchi = self.chisqr / (self.ndata - self.nvarys)
         del(self.__fun_evals)
         self.MDL = MDL
+        self.unprepare_fit()
+        
+        for par in self.var_map:
+            # return internal parameter scaling to original state
+            self.params[par].setup_bounds()
+
         return MDL
 
     def scalar_minimize(self, method='Nelder-Mead', **kws):
