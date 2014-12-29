@@ -21,7 +21,7 @@ from __future__ import print_function
 from .parameter import Parameters
 import re
 
-def natural_sort_key(s, _nsre=re.compile('([0-9]+)')):
+def alphanumeric_sort(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
 
@@ -94,7 +94,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         if callable(sort_pars):
             key = sort_pars
         else:
-            key = natural_sort_key
+            key = alphanumeric_sort
         parnames = sorted(params, key=key)
     else:
         # dict.keys() returns a KeysView in py3, and they're indexed further
