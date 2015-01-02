@@ -524,7 +524,7 @@ class Minimizer(object):
             parameter.from_internal = lambda val: val        
             self.vars.append(p[i].value)
 
-        self.__fun_evals = 0
+        self._fun_evals = 0
 
         @pm.observed
         def likelihood(value=self.__residual(self.vars), p=p):
@@ -533,7 +533,7 @@ class Minimizer(object):
             normal_like because we expect the residuals to be normally
             distributed around zero.
             """
-            self.__fun_evals += 1
+            self._fun_evals += 1
                 
             residuals = self.__residual(p)
             zero = np.zeros_like(residuals)
@@ -565,10 +565,9 @@ class Minimizer(object):
 
         residuals = self.__residual(self.vars)
         self.ndata = residuals.size
-        self.nfev = self.__fun_evals
+        self.nfev = self._fun_evals
         self.chisqr = np.sum(residuals ** 2)
         self.redchi = self.chisqr / (self.ndata - self.nvarys)
-        del(self.__fun_evals)
         self.MDL = MDL
         self.unprepare_fit()
         
