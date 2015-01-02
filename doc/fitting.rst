@@ -337,6 +337,31 @@ The Minimizer object has a few public methods:
 
 
 
+.. method:: mcmc(samples, burn=0, thin=1)
+
+   :param samples:     The number of samples the MCMC model draws
+   :type  sample:      int
+   :param burn:        The number of samples the MCMC model discards from the start of the sampling
+                       process.
+   :type  burn:        int
+   :param thin:        Once the burn process has completed a tally occurs every *thin* samples.
+                       Increase this number to reduce the correlation between successive draws (e.g. 30)
+   :type  thin:        int
+
+   :return: pymc.MCMC instance, which can be processed to obtain statistics about the sampling process, or
+                      be used to conduct further sampling.
+
+   Fits data with a Bayesian modelling approach via Markov Chain Monte Carlo (MCMC).  One obtains
+   the posterior probability (uncertainty) distribution for each varied parameter. The ``pymc``
+   package must be installed to use this method.  Once the sampling process is completed the method
+   calculates statistics for each parameter, as if a 'leastsq' fit had been completed.  i.e. the mean
+   and standard deviation of the posterior distribution provides the fitted parameter value and the
+   ``stderr`` respectively.  In addition, the interparameter correlations are calculated.  Very detailed
+   information can be obtained from the ``Minimizer.MDL`` attribute, but is beyond the scope of this
+   documentation. The user is advised to consult the `PyMC <http://pymc-devs.github.io/pymc/>`_ site
+   for further details.
+
+
 .. method:: lbfgsb(**kws)
 
 
