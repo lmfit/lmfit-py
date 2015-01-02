@@ -133,7 +133,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
             if hasattr(par, 'correl') and par.correl is not None:
                 for name2 in parnames[i+1:]:
                     if (name != name2 and name2 in par.correl and
-                        par.correl[name2] > min_correl):
+                        abs(par.correl[name2]) > min_correl):
                         correls["%s, %s" % (name, name2)] = par.correl[name2]
 
         sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
