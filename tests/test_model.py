@@ -256,7 +256,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(out.params['acenter'].value > 2.0)
         self.assertTrue(out.params['acenter'].value < 3.0)
 
-
         mod = models.GaussianModel(prefix='b')
         data = gaussian(x=self.x, **vals) + self.noise/3.0
         pars = mod.guess(data, x=self.x)
@@ -358,8 +357,8 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         mx = (m1 + m2)
         params = mx.make_params()
         param_values = {name: p.value for name, p in params.items()}
-        self.assertTrue(param_values['p1_amplitude'] == 1)
-        self.assertTrue(param_values['p2_amplitude'] == 2)
+        self.assertEqual(param_values['p1_amplitude'], 1)
+        self.assertEqual(param_values['p2_amplitude'], 2)
 
 
 class TestLinear(CommonTests, unittest.TestCase):
