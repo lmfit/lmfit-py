@@ -22,7 +22,7 @@ class test_copy_params(unittest.TestCase):
         return (data - model)
 
     def params_values(self, params):
-        return params.valuesdict().values()
+        return np.asfarray(params.valuesdict().values())
 
     def test_copy_params(self):
         # checking output for gh-#56
