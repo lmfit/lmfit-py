@@ -36,6 +36,14 @@ try:
 except ImportError:
     pass
 
+# check for pymc
+HAS_PYMC = False
+try:
+    import pymc as pm
+    HAS_PYMC = True
+except ImportError:
+    pass
+
 from .asteval import Interpreter
 from .astutils import NameFinder
 from .parameter import Parameter, Parameters
@@ -219,6 +227,7 @@ class Minimizer(object):
         self.jacfcn = None
         self.asteval = Interpreter()
         self.namefinder = NameFinder()
+        self.MDL = None
         self.__prepared = False
         self.__set_params(params)
         # self.prepare_fit()
@@ -328,8 +337,8 @@ class Minimizer(object):
 
         Parameters
         ----------
-        params : lmfit.parameter.Parameters object
-            The model parameters
+        params : sequence
+            The floating point values for the varying paramters
 
         Returns
         -------
@@ -464,6 +473,109 @@ class Minimizer(object):
         self.redchi = self.chisqr/self.nfree
         self.unprepare_fit()
         return
+
+    def mcmc(self, samples=1e4, burn=0, thin=1):
+        """
+        Markov Chain Monte Carlo sampling of the posterior distribution for
+        the parameters, given the objective function for this system.
+
+        Parameters
+        ----------
+        samples : int, optional
+            How many draws are made from the posterior distribution.
+        burn : int, optional
+            How many draws are discarded from the start of the sampling
+        thin : int, optional
+            The sampler only takes every thin'th draw.  Increase this number to
+            reduce the autocorrelation of the Markov chains.
+
+        Returns
+        -------
+        MDL : pymc.MCMC instance.
+            Contains the state of the pymc sampler.
+        """
+        if not HAS_PYMC:
+            raise NotImplementedError('You must have pymc to use the mcmc '
+                                      'method')
+
+        self.prepare_fit()
+        params = self.params
+        self.nvarys = len(self.var_map)
+        
+        bounds = [(params[var].min, params[var].max) for var
+                  in self.var_map]
+
+        if not np.all(np.isfinite(bounds)):
+            raise ValueError('With mcmc finite (min, max) are required for '
+                             ' every varying parameter')
+
+        p = np.empty(len(self.var_map), dtype=object)
+        self.vars = []
+        for i, par in enumerate(self.var_map):
+            parameter = params[par]
+            p[i] = pm.Uniform(parameter.name, parameter.min,
+                                     parameter.max, value=parameter.value)
+
+            # every parameter in Parameters has an attribute, from_internal
+            # that scales a fully bounded parameter to (-np.pi/2, np.pi/2).
+            # We have to remove this because the pymc distribution only draws
+            # from between the (min, max) bounds.  This scaling is done from
+            # self.__residual 
+            parameter.from_internal = lambda val: val        
+            self.vars.append(p[i].value)
+
+        self._fun_evals = 0
+
+        @pm.observed
+        def likelihood(value=self.__residual(self.vars), p=p):
+            """
+            likelihood function for the objective function. It's
+            normal_like because we expect the residuals to be normally
+            distributed around zero.
+            """
+            self._fun_evals += 1
+                
+            residuals = self.__residual(p)
+            zero = np.zeros_like(residuals)
+            ones = np.ones_like(residuals)
+            # residuals already encodes mu and tau
+            # http://pymc-devs.github.io/pymc/distributions.html
+            return pm.normal_like(residuals, zero, ones)
+
+        MDL = pm.MCMC([likelihood, p])
+        MDL.sample(samples, burn=burn, thin=thin)
+
+        stats = MDL.stats()
+        #work out correlation coefficients
+        corrcoefs = np.corrcoef(np.vstack(
+                     [MDL.trace(par, chain=None)[:] for par in self.var_map]))
+
+        for par in self.params:
+            self.params[par].stderr = None
+            self.params[par].correl = None
+
+        for i, par in enumerate(self.var_map):
+            self.params[par].value = stats[par]['mean']
+            self.vars[i] = stats[par]['mean']
+            self.params[par].stderr = stats[par]['standard deviation']
+            self.params[par].correl = {}
+            for j, par2 in enumerate(self.var_map):
+                if i != j:
+                    self.params[par].correl[par2] = corrcoefs[i, j]
+
+        residuals = self.__residual(self.vars)
+        self.ndata = residuals.size
+        self.nfev = self._fun_evals
+        self.chisqr = np.sum(residuals ** 2)
+        self.redchi = self.chisqr / (self.ndata - self.nvarys)
+        self.MDL = MDL
+        self.unprepare_fit()
+        
+        for par in self.var_map:
+            # return internal parameter scaling to original state
+            self.params[par].setup_bounds()
+
+        return MDL
 
     def scalar_minimize(self, method='Nelder-Mead', **kws):
         """

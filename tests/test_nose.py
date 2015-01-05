@@ -3,11 +3,18 @@ from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
 from lmfit.minimizer import SCALAR_METHODS
 from lmfit.lineshapes import gaussian
+from lmfit_testutils import assert_paramval
 import numpy as np
 from numpy import pi
+from numpy.testing import assert_allclose
 import unittest
 import nose
 from nose import SkipTest
+try:
+    import pymc as pm
+    HAS_PYMC = True
+except ImportError:
+    HAS_PYMC = False
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
@@ -62,6 +69,62 @@ def test_simple():
 
     for para, val in zip(params.values(), [5, 0.025, -.1, 2]):
         check(para, val)
+
+
+class test_mcmc(unittest.TestCase):
+    def setUp(self):
+
+        np.random.seed(123456)
+        self.x = np.linspace(0, 15, 301)
+        self.data = 5. * np.sin(2 * self.x - 0.1)
+        self.data *= np.exp(-self.x * self.x * 0.025)
+        self.data += np.random.normal(size=len(self.x), scale=0.2)
+
+        def fcn2min(params, x, data):
+            """ model decaying sine wave, subtract data"""
+            amp = params['amp'].value
+            shift = params['shift'].value
+            omega = params['omega'].value
+            decay = params['decay'].value
+            model = amp * np.sin(self.x * omega + shift)
+            model *= np.exp(-self.x * self.x * decay)
+            return model - data
+
+        self.objective = fcn2min
+        # create a set of Parameters
+        params = Parameters()
+        params.add('amp',   value=10.,  min=0., max=10.)
+        params.add('decay', value=0.105, min=0., max=0.105)
+        params.add('shift', value=0.0, min=-np.pi/2., max=np.pi/2)
+        params.add('omega', value=2.99, min=1., max=3.)
+        self.params = params
+
+        self.mini = Minimizer(self.objective, self.params,
+                              fcn_args=(self.x, self.data))
+
+    def test_mcmc(self):
+        if not HAS_PYMC:
+            return True
+                
+        params = self.mini.params
+        np.random.seed(123456)
+        self.mini.mcmc(samples=5000, burn=1000, thin=10)
+        mc_fit_params = self.mini.params
+        # test that fitted parameters are within tolerance of the lM values
+        values = mc_fit_params.valuesdict().values()
+
+        self.mini.minimize()
+        LM_fit_params = self.mini.params
+        LM_values = LM_fit_params.valuesdict().values()
+        assert_allclose(values, LM_values, atol=0.06)
+        
+        # test that stderrors are similar to those obtained from LM.
+        self.mini.minimize()
+        LM_fit_params = self.mini.params
+        
+        for par in mc_fit_params:
+            assert_allclose(mc_fit_params[par].stderr,
+                            LM_fit_params[par].stderr, atol=0.02)
 
 def test_lbfgsb():
     p_true = Parameters()
@@ -276,7 +339,7 @@ class CommonMinimizerTest(unittest.TestCase):
         if data is None:
             return model
         return (model - data)
-        
+
     def test_diffev_bounds_check(self):
         # You need finite (min, max) for each parameter if you're using
         # differential_evolution.
@@ -295,7 +358,7 @@ class CommonMinimizerTest(unittest.TestCase):
             else:
                 sig = 0.15
             self.scalar_minimizer(sig=sig)
-        
+
     def scalar_minimizer(self, sig=0.15):
         try:
             from scipy.optimize import minimize as scipy_minimize
