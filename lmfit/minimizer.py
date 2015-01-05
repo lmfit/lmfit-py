@@ -539,8 +539,14 @@ class Minimizer(object):
                                  'are required for each parameter')
             bounds = [(-np.pi / 2., np.pi / 2.)] * len(self.vars)
             fmin_kws['bounds'] = bounds
+            
+            # in scipy 0.14 this can be called directly from scipy_minimize
+            # When minimum scipy is 0.14 the following line and the else
+            # can be removed.
+            ret = _differential_evolution(self.penalty, self.vars, **fmin_kws)
+        else:
+            ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
 
-        ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
         xout = ret.x
         self.message = ret.message
 
