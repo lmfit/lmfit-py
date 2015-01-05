@@ -460,8 +460,14 @@ class Model(object):
         blank_param = any([(p.value is None and p.expr is None)
                            for p in params.values()])
         if missing_param or blank_param:
-            raise ValueError("""Assign each parameter an initial value by
- passing Parameters or keyword arguments to fit""")
+            msg = ('Assign each parameter an initial value by passing '
+                   'Parameters or keyword arguments to fit.\n')
+            missing = [p for p in self.param_names if p not in params.keys()]
+            blank = [name for name, p in params.items()
+                                    if (p.value is None and p.expr is None)]
+            msg += 'Missing parameters: %s\n' % str(missing)
+            msg += 'Non initialized parameters: %s' % str(blank)
+            raise ValueError(msg)
 
         # Do not alter anything that implements the array interface (np.array, pd.Series)
         # but convert other iterables (e.g., Python lists) to numpy arrays.
@@ -537,7 +543,8 @@ class CompositeModel(Model):
         the model function (`func`).
 
     """
-    _names_collide = "Two models have parameters named {clash}. Use distinct names"
+    _names_collide = ("\nTwo models have parameters named '{clash}'. "
+                      "Use distinct names.")
     _bad_arg   = "CompositeModel: argument {arg} is not a Model"
     _bad_op    = "CompositeModel: operator {op} is not callable"
     _known_ops = {operator.add: '+', operator.sub: '-',
@@ -557,8 +564,12 @@ class CompositeModel(Model):
 
         name_collisions = left.param_names & right.param_names
         if len(name_collisions) > 0:
-            raise NameError(self._names_collide.format(clash=name_collisions))
+            msg = ''
+            for collision in name_collisions:
+                msg += self._names_collide.format(clash=collision)
+            raise NameError(msg)
 
+        # we assume that all the sub-models have the same independent vars
         if 'independent_vars' not in kws:
             kws['independent_vars'] = self.left.independent_vars
         if 'missing' not in kws:

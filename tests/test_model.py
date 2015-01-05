@@ -256,7 +256,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(out.params['acenter'].value > 2.0)
         self.assertTrue(out.params['acenter'].value < 3.0)
 
-
         mod = models.GaussianModel(prefix='b')
         data = gaussian(x=self.x, **vals) + self.noise/3.0
         pars = mod.guess(data, x=self.x)
@@ -343,6 +342,23 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         model_total3 = (model1 + model2) + (model3 + model4)
         for mod in [model1, model2, model3, model4]:
             self.assertTrue(mod in model_total3.components)
+
+    def test_hints_in_composite_models(self):
+        # test propagation of hints from base models to composite model
+        def func(x, amplitude):
+            pass
+
+        m1 = Model(func, prefix='p1_')
+        m2 = Model(func, prefix='p2_')
+
+        m1.set_param_hint('amplitude', value=1)
+        m2.set_param_hint('amplitude', value=2)
+
+        mx = (m1 + m2)
+        params = mx.make_params()
+        param_values = {name: p.value for name, p in params.items()}
+        self.assertEqual(param_values['p1_amplitude'], 1)
+        self.assertEqual(param_values['p2_amplitude'], 2)
 
 
 class TestLinear(CommonTests, unittest.TestCase):
