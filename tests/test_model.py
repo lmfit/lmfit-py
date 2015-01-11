@@ -343,6 +343,35 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         for mod in [model1, model2, model3, model4]:
             self.assertTrue(mod in model_total3.components)
 
+    def test_composite_has_bestvalues(self):
+        # test that a composite model has non-empty best_values
+        model1 = models.GaussianModel(prefix='g1_')
+        model2 = models.GaussianModel(prefix='g2_')
+
+        mod  = model1 + model2
+        pars = mod.make_params()
+
+        values1 = dict(amplitude=7.10, center=1.1, sigma=2.40)
+        values2 = dict(amplitude=12.2, center=2.5, sigma=0.5)
+        data  = gaussian(x=self.x, **values1) + gaussian(x=self.x, **values2) + 0.1*self.noise
+
+        pars['g1_sigma'].set(2)
+        pars['g1_center'].set(1, max=1.5)
+        pars['g1_amplitude'].set(3)
+        pars['g2_sigma'].set(1)
+        pars['g2_center'].set(2.6, min=2.0)
+        pars['g2_amplitude'].set(1)
+
+        result = mod.fit(data, params=pars, x=self.x)
+
+        self.assertTrue(len(result.best_values) == 6)
+
+        self.assertTrue(abs(result.params['g1_amplitude'].value -  7.1) < 0.5)
+        self.assertTrue(abs(result.params['g2_amplitude'].value - 12.2) < 0.5)
+        self.assertTrue(abs(result.params['g1_center'].value    -  1.1) < 0.2)
+        self.assertTrue(abs(result.params['g2_center'].value    -  2.5) < 0.2)
+
+
     def test_hints_in_composite_models(self):
         # test propagation of hints from base models to composite model
         def func(x, amplitude):
