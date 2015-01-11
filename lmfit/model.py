@@ -617,6 +617,11 @@ class CompositeModel(Model):
         """return components for composite model"""
         return self.left.components + self.right.components
 
+    def _make_all_args(self, params=None, **kwargs):
+        """generate **all** function args for all functions"""
+        out = self.right._make_all_args(params=params, **kwargs)
+        out.update(self.left._make_all_args(params=params, **kwargs))
+        return out
 
 class ModelFit(Minimizer):
     """Result from Model fit
