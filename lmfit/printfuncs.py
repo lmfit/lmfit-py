@@ -19,6 +19,11 @@ Changes:
 
 from __future__ import print_function
 from .parameter import Parameters
+import re
+
+def alphanumeric_sort(s, _nsre=re.compile('([0-9]+)')):
+    return [int(text) if text.isdigit() else text.lower()
+            for text in re.split(_nsre, s)]
 
 def getfloat_attr(obj, attr, fmt='%.3f'):
     "format an attribute of an object for printing"
@@ -61,7 +66,8 @@ def gformat(val, length=11):
 
 CORREL_HEAD = '[[Correlations]] (unreported correlations are < % .3f)'
 
-def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
+def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
+               sort_pars=False):
     """return text of a report for fitted params best-fit values,
     uncertainties and correlations
 
@@ -71,16 +77,30 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1):
        modelpars    Optional Known Model Parameters [None]
        show_correl  whether to show list of sorted correlations [True]
        min_correl   smallest correlation absolute value to show [0.1]
-
+       sort_pars    If True, then fit_report will show parameter names
+                    sorted in alphanumerical order.  If False, then the
+                    parameters will be listed in the order they were added to
+                    the Parameters dictionary. If sort_pars is callable, then
+                    this (one argument) function is used to extract a
+                    comparison key from each list element.
     """
     if isinstance(inpars, Parameters):
         result, params = None, inpars
     if hasattr(inpars, 'params'):
         result = inpars
         params = inpars.params
+    
+    if sort_pars:
+        if callable(sort_pars):
+            key = sort_pars
+        else:
+            key = alphanumeric_sort
+        parnames = sorted(params, key=key)
+    else:
+        # dict.keys() returns a KeysView in py3, and they're indexed further
+        # down
+        parnames = list(params.keys())
 
-    parnames = sorted(params)
-    parnames = sorted(params)
     buff = []
     add = buff.append
     if result is not None:
