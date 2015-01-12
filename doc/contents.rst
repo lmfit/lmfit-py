@@ -6,6 +6,8 @@ Contents
 
    intro
    installation
+   support
+   faq
    parameters
    fitting
    model
