@@ -355,6 +355,7 @@ class Minimizer(object):
         self.nfev = 0
         self.var_map = []
         self.vars = []
+        self.errorbars = False
         for name, par in self.params.items():
             par.stderr = None
             par.correl = None

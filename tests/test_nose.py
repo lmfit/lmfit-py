@@ -267,7 +267,9 @@ def test_scalar_minimize_has_no_uncertainties():
 
     mini = Minimizer(fcn2min, params, fcn_args=(x, data))
     mini.minimize()
-    assert(np.isfinite(mini.params['amp'].stderr))
+    assert_(np.isfinite(mini.params['amp'].stderr))
+    print(mini.errorbars)
+    assert_(mini.errorbars == True)
     mini.minimize(method='nelder-mead')
     assert_(mini.params['amp'].stderr is None)
     assert_(mini.params['decay'].stderr is None)
@@ -277,6 +279,7 @@ def test_scalar_minimize_has_no_uncertainties():
     assert_(mini.params['decay'].correl is None)
     assert_(mini.params['shift'].correl is None)
     assert_(mini.params['omega'].correl is None)
+    assert_(mini.errorbars == False)
 
 
 class CommonMinimizerTest(unittest.TestCase):
