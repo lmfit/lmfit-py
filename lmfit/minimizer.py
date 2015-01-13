@@ -356,6 +356,9 @@ class Minimizer(object):
         self.var_map = []
         self.vars = []
         for name, par in self.params.items():
+            par.stderr = None
+            par.correl = None
+
             if par.expr is not None:
                 par.ast = self.asteval.parse(par.expr)
                 check_ast_errors(self.asteval.error)
