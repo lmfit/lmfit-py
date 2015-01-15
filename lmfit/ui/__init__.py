@@ -36,7 +36,7 @@ if has_matplotlib:
 
 if has_ipython:
     from .ipy_fitter import NotebookFitter
+    from .basefitter import MPLFitter
     BaseFitter = BaseFitter
     MPLFitter = MPLFitter
     Fitter = NotebookFitter
-
