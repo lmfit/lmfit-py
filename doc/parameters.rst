@@ -183,6 +183,33 @@ The :class:`Parameters` class
    This can be a very convenient way to get updated values in a objective
    function.
 
+.. method:: dumps(**kws):
+
+   return a JSON string representation of the :class:`Parameter` object.
+   This can be saved or used to re-create or re-set parameters, using the
+   :meth:`loads` method.
+
+   Optional keywords are sent :py:func:`json.dumps`.
+
+.. method:: dump(file, **kws):
+
+   write a JSON representation of the :class:`Parameter` object to a file
+   or file-like object in `file` -- really any object with a :meth:`write`
+   method.  Optional keywords are sent :py:func:`json.dumps`.
+
+.. method:: loads(sval, **kws):
+
+   use a JSON string representation of the :class:`Parameter` object in
+   `sval` to set all parameter settins. Optional keywords are sent
+   :py:func:`json.loads`.
+
+.. method:: load(file, **kws):
+
+   read and use a JSON string representation of the :class:`Parameter`
+   object from a file or file-like object in `file` -- really any object
+   with a :meth:`read` method.  Optional keywords are sent
+   :py:func:`json.loads`.
+
 
 Simple Example
 ==================
