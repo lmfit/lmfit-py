@@ -31,12 +31,8 @@ from .basefitter import BaseFitter
 Fitter = BaseFitter
 if has_matplotlib:
     from .basefitter import MPLFitter
-    BaseFitter = BaseFitter
     Fitter = MPLFitter
 
 if has_ipython:
     from .ipy_fitter import NotebookFitter
-    from .basefitter import MPLFitter
-    BaseFitter = BaseFitter
-    MPLFitter = MPLFitter
     Fitter = NotebookFitter
