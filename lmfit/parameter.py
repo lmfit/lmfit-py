@@ -3,7 +3,7 @@ Parameter class
 """
 from numpy import arcsin, cos, sin, sqrt, inf, nan
 import json
-
+import sys
 try:
     from collections import OrderedDict
 except ImportError:
@@ -323,14 +323,14 @@ class Parameter(object):
             self.from_internal = lambda val: val
             _val  = self._val
         elif self.max in (None, inf):
-            self.from_internal = lambda val: self.min - 1 + sqrt(val*val + 1)
-            _val  = sqrt((self._val - self.min + 1)**2 - 1)
+            self.from_internal = lambda val: self.min - 1.0 + sqrt(val*val + 1)
+            _val  = sqrt((self._val - self.min + 1.0)**2 - 1)
         elif self.min in (None, -inf):
             self.from_internal = lambda val: self.max + 1 - sqrt(val*val + 1)
-            _val  = sqrt((self.max - self._val + 1)**2 - 1)
+            _val  = sqrt((self.max - self._val + 1.0)**2 - 1)
         else:
             self.from_internal = lambda val: self.min + (sin(val) + 1) * \
-                                 (self.max - self.min) / 2
+                                 (self.max - self.min) / 2.0
             _val  = arcsin(2*(self._val - self.min)/(self.max - self.min) - 1)
         return _val
 
@@ -367,7 +367,7 @@ class Parameter(object):
             self.max =  inf
         if self.max < self.min:
             self.max, self.min = self.min, self.max
-        if abs((self.max - self.min)/max(self.max, self.min)) < 1.e-13:
+        if abs((1.0*self.max - self.min)/max(self.max, self.min)) < 1.e-13:
             raise ValueError("Parameter '%s' has min == max" % self.name)
 
         try:
