@@ -1,6 +1,7 @@
 """
 Parameter class
 """
+from __future__ import division
 from numpy import arcsin, cos, sin, sqrt, inf, nan
 import json
 import sys
