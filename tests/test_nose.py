@@ -5,6 +5,7 @@ from lmfit.minimizer import SCALAR_METHODS
 from lmfit.lineshapes import gaussian
 import numpy as np
 from numpy import pi
+from numpy.testing import assert_
 import unittest
 import nose
 from nose import SkipTest
@@ -47,7 +48,6 @@ def test_simple():
     params.add('decay', value= 0.1)
     params.add('shift', value= 0.0, min=-pi / 2., max=pi / 2)
     params.add('omega', value= 3.0)
-
 
     # do fit, here with leastsq model
     result = minimize(fcn2min, params, args=(x, data))
@@ -231,6 +231,55 @@ def test_peakfit():
 
     fit = residual(fit_params, x)
     check_paras(fit_params, org_params)
+
+
+def test_scalar_minimize_has_no_uncertainties():
+    # scalar_minimize doesn't calculate uncertainties.
+    # when a scalar_minimize is run the stderr and correl for each parameter
+    # should be None. (stderr and correl are set to None when a Parameter is
+    # initialised).
+    # This requires a reset after a leastsq fit has been done.
+    # Only when scalar_minimize calculates stderr and correl can this test
+    # be removed.
+
+    np.random.seed(1)
+    x = np.linspace(0, 15, 301)
+    data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
+            np.random.normal(size=len(x), scale=0.2) )
+
+    # define objective function: returns the array to be minimized
+    def fcn2min(params, x, data):
+        """ model decaying sine wave, subtract data"""
+        amp = params['amp'].value
+        shift = params['shift'].value
+        omega = params['omega'].value
+        decay = params['decay'].value
+
+        model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
+        return model - data
+
+    # create a set of Parameters
+    params = Parameters()
+    params.add('amp',   value= 10,  min=0)
+    params.add('decay', value= 0.1)
+    params.add('shift', value= 0.0, min=-pi / 2., max=pi / 2)
+    params.add('omega', value= 3.0)
+
+    mini = Minimizer(fcn2min, params, fcn_args=(x, data))
+    mini.minimize()
+    assert_(np.isfinite(mini.params['amp'].stderr))
+    print(mini.errorbars)
+    assert_(mini.errorbars == True)
+    mini.minimize(method='nelder-mead')
+    assert_(mini.params['amp'].stderr is None)
+    assert_(mini.params['decay'].stderr is None)
+    assert_(mini.params['shift'].stderr is None)
+    assert_(mini.params['omega'].stderr is None)
+    assert_(mini.params['amp'].correl is None)
+    assert_(mini.params['decay'].correl is None)
+    assert_(mini.params['shift'].correl is None)
+    assert_(mini.params['omega'].correl is None)
+    assert_(mini.errorbars == False)
 
 
 class CommonMinimizerTest(unittest.TestCase):
