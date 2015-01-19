@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Frequently Asked Questions &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    
+    <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.8.3rc1-14-g3d12eec',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="next" title="Parameter and Parameters" href="parameters.html" />
+    <link rel="prev" title="Getting Help" href="support.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head>
+  <body>
+<div>
+<table border=0>
+  <tr><td></td><td width=75% padding=5 align=left>
+       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=8% align=left>
+          <a href="installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td width=8% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+  </tr>
+  <tr><td></td><td width=75% padding=5 align=left>
+        <a href="index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td><td></td>
+     <td width=8% align=left>
+         <a href="intro.html" style="color: #882222">
+         <font size+=1>Introduction</font></a> </td>
+     <td width=8% align=left>
+         <a href="parameters.html" style="color: #882222">
+         <font size+=1>Parameters</font></a> </td>
+     <td width=8% align=left>
+         <a href="model.html" style="color: #882222">
+         <font size+=1>Models</font></a> </td>
+
+  </tr>
+</table>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameter and Parameters"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="support.html" title="Getting Help"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="constraints.html">constraints</a>]</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
+<li><a class="reference internal" href="#how-can-i-fit-multi-dimensional-data">How can I fit multi-dimensional data?</a></li>
+<li><a class="reference internal" href="#how-can-i-fit-complex-data">How can I fit complex data?</a></li>
+<li><a class="reference internal" href="#can-i-constrain-values-to-have-integer-values">Can I constrain values to have integer values?</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="support.html"
+                        title="previous chapter">Getting Help</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parameters.html"
+                        title="next chapter"><tt class="docutils literal"><span class="pre">Parameter</span></tt>  and <tt class="docutils literal"><span class="pre">Parameters</span></tt></a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/faq.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<p>A list of common questions.</p>
+<div class="section" id="how-can-i-fit-multi-dimensional-data">
+<h2>How can I fit multi-dimensional data?<a class="headerlink" href="#how-can-i-fit-multi-dimensional-data" title="Permalink to this headline">¶</a></h2>
+<p>The fitting routines except data arrays that are 1 dimensional and double
+precision.  So you need to convert the data and model (or the value
+returned by the objective function) to be one dimensional by using
+numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html#numpy.ndarray.flatten" title="(in NumPy v1.9)"><tt class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.flatten()</span></tt></a>, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="o">....</span>
+    <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_multidim_residual</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-can-i-fit-complex-data">
+<h2>How can I fit complex data?<a class="headerlink" href="#how-can-i-fit-complex-data" title="Permalink to this headline">¶</a></h2>
+<p>As with working with multidimensional data, you need to convert your data
+and model (or the value returned by the objective function) to be real.
+One way to do this would be to use a function like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">realimag</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>to convert the complex array into an array of alternating real and
+imaginary values.  You can then use this function on the result returned by
+your objective function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="o">....</span>
+    <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_complex_residual</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">realimag</span><span class="p">(</span><span class="n">resid</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="can-i-constrain-values-to-have-integer-values">
+<h2>Can I constrain values to have integer values?<a class="headerlink" href="#can-i-constrain-values-to-have-integer-values" title="Permalink to this headline">¶</a></h2>
+<p>Basically, no.  None of the minimizers in lmfit support integer
+programming.  They all (I think) assume that they can make a very small
+change to a floating point value for a parameters value and see a change in
+the value to be minimized.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="parameters.html" title="Parameter and Parameters"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="support.html" title="Getting Help"
+             >previous</a> |</li>
+   <li>[<a href="intro.html">intro</a>|</li>
+   <li><a href="parameters.html">parameters</a>|</li>
+   <li><a href="fitting.html"> minimize</a>|</li>
+   <li><a href="model.html"> model</a>|</li>
+   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="confidence.html">confidence intervals</a>|</li>
+   <li><a href="bounds.html">bounds</a>|</li>
+   <li><a href="constraints.html">constraints</a>]</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

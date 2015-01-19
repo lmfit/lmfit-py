@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.8.3rc1-14-g3d12eec',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -90,19 +90,17 @@
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper"><h3>Getting LMFIT</h3>
-<p>Current version: <b>0.8.2</b></p>
+<p>Current version: <b>0.8.3rc1-14-g3d12eec</b></p>
 <p>Download: &nbsp; <a href="http://pypi.python.org/pypi/lmfit/">PyPI (Python.org)</a>
 <p>Install:  &nbsp; <tt>pip install lmfit</tt>
 <p>
-<p>Development version: <br> 
+<p>Development version: <br>
 &nbsp; &nbsp; <a href="https://github.com/lmfit/lmfit-py/">github.com</a> <br>
 
-<h3>Support and Feedback</h3>
+<h3>Questions?</h3>
 
-&nbsp; <a href="https://groups.google.com/group/lmfit-py"> Mailing List</a> 
-
-<br>
-&nbsp; <a href="https://github.com/lmfit/lmfit-py/issues"> Issue Tracker</a>
+&nbsp; <a href="support.html"> Getting Help</a> <br>
+&nbsp; <a href="faq.html"> Frequently Asked Questions</a>
 
 <h3>Off-line Documentation</h3>
 
@@ -112,7 +110,7 @@
 ]
 
 
-<hr> 
+<hr>
 <p>
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
@@ -139,8 +137,8 @@
 <h1>Non-Linear Least-Square Minimization and Curve-Fitting for Python<a class="headerlink" href="#non-linear-least-square-minimization-and-curve-fitting-for-python" title="Permalink to this headline">¶</a></h1>
 <p>Lmfit provides a high-level interface to non-linear optimization and
 curve fitting problems for Python. Lmfit builds on
-<a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>, but
-also supports most of the optimization methods from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.
+<a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>, but
+also supports most of the optimization methods from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.
 It has a number of useful enhancements, including:</p>
 <blockquote>
 <div><ul class="simple">
@@ -152,12 +150,12 @@ constrained by an algebraic expression of other Parameter values.</li>
 one can change the fitting algorithm without changing the objective
 function.</li>
 <li>Improved estimation of confidence intervals.  While
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a> will automatically calculate
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a> will automatically calculate
 uncertainties and correlations from the covariance matrix, lmfit also
 has functions to explicitly explore parameter space to determine
 confidence levels even for the most difficult cases.</li>
 <li>Improved curve-fitting with the <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class.  This which
-extends the capabilities of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>, allowing
+extends the capabilities of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>, allowing
 you to turn a function that models for your data into a python class
 that helps you parametrize and fit data with that model.</li>
 <li>Many <a class="reference internal" href="builtin_models.html#builtin-models-chapter"><em>pre-built models</em></a> for common
@@ -178,6 +176,13 @@ participating in this effort please use the <a class="reference external" href="
 <li class="toctree-l2"><a class="reference internal" href="installation.html#testing">Testing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#acknowledgements">Acknowledgements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="support.html">Getting Help</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-multi-dimensional-data">How can I fit multi-dimensional data?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-complex-data">How can I fit complex data?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#can-i-constrain-values-to-have-integer-values">Can I constrain values to have integer values?</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html"><tt class="docutils literal"><span class="pre">Parameter</span></tt>  and <tt class="docutils literal"><span class="pre">Parameters</span></tt></a><ul>

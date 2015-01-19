@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.8.3rc1-14-g3d12eec',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Performing Fits, Analyzing Outputs" href="fitting.html" />
-    <link rel="prev" title="Downloading and Installation" href="installation.html" />
+    <link rel="prev" title="Frequently Asked Questions" href="faq.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
         "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
@@ -78,7 +78,7 @@
           <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="installation.html" title="Downloading and Installation"
+          <a href="faq.html" title="Frequently Asked Questions"
              accesskey="P">previous</a> |</li>
    <li>[<a href="intro.html">intro</a>|</li>
    <li><a href="#">parameters</a>|</li>
@@ -105,8 +105,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="installation.html"
-                        title="previous chapter">Downloading and Installation</a></p>
+  <p class="topless"><a href="faq.html"
+                        title="previous chapter">Frequently Asked Questions</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fitting.html"
                         title="next chapter">Performing Fits, Analyzing Outputs</a></p>
@@ -141,12 +141,12 @@
 <p>This chapter describes <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects which is the key concept
 of lmfit.  A <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> is the quantity to be optimized in all
 minimization problems, replacing the plain floating point number used in
-the optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  A <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
+the optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  A <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
 has a value that can be varied in the fit, fixed, have upper and/or lower
 bounds.  It can even have a value that is constrained by an algebraic
 expression of other Parameter values.  Since <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> live
 outside the core optimization routines, they can be used in <strong>all</strong>
-optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  By using
+optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  By using
 <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects instead of plain variables, the objective
 function does not have to be modified to reflect every change of what is
 varied in the fit.  This simplifies the writing of models, allowing general
@@ -154,7 +154,7 @@ models that describe the phenomenon to be written, and gives the user more
 flexibility in using and testing variations of that model.</p>
 <p>Whereas a <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> expands on an individual floating point
 variable, the optimization methods need an ordered group of floating point
-variables.  In the <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a> routines this is required to be a
+variables.  In the <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a> routines this is required to be a
 1-dimensional numpy ndarray.  For lmfit, where each <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> has
 a name, this is replaced by a <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class, which works as an
 ordered dictionary of <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects, with a few additional
@@ -340,6 +340,40 @@ This can be a very convenient way to get updated values in a objective
 function.</p>
 </dd></dl>
 
+<dl class="method">
+<dt>
+<tt class="descname">dumps(**kws):</tt></dt>
+<dd><p>return a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> object.
+This can be saved or used to re-create or re-set parameters, using the
+<tt class="xref py py-meth docutils literal"><span class="pre">loads()</span></tt> method.</p>
+<p>Optional keywords are sent <a class="reference external" href="http://docs.python.org/2/library/json.html#json.dumps" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">dump(file, **kws):</tt></dt>
+<dd><p>write a JSON representation of the <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> object to a file
+or file-like object in <cite>file</cite> &#8211; really any object with a <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt>
+method.  Optional keywords are sent <a class="reference external" href="http://docs.python.org/2/library/json.html#json.dumps" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">loads(sval, **kws):</tt></dt>
+<dd><p>use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> object in
+<cite>sval</cite> to set all parameter settins. Optional keywords are sent
+<a class="reference external" href="http://docs.python.org/2/library/json.html#json.loads" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">json.loads()</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">load(file, **kws):</tt></dt>
+<dd><p>read and use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
+object from a file or file-like object in <cite>file</cite> &#8211; really any object
+with a <tt class="xref py py-meth docutils literal"><span class="pre">read()</span></tt> method.  Optional keywords are sent
+<a class="reference external" href="http://docs.python.org/2/library/json.html#json.loads" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">json.loads()</span></tt></a>.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="simple-example">
 <h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
@@ -426,7 +460,7 @@ which would make the objective function <tt class="docutils literal"><span class
           <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
              >next</a> |</li>
         <li class="right" >
-          <a href="installation.html" title="Downloading and Installation"
+          <a href="faq.html" title="Frequently Asked Questions"
              >previous</a> |</li>
    <li>[<a href="intro.html">intro</a>|</li>
    <li><a href="#">parameters</a>|</li>

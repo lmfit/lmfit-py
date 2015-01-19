@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.8.3rc1-14-g3d12eec',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -170,7 +170,7 @@ reserved word.  Each value must be <a class="reference internal" href="parameter
 <li><strong>method</strong> (string (default <tt class="docutils literal"><span class="pre">leastsq</span></tt>)) &#8211; name of fitting method to use. See  <a class="reference internal" href="#fit-methods-label"><em>Choosing Different Fitting Methods</em></a> for details</li>
 <li><strong>scale_covar</strong> (bool (default <tt class="docutils literal"><span class="pre">True</span></tt>)) &#8211; whether to automatically scale covariance matrix (<tt class="docutils literal"><span class="pre">leastsq</span></tt> only)</li>
 <li><strong>iter_cb</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) &#8211; function to be called at each fit iteration</li>
-<li><strong>leastsq_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</li>
+<li><strong>leastsq_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</li>
 </ul>
 </td>
 </tr>
@@ -428,10 +428,10 @@ Attribute</th>
 <td>message about fit success.</td>
 </tr>
 <tr class="row-even"><td>ier</td>
-<td>integer error value from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a></td>
+<td>integer error value from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a></td>
 </tr>
 <tr class="row-odd"><td>lmdif_message</td>
-<td>message from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a></td>
+<td>message from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a></td>
 </tr>
 <tr class="row-even"><td>nvarys</td>
 <td>number of variables in fit  <span class="math">\(N_{\rm varys}\)</span></td>
@@ -502,7 +502,7 @@ reserved word.  Each value must be <a class="reference internal" href="parameter
 <li><strong>fcn_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
 <li><strong>iter_cb</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) &#8211; function to be called at each fit iteration</li>
 <li><strong>scale_covar</strong> &#8211; flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (<tt class="docutils literal"><span class="pre">leastsq</span></tt> only)</li>
-<li><strong>kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass as keywords to the underlying <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a> method.</li>
+<li><strong>kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass as keywords to the underlying <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a> method.</li>
 </ul>
 </td>
 </tr>
@@ -519,7 +519,7 @@ statistics, or to re-run fit.</p>
 <dt id="Minimizer.leastsq">
 <tt class="descname">leastsq</tt><big>(</big><em>scale_covar=True</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.leastsq" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform fit with Levenberg-Marquardt algorithm.  Keywords will be passed directly to
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.
 By default, numerical derivatives are used, and the following arguments are set:</p>
 <blockquote>
 <div><table border="1" class="docutils">
@@ -561,7 +561,7 @@ arg</th>
 <dt id="Minimizer.lbfgsb">
 <tt class="descname">lbfgsb</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.lbfgsb" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html#scipy.optimize.fmin_l_bfgs_b" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.fmin_l_bfgs_b()</span></tt></a>.</p>
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html#scipy.optimize.fmin_l_bfgs_b" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.fmin_l_bfgs_b()</span></tt></a>.</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -602,7 +602,7 @@ arg</th>
 <dt id="Minimizer.fmin">
 <tt class="descname">fmin</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.fmin" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform fit with Nelder-Mead downhill simplex algorithm.  Keywords will be passed directly to
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html#scipy.optimize.fmin" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.fmin()</span></tt></a>.</p>
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html#scipy.optimize.fmin" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.fmin()</span></tt></a>.</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -643,7 +643,7 @@ arg</th>
 <dt id="Minimizer.scalar_minimize">
 <tt class="descname">scalar_minimize</tt><big>(</big><em>method='Nelder-Mead'</em>, <em>hess=None</em>, <em>tol=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.scalar_minimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform fit with any of the scalar minimization algorithms supported by
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></tt></a>.</p>
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></tt></a>.</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>

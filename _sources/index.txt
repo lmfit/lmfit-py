@@ -48,6 +48,8 @@ participating in this effort please use the `lmfit github repository`_.
 
    intro
    installation
+   support
+   faq
    parameters
    fitting
    model
@@ -55,6 +57,3 @@ participating in this effort please use the `lmfit github repository`_.
    confidence
    bounds
    constraints
-
-
-

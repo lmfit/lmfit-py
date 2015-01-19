@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.8.3rc1-14-g3d12eec',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -306,7 +306,7 @@ parameters <tt class="docutils literal"><span class="pre">amplitude</span></tt> 
 <div class="math">
 \[f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}\]</div>
 <p>where <span class="math">\(\beta\)</span> is the beta function (see <tt class="xref py py-func docutils literal"><span class="pre">scipy.special.beta()</span></tt> in
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/special.html#module-scipy.special" title="(in SciPy v0.14.0)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.special</span></tt></a>).  The <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> function always
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/special.html#module-scipy.special" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.special</span></tt></a>).  The <tt class="xref py py-meth docutils literal"><span class="pre">guess()</span></tt> function always
 gives a starting value for <tt class="docutils literal"><span class="pre">exponent</span></tt> of 1.5.</p>
 </div>
 <div class="section" id="studentstmodel">
@@ -417,7 +417,7 @@ photo-emission. With the usual parameters <tt class="docutils literal"><span cla
 <h2>Linear and Polynomial Models<a class="headerlink" href="#linear-and-polynomial-models" title="Permalink to this headline">¶</a></h2>
 <p>These models correspond to polynomials of some degree.  Of course, lmfit is
 a very inefficient way to do linear regression (see <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html#numpy.polyfit" title="(in NumPy v1.9)"><tt class="xref py py-func docutils literal"><span class="pre">numpy.polyfit()</span></tt></a>
-or <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html#scipy.stats.linregress" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.stats.linregress()</span></tt></a>), but these models may be useful as one
+or <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html#scipy.stats.linregress" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.stats.linregress()</span></tt></a>), but these models may be useful as one
 of many components of composite model.</p>
 <div class="section" id="constantmodel">
 <h3><a class="reference internal" href="#models.ConstantModel" title="models.ConstantModel"><tt class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></tt></a><a class="headerlink" href="#constantmodel" title="Permalink to this headline">¶</a></h3>

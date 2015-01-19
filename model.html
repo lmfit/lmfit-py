@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.2',
+        VERSION:     '0.8.3rc1-14-g3d12eec',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -163,15 +163,15 @@
 has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model to most closely match some
 data.  With <tt class="xref py py-mod docutils literal"><span class="pre">scipy</span></tt>, such problems are commonly solved with
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>, which is a wrapper around
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.  Since Lmfit&#8217;s <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> is also a
-high-level wrapper around <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a> it can be used for
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>, which is a wrapper around
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.  Since Lmfit&#8217;s <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> is also a
+high-level wrapper around <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a> it can be used for
 curve-fitting problems, but requires more effort than using
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>.</p>
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>.</p>
 <p>Here we discuss lmfit&#8217;s <a class="reference internal" href="#model.Model" title="model.Model"><tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt></a> class.  This takes a model function
 &#8211; a function that calculates a model for some data &#8211; and provides methods
 to create parameters for that model and to fit data using that model
-function.  This is closer in spirit to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>,
+function.  This is closer in spirit to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>,
 but with the advantages of using <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> and lmfit.</p>
 <p>In addition to allowing you turn any model function into a curve-fitting
 method, Lmfit also provides canonical definitions for many known line shapes
@@ -196,7 +196,7 @@ own.  We start with a simple definition the model function:</p>
 </pre></div>
 </div>
 <p>that we want to use to fit to some data <span class="math">\(y(x)\)</span> represented by the
-arrays <tt class="docutils literal"><span class="pre">y</span></tt> and <tt class="docutils literal"><span class="pre">x</span></tt>.  Using <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a> makes this
+arrays <tt class="docutils literal"><span class="pre">y</span></tt> and <tt class="docutils literal"><span class="pre">x</span></tt>.  Using <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a> makes this
 easy to do, allowing us to do something like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -208,7 +208,7 @@ easy to do, allowing us to do something like:</p>
 </pre></div>
 </div>
 <p>That is, we read in data from somewhere, make an initial guess of the model
-values, and run <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a> with the model function,
+values, and run <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a> with the model function,
 data arrays, and initial guesses.  The results returned are the optimal
 values for the parameters and the covariance matrix.  It&#8217;s simple and very
 useful.  But it misses the benefits of lmfit.</p>
@@ -339,7 +339,7 @@ with 2 lines of code:</p>
 <p>These lines clearly express that we want to turn the <tt class="docutils literal"><span class="pre">gaussian</span></tt> function
 into a fitting model, and then fit the <span class="math">\(y(x)\)</span> data to this model,
 starting with values of 5 for <tt class="docutils literal"><span class="pre">amp</span></tt>, 5 for <tt class="docutils literal"><span class="pre">cen</span></tt> and 1 for <tt class="docutils literal"><span class="pre">wid</span></tt>, and
-compare well to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>:</p>
+compare well to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">best_vals</span><span class="p">,</span> <span class="n">covar</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">gaussian</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -939,7 +939,7 @@ independent variables and with best-fit parameters.</p>
 <dl class="attribute">
 <dt id="model.ier">
 <tt class="descname">ier</tt><a class="headerlink" href="#model.ier" title="Permalink to this definition">¶</a></dt>
-<dd><p>integer returned code from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</p>
+<dd><p>integer returned code from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -980,7 +980,7 @@ iteration, <tt class="docutils literal"><span class="pre">resid</span></tt> the 
 <dl class="attribute">
 <dt id="model.lmdif_message">
 <tt class="descname">lmdif_message</tt><a class="headerlink" href="#model.lmdif_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>string message returned from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.14.0)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</p>
+<dd><p>string message returned from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
