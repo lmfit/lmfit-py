@@ -1,8 +1,10 @@
 """
 Parameter class
 """
+from __future__ import division
 from numpy import arcsin, cos, sin, sqrt, inf, nan
-
+import json
+import sys
 try:
     from collections import OrderedDict
 except ImportError:
@@ -24,6 +26,8 @@ class Parameters(OrderedDict):
 
     add()
     add_many()
+    dumps() / dump()
+    loads() / load()
     """
     def __init__(self, *args, **kwds):
         super(Parameters, self).__init__(self)
@@ -94,6 +98,83 @@ class Parameters(OrderedDict):
 
         return OrderedDict(((p.name, p.value) for p in self.values()))
 
+    def dumps(self, **kws):
+        """represent Parameters as a JSON string.
+
+        all keyword arguments are passed to `json.dumps()`
+
+        Returns
+        -------
+        json string representation of Parameters
+
+        See Also
+        --------
+        dump(), loads(), load(), json.dumps()
+        """
+        out = [p.__getstate__() for p in self.values()]
+        return json.dumps(out, **kws)
+
+    def loads(self, s, **kws):
+        """load Parameters from a JSON string.
+
+        current Parameters will be cleared before loading.
+
+        all keyword arguments are passed to `json.loads()`
+
+        Returns
+        -------
+        None.   Parameters are updated as a side-effect
+
+        See Also
+        --------
+        dump(), dumps(), load(), json.loads()
+
+        """
+        self.clear()
+        for parstate in json.loads(s, **kws):
+            _par = Parameter()
+            _par.__setstate__(parstate)
+            self.__setitem__(parstate[0], _par)
+
+    def dump(self, fp, **kws):
+        """write JSON representation of Parameters to a file
+        or file-like object (must have a `write()` method).
+
+        Arguments
+        ---------
+        fp         open file-like object with `write()` method.
+
+        all keyword arguments are passed to `dumps()`
+
+        Returns
+        -------
+        return value from `fp.write()`
+
+        See Also
+        --------
+        dump(), load(), json.dump()
+        """
+        return fp.write(self.dumps(**kws))
+
+    def load(self, fp, **kws):
+        """load JSON representation of Parameters from a file
+        or file-like object (must have a `read()` method).
+
+        Arguments
+        ---------
+        fp         open file-like object with `read()` method.
+
+        all keyword arguments are passed to `loads()`
+
+        Returns
+        -------
+        None.   Parameters are updated as a side-effect
+
+        See Also
+        --------
+        dump(), loads(), json.load()
+        """
+        return self.loads(fp.read(), **kws)
 
 class Parameter(object):
     """
@@ -187,9 +268,9 @@ class Parameter(object):
                 self._val = self.max
             if self.min is not None and self._val < self.min:
                 self._val = self.min
-        elif self.min is not None:
+        elif self.min is not None and self._expr is None:
             self._val = self.min
-        elif self.max is not None:
+        elif self.max is not None and self._expr is None:
             self._val = self.max
         self.setup_bounds()
 
@@ -210,13 +291,13 @@ class Parameter(object):
         if self.name is not None:
             s.append("'%s'" % self.name)
         sval = repr(self._val)
-        if not self.vary and self.expr is None:
+        if not self.vary and self._expr is None:
             sval = "value=%s (fixed)" % (sval)
         elif self.stderr is not None:
             sval = "value=%s +/- %.3g" % (sval, self.stderr)
         s.append(sval)
         s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
-        if self.expr is not None:
+        if self._expr is not None:
             s.append("expr='%s'" % (self.expr))
         return "<Parameter %s>" % ', '.join(s)
 
@@ -238,19 +319,19 @@ class Parameter(object):
         The internal value for parameter from self.value (which holds
         the external, user-expected value).   This internal value should
         actually be used in a fit.
-       """
+        """
         if self.min in (None, -inf) and self.max in (None, inf):
             self.from_internal = lambda val: val
             _val  = self._val
         elif self.max in (None, inf):
-            self.from_internal = lambda val: self.min - 1 + sqrt(val*val + 1)
-            _val  = sqrt((self._val - self.min + 1)**2 - 1)
+            self.from_internal = lambda val: self.min - 1.0 + sqrt(val*val + 1)
+            _val  = sqrt((self._val - self.min + 1.0)**2 - 1)
         elif self.min in (None, -inf):
             self.from_internal = lambda val: self.max + 1 - sqrt(val*val + 1)
-            _val  = sqrt((self.max - self._val + 1)**2 - 1)
+            _val  = sqrt((self.max - self._val + 1.0)**2 - 1)
         else:
             self.from_internal = lambda val: self.min + (sin(val) + 1) * \
-                                 (self.max - self.min) / 2
+                                 (self.max - self.min) / 2.0
             _val  = arcsin(2*(self._val - self.min)/(self.max - self.min) - 1)
         return _val
 
@@ -279,13 +360,16 @@ class Parameter(object):
                 self._val = self._val.nominal_value
             except AttributeError:
                 pass
-
+        if not self.vary and self._expr is None:
+            return self._val
         if self.min is None:
             self.min = -inf
         if self.max is None:
             self.max =  inf
         if self.max < self.min:
             self.max, self.min = self.min, self.max
+        if abs((1.0*self.max - self.min)/max(self.max, self.min)) < 1.e-13:
+            raise ValueError("Parameter '%s' has min == max" % self.name)
 
         try:
             if self.min > -inf:
@@ -452,4 +536,3 @@ def isParameter(x):
     "test for Parameter-ness"
     return (isinstance(x, Parameter) or
             x.__class__.__name__ == 'Parameter')
-
