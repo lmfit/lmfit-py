@@ -396,7 +396,6 @@ class Minimizer(object):
         removes ast compilations of constraint expressions
         """
         self.__prepared = False
-        self.params = deepcopy(self.params)
         for par in self.params.values():
             if hasattr(par, 'ast'):
                 delattr(par, 'ast')
@@ -824,4 +823,8 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
     fitter.minimize(method=method)
+
+    params_copy = deepcopy(fitter.params)
+    fitter.params = params_copy
     return fitter
+
