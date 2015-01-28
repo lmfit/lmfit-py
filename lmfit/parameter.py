@@ -5,6 +5,7 @@ from __future__ import division
 from numpy import arcsin, cos, sin, sqrt, inf, nan
 import json
 import sys
+from copy import deepcopy
 try:
     from collections import OrderedDict
 except ImportError:
@@ -44,6 +45,14 @@ class Parameters(OrderedDict):
 
     def __add__(self, other):
         "add Parameters objects"
+        if not isinstance(other, Parameters):
+            raise ValueError("'%s' is not a Parameters object" % other)
+        out = deepcopy(self)
+        out.update(other)
+        return out
+
+    def __iadd__(self, other):
+        "add/assign Parameters objects"
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         self.update(other)
