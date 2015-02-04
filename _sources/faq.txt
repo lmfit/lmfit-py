@@ -7,10 +7,10 @@ A list of common questions.
 How can I fit multi-dimensional data?
 ========================================
 
-The fitting routines except data arrays that are 1 dimensional and double
+The fitting routines expect data arrays that are 1 dimensional and double
 precision.  So you need to convert the data and model (or the value
-returned by the objective function) to be one dimensional by using
-numpy's :meth:`numpy.ndarray.flatten`, for example::
+returned by the objective function) to be one dimensional.  A simple way to 
+do this is to use numpy's :meth:`numpy.ndarray.flatten`, for example::
 
     def residual(params, x, data=None):
         ....
@@ -22,8 +22,8 @@ How can I fit complex data?
 ===================================
 
 As with working with multidimensional data, you need to convert your data
-and model (or the value returned by the objective function) to be real.
-One way to do this would be to use a function like this::
+and model (or the value returned by the objective function) to be double precision
+floating point numbers. One way to do this would be to use a function like this::
 
     def realimag(array):
         return np.array([(x.real, x.imag) for x in array]).flatten()
@@ -45,3 +45,5 @@ Basically, no.  None of the minimizers in lmfit support integer
 programming.  They all (I think) assume that they can make a very small
 change to a floating point value for a parameters value and see a change in
 the value to be minimized.
+
+
