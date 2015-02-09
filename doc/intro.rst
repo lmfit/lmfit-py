@@ -4,7 +4,7 @@
 Getting started with Non-Linear Least-Squares Fitting
 ===========================================================
 
-The lmfit package is designed to provide simple tools to help you build of
+The lmfit package is designed to provide simple tools to help you build
 complex fitting models for non-linear least-squares problems and apply
 these models to real data.  This section gives an overview of the concepts
 and describes how to set up and perform simple fits.  Some basic knowledge
@@ -79,13 +79,13 @@ including:
 
 These shortcomings are really do solely to the use of traditional arrays of
 variables, as matches closely the implementation of the Fortran code.  The
-lmfit module overcomes these shortcomings by using a core reason for using
-Python -- objects.  The key concept for lmfit is to use :class:`Parameter`
+lmfit module overcomes these shortcomings by using objects -- a core reason for wokring with
+Python.  The key concept for lmfit is to use :class:`Parameter`
 objects instead of plain floating point numbers as the variables for the
 fit.  By using :class:`Parameter` objects (or the closely related
 :class:`Parameters` -- a dictionary of :class:`Parameter` objects), one can
 
-   a) not care about the order of variables, but refer to Parameters
+   a) forget about the order of variables and refer to Parameters
       by meaningful names.
    b) place bounds on Parameters as attributes, without worrying about order.
    c) fix Parameters, without having to rewrite the objective function.
@@ -117,9 +117,9 @@ as::
 
 At first look, we simply replaced a list of values with a dictionary,
 accessed by name -- not a huge improvement.  But each of the named
-:class:`Parameter` in the :class:`Parameters` object hold additional
+:class:`Parameter` in the :class:`Parameters` object holds additional
 attributes to modify the value during the fit.  For example, Parameters can
-be fixed or bounded.  This can be done when being defined::
+be fixed or bounded.  This can be done during definition::
 
     params = Parameters()
     params.add('amp', value=10, vary=False)
@@ -127,24 +127,24 @@ be fixed or bounded.  This can be done when being defined::
     params.add('phase', value=0.2)
     params.add('frequency', value=3.0, max=10)
 
-(where ``vary=False`` will prevent the value from changing in the fit, and
-``min=-0.0`` will set a lower bound on that parameters value) or after
-being defined by setting the corresponding attributes after they have been
+where ``vary=False`` will prevent the value from changing in the fit, and
+``min=0.0`` will set a lower bound on that parameters value). It can also be done
+later by setting the corresponding attributes after they have been
 created::
 
     params['amp'].vary = False
     params['decay'].min = 0.10
 
-Importantly, our function to be minimized remains unchanged.
+Importantly, our objective function remains unchanged.
 
 The `params` object can be copied and modified to make many user-level
 changes to the model and fitting process.  Of course, most of the
 information about how your data is modeled goes into the objective
-function, but the approach here allows some external control, that is by
-the **user** of the objective function instead of just by the author of the
+function, but the approach here allows some external control; that is, control by
+the **user** performing the fit, instead of by the author of the
 objective function.
 
 Finally, in addition to the :class:`Parameters` approach to fitting data,
-lmfit allows you to easily switch optimization methods without rewriting
-your objective function, and provides tools for writing fitting reports and
-for better determining the confidence levels for Parameters.
+lmfit allows switching optimization methods without changing
+the objective function, provides tools for writing fitting reports, and
+provides better determination of Parameters confidence levels.

@@ -39,7 +39,7 @@ Example: Fit data to Gaussian profile
 Let's start with a simple and common example of fitting data to a Gaussian
 peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
 provides a model function for a Gaussian profile, but here we'll build our
-own.  We start with a simple definition the model function:
+own.  We start with a simple definition of the model function:
 
     >>> from numpy import sqrt, pi, exp, linspace
     >>>
@@ -47,20 +47,20 @@ own.  We start with a simple definition the model function:
     ...    return amp * exp(-(x-cen)**2 /wid)
     ...
 
-that we want to use to fit to some data :math:`y(x)` represented by the
-arrays ``y`` and ``x``.  Using :func:`scipy.optimize.curve_fit` makes this
-easy to do, allowing us to do something like::
+We want to fit this objective function to data :math:`y(x)` represented by the
+arrays ``y`` and ``x``.  This can be done easily wit :func:`scipy.optimize.curve_fit`::
 
     >>> from scipy.optimize import curve_fit
     >>>
-    >>> x, y = read_data_from_somewhere(....)
+    >>> x = linspace(-10,10)
+    >>> y = y = gaussian(x, 2.33, 0.21, 1.51) + np.random.normal(0, 0.2, len(x))
     >>>
-    >>> init_vals = [5, 5, 1]     # for [amp, cen, wid]
+    >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
     >>> print best_vals
 
 
-That is, we read in data from somewhere, make an initial guess of the model
+We sample random data point, make an initial guess of the model
 values, and run :func:`scipy.optimize.curve_fit` with the model function,
 data arrays, and initial guesses.  The results returned are the optimal
 values for the parameters and the covariance matrix.  It's simple and very
@@ -72,12 +72,12 @@ such a function would be fairly simple (essentially, ``data - model``,
 possibly with some weighting), and we would need to define and use
 appropriately named parameters.  Though convenient, it is somewhat of a
 burden to keep the named parameter straight (on the other hand, with
-func:`scipy.optimize.curve_fit` you are required to remember the parameter
+:func:`scipy.optimize.curve_fit` you are required to remember the parameter
 order).  After doing this a few times it appears as a recurring pattern,
 and we can imagine automating this process.  That's where the
 :class:`Model` class comes in.
 
-The :class:`Model` allows us to easily wrap a model function such as the
+:class:`Model` allows us to easily wrap a model function such as the
 ``gaussian`` function.  This automatically generate the appropriate
 residual function, and determines the corresponding parameter names from
 the function signature itself::
@@ -97,9 +97,9 @@ see below) are used for Parameter names.  Thus, for the ``gaussian``
 function above, the parameters are named ``amp``, ``cen``, and ``wid``, and
 ``x`` is the independent variable -- all taken directly from the signature
 of the model function. As we will see below, you can specify what the
-independent variable is, and you can add or alter parameters too.
+independent variable is, and you can add or alter parameters, too.
 
-On creation of the model, parameters are *not* created.  The model knows
+The parameters are *not* created when the model is created. The model knows
 what the parameters should be named, but not anything about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initial values and other attributes.  To help you do this, each
@@ -111,7 +111,7 @@ the expected names:
 This creates the :class:`Parameters` but doesn't necessarily give them
 initial values -- again, the model has no idea what the scale should be.
 You can set initial values for parameters with keyword arguments to
-:meth:`make_params`, as with:
+:meth:`make_params`:
 
 
     >>> params = gmod.make_params(cen=5, amp=200, wid=1)
@@ -133,7 +133,7 @@ Admittedly, this a slightly long-winded way to calculate a Gaussian
 function.   But now that the model is set up, we can also use its
 :meth:`fit` method to fit this model to data, as with::
 
-    result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+    >>> result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
 Putting everything together, the script to do such a fit (included in the
 ``examples`` folder with the source code) is:
@@ -171,22 +171,21 @@ parameter values.  These can be used to generate the following plot:
 which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit as a dashed black line.
 
-We emphasize here that the fit to this model function was really performed
-with 2 lines of code::
+Note that the model fitting was really performed with 2 lines of code::
 
     gmod = Model(gaussian)
     result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
 These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
-starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``, and
-compare well to :func:`scipy.optimize.curve_fit`::
+starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``. 
+This is much more expressive than :func:`scipy.optimize.curve_fit`::
 
     best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
-except that all the other features of lmfit are included such as that the
+In addition, all the other features of lmfit are included: 
 :class:`Parameters` can have bounds and constraints and the result is a
-richer object that can be reused to explore the fit in more detail.
+rich object that can be reused to explore the model fit in detail.
 
 
 The :class:`Model` class

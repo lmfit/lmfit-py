@@ -7,7 +7,7 @@ A list of common questions.
 How can I fit multi-dimensional data?
 ========================================
 
-The fitting routines expect data arrays that are 1 dimensional and double
+The fitting routines accept data arrays that are 1 dimensional and double
 precision.  So you need to convert the data and model (or the value
 returned by the objective function) to be one dimensional.  A simple way to 
 do this is to use numpy's :meth:`numpy.ndarray.flatten`, for example::
