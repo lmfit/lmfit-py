@@ -715,16 +715,10 @@ class ModelFit(Minimizer):
         self.userkws.update(kwargs)
         return self.model.eval_components(params=self.params, **self.userkws)
 
-    def fit_report(self, modelpars=None, show_correl=True, min_correl=0.1):
+    def fit_report(self,  **kwargs):
         "return fit report"
-        stats_report = fit_report(self, modelpars=modelpars,
-                                 show_correl=show_correl,
-                                 min_correl=min_correl)
-        buff = ['[[Model]]']
-        buff.append('    %s' % self.model._reprstring(long=True))
-        buff = '\n'.join(buff)
-        out = '%s\n%s' % (buff, stats_report)
-        return out
+        return '[[Model]]\n    %s\n%s\n' % (self.model._reprstring(long=True),
+                                            fit_report(self, **kwargs))
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
