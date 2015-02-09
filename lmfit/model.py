@@ -993,3 +993,14 @@ class ModelFit(Minimizer):
                             fit_kws=fit_kws, ax_kws=ax_res_kws)
 
         return fig
+
+    def aic(self):
+        """calculate and return the AIC for a ModelFit.
+        AIC is Akaike information criterion, a measure of the relative quality of a statistical model for a given set of data.
+        It is computed as `n * log(rss/n) + 2k`, where `n` is the number of data points, `rss` is the sum of residuals squares, 
+        and k in the number of varying parameters.
+        """
+        rss = np.float((self.residual**2).sum())
+        n = self.ndata
+        k = self.nvarys
+        return n * np.log(rss / n) + 2 * k
