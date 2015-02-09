@@ -262,7 +262,7 @@ specifying one or more independent variables.
    :param verbose:  print a message when a new parameter is created due to a *hint*
    :type  verbose:  bool (default ``True``)
    :param kws:      additional keyword arguments to pass to model function.
-   :return:         :class:`ModeFitResult` object.
+   :return:         :class:`ModelFit` object.
 
    If ``params`` is ``None``, the internal ``params`` will be used. If it
    is supplied, these will replace the internal ones.  If supplied,
