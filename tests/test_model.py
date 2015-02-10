@@ -166,12 +166,12 @@ class CommonTests(object):
         # Pass Parameters object.
         params = model.make_params(**self.guess())
         result = model.fit(self.data, params, x=self.x)
-        aic    = result.aic()
+        aic = result.aic()
         self.assertTrue(aic < 0) # aic must be negative
 
         # Pass extra unused Parameter.
         params.add("unused_param", value=1.0, vary=True)
-        result    = model.fit(self.data, params, x=self.x)
+        result = model.fit(self.data, params, x=self.x)
         aic_extra = result.aic()
         self.assertTrue(aic_extra < 0)   # aic must be negative
         self.assertTrue(aic < aic_extra) # the extra param should lower the aic
