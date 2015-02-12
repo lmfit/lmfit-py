@@ -177,6 +177,29 @@ class CommonTests(object):
         self.assertTrue(aic < aic_extra) # the extra param should lower the aic
 
 
+    def test_bic(self):
+        model = self.model
+
+        # Pass Parameters object.
+        params = model.make_params(**self.guess())
+        result = model.fit(self.data, params, x=self.x)
+        bic = result.bic()
+        self.assertTrue(bic < 0) # aic must be negative
+
+        # Compare to AIC
+        aic = result.aic()
+        self.assertTrue(aic < bic) # aic should be lower than bic
+
+        # Pass extra unused Parameter.
+        params.add("unused_param", value=1.0, vary=True)
+        result = model.fit(self.data, params, x=self.x)
+        bic_extra = result.bic()
+        self.assertTrue(bic_extra < 0)   # bic must be negative
+        self.assertTrue(bic < bic_extra) # the extra param should lower the bic
+
+
+
+
 class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     # mainly aimed at checking that the API does what it says it does
     # and raises the right exceptions or warnings when things are not right
