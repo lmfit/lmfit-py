@@ -1004,3 +1004,15 @@ class ModelFit(Minimizer):
         n = self.ndata
         k = self.nvarys
         return n * np.log(rss / n) + 2 * k
+
+    def bic(self):
+        """calculate and return the BIC for a ModelFit.
+        BIC is Bayesian information criterion, a measure of the relative quality of a statistical model for a given set of data.
+        It is computed as `n * log(rss/n) + log(n) k`, where `n` is the number of data points, `rss` is the sum of residuals squares, 
+        and k in the number of varying parameters. 
+        It is closely related to AIC but gives a larger penalty to the number of paramters in the model.
+        """
+        rss = np.float((self.residual**2).sum())
+        n = self.ndata
+        k = self.nvarys
+        return n * np.log(rss / n) + np.log(n) * k
