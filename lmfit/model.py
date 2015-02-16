@@ -314,7 +314,7 @@ class Model(object):
         diff = self.eval(params, **kwargs) - data
         if weights is not None:
             diff *= weights
-        return np.asarray(diff)  # for compatibility with pandas.Series
+        return np.asarray(diff).ravel()  # for compatibility with pandas.Series
 
     def _handle_missing(self, data):
         "handle missing data"
