@@ -289,7 +289,7 @@ class Minimizer(object):
         if callable(self.iter_cb):
             self.iter_cb(self.params, self.nfev, out,
                          *self.userargs, **self.userkws)
-        return out
+        return np.asarray(out).ravel()
 
     def __jacobian(self, fvars):
         """

@@ -282,6 +282,33 @@ def test_scalar_minimize_has_no_uncertainties():
     assert_(mini.errorbars == False)
 
 
+def test_multidimensional_fit_GH205():
+    # test that you don't need to flatten the output from the objective
+    # function. Tests regression for GH205.
+    pos = np.linspace(0, 99, 100)
+    xv, yv = np.meshgrid(pos, pos)
+    f = lambda xv, yv, lambda1, lambda2: (np.sin(xv * lambda1)
+                                             + np.cos(yv * lambda2))
+
+    data = f(xv, yv, 0.3, 3)
+    assert_(data.ndim, 2)
+
+    def fcn2min(params, xv, yv, data):
+        """ model decaying sine wave, subtract data"""
+        lambda1 = params['lambda1'].value
+        lambda2 = params['lambda2'].value
+        model = f(xv, yv, lambda1, lambda2)
+        return model - data
+
+    # create a set of Parameters
+    params = Parameters()
+    params.add('lambda1', value=0.4)
+    params.add('lambda2', value=3.2)
+
+    mini = Minimizer(fcn2min, params, fcn_args=(xv, yv, data))
+    res = mini.minimize()
+
+
 class CommonMinimizerTest(unittest.TestCase):
 
     def setUp(self):
