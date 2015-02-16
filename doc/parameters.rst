@@ -89,10 +89,9 @@ feature.
    :param max:   upper bound for value
    :param expr:  mathematical expression to use to evaluate value during fit.
 
-   Each argument of :meth:`set` has a default value of ``None``, and will
-
-  be set only if the provided value is not ``None``.  You can use this to
-   update some Parameter attribute without affecting others, for example::
+Each argument of :meth:`set` has a default value of ``None``, and will
+be set only if the provided value is not ``None``.  You can use this to
+update some Parameter attribute without affecting others, for example::
 
        p1 = Parameter('a', value=2.0)
        p2 = Parameter('b', value=0.0)
