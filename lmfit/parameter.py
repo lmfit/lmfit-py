@@ -377,9 +377,9 @@ class Parameter(object):
             self.max =  inf
         if self.max < self.min:
             self.max, self.min = self.min, self.max
-        if abs((1.0*self.max - self.min)/max(self.max, self.min)) < 1.e-13:
+        if (abs((1.0*self.max - self.min)/
+                max(abs(self.max), abs(self.min), 1.e-13)) < 1.e-13):
             raise ValueError("Parameter '%s' has min == max" % self.name)
-
         try:
             if self.min > -inf:
                 self._val = max(self.min, self._val)
