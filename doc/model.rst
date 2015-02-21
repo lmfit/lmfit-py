@@ -178,12 +178,12 @@ Note that the model fitting was really performed with 2 lines of code::
 
 These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
-starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``. 
+starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.
 This is much more expressive than :func:`scipy.optimize.curve_fit`::
 
     best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
-In addition, all the other features of lmfit are included: 
+In addition, all the other features of lmfit are included:
 :class:`Parameters` can have bounds and constraints and the result is a
 rich object that can be reused to explore the model fit in detail.
 
@@ -251,7 +251,7 @@ specifying one or more independent variables.
    :type data: ndarray-like
    :param params: parameters to use for fit.
    :type params: ``None`` (default) or Parameters
-   :param weights: weights to use fit.
+   :param weights: weights to use for residual calculation in fit.
    :type weights: ``None`` (default) or ndarray-like.
    :param method:  name of fitting method to use. See  :ref:`fit-methods-label` for details
    :type  method:  string (default ``leastsq``)
@@ -265,9 +265,11 @@ specifying one or more independent variables.
    :return:         :class:`ModelFit` object.
 
    If ``params`` is ``None``, the internal ``params`` will be used. If it
-   is supplied, these will replace the internal ones.  If supplied,
-   ``weights`` must is an ndarray-like object of same size and shape as
-   ``data``.
+   is supplied, these will replace the internal ones.   If supplied,
+   ``weights`` will be used to weight the calculated residual so that the
+   quantitiy minimized in the least-squares sense is ``weights*(data -
+   fit)``.  ``weights`` must be an ndarray-like object of same size and
+   shape as ``data``.
 
    Note that other arguments for the model function (including all the
    independent variables!) will need to be passed in using keyword
@@ -800,8 +802,10 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute:: weights
 
-   ndarray (or ``None``) of weighting values used in fit.
-
+   ndarray (or ``None``) of weighting values to be used in fit.  If not
+   ``None``, it will be used as a multiplicative factor of the residual
+   array, so that ``weights*(data - fit)`` is minimized in the
+   least-squares sense.
 
 .. index:: Composite models
 
