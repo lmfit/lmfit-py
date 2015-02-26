@@ -113,7 +113,7 @@ def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
     """
     gss = gamma*sigma*sigma
     arg1 = gamma*(center +gss/2.0 - x)
-    arg2 = (center + gss - x)/s2/sigma
+    arg2 = (center + gss - x)/(s2*sigma)
     return amplitude*(gamma/2) * exp(arg1) * erfc(arg2)
 
 def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
