@@ -241,7 +241,7 @@ It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) 
 .. math::
 
     f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
-    \exp\bigl[\gamma({\mu - x  + \sigma^2/2})\bigr]
+    \exp\bigl[\gamma({\mu - x  + \gamma\sigma^2/2})\bigr]
     {\operatorname{erfc}}\Bigl(\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\Bigr)
 
 
