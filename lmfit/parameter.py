@@ -13,7 +13,17 @@ except ImportError:
 
 from . import uncertainties
 
-from .astutils import valid_symbol_name
+
+from .asteval import Interpreter
+from .astutils import NameFinder, valid_symbol_name
+
+def check_ast_errors(error):
+    """check for errors derived from asteval"""
+    if len(error) > 0:
+        for err in error:
+            msg = '%s: %s' % (err.get_error())
+            return msg
+    return None
 
 class Parameters(OrderedDict):
     """
@@ -32,6 +42,10 @@ class Parameters(OrderedDict):
     """
     def __init__(self, *args, **kwds):
         super(Parameters, self).__init__(self)
+        self.__asteval = Interpreter()
+        self.__namefinder = NameFinder()
+        self.__dependencies_known = False
+        self.__updated = {}
         self.update(*args, **kwds)
 
     def __setitem__(self, key, value):
@@ -40,6 +54,7 @@ class Parameters(OrderedDict):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
         if value is not None and not isinstance(value, Parameter):
             raise ValueError("'%s' is not a Parameter" % value)
+        self.__dependencies_known =  False
         OrderedDict.__setitem__(self, key, value)
         value.name = key
 
@@ -58,6 +73,56 @@ class Parameters(OrderedDict):
         self.update(other)
         return self
 
+    def __update_paramval(self, name):
+        """update a parameter value, including setting bounds.
+        For a constrained parameter (one with an expr defined),
+        this first updates (recursively) all parameters on which
+        the parameter depends (using the 'deps' field).
+        """
+        # Has this param already been updated?
+        # if this is called as an expression dependency,
+        # it may have been!
+        if self.__updated[name]:
+            return
+        par = self.__getitem__(name)
+        if getattr(par, 'expr', None) is not None:
+            if getattr(par, 'ast', None) is None:
+                par.ast = self.__asteval.parse(par.expr)
+            if par.deps is not None:
+                for dep in par.deps:
+                    self.__update_paramval(dep)
+            par.value = self.__asteval.run(par.ast)
+            if check_ast_errors(self.__asteval.error)is not None:
+                self.__asteval.raise_exception(None)
+        self.__asteval.symtable[name] = par.value
+        self.__updated[name] = True
+
+    def __find_dependencies():
+        for name, par in self.items():
+            par.stderr = None
+            par.correl = None
+            if par.expr is not None:
+                par.ast = self.__asteval.parse(par.expr)
+                check_ast_errors(self.__asteval.error)
+                par.vary = False
+                par.deps = []
+                self.__namefinder.names = []
+                self.__namefinder.generic_visit(par.ast)
+                for symname in self.__namefinder.names:
+                    if (symname in self.params and
+                        symname not in par.deps):
+                        par.deps.append(symname)
+        self.__dependencies_known = True
+
+    def update_constraints(self):
+        """update all constrained parameters, checking that
+        dependencies are evaluated as needed.
+        """
+        if not self.__dependencies_known:
+            self.__find_dependencies()
+        self.__updated = dict([(name, False) for name in self.keys()])
+        [self.__update_paramv(name) for name in self.keys()]
+
     def add(self, name, value=None, vary=True, min=None, max=None, expr=None):
         """
         Convenience function for adding a Parameter:
@@ -70,6 +135,7 @@ class Parameters(OrderedDict):
         is equivalent to:
         p[name] = Parameter(name=name, value=XX, ....
         """
+
         self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
                                          min=min, max=max, expr=expr))
 
