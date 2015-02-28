@@ -15,7 +15,7 @@ from . import uncertainties
 
 
 from .asteval import Interpreter
-from .astutils import NameFinder, valid_symbol_name
+from .astutils import get_ast_names, valid_symbol_name
 
 def check_ast_errors(error):
     """check for errors derived from asteval"""
@@ -42,21 +42,21 @@ class Parameters(OrderedDict):
     """
     def __init__(self, *args, **kwds):
         super(Parameters, self).__init__(self)
-        self.__asteval = Interpreter()
-        self.__namefinder = NameFinder()
-        self.__dependencies_known = False
-        self.__updated = {}
+        self._asteval = Interpreter()
+        self._deps_known = False
+        self._updated = {}
         self.update(*args, **kwds)
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, par):
         if key not in self:
             if not valid_symbol_name(key):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
-        if value is not None and not isinstance(value, Parameter):
-            raise ValueError("'%s' is not a Parameter" % value)
-        self.__dependencies_known =  False
-        OrderedDict.__setitem__(self, key, value)
-        value.name = key
+        if par is not None and not isinstance(par, Parameter):
+            raise ValueError("'%s' is not a Parameter" % par)
+        OrderedDict.__setitem__(self, key, par)
+        par.name = key
+        par._expr_eval = self._asteval
+        self._asteval.symtable[key] = par.value
 
     def __add__(self, other):
         "add Parameters objects"
@@ -73,55 +73,36 @@ class Parameters(OrderedDict):
         self.update(other)
         return self
 
-    def __update_paramval(self, name):
-        """update a parameter value, including setting bounds.
-        For a constrained parameter (one with an expr defined),
-        this first updates (recursively) all parameters on which
-        the parameter depends (using the 'deps' field).
-        """
-        # Has this param already been updated?
-        # if this is called as an expression dependency,
-        # it may have been!
-        if self.__updated[name]:
-            return
-        par = self.__getitem__(name)
-        if getattr(par, 'expr', None) is not None:
-            if getattr(par, 'ast', None) is None:
-                par.ast = self.__asteval.parse(par.expr)
-            if par.deps is not None:
-                for dep in par.deps:
-                    self.__update_paramval(dep)
-            par.value = self.__asteval.run(par.ast)
-            if check_ast_errors(self.__asteval.error)is not None:
-                self.__asteval.raise_exception(None)
-        self.__asteval.symtable[name] = par.value
-        self.__updated[name] = True
-
-    def __find_dependencies():
-        for name, par in self.items():
-            par.stderr = None
-            par.correl = None
-            if par.expr is not None:
-                par.ast = self.__asteval.parse(par.expr)
-                check_ast_errors(self.__asteval.error)
-                par.vary = False
-                par.deps = []
-                self.__namefinder.names = []
-                self.__namefinder.generic_visit(par.ast)
-                for symname in self.__namefinder.names:
-                    if (symname in self.params and
-                        symname not in par.deps):
-                        par.deps.append(symname)
-        self.__dependencies_known = True
-
     def update_constraints(self):
         """update all constrained parameters, checking that
         dependencies are evaluated as needed.
         """
-        if not self.__dependencies_known:
-            self.__find_dependencies()
-        self.__updated = dict([(name, False) for name in self.keys()])
-        [self.__update_paramv(name) for name in self.keys()]
+        _updated = dict([(name, False) for name in self.keys()])
+
+        def _update_param(name):
+            """update a parameter value, including setting bounds.
+            For a constrained parameter (one with an expr defined),
+            this first updates (recursively) all parameters on which
+            the parameter depends (using the 'deps' field).
+            """
+            # Has this param already been updated?
+            # if this an expression dependency, it may have been
+            if _updated[name]:
+                return
+            par = self.__getitem__(name)
+            if par._expr_ast is None:
+                par._expr_eval = self._asteval
+                if par._expr is not None:
+                    par.expr = par._expr
+            if par._expr_ast is not None:
+                for dep in par._expr_deps:
+                    if dep in self.keys():
+                        self._update_param(dep)
+            self._asteval.symtable[name] = par.value
+            _updated[name] = True
+
+        for name in self.keys():
+            _update_param(name)
 
     def add(self, name, value=None, vary=True, min=None, max=None, expr=None):
         """
@@ -300,7 +281,9 @@ class Parameter(object):
         self.max = max
         self.vary = vary
         self._expr = expr
-        self.deps   = None
+        self._expr_ast = None
+        self._expr_eval = None
+        self._expr_deps = []
         self.stderr = None
         self.correl = None
         self.from_internal = lambda val: val
@@ -437,6 +420,10 @@ class Parameter(object):
                 pass
         if not self.vary and self._expr is None:
             return self._val
+        if self._expr_ast is not None and self._expr_eval is not None:
+            self._val = self._expr_eval(self._expr_ast)
+            if check_ast_errors(self._exrp_eval.error)is not None:
+                self._expr_eval.raise_exception(None)
         if self.min is None:
             self.min = -inf
         if self.max is None:
@@ -455,6 +442,10 @@ class Parameter(object):
             self._val = nan
         return self._val
 
+    def set_expr_eval(self, evaluator):
+        "set expression evaluator instance"
+        self._expr_eval = evaluator
+
     @property
     def value(self):
         "The numerical value of the Parameter, with bounds applied"
@@ -464,6 +455,8 @@ class Parameter(object):
     def value(self, val):
         "Set the numerical Parameter value."
         self._val = val
+        if self._expr_eval is not None:
+            self._expr_eval.symtable[self.name] = val
 
     @property
     def expr(self):
@@ -481,6 +474,13 @@ class Parameter(object):
         if val == '':
             val = None
         self._expr = val
+        self.vary = self._expr is not None
+        if self._expr is not None and self._expr_eval is not None:
+            self._expr_ast = self._expr_eval.parse(self._expr)
+            if check_ast_errors(self._expr_eval.error)is not None:
+                self._expr_eval.raise_exception(None)
+            self._expr_deps = get_ast_names(self._expr_ast)
+
 
     def __str__(self):
         "string"
