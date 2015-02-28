@@ -4,7 +4,6 @@ Parameter class
 from __future__ import division
 from numpy import arcsin, cos, sin, sqrt, inf, nan
 import json
-import sys
 from copy import deepcopy
 try:
     from collections import OrderedDict
@@ -57,6 +56,18 @@ class Parameters(OrderedDict):
             raise ValueError("'%s' is not a Parameters object" % other)
         self.update(other)
         return self
+
+    def pretty_repr(self, oneline=False):
+        if oneline:
+            return super(Parameters, self).__repr__()
+        s = "Parameters({\n"
+        for key in self.keys():
+            s += "    '%s': %s, \n" % (key, self[key])
+        s += "    })\n"
+        return s
+
+    def pretty_print(self, oneline=False):
+        print(self.pretty_repr(oneline=oneline))
 
     def add(self, name, value=None, vary=True, min=None, max=None, expr=None):
         """
