@@ -114,7 +114,7 @@ def test_constraints2():
         """ """
         return 2*wpar
 
-    myfit.asteval.symtable['wfun'] = width_func
+    myfit.params._asteval.symtable['wfun'] = width_func
     myfit.params.add(name='wid_l', expr='wfun(wid_g)')
 
     myfit.leastsq()
