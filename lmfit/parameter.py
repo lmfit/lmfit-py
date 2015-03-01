@@ -39,12 +39,28 @@ class Parameters(OrderedDict):
     dumps() / dump()
     loads() / load()
     """
-    def __init__(self, *args, **kwds):
+    def __init__(self, asteval=None, *args, **kwds):
         super(Parameters, self).__init__(self)
-        self._asteval = Interpreter()
-        self._deps_known = False
-        self._updated = {}
+        self._asteval = asteval
+        if asteval is None:
+            self._asteval = Interpreter()
         self.update(*args, **kwds)
+
+    def __deepcopy__(self, memo):
+        _pars = Parameters()
+        for key, val in self._asteval.symtable.items():
+            _pars._asteval.symtable[key] = deepcopy(val)
+        for key, par in self.items():
+            if isinstance(par, Parameter):
+                name = par.name
+                _pars.add(name, value=par.value, min=par.min, max=par.max)
+                _pars[name].vary = par.vary
+                _pars[name].stderr = par.stderr
+                _pars[name].correl = par.correl
+                _pars[name].init_value = par.init_value
+                _pars[name].expr = par.expr
+                _pars._asteval.symtable[name] = par.value
+        return _pars
 
     def __setitem__(self, key, par):
         if key not in self:
@@ -345,7 +361,7 @@ class Parameter(object):
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)
-        sval = repr(self._val)
+        sval = repr(self._getval())
         if not self.vary and self._expr is None:
             sval = "value=%s (fixed)" % (sval)
         elif self.stderr is not None:
@@ -474,7 +490,8 @@ class Parameter(object):
         if val == '':
             val = None
         self._expr = val
-        self.vary = val is None
+        if val is not None:
+            self.vary = False
         if not hasattr(self, '_expr_eval'):  self._expr_eval = None
         if val is not None and self._expr_eval is not None:
             self._expr_ast = self._expr_eval.parse(val)
