@@ -13,7 +13,6 @@ except ImportError:
 
 from . import uncertainties
 
-
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name
 
@@ -57,6 +56,7 @@ class Parameters(OrderedDict):
         par.name = key
         par._expr_eval = self._asteval
         self._asteval.symtable[key] = par.value
+        self.update_constraints()
 
     def __add__(self, other):
         "add Parameters objects"
@@ -78,7 +78,6 @@ class Parameters(OrderedDict):
         dependencies are evaluated as needed.
         """
         _updated = dict([(name, False) for name in self.keys()])
-
         def _update_param(name):
             """update a parameter value, including setting bounds.
             For a constrained parameter (one with an expr defined),
@@ -90,14 +89,14 @@ class Parameters(OrderedDict):
             if _updated[name]:
                 return
             par = self.__getitem__(name)
-            if par._expr_ast is None:
+            if par._expr_eval is None:
                 par._expr_eval = self._asteval
-                if par._expr is not None:
-                    par.expr = par._expr
+            if par._expr is not None:
+                par.expr = par._expr
             if par._expr_ast is not None:
                 for dep in par._expr_deps:
                     if dep in self.keys():
-                        self._update_param(dep)
+                        _update_param(dep)
             self._asteval.symtable[name] = par.value
             _updated[name] = True
 
@@ -116,7 +115,6 @@ class Parameters(OrderedDict):
         is equivalent to:
         p[name] = Parameter(name=name, value=XX, ....
         """
-
         self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
                                          min=min, max=max, expr=expr))
 
@@ -341,7 +339,6 @@ class Parameter(object):
         """set state for pickle"""
         (self.name, self.value, self.vary, self.expr, self.min,
          self.max, self.stderr, self.correl, self.init_value) = state
-        self._val = self.value
         self._init_bounds()
 
     def __repr__(self):
@@ -420,9 +417,11 @@ class Parameter(object):
                 pass
         if not self.vary and self._expr is None:
             return self._val
+        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
+        if not hasattr(self, '_expr_ast'):   self._expr_ast = None
         if self._expr_ast is not None and self._expr_eval is not None:
             self._val = self._expr_eval(self._expr_ast)
-            if check_ast_errors(self._exrp_eval.error)is not None:
+            if check_ast_errors(self._expr_eval.error)is not None:
                 self._expr_eval.raise_exception(None)
         if self.min is None:
             self.min = -inf
@@ -455,6 +454,7 @@ class Parameter(object):
     def value(self, val):
         "Set the numerical Parameter value."
         self._val = val
+        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
         if self._expr_eval is not None:
             self._expr_eval.symtable[self.name] = val
 
@@ -474,13 +474,13 @@ class Parameter(object):
         if val == '':
             val = None
         self._expr = val
-        self.vary = self._expr is not None
-        if self._expr is not None and self._expr_eval is not None:
-            self._expr_ast = self._expr_eval.parse(self._expr)
+        self.vary = val is None
+        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
+        if val is not None and self._expr_eval is not None:
+            self._expr_ast = self._expr_eval.parse(val)
             if check_ast_errors(self._expr_eval.error)is not None:
                 self._expr_eval.raise_exception(None)
             self._expr_deps = get_ast_names(self._expr_ast)
-
 
     def __str__(self):
         "string"
