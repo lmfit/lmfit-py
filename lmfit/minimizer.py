@@ -337,15 +337,7 @@ class Minimizer(object):
         removes ast compilations of constraint expressions
         """
         self.__prepared = False
-        _params = Parameters()
-        for par in self.params.values():
-            _params.add(par.name, value=par.value, min=par.min, max=par.max)
-            _params[par.name].vary = par.vary
-            _params[par.name].stderr = par.stderr
-            _params[par.name].correl = par.correl
-            _params[par.name].init_value = par.init_value
-            _params[par.name].expr = par.expr
-        self.params = _params
+        self.params = deepcopy(self.params)
 
     @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
                        'and method=\'L-BFGS-B\' instead')
