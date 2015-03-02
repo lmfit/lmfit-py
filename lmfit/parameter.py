@@ -15,13 +15,10 @@ from . import uncertainties
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name
 
-def check_ast_errors(error):
+def check_ast_errors(expr_eval):
     """check for errors derived from asteval"""
-    if len(error) > 0:
-        for err in error:
-            msg = '%s: %s' % (err.get_error())
-            return msg
-    return None
+    if len(expr_eval.error) > 0:
+        expr_eval.raise_exception(None)
 
 class Parameters(OrderedDict):
     """
@@ -448,8 +445,8 @@ class Parameter(object):
         if not hasattr(self, '_expr_ast'):   self._expr_ast = None
         if self._expr_ast is not None and self._expr_eval is not None:
             self._val = self._expr_eval(self._expr_ast)
-            if check_ast_errors(self._expr_eval.error)is not None:
-                self._expr_eval.raise_exception(None)
+            check_ast_errors(self._expr_eval)
+
         if self.min is None:
             self.min = -inf
         if self.max is None:
@@ -506,8 +503,7 @@ class Parameter(object):
         if not hasattr(self, '_expr_eval'):  self._expr_eval = None
         if val is not None and self._expr_eval is not None:
             self._expr_ast = self._expr_eval.parse(val)
-            if check_ast_errors(self._expr_eval.error)is not None:
-                self._expr_eval.raise_exception(None)
+            check_ast_errors(self._expr_eval)
             self._expr_deps = get_ast_names(self._expr_ast)
 
     def __str__(self):
