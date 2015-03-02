@@ -495,7 +495,7 @@ class Model(object):
             params = deepcopy(params)
 
         # If any kwargs match parameter names, override params.
-        param_kwargs = set(kwargs.keys()) & self.param_names
+        param_kwargs = set(kwargs.keys()) & set(self.param_names)
         for name in param_kwargs:
             p = kwargs[name]
             if isinstance(p, Parameter):
