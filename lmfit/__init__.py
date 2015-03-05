@@ -46,7 +46,6 @@ from . import models
 from . import uncertainties
 from .uncertainties import ufloat, correlated_values
 
-from .ui import Fitter
 
 ## versioneer code
 from ._version import get_versions
