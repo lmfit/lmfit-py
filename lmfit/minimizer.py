@@ -37,7 +37,6 @@ except ImportError:
     pass
 
 from .asteval import Interpreter
-from .astutils import NameFinder
 from .parameter import Parameter, Parameters
 
 # use locally modified version of uncertainties package
@@ -54,32 +53,28 @@ def asteval_with_uncertainties(*vals, **kwargs):
     _obj = kwargs.get('_obj', None)
     _pars = kwargs.get('_pars', None)
     _names = kwargs.get('_names', None)
-    _asteval = kwargs.get('_asteval', None)
-    if (_obj is None or
-        _pars is None or
-        _names is None or
-        _asteval is None or
-        _obj.ast is None):
+    _asteval = _pars._asteval
+    if (_obj is None or  _pars is None or _names is None or
+        _asteval is None or _obj._expr_ast is None):
         return 0
     for val, name in zip(vals, _names):
         _asteval.symtable[name] = val
-    return _asteval.eval(_obj.ast)
+    return _asteval.eval(_obj._expr_ast)
 
 wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
 
-def eval_stderr(obj, uvars, _names, _pars, _asteval):
+def eval_stderr(obj, uvars, _names, _pars):
     """evaluate uncertainty and set .stderr for a parameter `obj`
     given the uncertain values `uvars` (a list of uncertainties.ufloats),
     a list of parameter names that matches uvars, and a dict of param
     objects, keyed by name.
 
-    This uses the uncertainties package wrapped function to evaluate
-    the uncertainty for an arbitrary expression (in obj.ast) of parameters.
+    This uses the uncertainties package wrapped function to evaluate the
+    uncertainty for an arbitrary expression (in obj._expr_ast) of parameters.
     """
-    if not isinstance(obj, Parameter) or not hasattr(obj, 'ast'):
+    if not isinstance(obj, Parameter) or getattr(obj, '_expr_ast', None) is None:
         return
-    uval = wrap_ueval(*uvars, _obj=obj, _names=_names,
-                      _pars=_pars, _asteval=_asteval)
+    uval = wrap_ueval(*uvars, _obj=obj, _names=_names, _pars=_pars)
     try:
         obj.stderr = uval.std_dev()
     except:
@@ -95,14 +90,6 @@ class MinimizerException(Exception):
     def __str__(self):
         return "\n%s" % (self.msg)
 
-
-def check_ast_errors(error):
-    """check for errors derived from asteval, raise MinimizerException"""
-    if len(error) > 0:
-        for err in error:
-            msg = '%s: %s' % (err.get_error())
-            return msg
-    return None
 
 def _differential_evolution(func, x0, **kwds):
     """
@@ -217,8 +204,6 @@ class Minimizer(object):
         self.params = []
         self.updated = []
         self.jacfcn = None
-        self.asteval = Interpreter()
-        self.namefinder = NameFinder()
         self.__prepared = False
         self.__set_params(params)
         # self.prepare_fit()
@@ -234,40 +219,12 @@ class Minimizer(object):
 
         return dict([(name, p.value) for name, p in self.params.items()])
 
-    def __update_paramval(self, name):
-        """
-        update parameter value, including setting bounds.
-        For a constrained parameter (one with an expr defined),
-        this first updates (recursively) all parameters on which
-        the parameter depends (using the 'deps' field).
-       """
-        # Has this param already been updated?
-        # if this is called as an expression dependency,
-        # it may have been!
-        if self.updated[name]:
-            return
-        par = self.params[name]
-        if getattr(par, 'expr', None) is not None:
-            if getattr(par, 'ast', None) is None:
-                par.ast = self.asteval.parse(par.expr)
-            if par.deps is not None:
-                for dep in par.deps:
-                    self.__update_paramval(dep)
-            par.value = self.asteval.run(par.ast)
-            out = check_ast_errors(self.asteval.error)
-            if out is not None:
-                self.asteval.raise_exception(None)
-        self.asteval.symtable[name] = par.value
-        self.updated[name] = True
-
     def update_constraints(self):
         """
         Update all constrained parameters, checking that dependencies are
         evaluated as needed.
         """
-        self.updated = dict([(name, False) for name in self.params])
-        for name in self.params:
-            self.__update_paramval(name)
+        self.params.update_constraints()
 
     def __residual(self, fvars):
         """
@@ -284,7 +241,6 @@ class Minimizer(object):
             par.value = par.from_internal(val)
         self.nfev = self.nfev + 1
 
-        self.update_constraints()
         out = self.userfcn(self.params, *self.userargs, **self.userkws)
         if callable(self.iter_cb):
             self.iter_cb(self.params, self.nfev, out,
@@ -356,36 +312,21 @@ class Minimizer(object):
         self.var_map = []
         self.vars = []
         self.errorbars = False
+        self.update_constraints()
         for name, par in self.params.items():
             par.stderr = None
             par.correl = None
-
             if par.expr is not None:
-                par.ast = self.asteval.parse(par.expr)
-                check_ast_errors(self.asteval.error)
                 par.vary = False
-                par.deps = []
-                self.namefinder.names = []
-                self.namefinder.generic_visit(par.ast)
-                for symname in self.namefinder.names:
-                    if (symname in self.params and
-                        symname not in par.deps):
-                        par.deps.append(symname)
-            elif par.vary:
+            if par.vary:
                 self.var_map.append(name)
                 self.vars.append(par.setup_bounds())
 
-            self.asteval.symtable[name] = par.value
             par.init_value = par.value
             if par.name is None:
                 par.name = name
 
         self.nvarys = len(self.vars)
-
-        # now evaluate make sure initial values
-        # are used to set values of the defined expressions.
-        # this also acts as a check of expression syntax.
-        self.update_constraints()
         self.__prepared = True
 
     def unprepare_fit(self):
@@ -397,9 +338,6 @@ class Minimizer(object):
         """
         self.__prepared = False
         self.params = deepcopy(self.params)
-        for par in self.params.values():
-            if hasattr(par, 'ast'):
-                delattr(par, 'ast')
 
     @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
                        'and method=\'L-BFGS-B\' instead')
@@ -543,7 +481,7 @@ class Minimizer(object):
                                  'are required for each parameter')
             bounds = [(-np.pi / 2., np.pi / 2.)] * len(self.vars)
             fmin_kws['bounds'] = bounds
-            
+
             # in scipy 0.14 this can be called directly from scipy_minimize
             # When minimum scipy is 0.14 the following line and the else
             # can be removed.
@@ -667,7 +605,6 @@ class Minimizer(object):
         if self.covar is not None:
             if self.scale_covar:
                 self.covar = self.covar * sum_sqr / self.nfree
-
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(self.covar[ivar, ivar])
@@ -692,14 +629,12 @@ class Minimizer(object):
                     uvars = uncertainties.correlated_values(vbest, self.covar)
                 except (LinAlgError, ValueError):
                     uvars = None
-
                 if uvars is not None:
                     for par in self.params.values():
-                        eval_stderr(par, uvars, self.var_map,
-                                    self.params, self.asteval)
+                        eval_stderr(par, uvars, self.var_map, self.params)
                     # restore nominal values
                     for v, nam in zip(uvars, self.var_map):
-                        self.asteval.symtable[nam] = v.nominal_value
+                        self.params[nam].value = v.nominal_value
 
         if not self.errorbars:
             self.message = '%s. Could not estimate error-bars'  % self.message

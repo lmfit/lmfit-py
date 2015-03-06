@@ -10,10 +10,70 @@ import numpy as np
 from . import Parameters, Parameter, Minimizer
 from .printfuncs import fit_report
 
+from collections import MutableSet
+
 try:
     from collections import OrderedDict
 except ImportError:
     from ordereddict import OrderedDict
+
+class OrderedSet(MutableSet):
+    """from http://code.activestate.com/recipes/576694-orderedset/"""
+    def __init__(self, iterable=None):
+        self.end = end = []
+        end += [None, end, end]         # sentinel node for doubly linked list
+        self.map = {}                   # key --> [key, prev, next]
+        if iterable is not None:
+            self |= iterable
+
+    def __len__(self):
+        return len(self.map)
+
+    def __contains__(self, key):
+        return key in self.map
+
+    def add(self, key):
+        if key not in self.map:
+            end = self.end
+            curr = end[1]
+            curr[2] = end[1] = self.map[key] = [key, curr, end]
+
+    def discard(self, key):
+        if key in self.map:
+            key, prev, next = self.map.pop(key)
+            prev[2] = next
+            next[1] = prev
+
+    def __iter__(self):
+        end = self.end
+        curr = end[2]
+        while curr is not end:
+            yield curr[0]
+            curr = curr[2]
+
+    def __reversed__(self):
+        end = self.end
+        curr = end[1]
+        while curr is not end:
+            yield curr[0]
+            curr = curr[1]
+
+    def pop(self, last=True):
+        if not self:
+            raise KeyError('set is empty')
+        key = self.end[1][0] if last else self.end[2][0]
+        self.discard(key)
+        return key
+
+    def __repr__(self):
+        if not self:
+            return '%s()' % (self.__class__.__name__,)
+        return '%s(%r)' % (self.__class__.__name__, list(self))
+
+    def __eq__(self, other):
+        if isinstance(other, OrderedSet):
+            return len(self) == len(other) and list(self) == list(other)
+        return set(self) == set(other)
 
 
 # Use pandas.isnull for aligning missing data is pandas is available.
@@ -105,8 +165,8 @@ class Model(object):
             raise ValueError(self._invalid_missing)
         self.missing = missing
         self.opts = kws
-        self.param_hints = {}
-        self._param_names = set()
+        self.param_hints = OrderedDict()
+        self._param_names = OrderedSet()
         self._parse_params()
         if self.independent_vars is None:
             self.independent_vars = []
@@ -229,8 +289,7 @@ class Model(object):
             if (self._strip_prefix(arg) not in allargs or
                 arg in self._forbidden_args):
                 raise ValueError(self._invalid_par % (arg, fname))
-
-        self._param_names = set(names)
+        self._param_names = OrderedSet(names)
 
     def set_param_hint(self, name, **kwargs):
         """set hints for parameter, including optional bounds
@@ -247,7 +306,7 @@ class Model(object):
             name = name[npref:]
 
         if name not in self.param_hints:
-            self.param_hints[name] = {}
+            self.param_hints[name] = OrderedDict()
         hints = self.param_hints[name]
         for key, val in kwargs.items():
             if key in self._hint_names:
@@ -263,7 +322,6 @@ class Model(object):
         if 'verbose' in kwargs:
             verbose = kwargs['verbose']
         params = Parameters()
-
         for name in self.param_names:
             par = Parameter(name=name)
             basename = name[len(self._prefix):]
@@ -437,7 +495,7 @@ class Model(object):
             params = deepcopy(params)
 
         # If any kwargs match parameter names, override params.
-        param_kwargs = set(kwargs.keys()) & self.param_names
+        param_kwargs = set(kwargs.keys()) & set(self.param_names)
         for name in param_kwargs:
             p = kwargs[name]
             if isinstance(p, Parameter):

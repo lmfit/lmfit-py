@@ -12,7 +12,13 @@ except ImportError:
 
 from . import uncertainties
 
-from .astutils import valid_symbol_name
+from .asteval import Interpreter
+from .astutils import get_ast_names, valid_symbol_name
+
+def check_ast_errors(expr_eval):
+    """check for errors derived from asteval"""
+    if len(expr_eval.error) > 0:
+        expr_eval.raise_exception(None)
 
 class Parameters(OrderedDict):
     """
@@ -29,18 +35,40 @@ class Parameters(OrderedDict):
     dumps() / dump()
     loads() / load()
     """
-    def __init__(self, *args, **kwds):
+    def __init__(self, asteval=None, *args, **kwds):
         super(Parameters, self).__init__(self)
+        self._asteval = asteval
+        if asteval is None:
+            self._asteval = Interpreter()
         self.update(*args, **kwds)
 
-    def __setitem__(self, key, value):
+    def __deepcopy__(self, memo):
+        _pars = Parameters()
+        for key, val in self._asteval.symtable.items():
+            _pars._asteval.symtable[key] = deepcopy(val)
+        for key, par in self.items():
+            if isinstance(par, Parameter):
+                name = par.name
+                _pars.add(name, value=par.value, min=par.min, max=par.max)
+                _pars[name].vary = par.vary
+                _pars[name].stderr = par.stderr
+                _pars[name].correl = par.correl
+                _pars[name].init_value = par.init_value
+                _pars[name].expr = par.expr
+                _pars._asteval.symtable[name] = par.value
+        return _pars
+
+    def __setitem__(self, key, par):
         if key not in self:
             if not valid_symbol_name(key):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
-        if value is not None and not isinstance(value, Parameter):
-            raise ValueError("'%s' is not a Parameter" % value)
-        OrderedDict.__setitem__(self, key, value)
-        value.name = key
+        if par is not None and not isinstance(par, Parameter):
+            raise ValueError("'%s' is not a Parameter" % par)
+        OrderedDict.__setitem__(self, key, par)
+        par.name = key
+        par._expr_eval = self._asteval
+        self._asteval.symtable[key] = par.value
+        self.update_constraints()
 
     def __add__(self, other):
         "add Parameters objects"
@@ -56,6 +84,36 @@ class Parameters(OrderedDict):
             raise ValueError("'%s' is not a Parameters object" % other)
         self.update(other)
         return self
+
+    def update_constraints(self):
+        """update all constrained parameters, checking that
+        dependencies are evaluated as needed.
+        """
+        _updated = dict([(name, False) for name in self.keys()])
+        def _update_param(name):
+            """update a parameter value, including setting bounds.
+            For a constrained parameter (one with an expr defined),
+            this first updates (recursively) all parameters on which
+            the parameter depends (using the 'deps' field).
+            """
+            # Has this param already been updated?
+            # if this an expression dependency, it may have been
+            if _updated[name]:
+                return
+            par = self.__getitem__(name)
+            if par._expr_eval is None:
+                par._expr_eval = self._asteval
+            if par._expr is not None:
+                par.expr = par._expr
+            if par._expr_ast is not None:
+                for dep in par._expr_deps:
+                    if dep in self.keys():
+                        _update_param(dep)
+            self._asteval.symtable[name] = par.value
+            _updated[name] = True
+
+        for name in self.keys():
+            _update_param(name)
 
     def pretty_repr(self, oneline=False):
         if oneline:
@@ -245,7 +303,9 @@ class Parameter(object):
         self.max = max
         self.vary = vary
         self._expr = expr
-        self.deps   = None
+        self._expr_ast = None
+        self._expr_eval = None
+        self._expr_deps = []
         self.stderr = None
         self.correl = None
         self.from_internal = lambda val: val
@@ -303,14 +363,13 @@ class Parameter(object):
         """set state for pickle"""
         (self.name, self.value, self.vary, self.expr, self.min,
          self.max, self.stderr, self.correl, self.init_value) = state
-        self._val = self.value
         self._init_bounds()
 
     def __repr__(self):
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)
-        sval = repr(self._val)
+        sval = repr(self._getval())
         if not self.vary and self._expr is None:
             sval = "value=%s (fixed)" % (sval)
         elif self.stderr is not None:
@@ -382,6 +441,12 @@ class Parameter(object):
                 pass
         if not self.vary and self._expr is None:
             return self._val
+        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
+        if not hasattr(self, '_expr_ast'):   self._expr_ast = None
+        if self._expr_ast is not None and self._expr_eval is not None:
+            self._val = self._expr_eval(self._expr_ast)
+            check_ast_errors(self._expr_eval)
+
         if self.min is None:
             self.min = -inf
         if self.max is None:
@@ -400,6 +465,10 @@ class Parameter(object):
             self._val = nan
         return self._val
 
+    def set_expr_eval(self, evaluator):
+        "set expression evaluator instance"
+        self._expr_eval = evaluator
+
     @property
     def value(self):
         "The numerical value of the Parameter, with bounds applied"
@@ -409,6 +478,9 @@ class Parameter(object):
     def value(self, val):
         "Set the numerical Parameter value."
         self._val = val
+        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
+        if self._expr_eval is not None:
+            self._expr_eval.symtable[self.name] = val
 
     @property
     def expr(self):
@@ -426,6 +498,13 @@ class Parameter(object):
         if val == '':
             val = None
         self._expr = val
+        if val is not None:
+            self.vary = False
+        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
+        if val is not None and self._expr_eval is not None:
+            self._expr_ast = self._expr_eval.parse(val)
+            check_ast_errors(self._expr_eval)
+            self._expr_deps = get_ast_names(self._expr_ast)
 
     def __str__(self):
         "string"

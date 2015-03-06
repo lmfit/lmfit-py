@@ -32,6 +32,7 @@ def residual(pars, x, sigma=None, data=None):
 n = 601
 xmin = 0.
 xmax = 20.0
+random.seed(0)
 x = linspace(xmin, xmax, n)
 
 data = (gaussian(x, 21, 8.1, 1.2) +
@@ -79,7 +80,3 @@ fit = residual(myfit.params, x)
 if HASPYLAB:
     pylab.plot(x, fit, 'k-')
     pylab.show()
-
-
-
-
