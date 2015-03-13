@@ -47,7 +47,7 @@ def starting_guess(mini, estimate_sigma=True):
     all points have the same uncertainty which will
     be also part of the sampled parameters.
     """
-    vals = [i.value for i in params.values() if i.vary]
+    vals = [i.value for i in mini.params.values() if i.vary]
     if estimate_sigma:
         vals.append(mini.residual.std())
     return vals
@@ -61,7 +61,7 @@ def create_all(mini, sigma=None):
     is added to the sampled parameters.
     """
     sigma_given = not sigma is None
-    lnprior = create_prior(params)
+    lnprior = create_prior(mini.params)
     lnprob = create_lnliklihood(mini, sigma=sigma)
     guess = starting_guess(mini, not sigma_given)
     if sigma_given:
