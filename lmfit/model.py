@@ -1000,7 +1000,7 @@ class ModelFit(Minimizer):
         It is computed as `n * log(rss/n) + 2k`, where `n` is the number of data points, `rss` is the sum of residuals squares, 
         and k in the number of varying parameters.
         """
-        rss = np.float((self.residual**2).sum())
+        rss = self.chisqr
         n = self.ndata
         k = self.nvarys
         return n * np.log(rss / n) + 2 * k
@@ -1012,7 +1012,63 @@ class ModelFit(Minimizer):
         and k in the number of varying parameters. 
         It is closely related to AIC but gives a larger penalty to the number of paramters in the model.
         """
-        rss = np.float((self.residual**2).sum())
+        rss = self.chisqr
         n = self.ndata
         k = self.nvarys
         return n * np.log(rss / n) + np.log(n) * k
+
+
+    def likelihood_ratio_test(self, other):
+        """calculate a likelihood ratio test for two model fits (self and other).
+
+        The likelihood ratio test is performed on two nested models 
+        (self is nested in other; that is, some of the parameters of other are fixed in self).
+        The test is used to calculate the probability that, given the null hypothesis that the nested model is true,
+        fitting both models to the same data produces the model fits given in the input to this function.
+        
+        The test uses the formula:
+        `D = -2 log(lik0/lik1)` 
+        where `D` is approximately chisquare distributed with `df` degrees of freedom, where `df` is the difference 
+        in number of parameters between the models. This approximation is due to Wilks's theorem and depends on the 
+        number of data points.
+
+
+        Parameters
+        ----------
+        self, other : lmfit.ModelFit
+            ModelFit instances. self is the nested /restricted / null model.
+
+        Returns
+        -------
+        pvalue : float
+            The pvalue of the test, specifying the probability of getting the specified input given the data.
+        D: float
+            The test statistic, chisquare distributed with df degrees of freedom when the number of data points is large.
+        df: int
+            The respective degrees of freedom, calculated as the difference in number of paramaters of the input models.
+        
+        Notes
+        -----
+        Model likelihood is calculated as the reciprocal of the residual sum of squares of the model.
+        Therefore the formula used is
+        `D = -2 log(rss1/rss0)`
+
+        See Also
+        --------
+        http://en.wikipedia.org/wiki/Likelihood-ratio_test
+
+        """
+        n0 = self.ndata
+        k0 = self.nvarys
+        chisqr0 = self.chisqr # residual sum square - see minimizer.py
+        assert chisqr0 > 0
+        n1 = other.ndata 
+        k1 = other.nvarys
+        chisqr1 = other.chisqr
+        assert chisqr1 > 0
+
+        lam = chisqr1 / chisqr0 # chisqr ~ 1/lik
+        assert 0 <= lam <= 1
+        D = -2 * np.log(lam)
+        df = k1 - k0
+        return stats.chi2.sf(D, df), D, df
