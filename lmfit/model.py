@@ -995,10 +995,18 @@ class ModelFit(Minimizer):
         return fig
 
     def aic(self):
-        """calculate and return the AIC for a ModelFit.
+        """Calculate and return the AIC for a ModelFit.
         AIC is Akaike information criterion, a measure of the relative quality of a statistical model for a given set of data.
         It is computed as `n * log(rss/n) + 2k`, where `n` is the number of data points, `rss` is the sum of residuals squares, 
         and k in the number of varying parameters.
+        
+        Returns
+        -------
+        aic : float
+
+        See also
+        --------
+        http://en.wikipedia.org/wiki/Akaike_information_criterion
         """
         rss = self.chisqr
         n = self.ndata
@@ -1006,11 +1014,19 @@ class ModelFit(Minimizer):
         return n * np.log(rss / n) + 2 * k
 
     def bic(self):
-        """calculate and return the BIC for a ModelFit.
+        """Calculate and return the BIC for a ModelFit.
         BIC is Bayesian information criterion, a measure of the relative quality of a statistical model for a given set of data.
         It is computed as `n * log(rss/n) + log(n) k`, where `n` is the number of data points, `rss` is the sum of residuals squares, 
         and k in the number of varying parameters. 
         It is closely related to AIC but gives a larger penalty to the number of paramters in the model.
+
+        Returns
+        -------
+        bic : float
+
+        See also
+        --------
+        http://en.wikipedia.org/wiki/Bayesian_information_criterion
         """
         rss = self.chisqr
         n = self.ndata
@@ -1018,8 +1034,8 @@ class ModelFit(Minimizer):
         return n * np.log(rss / n) + np.log(n) * k
 
 
-    def likelihood_ratio_test(self, other):
-        """calculate a likelihood ratio test for two model fits (self and other).
+    def lik_ratio(self, other):
+        """Calculate a likelihood ratio test for two model fits (self and other).
 
         The likelihood ratio test is performed on two nested models 
         (self is nested in other; that is, some of the parameters of other are fixed in self).
