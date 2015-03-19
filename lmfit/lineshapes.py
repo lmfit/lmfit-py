@@ -2,6 +2,7 @@
 """
 basic model line shapes and distribution functions
 """
+from __future__ import division
 from numpy import (pi, log, exp, sqrt, arctan, cos, where)
 from numpy.testing import assert_allclose
 
