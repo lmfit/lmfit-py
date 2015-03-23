@@ -640,6 +640,10 @@ model while the :class:`ModelFit` is the messier, more complex (but perhaps
 more useful) object that represents a fit with a set of parameters to data
 with a model.
 
+A :class:`ModelFit` object also includes basic methods for **model selection**:
+`aic`, `bic` and `lik_ratio` (see below).
+
+
 A :class:`ModelFit` has several attributes holding values for fit results,
 and several methods for working with fits.
 
@@ -687,7 +691,52 @@ These methods are all inherited from :class:`Minimize` or from
    :param show_correl:  whether to show list of sorted correlations [``True``]
    :param min_correl:   smallest correlation absolute value to show [0.1]
 
+.. method:: ModelFit.aic()
 
+    Calculate the `Akaike Information Criterion <http://en.wikipedia.org/wiki/Akaike_information_criterion>`_ (AIC) of the model fit.
+    AIC measures the relative quality of a statistical model for a given set of data.
+    AIC balances between the fit of the model to the data and the complexity of the model;
+    it can be used to prevent `overfitting <http://en.wikipedia.org/wiki/Overfitting>`_.
+    
+    AIC is computed by `AIC = n * log(rss/n) + 2k`, where `n` is the number of data points, `rss` is the sum of residuals squares, and `k` in the number of varying parameters.
+
+    AIC is used for model selection by selecting the model with the *lowest* AIC.
+    It is a relative measure and as such can only be used to compare models.
+    Compared to `BIC <http://en.wikipedia.org/wiki/Bayesian_information_criterion>`_, AIC can be considered
+    less conservative, giving less weight to model simplicity (number of parameters) than BIC.
+
+.. method:: ModelFit.bic()
+
+    Calculate the `Bayesian Information Criterion <http://en.wikipedia.org/wiki/Bayesian_information_criterion>`_ (BIC) of the model fit.
+    BIC measures the relative quality of a statistical model for a given set of data.
+    BIC balances between the fit of the model to the data and the complexity of the model;
+    it can be used to prevent `overfitting <http://en.wikipedia.org/wiki/Overfitting>`_.
+
+    BIC is computed by `BIC = n * log(rss/n) + log(n) k`, where `n` is the number of data points, `rss` is the sum of residuals squares, and `k` in the number of varying parameters.
+
+    BIC is used for model selection by selecting the model with the *lowest* BIC.
+    BIC is a relative measure and as such can only be used to compare models.
+    Compared to `AIC <http://en.wikipedia.org/wiki/Akaike_information_criterion>`_, BIC can be considered
+    more conservative, giving more weight to model simplicity (number of parameters) than AIC.
+
+.. method:: ModelFit.lik_ratio(other)
+
+    Calculate a `likelihood ratio test <http://en.wikipedia.org/wiki/Likelihood-ratio_test>`_ for two model fits.
+
+    The likelihood ratio test is performed on two nested models 
+    (`self` is nested in `other`; that is, some of the parameters of `other` are fixed in `self`).
+
+    The null hypothesis of the test is that the nested model is true. 
+    The method returns the p-value of the test - 
+    the likelihood of getting the model fits we got, given the null hypothesis and the data.
+
+    The test calculates the statistic `D = -2 log(lik0/lik1)`.
+    `lik0` and `lik1` are the likelihoods of the nested and the nesting models,
+    which are calculated as the reciprocal of the residual sum of squares.
+
+    By Wilks's theorem, `D` is approximately `chi-square distributed <http://en.wikipedia.org/wiki/Chi-squared_distribution>`_ with `df` degrees of freedom, 
+    where `df` is the difference in number of parameters between the models; 
+    this allows the approximation of the p-value.  
 
 
 :class:`ModelFit` attributes
