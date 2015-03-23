@@ -698,7 +698,7 @@ These methods are all inherited from :class:`Minimize` or from
     AIC balances between the fit of the model to the data and the complexity of the model;
     it can be used to prevent `overfitting <http://en.wikipedia.org/wiki/Overfitting>`_.
     
-    AIC is computed by `AIC = n * log(rss/n) + 2k`, where `n` is the number of data points, `rss` is the sum of residuals squares, and `k` in the number of varying parameters.
+    AIC is computed by `AIC = n * log(rss/n) + 2k`, where `n` is the number of data points, `rss` is the sum of residuals squares, and `k` in the number of estimated parameters.
 
     AIC is used for model selection by selecting the model with the *lowest* AIC.
     It is a relative measure and as such can only be used to compare models.
@@ -712,7 +712,7 @@ These methods are all inherited from :class:`Minimize` or from
     BIC balances between the fit of the model to the data and the complexity of the model;
     it can be used to prevent `overfitting <http://en.wikipedia.org/wiki/Overfitting>`_.
 
-    BIC is computed by `BIC = n * log(rss/n) + log(n) k`, where `n` is the number of data points, `rss` is the sum of residuals squares, and `k` in the number of varying parameters.
+    BIC is computed by `BIC = n * log(rss/n) + log(n) k`, where `n` is the number of data points, `rss` is the sum of residuals squares, and `k` in the number of estimated parameters.
 
     BIC is used for model selection by selecting the model with the *lowest* BIC.
     BIC is a relative measure and as such can only be used to compare models.
@@ -724,7 +724,8 @@ These methods are all inherited from :class:`Minimize` or from
     Calculate a `likelihood ratio test <http://en.wikipedia.org/wiki/Likelihood-ratio_test>`_ for two model fits.
 
     The likelihood ratio test is performed on two nested models 
-    (`self` is nested in `other`; that is, some of the parameters of `other` are fixed in `self`).
+    (`self` is nested in `other`; that is, some of the parameters of `other` are fixed in `self` --
+    the estimated paramters of `self` are a subset of the estimated parameters of `other`).
 
     The null hypothesis of the test is that the nested model is true. 
     The method returns the p-value of the test - 
@@ -734,7 +735,7 @@ These methods are all inherited from :class:`Minimize` or from
     `lik0` and `lik1` are the likelihoods of the nested and the nesting models,
     which are calculated as the reciprocal of the residual sum of squares.
 
-    By Wilks's theorem, `D` is approximately `chi-square distributed <http://en.wikipedia.org/wiki/Chi-squared_distribution>`_ with `df` degrees of freedom, 
+    By Wilks's theorem, `D` is asymptotically `chi-square distributed <http://en.wikipedia.org/wiki/Chi-squared_distribution>`_ with `df` degrees of freedom, 
     where `df` is the difference in number of parameters between the models; 
     this allows the approximation of the p-value.  
 
