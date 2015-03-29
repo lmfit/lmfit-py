@@ -206,16 +206,17 @@ Fitting Methods <fit-methods-table>`.
 
 ..  _fit-results-label:
 
-Goodness-of-Fit and estimated uncertainty and correlations
-===================================================================
+Goodness-of-Fit Statistics and estimated uncertainties and correlations
+===========================================================================
 
 On a successful fit using the `leastsq` method, several goodness-of-fit
-statistics and values related to the uncertainty in the fitted variables will be
-calculated.  These are all encapsulated in the :class:`Minimizer` object for the
-fit, as returned by :func:`minimize`.  The values related to the entire fit are
-stored in attributes of the :class:`Minimizer` object, as shown in :ref:`Table
-of Fit Results <goodfit-table>` while those related to each fitted variables are
-stored as attributes of the corresponding :class:`Parameter`.
+statistics and values related to the uncertainties in the fitted variables
+will be calculated.  These are all encapsulated in the :class:`Minimizer`
+object for the fit, as returned by :func:`minimize`.  The values related to
+the entire fit are stored in attributes of the :class:`Minimizer` object,
+as shown in :ref:`Table of Fit Results <goodfit-table>` while those related
+to each fitted variables are stored as attributes of the corresponding
+:class:`Parameter`.
 
 
 .. _goodfit-table:
@@ -245,11 +246,15 @@ stored as attributes of the corresponding :class:`Parameter`.
 +----------------------+----------------------------------------------------------------------------+
 |    nfree `           | degrees of freedom in fit:  :math:`N - N_{\rm varys}`                      |
 +----------------------+----------------------------------------------------------------------------+
-|    residual          | residual array (return of :func:`func`:  :math:`{\rm Resid}`               |
+|    residual          | residual array, return value of :func:`func`:  :math:`{\rm Resid}`         |
 +----------------------+----------------------------------------------------------------------------+
 |    chisqr            | chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`                    |
 +----------------------+----------------------------------------------------------------------------+
 |    redchi            | reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}` |
++----------------------+----------------------------------------------------------------------------+
+|    aic               | Akaike Information Criterion statistic (see below)                         |
++----------------------+----------------------------------------------------------------------------+
+|    bic               | Bayesian Information Criterion statistic (see below)                       |
 +----------------------+----------------------------------------------------------------------------+
 |    var_map           | list of variable parameter names for rows/columns of covar                 |
 +----------------------+----------------------------------------------------------------------------+
@@ -278,6 +283,49 @@ Parameters makes it more likely that errors cannot be estimated, as being
 near the maximum or minimum value makes the covariance matrix singular.  In
 these cases, the :attr:`errorbars` attribute of the fit result
 (:class:`Minimizer` object) will be ``False``.
+
+Akaike and Bayesian Information Criteria
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The :class:`Minimizer` includes the tradtional chi-square and reduced chi-square statistics:
+
+.. math::
+   :nowrap:
+
+   \begin{eqnarray*}
+        \chi^2  &=&  \sum_i^N r_i^2 \\
+	\chi^2_\nu &=& = \chi^2 / (N-N_{\rm varys})
+    \end{eqnarray*}
+
+where :math:`r` is the residual array returned by the objective function
+(likely to be ``(data-model)/uncertainty`` for data modeling usages),
+:math:`N` is the number of data points (``ndata``), and :math:`N_{\rm
+varys}` is number of variable parameters.
+
+Also included are the `Akaike Information Criterion
+<http://en.wikipedia.org/wiki/Akaike_information_criterion>`_, and
+`Bayesian Information Criterion
+<http://en.wikipedia.org/wiki/Bayesian_information_criterion>`_ statistics,
+held in the ``aic`` and ``bic`` attributes, respectively.  These give slightly
+different measures of the relative quality for a fit, trying to balance
+quality of fit with the number of variable parameters used in the fit.
+These are calculated as
+
+.. math::
+   :nowrap:
+
+   \begin{eqnarray*}
+     {\rm aic} &=&  N \ln(\chi^2/N) + 2 N_{\rm varys} \\
+     {\rm bic} &=&  N \ln(\chi^2/N) + \ln(N) *N_{\rm varys} \\
+    \end{eqnarray*}
+
+
+Generally, when comparing fits with different numbers of varying
+parameters, one typically selects the model with lowest reduced chi-square,
+Akaike information criterion, and/or Bayesian information criterion.
+Generally, the Bayesian information criterion is considered themost
+conservative of these statistics.
+
 
 .. module:: Minimizer
 
