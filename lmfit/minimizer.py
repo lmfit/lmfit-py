@@ -501,7 +501,7 @@ class Minimizer(object):
             self.ndata = len(self.residual)
             self.nfree = self.ndata - self.nvarys
         self.redchi = self.chisqr / self.nfree
-        _log_likelihood = self.ndata * np.log(self.chisqr/self.data)
+        _log_likelihood = self.ndata * np.log(self.chisqr/self.ndata)
         self.aic = _log_likelihood + 2 * self.nvarys
         self.bic = _log_likelihood + np.log(self.ndata) * self.nvarys
         self.unprepare_fit()
@@ -566,7 +566,7 @@ class Minimizer(object):
         self.chisqr = (resid**2).sum()
         self.nfree = (self.ndata - self.nvarys)
         self.redchi = self.chisqr / self.nfree
-        _log_likelihood = self.ndata * np.log(self.chisqr/self.data)
+        _log_likelihood = self.ndata * np.log(self.chisqr/self.ndata)
         self.aic = _log_likelihood + 2 * self.nvarys
         self.bic = _log_likelihood + np.log(self.ndata) * self.nvarys
 
@@ -610,7 +610,7 @@ class Minimizer(object):
 
         if self.covar is not None:
             if self.scale_covar:
-                self.covar = self.covar * sef.chisqr / self.nfree
+                self.covar = self.covar * self.chisqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(self.covar[ivar, ivar])
