@@ -501,6 +501,9 @@ class Minimizer(object):
             self.ndata = len(self.residual)
             self.nfree = self.ndata - self.nvarys
         self.redchi = self.chisqr / self.nfree
+        _log_likelihood = self.ndata * np.log(self.chisqr/self.ndata)
+        self.aic = _log_likelihood + 2 * self.nvarys
+        self.bic = _log_likelihood + np.log(self.ndata) * self.nvarys
         self.unprepare_fit()
         return ret.success
 
@@ -560,10 +563,13 @@ class Minimizer(object):
         self.nfev = infodict['nfev']
         self.ndata = len(resid)
 
-        sum_sqr = (resid**2).sum()
-        self.chisqr = sum_sqr
+        self.chisqr = (resid**2).sum()
         self.nfree = (self.ndata - self.nvarys)
-        self.redchi = sum_sqr / self.nfree
+        self.redchi = self.chisqr / self.nfree
+        _log_likelihood = self.ndata * np.log(self.chisqr/self.ndata)
+        self.aic = _log_likelihood + 2 * self.nvarys
+        self.bic = _log_likelihood + np.log(self.ndata) * self.nvarys
+
 
         # need to map _best values to params, then calculate the
         # grad for the variable parameters
@@ -604,7 +610,7 @@ class Minimizer(object):
 
         if self.covar is not None:
             if self.scale_covar:
-                self.covar = self.covar * sum_sqr / self.nfree
+                self.covar = self.covar * self.chisqr / self.nfree
             for ivar, varname in enumerate(self.var_map):
                 par = self.params[varname]
                 par.stderr = sqrt(self.covar[ivar, ivar])
