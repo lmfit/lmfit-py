@@ -45,7 +45,8 @@ class Parameters(OrderedDict):
     def __deepcopy__(self, memo):
         _pars = Parameters()
         for key, val in self._asteval.symtable.items():
-            _pars._asteval.symtable[key] = deepcopy(val)
+            if key not in self._asteval.no_deepcopy:
+                _pars._asteval.symtable[key] = deepcopy(val, memo)
         for key, par in self.items():
             if isinstance(par, Parameter):
                 name = par.name
