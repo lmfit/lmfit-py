@@ -352,7 +352,7 @@ class Minimizer(object):
             scipy.optimize.lbfgsb.fmin_l_bfgs_b function.
 
         """
-        raise NotImplementedError("use scalar_minimize(..., method='L-BFGS-B')")
+        raise NotImplementedError("use scalar_minimize(method='L-BFGS-B')")
 
 
     @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
@@ -366,7 +366,7 @@ class Minimizer(object):
         kws : dict
             Minimizer options to pass to the scipy.optimize.fmin minimizer.
         """
-        raise NotImplementedError("use scalar_minimize(..., method='Nelder-Mead')")
+        raise NotImplementedError("use scalar_minimize(method='Nelder-Mead')")
 
     def scalar_minimize(self, method='Nelder-Mead', **kws):
         """
