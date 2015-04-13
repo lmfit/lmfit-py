@@ -352,27 +352,8 @@ class Minimizer(object):
             scipy.optimize.lbfgsb.fmin_l_bfgs_b function.
 
         """
+        raise NotImplementedError("use scalar_minimize(..., method='L-BFGS-B')")
 
-        self.prepare_fit()
-        lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
-                      maxfun=2000 * (self.nvarys + 1),
-                      )
-        lb_kws.update(self.kws)
-        lb_kws.update(kws)
-
-        xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
-        self.nfev = info['funcalls']
-        self.message = info['task']
-        self.chisqr = self.residual = self.__residual(xout)
-        self.ndata = 1
-        self.nfree = 1
-        if isinstance(self.residual, ndarray):
-            self.chisqr = (self.chisqr**2).sum()
-            self.ndata = len(self.residual)
-            self.nfree = self.ndata - self.nvarys
-        self.redchi = self.chisqr/self.nfree
-        self.unprepare_fit()
-        return
 
     @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
                        'and method=\'Nelder-Mead\' instead')
@@ -385,27 +366,7 @@ class Minimizer(object):
         kws : dict
             Minimizer options to pass to the scipy.optimize.fmin minimizer.
         """
-
-        self.prepare_fit()
-        fmin_kws = dict(full_output=True, disp=False, retall=True,
-                        ftol=1.e-4, xtol=1.e-4,
-                        maxfun=5000 * (self.nvarys + 1))
-
-        fmin_kws.update(kws)
-
-        ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
-        xout, fout, niter, funccalls, warnflag, allvecs = ret
-        self.nfev = funccalls
-        self.chisqr = self.residual = self.__residual(xout)
-        self.ndata = 1
-        self.nfree = 1
-        if isinstance(self.residual, ndarray):
-            self.chisqr = (self.chisqr**2).sum()
-            self.ndata = len(self.residual)
-            self.nfree = self.ndata - self.nvarys
-        self.redchi = self.chisqr/self.nfree
-        self.unprepare_fit()
-        return
+        raise NotImplementedError("use scalar_minimize(..., method='Nelder-Mead')")
 
     def scalar_minimize(self, method='Nelder-Mead', **kws):
         """
