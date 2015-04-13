@@ -467,7 +467,7 @@ class Minimizer(object):
         else:
             ret = scipy_minimize(self.penalty, vars, **fmin_kws)
 
-        self.uprepare_fit()
+        self.unprepare_fit()
 
         result = self.result
         for attr in dir(ret):
@@ -486,6 +486,8 @@ class Minimizer(object):
         _log_likelihood = result.ndata * np.log(result.redchi)
         result.aic = _log_likelihood + 2 * result.nvarys
         result.bic = _log_likelihood + np.log(result.ndata) * result.nvarys
+        self.nvarys =  len(vars)
+        self.nfev   =  result.nfev
         return result
 
     def leastsq(self, **kws):
@@ -546,8 +548,9 @@ class Minimizer(object):
         else:
             result.message = 'Tolerance seems to be too small.'
 
-        result.nfev = infodict['nfev']
+        self.nfev = result.nfev = infodict['nfev']
         result.ndata = len(resid)
+        self.nvarys = result.nvarys = nvars
 
         result.chisqr = (resid**2).sum()
         result.nfree = (result.ndata - nvars)
