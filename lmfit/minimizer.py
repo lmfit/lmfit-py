@@ -226,8 +226,6 @@ class Minimizer(object):
         self.var_names = []
         self.params = params
         self.jacfcn = None
-        self.__prepared = False
-        self.result = MinimizerResult()
 
     @property
     def values(self):
@@ -238,14 +236,7 @@ class Minimizer(object):
             Parameter values in a simple dictionary.
         """
 
-        return dict([(name, p.value) for name, p in self.params.items()])
-
-    def update_constraints(self):
-        """
-        Update all constrained parameters, checking that dependencies are
-        evaluated as needed.
-        """
-        self.result.params.update_constraints()
+        return dict([(name, p.value) for name, p in self.result.params.items()])
 
     def __residual(self, fvars):
         """
@@ -257,7 +248,7 @@ class Minimizer(object):
         """
         # set parameter values
         params = self.result.params
-        for name, val in zip(self.var_names, fvars):
+        for name, val in zip(self.result.var_names, fvars):
             params[name].value = params[name].from_internal(val)
         self.result.nfev = self.result.nfev + 1
 
@@ -274,7 +265,7 @@ class Minimizer(object):
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         """
         params = self.result.params
-        for name, val in zip(self.var_names, fvars):
+        for name, val in zip(self.result.var_names, fvars):
             params[name].value = params[name].from_internal(val)
 
         self.result.nfev = self.result.nfev + 1
@@ -308,43 +299,45 @@ class Minimizer(object):
         """
         # determine which parameters are actually variables
         # and which are defined expressions.
+        result = self.result = MinimizerResult()
         if params is not None:
             self.params = params
         if isinstance(self.params, Parameters):
-            self.result.params = deepcopy(self.params)
+            result.params = deepcopy(self.params)
         elif isinstance(self.params, (list, tuple)):
-            self.result.params = Parameters()
+            result.params = Parameters()
             for par in self.params:
                 if not isinstance(par, Parameter):
                     raise MinimizerException(self.err_nonparam)
                 else:
-                    self.result.params[par.name] = par
+                    result.params[par.name] = par
         elif self.params is None:
             raise MinimizerException(self.err_nonparam)
 
         # determine which parameters are actually variables
         # and which are defined expressions.
 
-        self.result.nfev = 0
-        self.result.errorbars = False
-        self.var_names = []
-        vars = []
-        self.update_constraints()
+        result.var_names = [] # note that this *does* belong to self...
+        result.init_vals = []
+        result.params.update_constraints()
+        result.nfev = 0
+        result.errorbars = False
+        result.init_values = []
+
         for name, par in self.result.params.items():
             par.stderr = None
             par.correl = None
             if par.expr is not None:
                 par.vary = False
             if par.vary:
-                self.var_names.append(name)
-                vars.append(par.setup_bounds())
+                result.var_names.append(name)
+                result.init_vals.append(par.setup_bounds())
 
             par.init_value = par.value
             if par.name is None:
                 par.name = name
-        self.result.nvarys = len(vars)
-        self.__prepared = True
-        return vars
+        result.nvarys = len(result.var_names)
+        return result
 
     def unprepare_fit(self):
         """
@@ -353,7 +346,7 @@ class Minimizer(object):
 
         removes ast compilations of constraint expressions
         """
-        self.__prepared = False
+        pass
 
     @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
                        'and method=\'L-BFGS-B\' instead')
@@ -428,8 +421,9 @@ class Minimizer(object):
         if not HAS_SCALAR_MIN:
             raise NotImplementedError
 
-        vars = self.prepare_fit()
-        params = self.result.params
+        result = self.prepare_fit()
+        vars   = result.init_vals
+        params = result.params
 
         fmin_kws = dict(method=method,
                         options={'maxiter': 1000 * (len(vars) + 1)})
@@ -467,9 +461,6 @@ class Minimizer(object):
         else:
             ret = scipy_minimize(self.penalty, vars, **fmin_kws)
 
-        self.unprepare_fit()
-
-        result = self.result
         for attr in dir(ret):
             if not attr.startswith('_'):
                 setattr(result, attr, getattr(ret, attr))
@@ -486,8 +477,7 @@ class Minimizer(object):
         _log_likelihood = result.ndata * np.log(result.redchi)
         result.aic = _log_likelihood + 2 * result.nvarys
         result.bic = _log_likelihood + np.log(result.ndata) * result.nvarys
-        self.nvarys =  len(vars)
-        self.nfev   =  result.nfev
+
         return result
 
     def leastsq(self, **kws):
@@ -513,7 +503,8 @@ class Minimizer(object):
         success : bool
             True if fit was successful, False if not.
         """
-        vars = self.prepare_fit()
+        result = self.prepare_fit()
+        vars   = result.init_vals
         nvars = len(vars)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
                      gtol=1.e-7, maxfev=2000*(nvars+1), Dfun=None)
@@ -532,9 +523,6 @@ class Minimizer(object):
         lsout = scipy_leastsq(self.__residual, vars, **lskws)
         _best, _cov, infodict, errmsg, ier = lsout
 
-        self.unprepare_fit()
-
-        result = self.result
         result.residual = resid = infodict['fvec']
         result.ier = ier
         result.lmdif_message = errmsg
@@ -548,8 +536,6 @@ class Minimizer(object):
         else:
             result.message = 'Tolerance seems to be too small.'
 
-        self.nfev = result.nfev = infodict['nfev']
-        self.nvarys = result.nvarys = nvars
         result.ndata = len(resid)
 
         result.chisqr = (resid**2).sum()
