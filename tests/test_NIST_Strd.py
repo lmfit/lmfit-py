@@ -88,11 +88,11 @@ def NIST_Dataset(DataSet, method='leastsq', start='start2',
         params.add(pname, value=pval1)
 
     myfit = minimize(resid, params, method=method, args=(x,), kws={'y':y})
-    digs, buff = Compare_NIST_Results(DataSet, myfit, params, NISTdata)
+    digs, buff = Compare_NIST_Results(DataSet, myfit, myfit.params, NISTdata)
     if verbose:
         print(buff)
     if plot and HASPYLAB:
-        fit = -resid(params, x, )
+        fit = -resid(myfit.params, x, )
         pylab.plot(x, y, 'ro')
         pylab.plot(x, fit, 'k+-')
         pylab.show()
@@ -265,4 +265,3 @@ def test_Thurber():
 
 if __name__ == '__main__':
     run_interactive()
-

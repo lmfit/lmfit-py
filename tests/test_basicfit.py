@@ -39,8 +39,8 @@ def test_basic():
     assert(result.nfev < 500)
     assert(result.chisqr > 1)
     assert(result.nvarys == 4)
-    assert_paramval(params['amp'],   5.03, tol=0.05)
-    assert_paramval(params['omega'], 2.0, tol=0.05)
+    assert_paramval(result.params['amp'],   5.03, tol=0.05)
+    assert_paramval(result.params['omega'], 2.0, tol=0.05)
 
 
 if __name__ == '__main__':
