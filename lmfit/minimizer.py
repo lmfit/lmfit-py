@@ -472,9 +472,9 @@ class Minimizer(object):
         result = self.result
         for attr in dir(ret):
             if not attr.startswith('_'):
-                setattr(result, getattr(ret, attr))
+                setattr(result, attr, getattr(ret, attr))
 
-        result.chisqr = result.residual = self.__residual(xout)
+        result.chisqr = result.residual = self.__residual(ret.x)
         result.nvarys = len(vars)
         result.ndata = 1
         result.nfree = 1
@@ -549,8 +549,8 @@ class Minimizer(object):
             result.message = 'Tolerance seems to be too small.'
 
         self.nfev = result.nfev = infodict['nfev']
-        result.ndata = len(resid)
         self.nvarys = result.nvarys = nvars
+        result.ndata = len(resid)
 
         result.chisqr = (resid**2).sum()
         result.nfree = (result.ndata - nvars)
@@ -752,5 +752,4 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
-    fitter.minimize(method=method)
-    return fitter
+    return fitter.minimize(method=method)
