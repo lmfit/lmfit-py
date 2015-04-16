@@ -757,13 +757,18 @@ class ModelFit(Minimizer):
             self.method = method
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
-        self.init_params = deepcopy(self.params)
-        self.init_values = self.model._make_all_args(self.init_params)
-        self.init_fit    = self.model.eval(params=self.init_params, **self.userkws)
+        self.init_params = self.params
+        self.init_fit    = self.model.eval(params=self.params, **self.userkws)
 
-        self.minimize(method=self.method)
-        self.best_fit = self.model.eval(params=self.params, **self.userkws)
-        self.best_values = self.model._make_all_args(self.params)
+        _ret = self.minimize(method=self.method)
+
+        for attr in dir(_ret):
+            if not attr.startswith('_') :
+                setattr(self, attr, getattr(_ret, attr))
+
+        self.init_values = self.model._make_all_args(self.init_params)
+        self.best_values = self.model._make_all_args(_ret.params)
+        self.best_fit    = self.model.eval(params=_ret.params, **self.userkws)
 
     def eval(self, **kwargs):
         self.userkws.update(kwargs)
