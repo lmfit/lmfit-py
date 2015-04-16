@@ -750,14 +750,13 @@ class ModelFit(Minimizer):
         if data is not None:
             self.data = data
         if params is not None:
-            self.params = params
+            self.init_params = params
         if weights is not None:
             self.weights = weights
         if method is not None:
             self.method = method
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
-        self.init_params = self.params
         self.init_fit    = self.model.eval(params=self.params, **self.userkws)
 
         _ret = self.minimize(method=self.method)
