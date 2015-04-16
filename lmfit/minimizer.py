@@ -223,7 +223,6 @@ class Minimizer(object):
         self.covar = None
         self.residual = None
 
-        self.var_names = []
         self.params = params
         self.jacfcn = None
 
@@ -561,7 +560,7 @@ class Minimizer(object):
         if len(np.shape(grad)) == 0:
             grad = np.array([grad])
 
-        for ivar, name in enumerate(self.var_names):
+        for ivar, name in enumerate(result.var_names):
             grad[ivar] = params[name].scale_gradient(_best[ivar])
             vbest[ivar] = params[name].value
 
@@ -586,13 +585,13 @@ class Minimizer(object):
         if result.errorbars:
             if self.scale_covar:
                 result.covar *= result.redchi
-            for ivar, name in enumerate(self.var_names):
+            for ivar, name in enumerate(result.var_names):
                 par = params[name]
                 par.stderr = sqrt(result.covar[ivar, ivar])
                 par.correl = {}
                 try:
                     result.errorbars = result.errorbars and (par.stderr > 0.0)
-                    for jvar, varn2 in enumerate(self.var_names):
+                    for jvar, varn2 in enumerate(result.var_names):
                         if jvar != ivar:
                             par.correl[varn2] = (result.covar[ivar, jvar] /
                                  (par.stderr * sqrt(result.covar[jvar, jvar])))
@@ -612,9 +611,9 @@ class Minimizer(object):
                     uvars = None
                 if uvars is not None:
                     for par in params.values():
-                        eval_stderr(par, uvars, self.var_names, params)
+                        eval_stderr(par, uvars, result.var_names, params)
                     # restore nominal values
-                    for v, nam in zip(uvars, self.var_names):
+                    for v, nam in zip(uvars, result.var_names):
                         params[nam].value = v.nominal_value
 
         if not result.errorbars:
