@@ -45,12 +45,12 @@ fit_params.add('decay', value=0.02, max=0.10, min=0.00)
 
 out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 
-fit = residual(fit_params, x)
+fit = residual(out.params, x)
 
 print '# N_func_evals, N_free = ', out.nfev, out.nfree
 print '# chi-square, reduced chi-square = % .7g, % .7g' % (out.chisqr, out.redchi)
 
-report_fit(fit_params, show_correl=True, modelpars=p_true)
+report_fit(out.params, show_correl=True, modelpars=p_true)
 
 print 'Raw (unordered, unscaled) Covariance Matrix:'
 print out.covar

@@ -44,7 +44,7 @@ fit_params.add('decay', value=0.02)
 
 out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 
-fit = residual(fit_params, x)
-print(fit_report(fit_params))
+fit = residual(out.params, x)
+print(fit_report(out.params))
 
 #<end of examples/doc_withreport.py>

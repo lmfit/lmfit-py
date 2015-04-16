@@ -73,12 +73,12 @@ for scale_covar in (True, False):
         p_fit['line_slope'].value =0.0
         p_fit['line_off'].value   =0.0
 
-        myfit.leastsq()
+        out = myfit.leastsq()
         print '  sigma          = ', sigma
-        print '  chisqr         = ', myfit.chisqr
-        print '  reduced_chisqr = ', myfit.redchi
+        print '  chisqr         = ', out.chisqr
+        print '  reduced_chisqr = ', out.redchi
 
-        report_fit(p_fit, modelpars=p_true, show_correl=False)
+        report_fit(out.params, modelpars=p_true, show_correl=False)
         print '  =============================='
 
 
