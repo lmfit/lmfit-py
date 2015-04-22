@@ -1,10 +1,9 @@
 import lmfit
 import numpy as np
 import matplotlib
-matplotlib.use('WXAgg')
+# matplotlib.use('WXAgg')
 
 import matplotlib.pyplot as plt
-
 
 x = np.linspace(1, 10, 250)
 np.random.seed(0)
@@ -17,30 +16,35 @@ def residual(p):
    v = p.valuesdict()
    return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1)/v['t2'])-y
 
+# create Minimizer
+mini = lmfit.Minimizer(residual, p)
+
 # first solve with Nelder-Mead
-mi = lmfit.minimize(residual, p, method='Nelder')
+out1 = mini.minimize(method='Nelder')
 
-mi = lmfit.minimize(residual, p)
+# then solve from that starting point with Levenberg-Marquardt
+out2 = mini.leastsq(params=out1.params)
 
-lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
+lmfit.report_fit(out2.params, min_correl=0.5)
 
-ci, trace = lmfit.conf_interval(mi, sigmas=[0.68,0.95], trace=True, verbose=False)
+ci, trace = lmfit.conf_interval(mini, out2, sigmas=[0.68,0.95],
+                                trace=True, verbose=False)
 lmfit.printfuncs.report_ci(ci)
 
-plot_type = 3
+plot_type = 2
 if plot_type == 0:
     plt.plot(x, y)
-    plt.plot(x, residual(p)+y )
+    plt.plot(x, residual(out2.params)+y )
 
 elif plot_type == 1:
-    cx, cy, grid = lmfit.conf_interval2d(mi,'a2','t2',30,30)
+    cx, cy, grid = lmfit.conf_interval2d(mini, out2, 'a2','t2',30,30)
     plt.contourf(cx, cy, grid, np.linspace(0,1,11))
     plt.xlabel('a2')
     plt.colorbar()
     plt.ylabel('t2')
 
 elif plot_type == 2:
-    cx, cy, grid = lmfit.conf_interval2d(mi,'a1','t2',30,30)
+    cx, cy, grid = lmfit.conf_interval2d(mini, out2, 'a1','t2',30,30)
     plt.contourf(cx, cy, grid, np.linspace(0,1,11))
     plt.xlabel('a1')
     plt.colorbar()
