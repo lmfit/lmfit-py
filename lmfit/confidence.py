@@ -41,10 +41,10 @@ def restore_vals(tmp_params, params):
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
 
-def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
+def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
     r"""Calculates the confidence interval for parameters
-    from the given minimizer.
+    from the given a MinimizerResult, output from minimize.
 
     The parameter for which the ci is calculated will be varied, while
     the remaining parameters are re-optimized for minimizing chi-square.
@@ -56,7 +56,9 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
     Parameters
     ----------
     minimizer : Minimizer
-        The minimizer to use, should be already fitted via leastsq.
+        The minimizer to use, holding objective function.
+    result : MinimizerResult
+        The result of running minimize().
     p_names : list, optional
         Names of the parameters for which the ci is calculated. If None,
         the ci is calculated for every parameter.
@@ -114,8 +116,8 @@ def conf_interval(minimizer, p_names=None, sigmas=(0.674, 0.95, 0.997),
 
     This makes it possible to plot the dependence between free and fixed.
     """
-    ci = ConfidenceInterval(minimizer, p_names, prob_func, sigmas, trace,
-                            verbose, maxiter)
+    ci = ConfidenceInterval(minimizer, result, p_names, prob_func, sigmas,
+                            trace, verbose, maxiter)
     output = ci.calc_all_ci()
     if trace:
         return output, ci.trace_dict
@@ -139,23 +141,24 @@ class ConfidenceInterval(object):
     """
     Class used to calculate the confidence interval.
     """
-    def __init__(self, minimizer, p_names=None, prob_func=None,
+    def __init__(self, minimizer, result, p_names=None, prob_func=None,
                  sigmas=(0.674, 0.95, 0.997), trace=False, verbose=False,
                  maxiter=50):
         """
 
         """
+        self.verbose = verbose
+        self.minimizer = minimizer
+        self.result = result
+        self.params = result.params
+        self.org = copy_vals(self.params)
+        self.best_chi = result.chisqr
+
         if p_names is None:
-            params = minimizer.params
-            self.p_names = [i for i in params if params[i].vary]
-        else:
-            self.p_names = p_names
+            p_names = [i for i in self.params if self.params[i].vary]
 
-        # used to detect that .leastsq() has run!
-        if not hasattr(minimizer, 'covar'):
-            minimizer.leastsq()
-
-        self.fit_params = [minimizer.params[p] for p in self.p_names]
+        self.p_names = p_names
+        self.fit_params = [self.params[p] for p in self.p_names]
 
         # check that there are at least 2 true variables!
         # check that all stderrs are sensible (including not None or NaN)
@@ -176,9 +179,6 @@ class ConfidenceInterval(object):
         if trace:
             self.trace_dict = dict([(i, []) for i in self.p_names])
 
-        self.verbose = verbose
-        self.minimizer = minimizer
-        self.params = minimizer.params
         self.trace = trace
         self.maxiter = maxiter
         self.min_rel_change = 1e-5
@@ -186,22 +186,19 @@ class ConfidenceInterval(object):
         self.sigmas = list(sigmas)
         self.sigmas.sort()
 
-        # copy the best fit values.
-        self.org = copy_vals(minimizer.params)
-        self.best_chi = minimizer.chisqr
-
     def calc_all_ci(self):
         """
         Calculates all cis.
         """
         out = {}
+
         for p in self.p_names:
             out[p] = (self.calc_ci(p, -1)[::-1] +
                       [(0., self.params[p].value)] +
                       self.calc_ci(p, 1))
         if self.trace:
             self.trace_dict = map_trace_to_names(self.trace_dict,
-                                                 self.minimizer.params)
+                                                 self.params)
 
         return out
 
@@ -212,16 +209,15 @@ class ConfidenceInterval(object):
         """
 
         if isinstance(para, str):
-            para = self.minimizer.params[para]
+            para = self.params[para]
 
         #function used to calculate the pro
         calc_prob = lambda val, prob: self.calc_prob(para, val, prob)
         if self.trace:
-            x = [i.value for i in self.minimizer.params.values()]
+            x = [i.value for i in self.params.values()]
             self.trace_dict[para.name].append(x + [0])
 
         para.vary = False
-        self.minimizer.prepare_fit(self.params)
         limit, max_prob = self.find_limit(para, direction)
         start_val = para.value.copy()
         a_limit = start_val.copy()
@@ -254,7 +250,7 @@ class ConfidenceInterval(object):
         return ret
 
     def reset_vals(self):
-        restore_vals(self.org, self.minimizer.params)
+        restore_vals(self.org, self.params)
 
     def find_limit(self, para, direction):
         """
@@ -279,6 +275,7 @@ class ConfidenceInterval(object):
         while old_prob < max(self.sigmas):
             i = i + 1
             limit += step * direction
+
             new_prob = self.calc_prob(para, limit)
             rel_change = (new_prob - old_prob) / max(new_prob, old_prob, 1.e-12)
             old_prob = new_prob
@@ -303,25 +300,23 @@ class ConfidenceInterval(object):
     def calc_prob(self, para, val, offset=0., restore=False):
         """Returns the probability for given Value."""
         if restore:
-            restore_vals(self.org, self.minimizer.params)
+            restore_vals(self.org, self.params)
         para.value = val
-        save_para = self.minimizer.params[para.name]
-        self.minimizer.params[para.name] = para
-        self.minimizer.prepare_fit(para)
-        self.minimizer.leastsq()
-        out = self.minimizer
+        save_para = self.params[para.name]
+        self.params[para.name] = para
+        self.minimizer.prepare_fit(self.params)
+        out = self.minimizer.leastsq()
         prob = self.prob_func(out.ndata, out.ndata - out.nfree,
-            out.chisqr, self.best_chi)
+                              out.chisqr, self.best_chi)
 
         if self.trace:
             x = [i.value for i in out.params.values()]
             self.trace_dict[para.name].append(x + [prob])
-        self.minimizer.params[para.name] = save_para
+        self.params[para.name] = save_para
         return prob - offset
 
-
-def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
-                    prob_func=None):
+def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
+                    limits=None, prob_func=None):
     r"""Calculates confidence regions for two fixed parameters.
 
     The method is explained in *conf_interval*: here we are fixing
@@ -329,8 +324,10 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
 
     Parameters
     ----------
-    minimizer : minimizer
-        The minimizer to use, should be already fitted via leastsq.
+    minimizer : Minimizer
+        The minimizer to use, holding objective function.
+    result : MinimizerResult
+        The result of running minimize().
     x_name : string
         The name of the parameter which will be the x direction.
     y_name : string
@@ -353,10 +350,9 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
     Examples
     --------
 
-    >>> mini = minimize(some_func, params)
-    >>> mini.leastsq()
-    True
-    >>> x,y,gr = conf_interval2d('para1','para2')
+    >>> mini = Minimizer(some_func, params)
+    >>> result = mini.leastsq()
+    >>> x, y, gr = conf_interval2d(mini, result, 'para1','para2')
     >>> plt.contour(x,y,gr)
 
     Other Parameters
@@ -366,17 +362,16 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
         Default (``None``) uses built-in f_compare (F test).
     """
     # used to detect that .leastsq() has run!
-    if not hasattr(minimizer, 'covar'):
-        minimizer.leastsq()
+    params = result.params
 
-    best_chi = minimizer.chisqr
-    org = copy_vals(minimizer.params)
+    best_chi = result.chisqr
+    org = copy_vals(result.params)
 
     if prob_func is None or not hasattr(prob_func, '__call__'):
         prob_func = f_compare
 
-    x = minimizer.params[x_name]
-    y = minimizer.params[y_name]
+    x = params[x_name]
+    y = params[y_name]
 
     if limits is None:
         (x_upper, x_lower) = (x.value + 5 * x.stderr, x.value - 5
@@ -396,25 +391,24 @@ def conf_interval2d(minimizer, x_name, y_name, nx=10, ny=10, limits=None,
 
     def calc_prob(vals, restore=False):
         if restore:
-            restore_vals(org, minimizer.params)
+            restore_vals(org, result.params)
         x.value = vals[0]
         y.value = vals[1]
-        save_x = minimizer.params[x.name]
-        save_y = minimizer.params[y.name]
-        minimizer.params[x.name] = x
-        minimizer.params[y.name] = y
-        minimizer.prepare_fit([x, y])
-        minimizer.leastsq()
-        out = minimizer
+        save_x = result.params[x.name]
+        save_y = result.params[y.name]
+        result.params[x.name] = x
+        result.params[y.name] = y
+        minimizer.prepare_fit(params=result.params)
+        out = minimizer.leastsq()
         prob = prob_func(out.ndata, out.ndata - out.nfree, out.chisqr,
                          best_chi, nfix=2.)
-        minimizer.params[x.name] = save_x
-        minimizer.params[y.name] = save_y
+        result.params[x.name] = save_x
+        result.params[y.name] = save_y
         return prob
 
     out = x_points, y_points, np.apply_along_axis(calc_prob, -1, grid)
 
     x.vary, y.vary = True, True
-    restore_vals(org, minimizer.params)
-    minimizer.chisqr = best_chi
+    restore_vals(org, result.params)
+    result.chisqr = best_chi
     return out

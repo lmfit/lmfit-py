@@ -15,10 +15,9 @@ def residual(p):
 
    return 1/(a*x)+b-y
 
-mi = lmfit.minimize(residual, p)
-lmfit.printfuncs.report_fit(mi.params)
+minimizer = lmfit.Minimizer(residual, p)
+out = minimizer.leastsq()
+lmfit.printfuncs.report_fit(out.params)
 
-ci = lmfit.conf_interval(mi)
+ci = lmfit.conf_interval(minimizer, out)
 lmfit.printfuncs.report_ci(ci)
-
-
