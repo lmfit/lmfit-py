@@ -5,7 +5,7 @@ Created on Sun Apr 15 19:47:45 2012
 @author: Tillsten
 """
 import numpy as np
-from lmfit import Parameters, minimize, conf_interval, report_fit, report_ci
+from lmfit import Parameters, Minimizer, conf_interval, report_fit, report_ci
 
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
@@ -50,20 +50,23 @@ fit_params.add('period', value=2)
 fit_params.add('shift', value=0.0)
 fit_params.add('decay', value=0.02)
 
-out = minimize(residual, fit_params, args=(x,), kws={'data':data})
+mini = Minimizer(residual, fit_params, fcn_args=(x,),
+                 fcn_kws={'data':data})
+out = mini.leastsq()
 
-fit = residual(fit_params, x)
+fit = residual(out.params, x)
 
 print( ' N fev = ', out.nfev)
 print( out.chisqr, out.redchi, out.nfree)
 
-report_fit(fit_params)
+report_fit(out.params)
 #ci=calc_ci(out)
-ci, tr = conf_interval(out, trace=True)
+
+ci, tr = conf_interval(mini, out, trace=True)
 report_ci(ci)
     
 if HASPYLAB:
-    names=fit_params.keys()
+    names=out.params.keys()
     i=0  
     gs=pylab.GridSpec(4,4)
     sx={}
