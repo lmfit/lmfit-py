@@ -376,7 +376,7 @@ class Minimizer(object):
         """
         raise NotImplementedError("use scalar_minimize(method='Nelder-Mead')")
 
-    def scalar_minimize(self, method='Nelder-Mead', **kws):
+    def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """
         Use one of the scalar minimization methods from
         scipy.optimize.minimize.
@@ -398,6 +398,8 @@ class Minimizer(object):
                 'SLSQP'
                 'differential_evolution'
 
+        params : Parameters, optional
+           Parameters to use as starting points.
         kws : dict, optional
             Minimizer options pass to scipy.optimize.minimize.
 
@@ -420,7 +422,7 @@ class Minimizer(object):
         if not HAS_SCALAR_MIN:
             raise NotImplementedError
 
-        result = self.prepare_fit()
+        result = self.prepare_fit(params=params)
         vars   = result.init_vals
         params = result.params
 
@@ -479,7 +481,7 @@ class Minimizer(object):
 
         return result
 
-    def leastsq(self, **kws):
+    def leastsq(self, params=None, **kws):
         """
         Use Levenberg-Marquardt minimization to perform a fit.
         This assumes that ModelParameters have been stored, and a function to
@@ -494,6 +496,8 @@ class Minimizer(object):
 
         Parameters
         ----------
+        params : Parameters, optional
+           Parameters to use as starting points.
         kws : dict, optional
             Minimizer options to pass to scipy.optimize.leastsq.
 
@@ -502,7 +506,7 @@ class Minimizer(object):
         success : bool
             True if fit was successful, False if not.
         """
-        result = self.prepare_fit()
+        result = self.prepare_fit(params=params)
         vars   = result.init_vals
         nvars = len(vars)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
