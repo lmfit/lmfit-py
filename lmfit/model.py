@@ -72,6 +72,10 @@ class Model(object):
     name: None or string
         name for the model. When `None` (default) the name is the same as
         the model function (`func`).
+    residual2scalar: function, optional
+        Specifies a function used to reduce residuals to a scalar for
+        minimization. The sum of squares will be used if this is not
+        passed.
 
     Note
     ----
@@ -96,7 +100,7 @@ class Model(object):
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing='none', prefix='', name=None, **kws):
+                 missing='none', prefix='', name=None, residual2scalar=None, **kws):
         self.func = func
         self._prefix = prefix
         self._param_root_names = param_names  # will not include prefixes
@@ -116,6 +120,7 @@ class Model(object):
         if name is None and hasattr(self.func, '__name__'):
             name = self.func.__name__
         self._name = name
+        self.residual2scalar=residual2scalar
 
     def _reprstring(self, long=False):
         out = self._name
@@ -720,7 +725,7 @@ class ModelResult(Minimizer):
     """
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
-                 iter_cb=None, scale_covar=True, **fit_kws):
+                 iter_cb=None, scale_covar=True, residual2scalar=None, **fit_kws):
         self.model = model
         self.data = data
         self.weights = weights
@@ -729,7 +734,7 @@ class ModelResult(Minimizer):
         self.init_params = deepcopy(params)
         Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
                            fcn_kws=fcn_kws, iter_cb=iter_cb,
-                           scale_covar=scale_covar, **fit_kws)
+                           scale_covar=scale_covar, residual2scalar=residual2scalar, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None, **kwargs):
         """perform fit for a Model, given data and params"""
