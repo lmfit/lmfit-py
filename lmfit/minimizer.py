@@ -278,7 +278,7 @@ class Minimizer(object):
         else:
             raise MinimizerException(self.err_nonparam)
 
-    def penalty(self, params):
+    def penalty(self, params, likelihood_fun=None):
         """
         Penalty function for scalar minimizers:
 
@@ -294,8 +294,10 @@ class Minimizer(object):
             objective function is an array, return the array sum-of-squares
         """
         r = self.__residual(params)
-        if isinstance(r, ndarray):
+        if isinstance(r, ndarray) and likelihood_fun is None:
             r = (r*r).sum()
+        elif isinstance(r, ndarray):
+            r = likelihood_fun(r)
         return r
 
     def prepare_fit(self, params=None):
@@ -407,7 +409,7 @@ class Minimizer(object):
         self.unprepare_fit()
         return
 
-    def scalar_minimize(self, method='Nelder-Mead', **kws):
+    def scalar_minimize(self, method='Nelder-Mead', likelihood_fun=None, **kws):
         """
         Use one of the scalar minimization methods from
         scipy.optimize.minimize.
@@ -456,7 +458,8 @@ class Minimizer(object):
                         options={'maxiter': 1000 * (self.nvarys + 1)})
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
-
+        penalty_func = lambda x: self.penalty(x, likelihood_fun)
+                
         # hess supported only in some methods
         if 'hess' in fmin_kws and method not in ('Newton-CG',
                                                  'dogleg', 'trust-ncg'):
@@ -485,9 +488,9 @@ class Minimizer(object):
             # in scipy 0.14 this can be called directly from scipy_minimize
             # When minimum scipy is 0.14 the following line and the else
             # can be removed.
-            ret = _differential_evolution(self.penalty, self.vars, **fmin_kws)
+            ret = _differential_evolution(penalty_func, self.vars, **fmin_kws)
         else:
-            ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
+            ret = scipy_minimize(penalty_func, self.vars, **fmin_kws)
 
         xout = ret.x
         self.message = ret.message
