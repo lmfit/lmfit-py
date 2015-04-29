@@ -7,6 +7,25 @@ LMfit-py
 .. image:: https://zenodo.org/badge/doi/10.5281/zenodo.11813.png
    :target: http://dx.doi.org/10.5281/zenodo.11813
 
+
+Overview
+---------
+
+LMfit-py provides a Least-Squares Minimization routine and class with a
+simple, flexible approach to parameterizing a model for fitting to data.
+ 
+LMFIT is a pure python package, and so easy to install from source or witn
+`pip install lmfit`. 
+
+For questions, comments, and suggestions, please use the LMFIt mailing
+list, https://groups.google.com/group/lmfit-py.  Using the bug tracking
+software in Github Issues is encouraged for known problems and bug reports.
+Please read Contributing.md before creating an Issue.
+
+
+Parameters and Fitting
+-------------------------
+
 LMfit-py provides a Least-Squares Minimization routine and class
 with a simple, flexible approach to parameterizing a model for
 fitting to data.  Named Parameters can be held fixed or freely
