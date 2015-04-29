@@ -167,12 +167,14 @@ class Model(object):
         self.opts = kws
         self.param_hints = OrderedDict()
         self._param_names = OrderedSet()
+        # self.params = Parameters()
         self._parse_params()
         if self.independent_vars is None:
             self.independent_vars = []
         if name is None and hasattr(self.func, '__name__'):
             name = self.func.__name__
         self._name = name
+        # self.make_params()
 
     def _reprstring(self, long=False):
         out = self._name
@@ -321,7 +323,8 @@ class Model(object):
         verbose = False
         if 'verbose' in kwargs:
             verbose = kwargs['verbose']
-        params = Parameters()
+
+        params = self.params = Parameters()
         for name in self.param_names:
             par = Parameter(name=name)
             basename = name[len(self._prefix):]
@@ -356,15 +359,18 @@ class Model(object):
                 # Add the new parameter to the self.param_names
                 self._param_names.add(name)
                 if verbose: print( ' - Adding parameter "%s"' % name)
+        #print(" End of Make_Params")
+        #for nam, par in params.items():
+        #    print(" -- ", nam, par)
         return params
+
 
     def guess(self, data=None, **kws):
         """stub for guess starting values --
         should be implemented for each model subclass to
         run self.make_params(), update starting values
         and return a Parameters object"""
-        cname = self.__class__.__name__
-        msg = 'guess() not implemented for %s' % cname
+        msg = 'guess() not implemented for %s' % self.__class__.__name__
         raise NotImplementedError(msg)
 
     def _residual(self, params, data, weights, **kwargs):
@@ -394,7 +400,7 @@ class Model(object):
 
     def make_funcargs(self, params=None, kwargs=None, strip=True):
         """convert parameter values and keywords to function arguments"""
-        if params is None: params = {}
+        if params is None: params = {} # self.params
         if kwargs is None: kwargs = {}
         out = {}
         out.update(self.opts)
@@ -467,7 +473,7 @@ class Model(object):
 
         Returns
         -------
-        lmfit.ModelFit
+        lmfit.ModelResult
 
         Examples
         --------
@@ -554,8 +560,9 @@ class Model(object):
         if fit_kws is None:
             fit_kws = {}
 
-        output = ModelFit(self, params, method=method, iter_cb=iter_cb,
-                          scale_covar=scale_covar, fcn_kws=kwargs, **fit_kws)
+        output = ModelResult(self, params, method=method, iter_cb=iter_cb,
+                             scale_covar=scale_covar, fcn_kws=kwargs,
+                             **fit_kws)
         output.fit(data=data, weights=weights)
         output.components = self.components
         return output
@@ -681,7 +688,7 @@ class CompositeModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
-class ModelFit(Minimizer):
+class ModelResult(Minimizer):
     """Result from Model fit
 
     Attributes
@@ -836,8 +843,8 @@ class ModelFit(Minimizer):
 
         See Also
         --------
-        ModelFit.plot_residuals : Plot the fit residuals using matplotlib.
-        ModelFit.plot : Plot the fit results and residuals using matplotlib.
+        ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
+        ModelResult.plot : Plot the fit results and residuals using matplotlib.
         """
         if data_kws is None:
             data_kws = {}
@@ -930,8 +937,8 @@ class ModelFit(Minimizer):
 
         See Also
         --------
-        ModelFit.plot_fit : Plot the fit results using matplotlib.
-        ModelFit.plot : Plot the fit results and residuals using matplotlib.
+        ModelResult.plot_fit : Plot the fit results using matplotlib.
+        ModelResult.plot : Plot the fit results and residuals using matplotlib.
         """
         if data_kws is None:
             data_kws = {}
@@ -1019,7 +1026,7 @@ class ModelFit(Minimizer):
 
         Notes
         ----
-        The method combines ModelFit.plot_fit and ModelFit.plot_residuals.
+        The method combines ModelResult.plot_fit and ModelResult.plot_residuals.
 
         If yerr is specified or if the fit model included weights, then
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
@@ -1029,8 +1036,8 @@ class ModelFit(Minimizer):
 
         See Also
         --------
-        ModelFit.plot_fit : Plot the fit results using matplotlib.
-        ModelFit.plot_residuals : Plot the fit residuals using matplotlib.
+        ModelResult.plot_fit : Plot the fit results using matplotlib.
+        ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
         """
         if data_kws is None:
             data_kws = {}
