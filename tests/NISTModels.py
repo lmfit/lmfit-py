@@ -3,7 +3,7 @@ import sys
 from numpy import exp, log, log10, sin, cos, arctan, array
 from lmfit import Parameters
 thisdir, thisfile = os.path.split(__file__)
-NIST_DIR = os.path.join(thisdir, 'NIST_STRD')
+NIST_DIR = os.path.join(thisdir, '..', 'NIST_STRD')
 
 def read_params(params):
     if isinstance(params, Parameters):
