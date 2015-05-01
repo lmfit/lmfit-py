@@ -167,14 +167,12 @@ class Model(object):
         self.opts = kws
         self.param_hints = OrderedDict()
         self._param_names = OrderedSet()
-        # self.params = Parameters()
         self._parse_params()
         if self.independent_vars is None:
             self.independent_vars = []
         if name is None and hasattr(self.func, '__name__'):
             name = self.func.__name__
         self._name = name
-        # self.make_params()
 
     def _reprstring(self, long=False):
         out = self._name
@@ -323,8 +321,7 @@ class Model(object):
         verbose = False
         if 'verbose' in kwargs:
             verbose = kwargs['verbose']
-
-        params = self.params = Parameters()
+        params = Parameters()
         for name in self.param_names:
             par = Parameter(name=name)
             basename = name[len(self._prefix):]
@@ -359,18 +356,15 @@ class Model(object):
                 # Add the new parameter to the self.param_names
                 self._param_names.add(name)
                 if verbose: print( ' - Adding parameter "%s"' % name)
-        #print(" End of Make_Params")
-        #for nam, par in params.items():
-        #    print(" -- ", nam, par)
         return params
-
 
     def guess(self, data=None, **kws):
         """stub for guess starting values --
         should be implemented for each model subclass to
         run self.make_params(), update starting values
         and return a Parameters object"""
-        msg = 'guess() not implemented for %s' % self.__class__.__name__
+        cname = self.__class__.__name__
+        msg = 'guess() not implemented for %s' % cname
         raise NotImplementedError(msg)
 
     def _residual(self, params, data, weights, **kwargs):
@@ -400,7 +394,7 @@ class Model(object):
 
     def make_funcargs(self, params=None, kwargs=None, strip=True):
         """convert parameter values and keywords to function arguments"""
-        if params is None: params = {} # self.params
+        if params is None: params = {}
         if kwargs is None: kwargs = {}
         out = {}
         out.update(self.opts)
