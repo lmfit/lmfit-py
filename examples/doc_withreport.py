@@ -18,7 +18,7 @@ def residual(pars, x, data=None):
     per =  vals['period']
     shift = vals['shift']
     decay = vals['decay']
-    
+
     if abs(shift) > pi/2:
         shift = shift - sign(shift)*pi
     model = amp * sin(shift + x/per) * exp(-x*x*decay*decay)
@@ -44,7 +44,7 @@ fit_params.add('decay', value=0.02)
 
 out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 
-fit = residual(out.params, x)
-print(fit_report(out.params))
+print(fit_report(out))
+
 
 #<end of examples/doc_withreport.py>
