@@ -321,7 +321,6 @@ class Minimizer(object):
         result.params.update_constraints()
         result.nfev = 0
         result.errorbars = False
-        result.init_values = []
 
         for name, par in self.result.params.items():
             par.stderr = None
@@ -626,7 +625,7 @@ class Minimizer(object):
         np.seterr(**orig_warn_settings)
         return result
 
-    def minimize(self, method='leastsq'):
+    def minimize(self, method='leastsq', params=None, **kws):
         """
         Perform the minimization.
 
@@ -648,14 +647,20 @@ class Minimizer(object):
             'slsqp'                  -    Sequential Linear Squares Programming
             'differential_evolution' -    differential evolution
 
+        params : Parameters, optional
+            parameters to use as starting values
+
         Returns
         -------
-        success : bool
-            Whether the fit was successful.
+        result : MinimizerResult
+
+            MinimizerResult object contains updated params, fit statistics, etc.
+
         """
 
         function = self.leastsq
-        kwargs = {}
+        kwargs = {'params': params}
+        kwargs.update(kws)
 
         user_method = method.lower()
         if user_method.startswith('least'):
@@ -671,9 +676,7 @@ class Minimizer(object):
             function = self.fmin
         elif user_method.startswith('lbfgsb'):
             function = self.lbfgsb
-
         return function(**kwargs)
-
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, iter_cb=None, **fit_kws):
