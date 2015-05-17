@@ -7,16 +7,16 @@ Performing Fits, Analyzing Outputs
 As shown in the previous chapter, a simple fit can be performed with the
 :func:`minimize` function.  For more sophisticated modeling, the
 :class:`Minimizer` class can be used to gain a bit more control, especially
-when using complicated constraints.
+when using complicated constraints or comparing results from related fits.
 
 
 The :func:`minimize` function
 ===============================
 
-The minimize function takes a objective function (the function that
-calculates the array to be minimized), a :class:`Parameters` ordered
-dictionary, and several optional arguments.  See :ref:`fit-func-label` for
-details on writing the function to minimize.
+The :func:`minimize` function takes a objective function (the function that
+calculates the array to be minimized), a :class:`Parameters` object, and
+several optional arguments.  See :ref:`fit-func-label` for details on
+writing the objective.
 
 .. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **leastsq_kws]]]]]])
 
@@ -26,9 +26,9 @@ details on writing the function to minimize.
    :param function:  function to return fit residual.  See :ref:`fit-func-label` for details.
    :type  function:  callable.
    :param params:  a :class:`Parameters` dictionary.  Keywords must be strings
-                   that match ``[a-z_][a-z0-9_]*`` and is not a python
+                   that match ``[a-z_][a-z0-9_]*`` and cannot be a python
                    reserved word.  Each value must be :class:`Parameter`.
-   :type  params:  dict or :class:`Parameters`.
+   :type  params:  :class:`Parameters`.
    :param args:  arguments tuple to pass to the residual function as  positional arguments.
    :type  args:  tuple
    :param kws:   dictionary to pass to the residual function as keyword arguments.
@@ -42,11 +42,12 @@ details on writing the function to minimize.
    :param leastsq_kws:  dictionary to pass to :func:`scipy.optimize.leastsq`.
    :type  leastsq_kws:  dict
 
-   :return: Minimizer object, which can be used to inspect goodness-of-fit
-            statistics, or to re-run fit.
+   :return: :class:`MinimizerResult` instance, which will contain the
+            optimized parameter, and several goodness-of-fit statistics.
 
-   On output, the params will be updated with best-fit values and, where
-   appropriate, estimated uncertainties and correlations.  See
+   On output, the params will be unchanged.  The best-fit values, and where
+   appropriate, estimated uncertainties and correlations, will all be
+   contained in the returned :class:`MinimizerResult`.  See
    :ref:`fit-results-label` for further details.
 
    If provided, the ``iter_cb`` function should take arguments of ``params,
@@ -55,6 +56,8 @@ details on writing the function to minimize.
    array, and ``*args`` and ``**kws`` as passed to the objective function.
 
 ..  _fit-func-label:
+
+
 
 Writing a Fitting Function
 ===============================
@@ -70,7 +73,7 @@ but it must look like this:
    calculate objective residual to be minimized from parameters.
 
    :param params: parameters.
-   :type  params:  dict
+   :type  params: :class:`Parameters`.
    :param args:  positional arguments.  Must match ``args`` argument to :func:`minimize`
    :param kws:   keyword arguments.  Must match ``kws`` argument to :func:`minimize`
    :return: residual array (generally data-model) to be minimized in the least-squares sense.
@@ -154,40 +157,36 @@ Fitting Methods <fit-methods-table>`.
 
 .. _fit-methods-table:
 
- Table of Supported Fitting Methods:
+ Table of Supported Fitting Method, eithers:
 
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Fitting Meth          | ``method`` arg to            | :class:`Minimizer`  | ``method`` arg to           |
- |                       | :func:`minimize`             | method              | :meth:`scalar_minimize`     |
- +=======================+==============================+=====================+=============================+
- | Levenberg-Marquardt   |  ``leastsq``                 | :meth:`leastsq`     |   Not available             |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Nelder-Mead           |  ``nelder``                  | :meth:`fmin`        | ``Nelder-Mead``             |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | L-BFGS-B              |  ``lbfgsb``                  | :meth:`lbfgsb`      | ``L-BFGS-B``                |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Powell                |  ``powell``                  |                     | ``Powell``                  |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Conjugate Gradient    |  ``cg``                      |                     | ``CG``                      |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Newton-CG             |  ``newton``                  |                     | ``Newton-CG``               |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | COBYLA                |  ``cobyla``                  |                     |  ``COBYLA``                 |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | COBYLA                |  ``cobyla``                  |                     |  ``COBYLA``                 |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Truncated Newton      |  ``tnc``                     |                     |  ``TNC``                    |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Trust Newton-CGn      |  ``trust-ncg``               |                     |  ``trust-ncg``              |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Dogleg                |  ``dogleg``                  |                     |  ``dogleg``                 |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Sequential Linear     |  ``slsqp``                   |                     |  ``SLSQP``                  |
- | Squares Programming   |                              |                     |                             |
- +-----------------------+------------------------------+---------------------+-----------------------------+
- | Differential          |  ``differential_evolution``  |                     | ``differential_evolution``  |
- | Evolution             |                              |                     |                             |
- +-----------------------+------------------------------+---------------------+-----------------------------+
+ +-----------------------+------------------------------------------------------------------+
+ | Fitting Method        | ``method`` arg to :func:`minimize` or :meth:`Minimizer.minimize` |
+ +=======================+==================================================================+
+ | Levenberg-Marquardt   |  ``leastsq``                                                     |
+ +-----------------------+------------------------------------------------------------------+
+ | Nelder-Mead           |  ``nelder``                                                      |
+ +-----------------------+------------------------------------------------------------------+
+ | L-BFGS-B              |  ``lbfgsb``                                                      |
+ +-----------------------+------------------------------------------------------------------+
+ | Powell                |  ``powell``                                                      |
+ +-----------------------+------------------------------------------------------------------+
+ | Conjugate Gradient    |  ``cg``                                                          |
+ +-----------------------+------------------------------------------------------------------+
+ | Newton-CG             |  ``newton``                                                      |
+ +-----------------------+------------------------------------------------------------------+
+ | COBYLA                |  ``cobyla``                                                      |
+ +-----------------------+------------------------------------------------------------------+
+ | Truncated Newton      |  ``tnc``                                                         |
+ +-----------------------+------------------------------------------------------------------+
+ | Dogleg                |  ``dogleg``                                                      |
+ +-----------------------+------------------------------------------------------------------+
+ | Sequential Linear     |  ``slsqp``                                                       |
+ | Squares Programming   |                                                                  |
+ +-----------------------+------------------------------------------------------------------+
+ | Differential          |  ``differential_evolution``                                      |
+ | Evolution             |                                                                  |
+ +-----------------------+------------------------------------------------------------------+
+
 
 .. note::
 
@@ -206,8 +205,8 @@ Fitting Methods <fit-methods-table>`.
 
 ..  _fit-results-label:
 
-Goodness-of-Fit Statistics and estimated uncertainties and correlations
-===========================================================================
+:class:`MinimizerResult`, Goodness-of-Fit Statistics and estimated uncertainties and correlations
+===================================================================================================
 
 On a successful fit using the `leastsq` method, several goodness-of-fit
 statistics and values related to the uncertainties in the fitted variables
@@ -335,12 +334,11 @@ Using the :class:`Minimizer` class
 =======================================
 
 For full control of the fitting process, you'll want to create a
-:class:`Minimizer` object, or at least use the one returned from the
-:func:`minimize` function.
+:class:`Minimizer` object.
 
 .. class:: Minimizer(function, params, fcn_args=None, fcn_kws=None, iter_cb=None, scale_covar=True, **kws)
 
-   creates a Minimizer, for fine-grain access to fitting methods and attributes.
+   creates a Minimizer, for more detailed access to fitting methods and attributes.
 
    :param function:  objective function to return fit residual.  See :ref:`fit-func-label` for details.
    :type  function:  callable.
@@ -384,44 +382,19 @@ The Minimizer object has a few public methods:
     +------------------+----------------+------------------------------------------------------------+
 
 
-
 .. method:: lbfgsb(**kws)
-
 
    perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
    :func:`scipy.optimize.fmin_l_bfgs_b`.
-
-
-    +------------------+----------------+------------------------------------------------------------+
-    | :meth:`lbfgsb`   |  Default Value | Description                                                |
-    | arg              |                |                                                            |
-    +==================+================+============================================================+
-    |   factr          | 1000.0         |                                                            |
-    +------------------+----------------+------------------------------------------------------------+
-    |   approx_grad    |  ``True``      | calculate approximations of gradient                       |
-    +------------------+----------------+------------------------------------------------------------+
-    |   maxfun         | 2000*(nvar+1)  | maximum number of function calls (nvar= # of variables)    |
-    +------------------+----------------+------------------------------------------------------------+
 
 .. warning::
 
   :meth:`lbfgsb` is deprecated.  Use :meth:`minimize` with ``method='lbfgsb'``.
 
-.. method:: fmin(**kws)
+.. method:: fmin(**kws)o
 
    perform fit with Nelder-Mead downhill simplex algorithm.  Keywords will be passed directly to
    :func:`scipy.optimize.fmin`.
-
-    +------------------+----------------+------------------------------------------------------------+
-    | :meth:`fmin`     |  Default Value | Description                                                |
-    | arg              |                |                                                            |
-    +==================+================+============================================================+
-    |   ftol           | 1.e-4          | function tolerance                                         |
-    +------------------+----------------+------------------------------------------------------------+
-    |   xtol           | 1.e-4          | parameter tolerance                                        |
-    +------------------+----------------+------------------------------------------------------------+
-    |   maxfun         | 5000*(nvar+1)  | maximum number of function calls (nvar= # of variables)    |
-    +------------------+----------------+------------------------------------------------------------+
 
 .. warning::
 
@@ -449,25 +422,13 @@ The Minimizer object has a few public methods:
 
    prepares and initializes model and Parameters for subsequent
    fitting. This routine prepares the conversion of :class:`Parameters`
-   into fit variables, organizes parameter bounds, and parses, checks and
-   "compiles" constrain expressions.
+   into fit variables, organizes parameter bounds, and parses, "compiles"
+   and checks constrain expressions.   The method also creates and returns
+   a new instance of a :class:`MinimizerResult` object that contains the
+   copy of the Parameters that will actually be varied in the fit.
 
-
-   This is called directly by the fitting methods, and it is generally not
-   necessary to call this function explicitly.  An exception is when you
-   would like to call your function to minimize prior to running one of the
-   minimization routines, for example, to calculate the initial residual
-   function.  In that case, you might want to do something like::
-
-      myfit = Minimizer(my_residual, params,  fcn_args=(x,), fcn_kws={'data':data})
-
-      myfit.prepare_fit()
-      init = my_residual(p_fit, x)
-      pylab.plot(x, init, 'b--')
-
-      myfit.leastsq()
-
-   That is, this method should be called prior to your fitting function being called.
+   This method is called directly by the fitting methods, and it is
+   generally not necessary to call this function explicitly.
 
 
 Getting and Printing Fit Reports
