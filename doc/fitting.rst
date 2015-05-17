@@ -13,12 +13,13 @@ when using complicated constraints or comparing results from related fits.
 The :func:`minimize` function
 ===============================
 
-The :func:`minimize` function takes a objective function (the function that
-calculates the array to be minimized), a :class:`Parameters` object, and
-several optional arguments.  See :ref:`fit-func-label` for details on
-writing the objective.
+The :func:`minimize` function is a wrapper around :class:`Minimizer` for
+running an optimization problem.  It takes an objective function (the
+function that calculates the array to be minimized), a :class:`Parameters`
+object, and several optional arguments.  See :ref:`fit-func-label` for
+details on writing the objective.
 
-.. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **leastsq_kws]]]]]])
+.. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **fit_kws]]]]]])
 
    find values for the ``params`` so that the sum-of-squares of the array returned
    from ``function`` is minimized.
@@ -39,8 +40,8 @@ writing the objective.
    :type  scale_covar:  bool (default ``True``)
    :param iter_cb:  function to be called at each fit iteration
    :type  iter_cb:  callable or ``None``
-   :param leastsq_kws:  dictionary to pass to :func:`scipy.optimize.leastsq`.
-   :type  leastsq_kws:  dict
+   :param fit_kws:  dictionary to pass to :func:`scipy.optimize.leastsq` or :func:`scipy.optimize.minimize`.
+   :type  fit_kws:  dict
 
    :return: :class:`MinimizerResult` instance, which will contain the
             optimized parameter, and several goodness-of-fit statistics.
@@ -54,6 +55,14 @@ writing the objective.
    iter, resid, *args, **kws``, where ``params`` will have the current
    parameter values, ``iter`` the iteration, ``resid`` the current residual
    array, and ``*args`` and ``**kws`` as passed to the objective function.
+
+   For clarity, it should be emphasized that this function is simply a
+   wrapper around :class:`Minimizer` that runs a single fit, implemented as::
+
+    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
+                       iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
+    return fitter.minimize(method=method)
+
 
 ..  _fit-func-label:
 
@@ -150,10 +159,10 @@ being fast, and well-behaved for most curve-fitting needs, and making it
 easy to estimate uncertainties for and correlations between pairs of fit
 variables, as discussed in :ref:`fit-results-label`.
 
-Alternative algorithms can also be used by providing the ``method`` keyword
-to the :func:`minimize` function or use the corresponding method name from
-the :class:`Minimizer` class as listed in the :ref:`Table of Supported
-Fitting Methods <fit-methods-table>`.
+Alternative algorithms can also be used by providing the ``method``
+keyword to the :func:`minimize` function or :meth:`Minimizer.minimize`
+class as listed in the :ref:`Table of Supported Fitting Methods
+<fit-methods-table>`.
 
 .. _fit-methods-table:
 
@@ -205,39 +214,121 @@ Fitting Methods <fit-methods-table>`.
 
 ..  _fit-results-label:
 
-:class:`MinimizerResult`, Goodness-of-Fit Statistics and estimated uncertainties and correlations
-===================================================================================================
+:class:`MinimizerResult` -- the optimization result
+========================================================
 
-On a successful fit using the `leastsq` method, several goodness-of-fit
-statistics and values related to the uncertainties in the fitted variables
-will be calculated.  These are all encapsulated in the :class:`Minimizer`
-object for the fit, as returned by :func:`minimize`.  The values related to
-the entire fit are stored in attributes of the :class:`Minimizer` object,
-as shown in :ref:`Table of Fit Results <goodfit-table>` while those related
-to each fitted variables are stored as attributes of the corresponding
-:class:`Parameter`.
 
+.. class:: MinimizerResult(**kws)
+
+An optimization with :func:`minimize` or :meth:`Minimizer.minimize`
+will return a :class:`MinimizerResult` object.  This is an otherwise
+plain container object (that is, with no methods of its own) that
+simply holds the results of the minimization.  These results will
+include several pieces of informational data such as status and error
+messages, fit statistics, and the updated parameters themselves.
+
+Importantly, the parameters passed in to :meth:`Minimizer.minimize`
+will be not be changed.  To to find the best-fit values, uncertainties
+and so on for each parameter, one must use the
+:attr:`MinimizerResult.params` attribute.
+
+.. attribute::   params
+
+  the :class:`Parameters` actually used in the fit, with updated
+  values, :attr:`stderr` and :attr:`correl`.
+
+.. attribute::  var_names
+
+  ordered list of variable parameter names used in optimization, and
+  useful for understanding the the values in :attr:`init_vals` and
+  :attr:`covar`.
+
+.. attribute:: covar
+
+  covariance matrix from minimization (`leastsq` only), with
+  rows/columns using :attr:`var_names`.
+
+.. attribute:: init_vals
+
+  list of initial values for variable parameters using :attr:`var_names`.
+
+.. attribute::  nfev
+
+  number of function evaluations
+
+.. attribute::  success
+
+  boolean (``True``/``False``) for whether fit succeeded.
+
+.. attribute::  errorbars
+
+  boolean (``True``/``False``) for whether uncertainties were
+  estimated.
+
+.. attribute::  message
+
+  message about fit success.
+
+.. attribute::  ier
+
+  integer error value from :func:`scipy.optimize.leastsq`  (`leastsq`
+  only).
+
+.. attribute::  lmdif_message
+
+  message from :func:`scipy.optimize.leastsq` (`leastsq` only).
+
+
+.. attribute::  nvarys
+
+  number of variables in fit  :math:`N_{\rm varys}`
+
+.. attribute::  ndata
+
+  number of data points:  :math:`N`
+
+.. attribute::  nfree `
+
+  degrees of freedom in fit:  :math:`N - N_{\rm varys}`
+
+.. attribute::  residual
+
+  residual array, return value of :func:`func`:  :math:`{\rm Resid}`
+
+.. attribute::  chisqr
+
+  chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`
+
+.. attribute::  redchi
+
+  reduced chi-square: :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm
+  varys})}`
+
+.. attribute::  aic
+
+  Akaike Information Criterion statistic (see below)
+
+.. attribute::  bic
+
+  Bayesian Information Criterion statistic (see below).
+
+
+
+
+
+Goodness-of-Fit Statistics
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. _goodfit-table:
 
  Table of Fit Results:  These values, including the standard Goodness-of-Fit statistics,
- are all attributes of the :class:`Minimizer` object returned by :func:`minimize`.
+ are all attributes of the :class:`MinimizerResult` object returned by
+ :func:`minimize` or :meth:`Minimizer.minimize`.
 
 +----------------------+----------------------------------------------------------------------------+
-| :class:`Minimizer`   | Description / Formula                                                      |
-| Attribute            |                                                                            |
+| Attribute Name       | Description / Formula                                                      |
 +======================+============================================================================+
 |    nfev              | number of function evaluations                                             |
-+----------------------+----------------------------------------------------------------------------+
-|    success           | boolean (``True``/``False``) for whether fit succeeded.                    |
-+----------------------+----------------------------------------------------------------------------+
-|    errorbars         | boolean (``True``/``False``) for whether uncertainties were estimated.     |
-+----------------------+----------------------------------------------------------------------------+
-|    message           | message about fit success.                                                 |
-+----------------------+----------------------------------------------------------------------------+
-|    ier               | integer error value from :func:`scipy.optimize.leastsq`                    |
-+----------------------+----------------------------------------------------------------------------+
-|    lmdif_message     | message from :func:`scipy.optimize.leastsq`                                |
 +----------------------+----------------------------------------------------------------------------+
 |    nvarys            | number of variables in fit  :math:`N_{\rm varys}`                          |
 +----------------------+----------------------------------------------------------------------------+
@@ -255,24 +346,26 @@ to each fitted variables are stored as attributes of the corresponding
 +----------------------+----------------------------------------------------------------------------+
 |    bic               | Bayesian Information Criterion statistic (see below)                       |
 +----------------------+----------------------------------------------------------------------------+
-|    var_map           | list of variable parameter names for rows/columns of covar                 |
+|    var_names         | ordered list of variable parameter names used for init_vals and covar      |
 +----------------------+----------------------------------------------------------------------------+
-|    covar             | covariance matrix (with rows/columns using var_map                         |
+|    covar             | covariance matrix (with rows/columns using var_names                       |
++----------------------+----------------------------------------------------------------------------+
+|    init_vals         | list of initial values for variable parameters                             |
 +----------------------+----------------------------------------------------------------------------+
 
-Note that the calculation of chi-square and reduced chi-square assume that the
-returned residual function is scaled properly to the uncertainties in the data.
-For these statistics to be meaningful, the person writing the function to
-be minimized must scale them properly.
+Note that the calculation of chi-square and reduced chi-square assume
+that the returned residual function is scaled properly to the
+uncertainties in the data.  For these statistics to be meaningful, the
+person writing the function to be minimized must scale them properly.
 
-After a fit using using the :meth:`leastsq` method has completed successfully,
-standard errors for the fitted variables and correlations between pairs of
-fitted variables are automatically calculated from the covariance matrix.
-The standard error (estimated :math:`1\sigma` error-bar) go into the
-:attr:`stderr` attribute of the Parameter.  The correlations with all other
-variables will be put into the :attr:`correl` attribute of the Parameter --
-a dictionary with keys for all other Parameters and values of the
-corresponding correlation.
+After a fit using using the :meth:`leastsq` method has completed
+successfully, standard errors for the fitted variables and correlations
+between pairs of fitted variables are automatically calculated from the
+covariance matrix.  The standard error (estimated :math:`1\sigma`
+error-bar) go into the :attr:`stderr` attribute of the Parameter.  The
+correlations with all other variables will be put into the
+:attr:`correl` attribute of the Parameter -- a dictionary with keys for
+all other Parameters and values of the corresponding correlation.
 
 In some cases, it may not be possible to estimate the errors and
 correlations.  For example, if a variable actually has no practical effect
@@ -286,7 +379,7 @@ these cases, the :attr:`errorbars` attribute of the fit result
 Akaike and Bayesian Information Criteria
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :class:`Minimizer` includes the tradtional chi-square and reduced chi-square statistics:
+The :class:`MinimizerResult` includes the tradtional chi-square and reduced chi-square statistics:
 
 .. math::
    :nowrap:
@@ -356,17 +449,31 @@ For full control of the fitting process, you'll want to create a
    :type  scale_cover:  bool (default ``True``).
    :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
    :type  kws:      dict
-   :return: Minimizer object, which can be used to inspect goodness-of-fit
-            statistics, or to re-run fit.
-
 
 The Minimizer object has a few public methods:
 
-.. method:: leastsq(scale_covar=True, **kws)
+.. method:: minimize(method='leastsq', params=None, **kws)
 
-   perform fit with Levenberg-Marquardt algorithm.  Keywords will be passed directly to
-   :func:`scipy.optimize.leastsq`.
-   By default, numerical derivatives are used, and the following arguments are set:
+   perform fit using either :meth:`leastsq` or :meth:`scalar_minimize`.
+
+   :param method: name of fitting method.  Must be one of the naemes in
+                  :ref:`Table of Supported Fitting Methods <fit-methods-table>`
+   :type  method:  str.
+   :param params:  a :class:`Parameters` dictionary for starting values
+   :type  params:  :class:`Parameters` or `None`
+
+   :return: :class:`MinimizerResult` object, containing updated
+            parameters, fitting statistics, and information.
+
+   Additonal keywords are passed on to the correspond :meth:`leastsq`
+   or :meth:`scalar_minimize` method.
+
+.. method:: leastsq(params=None, scale_covar=True, **kws)
+
+   perform fit with Levenberg-Marquardt algorithm.  Keywords will be
+   passed directly to :func:`scipy.optimize.leastsq`.  By default,
+   numerical derivatives are used, and the following arguments are set:
+
 
     +------------------+----------------+------------------------------------------------------------+
     | :meth:`leastsq`  |  Default Value | Description                                                |
@@ -382,26 +489,7 @@ The Minimizer object has a few public methods:
     +------------------+----------------+------------------------------------------------------------+
 
 
-.. method:: lbfgsb(**kws)
-
-   perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
-   :func:`scipy.optimize.fmin_l_bfgs_b`.
-
-.. warning::
-
-  :meth:`lbfgsb` is deprecated.  Use :meth:`minimize` with ``method='lbfgsb'``.
-
-.. method:: fmin(**kws)o
-
-   perform fit with Nelder-Mead downhill simplex algorithm.  Keywords will be passed directly to
-   :func:`scipy.optimize.fmin`.
-
-.. warning::
-
-  :meth:`fmin` is deprecated.  Use :meth:`minimize` with ``method='nelder'``.
-
-
-.. method:: scalar_minimize(method='Nelder-Mead', hess=None, tol=None, **kws)
+.. method:: scalar_minimize(method='Nelder-Mead', params=None, hess=None, tol=None, **kws)
 
    perform fit with any of the scalar minimization algorithms supported by
    :func:`scipy.optimize.minimize`.
@@ -434,20 +522,20 @@ The Minimizer object has a few public methods:
 Getting and Printing Fit Reports
 ===========================================
 
-.. function:: fit_report(params, modelpars=None, show_correl=True, min_correl=0.1)
+.. function:: fit_report(result, modelpars=None, show_correl=True, min_correl=0.1)
 
    generate and return text of report of best-fit values, uncertainties,
    and correlations from fit.
 
-   :param params:       Parameters from fit, or Minimizer object as returned by :func:`minimize`.
+   :param result:       :class:`MinimizerResult` object as returned by :func:`minimize`.
    :param modelpars:    Parameters with "Known Values" (optional, default None)
    :param show_correl:  whether to show list of sorted correlations [``True``]
    :param min_correl:   smallest correlation absolute value to show [0.1]
 
-   If the first argument is a Minimizer object, as returned from
-   :func:`minimize`, the report will include some goodness-of-fit statistics.
+   If the first argument is a :class:`Parameters` object,
+   goodness-of-fit statistics will not be included.
 
-.. function:: report_fit(params, modelpars=None, show_correl=True, min_correl=0.1)
+.. function:: report_fit(result, modelpars=None, show_correl=True, min_correl=0.1)
 
    print text of report from :func:`fit_report`.
 
@@ -458,12 +546,21 @@ An example fit with report would be
 
 which would write out::
 
-
+    [[Fit Statistics]]
+        # function evals   = 85
+        # data points      = 1001
+        # variables        = 4
+        chi-square         = 498.812
+        reduced chi-square = 0.500
     [[Variables]]
         amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
-        decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
         period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
         shift:    0.16203677 +/- 0.014056 (8.67%) (init= 0)
+        decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
     [[Correlations]] (unreported correlations are <  0.100)
         C(period, shift)             =  0.797
         C(amp, decay)                =  0.582
+        C(amp, shift)                = -0.297
+        C(amp, period)               = -0.243
+        C(shift, decay)              = -0.182
+        C(period, decay)             = -0.150
