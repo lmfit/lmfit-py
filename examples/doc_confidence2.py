@@ -22,8 +22,9 @@ mini = lmfit.Minimizer(residual, p)
 # first solve with Nelder-Mead
 out1 = mini.minimize(method='Nelder')
 
-# then solve from that starting point with Levenberg-Marquardt
-out2 = mini.leastsq(params=out1.params)
+# then solve with Levenberg-Marquardt using the
+# Nelder-Mead solution as a starting point
+out2 = mini.minimize(method='leastsq', params=out1.params)
 
 lmfit.report_fit(out2.params, min_correl=0.5)
 
@@ -50,7 +51,7 @@ elif plot_type == 2:
     plt.colorbar()
     plt.ylabel('t2')
 
-    
+
 elif plot_type == 3:
     cx1, cy1, prob = trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
     cx2, cy2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
