@@ -467,7 +467,7 @@ class Model(object):
 
         Returns
         -------
-        lmfit.ModelFit
+        lmfit.ModelResult
 
         Examples
         --------
@@ -554,8 +554,9 @@ class Model(object):
         if fit_kws is None:
             fit_kws = {}
 
-        output = ModelFit(self, params, method=method, iter_cb=iter_cb,
-                          scale_covar=scale_covar, fcn_kws=kwargs, **fit_kws)
+        output = ModelResult(self, params, method=method, iter_cb=iter_cb,
+                             scale_covar=scale_covar, fcn_kws=kwargs,
+                             **fit_kws)
         output.fit(data=data, weights=weights)
         output.components = self.components
         return output
@@ -681,7 +682,7 @@ class CompositeModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
-class ModelFit(Minimizer):
+class ModelResult(Minimizer):
     """Result from Model fit
 
     Attributes
@@ -750,20 +751,24 @@ class ModelFit(Minimizer):
         if data is not None:
             self.data = data
         if params is not None:
-            self.params = params
+            self.init_params = params
         if weights is not None:
             self.weights = weights
         if method is not None:
             self.method = method
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
-        self.init_params = deepcopy(self.params)
-        self.init_values = self.model._make_all_args(self.init_params)
-        self.init_fit    = self.model.eval(params=self.init_params, **self.userkws)
+        self.init_fit    = self.model.eval(params=self.params, **self.userkws)
 
-        self.minimize(method=self.method)
-        self.best_fit = self.model.eval(params=self.params, **self.userkws)
-        self.best_values = self.model._make_all_args(self.params)
+        _ret = self.minimize(method=self.method)
+
+        for attr in dir(_ret):
+            if not attr.startswith('_') :
+                setattr(self, attr, getattr(_ret, attr))
+
+        self.init_values = self.model._make_all_args(self.init_params)
+        self.best_values = self.model._make_all_args(_ret.params)
+        self.best_fit    = self.model.eval(params=_ret.params, **self.userkws)
 
     def eval(self, **kwargs):
         self.userkws.update(kwargs)
@@ -832,8 +837,8 @@ class ModelFit(Minimizer):
 
         See Also
         --------
-        ModelFit.plot_residuals : Plot the fit residuals using matplotlib.
-        ModelFit.plot : Plot the fit results and residuals using matplotlib.
+        ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
+        ModelResult.plot : Plot the fit results and residuals using matplotlib.
         """
         if data_kws is None:
             data_kws = {}
@@ -926,8 +931,8 @@ class ModelFit(Minimizer):
 
         See Also
         --------
-        ModelFit.plot_fit : Plot the fit results using matplotlib.
-        ModelFit.plot : Plot the fit results and residuals using matplotlib.
+        ModelResult.plot_fit : Plot the fit results using matplotlib.
+        ModelResult.plot : Plot the fit results and residuals using matplotlib.
         """
         if data_kws is None:
             data_kws = {}
@@ -1015,7 +1020,7 @@ class ModelFit(Minimizer):
 
         Notes
         ----
-        The method combines ModelFit.plot_fit and ModelFit.plot_residuals.
+        The method combines ModelResult.plot_fit and ModelResult.plot_residuals.
 
         If yerr is specified or if the fit model included weights, then
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
@@ -1025,8 +1030,8 @@ class ModelFit(Minimizer):
 
         See Also
         --------
-        ModelFit.plot_fit : Plot the fit results using matplotlib.
-        ModelFit.plot_residuals : Plot the fit residuals using matplotlib.
+        ModelResult.plot_fit : Plot the fit results using matplotlib.
+        ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
         """
         if data_kws is None:
             data_kws = {}

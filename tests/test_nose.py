@@ -56,11 +56,14 @@ def test_simple():
     final = data + result.residual
 
     # write error report
-    report_fit(params)
+    print(" --> SIMPLE --> ")
+    print(result.params)
+    report_fit(result.params)
 
     #assert that the real parameters are found
 
-    for para, val in zip(params.values(), [5, 0.025, -.1, 2]):
+    for para, val in zip(result.params.values(), [5, 0.025, -.1, 2]):
+        
         check(para, val)
 
 def test_lbfgsb():
@@ -102,11 +105,11 @@ def test_lbfgsb():
 
     fit = residual(fit_params, x)
 
-    for name, par in fit_params.items():
+    for name, par in out.params.items():
         nout = "%s:%s" % (name, ' '*(20-len(name)))
         print("%s: %s (%s) " % (nout, par.value, p_true[name].value))
 
-    for para, true_para in zip(fit_params.values(), p_true.values()):
+    for para, true_para in zip(out.params.values(), p_true.values()):
         check_wo_stderr(para, true_para.value)
 
 def test_derive():
@@ -147,14 +150,15 @@ def test_derive():
 
     # fit without analytic derivative
     min1 = Minimizer(func, params1, fcn_args=(x,), fcn_kws={'data':data})
-    min1.leastsq()
-    fit1 = func(params1, x)
+    out1 = min1.leastsq()
+    fit1 = func(out1.params, x)
 
     # fit with analytic derivative
     min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data':data})
-    min2.leastsq(Dfun=dfunc, col_deriv=1)
-    fit2 = func(params2, x)
+    out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
+    fit2 = func(out2.params, x)
 
+    
     print ('''Comparison of fit to exponential decay
     with and without analytic derivatives, to
        model = a*exp(-b*x) + c
@@ -169,15 +173,15 @@ def test_derive():
        c               |   %.4f    |   %.4f  |
     ----------------------------------------------
     ''' %  (a, b, c,
-            min1.nfev,   min2.nfev,
-            min1.chisqr, min2.chisqr,
-            params1['a'].value, params2['a'].value,
-            params1['b'].value, params2['b'].value,
-            params1['c'].value, params2['c'].value ))
+            out1.nfev,   out2.nfev,
+            out1.chisqr, out2.chisqr,
+            out1.params['a'].value, out2.params['a'].value,
+            out1.params['b'].value, out2.params['b'].value,
+            out1.params['c'].value, out2.params['c'].value ))
 
-    check_wo_stderr(min1.params['a'], min2.params['a'].value, 0.00005)
-    check_wo_stderr(min1.params['b'], min2.params['b'].value, 0.00005)
-    check_wo_stderr(min1.params['c'], min2.params['c'].value, 0.00005)
+    check_wo_stderr(out1.params['a'], out2.params['a'].value, 0.00005)
+    check_wo_stderr(out1.params['b'], out2.params['b'].value, 0.00005)
+    check_wo_stderr(out1.params['c'], out2.params['c'].value, 0.00005)
 
 def test_peakfit():
     def residual(pars, x, data=None):
@@ -222,15 +226,15 @@ def test_peakfit():
     init = residual(fit_params, x)
 
 
-    myfit.leastsq()
+    out = myfit.leastsq()
 
     # print(' N fev = ', myfit.nfev)
     # print(myfit.chisqr, myfit.redchi, myfit.nfree)
 
-    report_fit(fit_params)
+    report_fit(out.params)
 
-    fit = residual(fit_params, x)
-    check_paras(fit_params, org_params)
+    fit = residual(out.params, x)
+    check_paras(out.params, org_params)
 
 
 def test_scalar_minimize_has_no_uncertainties():
@@ -266,20 +270,20 @@ def test_scalar_minimize_has_no_uncertainties():
     params.add('omega', value= 3.0)
 
     mini = Minimizer(fcn2min, params, fcn_args=(x, data))
-    mini.minimize()
-    assert_(np.isfinite(mini.params['amp'].stderr))
-    print(mini.errorbars)
-    assert_(mini.errorbars == True)
-    mini.minimize(method='nelder-mead')
-    assert_(mini.params['amp'].stderr is None)
-    assert_(mini.params['decay'].stderr is None)
-    assert_(mini.params['shift'].stderr is None)
-    assert_(mini.params['omega'].stderr is None)
-    assert_(mini.params['amp'].correl is None)
-    assert_(mini.params['decay'].correl is None)
-    assert_(mini.params['shift'].correl is None)
-    assert_(mini.params['omega'].correl is None)
-    assert_(mini.errorbars == False)
+    out = mini.minimize()
+    assert_(np.isfinite(out.params['amp'].stderr))
+    print(out.errorbars)
+    assert_(out.errorbars == True)
+    out2 = mini.minimize(method='nelder-mead')
+    assert_(out2.params['amp'].stderr is None)
+    assert_(out2.params['decay'].stderr is None)
+    assert_(out2.params['shift'].stderr is None)
+    assert_(out2.params['omega'].stderr is None)
+    assert_(out2.params['amp'].correl is None)
+    assert_(out2.params['decay'].correl is None)
+    assert_(out2.params['shift'].correl is None)
+    assert_(out2.params['omega'].correl is None)
+    assert_(out2.errorbars == False)
 
 
 def test_multidimensional_fit_GH205():
@@ -307,7 +311,6 @@ def test_multidimensional_fit_GH205():
 
     mini = Minimizer(fcn2min, params, fcn_args=(xv, yv, data))
     res = mini.minimize()
-
 
 class CommonMinimizerTest(unittest.TestCase):
 
@@ -379,15 +382,15 @@ class CommonMinimizerTest(unittest.TestCase):
             raise SkipTest
 
         print(self.minimizer)
-        self.mini.scalar_minimize(method=self.minimizer)
+        out = self.mini.scalar_minimize(method=self.minimizer)
 
-        fit = self.residual(self.fit_params, self.x)
+        fit = self.residual(out.params, self.x)
 
-        for name, par in self.fit_params.items():
+        for name, par in out.params.items():
             nout = "%s:%s" % (name, ' '*(20-len(name)))
             print("%s: %s (%s) " % (nout, par.value, self.p_true[name].value))
 
-        for para, true_para in zip(self.fit_params.values(),
+        for para, true_para in zip(out.params.values(),
                                    self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=sig)
 

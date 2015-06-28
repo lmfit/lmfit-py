@@ -40,15 +40,15 @@ def test_bounds():
 
     out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 
-    fit = residual(fit_params, x)
+    fit = residual(out.params, x)
 
     assert(out.nfev  > 10)
     assert(out.nfree > 50)
     assert(out.chisqr > 1.0)
 
     print(fit_report(out, show_correl=True, modelpars=p_true))
-    assert_paramval(fit_params['decay'], 0.01, tol=1.e-2)
-    assert_paramval(fit_params['shift'], 0.123, tol=1.e-2)
+    assert_paramval(out.params['decay'], 0.01, tol=1.e-2)
+    assert_paramval(out.params['shift'], 0.123, tol=1.e-2)
 
 if __name__ == '__main__':
     test_bounds()

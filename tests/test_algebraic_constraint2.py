@@ -51,17 +51,18 @@ def test_constraints(with_plot=True):
     if with_plot:
         pylab.plot(x, data, 'r+')
 
-    pfit = [Parameter(name='amp_g',  value=10),
-            Parameter(name='cen_g',  value=9),
-            Parameter(name='wid_g',  value=1),
-
-            Parameter(name='amp_tot',  value=20),
-            Parameter(name='amp_l',  expr='amp_tot - amp_g'),
-            Parameter(name='cen_l',  expr='1.5+cen_g'),
-            Parameter(name='wid_l',  expr='2*wid_g'),
-
-            Parameter(name='line_slope', value=0.0),
-            Parameter(name='line_off', value=0.0)]
+    pfit = Parameters()
+    pfit.add(name='amp_g',  value=10)
+    pfit.add(name='cen_g',  value=9)
+    pfit.add(name='wid_g',  value=1)
+    
+    pfit.add(name='amp_tot',  value=20)
+    pfit.add(name='amp_l',  expr='amp_tot - amp_g')
+    pfit.add(name='cen_l',  expr='1.5+cen_g')
+    pfit.add(name='wid_l',  expr='2*wid_g')
+    
+    pfit.add(name='line_slope', value=0.0)
+    pfit.add(name='line_off', value=0.0)
 
     sigma = 0.021  # estimate of data error (for all data points)
 

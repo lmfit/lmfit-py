@@ -44,11 +44,11 @@ init = residual(fit_params, x)
 
 out = minimize(residual, fit_params, method='lbfgsb', args=(x,), kws={'data':data})
 
-fit = residual(fit_params, x)
+fit = residual(out.params, x)
 
-for name, par in fit_params.items():
+for name, par in out.params.items():
     nout = "%s:%s" % (name, ' '*(20-len(name)))
-    print "%s: %s (%s) " % (nout, par.value, p_true[name].value)
+    print "%s: %s (true=%s) " % (nout, par.value, p_true[name].value)
 
 #print out.chisqr, out.redchi, out.nfree
 #
@@ -59,8 +59,3 @@ if HASPYLAB:
     pylab.plot(x, init, 'k')
     pylab.plot(x, fit, 'b')
     pylab.show()
-
-
-
-
-

@@ -46,13 +46,13 @@ data = y + 0.15*np.random.normal(size=len(x))
 
 # fit without analytic derivative
 min1 = Minimizer(func, params1, fcn_args=(x,), fcn_kws={'data':data})
-min1.leastsq()
-fit1 = func(params1, x)
+out1 = min1.leastsq()
+fit1 = func(out1.params, x)
 
 # fit with analytic derivative
 min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data':data})
-min2.leastsq(Dfun=dfunc, col_deriv=1)
-fit2 = func(params2, x)
+out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
+fit2 = func(out2.params, x)
 
 print '''Comparison of fit to exponential decay
 with and without analytic derivatives, to
@@ -68,11 +68,11 @@ Chi-square         |   %.4f    |   %.4f  |
    c               |   %.4f    |   %.4f  |
 ----------------------------------------------
 ''' %  (a, b, c,
-        min1.nfev,   min2.nfev,
-        min1.chisqr, min2.chisqr,
-        params1['a'].value, params2['a'].value,
-        params1['b'].value, params2['b'].value,
-        params1['c'].value, params2['c'].value )
+        out1.nfev,   out2.nfev,
+        out1.chisqr, out2.chisqr,
+        out1.params['a'].value, out2.params['a'].value,
+        out1.params['b'].value, out2.params['b'].value,
+        out1.params['c'].value, out2.params['c'].value )
 
 
 if HASPYLAB:

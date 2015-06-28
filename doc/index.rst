@@ -7,28 +7,32 @@ Non-Linear Least-Square Minimization and Curve-Fitting for Python
 .. _MINPACK-1:               http://en.wikipedia.org/wiki/MINPACK
 
 
-Lmfit provides a high-level interface to non-linear optimization and
-curve fitting problems for Python. Lmfit builds on
-`Levenberg-Marquardt`_ algorithm of :func:`scipy.optimize.leastsq`, but
-also supports most of the optimization methods from :mod:`scipy.optimize`.
-It has a number of useful enhancements, including:
+Lmfit provides a high-level interface to non-linear optimization and curve
+fitting problems for Python. Lmfit builds on and extends many of the
+optimizatin algorithm of :mod:`scipy.optimize`, especially the
+`Levenberg-Marquardt`_ method from :func:`scipy.optimize.leastsq`.
+
+Lmfit provides a number of useful enhancements to optimization and data
+fitting problems, including:
 
   * Using :class:`Parameter` objects instead of plain floats as variables.
-    A :class:`Parameter` has a value that can be varied in the fit, fixed,
-    have upper and/or lower bounds.  It can even have a value that is
-    constrained by an algebraic expression of other Parameter values.
+    A :class:`Parameter` has a value that can be varied in the fit, have a
+    fixed value, or have upper and/or lower bounds.  A Parameter can even
+    have a value that is constrained by an algebraic expression of other
+    Parameter values.
 
   * Ease of changing fitting algorithms.  Once a fitting model is set up,
-    one can change the fitting algorithm without changing the objective
-    function.
+    one can change the fitting algorithm used to find the optimal solution
+    without changing the objective function.
 
   * Improved estimation of confidence intervals.  While
     :func:`scipy.optimize.leastsq` will automatically calculate
-    uncertainties and correlations from the covariance matrix, lmfit also
+    uncertainties and correlations from the covariance matrix, the accuracy
+    of these estimates are often questionable.  To help address this, lmfit
     has functions to explicitly explore parameter space to determine
     confidence levels even for the most difficult cases.
 
-  * Improved curve-fitting with the :class:`Model` class.  This which
+  * Improved curve-fitting with the :class:`Model` class.  This
     extends the capabilities of :func:`scipy.optimize.curve_fit`, allowing
     you to turn a function that models for your data into a python class
     that helps you parametrize and fit data with that model.

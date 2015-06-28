@@ -31,7 +31,7 @@ result = minimize(fcn2min, params, args=(x, data))
 final = data + result.residual
 
 # write error report
-report_fit(params)
+report_fit(result.params)
 
 # try to plot results
 try:

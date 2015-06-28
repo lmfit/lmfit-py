@@ -121,6 +121,30 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'differential_evolution': 'differential_evolution'}
 
 
+class MinimizerResult(object):
+    """ The result of a minimization.
+
+    Attributes
+    ----------
+    params : Parameters
+        The best-fit parameters
+    success : bool
+        Whether the minimization was successful
+    status : int
+        Termination status of the optimizer. Its value depends on the
+        underlying solver. Refer to `message` for details.
+
+    Notes
+    -----
+    additional attributes not listed above depending of the
+    specific solver. Since this class is essentially a subclass of dict
+    with attribute accessors, one can see which attributes are available
+    using the `keys()` method.
+    """
+    def __init__(self, **kws):
+        for key, val in kws.items():
+            setattr(self, key, val)
+
 class Minimizer(object):
     """A general minimizer for curve fitting"""
     err_nonparam = ("params must be a minimizer.Parameters() instance or list "
@@ -189,7 +213,6 @@ class Minimizer(object):
         self.nfev = 0
         self.nfree = 0
         self.ndata = 0
-        self.nvarys = 0
         self.ier = 0
         self.success = True
         self.errorbars = False
@@ -199,14 +222,9 @@ class Minimizer(object):
         self.redchi = None
         self.covar = None
         self.residual = None
-        self.var_map = []
-        self.vars = []
-        self.params = []
-        self.updated = []
+
+        self.params = params
         self.jacfcn = None
-        self.__prepared = False
-        self.__set_params(params)
-        # self.prepare_fit()
 
     @property
     def values(self):
@@ -217,14 +235,7 @@ class Minimizer(object):
             Parameter values in a simple dictionary.
         """
 
-        return dict([(name, p.value) for name, p in self.params.items()])
-
-    def update_constraints(self):
-        """
-        Update all constrained parameters, checking that dependencies are
-        evaluated as needed.
-        """
-        self.params.update_constraints()
+        return dict([(name, p.value) for name, p in self.result.params.items()])
 
     def __residual(self, fvars):
         """
@@ -235,15 +246,14 @@ class Minimizer(object):
         calculate the residual.
         """
         # set parameter values
-        for varname, val in zip(self.var_map, fvars):
-            # self.params[varname].value = val
-            par = self.params[varname]
-            par.value = par.from_internal(val)
-        self.nfev = self.nfev + 1
+        params = self.result.params
+        for name, val in zip(self.result.var_names, fvars):
+            params[name].value = params[name].from_internal(val)
+        self.result.nfev = self.result.nfev + 1
 
-        out = self.userfcn(self.params, *self.userargs, **self.userkws)
+        out = self.userfcn(params, *self.userargs, **self.userkws)
         if callable(self.iter_cb):
-            self.iter_cb(self.params, self.nfev, out,
+            self.iter_cb(params, self.result.nfev, out,
                          *self.userargs, **self.userkws)
         return np.asarray(out).ravel()
 
@@ -253,39 +263,22 @@ class Minimizer(object):
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         """
-        for varname, val in zip(self.var_map, fvars):
-            # self.params[varname].value = val
-            self.params[varname].value = self.params[varname].from_internal(val)
+        params = self.result.params
+        for name, val in zip(self.result.var_names, fvars):
+            params[name].value = params[name].from_internal(val)
 
-        self.nfev = self.nfev + 1
-        self.update_constraints()
+        self.result.nfev = self.result.nfev + 1
+        self.result.params.update_constraints()
         # computing the jacobian
-        return self.jacfcn(self.params, *self.userargs, **self.userkws)
+        return self.jacfcn(params, *self.userargs, **self.userkws)
 
-    def __set_params(self, params):
-        """ set internal self.params from a Parameters object or
-        a list/tuple of Parameters"""
-        if params is None or isinstance(params, Parameters):
-            self.params = params
-        elif isinstance(params, (list, tuple)):
-            _params = Parameters()
-            for _par in params:
-                if not isinstance(_par, Parameter):
-                    raise MinimizerException(self.err_nonparam)
-                else:
-                    _params[_par.name] = _par
-            self.params = _params
-        else:
-            raise MinimizerException(self.err_nonparam)
-
-    def penalty(self, params):
+    def penalty(self, fvars):
         """
         Penalty function for scalar minimizers:
 
         Parameters
         ----------
-        params : lmfit.parameter.Parameters object
-            The model parameters
+        fvars : array of values for the variable parameters
 
         Returns
         -------
@@ -293,41 +286,56 @@ class Minimizer(object):
             The user evaluated user-supplied objective function. If the
             objective function is an array, return the array sum-of-squares
         """
-        r = self.__residual(params)
+        r = self.__residual(fvars)
         if isinstance(r, ndarray):
             r = (r*r).sum()
         return r
 
     def prepare_fit(self, params=None):
         """
-        Prepares parameters for fitting
+        Prepares parameters for fitting,
+        return array of initial values
         """
         # determine which parameters are actually variables
         # and which are defined expressions.
-        if params is None and self.params is not None and self.__prepared:
-            return
-        if params is not None and self.params is None:
-            self.__set_params(params)
-        self.nfev = 0
-        self.var_map = []
-        self.vars = []
-        self.errorbars = False
-        self.update_constraints()
-        for name, par in self.params.items():
+        result = self.result = MinimizerResult()
+        if params is not None:
+            self.params = params
+        if isinstance(self.params, Parameters):
+            result.params = deepcopy(self.params)
+        elif isinstance(self.params, (list, tuple)):
+            result.params = Parameters()
+            for par in self.params:
+                if not isinstance(par, Parameter):
+                    raise MinimizerException(self.err_nonparam)
+                else:
+                    result.params[par.name] = par
+        elif self.params is None:
+            raise MinimizerException(self.err_nonparam)
+
+        # determine which parameters are actually variables
+        # and which are defined expressions.
+
+        result.var_names = [] # note that this *does* belong to self...
+        result.init_vals = []
+        result.params.update_constraints()
+        result.nfev = 0
+        result.errorbars = False
+
+        for name, par in self.result.params.items():
             par.stderr = None
             par.correl = None
             if par.expr is not None:
                 par.vary = False
             if par.vary:
-                self.var_map.append(name)
-                self.vars.append(par.setup_bounds())
+                result.var_names.append(name)
+                result.init_vals.append(par.setup_bounds())
 
             par.init_value = par.value
             if par.name is None:
                 par.name = name
-
-        self.nvarys = len(self.vars)
-        self.__prepared = True
+        result.nvarys = len(result.var_names)
+        return result
 
     def unprepare_fit(self):
         """
@@ -336,8 +344,7 @@ class Minimizer(object):
 
         removes ast compilations of constraint expressions
         """
-        self.__prepared = False
-        self.params = deepcopy(self.params)
+        pass
 
     @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
                        'and method=\'L-BFGS-B\' instead')
@@ -352,27 +359,8 @@ class Minimizer(object):
             scipy.optimize.lbfgsb.fmin_l_bfgs_b function.
 
         """
+        raise NotImplementedError("use scalar_minimize(method='L-BFGS-B')")
 
-        self.prepare_fit()
-        lb_kws = dict(factr=1000.0, approx_grad=True, m=20,
-                      maxfun=2000 * (self.nvarys + 1),
-                      )
-        lb_kws.update(self.kws)
-        lb_kws.update(kws)
-
-        xout, fout, info = scipy_lbfgsb(self.penalty, self.vars, **lb_kws)
-        self.nfev = info['funcalls']
-        self.message = info['task']
-        self.chisqr = self.residual = self.__residual(xout)
-        self.ndata = 1
-        self.nfree = 1
-        if isinstance(self.residual, ndarray):
-            self.chisqr = (self.chisqr**2).sum()
-            self.ndata = len(self.residual)
-            self.nfree = self.ndata - self.nvarys
-        self.redchi = self.chisqr/self.nfree
-        self.unprepare_fit()
-        return
 
     @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
                        'and method=\'Nelder-Mead\' instead')
@@ -385,29 +373,9 @@ class Minimizer(object):
         kws : dict
             Minimizer options to pass to the scipy.optimize.fmin minimizer.
         """
+        raise NotImplementedError("use scalar_minimize(method='Nelder-Mead')")
 
-        self.prepare_fit()
-        fmin_kws = dict(full_output=True, disp=False, retall=True,
-                        ftol=1.e-4, xtol=1.e-4,
-                        maxfun=5000 * (self.nvarys + 1))
-
-        fmin_kws.update(kws)
-
-        ret = scipy_fmin(self.penalty, self.vars, **fmin_kws)
-        xout, fout, niter, funccalls, warnflag, allvecs = ret
-        self.nfev = funccalls
-        self.chisqr = self.residual = self.__residual(xout)
-        self.ndata = 1
-        self.nfree = 1
-        if isinstance(self.residual, ndarray):
-            self.chisqr = (self.chisqr**2).sum()
-            self.ndata = len(self.residual)
-            self.nfree = self.ndata - self.nvarys
-        self.redchi = self.chisqr/self.nfree
-        self.unprepare_fit()
-        return
-
-    def scalar_minimize(self, method='Nelder-Mead', **kws):
+    def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """
         Use one of the scalar minimization methods from
         scipy.optimize.minimize.
@@ -429,6 +397,8 @@ class Minimizer(object):
                 'SLSQP'
                 'differential_evolution'
 
+        params : Parameters, optional
+           Parameters to use as starting points.
         kws : dict, optional
             Minimizer options pass to scipy.optimize.minimize.
 
@@ -450,10 +420,13 @@ class Minimizer(object):
         """
         if not HAS_SCALAR_MIN:
             raise NotImplementedError
-        self.prepare_fit()
+
+        result = self.prepare_fit(params=params)
+        vars   = result.init_vals
+        params = result.params
 
         fmin_kws = dict(method=method,
-                        options={'maxiter': 1000 * (self.nvarys + 1)})
+                        options={'maxiter': 1000 * (len(vars) + 1)})
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
 
@@ -474,40 +447,40 @@ class Minimizer(object):
 
         if method == 'differential_evolution':
             fmin_kws['method'] = _differential_evolution
-            pars = self.params
-            bounds = [(pars[par].min, pars[par].max) for par in pars]
+            bounds = [(par.min, par.max) for par in params.values()]
             if not np.all(np.isfinite(bounds)):
                 raise ValueError('With differential evolution finite bounds '
                                  'are required for each parameter')
-            bounds = [(-np.pi / 2., np.pi / 2.)] * len(self.vars)
+            bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
             fmin_kws['bounds'] = bounds
 
             # in scipy 0.14 this can be called directly from scipy_minimize
             # When minimum scipy is 0.14 the following line and the else
             # can be removed.
-            ret = _differential_evolution(self.penalty, self.vars, **fmin_kws)
+            ret = _differential_evolution(self.penalty, vars, **fmin_kws)
         else:
-            ret = scipy_minimize(self.penalty, self.vars, **fmin_kws)
+            ret = scipy_minimize(self.penalty, vars, **fmin_kws)
 
-        xout = ret.x
-        self.message = ret.message
+        for attr in dir(ret):
+            if not attr.startswith('_'):
+                setattr(result, attr, getattr(ret, attr))
 
-        self.nfev = ret.nfev
-        self.chisqr = self.residual = self.__residual(xout)
-        self.ndata = 1
-        self.nfree = 1
-        if isinstance(self.residual, ndarray):
-            self.chisqr = (self.chisqr**2).sum()
-            self.ndata = len(self.residual)
-            self.nfree = self.ndata - self.nvarys
-        self.redchi = self.chisqr / self.nfree
-        _log_likelihood = self.ndata * np.log(self.chisqr/self.ndata)
-        self.aic = _log_likelihood + 2 * self.nvarys
-        self.bic = _log_likelihood + np.log(self.ndata) * self.nvarys
-        self.unprepare_fit()
-        return ret.success
+        result.chisqr = result.residual = self.__residual(ret.x)
+        result.nvarys = len(vars)
+        result.ndata = 1
+        result.nfree = 1
+        if isinstance(result.residual, ndarray):
+            result.chisqr = (result.chisqr**2).sum()
+            result.ndata = len(result.residual)
+            result.nfree = result.ndata - result.nvarys
+        result.redchi = result.chisqr / result.nfree
+        _log_likelihood = result.ndata * np.log(result.redchi)
+        result.aic = _log_likelihood + 2 * result.nvarys
+        result.bic = _log_likelihood + np.log(result.ndata) * result.nvarys
 
-    def leastsq(self, **kws):
+        return result
+
+    def leastsq(self, params=None, **kws):
         """
         Use Levenberg-Marquardt minimization to perform a fit.
         This assumes that ModelParameters have been stored, and a function to
@@ -522,6 +495,8 @@ class Minimizer(object):
 
         Parameters
         ----------
+        params : Parameters, optional
+           Parameters to use as starting points.
         kws : dict, optional
             Minimizer options to pass to scipy.optimize.leastsq.
 
@@ -530,9 +505,11 @@ class Minimizer(object):
         success : bool
             True if fit was successful, False if not.
         """
-        self.prepare_fit()
+        result = self.prepare_fit(params=params)
+        vars   = result.init_vals
+        nvars = len(vars)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
-                     gtol=1.e-7, maxfev=2000*(self.nvarys+1), Dfun=None)
+                     gtol=1.e-7, maxfev=2000*(nvars+1), Dfun=None)
 
         lskws.update(self.kws)
         lskws.update(kws)
@@ -544,32 +521,33 @@ class Minimizer(object):
         # suppress runtime warnings during fit and error analysis
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
-        lsout = scipy_leastsq(self.__residual, self.vars, **lskws)
+
+        lsout = scipy_leastsq(self.__residual, vars, **lskws)
         _best, _cov, infodict, errmsg, ier = lsout
 
-        self.residual = resid = infodict['fvec']
-        self.ier = ier
-        self.lmdif_message = errmsg
-        self.message = 'Fit succeeded.'
-        self.success = ier in [1, 2, 3, 4]
+        result.residual = resid = infodict['fvec']
+        result.ier = ier
+        result.lmdif_message = errmsg
+        result.message = 'Fit succeeded.'
+        result.success = ier in [1, 2, 3, 4]
 
         if ier == 0:
-            self.message = 'Invalid Input Parameters.'
+            result.message = 'Invalid Input Parameters.'
         elif ier == 5:
-            self.message = self.err_maxfev % lskws['maxfev']
+            result.message = self.err_maxfev % lskws['maxfev']
         else:
-            self.message = 'Tolerance seems to be too small.'
+            result.message = 'Tolerance seems to be too small.'
 
-        self.nfev = infodict['nfev']
-        self.ndata = len(resid)
+        result.ndata = len(resid)
 
-        self.chisqr = (resid**2).sum()
-        self.nfree = (self.ndata - self.nvarys)
-        self.redchi = self.chisqr / self.nfree
-        _log_likelihood = self.ndata * np.log(self.chisqr/self.ndata)
-        self.aic = _log_likelihood + 2 * self.nvarys
-        self.bic = _log_likelihood + np.log(self.ndata) * self.nvarys
+        result.chisqr = (resid**2).sum()
+        result.nfree = (result.ndata - nvars)
+        result.redchi = result.chisqr / result.nfree
+        _log_likelihood = result.ndata * np.log(result.redchi)
+        result.aic = _log_likelihood + 2 * nvars
+        result.bic = _log_likelihood + np.log(result.ndata) * nvars
 
+        params = result.params
 
         # need to map _best values to params, then calculate the
         # grad for the variable parameters
@@ -585,44 +563,43 @@ class Minimizer(object):
         if len(np.shape(grad)) == 0:
             grad = np.array([grad])
 
-        for ivar, varname in enumerate(self.var_map):
-            par = self.params[varname]
-            grad[ivar] = par.scale_gradient(_best[ivar])
-            vbest[ivar] = par.value
+        for ivar, name in enumerate(result.var_names):
+            grad[ivar] = params[name].scale_gradient(_best[ivar])
+            vbest[ivar] = params[name].value
 
         # modified from JJ Helmus' leastsqbound.py
         infodict['fjac'] = transpose(transpose(infodict['fjac']) /
                                      take(grad, infodict['ipvt'] - 1))
-        rvec = dot(triu(transpose(infodict['fjac'])[:self.nvarys, :]),
-                   take(eye(self.nvarys), infodict['ipvt'] - 1, 0))
+        rvec = dot(triu(transpose(infodict['fjac'])[:nvars, :]),
+                   take(eye(nvars), infodict['ipvt'] - 1, 0))
         try:
-            self.covar = inv(dot(transpose(rvec), rvec))
+            result.covar = inv(dot(transpose(rvec), rvec))
         except (LinAlgError, ValueError):
-            self.covar = None
+            result.covar = None
 
         has_expr = False
-        for par in self.params.values():
+        for par in params.values():
             par.stderr, par.correl = 0, None
             has_expr = has_expr or par.expr is not None
 
         # self.errorbars = error bars were successfully estimated
-        self.errorbars = self.covar is not None
+        result.errorbars = result.covar is not None
 
-        if self.covar is not None:
+        if result.errorbars:
             if self.scale_covar:
-                self.covar = self.covar * self.chisqr / self.nfree
-            for ivar, varname in enumerate(self.var_map):
-                par = self.params[varname]
-                par.stderr = sqrt(self.covar[ivar, ivar])
+                result.covar *= result.redchi
+            for ivar, name in enumerate(result.var_names):
+                par = params[name]
+                par.stderr = sqrt(result.covar[ivar, ivar])
                 par.correl = {}
                 try:
-                    self.errorbars = self.errorbars and (par.stderr > 0.0)
-                    for jvar, varn2 in enumerate(self.var_map):
+                    result.errorbars = result.errorbars and (par.stderr > 0.0)
+                    for jvar, varn2 in enumerate(result.var_names):
                         if jvar != ivar:
-                            par.correl[varn2] = (self.covar[ivar, jvar] /
-                                 (par.stderr * sqrt(self.covar[jvar, jvar])))
+                            par.correl[varn2] = (result.covar[ivar, jvar] /
+                                 (par.stderr * sqrt(result.covar[jvar, jvar])))
                 except:
-                    self.errorbars = False
+                    result.errorbars = False
 
             uvars = None
             if has_expr:
@@ -632,24 +609,23 @@ class Minimizer(object):
                 #   re-evaluate contrained parameters to extract stderr
                 #   and then set Parameters back to best-fit value
                 try:
-                    uvars = uncertainties.correlated_values(vbest, self.covar)
+                    uvars = uncertainties.correlated_values(vbest, result.covar)
                 except (LinAlgError, ValueError):
                     uvars = None
                 if uvars is not None:
-                    for par in self.params.values():
-                        eval_stderr(par, uvars, self.var_map, self.params)
+                    for par in params.values():
+                        eval_stderr(par, uvars, result.var_names, params)
                     # restore nominal values
-                    for v, nam in zip(uvars, self.var_map):
-                        self.params[nam].value = v.nominal_value
+                    for v, nam in zip(uvars, result.var_names):
+                        params[nam].value = v.nominal_value
 
-        if not self.errorbars:
-            self.message = '%s. Could not estimate error-bars'  % self.message
+        if not result.errorbars:
+            result.message = '%s. Could not estimate error-bars'% result.message
 
         np.seterr(**orig_warn_settings)
-        self.unprepare_fit()
-        return self.success
+        return result
 
-    def minimize(self, method='leastsq'):
+    def minimize(self, method='leastsq', params=None, **kws):
         """
         Perform the minimization.
 
@@ -671,14 +647,20 @@ class Minimizer(object):
             'slsqp'                  -    Sequential Linear Squares Programming
             'differential_evolution' -    differential evolution
 
+        params : Parameters, optional
+            parameters to use as starting values
+
         Returns
         -------
-        success : bool
-            Whether the fit was successful.
+        result : MinimizerResult
+
+            MinimizerResult object contains updated params, fit statistics, etc.
+
         """
 
         function = self.leastsq
-        kwargs = {}
+        kwargs = {'params': params}
+        kwargs.update(kws)
 
         user_method = method.lower()
         if user_method.startswith('least'):
@@ -694,9 +676,7 @@ class Minimizer(object):
             function = self.fmin
         elif user_method.startswith('lbfgsb'):
             function = self.lbfgsb
-
         return function(**kwargs)
-
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, iter_cb=None, **fit_kws):
@@ -764,5 +744,4 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
-    fitter.minimize(method=method)
-    return fitter
+    return fitter.minimize(method=method)

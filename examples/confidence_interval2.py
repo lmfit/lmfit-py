@@ -44,23 +44,25 @@ fit_params.add('decay', value=0.010)
 fit_params.add('amp2', value=-10.0)
 fit_params.add('decay2', value=0.050)
 
-out = minimize(residual, fit_params, args=(x,), kws={'data':data})
-out.leastsq()
-ci, trace = conf_interval(out, trace=True)
+mini = Minimizer(residual, fit_params,
+                 fcn_args=(x,), fcn_kws={'data':data})
 
+out = mini.leastsq()
 
-names=fit_params.keys()
+ci, trace = conf_interval(mini, out, trace=True)
+
+names = out.params.keys()
 
 if HASPYLAB:
     pylab.rcParams['font.size']=8
-    pylab.plot(x,data)
+    pylab.plot(x, data)
     pylab.figure()
     cm=pylab.cm.coolwarm
     for i in range(4):
         for j in range(4):
             pylab.subplot(4,4,16-j*4-i)
             if i!=j:
-                x,y,m = conf_interval2d(out,names[i],names[j],20,20)
+                x,y,m = conf_interval2d(mini, out, names[i],names[j],20,20)
                 pylab.contourf(x,y,m,np.linspace(0,1,10),cmap=cm)
                 pylab.xlabel(names[i])
                 pylab.ylabel(names[j])

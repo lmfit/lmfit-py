@@ -9,29 +9,25 @@ try:
     matplotlib.use('WXAgg')
     import pylab
     HASPYLAB = True
-
 except ImportError:
     HASPYLAB = False
 
-if 'nose' in arg:
-    HASPYLAB = False
 
 from lmfit import Parameters, minimize
 
 from NISTModels import Models, ReadNistData
-
 
 def ndig(a, b):
     "precision for NIST values"
     return round(-math.log10((abs(abs(a)-abs(b)) +1.e-15)/ abs(b)))
 
 
-def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
+def Compare_NIST_Results(DataSet, myfit, NISTdata):
     print(' ======================================')
     print(' %s: ' % DataSet)
     print(' | Parameter Name |  Value Found   |  Certified Value | # Matching Digits |')
     print(' |----------------+----------------+------------------+-------------------|')
-
+    params = myfit.params
     val_dig_min = 200
     err_dig_min = 200
     for i in range(NISTdata['nparams']):
@@ -87,10 +83,10 @@ def NIST_Test(DataSet, method='leastsq', start='start2', plot=True):
 
 
     myfit = minimize(resid, params, method=method, args=(x,), kws={'y':y})
-    digs = Compare_NIST_Results(DataSet, myfit, params, NISTdata)
+    digs = Compare_NIST_Results(DataSet, myfit, NISTdata)
 
     if plot and HASPYLAB:
-        fit = -resid(params, x, )
+        fit = -resid(myfit.params, x)
         pylab.plot(x, y, 'ro')
         pylab.plot(x, fit, 'k+-')
         pylab.show()
@@ -166,4 +162,3 @@ elif dset not in Models:
     print(usage)
 else:
     NIST_Test(dset, method=opts.method, start=start, plot=True)
-

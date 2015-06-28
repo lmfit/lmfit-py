@@ -56,13 +56,13 @@ for iy in (2, 3, 4, 5):
     fit_params['sig_%i' % iy].expr='sig_1'
 
 # run the global fit to all the data sets
-minimize(objective, fit_params, args=(x, data))
-report_fit(fit_params)
+out = minimize(objective, fit_params, args=(x, data))
+report_fit(out.params)
 
 # plot the data sets and fits
 plt.figure()
 for i in range(5):
-    y_fit = gauss_dataset(fit_params, i, x)
+    y_fit = gauss_dataset(out.params, i, x)
     plt.plot(x, data[i, :], 'o', x, y_fit, '-')
 
 plt.show()
