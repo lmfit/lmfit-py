@@ -276,7 +276,12 @@ class Minimizer(object):
         pars.update_constraints()
         # compute the jacobian for "internal" unbounded variables,
         # the rescale for bounded "external" variables.
-        return self.jacfcn(pars, *self.userargs, **self.userkws)*grad_scale
+        jac = self.jacfcn(pars, *self.userargs, **self.userkws)
+        if self.col_deriv:
+            jac = (jac.transpose()*grad_scale).transpose()
+        else:
+            jac = jac*grad_scale
+        return jac
 
     def penalty(self, fvars):
         """
@@ -514,14 +519,16 @@ class Minimizer(object):
         result = self.prepare_fit(params=params)
         vars   = result.init_vals
         nvars = len(vars)
-        lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
+        lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
                      gtol=1.e-7, maxfev=2000*(nvars+1), Dfun=None)
 
         lskws.update(self.kws)
         lskws.update(kws)
 
+        self.col_deriv = False
         if lskws['Dfun'] is not None:
             self.jacfcn = lskws['Dfun']
+            self.col_deriv = lskws['col_deriv']
             lskws['Dfun'] = self.__jacobian
 
         # suppress runtime warnings during fit and error analysis
