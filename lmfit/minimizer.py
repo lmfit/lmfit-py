@@ -262,15 +262,21 @@ class Minimizer(object):
         analytical jacobian to be used with the Levenberg-Marquardt
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
+        modified 06-29-2015 M Newville to apply gradient scaling
+               for bounded variables
         """
-        params = self.result.params
-        for name, val in zip(self.result.var_names, fvars):
-            params[name].value = params[name].from_internal(val)
+        pars  = self.result.params
+        grad_scale = ones_like(fvars)
+        for ivar, name in enumerate(self.result.var_names):
+            val = fvars[ivar]
+            pars[name].value = pars[name].from_internal(val)
+            grad_scale[ivar] = pars[name].scale_gradient(val)
 
         self.result.nfev = self.result.nfev + 1
-        self.result.params.update_constraints()
-        # computing the jacobian
-        return self.jacfcn(params, *self.userargs, **self.userkws)
+        pars.update_constraints()
+        # compute the jacobian for "internal" unbounded variables,
+        # the rescale for bounded "external" variables.
+        return self.jacfcn(pars, *self.userargs, **self.userkws)*grad_scale
 
     def penalty(self, fvars):
         """
