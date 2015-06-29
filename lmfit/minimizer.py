@@ -263,7 +263,7 @@ class Minimizer(object):
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         modified 06-29-2015 M Newville to apply gradient scaling
-               for bounded variables
+               for bounded variables (thanks to JJ Helmus, N Mayorov
         """
         pars  = self.result.params
         grad_scale = ones_like(fvars)
