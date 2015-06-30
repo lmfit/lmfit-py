@@ -3,8 +3,6 @@ from lmfit import fit_report
 from lmfit.models import StepModel, ConstantModel
 from lmfit_testutils import assert_paramval, assert_paramattr
 
-import matplotlib.pyplot as plt
-
 def get_data():
     x  = np.linspace(0, 10, 201)
     dat = np.ones_like(x)
@@ -58,4 +56,3 @@ def test_stepmodel_erf():
 if __name__ == '__main__':
     # test_stepmodel_linear()
     test_stepmodel_erf()
-

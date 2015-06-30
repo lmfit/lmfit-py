@@ -128,7 +128,7 @@ def test_derive():
         b = pars['b'].value
         c = pars['c'].value
         v = np.exp(-b*x)
-        return [v, -a*x*v, np.ones(len(x))]
+        return np.array([v, -a*x*v, np.ones(len(x))])
 
     def f(var, x):
         return var[0]* np.exp(-var[1] * x)+var[2]

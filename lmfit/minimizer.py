@@ -262,15 +262,26 @@ class Minimizer(object):
         analytical jacobian to be used with the Levenberg-Marquardt
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
+        modified 06-29-2015 M Newville to apply gradient scaling
+               for bounded variables (thanks to JJ Helmus, N Mayorov)
         """
-        params = self.result.params
-        for name, val in zip(self.result.var_names, fvars):
-            params[name].value = params[name].from_internal(val)
+        pars  = self.result.params
+        grad_scale = ones_like(fvars)
+        for ivar, name in enumerate(self.result.var_names):
+            val = fvars[ivar]
+            pars[name].value = pars[name].from_internal(val)
+            grad_scale[ivar] = pars[name].scale_gradient(val)
 
         self.result.nfev = self.result.nfev + 1
-        self.result.params.update_constraints()
-        # computing the jacobian
-        return self.jacfcn(params, *self.userargs, **self.userkws)
+        pars.update_constraints()
+        # compute the jacobian for "internal" unbounded variables,
+        # the rescale for bounded "external" variables.
+        jac = self.jacfcn(pars, *self.userargs, **self.userkws)
+        if self.col_deriv:
+            jac = (jac.transpose()*grad_scale).transpose()
+        else:
+            jac = jac*grad_scale
+        return jac
 
     def penalty(self, fvars):
         """
@@ -508,14 +519,16 @@ class Minimizer(object):
         result = self.prepare_fit(params=params)
         vars   = result.init_vals
         nvars = len(vars)
-        lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7,
+        lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
                      gtol=1.e-7, maxfev=2000*(nvars+1), Dfun=None)
 
         lskws.update(self.kws)
         lskws.update(kws)
 
+        self.col_deriv = False
         if lskws['Dfun'] is not None:
             self.jacfcn = lskws['Dfun']
+            self.col_deriv = lskws['col_deriv']
             lskws['Dfun'] = self.__jacobian
 
         # suppress runtime warnings during fit and error analysis
