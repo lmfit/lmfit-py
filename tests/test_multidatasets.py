@@ -2,7 +2,6 @@
 # example fitting to multiple (simulated) data sets
 #
 import numpy as np
-import matplotlib.pyplot as plt
 from lmfit import minimize, Parameters, fit_report
 from lmfit.lineshapes import gaussian
 
@@ -73,4 +72,3 @@ def test_multidatasets():
 
 if __name__ == '__main__':
     test_multidatasets()
-
