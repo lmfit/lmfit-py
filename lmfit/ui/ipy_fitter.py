@@ -10,12 +10,21 @@ from .basefitter import MPLFitter, _COMMON_DOC, _COMMON_EXAMPLES_DOC
 
 import IPython
 from IPython.display import display, clear_output
-
-from IPython.html.widgets import Dropdown
-from IPython.html.widgets import Button
-from IPython.html.widgets import HBox
-from IPython.html.widgets import FloatText
-from IPython.html.widgets import Checkbox
+# Widgets were only experimental in IPython 2.x, but this does work there.
+# Handle the change in naming from 2.x to 3.x.
+if IPython.release.version_info[0] == 2:
+    from IPython.html.widgets import DropdownWidget as Dropdown
+    from IPython.html.widgets import ButtonWidget as Button
+    from IPython.html.widgets import ContainerWidget as Box
+    from IPython.html.widgets import FloatTextWidget as FloatText
+    from IPython.html.widgets import CheckboxWidget as Checkbox
+else:
+    # as of IPython 3.x:
+    from IPython.html.widgets import Dropdown
+    from IPython.html.widgets import Button
+    from IPython.html.widgets import Box
+    from IPython.html.widgets import FloatText
+    from IPython.html.widgets import Checkbox
 
 
 class ParameterWidgetGroup(object):
@@ -107,11 +116,12 @@ class ParameterWidgetGroup(object):
         self.max_checkbox.close()
 
     def _repr_html_(self):
-        box = HBox()
+        box = Box()
         box.children = [self.value_text, self.vary_checkbox,
                         self.min_text, self.min_checkbox,
                         self.max_text, self.max_checkbox]
         display(box)
+        box.add_class('hbox')
 
     # Make it easy to set the widget attributes directly.
     @property
@@ -190,8 +200,8 @@ class NotebookFitter(MPLFitter):
         # Dropdown menu of all subclasses of Model, incl. user-defined.
         self.models_menu = Dropdown()
         if all_models is None:
-            all_models = [(m.__name__, m) for m in Model.__subclasses__()]
-        self.models_menu.options = all_models
+            all_models = dict([(m.__name__, m) for m in Model.__subclasses__()])
+        self.models_menu.values = all_models
         self.models_menu.on_trait_change(self._on_model_value_change,
                                              'value')
         # Button to trigger fitting.
@@ -210,9 +220,10 @@ class NotebookFitter(MPLFitter):
 
     def _repr_html_(self):
         display(self.models_menu)
-        button_box = HBox()
+        button_box = Box()
         button_box.children = [self.fit_button, self.guess_button]
         display(button_box)
+        button_box.add_class('hbox')
         for pw in self.param_widgets:
             display(pw)
         self.plot()
