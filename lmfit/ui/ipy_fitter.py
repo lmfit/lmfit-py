@@ -12,17 +12,22 @@ import IPython
 from IPython.display import display, clear_output
 # Widgets were only experimental in IPython 2.x, but this does work there.
 # Handle the change in naming from 2.x to 3.x.
-if IPython.release.version_info[0] == 2:
+IPY2 = IPython.release.version_info[0] == 2
+if IPY2:
     from IPython.html.widgets import DropdownWidget as Dropdown
     from IPython.html.widgets import ButtonWidget as Button
-    from IPython.html.widgets import ContainerWidget as Box
+    from IPython.html.widgets import ContainerWidget as HBox
     from IPython.html.widgets import FloatTextWidget as FloatText
     from IPython.html.widgets import CheckboxWidget as Checkbox
+    class HBox(Box):
+        def __init__(*args, **kwargs):
+            self.add_class('hbox')
+            super(self, HBox).__init__(*args, **kwargs)
 else:
     # as of IPython 3.x:
     from IPython.html.widgets import Dropdown
     from IPython.html.widgets import Button
-    from IPython.html.widgets import Box
+    from IPython.html.widgets import HBox
     from IPython.html.widgets import FloatText
     from IPython.html.widgets import Checkbox
 
@@ -37,8 +42,11 @@ class ParameterWidgetGroup(object):
         # Define widgets.
         self.value_text = FloatText(description=par.name,
                                     min=self.par.min, max=self.par.max)
+        self.value_text.width = 100
         self.min_text = FloatText(description='min', max=self.par.max)
+        self.min_text.width = 100
         self.max_text = FloatText(description='max', min=self.par.min)
+        self.max_text.width = 100
         self.min_checkbox = Checkbox(description='min')
         self.max_checkbox = Checkbox(description='max')
         self.vary_checkbox = Checkbox(description='vary')
@@ -103,7 +111,7 @@ class ParameterWidgetGroup(object):
 
     def _on_vary_change(self, name, value):
         self.par.vary = value
-        self.value_text.disabled = not value
+        # self.value_text.disabled = not value
 
     def close(self):
         # one convenience method to close (i.e., hide and disconnect) all
@@ -116,12 +124,11 @@ class ParameterWidgetGroup(object):
         self.max_checkbox.close()
 
     def _repr_html_(self):
-        box = Box()
+        box = HBox()
         box.children = [self.value_text, self.vary_checkbox,
-                        self.min_text, self.min_checkbox,
-                        self.max_text, self.max_checkbox]
+                        self.min_checkbox, self.min_text,
+                        self.max_checkbox, self.max_text]
         display(box)
-        box.add_class('hbox')
 
     # Make it easy to set the widget attributes directly.
     @property
@@ -199,9 +206,15 @@ class NotebookFitter(MPLFitter):
                 data_style={}, init_style={}, best_style={}, **kwargs):
         # Dropdown menu of all subclasses of Model, incl. user-defined.
         self.models_menu = Dropdown()
-        if all_models is None:
-            all_models = dict([(m.__name__, m) for m in Model.__subclasses__()])
-        self.models_menu.values = all_models
+        # Dropbox API is very different between IPy 2.x and 3.x.
+        if IPY2:
+            if all_models is None:
+                all_models = dict([(m.__name__, m) for m in Model.__subclasses__()])
+            self.models_menu.values = all_models
+        else:
+            if all_models is None:
+                all_models = [(m.__name__, m) for m in Model.__subclasses__()]
+            self.models_menu.options = all_models
         self.models_menu.on_trait_change(self._on_model_value_change,
                                              'value')
         # Button to trigger fitting.
@@ -220,10 +233,9 @@ class NotebookFitter(MPLFitter):
 
     def _repr_html_(self):
         display(self.models_menu)
-        button_box = Box()
+        button_box = HBox()
         button_box.children = [self.fit_button, self.guess_button]
         display(button_box)
-        button_box.add_class('hbox')
         for pw in self.param_widgets:
             display(pw)
         self.plot()
