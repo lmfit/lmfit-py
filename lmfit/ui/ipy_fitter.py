@@ -37,8 +37,11 @@ class ParameterWidgetGroup(object):
         # Define widgets.
         self.value_text = FloatText(description=par.name,
                                     min=self.par.min, max=self.par.max)
+        self.value_text.width = 100
         self.min_text = FloatText(description='min', max=self.par.max)
+        self.min_text.width = 100
         self.max_text = FloatText(description='max', min=self.par.min)
+        self.max_text.width = 100
         self.min_checkbox = Checkbox(description='min')
         self.max_checkbox = Checkbox(description='max')
         self.vary_checkbox = Checkbox(description='vary')
@@ -103,7 +106,7 @@ class ParameterWidgetGroup(object):
 
     def _on_vary_change(self, name, value):
         self.par.vary = value
-        self.value_text.disabled = not value
+        # self.value_text.disabled = not value
 
     def close(self):
         # one convenience method to close (i.e., hide and disconnect) all
@@ -118,8 +121,8 @@ class ParameterWidgetGroup(object):
     def _repr_html_(self):
         box = Box()
         box.children = [self.value_text, self.vary_checkbox,
-                        self.min_text, self.min_checkbox,
-                        self.max_text, self.max_checkbox]
+                        self.min_checkbox, self.min_text,
+                        self.max_checkbox, self.max_text]
         display(box)
         if IPython.release.version_info[0] == 2:
             box.add_class('hbox')
