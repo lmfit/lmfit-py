@@ -1060,7 +1060,7 @@ class ModelResult(Minimizer):
 
         self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt, yerr=yerr,
                       initfmt=initfmt, numpoints=numpoints, data_kws=data_kws,
-                      fit_kws=fit_kws, init_kws={}, ax_kws=ax_fit_kws)
+                      fit_kws=fit_kws, init_kws=init_kws, ax_kws=ax_fit_kws)
         self.plot_residuals(ax=ax_res, datafmt=datafmt, yerr=yerr,
                             data_kws=data_kws, fit_kws=fit_kws,
                             ax_kws=ax_res_kws)
