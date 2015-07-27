@@ -863,7 +863,7 @@ class ModelResult(Minimizer):
 
         # make a dense array for x-axis if data is not dense
         if numpoints is not None and len(self.data) < numpoints:
-            x_array_dense = np.linspace(x_array[0], x_array[-1], numpoints)
+            x_array_dense = np.linspace(min(x_array), max(x_array), numpoints)
         else:
             x_array_dense = x_array
 
@@ -1060,7 +1060,7 @@ class ModelResult(Minimizer):
 
         self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt, yerr=yerr,
                       initfmt=initfmt, numpoints=numpoints, data_kws=data_kws,
-                      fit_kws=fit_kws, init_kws={}, ax_kws=ax_fit_kws)
+                      fit_kws=fit_kws, init_kws=init_kws, ax_kws=ax_fit_kws)
         self.plot_residuals(ax=ax_res, datafmt=datafmt, yerr=yerr,
                             data_kws=data_kws, fit_kws=fit_kws,
                             ax_kws=ax_res_kws)
