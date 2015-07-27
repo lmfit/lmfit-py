@@ -863,7 +863,7 @@ class ModelResult(Minimizer):
 
         # make a dense array for x-axis if data is not dense
         if numpoints is not None and len(self.data) < numpoints:
-            x_array_dense = np.linspace(x_array[0], x_array[-1], numpoints)
+            x_array_dense = np.linspace(min(x_array), max(x_array), numpoints)
         else:
             x_array_dense = x_array
 
