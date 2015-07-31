@@ -364,6 +364,9 @@ class Parameter(object):
         """set state for pickle"""
         (self.name, self.value, self.vary, self.expr, self.min,
          self.max, self.stderr, self.correl, self.init_value) = state
+        self._expr_ast = None
+        self._expr_eval = None
+        self._expr_deps = []
         self._init_bounds()
 
     def __repr__(self):
