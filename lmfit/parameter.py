@@ -330,6 +330,8 @@ class Parameter(object):
             Mathematical expression used to constrain the value during the fit.
             To remove a constraint you must supply an empty string.
         """
+
+        self.__set_expression(expr)
         if value is not None:
             self._val = value
         if vary is not None:
@@ -338,8 +340,6 @@ class Parameter(object):
             self.min = min
         if max is not None:
             self.max = max
-        if expr is not None:
-            self.expr = expr
 
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
@@ -442,8 +442,10 @@ class Parameter(object):
                 pass
         if not self.vary and self._expr is None:
             return self._val
-        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
-        if not hasattr(self, '_expr_ast'):   self._expr_ast = None
+        if not hasattr(self, '_expr_eval'):
+            self._expr_eval = None
+        if not hasattr(self, '_expr_ast'):
+            self._expr_ast = None
         if self._expr_ast is not None and self._expr_eval is not None:
             self._val = self._expr_eval(self._expr_ast)
             check_ast_errors(self._expr_eval)
@@ -496,12 +498,16 @@ class Parameter(object):
         The mathematical expression used to constrain the value during the fit.
         To remove a constraint you must supply an empty string.
         """
+        self.__set_expression(val)
+
+    def __set_expression(self, val):
         if val == '':
             val = None
         self._expr = val
         if val is not None:
             self.vary = False
         if not hasattr(self, '_expr_eval'):  self._expr_eval = None
+        if val is None: self._expr_ast = None
         if val is not None and self._expr_eval is not None:
             self._expr_ast = self._expr_eval.parse(val)
             check_ast_errors(self._expr_eval)
