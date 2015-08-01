@@ -192,9 +192,11 @@ class VoigtModel(Model):
 
 class PseudoVoigtModel(Model):
     __doc__ = pvoigt.__doc__ + COMMON_DOC if pvoigt.__doc__ else ""
+    fwhm_factor = 2.0
     def __init__(self, *args, **kwargs):
         super(PseudoVoigtModel, self).__init__(pvoigt, *args, **kwargs)
         self.set_param_hint('fraction', value=0.5)
+        self.set_param_hint('fwhm',  expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
