@@ -256,12 +256,9 @@ class Minimizer(object):
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
         if callable(self.iter_cb):
-            try:
-                abort = self.iter_cb(params, self.result.nfev, out,
-                                     *self.userargs, **self.userkws)
-            except:
-                abort = True
-        self._abort = self._abort or abort
+            abort = self.iter_cb(params, self.result.nfev, out,
+                                 *self.userargs, **self.userkws)
+            self._abort = self._abort or abort
         if not self._abort:
             return np.asarray(out).ravel()
 
