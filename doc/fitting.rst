@@ -38,7 +38,7 @@ details on writing the objective.
    :type  method:  string (default ``leastsq``)
    :param scale_covar:  whether to automatically scale covariance matrix (``leastsq`` only)
    :type  scale_covar:  bool (default ``True``)
-   :param iter_cb:  function to be called at each fit iteration
+   :param iter_cb:  function to be called at each fit iteration. See :ref:`fit-itercb-label` for details.
    :type  iter_cb:  callable or ``None``
    :param fit_kws:  dictionary to pass to :func:`scipy.optimize.leastsq` or :func:`scipy.optimize.minimize`.
    :type  fit_kws:  dict
@@ -51,11 +51,6 @@ details on writing the objective.
    contained in the returned :class:`MinimizerResult`.  See
    :ref:`fit-results-label` for further details.
 
-   If provided, the ``iter_cb`` function should take arguments of ``params,
-   iter, resid, *args, **kws``, where ``params`` will have the current
-   parameter values, ``iter`` the iteration, ``resid`` the current residual
-   array, and ``*args`` and ``**kws`` as passed to the objective function.
-
    For clarity, it should be emphasized that this function is simply a
    wrapper around :class:`Minimizer` that runs a single fit, implemented as::
 
@@ -65,7 +60,6 @@ details on writing the objective.
 
 
 ..  _fit-func-label:
-
 
 
 Writing a Fitting Function
@@ -418,6 +412,40 @@ Akaike information criterion, and/or Bayesian information criterion.
 Generally, the Bayesian information criterion is considered themost
 conservative of these statistics.
 
+..  _fit-itercb-label:
+
+
+Using a Iteration Callback Function
+====================================
+
+An iteration callback function is a function to be called at each
+iteration, just after the objective function is called.  The iteration
+callback allows user-supplied code to be run at each iteration, and can be
+used to abort a fit.
+
+.. function:: iter_cb(params, iter, resid, *args, **kws):
+
+   user-supplied function to be run at each iteration
+
+   :param params: parameters.
+   :type  params: :class:`Parameters`.
+   :param iter:   iteration number
+   :type  iter:   integer
+   :param resid:  residual array.
+   :type  resid:  ndarray
+   :param args:  positional arguments.  Must match ``args`` argument to :func:`minimize`
+   :param kws:   keyword arguments.  Must match ``kws`` argument to :func:`minimize`
+   :return:      residual array (generally data-model) to be minimized in the least-squares sense.
+   :rtype:    ``None`` for normal behavior, any value like ``True`` to abort fit.
+
+
+Normally, the iteration callback would have no return value or return
+``None``.  To abort a fit, have this function return a value that is
+``True`` (including any non-zero integer).  The fit will also abort if any
+exception is raised in the iteration callback. When a fit is aborted this
+way, the parameters will have the values from the last iteration.  The fit
+statistics are not likely to be meaningful, and uncertainties will not be computed.
+
 
 .. module:: Minimizer
 
@@ -443,7 +471,7 @@ For full control of the fitting process, you'll want to create a
    :type  fcn_args: tuple
    :param fcn_kws:  dictionary to pass to the residual function as keyword arguments.
    :type  fcn_kws:  dict
-   :param iter_cb:  function to be called at each fit iteration
+   :param iter_cb:  function to be called at each fit iteration.  See :ref:`fit-itercb-label` for details.
    :type  iter_cb:  callable or ``None``
    :param scale_covar:  flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
    :type  scale_cover:  bool (default ``True``).

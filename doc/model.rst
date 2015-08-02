@@ -257,7 +257,7 @@ specifying one or more independent variables.
    :type  method:  string (default ``leastsq``)
    :param scale_covar:  whether to automatically scale covariance matrix (``leastsq`` only)
    :type  scale_covar:  bool (default ``True``)
-   :param iter_cb:  function to be called at each fit iteration
+   :param iter_cb:  function to be called at each fit iteration. See :ref:`fit-itercb-label` for details.
    :type  iter_cb:  callable or ``None``
    :param verbose:  print a message when a new parameter is created due to a *hint*
    :type  verbose:  bool (default ``True``)
@@ -865,7 +865,7 @@ These methods are all inherited from :class:`Minimize` or from
    must take take arguments of ``params, iter, resid, *args, **kws``, where
    ``params`` will have the current parameter values, ``iter`` the
    iteration, ``resid`` the current residual array, and ``*args`` and
-   ``**kws`` as passed to the objective function.
+   ``**kws`` as passed to the objective function.  See :ref:`fit-itercb-label`.
 
 .. attribute:: jacfcn
 
