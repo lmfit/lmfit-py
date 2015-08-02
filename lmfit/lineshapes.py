@@ -45,10 +45,18 @@ def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
 def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
     """1 dimensional pseudo-voigt:
     pvoigt(x, amplitude, center, sigma, fraction)
-       = amplitude*(1-fraction)*gaussion(x, center,sigma) +
+       = amplitude*(1-fraction)*gaussion(x, center, sigma_g) +
          amplitude*fraction*lorentzian(x, center, sigma)
+
+    where sigma_g (the sigma for the Gaussian component) is
+
+        sigma_g = sigma / sqrt(2*log(2)) ~= sigma / 1.17741
+
+    so that the Gaussian and Lorentzian components have the
+    same FWHM of 2*sigma.
     """
-    return ((1-fraction)*gaussian(x, amplitude, center, sigma) +
+    sigma_g = sigma / sqrt(2*log2)
+    return ((1-fraction)*gaussian(x, amplitude, center, sigma_g) +
                fraction*lorentzian(x, amplitude, center, sigma))
 
 def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):

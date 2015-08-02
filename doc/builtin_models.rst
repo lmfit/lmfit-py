@@ -65,8 +65,8 @@ parameter ``fwhm`` is included.
   f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}
 
 where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
-:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
-Half-Maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
+:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
+half maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
 :math:`2.3548\sigma`
 
 
@@ -85,8 +85,8 @@ parameter ``fwhm`` is included.
   f(x; A, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
 
 where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
-:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
-Half-Maximum is :math:`2\sigma`.
+:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
+half maximum is :math:`2\sigma`.
 
 
 :class:`VoigtModel`
@@ -132,18 +132,20 @@ the full width at half maximum is approximately :math:`3.6013\sigma`.
 a model based on a `pseudo-Voigt distribution function
 <http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation>`_,
 which is a weighted sum of a Gaussian and Lorentzian distribution functions
-with the same values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
-and ``sigma`` (:math:`\sigma`), and a parameter ``fraction`` (:math:`\alpha`)
-in
+with that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
+and full width at half maximum (and so have  constrained values of
+``sigma`` (:math:`\sigma`).  A parameter ``fraction`` (:math:`\alpha`)
+controls the relative weight of the Gaussian and Lorentzian components,
+giving the full definition of
 
 .. math::
 
-  f(x; A, \mu, \sigma, \alpha) = (1-\alpha)\frac{A}{\pi}
-  \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big] + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
+  f(x; A, \mu, \sigma, \alpha) = \frac{(1-\alpha)A}{\sigma_g\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma_g}^2}}]}
+ + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
 
-
-The :meth:`guess` function always gives a starting
-value for ``fraction`` of 0.5
+where :math:`\sigma_g = {\sigma}/{\sqrt{2\ln{2}}}` so that the full width
+at half maximum of each component and of the sum is :math:`2\sigma`. The
+:meth:`guess` function always sets the starting value for ``fraction`` at 0.5.
 
 :class:`Pearson7Model`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
