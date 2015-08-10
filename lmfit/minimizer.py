@@ -214,6 +214,7 @@ class Minimizer(object):
         self.nfree = 0
         self.ndata = 0
         self.ier = 0
+        self._abort = False
         self.success = True
         self.errorbars = False
         self.message = None
@@ -246,6 +247,8 @@ class Minimizer(object):
         calculate the residual.
         """
         # set parameter values
+        if self._abort:
+            return None
         params = self.result.params
         for name, val in zip(self.result.var_names, fvars):
             params[name].value = params[name].from_internal(val)
@@ -253,9 +256,11 @@ class Minimizer(object):
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
         if callable(self.iter_cb):
-            self.iter_cb(params, self.result.nfev, out,
-                         *self.userargs, **self.userkws)
-        return np.asarray(out).ravel()
+            abort = self.iter_cb(params, self.result.nfev, out,
+                                 *self.userargs, **self.userkws)
+            self._abort = self._abort or abort
+        if not self._abort:
+            return np.asarray(out).ravel()
 
     def __jacobian(self, fvars):
         """
@@ -332,7 +337,7 @@ class Minimizer(object):
         result.params.update_constraints()
         result.nfev = 0
         result.errorbars = False
-
+        result.aborted = False
         for name, par in self.result.params.items():
             par.stderr = None
             par.correl = None
@@ -472,6 +477,9 @@ class Minimizer(object):
         else:
             ret = scipy_minimize(self.penalty, vars, **fmin_kws)
 
+        result.aborted = self._abort
+        self._abort = False
+
         for attr in dir(ret):
             if not attr.startswith('_'):
                 setattr(result, attr, getattr(ret, attr))
@@ -537,14 +545,18 @@ class Minimizer(object):
 
         lsout = scipy_leastsq(self.__residual, vars, **lskws)
         _best, _cov, infodict, errmsg, ier = lsout
+        result.aborted = self._abort
+        self._abort = False
 
         result.residual = resid = infodict['fvec']
         result.ier = ier
         result.lmdif_message = errmsg
         result.message = 'Fit succeeded.'
         result.success = ier in [1, 2, 3, 4]
-
-        if ier == 0:
+        if result.aborted:
+            result.message = 'Fit aborted by user callback.'
+            result.success = False
+        elif ier == 0:
             result.message = 'Invalid Input Parameters.'
         elif ier == 5:
             result.message = self.err_maxfev % lskws['maxfev']
@@ -596,8 +608,9 @@ class Minimizer(object):
             has_expr = has_expr or par.expr is not None
 
         # self.errorbars = error bars were successfully estimated
-        result.errorbars = result.covar is not None
-
+        result.errorbars = (result.covar is not None)
+        if result.aborted:
+            result.errorbars = False
         if result.errorbars:
             if self.scale_covar:
                 result.covar *= result.redchi
