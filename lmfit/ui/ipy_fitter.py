@@ -13,6 +13,7 @@ from IPython.display import display, clear_output
 # Widgets were only experimental in IPython 2.x, but this does work there.
 # Handle the change in naming from 2.x to 3.x.
 IPY2 = IPython.release.version_info[0] == 2
+IPY3 = IPython.release.version_info[0] == 3
 if IPY2:
     from IPython.html.widgets import DropdownWidget as Dropdown
     from IPython.html.widgets import ButtonWidget as Button
@@ -23,13 +24,20 @@ if IPY2:
         def __init__(*args, **kwargs):
             self.add_class('hbox')
             super(self, HBox).__init__(*args, **kwargs)
-else:
+elif IPY3:
     # as of IPython 3.x:
     from IPython.html.widgets import Dropdown
     from IPython.html.widgets import Button
     from IPython.html.widgets import HBox
     from IPython.html.widgets import FloatText
     from IPython.html.widgets import Checkbox
+else:
+    # as of IPython 4.x+:
+    from ipywidgets import Dropdown
+    from ipywidgets import Button
+    from ipywidgets import Box
+    from ipywidgets import FloatText
+    from ipywidgets import Checkbox
 
 
 class ParameterWidgetGroup(object):
