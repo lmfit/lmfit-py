@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
-from lmfit.minimizer import SCALAR_METHODS
+from lmfit.minimizer import SCALAR_METHODS, HAS_EMCEE, MinimizerResult
 from lmfit.lineshapes import gaussian
 import numpy as np
 from numpy import pi
-from numpy.testing import assert_
+from numpy.testing import assert_, decorators
 import unittest
 import nose
 from nose import SkipTest
+
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
@@ -20,9 +21,9 @@ def check_wo_stderr(para, real_val, sig=0.1):
     print (para.name, para.value, real_val)
     assert(err < sig)
 
-def check_paras(para_fit, para_real):
+def check_paras(para_fit, para_real, sig=3):
     for i in para_fit:
-        check(para_fit[i], para_real[i].value)
+        check(para_fit[i], para_real[i].value, sig=sig)
 
 def test_simple():
     # create data to be fitted
@@ -393,6 +394,62 @@ class CommonMinimizerTest(unittest.TestCase):
         for para, true_para in zip(out.params.values(),
                                    self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=sig)
+
+    # @decorators.slow
+    # def test_emcee(self):
+    #     # test emcee
+    #     if not HAS_EMCEE:
+    #         return True
+    #
+    #     np.random.seed(123456)
+    #     out, chains = self.mini.emcee(nwalkers=100, steps=500,
+    #                                   burn=200, thin=20)
+    #
+    #     check_paras(out.params, self.p_true, sig=3)
+
+    @decorators.slow
+    def test_emcee_PT(self):
+        # test emcee with parallel tempering
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        out, chains = self.mini.emcee(ntemps=4, nwalkers=100, steps=500,
+                                      burn=300, thin=10)
+
+        check_paras(out.params, self.p_true, sig=3)
+
+    # @decorators.slow
+    # def test_emcee_partial_bounds(self):
+    #     # test mcmc with partial bounds
+    #     if not HAS_EMCEE:
+    #         return True
+    #
+    #     np.random.seed(123456)
+    #     # test mcmc output vs lm, some parameters not bounded
+    #     self.fit_params['amp'].max = None
+    #     # self.fit_params['amp'].min = None
+    #     out, chains = self.mini.emcee(nwalkers=150, steps=600,
+    #                                   burn=300, thin=10)
+    #
+    #     check_paras(out.params, self.p_true, sig=5)
+
+    def test_emcee_output(self):
+        # test mcmc output
+        if not HAS_EMCEE:
+            return True
+        try:
+            from pandas import DataFrame
+        except ImportError:
+            return True
+
+        out, chain = self.mini.emcee(nwalkers=10, steps=10)
+        assert_(isinstance(out, MinimizerResult))
+        assert_(isinstance(chain, DataFrame))
+        # check that we can access the chains via parameter name
+        assert_(chain['amp'].shape[0] == 100)
+        assert_(out.errorbars == True)
+        assert_(np.isfinite(out.params['amp'].correl['period']))
 
 
 if __name__ == '__main__':

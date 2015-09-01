@@ -25,6 +25,14 @@ try:
     from scipy.optimize import differential_evolution as scipy_diffev
 except ImportError:
     from ._differentialevolution import differential_evolution as scipy_diffev
+# check for EMCEE
+HAS_EMCEE = False
+try:
+    import emcee as emcee
+    from pandas import DataFrame
+    HAS_EMCEE = True
+except ImportError:
+    pass
 
 # check for scipy.optimize.minimize
 HAS_SCALAR_MIN = False
@@ -497,6 +505,124 @@ class Minimizer(object):
         result.bic = _log_likelihood + np.log(result.ndata) * result.nvarys
 
         return result
+
+    def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
+              ntemps=1):
+        """
+        Bayesian sampling of the posterior distribution for the parameters
+        using the `emcee` Markov Chain Monte Carlo package.
+        The method assumes that the prior is Uniform.
+        You need to have `emcee` and `pandas` installed to use this method.
+
+        Parameters
+        ----------
+        steps : int, optional
+            How many samples you would like to draw from the posterior
+            distribution?
+        burn : int, optional
+            Discard this many samples from the start of the sampling regime.
+        thin : int, optional
+            Only accept 1 in every `thin` samples.
+        ntemps : int, optional
+            If `ntemps > 1` perform a Parallel Tempering.
+
+        Returns
+        -------
+        result, chain : MinimizerResult, pandas.DataFrame
+            MinimizerResult object contains updated params, fit statistics, etc.
+            The `chain` contains the samples. Has shape (steps, ndims). Access
+            chain values for a particular parameter using chain[parname].
+        """
+        if not HAS_EMCEE:
+            raise NotImplementedError('You must have emcee to use the emcee '
+                                      'method')
+
+        result = self.prepare_fit(params=params)
+        vars   = result.init_vals
+        params = result.params
+
+        # Removing internal parameter scaling. We could possibly keep it,
+        # but I don't know how this affects the emcee sampling.
+        bounds_varying = []
+        for i, par in enumerate(params):
+            param = params[par]
+            vars[i] = param.from_internal(param.value)
+            param.from_internal = lambda val: val
+            lb, ub = param.min, param.max
+            if lb is None or lb is np.nan:
+                lb = -np.inf
+            if ub is None or ub is np.nan:
+                ub = np.inf
+            bounds_varying.append((lb, ub))
+
+        bounds_varying = np.array(bounds_varying)
+
+        self.nvarys = len(result.var_names)
+
+        def lnlike(theta):
+            # log likelihood
+            return -0.5 * self.penalty(theta)
+
+        def lnprior(theta):
+            # stay within the prior specified by the parameter bounds
+            if (np.any(theta > bounds_varying[:, 1])
+                    or np.any(theta < bounds_varying[:, 0])):
+                return -np.inf
+            return 0
+
+        def lnprob(theta):
+            lp = lnprior(theta)
+            if not np.isfinite(lp):
+                return -np.inf
+            return lp + lnlike(theta)
+
+        if ntemps > 1:
+            # jitter the starting position by scaled Gaussian noise (1% level)
+            p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-2
+            sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys, lnlike,
+                                      lnprior)
+        else:
+            p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-2
+            sampler = emcee.EnsembleSampler(nwalkers, self.nvarys, lnprob)
+
+        # burn in the sampler
+        p0 *= vars
+        for output in sampler.sample(p0, iterations=burn):
+            p0 = output[0]
+        sampler.reset()
+
+        # now do a production run
+        for output in sampler.sample(p0, iterations=steps - burn, thin=thin):
+            pass
+
+        flat_chain = DataFrame(sampler.flatchain.reshape((-1, self.nvarys)),
+                               columns=result.var_names)
+
+        mean = np.mean(flat_chain, axis=0)
+        quantiles = np.percentile(flat_chain, [15.8, 84.2], axis=0)
+
+        for i, var_name in enumerate(result.var_names):
+            std_l, std_u = quantiles[:, i]
+            params[var_name].value = mean[i]
+            params[var_name].stderr = std_u - std_l
+            params[var_name].correl = {}
+
+        # work out correlation coefficients
+        corrcoefs = np.corrcoef(flat_chain.T)
+
+        for i, var_name in enumerate(result.var_names):
+            for j, var_name2 in enumerate(result.var_names):
+                if i != j:
+                    result.params[var_name].correl[var_name2] = corrcoefs[i, j]
+
+        result.errorbars = True
+        result.ndata = 1
+        result.nfree = 1
+        result.chisqr = self.penalty(mean)
+        result.redchi = result.chisqr / (result.ndata - result.nvarys)
+        self.unprepare_fit()
+
+        return result, flat_chain
 
     def leastsq(self, params=None, **kws):
         """
