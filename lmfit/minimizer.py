@@ -518,7 +518,14 @@ class Minimizer(object):
         ----------
         steps : int, optional
             How many samples you would like to draw from the posterior
-            distribution?
+            distribution for each of the walkers?
+        nwalkers : int, optional
+            Should be set so :math:`nwalkers >> nvarys`, where `nvarys` are
+            the number of parameters being varied during the fit.
+            "Walkers are the members of the ensemble. They are almost like
+            separate Metropolis-Hastings chains but, of course, the proposal
+            distribution for a given walker depends on the positions of all
+            the other walkers in the ensemble." - from the `emcee` webpage.
         burn : int, optional
             Discard this many samples from the start of the sampling regime.
         thin : int, optional
@@ -528,14 +535,44 @@ class Minimizer(object):
 
         Returns
         -------
-        result, chain : MinimizerResult, pandas.DataFrame
-            MinimizerResult object contains updated params, fit statistics, etc.
-            The `chain` contains the samples. Has shape (steps, ndims). Access
-            chain values for a particular parameter using chain[parname].
+        result : MinimizerResult
+            MinimizerResult object containing updated params, fit statistics,
+            etc. The `MinimizerResult` also contains a ``chain`` attribute,
+            which contains the samples from the sampling. The ``chain``
+            attribute is a `pandas.DataFrame` instance with shape
+            (steps, ndims). Access chain values for a particular parameter
+            using `result.chain[parname]`. The samples for a given parameter
+            are not contained in any of the `Parameter` instances in
+            `result.params`.
+
+        Notes
+        -----
+        This method samples the posterior distribution of the parameters using
+        Markov Chain Monte Carlo.  To do so it needs to calculate a
+        log-likelihood function, [1]_:
+
+        ..math::
+
+        -\frac{1}{2}\sum_n \left[\frac{(y_{obs}-y_{calc})^2}{s_n^2}+\ln (2\pi s_n^2)\right]
+
+        The first summand in the square brackets represents the residual for a
+        given datapoint. If your objective function, `fcn`, returns a vector,
+        `res`, then the vector is assumed to contain the residuals. The
+        log-likelihood is then calculated as: `-0.5 * np.sum(res **2)`.
+        However, this ignores the second summand in the square brackets.
+        Consequently, in order to calculate a fully correct log-likelihood
+        value your objective function can return a single value. This single
+        value represents the sum of the square brackets over all the points.
+        The log-likelihood calculation is then calculated as `-0.5 * res`.
+
+        References
+        ----------
+        .. [1] http://dan.iel.fm/emcee/current/user/line/
+
         """
         if not HAS_EMCEE:
-            raise NotImplementedError('You must have emcee to use the emcee '
-                                      'method')
+            raise NotImplementedError('You must have emcee and pandas to use'
+                                      ' the emcee method')
 
         result = self.prepare_fit(params=params)
         vars   = result.init_vals
@@ -561,7 +598,17 @@ class Minimizer(object):
 
         def lnlike(theta):
             # log likelihood
-            return -0.5 * self.penalty(theta)
+            r = self.__residual(theta)
+
+            if isinstance(r, ndarray):
+                # objective function returns a vector of residuals
+                r = (r*r).sum()
+            else:
+                # objective function returns a single value. Assume that it's
+                # the likelihood summed over all the points.
+                pass
+
+            return -0.5 * r
 
         def lnprior(theta):
             # stay within the prior specified by the parameter bounds
@@ -579,14 +626,15 @@ class Minimizer(object):
         if ntemps > 1:
             # jitter the starting position by scaled Gaussian noise (1% level)
             p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-2
+            p0 *= vars
             sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys, lnlike,
                                       lnprior)
         else:
             p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-2
+            p0 *= vars
             sampler = emcee.EnsembleSampler(nwalkers, self.nvarys, lnprob)
 
         # burn in the sampler
-        p0 *= vars
         for output in sampler.sample(p0, iterations=burn):
             p0 = output[0]
         sampler.reset()
@@ -604,7 +652,7 @@ class Minimizer(object):
         for i, var_name in enumerate(result.var_names):
             std_l, std_u = quantiles[:, i]
             params[var_name].value = mean[i]
-            params[var_name].stderr = std_u - std_l
+            params[var_name].stderr = 0.5 * (std_u - std_l)
             params[var_name].correl = {}
 
         # work out correlation coefficients
@@ -615,14 +663,30 @@ class Minimizer(object):
                 if i != j:
                     result.params[var_name].correl[var_name2] = corrcoefs[i, j]
 
+        result.chain = flat_chain
         result.errorbars = True
+        r = self.__residual(theta)
+        if isinstance(r, ndarray):
+            # objective function returns a vector of residuals
+            r = (r*r).sum()
+        else:
+            # objective function returns a scalar. Assume that it's the
+            # likelihood summed over all the points.
+            pass
+
+        result.chisqr = result.residual = self.__residual(mean)
+        result.nvarys = len(vars)
         result.ndata = 1
         result.nfree = 1
-        result.chisqr = self.penalty(mean)
-        result.redchi = result.chisqr / (result.ndata - result.nvarys)
+        if isinstance(result.residual, ndarray):
+            result.chisqr = (result.chisqr**2).sum()
+            result.ndata = len(result.residual)
+            result.nfree = result.ndata - result.nvarys
+        result.redchi = result.chisqr / result.nfree
+
         self.unprepare_fit()
 
-        return result, flat_chain
+        return result
 
     def leastsq(self, params=None, **kws):
         """
