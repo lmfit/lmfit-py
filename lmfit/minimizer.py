@@ -665,14 +665,6 @@ class Minimizer(object):
 
         result.chain = flat_chain
         result.errorbars = True
-        r = self.__residual(theta)
-        if isinstance(r, ndarray):
-            # objective function returns a vector of residuals
-            r = (r*r).sum()
-        else:
-            # objective function returns a scalar. Assume that it's the
-            # likelihood summed over all the points.
-            pass
 
         result.chisqr = result.residual = self.__residual(mean)
         result.nvarys = len(vars)
