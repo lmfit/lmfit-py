@@ -575,7 +575,7 @@ class Minimizer(object):
                                       ' the emcee method')
 
         result = self.prepare_fit(params=params)
-        vars   = result.init_vals
+        vars = result.init_vals
         params = result.params
 
         # Removing internal parameter scaling. We could possibly keep it,
@@ -583,7 +583,7 @@ class Minimizer(object):
         bounds_varying = []
         for i, par in enumerate(params):
             param = params[par]
-            vars[i] = param.from_internal(param.value)
+            vars[i] = param.value
             param.from_internal = lambda val: val
             lb, ub = param.min, param.max
             if lb is None or lb is np.nan:
@@ -591,7 +591,6 @@ class Minimizer(object):
             if ub is None or ub is np.nan:
                 ub = np.inf
             bounds_varying.append((lb, ub))
-
         bounds_varying = np.array(bounds_varying)
 
         self.nvarys = len(result.var_names)
@@ -625,12 +624,12 @@ class Minimizer(object):
 
         if ntemps > 1:
             # jitter the starting position by scaled Gaussian noise (1% level)
-            p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-2
+            p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-4
             p0 *= vars
             sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys, lnlike,
                                       lnprior)
         else:
-            p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-2
+            p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-4
             p0 *= vars
             sampler = emcee.EnsembleSampler(nwalkers, self.nvarys, lnprob)
 
