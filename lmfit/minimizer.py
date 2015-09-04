@@ -25,12 +25,20 @@ try:
     from scipy.optimize import differential_evolution as scipy_diffev
 except ImportError:
     from ._differentialevolution import differential_evolution as scipy_diffev
+
 # check for EMCEE
 HAS_EMCEE = False
 try:
     import emcee as emcee
-    from pandas import DataFrame
     HAS_EMCEE = True
+except ImportError:
+    pass
+
+#check for pandas
+HAS_PANDAS = False
+try:
+    import pandas as pd
+    HAS_PANDAS = True
 except ImportError:
     pass
 
@@ -150,6 +158,21 @@ class MinimizerResult(object):
     def __init__(self, **kws):
         for key, val in kws.items():
             setattr(self, key, val)
+
+    @property
+    def flatchain(self):
+        """
+        A flatchain view of the sampling chain from the `emcee` method.
+        """
+        if hasattr(self, 'chain'):
+            if HAS_PANDAS:
+                return pd.DataFrame(self.chain.reshape((-1, self.nvarys)),
+                                    columns=self.var_names)
+            else:
+                raise NotImplementedError('Please install Pandas to see the '
+                                          'flattened chain')
+        else:
+            return None
 
 
 class Minimizer(object):
@@ -537,13 +560,17 @@ class Minimizer(object):
         -------
         result : MinimizerResult
             MinimizerResult object containing updated params, fit statistics,
-            etc. The `MinimizerResult` also contains a ``chain`` attribute,
-            which contains the samples from the sampling. The ``chain``
-            attribute is a `pandas.DataFrame` instance with shape
-            (steps, ndims). Access chain values for a particular parameter
-            using `result.chain[parname]`. The samples for a given parameter
-            are not contained in any of the `Parameter` instances in
-            `result.params`.
+            etc. The `MinimizerResult` also contains the ``chain`` and
+            ``flatchain`` attributes, which are the samples. The ``chain``
+            attribute either has the shape
+            `(nwalkers, (steps - burn) // thin, nvarys)` or
+            `(ntemps, nwalkers, (steps - burn) // thin, nvarys)`,
+            depending on whether Parallel tempering was used or not.
+            `nvarys` is the number of parameters that are allowed to vary.
+            The ``flatchain`` attribute is a `pandas.DataFrame` of the
+            flattened chain, `chain.reshape(-1, nvarys)`. To access flattened
+            chain values for a particular parameter use
+            `result.flatchain[parname]`.
 
         Notes
         -----
@@ -571,7 +598,7 @@ class Minimizer(object):
 
         """
         if not HAS_EMCEE:
-            raise NotImplementedError('You must have emcee and pandas to use'
+            raise NotImplementedError('You must have emcee to use'
                                       ' the emcee method')
 
         result = self.prepare_fit(params=params)
@@ -633,20 +660,16 @@ class Minimizer(object):
             p0 *= vars
             sampler = emcee.EnsembleSampler(nwalkers, self.nvarys, lnprob)
 
-        # burn in the sampler
-        for output in sampler.sample(p0, iterations=burn):
-            p0 = output[0]
-        sampler.reset()
+        # now do a production run, sampling all the time
+        output = sampler.run_mcmc(p0, steps)
 
-        # now do a production run
-        for output in sampler.sample(p0, iterations=steps - burn, thin=thin):
-            pass
+        # discard the burn samples and thin
+        chain = sampler.chain[..., burn::thin, :]
 
-        flat_chain = DataFrame(sampler.flatchain.reshape((-1, self.nvarys)),
-                               columns=result.var_names)
+        flatchain = chain.reshape((-1, self.nvarys))
 
-        mean = np.mean(flat_chain, axis=0)
-        quantiles = np.percentile(flat_chain, [15.8, 84.2], axis=0)
+        mean = np.mean(flatchain, axis=0)
+        quantiles = np.percentile(flatchain, [15.8, 84.2], axis=0)
 
         for i, var_name in enumerate(result.var_names):
             std_l, std_u = quantiles[:, i]
@@ -655,14 +678,14 @@ class Minimizer(object):
             params[var_name].correl = {}
 
         # work out correlation coefficients
-        corrcoefs = np.corrcoef(flat_chain.T)
+        corrcoefs = np.corrcoef(flatchain.T)
 
         for i, var_name in enumerate(result.var_names):
             for j, var_name2 in enumerate(result.var_names):
                 if i != j:
                     result.params[var_name].correl[var_name2] = corrcoefs[i, j]
 
-        result.chain = flat_chain
+        result.chain = chain
         result.errorbars = True
 
         result.chisqr = result.residual = self.__residual(mean)

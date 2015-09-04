@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
-from lmfit.minimizer import SCALAR_METHODS, HAS_EMCEE, MinimizerResult
+from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE, HAS_PANDAS,
+                             MinimizerResult)
 from lmfit.lineshapes import gaussian
 import numpy as np
 from numpy import pi
@@ -402,8 +403,8 @@ class CommonMinimizerTest(unittest.TestCase):
             return True
 
         np.random.seed(123456)
-        out = self.mini.emcee(nwalkers=100, steps=500,
-                                      burn=200, thin=20)
+        out = self.mini.emcee(nwalkers=100, steps=200,
+                                      burn=50, thin=10)
 
         check_paras(out.params, self.p_true, sig=3)
 
@@ -414,8 +415,8 @@ class CommonMinimizerTest(unittest.TestCase):
             return True
 
         np.random.seed(123456)
-        out = self.mini.emcee(ntemps=4, nwalkers=100, steps=500,
-                                      burn=300, thin=10)
+        out = self.mini.emcee(ntemps=4, nwalkers=100, steps=100,
+                              burn=50, thin=10)
 
         check_paras(out.params, self.p_true, sig=3)
 
@@ -429,8 +430,8 @@ class CommonMinimizerTest(unittest.TestCase):
         # test mcmc output vs lm, some parameters not bounded
         self.fit_params['amp'].max = None
         # self.fit_params['amp'].min = None
-        out = self.mini.emcee(nwalkers=150, steps=600,
-                                      burn=300, thin=10)
+        out = self.mini.emcee(nwalkers=100, steps=200,
+                                      burn=50, thin=10)
 
         check_paras(out.params, self.p_true, sig=5)
 
@@ -445,9 +446,9 @@ class CommonMinimizerTest(unittest.TestCase):
 
         out = self.mini.emcee(nwalkers=10, steps=10)
         assert_(isinstance(out, MinimizerResult))
-        assert_(isinstance(out.chain, DataFrame))
+        assert_(isinstance(out.flatchain, DataFrame))
         # check that we can access the chains via parameter name
-        assert_(out.chain['amp'].shape[0] == 100)
+        assert_(out.flatchain['amp'].shape[0] == 100)
         assert_(out.errorbars == True)
         assert_(np.isfinite(out.params['amp'].correl['period']))
 
