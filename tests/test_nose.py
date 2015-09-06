@@ -444,13 +444,32 @@ class CommonMinimizerTest(unittest.TestCase):
         except ImportError:
             return True
 
-        out = self.mini.emcee(nwalkers=10, steps=10)
+        out = self.mini.emcee(nwalkers=10, steps=20, burn=5, thin=2)
         assert_(isinstance(out, MinimizerResult))
         assert_(isinstance(out.flatchain, DataFrame))
         # check that we can access the chains via parameter name
-        assert_(out.flatchain['amp'].shape[0] == 100)
+        assert_(out.flatchain['amp'].shape[0] == 80)
         assert_(out.errorbars == True)
         assert_(np.isfinite(out.params['amp'].correl['period']))
+        # the lnprob array should be the same as the chain size
+        assert_(np.size(out.chain)//4 == np.size(out.lnprob))
+
+    @decorators.slow
+    def test_emcee_float(self):
+        # test that is works if the residuals returns a float, not a vector
+        if not HAS_EMCEE:
+            return True
+
+        def resid(pars, x, data=None):
+            return -0.5 * np.sum(self.residual(pars, x, data=data)**2)
+
+        self.mini.userfcn = resid
+
+        np.random.seed(123456)
+        out = self.mini.emcee(nwalkers=100, steps=200,
+                                      burn=50, thin=10)
+
+        check_paras(out.params, self.p_true, sig=3)
 
 
 if __name__ == '__main__':

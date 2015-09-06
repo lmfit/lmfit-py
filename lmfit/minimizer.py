@@ -535,7 +535,7 @@ class Minimizer(object):
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package.
         The method assumes that the prior is Uniform.
-        You need to have `emcee` and `pandas` installed to use this method.
+        You need to have `emcee` installed to use this method.
 
         Parameters
         ----------
@@ -559,10 +559,10 @@ class Minimizer(object):
         Returns
         -------
         result : MinimizerResult
-            MinimizerResult object containing updated params, fit statistics,
-            etc. The `MinimizerResult` also contains the ``chain`` and
-            ``flatchain`` attributes, which are the samples. The ``chain``
-            attribute either has the shape
+            MinimizerResult object containing updated params, statistics,
+            etc. The `MinimizerResult` also contains the ``chain``,
+            ``flatchain`` and ``lnprob`` attributes. The ``chain`` and
+            ``flatchain`` attributes contain the samples and have the shape
             `(nwalkers, (steps - burn) // thin, nvarys)` or
             `(ntemps, nwalkers, (steps - burn) // thin, nvarys)`,
             depending on whether Parallel tempering was used or not.
@@ -570,27 +570,53 @@ class Minimizer(object):
             The ``flatchain`` attribute is a `pandas.DataFrame` of the
             flattened chain, `chain.reshape(-1, nvarys)`. To access flattened
             chain values for a particular parameter use
-            `result.flatchain[parname]`.
+            `result.flatchain[parname]`. The ``lnprob`` attribute contains the
+            log probability for each sample in ``chain``. The sample with the
+            highest probability corresponds to the maximum likelihood estimate.
 
         Notes
         -----
         This method samples the posterior distribution of the parameters using
-        Markov Chain Monte Carlo.  To do so it needs to calculate a
-        log-likelihood function, [1]_:
+        Markov Chain Monte Carlo.  To do so it needs to calculate the
+        log-posterior probability of the model parameters, `F`, given the data,
+        `D`, :math:`\ln p(F_{true} | D)`. This 'posterior probability' is
+        calculated as:
 
         ..math::
 
-        -\frac{1}{2}\sum_n \left[\frac{(y_{obs}-y_{calc})^2}{s_n^2}+\ln (2\pi s_n^2)\right]
+        \ln p(F_{true} | D) \propto \ln p(D | F_{true}) + \ln p(F_{true})
+
+        where :math:`\ln p(D | F_{true})` is the 'log-likelihood' and
+        :math:`\ln p(F_{true}` is the 'log-prior'. The default log-prior
+        encodes prior information already known about the model. This method
+        assumes that the log-prior probability is `-np.inf` (impossible) if the
+        one of the parameters is outside its limits. The log-prior probability
+        term is zero if all the parameters are inside their bounds (known as a
+        uniform prior). The log-likelihood function is given by [1]_:
+
+        ..math::
+
+        \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{(\text{model} - D_n)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
 
         The first summand in the square brackets represents the residual for a
-        given datapoint. If your objective function, `fcn`, returns a vector,
-        `res`, then the vector is assumed to contain the residuals. The
-        log-likelihood is then calculated as: `-0.5 * np.sum(res **2)`.
-        However, this ignores the second summand in the square brackets.
-        Consequently, in order to calculate a fully correct log-likelihood
-        value your objective function can return a single value. This single
-        value represents the sum of the square brackets over all the points.
-        The log-likelihood calculation is then calculated as `-0.5 * res`.
+        given datapoint. This term represents :math:`\chi^2` when summed over
+        all datapoints.
+        The objective function used to create `lmfit.Minimizer` should return
+        :math:`\ln p(F_{true}`. However, since the in-built log-prior term is
+        zero, the objective function can just return the log-likelihood (unless
+        you wish to create a non-uniform prior).
+        The default behaviour of lmfit for all the other minimizers is to
+        return a vector of residuals. Therefore, if your objective function,
+        `fcn`, returns a vector, `res`, then the vector is assumed to contain
+        the residuals. The log-likelihood (and log-posterior probability) is
+        then calculated as: `-0.5 * np.sum(res **2)`. However, this ignores the
+        second summand in the square brackets. Consequently, in order to
+        calculate a fully correct log-posterior probability value your
+        objective function should return a single value.
+        Marginalisation over a nuisance parameter (such as incorrectly
+        estimated data uncertainties, `s_n`) can be achieved by including such
+        parameters in a `Parameters` instance and suitable inclusion in the
+        objective function.
 
         References
         ----------
@@ -626,15 +652,15 @@ class Minimizer(object):
             # log likelihood
             r = self.__residual(theta)
 
-            if isinstance(r, ndarray):
+            if isinstance(r, np.ndarray) and np.size(r) > 1:
                 # objective function returns a vector of residuals
-                r = (r*r).sum()
+                r = -0.5 * (r*r).sum()
             else:
                 # objective function returns a single value. Assume that it's
-                # the likelihood summed over all the points.
+                # the true log-posterior probability.
                 pass
 
-            return -0.5 * r
+            return r
 
         def lnprior(theta):
             # stay within the prior specified by the parameter bounds
@@ -665,6 +691,7 @@ class Minimizer(object):
 
         # discard the burn samples and thin
         chain = sampler.chain[..., burn::thin, :]
+        lnprobability = sampler.lnprobability[:, burn::thin]
 
         flatchain = chain.reshape((-1, self.nvarys))
 
@@ -686,17 +713,9 @@ class Minimizer(object):
                     result.params[var_name].correl[var_name2] = corrcoefs[i, j]
 
         result.chain = chain
+        result.lnprob = lnprobability
         result.errorbars = True
-
-        result.chisqr = result.residual = self.__residual(mean)
         result.nvarys = len(vars)
-        result.ndata = 1
-        result.nfree = 1
-        if isinstance(result.residual, ndarray):
-            result.chisqr = (result.chisqr**2).sum()
-            result.ndata = len(result.residual)
-            result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
 
         self.unprepare_fit()
 
