@@ -264,7 +264,7 @@ It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) 
     f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
   e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
       {\operatorname{erf}}\bigl[
-         \frac{\gamma(x-\mu)}{\sigma\sqrt{2\pi}}
+         \frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
      \bigr] \Bigr\}
 
 
