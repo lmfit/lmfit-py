@@ -530,15 +530,19 @@ class Minimizer(object):
         return result
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
-              ntemps=1, pos=None):
+              ntemps=1, pos=None, reuse_sampler=False):
         """
         Bayesian sampling of the posterior distribution for the parameters
-        using the `emcee` Markov Chain Monte Carlo package.
-        The method assumes that the prior is Uniform.
-        You need to have `emcee` installed to use this method.
+        using the `emcee` Markov Chain Monte Carlo package. The method assumes
+        that the prior is Uniform. You need to have `emcee` installed to use
+        this method.
 
         Parameters
         ----------
+        params : lmfit.Parameters, optional
+            Parameters to use as starting point. If this is not specified
+            then the Parameters used to initialise the Minimizer object are
+            used.
         steps : int, optional
             How many samples you would like to draw from the posterior
             distribution for each of the walkers?
@@ -561,14 +565,27 @@ class Minimizer(object):
             `(ntemps, nwalkers, nvarys)`. You can also initialise using a
             previous chain that had the same `ntemps`, `nwalkers` and
             `nvarys`.
+        reuse_sampler : bool, optional
+            If you have already run `emcee` on a given `Minimizer` object then
+            it possesses an internal sampler attribute. You can continue to
+            draw from the same sampler (retaining the chain history) if you set
+            this option to `True`. Otherwise a new sampler is created. The
+            `nwalkers`, `ntemps` and `params` keywords are ignored with this
+            option.
+            **Important**: the Parameters used to create the sampler must not
+            change in-between calls to `emcee`. Alteration of Parameters
+            would include changed ``min``, ``max``, ``vary`` and ``expr``
+            attributes. This may happen, for example, if you use an altered
+            Parameters object and call the `minimize` method in-between calls
+            to `emcee` .
 
         Returns
         -------
         result : MinimizerResult
             MinimizerResult object containing updated params, statistics,
             etc. The `MinimizerResult` also contains the ``chain``,
-            ``flatchain`` and ``lnprob`` attributes. The ``chain`` and
-            ``flatchain`` attributes contain the samples and have the shape
+            ``flatchain`` and ``lnprob`` attributes. The ``chain``
+            and ``flatchain`` attributes contain the samples and have the shape
             `(nwalkers, (steps - burn) // thin, nvarys)` or
             `(ntemps, nwalkers, (steps - burn) // thin, nvarys)`,
             depending on whether Parallel tempering was used or not.
@@ -593,7 +610,7 @@ class Minimizer(object):
         \ln p(F_{true} | D) \propto \ln p(D | F_{true}) + \ln p(F_{true})
 
         where :math:`\ln p(D | F_{true})` is the 'log-likelihood' and
-        :math:`\ln p(F_{true}` is the 'log-prior'. The default log-prior
+        :math:`\ln p(F_{true})` is the 'log-prior'. The default log-prior
         encodes prior information already known about the model. This method
         assumes that the log-prior probability is `-np.inf` (impossible) if the
         one of the parameters is outside its limits. The log-prior probability
@@ -602,23 +619,28 @@ class Minimizer(object):
 
         ..math::
 
-        \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{(\text{model} - D_n)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
+        \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{\left(g_n(F_{true}) - D_n \right)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
 
         The first summand in the square brackets represents the residual for a
         given datapoint. This term represents :math:`\chi^2` when summed over
         all datapoints.
         The objective function used to create `lmfit.Minimizer` should return
-        :math:`\ln p(F_{true}|D)`. However, since the in-built log-prior term
+        :math:`\ln p(F_{true} | D)`. However, since the in-built log-prior term
         is zero, the objective function can just return the log-likelihood
-        (unless you wish to create a non-uniform prior).
-        The default behaviour of most objective functions is to return a vector
-        of residuals. Therefore, if your objective function, `fcn`, returns a
-        vector, `res`, then the vector is assumed to contain the residuals. The
-        log-likelihood (and log-posterior probability) is then calculated as:
-        `-0.5 * np.sum(res **2)`. However, this ignores the second summand in
-        the square brackets. Consequently, in order to calculate a fully correct
-        log-posterior probability value your objective function should return a
-        single value.
+        (unless you wish to create a non-uniform prior). If a negative float
+        value is returned by the objective function it's assumed to be
+        :math:`\ln p(F_{true} | D)`, the posterior probability. If a positive
+        float value is returned then the value is assumed to be :math:`\chi^2`.
+        The posterior probability is then calculated as :math:`-0.5 * \chi^2`.
+
+        However, the default behaviour of most objective functions is to return
+        a vector of residuals. Therefore, if your objective function, `fcn`,
+        returns a vector, `res`, then the vector is assumed to contain the
+        residuals. The log-likelihood (and log-posterior probability) is then
+        calculated as: `-0.5 * np.sum(res **2)`. However, this ignores the
+        second summand in the square brackets. Consequently, in order to
+        calculate a fully correct log-posterior probability value your objective
+        function should return a single value.
         Marginalisation over a nuisance parameter (such as incorrectly
         estimated data uncertainties, `s_n`) can be achieved by including such
         parameters in a `Parameters` instance and suitable inclusion in the
@@ -633,7 +655,20 @@ class Minimizer(object):
             raise NotImplementedError('You must have emcee to use'
                                       ' the emcee method')
 
-        result = self.prepare_fit(params=params)
+        tparams = params
+        if reuse_sampler:
+            if hasattr(self, 'sampler') is False:
+                raise ValueError("You wanted to use an existing sampler, but"
+                                 "it hasn't been created yet")
+            if len(self.sampler.chain.shape) == 3:
+                ntemps = 1
+                nwalkers = self.sampler.chain.shape[0]
+            elif len(self.sampler.chain.shape) == 4:
+                ntemps = self.sampler.chain.shape[0]
+                nwalkers = self.sampler.chain.shape[1]
+            tparams = None
+
+        result = self.prepare_fit(params=tparams)
         vars = result.init_vals
         params = result.params
 
@@ -662,9 +697,13 @@ class Minimizer(object):
                 # objective function returns a vector of residuals
                 r = -0.5 * (r*r).sum()
             else:
-                # objective function returns a single value. Assume that it's
-                # the true log-posterior probability.
-                pass
+                # objective function returns a single value.
+                # If r > 0, assume that r is chi**2
+                if r > 0:
+                    r *= -0.5
+                else:
+                    # Assume that it's the true log-posterior probability.
+                    pass
 
             return r
 
@@ -681,20 +720,23 @@ class Minimizer(object):
                 return -np.inf
             return lp + lnlike(theta)
 
-        if ntemps > 1:
+        if reuse_sampler:
+            p0 = self.sampler.chain[..., -1, :]
+        elif ntemps > 1:
             # jitter the starting position by scaled Gaussian noise
             p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-4
             p0 *= vars
-            sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys, lnlike,
-                                      lnprior)
+            self.sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys,
+                                            lnlike, lnprior)
         else:
             p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-4
             p0 *= vars
-            sampler = emcee.EnsembleSampler(nwalkers, self.nvarys, lnprob)
+            self.sampler = emcee.EnsembleSampler(nwalkers, self.nvarys,
+                                                  lnprob)
 
         # user supplies an initialisation position for the chain
         # If you try to run the sampler with p0 of a wrong size then you'll get
-        #  a ValueError.
+        # a ValueError.
         if pos is not None:
             tpos = np.asfarray(pos)
             if p0.shape == tpos.shape:
@@ -713,11 +755,11 @@ class Minimizer(object):
             p0 = tpos
 
         # now do a production run, sampling all the time
-        output = sampler.run_mcmc(p0, steps)
+        output = self.sampler.run_mcmc(p0, steps)
 
         # discard the burn samples and thin
-        chain = sampler.chain[..., burn::thin, :]
-        lnprobability = sampler.lnprobability[:, burn::thin]
+        chain = self.sampler.chain[..., burn::thin, :]
+        lnprobability = self.sampler.lnprobability[:, burn::thin]
 
         flatchain = chain.reshape((-1, self.nvarys))
 
@@ -738,9 +780,8 @@ class Minimizer(object):
                 if i != j:
                     result.params[var_name].correl[var_name2] = corrcoefs[i, j]
 
-        result.chain = chain
-        result.sampler = sampler
-        result.lnprob = lnprobability
+        result.chain = np.copy(chain)
+        result.lnprob = np.copy(lnprobability)
         result.errorbars = True
         result.nvarys = len(vars)
 

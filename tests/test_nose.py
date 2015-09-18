@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
-from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE, HAS_PANDAS,
+from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
                              MinimizerResult)
 from lmfit.lineshapes import gaussian
 import numpy as np
@@ -332,8 +332,8 @@ class CommonMinimizerTest(unittest.TestCase):
         xmin = 0.
         xmax = 250.0
         noise = np.random.normal(scale=0.7215, size=n)
-        self.x     = np.linspace(xmin, xmax, n)
-        data  = self.residual(p_true, self.x) + noise
+        self.x = np.linspace(xmin, xmax, n)
+        data = self.residual(p_true, self.x) + noise
 
         fit_params = Parameters()
         fit_params.add('amp', value=11.0, min=5, max=20)
@@ -443,16 +443,27 @@ class CommonMinimizerTest(unittest.TestCase):
         out = self.mini.emcee(nwalkers=100, steps=5)
         # can initialise with a chain
         out2 = self.mini.emcee(nwalkers=100, steps=1, pos=out.chain)
+
         # can initialise with a correct subset of a chain
         out3 = self.mini.emcee(nwalkers=100,
                                steps=1,
                                pos=out.chain[..., -1, :])
+
         # but you can't initialise if the shape is wrong.
         assert_raises(ValueError,
                       self.mini.emcee,
                       nwalkers=100,
                       steps=1,
                       pos=out.chain[..., -1, :-1])
+
+    def test_emcee_reuse_sampler(self):
+        if not HAS_EMCEE:
+            return True
+
+        out = self.mini.emcee(nwalkers=100, steps=5)
+        # now try and re-use sampler
+        out2 = self.mini.emcee(steps = 10, reuse_sampler=True)
+        assert_(out2.chain.shape[1] == 15)
 
     def test_emcee_output(self):
         # test mcmc output
@@ -482,12 +493,20 @@ class CommonMinimizerTest(unittest.TestCase):
         def resid(pars, x, data=None):
             return -0.5 * np.sum(self.residual(pars, x, data=data)**2)
 
-        self.mini.userfcn = resid
+        # just return chi2
+        def resid2(pars, x, data=None):
+            return np.sum(self.residual(pars, x, data=data)**2)
 
+        self.mini.userfcn = resid
         np.random.seed(123456)
         out = self.mini.emcee(nwalkers=100, steps=200,
                                       burn=50, thin=10)
+        check_paras(out.params, self.p_true, sig=3)
 
+        self.mini.userfcn = resid2
+        np.random.seed(123456)
+        out = self.mini.emcee(nwalkers=100, steps=200,
+                                      burn=50, thin=10)
         check_paras(out.params, self.p_true, sig=3)
 
 
