@@ -589,7 +589,7 @@ The Minimizer object has a few public methods:
                     like separate Metropolis-Hastings chains but, of course,
                     the proposal distribution for a given walker depends on the
                     positions of all the other walkers in the ensemble." - from
-                    the `emcee` webpage.
+                    [1]_.
   :type  nwalkers: int
   :param burn: Discard this many samples from the start of the sampling regime.
   :type  burn: int
@@ -680,6 +680,121 @@ The Minimizer object has a few public methods:
 
   .. [1] http://dan.iel.fm/emcee/current/user/line/
 
+
+Using :meth:`emcee`
+==========================
+
+:meth:`emcee` can be used to obtain the posterior probability distribution of
+parameters, given a set of experimental data. An example problem is a double
+exponential decay. A small amount of Gaussian noise is also added in::
+
+    >>> import numpy as np
+    >>> import lmfit
+    >>> import matplotlib.pyplot as plt
+    >>> x = np.linspace(1, 10, 250)
+    >>> np.random.seed(0)
+    >>> y = 3.0 * np.exp(-x / 2) - 5.0 * np.exp(-(x - 0.1) / 10.) + 0.1 * np.random.randn(len(x))
+    >>> plt.plot(x, y)
+    >>> plt.show()
+
+.. image:: _images/emcee_dbl_exp.png
+
+Create a Parameter set for the initial guesses::
+
+    >>> p = lmfit.Parameters()
+    >>> p.add_many(('a1', 4.), ('a2', 4.), ('t1', 3.), ('t2', 3., True))
+
+    >>> def residual(p):
+    ...     v = p.valuesdict()
+    ...     return v['a1'] * np.exp(-x / v['t1']) + v['a2'] * np.exp(-(x - 0.1) / v['t2']) - y
+
+Solving with :func:`minimize` gives the Maximum Likelihood solution.::
+
+    >>> mi = lmfit.minimize(residual, p, method='Nelder')
+    >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
+    [[Variables]]
+        a1:   2.98623688 (init= 4)
+        a2:  -4.33525596 (init= 4)
+        t1:   1.30993185 (init= 3)
+        t2:   11.8240752 (init= 3)
+    [[Correlations]] (unreported correlations are <  0.500)
+    >>> plt.plot(x, y)
+    >>> plt.plot(x, residual(mi.params) + y, 'r')
+    >>> plt.show()
+
+.. image:: _images/emcee_dbl_exp2.png
+
+However, this doesn't give a probability distribution for the parameters.
+Furthermore, we wish to deal with the data uncertainty. This is called
+marginalisation of a nuisance parameter. emcee requires a function that returns
+the log-posterior probability. The log-posterior probability is a sum of the
+log-prior probability and log-likelihood functions. The log-prior probability is
+assumed to be zero if all the parameters are within their bounds and `-np.inf`
+if any of the parameters are outside their bounds.::
+
+    >>> # add a noise parameter
+    >>> mi.params.add('f', value=1, min=0.001, max=2)
+
+    >>> # This is the log-likelihood probability for the sampling. We're going to estimate the
+    >>> # size of the uncertainties on the data as well.
+    >>> def lnprob(p):
+    ...    resid = residual(p)
+    ...    s = p['f']
+    ...    return -0.5 * np.sum((resid / s)**2 + np.log(2 * np.pi * s**2))
+
+Now we have to set up the minimizer and do the sampling.::
+
+    >>> mini = lmfit.Minimizer(lnprob, mi.params)
+    >>> res = mini.emcee(burn=300, steps=600, thin=10, params=mi.params)
+
+Lets have a look at those posterior distributions for the parameters.  This requires
+installation of the `triangle_plot` package.::
+
+    >>> import triangle
+    >>> triangle.corner(res.flatchain, labels=res.var_names, truths=list(res.params.valuesdict().values()))
+
+.. image:: _images/emcee_triangle.png
+
+The values reported in the :class:`MinimizerResult` are the means of the
+probability distributions and the 1 sigma quantile. The mean value is not
+necessarily the same as the Maximum Likelihood Estimate. We'll get that as well.
+You can see that we recovered the right uncertainty level on the data.::
+
+    >>> print("mean of posterior probability distribution")
+    >>> print('------------------------------------------')
+    >>> lmfit.report_fit(res.params)
+    mean of posterior probability distribution
+    ------------------------------------------
+    [[Variables]]
+        a1:   3.00975345 +/- 0.151034 (5.02%) (init= 2.986237)
+        a2:  -4.35419204 +/- 0.127505 (2.93%) (init=-4.335256)
+        t1:   1.32726415 +/- 0.142995 (10.77%) (init= 1.309932)
+        t2:   11.7911935 +/- 0.495583 (4.20%) (init= 11.82408)
+        f:    0.09805494 +/- 0.004256 (4.34%) (init= 1)
+    [[Correlations]] (unreported correlations are <  0.100)
+        C(a2, t2)                    =  0.981
+        C(a2, t1)                    = -0.927
+        C(t1, t2)                    = -0.880
+        C(a1, t1)                    = -0.519
+        C(a1, a2)                    =  0.195
+        C(a1, t2)                    =  0.146
+
+    >>> # find the maximum likelihood solution
+    >>> highest_prob = np.argmax(res.lnprob)
+    >>> hp_loc = np.unravel_index(highest_prob, res.lnprob.shape)
+    >>> mle_soln = res.chain[hp_loc]
+    >>> for i, par in enumerate(p):
+    ...     p[par].value = mle_soln[i]
+
+    >>> print("\nMaximum likelihood Estimation")
+    >>> print('-----------------------------')
+    >>> print(p)
+    Maximum likelihood Estimation
+    -----------------------------
+    Parameters([('a1', <Parameter 'a1', 2.9943337359308981, bounds=[-inf:inf]>),
+    ('a2', <Parameter 'a2', -4.3364489105166593, bounds=[-inf:inf]>),
+    ('t1', <Parameter 't1', 1.3124544105342462, bounds=[-inf:inf]>),
+    ('t2', <Parameter 't2', 11.80612160586597, bounds=[-inf:inf]>)])
 
 Getting and Printing Fit Reports
 ===========================================
