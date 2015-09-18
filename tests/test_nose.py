@@ -6,7 +6,7 @@ from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE, HAS_PANDAS,
 from lmfit.lineshapes import gaussian
 import numpy as np
 from numpy import pi
-from numpy.testing import assert_, decorators
+from numpy.testing import assert_, decorators, assert_raises
 import unittest
 import nose
 from nose import SkipTest
@@ -422,7 +422,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
     @decorators.slow
     def test_emcee_partial_bounds(self):
-        # test mcmc with partial bounds
+        # mcmc with partial bounds
         if not HAS_EMCEE:
             return True
 
@@ -434,6 +434,25 @@ class CommonMinimizerTest(unittest.TestCase):
                                       burn=50, thin=10)
 
         check_paras(out.params, self.p_true, sig=5)
+
+    def test_emcee_init_with_chain(self):
+        # can you initialise with a previous chain
+        if not HAS_EMCEE:
+            return True
+
+        out = self.mini.emcee(nwalkers=100, steps=5)
+        # can initialise with a chain
+        out2 = self.mini.emcee(nwalkers=100, steps=1, pos=out.chain)
+        # can initialise with a correct subset of a chain
+        out3 = self.mini.emcee(nwalkers=100,
+                               steps=1,
+                               pos=out.chain[..., -1, :])
+        # but you can't initialise if the shape is wrong.
+        assert_raises(ValueError,
+                      self.mini.emcee,
+                      nwalkers=100,
+                      steps=1,
+                      pos=out.chain[..., -1, :-1])
 
     def test_emcee_output(self):
         # test mcmc output
@@ -456,7 +475,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
     @decorators.slow
     def test_emcee_float(self):
-        # test that is works if the residuals returns a float, not a vector
+        # test that it works if the residuals returns a float, not a vector
         if not HAS_EMCEE:
             return True
 

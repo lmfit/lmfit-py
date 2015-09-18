@@ -530,7 +530,7 @@ class Minimizer(object):
         return result
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
-              ntemps=1):
+              ntemps=1, pos=None):
         """
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package.
@@ -555,6 +555,12 @@ class Minimizer(object):
             Only accept 1 in every `thin` samples.
         ntemps : int, optional
             If `ntemps > 1` perform a Parallel Tempering.
+        pos : np.ndarray, optional
+            Specify the initial positions for the sampler.  If `ntemps == 1`
+            then `pos.shape` should be `(nwalkers, nvarys)`. Otherwise,
+            `(ntemps, nwalkers, nvarys)`. You can also initialise using a
+            previous chain that had the same `ntemps`, `nwalkers` and
+            `nvarys`.
 
         Returns
         -------
@@ -602,17 +608,17 @@ class Minimizer(object):
         given datapoint. This term represents :math:`\chi^2` when summed over
         all datapoints.
         The objective function used to create `lmfit.Minimizer` should return
-        :math:`\ln p(F_{true}`. However, since the in-built log-prior term is
-        zero, the objective function can just return the log-likelihood (unless
-        you wish to create a non-uniform prior).
-        The default behaviour of lmfit for all the other minimizers is to
-        return a vector of residuals. Therefore, if your objective function,
-        `fcn`, returns a vector, `res`, then the vector is assumed to contain
-        the residuals. The log-likelihood (and log-posterior probability) is
-        then calculated as: `-0.5 * np.sum(res **2)`. However, this ignores the
-        second summand in the square brackets. Consequently, in order to
-        calculate a fully correct log-posterior probability value your
-        objective function should return a single value.
+        :math:`\ln p(F_{true}|D)`. However, since the in-built log-prior term
+        is zero, the objective function can just return the log-likelihood
+        (unless you wish to create a non-uniform prior).
+        The default behaviour of most objective functions is to return a vector
+        of residuals. Therefore, if your objective function, `fcn`, returns a
+        vector, `res`, then the vector is assumed to contain the residuals. The
+        log-likelihood (and log-posterior probability) is then calculated as:
+        `-0.5 * np.sum(res **2)`. However, this ignores the second summand in
+        the square brackets. Consequently, in order to calculate a fully correct
+        log-posterior probability value your objective function should return a
+        single value.
         Marginalisation over a nuisance parameter (such as incorrectly
         estimated data uncertainties, `s_n`) can be achieved by including such
         parameters in a `Parameters` instance and suitable inclusion in the
@@ -676,7 +682,7 @@ class Minimizer(object):
             return lp + lnlike(theta)
 
         if ntemps > 1:
-            # jitter the starting position by scaled Gaussian noise (1% level)
+            # jitter the starting position by scaled Gaussian noise
             p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-4
             p0 *= vars
             sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys, lnlike,
@@ -685,6 +691,26 @@ class Minimizer(object):
             p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-4
             p0 *= vars
             sampler = emcee.EnsembleSampler(nwalkers, self.nvarys, lnprob)
+
+        # user supplies an initialisation position for the chain
+        # If you try to run the sampler with p0 of a wrong size then you'll get
+        #  a ValueError.
+        if pos is not None:
+            tpos = np.asfarray(pos)
+            if p0.shape == tpos.shape:
+                pass
+            # trying to initialise with a previous chain
+            elif (tpos.shape[0::2] == (nwalkers, self.nvarys)):
+                tpos = tpos[:, -1, :]
+            elif ntemps > 1 and tpos.ndim == 4:
+                tpos_shape = list(tpos.shape)
+                tpos_shape.pop(2)
+                if tpos_shape == (ntemps, nwalkers, self.nvarys):
+                    tpos = tpos[..., -1, :]
+            else:
+                raise ValueError('pos should have shape (nwalkers, nvarys)'
+                                 'or (ntemps, nwalkers, nvarys) if ntemps > 1')
+            p0 = tpos
 
         # now do a production run, sampling all the time
         output = sampler.run_mcmc(p0, steps)
@@ -713,6 +739,7 @@ class Minimizer(object):
                     result.params[var_name].correl[var_name2] = corrcoefs[i, j]
 
         result.chain = chain
+        result.sampler = sampler
         result.lnprob = lnprobability
         result.errorbars = True
         result.nvarys = len(vars)
