@@ -572,6 +572,115 @@ The Minimizer object has a few public methods:
 
 
 
+.. method:: emcee(params=None, steps=1000, nwalkers=100, burn=0, thin=1, ntemps=1, pos=None, reuse_sampler=False)
+
+  Bayesian sampling of the posterior distribution for the parameters using the `emcee`
+  Markov Chain Monte Carlo package. The method assumes that the prior is Uniform. You need
+  to have `emcee` installed to use this method.
+
+  :param params: a :class:`Parameters` dictionary for starting values
+  :type  params: :class:`Parameters` or `None`
+  :param steps: How many samples you would like to draw from the posterior
+                 distribution for each of the walkers?
+  :type  steps: int
+  :param nwalkers: Should be set so :math:`nwalkers >> nvarys`, where `nvarys`
+                    are the number of parameters being varied during the fit.
+                    "Walkers are the members of the ensemble. They are almost
+                    like separate Metropolis-Hastings chains but, of course,
+                    the proposal distribution for a given walker depends on the
+                    positions of all the other walkers in the ensemble." - from
+                    the `emcee` webpage.
+  :type  nwalkers: int
+  :param burn: Discard this many samples from the start of the sampling regime.
+  :type  burn: int
+  :param thin: Only accept 1 in every `thin` samples.
+  :type  thin: int
+  :param ntemps: If `ntemps > 1` perform a Parallel Tempering.
+  :type ntemps: int
+  :param pos: Specify the initial positions for the sampler.  If `ntemps == 1`
+              then `pos.shape` should be `(nwalkers, nvarys)`. Otherwise,
+              `(ntemps, nwalkers, nvarys)`. You can also initialise using a
+              previous chain that had the same `ntemps`, `nwalkers` and `nvarys`.
+  :type pos: np.ndarray
+  :param reuse_sampler:  If you have already run :meth:`emcee` on a given
+            :class:`Minimizer` object then it possesses an internal sampler
+            attribute. You can continue to draw from the same sampler (retaining
+            the chain history) if you set this option to `True`. Otherwise a new
+            sampler is created. The `nwalkers`, `ntemps` and `params` keywords
+            are ignored with this option.
+            **Important**: the :class:`Parameters` used to create the sampler
+            must not change in-between calls to :meth:`emcee`. Alteration of
+            :class:`Parameters` would include changed ``min``, ``max``,
+            ``vary`` and ``expr`` attributes. This may happen, for example, if
+            you use an altered :class:`Parameters` object and call the
+            :meth:`minimize` method in-between calls to :meth:`emcee` .
+  :type  reuse_sampler:  bool
+
+  :return: :class:`MinimizerResult` object containing updated params, statistics,
+            etc. The :class:`MinimizerResult` also contains the ``chain``,
+            ``flatchain`` and ``lnprob`` attributes. The ``chain``
+            and ``flatchain`` attributes contain the samples and have the shape
+            `(nwalkers, (steps - burn) // thin, nvarys)` or
+            `(ntemps, nwalkers, (steps - burn) // thin, nvarys)`,
+            depending on whether Parallel tempering was used or not.
+            `nvarys` is the number of parameters that are allowed to vary.
+            The ``flatchain`` attribute is a :class:`pandas.DataFrame` of the
+            flattened chain, `chain.reshape(-1, nvarys)`. To access flattened
+            chain values for a particular parameter use
+            `result.flatchain[parname]`. The ``lnprob`` attribute contains the
+            log probability for each sample in ``chain``. The sample with the
+            highest probability corresponds to the maximum likelihood estimate.
+
+  This method samples the posterior distribution of the parameters using
+  Markov Chain Monte Carlo.  To do so it needs to calculate the
+  log-posterior probability of the model parameters, `F`, given the data,
+  `D`, :math:`\ln p(F_{true} | D)`. This 'posterior probability' is
+  calculated as:
+
+  .. math::
+
+    \ln p(F_{true} | D) \propto \ln p(D | F_{true}) + \ln p(F_{true})
+
+  where :math:`\ln p(D | F_{true})` is the 'log-likelihood' and
+  :math:`\ln p(F_{true})` is the 'log-prior'. The default log-prior
+  encodes prior information already known about the model. This method
+  assumes that the log-prior probability is `-np.inf` (impossible) if the
+  one of the parameters is outside its limits. The log-prior probability
+  term is zero if all the parameters are inside their bounds (known as a
+  uniform prior). The log-likelihood function is given by [1]_:
+
+  .. math::
+
+    \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{\left(g_n(F_{true}) - D_n \right)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
+
+  The first summand in the square brackets represents the residual for a
+  given datapoint. This term represents :math:`\chi^2` when summed over
+  all datapoints.
+  The objective function used to create :class:`Minimizer` should return
+  :math:`\ln p(F_{true} | D)`. However, since the in-built log-prior term
+  is zero, the objective function can just return the log-likelihood
+  (unless you wish to create a non-uniform prior). If a negative float
+  value is returned by the objective function it's assumed to be
+  :math:`\ln p(F_{true} | D)`, the posterior probability. If a positive
+  float value is returned then the value is assumed to be :math:`\chi^2`.
+  The log-likelihood is then calculated as :math:`-0.5 * \chi^2`.
+
+  However, the default behaviour of most objective functions is to return
+  a vector of residuals. Therefore, if your objective function, `fcn`,
+  returns a vector, `res`, then the vector is assumed to contain the
+  residuals. The log-likelihood (and log-posterior probability) is then
+  calculated as: `-0.5 * np.sum(res **2)`. However, this ignores the
+  second summand in the square brackets. Consequently, in order to
+  calculate a fully correct log-posterior probability value your objective
+  function should return a single value.
+  Marginalisation over a nuisance parameter (such as incorrectly
+  estimated data uncertainties, `s_n`) can be achieved by including such
+  parameters in a :class:`Parameters` instance and suitable inclusion in the
+  objective function.
+
+  .. [1] http://dan.iel.fm/emcee/current/user/line/
+
+
 Getting and Printing Fit Reports
 ===========================================
 
