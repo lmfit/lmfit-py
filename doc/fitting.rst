@@ -681,8 +681,10 @@ The Minimizer object has a few public methods:
   .. [1] http://dan.iel.fm/emcee/current/user/line/
 
 
-Using :meth:`emcee`
-==========================
+.. _label-emcee:
+
+:meth:`emcee` - calculating the posterior probability distribution of parameters
+==============================================================================================
 
 :meth:`emcee` can be used to obtain the posterior probability distribution of
 parameters, given a set of experimental data. An example problem is a double

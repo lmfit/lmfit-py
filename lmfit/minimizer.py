@@ -772,6 +772,8 @@ class Minimizer(object):
             params[var_name].stderr = 0.5 * (std_u - std_l)
             params[var_name].correl = {}
 
+        params.update_constraints()
+
         # work out correlation coefficients
         corrcoefs = np.corrcoef(flatchain.T)
 
