@@ -1,15 +1,43 @@
+.. _faq_chapter:
+
 ====================================
 Frequently Asked Questions
 ====================================
 
 A list of common questions.
 
+What's the best way to ask for help or submit a bug report?
+================================================================
+
+See :ref:`support_chapter`.
+
+
+Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?
+====================================================================
+
+See :ref:`whatsnew_090_label`
+
+
+I get import errors from IPython
+==============================================================
+
+If you see something like::
+
+        from IPython.html.widgets import Dropdown
+
+    ImportError: No module named 'widgets'
+
+then you need to install the ipywidgets package.   Try 'pip install ipywidgets'.
+
+
+
+
 How can I fit multi-dimensional data?
 ========================================
 
 The fitting routines accept data arrays that are 1 dimensional and double
 precision.  So you need to convert the data and model (or the value
-returned by the objective function) to be one dimensional.  A simple way to 
+returned by the objective function) to be one dimensional.  A simple way to
 do this is to use numpy's :meth:`numpy.ndarray.flatten`, for example::
 
     def residual(params, x, data=None):
@@ -22,7 +50,7 @@ How can I fit multiple data sets?
 
 As above, the fitting routines accept data arrays that are 1 dimensional and double
 precision.  So you need to convert the sets of data and models (or the value
-returned by the objective function) to be one dimensional.  A simple way to 
+returned by the objective function) to be one dimensional.  A simple way to
 do this is to use numpy's :meth:`numpy.concatenate`.  As an example, here
 is a residual function to simultaneously fit two lines to two different
 arrays.  As a bonus, the two lines share the 'offset' parameter:
@@ -33,7 +61,7 @@ arrays.  As a bonus, the two lines share the 'offset' parameter:
 
 	resid1 = dat1 - model1
         resid2 = dat2 - model2
-        return numpy.concatenate((resid1, resid2)) 
+        return numpy.concatenate((resid1, resid2))
 
 
 
@@ -69,5 +97,4 @@ the value to be minimized.
 How should I cite LMFIT?
 ==================================
 
-See http://dx.doi.org/10.5281/zenodo.11813 
-
+See http://dx.doi.org/10.5281/zenodo.11813
