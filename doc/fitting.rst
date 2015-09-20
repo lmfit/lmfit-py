@@ -10,6 +10,11 @@ As shown in the previous chapter, a simple fit can be performed with the
 when using complicated constraints or comparing results from related fits.
 
 
+.. warning::
+
+  Upgrading scripts from version 0.8.3 to 0.9.0?  See  :ref:`whatsnew_090_label`
+
+
 The :func:`minimize` function
 ===============================
 
@@ -45,6 +50,10 @@ details on writing the objective.
 
    :return: :class:`MinimizerResult` instance, which will contain the
             optimized parameter, and several goodness-of-fit statistics.
+
+.. versionchanged:: 0.9.0
+   return value changed to :class:`MinimizerResult`
+
 
    On output, the params will be unchanged.  The best-fit values, and where
    appropriate, estimated uncertainties and correlations, will all be
@@ -212,7 +221,10 @@ class as listed in the :ref:`Table of Supported Fitting Methods
 ========================================================
 
 
+
 .. class:: MinimizerResult(**kws)
+
+.. versionadded:: 0.9.0
 
 An optimization with :func:`minimize` or :meth:`Minimizer.minimize`
 will return a :class:`MinimizerResult` object.  This is an otherwise
@@ -406,11 +418,11 @@ These are calculated as
     \end{eqnarray*}
 
 
-Generally, when comparing fits with different numbers of varying
-parameters, one typically selects the model with lowest reduced chi-square,
-Akaike information criterion, and/or Bayesian information criterion.
-Generally, the Bayesian information criterion is considered themost
-conservative of these statistics.
+When comparing fits with different numbers of varying parameters, one
+typically selects the model with lowest reduced chi-square, Akaike
+information criterion, and/or Bayesian information criterion.  Generally,
+the Bayesian information criterion is considered the most conservative of
+these statistics.
 
 ..  _fit-itercb-label:
 
@@ -493,8 +505,12 @@ The Minimizer object has a few public methods:
    :return: :class:`MinimizerResult` object, containing updated
             parameters, fitting statistics, and information.
 
+.. versionchanged:: 0.9.0
+   return value changed to :class:`MinimizerResult`
+
    Additonal keywords are passed on to the correspond :meth:`leastsq`
    or :meth:`scalar_minimize` method.
+
 
 .. method:: leastsq(params=None, scale_covar=True, **kws)
 
@@ -517,6 +533,9 @@ The Minimizer object has a few public methods:
     +------------------+----------------+------------------------------------------------------------+
 
 
+.. versionchanged:: 0.9.0
+   return value changed to :class:`MinimizerResult`
+
 .. method:: scalar_minimize(method='Nelder-Mead', params=None, hess=None, tol=None, **kws)
 
    perform fit with any of the scalar minimization algorithms supported by
@@ -533,6 +552,8 @@ The Minimizer object has a few public methods:
     |   hess                  | None            | Hessian of objective function                       |
     +-------------------------+-----------------+-----------------------------------------------------+
 
+.. versionchanged:: 0.9.0
+   return value changed to :class:`MinimizerResult`
 
 .. method:: prepare_fit(**kws)
 
@@ -545,6 +566,10 @@ The Minimizer object has a few public methods:
 
    This method is called directly by the fitting methods, and it is
    generally not necessary to call this function explicitly.
+
+.. versionchanged:: 0.9.0
+   return value changed to :class:`MinimizerResult`
+
 
 
 Getting and Printing Fit Reports
