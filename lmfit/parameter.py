@@ -106,6 +106,19 @@ class Parameters(OrderedDict):
         self.add_many(*params)
         return self
 
+    def __reduce__(self):
+        """
+        Required to pickle a Parameters instance. pickle does not know how
+        to deal with the asteval machinery.
+        """
+        items = [self[k] for k in self]
+        return self.__class__, (), items
+
+    def __setstate__(self, state):
+        """state is list of parameters"""
+        for param in state:
+            self.__setitem__(param.name, param)
+
     def update_constraints(self):
         """
         Update all constrained parameters, checking that dependencies are
