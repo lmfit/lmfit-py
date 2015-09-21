@@ -6,6 +6,7 @@ Contents
 
    intro
    installation
+   whatsnew
    support
    faq
    parameters
