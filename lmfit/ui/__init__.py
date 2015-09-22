@@ -14,7 +14,7 @@ else:
 try:
     import IPython
 except ImportError:
-    pass
+    warnings.warn("lmfit.Fitter will use basic mode, not IPython: need matplotlib")
 else:
     _ipy_msg1 = "lmfit.Fitter will use basic mode, not IPython: need IPython2."
     _ipy_msg2 = "lmfit.Fitter will use basic mode, not IPython: could not get IPython version"
