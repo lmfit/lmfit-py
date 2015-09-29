@@ -356,11 +356,23 @@ class RectangleModel(Model):
 class ExpressionModel(Model):
     """Model from User-supplied expression
 
-%s
-    """ % COMMON_DOC
+Parameters
+----------
+expr:    string of mathematical expression for model.
+independent_vars: list of strings to be set as variable names
+missing: None, 'drop', or 'raise'
+    None: Do not check for null or missing values.
+    'drop': Drop null or missing observations in data.
+        Use pandas.isnull if pandas is available; otherwise,
+        silently fall back to numpy.isnan.
+    'raise': Raise a (more helpful) exception when data contains null
+        or missing values.
+prefix: NOT supported for ExpressionModel
+"""
 
     idvar_missing  = "No independent variable found in\n %s"
     idvar_notfound = "Cannot find independent variables '%s' in\n %s"
+    no_prefix      = "ExpressionModel does not support `prefix` argument"
     def __init__(self, expr, independent_vars=None, init_script=None,
                  *args, **kwargs):
 
@@ -372,8 +384,8 @@ class ExpressionModel(Model):
             self.asteval.eval(init_script)
 
         # save expr as text, parse to ast, save for later use
-        self.expr = expr
-        self.astcode = self.asteval.parse(expr)
+        self.expr = expr.strip()
+        self.astcode = self.asteval.parse(self.expr)
 
         # find all symbol names found in expression
         sym_names = get_ast_names(self.astcode)
@@ -403,6 +415,8 @@ class ExpressionModel(Model):
             raise ValueError(self.idvar_notfound % (lost, self.expr))
 
         kwargs['independent_vars'] = independent_vars
+        if 'prefix' in kwargs:
+            raise Warning(self.no_prefix)
 
         def _eval(**kwargs):
             for name, val in kwargs.items():
