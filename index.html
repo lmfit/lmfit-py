@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="#" />
     <link rel="next" title="Getting started with Non-Linear Least-Squares Fitting" href="intro.html" />
   <script type="text/x-mathjax-config">
@@ -33,41 +33,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -88,9 +83,9 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Getting LMFIT</h3>
-<p>Current version: <b>0.8.3</b></p>
+<p>Current version: <b>0.9.0</b></p>
 <p>Download: &nbsp; <a href="http://pypi.python.org/pypi/lmfit/">PyPI (Python.org)</a>
 <p>Install:  &nbsp; <tt>pip install lmfit</tt>
 <p>
@@ -99,8 +94,9 @@
 
 <h3>Questions?</h3>
 
-&nbsp; <a href="support.html"> Getting Help</a> <br>
-&nbsp; <a href="faq.html"> Frequently Asked Questions</a>
+&nbsp; <a href="faq.html">Frequently Asked Questions</a><br>
+&nbsp; <a href="https://groups.google.com/group/lmfit-py">Mailing List</a><br>
+&nbsp; <a href="support.html">Getting Help</a><br>
 
 <h3>Off-line Documentation</h3>
 
@@ -112,7 +108,7 @@
 
 <hr>
 <p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -131,34 +127,41 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="non-linear-least-square-minimization-and-curve-fitting-for-python">
 <h1>Non-Linear Least-Square Minimization and Curve-Fitting for Python<a class="headerlink" href="#non-linear-least-square-minimization-and-curve-fitting-for-python" title="Permalink to this headline">¶</a></h1>
-<p>Lmfit provides a high-level interface to non-linear optimization and
-curve fitting problems for Python. Lmfit builds on
-<a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> algorithm of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>, but
-also supports most of the optimization methods from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.
-It has a number of useful enhancements, including:</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Upgrading scripts from version 0.8.3 to 0.9.0?  See  <a class="reference internal" href="whatsnew.html#whatsnew-090-label"><span>Version 0.9.0 Release Notes</span></a></p>
+</div>
+<p>Lmfit provides a high-level interface to non-linear optimization and curve
+fitting problems for Python. Lmfit builds on and extends many of the
+optimizatin algorithm of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>, especially the
+<a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> method from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a>.</p>
+<p>Lmfit provides a number of useful enhancements to optimization and data
+fitting problems, including:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Using <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects instead of plain floats as variables.
-A <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> has a value that can be varied in the fit, fixed,
-have upper and/or lower bounds.  It can even have a value that is
-constrained by an algebraic expression of other Parameter values.</li>
+<li>Using <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects instead of plain floats as variables.
+A <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has a value that can be varied in the fit, have a
+fixed value, or have upper and/or lower bounds.  A Parameter can even
+have a value that is constrained by an algebraic expression of other
+Parameter values.</li>
 <li>Ease of changing fitting algorithms.  Once a fitting model is set up,
-one can change the fitting algorithm without changing the objective
-function.</li>
+one can change the fitting algorithm used to find the optimal solution
+without changing the objective function.</li>
 <li>Improved estimation of confidence intervals.  While
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a> will automatically calculate
-uncertainties and correlations from the covariance matrix, lmfit also
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a> will automatically calculate
+uncertainties and correlations from the covariance matrix, the accuracy
+of these estimates are often questionable.  To help address this, lmfit
 has functions to explicitly explore parameter space to determine
 confidence levels even for the most difficult cases.</li>
-<li>Improved curve-fitting with the <tt class="xref py py-class docutils literal"><span class="pre">Model</span></tt> class.  This which
-extends the capabilities of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></tt></a>, allowing
+<li>Improved curve-fitting with the <code class="xref py py-class docutils literal"><span class="pre">Model</span></code> class.  This
+extends the capabilities of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html#scipy.optimize.curve_fit" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.curve_fit()</span></code></a>, allowing
 you to turn a function that models for your data into a python class
 that helps you parametrize and fit data with that model.</li>
-<li>Many <a class="reference internal" href="builtin_models.html#builtin-models-chapter"><em>pre-built models</em></a> for common
+<li>Many <a class="reference internal" href="builtin_models.html#builtin-models-chapter"><span>pre-built models</span></a> for common
 lineshapes are included and ready to use.</li>
 </ul>
 </div></blockquote>
@@ -180,34 +183,40 @@ participating in this effort please use the <a class="reference external" href="
 </li>
 <li class="toctree-l1"><a class="reference internal" href="support.html">Getting Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What&#8217;s the best way to ask for help or submit a bug report?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-get-import-errors-from-ipython">I get import errors from IPython</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-multi-dimensional-data">How can I fit multi-dimensional data?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-multiple-data-sets">How can I fit multiple data sets?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-complex-data">How can I fit complex data?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#can-i-constrain-values-to-have-integer-values">Can I constrain values to have integer values?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="parameters.html"><tt class="docutils literal"><span class="pre">Parameter</span></tt>  and <tt class="docutils literal"><span class="pre">Parameters</span></tt></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameter-class">The <tt class="docutils literal"><span class="pre">Parameter</span></tt> class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameters-class">The <tt class="docutils literal"><span class="pre">Parameters</span></tt> class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html"><code class="docutils literal"><span class="pre">Parameter</span></code>  and <code class="docutils literal"><span class="pre">Parameters</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameter-class">The <code class="docutils literal"><span class="pre">Parameter</span></code> class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameters-class">The <code class="docutils literal"><span class="pre">Parameters</span></code> class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parameters.html#simple-example">Simple Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fitting.html">Performing Fits, Analyzing Outputs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="fitting.html#the-minimize-function">The <tt class="docutils literal"><span class="pre">minimize()</span></tt> function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#the-minimize-function">The <code class="docutils literal"><span class="pre">minimize()</span></code> function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#writing-a-fitting-function">Writing a Fitting Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#choosing-different-fitting-methods">Choosing Different Fitting Methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fitting.html#goodness-of-fit-and-estimated-uncertainty-and-correlations">Goodness-of-Fit and estimated uncertainty and correlations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fitting.html#using-the-minimizer-class">Using the <tt class="docutils literal"><span class="pre">Minimizer</span></tt> class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#minimizerresult-the-optimization-result"><code class="docutils literal"><span class="pre">MinimizerResult</span></code> &#8211; the optimization result</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#using-a-iteration-callback-function">Using a Iteration Callback Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#using-the-minimizer-class">Using the <code class="docutils literal"><span class="pre">Minimizer</span></code> class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#getting-and-printing-fit-reports">Getting and Printing Fit Reports</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="model.html">Modeling Data and Curve Fitting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="model.html#example-fit-data-to-gaussian-profile">Example: Fit data to Gaussian profile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#the-model-class">The <tt class="docutils literal"><span class="pre">Model</span></tt> class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#the-modelfit-class">The <tt class="docutils literal"><span class="pre">ModelFit</span></tt> class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.html#the-model-class">The <code class="docutils literal"><span class="pre">Model</span></code> class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.html#the-modelfit-class">The <code class="docutils literal"><span class="pre">ModelFit</span></code> class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model.html#composite-models-adding-or-multiplying-models">Composite Models : adding (or multiplying) Models</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="builtin_models.html">Built-in Fitting Models in the <tt class="docutils literal"><span class="pre">models</span></tt> module</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="builtin_models.html">Built-in Fitting Models in the <code class="docutils literal"><span class="pre">models</span></code> module</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#peak-like-models">Peak-like models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#linear-and-polynomial-models">Linear and Polynomial Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#step-like-models">Step-like models</a></li>
@@ -243,7 +252,7 @@ participating in this effort please use the <a class="reference external" href="
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -263,9 +272,9 @@ participating in this effort please use the <a class="reference external" href="
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

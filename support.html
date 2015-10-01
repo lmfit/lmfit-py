@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Frequently Asked Questions" href="faq.html" />
     <link rel="prev" title="Downloading and Installation" href="installation.html" />
@@ -34,41 +34,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -92,7 +87,7 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="installation.html"
@@ -100,12 +95,14 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="faq.html"
                         title="next chapter">Frequently Asked Questions</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/support.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/support.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -124,10 +121,10 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="getting-help">
-<h1>Getting Help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h1>
+<span id="support-chapter"></span><h1>Getting Help<a class="headerlink" href="#getting-help" title="Permalink to this headline">¶</a></h1>
 <p>If you have questions, comments, or suggestions for LMFIT, please use the
 <a class="reference external" href="https://groups.google.com/group/lmfit-py">mailing list</a>.  This provides an on-line conversation that is and
 archived well and can be searched well with standard web searches.  If you
@@ -156,7 +153,7 @@ discussions.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -179,9 +176,9 @@ discussions.</p>
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

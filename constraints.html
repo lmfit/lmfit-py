@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="prev" title="Bounds Implementation" href="bounds.html" />
   <script type="text/x-mathjax-config">
@@ -33,41 +33,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -88,7 +83,7 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -104,12 +99,14 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="bounds.html"
                         title="previous chapter">Bounds Implementation</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/constraints.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/constraints.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -128,7 +125,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="using-mathematical-constraints">
 <span id="constraints-chapter"></span><h1>Using Mathematical Constraints<a class="headerlink" href="#using-mathematical-constraints" title="Permalink to this headline">¶</a></h1>
@@ -148,9 +145,9 @@ expressions used for constraints are evaluated using the <a class="reference ext
 which uses Python syntax, and evaluates the constraint expressions in a safe
 and isolated  namespace.</p>
 <p>This approach to mathematical constraints allows one to not have to write a
-separate model function for two Gaussians where the two <tt class="docutils literal"><span class="pre">sigma</span></tt> values are
+separate model function for two Gaussians where the two <code class="docutils literal"><span class="pre">sigma</span></code> values are
 forced to be equal, or where amplitudes are related.  Instead, one can write a
-more general two Gaussian model (perhaps using <tt class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></tt>) and
+more general two Gaussian model (perhaps using <code class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></code>) and
 impose such constraints on the Parameters for a particular fit.</p>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
@@ -252,7 +249,7 @@ the expression into something that can easily be evaluated
 within Python.  It also means that the symbols in the
 expressions can point to any Python object.</p>
 <p>In fact, the use of Python&#8217;s AST allows a nearly full version of Python to
-be supported, without using Python&#8217;s built-in <tt class="xref py py-meth docutils literal"><span class="pre">eval()</span></tt> function.  The
+be supported, without using Python&#8217;s built-in <code class="xref py py-meth docutils literal"><span class="pre">eval()</span></code> function.  The
 <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module actually supports most Python syntax, including for- and
 while-loops, conditional expressions, and user-defined functions.  There
 are several unsupported Python constructs, most notably the class
@@ -260,8 +257,8 @@ statement, so that new classes cannot be created, and the import statement,
 which helps make the <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module safe from malicious use.</p>
 <p>One important feature of the <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module is that you can add
 domain-specific functions into the it, for later use in constraint
-expressions.  To do this, you would use the <tt class="xref py py-attr docutils literal"><span class="pre">asteval</span></tt> attribute of
-the <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class, which contains a complete AST interpreter.
+expressions.  To do this, you would use the <code class="xref py py-attr docutils literal"><span class="pre">asteval</span></code> attribute of
+the <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> class, which contains a complete AST interpreter.
 The <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> interpreter uses a flat namespace, implemented as a single
 dictionary. That means you can preload any Python symbol into the namespace
 for the constraints:</p>
@@ -273,7 +270,7 @@ for the constraints:</p>
 <span class="n">fitter</span><span class="o">.</span><span class="n">asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s">&#39;lorentzian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mylorentzian</span>
 </pre></div>
 </div>
-<p>and this <tt class="xref py py-meth docutils literal"><span class="pre">lorentzian()</span></tt> function can now be used in constraint
+<p>and this <code class="xref py py-meth docutils literal"><span class="pre">lorentzian()</span></code> function can now be used in constraint
 expressions.</p>
 </div>
 </div>
@@ -284,7 +281,7 @@ expressions.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -304,9 +301,9 @@ expressions.</p>
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Bounds Implementation" href="bounds.html" />
     <link rel="prev" title="Built-in Fitting Models in the models module" href="builtin_models.html" />
@@ -34,41 +34,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -92,7 +87,7 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
@@ -107,16 +102,18 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="builtin_models.html"
-                        title="previous chapter">Built-in Fitting Models in the <tt class="docutils literal"><span class="pre">models</span></tt> module</a></p>
+                        title="previous chapter">Built-in Fitting Models in the <code class="docutils literal"><span class="pre">models</span></code> module</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="bounds.html"
                         title="next chapter">Bounds Implementation</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/confidence.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/confidence.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -135,16 +132,16 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="module-confidence">
 <span id="calculation-of-confidence-intervals"></span><h1>Calculation of confidence intervals<a class="headerlink" href="#module-confidence" title="Permalink to this headline">¶</a></h1>
-<p>The lmfit <a class="reference internal" href="#module-confidence" title="confidence"><tt class="xref py py-mod docutils literal"><span class="pre">confidence</span></tt></a> module allows you to explicitly calculate
+<p>The lmfit <a class="reference internal" href="#module-confidence" title="confidence"><code class="xref py py-mod docutils literal"><span class="pre">confidence</span></code></a> module allows you to explicitly calculate
 confidence intervals for variable parameters.  For most models, it is not
 necessary: the estimation of the standard error from the estimated
 covariance matrix is normally quite good.</p>
 <p>But for some models, e.g. a sum of two exponentials, the approximation
-begins to fail. For this case, lmfit has the function <tt class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></tt>
+begins to fail. For this case, lmfit has the function <code class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></code>
 to calculate confidence intervals directly.  This is substantially slower
 than using the errors estimated from the covariance matrix, but the results
 are more robust.</p>
@@ -170,8 +167,8 @@ model).</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="o">+</span><span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pars</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pars</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="n">a</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
 <span class="gp">... </span>   <span class="n">b</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
@@ -181,8 +178,9 @@ model).</p>
 <p>before we can generate the confidence intervals, we have to run a fit, so
 that the automated estimate of the standard errors can be used as a
 starting point:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mi</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mini</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Minimizer</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">pars</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">minimize</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">lmfit</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">))</span>
 <span class="go">[Variables]]</span>
 <span class="go">    a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)</span>
 <span class="go">    b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)</span>
@@ -192,7 +190,7 @@ starting point:</p>
 </div>
 <p>Now it is just a simple function call to calculate the confidence
 intervals:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
 <span class="go">     99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%</span>
 <span class="go">a   0.09886   0.09905   0.09925   0.09944   0.09963   0.09982   0.10003</span>
@@ -216,63 +214,101 @@ covariance can lead to misleading result &#8211; two decaying exponentials.  In
 fact such a problem is particularly hard for the Levenberg-Marquardt
 method, so we fitst estimate the results using the slower but robust
 Nelder-Mead  method, and <em>then</em> use Levenberg-Marquardt to estimate the
-uncertainties and correlations:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span><span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s">&#39;a1&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;a2&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;t1&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;t2&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">))</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
-<span class="gp">... </span>   <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
-<span class="gp">... </span>   <span class="k">return</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">v</span><span class="p">[</span><span class="s">&#39;t1&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;a2&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="o">/</span><span class="n">v</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">])</span><span class="o">-</span><span class="n">y</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># first solve with Nelder-Mead</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mi</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;Nelder&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c"># then solve with Levenberg-Marquardt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mi</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+uncertainties and correlations</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">lmfit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="c"># matplotlib.use(&#39;WXAgg&#39;)</span>
 
-<span class="go">[[Variables]]</span>
-<span class="go">    a1:   2.98622120 +/- 0.148671 (4.98%) (init= 2.986237)</span>
-<span class="go">    a2:  -4.33526327 +/- 0.115275 (2.66%) (init=-4.335256)</span>
-<span class="go">    t1:   1.30994233 +/- 0.131211 (10.02%) (init= 1.309932)</span>
-<span class="go">    t2:   11.8240350 +/- 0.463164 (3.92%) (init= 11.82408)</span>
-<span class="go">[[Correlations]] (unreported correlations are &lt;  0.500)</span>
-<span class="go">    C(a2, t2)                    =  0.987</span>
-</pre></div>
-</div>
-<p>Again we call <tt class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></tt>, this time with tracing and only for 1-
-and 2 <span class="math">\(\sigma\)</span>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.68</span><span class="p">,</span><span class="mf">0.95</span><span class="p">],</span> <span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
-<span class="go">      95.00%    68.00%     0.00%    68.00%    95.00%</span>
-<span class="go">a1   2.71850   2.84525   2.98622   3.14874   3.34076</span>
-<span class="go">a2  -4.63180  -4.46663  -4.35429  -4.22883  -4.14178</span>
-<span class="go">t2  10.82699  11.33865  11.78219  12.28195  12.71094</span>
-<span class="go">t1   1.08014   1.18566   1.38044   1.45566   1.62579</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span><span class="mf">5.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s">&#39;a1&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;a2&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;t1&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;t2&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+   <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
+   <span class="k">return</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">v</span><span class="p">[</span><span class="s">&#39;t1&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;a2&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="o">/</span><span class="n">v</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">])</span><span class="o">-</span><span class="n">y</span>
+
+<span class="c"># create Minimizer</span>
+<span class="n">mini</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Minimizer</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+
+<span class="c"># first solve with Nelder-Mead</span>
+<span class="n">out1</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;Nelder&#39;</span><span class="p">)</span>
+
+<span class="c"># then solve with Levenberg-Marquardt using the</span>
+<span class="c"># Nelder-Mead solution as a starting point</span>
+<span class="n">out2</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s">&#39;leastsq&#39;</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">out1</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+
+<span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">out2</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">out2</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.68</span><span class="p">,</span><span class="mf">0.95</span><span class="p">],</span>
+                                <span class="n">trace</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_ci</span><span class="p">(</span><span class="n">ci</span><span class="p">)</span>
+
+<span class="n">plot_type</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="k">if</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">residual</span><span class="p">(</span><span class="n">out2</span><span class="o">.</span><span class="n">params</span><span class="p">)</span><span class="o">+</span><span class="n">y</span> <span class="p">)</span>
+
+<span class="k">elif</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">grid</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">out2</span><span class="p">,</span> <span class="s">&#39;a2&#39;</span><span class="p">,</span><span class="s">&#39;t2&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;a2&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;t2&#39;</span><span class="p">)</span>
+
+<span class="k">elif</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">grid</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">out2</span><span class="p">,</span> <span class="s">&#39;a1&#39;</span><span class="p">,</span><span class="s">&#39;t2&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">cx</span><span class="p">,</span> <span class="n">cy</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;a1&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;t2&#39;</span><span class="p">)</span>
+
+
+<span class="k">elif</span> <span class="n">plot_type</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">,</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
+    <span class="n">cx2</span><span class="p">,</span> <span class="n">cy2</span><span class="p">,</span> <span class="n">prob2</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cx1</span><span class="p">,</span> <span class="n">cy1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">cx2</span><span class="p">,</span> <span class="n">cy2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">((</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">((</span><span class="mi">11</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;a1&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;t2&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">plot_type</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Comparing these two different estimates, we see that the estimate for <cite>a1</cite>
-is reasonably well approximated from the covariance matrix, but the
-estimates for <cite>a2</cite> and especially for <cite>t1</cite>, and <cite>t2</cite> are very asymmetric
-and that going from 1 <span class="math">\(\sigma\)</span> (68% confidence) to 2 <span class="math">\(\sigma\)</span>
-(95% confidence) is not very predictable.</p>
-<p>Now let&#8217;s plot a confidence region:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grid</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="s">&#39;a1&#39;</span><span class="p">,</span><span class="s">&#39;t2&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="mi">30</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;a1&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;t2&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<p>which will report:</p>
+<div class="highlight-python"><div class="highlight"><pre>[[Variables]]
+    a1:   2.98622120 +/- 0.148671 (4.98%) (init= 2.986237)
+    a2:  -4.33526327 +/- 0.115275 (2.66%) (init=-4.335256)
+    t1:   1.30994233 +/- 0.131211 (10.02%) (init= 1.309932)
+    t2:   11.8240350 +/- 0.463164 (3.92%) (init= 11.82408)
+[[Correlations]] (unreported correlations are &lt;  0.500)
+    C(a2, t2)                    =  0.987
+    C(a2, t1)                    = -0.925
+    C(t1, t2)                    = -0.881
+    C(a1, t1)                    = -0.599
+      95.00%    68.00%     0.00%    68.00%    95.00%
+a1   2.71850   2.84525   2.98622   3.14874   3.34076
+a2  -4.63180  -4.46663  -4.33526  -4.22883  -4.14178
+t2  10.82699  11.33865  11.82404  12.28195  12.71094
+t1   1.08014   1.18566   1.30994   1.45566   1.62579
 </pre></div>
 </div>
-<p>which shows the figure on the left below for <tt class="docutils literal"><span class="pre">a1</span></tt> and <tt class="docutils literal"><span class="pre">t2</span></tt>, and for
-<tt class="docutils literal"><span class="pre">a2</span></tt> and <tt class="docutils literal"><span class="pre">t2</span></tt> on the right:</p>
+<p>Again we called <code class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></code>, this time with tracing and only for
+1- and 2 <span class="math">\(\sigma\)</span>.  Comparing these two different estimates, we see
+that the estimate for <cite>a1</cite> is reasonably well approximated from the
+covariance matrix, but the estimates for <cite>a2</cite> and especially for <cite>t1</cite>, and
+<cite>t2</cite> are very asymmetric and that going from 1 <span class="math">\(\sigma\)</span> (68%
+confidence) to 2 <span class="math">\(\sigma\)</span> (95% confidence) is not very predictable.</p>
+<p>Let plots mad of the confidence region are shown the figure on the left
+below for <code class="docutils literal"><span class="pre">a1</span></code> and <code class="docutils literal"><span class="pre">t2</span></code>, and for <code class="docutils literal"><span class="pre">a2</span></code> and <code class="docutils literal"><span class="pre">t2</span></code> on the right:</p>
 <blockquote id="figc1">
 <div><a class="reference external image-reference" href="_images/conf_interval1.png"><img alt="_images/conf_interval1.png" src="_images/conf_interval1.png" style="width: 48%;" /></a>
 <a class="reference external image-reference" href="_images/conf_interval1a.png"><img alt="_images/conf_interval1a.png" src="_images/conf_interval1a.png" style="width: 48%;" /></a>
@@ -280,10 +316,11 @@ and that going from 1 <span class="math">\(\sigma\)</span> (68% confidence) to 2
 <p>Neither of these plots is very much like an ellipse, which is implicitly
 assumed by the approach using the covariance matrix.</p>
 <p>The trace returned as the optional second argument from
-<tt class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></tt> contains a dictionary for each variable parameter.
+<code class="xref py py-func docutils literal"><span class="pre">conf_interval()</span></code> contains a dictionary for each variable parameter.
 The values are dictionaries with arrays of values for each variable, and an
-array of corresponding probabilities for the corresponding cumulative variables.  This
-can be used to show the dependence between two parameters:</p>
+array of corresponding probabilities for the corresponding cumulative
+variables.  This can be used to show the dependence between two
+parameters:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">prob</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;a1&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">prob2</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;t2&#39;</span><span class="p">],</span> <span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;a1&#39;</span><span class="p">],</span><span class="n">trace</span><span class="p">[</span><span class="s">&#39;t2&#39;</span><span class="p">][</span><span class="s">&#39;prob&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">prob</span> <span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
@@ -302,9 +339,9 @@ can be used to show the dependence between two parameters:</p>
 <h2>Documentation of methods<a class="headerlink" href="#documentation-of-methods" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="lmfit.conf_interval">
-<tt class="descname">conf_interval</tt><big>(</big><em>minimizer</em>, <em>p_names=None</em>, <em>sigmas=(0.674</em>, <em>0.95</em>, <em>0.997)</em>, <em>trace=False</em>, <em>maxiter=200</em>, <em>verbose=False</em>, <em>prob_func=None</em><big>)</big><a class="headerlink" href="#lmfit.conf_interval" title="Permalink to this definition">¶</a></dt>
+<code class="descname">conf_interval</code><span class="sig-paren">(</span><em>minimizer</em>, <em>result</em>, <em>p_names=None</em>, <em>sigmas=(0.674</em>, <em>0.95</em>, <em>0.997)</em>, <em>trace=False</em>, <em>maxiter=200</em>, <em>verbose=False</em>, <em>prob_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the confidence interval for parameters
-from the given minimizer.</p>
+from the given a MinimizerResult, output from minimize.</p>
 <p>The parameter for which the ci is calculated will be varied, while
 the remaining parameters are re-optimized for minimizing chi-square.
 The resulting chi-square is used  to calculate the probability with
@@ -317,7 +354,11 @@ region.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minimizer</strong> : Minimizer</p>
 <blockquote>
-<div><p>The minimizer to use, should be already fitted via leastsq.</p>
+<div><p>The minimizer to use, holding objective function.</p>
+</div></blockquote>
+<p><strong>result</strong> : MinimizerResult</p>
+<blockquote>
+<div><p>The result of running minimize().</p>
 </div></blockquote>
 <p><strong>p_names</strong> : list, optional</p>
 <blockquote>
@@ -354,14 +395,14 @@ values.</p>
 <blockquote>
 <div><p>Maximum of iteration to find an upper limit.</p>
 </div></blockquote>
-<p><strong>prob_func</strong> : <tt class="docutils literal"><span class="pre">None</span></tt> or callable</p>
+<p><strong>prob_func</strong> : <code class="docutils literal"><span class="pre">None</span></code> or callable</p>
 <blockquote>
 <div><p>Function to calculate the probability from the optimized chi-square.
-Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses built-in f_compare (F test).</p>
+Default (<code class="docutils literal"><span class="pre">None</span></code>) uses built-in f_compare (F test).</p>
 </div></blockquote>
-<p><strong>verbose: bool</strong> :</p>
+<p><strong>verbose: bool</strong></p>
 <blockquote class="last">
-<div><p>print extra debuggin information. Default is <tt class="docutils literal"><span class="pre">False</span></tt>.</p>
+<div><p>print extra debuggin information. Default is <code class="docutils literal"><span class="pre">False</span></code>.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -369,7 +410,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">conf_interval2d</span></tt></p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">conf_interval2d</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit.printfuncs</span> <span class="kn">import</span> <span class="o">*</span>
@@ -395,7 +436,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
 
 <dl class="function">
 <dt id="lmfit.conf_interval2d">
-<tt class="descname">conf_interval2d</tt><big>(</big><em>minimizer</em>, <em>x_name</em>, <em>y_name</em>, <em>nx=10</em>, <em>ny=10</em>, <em>limits=None</em>, <em>prob_func=None</em><big>)</big><a class="headerlink" href="#lmfit.conf_interval2d" title="Permalink to this definition">¶</a></dt>
+<code class="descname">conf_interval2d</code><span class="sig-paren">(</span><em>minimizer</em>, <em>result</em>, <em>x_name</em>, <em>y_name</em>, <em>nx=10</em>, <em>ny=10</em>, <em>limits=None</em>, <em>prob_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates confidence regions for two fixed parameters.</p>
 <p>The method is explained in <em>conf_interval</em>: here we are fixing
 two parameters.</p>
@@ -403,9 +444,13 @@ two parameters.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minimizer</strong> : minimizer</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minimizer</strong> : Minimizer</p>
 <blockquote>
-<div><p>The minimizer to use, should be already fitted via leastsq.</p>
+<div><p>The minimizer to use, holding objective function.</p>
+</div></blockquote>
+<p><strong>result</strong> : MinimizerResult</p>
+<blockquote>
+<div><p>The result of running minimize().</p>
 </div></blockquote>
 <p><strong>x_name</strong> : string</p>
 <blockquote>
@@ -441,20 +486,19 @@ given, the default is 5 std-errs in each direction.</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>prob_func</strong> : <tt class="docutils literal"><span class="pre">None</span></tt> or callable</p>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>prob_func</strong> : <code class="docutils literal"><span class="pre">None</span></code> or callable</p>
 <blockquote class="last">
 <div><p>Function to calculate the probability from the optimized chi-square.
-Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses built-in f_compare (F test).</p>
+Default (<code class="docutils literal"><span class="pre">None</span></code>) uses built-in f_compare (F test).</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mini</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">some_func</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mini</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">gr</span> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="s">&#39;para1&#39;</span><span class="p">,</span><span class="s">&#39;para2&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mini</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">some_func</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">gr</span> <span class="o">=</span> <span class="n">conf_interval2d</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="s">&#39;para1&#39;</span><span class="p">,</span><span class="s">&#39;para2&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">gr</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -469,7 +513,7 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -492,9 +536,9 @@ Default (<tt class="docutils literal"><span class="pre">None</span></tt>) uses b
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

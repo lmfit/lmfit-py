@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Performing Fits, Analyzing Outputs" href="fitting.html" />
     <link rel="prev" title="Frequently Asked Questions" href="faq.html" />
@@ -34,41 +34,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -92,13 +87,13 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">Parameter</span></tt>  and <tt class="docutils literal"><span class="pre">Parameters</span></tt></a><ul>
-<li><a class="reference internal" href="#the-parameter-class">The <tt class="docutils literal"><span class="pre">Parameter</span></tt> class</a></li>
-<li><a class="reference internal" href="#the-parameters-class">The <tt class="docutils literal"><span class="pre">Parameters</span></tt> class</a></li>
+<li><a class="reference internal" href="#"><code class="docutils literal"><span class="pre">Parameter</span></code>  and <code class="docutils literal"><span class="pre">Parameters</span></code></a><ul>
+<li><a class="reference internal" href="#the-parameter-class">The <code class="docutils literal"><span class="pre">Parameter</span></code> class</a></li>
+<li><a class="reference internal" href="#the-parameters-class">The <code class="docutils literal"><span class="pre">Parameters</span></code> class</a></li>
 <li><a class="reference internal" href="#simple-example">Simple Example</a></li>
 </ul>
 </li>
@@ -110,12 +105,14 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="fitting.html"
                         title="next chapter">Performing Fits, Analyzing Outputs</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/parameters.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/parameters.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -134,52 +131,53 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="parameter-and-parameters">
-<span id="parameters-chapter"></span><h1><a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>  and <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a><a class="headerlink" href="#parameter-and-parameters" title="Permalink to this headline">¶</a></h1>
-<p>This chapter describes <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects which is the key concept
-of lmfit.  A <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> is the quantity to be optimized in all
-minimization problems, replacing the plain floating point number used in
-the optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  A <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
-has a value that can be varied in the fit, fixed, have upper and/or lower
-bounds.  It can even have a value that is constrained by an algebraic
-expression of other Parameter values.  Since <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> live
-outside the core optimization routines, they can be used in <strong>all</strong>
-optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>.  By using
-<a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects instead of plain variables, the objective
+<span id="parameters-chapter"></span><h1><a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>  and <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a><a class="headerlink" href="#parameter-and-parameters" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects which is the key concept
+of lmfit.</p>
+<p>A <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> is the quantity to be optimized in all minimization
+problems, replacing the plain floating point number used in the
+optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>.  A <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
+a value that can be varied in the fit or have a fixed value, have upper
+and/or lower bounds.  It can even have a value that is constrained by an
+algebraic expression of other Parameter values.  Since <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>
+live outside the core optimization routines, they can be used in <strong>all</strong>
+optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>.  By using
+<a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects instead of plain variables, the objective
 function does not have to be modified to reflect every change of what is
 varied in the fit.  This simplifies the writing of models, allowing general
 models that describe the phenomenon to be written, and gives the user more
 flexibility in using and testing variations of that model.</p>
-<p>Whereas a <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> expands on an individual floating point
+<p>Whereas a <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> expands on an individual floating point
 variable, the optimization methods need an ordered group of floating point
-variables.  In the <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a> routines this is required to be a
-1-dimensional numpy ndarray.  For lmfit, where each <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> has
-a name, this is replaced by a <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class, which works as an
-ordered dictionary of <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects, with a few additional
-features and methods.  That is, while the concept of a <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
+variables.  In the <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a> routines this is required to be a
+1-dimensional numpy ndarray.  For lmfit, where each <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
+a name, this is replaced by a <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> class, which works as an
+ordered dictionary of <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects, with a few additional
+features and methods.  That is, while the concept of a <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 is central to lmfit, one normally creates and interacts with a
-<a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> instance that contains many <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
-objects.  The objective functions you write will take an instance of
-<a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> as its first argument.</p>
+<a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> instance that contains many <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects.
+The objective functions you write for lmfit will take an instance of
+<a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> as its first argument.</p>
 <div class="section" id="the-parameter-class">
-<h2>The <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> class<a class="headerlink" href="#the-parameter-class" title="Permalink to this headline">¶</a></h2>
+<h2>The <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> class<a class="headerlink" href="#the-parameter-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="Parameter">
-<em class="property">class </em><tt class="descname">Parameter</tt><big>(</big><em>name=None</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Parameter</code><span class="sig-paren">(</span><em>name=None</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>create a Parameter object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> or string &#8211; will be overwritten during fit if <tt class="docutils literal"><span class="pre">None</span></tt>.) &#8211; parameter name</li>
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">None</span></code> or string &#8211; will be overwritten during fit if <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; parameter name</li>
 <li><strong>value</strong> &#8211; the numerical value for the parameter</li>
-<li><strong>vary</strong> (boolean (<tt class="docutils literal"><span class="pre">True</span></tt>/<tt class="docutils literal"><span class="pre">False</span></tt>) [default <tt class="docutils literal"><span class="pre">True</span></tt>]) &#8211; whether to vary the parameter or not.</li>
-<li><strong>min</strong> &#8211; lower bound for value (<tt class="docutils literal"><span class="pre">None</span></tt> = no lower bound).</li>
-<li><strong>max</strong> &#8211; upper bound for value (<tt class="docutils literal"><span class="pre">None</span></tt> = no upper bound).</li>
-<li><strong>expr</strong> (<tt class="docutils literal"><span class="pre">None</span></tt> or string) &#8211; mathematical expression to use to evaluate value during fit.</li>
+<li><strong>vary</strong> (boolean (<code class="docutils literal"><span class="pre">True</span></code>/<code class="docutils literal"><span class="pre">False</span></code>) [default <code class="docutils literal"><span class="pre">True</span></code>]) &#8211; whether to vary the parameter or not.</li>
+<li><strong>min</strong> &#8211; lower bound for value (<code class="docutils literal"><span class="pre">None</span></code> = no lower bound).</li>
+<li><strong>max</strong> &#8211; upper bound for value (<code class="docutils literal"><span class="pre">None</span></code> = no upper bound).</li>
+<li><strong>expr</strong> (<code class="docutils literal"><span class="pre">None</span></code> or string) &#8211; mathematical expression to use to evaluate value during fit.</li>
 </ul>
 </td>
 </tr>
@@ -188,19 +186,19 @@ objects.  The objective functions you write will take an instance of
 </dd></dl>
 
 <p>Each of these inputs is turned into an attribute of the same name.</p>
-<p>After a fit, a Parameter for a fitted variable (that is with vary =
-<tt class="docutils literal"><span class="pre">True</span></tt>) will have the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> attribute holding the best-fit value.
+<p>After a fit, a Parameter for a fitted variable (that is with <code class="docutils literal"><span class="pre">vary</span> <span class="pre">=</span>
+<span class="pre">True</span></code>) may have its <code class="xref py py-attr docutils literal"><span class="pre">value</span></code> attribute to hold the best-fit value.
 Depending on the success of the fit and fitting algorithm used, it may also
-have attributes <a class="reference internal" href="#stderr" title="stderr"><tt class="xref py py-attr docutils literal"><span class="pre">stderr</span></tt></a> and <a class="reference internal" href="#correl" title="correl"><tt class="xref py py-attr docutils literal"><span class="pre">correl</span></tt></a>.</p>
+have attributes <a class="reference internal" href="#stderr" title="stderr"><code class="xref py py-attr docutils literal"><span class="pre">stderr</span></code></a> and <a class="reference internal" href="#correl" title="correl"><code class="xref py py-attr docutils literal"><span class="pre">correl</span></code></a>.</p>
 <dl class="attribute">
 <dt id="stderr">
-<tt class="descname">stderr</tt><a class="headerlink" href="#stderr" title="Permalink to this definition">¶</a></dt>
+<code class="descname">stderr</code><a class="headerlink" href="#stderr" title="Permalink to this definition">¶</a></dt>
 <dd><p>the estimated standard error for the best-fit value.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="correl">
-<tt class="descname">correl</tt><a class="headerlink" href="#correl" title="Permalink to this definition">¶</a></dt>
+<code class="descname">correl</code><a class="headerlink" href="#correl" title="Permalink to this definition">¶</a></dt>
 <dd><p>a dictionary of the correlation with the other fitted variables in the
 fit, of the form:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;decay&#39;</span><span class="p">:</span> <span class="mf">0.404</span><span class="p">,</span> <span class="s">&#39;phase&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.020</span><span class="p">,</span> <span class="s">&#39;frequency&#39;</span><span class="p">:</span> <span class="mf">0.102</span><span class="p">}</span>
@@ -208,98 +206,92 @@ fit, of the form:</p>
 </div>
 </dd></dl>
 
-<p>See <a class="reference internal" href="bounds.html#bounds-chapter"><em>Bounds Implementation</em></a> for details on the math used to implement the
-bounds with <tt class="xref py py-attr docutils literal"><span class="pre">min</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">max</span></tt>.</p>
-<p>The <tt class="xref py py-attr docutils literal"><span class="pre">expr</span></tt> attribute can contain a mathematical expression that will
+<p>See <a class="reference internal" href="bounds.html#bounds-chapter"><span>Bounds Implementation</span></a> for details on the math used to implement the
+bounds with <code class="xref py py-attr docutils literal"><span class="pre">min</span></code> and <code class="xref py py-attr docutils literal"><span class="pre">max</span></code>.</p>
+<p>The <code class="xref py py-attr docutils literal"><span class="pre">expr</span></code> attribute can contain a mathematical expression that will
 be used to compute the value for the Parameter at each step in the fit.
-See <a class="reference internal" href="constraints.html#constraints-chapter"><em>Using Mathematical Constraints</em></a> for more details and examples of this
+See <a class="reference internal" href="constraints.html#constraints-chapter"><span>Using Mathematical Constraints</span></a> for more details and examples of this
 feature.</p>
 <span class="target" id="index-0"></span><dl class="method">
 <dt id="set">
-<tt class="descname">set</tt><big>(</big><em>value=None</em><span class="optional">[</span>, <em>vary=None</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#set" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>set or update a Parameters value or other attributes.</p>
+<code class="descname">set</code><span class="sig-paren">(</span><em>value=None</em><span class="optional">[</span>, <em>vary=None</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#set" title="Permalink to this definition">¶</a></dt>
+<dd><p>set or update a Parameters value or other attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">param name:</th><td class="field-body">parameter name</td>
-</tr>
-<tr class="field-even field"><th class="field-name">param value:</th><td class="field-body">the numerical value for the parameter</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">param vary:</th><td class="field-body">whether to vary the parameter or not.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">param min:</th><td class="field-body">lower bound for value</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">param max:</th><td class="field-body">upper bound for value</td>
-</tr>
-<tr class="field-even field"><th class="field-name">param expr:</th><td class="field-body">mathematical expression to use to evaluate value during fit.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; parameter name</li>
+<li><strong>value</strong> &#8211; the numerical value for the parameter</li>
+<li><strong>vary</strong> &#8211; whether to vary the parameter or not.</li>
+<li><strong>min</strong> &#8211; lower bound for value</li>
+<li><strong>max</strong> &#8211; upper bound for value</li>
+<li><strong>expr</strong> &#8211; mathematical expression to use to evaluate value during fit.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
-<p>Each argument of <a class="reference internal" href="#set" title="set"><tt class="xref py py-meth docutils literal"><span class="pre">set()</span></tt></a> has a default value of <tt class="docutils literal"><span class="pre">None</span></tt>, and will</p>
-</div></blockquote>
-<dl class="docutils">
-<dt>be set only if the provided value is not <tt class="docutils literal"><span class="pre">None</span></tt>.  You can use this to</dt>
-<dd><p class="first">update some Parameter attribute without affecting others, for example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">p1</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="n">p2</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-<span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">p2</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>to set a lower bound, or to set a Parameter as have a fixed value.</p>
-<p>Note that to use this approach to lift a lower or upper bound, doing:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="o">.....</span>
-<span class="c"># now lift the lower bound</span>
-<span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>   <span class="c"># won&#39;t work!  lower bound NOT changed</span>
-</pre></div>
-</div>
-<p>won&#8217;t work &#8211; this will not change the current lower bound.  Instead
-you&#8217;ll have to use <tt class="docutils literal"><span class="pre">np.inf</span></tt> to remove a lower or upper bound:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># now lift the lower bound</span>
-<span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>   <span class="c"># will work!</span>
-</pre></div>
-</div>
-<p>Similarly, to clear an expression of a parameter, you need to pass an
-empty string, not <tt class="docutils literal"><span class="pre">None</span></tt>.  You also need to give a value and
-explicitly tell it to vary:</p>
-<div class="last highlight-python"><div class="highlight"><pre><span class="n">p3</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;(a+b)/2&#39;</span><span class="p">)</span>
-<span class="n">p3</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>     <span class="c"># won&#39;t work!  expression NOT changed</span>
-
-<span class="c"># remove constraint expression</span>
-<span class="n">p3</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>  <span class="c"># will work!  parameter now unconstrained</span>
-</pre></div>
-</div>
-</dd>
-</dl>
 </dd></dl>
 
+<p>Each argument of <a class="reference internal" href="#set" title="set"><code class="xref py py-meth docutils literal"><span class="pre">set()</span></code></a> has a default value of <code class="docutils literal"><span class="pre">None</span></code>, and will
+be set only if the provided value is not <code class="docutils literal"><span class="pre">None</span></code>.  You can use this to
+update some Parameter attribute without affecting others, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre>    p1 = Parameter(&#39;a&#39;, value=2.0)
+    p2 = Parameter(&#39;b&#39;, value=0.0)
+    p1.set(min=0)
+    p2.set(vary=False)
+
+to set a lower bound, or to set a Parameter as have a fixed value.
+
+Note that to use this approach to lift a lower or upper bound, doing::
+
+    p1.set(min=0)
+    .....
+    # now lift the lower bound
+    p1.set(min=None)   # won&#39;t work!  lower bound NOT changed
+
+won&#39;t work -- this will not change the current lower bound.  Instead
+you&#39;ll have to use ``np.inf`` to remove a lower or upper bound::
+
+    # now lift the lower bound
+    p1.set(min=-np.inf)   # will work!
+
+Similarly, to clear an expression of a parameter, you need to pass an
+empty string, not ``None``.  You also need to give a value and
+explicitly tell it to vary::
+
+    p3 = Parameter(&#39;c&#39;, expr=&#39;(a+b)/2&#39;)
+    p3.set(expr=None)     # won&#39;t work!  expression NOT changed
+
+    # remove constraint expression
+    p3.set(value=1.0, vary=True, expr=&#39;&#39;)  # will work!  parameter now unconstrained
+</pre></div>
+</div>
 </div>
 <div class="section" id="the-parameters-class">
-<h2>The <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> class<a class="headerlink" href="#the-parameters-class" title="Permalink to this headline">¶</a></h2>
+<h2>The <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> class<a class="headerlink" href="#the-parameters-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="Parameters">
-<em class="property">class </em><tt class="descname">Parameters</tt><a class="headerlink" href="#Parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>create a Parameters object.  This is little more than a fancy
-dictionary, with the restrictions that</p>
+<em class="property">class </em><code class="descname">Parameters</code><a class="headerlink" href="#Parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a Parameters object.  This is little more than a fancy ordered
+dictionary, with the restrictions that:</p>
 <ol class="arabic simple">
-<li>keys must be valid Python symbol names (so that they can be used in
-expressions of mathematical constraints).  This means the names must
-match <tt class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></tt>  and cannot be a Python reserved word.</li>
-<li>values must be valid <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects.</li>
+<li>keys must be valid Python symbol names, so that they can be used in
+expressions of mathematical constraints.  This means the names must
+match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code>  and cannot be a Python reserved word.</li>
+<li>values must be valid <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects.</li>
 </ol>
-<p>Two methods are for provided for convenient initialization of a <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>,
-and one for extracting <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> values into a plain dictionary.</p>
+<p>Two methods are for provided for convenient initialization of a <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>,
+and one for extracting <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> values into a plain dictionary.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="add">
-<tt class="descname">add</tt><big>(</big><em>name</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#add" title="Permalink to this definition">¶</a></dt>
-<dd><p>add a named parameter.  This creates a <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
+<code class="descname">add</code><span class="sig-paren">(</span><em>name</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#add" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a named parameter.  This creates a <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 object associated with the key <cite>name</cite>, with optional arguments
-passed to <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>:</p>
+passed to <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">p</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;myvar&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
@@ -308,7 +300,7 @@ passed to <a class="reference internal" href="#Parameter" title="Parameter"><tt 
 
 <dl class="method">
 <dt id="add_many">
-<tt class="descname">add_many</tt><big>(</big><em>self</em>, <em>paramlist</em><big>)</big><a class="headerlink" href="#add_many" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_many</code><span class="sig-paren">(</span><em>self</em>, <em>paramlist</em><span class="sig-paren">)</span><a class="headerlink" href="#add_many" title="Permalink to this definition">¶</a></dt>
 <dd><p>add a list of named parameters.  Each entry must be a tuple
 with the following entries:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">vary</span><span class="p">,</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">,</span> <span class="n">expr</span>
@@ -330,54 +322,61 @@ table-like:</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pretty_print">
+<code class="descname">pretty_print</code><span class="sig-paren">(</span><em>oneline=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pretty_print" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints a clean representation on the Parameters. If <cite>oneline</cite> is
+<cite>True</cite>, the result will be printed to a single (long) line.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="valuesdict">
-<tt class="descname">valuesdict</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#valuesdict" title="Permalink to this definition">¶</a></dt>
-<dd><p>return an ordered dictionary of name:value pairs containing the
-<tt class="xref py py-attr docutils literal"><span class="pre">name</span></tt> and <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt> of a Parameter.</p>
-<p>This is distinct from the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> itself, as the dictionary
-values are not <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects, just the <tt class="xref py py-attr docutils literal"><span class="pre">value</span></tt>.
-This can be a very convenient way to get updated values in a objective
-function.</p>
+<code class="descname">valuesdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#valuesdict" title="Permalink to this definition">¶</a></dt>
+<dd><p>return an ordered dictionary of name:value pairs with the
+Paramater name as the key and Parameter value as value.</p>
+<p>This is distinct from the <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> itself, as the dictionary
+values are not <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects, just the <code class="xref py py-attr docutils literal"><span class="pre">value</span></code>.
+Using <a href="#id1"><span class="problematic" id="id2">:method:`valuesdict`</span></a> can be a very convenient way to get updated
+values in a objective function.</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<tt class="descname">dumps(**kws):</tt></dt>
-<dd><p>return a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> object.
+<code class="descname">dumps(**kws):</code></dt>
+<dd><p>return a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object.
 This can be saved or used to re-create or re-set parameters, using the
-<tt class="xref py py-meth docutils literal"><span class="pre">loads()</span></tt> method.</p>
-<p>Optional keywords are sent <a class="reference external" href="http://docs.python.org/2/library/json.html#json.dumps" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></tt></a>.</p>
+<code class="xref py py-meth docutils literal"><span class="pre">loads()</span></code> method.</p>
+<p>Optional keywords are sent <a class="reference external" href="http://docs.python.org/2/library/json.html#json.dumps" title="(in Python v2.7)"><code class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<tt class="descname">dump(file, **kws):</tt></dt>
-<dd><p>write a JSON representation of the <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> object to a file
-or file-like object in <cite>file</cite> &#8211; really any object with a <tt class="xref py py-meth docutils literal"><span class="pre">write()</span></tt>
-method.  Optional keywords are sent <a class="reference external" href="http://docs.python.org/2/library/json.html#json.dumps" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></tt></a>.</p>
+<code class="descname">dump(file, **kws):</code></dt>
+<dd><p>write a JSON representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object to a file
+or file-like object in <cite>file</cite> &#8211; really any object with a <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code>
+method.  Optional keywords are sent <a class="reference external" href="http://docs.python.org/2/library/json.html#json.dumps" title="(in Python v2.7)"><code class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<tt class="descname">loads(sval, **kws):</tt></dt>
-<dd><p>use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> object in
+<code class="descname">loads(sval, **kws):</code></dt>
+<dd><p>use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object in
 <cite>sval</cite> to set all parameter settins. Optional keywords are sent
-<a class="reference external" href="http://docs.python.org/2/library/json.html#json.loads" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">json.loads()</span></tt></a>.</p>
+<a class="reference external" href="http://docs.python.org/2/library/json.html#json.loads" title="(in Python v2.7)"><code class="xref py py-func docutils literal"><span class="pre">json.loads()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt>
-<tt class="descname">load(file, **kws):</tt></dt>
-<dd><p>read and use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
+<code class="descname">load(file, **kws):</code></dt>
+<dd><p>read and use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 object from a file or file-like object in <cite>file</cite> &#8211; really any object
-with a <tt class="xref py py-meth docutils literal"><span class="pre">read()</span></tt> method.  Optional keywords are sent
-<a class="reference external" href="http://docs.python.org/2/library/json.html#json.loads" title="(in Python v2.7)"><tt class="xref py py-func docutils literal"><span class="pre">json.loads()</span></tt></a>.</p>
+with a <code class="xref py py-meth docutils literal"><span class="pre">read()</span></code> method.  Optional keywords are sent
+<a class="reference external" href="http://docs.python.org/2/library/json.html#json.loads" title="(in Python v2.7)"><code class="xref py py-func docutils literal"><span class="pre">json.loads()</span></code></a>.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="simple-example">
 <h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
-<p>Using <tt class="xref py py-class docutils literal"><span class="pre">Parameters`</span></tt> and <a class="reference internal" href="fitting.html#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function (discussed in the
+<p>Using <code class="xref py py-class docutils literal"><span class="pre">Parameters`</span></code> and <a class="reference internal" href="fitting.html#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> function (discussed in the
 next chapter) might look like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
 <span class="c">#&lt;examples/doc_basic.py&gt;</span>
@@ -415,7 +414,7 @@ next chapter) might look like this:</p>
 <span class="n">final</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">residual</span>
 
 <span class="c"># write error report</span>
-<span class="n">report_fit</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 
 <span class="c"># try to plot results</span>
 <span class="k">try</span><span class="p">:</span>
@@ -430,8 +429,8 @@ next chapter) might look like this:</p>
 </pre></div>
 </div>
 <p>Here, the objective function explicitly unpacks each Parameter value.  This
-can be simplified using the <a class="reference internal" href="#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> <a class="reference internal" href="#valuesdict" title="valuesdict"><tt class="xref py py-meth docutils literal"><span class="pre">valuesdict()</span></tt></a> method,
-which would make the objective function <tt class="docutils literal"><span class="pre">fcn2min</span></tt> above look like:</p>
+can be simplified using the <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> <a class="reference internal" href="#valuesdict" title="valuesdict"><code class="xref py py-meth docutils literal"><span class="pre">valuesdict()</span></code></a> method,
+which would make the objective function <code class="docutils literal"><span class="pre">fcn2min</span></code> above look like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; model decaying sine wave, subtract data&quot;&quot;&quot;</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
@@ -450,7 +449,7 @@ which would make the objective function <tt class="docutils literal"><span class
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -473,9 +472,9 @@ which would make the objective function <tt class="docutils literal"><span class
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

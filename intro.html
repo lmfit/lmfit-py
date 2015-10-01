@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Downloading and Installation" href="installation.html" />
     <link rel="prev" title="Non-Linear Least-Square Minimization and Curve-Fitting for Python" href="index.html" />
@@ -34,41 +34,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -92,7 +87,7 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
@@ -100,12 +95,14 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="installation.html"
                         title="next chapter">Downloading and Installation</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/intro.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/intro.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -124,11 +121,11 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="getting-started-with-non-linear-least-squares-fitting">
 <span id="intro-chapter"></span><h1>Getting started with Non-Linear Least-Squares Fitting<a class="headerlink" href="#getting-started-with-non-linear-least-squares-fitting" title="Permalink to this headline">¶</a></h1>
-<p>The lmfit package is designed to provide simple tools to help you build of
+<p>The lmfit package is designed to provide simple tools to help you build
 complex fitting models for non-linear least-squares problems and apply
 these models to real data.  This section gives an overview of the concepts
 and describes how to set up and perform simple fits.  Some basic knowledge
@@ -165,7 +162,7 @@ simple example, one might write an objective function like this:</p>
     <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span><span class="o">/</span><span class="n">eps_data</span>
 </pre></div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a>, one would do:</p>
+<p>To perform the minimization with <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>, one would do:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
 <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">))</span>
@@ -198,14 +195,14 @@ painful if the fitting model needs to change.</li>
 </div></blockquote>
 <p>These shortcomings are really do solely to the use of traditional arrays of
 variables, as matches closely the implementation of the Fortran code.  The
-lmfit module overcomes these shortcomings by using a core reason for using
-Python &#8211; objects.  The key concept for lmfit is to use <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>
+lmfit module overcomes these shortcomings by using objects &#8211; a core reason for wokring with
+Python.  The key concept for lmfit is to use <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 objects instead of plain floating point numbers as the variables for the
-fit.  By using <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects (or the closely related
-<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> &#8211; a dictionary of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> objects), one can</p>
+fit.  By using <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects (or the closely related
+<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> &#8211; a dictionary of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects), one can</p>
 <blockquote>
 <div><ol class="loweralpha simple">
-<li>not care about the order of variables, but refer to Parameters
+<li>forget about the order of variables and refer to Parameters
 by meaningful names.</li>
 <li>place bounds on Parameters as attributes, without worrying about order.</li>
 <li>fix Parameters, without having to rewrite the objective function.</li>
@@ -237,9 +234,9 @@ as:</p>
 </div>
 <p>At first look, we simply replaced a list of values with a dictionary,
 accessed by name &#8211; not a huge improvement.  But each of the named
-<a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> in the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> object hold additional
+<a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> in the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> object holds additional
 attributes to modify the value during the fit.  For example, Parameters can
-be fixed or bounded.  This can be done when being defined:</p>
+be fixed or bounded.  This can be done during definition:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.007</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
@@ -247,25 +244,25 @@ be fixed or bounded.  This can be done when being defined:</p>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frequency&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>(where <tt class="docutils literal"><span class="pre">vary=False</span></tt> will prevent the value from changing in the fit, and
-<tt class="docutils literal"><span class="pre">min=-0.0</span></tt> will set a lower bound on that parameters value) or after
-being defined by setting the corresponding attributes after they have been
+<p>where <code class="docutils literal"><span class="pre">vary=False</span></code> will prevent the value from changing in the fit, and
+<code class="docutils literal"><span class="pre">min=0.0</span></code> will set a lower bound on that parameters value). It can also be done
+later by setting the corresponding attributes after they have been
 created:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="bp">False</span>
 <span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mf">0.10</span>
 </pre></div>
 </div>
-<p>Importantly, our function to be minimized remains unchanged.</p>
+<p>Importantly, our objective function remains unchanged.</p>
 <p>The <cite>params</cite> object can be copied and modified to make many user-level
 changes to the model and fitting process.  Of course, most of the
 information about how your data is modeled goes into the objective
-function, but the approach here allows some external control, that is by
-the <strong>user</strong> of the objective function instead of just by the author of the
+function, but the approach here allows some external control; that is, control by
+the <strong>user</strong> performing the fit, instead of by the author of the
 objective function.</p>
-<p>Finally, in addition to the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> approach to fitting data,
-lmfit allows you to easily switch optimization methods without rewriting
-your objective function, and provides tools for writing fitting reports and
-for better determining the confidence levels for Parameters.</p>
+<p>Finally, in addition to the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> approach to fitting data,
+lmfit allows switching optimization methods without changing
+the objective function, provides tools for writing fitting reports, and
+provides better determination of Parameters confidence levels.</p>
 </div>
 
 
@@ -274,7 +271,7 @@ for better determining the confidence levels for Parameters.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -297,9 +294,9 @@ for better determining the confidence levels for Parameters.</p>
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

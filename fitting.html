@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Modeling Data and Curve Fitting" href="model.html" />
     <link rel="prev" title="Parameter and Parameters" href="parameters.html" />
@@ -34,41 +34,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -92,16 +87,21 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Performing Fits, Analyzing Outputs</a><ul>
-<li><a class="reference internal" href="#the-minimize-function">The <tt class="docutils literal"><span class="pre">minimize()</span></tt> function</a></li>
+<li><a class="reference internal" href="#the-minimize-function">The <code class="docutils literal"><span class="pre">minimize()</span></code> function</a></li>
 <li><a class="reference internal" href="#writing-a-fitting-function">Writing a Fitting Function</a></li>
 <li><a class="reference internal" href="#choosing-different-fitting-methods">Choosing Different Fitting Methods</a></li>
-<li><a class="reference internal" href="#goodness-of-fit-and-estimated-uncertainty-and-correlations">Goodness-of-Fit and estimated uncertainty and correlations</a></li>
-<li><a class="reference internal" href="#using-the-minimizer-class">Using the <tt class="docutils literal"><span class="pre">Minimizer</span></tt> class</a></li>
+<li><a class="reference internal" href="#minimizerresult-the-optimization-result"><code class="docutils literal"><span class="pre">MinimizerResult</span></code> &#8211; the optimization result</a><ul>
+<li><a class="reference internal" href="#goodness-of-fit-statistics">Goodness-of-Fit Statistics</a></li>
+<li><a class="reference internal" href="#akaike-and-bayesian-information-criteria">Akaike and Bayesian Information Criteria</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-a-iteration-callback-function">Using a Iteration Callback Function</a></li>
+<li><a class="reference internal" href="#using-the-minimizer-class">Using the <code class="docutils literal"><span class="pre">Minimizer</span></code> class</a></li>
 <li><a class="reference internal" href="#getting-and-printing-fit-reports">Getting and Printing Fit Reports</a></li>
 </ul>
 </li>
@@ -109,16 +109,18 @@
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="parameters.html"
-                        title="previous chapter"><tt class="docutils literal"><span class="pre">Parameter</span></tt>  and <tt class="docutils literal"><span class="pre">Parameters</span></tt></a></p>
+                        title="previous chapter"><code class="docutils literal"><span class="pre">Parameter</span></code>  and <code class="docutils literal"><span class="pre">Parameters</span></code></a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="model.html"
                         title="next chapter">Modeling Data and Curve Fitting</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/fitting.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fitting.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -137,58 +139,70 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="performing-fits-analyzing-outputs">
 <span id="minimize-chapter"></span><h1>Performing Fits, Analyzing Outputs<a class="headerlink" href="#performing-fits-analyzing-outputs" title="Permalink to this headline">¶</a></h1>
 <p>As shown in the previous chapter, a simple fit can be performed with the
-<a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function.  For more sophisticated modeling, the
-<a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class can be used to gain a bit more control, especially
-when using complicated constraints.</p>
+<a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> function.  For more sophisticated modeling, the
+<a class="reference internal" href="#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> class can be used to gain a bit more control, especially
+when using complicated constraints or comparing results from related fits.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Upgrading scripts from version 0.8.3 to 0.9.0?  See  <a class="reference internal" href="whatsnew.html#whatsnew-090-label"><span>Version 0.9.0 Release Notes</span></a></p>
+</div>
 <div class="section" id="the-minimize-function">
-<h2>The <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function<a class="headerlink" href="#the-minimize-function" title="Permalink to this headline">¶</a></h2>
-<p>The minimize function takes a objective function (the function that
-calculates the array to be minimized), a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> ordered
-dictionary, and several optional arguments.  See <a class="reference internal" href="#fit-func-label"><em>Writing a Fitting Function</em></a> for
-details on writing the function to minimize.</p>
+<h2>The <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> function<a class="headerlink" href="#the-minimize-function" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> function is a wrapper around <a class="reference internal" href="#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> for
+running an optimization problem.  It takes an objective function (the
+function that calculates the array to be minimized), a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>
+object, and several optional arguments.  See <a class="reference internal" href="#fit-func-label"><span>Writing a Fitting Function</span></a> for
+details on writing the objective.</p>
 <dl class="function">
 <dt id="minimize">
-<tt class="descname">minimize</tt><big>(</big><em>function</em>, <em>params</em><span class="optional">[</span>, <em>args=None</em><span class="optional">[</span>, <em>kws=None</em><span class="optional">[</span>, <em>method='leastsq'</em><span class="optional">[</span>, <em>scale_covar=True</em><span class="optional">[</span>, <em>iter_cb=None</em><span class="optional">[</span>, <em>**leastsq_kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#minimize" title="Permalink to this definition">¶</a></dt>
-<dd><p>find values for the <tt class="docutils literal"><span class="pre">params</span></tt> so that the sum-of-squares of the array returned
-from <tt class="docutils literal"><span class="pre">function</span></tt> is minimized.</p>
+<code class="descname">minimize</code><span class="sig-paren">(</span><em>function</em>, <em>params</em><span class="optional">[</span>, <em>args=None</em><span class="optional">[</span>, <em>kws=None</em><span class="optional">[</span>, <em>method='leastsq'</em><span class="optional">[</span>, <em>scale_covar=True</em><span class="optional">[</span>, <em>iter_cb=None</em><span class="optional">[</span>, <em>**fit_kws</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#minimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>find values for the <code class="docutils literal"><span class="pre">params</span></code> so that the sum-of-squares of the array returned
+from <code class="docutils literal"><span class="pre">function</span></code> is minimized.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>function</strong> (<em>callable.</em>) &#8211; function to return fit residual.  See <a class="reference internal" href="#fit-func-label"><em>Writing a Fitting Function</em></a> for details.</li>
-<li><strong>params</strong> (dict or <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>.) &#8211; a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a> dictionary.  Keywords must be strings
-that match <tt class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></tt> and is not a python
-reserved word.  Each value must be <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>.</li>
+<li><strong>function</strong> (<em>callable.</em>) &#8211; function to return fit residual.  See <a class="reference internal" href="#fit-func-label"><span>Writing a Fitting Function</span></a> for details.</li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>.) &#8211; a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> dictionary.  Keywords must be strings
+that match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code> and cannot be a python
+reserved word.  Each value must be <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>.</li>
 <li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
 <li><strong>kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
-<li><strong>method</strong> (string (default <tt class="docutils literal"><span class="pre">leastsq</span></tt>)) &#8211; name of fitting method to use. See  <a class="reference internal" href="#fit-methods-label"><em>Choosing Different Fitting Methods</em></a> for details</li>
-<li><strong>scale_covar</strong> (bool (default <tt class="docutils literal"><span class="pre">True</span></tt>)) &#8211; whether to automatically scale covariance matrix (<tt class="docutils literal"><span class="pre">leastsq</span></tt> only)</li>
-<li><strong>iter_cb</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) &#8211; function to be called at each fit iteration</li>
-<li><strong>leastsq_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.</li>
+<li><strong>method</strong> (string (default <code class="docutils literal"><span class="pre">leastsq</span></code>)) &#8211; name of fitting method to use. See  <a class="reference internal" href="#fit-methods-label"><span>Choosing Different Fitting Methods</span></a> for details</li>
+<li><strong>scale_covar</strong> (bool (default <code class="docutils literal"><span class="pre">True</span></code>)) &#8211; whether to automatically scale covariance matrix (<code class="docutils literal"><span class="pre">leastsq</span></code> only)</li>
+<li><strong>iter_cb</strong> (callable or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; function to be called at each fit iteration. See <a class="reference internal" href="#fit-itercb-label"><span>Using a Iteration Callback Function</span></a> for details.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a> or <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></code></a>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Minimizer object, which can be used to inspect goodness-of-fit
-statistics, or to re-run fit.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> instance, which will contain the
+optimized parameter, and several goodness-of-fit statistics.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>On output, the params will be updated with best-fit values and, where
-appropriate, estimated uncertainties and correlations.  See
-<a class="reference internal" href="#fit-results-label"><em>Goodness-of-Fit and estimated uncertainty and correlations</em></a> for further details.</p>
-<p>If provided, the <tt class="docutils literal"><span class="pre">iter_cb</span></tt> function should take arguments of <tt class="docutils literal"><span class="pre">params,</span>
-<span class="pre">iter,</span> <span class="pre">resid,</span> <span class="pre">*args,</span> <span class="pre">**kws</span></tt>, where <tt class="docutils literal"><span class="pre">params</span></tt> will have the current
-parameter values, <tt class="docutils literal"><span class="pre">iter</span></tt> the iteration, <tt class="docutils literal"><span class="pre">resid</span></tt> the current residual
-array, and <tt class="docutils literal"><span class="pre">*args</span></tt> and <tt class="docutils literal"><span class="pre">**kws</span></tt> as passed to the objective function.</p>
 </dd></dl>
 
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.9.0: </span>return value changed to <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a></p>
+<p>On output, the params will be unchanged.  The best-fit values, and where
+appropriate, estimated uncertainties and correlations, will all be
+contained in the returned <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a>.  See
+<a class="reference internal" href="#fit-results-label"><span>MinimizerResult &#8211; the optimization result</span></a> for further details.</p>
+<p>For clarity, it should be emphasized that this function is simply a
+wrapper around <a class="reference internal" href="#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> that runs a single fit, implemented as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fitter</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">fcn</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">fcn_args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span> <span class="n">fcn_kws</span><span class="o">=</span><span class="n">kws</span><span class="p">,</span>
+                   <span class="n">iter_cb</span><span class="o">=</span><span class="n">iter_cb</span><span class="p">,</span> <span class="n">scale_covar</span><span class="o">=</span><span class="n">scale_covar</span><span class="p">,</span> <span class="o">**</span><span class="n">fit_kws</span><span class="p">)</span>
+<span class="k">return</span> <span class="n">fitter</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="writing-a-fitting-function">
 <span id="fit-func-label"></span><h2>Writing a Fitting Function<a class="headerlink" href="#writing-a-fitting-function" title="Permalink to this headline">¶</a></h2>
@@ -199,16 +213,16 @@ and return value.  In principle, your function can be any python callable,
 but it must look like this:</p>
 <dl class="function">
 <dt>
-<tt class="descname">func(params, *args, **kws):</tt></dt>
+<code class="descname">func(params, *args, **kws):</code></dt>
 <dd><p>calculate objective residual to be minimized from parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>params</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; parameters.</li>
-<li><strong>args</strong> &#8211; positional arguments.  Must match <tt class="docutils literal"><span class="pre">args</span></tt> argument to <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a></li>
-<li><strong>kws</strong> &#8211; keyword arguments.  Must match <tt class="docutils literal"><span class="pre">kws</span></tt> argument to <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a></li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>.) &#8211; parameters.</li>
+<li><strong>args</strong> &#8211; positional arguments.  Must match <code class="docutils literal"><span class="pre">args</span></code> argument to <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a></li>
+<li><strong>kws</strong> &#8211; keyword arguments.  Must match <code class="docutils literal"><span class="pre">kws</span></code> argument to <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a></li>
 </ul>
 </td>
 </tr>
@@ -227,14 +241,14 @@ data needed to calculate the residual, including such things as the data array,
 dependent variable, uncertainties in the data, and other data structures for the
 model calculation.</p>
 <p>The objective function should return the value to be minimized.  For the
-Levenberg-Marquardt algorithm from <tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt>, this returned value <strong>must</strong> be an
+Levenberg-Marquardt algorithm from <code class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></code>, this returned value <strong>must</strong> be an
 array, with a length greater than or equal to the number of fitting variables in the
 model.  For the other methods, the return value can either be a scalar or an array.  If an
 array is returned, the sum of squares of the array will be sent to the underlying fitting
 method, effectively doing a least-squares optimization of the return values.</p>
-<p>Since the function will be passed in a dictionary of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>, it is advisable
+<p>Since the function will be passed in a dictionary of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>, it is advisable
 to unpack these to get numerical values at the top of the function.  A
-simple way to do this is with <tt class="xref py py-meth docutils literal"><span class="pre">Parameters.valuesdict()</span></tt>, as with:</p>
+simple way to do this is with <code class="xref py py-meth docutils literal"><span class="pre">Parameters.valuesdict()</span></code>, as with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="c"># unpack parameters:</span>
     <span class="c">#  extract .value attribute for each parameter</span>
@@ -258,12 +272,12 @@ simple way to do this is with <tt class="xref py py-meth docutils literal"><span
     <span class="k">return</span> <span class="p">(</span><span class="n">model</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span><span class="o">/</span><span class="n">eps</span>
 </pre></div>
 </div>
-<p>In this example, <tt class="docutils literal"><span class="pre">x</span></tt> is a positional (required) argument, while the
-<tt class="docutils literal"><span class="pre">data</span></tt> array is actually optional (so that the function returns the model
+<p>In this example, <code class="docutils literal"><span class="pre">x</span></code> is a positional (required) argument, while the
+<code class="docutils literal"><span class="pre">data</span></code> array is actually optional (so that the function returns the model
 calculation if the data is neglected).  Also note that the model
-calculation will divide <tt class="docutils literal"><span class="pre">x</span></tt> by the value of the &#8216;period&#8217; Parameter.  It
+calculation will divide <code class="docutils literal"><span class="pre">x</span></code> by the value of the &#8216;period&#8217; Parameter.  It
 might be wise to ensure this parameter cannot be 0.  It would be possible
-to use the bounds on the <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> to do this:</p>
+to use the bounds on the <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> to do this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">params</span><span class="p">[</span><span class="s">&#39;period&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">1.e-10</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -273,7 +287,7 @@ to use the bounds on the <a class="reference internal" href="parameters.html#Par
 </pre></div>
 </div>
 <p>is also a reasonable approach.   Similarly, one could place bounds on the
-<tt class="docutils literal"><span class="pre">decay</span></tt> parameter to take values only between <tt class="docutils literal"><span class="pre">-pi/2</span></tt> and <tt class="docutils literal"><span class="pre">pi/2</span></tt>.</p>
+<code class="docutils literal"><span class="pre">decay</span></code> parameter to take values only between <code class="docutils literal"><span class="pre">-pi/2</span></code> and <code class="docutils literal"><span class="pre">pi/2</span></code>.</p>
 </div>
 <div class="section" id="choosing-different-fitting-methods">
 <span id="fit-methods-label"></span><h2>Choosing Different Fitting Methods<a class="headerlink" href="#choosing-different-fitting-methods" title="Permalink to this headline">¶</a></h2>
@@ -282,97 +296,57 @@ used for fitting.  While often criticized, including the fact it finds a
 <em>local</em> minima, this approach has some distinct advantages.  These include
 being fast, and well-behaved for most curve-fitting needs, and making it
 easy to estimate uncertainties for and correlations between pairs of fit
-variables, as discussed in <a class="reference internal" href="#fit-results-label"><em>Goodness-of-Fit and estimated uncertainty and correlations</em></a>.</p>
-<p>Alternative algorithms can also be used by providing the <tt class="docutils literal"><span class="pre">method</span></tt> keyword
-to the <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function or use the corresponding method name from
-the <a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class as listed in the <a class="reference internal" href="#fit-methods-table"><em>Table of Supported
-Fitting Methods</em></a>.</p>
+variables, as discussed in <a class="reference internal" href="#fit-results-label"><span>MinimizerResult &#8211; the optimization result</span></a>.</p>
+<p>Alternative algorithms can also be used by providing the <code class="docutils literal"><span class="pre">method</span></code>
+keyword to the <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> function or <a class="reference internal" href="#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a>
+class as listed in the <a class="reference internal" href="#fit-methods-table"><span>Table of Supported Fitting Methods</span></a>.</p>
 <blockquote id="fit-methods-table">
-<div><p>Table of Supported Fitting Methods:</p>
+<div><p>Table of Supported Fitting Method, eithers:</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="22%" />
-<col width="29%" />
-<col width="20%" />
-<col width="28%" />
+<col width="26%" />
+<col width="74%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head">Fitting Meth</th>
-<th class="head"><tt class="docutils literal"><span class="pre">method</span></tt> arg to
-<a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a></th>
-<th class="head"><a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a>
-method</th>
-<th class="head"><tt class="docutils literal"><span class="pre">method</span></tt> arg to
-<tt class="xref py py-meth docutils literal"><span class="pre">scalar_minimize()</span></tt></th>
+<tr class="row-odd"><th class="head">Fitting Method</th>
+<th class="head"><code class="docutils literal"><span class="pre">method</span></code> arg to <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> or <a class="reference internal" href="#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a></th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>Levenberg-Marquardt</td>
-<td><tt class="docutils literal"><span class="pre">leastsq</span></tt></td>
-<td><tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt></td>
-<td>Not available</td>
+<td><code class="docutils literal"><span class="pre">leastsq</span></code></td>
 </tr>
 <tr class="row-odd"><td>Nelder-Mead</td>
-<td><tt class="docutils literal"><span class="pre">nelder</span></tt></td>
-<td><tt class="xref py py-meth docutils literal"><span class="pre">fmin()</span></tt></td>
-<td><tt class="docutils literal"><span class="pre">Nelder-Mead</span></tt></td>
+<td><code class="docutils literal"><span class="pre">nelder</span></code></td>
 </tr>
 <tr class="row-even"><td>L-BFGS-B</td>
-<td><tt class="docutils literal"><span class="pre">lbfgsb</span></tt></td>
-<td><tt class="xref py py-meth docutils literal"><span class="pre">lbfgsb()</span></tt></td>
-<td><tt class="docutils literal"><span class="pre">L-BFGS-B</span></tt></td>
+<td><code class="docutils literal"><span class="pre">lbfgsb</span></code></td>
 </tr>
 <tr class="row-odd"><td>Powell</td>
-<td><tt class="docutils literal"><span class="pre">powell</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">Powell</span></tt></td>
+<td><code class="docutils literal"><span class="pre">powell</span></code></td>
 </tr>
 <tr class="row-even"><td>Conjugate Gradient</td>
-<td><tt class="docutils literal"><span class="pre">cg</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">CG</span></tt></td>
+<td><code class="docutils literal"><span class="pre">cg</span></code></td>
 </tr>
 <tr class="row-odd"><td>Newton-CG</td>
-<td><tt class="docutils literal"><span class="pre">newton</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">Newton-CG</span></tt></td>
+<td><code class="docutils literal"><span class="pre">newton</span></code></td>
 </tr>
 <tr class="row-even"><td>COBYLA</td>
-<td><tt class="docutils literal"><span class="pre">cobyla</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">COBYLA</span></tt></td>
+<td><code class="docutils literal"><span class="pre">cobyla</span></code></td>
 </tr>
-<tr class="row-odd"><td>COBYLA</td>
-<td><tt class="docutils literal"><span class="pre">cobyla</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">COBYLA</span></tt></td>
-</tr>
-<tr class="row-even"><td>Truncated Newton</td>
-<td><tt class="docutils literal"><span class="pre">tnc</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">TNC</span></tt></td>
-</tr>
-<tr class="row-odd"><td>Trust Newton-CGn</td>
-<td><tt class="docutils literal"><span class="pre">trust-ncg</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">trust-ncg</span></tt></td>
+<tr class="row-odd"><td>Truncated Newton</td>
+<td><code class="docutils literal"><span class="pre">tnc</span></code></td>
 </tr>
 <tr class="row-even"><td>Dogleg</td>
-<td><tt class="docutils literal"><span class="pre">dogleg</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">dogleg</span></tt></td>
+<td><code class="docutils literal"><span class="pre">dogleg</span></code></td>
 </tr>
 <tr class="row-odd"><td>Sequential Linear
 Squares Programming</td>
-<td><tt class="docutils literal"><span class="pre">slsqp</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">SLSQP</span></tt></td>
+<td><code class="docutils literal"><span class="pre">slsqp</span></code></td>
 </tr>
 <tr class="row-even"><td>Differential
 Evolution</td>
-<td><tt class="docutils literal"><span class="pre">differential_evolution</span></tt></td>
-<td>&nbsp;</td>
-<td><tt class="docutils literal"><span class="pre">differential_evolution</span></tt></td>
+<td><code class="docutils literal"><span class="pre">differential_evolution</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -387,30 +361,158 @@ can return either a scalar value or an array.</p>
 <p class="first admonition-title">Warning</p>
 <p class="last">Much of this documentation assumes that the Levenberg-Marquardt method is
 the method used.  Many of the fit statistics and estimates for
-uncertainties in parameters discussed in <a class="reference internal" href="#fit-results-label"><em>Goodness-of-Fit and estimated uncertainty and correlations</em></a> are
+uncertainties in parameters discussed in <a class="reference internal" href="#fit-results-label"><span>MinimizerResult &#8211; the optimization result</span></a> are
 done only for this method.</p>
 </div>
 </div>
-<div class="section" id="goodness-of-fit-and-estimated-uncertainty-and-correlations">
-<span id="fit-results-label"></span><h2>Goodness-of-Fit and estimated uncertainty and correlations<a class="headerlink" href="#goodness-of-fit-and-estimated-uncertainty-and-correlations" title="Permalink to this headline">¶</a></h2>
-<p>On a successful fit using the <cite>leastsq</cite> method, several goodness-of-fit
-statistics and values related to the uncertainty in the fitted variables will be
-calculated.  These are all encapsulated in the <a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> object for the
-fit, as returned by <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a>.  The values related to the entire fit are
-stored in attributes of the <a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> object, as shown in <a class="reference internal" href="#goodfit-table"><em>Table
-of Fit Results</em></a> while those related to each fitted variables are
-stored as attributes of the corresponding <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>.</p>
+<div class="section" id="minimizerresult-the-optimization-result">
+<span id="fit-results-label"></span><h2><a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> &#8211; the optimization result<a class="headerlink" href="#minimizerresult-the-optimization-result" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="MinimizerResult">
+<em class="property">class </em><code class="descname">MinimizerResult</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#MinimizerResult" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<div class="versionadded">
+<p><span class="versionmodified">New in version 0.9.0.</span></p>
+</div>
+<p>An optimization with <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> or <a class="reference internal" href="#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a>
+will return a <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> object.  This is an otherwise
+plain container object (that is, with no methods of its own) that
+simply holds the results of the minimization.  These results will
+include several pieces of informational data such as status and error
+messages, fit statistics, and the updated parameters themselves.</p>
+<p>Importantly, the parameters passed in to <a class="reference internal" href="#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a>
+will be not be changed.  To to find the best-fit values, uncertainties
+and so on for each parameter, one must use the
+<code class="xref py py-attr docutils literal"><span class="pre">MinimizerResult.params</span></code> attribute.</p>
+<dl class="attribute">
+<dt id="params">
+<code class="descname">params</code><a class="headerlink" href="#params" title="Permalink to this definition">¶</a></dt>
+<dd><p>the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> actually used in the fit, with updated
+values, <a class="reference internal" href="parameters.html#stderr" title="stderr"><code class="xref py py-attr docutils literal"><span class="pre">stderr</span></code></a> and <a class="reference internal" href="parameters.html#correl" title="correl"><code class="xref py py-attr docutils literal"><span class="pre">correl</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="var_names">
+<code class="descname">var_names</code><a class="headerlink" href="#var_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>ordered list of variable parameter names used in optimization, and
+useful for understanding the the values in <a class="reference internal" href="#init_vals" title="init_vals"><code class="xref py py-attr docutils literal"><span class="pre">init_vals</span></code></a> and
+<a class="reference internal" href="#covar" title="covar"><code class="xref py py-attr docutils literal"><span class="pre">covar</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="covar">
+<code class="descname">covar</code><a class="headerlink" href="#covar" title="Permalink to this definition">¶</a></dt>
+<dd><p>covariance matrix from minimization (<cite>leastsq</cite> only), with
+rows/columns using <a class="reference internal" href="#var_names" title="var_names"><code class="xref py py-attr docutils literal"><span class="pre">var_names</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="init_vals">
+<code class="descname">init_vals</code><a class="headerlink" href="#init_vals" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of initial values for variable parameters using <a class="reference internal" href="#var_names" title="var_names"><code class="xref py py-attr docutils literal"><span class="pre">var_names</span></code></a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nfev">
+<code class="descname">nfev</code><a class="headerlink" href="#nfev" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of function evaluations</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="success">
+<code class="descname">success</code><a class="headerlink" href="#success" title="Permalink to this definition">¶</a></dt>
+<dd><p>boolean (<code class="docutils literal"><span class="pre">True</span></code>/<code class="docutils literal"><span class="pre">False</span></code>) for whether fit succeeded.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="errorbars">
+<code class="descname">errorbars</code><a class="headerlink" href="#errorbars" title="Permalink to this definition">¶</a></dt>
+<dd><p>boolean (<code class="docutils literal"><span class="pre">True</span></code>/<code class="docutils literal"><span class="pre">False</span></code>) for whether uncertainties were
+estimated.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="message">
+<code class="descname">message</code><a class="headerlink" href="#message" title="Permalink to this definition">¶</a></dt>
+<dd><p>message about fit success.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ier">
+<code class="descname">ier</code><a class="headerlink" href="#ier" title="Permalink to this definition">¶</a></dt>
+<dd><p>integer error value from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a>  (<cite>leastsq</cite>
+only).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="lmdif_message">
+<code class="descname">lmdif_message</code><a class="headerlink" href="#lmdif_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>message from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a> (<cite>leastsq</cite> only).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="nvarys">
+<code class="descname">nvarys</code><a class="headerlink" href="#nvarys" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of variables in fit  <span class="math">\(N_{\rm varys}\)</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ndata">
+<code class="descname">ndata</code><a class="headerlink" href="#ndata" title="Permalink to this definition">¶</a></dt>
+<dd><p>number of data points:  <span class="math">\(N\)</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">nfree `</code></dt>
+<dd><p>degrees of freedom in fit:  <span class="math">\(N - N_{\rm varys}\)</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="residual">
+<code class="descname">residual</code><a class="headerlink" href="#residual" title="Permalink to this definition">¶</a></dt>
+<dd><p>residual array, return value of <code class="xref py py-func docutils literal"><span class="pre">func()</span></code>:  <span class="math">\({\rm Resid}\)</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="chisqr">
+<code class="descname">chisqr</code><a class="headerlink" href="#chisqr" title="Permalink to this definition">¶</a></dt>
+<dd><p>chi-square: <span class="math">\(\chi^2 = \sum_i^N [{\rm Resid}_i]^2\)</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="redchi">
+<code class="descname">redchi</code><a class="headerlink" href="#redchi" title="Permalink to this definition">¶</a></dt>
+<dd><p>reduced chi-square: <span class="math">\(\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm
+varys})}\)</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="aic">
+<code class="descname">aic</code><a class="headerlink" href="#aic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Akaike Information Criterion statistic (see below)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="bic">
+<code class="descname">bic</code><a class="headerlink" href="#bic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bayesian Information Criterion statistic (see below).</p>
+</dd></dl>
+
+<div class="section" id="goodness-of-fit-statistics">
+<h3>Goodness-of-Fit Statistics<a class="headerlink" href="#goodness-of-fit-statistics" title="Permalink to this headline">¶</a></h3>
 <blockquote id="goodfit-table">
 <div>Table of Fit Results:  These values, including the standard Goodness-of-Fit statistics,
-are all attributes of the <a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> object returned by <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a>.</div></blockquote>
+are all attributes of the <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> object returned by
+<a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> or <a class="reference internal" href="#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a>.</div></blockquote>
 <table border="1" class="docutils">
 <colgroup>
 <col width="22%" />
 <col width="78%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a>
-Attribute</th>
+<tr class="row-odd"><th class="head">Attribute Name</th>
 <th class="head">Description / Formula</th>
 </tr>
 </thead>
@@ -418,96 +520,153 @@ Attribute</th>
 <tr class="row-even"><td>nfev</td>
 <td>number of function evaluations</td>
 </tr>
-<tr class="row-odd"><td>success</td>
-<td>boolean (<tt class="docutils literal"><span class="pre">True</span></tt>/<tt class="docutils literal"><span class="pre">False</span></tt>) for whether fit succeeded.</td>
-</tr>
-<tr class="row-even"><td>errorbars</td>
-<td>boolean (<tt class="docutils literal"><span class="pre">True</span></tt>/<tt class="docutils literal"><span class="pre">False</span></tt>) for whether uncertainties were estimated.</td>
-</tr>
-<tr class="row-odd"><td>message</td>
-<td>message about fit success.</td>
-</tr>
-<tr class="row-even"><td>ier</td>
-<td>integer error value from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a></td>
-</tr>
-<tr class="row-odd"><td>lmdif_message</td>
-<td>message from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a></td>
-</tr>
-<tr class="row-even"><td>nvarys</td>
+<tr class="row-odd"><td>nvarys</td>
 <td>number of variables in fit  <span class="math">\(N_{\rm varys}\)</span></td>
 </tr>
-<tr class="row-odd"><td>ndata</td>
+<tr class="row-even"><td>ndata</td>
 <td>number of data points:  <span class="math">\(N\)</span></td>
 </tr>
-<tr class="row-even"><td>nfree `</td>
+<tr class="row-odd"><td>nfree `</td>
 <td>degrees of freedom in fit:  <span class="math">\(N - N_{\rm varys}\)</span></td>
 </tr>
-<tr class="row-odd"><td>residual</td>
-<td>residual array (return of <tt class="xref py py-func docutils literal"><span class="pre">func()</span></tt>:  <span class="math">\({\rm Resid}\)</span></td>
+<tr class="row-even"><td>residual</td>
+<td>residual array, return value of <code class="xref py py-func docutils literal"><span class="pre">func()</span></code>:  <span class="math">\({\rm Resid}\)</span></td>
 </tr>
-<tr class="row-even"><td>chisqr</td>
+<tr class="row-odd"><td>chisqr</td>
 <td>chi-square: <span class="math">\(\chi^2 = \sum_i^N [{\rm Resid}_i]^2\)</span></td>
 </tr>
-<tr class="row-odd"><td>redchi</td>
+<tr class="row-even"><td>redchi</td>
 <td>reduced chi-square: <span class="math">\(\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}\)</span></td>
 </tr>
-<tr class="row-even"><td>var_map</td>
-<td>list of variable parameter names for rows/columns of covar</td>
+<tr class="row-odd"><td>aic</td>
+<td>Akaike Information Criterion statistic (see below)</td>
 </tr>
-<tr class="row-odd"><td>covar</td>
-<td>covariance matrix (with rows/columns using var_map</td>
+<tr class="row-even"><td>bic</td>
+<td>Bayesian Information Criterion statistic (see below)</td>
+</tr>
+<tr class="row-odd"><td>var_names</td>
+<td>ordered list of variable parameter names used for init_vals and covar</td>
+</tr>
+<tr class="row-even"><td>covar</td>
+<td>covariance matrix (with rows/columns using var_names</td>
+</tr>
+<tr class="row-odd"><td>init_vals</td>
+<td>list of initial values for variable parameters</td>
 </tr>
 </tbody>
 </table>
-<p>Note that the calculation of chi-square and reduced chi-square assume that the
-returned residual function is scaled properly to the uncertainties in the data.
-For these statistics to be meaningful, the person writing the function to
-be minimized must scale them properly.</p>
-<p>After a fit using using the <tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt> method has completed successfully,
-standard errors for the fitted variables and correlations between pairs of
-fitted variables are automatically calculated from the covariance matrix.
-The standard error (estimated <span class="math">\(1\sigma\)</span> error-bar) go into the
-<a class="reference internal" href="parameters.html#stderr" title="stderr"><tt class="xref py py-attr docutils literal"><span class="pre">stderr</span></tt></a> attribute of the Parameter.  The correlations with all other
-variables will be put into the <a class="reference internal" href="parameters.html#correl" title="correl"><tt class="xref py py-attr docutils literal"><span class="pre">correl</span></tt></a> attribute of the Parameter &#8211;
-a dictionary with keys for all other Parameters and values of the
-corresponding correlation.</p>
+<p>Note that the calculation of chi-square and reduced chi-square assume
+that the returned residual function is scaled properly to the
+uncertainties in the data.  For these statistics to be meaningful, the
+person writing the function to be minimized must scale them properly.</p>
+<p>After a fit using using the <code class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></code> method has completed
+successfully, standard errors for the fitted variables and correlations
+between pairs of fitted variables are automatically calculated from the
+covariance matrix.  The standard error (estimated <span class="math">\(1\sigma\)</span>
+error-bar) go into the <a class="reference internal" href="parameters.html#stderr" title="stderr"><code class="xref py py-attr docutils literal"><span class="pre">stderr</span></code></a> attribute of the Parameter.  The
+correlations with all other variables will be put into the
+<a class="reference internal" href="parameters.html#correl" title="correl"><code class="xref py py-attr docutils literal"><span class="pre">correl</span></code></a> attribute of the Parameter &#8211; a dictionary with keys for
+all other Parameters and values of the corresponding correlation.</p>
 <p>In some cases, it may not be possible to estimate the errors and
 correlations.  For example, if a variable actually has no practical effect
 on the fit, it will likely cause the covariance matrix to be singular,
 making standard errors impossible to estimate.  Placing bounds on varied
 Parameters makes it more likely that errors cannot be estimated, as being
 near the maximum or minimum value makes the covariance matrix singular.  In
-these cases, the <tt class="xref py py-attr docutils literal"><span class="pre">errorbars</span></tt> attribute of the fit result
-(<a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> object) will be <tt class="docutils literal"><span class="pre">False</span></tt>.</p>
-<span class="target" id="module-Minimizer"></span></div>
-<div class="section" id="using-the-minimizer-class">
-<span id="fit-minimizer-label"></span><h2>Using the <a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> class<a class="headerlink" href="#using-the-minimizer-class" title="Permalink to this headline">¶</a></h2>
-<p>For full control of the fitting process, you&#8217;ll want to create a
-<a class="reference internal" href="#module-Minimizer" title="Minimizer"><tt class="xref py py-class docutils literal"><span class="pre">Minimizer</span></tt></a> object, or at least use the one returned from the
-<a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a> function.</p>
-<dl class="class">
-<dt id="Minimizer.Minimizer">
-<em class="property">class </em><tt class="descname">Minimizer</tt><big>(</big><em>function</em>, <em>params</em>, <em>fcn_args=None</em>, <em>fcn_kws=None</em>, <em>iter_cb=None</em>, <em>scale_covar=True</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.Minimizer" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a Minimizer, for fine-grain access to fitting methods and attributes.</p>
+these cases, the <a class="reference internal" href="#errorbars" title="errorbars"><code class="xref py py-attr docutils literal"><span class="pre">errorbars</span></code></a> attribute of the fit result
+(<a class="reference internal" href="#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> object) will be <code class="docutils literal"><span class="pre">False</span></code>.</p>
+</div>
+<div class="section" id="akaike-and-bayesian-information-criteria">
+<h3>Akaike and Bayesian Information Criteria<a class="headerlink" href="#akaike-and-bayesian-information-criteria" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> includes the tradtional chi-square and reduced chi-square statistics:</p>
+<div class="math">
+\[\begin{eqnarray*}
+     \chi^2  &=&  \sum_i^N r_i^2 \\
+     \chi^2_\nu &=& = \chi^2 / (N-N_{\rm varys})
+ \end{eqnarray*}\]</div><p>where <span class="math">\(r\)</span> is the residual array returned by the objective function
+(likely to be <code class="docutils literal"><span class="pre">(data-model)/uncertainty</span></code> for data modeling usages),
+<span class="math">\(N\)</span> is the number of data points (<code class="docutils literal"><span class="pre">ndata</span></code>), and <span class="math">\(N_{\rm
+varys}\)</span> is number of variable parameters.</p>
+<p>Also included are the <a class="reference external" href="http://en.wikipedia.org/wiki/Akaike_information_criterion">Akaike Information Criterion</a>, and
+<a class="reference external" href="http://en.wikipedia.org/wiki/Bayesian_information_criterion">Bayesian Information Criterion</a> statistics,
+held in the <code class="docutils literal"><span class="pre">aic</span></code> and <code class="docutils literal"><span class="pre">bic</span></code> attributes, respectively.  These give slightly
+different measures of the relative quality for a fit, trying to balance
+quality of fit with the number of variable parameters used in the fit.
+These are calculated as</p>
+<div class="math">
+\[\begin{eqnarray*}
+  {\rm aic} &=&  N \ln(\chi^2/N) + 2 N_{\rm varys} \\
+  {\rm bic} &=&  N \ln(\chi^2/N) + \ln(N) *N_{\rm varys} \\
+ \end{eqnarray*}\]</div><p>When comparing fits with different numbers of varying parameters, one
+typically selects the model with lowest reduced chi-square, Akaike
+information criterion, and/or Bayesian information criterion.  Generally,
+the Bayesian information criterion is considered the most conservative of
+these statistics.</p>
+</div>
+</div>
+<div class="section" id="using-a-iteration-callback-function">
+<span id="fit-itercb-label"></span><h2>Using a Iteration Callback Function<a class="headerlink" href="#using-a-iteration-callback-function" title="Permalink to this headline">¶</a></h2>
+<p>An iteration callback function is a function to be called at each
+iteration, just after the objective function is called.  The iteration
+callback allows user-supplied code to be run at each iteration, and can be
+used to abort a fit.</p>
+<dl class="function">
+<dt>
+<code class="descname">iter_cb(params, iter, resid, *args, **kws):</code></dt>
+<dd><p>user-supplied function to be run at each iteration</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>function</strong> (<em>callable.</em>) &#8211; objective function to return fit residual.  See <a class="reference internal" href="#fit-func-label"><em>Writing a Fitting Function</em></a> for details.</li>
-<li><strong>params</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; a dictionary of Parameters.  Keywords must be strings
-that match <tt class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></tt> and is not a python
-reserved word.  Each value must be <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a>.</li>
-<li><strong>fcn_args</strong> (<a class="reference external" href="http://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
-<li><strong>fcn_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
-<li><strong>iter_cb</strong> (callable or <tt class="docutils literal"><span class="pre">None</span></tt>) &#8211; function to be called at each fit iteration</li>
-<li><strong>scale_covar</strong> &#8211; flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (<tt class="docutils literal"><span class="pre">leastsq</span></tt> only)</li>
-<li><strong>kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass as keywords to the underlying <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.15.1)"><tt class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></tt></a> method.</li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>.) &#8211; parameters.</li>
+<li><strong>iter</strong> (<em>integer</em>) &#8211; iteration number</li>
+<li><strong>resid</strong> (<em>ndarray</em>) &#8211; residual array.</li>
+<li><strong>args</strong> &#8211; positional arguments.  Must match <code class="docutils literal"><span class="pre">args</span></code> argument to <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a></li>
+<li><strong>kws</strong> &#8211; keyword arguments.  Must match <code class="docutils literal"><span class="pre">kws</span></code> argument to <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a></li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Minimizer object, which can be used to inspect goodness-of-fit
-statistics, or to re-run fit.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">residual array (generally data-model) to be minimized in the least-squares sense.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">None</span></code> for normal behavior, any value like <code class="docutils literal"><span class="pre">True</span></code> to abort fit.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Normally, the iteration callback would have no return value or return
+<code class="docutils literal"><span class="pre">None</span></code>.  To abort a fit, have this function return a value that is
+<code class="docutils literal"><span class="pre">True</span></code> (including any non-zero integer).  The fit will also abort if any
+exception is raised in the iteration callback. When a fit is aborted this
+way, the parameters will have the values from the last iteration.  The fit
+statistics are not likely to be meaningful, and uncertainties will not be computed.</p>
+<span class="target" id="module-Minimizer"></span></div>
+<div class="section" id="using-the-minimizer-class">
+<span id="fit-minimizer-label"></span><h2>Using the <a class="reference internal" href="#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> class<a class="headerlink" href="#using-the-minimizer-class" title="Permalink to this headline">¶</a></h2>
+<p>For full control of the fitting process, you&#8217;ll want to create a
+<a class="reference internal" href="#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> object.</p>
+<dl class="class">
+<dt id="Minimizer.Minimizer">
+<em class="property">class </em><code class="descname">Minimizer</code><span class="sig-paren">(</span><em>function</em>, <em>params</em>, <em>fcn_args=None</em>, <em>fcn_kws=None</em>, <em>iter_cb=None</em>, <em>scale_covar=True</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.Minimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a Minimizer, for more detailed access to fitting methods and attributes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>function</strong> (<em>callable.</em>) &#8211; objective function to return fit residual.  See <a class="reference internal" href="#fit-func-label"><span>Writing a Fitting Function</span></a> for details.</li>
+<li><strong>params</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; a dictionary of Parameters.  Keywords must be strings
+that match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code> and is not a python
+reserved word.  Each value must be <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>.</li>
+<li><strong>fcn_args</strong> (<a class="reference external" href="http://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
+<li><strong>fcn_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
+<li><strong>iter_cb</strong> (callable or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; function to be called at each fit iteration.  See <a class="reference internal" href="#fit-itercb-label"><span>Using a Iteration Callback Function</span></a> for details.</li>
+<li><strong>scale_covar</strong> &#8211; flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (<code class="docutils literal"><span class="pre">leastsq</span></code> only)</li>
+<li><strong>kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass as keywords to the underlying <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a> method.</li>
+</ul>
 </td>
 </tr>
 </tbody>
@@ -516,11 +675,39 @@ statistics, or to re-run fit.</p>
 
 <p>The Minimizer object has a few public methods:</p>
 <dl class="method">
+<dt id="Minimizer.minimize">
+<code class="descname">minimize</code><span class="sig-paren">(</span><em>method='leastsq'</em>, <em>params=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.minimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>perform fit using either <a class="reference internal" href="#Minimizer.leastsq" title="Minimizer.leastsq"><code class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></code></a> or <a class="reference internal" href="#Minimizer.scalar_minimize" title="Minimizer.scalar_minimize"><code class="xref py py-meth docutils literal"><span class="pre">scalar_minimize()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>method</strong> (<em>str.</em>) &#8211; name of fitting method.  Must be one of the naemes in
+<a class="reference internal" href="#fit-methods-table"><span>Table of Supported Fitting Methods</span></a></li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> or <cite>None</cite>) &#8211; a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> dictionary for starting values</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> object, containing updated
+parameters, fitting statistics, and information.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.9.0: </span>return value changed to <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a></p>
+<p>Additonal keywords are passed on to the correspond <a class="reference internal" href="#Minimizer.leastsq" title="Minimizer.leastsq"><code class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></code></a>
+or <a class="reference internal" href="#Minimizer.scalar_minimize" title="Minimizer.scalar_minimize"><code class="xref py py-meth docutils literal"><span class="pre">scalar_minimize()</span></code></a> method.</p>
+</div>
+<dl class="method">
 <dt id="Minimizer.leastsq">
-<tt class="descname">leastsq</tt><big>(</big><em>scale_covar=True</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.leastsq" title="Permalink to this definition">¶</a></dt>
-<dd><p>perform fit with Levenberg-Marquardt algorithm.  Keywords will be passed directly to
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a>.
-By default, numerical derivatives are used, and the following arguments are set:</p>
+<code class="descname">leastsq</code><span class="sig-paren">(</span><em>params=None</em>, <em>scale_covar=True</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.leastsq" title="Permalink to this definition">¶</a></dt>
+<dd><p>perform fit with Levenberg-Marquardt algorithm.  Keywords will be
+passed directly to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a>.  By default,
+numerical derivatives are used, and the following arguments are set:</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -529,7 +716,7 @@ By default, numerical derivatives are used, and the following arguments are set:
 <col width="64%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><a class="reference internal" href="#Minimizer.leastsq" title="Minimizer.leastsq"><tt class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></tt></a>
+<tr class="row-odd"><th class="head"><a class="reference internal" href="#Minimizer.leastsq" title="Minimizer.leastsq"><code class="xref py py-meth docutils literal"><span class="pre">leastsq()</span></code></a>
 arg</th>
 <th class="head">Default Value</th>
 <th class="head">Description</th>
@@ -549,7 +736,7 @@ arg</th>
 <td>maximum number of function calls (nvar= # of variables)</td>
 </tr>
 <tr class="row-odd"><td>Dfun</td>
-<td><tt class="docutils literal"><span class="pre">None</span></tt></td>
+<td><code class="docutils literal"><span class="pre">None</span></code></td>
 <td>function to call for Jacobian calculation</td>
 </tr>
 </tbody>
@@ -557,93 +744,14 @@ arg</th>
 </div></blockquote>
 </dd></dl>
 
-<dl class="method">
-<dt id="Minimizer.lbfgsb">
-<tt class="descname">lbfgsb</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.lbfgsb" title="Permalink to this definition">¶</a></dt>
-<dd><p>perform fit with L-BFGS-B algorithm.  Keywords will be passed directly to
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html#scipy.optimize.fmin_l_bfgs_b" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.fmin_l_bfgs_b()</span></tt></a>.</p>
-<blockquote>
-<div><table border="1" class="docutils">
-<colgroup>
-<col width="19%" />
-<col width="17%" />
-<col width="64%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head"><a class="reference internal" href="#Minimizer.lbfgsb" title="Minimizer.lbfgsb"><tt class="xref py py-meth docutils literal"><span class="pre">lbfgsb()</span></tt></a>
-arg</th>
-<th class="head">Default Value</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>factr</td>
-<td>1000.0</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td>approx_grad</td>
-<td><tt class="docutils literal"><span class="pre">True</span></tt></td>
-<td>calculate approximations of gradient</td>
-</tr>
-<tr class="row-even"><td>maxfun</td>
-<td>2000*(nvar+1)</td>
-<td>maximum number of function calls (nvar= # of variables)</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</dd></dl>
-
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last"><a class="reference internal" href="#Minimizer.lbfgsb" title="Minimizer.lbfgsb"><tt class="xref py py-meth docutils literal"><span class="pre">lbfgsb()</span></tt></a> is deprecated.  Use <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-meth docutils literal"><span class="pre">minimize()</span></tt></a> with <tt class="docutils literal"><span class="pre">method='lbfgsb'</span></tt>.</p>
-</div>
-<dl class="method">
-<dt id="Minimizer.fmin">
-<tt class="descname">fmin</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.fmin" title="Permalink to this definition">¶</a></dt>
-<dd><p>perform fit with Nelder-Mead downhill simplex algorithm.  Keywords will be passed directly to
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html#scipy.optimize.fmin" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.fmin()</span></tt></a>.</p>
-<blockquote>
-<div><table border="1" class="docutils">
-<colgroup>
-<col width="19%" />
-<col width="17%" />
-<col width="64%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head"><a class="reference internal" href="#Minimizer.fmin" title="Minimizer.fmin"><tt class="xref py py-meth docutils literal"><span class="pre">fmin()</span></tt></a>
-arg</th>
-<th class="head">Default Value</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>ftol</td>
-<td>1.e-4</td>
-<td>function tolerance</td>
-</tr>
-<tr class="row-odd"><td>xtol</td>
-<td>1.e-4</td>
-<td>parameter tolerance</td>
-</tr>
-<tr class="row-even"><td>maxfun</td>
-<td>5000*(nvar+1)</td>
-<td>maximum number of function calls (nvar= # of variables)</td>
-</tr>
-</tbody>
-</table>
-</div></blockquote>
-</dd></dl>
-
-<div class="admonition warning">
-<p class="first admonition-title">Warning</p>
-<p class="last"><a class="reference internal" href="#Minimizer.fmin" title="Minimizer.fmin"><tt class="xref py py-meth docutils literal"><span class="pre">fmin()</span></tt></a> is deprecated.  Use <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-meth docutils literal"><span class="pre">minimize()</span></tt></a> with <tt class="docutils literal"><span class="pre">method='nelder'</span></tt>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.9.0: </span>return value changed to <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a></p>
 </div>
 <dl class="method">
 <dt id="Minimizer.scalar_minimize">
-<tt class="descname">scalar_minimize</tt><big>(</big><em>method='Nelder-Mead'</em>, <em>hess=None</em>, <em>tol=None</em>, <em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.scalar_minimize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">scalar_minimize</code><span class="sig-paren">(</span><em>method='Nelder-Mead'</em>, <em>params=None</em>, <em>hess=None</em>, <em>tol=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.scalar_minimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform fit with any of the scalar minimization algorithms supported by
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></tt></a>.</p>
+<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></code></a>.</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>
@@ -652,7 +760,7 @@ arg</th>
 <col width="56%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head"><a class="reference internal" href="#Minimizer.scalar_minimize" title="Minimizer.scalar_minimize"><tt class="xref py py-meth docutils literal"><span class="pre">scalar_minimize()</span></tt></a>
+<tr class="row-odd"><th class="head"><a class="reference internal" href="#Minimizer.scalar_minimize" title="Minimizer.scalar_minimize"><code class="xref py py-meth docutils literal"><span class="pre">scalar_minimize()</span></code></a>
 arg</th>
 <th class="head">Default Value</th>
 <th class="head">Description</th>
@@ -660,7 +768,7 @@ arg</th>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>method</td>
-<td><tt class="docutils literal"><span class="pre">Nelder-Mead</span></tt></td>
+<td><code class="docutils literal"><span class="pre">Nelder-Mead</span></code></td>
 <td>fitting method</td>
 </tr>
 <tr class="row-odd"><td>tol</td>
@@ -676,36 +784,31 @@ arg</th>
 </div></blockquote>
 </dd></dl>
 
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.9.0: </span>return value changed to <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a></p>
+</div>
 <dl class="method">
 <dt id="Minimizer.prepare_fit">
-<tt class="descname">prepare_fit</tt><big>(</big><em>**kws</em><big>)</big><a class="headerlink" href="#Minimizer.prepare_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">prepare_fit</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.prepare_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>prepares and initializes model and Parameters for subsequent
-fitting. This routine prepares the conversion of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><tt class="xref py py-class docutils literal"><span class="pre">Parameters</span></tt></a>
-into fit variables, organizes parameter bounds, and parses, checks and
-&#8220;compiles&#8221; constrain expressions.</p>
-<p>This is called directly by the fitting methods, and it is generally not
-necessary to call this function explicitly.  An exception is when you
-would like to call your function to minimize prior to running one of the
-minimization routines, for example, to calculate the initial residual
-function.  In that case, you might want to do something like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">myfit</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">my_residual</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>  <span class="n">fcn_args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">fcn_kws</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">})</span>
-
-<span class="n">myfit</span><span class="o">.</span><span class="n">prepare_fit</span><span class="p">()</span>
-<span class="n">init</span> <span class="o">=</span> <span class="n">my_residual</span><span class="p">(</span><span class="n">p_fit</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-<span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">init</span><span class="p">,</span> <span class="s">&#39;b--&#39;</span><span class="p">)</span>
-
-<span class="n">myfit</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>That is, this method should be called prior to your fitting function being called.</p>
+fitting. This routine prepares the conversion of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>
+into fit variables, organizes parameter bounds, and parses, &#8220;compiles&#8221;
+and checks constrain expressions.   The method also creates and returns
+a new instance of a <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> object that contains the
+copy of the Parameters that will actually be varied in the fit.</p>
+<p>This method is called directly by the fitting methods, and it is
+generally not necessary to call this function explicitly.</p>
 </dd></dl>
 
+<div class="versionchanged">
+<p><span class="versionmodified">Changed in version 0.9.0: </span>return value changed to <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a></p>
+</div>
 </div>
 <div class="section" id="getting-and-printing-fit-reports">
 <h2>Getting and Printing Fit Reports<a class="headerlink" href="#getting-and-printing-fit-reports" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="Minimizer.fit_report">
-<tt class="descname">fit_report</tt><big>(</big><em>params</em>, <em>modelpars=None</em>, <em>show_correl=True</em>, <em>min_correl=0.1</em><big>)</big><a class="headerlink" href="#Minimizer.fit_report" title="Permalink to this definition">¶</a></dt>
+<code class="descname">fit_report</code><span class="sig-paren">(</span><em>result</em>, <em>modelpars=None</em>, <em>show_correl=True</em>, <em>min_correl=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.fit_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>generate and return text of report of best-fit values, uncertainties,
 and correlations from fit.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -713,23 +816,23 @@ and correlations from fit.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>params</strong> &#8211; Parameters from fit, or Minimizer object as returned by <a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a>.</li>
+<li><strong>result</strong> &#8211; <a class="reference internal" href="#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> object as returned by <a class="reference internal" href="#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a>.</li>
 <li><strong>modelpars</strong> &#8211; Parameters with &#8220;Known Values&#8221; (optional, default None)</li>
-<li><strong>show_correl</strong> &#8211; whether to show list of sorted correlations [<tt class="docutils literal"><span class="pre">True</span></tt>]</li>
+<li><strong>show_correl</strong> &#8211; whether to show list of sorted correlations [<code class="docutils literal"><span class="pre">True</span></code>]</li>
 <li><strong>min_correl</strong> &#8211; smallest correlation absolute value to show [0.1]</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>If the first argument is a Minimizer object, as returned from
-<a class="reference internal" href="#minimize" title="minimize"><tt class="xref py py-func docutils literal"><span class="pre">minimize()</span></tt></a>, the report will include some goodness-of-fit statistics.</p>
+<p>If the first argument is a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> object,
+goodness-of-fit statistics will not be included.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="Minimizer.report_fit">
-<tt class="descname">report_fit</tt><big>(</big><em>params</em>, <em>modelpars=None</em>, <em>show_correl=True</em>, <em>min_correl=0.1</em><big>)</big><a class="headerlink" href="#Minimizer.report_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>print text of report from <a class="reference internal" href="#Minimizer.fit_report" title="Minimizer.fit_report"><tt class="xref py py-func docutils literal"><span class="pre">fit_report()</span></tt></a>.</p>
+<code class="descname">report_fit</code><span class="sig-paren">(</span><em>result</em>, <em>modelpars=None</em>, <em>show_correl=True</em>, <em>min_correl=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.report_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>print text of report from <a class="reference internal" href="#Minimizer.fit_report" title="Minimizer.fit_report"><code class="xref py py-func docutils literal"><span class="pre">fit_report()</span></code></a>.</p>
 </dd></dl>
 
 <p>An example fit with report would be</p>
@@ -753,7 +856,7 @@ and correlations from fit.</p>
     <span class="n">per</span> <span class="o">=</span>  <span class="n">vals</span><span class="p">[</span><span class="s">&#39;period&#39;</span><span class="p">]</span>
     <span class="n">shift</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s">&#39;shift&#39;</span><span class="p">]</span>
     <span class="n">decay</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span>
-    
+
     <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
         <span class="n">shift</span> <span class="o">=</span> <span class="n">shift</span> <span class="o">-</span> <span class="n">sign</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">shift</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="n">per</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
@@ -779,21 +882,31 @@ and correlations from fit.</p>
 
 <span class="n">out</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">fit_params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">kws</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;data&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">})</span>
 
-<span class="n">fit</span> <span class="o">=</span> <span class="n">residual</span><span class="p">(</span><span class="n">fit_params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">fit_report</span><span class="p">(</span><span class="n">fit_params</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fit_report</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+
 
 <span class="c">#&lt;end of examples/doc_withreport.py&gt;</span>
 </pre></div>
 </div>
 <p>which would write out:</p>
-<div class="highlight-python"><div class="highlight"><pre>[[Variables]]
+<div class="highlight-python"><div class="highlight"><pre>[[Fit Statistics]]
+    # function evals   = 85
+    # data points      = 1001
+    # variables        = 4
+    chi-square         = 498.812
+    reduced chi-square = 0.500
+[[Variables]]
     amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
-    decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
     period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
     shift:    0.16203677 +/- 0.014056 (8.67%) (init= 0)
+    decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
 [[Correlations]] (unreported correlations are &lt;  0.100)
     C(period, shift)             =  0.797
     C(amp, decay)                =  0.582
+    C(amp, shift)                = -0.297
+    C(amp, period)               = -0.243
+    C(shift, decay)              = -0.182
+    C(period, decay)             = -0.150
 </pre></div>
 </div>
 </div>
@@ -805,7 +918,7 @@ and correlations from fit.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -828,9 +941,9 @@ and correlations from fit.</p>
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

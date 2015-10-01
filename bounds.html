@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Using Mathematical Constraints" href="constraints.html" />
     <link rel="prev" title="Calculation of confidence intervals" href="confidence.html" />
@@ -34,41 +34,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -92,7 +87,7 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="confidence.html"
@@ -100,12 +95,14 @@
   <h4>Next topic</h4>
   <p class="topless"><a href="constraints.html"
                         title="next chapter">Using Mathematical Constraints</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/bounds.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/bounds.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -124,12 +121,12 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="bounds-implementation">
 <span id="bounds-chapter"></span><h1>Bounds Implementation<a class="headerlink" href="#bounds-implementation" title="Permalink to this headline">¶</a></h1>
-<p>This section describes the implementation of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><tt class="xref py py-class docutils literal"><span class="pre">Parameter</span></tt></a> bounds.
-The <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> implementation used in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.15.1)"><tt class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></tt></a> for
+<p>This section describes the implementation of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> bounds.
+The <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> implementation used in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a> for
 the Levenberg-Marquardt algorithm does not explicitly support bounds on
 parameters, and expects to be able to fully explore the available range of
 values for any Parameter.  Simply placing hard constraints (that is,
@@ -141,19 +138,19 @@ mathematically transformed using the formulation devised (and documented)
 for <a class="reference external" href="http://en.wikipedia.org/wiki/MINUIT">MINUIT</a>.  This is implemented following (and borrowing heavily from)
 the <a class="reference external" href="https://github.com/jjhelmus/leastsqbound-scipy">leastsqbound</a> from J. J. Helmus.   Parameter values are mapped from
 internally used, freely variable values <span class="math">\(P_{\rm internal}\)</span> to bounded
-parameters <span class="math">\(P_{\rm bounded}\)</span>.   When both <tt class="docutils literal"><span class="pre">min</span></tt> and <tt class="docutils literal"><span class="pre">max</span></tt> bounds
+parameters <span class="math">\(P_{\rm bounded}\)</span>.   When both <code class="docutils literal"><span class="pre">min</span></code> and <code class="docutils literal"><span class="pre">max</span></code> bounds
 are specified, the mapping is</p>
 <div class="math">
 \[\begin{eqnarray*}
      P_{\rm internal} &=& \arcsin\big(\frac{2 (P_{\rm bounded} - {\rm min})}{({\rm max} - {\rm min})} - 1\big) \\
      P_{\rm bounded}  &=& {\rm min} + \big(\sin(P_{\rm internal}) + 1\big) \frac{({\rm max} - {\rm min})}{2}
- \end{eqnarray*}\]</div><p>With only an upper limit <tt class="docutils literal"><span class="pre">max</span></tt> supplied, but <tt class="docutils literal"><span class="pre">min</span></tt> left unbounded, the
+ \end{eqnarray*}\]</div><p>With only an upper limit <code class="docutils literal"><span class="pre">max</span></code> supplied, but <code class="docutils literal"><span class="pre">min</span></code> left unbounded, the
 mapping is:</p>
 <div class="math">
 \[\begin{eqnarray*}
      P_{\rm internal} &=& \sqrt{({\rm max} - P_{\rm bounded} + 1)^2 - 1} \\
      P_{\rm bounded}  &=& {\rm max} + 1 - \sqrt{P_{\rm internal}^2 + 1}
- \end{eqnarray*}\]</div><p>With only a lower limit <tt class="docutils literal"><span class="pre">min</span></tt> supplied, but <tt class="docutils literal"><span class="pre">max</span></tt> left unbounded, the
+ \end{eqnarray*}\]</div><p>With only a lower limit <code class="docutils literal"><span class="pre">min</span></code> supplied, but <code class="docutils literal"><span class="pre">max</span></code> left unbounded, the
 mapping is:</p>
 <div class="math">
 \[\begin{eqnarray*}
@@ -176,7 +173,7 @@ uncertainty and correlations for that parameter may not be reliable.</p>
 bounds can certainly increase the number of function evaluations (and so
 computation time), and in some cases may cause some instabilities, as the
 range of acceptable parameter values is not fully explored.  On the other
-hand, preliminary tests suggest that using <tt class="docutils literal"><span class="pre">max</span></tt> and <tt class="docutils literal"><span class="pre">min</span></tt> to set
+hand, preliminary tests suggest that using <code class="docutils literal"><span class="pre">max</span></code> and <code class="docutils literal"><span class="pre">min</span></code> to set
 clearly outlandish bounds does not greatly affect performance or results.</p>
 </div>
 
@@ -186,7 +183,7 @@ clearly outlandish bounds does not greatly affect performance or results.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -209,9 +206,9 @@ clearly outlandish bounds does not greatly affect performance or results.</p>
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -39,7 +39,7 @@ Example: Fit data to Gaussian profile
 Let's start with a simple and common example of fitting data to a Gaussian
 peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
 provides a model function for a Gaussian profile, but here we'll build our
-own.  We start with a simple definition the model function:
+own.  We start with a simple definition of the model function:
 
     >>> from numpy import sqrt, pi, exp, linspace
     >>>
@@ -47,20 +47,20 @@ own.  We start with a simple definition the model function:
     ...    return amp * exp(-(x-cen)**2 /wid)
     ...
 
-that we want to use to fit to some data :math:`y(x)` represented by the
-arrays ``y`` and ``x``.  Using :func:`scipy.optimize.curve_fit` makes this
-easy to do, allowing us to do something like::
+We want to fit this objective function to data :math:`y(x)` represented by the
+arrays ``y`` and ``x``.  This can be done easily wit :func:`scipy.optimize.curve_fit`::
 
     >>> from scipy.optimize import curve_fit
     >>>
-    >>> x, y = read_data_from_somewhere(....)
+    >>> x = linspace(-10,10)
+    >>> y = y = gaussian(x, 2.33, 0.21, 1.51) + np.random.normal(0, 0.2, len(x))
     >>>
-    >>> init_vals = [5, 5, 1]     # for [amp, cen, wid]
+    >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
     >>> print best_vals
 
 
-That is, we read in data from somewhere, make an initial guess of the model
+We sample random data point, make an initial guess of the model
 values, and run :func:`scipy.optimize.curve_fit` with the model function,
 data arrays, and initial guesses.  The results returned are the optimal
 values for the parameters and the covariance matrix.  It's simple and very
@@ -72,12 +72,12 @@ such a function would be fairly simple (essentially, ``data - model``,
 possibly with some weighting), and we would need to define and use
 appropriately named parameters.  Though convenient, it is somewhat of a
 burden to keep the named parameter straight (on the other hand, with
-func:`scipy.optimize.curve_fit` you are required to remember the parameter
+:func:`scipy.optimize.curve_fit` you are required to remember the parameter
 order).  After doing this a few times it appears as a recurring pattern,
 and we can imagine automating this process.  That's where the
 :class:`Model` class comes in.
 
-The :class:`Model` allows us to easily wrap a model function such as the
+:class:`Model` allows us to easily wrap a model function such as the
 ``gaussian`` function.  This automatically generate the appropriate
 residual function, and determines the corresponding parameter names from
 the function signature itself::
@@ -97,9 +97,9 @@ see below) are used for Parameter names.  Thus, for the ``gaussian``
 function above, the parameters are named ``amp``, ``cen``, and ``wid``, and
 ``x`` is the independent variable -- all taken directly from the signature
 of the model function. As we will see below, you can specify what the
-independent variable is, and you can add or alter parameters too.
+independent variable is, and you can add or alter parameters, too.
 
-On creation of the model, parameters are *not* created.  The model knows
+The parameters are *not* created when the model is created. The model knows
 what the parameters should be named, but not anything about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initial values and other attributes.  To help you do this, each
@@ -111,7 +111,7 @@ the expected names:
 This creates the :class:`Parameters` but doesn't necessarily give them
 initial values -- again, the model has no idea what the scale should be.
 You can set initial values for parameters with keyword arguments to
-:meth:`make_params`, as with:
+:meth:`make_params`:
 
 
     >>> params = gmod.make_params(cen=5, amp=200, wid=1)
@@ -133,7 +133,7 @@ Admittedly, this a slightly long-winded way to calculate a Gaussian
 function.   But now that the model is set up, we can also use its
 :meth:`fit` method to fit this model to data, as with::
 
-    result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+    >>> result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
 Putting everything together, the script to do such a fit (included in the
 ``examples`` folder with the source code) is:
@@ -171,22 +171,21 @@ parameter values.  These can be used to generate the following plot:
 which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit as a dashed black line.
 
-We emphasize here that the fit to this model function was really performed
-with 2 lines of code::
+Note that the model fitting was really performed with 2 lines of code::
 
     gmod = Model(gaussian)
     result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
 These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
-starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``, and
-compare well to :func:`scipy.optimize.curve_fit`::
+starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.
+This is much more expressive than :func:`scipy.optimize.curve_fit`::
 
     best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
-except that all the other features of lmfit are included such as that the
+In addition, all the other features of lmfit are included:
 :class:`Parameters` can have bounds and constraints and the result is a
-richer object that can be reused to explore the fit in more detail.
+rich object that can be reused to explore the model fit in detail.
 
 
 The :class:`Model` class
@@ -252,23 +251,25 @@ specifying one or more independent variables.
    :type data: ndarray-like
    :param params: parameters to use for fit.
    :type params: ``None`` (default) or Parameters
-   :param weights: weights to use fit.
+   :param weights: weights to use for residual calculation in fit.
    :type weights: ``None`` (default) or ndarray-like.
    :param method:  name of fitting method to use. See  :ref:`fit-methods-label` for details
    :type  method:  string (default ``leastsq``)
    :param scale_covar:  whether to automatically scale covariance matrix (``leastsq`` only)
    :type  scale_covar:  bool (default ``True``)
-   :param iter_cb:  function to be called at each fit iteration
+   :param iter_cb:  function to be called at each fit iteration. See :ref:`fit-itercb-label` for details.
    :type  iter_cb:  callable or ``None``
    :param verbose:  print a message when a new parameter is created due to a *hint*
    :type  verbose:  bool (default ``True``)
    :param kws:      additional keyword arguments to pass to model function.
-   :return:         :class:`ModeFitResult` object.
+   :return:         :class:`ModelFit` object.
 
    If ``params`` is ``None``, the internal ``params`` will be used. If it
-   is supplied, these will replace the internal ones.  If supplied,
-   ``weights`` must is an ndarray-like object of same size and shape as
-   ``data``.
+   is supplied, these will replace the internal ones.   If supplied,
+   ``weights`` will be used to weight the calculated residual so that the
+   quantitiy minimized in the least-squares sense is ``weights*(data -
+   fit)``.  ``weights`` must be an ndarray-like object of same size and
+   shape as ``data``.
 
    Note that other arguments for the model function (including all the
    independent variables!) will need to be passed in using keyword
@@ -321,6 +322,7 @@ specifying one or more independent variables.
    :type expr: string
 
    See :ref:`model_param_hints_section`.
+
 
 :class:`Model` class Attributes
 ---------------------------------
@@ -640,8 +642,11 @@ model while the :class:`ModelFit` is the messier, more complex (but perhaps
 more useful) object that represents a fit with a set of parameters to data
 with a model.
 
+
 A :class:`ModelFit` has several attributes holding values for fit results,
-and several methods for working with fits.
+and several methods for working with fits.  These include statistics
+inherited from :class:`Minimizer` useful for comparing different models,
+includind `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. class:: ModelFit()
 
@@ -688,10 +693,125 @@ These methods are all inherited from :class:`Minimize` or from
    :param min_correl:   smallest correlation absolute value to show [0.1]
 
 
+.. method:: ModelFit.plot(datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None, fig=None, data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None, fig_kws=None)
+
+   Plot the fit results and residuals using matplotlib, if available.  The
+   plot will include two panels, one showing the fit residual, and the
+   other with the data points, the initial fit curve, and the best-fit
+   curve. If the fit model included weights or if ``yerr`` is specified,
+   errorbars will also be plotted.
+
+   :param datafmt: matplotlib format string for data curve.
+   :type  datafmt: ``None`` or string.
+   :param fitfmt:  matplotlib format string for best-fit curve.
+   :type fitfmt: ``None`` or string.
+   :param initfmt:  matplotlib format string for initial curve.
+   :type intfmt: ``None`` or string.
+   :param yerr:  array of uncertainties for data array.
+   :type  yerr: ``None`` or ndarray.
+   :param numpoints:  number of points to display
+   :type numpoints: ``None`` or integer
+   :param fig: matplotlib Figure to plot on.
+   :type fig:  ``None`` or matplotlib.figure.Figure
+   :param data_kws:  keyword arguments passed to plot for data curve.
+   :type data_kws: ``None`` or dictionary
+   :param fit_kws:  keyword arguments passed to plot for best-fit curve.
+   :type fit_kws: ``None`` or dictionary
+   :param init_kws:  keyword arguments passed to plot for initial curve.
+   :type init_kws: ``None`` or dictionary
+   :param ax_res_kws:  keyword arguments passed to creation of matplotlib axes for the residual plot.
+   :type ax_res_kws: ``None`` or dictionary
+   :param ax_fit_kws:  keyword arguments passed to creation of matplotlib axes for the fit plot.
+   :type ax_fit_kws: ``None`` or dictionary
+   :param fig_kws:  keyword arguments passed to creation of matplotlib figure.
+   :type fig_kws: ``None`` or dictionary
+   :returns:     matplotlib.figure.Figure
+
+   This combines :meth:`ModelFit.plot_fit` and :meth:`ModelFit.plot_residual`.
+
+   If ``yerr`` is specified or if the fit model included weights, then
+   matplotlib.axes.Axes.errorbar is used to plot the data.  If ``yerr`` is
+   not specified and the fit includes weights, ``yerr`` set to ``1/self.weights``
+
+   If ``fig`` is None then ``matplotlib.pyplot.figure(**fig_kws)`` is called.
+
+.. method:: ModelFit.plot_fit(ax=None, datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None,  data_kws=None, fit_kws=None, init_kws=None, ax_kws=None)
+
+   Plot the fit results using matplotlib, if available.  The plot will include
+   the data points, the initial fit curve, and the best-fit curve. If the fit
+   model included weights or if ``yerr`` is specified, errorbars will also
+   be plotted.
+
+   :param ax: matplotlib axes to plot on.
+   :type ax:  ``None`` or matplotlib.axes.Axes.
+   :param datafmt: matplotlib format string for data curve.
+   :type  datafmt: ``None`` or string.
+   :param fitfmt:  matplotlib format string for best-fit curve.
+   :type fitfmt: ``None`` or string.
+   :param initfmt:  matplotlib format string for initial curve.
+   :type intfmt: ``None`` or string.
+   :param yerr:  array of uncertainties for data array.
+   :type  yerr: ``None`` or ndarray.
+   :param numpoints:  number of points to display
+   :type numpoints: ``None`` or integer
+   :param data_kws:  keyword arguments passed to plot for data curve.
+   :type data_kws: ``None`` or dictionary
+   :param fit_kws:  keyword arguments passed to plot for best-fit curve.
+   :type fit_kws: ``None`` or dictionary
+   :param init_kws:  keyword arguments passed to plot for initial curve.
+   :type init_kws: ``None`` or dictionary
+   :param ax_kws:  keyword arguments passed to creation of matplotlib axes.
+   :type ax_kws: ``None`` or dictionary
+   :returns:     matplotlib.axes.Axes
+
+   For details about plot format strings and keyword arguments see
+   documentation of :func:`matplotlib.axes.Axes.plot`.
+
+   If ``yerr`` is specified or if the fit model included weights, then
+   matplotlib.axes.Axes.errorbar is used to plot the data.  If ``yerr`` is
+   not specified and the fit includes weights, ``yerr`` set to ``1/self.weights``
+
+   If ``ax`` is None then ``matplotlib.pyplot.gca(**ax_kws)`` is called.
+
+.. method:: ModelFit.plot_residuals(ax=None, datafmt='o', yerr=None, data_kws=None, fit_kws=None, ax_kws=None)
+
+  Plot the fit residuals (data - fit) using matplotlib.  If ``yerr`` is
+  supplied or if the model included weights, errorbars will also be plotted.
+
+   :param ax: matplotlib axes to plot on.
+   :type ax:  ``None`` or matplotlib.axes.Axes.
+   :param datafmt: matplotlib format string for data curve.
+   :type  datafmt: ``None`` or string.
+   :param yerr:  array of uncertainties for data array.
+   :type  yerr: ``None`` or ndarray.
+   :param numpoints:  number of points to display
+   :type numpoints: ``None`` or integer
+   :param data_kws:  keyword arguments passed to plot for data curve.
+   :type data_kws: ``None`` or dictionary
+   :param fit_kws:  keyword arguments passed to plot for best-fit curve.
+   :type fit_kws: ``None`` or dictionary
+   :param ax_kws:  keyword arguments passed to creation of matplotlib axes.
+   :type ax_kws: ``None`` or dictionary
+   :returns:     matplotlib.axes.Axes
+
+   For details about plot format strings and keyword arguments see
+   documentation of :func:`matplotlib.axes.Axes.plot`.
+
+   If ``yerr`` is specified or if the fit model included weights, then
+   matplotlib.axes.Axes.errorbar is used to plot the data.  If ``yerr`` is
+   not specified and the fit includes weights, ``yerr`` set to ``1/self.weights``
+
+   If ``ax`` is None then ``matplotlib.pyplot.gca(**ax_kws)`` is called.
+
+
 
 
 :class:`ModelFit` attributes
 ---------------------------------
+
+.. attribute:: aic
+
+   floating point best-fit Akaike Information Criterion statistic (see :ref:`fit-results-label`).
 
 .. attribute:: best_fit
 
@@ -702,9 +822,13 @@ These methods are all inherited from :class:`Minimize` or from
 
    dictionary with  parameter names as keys, and best-fit values as values.
 
+.. attribute:: bic
+
+   floating point best-fit Bayesian Information Criterion statistic (see :ref:`fit-results-label`).
+
 .. attribute:: chisqr
 
-   floating point best-fit chi-square statistic.
+   floating point best-fit chi-square statistic (see :ref:`fit-results-label`).
 
 .. attribute:: covar
 
@@ -741,7 +865,7 @@ These methods are all inherited from :class:`Minimize` or from
    must take take arguments of ``params, iter, resid, *args, **kws``, where
    ``params`` will have the current parameter values, ``iter`` the
    iteration, ``resid`` the current residual array, and ``*args`` and
-   ``**kws`` as passed to the objective function.
+   ``**kws`` as passed to the objective function.  See :ref:`fit-itercb-label`.
 
 .. attribute:: jacfcn
 
@@ -785,7 +909,7 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute::  redchi
 
-    floating point reduced chi-square statistic
+    floating point reduced chi-square statistic (see :ref:`fit-results-label`).
 
 .. attribute::  residual
 
@@ -801,8 +925,10 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute:: weights
 
-   ndarray (or ``None``) of weighting values used in fit.
-
+   ndarray (or ``None``) of weighting values to be used in fit.  If not
+   ``None``, it will be used as a multiplicative factor of the residual
+   array, so that ``weights*(data - fit)`` is minimized in the
+   least-squares sense.
 
 .. index:: Composite models
 

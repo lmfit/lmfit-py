@@ -65,8 +65,8 @@ parameter ``fwhm`` is included.
   f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}
 
 where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
-:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
-Half-Maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
+:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
+half maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
 :math:`2.3548\sigma`
 
 
@@ -85,8 +85,8 @@ parameter ``fwhm`` is included.
   f(x; A, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
 
 where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
-:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The Full-Width at
-Half-Maximum is :math:`2\sigma`.
+:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
+half maximum is :math:`2\sigma`.
 
 
 :class:`VoigtModel`
@@ -132,18 +132,20 @@ the full width at half maximum is approximately :math:`3.6013\sigma`.
 a model based on a `pseudo-Voigt distribution function
 <http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation>`_,
 which is a weighted sum of a Gaussian and Lorentzian distribution functions
-with the same values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
-and ``sigma`` (:math:`\sigma`), and a parameter ``fraction`` (:math:`\alpha`)
-in
+with that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
+and full width at half maximum (and so have  constrained values of
+``sigma`` (:math:`\sigma`).  A parameter ``fraction`` (:math:`\alpha`)
+controls the relative weight of the Gaussian and Lorentzian components,
+giving the full definition of
 
 .. math::
 
-  f(x; A, \mu, \sigma, \alpha) = (1-\alpha)\frac{A}{\pi}
-  \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big] + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
+  f(x; A, \mu, \sigma, \alpha) = \frac{(1-\alpha)A}{\sigma_g\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma_g}^2}}]}
+ + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
 
-
-The :meth:`guess` function always gives a starting
-value for ``fraction`` of 0.5
+where :math:`\sigma_g = {\sigma}/{\sqrt{2\ln{2}}}` so that the full width
+at half maximum of each component and of the sum is :math:`2\sigma`. The
+:meth:`guess` function always sets the starting value for ``fraction`` at 0.5.
 
 :class:`Pearson7Model`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,7 +243,7 @@ It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) 
 .. math::
 
     f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
-    \exp\bigl[\gamma({\mu - x  + \sigma^2/2})\bigr]
+    \exp\bigl[\gamma({\mu - x  + \gamma\sigma^2/2})\bigr]
     {\operatorname{erfc}}\Bigl(\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\Bigr)
 
 
@@ -262,7 +264,7 @@ It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) 
     f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
   e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
       {\operatorname{erf}}\bigl[
-         \frac{\gamma(x-\mu)}{\sigma\sqrt{2\pi}}
+         \frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
      \bigr] \Bigr\}
 
 
@@ -474,18 +476,19 @@ mathematical constraints as discussed in :ref:`constraints_chapter`.
 :class:`ExpressionModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ExpressionModel(expr, independent_vars=None, init_script=None, missing=None, prefix='', name=None, **kws)
+.. class:: ExpressionModel(expr, independent_vars=None, init_script=None, **kws)
 
     A model using the user-supplied mathematical expression, which can be nearly any valid Python expresion.
 
     :param expr: expression use to build model
     :type expr: string
+    :param independent_vars: list of argument names in expression that are independent variables.
+    :type independent_vars: ``None`` (default) or list of strings for independent variables.
     :param init_script: python script to run before parsing and evaluating expression.
     :type init_script: ``None`` (default) or string
-    :param independent_vars: list of argument names to ``func`` that are independent variables.
-    :type independent_vars: ``None`` (default) or list of strings for independent variables.
 
-with other parameters passed to :class:`model.Model`.
+with other parameters passed to :class:`model.Model`, with the notable
+exception that :class:`ExpressionModel` does **not** support the `prefix` argument.
 
 Since the point of this model is that an arbitrary expression will be
 supplied, the determination of what are the parameter names for the model
@@ -506,7 +509,7 @@ For example, if one creates an :class:`ExpressionModel` as::
 
 The name `exp` will be recognized as the exponent function, so the model
 will be interpreted to have parameters named `off`, `amp`, `x0` and
-`phase`, and `x` will be assumed to be the sole independent variable.
+`phase`. In addition, `x` will be assumed to be the sole independent variable.
 In general, there is no obvious way to set default parameter values or
 parameter hints for bounds, so this will have to be handled explicitly.
 

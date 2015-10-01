@@ -5,13 +5,15 @@
 ================================================
 
 This chapter describes :class:`Parameter` objects which is the key concept
-of lmfit.  A :class:`Parameter` is the quantity to be optimized in all
-minimization problems, replacing the plain floating point number used in
-the optimization routines from :mod:`scipy.optimize`.  A :class:`Parameter`
-has a value that can be varied in the fit, fixed, have upper and/or lower
-bounds.  It can even have a value that is constrained by an algebraic
-expression of other Parameter values.  Since :class:`Parameters` live
-outside the core optimization routines, they can be used in **all**
+of lmfit.
+
+A :class:`Parameter` is the quantity to be optimized in all minimization
+problems, replacing the plain floating point number used in the
+optimization routines from :mod:`scipy.optimize`.  A :class:`Parameter` has
+a value that can be varied in the fit or have a fixed value, have upper
+and/or lower bounds.  It can even have a value that is constrained by an
+algebraic expression of other Parameter values.  Since :class:`Parameters`
+live outside the core optimization routines, they can be used in **all**
 optimization routines from :mod:`scipy.optimize`.  By using
 :class:`Parameter` objects instead of plain variables, the objective
 function does not have to be modified to reflect every change of what is
@@ -27,8 +29,8 @@ a name, this is replaced by a :class:`Parameters` class, which works as an
 ordered dictionary of :class:`Parameter` objects, with a few additional
 features and methods.  That is, while the concept of a :class:`Parameter`
 is central to lmfit, one normally creates and interacts with a
-:class:`Parameters` instance that contains many :class:`Parameter`
-objects.  The objective functions you write will take an instance of
+:class:`Parameters` instance that contains many :class:`Parameter` objects.
+The objective functions you write for lmfit will take an instance of
 :class:`Parameters` as its first argument.
 
 
@@ -52,8 +54,8 @@ The :class:`Parameter` class
 
 Each of these inputs is turned into an attribute of the same name.
 
-After a fit, a Parameter for a fitted variable (that is with vary =
-``True``) will have the :attr:`value` attribute holding the best-fit value.
+After a fit, a Parameter for a fitted variable (that is with ``vary =
+True``) may have its :attr:`value` attribute to hold the best-fit value.
 Depending on the success of the fit and fitting algorithm used, it may also
 have attributes :attr:`stderr` and :attr:`correl`.
 
@@ -89,10 +91,9 @@ feature.
    :param max:   upper bound for value
    :param expr:  mathematical expression to use to evaluate value during fit.
 
-   Each argument of :meth:`set` has a default value of ``None``, and will
-
-  be set only if the provided value is not ``None``.  You can use this to
-   update some Parameter attribute without affecting others, for example::
+Each argument of :meth:`set` has a default value of ``None``, and will
+be set only if the provided value is not ``None``.  You can use this to
+update some Parameter attribute without affecting others, for example::
 
        p1 = Parameter('a', value=2.0)
        p2 = Parameter('b', value=0.0)
@@ -130,11 +131,11 @@ The :class:`Parameters` class
 
 .. class:: Parameters()
 
-   create a Parameters object.  This is little more than a fancy
-   dictionary, with the restrictions that
+   create a Parameters object.  This is little more than a fancy ordered
+   dictionary, with the restrictions that:
 
-   1. keys must be valid Python symbol names (so that they can be used in
-      expressions of mathematical constraints).  This means the names must
+   1. keys must be valid Python symbol names, so that they can be used in
+      expressions of mathematical constraints.  This means the names must
       match ``[a-z_][a-z0-9_]*``  and cannot be a Python reserved word.
 
    2. values must be valid :class:`Parameter` objects.
@@ -173,15 +174,20 @@ The :class:`Parameters` class
                 ('wid2',  None, False, None, None, '2*wid1/3'))
 
 
-.. method:: valuesdict(self)
+.. method:: pretty_print(oneline=False)
 
-   return an ordered dictionary of name:value pairs containing the
-   :attr:`name` and :attr:`value` of a Parameter.
+   prints a clean representation on the Parameters. If `oneline` is
+   `True`, the result will be printed to a single (long) line.
+
+.. method:: valuesdict()
+
+   return an ordered dictionary of name:value pairs with the
+   Paramater name as the key and Parameter value as value.
 
    This is distinct from the :class:`Parameters` itself, as the dictionary
    values are not :class:`Parameter` objects, just the :attr:`value`.
-   This can be a very convenient way to get updated values in a objective
-   function.
+   Using :method:`valuesdict` can be a very convenient way to get updated
+   values in a objective function.
 
 .. method:: dumps(**kws):
 

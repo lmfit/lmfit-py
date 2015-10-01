@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.3',
+        VERSION:     '0.9.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
@@ -33,41 +33,36 @@
   });</script>
 
   </head>
-  <body>
+  <body role="document">
 <div>
 <table border=0>
-  <tr><td></td><td width=75% padding=5 align=left>
+  <tr><td></td><td width=85% padding=5 align=left>
        <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td><td></td>
-     <td width=8% align=left>
+     </td>
+     <td width=7% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=8% align=left>
+     <td width=7% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
-     <td width=8% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
   <tr><td></td><td width=75% padding=5 align=left>
         <a href="index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td><td></td>
-     <td width=8% align=left>
-         <a href="intro.html" style="color: #882222">
-         <font size+=1>Introduction</font></a> </td>
-     <td width=8% align=left>
-         <a href="parameters.html" style="color: #882222">
-         <font size+=1>Parameters</font></a> </td>
-     <td width=8% align=left>
-         <a href="model.html" style="color: #882222">
-         <font size+=1>Models</font></a> </td>
-
+     </td>
+     <td width=7% align=left>
+         <a href="faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=7% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
   </tr>
 </table>
 </div>
 
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -85,12 +80,12 @@
       </ul>
     </div>
 
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 
    
 
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -109,7 +104,7 @@
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
 
 <h1 id="index">Index</h1>
@@ -143,12 +138,22 @@
   <dt><a href="parameters.html#add">add()</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="parameters.html#add_many">add_many()</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="fitting.html#aic">aic</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="model.html#model.aic">(in module model)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -166,6 +171,16 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="fitting.html#bic">bic</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="model.html#model.bic">(in module model)</a>
+  </dt>
+
+      </dl></dd>
+      
   <dt><a href="builtin_models.html#models.BreitWignerModel">BreitWignerModel (class in models)</a>
   </dt>
 
@@ -176,9 +191,15 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="model.html#model.chisqr">chisqr (in module model)</a>
+  <dt><a href="fitting.html#chisqr">chisqr</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.chisqr">(in module model)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="model.html#index-0">Composite models</a>
   </dt>
@@ -210,9 +231,15 @@
   </dt>
 
       
-  <dt><a href="model.html#model.covar">covar (in module model)</a>
+  <dt><a href="fitting.html#covar">covar</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.covar">(in module model)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -240,9 +267,15 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="model.html#model.errorbars">errorbars (in module model)</a>
+  <dt><a href="fitting.html#errorbars">errorbars</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.errorbars">(in module model)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="model.html#model.Model.eval">eval() (Model method)</a>
   </dt>
@@ -300,10 +333,6 @@
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#Minimizer.fmin">fmin() (in module Minimizer)</a>
-  </dt>
-
-      
   <dt><a href="model.html#model.func">func (in module model)</a>
   </dt>
 
@@ -330,9 +359,15 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="model.html#model.ier">ier (in module model)</a>
+  <dt><a href="fitting.html#ier">ier</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.ier">(in module model)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="model.html#model.independent_vars">independent_vars (in module model)</a>
   </dt>
@@ -341,10 +376,14 @@
   <dt><a href="model.html#model.init_fit">init_fit (in module model)</a>
   </dt>
 
+      
+  <dt><a href="model.html#model.init_params">init_params (in module model)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="model.html#model.init_params">init_params (in module model)</a>
+  <dt><a href="fitting.html#init_vals">init_vals</a>
   </dt>
 
       
@@ -372,10 +411,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="fitting.html#Minimizer.lbfgsb">lbfgsb() (in module Minimizer)</a>
-  </dt>
-
-      
   <dt><a href="fitting.html#Minimizer.leastsq">leastsq() (in module Minimizer)</a>
   </dt>
 
@@ -383,12 +418,18 @@
   <dt><a href="builtin_models.html#models.LinearModel">LinearModel (class in models)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="model.html#model.lmdif_message">lmdif_message (in module model)</a>
+  <dt><a href="fitting.html#lmdif_message">lmdif_message</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.lmdif_message">(in module model)</a>
+  </dt>
+
+      </dl></dd>
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="builtin_models.html#models.LognormalModel">LognormalModel (class in models)</a>
   </dt>
@@ -408,9 +449,15 @@
   </dt>
 
       
-  <dt><a href="model.html#model.message">message (in module model)</a>
+  <dt><a href="fitting.html#message">message</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.message">(in module model)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="model.html#model.method">method (in module model)</a>
   </dt>
@@ -419,6 +466,12 @@
   <dt><a href="fitting.html#minimize">minimize() (built-in function)</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="fitting.html#Minimizer.minimize">(in module Minimizer)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="fitting.html#Minimizer.Minimizer">Minimizer (class in Minimizer)</a>
   </dt>
@@ -429,6 +482,10 @@
   </dt>
 
       </dl></dd>
+      
+  <dt><a href="fitting.html#MinimizerResult">MinimizerResult (built-in class)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
@@ -468,13 +525,25 @@
   </dt>
 
       
-  <dt><a href="model.html#model.ndata">ndata (in module model)</a>
+  <dt><a href="fitting.html#ndata">ndata</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.ndata">(in module model)</a>
+  </dt>
+
+      </dl></dd>
       
-  <dt><a href="model.html#model.nfev">nfev (in module model)</a>
+  <dt><a href="fitting.html#nfev">nfev</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.nfev">(in module model)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
@@ -482,9 +551,15 @@
   </dt>
 
       
-  <dt><a href="model.html#model.nvarys">nvarys (in module model)</a>
+  <dt><a href="fitting.html#nvarys">nvarys</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.nvarys">(in module model)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -522,13 +597,31 @@
   </dt>
 
       
-  <dt><a href="model.html#model.params">params (in module model)</a>
+  <dt><a href="fitting.html#params">params</a>
+  </dt>
+
+      <dd><dl>
+        
+  <dt><a href="model.html#model.params">(in module model)</a>
+  </dt>
+
+      </dl></dd>
+      
+  <dt><a href="builtin_models.html#models.Pearson7Model">Pearson7Model (class in models)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#model.ModelFit.plot">plot() (ModelFit method)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="builtin_models.html#models.Pearson7Model">Pearson7Model (class in models)</a>
+  <dt><a href="model.html#model.ModelFit.plot_fit">plot_fit() (ModelFit method)</a>
+  </dt>
+
+      
+  <dt><a href="model.html#model.ModelFit.plot_residuals">plot_residuals() (ModelFit method)</a>
   </dt>
 
       
@@ -545,6 +638,10 @@
 
       
   <dt><a href="fitting.html#Minimizer.prepare_fit">prepare_fit() (in module Minimizer)</a>
+  </dt>
+
+      
+  <dt><a href="parameters.html#pretty_print">pretty_print()</a>
   </dt>
 
       
@@ -572,9 +669,15 @@
   </dt>
 
       
-  <dt><a href="model.html#model.redchi">redchi (in module model)</a>
+  <dt><a href="fitting.html#redchi">redchi</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.redchi">(in module model)</a>
+  </dt>
+
+      </dl></dd>
       
   <dt><a href="parameters.html#index-0">Removing a Constraint Expression</a>
   </dt>
@@ -586,9 +689,15 @@
   </dt>
 
       
-  <dt><a href="model.html#model.residual">residual (in module model)</a>
+  <dt><a href="fitting.html#residual">residual</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.residual">(in module model)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -630,9 +739,15 @@
   </dt>
 
       
-  <dt><a href="model.html#model.success">success (in module model)</a>
+  <dt><a href="fitting.html#success">success</a>
   </dt>
 
+      <dd><dl>
+        
+  <dt><a href="model.html#model.success">(in module model)</a>
+  </dt>
+
+      </dl></dd>
   </dl></td>
 </tr></table>
 
@@ -641,6 +756,10 @@
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="parameters.html#valuesdict">valuesdict()</a>
+  </dt>
+
+      
+  <dt><a href="fitting.html#var_names">var_names</a>
   </dt>
 
   </dl></td>
@@ -669,7 +788,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -686,9 +805,9 @@
  
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
