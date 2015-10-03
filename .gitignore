@@ -8,3 +8,5 @@ dist
 lmfit.egg-info
 sandbox/
 *.swp
+.idea/
+.DS_Store
