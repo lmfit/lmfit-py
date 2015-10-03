@@ -17,6 +17,7 @@ from numpy import (dot, eye, ndarray, ones_like,
                    sqrt, take, transpose, triu, deprecate)
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
+import multiprocessing
 
 from scipy.optimize import leastsq as scipy_leastsq
 
@@ -530,7 +531,7 @@ class Minimizer(object):
         return result
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
-              ntemps=1, pos=None, reuse_sampler=False):
+              ntemps=1, pos=None, reuse_sampler=False, workers=1):
         """
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
@@ -577,7 +578,18 @@ class Minimizer(object):
             would include changed ``min``, ``max``, ``vary`` and ``expr``
             attributes. This may happen, for example, if you use an altered
             Parameters object and call the `minimize` method in-between calls
-            to `emcee` .
+            to `emcee`.
+        workers : Pool-like or int, optional
+            For parallelization of sampling.  It can be any Pool-like object
+            with a map method that follows the same calling sequence as the
+            built-in map function. If int is given as the argument, then a
+            multiprocessing-based pool is spawned internally with the
+            corresponding number of parallel processes. 'mpi4py'-based
+            parallelization and 'joblib'-based parallelization pools can also
+            be used here. **Note**: because of multiprocessing overhead it may
+            only be worth parallelising if the objective function is expensive
+            to calculate, or if there are a large number of objective
+            evaluations per step (`ntemps * nwalkers * nvarys`).
 
         Returns
         -------
@@ -655,6 +667,8 @@ class Minimizer(object):
             raise NotImplementedError('You must have emcee to use'
                                       ' the emcee method')
 
+        # if you're reusing the sampler then ntemps, nwalkers have to be
+        # determined from the previous sampling
         tparams = params
         if reuse_sampler:
             if hasattr(self, 'sampler') is False:
@@ -669,70 +683,70 @@ class Minimizer(object):
             tparams = None
 
         result = self.prepare_fit(params=tparams)
-        vars = result.init_vals
         params = result.params
 
         # Removing internal parameter scaling. We could possibly keep it,
         # but I don't know how this affects the emcee sampling.
-        bounds_varying = []
+        bounds = []
+        var_arr = np.zeros(len(result.var_names))
         for i, par in enumerate(params):
             param = params[par]
-            vars[i] = param.value
+            if param.expr is not None:
+                param.vary = False
+            if param.vary:
+                var_arr[i] = param.value
+
             param.from_internal = lambda val: val
             lb, ub = param.min, param.max
             if lb is None or lb is np.nan:
                 lb = -np.inf
             if ub is None or ub is np.nan:
                 ub = np.inf
-            bounds_varying.append((lb, ub))
-        bounds_varying = np.array(bounds_varying)
+            bounds.append((lb, ub))
+        bounds = np.array(bounds)
 
         self.nvarys = len(result.var_names)
 
-        def lnlike(theta):
-            # log likelihood
-            r = self.__residual(theta)
+        # function arguments for the log-probability functions
+        lnprob_args = (self.userfcn, params, result.var_names, bounds)
+        lnprob_kwargs = {'userargs': self.userargs, 'userkws': self.userkws}
 
-            if isinstance(r, np.ndarray) and np.size(r) > 1:
-                # objective function returns a vector of residuals
-                r = -0.5 * (r*r).sum()
-            else:
-                # objective function returns a single value.
-                # If r > 0, assume that r is chi**2
-                if r > 0:
-                    r *= -0.5
-                else:
-                    # Assume that it's the true log-posterior probability.
-                    pass
+        # set up multiprocessing options for the samplers
+        auto_pool = None
+        sampler_kwargs = {}
+        if type(workers) is int and workers > 1:
+            auto_pool = multiprocessing.Pool(workers)
+            sampler_kwargs['pool'] = auto_pool
+        elif hasattr(workers, 'map'):
+            sampler_kwargs['pool'] = workers
 
-            return r
+        # these values are sent to the log-probability functions by the sampler.
+        if ntemps > 1:
+            sampler_kwargs['loglargs'] = lnprob_args
+            sampler_kwargs['logpargs'] = lnprob_args
+            sampler_kwargs['loglkwargs'] = lnprob_kwargs
+            sampler_kwargs['logpkwargs'] = lnprob_kwargs
+        else:
+            sampler_kwargs['args'] = lnprob_args
+            sampler_kwargs['kwargs'] = lnprob_kwargs
 
-        def lnprior(theta):
-            # stay within the prior specified by the parameter bounds
-            if (np.any(theta > bounds_varying[:, 1])
-                    or np.any(theta < bounds_varying[:, 0])):
-                return -np.inf
-            return 0
-
-        def lnprob(theta):
-            lp = lnprior(theta)
-            if not np.isfinite(lp):
-                return -np.inf
-            return lp + lnlike(theta)
-
+        # now initialise the samplers
         if reuse_sampler:
+            if auto_pool is not None:
+                self.sampler.pool = auto_pool
+
             p0 = self.sampler.chain[..., -1, :]
         elif ntemps > 1:
             # jitter the starting position by scaled Gaussian noise
             p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-4
-            p0 *= vars
+            p0 *= var_arr
             self.sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys,
-                                            lnlike, lnprior)
+                                           _lnpost, _lnprior, **sampler_kwargs)
         else:
             p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-4
-            p0 *= vars
+            p0 *= var_arr
             self.sampler = emcee.EnsembleSampler(nwalkers, self.nvarys,
-                                                  lnprob)
+                                                 _lnpost, **sampler_kwargs)
 
         # user supplies an initialisation position for the chain
         # If you try to run the sampler with p0 of a wrong size then you'll get
@@ -785,9 +799,10 @@ class Minimizer(object):
         result.chain = np.copy(chain)
         result.lnprob = np.copy(lnprobability)
         result.errorbars = True
-        result.nvarys = len(vars)
+        result.nvarys = len(result.var_names)
 
-        self.unprepare_fit()
+        if auto_pool is not None:
+            auto_pool.terminate()
 
         return result
 
@@ -994,6 +1009,106 @@ class Minimizer(object):
         elif user_method.startswith('lbfgsb'):
             function = self.lbfgsb
         return function(**kwargs)
+
+
+def _lnprior(theta, userfcn, params, var_names, bounds, userargs=(),
+            userkws=None):
+    """
+    Calculates an improper uniform log-prior probability
+
+    Parameters
+    ----------
+    theta : sequence
+        float parameter values
+    userfcn : callable
+        User objective function
+    params : lmfit.Parameters
+        The entire set of Parameters
+    var_names : list
+        The names of the parameters that are varying
+    bounds : np.ndarray
+        Lower and upper bounds of parameters. Has shape (nparams, 2).
+    userargs : tuple, optional
+        Extra positional arguments required for user objective function
+    userkws : dict, optional
+        Extra keyword arguments required for user objective function
+
+    Returns
+    -------
+    lnprob : float
+        Log prior probability
+    """
+    for name, val in zip(var_names, theta):
+        params[name].value = val
+
+    values = np.asarray([params[par].value for par in params])
+
+    if (np.any(values > bounds[:, 1])
+        or np.any(values < bounds[:, 0])):
+        return -np.inf
+    else:
+        return 0
+
+
+def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
+            userkws=None):
+    """
+    Calculates the log-posterior probability. See the `Minimizer.emcee` method
+    for more details
+
+    Parameters
+    ----------
+    theta : sequence
+        float parameter values
+    userfcn : callable
+        User objective function
+    params : lmfit.Parameters
+        The entire set of Parameters
+    var_names : list
+        The names of the parameters that are varying
+    bounds : np.ndarray
+        Lower and upper bounds of parameters. Has shape (nparams, 2).
+    userargs : tuple, optional
+        Extra positional arguments required for user objective function
+    userkws : dict, optional
+        Extra keyword arguments required for user objective function
+
+    Returns
+    -------
+    lnprob : float
+        Log posterior probability
+    """
+    for name, val in zip(var_names, theta):
+        params[name].value = val
+
+    values = np.asarray([params[par].value for par in params])
+
+    if (np.any(values > bounds[:, 1])
+        or np.any(values < bounds[:, 0])):
+        return -np.inf
+
+    userkwargs = {}
+    if userkws is not None:
+        userkwargs = userkws
+
+    # now calculate the log-likelihood
+    out = userfcn(params, *userargs, **userkwargs)
+    lnprob = np.asarray(out).ravel()
+
+    if lnprob.size > 1:
+        # objective function returns a vector of residuals
+        lnprob = -0.5 * (lnprob * lnprob).sum()
+    else:
+        # objective function returns a single value.
+        # If lnprob > 0, assume that lnprob is chi**2
+        if lnprob > 0:
+            lnprob *= -0.5
+        else:
+            # If it's negative assume that it's the true log-posterior
+            # probability.
+            pass
+
+    return lnprob
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,

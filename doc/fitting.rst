@@ -615,6 +615,17 @@ The Minimizer object has a few public methods:
             you use an altered :class:`Parameters` object and call the
             :meth:`minimize` method in-between calls to :meth:`emcee` .
   :type  reuse_sampler:  bool
+  :param workers: For parallelization of sampling.  It can be any Pool-like object
+            with a map method that follows the same calling sequence as the
+            built-in map function. If int is given as the argument, then a
+            multiprocessing-based pool is spawned internally with the
+            corresponding number of parallel processes. 'mpi4py'-based
+            parallelization and 'joblib'-based parallelization pools can also
+            be used here. **Note**: because of multiprocessing overhead it may
+            only be worth parallelising if the objective function is expensive
+            to calculate, or if there are a large number of objective
+            evaluations per step (`ntemps * nwalkers * nvarys`).
+  :type workers: int or Pool-like
 
   :return: :class:`MinimizerResult` object containing updated params, statistics,
             etc. The :class:`MinimizerResult` also contains the ``chain``,

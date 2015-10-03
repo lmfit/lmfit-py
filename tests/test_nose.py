@@ -415,10 +415,31 @@ class CommonMinimizerTest(unittest.TestCase):
             return True
 
         np.random.seed(123456)
+        self.mini.userfcn = residual_for_multiprocessing
         out = self.mini.emcee(ntemps=4, nwalkers=100, steps=100,
-                              burn=50, thin=10)
+                              burn=50, thin=10, workers=4)
 
         check_paras(out.params, self.p_true, sig=3)
+
+    @decorators.slow
+    def test_emcee_multiprocessing(self):
+        # test multiprocessing runs
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        self.mini.userfcn = residual_for_multiprocessing
+        out = self.mini.emcee(steps=10, workers=4)
+
+    def test_emcee_bounds_length(self):
+        # the log-probability functions check if the parameters are
+        # inside the bounds. Check that the bounds and parameters
+        # are the right lengths for comparison. This can be done
+        # if nvarys != nparams
+        if not HAS_EMCEE:
+            return True
+        self.mini.params['decay'].vary=False
+        out = self.mini.emcee(steps=10)
 
     @decorators.slow
     def test_emcee_partial_bounds(self):
@@ -473,7 +494,6 @@ class CommonMinimizerTest(unittest.TestCase):
             from pandas import DataFrame
         except ImportError:
             return True
-
         out = self.mini.emcee(nwalkers=10, steps=20, burn=5, thin=2)
         assert_(isinstance(out, MinimizerResult))
         assert_(isinstance(out.flatchain, DataFrame))
@@ -508,6 +528,22 @@ class CommonMinimizerTest(unittest.TestCase):
         out = self.mini.emcee(nwalkers=100, steps=200,
                                       burn=50, thin=10)
         check_paras(out.params, self.p_true, sig=3)
+
+
+def residual_for_multiprocessing(pars, x, data=None):
+    # a residual function defined in the top level is needed for
+    # multiprocessing. bound methods don't work.
+    amp = pars['amp'].value
+    per = pars['period'].value
+    shift = pars['shift'].value
+    decay = pars['decay'].value
+
+    if abs(shift) > pi/2:
+        shift = shift - np.sign(shift) * pi
+    model = amp*np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
+    if data is None:
+        return model
+    return (model - data)
 
 
 if __name__ == '__main__':
