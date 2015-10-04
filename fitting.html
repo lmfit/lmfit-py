@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.0',
+        VERSION:     '0.9.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -172,12 +172,12 @@ from <code class="docutils literal"><span class="pre">function</span></code> is 
 <li><strong>params</strong> (<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>.) &#8211; a <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> dictionary.  Keywords must be strings
 that match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code> and cannot be a python
 reserved word.  Each value must be <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>.</li>
-<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
-<li><strong>kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
+<li><strong>args</strong> (<em>tuple</em>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
+<li><strong>kws</strong> (<em>dict</em>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
 <li><strong>method</strong> (string (default <code class="docutils literal"><span class="pre">leastsq</span></code>)) &#8211; name of fitting method to use. See  <a class="reference internal" href="#fit-methods-label"><span>Choosing Different Fitting Methods</span></a> for details</li>
 <li><strong>scale_covar</strong> (bool (default <code class="docutils literal"><span class="pre">True</span></code>)) &#8211; whether to automatically scale covariance matrix (<code class="docutils literal"><span class="pre">leastsq</span></code> only)</li>
 <li><strong>iter_cb</strong> (callable or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; function to be called at each fit iteration. See <a class="reference internal" href="#fit-itercb-label"><span>Using a Iteration Callback Function</span></a> for details.</li>
-<li><strong>fit_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a> or <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></code></a>.</li>
+<li><strong>fit_kws</strong> (<em>dict</em>) &#8211; dictionary to pass to <code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code> or <code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -441,14 +441,14 @@ estimated.</p>
 <dl class="attribute">
 <dt id="ier">
 <code class="descname">ier</code><a class="headerlink" href="#ier" title="Permalink to this definition">¶</a></dt>
-<dd><p>integer error value from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a>  (<cite>leastsq</cite>
+<dd><p>integer error value from <code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code>  (<cite>leastsq</cite>
 only).</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lmdif_message">
 <code class="descname">lmdif_message</code><a class="headerlink" href="#lmdif_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>message from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a> (<cite>leastsq</cite> only).</p>
+<dd><p>message from <code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code> (<cite>leastsq</cite> only).</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -658,14 +658,14 @@ statistics are not likely to be meaningful, and uncertainties will not be comput
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>function</strong> (<em>callable.</em>) &#8211; objective function to return fit residual.  See <a class="reference internal" href="#fit-func-label"><span>Writing a Fitting Function</span></a> for details.</li>
-<li><strong>params</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; a dictionary of Parameters.  Keywords must be strings
+<li><strong>params</strong> (<em>dict</em>) &#8211; a dictionary of Parameters.  Keywords must be strings
 that match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code> and is not a python
 reserved word.  Each value must be <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>.</li>
-<li><strong>fcn_args</strong> (<a class="reference external" href="http://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
-<li><strong>fcn_kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
+<li><strong>fcn_args</strong> (<em>tuple</em>) &#8211; arguments tuple to pass to the residual function as  positional arguments.</li>
+<li><strong>fcn_kws</strong> (<em>dict</em>) &#8211; dictionary to pass to the residual function as keyword arguments.</li>
 <li><strong>iter_cb</strong> (callable or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; function to be called at each fit iteration.  See <a class="reference internal" href="#fit-itercb-label"><span>Using a Iteration Callback Function</span></a> for details.</li>
 <li><strong>scale_covar</strong> &#8211; flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (<code class="docutils literal"><span class="pre">leastsq</span></code> only)</li>
-<li><strong>kws</strong> (<a class="reference external" href="http://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) &#8211; dictionary to pass as keywords to the underlying <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a> method.</li>
+<li><strong>kws</strong> (<em>dict</em>) &#8211; dictionary to pass as keywords to the underlying <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code> method.</li>
 </ul>
 </td>
 </tr>
@@ -706,7 +706,7 @@ or <a class="reference internal" href="#Minimizer.scalar_minimize" title="Minimi
 <dt id="Minimizer.leastsq">
 <code class="descname">leastsq</code><span class="sig-paren">(</span><em>params=None</em>, <em>scale_covar=True</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.leastsq" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform fit with Levenberg-Marquardt algorithm.  Keywords will be
-passed directly to <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html#scipy.optimize.leastsq" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code></a>.  By default,
+passed directly to <code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.leastsq()</span></code>.  By default,
 numerical derivatives are used, and the following arguments are set:</p>
 <blockquote>
 <div><table border="1" class="docutils">
@@ -751,7 +751,7 @@ arg</th>
 <dt id="Minimizer.scalar_minimize">
 <code class="descname">scalar_minimize</code><span class="sig-paren">(</span><em>method='Nelder-Mead'</em>, <em>params=None</em>, <em>hess=None</em>, <em>tol=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#Minimizer.scalar_minimize" title="Permalink to this definition">¶</a></dt>
 <dd><p>perform fit with any of the scalar minimization algorithms supported by
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html#scipy.optimize.minimize" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></code></a>.</p>
+<code class="xref py py-func docutils literal"><span class="pre">scipy.optimize.minimize()</span></code>.</p>
 <blockquote>
 <div><table border="1" class="docutils">
 <colgroup>

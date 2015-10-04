@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.0',
+        VERSION:     '0.9.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -162,7 +162,7 @@ simple example, one might write an objective function like this:</p>
     <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span><span class="o">/</span><span class="n">eps_data</span>
 </pre></div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>, one would do:</p>
+<p>To perform the minimization with <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code>, one would do:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
 <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">))</span>
