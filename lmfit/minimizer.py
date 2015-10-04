@@ -695,6 +695,9 @@ class Minimizer(object):
                 param.vary = False
             if param.vary:
                 var_arr[i] = param.value
+            else:
+                # don't want to append bounds if they're not being varied.
+                continue
 
             param.from_internal = lambda val: val
             lb, ub = param.min, param.max
@@ -1019,7 +1022,7 @@ def _lnprior(theta, userfcn, params, var_names, bounds, userargs=(),
     Parameters
     ----------
     theta : sequence
-        float parameter values
+        float parameter values (only those being varied)
     userfcn : callable
         User objective function
     params : lmfit.Parameters
@@ -1027,7 +1030,7 @@ def _lnprior(theta, userfcn, params, var_names, bounds, userargs=(),
     var_names : list
         The names of the parameters that are varying
     bounds : np.ndarray
-        Lower and upper bounds of parameters. Has shape (nparams, 2).
+        Lower and upper bounds of parameters. Has shape (nvarys, 2).
     userargs : tuple, optional
         Extra positional arguments required for user objective function
     userkws : dict, optional
@@ -1038,13 +1041,8 @@ def _lnprior(theta, userfcn, params, var_names, bounds, userargs=(),
     lnprob : float
         Log prior probability
     """
-    for name, val in zip(var_names, theta):
-        params[name].value = val
-
-    values = np.asarray([params[par].value for par in params])
-
-    if (np.any(values > bounds[:, 1])
-        or np.any(values < bounds[:, 0])):
+    if (np.any(theta > bounds[:, 1])
+        or np.any(theta < bounds[:, 0])):
         return -np.inf
     else:
         return 0
@@ -1059,7 +1057,7 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     Parameters
     ----------
     theta : sequence
-        float parameter values
+        float parameter values (only those being varied)
     userfcn : callable
         User objective function
     params : lmfit.Parameters
@@ -1067,7 +1065,7 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     var_names : list
         The names of the parameters that are varying
     bounds : np.ndarray
-        Lower and upper bounds of parameters. Has shape (nparams, 2).
+        Lower and upper bounds of parameters. Has shape (nvarys, 2).
     userargs : tuple, optional
         Extra positional arguments required for user objective function
     userkws : dict, optional
@@ -1078,14 +1076,15 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     lnprob : float
         Log posterior probability
     """
+    # the comparison has to be done on theta and bounds. DO NOT inject theta
+    # values into Parameters, then compare Parameters values to the bounds.
+    # Parameters values are clipped to stay within bounds.
+    if (np.any(theta > bounds[:, 1])
+        or np.any(theta < bounds[:, 0])):
+        return -np.inf
+
     for name, val in zip(var_names, theta):
         params[name].value = val
-
-    values = np.asarray([params[par].value for par in params])
-
-    if (np.any(values > bounds[:, 1])
-        or np.any(values < bounds[:, 0])):
-        return -np.inf
 
     userkwargs = {}
     if userkws is not None:
