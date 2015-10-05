@@ -689,12 +689,14 @@ class Minimizer(object):
         # but I don't know how this affects the emcee sampling.
         bounds = []
         var_arr = np.zeros(len(result.var_names))
-        for i, par in enumerate(params):
+        i = 0
+        for par in params:
             param = params[par]
             if param.expr is not None:
                 param.vary = False
             if param.vary:
                 var_arr[i] = param.value
+                i += 1
             else:
                 # don't want to append bounds if they're not being varied.
                 continue

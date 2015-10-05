@@ -438,7 +438,10 @@ class CommonMinimizerTest(unittest.TestCase):
         # if nvarys != nparams
         if not HAS_EMCEE:
             return True
-        self.mini.params['decay'].vary=False
+        self.mini.params['amp'].vary=False
+        self.mini.params['period'].vary=False
+        self.mini.params['shift'].vary=False
+
         out = self.mini.emcee(steps=10)
 
     @decorators.slow
