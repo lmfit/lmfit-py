@@ -30,35 +30,35 @@ except ImportError:
 class Interpreter:
     """mathematical expression compiler and interpreter.
 
-  This module compiles expressions and statements to AST representation,
-  using python's ast module, and then executes the AST representation
-  using a dictionary of named object (variable, functions).
+    This module compiles expressions and statements to AST representation,
+    using python's ast module, and then executes the AST representation
+    using a dictionary of named object (variable, functions).
 
-  The result is a restricted, simplified version of Python meant for
-  numerical caclulations that is somewhat safer than 'eval' because some
-  operations (such as 'import' and 'eval') are simply not allowed.  The
-  resulting language uses a flat namespace that works on Python objects,
-  but does not allow new classes to be defined.
+    The result is a restricted, simplified version of Python meant for
+    numerical caclulations that is somewhat safer than 'eval' because some
+    operations (such as 'import' and 'eval') are simply not allowed.  The
+    resulting language uses a flat namespace that works on Python objects,
+    but does not allow new classes to be defined.
 
-  Many parts of Python syntax are supported, including:
-     for loops, while loops, if-then-elif-else conditionals
-     try-except (including 'finally')
-     function definitions with def
-     advanced slicing:    a[::-1], array[-3:, :, ::2]
-     if-expressions:      out = one_thing if TEST else other
-     list comprehension   out = [sqrt(i) for i in values]
+    Many parts of Python syntax are supported, including:
+        for loops, while loops, if-then-elif-else conditionals
+        try-except (including 'finally')
+        function definitions with def
+        advanced slicing:    a[::-1], array[-3:, :, ::2]
+        if-expressions:      out = one_thing if TEST else other
+        list comprehension   out = [sqrt(i) for i in values]
 
-  The following Python syntax elements are not supported:
-      Import, Exec, Lambda, Class, Global, Generators,
-      Yield, Decorators
+    The following Python syntax elements are not supported:
+        Import, Exec, Lambda, Class, Global, Generators,
+        Yield, Decorators
 
-  In addition, while many builtin functions are supported, several
-  builtin functions are missing ('eval', 'exec', and 'getattr' for
-  example) that can be considered unsafe.
+    In addition, while many builtin functions are supported, several
+    builtin functions are missing ('eval', 'exec', and 'getattr' for
+    example) that can be considered unsafe.
 
-  If numpy is installed, many numpy functions are also imported.
+    If numpy is installed, many numpy functions are also imported.
 
-  """
+    """
 
     supported_nodes = ('arg', 'assert', 'assign', 'attribute', 'augassign',
                        'binop', 'boolop', 'break', 'call', 'compare',
@@ -84,24 +84,31 @@ class Interpreter:
         self.use_numpy = HAS_NUMPY and use_numpy
 
         symtable['print'] = self._printer
-        for sym in FROM_PY:
-            if sym in __builtins__:
-                symtable[sym] = __builtins__[sym]
 
-        for symname, obj in LOCALFUNCS.items():
-            symtable[symname] = obj
+        # add python symbols
+        py_symtable = {sym: __builtins__[sym] for sym in FROM_PY
+                              if sym in __builtins__}
+        symtable.update(py_symtable)
 
-        for sym in FROM_MATH:
-            if hasattr(math, sym):
-                symtable[sym] = getattr(math, sym)
+        # add local symbols
+        local_symtable = {sym: obj for (sym, obj) in LOCALFUNCS.items()}
+        symtable.update(local_symtable)
 
+        # add math symbols
+        math_symtable = {sym: getattr(math, sym) for sym in FROM_MATH
+                              if hasattr(math, sym)}
+        symtable.update(math_symtable)
+
+        # add numpy symbols
         if self.use_numpy:
-            for sym in FROM_NUMPY:
-                if hasattr(numpy, sym):
-                    symtable[sym] = getattr(numpy, sym)
-            for name, sym in NUMPY_RENAMES.items():
-                if hasattr(numpy, sym):
-                    symtable[name] = getattr(numpy, sym)
+            numpy_symtable = {sym: getattr(numpy, sym) for sym in FROM_NUMPY
+                              if hasattr(numpy, sym)}
+            symtable.update(numpy_symtable)
+
+            npy_rename_symtable = {name: getattr(numpy, sym) for name, sym
+                                   in NUMPY_RENAMES.items()
+                                   if hasattr(numpy, sym)}
+            symtable.update(npy_rename_symtable)
 
         self.node_handlers = dict(((node, getattr(self, "on_%s" % node))
                                    for node in self.supported_nodes))
@@ -110,11 +117,9 @@ class Interpreter:
         self.node_handlers['tryexcept'] = self.node_handlers['try']
         self.node_handlers['tryfinally'] = self.node_handlers['try']
 
-        self.no_deepcopy = []
-        for key, val in symtable.items():
-            if (callable(val) or 'numpy.lib.index_tricks' in repr(val)):
-                self.no_deepcopy.append(key)
-
+        self.no_deepcopy = [key for key, val in symtable.items()
+                            if (callable(val)
+                                or 'numpy.lib.index_tricks' in repr(val))]
 
     def unimplemented(self, node):
         "unimplemented nodes"
