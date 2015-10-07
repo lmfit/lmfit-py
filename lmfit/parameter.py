@@ -100,24 +100,16 @@ class Parameters(OrderedDict):
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         out = deepcopy(self)
-        try:
-            out._dont_update_constraints = True
-            out.update(other)
-        finally:
-            out._dont_update_constraints = False
-            out.update_constraints()
+        params = other.values()
+        out.add_many_parameters(params)
         return out
 
     def __iadd__(self, other):
         "add/assign Parameters objects"
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
-        try:
-            self._dont_update_constraints = True
-            self.update(other)
-        finally:
-            self._dont_update_constraints = False
-            self.update_constraints()
+        params = other.values()
+        self.add_many_parameters(params)
         return self
 
     def update_constraints(self):
