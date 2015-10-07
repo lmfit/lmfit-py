@@ -34,6 +34,7 @@ class Parameters(OrderedDict):
 
     add()
     add_many()
+    add_many_parameters()
     dumps() / dump()
     loads() / load()
     """
@@ -54,9 +55,7 @@ class Parameters(OrderedDict):
         _pars = Parameters()
 
         # find the symbols that were added by users, not during construction
-        sym_in_current = set(self._asteval.symtable.keys())
-        sym_from_construction = set(_pars._asteval.no_deepcopy)
-        sym_unique = sym_in_current.difference(sym_from_construction)
+        sym_unique = self._asteval.user_defined_symbols()
         unique_symbols = {key: deepcopy(self._asteval.symtable[key], memo)
                           for key in sym_unique}
         _pars._asteval.symtable.update(unique_symbols)

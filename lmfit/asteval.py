@@ -121,6 +121,22 @@ class Interpreter:
                             if (callable(val)
                                 or 'numpy.lib.index_tricks' in repr(val))]
 
+    def user_defined_symbols(self):
+        """
+        Return a set of symbols that have been added to symtable after
+        construction. I.e. the symbols from self.symtable that are not in
+        self.no_deepcopy.
+
+        Returns
+        -------
+        unique_symbols : set
+            symbols in symtable that are not in self.no_deepcopy
+        """
+        sym_in_current = set(self.symtable.keys())
+        sym_from_construction = set(self.no_deepcopy)
+        unique_symbols = sym_in_current.difference(sym_from_construction)
+        return unique_symbols
+
     def unimplemented(self, node):
         "unimplemented nodes"
         self.raise_exception(node, exc=NotImplementedError,
