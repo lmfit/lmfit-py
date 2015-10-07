@@ -321,7 +321,12 @@ class Model(object):
         verbose = False
         if 'verbose' in kwargs:
             verbose = kwargs['verbose']
+
         params = Parameters()
+
+        # temporarily switch off updating of constraints
+        params._dont_update_constraints = True
+
         for name in self.param_names:
             par = Parameter(name=name)
             basename = name[len(self._prefix):]
@@ -356,6 +361,10 @@ class Model(object):
                 # Add the new parameter to the self.param_names
                 self._param_names.add(name)
                 if verbose: print( ' - Adding parameter "%s"' % name)
+
+        params._dont_update_constraints = False
+        params.update_constraints()
+
         return params
 
     def guess(self, data=None, **kws):

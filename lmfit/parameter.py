@@ -15,10 +15,12 @@ from . import uncertainties
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name
 
+
 def check_ast_errors(expr_eval):
     """check for errors derived from asteval"""
     if len(expr_eval.error) > 0:
         expr_eval.raise_exception(None)
+
 
 class Parameters(OrderedDict):
     """
@@ -38,15 +40,32 @@ class Parameters(OrderedDict):
     def __init__(self, asteval=None, *args, **kwds):
         super(Parameters, self).__init__(self)
         self._asteval = asteval
+
+        # a flag to temporarily pause updating constraints when lots of
+        # parameters are being added. This is mainly used during the deepcopy
+        # operation. Do not forget to switch back on.
+        self._dont_update_constraints = False
+
         if asteval is None:
             self._asteval = Interpreter()
         self.update(*args, **kwds)
 
     def __deepcopy__(self, memo):
         _pars = Parameters()
-        for key, val in self._asteval.symtable.items():
-            if key not in self._asteval.no_deepcopy:
-                _pars._asteval.symtable[key] = deepcopy(val, memo)
+
+        # find the symbols that were added by users, not during construction
+        sym_in_current = set(self._asteval.symtable.keys())
+        sym_from_construction = set(_pars._asteval.no_deepcopy)
+        sym_unique = sym_in_current.difference(sym_from_construction)
+        unique_symbols = {key: deepcopy(self._asteval.symtable[key], memo)
+                          for key in sym_unique}
+        _pars._asteval.symtable.update(unique_symbols)
+
+        # we're just about to add a lot of Parameter objects to the newly
+        # created object. Temporarily switch off updating_constraints().
+        # This causes a O(N**2) slowdown.
+        _pars._dont_update_constraints = True
+
         for key, par in self.items():
             if isinstance(par, Parameter):
                 name = par.name
@@ -57,6 +76,11 @@ class Parameters(OrderedDict):
                 _pars[name].init_value = par.init_value
                 _pars[name].expr = par.expr
                 _pars._asteval.symtable[name] = par.value
+
+        # now update the contraints again
+        _pars._dont_update_constraints = False
+        _pars.update_constraints()
+
         return _pars
 
     def __setitem__(self, key, par):
@@ -69,6 +93,7 @@ class Parameters(OrderedDict):
         par.name = key
         par._expr_eval = self._asteval
         self._asteval.symtable[key] = par.value
+
         self.update_constraints()
 
     def __add__(self, other):
@@ -76,20 +101,30 @@ class Parameters(OrderedDict):
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         out = deepcopy(self)
+
+        out._dont_update_constraints = True
         out.update(other)
+        out._dont_update_constraints = False
+        out.update_constraints()
         return out
 
     def __iadd__(self, other):
         "add/assign Parameters objects"
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
+        self._dont_update_constraints = True
         self.update(other)
+        self._dont_update_constraints = False
+        self.update_constraints()
         return self
 
     def update_constraints(self):
         """update all constrained parameters, checking that
         dependencies are evaluated as needed.
         """
+        if self._dont_update_constraints:
+            return
+
         _updated = dict([(name, False) for name in self.keys()])
         def _update_param(name):
             """update a parameter value, including setting bounds.
@@ -163,8 +198,11 @@ class Parameters(OrderedDict):
                     (name4, val4))
 
         """
+        self._dont_update_constraints = True
         for para in parlist:
             self.add(*para)
+        self._dont_update_constraints = False
+        self.update_constraints()
 
     def valuesdict(self):
         """
