@@ -64,22 +64,21 @@ class Parameters(OrderedDict):
         # we're just about to add a lot of Parameter objects to the newly
         # created object. Temporarily switch off updating_constraints().
         # This causes a O(N**2) slowdown.
-        _pars._dont_update_constraints = True
-
+        parameter_list = []
         for key, par in self.items():
             if isinstance(par, Parameter):
-                name = par.name
-                _pars.add(name, value=par.value, min=par.min, max=par.max)
-                _pars[name].vary = par.vary
-                _pars[name].stderr = par.stderr
-                _pars[name].correl = par.correl
-                _pars[name].init_value = par.init_value
-                _pars[name].expr = par.expr
-                _pars._asteval.symtable[name] = par.value
+                param = Parameter(name=par.name,
+                                  value=par.value,
+                                  min=par.min,
+                                  max=par.max)
+                param.vary = par.vary
+                param.stderr = par.stderr
+                param.correl = par.correl
+                param.init_value = par.init_value
+                param.expr = par.expr
+                parameter_list.append(param)
 
-        # now update the contraints again
-        _pars._dont_update_constraints = False
-        _pars.update_constraints()
+        _pars.add_many_parameters(parameter_list)
 
         return _pars
 
@@ -101,21 +100,24 @@ class Parameters(OrderedDict):
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         out = deepcopy(self)
-
-        out._dont_update_constraints = True
-        out.update(other)
-        out._dont_update_constraints = False
-        out.update_constraints()
+        try:
+            out._dont_update_constraints = True
+            out.update(other)
+        finally:
+            out._dont_update_constraints = False
+            out.update_constraints()
         return out
 
     def __iadd__(self, other):
         "add/assign Parameters objects"
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
-        self._dont_update_constraints = True
-        self.update(other)
-        self._dont_update_constraints = False
-        self.update_constraints()
+        try:
+            self._dont_update_constraints = True
+            self.update(other)
+        finally:
+            self._dont_update_constraints = False
+            self.update_constraints()
         return self
 
     def update_constraints(self):
@@ -198,11 +200,28 @@ class Parameters(OrderedDict):
                     (name4, val4))
 
         """
-        self._dont_update_constraints = True
+        parameter_list = []
         for para in parlist:
-            self.add(*para)
-        self._dont_update_constraints = False
-        self.update_constraints()
+            param = Parameter(*para)
+            parameter_list.append(param)
+        self.add_many_parameters(parameter_list)
+
+    def add_many_parameters(self, parameter_list):
+        """
+        Convenience method for adding many Parameter items
+
+        Parameters
+        ----------
+        parameter_list : sequence of lmfit.Parameter objects
+        """
+        try:
+            self._dont_update_constraints = True
+            for param in parameter_list:
+                if isinstance(param, Parameter):
+                    self.__setitem__(param.name, param)
+        finally:
+            self._dont_update_constraints = False
+            self.update_constraints()
 
     def valuesdict(self):
         """
