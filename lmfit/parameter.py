@@ -485,10 +485,17 @@ class Parameter(object):
 
     def _getval(self):
         """get value, with bounds applied"""
-        if (self._val is not nan and
-            isinstance(self._val, uncertainties.Variable)):
+
+        # Note assignment to self._val has been changed to self.value
+        # The self.value property setter makes sure that the
+        # _expr_eval.symtable is kept updated.
+        # If you just assign to self._val then
+        # _expr_eval.symtable[self.name]
+        # becomes stale if parameter.expr is not None.
+        if (isinstance(self._val, uncertainties.Variable)
+            and self._val is not nan):
             try:
-                self._val = self._val.nominal_value
+                self.value = self._val.nominal_value
             except AttributeError:
                 pass
         if not self.vary and self._expr is None:
@@ -498,25 +505,22 @@ class Parameter(object):
         if not hasattr(self, '_expr_ast'):
             self._expr_ast = None
         if self._expr_ast is not None and self._expr_eval is not None:
-            self._val = self._expr_eval(self._expr_ast)
+            self.value = self._expr_eval(self._expr_ast)
             check_ast_errors(self._expr_eval)
 
         if self.min is None:
             self.min = -inf
         if self.max is None:
-            self.max =  inf
+            self.max = inf
         if self.max < self.min:
             self.max, self.min = self.min, self.max
-        if (abs((1.0*self.max - self.min)/
+        if (abs((1.0 * self.max - self.min)/
                 max(abs(self.max), abs(self.min), 1.e-13)) < 1.e-13):
             raise ValueError("Parameter '%s' has min == max" % self.name)
         try:
-            if self.min > -inf:
-                self._val = max(self.min, self._val)
-            if self.max < inf:
-                self._val = min(self.max, self._val)
+            self.value = max(self.min, min(self._val, self.max))
         except(TypeError, ValueError):
-            self._val = nan
+            self.value = nan
         return self._val
 
     def set_expr_eval(self, evaluator):
