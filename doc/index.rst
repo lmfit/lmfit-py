@@ -7,6 +7,11 @@ Non-Linear Least-Square Minimization and Curve-Fitting for Python
 .. _MINPACK-1:               http://en.wikipedia.org/wiki/MINPACK
 
 
+.. warning::
+
+  Upgrading scripts from version 0.8.3 to 0.9.0?  See  :ref:`whatsnew_090_label`
+
+
 Lmfit provides a high-level interface to non-linear optimization and curve
 fitting problems for Python. Lmfit builds on and extends many of the
 optimizatin algorithm of :mod:`scipy.optimize`, especially the

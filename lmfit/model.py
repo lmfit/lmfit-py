@@ -764,7 +764,10 @@ class ModelResult(Minimizer):
 
         for attr in dir(_ret):
             if not attr.startswith('_') :
-                setattr(self, attr, getattr(_ret, attr))
+                try:
+                    setattr(self, attr, getattr(_ret, attr))
+                except AttributeError:
+                    pass
 
         self.init_values = self.model._make_all_args(self.init_params)
         self.best_values = self.model._make_all_args(_ret.params)

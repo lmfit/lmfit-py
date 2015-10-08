@@ -476,18 +476,19 @@ mathematical constraints as discussed in :ref:`constraints_chapter`.
 :class:`ExpressionModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ExpressionModel(expr, independent_vars=None, init_script=None, missing=None, prefix='', name=None, **kws)
+.. class:: ExpressionModel(expr, independent_vars=None, init_script=None, **kws)
 
     A model using the user-supplied mathematical expression, which can be nearly any valid Python expresion.
 
     :param expr: expression use to build model
     :type expr: string
+    :param independent_vars: list of argument names in expression that are independent variables.
+    :type independent_vars: ``None`` (default) or list of strings for independent variables.
     :param init_script: python script to run before parsing and evaluating expression.
     :type init_script: ``None`` (default) or string
-    :param independent_vars: list of argument names to ``func`` that are independent variables.
-    :type independent_vars: ``None`` (default) or list of strings for independent variables.
 
-with other parameters passed to :class:`model.Model`.
+with other parameters passed to :class:`model.Model`, with the notable
+exception that :class:`ExpressionModel` does **not** support the `prefix` argument.
 
 Since the point of this model is that an arbitrary expression will be
 supplied, the determination of what are the parameter names for the model
@@ -508,7 +509,7 @@ For example, if one creates an :class:`ExpressionModel` as::
 
 The name `exp` will be recognized as the exponent function, so the model
 will be interpreted to have parameters named `off`, `amp`, `x0` and
-`phase`, and `x` will be assumed to be the sole independent variable.
+`phase`. In addition, `x` will be assumed to be the sole independent variable.
 In general, there is no obvious way to set default parameter values or
 parameter hints for bounds, so this will have to be handled explicitly.
 
