@@ -254,6 +254,7 @@ class Minimizer(object):
             params[name].value = params[name].from_internal(val)
         self.result.nfev = self.result.nfev + 1
 
+        params.update_constraints()
         out = self.userfcn(params, *self.userargs, **self.userkws)
         if callable(self.iter_cb):
             abort = self.iter_cb(params, self.result.nfev, out,
