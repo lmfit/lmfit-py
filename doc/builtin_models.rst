@@ -147,6 +147,26 @@ where :math:`\sigma_g = {\sigma}/{\sqrt{2\ln{2}}}` so that the full width
 at half maximum of each component and of the sum is :math:`2\sigma`. The
 :meth:`guess` function always sets the starting value for ``fraction`` at 0.5.
 
+
+:class:`MoffatModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. class:: MoffatModel(missing=None[, prefix=''[, name=None[, **kws]]])
+
+a model based on a `Moffat distribution function
+<https://en.wikipedia.org/wiki/Moffat_distribution>`_, the parameters are
+``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
+a width parameter ``sigma`` (:math:`\sigma`) and an exponent ``beta`` (:math:`\beta`).
+For (:math:`\beta=1`) the Moffat has a Lorentzian shape.
+
+.. math::
+
+  f(x; A, \mu, \sigma, \beta) = A \big[(\frac{x-\mu}{\sigma})^2+1\big]^{-\beta}
+
+the full width have maximum is :math:`\sigma 2 \sqrt{2^{1/\beta}}-1`.
+:meth:`guess` function always sets the starting value for ``beta`` to 1.
+
+
 :class:`Pearson7Model`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

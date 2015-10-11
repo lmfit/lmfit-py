@@ -1,7 +1,7 @@
 import numpy as np
 from .model import Model
 
-from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, pearson7,
+from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, moffat, pearson7,
                          step, rectangle, breit_wigner, logistic,
                          students_t, lognormal, damped_oscillator,
                          expgaussian, skewed_gaussian, donaich,
@@ -201,6 +201,17 @@ class PseudoVoigtModel(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
         pars['%sfraction' % self.prefix].set(value=0.5)
+        return update_param_vals(pars, self.prefix, **kwargs)
+
+
+class MoffatModel(Model):
+    __doc__ = moffat.__doc__ + COMMON_DOC if moffat.__doc__ else ""
+    def __init__(self, *args, **kwargs):
+        super(MoffatModel, self).__init__(moffat, *args, **kwargs)
+        # self.set_param_hint('fwhm', expr=fwhm_expr(self))
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        pars = guess_from_peak(self, data, x, negative, ampscale=0.5, sigscale=1.)
         return update_param_vals(pars, self.prefix, **kwargs)
 
 

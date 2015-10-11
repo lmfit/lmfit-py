@@ -14,7 +14,7 @@ s2pi = sqrt(2*pi)
 spi  = sqrt(pi)
 s2   = sqrt(2.0)
 
-functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'pearson7',
+functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'breit_wigner', 'damped_oscillator', 'logistic', 'lognormal',
              'students_t', 'expgaussian', 'donaich', 'skewed_gaussian',
              'skewed_voigt', 'step', 'rectangle', 'erf', 'erfc', 'wofz',
@@ -58,6 +58,13 @@ def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
     sigma_g = sigma / sqrt(2*log2)
     return ((1-fraction)*gaussian(x, amplitude, center, sigma_g) +
                fraction*lorentzian(x, amplitude, center, sigma))
+
+def moffat(x, amplitude=1, center=0., sigma=1, beta=1.):
+    """ 1 dimensional moffat function:
+
+    moffat(amplitude, center, sigma, beta) = amplitude / (((x - center)/sigma)**2 + 1)**beta
+    """
+    return amplitude / (((x - center)/sigma)**2 + 1)**beta
 
 def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
     """pearson7 lineshape, using the wikipedia definition:
