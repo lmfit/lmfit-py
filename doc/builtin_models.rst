@@ -163,7 +163,7 @@ For (:math:`\beta=1`) the Moffat has a Lorentzian shape.
 
   f(x; A, \mu, \sigma, \beta) = A \big[(\frac{x-\mu}{\sigma})^2+1\big]^{-\beta}
 
-the full width have maximum is :math:`\sigma 2 \sqrt{2^{1/\beta}}-1`.
+the full width have maximum is :math:`\sigma 2 \sqrt{2^{1/\beta}-1}`.
 :meth:`guess` function always sets the starting value for ``beta`` to 1.
 
 

@@ -208,7 +208,7 @@ class MoffatModel(Model):
     __doc__ = moffat.__doc__ + COMMON_DOC if moffat.__doc__ else ""
     def __init__(self, *args, **kwargs):
         super(MoffatModel, self).__init__(moffat, *args, **kwargs)
-        # self.set_param_hint('fwhm', expr=fwhm_expr(self))
+        self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/%sbeta)-1)" % (self.prefix, self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5, sigscale=1.)
