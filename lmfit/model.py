@@ -322,10 +322,11 @@ class Model(object):
         if 'verbose' in kwargs:
             verbose = kwargs['verbose']
 
-        params = Parameters()
-
-        # temporarily switch off updating of constraints
-        params._dont_update_constraints = True
+        # self.param_names is a set, i.e. all the parameters we will add in the
+        # following loop will be unique. Therefore, we'll make a list of the
+        # Parameter to be added, and construct the Parameters instance
+        # afterwards.
+        _params = []
 
         for name in self.param_names:
             par = Parameter(name=name)
@@ -346,24 +347,30 @@ class Model(object):
             if name in kwargs:
                 # kw parameter names with prefix
                 par.value = kwargs[name]
-            params[name] = par
+            _params.append(par)
+
+        params = Parameters()
+        params.add_many_parameters(_params)
 
         # add any additional parameters defined in param_hints
         # note that composites may define their own additional
         # convenience parameters here
+        _params = []
         for basename, hint in self.param_hints.items():
             name = "%s%s" % (self._prefix, basename)
             if name not in params:
-                par = params[name] = Parameter(name=name)
+                par = Parameter(name=name)
                 for item in self._hint_names:
                     if item in  hint:
                         setattr(par, item, hint[item])
                 # Add the new parameter to the self.param_names
                 self._param_names.add(name)
-                if verbose: print( ' - Adding parameter "%s"' % name)
+                _params.append(par)
 
-        params._dont_update_constraints = False
-        params.update_constraints()
+                if verbose:
+                    print( ' - Adding parameter "%s"' % name)
+
+        params.add_many_parameters(_params)
 
         return params
 
