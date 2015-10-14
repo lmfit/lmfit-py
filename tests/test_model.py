@@ -309,7 +309,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             all_begin_with_c = all([n.startswith('c') for n in names])
             self.assertTrue(all_begin_with_c)
         except NameError:
-            warnings.warn("test_change_prefix is currently failing")
+            warnings.warn("test_change_prefix is a known fail")
 
     def test_sum_of_two_gaussians(self):
         # two user-defined gaussians
