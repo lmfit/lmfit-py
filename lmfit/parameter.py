@@ -118,7 +118,7 @@ class Parameters(OrderedDict):
         if self._dont_update_constraints:
             return
 
-        _updated = dict([(name, False) for name in self.keys()])
+        _updated = []
         def _update_param(name):
             """update a parameter value, including setting bounds.
             For a constrained parameter (one with an expr defined),
@@ -127,7 +127,7 @@ class Parameters(OrderedDict):
             """
             # Has this param already been updated?
             # if this an expression dependency, it may have been
-            if _updated[name]:
+            if name in _updated:
                 return
             par = self.__getitem__(name)
             if par._expr_eval is None:
@@ -139,7 +139,7 @@ class Parameters(OrderedDict):
                     if dep in self.keys():
                         _update_param(dep)
             self._asteval.symtable[name] = par.value
-            _updated[name] = True
+            _updated.append(name)
 
         for name in self.keys():
             _update_param(name)
