@@ -15,7 +15,7 @@ class TestParameters(unittest.TestCase):
                              ('c', 3., True, None, None, '2. * a'))
 
     def test_expr_was_evaluated(self):
-        # was the expression evaluated during setup
+        self.params.update_constraints()
         assert_almost_equal(self.params['c'].value,
                             2 * self.params['a'].value)
 
@@ -49,10 +49,9 @@ class TestParameters(unittest.TestCase):
         # test that we can add many parameters, but only parameters are added.
         a = Parameter('a', 1)
         b = Parameter('b', 2)
-        c = 2
 
         p = Parameters()
-        p.add_many_parameters([a, b, c])
+        p.add_many(a, b)
 
         assert_(list(p.keys()) == ['a', 'b'])
 

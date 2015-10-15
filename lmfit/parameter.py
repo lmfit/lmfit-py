@@ -34,7 +34,6 @@ class Parameters(OrderedDict):
 
     add()
     add_many()
-    add_many_parameters()
     dumps() / dump()
     loads() / load()
     """
@@ -61,8 +60,6 @@ class Parameters(OrderedDict):
         _pars._asteval.symtable.update(unique_symbols)
 
         # we're just about to add a lot of Parameter objects to the newly
-        # created object. Temporarily switch off updating_constraints().
-        # This causes a O(N**2) slowdown.
         parameter_list = []
         for key, par in self.items():
             if isinstance(par, Parameter):
@@ -77,7 +74,7 @@ class Parameters(OrderedDict):
                 param.expr = par.expr
                 parameter_list.append(param)
 
-        _pars.add_many_parameters(parameter_list)
+        _pars.add_many(*parameter_list)
 
         return _pars
 
@@ -92,15 +89,13 @@ class Parameters(OrderedDict):
         par._expr_eval = self._asteval
         self._asteval.symtable[key] = par.value
 
-        self.update_constraints()
-
     def __add__(self, other):
         "add Parameters objects"
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         out = deepcopy(self)
         params = other.values()
-        out.add_many_parameters(params)
+        out.add_many(*params)
         return out
 
     def __iadd__(self, other):
@@ -108,25 +103,23 @@ class Parameters(OrderedDict):
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         params = other.values()
-        self.add_many_parameters(params)
+        self.add_many(*params)
         return self
 
     def update_constraints(self):
-        """update all constrained parameters, checking that
-        dependencies are evaluated as needed.
         """
-        if self._dont_update_constraints:
-            return
-
+        Update all constrained parameters, checking that dependencies are
+        evaluated as needed.
+        """
         _updated = []
         def _update_param(name):
-            """update a parameter value, including setting bounds.
+            """
+            Update a parameter value, including setting bounds.
             For a constrained parameter (one with an expr defined),
             this first updates (recursively) all parameters on which
             the parameter depends (using the 'deps' field).
             """
             # Has this param already been updated?
-            # if this an expression dependency, it may have been
             if name in _updated:
                 return
             par = self.__getitem__(name)
@@ -178,41 +171,32 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         parlist : sequence
-        A sequence of tuples, each containing at least the name. The order in
-        each tuple is the following:
-            name, value, vary, min, max, expr
+            A sequence of tuples, or a sequence of `Parameter` instances. If it
+            is a sequence of tuples, then each tuple must contain at least the
+            name. The order in each tuple is the following:
+
+                name, value, vary, min, max, expr
 
         Example
         -------
         p = Parameters()
+        # add a sequence of tuples
         p.add_many( (name1, val1, True, None, None, None),
                     (name2, val2, True,  0.0, None, None),
                     (name3, val3, False, None, None, None),
                     (name4, val4))
 
+        # add a sequence of Parameter
+        f = Parameter('name5', val5)
+        g = Parameter('name6', val6)
+        p.add_many(f, g)
         """
-        parameter_list = []
         for para in parlist:
-            param = Parameter(*para)
-            parameter_list.append(param)
-        self.add_many_parameters(parameter_list)
-
-    def add_many_parameters(self, parameter_list):
-        """
-        Convenience method for adding many Parameter items
-
-        Parameters
-        ----------
-        parameter_list : sequence of lmfit.Parameter objects
-        """
-        try:
-            self._dont_update_constraints = True
-            for param in parameter_list:
-                if isinstance(param, Parameter):
-                    self.__setitem__(param.name, param)
-        finally:
-            self._dont_update_constraints = False
-            self.update_constraints()
+            if isinstance(para, Parameter):
+                self.__setitem__(para.name, para)
+            else:
+                param = Parameter(*para)
+                self.__setitem__(param.name, param)
 
     def valuesdict(self):
         """
@@ -302,6 +286,7 @@ class Parameters(OrderedDict):
         dump(), loads(), json.load()
         """
         return self.loads(fp.read(), **kws)
+
 
 class Parameter(object):
     """

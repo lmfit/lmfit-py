@@ -53,15 +53,14 @@ def test_constraints1():
     myfit.prepare_fit()
     init = residual(myfit.params, x)
 
+    result = myfit.leastsq()
 
-    myfit.leastsq()
+    print(' Nfev = ', result.nfev)
+    print( result.chisqr, result.redchi, result.nfree)
 
-    print(' Nfev = ', myfit.nfev)
-    print( myfit.chisqr, myfit.redchi, myfit.nfree)
-
-    report_fit(myfit.params)
-    pfit= myfit.params
-    fit = residual(myfit.params, x)
+    report_fit(result.params)
+    pfit= result.params
+    fit = residual(result.params, x)
     assert(pfit['cen_l'].value == 1.5 + pfit['cen_g'].value)
     assert(pfit['amp_l'].value == pfit['amp_tot'].value - pfit['amp_g'].value)
     assert(pfit['wid_l'].value == 2 * pfit['wid_g'].value)
@@ -119,14 +118,14 @@ def test_constraints2():
     myfit.params._asteval.symtable['wfun'] = width_func
     myfit.params.add(name='wid_l', expr='wfun(wid_g)')
 
-    myfit.leastsq()
+    result = myfit.leastsq()
 
-    print(' Nfev = ', myfit.nfev)
-    print( myfit.chisqr, myfit.redchi, myfit.nfree)
+    print(' Nfev = ', result.nfev)
+    print( result.chisqr, result.redchi, result.nfree)
 
-    report_fit(myfit.params)
-    pfit= myfit.params
-    fit = residual(myfit.params, x)
+    report_fit(result.params)
+    pfit= result.params
+    fit = residual(result.params, x)
     assert(pfit['cen_l'].value == 1.5 + pfit['cen_g'].value)
     assert(pfit['amp_l'].value == pfit['amp_tot'].value - pfit['amp_g'].value)
     assert(pfit['wid_l'].value == 2 * pfit['wid_g'].value)

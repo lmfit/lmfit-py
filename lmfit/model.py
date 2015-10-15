@@ -353,7 +353,7 @@ class Model(object):
             _params.append(par)
 
         params = Parameters()
-        params.add_many_parameters(_params)
+        params.add_many(*_params)
 
         # add any additional parameters defined in param_hints
         # note that composites may define their own additional
@@ -373,7 +373,7 @@ class Model(object):
                 if verbose:
                     print( ' - Adding parameter "%s"' % name)
 
-        params.add_many_parameters(_params)
+        params.add_many(*_params)
 
         return params
 
