@@ -17,6 +17,7 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
+
 class OrderedSet(MutableSet):
     """from http://code.activestate.com/recipes/576694-orderedset/"""
     def __init__(self, iterable=None):
@@ -166,7 +167,8 @@ class Model(object):
         self.missing = missing
         self.opts = kws
         self.param_hints = OrderedDict()
-        self._param_names = OrderedSet()
+        # the following has been changed from OrderedSet for the time being
+        self._param_names = set()
         self._parse_params()
         if self.independent_vars is None:
             self.independent_vars = []
@@ -208,7 +210,7 @@ class Model(object):
         return self._param_names
 
     def __repr__(self):
-        return  "<lmfit.Model: %s>" % (self.name)
+        return "<lmfit.Model: %s>" % (self.name)
 
     def copy(self, prefix=None):
         """Return a completely independent copy of the whole model.
@@ -234,7 +236,7 @@ class Model(object):
         if argspec.defaults is not None:
             for val in reversed(argspec.defaults):
                 kw_args[pos_args.pop()] = val
-        #
+
         self._func_haskeywords = keywords is not None
         self._func_allargs = pos_args + list(kw_args.keys())
         allargs = self._func_allargs
@@ -289,7 +291,8 @@ class Model(object):
             if (self._strip_prefix(arg) not in allargs or
                 arg in self._forbidden_args):
                 raise ValueError(self._invalid_par % (arg, fname))
-        self._param_names = OrderedSet(names)
+        # the following as been changed from OrderedSet for the time being.
+        self._param_names = set(names)
 
     def set_param_hint(self, name, **kwargs):
         """set hints for parameter, including optional bounds
@@ -321,7 +324,13 @@ class Model(object):
         verbose = False
         if 'verbose' in kwargs:
             verbose = kwargs['verbose']
-        params = Parameters()
+
+        # self.param_names is a set, i.e. all the parameters we will add in the
+        # following loop will be unique. Therefore, we'll make a list of the
+        # Parameter to be added, and construct the Parameters instance
+        # afterwards.
+        _params = []
+
         for name in self.param_names:
             par = Parameter(name=name)
             basename = name[len(self._prefix):]
@@ -332,7 +341,7 @@ class Model(object):
             if basename in self.param_hints:
                 hint = self.param_hints[basename]
                 for item in self._hint_names:
-                    if item in  hint:
+                    if item in hint:
                         setattr(par, item, hint[item])
             # apply values passed in through kw args
             if basename in kwargs:
@@ -341,21 +350,31 @@ class Model(object):
             if name in kwargs:
                 # kw parameter names with prefix
                 par.value = kwargs[name]
-            params[name] = par
+            _params.append(par)
+
+        params = Parameters()
+        params.add_many(*_params)
 
         # add any additional parameters defined in param_hints
         # note that composites may define their own additional
         # convenience parameters here
+        _params = []
         for basename, hint in self.param_hints.items():
             name = "%s%s" % (self._prefix, basename)
             if name not in params:
-                par = params[name] = Parameter(name=name)
+                par = Parameter(name=name)
                 for item in self._hint_names:
                     if item in  hint:
                         setattr(par, item, hint[item])
                 # Add the new parameter to the self.param_names
                 self._param_names.add(name)
-                if verbose: print( ' - Adding parameter "%s"' % name)
+                _params.append(par)
+
+                if verbose:
+                    print( ' - Adding parameter "%s"' % name)
+
+        params.add_many(*_params)
+
         return params
 
     def guess(self, data=None, **kws):
@@ -507,7 +526,7 @@ class Model(object):
 
         # All remaining kwargs should correspond to independent variables.
         for name in kwargs.keys():
-            if not name in self.independent_vars:
+            if name not in self.independent_vars:
                 warnings.warn("The keyword argument %s does not" % name +
                               "match any arguments of the model function." +
                               "It will be ignored.", UserWarning)
@@ -681,6 +700,7 @@ class CompositeModel(Model):
         out = self.right._make_all_args(params=params, **kwargs)
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
+
 
 class ModelResult(Minimizer):
     """Result from Model fit

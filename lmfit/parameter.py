@@ -15,10 +15,12 @@ from . import uncertainties
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name
 
+
 def check_ast_errors(expr_eval):
     """check for errors derived from asteval"""
     if len(expr_eval.error) > 0:
         expr_eval.raise_exception(None)
+
 
 class Parameters(OrderedDict):
     """
@@ -38,25 +40,42 @@ class Parameters(OrderedDict):
     def __init__(self, asteval=None, *args, **kwds):
         super(Parameters, self).__init__(self)
         self._asteval = asteval
+
+        # a flag to temporarily pause updating constraints when lots of
+        # parameters are being added. This is mainly used during the deepcopy
+        # operation. Do not forget to switch back on.
+        self._dont_update_constraints = False
+
         if asteval is None:
             self._asteval = Interpreter()
         self.update(*args, **kwds)
 
     def __deepcopy__(self, memo):
         _pars = Parameters()
-        for key, val in self._asteval.symtable.items():
-            if key not in self._asteval.no_deepcopy:
-                _pars._asteval.symtable[key] = deepcopy(val, memo)
+
+        # find the symbols that were added by users, not during construction
+        sym_unique = self._asteval.user_defined_symbols()
+        unique_symbols = {key: deepcopy(self._asteval.symtable[key], memo)
+                          for key in sym_unique}
+        _pars._asteval.symtable.update(unique_symbols)
+
+        # we're just about to add a lot of Parameter objects to the newly
+        parameter_list = []
         for key, par in self.items():
             if isinstance(par, Parameter):
-                name = par.name
-                _pars.add(name, value=par.value, min=par.min, max=par.max)
-                _pars[name].vary = par.vary
-                _pars[name].stderr = par.stderr
-                _pars[name].correl = par.correl
-                _pars[name].init_value = par.init_value
-                _pars[name].expr = par.expr
-                _pars._asteval.symtable[name] = par.value
+                param = Parameter(name=par.name,
+                                  value=par.value,
+                                  min=par.min,
+                                  max=par.max)
+                param.vary = par.vary
+                param.stderr = par.stderr
+                param.correl = par.correl
+                param.init_value = par.init_value
+                param.expr = par.expr
+                parameter_list.append(param)
+
+        _pars.add_many(*parameter_list)
+
         return _pars
 
     def __setitem__(self, key, par):
@@ -69,37 +88,39 @@ class Parameters(OrderedDict):
         par.name = key
         par._expr_eval = self._asteval
         self._asteval.symtable[key] = par.value
-        self.update_constraints()
 
     def __add__(self, other):
         "add Parameters objects"
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         out = deepcopy(self)
-        out.update(other)
+        params = other.values()
+        out.add_many(*params)
         return out
 
     def __iadd__(self, other):
         "add/assign Parameters objects"
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
-        self.update(other)
+        params = other.values()
+        self.add_many(*params)
         return self
 
     def update_constraints(self):
-        """update all constrained parameters, checking that
-        dependencies are evaluated as needed.
         """
-        _updated = dict([(name, False) for name in self.keys()])
+        Update all constrained parameters, checking that dependencies are
+        evaluated as needed.
+        """
+        _updated = []
         def _update_param(name):
-            """update a parameter value, including setting bounds.
+            """
+            Update a parameter value, including setting bounds.
             For a constrained parameter (one with an expr defined),
             this first updates (recursively) all parameters on which
             the parameter depends (using the 'deps' field).
             """
             # Has this param already been updated?
-            # if this an expression dependency, it may have been
-            if _updated[name]:
+            if name in _updated:
                 return
             par = self.__getitem__(name)
             if par._expr_eval is None:
@@ -111,7 +132,7 @@ class Parameters(OrderedDict):
                     if dep in self.keys():
                         _update_param(dep)
             self._asteval.symtable[name] = par.value
-            _updated[name] = True
+            _updated.append(name)
 
         for name in self.keys():
             _update_param(name)
@@ -150,21 +171,32 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         parlist : sequence
-        A sequence of tuples, each containing at least the name. The order in
-        each tuple is the following:
-            name, value, vary, min, max, expr
+            A sequence of tuples, or a sequence of `Parameter` instances. If it
+            is a sequence of tuples, then each tuple must contain at least the
+            name. The order in each tuple is the following:
+
+                name, value, vary, min, max, expr
 
         Example
         -------
         p = Parameters()
+        # add a sequence of tuples
         p.add_many( (name1, val1, True, None, None, None),
                     (name2, val2, True,  0.0, None, None),
                     (name3, val3, False, None, None, None),
                     (name4, val4))
 
+        # add a sequence of Parameter
+        f = Parameter('name5', val5)
+        g = Parameter('name6', val6)
+        p.add_many(f, g)
         """
         for para in parlist:
-            self.add(*para)
+            if isinstance(para, Parameter):
+                self.__setitem__(para.name, para)
+            else:
+                param = Parameter(*para)
+                self.__setitem__(param.name, param)
 
     def valuesdict(self):
         """
@@ -254,6 +286,7 @@ class Parameters(OrderedDict):
         dump(), loads(), json.load()
         """
         return self.loads(fp.read(), **kws)
+
 
 class Parameter(object):
     """
@@ -437,10 +470,17 @@ class Parameter(object):
 
     def _getval(self):
         """get value, with bounds applied"""
-        if (self._val is not nan and
-            isinstance(self._val, uncertainties.Variable)):
+
+        # Note assignment to self._val has been changed to self.value
+        # The self.value property setter makes sure that the
+        # _expr_eval.symtable is kept updated.
+        # If you just assign to self._val then
+        # _expr_eval.symtable[self.name]
+        # becomes stale if parameter.expr is not None.
+        if (isinstance(self._val, uncertainties.Variable)
+            and self._val is not nan):
             try:
-                self._val = self._val.nominal_value
+                self.value = self._val.nominal_value
             except AttributeError:
                 pass
         if not self.vary and self._expr is None:
@@ -450,25 +490,22 @@ class Parameter(object):
         if not hasattr(self, '_expr_ast'):
             self._expr_ast = None
         if self._expr_ast is not None and self._expr_eval is not None:
-            self._val = self._expr_eval(self._expr_ast)
+            self.value = self._expr_eval(self._expr_ast)
             check_ast_errors(self._expr_eval)
 
         if self.min is None:
             self.min = -inf
         if self.max is None:
-            self.max =  inf
+            self.max = inf
         if self.max < self.min:
             self.max, self.min = self.min, self.max
-        if (abs((1.0*self.max - self.min)/
+        if (abs((1.0 * self.max - self.min)/
                 max(abs(self.max), abs(self.min), 1.e-13)) < 1.e-13):
             raise ValueError("Parameter '%s' has min == max" % self.name)
         try:
-            if self.min > -inf:
-                self._val = max(self.min, self._val)
-            if self.max < inf:
-                self._val = min(self.max, self._val)
+            self.value = max(self.min, min(self._val, self.max))
         except(TypeError, ValueError):
-            self._val = nan
+            self.value = nan
         return self._val
 
     def set_expr_eval(self, evaluator):

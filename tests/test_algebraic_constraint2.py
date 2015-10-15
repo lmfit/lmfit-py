@@ -73,31 +73,31 @@ def test_constraints(with_plot=True):
     myfit.prepare_fit()
     init = residual(myfit.params, x)
 
-    myfit.leastsq()
+    result = myfit.leastsq()
 
-    print(' Nfev = ', myfit.nfev)
-    print( myfit.chisqr, myfit.redchi, myfit.nfree)
+    print(' Nfev = ', result.nfev)
+    print( result.chisqr, result.redchi, result.nfree)
 
-    report_fit(myfit.params, min_correl=0.3)
+    report_fit(result.params, min_correl=0.3)
 
-    fit = residual(myfit.params, x)
+    fit = residual(result.params, x)
     if with_plot:
         pylab.plot(x, fit, 'b-')
-    assert(myfit.params['cen_l'].value == 1.5 + myfit.params['cen_g'].value)
-    assert(myfit.params['amp_l'].value == myfit.params['amp_tot'].value - myfit.params['amp_g'].value)
-    assert(myfit.params['wid_l'].value == 2 * myfit.params['wid_g'].value)
+    assert(result.params['cen_l'].value == 1.5 + result.params['cen_g'].value)
+    assert(result.params['amp_l'].value == result.params['amp_tot'].value - result.params['amp_g'].value)
+    assert(result.params['wid_l'].value == 2 * result.params['wid_g'].value)
 
     # now, change fit slightly and re-run
     myfit.params['wid_l'].expr = '1.25*wid_g'
-    myfit.leastsq()
-    report_fit(myfit.params, min_correl=0.4)
-    fit2 = residual(myfit.params, x)
+    result = myfit.leastsq()
+    report_fit(result.params, min_correl=0.4)
+    fit2 = residual(result.params, x)
     if with_plot:
         pylab.plot(x, fit2, 'k')
         pylab.show()
 
-    assert(myfit.params['cen_l'].value == 1.5 + myfit.params['cen_g'].value)
-    assert(myfit.params['amp_l'].value == myfit.params['amp_tot'].value - myfit.params['amp_g'].value)
-    assert(myfit.params['wid_l'].value == 1.25 * myfit.params['wid_g'].value)
+    assert(result.params['cen_l'].value == 1.5 + result.params['cen_g'].value)
+    assert(result.params['amp_l'].value == result.params['amp_tot'].value - result.params['amp_g'].value)
+    assert(result.params['wid_l'].value == 1.25 * result.params['wid_g'].value)
 
 test_constraints()

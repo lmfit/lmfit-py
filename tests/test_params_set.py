@@ -14,8 +14,9 @@ def test_param_set():
     params = model.guess(y, x=x)
 
     # test #1:  gamma is constrained to equal sigma
-    sigval = params['gamma'].value
     assert(params['gamma'].expr == 'sigma')
+    params.update_constraints()
+    sigval = params['gamma'].value
     assert_allclose(params['gamma'].value, sigval, 1e-4, 1e-4, '', True)
 
     # test #2: explicitly setting a param value should work, even when
@@ -27,9 +28,13 @@ def test_param_set():
     assert_allclose(params['gamma'].value, gamval, 1e-4, 1e-4, '', True)
 
     # test #3: explicitly setting an expression should work
+    # Note, the only way to ensure that **ALL** constraints are up to date
+    # is to call params.update_constraints(). This is because the constraint
+    # may have multiple dependencies.
     params['gamma'].set(expr='sigma/2.0')
     assert(params['gamma'].expr is not None)
     assert(not params['gamma'].vary)
+    params.update_constraints()
     assert_allclose(params['gamma'].value, sigval/2.0, 1e-4, 1e-4, '', True)
 
     # test #4: explicitly setting a param value WITH vary=True
@@ -39,3 +44,5 @@ def test_param_set():
     assert(params['gamma'].expr is None)
     assert(params['gamma'].vary)
     assert_allclose(params['gamma'].value, gamval, 1e-4, 1e-4, '', True)
+
+test_param_set()
