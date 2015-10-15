@@ -4,6 +4,7 @@ from numpy.testing import assert_, assert_almost_equal
 import unittest
 from copy import deepcopy
 import numpy as np
+import pickle
 
 
 class TestParameters(unittest.TestCase):
@@ -73,6 +74,33 @@ class TestParameters(unittest.TestCase):
         p['b'].value = 30
         assert_almost_equal(p['b'].value, 20)
         assert_almost_equal(p['a'].value, 40)
+
+    def test_pickle_parameter(self):
+        # test that we can pickle a Parameter
+        p = Parameter('a', 10, True, 0, 1)
+        pkl = pickle.dumps(p)
+
+        q = pickle.loads(pkl)
+
+        assert_(p == q)
+
+    def test_pickle_parameters(self):
+        # test that we can pickle a Parameters object
+        p = Parameters()
+        p.add('a', 10, True, 0, 100)
+        p.add('b', 10, True, 0, 100, 'a * sin(1)')
+        p.update_constraints()
+        p._asteval.symtable['abc'] = '2 * 3.142'
+
+        pkl = pickle.dumps(p, -1)
+        q = pickle.loads(pkl)
+
+        q.update_constraints()
+        assert_(p == q)
+        assert_(not p is q)
+
+        # now test if the asteval machinery survived
+        assert_(q._asteval.symtable['abc'] == '2 * 3.142')
 
 
 if __name__ == '__main__':
