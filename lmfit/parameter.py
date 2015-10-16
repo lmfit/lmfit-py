@@ -99,12 +99,47 @@ class Parameters(OrderedDict):
         return out
 
     def __iadd__(self, other):
-        "add/assign Parameters objects"
+        """
+        add/assign Parameters objects
+        """
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         params = other.values()
         self.add_many(*params)
         return self
+
+    def __reduce__(self):
+        """
+        Required to pickle a Parameters instance.
+        """
+        # make a list of all the parameters
+        params = [self[k] for k in self]
+
+        # find the symbols from _asteval.symtable, that need to be remembered.
+        sym_unique = self._asteval.user_defined_symbols()
+        unique_symbols = {key: deepcopy(self._asteval.symtable[key])
+                          for key in sym_unique}
+
+        return self.__class__, (), {'unique_symbols': unique_symbols,
+                                    'params': params}
+
+    def __setstate__(self, state):
+        """
+        Unpickle a Parameters instance.
+
+        Parameters
+        ----------
+        state : list
+            state[0] is a dictionary containing symbols that need to be
+            injected into _asteval.symtable
+            state[1:] are the Parameter instances to be added
+         is list of parameters
+        """
+        # first add all the parameters
+        self.add_many(*state['params'])
+
+        # now update the Interpreter symbol table
+        self._asteval.symtable.update(state['unique_symbols'])
 
     def update_constraints(self):
         """
