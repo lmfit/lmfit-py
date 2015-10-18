@@ -8,7 +8,8 @@ import operator
 from copy import deepcopy
 import numpy as np
 from . import Parameters, Parameter, Minimizer
-from .printfuncs import fit_report
+from .printfuncs import fit_report, ci_report
+from .confidence import conf_interval
 
 from collections import MutableSet
 
@@ -761,6 +762,7 @@ class ModelResult(Minimizer):
         self.data = data
         self.weights = weights
         self.method = method
+        self.ci_out = None
         self.init_params = deepcopy(params)
         Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
                            fcn_kws=fcn_kws, iter_cb=iter_cb,
@@ -776,6 +778,7 @@ class ModelResult(Minimizer):
             self.weights = weights
         if method is not None:
             self.method = method
+        self.ci_out = None
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
         self.init_fit    = self.model.eval(params=self.params, **self.userkws)
@@ -800,6 +803,16 @@ class ModelResult(Minimizer):
     def eval_components(self, **kwargs):
         self.userkws.update(kwargs)
         return self.model.eval_components(params=self.params, **self.userkws)
+
+    def conf_interval(self, **kwargs):
+        """return explicitly calculated confidence intervals"""
+        if self.ci_out is None:
+            self.ci_out = conf_interval(self, self, **kwargs)
+        return self.ci_out
+
+    def ci_report(self, **kwargs):
+        """return nicely formatted report about confidence intervals"""
+        return ci_report(self.conf_interval(**kwargs))
 
     def fit_report(self,  **kwargs):
         "return fit report"
