@@ -196,8 +196,11 @@ class Parameters(OrderedDict):
         is equivalent to:
         p[name] = Parameter(name=name, value=XX, ....
         """
-        self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
-                                         min=min, max=max, expr=expr))
+        if isinstance(name, Parameter):
+            self.__setitem__(name.name, name)
+        else:
+            self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
+                                             min=min, max=max, expr=expr))
 
     def add_many(self, *parlist):
         """
