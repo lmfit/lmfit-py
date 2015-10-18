@@ -141,11 +141,6 @@ class Model(object):
     def prefix(self):
         return self._prefix
 
-    @prefix.setter
-    def prefix(self, value):
-        self._prefix = value
-        self._parse_params()
-
     @property
     def param_names(self):
         return self._param_names
@@ -153,18 +148,9 @@ class Model(object):
     def __repr__(self):
         return "<lmfit.Model: %s>" % (self.name)
 
-    def copy(self, prefix=None):
-        """Return a completely independent copy of the whole model.
-
-        Parameters
-        ----------
-        prefix: string or None. If not None new model's prefix is
-            changed to the passed value.
-        """
-        new = deepcopy(self)
-        if prefix is not None:
-            new.prefix = prefix
-        return new
+    def copy(self, **kwargs):
+        """DOES NOT WORK"""
+        raise NotImplementedError("Model.copy does not work. Make a new Model")
 
     def _parse_params(self):
         "build params from function arguments"
