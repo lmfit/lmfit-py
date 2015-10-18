@@ -301,15 +301,18 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue('bsigma' in pars)
 
     def test_change_prefix(self):
+        "should fail"
         mod = models.GaussianModel(prefix='b')
-        mod.prefix = 'c'
+        set_prefix_failed = None
         try:
-            params = mod.make_params()
-            names = params.keys()
-            all_begin_with_c = all([n.startswith('c') for n in names])
-            self.assertTrue(all_begin_with_c)
-        except NameError:
-            warnings.warn("test_change_prefix is a known fail")
+            mod.prefix = 'c'
+            set_prefix_failed = False
+        except AttributeError:
+            set_prefix_failed = True
+        except:
+            set_prefix_failed = None
+        self.assertTrue(set_prefix_failed)
+
 
     def test_sum_of_two_gaussians(self):
         # two user-defined gaussians
