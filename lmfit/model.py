@@ -18,66 +18,6 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
-
-class OrderedSet(MutableSet):
-    """from http://code.activestate.com/recipes/576694-orderedset/"""
-    def __init__(self, iterable=None):
-        self.end = end = []
-        end += [None, end, end]         # sentinel node for doubly linked list
-        self.map = {}                   # key --> [key, prev, next]
-        if iterable is not None:
-            self |= iterable
-
-    def __len__(self):
-        return len(self.map)
-
-    def __contains__(self, key):
-        return key in self.map
-
-    def add(self, key):
-        if key not in self.map:
-            end = self.end
-            curr = end[1]
-            curr[2] = end[1] = self.map[key] = [key, curr, end]
-
-    def discard(self, key):
-        if key in self.map:
-            key, prev, next = self.map.pop(key)
-            prev[2] = next
-            next[1] = prev
-
-    def __iter__(self):
-        end = self.end
-        curr = end[2]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[2]
-
-    def __reversed__(self):
-        end = self.end
-        curr = end[1]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[1]
-
-    def pop(self, last=True):
-        if not self:
-            raise KeyError('set is empty')
-        key = self.end[1][0] if last else self.end[2][0]
-        self.discard(key)
-        return key
-
-    def __repr__(self):
-        if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self))
-
-    def __eq__(self, other):
-        if isinstance(other, OrderedSet):
-            return len(self) == len(other) and list(self) == list(other)
-        return set(self) == set(other)
-
-
 # Use pandas.isnull for aligning missing data is pandas is available.
 # otherwise use numpy.isnan
 try:
@@ -169,7 +109,7 @@ class Model(object):
         self.opts = kws
         self.param_hints = OrderedDict()
         # the following has been changed from OrderedSet for the time being
-        self._param_names = set()
+        self._param_names = []
         self._parse_params()
         if self.independent_vars is None:
             self.independent_vars = []
@@ -293,7 +233,7 @@ class Model(object):
                 arg in self._forbidden_args):
                 raise ValueError(self._invalid_par % (arg, fname))
         # the following as been changed from OrderedSet for the time being.
-        self._param_names = set(names)
+        self._param_names = names[:]
 
     def set_param_hint(self, name, **kwargs):
         """set hints for parameter, including optional bounds
@@ -368,7 +308,8 @@ class Model(object):
                     if item in  hint:
                         setattr(par, item, hint[item])
                 # Add the new parameter to the self.param_names
-                self._param_names.add(name)
+                if name not in self._param_names:
+                    self._param_names.append(name)
                 _params.append(par)
 
                 if verbose:
@@ -641,7 +582,7 @@ class CompositeModel(Model):
         self.right = right
         self.op    = op
 
-        name_collisions = left.param_names & right.param_names
+        name_collisions = set(left.param_names) & set(right.param_names)
         if len(name_collisions) > 0:
             msg = ''
             for collision in name_collisions:
@@ -689,7 +630,7 @@ class CompositeModel(Model):
 
     @property
     def param_names(self):
-        return self.left.param_names | self.right.param_names
+        return  self.left.param_names + self.right.param_names
 
     @property
     def components(self):
