@@ -10,6 +10,11 @@ from scipy.stats import f
 from scipy.optimize import brentq
 from .minimizer import MinimizerException
 
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
+
 CONF_ERR_GEN    = 'Cannot determine Confidence Intervals'
 CONF_ERR_STDERR = '%s without sensible uncertainty estimates' % CONF_ERR_GEN
 CONF_ERR_NVARS  = '%s with < 2 variables' % CONF_ERR_GEN
@@ -190,7 +195,7 @@ class ConfidenceInterval(object):
         """
         Calculates all cis.
         """
-        out = {}
+        out = OrderedDict()
 
         for p in self.p_names:
             out[p] = (self.calc_ci(p, -1)[::-1] +
