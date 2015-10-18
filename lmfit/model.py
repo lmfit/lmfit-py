@@ -810,9 +810,10 @@ class ModelResult(Minimizer):
             self.ci_out = conf_interval(self, self, **kwargs)
         return self.ci_out
 
-    def ci_report(self, **kwargs):
+    def ci_report(self, with_offset=True, ndigits=5, **kwargs):
         """return nicely formatted report about confidence intervals"""
-        return ci_report(self.conf_interval(**kwargs))
+        return ci_report(self.conf_interval(**kwargs),
+                         with_offset=with_offset, ndigits=ndigits)
 
     def fit_report(self,  **kwargs):
         "return fit report"
