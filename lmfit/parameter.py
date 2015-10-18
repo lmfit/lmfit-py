@@ -527,6 +527,9 @@ class Parameter(object):
             self._expr_eval = None
         if not hasattr(self, '_expr_ast'):
             self._expr_ast = None
+        if self._expr_ast is None and self._expr is not None:
+            self.__set_expression(self._expr)
+
         if self._expr_ast is not None and self._expr_eval is not None:
             self.value = self._expr_eval(self._expr_ast)
             check_ast_errors(self._expr_eval)
