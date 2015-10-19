@@ -163,7 +163,7 @@ For (:math:`\beta=1`) the Moffat has a Lorentzian shape.
 
   f(x; A, \mu, \sigma, \beta) = A \big[(\frac{x-\mu}{\sigma})^2+1\big]^{-\beta}
 
-the full width have maximum is :math:`\sigma 2 \sqrt{2^{1/\beta}-1}`.
+the full width have maximum is :math:`2\sigma\sqrt{2^{1/\beta}-1}`.
 :meth:`guess` function always sets the starting value for ``beta`` to 1.
 
 
@@ -755,15 +755,15 @@ for simple problems.  The example is included in the ``doc_peakmodels.py``
 file in the examples directory.
 
 
-
 Example 2: Fit data to a Composite Model with pre-defined models
 ------------------------------------------------------------------
 
-Here, we repeat the point made at the end of the last chapter that instances
-of :class:`model.Model` class can be added them together to make a *composite
-model*.  But using the large number of built-in models available, this is
-very simple.  An example of a simple fit to a noisy step function plus a
-constant:
+Here, we repeat the point made at the end of the last chapter that
+instances of :class:`model.Model` class can be added together to make a
+*composite model*.  By using the large number of built-in models available,
+it is therefore very simple to build models that contain multiple peaks and
+various backgrounds.  An example of a simple fit to a noisy step function
+plus a constant:
 
 .. literalinclude:: ../examples/doc_stepmodel.py
 
