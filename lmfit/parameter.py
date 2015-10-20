@@ -141,10 +141,7 @@ class Parameters(OrderedDict):
         Update all constrained parameters, checking that dependencies are
         evaluated as needed.
         """
-        _updated = []
-        for name, par in self.items():
-            if par._expr is None:
-                _updated.append(name)
+        _updated = [name for name,par in self.items() if par._expr is None]
 
         def _update_param(name):
             """
