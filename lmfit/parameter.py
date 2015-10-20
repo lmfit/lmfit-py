@@ -41,11 +41,6 @@ class Parameters(OrderedDict):
         super(Parameters, self).__init__(self)
         self._asteval = asteval
 
-        # a flag to temporarily pause updating constraints when lots of
-        # parameters are being added. This is mainly used during the deepcopy
-        # operation. Do not forget to switch back on.
-        self._dont_update_constraints = False
-
         if asteval is None:
             self._asteval = Interpreter()
         self.update(*args, **kwds)
@@ -147,6 +142,10 @@ class Parameters(OrderedDict):
         evaluated as needed.
         """
         _updated = []
+        for name, par in self.items():
+            if par._expr is None:
+                _updated.append(name)
+
         def _update_param(name):
             """
             Update a parameter value, including setting bounds.
@@ -170,7 +169,8 @@ class Parameters(OrderedDict):
             _updated.append(name)
 
         for name in self.keys():
-            _update_param(name)
+            if name not in _updated:
+                _update_param(name)
 
     def pretty_repr(self, oneline=False):
         if oneline:
