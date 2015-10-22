@@ -8,15 +8,17 @@ python:
     - 3.4
 
 before_install:
-    - wget http://repo.continuum.io/miniconda/Miniconda3-3.5.5-Linux-x86_64.sh -O miniconda.sh
-    - chmod +x miniconda.sh
-    - ./miniconda.sh -b
-    - export PATH=/home/travis/miniconda3/bin:$PATH
-    - conda config --add channels https://conda.binstar.org/dan_blanchard
-    - conda update --yes conda
+    - wget http://repo.continuum.io/miniconda/Miniconda-latest-x86_64.sh -O miniconda.sh
+    - bash miniconda.sh -b -p $HOME/minicoda
+    - export PATH=$HOME/miniconda/bin:$PATH
+    - hash -r
+    - conda config --set always_yes yws --set changeps1 no
+    - conda update -q conda
+    - conda info -a
 
 install:
-    - conda install --yes pip python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib dateutil nose
+    - conda create test_env --yes pip python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib dateutil nose
+    - source activate test_env
     - python setup.py install
 
 script:
