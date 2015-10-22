@@ -244,22 +244,38 @@ class Model(object):
             else:
                 warnings.warn(self._invalid_hint % (key, name))
 
-    def make_params(self, **kwargs):
+    def make_params(self, verbose=False, **kwargs):
         """create and return a Parameters object for a Model.
         This applies any default values
         """
-        verbose = False
-        if 'verbose' in kwargs:
-            verbose = kwargs['verbose']
+        params = Parameters()
 
-        # self.param_names is a set, i.e. all the parameters we will add in the
-        # following loop will be unique. Therefore, we'll make a list of the
-        # Parameter to be added, and construct the Parameters instance
-        # afterwards.
-        _params = []
+        # first build parameters defined in param_hints
+        # note that composites may define their own additional
+        # convenience parameters here
+        for basename, hint in self.param_hints.items():
+            name = "%s%s" % (self._prefix, basename)
+            if name in params:
+                par = params[name]
+            else:
+                par = Parameter(name=name)
 
+            for item in self._hint_names:
+                if item in  hint:
+                    setattr(par, item, hint[item])
+            # Add the new parameter to self._param_names
+            if name not in self._param_names:
+                self._param_names.append(name)
+            params.add(par)
+            if verbose:
+                print( ' - Adding parameter for hint "%s"' % name)
+                    
+        # next, make sure that all named parameters are included
         for name in self.param_names:
-            par = Parameter(name=name)
+            if name in params:
+                par = params[name]
+            else:
+                par = Parameter(name=name)
             basename = name[len(self._prefix):]
             # apply defaults from model function definition
             if basename in self.def_vals:
@@ -277,31 +293,9 @@ class Model(object):
             if name in kwargs:
                 # kw parameter names with prefix
                 par.value = kwargs[name]
-            _params.append(par)
-
-        params = Parameters()
-        params.add_many(*_params)
-
-        # add any additional parameters defined in param_hints
-        # note that composites may define their own additional
-        # convenience parameters here
-        _params = []
-        for basename, hint in self.param_hints.items():
-            name = "%s%s" % (self._prefix, basename)
-            if name not in params:
-                par = Parameter(name=name)
-                for item in self._hint_names:
-                    if item in  hint:
-                        setattr(par, item, hint[item])
-                # Add the new parameter to the self.param_names
-                if name not in self._param_names:
-                    self._param_names.append(name)
-                _params.append(par)
-
-                if verbose:
-                    print( ' - Adding parameter "%s"' % name)
-
-        params.add_many(*_params)
+            params.add(par)
+            if verbose:
+                print( ' - Adding parameter "%s"' % name)
 
         return params
 
