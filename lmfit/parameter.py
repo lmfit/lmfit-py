@@ -375,6 +375,7 @@ class Parameter(object):
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
+        self._allow_asteval_errors = False
         self.stderr = None
         self.correl = None
         self.from_internal = lambda val: val
@@ -528,9 +529,9 @@ class Parameter(object):
             self.__set_expression(self._expr)
 
         if self._expr_ast is not None and self._expr_eval is not None:
-            self.value = self._expr_eval(self._expr_ast)
-            check_ast_errors(self._expr_eval)
-
+            if not self._allow_asteval_errors:    
+                self.value = self._expr_eval(self._expr_ast)
+                check_ast_errors(self._expr_eval)
         if self.min is None:
             self.min = -inf
         if self.max is None:

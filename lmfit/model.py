@@ -235,12 +235,15 @@ class Model(object):
         if npref > 0 and name.startswith(self._prefix):
             name = name[npref:]
 
-        if name not in self.param_hints:
-            self.param_hints[name] = OrderedDict()
-        hints = self.param_hints[name]
-        for key, val in kwargs.items():
+        thishint = {}
+        if name in self.param_hints:
+            thishint = self.param_hints.pop(name)
+        thishint.update(kwargs)
+
+        self.param_hints[name] = OrderedDict()
+        for key, val in thishint.items():
             if key in self._hint_names:
-                hints[key] = val
+                self.param_hints[name][key] = val
             else:
                 warnings.warn(self._invalid_hint % (key, name))
 
@@ -249,7 +252,6 @@ class Model(object):
         This applies any default values
         """
         params = Parameters()
-
         # first build parameters defined in param_hints
         # note that composites may define their own additional
         # convenience parameters here
@@ -259,7 +261,8 @@ class Model(object):
                 par = params[name]
             else:
                 par = Parameter(name=name)
-
+            par._allow_asteval_errors = True
+            # print(" HINT ", name, hint, par)
             for item in self._hint_names:
                 if item in  hint:
                     setattr(par, item, hint[item])
@@ -276,7 +279,9 @@ class Model(object):
                 par = params[name]
             else:
                 par = Parameter(name=name)
+            par._allow_asteval_errors = True
             basename = name[len(self._prefix):]
+            # print(" PAR  ", name, par)
             # apply defaults from model function definition
             if basename in self.def_vals:
                 par.value = self.def_vals[basename]
@@ -297,6 +302,7 @@ class Model(object):
             if verbose:
                 print( ' - Adding parameter "%s"' % name)
 
+        for p in params.values(): p._allow_asteval_errors = False
         return params
 
     def guess(self, data=None, **kws):
