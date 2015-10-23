@@ -436,6 +436,7 @@ class Parameter(object):
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
+        self._allow_asteval_errors = False
         self._init_bounds()
 
     def __repr__(self):
