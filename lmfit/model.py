@@ -296,10 +296,9 @@ class Model(object):
             if name in kwargs:
                 # kw parameter names with prefix
                 par.value = kwargs[name]
-            if par not in params:
-                params.add(par)
-                if verbose:
-                    print( ' - Adding parameter "%s"' % name)
+            params.add(par)
+            if verbose:
+                print( ' - Adding parameter "%s"' % name)
 
         for p in params.values():
             p._delay_asteval = False
