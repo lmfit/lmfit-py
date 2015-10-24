@@ -261,8 +261,7 @@ class Model(object):
                 par = params[name]
             else:
                 par = Parameter(name=name)
-            par._allow_asteval_errors = True
-            # print(" HINT ", name, hint, par)
+            par._delay_asteval = True
             for item in self._hint_names:
                 if item in  hint:
                     setattr(par, item, hint[item])
@@ -272,16 +271,15 @@ class Model(object):
             params.add(par)
             if verbose:
                 print( ' - Adding parameter for hint "%s"' % name)
-                    
+
         # next, make sure that all named parameters are included
         for name in self.param_names:
             if name in params:
                 par = params[name]
             else:
                 par = Parameter(name=name)
-            par._allow_asteval_errors = True
+            par._delay_asteval = True
             basename = name[len(self._prefix):]
-            # print(" PAR  ", name, par)
             # apply defaults from model function definition
             if basename in self.def_vals:
                 par.value = self.def_vals[basename]
@@ -298,11 +296,13 @@ class Model(object):
             if name in kwargs:
                 # kw parameter names with prefix
                 par.value = kwargs[name]
-            params.add(par)
-            if verbose:
-                print( ' - Adding parameter "%s"' % name)
+            if par not in params:
+                params.add(par)
+                if verbose:
+                    print( ' - Adding parameter "%s"' % name)
 
-        for p in params.values(): p._allow_asteval_errors = False
+        for p in params.values():
+            p._delay_asteval = False
         return params
 
     def guess(self, data=None, **kws):
