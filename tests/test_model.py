@@ -433,6 +433,44 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertEqual(param_values['p1_amplitude'], 1)
         self.assertEqual(param_values['p2_amplitude'], 2)
 
+    def test_composite_model_with_expr_constrains(self):
+        """Smoke test for composite model fitting with expr constraints.
+        """
+        y = [  0,   0,   4,   2,   1,   8,  21,  21,  23,  35,  50,  54,  46,
+             70,   77,  87,  98, 113, 148, 136, 185, 195, 194, 168, 170, 139,
+             155, 115, 132, 109, 102,  85,  69,  81,  82,  80,  71,  64,  79,
+             88,  111,  97,  97,  73,  72,  62,  41,  30,  13,   3,   9,   7,
+             0,     0,   0]
+        x = np.arange(-0.2, 1.2, 0.025)[:-1] + 0.5*0.025
+
+        def gauss(x, sigma, mu, A):
+            return A*np.exp(-(x-mu)**2/(2*sigma**2))
+
+        # Initial values
+        p1_mu = 0.2
+        p1_sigma = 0.1
+        #p2_mu = 0.8
+        p2_sigma = 0.1
+
+        peak1 = Model(gauss, prefix='p1_')
+        peak2 = Model(gauss, prefix='p2_')
+        model = peak1 + peak2
+
+        model.set_param_hint('p1_mu', value=p1_mu, min=-1, max=2)
+        #model.set_param_hint('p2_mu', value=p2_mu, min=-1, max=2)
+        model.set_param_hint('p1_sigma', value=p1_sigma, min=0.01, max=0.2)
+        model.set_param_hint('p2_sigma', value=p2_sigma, min=0.01, max=0.2)
+        model.set_param_hint('p1_A', value=100, min=0.01)
+        model.set_param_hint('p2_A', value=50, min=0.01)
+
+        # Constrains the distance between peaks to be > 0
+        model.set_param_hint('pos_delta', value=0.3, min=0)
+        model.set_param_hint('p2_mu', min=-1, expr='p1_mu + pos_delta')
+
+        # Test fitting
+        result = model.fit(y, x=x)
+        self.assertTrue(result.params['pos_delta'].value > 0)
+
 
 class TestLinear(CommonTests, unittest.TestCase):
 
