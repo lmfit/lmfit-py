@@ -8,7 +8,8 @@ import operator
 from copy import deepcopy
 import numpy as np
 from . import Parameters, Parameter, Minimizer
-from .printfuncs import fit_report
+from .printfuncs import fit_report, ci_report
+from .confidence import conf_interval
 
 from collections import MutableSet
 
@@ -16,66 +17,6 @@ try:
     from collections import OrderedDict
 except ImportError:
     from ordereddict import OrderedDict
-
-
-class OrderedSet(MutableSet):
-    """from http://code.activestate.com/recipes/576694-orderedset/"""
-    def __init__(self, iterable=None):
-        self.end = end = []
-        end += [None, end, end]         # sentinel node for doubly linked list
-        self.map = {}                   # key --> [key, prev, next]
-        if iterable is not None:
-            self |= iterable
-
-    def __len__(self):
-        return len(self.map)
-
-    def __contains__(self, key):
-        return key in self.map
-
-    def add(self, key):
-        if key not in self.map:
-            end = self.end
-            curr = end[1]
-            curr[2] = end[1] = self.map[key] = [key, curr, end]
-
-    def discard(self, key):
-        if key in self.map:
-            key, prev, next = self.map.pop(key)
-            prev[2] = next
-            next[1] = prev
-
-    def __iter__(self):
-        end = self.end
-        curr = end[2]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[2]
-
-    def __reversed__(self):
-        end = self.end
-        curr = end[1]
-        while curr is not end:
-            yield curr[0]
-            curr = curr[1]
-
-    def pop(self, last=True):
-        if not self:
-            raise KeyError('set is empty')
-        key = self.end[1][0] if last else self.end[2][0]
-        self.discard(key)
-        return key
-
-    def __repr__(self):
-        if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self))
-
-    def __eq__(self, other):
-        if isinstance(other, OrderedSet):
-            return len(self) == len(other) and list(self) == list(other)
-        return set(self) == set(other)
-
 
 # Use pandas.isnull for aligning missing data is pandas is available.
 # otherwise use numpy.isnan
@@ -168,7 +109,7 @@ class Model(object):
         self.opts = kws
         self.param_hints = OrderedDict()
         # the following has been changed from OrderedSet for the time being
-        self._param_names = set()
+        self._param_names = []
         self._parse_params()
         if self.independent_vars is None:
             self.independent_vars = []
@@ -200,11 +141,6 @@ class Model(object):
     def prefix(self):
         return self._prefix
 
-    @prefix.setter
-    def prefix(self, value):
-        self._prefix = value
-        self._parse_params()
-
     @property
     def param_names(self):
         return self._param_names
@@ -212,18 +148,9 @@ class Model(object):
     def __repr__(self):
         return "<lmfit.Model: %s>" % (self.name)
 
-    def copy(self, prefix=None):
-        """Return a completely independent copy of the whole model.
-
-        Parameters
-        ----------
-        prefix: string or None. If not None new model's prefix is
-            changed to the passed value.
-        """
-        new = deepcopy(self)
-        if prefix is not None:
-            new.prefix = prefix
-        return new
+    def copy(self, **kwargs):
+        """DOES NOT WORK"""
+        raise NotImplementedError("Model.copy does not work. Make a new Model")
 
     def _parse_params(self):
         "build params from function arguments"
@@ -292,7 +219,7 @@ class Model(object):
                 arg in self._forbidden_args):
                 raise ValueError(self._invalid_par % (arg, fname))
         # the following as been changed from OrderedSet for the time being.
-        self._param_names = set(names)
+        self._param_names = names[:]
 
     def set_param_hint(self, name, **kwargs):
         """set hints for parameter, including optional bounds
@@ -308,31 +235,50 @@ class Model(object):
         if npref > 0 and name.startswith(self._prefix):
             name = name[npref:]
 
-        if name not in self.param_hints:
-            self.param_hints[name] = OrderedDict()
-        hints = self.param_hints[name]
-        for key, val in kwargs.items():
+        thishint = {}
+        if name in self.param_hints:
+            thishint = self.param_hints.pop(name)
+        thishint.update(kwargs)
+
+        self.param_hints[name] = OrderedDict()
+        for key, val in thishint.items():
             if key in self._hint_names:
-                hints[key] = val
+                self.param_hints[name][key] = val
             else:
                 warnings.warn(self._invalid_hint % (key, name))
 
-    def make_params(self, **kwargs):
+    def make_params(self, verbose=False, **kwargs):
         """create and return a Parameters object for a Model.
         This applies any default values
         """
-        verbose = False
-        if 'verbose' in kwargs:
-            verbose = kwargs['verbose']
+        params = Parameters()
+        # first build parameters defined in param_hints
+        # note that composites may define their own additional
+        # convenience parameters here
+        for basename, hint in self.param_hints.items():
+            name = "%s%s" % (self._prefix, basename)
+            if name in params:
+                par = params[name]
+            else:
+                par = Parameter(name=name)
+            par._delay_asteval = True
+            for item in self._hint_names:
+                if item in  hint:
+                    setattr(par, item, hint[item])
+            # Add the new parameter to self._param_names
+            if name not in self._param_names:
+                self._param_names.append(name)
+            params.add(par)
+            if verbose:
+                print( ' - Adding parameter for hint "%s"' % name)
 
-        # self.param_names is a set, i.e. all the parameters we will add in the
-        # following loop will be unique. Therefore, we'll make a list of the
-        # Parameter to be added, and construct the Parameters instance
-        # afterwards.
-        _params = []
-
+        # next, make sure that all named parameters are included
         for name in self.param_names:
-            par = Parameter(name=name)
+            if name in params:
+                par = params[name]
+            else:
+                par = Parameter(name=name)
+            par._delay_asteval = True
             basename = name[len(self._prefix):]
             # apply defaults from model function definition
             if basename in self.def_vals:
@@ -350,31 +296,12 @@ class Model(object):
             if name in kwargs:
                 # kw parameter names with prefix
                 par.value = kwargs[name]
-            _params.append(par)
+            params.add(par)
+            if verbose:
+                print( ' - Adding parameter "%s"' % name)
 
-        params = Parameters()
-        params.add_many(*_params)
-
-        # add any additional parameters defined in param_hints
-        # note that composites may define their own additional
-        # convenience parameters here
-        _params = []
-        for basename, hint in self.param_hints.items():
-            name = "%s%s" % (self._prefix, basename)
-            if name not in params:
-                par = Parameter(name=name)
-                for item in self._hint_names:
-                    if item in  hint:
-                        setattr(par, item, hint[item])
-                # Add the new parameter to the self.param_names
-                self._param_names.add(name)
-                _params.append(par)
-
-                if verbose:
-                    print( ' - Adding parameter "%s"' % name)
-
-        params.add_many(*_params)
-
+        for p in params.values():
+            p._delay_asteval = False
         return params
 
     def guess(self, data=None, **kws):
@@ -640,7 +567,7 @@ class CompositeModel(Model):
         self.right = right
         self.op    = op
 
-        name_collisions = left.param_names & right.param_names
+        name_collisions = set(left.param_names) & set(right.param_names)
         if len(name_collisions) > 0:
             msg = ''
             for collision in name_collisions:
@@ -688,7 +615,7 @@ class CompositeModel(Model):
 
     @property
     def param_names(self):
-        return self.left.param_names | self.right.param_names
+        return  self.left.param_names + self.right.param_names
 
     @property
     def components(self):
@@ -761,6 +688,7 @@ class ModelResult(Minimizer):
         self.data = data
         self.weights = weights
         self.method = method
+        self.ci_out = None
         self.init_params = deepcopy(params)
         Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
                            fcn_kws=fcn_kws, iter_cb=iter_cb,
@@ -776,6 +704,7 @@ class ModelResult(Minimizer):
             self.weights = weights
         if method is not None:
             self.method = method
+        self.ci_out = None
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
         self.init_fit    = self.model.eval(params=self.params, **self.userkws)
@@ -800,6 +729,17 @@ class ModelResult(Minimizer):
     def eval_components(self, **kwargs):
         self.userkws.update(kwargs)
         return self.model.eval_components(params=self.params, **self.userkws)
+
+    def conf_interval(self, **kwargs):
+        """return explicitly calculated confidence intervals"""
+        if self.ci_out is None:
+            self.ci_out = conf_interval(self, self, **kwargs)
+        return self.ci_out
+
+    def ci_report(self, with_offset=True, ndigits=5, **kwargs):
+        """return nicely formatted report about confidence intervals"""
+        return ci_report(self.conf_interval(**kwargs),
+                         with_offset=with_offset, ndigits=ndigits)
 
     def fit_report(self,  **kwargs):
         "return fit report"

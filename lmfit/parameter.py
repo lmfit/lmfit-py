@@ -41,11 +41,6 @@ class Parameters(OrderedDict):
         super(Parameters, self).__init__(self)
         self._asteval = asteval
 
-        # a flag to temporarily pause updating constraints when lots of
-        # parameters are being added. This is mainly used during the deepcopy
-        # operation. Do not forget to switch back on.
-        self._dont_update_constraints = False
-
         if asteval is None:
             self._asteval = Interpreter()
         self.update(*args, **kwds)
@@ -146,7 +141,8 @@ class Parameters(OrderedDict):
         Update all constrained parameters, checking that dependencies are
         evaluated as needed.
         """
-        _updated = []
+        _updated = [name for name,par in self.items() if par._expr is None]
+
         def _update_param(name):
             """
             Update a parameter value, including setting bounds.
@@ -170,7 +166,8 @@ class Parameters(OrderedDict):
             _updated.append(name)
 
         for name in self.keys():
-            _update_param(name)
+            if name not in _updated:
+                _update_param(name)
 
     def pretty_repr(self, oneline=False):
         if oneline:
@@ -196,8 +193,11 @@ class Parameters(OrderedDict):
         is equivalent to:
         p[name] = Parameter(name=name, value=XX, ....
         """
-        self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
-                                         min=min, max=max, expr=expr))
+        if isinstance(name, Parameter):
+            self.__setitem__(name.name, name)
+        else:
+            self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
+                                             min=min, max=max, expr=expr))
 
     def add_many(self, *parlist):
         """
@@ -375,6 +375,7 @@ class Parameter(object):
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
+        self._delay_asteval = False
         self.stderr = None
         self.correl = None
         self.from_internal = lambda val: val
@@ -435,6 +436,7 @@ class Parameter(object):
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
+        self._delay_asteval = False
         self._init_bounds()
 
     def __repr__(self):
@@ -524,9 +526,13 @@ class Parameter(object):
             self._expr_eval = None
         if not hasattr(self, '_expr_ast'):
             self._expr_ast = None
+        if self._expr_ast is None and self._expr is not None:
+            self.__set_expression(self._expr)
+
         if self._expr_ast is not None and self._expr_eval is not None:
-            self.value = self._expr_eval(self._expr_ast)
-            check_ast_errors(self._expr_eval)
+            if not self._delay_asteval:
+                self.value = self._expr_eval(self._expr_ast)
+                check_ast_errors(self._expr_eval)
 
         if self.min is None:
             self.min = -inf

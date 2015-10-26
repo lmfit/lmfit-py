@@ -89,7 +89,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     if hasattr(inpars, 'params'):
         result = inpars
         params = inpars.params
-    
+
     if sort_pars:
         if callable(sort_pars):
             key = sort_pars
@@ -174,21 +174,51 @@ def report_fit(params, **kws):
     print(fit_report(params, **kws))
 
 
-def ci_report(ci):
-    """return text of a report for confidence intervals"""
+def ci_report(ci, with_offset=True, ndigits=5):
+    """return text of a report for confidence intervals
+
+    Parameters
+    ----------
+    with_offset : bool (default `True`)
+        whether to subtract best value from all other values.
+    ndigits : int (default 5)
+        number of significant digits to show
+
+    Returns
+    -------
+       text of formatted report on confidence intervals.
+    """
     maxlen = max([len(i) for i in ci])
     buff = []
     add = buff.append
-    convp = lambda x: ("%.2f" % (x[0]*100))+'%'
-    conv = lambda x: "%.5f" % x[1]
+    def convp(x):
+        if abs(x[0]) < 1.e-2:
+            return "_BEST_"
+        return "%.2f%%" % (x[0]*100)
+
     title_shown = False
+    fmt_best = fmt_diff  = "{0:.%if}" % ndigits
+    if with_offset:
+        fmt_diff = "{0:+.%if}" % ndigits
     for name, row in ci.items():
         if not title_shown:
-            add("".join([''.rjust(maxlen)]+[i.rjust(10)
+            add("".join([''.rjust(maxlen+1)]+[i.rjust(ndigits+5)
                                             for i in map(convp, row)]))
             title_shown = True
-        add("".join([name.rjust(maxlen)]+[i.rjust(10)
-                                          for i in map(conv,  row)]))
+        thisrow = [" %s:" % name.ljust(maxlen)]
+        offset = 0.0
+        if with_offset:
+            for cval, val in row:
+                if abs(cval) < 1.e-2:
+                    offset = val
+        for cval, val in row:
+            if cval < 1.e-2:
+                sval = fmt_best.format(val)
+            else:
+                sval = fmt_diff.format(val-offset)
+            thisrow.append(sval.rjust(ndigits+5))
+        add("".join(thisrow))
+
     return '\n'.join(buff)
 
 
