@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.1',
+        VERSION:     '0.9.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -139,12 +139,12 @@
 of lmfit.</p>
 <p>A <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> is the quantity to be optimized in all minimization
 problems, replacing the plain floating point number used in the
-optimization routines from <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code>.  A <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
+optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>.  A <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
 a value that can be varied in the fit or have a fixed value, have upper
 and/or lower bounds.  It can even have a value that is constrained by an
 algebraic expression of other Parameter values.  Since <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>
 live outside the core optimization routines, they can be used in <strong>all</strong>
-optimization routines from <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code>.  By using
+optimization routines from <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>.  By using
 <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects instead of plain variables, the objective
 function does not have to be modified to reflect every change of what is
 varied in the fit.  This simplifies the writing of models, allowing general
@@ -152,7 +152,7 @@ models that describe the phenomenon to be written, and gives the user more
 flexibility in using and testing variations of that model.</p>
 <p>Whereas a <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> expands on an individual floating point
 variable, the optimization methods need an ordered group of floating point
-variables.  In the <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code> routines this is required to be a
+variables.  In the <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a> routines this is required to be a
 1-dimensional numpy ndarray.  For lmfit, where each <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
 a name, this is replaced by a <a class="reference internal" href="#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> class, which works as an
 ordered dictionary of <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects, with a few additional
@@ -345,7 +345,7 @@ values in a objective function.</p>
 <dd><p>return a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object.
 This can be saved or used to re-create or re-set parameters, using the
 <code class="xref py py-meth docutils literal"><span class="pre">loads()</span></code> method.</p>
-<p>Optional keywords are sent <code class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></code>.</p>
+<p>Optional keywords are sent <a class="reference external" href="http://docs.python.org/2/library/json.html#json.dumps" title="(in Python v2.7)"><code class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -353,7 +353,7 @@ This can be saved or used to re-create or re-set parameters, using the
 <code class="descname">dump(file, **kws):</code></dt>
 <dd><p>write a JSON representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object to a file
 or file-like object in <cite>file</cite> &#8211; really any object with a <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code>
-method.  Optional keywords are sent <code class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></code>.</p>
+method.  Optional keywords are sent <a class="reference external" href="http://docs.python.org/2/library/json.html#json.dumps" title="(in Python v2.7)"><code class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -361,7 +361,7 @@ method.  Optional keywords are sent <code class="xref py py-func docutils litera
 <code class="descname">loads(sval, **kws):</code></dt>
 <dd><p>use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object in
 <cite>sval</cite> to set all parameter settins. Optional keywords are sent
-<code class="xref py py-func docutils literal"><span class="pre">json.loads()</span></code>.</p>
+<a class="reference external" href="http://docs.python.org/2/library/json.html#json.loads" title="(in Python v2.7)"><code class="xref py py-func docutils literal"><span class="pre">json.loads()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -370,7 +370,7 @@ method.  Optional keywords are sent <code class="xref py py-func docutils litera
 <dd><p>read and use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 object from a file or file-like object in <cite>file</cite> &#8211; really any object
 with a <code class="xref py py-meth docutils literal"><span class="pre">read()</span></code> method.  Optional keywords are sent
-<code class="xref py py-func docutils literal"><span class="pre">json.loads()</span></code>.</p>
+<a class="reference external" href="http://docs.python.org/2/library/json.html#json.loads" title="(in Python v2.7)"><code class="xref py py-func docutils literal"><span class="pre">json.loads()</span></code></a>.</p>
 </dd></dl>
 
 </div>

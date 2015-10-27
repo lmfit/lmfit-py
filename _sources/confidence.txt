@@ -1,3 +1,5 @@
+.. _confidence_chapter:
+
 Calculation of confidence intervals
 ====================================
 
@@ -164,8 +166,12 @@ which shows the trace of values:
    :width: 50%
 
 
-Documentation of methods
-------------------------
+
+Confidence Interval Functions
+----------------------------------
 
 .. autofunction:: lmfit.conf_interval
+
 .. autofunction:: lmfit.conf_interval2d
+
+.. autofunction:: lmfit.ci_report

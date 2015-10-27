@@ -141,7 +141,7 @@ Putting everything together, the script to do such a fit (included in the
 .. literalinclude:: ../examples/doc_model1.py
 
 which is pretty compact and to the point.  The returned ``result`` will be
-a :class:`ModelFit` object.  As we will see below, this has many
+a :class:`ModelResult` object.  As we will see below, this has many
 components, including a :meth:`fit_report` method, which will show::
 
     [[Model]]
@@ -262,7 +262,7 @@ specifying one or more independent variables.
    :param verbose:  print a message when a new parameter is created due to a *hint*
    :type  verbose:  bool (default ``True``)
    :param kws:      additional keyword arguments to pass to model function.
-   :return:         :class:`ModelFit` object.
+   :return:         :class:`ModelResult` object.
 
    If ``params`` is ``None``, the internal ``params`` will be used. If it
    is supplied, these will replace the internal ones.   If supplied,
@@ -624,50 +624,51 @@ at half maximum of a Gaussian model, one could use a parameter hint of::
 
 
 
-The :class:`ModelFit` class
+The :class:`ModelResult` class
 =======================================
 
-A :class:`ModelFit` is the object returned by :meth:`Model.fit`.  It is a
-subclass of :class:`Minimizer`, and so contains many of the fit results.
-Of course, it knows the :class:`Model` and the set of :class:`Parameters`
-used in the fit, and it has methods to evaluate the model, to fit the data
-(or re-fit the data with changes to the parameters, or fit with different
-or modified data) and to print out a report for that fit.
+A :class:`ModelResult` (which had been called `ModelFit` prior to version
+0.9) is the object returned by :meth:`Model.fit`.  It is a subclass of
+:class:`Minimizer`, and so contains many of the fit results.  Of course, it
+knows the :class:`Model` and the set of :class:`Parameters` used in the
+fit, and it has methods to evaluate the model, to fit the data (or re-fit
+the data with changes to the parameters, or fit with different or modified
+data) and to print out a report for that fit.
 
 While a :class:`Model` encapsulates your model function, it is fairly
 abstract and does not contain the parameters or data used in a particular
-fit.  A :class:`ModelFit` *does* contain parameters and data as well as
+fit.  A :class:`ModelResult` *does* contain parameters and data as well as
 methods to alter and re-do fits.  Thus the :class:`Model` is the idealized
-model while the :class:`ModelFit` is the messier, more complex (but perhaps
+model while the :class:`ModelResult` is the messier, more complex (but perhaps
 more useful) object that represents a fit with a set of parameters to data
 with a model.
 
 
-A :class:`ModelFit` has several attributes holding values for fit results,
+A :class:`ModelResult` has several attributes holding values for fit results,
 and several methods for working with fits.  These include statistics
 inherited from :class:`Minimizer` useful for comparing different models,
 includind `chisqr`, `redchi`, `aic`, and `bic`.
 
-.. class:: ModelFit()
+.. class:: ModelResult()
 
     Model fit is intended to be created and returned by :meth:`Model.fit`.
 
 
 
-:class:`ModelFit` methods
+:class:`ModelResult` methods
 ---------------------------------
 
 These methods are all inherited from :class:`Minimize` or from
 :class:`Model`.
 
-.. method:: ModelFit.eval(**kwargs)
+.. method:: ModelResult.eval(**kwargs)
 
    evaluate the model using the best-fit parameters and supplied
    independent variables.  The ``**kwargs`` arguments can be used to update
    parameter values and/or independent variables.
 
 
-.. method:: ModelFit.eval_components(**kwargs)
+.. method:: ModelResult.eval_components(**kwargs)
 
    evaluate each component of a :class:`CompositeModel`, returning an
    ordered dictionary of with the values for each component model.  The
@@ -675,7 +676,7 @@ These methods are all inherited from :class:`Minimize` or from
    is given), the model name.  The ``**kwargs`` arguments can be used to
    update parameter values and/or independent variables.
 
-.. method:: ModelFit.fit(data=None[, params=None[, weights=None[, method=None[, **kwargs]]]])
+.. method:: ModelResult.fit(data=None[, params=None[, weights=None[, method=None[, **kwargs]]]])
 
    fit (or re-fit), optionally changing ``data``, ``params``, ``weights``,
    or ``method``, or changing the independent variable(s) with the
@@ -683,7 +684,7 @@ These methods are all inherited from :class:`Minimize` or from
    descriptions, and note that any value of ``None`` defaults to the last
    used value.
 
-.. method:: ModelFit.fit_report(modelpars=None[, show_correl=True[,`< min_correl=0.1]])
+.. method:: ModelResult.fit_report(modelpars=None[, show_correl=True[,`< min_correl=0.1]])
 
    return a printable fit report for the fit with fit statistics, best-fit
    values with uncertainties and correlations.  As with :func:`fit_report`.
@@ -693,7 +694,20 @@ These methods are all inherited from :class:`Minimize` or from
    :param min_correl:   smallest correlation absolute value to show [0.1]
 
 
-.. method:: ModelFit.plot(datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None, fig=None, data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None, fig_kws=None)
+.. method:: ModelResult.conf_interval(**kwargs)
+
+   calculate the confidence intervals for the variable parameters using
+   :func:`confidence.conf_interval() <lmfit.conf_interval>`.  All keyword
+   arguments are passed to that function.  The result is stored in
+   :attr:`ci_out`, and so can be accessed without recalculating them.
+
+.. method:: ModelResult.ci_report(with_offset=True)
+
+   return a nicely formatted text report of the confidence intervals, as
+   from :func:`ci_report() <lmfit.ci_report>`.
+
+
+.. method:: ModelResult.plot(datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None, fig=None, data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None, fig_kws=None)
 
    Plot the fit results and residuals using matplotlib, if available.  The
    plot will include two panels, one showing the fit residual, and the
@@ -727,7 +741,7 @@ These methods are all inherited from :class:`Minimize` or from
    :type fig_kws: ``None`` or dictionary
    :returns:     matplotlib.figure.Figure
 
-   This combines :meth:`ModelFit.plot_fit` and :meth:`ModelFit.plot_residual`.
+   This combines :meth:`ModelResult.plot_fit` and :meth:`ModelResult.plot_residual`.
 
    If ``yerr`` is specified or if the fit model included weights, then
    matplotlib.axes.Axes.errorbar is used to plot the data.  If ``yerr`` is
@@ -735,7 +749,7 @@ These methods are all inherited from :class:`Minimize` or from
 
    If ``fig`` is None then ``matplotlib.pyplot.figure(**fig_kws)`` is called.
 
-.. method:: ModelFit.plot_fit(ax=None, datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None,  data_kws=None, fit_kws=None, init_kws=None, ax_kws=None)
+.. method:: ModelResult.plot_fit(ax=None, datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None,  data_kws=None, fit_kws=None, init_kws=None, ax_kws=None)
 
    Plot the fit results using matplotlib, if available.  The plot will include
    the data points, the initial fit curve, and the best-fit curve. If the fit
@@ -773,7 +787,7 @@ These methods are all inherited from :class:`Minimize` or from
 
    If ``ax`` is None then ``matplotlib.pyplot.gca(**ax_kws)`` is called.
 
-.. method:: ModelFit.plot_residuals(ax=None, datafmt='o', yerr=None, data_kws=None, fit_kws=None, ax_kws=None)
+.. method:: ModelResult.plot_residuals(ax=None, datafmt='o', yerr=None, data_kws=None, fit_kws=None, ax_kws=None)
 
   Plot the fit residuals (data - fit) using matplotlib.  If ``yerr`` is
   supplied or if the model included weights, errorbars will also be plotted.
@@ -806,7 +820,7 @@ These methods are all inherited from :class:`Minimize` or from
 
 
 
-:class:`ModelFit` attributes
+:class:`ModelResult` attributes
 ---------------------------------
 
 .. attribute:: aic
@@ -829,6 +843,11 @@ These methods are all inherited from :class:`Minimize` or from
 .. attribute:: chisqr
 
    floating point best-fit chi-square statistic (see :ref:`fit-results-label`).
+
+.. attribute:: ci_out
+
+   confidence interval data (see :ref:`confidence_chapter`) or `None`  if
+   the confidence intervals have not been calculated.
 
 .. attribute:: covar
 
@@ -1015,14 +1034,14 @@ red line, and the initial fit is shown as a black dashed line.  In the
 figure on the right, the data is again shown in blue dots, and the Gaussian
 component shown as a black dashed line, and the linear component shown as a
 red dashed line.  These components were generated after the fit using the
-Models :meth:`ModelFit.eval_components` method of the `result`::
+Models :meth:`ModelResult.eval_components` method of the `result`::
 
     comps = result.eval_components()
 
 which returns a dictionary of the components, using keys of the model name
 (or `prefix` if that is set).  This will use the parameter values in
 ``result.params`` and the independent variables (``x``) used during the
-fit.  Note that while the :class:`ModelFit` held in `result` does store the
+fit.  Note that while the :class:`ModelResult` held in `result` does store the
 best parameters and the best estimate of the model in ``result.best_fit``,
 the original model and parameters in ``pars`` are left unaltered.
 

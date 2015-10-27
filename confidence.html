@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.1',
+        VERSION:     '0.9.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -95,7 +95,7 @@
 <li><a class="reference internal" href="#method-used-for-calculating-confidence-intervals">Method used for calculating confidence intervals</a></li>
 <li><a class="reference internal" href="#a-basic-example">A basic example</a></li>
 <li><a class="reference internal" href="#an-advanced-example">An advanced example</a></li>
-<li><a class="reference internal" href="#documentation-of-methods">Documentation of methods</a></li>
+<li><a class="reference internal" href="#confidence-interval-functions">Confidence Interval Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -135,7 +135,7 @@
           <div class="body" role="main">
             
   <div class="section" id="module-confidence">
-<span id="calculation-of-confidence-intervals"></span><h1>Calculation of confidence intervals<a class="headerlink" href="#module-confidence" title="Permalink to this headline">¶</a></h1>
+<span id="calculation-of-confidence-intervals"></span><span id="confidence-chapter"></span><h1>Calculation of confidence intervals<a class="headerlink" href="#module-confidence" title="Permalink to this headline">¶</a></h1>
 <p>The lmfit <a class="reference internal" href="#module-confidence" title="confidence"><code class="xref py py-mod docutils literal"><span class="pre">confidence</span></code></a> module allows you to explicitly calculate
 confidence intervals for variable parameters.  For most models, it is not
 necessary: the estimation of the standard error from the estimated
@@ -335,8 +335,8 @@ parameters:</p>
 <p>which shows the trace of values:</p>
 <a class="reference external image-reference" href="_images/conf_interval2.png"><img alt="_images/conf_interval2.png" src="_images/conf_interval2.png" style="width: 50%;" /></a>
 </div>
-<div class="section" id="documentation-of-methods">
-<h2>Documentation of methods<a class="headerlink" href="#documentation-of-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="confidence-interval-functions">
+<h2>Confidence Interval Functions<a class="headerlink" href="#confidence-interval-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="lmfit.conf_interval">
 <code class="descname">conf_interval</code><span class="sig-paren">(</span><em>minimizer</em>, <em>result</em>, <em>p_names=None</em>, <em>sigmas=(0.674</em>, <em>0.95</em>, <em>0.997)</em>, <em>trace=False</em>, <em>maxiter=200</em>, <em>verbose=False</em>, <em>prob_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval" title="Permalink to this definition">¶</a></dt>
@@ -502,6 +502,31 @@ Default (<code class="docutils literal"><span class="pre">None</span></code>) us
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">gr</span><span class="p">)</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="function">
+<dt id="lmfit.ci_report">
+<code class="descname">ci_report</code><span class="sig-paren">(</span><em>ci</em>, <em>with_offset=True</em>, <em>ndigits=5</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.ci_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>return text of a report for confidence intervals</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>with_offset</strong> : bool (default <cite>True</cite>)</p>
+<blockquote>
+<div><p>whether to subtract best value from all other values.</p>
+</div></blockquote>
+<p><strong>ndigits</strong> : int (default 5)</p>
+<blockquote>
+<div><p>number of significant digits to show</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">text of formatted report on confidence intervals.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
