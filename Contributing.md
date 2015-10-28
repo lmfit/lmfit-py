@@ -1,4 +1,3 @@
-
 ## Contributing Code
 
 We'd love your help, either as ideas, documentation, or code.  If you have a
@@ -28,13 +27,25 @@ inappropriate for the mailing list, but many questions are not Issues.  We
 will try our best to engage in all discussions, but we may simply close github
 Issues that are actually questions.
 
+## Provding an Example with Github Issues
+
+If you are reporting a bug with Github Issues, we expect a small, complete
+working example that illustrates the problem.  Yes, this forces you to
+invest some time in writing a careful example.  That is intentional.   If
+you need to read certain data or have code longer than a few pages, use a
+Github gist.
+
+Please understand that the pointo of the example script is to be *read*.
+We may not even run your example.  Please do not expect that we know much
+about your problem domain, or will read any example in enough detail to
+fully understand what you're trying to do without adequate explanation.
+State the problem, including what you result you think you should have
+gotten, and include what you got.  If you get a traceback, include the
+entire thing.
+
 ## Using IPython Notebooks to show examples
 
-IPython Notebooks are very useful for showing code snippets and outcomes, and
-are very good way to demonstrate a question or raise an issue.  Please know
-that we will *read* your notebook, but will probably not run it off-line.
-Also, please do not expect that we know much about your problem domain, or
-will read your notebook in so much detail as to fully understand what you're
-trying to do without adequate explanation.  State the problem, including what
-you result you think you should have gotten, and definitely include a
-conclusion.
+IPython Notebooks are very useful for showing code snippets and outcomes,
+and are very good way to demonstrate a question or raise an issue.  Please
+see the above about providing examples.  The notebook you provide will be
+*read* but will probably not be run.
