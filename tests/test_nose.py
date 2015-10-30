@@ -2,11 +2,12 @@
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
 from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
-                             MinimizerResult)
+                             MinimizerResult, _lnpost)
 from lmfit.lineshapes import gaussian
 import numpy as np
 from numpy import pi
-from numpy.testing import assert_, decorators, assert_raises
+from numpy.testing import (assert_, decorators, assert_raises,
+                           assert_almost_equal)
 import unittest
 import nose
 from nose import SkipTest
@@ -31,7 +32,7 @@ def test_simple():
     np.random.seed(1)
     x = np.linspace(0, 15, 301)
     data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
-            np.random.normal(size=len(x), scale=0.2) )
+            np.random.normal(size=len(x), scale=0.2))
 
     # define objective function: returns the array to be minimized
     def fcn2min(params, x, data):
@@ -123,7 +124,7 @@ def test_derive():
         model=a * np.exp(-b * x)+c
         if data is None:
             return model
-        return (model - data)
+        return model - data
 
     def dfunc(pars, x, data=None):
         a = pars['a'].value
@@ -159,7 +160,6 @@ def test_derive():
     min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data':data})
     out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
     fit2 = func(out2.params, x)
-
     
     print ('''Comparison of fit to exponential decay
     with and without analytic derivatives, to
@@ -221,7 +221,7 @@ def test_peakfit():
     fit_params.add('w2', expr='2.5*w1')
 
     myfit = Minimizer(residual, fit_params,
-                      fcn_args=(x,), fcn_kws={'data':data})
+                      fcn_args=(x,), fcn_kws={'data': data})
 
     myfit.prepare_fit()
 
@@ -333,7 +333,7 @@ class CommonMinimizerTest(unittest.TestCase):
         xmax = 250.0
         noise = np.random.normal(scale=0.7215, size=n)
         self.x = np.linspace(xmin, xmax, n)
-        data = self.residual(p_true, self.x) + noise
+        self.data = self.residual(p_true, self.x) + noise
 
         fit_params = Parameters()
         fit_params.add('amp', value=11.0, min=5, max=20)
@@ -342,8 +342,7 @@ class CommonMinimizerTest(unittest.TestCase):
         fit_params.add('decay', value=6.e-3, min=0, max=0.1)
         self.fit_params = fit_params
 
-        init = self.residual(fit_params, self.x)
-        self.mini = Minimizer(self.residual, fit_params, [self.x, data])
+        self.mini = Minimizer(self.residual, fit_params, [self.x, self.data])
 
     def residual(self, pars, x, data=None):
         amp = pars['amp'].value
@@ -356,7 +355,7 @@ class CommonMinimizerTest(unittest.TestCase):
         model = amp*np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
         if data is None:
             return model
-        return (model - data)
+        return model - data
         
     def test_diffev_bounds_check(self):
         # You need finite (min, max) for each parameter if you're using
@@ -386,7 +385,7 @@ class CommonMinimizerTest(unittest.TestCase):
         print(self.minimizer)
         out = self.mini.scalar_minimize(method=self.minimizer)
 
-        fit = self.residual(out.params, self.x)
+        self.residual(out.params, self.x)
 
         for name, par in out.params.items():
             nout = "%s:%s" % (name, ' '*(20-len(name)))
@@ -454,10 +453,10 @@ class CommonMinimizerTest(unittest.TestCase):
         # test mcmc output vs lm, some parameters not bounded
         self.fit_params['amp'].max = None
         # self.fit_params['amp'].min = None
-        out = self.mini.emcee(nwalkers=100, steps=200,
-                                      burn=50, thin=10)
+        out = self.mini.emcee(nwalkers=100, steps=300,
+                                      burn=100, thin=10)
 
-        check_paras(out.params, self.p_true, sig=5)
+        check_paras(out.params, self.p_true, sig=3)
 
     def test_emcee_init_with_chain(self):
         # can you initialise with a previous chain
@@ -484,10 +483,49 @@ class CommonMinimizerTest(unittest.TestCase):
         if not HAS_EMCEE:
             return True
 
-        out = self.mini.emcee(nwalkers=100, steps=5)
+        self.mini.emcee(nwalkers=100, steps=5)
+
+        # if you've run the sampler the Minimizer object should have a _lastpos
+        # attribute
+        assert_(hasattr(self.mini, '_lastpos'))
+
         # now try and re-use sampler
-        out2 = self.mini.emcee(steps = 10, reuse_sampler=True)
+        out2 = self.mini.emcee(steps=10, reuse_sampler=True)
         assert_(out2.chain.shape[1] == 15)
+
+        # you shouldn't be able to reuse the sampler if nvarys has changed.
+        self.mini.params['amp'].vary = False
+        assert_raises(ValueError, self.mini.emcee, reuse_sampler=True)
+
+    def test_emcee_lnpost(self):
+        # check ln likelihood is calculated correctly. It should be
+        # -0.5 * chi**2.
+        result = self.mini.minimize()
+
+        # obtain the numeric values
+        # note - in this example all the parameters are varied
+        fvars = np.array([par.value for par in result.params.values()])
+
+        # calculate the cost function with scaled values (parameters all have
+        # lower and upper bounds.
+        scaled_fvars = []
+        for par, fvar in zip(result.params.values(), fvars):
+            par.value = fvar
+            scaled_fvars.append(par.setup_bounds())
+
+        val = self.mini.penalty(np.array(scaled_fvars))
+
+        # calculate the log-likelihood value
+        bounds = np.array([(par.min, par.max)
+                           for par in result.params.values()])
+        val2 = _lnpost(fvars,
+                       self.residual,
+                       result.params,
+                       result.var_names,
+                       bounds,
+                       userargs=(self.x, self.data))
+
+        assert_almost_equal(val2, -0.5 * val)
 
     def test_emcee_output(self):
         # test mcmc output
@@ -500,10 +538,12 @@ class CommonMinimizerTest(unittest.TestCase):
         out = self.mini.emcee(nwalkers=10, steps=20, burn=5, thin=2)
         assert_(isinstance(out, MinimizerResult))
         assert_(isinstance(out.flatchain, DataFrame))
+
         # check that we can access the chains via parameter name
         assert_(out.flatchain['amp'].shape[0] == 80)
-        assert_(out.errorbars == True)
+        assert_(out.errorbars is True)
         assert_(np.isfinite(out.params['amp'].correl['period']))
+
         # the lnprob array should be the same as the chain size
         assert_(np.size(out.chain)//4 == np.size(out.lnprob))
 
@@ -529,7 +569,7 @@ class CommonMinimizerTest(unittest.TestCase):
         self.mini.userfcn = resid2
         np.random.seed(123456)
         out = self.mini.emcee(nwalkers=100, steps=200,
-                                      burn=50, thin=10)
+                              burn=50, thin=10)
         check_paras(out.params, self.p_true, sig=3)
 
 

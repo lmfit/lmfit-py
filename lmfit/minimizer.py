@@ -571,8 +571,8 @@ class Minimizer(object):
             it possesses an internal sampler attribute. You can continue to
             draw from the same sampler (retaining the chain history) if you set
             this option to `True`. Otherwise a new sampler is created. The
-            `nwalkers`, `ntemps` and `params` keywords are ignored with this
-            option.
+            `nwalkers`, `ntemps`, `pos`, and `params` keywords are ignored with
+            this option.
             **Important**: the Parameters used to create the sampler must not
             change in-between calls to `emcee`. Alteration of Parameters
             would include changed ``min``, ``max``, ``vary`` and ``expr``
@@ -671,15 +671,15 @@ class Minimizer(object):
         # determined from the previous sampling
         tparams = params
         if reuse_sampler:
-            if hasattr(self, 'sampler') is False:
+            if not hasattr(self, 'sampler') or not hasattr(self, '_lastpos'):
                 raise ValueError("You wanted to use an existing sampler, but"
                                  "it hasn't been created yet")
-            if len(self.sampler.chain.shape) == 3:
+            if len(self._lastpos.shape) == 2:
                 ntemps = 1
-                nwalkers = self.sampler.chain.shape[0]
-            elif len(self.sampler.chain.shape) == 4:
-                ntemps = self.sampler.chain.shape[0]
-                nwalkers = self.sampler.chain.shape[1]
+                nwalkers = self._lastpos.shape[0]
+            elif len(self._lastpos.shape) == 3:
+                ntemps = self._lastpos.shape[0]
+                nwalkers = self._lastpos.shape[1]
             tparams = None
 
         result = self.prepare_fit(params=tparams)
@@ -712,10 +712,6 @@ class Minimizer(object):
 
         self.nvarys = len(result.var_names)
 
-        # function arguments for the log-probability functions
-        lnprob_args = (self.userfcn, params, result.var_names, bounds)
-        lnprob_kwargs = {'userargs': self.userargs, 'userkws': self.userkws}
-
         # set up multiprocessing options for the samplers
         auto_pool = None
         sampler_kwargs = {}
@@ -725,12 +721,16 @@ class Minimizer(object):
         elif hasattr(workers, 'map'):
             sampler_kwargs['pool'] = workers
 
+        # function arguments for the log-probability functions
         # these values are sent to the log-probability functions by the sampler.
+        lnprob_args = (self.userfcn, params, result.var_names, bounds)
+        lnprob_kwargs = {'userargs': self.userargs, 'userkws': self.userkws}
+
         if ntemps > 1:
+            # the prior and likelihood function args and kwargs are the same
             sampler_kwargs['loglargs'] = lnprob_args
-            sampler_kwargs['logpargs'] = lnprob_args
             sampler_kwargs['loglkwargs'] = lnprob_kwargs
-            sampler_kwargs['logpkwargs'] = lnprob_kwargs
+            sampler_kwargs['logpargs'] = (bounds,)
         else:
             sampler_kwargs['args'] = lnprob_args
             sampler_kwargs['kwargs'] = lnprob_kwargs
@@ -740,8 +740,12 @@ class Minimizer(object):
             if auto_pool is not None:
                 self.sampler.pool = auto_pool
 
-            p0 = self.sampler.chain[..., -1, :]
+            p0 = self._lastpos
+            if p0.shape[-1] != self.nvarys:
+                raise ValueError("You cannot reuse the sampler if the number"
+                                 "of varying parameters has changed")
         elif ntemps > 1:
+            # Parallel Tempering
             # jitter the starting position by scaled Gaussian noise
             p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-4
             p0 *= var_arr
@@ -755,14 +759,16 @@ class Minimizer(object):
 
         # user supplies an initialisation position for the chain
         # If you try to run the sampler with p0 of a wrong size then you'll get
-        # a ValueError.
-        if pos is not None:
+        # a ValueError. Note, you can't initialise with a position if you are
+        # reusing the sampler.
+        if pos is not None and not reuse_sampler:
             tpos = np.asfarray(pos)
             if p0.shape == tpos.shape:
                 pass
             # trying to initialise with a previous chain
             elif (tpos.shape[0::2] == (nwalkers, self.nvarys)):
                 tpos = tpos[:, -1, :]
+            # initialising with a PTsampler chain.
             elif ntemps > 1 and tpos.ndim == 4:
                 tpos_shape = list(tpos.shape)
                 tpos_shape.pop(2)
@@ -775,6 +781,7 @@ class Minimizer(object):
 
         # now do a production run, sampling all the time
         output = self.sampler.run_mcmc(p0, steps)
+        self._lastpos = output[0]
 
         # discard the burn samples and thin
         chain = self.sampler.chain[..., burn::thin, :]
@@ -1016,8 +1023,7 @@ class Minimizer(object):
         return function(**kwargs)
 
 
-def _lnprior(theta, userfcn, params, var_names, bounds, userargs=(),
-            userkws=None):
+def _lnprior(theta, bounds):
     """
     Calculates an improper uniform log-prior probability
 
@@ -1025,18 +1031,9 @@ def _lnprior(theta, userfcn, params, var_names, bounds, userargs=(),
     ----------
     theta : sequence
         float parameter values (only those being varied)
-    userfcn : callable
-        User objective function
-    params : lmfit.Parameters
-        The entire set of Parameters
-    var_names : list
-        The names of the parameters that are varying
     bounds : np.ndarray
-        Lower and upper bounds of parameters. Has shape (nvarys, 2).
-    userargs : tuple, optional
-        Extra positional arguments required for user objective function
-    userkws : dict, optional
-        Extra keyword arguments required for user objective function
+        Lower and upper bounds of parameters that are varying.
+        Has shape (nvarys, 2).
 
     Returns
     -------
@@ -1091,6 +1088,9 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     userkwargs = {}
     if userkws is not None:
         userkwargs = userkws
+
+    # update the constraints
+    params.update_constraints()
 
     # now calculate the log-likelihood
     out = userfcn(params, *userargs, **userkwargs)
