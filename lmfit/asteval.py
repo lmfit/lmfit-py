@@ -622,7 +622,7 @@ class Interpreter:
 
     def on_call(self, node):
         "function execution"
-        #  ('func', 'args', 'keywords', and 'starargs', 'kwargs' in py < 3.5)
+        #  ('func', 'args', 'keywords'. Py<3.5 has 'starargs' and 'kwargs' too)
         func = self.run(node.func)
         if not hasattr(func, '__call__') and not isinstance(func, type):
             msg = "'%s' is not callable!!" % (func)
