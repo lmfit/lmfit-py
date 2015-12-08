@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #<examples/model_doc2.py>
-from numpy import sqrt, pi, exp, linspace, loadtxt
+from numpy import sqrt, pi, exp, loadtxt
 from lmfit import Model
 
 import matplotlib.pyplot as plt

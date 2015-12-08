@@ -622,25 +622,27 @@ class Interpreter:
 
     def on_call(self, node):
         "function execution"
-        #  ('func', 'args', 'keywords', 'starargs', 'kwargs')
+        #  ('func', 'args', 'keywords'. Py<3.5 has 'starargs' and 'kwargs' too)
         func = self.run(node.func)
         if not hasattr(func, '__call__') and not isinstance(func, type):
             msg = "'%s' is not callable!!" % (func)
             self.raise_exception(node, exc=TypeError, msg=msg)
 
         args = [self.run(targ) for targ in node.args]
-        if node.starargs is not None:
-            args = args + self.run(node.starargs)
+        starargs = getattr(node, 'starargs', None)
+        if starargs is not None:
+            args = args + self.run(starargs)
 
         keywords = {}
         for key in node.keywords:
             if not isinstance(key, ast.keyword):
                 msg = "keyword error in function call '%s'" % (func)
                 self.raise_exception(node, msg=msg)
-
             keywords[key.arg] = self.run(key.value)
-        if node.kwargs is not None:
-            keywords.update(self.run(node.kwargs))
+
+        kwargs = getattr(node, 'kwargs', None)
+        if kwargs is not None:
+            keywords.update(self.run(kwargs))
 
         try:
             return func(*args, **keywords)
