@@ -7,6 +7,7 @@ python:
     - 2.7
     - 3.3
     - 3.4
+    - 3.5
 
 before_install:
     - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
@@ -18,7 +19,7 @@ before_install:
     - conda info -a
 
 install:
-    - conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib dateutil nose
+    - conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib nose
     - source activate test_env
     - python setup.py install
 
