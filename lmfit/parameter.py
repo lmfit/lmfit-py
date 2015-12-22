@@ -141,7 +141,9 @@ class Parameters(OrderedDict):
         Update all constrained parameters, checking that dependencies are
         evaluated as needed.
         """
-        _updated = [name for name,par in self.items() if par._expr is None]
+        requires_update = {name for name, par in self.items()
+                           if par._expr is not None}
+        updated_tracker = set(requires_update)
 
         def _update_param(name):
             """
@@ -150,24 +152,17 @@ class Parameters(OrderedDict):
             this first updates (recursively) all parameters on which
             the parameter depends (using the 'deps' field).
             """
-            # Has this param already been updated?
-            if name in _updated:
-                return
             par = self.__getitem__(name)
             if par._expr_eval is None:
                 par._expr_eval = self._asteval
-            if par._expr is not None:
-                par.expr = par._expr
-            if par._expr_ast is not None:
-                for dep in par._expr_deps:
-                    if dep in self.keys():
-                        _update_param(dep)
+            for dep in par._expr_deps:
+                if dep in updated_tracker:
+                    _update_param(dep)
             self._asteval.symtable[name] = par.value
-            _updated.append(name)
+            updated_tracker.discard(name)
 
-        for name in self.keys():
-            if name not in _updated:
-                _update_param(name)
+        for name in requires_update:
+            _update_param(name)
 
     def pretty_repr(self, oneline=False):
         if oneline:
