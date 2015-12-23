@@ -1,6 +1,6 @@
 from __future__ import print_function
 from lmfit import Parameters, Parameter
-from numpy.testing import assert_, assert_almost_equal
+from numpy.testing import assert_, assert_almost_equal, assert_equal
 import unittest
 from copy import deepcopy
 import numpy as np
@@ -63,6 +63,9 @@ class TestParameters(unittest.TestCase):
 
         p['a'] = Parameter('a', 10, True)
         p['b'] = Parameter('b', 10, True, 0, 20)
+
+        assert_equal(p['b'].min, 0)
+        assert_equal(p['b'].max, 20)
 
         p['a'].expr = '2 * b'
         assert_almost_equal(p['a'].value, 20)
