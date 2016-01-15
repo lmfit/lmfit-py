@@ -2,7 +2,7 @@
 Parameter class
 """
 from __future__ import division
-from numpy import arcsin, cos, sin, sqrt, inf, nan
+from numpy import arcsin, cos, sin, sqrt, inf, nan, isfinite
 import json
 from copy import deepcopy
 try:
@@ -20,6 +20,42 @@ def check_ast_errors(expr_eval):
     """check for errors derived from asteval"""
     if len(expr_eval.error) > 0:
         expr_eval.raise_exception(None)
+
+
+def isclose(x, y, rtol=1e-5, atol=1e-8):
+    """
+    The truth whether two numbers are the same, within an absolute and
+    relative tolerance.
+
+    i.e. abs(`x` - `y`) <= (`atol` + `rtol` * absolute(`y`))
+
+    Parameters
+    ----------
+    x, y : float
+        Input values
+    rtol : float
+        The relative tolerance parameter (see Notes).
+    atol : float
+        The absolute tolerance parameter (see Notes).
+
+    Returns
+    -------
+    y : bool
+        Are `x` and `x` are equal within tolerance?
+    """
+    def within_tol(x, y, atol, rtol):
+        return abs(x - y) <= atol + rtol * abs(y)
+
+    xfin = isfinite(x)
+    yfin = isfinite(y)
+
+    # both are finite
+    if xfin and yfin:
+        return within_tol(x, y, atol, rtol)
+    elif x == y:
+        return True
+    else:
+        return False
 
 
 class Parameters(OrderedDict):
@@ -435,7 +471,7 @@ class Parameter(object):
         self._max = val
         if self.min > self.max:
             self._min, self._max = self.max, self.min
-        if abs((1.0 * self.max - self.min) / max(abs(self.max), abs(self.min), 1.e-13)) < 1.e-13:
+        if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
             raise ValueError("Parameter '%s' has min == max" % self.name)
 
     def get_min(self):
@@ -447,7 +483,7 @@ class Parameter(object):
         self._min = val
         if self.min > self.max:
             self._min, self._max = self.max, self.min
-        if abs((1.0 * self.max - self.min) / max(abs(self.max), abs(self.min), 1.e-13)) < 1.e-13:
+        if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
             raise ValueError("Parameter '%s' has min == max" % self.name)
 
     min = property(get_min, set_min)
@@ -577,9 +613,12 @@ class Parameter(object):
 
     @value.setter
     def value(self, val):
-        "Set the numerical Parameter value."
+        """
+        Set the numerical Parameter value.
+        """
         self._val = val
-        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
+        if not hasattr(self, '_expr_eval'):
+            self._expr_eval = None
         if self._expr_eval is not None:
             self._expr_eval.symtable[self.name] = val
 
@@ -604,8 +643,10 @@ class Parameter(object):
         self._expr = val
         if val is not None:
             self.vary = False
-        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
-        if val is None: self._expr_ast = None
+        if not hasattr(self, '_expr_eval'):
+            self._expr_eval = None
+        if val is None:
+            self._expr_ast = None
         if val is not None and self._expr_eval is not None:
             self._expr_ast = self._expr_eval.parse(val)
             check_ast_errors(self._expr_eval)
