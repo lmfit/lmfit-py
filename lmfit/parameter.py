@@ -120,19 +120,6 @@ class Parameters(OrderedDict):
         par._expr_eval = self._asteval
         self._asteval.symtable[key] = par.value
 
-    def __reduce__(self):
-        """
-        Required to pickle a Parameters instance. pickle does not know how
-        to deal with the asteval machinery.
-        """
-        items = [self[k] for k in self]
-        return self.__class__, (), items
-
-    def __setstate__(self, state):
-        """state is list of parameters"""
-        for param in state:
-            self.__setitem__(param.name, param)
-
     def __add__(self, other):
         """
         Add Parameters objects
