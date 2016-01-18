@@ -2,7 +2,7 @@
 Parameter class
 """
 from __future__ import division
-from numpy import arcsin, cos, sin, sqrt, inf, nan
+from numpy import arcsin, cos, sin, sqrt, inf, nan, isfinite
 import json
 from copy import deepcopy
 try:
@@ -20,6 +20,42 @@ def check_ast_errors(expr_eval):
     """check for errors derived from asteval"""
     if len(expr_eval.error) > 0:
         expr_eval.raise_exception(None)
+
+
+def isclose(x, y, rtol=1e-5, atol=1e-8):
+    """
+    The truth whether two numbers are the same, within an absolute and
+    relative tolerance.
+
+    i.e. abs(`x` - `y`) <= (`atol` + `rtol` * absolute(`y`))
+
+    Parameters
+    ----------
+    x, y : float
+        Input values
+    rtol : float
+        The relative tolerance parameter (see Notes).
+    atol : float
+        The absolute tolerance parameter (see Notes).
+
+    Returns
+    -------
+    y : bool
+        Are `x` and `x` are equal within tolerance?
+    """
+    def within_tol(x, y, atol, rtol):
+        return abs(x - y) <= atol + rtol * abs(y)
+
+    xfin = isfinite(x)
+    yfin = isfinite(y)
+
+    # both are finite
+    if xfin and yfin:
+        return within_tol(x, y, atol, rtol)
+    elif x == y:
+        return True
+    else:
+        return False
 
 
 class Parameters(OrderedDict):
@@ -330,9 +366,9 @@ class Parameter(object):
     vary : bool
         Whether the Parameter is fixed during a fit.
     min : float
-        Lower bound for value (None = no lower bound).
+        Lower bound for value (None or -inf means no lower bound).
     max : float
-        Upper bound for value (None = no upper bound).
+        Upper bound for value (None or inf means no upper bound).
     expr : str
         An expression specifying constraints for the parameter.
     stderr : float
@@ -342,7 +378,7 @@ class Parameter(object):
         Of the form `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
     """
     def __init__(self, name=None, value=None, vary=True,
-                 min=None, max=None, expr=None):
+                 min=-inf, max=inf, expr=None):
         """
         Parameters
         ----------
@@ -353,9 +389,9 @@ class Parameter(object):
         vary : bool, optional
             Whether the Parameter is fixed during a fit.
         min : float, optional
-            Lower bound for value (None = no lower bound).
+            Lower bound for value (None or -inf means no lower bound).
         max : float, optional
-            Upper bound for value (None = no upper bound).
+            Upper bound for value (None or inf means no upper bound).
         expr : str, optional
             Mathematical expression used to constrain the value during the fit.
         """
@@ -363,6 +399,8 @@ class Parameter(object):
         self._val = value
         self.user_value = value
         self.init_value = value
+        self._min = -inf
+        self._max = inf
         self.min = min
         self.max = max
         self.vary = vary
@@ -419,6 +457,33 @@ class Parameter(object):
             self._val = self.max
         self.setup_bounds()
 
+    def get_max(self):
+        return self._max
+
+    def set_max(self, val):
+        if val is None:
+            val = inf
+        self._max = val
+        if self.min > self.max:
+            self._min, self._max = self.max, self.min
+        if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
+            raise ValueError("Parameter '%s' has min == max" % self.name)
+
+    def get_min(self):
+        return self._min
+
+    def set_min(self, val):
+        if val is None:
+            val = -inf
+        self._min = val
+        if self.min > self.max:
+            self._min, self._max = self.max, self.min
+        if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
+            raise ValueError("Parameter '%s' has min == max" % self.name)
+
+    min = property(get_min, set_min)
+    max = property(get_max, set_max)
+
     def __getstate__(self):
         """get state for pickle"""
         return (self.name, self.value, self.vary, self.expr, self.min,
@@ -426,8 +491,8 @@ class Parameter(object):
 
     def __setstate__(self, state):
         """set state for pickle"""
-        (self.name, self.value, self.vary, self.expr, self.min,
-         self.max, self.stderr, self.correl, self.init_value) = state
+        (self.name, self.value, self.vary, self.expr, self._min,
+         self._max, self.stderr, self.correl, self.init_value) = state
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
@@ -499,7 +564,6 @@ class Parameter(object):
         else:
             return cos(val) * (self.max - self.min) / 2.0
 
-
     def _getval(self):
         """get value, with bounds applied"""
 
@@ -517,27 +581,16 @@ class Parameter(object):
                 pass
         if not self.vary and self._expr is None:
             return self._val
-        if not hasattr(self, '_expr_eval'):
-            self._expr_eval = None
-        if not hasattr(self, '_expr_ast'):
-            self._expr_ast = None
-        if self._expr_ast is None and self._expr is not None:
-            self.__set_expression(self._expr)
 
-        if self._expr_ast is not None and self._expr_eval is not None:
-            if not self._delay_asteval:
-                self.value = self._expr_eval(self._expr_ast)
-                check_ast_errors(self._expr_eval)
+        if self._expr is not None:
+            if self._expr_ast is None:
+                self.__set_expression(self._expr)
 
-        if self.min is None:
-            self.min = -inf
-        if self.max is None:
-            self.max = inf
-        if self.max < self.min:
-            self.max, self.min = self.min, self.max
-        if (abs((1.0 * self.max - self.min)/
-                max(abs(self.max), abs(self.min), 1.e-13)) < 1.e-13):
-            raise ValueError("Parameter '%s' has min == max" % self.name)
+            if self._expr_eval is not None:
+                if not self._delay_asteval:
+                    self.value = self._expr_eval(self._expr_ast)
+                    check_ast_errors(self._expr_eval)
+
         try:
             self.value = max(self.min, min(self._val, self.max))
         except(TypeError, ValueError):
@@ -555,9 +608,12 @@ class Parameter(object):
 
     @value.setter
     def value(self, val):
-        "Set the numerical Parameter value."
+        """
+        Set the numerical Parameter value.
+        """
         self._val = val
-        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
+        if not hasattr(self, '_expr_eval'):
+            self._expr_eval = None
         if self._expr_eval is not None:
             self._expr_eval.symtable[self.name] = val
 
@@ -582,8 +638,10 @@ class Parameter(object):
         self._expr = val
         if val is not None:
             self.vary = False
-        if not hasattr(self, '_expr_eval'):  self._expr_eval = None
-        if val is None: self._expr_ast = None
+        if not hasattr(self, '_expr_eval'):
+            self._expr_eval = None
+        if val is None:
+            self._expr_ast = None
         if val is not None and self._expr_eval is not None:
             self._expr_ast = self._expr_eval.parse(val)
             check_ast_errors(self._expr_eval)

@@ -1,6 +1,7 @@
 from __future__ import print_function
 from lmfit import Parameters, Parameter
-from numpy.testing import assert_, assert_almost_equal
+from lmfit.parameter import isclose
+from numpy.testing import assert_, assert_almost_equal, assert_equal
 import unittest
 from copy import deepcopy
 import numpy as np
@@ -64,6 +65,9 @@ class TestParameters(unittest.TestCase):
         p['a'] = Parameter('a', 10, True)
         p['b'] = Parameter('b', 10, True, 0, 20)
 
+        assert_equal(p['b'].min, 0)
+        assert_equal(p['b'].max, 20)
+
         p['a'].expr = '2 * b'
         assert_almost_equal(p['a'].value, 20)
 
@@ -101,6 +105,15 @@ class TestParameters(unittest.TestCase):
 
         # now test if the asteval machinery survived
         assert_(q._asteval.symtable['abc'] == '2 * 3.142')
+
+    def test_isclose(self):
+        assert_(isclose(1., 1+1e-5, atol=1e-4, rtol=0))
+        assert_(not isclose(1., 1+1e-5, atol=1e-6, rtol=0))
+        assert_(isclose(1e10, 1.00001e10, rtol=1e-5, atol=1e-8))
+        assert_(not isclose(0, np.inf))
+        assert_(not isclose(-np.inf, np.inf))
+        assert_(isclose(np.inf, np.inf))
+        assert_(not isclose(np.nan, np.nan))
 
 
 if __name__ == '__main__':
