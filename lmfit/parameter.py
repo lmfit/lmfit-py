@@ -121,7 +121,9 @@ class Parameters(OrderedDict):
         self._asteval.symtable[key] = par.value
 
     def __add__(self, other):
-        "add Parameters objects"
+        """
+        Add Parameters objects
+        """
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         out = deepcopy(self)
@@ -131,7 +133,7 @@ class Parameters(OrderedDict):
 
     def __iadd__(self, other):
         """
-        add/assign Parameters objects
+        Add/assign Parameters objects
         """
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
@@ -445,7 +447,7 @@ class Parameter(object):
 
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
-        #_val is None means - infinity.
+        # _val is None means - infinity.
         if self._val is not None:
             if self.max is not None and self._val > self.max:
                 self._val = self.max
@@ -505,13 +507,13 @@ class Parameter(object):
             s.append("'%s'" % self.name)
         sval = repr(self._getval())
         if not self.vary and self._expr is None:
-            sval = "value=%s (fixed)" % (sval)
+            sval = "value=%s (fixed)" % sval
         elif self.stderr is not None:
             sval = "value=%s +/- %.3g" % (sval, self.stderr)
         s.append(sval)
         s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
         if self._expr is not None:
-            s.append("expr='%s'" % (self.expr))
+            s.append("expr='%s'" % self.expr)
         return "<Parameter %s>" % ', '.join(s)
 
     def setup_bounds(self):
@@ -535,17 +537,17 @@ class Parameter(object):
         """
         if self.min in (None, -inf) and self.max in (None, inf):
             self.from_internal = lambda val: val
-            _val  = self._val
+            _val = self._val
         elif self.max in (None, inf):
             self.from_internal = lambda val: self.min - 1.0 + sqrt(val*val + 1)
-            _val  = sqrt((self._val - self.min + 1.0)**2 - 1)
+            _val = sqrt((self._val - self.min + 1.0)**2 - 1)
         elif self.min in (None, -inf):
             self.from_internal = lambda val: self.max + 1 - sqrt(val*val + 1)
-            _val  = sqrt((self.max - self._val + 1.0)**2 - 1)
+            _val = sqrt((self.max - self._val + 1.0)**2 - 1)
         else:
             self.from_internal = lambda val: self.min + (sin(val) + 1) * \
                                  (self.max - self.min) / 2.0
-            _val  = arcsin(2*(self._val - self.min)/(self.max - self.min) - 1)
+            _val = arcsin(2*(self._val - self.min)/(self.max - self.min) - 1)
         return _val
 
     def scale_gradient(self, val):
@@ -598,12 +600,12 @@ class Parameter(object):
         return self._val
 
     def set_expr_eval(self, evaluator):
-        "set expression evaluator instance"
+        """set expression evaluator instance"""
         self._expr_eval = evaluator
 
     @property
     def value(self):
-        "The numerical value of the Parameter, with bounds applied"
+        """The numerical value of the Parameter, with bounds applied"""
         return self._getval()
 
     @value.setter
@@ -648,131 +650,133 @@ class Parameter(object):
             self._expr_deps = get_ast_names(self._expr_ast)
 
     def __str__(self):
-        "string"
+        """string"""
         return self.__repr__()
 
     def __abs__(self):
-        "abs"
+        """abs"""
         return abs(self._getval())
 
     def __neg__(self):
-        "neg"
+        """neg"""
         return -self._getval()
 
     def __pos__(self):
-        "positive"
+        """positive"""
         return +self._getval()
 
     def __nonzero__(self):
-        "not zero"
+        """not zero"""
         return self._getval() != 0
 
     def __int__(self):
-        "int"
+        """int"""
         return int(self._getval())
 
     def __long__(self):
-        "long"
+        """long"""
         return long(self._getval())
 
     def __float__(self):
-        "float"
+        """float"""
         return float(self._getval())
 
     def __trunc__(self):
-        "trunc"
+        """trunc"""
         return self._getval().__trunc__()
 
     def __add__(self, other):
-        "+"
+        """+"""
         return self._getval() + other
 
     def __sub__(self, other):
-        "-"
+        """-"""
         return self._getval() - other
 
     def __div__(self, other):
-        "/"
+        """/"""
         return self._getval() / other
     __truediv__ = __div__
 
     def __floordiv__(self, other):
-        "//"
+        """//"""
         return self._getval() // other
 
     def __divmod__(self, other):
-        "divmod"
+        """divmod"""
         return divmod(self._getval(), other)
 
     def __mod__(self, other):
-        "%"
+        """%"""
         return self._getval() % other
 
     def __mul__(self, other):
-        "*"
+        """*"""
         return self._getval() * other
 
     def __pow__(self, other):
-        "**"
+        """**"""
         return self._getval() ** other
 
     def __gt__(self, other):
-        ">"
+        """>"""
         return self._getval() > other
 
     def __ge__(self, other):
-        ">="
+        """>="""
         return self._getval() >= other
 
     def __le__(self, other):
-        "<="
+        """<="""
         return self._getval() <= other
 
     def __lt__(self, other):
-        "<"
+        """<"""
         return self._getval() < other
 
     def __eq__(self, other):
-        "=="
+        """=="""
         return self._getval() == other
+
     def __ne__(self, other):
-        "!="
+        """!="""
         return self._getval() != other
 
     def __radd__(self, other):
-        "+ (right)"
+        """+ (right)"""
         return other + self._getval()
 
     def __rdiv__(self, other):
-        "/ (right)"
+        """/ (right)"""
         return other / self._getval()
     __rtruediv__ = __rdiv__
 
     def __rdivmod__(self, other):
-        "divmod (right)"
+        """divmod (right)"""
         return divmod(other, self._getval())
 
     def __rfloordiv__(self, other):
-        "// (right)"
+        """// (right)"""
         return other // self._getval()
 
     def __rmod__(self, other):
-        "% (right)"
+        """% (right)"""
         return other % self._getval()
 
     def __rmul__(self, other):
-        "* (right)"
+        """* (right)"""
         return other * self._getval()
 
     def __rpow__(self, other):
-        "** (right)"
+        """** (right)"""
         return other ** self._getval()
 
     def __rsub__(self, other):
-        "- (right)"
+        """- (right)"""
         return other - self._getval()
 
+
 def isParameter(x):
-    "test for Parameter-ness"
+    """Test for Parameter-ness"""
     return (isinstance(x, Parameter) or
             x.__class__.__name__ == 'Parameter')

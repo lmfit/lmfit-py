@@ -19,8 +19,6 @@ from numpy.dual import inv
 from numpy.linalg import LinAlgError
 
 from scipy.optimize import leastsq as scipy_leastsq
-from scipy.optimize import fmin as scipy_fmin
-from scipy.optimize.lbfgsb import fmin_l_bfgs_b as scipy_lbfgsb
 
 # differential_evolution is only present in scipy >= 0.15
 try:
@@ -36,7 +34,6 @@ try:
 except ImportError:
     pass
 
-from .asteval import Interpreter
 from .parameter import Parameter, Parameters
 
 # use locally modified version of uncertainties package
@@ -54,7 +51,7 @@ def asteval_with_uncertainties(*vals, **kwargs):
     _pars = kwargs.get('_pars', None)
     _names = kwargs.get('_names', None)
     _asteval = _pars._asteval
-    if (_obj is None or  _pars is None or _names is None or
+    if (_obj is None or _pars is None or _names is None or
         _asteval is None or _obj._expr_ast is None):
         return 0
     for val, name in zip(vals, _names):
@@ -62,6 +59,7 @@ def asteval_with_uncertainties(*vals, **kwargs):
     return _asteval.eval(_obj._expr_ast)
 
 wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
+
 
 def eval_stderr(obj, uvars, _names, _pars):
     """evaluate uncertainty and set .stderr for a parameter `obj`
@@ -88,7 +86,7 @@ class MinimizerException(Exception):
         self.msg = msg
 
     def __str__(self):
-        return "\n%s" % (self.msg)
+        return "\n%s" % self.msg
 
 
 def _differential_evolution(func, x0, **kwds):
@@ -112,7 +110,7 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'bfgs': 'BFGS',
                   'newton': 'Newton-CG',
                   'lbfgsb': 'L-BFGS-B',
-                  'l-bfgsb':'L-BFGS-B',
+                  'l-bfgsb': 'L-BFGS-B',
                   'tnc': 'TNC',
                   'cobyla': 'COBYLA',
                   'slsqp': 'SLSQP',
@@ -144,6 +142,7 @@ class MinimizerResult(object):
     def __init__(self, **kws):
         for key, val in kws.items():
             setattr(self, key, val)
+
 
 class Minimizer(object):
     """A general minimizer for curve fitting"""
@@ -252,7 +251,7 @@ class Minimizer(object):
         params = self.result.params
         for name, val in zip(self.result.var_names, fvars):
             params[name].value = params[name].from_internal(val)
-        self.result.nfev = self.result.nfev + 1
+        self.result.nfev += 1
 
         params.update_constraints()
         out = self.userfcn(params, *self.userargs, **self.userkws)
@@ -271,14 +270,14 @@ class Minimizer(object):
         modified 06-29-2015 M Newville to apply gradient scaling
                for bounded variables (thanks to JJ Helmus, N Mayorov)
         """
-        pars  = self.result.params
+        pars = self.result.params
         grad_scale = ones_like(fvars)
         for ivar, name in enumerate(self.result.var_names):
             val = fvars[ivar]
             pars[name].value = pars[name].from_internal(val)
             grad_scale[ivar] = pars[name].scale_gradient(val)
 
-        self.result.nfev = self.result.nfev + 1
+        self.result.nfev += 1
         pars.update_constraints()
         # compute the jacobian for "internal" unbounded variables,
         # the rescale for bounded "external" variables.
@@ -286,7 +285,7 @@ class Minimizer(object):
         if self.col_deriv:
             jac = (jac.transpose()*grad_scale).transpose()
         else:
-            jac = jac*grad_scale
+            jac *= grad_scale
         return jac
 
     def penalty(self, fvars):
@@ -333,7 +332,7 @@ class Minimizer(object):
         # determine which parameters are actually variables
         # and which are defined expressions.
 
-        result.var_names = [] # note that this *does* belong to self...
+        result.var_names = []  # note that this *does* belong to self...
         result.init_vals = []
         result.params.update_constraints()
         result.nfev = 0
@@ -377,7 +376,6 @@ class Minimizer(object):
 
         """
         raise NotImplementedError("use scalar_minimize(method='L-BFGS-B')")
-
 
     @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
                        'and method=\'Nelder-Mead\' instead')
@@ -439,7 +437,7 @@ class Minimizer(object):
             raise NotImplementedError
 
         result = self.prepare_fit(params=params)
-        vars   = result.init_vals
+        vars = result.init_vals
         params = result.params
 
         fmin_kws = dict(method=method,
@@ -526,7 +524,7 @@ class Minimizer(object):
             True if fit was successful, False if not.
         """
         result = self.prepare_fit(params=params)
-        vars   = result.init_vals
+        vars = result.init_vals
         nvars = len(vars)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
                      gtol=1.e-7, maxfev=2000*(nvars+1), Dfun=None)
@@ -628,7 +626,6 @@ class Minimizer(object):
                 except:
                     result.errorbars = False
 
-            uvars = None
             if has_expr:
                 # uncertainties on constrained parameters:
                 #   get values with uncertainties (including correlations),
@@ -647,7 +644,7 @@ class Minimizer(object):
                         params[nam].value = v.nominal_value
 
         if not result.errorbars:
-            result.message = '%s. Could not estimate error-bars'% result.message
+            result.message = '%s. Could not estimate error-bars' % result.message
 
         np.seterr(**orig_warn_settings)
         return result
@@ -704,6 +701,7 @@ class Minimizer(object):
         elif user_method.startswith('lbfgsb'):
             function = self.lbfgsb
         return function(**kwargs)
+
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, iter_cb=None, **fit_kws):
