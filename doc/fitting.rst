@@ -572,7 +572,7 @@ The Minimizer object has a few public methods:
 
 
 
-.. method:: emcee(params=None, steps=1000, nwalkers=100, burn=0, thin=1, ntemps=1, pos=None, reuse_sampler=False)
+.. method:: emcee(params=None, steps=1000, nwalkers=100, burn=0, thin=1, ntemps=1, pos=None, reuse_sampler=False, workers=1, is_weighted=True)
 
   Bayesian sampling of the posterior distribution for the parameters using the `emcee`
   Markov Chain Monte Carlo package. The method assumes that the prior is Uniform. You need
@@ -626,6 +626,20 @@ The Minimizer object has a few public methods:
             to calculate, or if there are a large number of objective
             evaluations per step (`ntemps * nwalkers * nvarys`).
   :type workers: int or Pool-like
+  :param is_weighted: Has your objective function been weighted by measurement
+            uncertainties? If `is_weighted is True` then your objective
+            function is assumed to return residuals that have been divided by
+            the true measurement uncertainty `(data - model) / sigma`. If
+            `is_weighted is False` then the objective function is assumed to
+            return unweighted residuals, `data - model`. In this case `emcee`
+            will employ a positive measurement uncertainty during the sampling.
+            This measurement uncertainty will be present in the output params
+            and output chain with the name `__lnsigma`. A side effect of this
+            is that you cannot use this parameter name yourself.
+            **Important** this parameter only has any effect if your objective
+            function returns an array. If your objective function returns a
+            float, then this parameter is ignored. See Notes for more details.
+  :type is_weighted: bool
 
   :return: :class:`MinimizerResult` object containing updated params, statistics,
             etc. The :class:`MinimizerResult` also contains the ``chain``,
@@ -665,29 +679,37 @@ The Minimizer object has a few public methods:
     \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{\left(g_n(F_{true}) - D_n \right)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
 
   The first summand in the square brackets represents the residual for a
-  given datapoint. This term represents :math:`\chi^2` when summed over
-  all datapoints.
-  The objective function used to create :class:`Minimizer` should return
-  :math:`\ln p(F_{true} | D)`. However, since the in-built log-prior term
-  is zero, the objective function can just return the log-likelihood
-  (unless you wish to create a non-uniform prior). If a negative float
-  value is returned by the objective function it's assumed to be
-  :math:`\ln p(F_{true} | D)`, the posterior probability. If a positive
-  float value is returned then the value is assumed to be :math:`\chi^2`.
-  The log-likelihood is then calculated as :math:`-0.5 * \chi^2`.
+  given datapoint (:math:`g` being the generative model) . This term
+  represents :math:`\chi^2` when summed over all datapoints.
+  Ideally the objective function used to create :class:`lmfit.Minimizer` should
+  return the log-posterior probability, :math:`\ln p(F_{true} | D)`.
+  However, since the in-built log-prior term is zero, the objective
+  function can also just return the log-likelihood, unless you wish to
+  create a non-uniform prior.
 
-  However, the default behaviour of most objective functions is to return
-  a vector of residuals. Therefore, if your objective function, `fcn`,
-  returns a vector, `res`, then the vector is assumed to contain the
-  residuals. The log-likelihood (and log-posterior probability) is then
-  calculated as: `-0.5 * np.sum(res **2)`. However, this ignores the
-  second summand in the square brackets. Consequently, in order to
-  calculate a fully correct log-posterior probability value your objective
-  function should return a single value.
-  Marginalisation over a nuisance parameter (such as incorrectly
-  estimated data uncertainties, `s_n`) can be achieved by including such
-  parameters in a :class:`Parameters` instance and suitable inclusion in the
-  objective function.
+  If a negative float value is returned by the objective function this
+  value is assumed to be the log-posterior probability.
+
+  If a positive float value is returned then the value is assumed to be
+  :math:`\chi^2`. The posterior probability is then calculated as
+  :math:`-0.5 * \chi^2`.
+
+  However, the default behaviour of many objective functions is to return
+  a vector of (possibly weighted) residuals. Therefore, if your objective
+  function, `fcn`, returns a vector, `res`, then the vector is assumed to
+  contain the residuals. If `is_weighted is True` then your residuals are
+  assumed to be correctly weighted by the standard deviation of the data
+  points (`res = (data - model) / sigma`) and the log-likelihood
+  (and log-posterior probability) is calculated as:
+  `-0.5 * np.sum(res **2)`. This ignores the second summand in the square
+  brackets. Consequently, in order to calculate a fully correct
+  log-posterior probability value your objective function should return a
+  single value. If `is_weighted is False` then the data uncertainty,
+  :math:`s_n`, will be treated as a nuisance parameter and will be marginalised
+  out. This is achieved by employing a strictly positive uncertainty
+  (homoscedasticity) for each data point, :math:`s_n=exp(\_\_lnsigma)`.
+  `__lnsigma` will be present in `MinimizerResult.params`, as well as
+  `Minimizer.chain`, `nvarys` will also be increased by one.
 
   .. [1] http://dan.iel.fm/emcee/current/user/line/
 
