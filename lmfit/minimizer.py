@@ -531,7 +531,8 @@ class Minimizer(object):
         return result
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
-              ntemps=1, pos=None, reuse_sampler=False, workers=1):
+              ntemps=1, pos=None, reuse_sampler=False, workers=1,
+              is_weighted=True):
         """
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
@@ -565,10 +566,12 @@ class Minimizer(object):
             then `pos.shape` should be `(nwalkers, nvarys)`. Otherwise,
             `(ntemps, nwalkers, nvarys)`. You can also initialise using a
             previous chain that had the same `ntemps`, `nwalkers` and
-            `nvarys`.
+            `nvarys`. Note that `nvarys` may be one larger than you expect it
+            to be if your `userfcn` returns an array and `is_weighted is
+            False`.
         reuse_sampler : bool, optional
             If you have already run `emcee` on a given `Minimizer` object then
-            it possesses an internal sampler attribute. You can continue to
+            it possesses an internal ``sampler`` attribute. You can continue to
             draw from the same sampler (retaining the chain history) if you set
             this option to `True`. Otherwise a new sampler is created. The
             `nwalkers`, `ntemps`, `pos`, and `params` keywords are ignored with
@@ -582,7 +585,7 @@ class Minimizer(object):
         workers : Pool-like or int, optional
             For parallelization of sampling.  It can be any Pool-like object
             with a map method that follows the same calling sequence as the
-            built-in map function. If int is given as the argument, then a
+            built-in `map` function. If int is given as the argument, then a
             multiprocessing-based pool is spawned internally with the
             corresponding number of parallel processes. 'mpi4py'-based
             parallelization and 'joblib'-based parallelization pools can also
@@ -590,6 +593,20 @@ class Minimizer(object):
             only be worth parallelising if the objective function is expensive
             to calculate, or if there are a large number of objective
             evaluations per step (`ntemps * nwalkers * nvarys`).
+        is_weighted : bool, optional
+            Has your objective function been weighted by measurement
+            uncertainties? If `is_weighted is True` then your objective
+            function is assumed to return residuals that have been divided by
+            the true measurement uncertainty `(data - model) / sigma`. If
+            `is_weighted is False` then the objective function is assumed to
+            return unweighted residuals, `data - model`. In this case `emcee`
+            will employ a positive measurement uncertainty during the sampling.
+            This measurement uncertainty will be present in the output params
+            and output chain with the name `__lnsigma`. A side effect of this
+            is that you cannot use this parameter name yourself.
+            **Important** this parameter only has any effect if your objective
+            function returns an array. If your objective function returns a
+            float, then this parameter is ignored. See Notes for more details.
 
         Returns
         -------
@@ -634,42 +651,48 @@ class Minimizer(object):
         \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{\left(g_n(F_{true}) - D_n \right)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
 
         The first summand in the square brackets represents the residual for a
-        given datapoint. This term represents :math:`\chi^2` when summed over
-        all datapoints.
-        The objective function used to create `lmfit.Minimizer` should return
-        :math:`\ln p(F_{true} | D)`. However, since the in-built log-prior term
-        is zero, the objective function can just return the log-likelihood
-        (unless you wish to create a non-uniform prior). If a negative float
-        value is returned by the objective function it's assumed to be
-        :math:`\ln p(F_{true} | D)`, the posterior probability. If a positive
-        float value is returned then the value is assumed to be :math:`\chi^2`.
-        The posterior probability is then calculated as :math:`-0.5 * \chi^2`.
+        given datapoint (:math:`g` being the generative model) . This term
+        represents :math:`\chi^2` when summed over all datapoints.
+        Ideally the objective function used to create `lmfit.Minimizer` should
+        return the log-posterior probability, :math:`\ln p(F_{true} | D)`.
+        However, since the in-built log-prior term is zero, the objective
+        function can also just return the log-likelihood, unless you wish to
+        create a non-uniform prior.
 
-        However, the default behaviour of most objective functions is to return
-        a vector of residuals. Therefore, if your objective function, `fcn`,
-        returns a vector, `res`, then the vector is assumed to contain the
-        residuals. The log-likelihood (and log-posterior probability) is then
-        calculated as: `-0.5 * np.sum(res **2)`. However, this ignores the
-        second summand in the square brackets. Consequently, in order to
-        calculate a fully correct log-posterior probability value your objective
-        function should return a single value.
-        Marginalisation over a nuisance parameter (such as incorrectly
-        estimated data uncertainties, `s_n`) can be achieved by including such
-        parameters in a `Parameters` instance and suitable inclusion in the
-        objective function.
+        If a negative float value is returned by the objective function this
+        value is assumed to be the log-posterior probability.
+
+        If a positive float value is returned then the value is assumed to be
+        :math:`\chi^2`. The posterior probability is then calculated as
+        :math:`-0.5 * \chi^2`.
+
+        However, the default behaviour of many objective functions is to return
+        a vector of (possibly weighted) residuals. Therefore, if your objective
+        function, `fcn`, returns a vector, `res`, then the vector is assumed to
+        contain the residuals. If `is_weighted is True` then your residuals are
+        assumed to be correctly weighted by the standard deviation of the data
+        points (`res = (data - model) / sigma`) and the log-likelihood
+        (and log-posterior probability) is calculated as:
+        `-0.5 * np.sum(res **2)`. This ignores the second summand in the square
+        brackets. Consequently, in order to calculate a fully correct
+        log-posterior probability value your objective function should return a
+        single value. If `is_weighted is False` then the data uncertainty,
+        `s_n`, will be treated as a nuisance parameter and will be marginalised
+        out. This is achieved by employing a strictly positive uncertainty
+        (homoscedasticity) for each data point, :math:`s_n = exp(__lnsigma)`.
+        `__lnsigma` will be present in `MinimizerResult.params`, as well as
+        `Minimizer.chain`, `nvarys` will also be increased by one.
 
         References
         ----------
         .. [1] http://dan.iel.fm/emcee/current/user/line/
-
         """
         if not HAS_EMCEE:
             raise NotImplementedError('You must have emcee to use'
                                       ' the emcee method')
-
+        tparams = params
         # if you're reusing the sampler then ntemps, nwalkers have to be
         # determined from the previous sampling
-        tparams = params
         if reuse_sampler:
             if not hasattr(self, 'sampler') or not hasattr(self, '_lastpos'):
                 raise ValueError("You wanted to use an existing sampler, but"
@@ -684,6 +707,19 @@ class Minimizer(object):
 
         result = self.prepare_fit(params=tparams)
         params = result.params
+
+        # check if the userfcn returns a vector of residuals
+        out = self.userfcn(params, *self.userargs, **self.userkws)
+        out = np.asarray(out).ravel()
+        if out.size > 1 and is_weighted is False:
+            # we need to marginalise over a constant data uncertainty
+            if '__lnsigma' not in params:
+                # __lnsigma should already be in params if is_weighted was
+                # previously set to True.
+                params.add('__lnsigma', value=0.01, min=-np.inf, max=np.inf, vary=True)
+                # have to re-prepare the fit
+                result = self.prepare_fit(params)
+                params = result.params
 
         # Removing internal parameter scaling. We could possibly keep it,
         # but I don't know how this affects the emcee sampling.
@@ -1098,7 +1134,13 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
 
     if lnprob.size > 1:
         # objective function returns a vector of residuals
-        lnprob = -0.5 * (lnprob * lnprob).sum()
+        if '__lnsigma' in params:
+            # marginalise over a constant data uncertainty
+            __lnsigma = params['__lnsigma'].value
+            c = np.log(2 * np.pi) + 2 * __lnsigma
+            lnprob = -0.5 * np.sum((lnprob / np.exp(__lnsigma)) ** 2 + c)
+        else:
+            lnprob = -0.5 * (lnprob * lnprob).sum()
     else:
         # objective function returns a single value.
         # If lnprob > 0, assume that lnprob is chi**2
