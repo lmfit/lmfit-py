@@ -825,12 +825,11 @@ class Minimizer(object):
 
         flatchain = chain.reshape((-1, self.nvarys))
 
-        mean = np.mean(flatchain, axis=0)
-        quantiles = np.percentile(flatchain, [15.8, 84.2], axis=0)
+        quantiles = np.percentile(flatchain, [15.8, 50, 84.2], axis=0)
 
         for i, var_name in enumerate(result.var_names):
-            std_l, std_u = quantiles[:, i]
-            params[var_name].value = mean[i]
+            std_l, median, std_u = quantiles[:, i]
+            params[var_name].value = median
             params[var_name].stderr = 0.5 * (std_u - std_l)
             params[var_name].correl = {}
 

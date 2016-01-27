@@ -415,8 +415,8 @@ class CommonMinimizerTest(unittest.TestCase):
 
         np.random.seed(123456)
         self.mini.userfcn = residual_for_multiprocessing
-        out = self.mini.emcee(ntemps=4, nwalkers=100, steps=100,
-                              burn=50, thin=10, workers=4)
+        out = self.mini.emcee(ntemps=4, nwalkers=50, steps=200,
+                              burn=100, thin=10, workers=2)
 
         check_paras(out.params, self.p_true, sig=3)
 
