@@ -106,6 +106,17 @@ class TestParameters(unittest.TestCase):
         # now test if the asteval machinery survived
         assert_(q._asteval.symtable['abc'] == '2 * 3.142')
 
+        # check that unpickling of Parameters is not affected by expr that
+        # refer to Parameter that are added later on. In the following
+        # example var_0.expr refers to var_1, which is a Parameter later
+        # on in the Parameters OrderedDict.
+        p = Parameters()
+        p.add('var_0', value=1)
+        p.add('var_1', value=2)
+        p['var_0'].expr = 'var_1'
+        pkl = pickle.dumps(p)
+        q = pickle.loads(pkl)
+
     def test_isclose(self):
         assert_(isclose(1., 1+1e-5, atol=1e-4, rtol=0))
         assert_(not isclose(1., 1+1e-5, atol=1e-6, rtol=0))
