@@ -486,7 +486,8 @@ class Minimizer(object):
                 if not attr.startswith('_'):
                     setattr(result, attr, getattr(ret, attr))
 
-        result.chisqr = result.residual = self.__residual(ret.x)
+        result.x = np.atleast_1d(result.x)
+        result.chisqr = result.residual = self.__residual(result.x)
         result.nvarys = len(vars)
         result.ndata = 1
         result.nfree = 1
