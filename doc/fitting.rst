@@ -783,22 +783,23 @@ Now we have to set up the minimizer and do the sampling.::
     >>> res = mini.emcee(burn=300, steps=600, thin=10, params=mi.params)
 
 Lets have a look at those posterior distributions for the parameters.  This requires
-installation of the `triangle_plot` package.::
+installation of the `corner` package.::
 
-    >>> import triangle
-    >>> triangle.corner(res.flatchain, labels=res.var_names, truths=list(res.params.valuesdict().values()))
+    >>> import corner
+    >>> corner.corner(res.flatchain, labels=res.var_names, truths=list(res.params.valuesdict().values()))
 
 .. image:: _images/emcee_triangle.png
 
-The values reported in the :class:`MinimizerResult` are the means of the
-probability distributions and the 1 sigma quantile. The mean value is not
+The values reported in the :class:`MinimizerResult` are the medians of the
+probability distributions and a 1 sigma quantile, estimated as half the
+difference between the 15.8 and 84.2 percentiles. The median value is not
 necessarily the same as the Maximum Likelihood Estimate. We'll get that as well.
 You can see that we recovered the right uncertainty level on the data.::
 
-    >>> print("mean of posterior probability distribution")
+    >>> print("median of posterior probability distribution")
     >>> print('------------------------------------------')
     >>> lmfit.report_fit(res.params)
-    mean of posterior probability distribution
+    median of posterior probability distribution
     ------------------------------------------
     [[Variables]]
         a1:   3.00975345 +/- 0.151034 (5.02%) (init= 2.986237)
@@ -830,6 +831,10 @@ You can see that we recovered the right uncertainty level on the data.::
     ('a2', <Parameter 'a2', -4.3364489105166593, bounds=[-inf:inf]>),
     ('t1', <Parameter 't1', 1.3124544105342462, bounds=[-inf:inf]>),
     ('t2', <Parameter 't2', 11.80612160586597, bounds=[-inf:inf]>)])
+
+    >>> # Finally lets work out a 2-sigma error estimate.
+    >>> np.percentile(res.flatchain['t1'], [15.8, 50, 84.2])
+
 
 Getting and Printing Fit Reports
 ===========================================
