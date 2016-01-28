@@ -478,10 +478,13 @@ class Minimizer(object):
 
         result.aborted = self._abort
         self._abort = False
-
-        for attr in dir(ret):
-            if not attr.startswith('_'):
-                setattr(result, attr, getattr(ret, attr))
+        if isinstance(ret, dict):
+            for attr, value in ret.items():
+                setattr(result, attr, value)
+        else:
+            for attr in dir(ret):
+                if not attr.startswith('_'):
+                    setattr(result, attr, getattr(ret, attr))
 
         result.chisqr = result.residual = self.__residual(ret.x)
         result.nvarys = len(vars)
