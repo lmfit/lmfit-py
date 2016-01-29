@@ -569,7 +569,7 @@ class CommonMinimizerTest(unittest.TestCase):
         self.mini.userfcn = resid2
         np.random.seed(123456)
         out = self.mini.emcee(nwalkers=100, steps=200,
-                              burn=50, thin=10)
+                              burn=50, thin=10, float_behavior='chi2')
         check_paras(out.params, self.p_true, sig=3)
 
 

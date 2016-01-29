@@ -486,7 +486,7 @@ For full control of the fitting process, you'll want to create a
    :param iter_cb:  function to be called at each fit iteration.  See :ref:`fit-itercb-label` for details.
    :type  iter_cb:  callable or ``None``
    :param scale_covar:  flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
-   :type  scale_cover:  bool (default ``True``).
+   :type  scale_covar:  bool (default ``True``).
    :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
    :type  kws:      dict
 
@@ -572,7 +572,7 @@ The Minimizer object has a few public methods:
 
 
 
-.. method:: emcee(params=None, steps=1000, nwalkers=100, burn=0, thin=1, ntemps=1, pos=None, reuse_sampler=False, workers=1, is_weighted=True)
+.. method:: emcee(params=None, steps=1000, nwalkers=100, burn=0, thin=1, ntemps=1, pos=None, reuse_sampler=False, workers=1, float_behavior='posterior', is_weighted=True)
 
   Bayesian sampling of the posterior distribution for the parameters using the `emcee`
   Markov Chain Monte Carlo package. The method assumes that the prior is Uniform. You need
@@ -626,6 +626,15 @@ The Minimizer object has a few public methods:
             to calculate, or if there are a large number of objective
             evaluations per step (`ntemps * nwalkers * nvarys`).
   :type workers: int or Pool-like
+  :type float_behavior: str
+  :param float_behavior: Specifies the meaning of the objective function if it
+   returns a float. One of:
+
+    'posterior' - the objective function returns a log-posterior probability
+
+    'chi2' - the objective function is returning :math:`\chi^2`.
+
+   See Notes for further details.
   :param is_weighted: Has your objective function been weighted by measurement
             uncertainties? If `is_weighted is True` then your objective
             function is assumed to return residuals that have been divided by
@@ -687,29 +696,29 @@ The Minimizer object has a few public methods:
   function can also just return the log-likelihood, unless you wish to
   create a non-uniform prior.
 
-  If a negative float value is returned by the objective function this
-  value is assumed to be the log-posterior probability.
-
-  If a positive float value is returned then the value is assumed to be
-  :math:`\chi^2`. The posterior probability is then calculated as
-  :math:`-0.5 * \chi^2`.
+  If a float value is returned by the objective function then this value
+  is assumed by default to be the log-posterior probability, i.e.
+  `float_behavior is 'posterior'`. If your objective function returns
+  :math:`\chi^2`, then you should use a value of `'chi2'` for
+  `float_behavior`. `emcee` will then multiply your :math:`\chi^2` value
+  by -0.5 to obtain the posterior probability.
 
   However, the default behaviour of many objective functions is to return
   a vector of (possibly weighted) residuals. Therefore, if your objective
-  function, `fcn`, returns a vector, `res`, then the vector is assumed to
-  contain the residuals. If `is_weighted is True` then your residuals are
-  assumed to be correctly weighted by the standard deviation of the data
-  points (`res = (data - model) / sigma`) and the log-likelihood
-  (and log-posterior probability) is calculated as:
-  `-0.5 * np.sum(res **2)`. This ignores the second summand in the square
-  brackets. Consequently, in order to calculate a fully correct
-  log-posterior probability value your objective function should return a
-  single value. If `is_weighted is False` then the data uncertainty,
-  :math:`s_n`, will be treated as a nuisance parameter and will be marginalised
-  out. This is achieved by employing a strictly positive uncertainty
-  (homoscedasticity) for each data point, :math:`s_n=exp(\_\_lnsigma)`.
-  `__lnsigma` will be present in `MinimizerResult.params`, as well as
-  `Minimizer.chain`, `nvarys` will also be increased by one.
+  function returns a vector, `res`, then the vector is assumed to contain
+  the residuals. If `is_weighted is True` then your residuals are assumed
+  to be correctly weighted by the standard deviation of the data points
+  (`res = (data - model) / sigma`) and the log-likelihood (and
+  log-posterior probability) is calculated as: `-0.5 * np.sum(res **2)`.
+  This ignores the second summand in the square brackets. Consequently, in
+  order to calculate a fully correct log-posterior probability value your
+  objective function should return a single value. If `is_weighted is False`
+  then the data uncertainty, :math:`s_n`, will be treated as a nuisance
+  parameter and will be marginalised out. This is achieved by employing a
+  strictly positive uncertainty (homoscedasticity) for each data point,
+  :math:`s_n=exp(\_\_lnsigma)`. `__lnsigma` will be present in
+  `MinimizerResult.params`, as well as `Minimizer.chain`, `nvarys` will also be
+  increased by one.
 
   .. [1] http://dan.iel.fm/emcee/current/user/line/
 
@@ -775,7 +784,10 @@ if any of the parameters are outside their bounds.::
     >>> def lnprob(p):
     ...    resid = residual(p)
     ...    s = p['f']
-    ...    return -0.5 * np.sum((resid / s)**2 + np.log(2 * np.pi * s**2))
+    ...    resid *= 1 / s
+    ...    resid *= resid
+    ...    resid += np.log(2 * np.pi * s**2)
+    ...    return -0.5 * np.sum(resid)
 
 Now we have to set up the minimizer and do the sampling.::
 
@@ -832,9 +844,10 @@ You can see that we recovered the right uncertainty level on the data.::
     ('t1', <Parameter 't1', 1.3124544105342462, bounds=[-inf:inf]>),
     ('t2', <Parameter 't2', 11.80612160586597, bounds=[-inf:inf]>)])
 
-    >>> # Finally lets work out a 2-sigma error estimate.
-    >>> np.percentile(res.flatchain['t1'], [15.8, 50, 84.2])
-
+    >>> # Finally lets work out a 1 and 2-sigma error estimate for 't1'
+    >>> quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
+    >>> print("2 sigma spread", 0.5 * (quantiles[-1] - quantiles[0]))
+    2 sigma spread 0.298878202908
 
 Getting and Printing Fit Reports
 ===========================================

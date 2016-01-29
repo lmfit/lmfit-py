@@ -532,7 +532,7 @@ class Minimizer(object):
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              is_weighted=True):
+              float_behavior='posterior', is_weighted=True):
         """
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
@@ -593,6 +593,15 @@ class Minimizer(object):
             only be worth parallelising if the objective function is expensive
             to calculate, or if there are a large number of objective
             evaluations per step (`ntemps * nwalkers * nvarys`).
+        float_behavior : str, optional
+            Specifies meaning of the objective function output if it returns a
+            float. One of:
+
+                'posterior' - objective function returns a log-posterior
+                               probability
+                'chi2' - objective function returns :math:`\chi^2`.
+
+            See Notes for further details.
         is_weighted : bool, optional
             Has your objective function been weighted by measurement
             uncertainties? If `is_weighted is True` then your objective
@@ -659,26 +668,26 @@ class Minimizer(object):
         function can also just return the log-likelihood, unless you wish to
         create a non-uniform prior.
 
-        If a negative float value is returned by the objective function this
-        value is assumed to be the log-posterior probability.
-
-        If a positive float value is returned then the value is assumed to be
-        :math:`\chi^2`. The posterior probability is then calculated as
-        :math:`-0.5 * \chi^2`.
+        If a float value is returned by the objective function then this value
+        is assumed by default to be the log-posterior probability, i.e.
+        `float_behavior is 'posterior'`. If your objective function returns
+        :math:`\chi^2`, then you should use a value of `'chi2'` for
+        `float_behavior`. `emcee` will then multiply your :math:`\chi^2` value
+        by -0.5 to obtain the posterior probability.
 
         However, the default behaviour of many objective functions is to return
         a vector of (possibly weighted) residuals. Therefore, if your objective
-        function, `fcn`, returns a vector, `res`, then the vector is assumed to
-        contain the residuals. If `is_weighted is True` then your residuals are
-        assumed to be correctly weighted by the standard deviation of the data
-        points (`res = (data - model) / sigma`) and the log-likelihood
-        (and log-posterior probability) is calculated as:
-        `-0.5 * np.sum(res **2)`. This ignores the second summand in the square
-        brackets. Consequently, in order to calculate a fully correct
-        log-posterior probability value your objective function should return a
-        single value. If `is_weighted is False` then the data uncertainty,
-        `s_n`, will be treated as a nuisance parameter and will be marginalised
-        out. This is achieved by employing a strictly positive uncertainty
+        function returns a vector, `res`, then the vector is assumed to contain
+        the residuals. If `is_weighted is True` then your residuals are assumed
+        to be correctly weighted by the standard deviation of the data points
+        (`res = (data - model) / sigma`) and the log-likelihood (and
+        log-posterior probability) is calculated as: `-0.5 * np.sum(res **2)`.
+        This ignores the second summand in the square brackets. Consequently,
+        in order to calculate a fully correct log-posterior probability value
+        your objective function should return a single value. If
+        `is_weighted is False` then the data uncertainty, `s_n`, will be
+        treated as a nuisance parameter and will be marginalised out. This is
+        achieved by employing a strictly positive uncertainty
         (homoscedasticity) for each data point, :math:`s_n = exp(__lnsigma)`.
         `__lnsigma` will be present in `MinimizerResult.params`, as well as
         `Minimizer.chain`, `nvarys` will also be increased by one.
@@ -760,7 +769,10 @@ class Minimizer(object):
         # function arguments for the log-probability functions
         # these values are sent to the log-probability functions by the sampler.
         lnprob_args = (self.userfcn, params, result.var_names, bounds)
-        lnprob_kwargs = {'userargs': self.userargs, 'userkws': self.userkws}
+        lnprob_kwargs = {'is_weighted': is_weighted,
+                         'float_behavior': float_behavior,
+                         'userargs': self.userargs,
+                         'userkws': self.userkws}
 
         if ntemps > 1:
             # the prior and likelihood function args and kwargs are the same
@@ -825,7 +837,7 @@ class Minimizer(object):
 
         flatchain = chain.reshape((-1, self.nvarys))
 
-        quantiles = np.percentile(flatchain, [15.8, 50, 84.2], axis=0)
+        quantiles = np.percentile(flatchain, [15.87, 50, 84.13], axis=0)
 
         for i, var_name in enumerate(result.var_names):
             std_l, median, std_u = quantiles[:, i]
@@ -1083,7 +1095,7 @@ def _lnprior(theta, bounds):
 
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
-            userkws=None):
+            userkws=None, float_behavior='posterior', is_weighted=True):
     """
     Calculates the log-posterior probability. See the `Minimizer.emcee` method
     for more details
@@ -1104,6 +1116,16 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
         Extra positional arguments required for user objective function
     userkws : dict, optional
         Extra keyword arguments required for user objective function
+    float_behavior : str, optional
+        Specifies meaning of objective when it returns a float. One of:
+
+        'posterior' - objective function returnins a log-posterior
+                      probability.
+        'chi2' - objective function returns a chi2 value.
+
+    is_weighted : bool
+        If `userfcn` returns a vector of residuals then `is_weighted`
+        specifies if the residuals have been weighted by data uncertainties.
 
     Returns
     -------
@@ -1133,7 +1155,7 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
 
     if lnprob.size > 1:
         # objective function returns a vector of residuals
-        if '__lnsigma' in params:
+        if '__lnsigma' in params and not is_weighted:
             # marginalise over a constant data uncertainty
             __lnsigma = params['__lnsigma'].value
             c = np.log(2 * np.pi) + 2 * __lnsigma
@@ -1142,13 +1164,14 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
             lnprob = -0.5 * (lnprob * lnprob).sum()
     else:
         # objective function returns a single value.
-        # If lnprob > 0, assume that lnprob is chi**2
-        if lnprob > 0:
+        # use float_behaviour to figure out if the value is posterior or chi2
+        if float_behavior == 'posterior':
+            pass
+        elif float_behavior == 'chi2':
             lnprob *= -0.5
         else:
-            # If it's negative assume that it's the true log-posterior
-            # probability.
-            pass
+            raise ValueError("float_behaviour must be either 'posterior' or"
+                             " 'chi2' " + float_behavior)
 
     return lnprob
 
