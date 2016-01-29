@@ -162,17 +162,24 @@ class Parameters(OrderedDict):
 
         Parameters
         ----------
-        state : list
-            state[0] is a dictionary containing symbols that need to be
-            injected into _asteval.symtable
-            state[1:] are the Parameter instances to be added
-         is list of parameters
+        state : dict
+            state['unique_symbols'] is a dictionary containing symbols that
+            need to be injected into _asteval.symtable
+            state['params'] is a list of Parameter instances to be added
         """
-        # first add all the parameters
+        # first update the Interpreter symbol table. This needs to be done
+        # first because Parameter's early in the list may depend on later
+        # Parameter's. This leads to problems because add_many eventually leads
+        # to a Parameter value being retrieved with _getval, which, if the
+        # dependent value hasn't already been added to the symtable, leads to
+        # an Error. Another way of doing this would be to remove all the expr
+        # from the Parameter instances before they get added, then to restore
+        # them.
+        self._asteval.symtable.update(state['unique_symbols'])
+
+        # then add all the parameters
         self.add_many(*state['params'])
 
-        # now update the Interpreter symbol table
-        self._asteval.symtable.update(state['unique_symbols'])
 
     def update_constraints(self):
         """
