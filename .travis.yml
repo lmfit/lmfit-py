@@ -21,6 +21,7 @@ before_install:
 install:
     - conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy pandas matplotlib nose
     - source activate test_env
+    - pip install emcee
     - python setup.py install
 
 script:
