@@ -525,7 +525,7 @@ class CommonMinimizerTest(unittest.TestCase):
                        bounds,
                        userargs=(self.x, self.data))
 
-        assert_almost_equal(val2, -0.5 * val)
+        assert_almost_equal(-0.5 * val, val2)
 
     def test_emcee_output(self):
         # test mcmc output

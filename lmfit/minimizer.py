@@ -35,7 +35,7 @@ try:
 except ImportError:
     pass
 
-#check for pandas
+# check for pandas
 HAS_PANDAS = False
 try:
     import pandas as pd
@@ -151,7 +151,7 @@ class MinimizerResult(object):
 
     Notes
     -----
-    additional attributes not listed above depending of the
+    Additional attributes not listed above may be present, depending on the
     specific solver. Since this class is essentially a subclass of dict
     with attribute accessors, one can see which attributes are available
     using the `keys()` method.
