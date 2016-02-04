@@ -93,7 +93,7 @@ An advanced example
 Now we look at a problem where calculating the error from approximated
 covariance can lead to misleading result -- two decaying exponentials.  In
 fact such a problem is particularly hard for the Levenberg-Marquardt
-method, so we fitst estimate the results using the slower but robust
+method, so we first estimate the results using the slower but robust
 Nelder-Mead  method, and *then* use Levenberg-Marquardt to estimate the
 uncertainties and correlations
 
@@ -164,6 +164,22 @@ which shows the trace of values:
 .. image:: _images/conf_interval2.png
    :target: _images/conf_interval2.png
    :width: 50%
+
+The :meth:`Minimizer.emcee` method uses Markov Chain Monte Carlo to sample
+the posterior probability distribution. These distributions demonstrate the
+range of solutions that the data supports. The following image was obtained
+by using :meth:`Minimizer.emcee` on the same problem.
+
+.. image:: _images/emcee_triangle.png
+
+Credible intervals (the Bayesian equivalent of the frequentist confidence
+interval) can be obtained with this method. MCMC can be used for model
+selection, to determine outliers, to marginalise over nuisance parameters, etc.
+For example, you may have fractionally underestimated the uncertainties on a
+dataset. MCMC can be used to estimate the true level of uncertainty on each
+datapoint. A tutorial on the possibilities offered by MCMC can be found at [1]_.
+
+.. [1] http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/
 
 
 

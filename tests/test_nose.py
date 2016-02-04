@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
-from lmfit.minimizer import SCALAR_METHODS
+from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
+                             MinimizerResult, _lnpost)
 from lmfit.lineshapes import gaussian
 import numpy as np
 from numpy import pi
-from numpy.testing import assert_
+from numpy.testing import (assert_, decorators, assert_raises,
+                           assert_almost_equal)
 import unittest
 import nose
 from nose import SkipTest
+
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
@@ -20,16 +23,16 @@ def check_wo_stderr(para, real_val, sig=0.1):
     print (para.name, para.value, real_val)
     assert(err < sig)
 
-def check_paras(para_fit, para_real):
+def check_paras(para_fit, para_real, sig=3):
     for i in para_fit:
-        check(para_fit[i], para_real[i].value)
+        check(para_fit[i], para_real[i].value, sig=sig)
 
 def test_simple():
     # create data to be fitted
     np.random.seed(1)
     x = np.linspace(0, 15, 301)
     data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
-            np.random.normal(size=len(x), scale=0.2) )
+            np.random.normal(size=len(x), scale=0.2))
 
     # define objective function: returns the array to be minimized
     def fcn2min(params, x, data):
@@ -121,7 +124,7 @@ def test_derive():
         model=a * np.exp(-b * x)+c
         if data is None:
             return model
-        return (model - data)
+        return model - data
 
     def dfunc(pars, x, data=None):
         a = pars['a'].value
@@ -157,7 +160,6 @@ def test_derive():
     min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data':data})
     out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
     fit2 = func(out2.params, x)
-
     
     print ('''Comparison of fit to exponential decay
     with and without analytic derivatives, to
@@ -219,7 +221,7 @@ def test_peakfit():
     fit_params.add('w2', expr='2.5*w1')
 
     myfit = Minimizer(residual, fit_params,
-                      fcn_args=(x,), fcn_kws={'data':data})
+                      fcn_args=(x,), fcn_kws={'data': data})
 
     myfit.prepare_fit()
 
@@ -330,8 +332,8 @@ class CommonMinimizerTest(unittest.TestCase):
         xmin = 0.
         xmax = 250.0
         noise = np.random.normal(scale=0.7215, size=n)
-        self.x     = np.linspace(xmin, xmax, n)
-        data  = self.residual(p_true, self.x) + noise
+        self.x = np.linspace(xmin, xmax, n)
+        self.data = self.residual(p_true, self.x) + noise
 
         fit_params = Parameters()
         fit_params.add('amp', value=11.0, min=5, max=20)
@@ -340,8 +342,7 @@ class CommonMinimizerTest(unittest.TestCase):
         fit_params.add('decay', value=6.e-3, min=0, max=0.1)
         self.fit_params = fit_params
 
-        init = self.residual(fit_params, self.x)
-        self.mini = Minimizer(self.residual, fit_params, [self.x, data])
+        self.mini = Minimizer(self.residual, fit_params, [self.x, self.data])
 
     def residual(self, pars, x, data=None):
         amp = pars['amp'].value
@@ -354,7 +355,7 @@ class CommonMinimizerTest(unittest.TestCase):
         model = amp*np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
         if data is None:
             return model
-        return (model - data)
+        return model - data
         
     def test_diffev_bounds_check(self):
         # You need finite (min, max) for each parameter if you're using
@@ -384,7 +385,7 @@ class CommonMinimizerTest(unittest.TestCase):
         print(self.minimizer)
         out = self.mini.scalar_minimize(method=self.minimizer)
 
-        fit = self.residual(out.params, self.x)
+        self.residual(out.params, self.x)
 
         for name, par in out.params.items():
             nout = "%s:%s" % (name, ' '*(20-len(name)))
@@ -393,6 +394,199 @@ class CommonMinimizerTest(unittest.TestCase):
         for para, true_para in zip(out.params.values(),
                                    self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=sig)
+
+    @decorators.slow
+    def test_emcee(self):
+        # test emcee
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        out = self.mini.emcee(nwalkers=100, steps=200,
+                                      burn=50, thin=10)
+
+        check_paras(out.params, self.p_true, sig=3)
+
+    @decorators.slow
+    def test_emcee_PT(self):
+        # test emcee with parallel tempering
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        self.mini.userfcn = residual_for_multiprocessing
+        out = self.mini.emcee(ntemps=4, nwalkers=50, steps=200,
+                              burn=100, thin=10, workers=2)
+
+        check_paras(out.params, self.p_true, sig=3)
+
+    @decorators.slow
+    def test_emcee_multiprocessing(self):
+        # test multiprocessing runs
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        self.mini.userfcn = residual_for_multiprocessing
+        out = self.mini.emcee(steps=10, workers=4)
+
+    def test_emcee_bounds_length(self):
+        # the log-probability functions check if the parameters are
+        # inside the bounds. Check that the bounds and parameters
+        # are the right lengths for comparison. This can be done
+        # if nvarys != nparams
+        if not HAS_EMCEE:
+            return True
+        self.mini.params['amp'].vary=False
+        self.mini.params['period'].vary=False
+        self.mini.params['shift'].vary=False
+
+        out = self.mini.emcee(steps=10)
+
+    @decorators.slow
+    def test_emcee_partial_bounds(self):
+        # mcmc with partial bounds
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        # test mcmc output vs lm, some parameters not bounded
+        self.fit_params['amp'].max = None
+        # self.fit_params['amp'].min = None
+        out = self.mini.emcee(nwalkers=100, steps=300,
+                                      burn=100, thin=10)
+
+        check_paras(out.params, self.p_true, sig=3)
+
+    def test_emcee_init_with_chain(self):
+        # can you initialise with a previous chain
+        if not HAS_EMCEE:
+            return True
+
+        out = self.mini.emcee(nwalkers=100, steps=5)
+        # can initialise with a chain
+        out2 = self.mini.emcee(nwalkers=100, steps=1, pos=out.chain)
+
+        # can initialise with a correct subset of a chain
+        out3 = self.mini.emcee(nwalkers=100,
+                               steps=1,
+                               pos=out.chain[..., -1, :])
+
+        # but you can't initialise if the shape is wrong.
+        assert_raises(ValueError,
+                      self.mini.emcee,
+                      nwalkers=100,
+                      steps=1,
+                      pos=out.chain[..., -1, :-1])
+
+    def test_emcee_reuse_sampler(self):
+        if not HAS_EMCEE:
+            return True
+
+        self.mini.emcee(nwalkers=100, steps=5)
+
+        # if you've run the sampler the Minimizer object should have a _lastpos
+        # attribute
+        assert_(hasattr(self.mini, '_lastpos'))
+
+        # now try and re-use sampler
+        out2 = self.mini.emcee(steps=10, reuse_sampler=True)
+        assert_(out2.chain.shape[1] == 15)
+
+        # you shouldn't be able to reuse the sampler if nvarys has changed.
+        self.mini.params['amp'].vary = False
+        assert_raises(ValueError, self.mini.emcee, reuse_sampler=True)
+
+    def test_emcee_lnpost(self):
+        # check ln likelihood is calculated correctly. It should be
+        # -0.5 * chi**2.
+        result = self.mini.minimize()
+
+        # obtain the numeric values
+        # note - in this example all the parameters are varied
+        fvars = np.array([par.value for par in result.params.values()])
+
+        # calculate the cost function with scaled values (parameters all have
+        # lower and upper bounds.
+        scaled_fvars = []
+        for par, fvar in zip(result.params.values(), fvars):
+            par.value = fvar
+            scaled_fvars.append(par.setup_bounds())
+
+        val = self.mini.penalty(np.array(scaled_fvars))
+
+        # calculate the log-likelihood value
+        bounds = np.array([(par.min, par.max)
+                           for par in result.params.values()])
+        val2 = _lnpost(fvars,
+                       self.residual,
+                       result.params,
+                       result.var_names,
+                       bounds,
+                       userargs=(self.x, self.data))
+
+        assert_almost_equal(-0.5 * val, val2)
+
+    def test_emcee_output(self):
+        # test mcmc output
+        if not HAS_EMCEE:
+            return True
+        try:
+            from pandas import DataFrame
+        except ImportError:
+            return True
+        out = self.mini.emcee(nwalkers=10, steps=20, burn=5, thin=2)
+        assert_(isinstance(out, MinimizerResult))
+        assert_(isinstance(out.flatchain, DataFrame))
+
+        # check that we can access the chains via parameter name
+        assert_(out.flatchain['amp'].shape[0] == 80)
+        assert_(out.errorbars is True)
+        assert_(np.isfinite(out.params['amp'].correl['period']))
+
+        # the lnprob array should be the same as the chain size
+        assert_(np.size(out.chain)//4 == np.size(out.lnprob))
+
+    @decorators.slow
+    def test_emcee_float(self):
+        # test that it works if the residuals returns a float, not a vector
+        if not HAS_EMCEE:
+            return True
+
+        def resid(pars, x, data=None):
+            return -0.5 * np.sum(self.residual(pars, x, data=data)**2)
+
+        # just return chi2
+        def resid2(pars, x, data=None):
+            return np.sum(self.residual(pars, x, data=data)**2)
+
+        self.mini.userfcn = resid
+        np.random.seed(123456)
+        out = self.mini.emcee(nwalkers=100, steps=200,
+                                      burn=50, thin=10)
+        check_paras(out.params, self.p_true, sig=3)
+
+        self.mini.userfcn = resid2
+        np.random.seed(123456)
+        out = self.mini.emcee(nwalkers=100, steps=200,
+                              burn=50, thin=10, float_behavior='chi2')
+        check_paras(out.params, self.p_true, sig=3)
+
+
+def residual_for_multiprocessing(pars, x, data=None):
+    # a residual function defined in the top level is needed for
+    # multiprocessing. bound methods don't work.
+    amp = pars['amp'].value
+    per = pars['period'].value
+    shift = pars['shift'].value
+    decay = pars['decay'].value
+
+    if abs(shift) > pi/2:
+        shift = shift - np.sign(shift) * pi
+    model = amp*np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
+    if data is None:
+        return model
+    return (model - data)
 
 
 if __name__ == '__main__':

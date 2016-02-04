@@ -17,6 +17,7 @@ from numpy import (dot, eye, ndarray, ones_like,
                    sqrt, take, transpose, triu, deprecate)
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
+import multiprocessing
 
 from scipy.optimize import leastsq as scipy_leastsq
 
@@ -25,6 +26,22 @@ try:
     from scipy.optimize import differential_evolution as scipy_diffev
 except ImportError:
     from ._differentialevolution import differential_evolution as scipy_diffev
+
+# check for EMCEE
+HAS_EMCEE = False
+try:
+    import emcee as emcee
+    HAS_EMCEE = True
+except ImportError:
+    pass
+
+# check for pandas
+HAS_PANDAS = False
+try:
+    import pandas as pd
+    HAS_PANDAS = True
+except ImportError:
+    pass
 
 # check for scipy.optimize.minimize
 HAS_SCALAR_MIN = False
@@ -134,7 +151,7 @@ class MinimizerResult(object):
 
     Notes
     -----
-    additional attributes not listed above depending of the
+    Additional attributes not listed above may be present, depending on the
     specific solver. Since this class is essentially a subclass of dict
     with attribute accessors, one can see which attributes are available
     using the `keys()` method.
@@ -142,6 +159,21 @@ class MinimizerResult(object):
     def __init__(self, **kws):
         for key, val in kws.items():
             setattr(self, key, val)
+
+    @property
+    def flatchain(self):
+        """
+        A flatchain view of the sampling chain from the `emcee` method.
+        """
+        if hasattr(self, 'chain'):
+            if HAS_PANDAS:
+                return pd.DataFrame(self.chain.reshape((-1, self.nvarys)),
+                                    columns=self.var_names)
+            else:
+                raise NotImplementedError('Please install Pandas to see the '
+                                          'flattened chain')
+        else:
+            return None
 
 
 class Minimizer(object):
@@ -502,6 +534,341 @@ class Minimizer(object):
 
         return result
 
+    def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
+              ntemps=1, pos=None, reuse_sampler=False, workers=1,
+              float_behavior='posterior', is_weighted=True):
+        """
+        Bayesian sampling of the posterior distribution for the parameters
+        using the `emcee` Markov Chain Monte Carlo package. The method assumes
+        that the prior is Uniform. You need to have `emcee` installed to use
+        this method.
+
+        Parameters
+        ----------
+        params : lmfit.Parameters, optional
+            Parameters to use as starting point. If this is not specified
+            then the Parameters used to initialise the Minimizer object are
+            used.
+        steps : int, optional
+            How many samples you would like to draw from the posterior
+            distribution for each of the walkers?
+        nwalkers : int, optional
+            Should be set so :math:`nwalkers >> nvarys`, where `nvarys` are
+            the number of parameters being varied during the fit.
+            "Walkers are the members of the ensemble. They are almost like
+            separate Metropolis-Hastings chains but, of course, the proposal
+            distribution for a given walker depends on the positions of all
+            the other walkers in the ensemble." - from the `emcee` webpage.
+        burn : int, optional
+            Discard this many samples from the start of the sampling regime.
+        thin : int, optional
+            Only accept 1 in every `thin` samples.
+        ntemps : int, optional
+            If `ntemps > 1` perform a Parallel Tempering.
+        pos : np.ndarray, optional
+            Specify the initial positions for the sampler.  If `ntemps == 1`
+            then `pos.shape` should be `(nwalkers, nvarys)`. Otherwise,
+            `(ntemps, nwalkers, nvarys)`. You can also initialise using a
+            previous chain that had the same `ntemps`, `nwalkers` and
+            `nvarys`. Note that `nvarys` may be one larger than you expect it
+            to be if your `userfcn` returns an array and `is_weighted is
+            False`.
+        reuse_sampler : bool, optional
+            If you have already run `emcee` on a given `Minimizer` object then
+            it possesses an internal ``sampler`` attribute. You can continue to
+            draw from the same sampler (retaining the chain history) if you set
+            this option to `True`. Otherwise a new sampler is created. The
+            `nwalkers`, `ntemps`, `pos`, and `params` keywords are ignored with
+            this option.
+            **Important**: the Parameters used to create the sampler must not
+            change in-between calls to `emcee`. Alteration of Parameters
+            would include changed ``min``, ``max``, ``vary`` and ``expr``
+            attributes. This may happen, for example, if you use an altered
+            Parameters object and call the `minimize` method in-between calls
+            to `emcee`.
+        workers : Pool-like or int, optional
+            For parallelization of sampling.  It can be any Pool-like object
+            with a map method that follows the same calling sequence as the
+            built-in `map` function. If int is given as the argument, then a
+            multiprocessing-based pool is spawned internally with the
+            corresponding number of parallel processes. 'mpi4py'-based
+            parallelization and 'joblib'-based parallelization pools can also
+            be used here. **Note**: because of multiprocessing overhead it may
+            only be worth parallelising if the objective function is expensive
+            to calculate, or if there are a large number of objective
+            evaluations per step (`ntemps * nwalkers * nvarys`).
+        float_behavior : str, optional
+            Specifies meaning of the objective function output if it returns a
+            float. One of:
+
+                'posterior' - objective function returns a log-posterior
+                               probability
+                'chi2' - objective function returns :math:`\chi^2`.
+
+            See Notes for further details.
+        is_weighted : bool, optional
+            Has your objective function been weighted by measurement
+            uncertainties? If `is_weighted is True` then your objective
+            function is assumed to return residuals that have been divided by
+            the true measurement uncertainty `(data - model) / sigma`. If
+            `is_weighted is False` then the objective function is assumed to
+            return unweighted residuals, `data - model`. In this case `emcee`
+            will employ a positive measurement uncertainty during the sampling.
+            This measurement uncertainty will be present in the output params
+            and output chain with the name `__lnsigma`. A side effect of this
+            is that you cannot use this parameter name yourself.
+            **Important** this parameter only has any effect if your objective
+            function returns an array. If your objective function returns a
+            float, then this parameter is ignored. See Notes for more details.
+
+        Returns
+        -------
+        result : MinimizerResult
+            MinimizerResult object containing updated params, statistics,
+            etc. The `MinimizerResult` also contains the ``chain``,
+            ``flatchain`` and ``lnprob`` attributes. The ``chain``
+            and ``flatchain`` attributes contain the samples and have the shape
+            `(nwalkers, (steps - burn) // thin, nvarys)` or
+            `(ntemps, nwalkers, (steps - burn) // thin, nvarys)`,
+            depending on whether Parallel tempering was used or not.
+            `nvarys` is the number of parameters that are allowed to vary.
+            The ``flatchain`` attribute is a `pandas.DataFrame` of the
+            flattened chain, `chain.reshape(-1, nvarys)`. To access flattened
+            chain values for a particular parameter use
+            `result.flatchain[parname]`. The ``lnprob`` attribute contains the
+            log probability for each sample in ``chain``. The sample with the
+            highest probability corresponds to the maximum likelihood estimate.
+
+        Notes
+        -----
+        This method samples the posterior distribution of the parameters using
+        Markov Chain Monte Carlo.  To do so it needs to calculate the
+        log-posterior probability of the model parameters, `F`, given the data,
+        `D`, :math:`\ln p(F_{true} | D)`. This 'posterior probability' is
+        calculated as:
+
+        ..math::
+
+        \ln p(F_{true} | D) \propto \ln p(D | F_{true}) + \ln p(F_{true})
+
+        where :math:`\ln p(D | F_{true})` is the 'log-likelihood' and
+        :math:`\ln p(F_{true})` is the 'log-prior'. The default log-prior
+        encodes prior information already known about the model. This method
+        assumes that the log-prior probability is `-np.inf` (impossible) if the
+        one of the parameters is outside its limits. The log-prior probability
+        term is zero if all the parameters are inside their bounds (known as a
+        uniform prior). The log-likelihood function is given by [1]_:
+
+        ..math::
+
+        \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{\left(g_n(F_{true}) - D_n \right)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
+
+        The first summand in the square brackets represents the residual for a
+        given datapoint (:math:`g` being the generative model) . This term
+        represents :math:`\chi^2` when summed over all datapoints.
+        Ideally the objective function used to create `lmfit.Minimizer` should
+        return the log-posterior probability, :math:`\ln p(F_{true} | D)`.
+        However, since the in-built log-prior term is zero, the objective
+        function can also just return the log-likelihood, unless you wish to
+        create a non-uniform prior.
+
+        If a float value is returned by the objective function then this value
+        is assumed by default to be the log-posterior probability, i.e.
+        `float_behavior is 'posterior'`. If your objective function returns
+        :math:`\chi^2`, then you should use a value of `'chi2'` for
+        `float_behavior`. `emcee` will then multiply your :math:`\chi^2` value
+        by -0.5 to obtain the posterior probability.
+
+        However, the default behaviour of many objective functions is to return
+        a vector of (possibly weighted) residuals. Therefore, if your objective
+        function returns a vector, `res`, then the vector is assumed to contain
+        the residuals. If `is_weighted is True` then your residuals are assumed
+        to be correctly weighted by the standard deviation of the data points
+        (`res = (data - model) / sigma`) and the log-likelihood (and
+        log-posterior probability) is calculated as: `-0.5 * np.sum(res **2)`.
+        This ignores the second summand in the square brackets. Consequently,
+        in order to calculate a fully correct log-posterior probability value
+        your objective function should return a single value. If
+        `is_weighted is False` then the data uncertainty, `s_n`, will be
+        treated as a nuisance parameter and will be marginalised out. This is
+        achieved by employing a strictly positive uncertainty
+        (homoscedasticity) for each data point, :math:`s_n = exp(__lnsigma)`.
+        `__lnsigma` will be present in `MinimizerResult.params`, as well as
+        `Minimizer.chain`, `nvarys` will also be increased by one.
+
+        References
+        ----------
+        .. [1] http://dan.iel.fm/emcee/current/user/line/
+        """
+        if not HAS_EMCEE:
+            raise NotImplementedError('You must have emcee to use'
+                                      ' the emcee method')
+        tparams = params
+        # if you're reusing the sampler then ntemps, nwalkers have to be
+        # determined from the previous sampling
+        if reuse_sampler:
+            if not hasattr(self, 'sampler') or not hasattr(self, '_lastpos'):
+                raise ValueError("You wanted to use an existing sampler, but"
+                                 "it hasn't been created yet")
+            if len(self._lastpos.shape) == 2:
+                ntemps = 1
+                nwalkers = self._lastpos.shape[0]
+            elif len(self._lastpos.shape) == 3:
+                ntemps = self._lastpos.shape[0]
+                nwalkers = self._lastpos.shape[1]
+            tparams = None
+
+        result = self.prepare_fit(params=tparams)
+        params = result.params
+
+        # check if the userfcn returns a vector of residuals
+        out = self.userfcn(params, *self.userargs, **self.userkws)
+        out = np.asarray(out).ravel()
+        if out.size > 1 and is_weighted is False:
+            # we need to marginalise over a constant data uncertainty
+            if '__lnsigma' not in params:
+                # __lnsigma should already be in params if is_weighted was
+                # previously set to True.
+                params.add('__lnsigma', value=0.01, min=-np.inf, max=np.inf, vary=True)
+                # have to re-prepare the fit
+                result = self.prepare_fit(params)
+                params = result.params
+
+        # Removing internal parameter scaling. We could possibly keep it,
+        # but I don't know how this affects the emcee sampling.
+        bounds = []
+        var_arr = np.zeros(len(result.var_names))
+        i = 0
+        for par in params:
+            param = params[par]
+            if param.expr is not None:
+                param.vary = False
+            if param.vary:
+                var_arr[i] = param.value
+                i += 1
+            else:
+                # don't want to append bounds if they're not being varied.
+                continue
+
+            param.from_internal = lambda val: val
+            lb, ub = param.min, param.max
+            if lb is None or lb is np.nan:
+                lb = -np.inf
+            if ub is None or ub is np.nan:
+                ub = np.inf
+            bounds.append((lb, ub))
+        bounds = np.array(bounds)
+
+        self.nvarys = len(result.var_names)
+
+        # set up multiprocessing options for the samplers
+        auto_pool = None
+        sampler_kwargs = {}
+        if type(workers) is int and workers > 1:
+            auto_pool = multiprocessing.Pool(workers)
+            sampler_kwargs['pool'] = auto_pool
+        elif hasattr(workers, 'map'):
+            sampler_kwargs['pool'] = workers
+
+        # function arguments for the log-probability functions
+        # these values are sent to the log-probability functions by the sampler.
+        lnprob_args = (self.userfcn, params, result.var_names, bounds)
+        lnprob_kwargs = {'is_weighted': is_weighted,
+                         'float_behavior': float_behavior,
+                         'userargs': self.userargs,
+                         'userkws': self.userkws}
+
+        if ntemps > 1:
+            # the prior and likelihood function args and kwargs are the same
+            sampler_kwargs['loglargs'] = lnprob_args
+            sampler_kwargs['loglkwargs'] = lnprob_kwargs
+            sampler_kwargs['logpargs'] = (bounds,)
+        else:
+            sampler_kwargs['args'] = lnprob_args
+            sampler_kwargs['kwargs'] = lnprob_kwargs
+
+        # now initialise the samplers
+        if reuse_sampler:
+            if auto_pool is not None:
+                self.sampler.pool = auto_pool
+
+            p0 = self._lastpos
+            if p0.shape[-1] != self.nvarys:
+                raise ValueError("You cannot reuse the sampler if the number"
+                                 "of varying parameters has changed")
+        elif ntemps > 1:
+            # Parallel Tempering
+            # jitter the starting position by scaled Gaussian noise
+            p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-4
+            p0 *= var_arr
+            self.sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys,
+                                           _lnpost, _lnprior, **sampler_kwargs)
+        else:
+            p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-4
+            p0 *= var_arr
+            self.sampler = emcee.EnsembleSampler(nwalkers, self.nvarys,
+                                                 _lnpost, **sampler_kwargs)
+
+        # user supplies an initialisation position for the chain
+        # If you try to run the sampler with p0 of a wrong size then you'll get
+        # a ValueError. Note, you can't initialise with a position if you are
+        # reusing the sampler.
+        if pos is not None and not reuse_sampler:
+            tpos = np.asfarray(pos)
+            if p0.shape == tpos.shape:
+                pass
+            # trying to initialise with a previous chain
+            elif (tpos.shape[0::2] == (nwalkers, self.nvarys)):
+                tpos = tpos[:, -1, :]
+            # initialising with a PTsampler chain.
+            elif ntemps > 1 and tpos.ndim == 4:
+                tpos_shape = list(tpos.shape)
+                tpos_shape.pop(2)
+                if tpos_shape == (ntemps, nwalkers, self.nvarys):
+                    tpos = tpos[..., -1, :]
+            else:
+                raise ValueError('pos should have shape (nwalkers, nvarys)'
+                                 'or (ntemps, nwalkers, nvarys) if ntemps > 1')
+            p0 = tpos
+
+        # now do a production run, sampling all the time
+        output = self.sampler.run_mcmc(p0, steps)
+        self._lastpos = output[0]
+
+        # discard the burn samples and thin
+        chain = self.sampler.chain[..., burn::thin, :]
+        lnprobability = self.sampler.lnprobability[:, burn::thin]
+
+        flatchain = chain.reshape((-1, self.nvarys))
+
+        quantiles = np.percentile(flatchain, [15.87, 50, 84.13], axis=0)
+
+        for i, var_name in enumerate(result.var_names):
+            std_l, median, std_u = quantiles[:, i]
+            params[var_name].value = median
+            params[var_name].stderr = 0.5 * (std_u - std_l)
+            params[var_name].correl = {}
+
+        params.update_constraints()
+
+        # work out correlation coefficients
+        corrcoefs = np.corrcoef(flatchain.T)
+
+        for i, var_name in enumerate(result.var_names):
+            for j, var_name2 in enumerate(result.var_names):
+                if i != j:
+                    result.params[var_name].correl[var_name2] = corrcoefs[i, j]
+
+        result.chain = np.copy(chain)
+        result.lnprob = np.copy(lnprobability)
+        result.errorbars = True
+        result.nvarys = len(result.var_names)
+
+        if auto_pool is not None:
+            auto_pool.terminate()
+
+        return result
+
     def leastsq(self, params=None, **kws):
         """
         Use Levenberg-Marquardt minimization to perform a fit.
@@ -705,6 +1072,112 @@ class Minimizer(object):
         elif user_method.startswith('lbfgsb'):
             function = self.lbfgsb
         return function(**kwargs)
+
+
+def _lnprior(theta, bounds):
+    """
+    Calculates an improper uniform log-prior probability
+
+    Parameters
+    ----------
+    theta : sequence
+        float parameter values (only those being varied)
+    bounds : np.ndarray
+        Lower and upper bounds of parameters that are varying.
+        Has shape (nvarys, 2).
+
+    Returns
+    -------
+    lnprob : float
+        Log prior probability
+    """
+    if (np.any(theta > bounds[:, 1])
+        or np.any(theta < bounds[:, 0])):
+        return -np.inf
+    else:
+        return 0
+
+
+def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
+            userkws=None, float_behavior='posterior', is_weighted=True):
+    """
+    Calculates the log-posterior probability. See the `Minimizer.emcee` method
+    for more details
+
+    Parameters
+    ----------
+    theta : sequence
+        float parameter values (only those being varied)
+    userfcn : callable
+        User objective function
+    params : lmfit.Parameters
+        The entire set of Parameters
+    var_names : list
+        The names of the parameters that are varying
+    bounds : np.ndarray
+        Lower and upper bounds of parameters. Has shape (nvarys, 2).
+    userargs : tuple, optional
+        Extra positional arguments required for user objective function
+    userkws : dict, optional
+        Extra keyword arguments required for user objective function
+    float_behavior : str, optional
+        Specifies meaning of objective when it returns a float. One of:
+
+        'posterior' - objective function returnins a log-posterior
+                      probability.
+        'chi2' - objective function returns a chi2 value.
+
+    is_weighted : bool
+        If `userfcn` returns a vector of residuals then `is_weighted`
+        specifies if the residuals have been weighted by data uncertainties.
+
+    Returns
+    -------
+    lnprob : float
+        Log posterior probability
+    """
+    # the comparison has to be done on theta and bounds. DO NOT inject theta
+    # values into Parameters, then compare Parameters values to the bounds.
+    # Parameters values are clipped to stay within bounds.
+    if (np.any(theta > bounds[:, 1])
+        or np.any(theta < bounds[:, 0])):
+        return -np.inf
+
+    for name, val in zip(var_names, theta):
+        params[name].value = val
+
+    userkwargs = {}
+    if userkws is not None:
+        userkwargs = userkws
+
+    # update the constraints
+    params.update_constraints()
+
+    # now calculate the log-likelihood
+    out = userfcn(params, *userargs, **userkwargs)
+    lnprob = np.asarray(out).ravel()
+
+    if lnprob.size > 1:
+        # objective function returns a vector of residuals
+        if '__lnsigma' in params and not is_weighted:
+            # marginalise over a constant data uncertainty
+            __lnsigma = params['__lnsigma'].value
+            c = np.log(2 * np.pi) + 2 * __lnsigma
+            lnprob = -0.5 * np.sum((lnprob / np.exp(__lnsigma)) ** 2 + c)
+        else:
+            lnprob = -0.5 * (lnprob * lnprob).sum()
+    else:
+        # objective function returns a single value.
+        # use float_behaviour to figure out if the value is posterior or chi2
+        if float_behavior == 'posterior':
+            pass
+        elif float_behavior == 'chi2':
+            lnprob *= -0.5
+        else:
+            raise ValueError("float_behaviour must be either 'posterior' or"
+                             " 'chi2' " + float_behavior)
+
+    return lnprob
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,

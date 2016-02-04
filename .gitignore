@@ -10,3 +10,4 @@ sandbox/
 *.swp
 .idea/
 .DS_Store
+.ipynb_checkpoints/
