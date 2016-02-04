@@ -73,7 +73,7 @@ class Parameters(OrderedDict):
     dumps() / dump()
     loads() / load()
     """
-    def __init__(self, asteval=None, *args, **kwds):
+    def __init__(self, *args, asteval=None, **kwds):
         super(Parameters, self).__init__(self)
         self._asteval = asteval
 
