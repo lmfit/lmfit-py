@@ -81,8 +81,14 @@ class Parameters(OrderedDict):
             self._asteval = Interpreter()
         self.update(*args, **kwds)
 
+    def copy(self):
+        return self.__deepcopy__(None)
+
+    def __copy__(self, memo):
+        self.__deepcopy__(memo)
+
     def __deepcopy__(self, memo):
-        _pars = Parameters()
+        _pars = Parameters(asteval=None)
 
         # find the symbols that were added by users, not during construction
         sym_unique = self._asteval.user_defined_symbols()
