@@ -21,6 +21,27 @@ class TestParameters(unittest.TestCase):
         assert_almost_equal(self.params['c'].value,
                             2 * self.params['a'].value)
 
+    def test_copy(self):
+        # check simple Parameters.copy() does not fail
+        # on non-trivial Parameters
+        p1 = Parameters()
+        p1.add('t', 2.0, min=0.0, max=5.0)
+        p1.add('x', 10.0)
+        p1.add('y', expr='x*t + sqrt(t)/3.0')
+
+        p2 = p1.copy()
+        assert(isinstance(p2, Parameters))
+        assert('t' in p2)
+        assert('y' in p2)
+        assert(p2['t'].max < 6.0)
+        assert(np.isinf(p2['x'].max) and p2['x'].max > 0)
+        assert(np.isinf(p2['x'].min) and p2['x'].min < 0)
+        assert('sqrt(t)' in p2['y'].expr )
+        assert(p2._asteval is not None)
+        assert(p2._asteval.symtable is not None)
+        assert((p2['y'].value > 20) and (p2['y'].value < 21))
+
+
     def test_deepcopy(self):
         # check that a simple copy works
         b = deepcopy(self.params)

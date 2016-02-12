@@ -81,8 +81,19 @@ class Parameters(OrderedDict):
             self._asteval = Interpreter()
         self.update(*args, **kwds)
 
+    def copy(self):
+        """Parameters.copy() should always be a deepcopy"""
+        return self.__deepcopy__(None)
+
+    def __copy__(self, memo):
+        """Parameters.copy() should always be a deepcopy"""
+        self.__deepcopy__(memo)
+
     def __deepcopy__(self, memo):
-        _pars = Parameters()
+        """Parameters deepcopy needs to make sure that
+        asteval is available and that all individula
+        parameter objects are copied"""
+        _pars = Parameters(asteval=None)
 
         # find the symbols that were added by users, not during construction
         sym_unique = self._asteval.user_defined_symbols()
