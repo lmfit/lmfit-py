@@ -291,6 +291,7 @@ class Minimizer(object):
             abort = self.iter_cb(params, self.result.nfev, out,
                                  *self.userargs, **self.userkws)
             self._abort = self._abort or abort
+        self._abort = self._abort and self.result.nfev > len(fvars)
         if not self._abort:
             return np.asarray(out).ravel()
 
