@@ -232,7 +232,7 @@ class Parameters(OrderedDict):
     def pretty_print(self, oneline=False):
         print(self.pretty_repr(oneline=oneline))
 
-    def add(self, name, value=None, vary=True, min=None, max=None, expr=None):
+    def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None):
         """
         Convenience function for adding a Parameter:
 
@@ -419,8 +419,8 @@ class Parameter(object):
         self._val = value
         self.user_value = value
         self.init_value = value
-        self._min = -inf
-        self._max = inf
+        # self._min = -inf
+        # self._max = inf
         self.min = min
         self.max = max
         self.vary = vary
@@ -434,7 +434,7 @@ class Parameter(object):
         self.from_internal = lambda val: val
         self._init_bounds()
 
-    def set(self, value=None, vary=None, min=None, max=None, expr=None):
+    def set(self, value=None, vary=None, min=-inf, max=inf, expr=None):
         """
         Set or update Parameter attributes.
 
@@ -458,51 +458,33 @@ class Parameter(object):
             self._val = value
         if vary is not None:
             self.vary = vary
-        if min is not None:
-            self.min = min
-        if max is not None:
-            self.max = max
+        if min is None:
+            min = -inf
+        if max is None:
+            max = inf
+        self.min = min
+        self.max = max
 
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
         # _val is None means - infinity.
+        if self.max is None:
+            self.max = inf
+        if self.min is None:
+            self.min = -inf
         if self._val is not None:
-            if self.max is not None and self._val > self.max:
+            if self.min > self.max:
+                self._min, self._max = self.max, self.min
+            if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
+                raise ValueError("Parameter '%s' has min == max" % self.name)
+
+            if self._val > self.max:
                 self._val = self.max
-            if self.min is not None and self._val < self.min:
+            if self._val < self.min:
                 self._val = self.min
-        elif self.min is not None and self._expr is None:
+        elif self._expr is None:
             self._val = self.min
-        elif self.max is not None and self._expr is None:
-            self._val = self.max
         self.setup_bounds()
-
-    def get_max(self):
-        return self._max
-
-    def set_max(self, val):
-        if val is None:
-            val = inf
-        self._max = val
-        if self.min > self.max:
-            self._min, self._max = self.max, self.min
-        if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
-            raise ValueError("Parameter '%s' has min == max" % self.name)
-
-    def get_min(self):
-        return self._min
-
-    def set_min(self, val):
-        if val is None:
-            val = -inf
-        self._min = val
-        if self.min > self.max:
-            self._min, self._max = self.max, self.min
-        if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
-            raise ValueError("Parameter '%s' has min == max" % self.name)
-
-    min = property(get_min, set_min)
-    max = property(get_max, set_max)
 
     def __getstate__(self):
         """get state for pickle"""
@@ -511,8 +493,8 @@ class Parameter(object):
 
     def __setstate__(self, state):
         """set state for pickle"""
-        (self.name, self.value, self.vary, self.expr, self._min,
-         self._max, self.stderr, self.correl, self.init_value) = state
+        (self.name, self.value, self.vary, self.expr, self.min,
+         self.max, self.stderr, self.correl, self.init_value) = state
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
@@ -553,13 +535,17 @@ class Parameter(object):
         the external, user-expected value).   This internal value should
         actually be used in a fit.
         """
-        if self.min in (None, -inf) and self.max in (None, inf):
+        if self.min is None:
+            self.min = -inf
+        if self.max is None:
+            self.max = inf
+        if self.min == -inf and self.max == inf:
             self.from_internal = lambda val: val
             _val = self._val
-        elif self.max in (None, inf):
+        elif self.max == inf:
             self.from_internal = lambda val: self.min - 1.0 + sqrt(val*val + 1)
             _val = sqrt((self._val - self.min + 1.0)**2 - 1)
-        elif self.min in (None, -inf):
+        elif self.min == -inf:
             self.from_internal = lambda val: self.max + 1 - sqrt(val*val + 1)
             _val = sqrt((self.max - self._val + 1.0)**2 - 1)
         else:
@@ -575,11 +561,11 @@ class Parameter(object):
         scaling factor for gradient the according to Minuit-style
         transformation.
         """
-        if self.min in (None, -inf) and self.max in (None, inf):
+        if self.min == -inf and self.max == inf:
             return 1.0
-        elif self.max in (None, inf):
+        elif self.max == inf:
             return val / sqrt(val*val + 1)
-        elif self.min in (None, -inf):
+        elif self.min == -inf:
             return -val / sqrt(val*val + 1)
         else:
             return cos(val) * (self.max - self.min) / 2.0
