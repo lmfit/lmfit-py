@@ -1,8 +1,12 @@
 import numpy as np
 import time
 import cProfile, pstats
-
+from subprocess import Popen, PIPE
 from lmfit import minimize, Parameters,  __version__
+
+def get_git_version():
+    proc = Popen(['git', 'rev-parse', '--short', 'HEAD'], stdout=PIPE)
+    return proc.communicate()[0].strip()
 
 # define objective function: returns the array to be minimized
 def fcn2min(params, x, data):
@@ -28,10 +32,13 @@ def run_fit(nruns=100):
         params.add('omega', value= 1.0, min=0, max=10)
         out = minimize(fcn2min, params, args=(x, data))
 
-def show_profile(command, filename='_fit_stats.dat'):
+def show_profile(command, filename=None):
+    gitversion = get_git_version()
+    if filename is None:
+        filename = '%s.dat' % gitversion
     prof = cProfile.run(command, filename=filename)
     stats = pstats.Stats(filename)
+    print(' LMFIT __version__=%s, git version=%s' % (__version__, gitversion))
     stats.strip_dirs().sort_stats('tottime').print_stats(20)
 
-print(__version__)
 show_profile('run_fit()')
