@@ -24,21 +24,29 @@ def run_fit(nruns=100):
     np.random.seed(201)
     for i in range(nruns):
         data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
-                np.random.normal(size=len(x), scale=0.3) )
+                np.random.normal(size=len(x), scale=0.1) )
         params = Parameters()
-        params.add('amp',   value= 1,  min=0, max=100)
-        params.add('decay', value= 0.0, min=0, max=10)
+        params.add('amp',   value= 1.0, min=0.0, max=100.0)
+        params.add('decay', value= 0.0, min=-1.0, max=10.0)
         params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
-        params.add('omega', value= 1.0, min=0, max=10)
+        params.add('omega', value= 1.0, min=-10.0, max=10.0)
         out = minimize(fcn2min, params, args=(x, data))
+        # print out.params['amp']
+        assert out.params['amp'].value < 5.5
+        assert out.params['amp'].value > 4.5
+        assert out.params['omega'].value < 2.25
+        assert out.params['omega'].value > 1.75
+        # print out.params['amp']
 
-def show_profile(command, filename=None):
-    gitversion = get_git_version()
-    if filename is None:
-        filename = '%s.dat' % gitversion
-    prof = cProfile.run(command, filename=filename)
+def show_profile(filename):
     stats = pstats.Stats(filename)
-    print(' LMFIT __version__=%s, git version=%s' % (__version__, gitversion))
     stats.strip_dirs().sort_stats('tottime').print_stats(20)
 
-show_profile('run_fit()')
+def profile_command(command, filename=None):
+    gitversion = get_git_version()
+    if filename is None:
+        filename = '%s.prof' % gitversion
+    prof = cProfile.run(command, filename=filename)
+    show_profile(filename)
+
+profile_command('run_fit()')
