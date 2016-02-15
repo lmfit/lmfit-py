@@ -419,8 +419,6 @@ class Parameter(object):
         self._val = value
         self.user_value = value
         self.init_value = value
-        # self._min = -inf
-        # self._max = inf
         self.min = min
         self.max = max
         self.vary = vary
@@ -474,7 +472,7 @@ class Parameter(object):
             self.min = -inf
         if self._val is not None:
             if self.min > self.max:
-                self._min, self._max = self.max, self.min
+                self.min, self.max = self.max, self.min
             if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
                 raise ValueError("Parameter '%s' has min == max" % self.name)
 
