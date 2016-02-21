@@ -15,7 +15,7 @@
 
     // List of branches to benchmark. If not provided, defaults to "master"
     // (for git) or "tip" (for mercurial).
-    "branches": ["master"], // for git
+    "branches": ["master", "param_minmax_inf"], // for git
     // "branches": ["tip"],    // for mercurial
 
     // The DVCS being used.  If not set, it will be automatically
