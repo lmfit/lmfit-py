@@ -15,12 +15,12 @@ from nose import SkipTest
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
-    print( para.name, para.value, real_val, para.stderr)
+    print('Check Param w/ stderr: ',  para.name, para.value, real_val, para.stderr)
     assert(err < sig * para.stderr)
 
 def check_wo_stderr(para, real_val, sig=0.1):
     err = abs(para.value - real_val)
-    print (para.name, para.value, real_val)
+    print('Check Param w/o stderr: ', para.name, para.value, real_val, sig)
     assert(err < sig)
 
 def check_paras(para_fit, para_real, sig=3):
@@ -367,7 +367,7 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_scalar_minimizers(self):
         # test all the scalar minimizers
         for method in SCALAR_METHODS:
-            if method in ['newton', 'dogleg', 'trust-ncg']:
+            if method in ['newton', 'dogleg', 'trust-ncg', 'cg']:
                 continue
             self.minimizer = SCALAR_METHODS[method]
             if method == 'Nelder-Mead':
