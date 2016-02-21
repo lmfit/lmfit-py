@@ -66,7 +66,7 @@ def test_simple():
     #assert that the real parameters are found
 
     for para, val in zip(result.params.values(), [5, 0.025, -.1, 2]):
-        
+
         check(para, val)
 
 def test_lbfgsb():
@@ -160,7 +160,7 @@ def test_derive():
     min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data':data})
     out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
     fit2 = func(out2.params, x)
-    
+
     print ('''Comparison of fit to exponential decay
     with and without analytic derivatives, to
        model = a*exp(-b*x) + c
@@ -356,11 +356,11 @@ class CommonMinimizerTest(unittest.TestCase):
         if data is None:
             return model
         return model - data
-        
+
     def test_diffev_bounds_check(self):
         # You need finite (min, max) for each parameter if you're using
         # differential_evolution.
-        self.fit_params['decay'].min = None
+        self.fit_params['decay'].min = -np.inf
         self.minimizer = 'differential_evolution'
         np.testing.assert_raises(ValueError, self.scalar_minimizer)
 
@@ -375,7 +375,7 @@ class CommonMinimizerTest(unittest.TestCase):
             else:
                 sig = 0.15
             self.scalar_minimizer(sig=sig)
-        
+
     def scalar_minimizer(self, sig=0.15):
         try:
             from scipy.optimize import minimize as scipy_minimize
