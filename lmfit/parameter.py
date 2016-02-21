@@ -595,10 +595,10 @@ class Parameter(object):
                     self.value = self._expr_eval(self._expr_ast)
                     check_ast_errors(self._expr_eval)
 
-        try:
-            self.value = max(self.min, min(self._val, self.max))
-        except(TypeError, ValueError):
-            self.value = nan
+        v = self._val
+        if v > self.max: v = self.max
+        if v < self.min: v = self.min
+        self.value = self._val = v
         return self._val
 
     def set_expr_eval(self, evaluator):
