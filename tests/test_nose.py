@@ -451,8 +451,8 @@ class CommonMinimizerTest(unittest.TestCase):
 
         np.random.seed(123456)
         # test mcmc output vs lm, some parameters not bounded
-        self.fit_params['amp'].max = None
-        # self.fit_params['amp'].min = None
+        self.fit_params['amp'].max = np.inf
+        # self.fit_params['amp'].min = -np.inf
         out = self.mini.emcee(nwalkers=100, steps=300,
                                       burn=100, thin=10)
 
