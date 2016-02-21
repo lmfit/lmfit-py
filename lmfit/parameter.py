@@ -596,10 +596,6 @@ class Parameter(object):
                     check_ast_errors(self._expr_eval)
 
         v = self._val
-
-        if self.max is None: self.max = inf
-        if self.min is None: self.min = -inf
-
         if v > self.max: v = self.max
         if v < self.min: v = self.min
         self.value = self._val = v
