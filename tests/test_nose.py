@@ -15,12 +15,12 @@ from nose import SkipTest
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
-    print( para.name, para.value, real_val, para.stderr)
+    print('Check Param w/ stderr: ',  para.name, para.value, real_val, para.stderr)
     assert(err < sig * para.stderr)
 
 def check_wo_stderr(para, real_val, sig=0.1):
     err = abs(para.value - real_val)
-    print (para.name, para.value, real_val)
+    print('Check Param w/o stderr: ', para.name, para.value, real_val, sig)
     assert(err < sig)
 
 def check_paras(para_fit, para_real, sig=3):
@@ -66,7 +66,7 @@ def test_simple():
     #assert that the real parameters are found
 
     for para, val in zip(result.params.values(), [5, 0.025, -.1, 2]):
-        
+
         check(para, val)
 
 def test_lbfgsb():
@@ -160,7 +160,7 @@ def test_derive():
     min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data':data})
     out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
     fit2 = func(out2.params, x)
-    
+
     print ('''Comparison of fit to exponential decay
     with and without analytic derivatives, to
        model = a*exp(-b*x) + c
@@ -356,18 +356,18 @@ class CommonMinimizerTest(unittest.TestCase):
         if data is None:
             return model
         return model - data
-        
+
     def test_diffev_bounds_check(self):
         # You need finite (min, max) for each parameter if you're using
         # differential_evolution.
-        self.fit_params['decay'].min = None
+        self.fit_params['decay'].min = -np.inf
         self.minimizer = 'differential_evolution'
         np.testing.assert_raises(ValueError, self.scalar_minimizer)
 
     def test_scalar_minimizers(self):
         # test all the scalar minimizers
         for method in SCALAR_METHODS:
-            if method in ['newton', 'dogleg', 'trust-ncg']:
+            if method in ['newton', 'dogleg', 'trust-ncg', 'cg']:
                 continue
             self.minimizer = SCALAR_METHODS[method]
             if method == 'Nelder-Mead':
@@ -375,7 +375,7 @@ class CommonMinimizerTest(unittest.TestCase):
             else:
                 sig = 0.15
             self.scalar_minimizer(sig=sig)
-        
+
     def scalar_minimizer(self, sig=0.15):
         try:
             from scipy.optimize import minimize as scipy_minimize
@@ -451,8 +451,8 @@ class CommonMinimizerTest(unittest.TestCase):
 
         np.random.seed(123456)
         # test mcmc output vs lm, some parameters not bounded
-        self.fit_params['amp'].max = None
-        # self.fit_params['amp'].min = None
+        self.fit_params['amp'].max = np.inf
+        # self.fit_params['amp'].min = -np.inf
         out = self.mini.emcee(nwalkers=100, steps=300,
                                       burn=100, thin=10)
 
