@@ -572,7 +572,7 @@ The Minimizer object has a few public methods:
 
 
 
-.. method:: emcee(params=None, steps=1000, nwalkers=100, burn=0, thin=1, ntemps=1, pos=None, reuse_sampler=False, workers=1, float_behavior='posterior', is_weighted=True)
+.. method:: emcee(params=None, steps=1000, nwalkers=100, burn=0, thin=1, ntemps=1, pos=None, reuse_sampler=False, workers=1, float_behavior='posterior', is_weighted=True, seed=None)
 
   Bayesian sampling of the posterior distribution for the parameters using the `emcee`
   Markov Chain Monte Carlo package. The method assumes that the prior is Uniform. You need
@@ -649,6 +649,12 @@ The Minimizer object has a few public methods:
             function returns an array. If your objective function returns a
             float, then this parameter is ignored. See Notes for more details.
   :type is_weighted: bool
+  :param seed: If `seed` is an int, a new `np.random.RandomState` instance is used,
+            seeded with `seed`.
+            If `seed` is already a `np.random.RandomState` instance, then that
+            `np.random.RandomState` instance is used.
+            Specify `seed` for repeatable sampling.
+  :type seed: int or np.random.RandomState
 
   :return: :class:`MinimizerResult` object containing updated params, statistics,
             etc. The :class:`MinimizerResult` also contains the ``chain``,
