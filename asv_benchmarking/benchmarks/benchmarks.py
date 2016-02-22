@@ -5,7 +5,8 @@ import time
 import cProfile, pstats
 from subprocess import Popen, PIPE
 from lmfit import (minimize, Parameters, Minimizer,  __version__,
-                   conf_interval)
+                   conf_interval, Parameter)
+from copy import deepcopy
 
 
 def obj_func(params, x, data):
@@ -17,13 +18,13 @@ def obj_func(params, x, data):
     model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
     return model - data
 
+
 class MinimizeSuite:
     """
     Benchmarks using minimize() and least-squares
     """
     def setup(self):
         pass
-
 
     def time_minimize(self):
         np.random.seed(201)
@@ -56,3 +57,53 @@ class MinimizeSuite:
         minimizer = Minimizer(residual, p)
         out = minimizer.leastsq()
         ci = conf_interval(minimizer, out)
+
+
+class MinimizerClassSuite:
+    """
+    Benchmarks for the Minimizer class
+    """
+    def setup(self):
+        self.x = np.linspace(1, 10, 250)
+        np.random.seed(0)
+        self.y = (3.0 * np.exp(-self.x / 2)
+                  - 5.0 * np.exp(-(self.x - 0.1) / 10.)
+                  + 0.1 * np.random.randn(len(self.x)))
+
+        self.p = Parameters()
+        self.p.add_many(('a1', 4., True, 0., 10.),
+                        ('a2', 4., True, -10., 10.),
+                        ('t1', 3., True, 0.01, 10.),
+                        ('t2', 3., True, 0.01, 20.))
+
+        self.p_emcee = deepcopy(self.p)
+        self.p_emcee.add('noise', 0.2, True, 0.001, 1.)
+
+        self.mini_de = Minimizer(Minimizer_Residual,
+                                 self.p,
+                                 fcn_args=(self.x, self.y),
+                                 kws={'seed': 1,
+                                      'polish': False,
+                                      'maxiter': 100})
+
+        self.mini_emcee = Minimizer(Minimizer_lnprob,
+                                    self.p_emcee,
+                                    fcn_args=(self.x, self.y))
+
+    def time_differential_evolution(self):
+        self.mini_de.minimize(method='differential_evolution')
+
+    def time_emcee(self):
+        self.mini_emcee.emcee(self.p_emcee, steps=100, seed=1)
+
+
+def Minimizer_Residual(p, x, y):
+    v = p.valuesdict()
+    return (v['a1'] * np.exp(-x / v['t1'])
+            + v['a2'] * np.exp(-(x - 0.1) / v['t2'])
+            - y)
+
+def Minimizer_lnprob(p, x, y):
+    noise = p['noise'].value
+    return -0.5 * np.sum((Minimizer_Residual(p, x, y) / noise)**2
+                         + np.log(2 * np.pi * noise**2))
