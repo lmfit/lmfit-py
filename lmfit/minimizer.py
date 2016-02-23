@@ -18,6 +18,7 @@ from numpy import (dot, eye, ndarray, ones_like,
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 import multiprocessing
+import numbers
 
 from scipy.optimize import leastsq as scipy_leastsq
 
@@ -537,7 +538,7 @@ class Minimizer(object):
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              float_behavior='posterior', is_weighted=True):
+              float_behavior='posterior', is_weighted=True, seed=None):
         """
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
@@ -621,6 +622,12 @@ class Minimizer(object):
             **Important** this parameter only has any effect if your objective
             function returns an array. If your objective function returns a
             float, then this parameter is ignored. See Notes for more details.
+        seed : int or `np.random.RandomState`, optional
+            If `seed` is an int, a new `np.random.RandomState` instance is used,
+            seeded with `seed`.
+            If `seed` is already a `np.random.RandomState` instance, then that
+            `np.random.RandomState` instance is used.
+            Specify `seed` for repeatable minimizations.
 
         Returns
         -------
@@ -788,6 +795,9 @@ class Minimizer(object):
             sampler_kwargs['args'] = lnprob_args
             sampler_kwargs['kwargs'] = lnprob_kwargs
 
+        # set up the random number generator
+        rng = _make_random_gen(seed)
+
         # now initialise the samplers
         if reuse_sampler:
             if auto_pool is not None:
@@ -800,12 +810,12 @@ class Minimizer(object):
         elif ntemps > 1:
             # Parallel Tempering
             # jitter the starting position by scaled Gaussian noise
-            p0 = 1 + np.random.randn(ntemps, nwalkers, self.nvarys) * 1.e-4
+            p0 = 1 + rng.randn(ntemps, nwalkers, self.nvarys) * 1.e-4
             p0 *= var_arr
             self.sampler = emcee.PTSampler(ntemps, nwalkers, self.nvarys,
                                            _lnpost, _lnprior, **sampler_kwargs)
         else:
-            p0 = 1 + np.random.randn(nwalkers, self.nvarys) * 1.e-4
+            p0 = 1 + rng.randn(nwalkers, self.nvarys) * 1.e-4
             p0 *= var_arr
             self.sampler = emcee.EnsembleSampler(nwalkers, self.nvarys,
                                                  _lnpost, **sampler_kwargs)
@@ -831,6 +841,10 @@ class Minimizer(object):
                 raise ValueError('pos should have shape (nwalkers, nvarys)'
                                  'or (ntemps, nwalkers, nvarys) if ntemps > 1')
             p0 = tpos
+
+        # if you specified a seed then you also need to seed the sampler
+        if seed is not None:
+            self.sampler.random_state = rng.get_state()
 
         # now do a production run, sampling all the time
         output = self.sampler.run_mcmc(p0, steps)
@@ -1179,6 +1193,24 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
                              " 'chi2' " + float_behavior)
 
     return lnprob
+
+
+def _make_random_gen(seed):
+    """Turn seed into a np.random.RandomState instance
+
+    If seed is None, return the RandomState singleton used by np.random.
+    If seed is an int, return a new RandomState instance seeded with seed.
+    If seed is already a RandomState instance, return it.
+    Otherwise raise ValueError.
+    """
+    if seed is None or seed is np.random:
+        return np.random.mtrand._rand
+    if isinstance(seed, (numbers.Integral, np.integer)):
+        return np.random.RandomState(seed)
+    if isinstance(seed, np.random.RandomState):
+        return seed
+    raise ValueError('%r cannot be used to seed a numpy.random.RandomState'
+                     ' instance' % seed)
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,

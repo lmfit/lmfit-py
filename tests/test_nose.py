@@ -572,6 +572,21 @@ class CommonMinimizerTest(unittest.TestCase):
                               burn=50, thin=10, float_behavior='chi2')
         check_paras(out.params, self.p_true, sig=3)
 
+    @decorators.slow
+    def test_emcee_seed(self):
+        # test emcee seeding can reproduce a sampling run
+        if not HAS_EMCEE:
+            return True
+
+        out = self.mini.emcee(params=self.fit_params,
+                              nwalkers=100,
+                              steps=1, seed=1)
+        out2 = self.mini.emcee(params=self.fit_params,
+                               nwalkers=100,
+                               steps=1, seed=1)
+
+        assert_almost_equal(out.chain, out2.chain)
+
 
 def residual_for_multiprocessing(pars, x, data=None):
     # a residual function defined in the top level is needed for
