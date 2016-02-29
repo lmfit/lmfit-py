@@ -224,8 +224,7 @@ class ConfidenceInterval(object):
 
         para.vary = False
         limit, max_prob = self.find_limit(para, direction)
-        start_val = para.value.copy()
-        a_limit = start_val.copy()
+        start_val = a_limit = float(para.value)
         ret = []
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
