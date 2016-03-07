@@ -195,6 +195,7 @@ class PseudoVoigtModel(Model):
     fwhm_factor = 2.0
     def __init__(self, *args, **kwargs):
         super(PseudoVoigtModel, self).__init__(pvoigt, *args, **kwargs)
+        self.set_param_hint('sigma', min=0)
         self.set_param_hint('fraction', value=0.5)
         self.set_param_hint('fwhm',  expr=fwhm_expr(self))
 
