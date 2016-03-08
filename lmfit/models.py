@@ -195,6 +195,7 @@ class PseudoVoigtModel(Model):
     fwhm_factor = 2.0
     def __init__(self, *args, **kwargs):
         super(PseudoVoigtModel, self).__init__(pvoigt, *args, **kwargs)
+        self.set_param_hint('sigma', min=0)
         self.set_param_hint('fraction', value=0.5)
         self.set_param_hint('fwhm',  expr=fwhm_expr(self))
 
@@ -208,6 +209,8 @@ class MoffatModel(Model):
     __doc__ = moffat.__doc__ + COMMON_DOC if moffat.__doc__ else ""
     def __init__(self, *args, **kwargs):
         super(MoffatModel, self).__init__(moffat, *args, **kwargs)
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('beta')
         self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/%sbeta)-1)" % (self.prefix, self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -348,6 +351,9 @@ class RectangleModel(Model):
     __doc__ = rectangle.__doc__ + COMMON_DOC if rectangle.__doc__ else ""
     def __init__(self, *args, **kwargs):
         super(RectangleModel, self).__init__(rectangle, *args, **kwargs)
+
+        self.set_param_hint('center1')
+        self.set_param_hint('center2')
         self.set_param_hint('midpoint',
                             expr='(%scenter1+%scenter2)/2.0' % (self.prefix,
                                                                 self.prefix))
