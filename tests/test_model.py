@@ -433,6 +433,24 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertEqual(param_values['p1_amplitude'], 1)
         self.assertEqual(param_values['p2_amplitude'], 2)
 
+    def test_weird_param_hints(self):
+        # tests Github Issue 312, a very weird way to access param_hints
+        def func(x, amp):
+            return amp*x
+
+        m = Model(func)
+        models = {}
+        for i in range(2):
+            m.set_param_hint('amp', value=1)
+            m.set_param_hint('amp', value=25)
+
+            models[i] = Model(func, prefix='mod%i_' % i)
+            models[i].param_hints['amp'] = m.param_hints['amp']
+
+        self.assertEqual(models[0].param_hints['amp'],
+                         models[1].param_hints['amp'])
+
+
     def test_composite_model_with_expr_constrains(self):
         """Smoke test for composite model fitting with expr constraints.
         """
