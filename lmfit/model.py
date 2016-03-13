@@ -235,13 +235,10 @@ class Model(object):
         if npref > 0 and name.startswith(self._prefix):
             name = name[npref:]
 
-        thishint = {}
-        if name in self.param_hints:
-            thishint = self.param_hints.pop(name)
-        thishint.update(kwargs)
+        if name not in self.param_hints:
+            self.param_hints[name] = OrderedDict()
 
-        self.param_hints[name] = OrderedDict()
-        for key, val in thishint.items():
+        for key, val in kwargs.items():
             if key in self._hint_names:
                 self.param_hints[name][key] = val
             else:
