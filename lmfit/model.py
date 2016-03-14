@@ -333,14 +333,14 @@ class Model(object):
 
         if data_dtype.char in np.typecodes['Complex']:
             # data/model are complex
-            diff = diff.view(data_dtype.char.lower())
+            diff = diff.ravel().view(data_dtype.char.lower())
             if weights is not None:
                 if weights.dtype.char in np.typecodes['Complex']:
-                    #weights are complex
-                    weights = weights.view(weights.dtype.char.lower())
+                    # weights are complex
+                    weights = weights.ravel().view(weights.dtype.char.lower())
                 else:
-                    #real weights but complex data
-                    weights = (weights + 1j*weights).astype(data_dtype).view(data_dtype.char.lower())
+                    # real weights but complex data
+                    weights = (weights + 1j * weights).astype(data_dtype).ravel().view(data_dtype.char.lower())
         if weights is not None:
             diff *= weights
         return np.asarray(diff).ravel()  # for compatibility with pandas.Series
