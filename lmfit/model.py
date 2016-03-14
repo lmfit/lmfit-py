@@ -311,15 +311,35 @@ class Model(object):
         raise NotImplementedError(msg)
 
     def _residual(self, params, data, weights, **kwargs):
-        "default residual:  (data-model)*weights"
+        """default residual:  (data-model)*weights
+
+        If the model returns complex values, the residual is computed by treating the real and imaginary
+        parts separately. In this case, if the weights provided are real, they are assumed to apply equally to the
+        real and imaginary parts. If the weights are complex, the real part of the weights are applied to the real
+        part of the residual and the imaginary part is treated correspondingly.
+        """
         diff = self.eval(params, **kwargs) - data
         data_dtype = diff.dtype
+        # The following code uses dtype character codes as it appears to be the easiest way to reliably map from a
+        # complex dtype to the corresponding floating point type. We could instead cast everything to 'complex',
+        # but that will imply a potential performance penalty.
+
+        # np.typecodes is a dictionary that maps data type categories to strings containing all the associated
+        # character dtype codes for that category. E.g. 'Complex' currently contains 'FDG' for complex types made up
+        # of 32, 64, and 128 bit floats, respectively.
+
+        # the corresponding floating point types are 'fdg', so .lower transforms from the complex dtype to the
+        # underlying floating point character code.
+
         if data_dtype.char in np.typecodes['Complex']:
+            # data/model are complex
             diff = diff.view(data_dtype.char.lower())
             if weights is not None:
                 if weights.dtype.char in np.typecodes['Complex']:
+                    #weights are complex
                     weights = weights.view(weights.dtype.char.lower())
-                else: #real weights but complex data
+                else:
+                    #real weights but complex data
                     weights = (weights + 1j*weights).astype(data_dtype).view(data_dtype.char.lower())
         if weights is not None:
             diff *= weights
