@@ -313,6 +313,14 @@ class Model(object):
     def _residual(self, params, data, weights, **kwargs):
         "default residual:  (data-model)*weights"
         diff = self.eval(params, **kwargs) - data
+        data_dtype = diff.dtype
+        if data_dtype.char in np.typecodes['Complex']:
+            diff = diff.view(data_dtype.char.lower())
+            if weights is not None:
+                if weights.dtype.char in np.typecodes['Complex']:
+                    weights = weights.view(weights.dtype.char.lower())
+                else: #real weights but complex data
+                    weights = (weights + 1j*weights).astype(data_dtype).view(data_dtype.char.lower())
         if weights is not None:
             diff *= weights
         return np.asarray(diff).ravel()  # for compatibility with pandas.Series

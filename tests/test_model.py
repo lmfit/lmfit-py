@@ -557,3 +557,11 @@ class TestExponential(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(amplitude=2, decay=8)
         self.model_constructor = models.ExponentialModel
         super(TestExponential, self).setUp()
+
+
+class TestComplexConstant(CommonTests, unittest.TestCase):
+    def setUp(self):
+        self.true_values = lambda: dict(re=5,im=5)
+        self.guess = lambda: dict(re=2,im=2)
+        self.model_constructor = models.ComplexConstantModel
+        super(TestComplexConstant, self).setUp()

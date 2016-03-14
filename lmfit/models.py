@@ -95,6 +95,18 @@ class ConstantModel(Model):
         pars['%sc' % self.prefix].set(value=data.mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
+class ComplexConstantModel(Model):
+    __doc__ = "x -> re+1j*im" + COMMON_DOC
+    def __init__(self, *args, **kwargs):
+        def constant(x, re, im):
+            return re + 1j*im
+        super(ComplexConstantModel, self).__init__(constant, *args, **kwargs)
+
+    def guess(self, data, **kwargs):
+        pars = self.make_params()
+        pars['%sre' % self.prefix].set(value=data.real.mean())
+        pars['%sim' % self.prefix].set(value=data.imag.mean())
+        return update_param_vals(pars, self.prefix, **kwargs)
 
 class LinearModel(Model):
     __doc__ = linear.__doc__ + COMMON_DOC if linear.__doc__ else ""
