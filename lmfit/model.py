@@ -11,8 +11,6 @@ from . import Parameters, Parameter, Minimizer
 from .printfuncs import fit_report, ci_report
 from .confidence import conf_interval
 
-from collections import MutableSet
-
 try:
     from collections import OrderedDict
 except ImportError:
@@ -253,12 +251,12 @@ class Model(object):
         print('{:{name_len}}  {:>{n}} {:>{n}} {:>{n}} {:>{n}}    {:{n}}'
               .format('Name', 'Value', 'Min', 'Max', 'Vary', 'Expr',
                       name_len=name_len, n=spacing))
-        line = ('{name:<{name_len}}  {value:{n}} {min:{n}} {max:{n}} '
+        line = ('{name:<{name_len}}  {value:{n}g} {min:{n}g} {max:{n}g} '
                 '{vary!s:>{n}}    {expr}')
         for name, values in sorted(self.param_hints.items()):
-            pvalues = {k: values.get(k, '')
-                       for k in ('value', 'min', 'max', 'vary', 'expr')}
-            pvalues['name'] = name
+            pvalues = dict(name=name, value=np.nan, min=-np.inf, max=np.inf,
+                           vary='', expr='')
+            pvalues.update(**values)
             print(line.format(name_len=name_len, n=spacing, **pvalues))
 
     def make_params(self, verbose=False, **kwargs):
