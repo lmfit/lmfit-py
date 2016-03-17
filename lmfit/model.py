@@ -255,7 +255,7 @@ class Model(object):
                 '{vary!s:>{n}}    {expr}')
         for name, values in sorted(self.param_hints.items()):
             pvalues = dict(name=name, value=np.nan, min=-np.inf, max=np.inf,
-                           vary='', expr='')
+                           vary=True, expr='')
             pvalues.update(**values)
             print(line.format(name_len=name_len, n=spacing, **pvalues))
 
