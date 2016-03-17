@@ -244,6 +244,23 @@ class Model(object):
             else:
                 warnings.warn(self._invalid_hint % (key, name))
 
+    def print_param_hints(self, spacing=8):
+        """Pretty-print parameters hints.
+        """
+        name_len = max(len(s) for s in self.param_hints)
+        print('{:nn}  {:>nf} {:>nf} {:>nf}    {:nf}'
+              .replace('nn', str(name_len))
+              .replace('nf', str(spacing))
+              .format('Name', 'Value', 'Min', 'Max', 'Expr'))
+        line = ('{name:<nn}  {value:nf} {min:nf} {max:nf}    {expr}'
+                .replace('nn', str(name_len))
+                .replace('nf', str(spacing)))
+        for name, values in sorted(self.param_hints.items()):
+            pvalues = {k: values.get(k, '')
+                       for k in ('value', 'min', 'max', 'expr')}
+            pvalues['name'] = name
+            print(line.format(**pvalues))
+
     def make_params(self, verbose=False, **kwargs):
         """create and return a Parameters object for a Model.
         This applies any default values
