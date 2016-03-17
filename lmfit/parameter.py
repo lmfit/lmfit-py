@@ -229,8 +229,26 @@ class Parameters(OrderedDict):
         s += "    })\n"
         return s
 
-    def pretty_print(self, oneline=False):
-        print(self.pretty_repr(oneline=oneline))
+    def pretty_print(self, oneline=False, spacing=8):
+        """Pretty-print parameters data.
+
+        Argument `spacing` is column width except for first and last columns.
+        """
+        if oneline:
+            print(self.pretty_repr(oneline=oneline))
+            return
+
+        name_len = max(len(s) for s in self)
+        print('{:{name_len}}  {:>{n}} {:>{n}} {:>{n}} {:>{n}}    {:{n}}'
+              .format('Name', 'Value', 'Min', 'Max', 'Vary', 'Expr',
+                      name_len=name_len, n=spacing))
+        line = ('{name:<{name_len}}  {value:{n}g} {min:{n}g} {max:{n}g} '
+                '{vary!s:>{n}}    {expr}')
+        for name, values in sorted(self.items()):
+            pvalues = {k: getattr(values, k)
+                       for k in ('value', 'min', 'max', 'vary', 'expr')}
+            pvalues['name'] = name
+            print(line.format(name_len=name_len, n=spacing, **pvalues))
 
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None):
         """
