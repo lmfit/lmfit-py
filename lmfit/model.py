@@ -246,6 +246,8 @@ class Model(object):
 
     def print_param_hints(self, spacing=8):
         """Pretty-print parameters hints.
+
+        Argument `spacing` is the width of Value, Min and Max columns.
         """
         name_len = max(len(s) for s in self.param_hints)
         print('{:nn}  {:>nf} {:>nf} {:>nf}    {:nf}'
