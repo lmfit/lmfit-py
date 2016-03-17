@@ -247,21 +247,19 @@ class Model(object):
     def print_param_hints(self, spacing=8):
         """Pretty-print parameters hints.
 
-        Argument `spacing` is the width of Value, Min and Max columns.
+        Argument `spacing` is column width except for first and last columns.
         """
         name_len = max(len(s) for s in self.param_hints)
-        print('{:nn}  {:>nf} {:>nf} {:>nf}    {:nf}'
-              .replace('nn', str(name_len))
-              .replace('nf', str(spacing))
-              .format('Name', 'Value', 'Min', 'Max', 'Expr'))
-        line = ('{name:<nn}  {value:nf} {min:nf} {max:nf}    {expr}'
-                .replace('nn', str(name_len))
-                .replace('nf', str(spacing)))
+        print('{:{name_len}}  {:>{n}} {:>{n}} {:>{n}} {:>{n}}    {:{n}}'
+              .format('Name', 'Value', 'Min', 'Max', 'Vary', 'Expr',
+                      name_len=name_len, n=spacing))
+        line = ('{name:<{name_len}}  {value:{n}} {min:{n}} {max:{n}} '
+                '{vary!s:>{n}}    {expr}')
         for name, values in sorted(self.param_hints.items()):
             pvalues = {k: values.get(k, '')
-                       for k in ('value', 'min', 'max', 'expr')}
+                       for k in ('value', 'min', 'max', 'vary', 'expr')}
             pvalues['name'] = name
-            print(line.format(**pvalues))
+            print(line.format(name_len=name_len, n=spacing, **pvalues))
 
     def make_params(self, verbose=False, **kwargs):
         """create and return a Parameters object for a Model.
