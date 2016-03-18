@@ -229,26 +229,47 @@ class Parameters(OrderedDict):
         s += "    })\n"
         return s
 
-    def pretty_print(self, oneline=False, spacing=8):
+    def pretty_print(self, oneline=False, colwidth=8, precision=4, fmt='g',
+                     columns=['value', 'min', 'max', 'stderr', 'vary', 'expr']):
         """Pretty-print parameters data.
 
-        Argument `spacing` is column width except for first and last columns.
+        Parameters
+        ----------
+        oneline : boolean
+            If True print a one-line parameters representation. Default False.
+        colwidth : int
+            column width for all except the first (i.e. name) column.
+        columns : list of strings
+            list of columns names to print. All values must be a valid
+            :class:`Parameter` attributes.
+        precision : int
+            number of digits after floating point to be printed.
+        format : string
+            single-char numeric formatter type. Valid values: 'f' floating point,
+            'g' floating point and exponential, 'e' exponential.
         """
         if oneline:
             print(self.pretty_repr(oneline=oneline))
             return
 
         name_len = max(len(s) for s in self)
-        print('{:{name_len}}  {:>{n}} {:>{n}} {:>{n}} {:>{n}}    {:{n}}'
-              .format('Name', 'Value', 'Min', 'Max', 'Vary', 'Expr',
-                      name_len=name_len, n=spacing))
-        line = ('{name:<{name_len}}  {value:{n}g} {min:{n}g} {max:{n}g} '
-                '{vary!s:>{n}}    {expr}')
+        allcols = [s.capitalize() for s in (['name'] + columns)]
+        title = '{:{name_len}} ' + len(columns) * ' {:>{n}}'
+        print(title.format(*allcols, name_len=name_len, n=colwidth))
+        numstyle = '{%s:>{n}.{p}{f}}'  # format for numeric columns
+        otherstyles = dict(name='{name:<{name_len}} ', stderr='{stderr!s:>{n}}',
+                           vary='{vary!s:>{n}}', expr='{expr!s:>{n}}')
+        line = ' '.join([otherstyles.get(k.lower(), numstyle % k.lower())
+                         for k in allcols])
         for name, values in sorted(self.items()):
-            pvalues = {k: getattr(values, k)
-                       for k in ('value', 'min', 'max', 'vary', 'expr')}
+            pvalues = {k: getattr(values, k) for k in columns}
             pvalues['name'] = name
-            print(line.format(name_len=name_len, n=spacing, **pvalues))
+            # stderr is a special case: it is either numeric or None (i.e. str)
+            if 'stderr' in columns and pvalues['stderr'] is not None:
+                pvalues['stderr'] = (numstyle % '').format(
+                    pvalues['stderr'], n=colwidth, p=precision, f=fmt)
+            print(line.format(name_len=name_len, n=colwidth, p=precision, f=fmt,
+                              **pvalues))
 
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None):
         """
