@@ -36,7 +36,7 @@ setup(name = 'lmfit',
       author_email = 'matt.newville@gmail.com',
       url          = 'http://lmfit.github.io/lmfit-py/',
       download_url = 'http://lmfit.github.io//lmfit-py/',
-      install_requires = ['numpy', 'scipy'],
+      install_requires = ['numpy', 'scipy', 'future'],
       license = 'BSD',
       description = "Least-Squares Minimization with Bounds and Constraints",
       long_description = long_desc,
@@ -51,4 +51,3 @@ setup(name = 'lmfit',
       package_dir = {'lmfit': 'lmfit'},
       packages = ['lmfit', 'lmfit.ui', 'lmfit.uncertainties'],
       )
-
