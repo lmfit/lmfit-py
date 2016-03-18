@@ -2,6 +2,7 @@
 Parameter class
 """
 from __future__ import division
+from builtins import int
 from numpy import arcsin, cos, sin, sqrt, inf, nan, isfinite
 import json
 from copy import deepcopy
@@ -674,10 +675,6 @@ class Parameter(object):
     def __int__(self):
         """int"""
         return int(self._getval())
-
-    def __long__(self):
-        """long"""
-        return long(self._getval())
 
     def __float__(self):
         """float"""
