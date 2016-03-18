@@ -311,8 +311,30 @@ class Model(object):
         raise NotImplementedError(msg)
 
     def _residual(self, params, data, weights, **kwargs):
-        "default residual:  (data-model)*weights"
+        """default residual:  (data-model)*weights
+
+        If the model returns complex values, the residual is computed by treating the real and imaginary
+        parts separately. In this case, if the weights provided are real, they are assumed to apply equally to the
+        real and imaginary parts. If the weights are complex, the real part of the weights are applied to the real
+        part of the residual and the imaginary part is treated correspondingly.
+
+        Since the underlying scipy.optimize routines expect np.float arrays, the only complex type supported is
+        np.complex.
+
+        The "ravels" throughout are necessary to support pandas.Series.
+        """
         diff = self.eval(params, **kwargs) - data
+
+        if diff.dtype == np.complex:
+            # data/model are complex
+            diff = diff.ravel().view(np.float)
+            if weights is not None:
+                if weights.dtype == np.complex:
+                    # weights are complex
+                    weights = weights.ravel().view(np.float)
+                else:
+                    # real weights but complex data
+                    weights = (weights + 1j * weights).ravel().view(np.float)
         if weights is not None:
             diff *= weights
         return np.asarray(diff).ravel()  # for compatibility with pandas.Series
