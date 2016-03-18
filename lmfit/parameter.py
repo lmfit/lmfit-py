@@ -253,14 +253,13 @@ class Parameters(OrderedDict):
             return
 
         name_len = max(len(s) for s in self)
-        allcols = [s.capitalize() for s in (['name'] + columns)]
+        allcols = ['name'] + columns
         title = '{:{name_len}} ' + len(columns) * ' {:>{n}}'
-        print(title.format(*allcols, name_len=name_len, n=colwidth))
+        print(title.format(*allcols, name_len=name_len, n=colwidth).title())
         numstyle = '{%s:>{n}.{p}{f}}'  # format for numeric columns
         otherstyles = dict(name='{name:<{name_len}} ', stderr='{stderr!s:>{n}}',
                            vary='{vary!s:>{n}}', expr='{expr!s:>{n}}')
-        line = ' '.join([otherstyles.get(k.lower(), numstyle % k.lower())
-                         for k in allcols])
+        line = ' '.join([otherstyles.get(k, numstyle % k) for k in allcols])
         for name, values in sorted(self.items()):
             pvalues = {k: getattr(values, k) for k in columns}
             pvalues['name'] = name
