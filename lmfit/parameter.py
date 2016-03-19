@@ -236,16 +236,16 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         oneline : boolean
-            If True print a one-line parameters representation. Default False.
+            If True prints a one-line parameters representation. Default False.
         colwidth : int
             column width for all except the first (i.e. name) column.
         columns : list of strings
-            list of columns names to print. All values must be a valid
+            list of columns names to print. All values must be valid
             :class:`Parameter` attributes.
         precision : int
-            number of digits after floating point to be printed.
+            number of digits to be printed after floating point.
         format : string
-            single-char numeric formatter type. Valid values: 'f' floating point,
+            single-char numeric formatter. Valid values: 'f' floating point,
             'g' floating point and exponential, 'e' exponential.
         """
         if oneline:
