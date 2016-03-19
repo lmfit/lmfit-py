@@ -2,7 +2,6 @@
 Parameter class
 """
 from __future__ import division
-from builtins import int
 from numpy import arcsin, cos, sin, sqrt, inf, nan, isfinite
 import json
 from copy import deepcopy
