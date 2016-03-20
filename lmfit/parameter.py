@@ -675,10 +675,6 @@ class Parameter(object):
         """int"""
         return int(self._getval())
 
-    def __long__(self):
-        """long"""
-        return long(self._getval())
-
     def __float__(self):
         """float"""
         return float(self._getval())
