@@ -229,8 +229,46 @@ class Parameters(OrderedDict):
         s += "    })\n"
         return s
 
-    def pretty_print(self, oneline=False):
-        print(self.pretty_repr(oneline=oneline))
+    def pretty_print(self, oneline=False, colwidth=8, precision=4, fmt='g',
+                     columns=['value', 'min', 'max', 'stderr', 'vary', 'expr']):
+        """Pretty-print parameters data.
+
+        Parameters
+        ----------
+        oneline : boolean
+            If True prints a one-line parameters representation. Default False.
+        colwidth : int
+            column width for all except the first (i.e. name) column.
+        columns : list of strings
+            list of columns names to print. All values must be valid
+            :class:`Parameter` attributes.
+        precision : int
+            number of digits to be printed after floating point.
+        format : string
+            single-char numeric formatter. Valid values: 'f' floating point,
+            'g' floating point and exponential, 'e' exponential.
+        """
+        if oneline:
+            print(self.pretty_repr(oneline=oneline))
+            return
+
+        name_len = max(len(s) for s in self)
+        allcols = ['name'] + columns
+        title = '{:{name_len}} ' + len(columns) * ' {:>{n}}'
+        print(title.format(*allcols, name_len=name_len, n=colwidth).title())
+        numstyle = '{%s:>{n}.{p}{f}}'  # format for numeric columns
+        otherstyles = dict(name='{name:<{name_len}} ', stderr='{stderr!s:>{n}}',
+                           vary='{vary!s:>{n}}', expr='{expr!s:>{n}}')
+        line = ' '.join([otherstyles.get(k, numstyle % k) for k in allcols])
+        for name, values in sorted(self.items()):
+            pvalues = {k: getattr(values, k) for k in columns}
+            pvalues['name'] = name
+            # stderr is a special case: it is either numeric or None (i.e. str)
+            if 'stderr' in columns and pvalues['stderr'] is not None:
+                pvalues['stderr'] = (numstyle % '').format(
+                    pvalues['stderr'], n=colwidth, p=precision, f=fmt)
+            print(line.format(name_len=name_len, n=colwidth, p=precision, f=fmt,
+                              **pvalues))
 
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None):
         """
