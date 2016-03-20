@@ -30,7 +30,13 @@ def index_of(arr, val):
 
 def fwhm_expr(model):
     "return constraint expression for fwhm"
-    return "%.7f*%ssigma" % (model.fwhm_factor, model.prefix)
+    fmt = "{factor:.7f}*{prefix:s}sigma"
+    return fmt.format(factor=model.fwhm_factor, prefix=model.prefix)
+
+def height_expr(model):
+    "return constraint expression for maximum peak height"
+    fmt = "{factor:.7f}*{prefix:s}amplitude/{prefix:s}sigma"
+    return fmt.format(factor=model.height_factor, prefix=model.prefix)
 
 def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     "estimate amp, cen, sigma for a peak, create params"
@@ -164,10 +170,12 @@ class PolynomialModel(Model):
 class GaussianModel(Model):
     __doc__ = gaussian.__doc__ + COMMON_DOC if gaussian.__doc__ else ""
     fwhm_factor = 2.354820
+    height_factor = 1./np.sqrt(2*np.pi)
     def __init__(self, *args, **kwargs):
         super(GaussianModel, self).__init__(gaussian, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
+        self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -177,10 +185,12 @@ class GaussianModel(Model):
 class LorentzianModel(Model):
     __doc__ = lorentzian.__doc__ + COMMON_DOC if lorentzian.__doc__ else ""
     fwhm_factor = 2.0
+    height_factor = 1./np.pi
     def __init__(self, *args, **kwargs):
         super(LorentzianModel, self).__init__(lorentzian, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
+        self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
@@ -190,11 +200,13 @@ class LorentzianModel(Model):
 class VoigtModel(Model):
     __doc__ = voigt.__doc__ + COMMON_DOC if voigt.__doc__ else ""
     fwhm_factor = 3.60131
+    height_factor = 1./np.sqrt(2*np.pi)
     def __init__(self, *args, **kwargs):
         super(VoigtModel, self).__init__(voigt, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
         self.set_param_hint('fwhm',  expr=fwhm_expr(self))
+        self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
