@@ -129,6 +129,8 @@ update some Parameter attribute without affecting others, for example::
 The :class:`Parameters` class
 ========================================
 
+.. currentmodule:: lmfit.parameter
+
 .. class:: Parameters()
 
    create a Parameters object.  This is little more than a fancy ordered
@@ -140,8 +142,7 @@ The :class:`Parameters` class
 
    2. values must be valid :class:`Parameter` objects.
 
-
-   Two methods are for provided for convenient initialization of a :class:`Parameters`,
+   Two methods are provided for convenient initialization of a :class:`Parameters`,
    and one for extracting :class:`Parameter` values into a plain dictionary.
 
 .. method:: add(name[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
@@ -174,10 +175,7 @@ The :class:`Parameters` class
                 ('wid2',  None, False, None, None, '2*wid1/3'))
 
 
-.. method:: pretty_print(oneline=False)
-
-   prints a clean representation on the Parameters. If `oneline` is
-   `True`, the result will be printed to a single (long) line.
+.. automethod:: Parameters.pretty_print
 
 .. method:: valuesdict()
 
@@ -186,7 +184,7 @@ The :class:`Parameters` class
 
    This is distinct from the :class:`Parameters` itself, as the dictionary
    values are not :class:`Parameter` objects, just the :attr:`value`.
-   Using :method:`valuesdict` can be a very convenient way to get updated
+   Using :meth:`valuesdict` can be a very convenient way to get updated
    values in a objective function.
 
 .. method:: dumps(**kws):

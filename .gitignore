@@ -11,3 +11,4 @@ sandbox/
 .idea/
 .DS_Store
 .ipynb_checkpoints/
+doc/html
