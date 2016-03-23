@@ -242,22 +242,22 @@ class Model(object):
             else:
                 warnings.warn(self._invalid_hint % (key, name))
 
-    def print_param_hints(self, spacing=8):
+    def print_param_hints(self, colwidth=8):
         """Pretty-print parameters hints.
 
-        Argument `spacing` is column width except for first and last columns.
+        Argument `colwidth` is column width except for first and last columns.
         """
         name_len = max(len(s) for s in self.param_hints)
         print('{:{name_len}}  {:>{n}} {:>{n}} {:>{n}} {:>{n}}    {:{n}}'
               .format('Name', 'Value', 'Min', 'Max', 'Vary', 'Expr',
-                      name_len=name_len, n=spacing))
+                      name_len=name_len, n=colwidth))
         line = ('{name:<{name_len}}  {value:{n}g} {min:{n}g} {max:{n}g} '
                 '{vary!s:>{n}}    {expr}')
         for name, values in sorted(self.param_hints.items()):
             pvalues = dict(name=name, value=np.nan, min=-np.inf, max=np.inf,
                            vary=True, expr='')
             pvalues.update(**values)
-            print(line.format(name_len=name_len, n=spacing, **pvalues))
+            print(line.format(name_len=name_len, n=colwidth, **pvalues))
 
     def make_params(self, verbose=False, **kwargs):
         """create and return a Parameters object for a Model.
