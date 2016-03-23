@@ -65,6 +65,7 @@ copyright = u'2014, Matthew Newville, The University of Chicago,  Till Stensitzk
 # built documents.
 #
 # The short X.Y version.
+sys.path.insert(0, os.path.abspath('../'))
 try:
     import lmfit
     release = lmfit.__version__
