@@ -77,21 +77,21 @@ Discussion
 
 The main goal for making this change were to
 
-   1. give a better return value to :func:`minimize` and
-      :meth:`Minimizer.minimize` that can hold all of the information
-      about a fit.  By having the return value be an instance of the
-      :class:`MinimizerResult` class, it can hold an arbitrary amount of
-      information that is easily accessed by attribute name, and even
-      be given methods.  Using objects is good!
+1. give a better return value to :func:`minimize` and
+   :meth:`Minimizer.minimize` that can hold all of the information
+   about a fit.  By having the return value be an instance of the
+   :class:`MinimizerResult` class, it can hold an arbitrary amount of
+   information that is easily accessed by attribute name, and even
+   be given methods.  Using objects is good!
 
-   2. To limit or even elimate the amount of "state information" a
-      :class:`Minimizer` holds.  By state information, we mean how much of
-      the previous fit is remembered after a fit is done.  Keeping (and
-      especially using) such information about a previous fit means that
-      a :class:`Minimizer` might give different results even for the same
-      problem if run a second time.  While it's desirable to be able to
-      adjust a set of :class:`Parameters` re-run a fit to get an improved
-      result, doing this by changing an *internal attribute
-      (:attr:`Minimizer.params`) has the undesirable side-effect of not
-      being able to "go back", and makes it somewhat cumbersome to keep
-      track of changes made while adjusting parameters and re-running fits.
+2. To limit or even eliminate the amount of "state information" a
+   :class:`Minimizer` holds.  By state information, we mean how much of
+   the previous fit is remembered after a fit is done.  Keeping (and
+   especially using) such information about a previous fit means that
+   a :class:`Minimizer` might give different results even for the same
+   problem if run a second time.  While it's desirable to be able to
+   adjust a set of :class:`Parameters` re-run a fit to get an improved
+   result, doing this by changing an internal attribute
+   (:attr:`Minimizer.params`) has the undesirable side-effect of not
+   being able to "go back", and makes it somewhat cumbersome to keep
+   track of changes made while adjusting parameters and re-running fits.

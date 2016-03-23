@@ -24,13 +24,18 @@ sys.path.append(os.path.abspath(os.path.join('.')))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 from extensions import extensions
 
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.mathjax',
+    ]
+
 try:
     import IPython.sphinxext.ipython_directive
     extensions.extend(['IPython.sphinxext.ipython_directive',
                        'IPython.sphinxext.ipython_console_highlighting'])
 except ImportError:
     pass
-
 
 intersphinx_mapping = {'py': ('http://docs.python.org/2', None),
                        'numpy': ('http://docs.scipy.org/doc/numpy/', None),
@@ -60,6 +65,7 @@ copyright = u'2014, Matthew Newville, The University of Chicago,  Till Stensitzk
 # built documents.
 #
 # The short X.Y version.
+sys.path.insert(0, os.path.abspath('../'))
 try:
     import lmfit
     release = lmfit.__version__
@@ -173,4 +179,3 @@ latex_documents = [
    'Non-Linear Least-Squares Minimization and Curve-Fitting for Python',
    'Matthew Newville, Till Stensitzki, and others', 'manual'),
 ]
-
