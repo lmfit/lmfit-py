@@ -243,9 +243,10 @@ class Model(object):
                 warnings.warn(self._invalid_hint % (key, name))
 
     def print_param_hints(self, colwidth=8):
-        """Pretty-print parameters hints.
+        """Prints a nicely aligned text-table of parameters hints.
 
-        Argument `colwidth` is column width except for first and last columns.
+        The argument `colwidth` is the width of each column,
+        except for first and last columns.
         """
         name_len = max(len(s) for s in self.param_hints)
         print('{:{name_len}}  {:>{n}} {:>{n}} {:>{n}} {:>{n}}    {:{n}}'
