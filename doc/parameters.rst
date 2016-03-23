@@ -145,74 +145,74 @@ The :class:`Parameters` class
    Two methods are provided for convenient initialization of a :class:`Parameters`,
    and one for extracting :class:`Parameter` values into a plain dictionary.
 
-.. method:: add(name[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
+    .. method:: add(name[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
 
-   add a named parameter.  This creates a :class:`Parameter`
-   object associated with the key `name`, with optional arguments
-   passed to :class:`Parameter`::
+       add a named parameter.  This creates a :class:`Parameter`
+       object associated with the key `name`, with optional arguments
+       passed to :class:`Parameter`::
 
-     p = Parameters()
-     p.add('myvar', value=1, vary=True)
+         p = Parameters()
+         p.add('myvar', value=1, vary=True)
 
-.. method:: add_many(self, paramlist)
+    .. method:: add_many(self, paramlist)
 
-   add a list of named parameters.  Each entry must be a tuple
-   with the following entries::
+       add a list of named parameters.  Each entry must be a tuple
+       with the following entries::
 
-        name, value, vary, min, max, expr
+            name, value, vary, min, max, expr
 
-   This method is somewhat rigid and verbose (no default values), but can
-   be useful when initially defining a parameter list so that it looks
-   table-like::
+       This method is somewhat rigid and verbose (no default values), but can
+       be useful when initially defining a parameter list so that it looks
+       table-like::
 
-     p = Parameters()
-     #           (Name,  Value,  Vary,   Min,  Max,  Expr)
-     p.add_many(('amp1',    10,  True, None, None,  None),
-                ('cen1',   1.2,  True,  0.5,  2.0,  None),
-                ('wid1',   0.8,  True,  0.1, None,  None),
-                ('amp2',   7.5,  True, None, None,  None),
-                ('cen2',   1.9,  True,  1.0,  3.0,  None),
-                ('wid2',  None, False, None, None, '2*wid1/3'))
+         p = Parameters()
+         #           (Name,  Value,  Vary,   Min,  Max,  Expr)
+         p.add_many(('amp1',    10,  True, None, None,  None),
+                    ('cen1',   1.2,  True,  0.5,  2.0,  None),
+                    ('wid1',   0.8,  True,  0.1, None,  None),
+                    ('amp2',   7.5,  True, None, None,  None),
+                    ('cen2',   1.9,  True,  1.0,  3.0,  None),
+                    ('wid2',  None, False, None, None, '2*wid1/3'))
 
 
-.. automethod:: Parameters.pretty_print
+    .. automethod:: Parameters.pretty_print
 
-.. method:: valuesdict()
+    .. method:: valuesdict()
 
-   return an ordered dictionary of name:value pairs with the
-   Paramater name as the key and Parameter value as value.
+       return an ordered dictionary of name:value pairs with the
+       Paramater name as the key and Parameter value as value.
 
-   This is distinct from the :class:`Parameters` itself, as the dictionary
-   values are not :class:`Parameter` objects, just the :attr:`value`.
-   Using :meth:`valuesdict` can be a very convenient way to get updated
-   values in a objective function.
+       This is distinct from the :class:`Parameters` itself, as the dictionary
+       values are not :class:`Parameter` objects, just the :attr:`value`.
+       Using :meth:`valuesdict` can be a very convenient way to get updated
+       values in a objective function.
 
-.. method:: dumps(**kws):
+    .. method:: dumps(**kws)
 
-   return a JSON string representation of the :class:`Parameter` object.
-   This can be saved or used to re-create or re-set parameters, using the
-   :meth:`loads` method.
+       return a JSON string representation of the :class:`Parameter` object.
+       This can be saved or used to re-create or re-set parameters, using the
+       :meth:`loads` method.
 
-   Optional keywords are sent :py:func:`json.dumps`.
+       Optional keywords are sent :py:func:`json.dumps`.
 
-.. method:: dump(file, **kws):
+    .. method:: dump(file, **kws)
 
-   write a JSON representation of the :class:`Parameter` object to a file
-   or file-like object in `file` -- really any object with a :meth:`write`
-   method.  Optional keywords are sent :py:func:`json.dumps`.
+       write a JSON representation of the :class:`Parameter` object to a file
+       or file-like object in `file` -- really any object with a :meth:`write`
+       method.  Optional keywords are sent :py:func:`json.dumps`.
 
-.. method:: loads(sval, **kws):
+    .. method:: loads(sval, **kws)
 
-   use a JSON string representation of the :class:`Parameter` object in
-   `sval` to set all parameter settins. Optional keywords are sent
-   :py:func:`json.loads`.
+       use a JSON string representation of the :class:`Parameter` object in
+       `sval` to set all parameter settins. Optional keywords are sent
+       :py:func:`json.loads`.
 
-.. method:: load(file, **kws):
+    .. method:: load(file, **kws)
 
-   read and use a JSON string representation of the :class:`Parameter`
-   object from a file or file-like object in `file` -- really any object
-   with a :meth:`read` method.  Optional keywords are sent
-   :py:func:`json.loads`.
+       read and use a JSON string representation of the :class:`Parameter`
+       object from a file or file-like object in `file` -- really any object
+       with a :meth:`read` method.  Optional keywords are sent
+       :py:func:`json.loads`.
 
 
 Simple Example
