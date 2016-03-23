@@ -48,7 +48,7 @@ def restore_vals(tmp_params, params):
 
 def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
-    r"""Calculates the confidence interval for parameters
+    """Calculates the confidence interval for parameters
     from the given a MinimizerResult, output from minimize.
 
     The parameter for which the ci is calculated will be varied, while
@@ -80,7 +80,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
         A dict, which contains a list of (sigma, vals)-tuples for each name.
     trace_dict : dict
         Only if trace is set true. Is a dict, the key is the parameter which
-        was fixed.The values are again a dict with the names as keys, but with
+        was fixed. The values are again a dict with the names as keys, but with
         an additional key 'prob'. Each contains an array of the corresponding
         values.
 
@@ -96,7 +96,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
         Function to calculate the probability from the optimized chi-square.
         Default (``None``) uses built-in f_compare (F test).
     verbose: bool
-        print extra debuggin information. Default is ``False``.
+        print extra debuging information. Default is ``False``.
 
 
     Examples
@@ -120,6 +120,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
     >>> prob = trace['para1']['prob']
 
     This makes it possible to plot the dependence between free and fixed.
+    
     """
     ci = ConfidenceInterval(minimizer, result, p_names, prob_func, sigmas,
                             trace, verbose, maxiter)
