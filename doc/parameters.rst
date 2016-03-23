@@ -39,91 +39,90 @@ The :class:`Parameter` class
 
 .. class:: Parameter(name=None[, value=None[, vary=True[, min=None[, max=None[, expr=None]]]]])
 
-   create a Parameter object.
+    create a Parameter object.
 
-   :param name: parameter name
-   :type name: ``None`` or string -- will be overwritten during fit if ``None``.
-   :param value: the numerical value for the parameter
-   :param vary:  whether to vary the parameter or not.
-   :type vary:  boolean (``True``/``False``) [default ``True``]
-   :param min:  lower bound for value (``None`` = no lower bound).
-   :param max:  upper bound for value (``None`` = no upper bound).
-   :param expr:  mathematical expression to use to evaluate value during fit.
-   :type expr: ``None`` or string
+    :param name: parameter name
+    :type name: ``None`` or string -- will be overwritten during fit if ``None``.
+    :param value: the numerical value for the parameter
+    :param vary:  whether to vary the parameter or not.
+    :type vary:  boolean (``True``/``False``) [default ``True``]
+    :param min:  lower bound for value (``None`` = no lower bound).
+    :param max:  upper bound for value (``None`` = no upper bound).
+    :param expr:  mathematical expression to use to evaluate value during fit.
+    :type expr: ``None`` or string
 
+    Each of these inputs is turned into an attribute of the same name.
 
-Each of these inputs is turned into an attribute of the same name.
+    After a fit, a Parameter for a fitted variable (that is with ``vary =
+    True``) may have its :attr:`value` attribute to hold the best-fit value.
+    Depending on the success of the fit and fitting algorithm used, it may also
+    have attributes :attr:`stderr` and :attr:`correl`.
 
-After a fit, a Parameter for a fitted variable (that is with ``vary =
-True``) may have its :attr:`value` attribute to hold the best-fit value.
-Depending on the success of the fit and fitting algorithm used, it may also
-have attributes :attr:`stderr` and :attr:`correl`.
+    .. attribute:: stderr
 
-.. attribute:: stderr
+       the estimated standard error for the best-fit value.
 
-   the estimated standard error for the best-fit value.
+    .. attribute:: correl
 
-.. attribute:: correl
+       a dictionary of the correlation with the other fitted variables in the
+       fit, of the form::
 
-   a dictionary of the correlation with the other fitted variables in the
-   fit, of the form::
+       {'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}
 
-   {'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}
+    See :ref:`bounds_chapter` for details on the math used to implement the
+    bounds with :attr:`min` and :attr:`max`.
 
-See :ref:`bounds_chapter` for details on the math used to implement the
-bounds with :attr:`min` and :attr:`max`.
+    The :attr:`expr` attribute can contain a mathematical expression that will
+    be used to compute the value for the Parameter at each step in the fit.
+    See :ref:`constraints_chapter` for more details and examples of this
+    feature.
 
-The :attr:`expr` attribute can contain a mathematical expression that will
-be used to compute the value for the Parameter at each step in the fit.
-See :ref:`constraints_chapter` for more details and examples of this
-feature.
+    .. index:: Removing a Constraint Expression
 
-.. index:: Removing a Constraint Expression
+    .. method:: set(value=None[, vary=None[, min=None[, max=None[, expr=None]]]])
 
-.. method:: set(value=None[, vary=None[, min=None[, max=None[, expr=None]]]])
+       set or update a Parameters value or other attributes.
 
-   set or update a Parameters value or other attributes.
+       :param name:  parameter name
+       :param value: the numerical value for the parameter
+       :param vary:  whether to vary the parameter or not.
+       :param min:   lower bound for value
+       :param max:   upper bound for value
+       :param expr:  mathematical expression to use to evaluate value during fit.
 
-   :param name:  parameter name
-   :param value: the numerical value for the parameter
-   :param vary:  whether to vary the parameter or not.
-   :param min:   lower bound for value
-   :param max:   upper bound for value
-   :param expr:  mathematical expression to use to evaluate value during fit.
+    Each argument of :meth:`set` has a default value of ``None``, and will
+    be set only if the provided value is not ``None``.  You can use this to
+    update some Parameter attribute without affecting others, for example::
 
-Each argument of :meth:`set` has a default value of ``None``, and will
-be set only if the provided value is not ``None``.  You can use this to
-update some Parameter attribute without affecting others, for example::
+        p1 = Parameter('a', value=2.0)
+        p2 = Parameter('b', value=0.0)
+        p1.set(min=0)
+        p2.set(vary=False)
 
-       p1 = Parameter('a', value=2.0)
-       p2 = Parameter('b', value=0.0)
-       p1.set(min=0)
-       p2.set(vary=False)
+    to set a lower bound, or to set a Parameter as have a fixed value.
 
-   to set a lower bound, or to set a Parameter as have a fixed value.
+    Note that to use this approach to lift a lower or upper bound, doing::
 
-   Note that to use this approach to lift a lower or upper bound, doing::
+        p1.set(min=0)
+        .....
+        # now lift the lower bound
+        p1.set(min=None)   # won't work!  lower bound NOT changed
 
-       p1.set(min=0)
-       .....
-       # now lift the lower bound
-       p1.set(min=None)   # won't work!  lower bound NOT changed
+    won't work -- this will not change the current lower bound.  Instead
+    you'll have to use ``np.inf`` to remove a lower or upper bound::
 
-   won't work -- this will not change the current lower bound.  Instead
-   you'll have to use ``np.inf`` to remove a lower or upper bound::
+        # now lift the lower bound
+        p1.set(min=-np.inf)   # will work!
 
-       # now lift the lower bound
-       p1.set(min=-np.inf)   # will work!
+    Similarly, to clear an expression of a parameter, you need to pass an
+    empty string, not ``None``.  You also need to give a value and
+    explicitly tell it to vary::
 
-   Similarly, to clear an expression of a parameter, you need to pass an
-   empty string, not ``None``.  You also need to give a value and
-   explicitly tell it to vary::
+        p3 = Parameter('c', expr='(a+b)/2')
+        p3.set(expr=None)     # won't work!  expression NOT changed
 
-       p3 = Parameter('c', expr='(a+b)/2')
-       p3.set(expr=None)     # won't work!  expression NOT changed
-
-       # remove constraint expression
-       p3.set(value=1.0, vary=True, expr='')  # will work!  parameter now unconstrained
+        # remove constraint expression
+        p3.set(value=1.0, vary=True, expr='')  # will work!  parameter now unconstrained
 
 
 The :class:`Parameters` class
