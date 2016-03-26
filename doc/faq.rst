@@ -69,20 +69,15 @@ How can I fit complex data?
 ===================================
 
 As with working with multidimensional data, you need to convert your data
-and model (or the value returned by the objective function) to be double precision
-floating point numbers. One way to do this would be to use a function like this::
+and model (or the value returned by the objective function) to be double
+precision floating point numbers. The simplest approach is to use numpy's
+:func:`numpy.ndarray.view` method, perhaps like::
 
-    def realimag(array):
-        return np.array([(x.real, x.imag) for x in array]).flatten()
-
-to convert the complex array into an array of alternating real and
-imaginary values.  You can then use this function on the result returned by
-your objective function::
-
-    def residual(params, x, data=None):
+   import numpy as np
+   def residual(params, x, data=None):
         ....
         resid = calculate_complex_residual()
-        return realimag(resid)
+        return resid.view(np.float)
 
 
 Can I constrain values to have integer values?
