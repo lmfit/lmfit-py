@@ -36,8 +36,10 @@ common parameter names are used whenever possible.  Thus, most models have
 a parameter called ``amplitude`` that represents the overall height (or
 area of) a peak or function, a ``center`` parameter that represents a peak
 centroid position, and a ``sigma`` parameter that gives a characteristic
-width.   Some peak shapes also have a parameter ``fwhm``, typically
-constrained by ``sigma`` to give the full width at half maximum.
+width.  Many peak shapes also have a parameter ``fwhm`` (constrained by
+``sigma``) giving the full width at half maximum and a parameter ``height``
+(constrained by ``sigma`` and ``amplitude``) to give the maximum peak
+height.
 
 After a list of builtin models, a few examples of their use is given.
 
@@ -57,8 +59,9 @@ methods for all of these make a fairly crude guess for the value of
 
 A model based on a `Gaussian or normal distribution lineshape
 <http://en.wikipedia.org/wiki/Normal_distribution>`_.  Parameter names:
-``amplitude``, ``center``, and ``sigma``.  In addition, a constrained
-parameter ``fwhm`` is included.
+``amplitude``, ``center``, and ``sigma``.
+In addition, parameters ``fwhm`` and ``height`` are included as constraints
+to report full width at half maximum and maximum peak height, respectively.
 
 .. math::
 
@@ -77,8 +80,9 @@ half maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
 
 A model based on a `Lorentzian or Cauchy-Lorentz distribution function
 <http://en.wikipedia.org/wiki/Cauchy_distribution>`_.  Parameter names:
-``amplitude``, ``center``, and ``sigma``.  In addition, a constrained
-parameter ``fwhm`` is included.
+``amplitude``, ``center``, and ``sigma``.
+In addition, parameters ``fwhm`` and ``height`` are included as constraints
+to report full width at half maximum and maximum peak height, respectively.
 
 .. math::
 
@@ -98,9 +102,10 @@ A model based on a `Voigt distribution function
 <http://en.wikipedia.org/wiki/Voigt_profile>`_.  Parameter names:
 ``amplitude``, ``center``, and ``sigma``.  A ``gamma`` parameter is also
 available.  By default, it is constrained to have value equal to ``sigma``,
-though this can be varied independently.  In addition, a constrained
-parameter ``fwhm`` is included.  The definition for the Voigt function used
-here is
+though this can be varied independently.  In addition, parameters ``fwhm``
+and ``height`` are included as constraints to report full width at half
+maximum and maximum peak height, respectively.  The definition for the
+Voigt function used here is
 
 .. math::
 
@@ -824,8 +829,8 @@ where we give a separate prefix to each model (they all have an
 ``amplitude`` parameter).  The ``prefix`` values are attached transparently
 to the models.
 
-MN----: Note that the calls to :meth:`make_param` used the bare
-name, without the prefix.  We could have used them, but because we used the
+Note that the calls to :meth:`make_param` used the bare name, without the
+prefix.  We could have used the prefixes, but because we used the
 individual model ``gauss1`` and ``gauss2``, there was no need.
 
 
