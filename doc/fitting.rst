@@ -45,7 +45,7 @@ details on writing the objective.
    :type  scale_covar:  bool (default ``True``)
    :param iter_cb:  function to be called at each fit iteration. See :ref:`fit-itercb-label` for details.
    :type  iter_cb:  callable or ``None``
-   :param fit_kws:  dictionary to pass to :func:`scipy.optimize.leastsq` or :func:`scipy.optimize.minimize`.
+   :param fit_kws:  dictionary to pass to :scipydoc:`optimize.leastsq` or :scipydoc:`optimize.minimize`.
    :type  fit_kws:  dict
 
    :return: :class:`MinimizerResult` instance, which will contain the
@@ -277,12 +277,11 @@ and so on for each parameter, one must use the
 
 .. attribute::  ier
 
-  integer error value from :func:`scipy.optimize.leastsq`  (`leastsq`
-  only).
+  integer error value from :scipydoc:`optimize.leastsq`  (`leastsq`  only).
 
 .. attribute::  lmdif_message
 
-  message from :func:`scipy.optimize.leastsq` (`leastsq` only).
+  message from :scipydoc:`optimize.leastsq` (`leastsq` only).
 
 
 .. attribute::  nvarys
@@ -515,7 +514,7 @@ The Minimizer object has a few public methods:
 .. method:: leastsq(params=None, scale_covar=True, **kws)
 
    perform fit with Levenberg-Marquardt algorithm.  Keywords will be
-   passed directly to :func:`scipy.optimize.leastsq`.  By default,
+   passed directly to :scipydoc:`optimize.leastsq`.  By default,
    numerical derivatives are used, and the following arguments are set:
 
 
@@ -539,7 +538,7 @@ The Minimizer object has a few public methods:
 .. method:: scalar_minimize(method='Nelder-Mead', params=None, hess=None, tol=None, **kws)
 
    perform fit with any of the scalar minimization algorithms supported by
-   :func:`scipy.optimize.minimize`.
+   :scipydoc:`optimize.minimize`.
 
     +-------------------------+-----------------+-----------------------------------------------------+
     | :meth:`scalar_minimize` | Default Value   | Description                                         |

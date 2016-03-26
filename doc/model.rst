@@ -10,16 +10,17 @@ A common use of least-squares minimization is *curve fitting*, where one
 has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model to most closely match some
 data.  With :mod:`scipy`, such problems are commonly solved with
-:func:`scipy.optimize.curve_fit`, which is a wrapper around
-:func:`scipy.optimize.leastsq`.  Since Lmfit's :func:`minimize` is also a
-high-level wrapper around :func:`scipy.optimize.leastsq` it can be used for
-curve-fitting problems, but requires more effort than using
-:func:`scipy.optimize.curve_fit`.
+:scipydoc:`scipy.optimize.curve_fit`, which is a wrapper around
+:scipydoc:`scipy.optimize.leastsq`.  Since Lmfit's :func:`minimize` is also
+a high-level wrapper around :scipydoc:`scipy.optimize.leastsq` it can be used
+for curve-fitting problems, but requires more effort than using
+:scipydoc:`scipy.optimize.curve_fit`.
+
 
 Here we discuss lmfit's :class:`Model` class.  This takes a model function
 -- a function that calculates a model for some data -- and provides methods
 to create parameters for that model and to fit data using that model
-function.  This is closer in spirit to :func:`scipy.optimize.curve_fit`,
+function.  This is closer in spirit to :scipydoc:`scipy.optimize.curve_fit`,
 but with the advantages of using :class:`Parameters` and lmfit.
 
 In addition to allowing you turn any model function into a curve-fitting
@@ -48,7 +49,7 @@ own.  We start with a simple definition of the model function:
     ...
 
 We want to fit this objective function to data :math:`y(x)` represented by the
-arrays ``y`` and ``x``.  This can be done easily wit :func:`scipy.optimize.curve_fit`::
+arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`optimize.curve_fit`::
 
     >>> from scipy.optimize import curve_fit
     >>>
@@ -61,7 +62,7 @@ arrays ``y`` and ``x``.  This can be done easily wit :func:`scipy.optimize.curve
 
 
 We sample random data point, make an initial guess of the model
-values, and run :func:`scipy.optimize.curve_fit` with the model function,
+values, and run :scipydoc:`optimize.curve_fit` with the model function,
 data arrays, and initial guesses.  The results returned are the optimal
 values for the parameters and the covariance matrix.  It's simple and very
 useful.  But it misses the benefits of lmfit.
@@ -72,7 +73,7 @@ such a function would be fairly simple (essentially, ``data - model``,
 possibly with some weighting), and we would need to define and use
 appropriately named parameters.  Though convenient, it is somewhat of a
 burden to keep the named parameter straight (on the other hand, with
-:func:`scipy.optimize.curve_fit` you are required to remember the parameter
+:scipydoc:`optimize.curve_fit` you are required to remember the parameter
 order).  After doing this a few times it appears as a recurring pattern,
 and we can imagine automating this process.  That's where the
 :class:`Model` class comes in.
@@ -179,7 +180,7 @@ Note that the model fitting was really performed with 2 lines of code::
 These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
 starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.
-This is much more expressive than :func:`scipy.optimize.curve_fit`::
+This is much more expressive than :scipydoc:`optimize.curve_fit`::
 
     best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
@@ -866,7 +867,7 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute::  ier
 
-   integer returned code from :func:`scipy.optimize.leastsq`.
+   integer returned code from :scipydoc:`optimize.leastsq`.
 
 .. attribute:: init_fit
 
@@ -895,7 +896,7 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute::  lmdif_message
 
-   string message returned from :func:`scipy.optimize.leastsq`.
+   string message returned from :scipydoc:`optimize.leastsq`.
 
 .. attribute::  message
 

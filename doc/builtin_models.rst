@@ -187,7 +187,7 @@ parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
 
     f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
 
-where :math:`\beta` is the beta function (see :func:`scipy.special.beta` in
+where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
 :mod:`scipy.special`).  The :meth:`guess` function always
 gives a starting value for ``exponent`` of 1.5.
 
@@ -317,8 +317,8 @@ Linear and Polynomial Models
 ------------------------------------
 
 These models correspond to polynomials of some degree.  Of course, lmfit is
-a very inefficient way to do linear regression (see :func:`numpy.polyfit`
-or :func:`scipy.stats.linregress`), but these models may be useful as one
+a very inefficient way to do linear regression (see :numpydoc:`polyfit`
+or :scipydoc:`stats.linregress`), but these models may be useful as one
 of many components of composite model.
 
 :class:`ConstantModel`
@@ -383,7 +383,7 @@ with parameters ``a``, ``b``, and ``c``.
 
 with parameters ``c0``, ``c1``, ..., ``c7``.  The supplied ``degree``
 will specify how many of these are actual variable parameters.  This uses
-:func:`numpy.polyval` for its calculation of the polynomial.
+:numpydoc:`polyval` for its calculation of the polynomial.
 
 
 

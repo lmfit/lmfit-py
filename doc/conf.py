@@ -25,6 +25,7 @@ sys.path.append(os.path.abspath(os.path.join('.')))
 from extensions import extensions
 
 extensions = [
+    'sphinx.ext.extlinks',
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     'sphinx.ext.mathjax',
@@ -42,7 +43,12 @@ intersphinx_mapping = {'py': ('http://docs.python.org/2', None),
                        'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
                        }
 
-intersphinx_cache_limit = 10
+## intersphinx_cache_limit = 10
+
+extlinks = {
+    'scipydoc' : ('http://docs.scipy.org/doc/scipy/reference/generated/%s.html', ''),
+    'numpydoc' : ('http://docs.scipy.org/doc/numpy/reference/generated/numpy.%s.html', ''),
+    }
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
