@@ -110,6 +110,8 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         add("    # variables        = %s" % getfloat_attr(result, 'nvarys'))
         add("    chi-square         = %s" % getfloat_attr(result, 'chisqr'))
         add("    reduced chi-square = %s" % getfloat_attr(result, 'redchi'))
+        add("    Akaike info crit   = %s" % getfloat_attr(result, 'aic'))
+        add("    Bayesian info crit = %s" % getfloat_attr(result, 'bic'))
 
     namelen = max([len(n) for n in parnames])
     add("[[Variables]]")
