@@ -324,6 +324,9 @@ specifying one or more independent variables.
    See :ref:`model_param_hints_section`.
 
 
+.. automethod:: lmfit.model.Model.print_param_hints
+
+
 :class:`Model` class Attributes
 ---------------------------------
 
