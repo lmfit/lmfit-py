@@ -9,7 +9,6 @@ As shown in the previous chapter, a simple fit can be performed with the
 :class:`Minimizer` class can be used to gain a bit more control, especially
 when using complicated constraints or comparing results from related fits.
 
-
 .. warning::
 
   Upgrading scripts from version 0.8.3 to 0.9.0?  See  :ref:`whatsnew_090_label`
@@ -214,7 +213,6 @@ class as listed in the :ref:`Table of Supported Fitting Methods
   uncertainties in parameters discussed in :ref:`fit-results-label` are
   done only for this method.
 
-
 ..  _fit-results-label:
 
 :class:`MinimizerResult` -- the optimization result
@@ -283,7 +281,6 @@ and so on for each parameter, one must use the
 
   message from :scipydoc:`optimize.leastsq` (`leastsq` only).
 
-
 .. attribute::  nvarys
 
   number of variables in fit  :math:`N_{\rm varys}`
@@ -316,8 +313,6 @@ and so on for each parameter, one must use the
 .. attribute::  bic
 
   Bayesian Information Criterion statistic (see below).
-
-
 
 
 
@@ -380,6 +375,9 @@ Parameters makes it more likely that errors cannot be estimated, as being
 near the maximum or minimum value makes the covariance matrix singular.  In
 these cases, the :attr:`errorbars` attribute of the fit result
 (:class:`Minimizer` object) will be ``False``.
+
+
+.. _information_criteria_label:
 
 Akaike and Bayesian Information Criteria
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -874,7 +872,6 @@ Getting and Printing Fit Reports
 
    print text of report from :func:`fit_report`.
 
-
 An example fit with report would be
 
 .. literalinclude:: ../examples/doc_withreport.py
@@ -887,10 +884,12 @@ which would write out::
         # variables        = 4
         chi-square         = 498.812
         reduced chi-square = 0.500
+        Akaike info crit   = -685.215
+        Bayesian info crit = -665.579
     [[Variables]]
         amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
         period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
-        shift:    0.16203677 +/- 0.014056 (8.67%) (init= 0)
+        shift:    0.16203676 +/- 0.014056 (8.67%) (init= 0)
         decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
     [[Correlations]] (unreported correlations are <  0.100)
         C(period, shift)             =  0.797

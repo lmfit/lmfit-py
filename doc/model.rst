@@ -153,6 +153,8 @@ components, including a :meth:`fit_report` method, which will show::
         # variables        = 3
         chi-square         = 3.409
         reduced chi-square = 0.035
+        Akaike info crit   = -333.218
+        Bayesian info crit = -325.373
     [[Variables]]
         amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
         cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
@@ -1010,6 +1012,8 @@ which prints out the results::
         # variables        = 5
         chi-square         = 2.579
         reduced chi-square = 0.027
+        Akaike info crit   = -355.329
+        Bayesian info crit = -342.253
     [[Variables]]
         amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
         cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
@@ -1115,19 +1119,21 @@ which prints out the results::
     [[Model]]
         (Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
     [[Fit Statistics]]
-        # function evals   = 25
+        # function evals   = 23
         # data points      = 201
         # variables        = 3
-        chi-square         = 21.692
-        reduced chi-square = 0.110
+        chi-square         = 25.789
+        reduced chi-square = 0.130
+        Akaike info crit   = -403.702
+        Bayesian info crit = -393.793
     [[Variables]]
-        amplitude:   0.62106099 +/- 0.001783 (0.29%) (init= 1)
-        center:      4.49913218 +/- 0.009373 (0.21%) (init= 3.5)
         mid:         5 (fixed)
-        sigma:       0.61936067 +/- 0.012977 (2.10%) (init= 1)
+        amplitude:   0.62249894 +/- 0.001946 (0.31%) (init= 1)
+        sigma:       0.61438887 +/- 0.014057 (2.29%) (init= 1.5)
+        center:      4.51710256 +/- 0.010152 (0.22%) (init= 3.5)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(amplitude, center)         =  0.336
-        C(amplitude, sigma)          =  0.274
+        C(amplitude, center)         =  0.335
+        C(amplitude, sigma)          =  0.273
 
 and shows the plots:
 
