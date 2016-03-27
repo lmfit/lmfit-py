@@ -449,9 +449,8 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         m = m1 + m2
 
         param_values = {name: p.value for name, p in params.items()}
-        self.assertEqual(param_values['m1_amplitude'], 1)
         self.assertTrue(param_values['m1_intercept'] < -0.0)
-
+        self.assertEqual(param_values['m2_amplitude'], 1)
 
     def test_weird_param_hints(self):
         # tests Github Issue 312, a very weird way to access param_hints
