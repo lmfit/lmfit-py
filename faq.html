@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.2',
+        VERSION:     '0.9.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -164,7 +164,7 @@ ImportError: No module named &#39;widgets&#39;
 <p>The fitting routines accept data arrays that are 1 dimensional and double
 precision.  So you need to convert the data and model (or the value
 returned by the objective function) to be one dimensional.  A simple way to
-do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html#numpy.ndarray.flatten" title="(in NumPy v1.9)"><code class="xref py py-meth docutils literal"><span class="pre">numpy.ndarray.flatten()</span></code></a>, for example:</p>
+do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">ndarray.flatten</a>, for example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_multidim_residual</span><span class="p">()</span>
@@ -174,40 +174,33 @@ do this is to use numpy&#8217;s <a class="reference external" href="http://docs.
 </div>
 <div class="section" id="how-can-i-fit-multiple-data-sets">
 <h2>How can I fit multiple data sets?<a class="headerlink" href="#how-can-i-fit-multiple-data-sets" title="Permalink to this headline">¶</a></h2>
-<p>As above, the fitting routines accept data arrays that are 1 dimensional and double
-precision.  So you need to convert the sets of data and models (or the value
-returned by the objective function) to be one dimensional.  A simple way to
-do this is to use numpy&#8217;s <code class="xref py py-meth docutils literal"><span class="pre">numpy.concatenate()</span></code>.  As an example, here
-is a residual function to simultaneously fit two lines to two different
-arrays.  As a bonus, the two lines share the &#8216;offset&#8217; parameter:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>def fit_function(params, x=None, dat1=None, dat2=None):</dt>
-<dd><p class="first">model1 = params[&#8216;offset&#8217;].value + x * params[&#8216;slope1&#8217;].value
-model2 = params[&#8216;offset&#8217;].value + x * params[&#8216;slope2&#8217;].value</p>
-<p class="last">resid1 = dat1 - model1
-resid2 = dat2 - model2
-return numpy.concatenate((resid1, resid2))</p>
-</dd>
-</dl>
-</div></blockquote>
+<p>As above, the fitting routines accept data arrays that are 1 dimensional
+and double precision.  So you need to convert the sets of data and models
+(or the value returned by the objective function) to be one dimensional.  A
+simple way to do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">concatenate</a>.  As an
+example, here is a residual function to simultaneously fit two lines to two
+different arrays.  As a bonus, the two lines share the &#8216;offset&#8217; parameter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">fit_function</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dat1</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dat2</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">model1</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;offset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;slope1&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">model2</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;offset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;slope2&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="n">resid1</span> <span class="o">=</span> <span class="n">dat1</span> <span class="o">-</span> <span class="n">model1</span>
+    <span class="n">resid2</span> <span class="o">=</span> <span class="n">dat2</span> <span class="o">-</span> <span class="n">model2</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">resid1</span><span class="p">,</span> <span class="n">resid2</span><span class="p">))</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="how-can-i-fit-complex-data">
 <h2>How can I fit complex data?<a class="headerlink" href="#how-can-i-fit-complex-data" title="Permalink to this headline">¶</a></h2>
 <p>As with working with multidimensional data, you need to convert your data
-and model (or the value returned by the objective function) to be double precision
-floating point numbers. One way to do this would be to use a function like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">realimag</span><span class="p">(</span><span class="n">array</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">array</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>to convert the complex array into an array of alternating real and
-imaginary values.  You can then use this function on the result returned by
-your objective function:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="o">....</span>
-    <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_complex_residual</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">realimag</span><span class="p">(</span><span class="n">resid</span><span class="p">)</span>
+and model (or the value returned by the objective function) to be double
+precision floating point numbers. The simplest approach is to use numpy&#8217;s
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">ndarray.view</a> method, perhaps like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+     <span class="o">....</span>
+     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_complex_residual</span><span class="p">()</span>
+     <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

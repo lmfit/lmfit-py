@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.2',
+        VERSION:     '0.9.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -162,7 +162,7 @@ simple example, one might write an objective function like this:</p>
     <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span><span class="o">/</span><span class="n">eps_data</span>
 </pre></div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>, one would do:</p>
+<p>To perform the minimization with <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code>, one would do:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">leastsq</span>
 <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">))</span>
@@ -195,11 +195,11 @@ painful if the fitting model needs to change.</li>
 </div></blockquote>
 <p>These shortcomings are really do solely to the use of traditional arrays of
 variables, as matches closely the implementation of the Fortran code.  The
-lmfit module overcomes these shortcomings by using objects &#8211; a core reason for wokring with
+lmfit module overcomes these shortcomings by using objects &#8211; a core reason for working with
 Python.  The key concept for lmfit is to use <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 objects instead of plain floating point numbers as the variables for the
 fit.  By using <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects (or the closely related
-<a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> &#8211; a dictionary of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects), one can</p>
+<code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> &#8211; a dictionary of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects), one can</p>
 <blockquote>
 <div><ol class="loweralpha simple">
 <li>forget about the order of variables and refer to Parameters
@@ -234,7 +234,7 @@ as:</p>
 </div>
 <p>At first look, we simply replaced a list of values with a dictionary,
 accessed by name &#8211; not a huge improvement.  But each of the named
-<a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> in the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> object holds additional
+<a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> in the <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> object holds additional
 attributes to modify the value during the fit.  For example, Parameters can
 be fixed or bounded.  This can be done during definition:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
@@ -259,7 +259,7 @@ information about how your data is modeled goes into the objective
 function, but the approach here allows some external control; that is, control by
 the <strong>user</strong> performing the fit, instead of by the author of the
 objective function.</p>
-<p>Finally, in addition to the <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> approach to fitting data,
+<p>Finally, in addition to the <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> approach to fitting data,
 lmfit allows switching optimization methods without changing
 the objective function, provides tools for writing fitting reports, and
 provides better determination of Parameters confidence levels.</p>

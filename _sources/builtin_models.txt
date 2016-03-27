@@ -36,8 +36,10 @@ common parameter names are used whenever possible.  Thus, most models have
 a parameter called ``amplitude`` that represents the overall height (or
 area of) a peak or function, a ``center`` parameter that represents a peak
 centroid position, and a ``sigma`` parameter that gives a characteristic
-width.   Some peak shapes also have a parameter ``fwhm``, typically
-constrained by ``sigma`` to give the full width at half maximum.
+width.  Many peak shapes also have a parameter ``fwhm`` (constrained by
+``sigma``) giving the full width at half maximum and a parameter ``height``
+(constrained by ``sigma`` and ``amplitude``) to give the maximum peak
+height.
 
 After a list of builtin models, a few examples of their use is given.
 
@@ -57,8 +59,9 @@ methods for all of these make a fairly crude guess for the value of
 
 A model based on a `Gaussian or normal distribution lineshape
 <http://en.wikipedia.org/wiki/Normal_distribution>`_.  Parameter names:
-``amplitude``, ``center``, and ``sigma``.  In addition, a constrained
-parameter ``fwhm`` is included.
+``amplitude``, ``center``, and ``sigma``.
+In addition, parameters ``fwhm`` and ``height`` are included as constraints
+to report full width at half maximum and maximum peak height, respectively.
 
 .. math::
 
@@ -77,8 +80,9 @@ half maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
 
 A model based on a `Lorentzian or Cauchy-Lorentz distribution function
 <http://en.wikipedia.org/wiki/Cauchy_distribution>`_.  Parameter names:
-``amplitude``, ``center``, and ``sigma``.  In addition, a constrained
-parameter ``fwhm`` is included.
+``amplitude``, ``center``, and ``sigma``.
+In addition, parameters ``fwhm`` and ``height`` are included as constraints
+to report full width at half maximum and maximum peak height, respectively.
 
 .. math::
 
@@ -98,9 +102,10 @@ A model based on a `Voigt distribution function
 <http://en.wikipedia.org/wiki/Voigt_profile>`_.  Parameter names:
 ``amplitude``, ``center``, and ``sigma``.  A ``gamma`` parameter is also
 available.  By default, it is constrained to have value equal to ``sigma``,
-though this can be varied independently.  In addition, a constrained
-parameter ``fwhm`` is included.  The definition for the Voigt function used
-here is
+though this can be varied independently.  In addition, parameters ``fwhm``
+and ``height`` are included as constraints to report full width at half
+maximum and maximum peak height, respectively.  The definition for the
+Voigt function used here is
 
 .. math::
 
@@ -182,7 +187,7 @@ parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
 
     f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
 
-where :math:`\beta` is the beta function (see :func:`scipy.special.beta` in
+where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
 :mod:`scipy.special`).  The :meth:`guess` function always
 gives a starting value for ``exponent`` of 1.5.
 
@@ -312,8 +317,8 @@ Linear and Polynomial Models
 ------------------------------------
 
 These models correspond to polynomials of some degree.  Of course, lmfit is
-a very inefficient way to do linear regression (see :func:`numpy.polyfit`
-or :func:`scipy.stats.linregress`), but these models may be useful as one
+a very inefficient way to do linear regression (see :numpydoc:`polyfit`
+or :scipydoc:`stats.linregress`), but these models may be useful as one
 of many components of composite model.
 
 :class:`ConstantModel`
@@ -378,7 +383,7 @@ with parameters ``a``, ``b``, and ``c``.
 
 with parameters ``c0``, ``c1``, ..., ``c7``.  The supplied ``degree``
 will specify how many of these are actual variable parameters.  This uses
-:func:`numpy.polyval` for its calculation of the polynomial.
+:numpydoc:`polyval` for its calculation of the polynomial.
 
 
 
@@ -577,46 +582,50 @@ Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles
 Here, we will fit data to three similar line shapes, in order to decide which
 might be the better model.  We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in :class:`GaussianModel` instead
-of one we write ourselves.  This is a slightly different version from the
+of writing one ourselves.  This is a slightly different version rom the
 one in previous example in that the parameter names are different, and have
-built-in default values.  So, we'll simply use::
+built-in default values.  We'll simply use::
 
-    from numpy import loadtxt
-    from lmfit.models import GaussianModel
+     from numpy import loadtxt
+     from lmfit.models import GaussianModel
 
-    data = loadtxt('test_peak.dat')
-    x = data[:, 0]
-    y = data[:, 1]
+     data = loadtxt('test_peak.dat')
+     x = data[:, 0]
+     y = data[:, 1]
 
-    mod = GaussianModel()
-    pars = mod.guess(y, x=x)
-    out  = mod.fit(y, pars, x=x)
-    print(out.fit_report(min_correl=0.25))
+     mod = GaussianModel()
+
+     pars = mod.guess(y, x=x)
+     out  = mod.fit(y, pars, x=x)
+     print(out.fit_report(min_correl=0.25))
+
 
 which prints out the results::
 
     [[Model]]
         gaussian
     [[Fit Statistics]]
-        # function evals   = 21
+        # function evals   = 23
         # data points      = 401
         # variables        = 3
         chi-square         = 29.994
         reduced chi-square = 0.075
+        Akaike info crit   = -1030.763
+        Bayesian info crit = -1018.781
     [[Variables]]
-        amplitude:   30.3135571 +/- 0.157126 (0.52%) (init= 29.08159)
-        center:      9.24277049 +/- 0.007374 (0.08%) (init= 9.25)
-        fwhm:        2.90156963 +/- 0.017366 (0.60%)  == '2.3548200*sigma'
         sigma:       1.23218319 +/- 0.007374 (0.60%) (init= 1.35)
+        fwhm:        2.90156963 +/- 0.017366 (0.60%)  == '2.3548200*sigma'
+        height:      9.81457973 +/- 0.050872 (0.52%)  == '0.3989423*amplitude/sigma'
+        center:      9.24277049 +/- 0.007374 (0.08%) (init= 9.25)
+        amplitude:   30.3135571 +/- 0.157126 (0.52%) (init= 29.08159)
     [[Correlations]] (unreported correlations are <  0.250)
-        C(amplitude, sigma)          =  0.577
+        C(sigma, amplitude)          =  0.577
 
-
-[We see a few interesting differences from the results of the previous
- chapter. First, the parameter names are longer. Second, there is a
- ``fwhm`` parameter, defined as :math:`\sim 2.355\sigma`. And third, the
- automated initial guesses are pretty good. A plot of the fit shows not
- such a great fit:
+We see a few interesting differences from the results of the previous
+chapter. First, the parameter names are longer. Second, there are ``fwhm``
+and ``height`` parameters, to give the full width at half maximum and
+maximum peak height.  And third, the automated initial guesses are pretty
+good. A plot of the fit:
 
 .. _figA1:
 
@@ -629,68 +638,71 @@ which prints out the results::
 
   Fit to peak with Gaussian (left) and Lorentzian (right) models.
 
-suggesting that a different peak shape, with longer tails, should be used.
-Perhaps a Lorentzian would be better?  To do this, we simply replace
-``GaussianModel`` with ``LorentzianModel`` to get a
-:class:`LorentzianModel`::
+shows a decent match to the data -- the fit worked with no explicit setting
+of initial parameter values.  Looking more closing, the fit is not perfect,
+especially in the tails of the peak, suggesting that a different peak
+shape, with longer tails, should be used.  Perhaps a Lorentzian would be
+better?  To do this, we simply replace ``GaussianModel`` with
+``LorentzianModel`` to get a :class:`LorentzianModel`::
 
     from lmfit.models import LorentzianModel
     mod = LorentzianModel()
-    pars = mod.guess(y, x=x)
-    out  = mod.fit(y, pars, x=x)
-    print(out.fit_report(min_correl=0.25))
 
-Predictably, the first thing we try gives results that are worse::
+with the rest of the script as above.  Perhaps predictably, the first thing
+we try gives results that are worse::
 
     [[Model]]
-        lorentzian
+        Model(lorentzian)
     [[Fit Statistics]]
-        # function evals   = 25
+        # function evals   = 27
         # data points      = 401
         # variables        = 3
         chi-square         = 53.754
         reduced chi-square = 0.135
+        Akaike info crit   = -796.819
+        Bayesian info crit = -784.837
     [[Variables]]
-        amplitude:   38.9728645 +/- 0.313857 (0.81%) (init= 36.35199)
-        center:      9.24438944 +/- 0.009275 (0.10%) (init= 9.25)
-        fwhm:        2.30969034 +/- 0.026312 (1.14%)  == '2.0000000*sigma'
         sigma:       1.15484517 +/- 0.013156 (1.14%) (init= 1.35)
+        fwhm:        2.30969034 +/- 0.026312 (1.14%)  == '2.0000000*sigma'
+        height:      10.7420881 +/- 0.086336 (0.80%)  ==
+        '0.3183099*amplitude/sigm    a'
+        center:      9.24438944 +/- 0.009275 (0.10%) (init= 9.25)
+        amplitude:   38.9728645 +/- 0.313857 (0.81%) (init= 36.35199)
     [[Correlations]] (unreported correlations are <  0.250)
-        C(amplitude, sigma)          =  0.709
+        C(sigma, amplitude)          =  0.709
 
 
-with the plot shown on the right in the figure above.
-
-A Voigt model does a better job.  Using :class:`VoigtModel`, this is
-as simple as::
+with the plot shown on the right in the figure above.  The tails are now
+too big, and the value for :math:`\chi^2` almost doubled.  A Voigt model
+does a better job.  Using :class:`VoigtModel`, this is as simple as using::
 
     from lmfit.models import VoigtModel
     mod = VoigtModel()
-    pars = mod.guess(y, x=x)
-    out  = mod.fit(y, pars, x=x)
-    print(out.fit_report(min_correl=0.25))
 
-which gives::
+with all the rest of the script as above.  This gives::
 
     [[Model]]
-        voigt
+        Model(voigt)
     [[Fit Statistics]]
-        # function evals   = 17
+        # function evals   = 19
         # data points      = 401
         # variables        = 3
         chi-square         = 14.545
         reduced chi-square = 0.037
+        Akaike info crit   = -1320.995
+        Bayesian info crit = -1309.013
     [[Variables]]
-        amplitude:   35.7554017 +/- 0.138614 (0.39%) (init= 43.62238)
-        center:      9.24411142 +/- 0.005054 (0.05%) (init= 9.25)
-        fwhm:        2.62951718 +/- 0.013269 (0.50%)  == '3.6013100*sigma'
-        gamma:       0.73015574 +/- 0.003684 (0.50%)  == 'sigma'
         sigma:       0.73015574 +/- 0.003684 (0.50%) (init= 0.8775)
+        gamma:       0.73015574 +/- 0.003684 (0.50%)  == 'sigma'
+        fwhm:        2.62951718 +/- 0.013269 (0.50%)  == '3.6013100*sigma'
+        height:      19.5360268 +/- 0.075691 (0.39%)  ==  '0.3989423*amplitude/sigm    a'
+        center:      9.24411142 +/- 0.005054 (0.05%) (init= 9.25)
+        amplitude:   35.7554017 +/- 0.138614 (0.39%) (init= 43.62238)
     [[Correlations]] (unreported correlations are <  0.250)
-        C(amplitude, sigma)          =  0.651
+        C(sigma, amplitude)          =  0.651
 
 
-with the much better value for :math:`\chi^2` and the obviously better
+which has a much better value for :math:`\chi^2` and an obviously better
 match to the data as seen in the figure below (left).
 
 .. _figA2:
@@ -705,54 +717,63 @@ match to the data as seen in the figure below (left).
   Fit to peak with Voigt model (left) and Voigt model with ``gamma``
   varying independently of ``sigma`` (right).
 
-The Voigt function has a :math:`\gamma` parameter (``gamma``) that can be
-distinct from ``sigma``.  The default behavior used above constrains
-``gamma`` to have exactly the same value as ``sigma``.  If we allow these
-to vary separately, does the fit improve?  To do this, we have to change
-the ``gamma`` parameter from a constrained expression and give it a
-starting value::
+Can we do better? The Voigt function has a :math:`\gamma` parameter
+(``gamma``) that can be distinct from ``sigma``.  The default behavior used
+above constrains ``gamma`` to have exactly the same value as ``sigma``.  If
+we allow these to vary separately, does the fit improve?  To do this, we
+have to change the ``gamma`` parameter from a constrained expression and
+give it a starting value using something like::
 
-    mod = VoigtModel()
-    pars = mod.guess(y, x=x)
-    pars['gamma'].set(value=0.7, vary=True, expr='')
+   mod = VoigtModel()
+   pars = mod.guess(y, x=x)
+   pars['gamma'].set(value=0.7, vary=True, expr='')
 
-    out  = mod.fit(y, pars, x=x)
-    print(out.fit_report(min_correl=0.25))
 
 which gives::
 
     [[Model]]
-        voigt
+        Model(voigt)
     [[Fit Statistics]]
-        # function evals   = 21
+        # function evals   = 23
         # data points      = 401
         # variables        = 4
         chi-square         = 10.930
         reduced chi-square = 0.028
+        Akaike info crit   = -1432.556
+        Bayesian info crit = -1416.580
     [[Variables]]
-        amplitude:   34.1914716 +/- 0.179468 (0.52%) (init= 43.62238)
-        center:      9.24374845 +/- 0.004419 (0.05%) (init= 9.25)
-        fwhm:        3.22385491 +/- 0.050974 (1.58%)  == '3.6013100*sigma'
-        gamma:       0.52540157 +/- 0.018579 (3.54%) (init= 0.7)
         sigma:       0.89518950 +/- 0.014154 (1.58%) (init= 0.8775)
+        gamma:       0.52540156 +/- 0.018579 (3.54%) (init= 0.7)
+        fwhm:        3.22385492 +/- 0.050974 (1.58%)  == '3.6013100*sigma'
+        height:      15.2374711 +/- 0.299235 (1.96%)  ==
+    '0.3989423*amplitude/sigm    a'
+        center:      9.24374845 +/- 0.004419 (0.05%) (init= 9.25)
+        amplitude:   34.1914716 +/- 0.179468 (0.52%) (init= 43.62238)
     [[Correlations]] (unreported correlations are <  0.250)
-        C(amplitude, gamma)          =  0.821
-
+        C(sigma, gamma)              = -0.928
+        C(gamma, amplitude)          =  0.821
+        C(sigma, amplitude)          = -0.651
 
 and the fit shown on the right above.
 
 Comparing the two fits with the Voigt function, we see that :math:`\chi^2`
 is definitely improved with a separately varying ``gamma`` parameter.  In
 addition, the two values for ``gamma`` and ``sigma`` differ significantly
--- well outside the estimated uncertainties.  Even more compelling, reduced
+-- well outside the estimated uncertainties.  More compelling, reduced
 :math:`\chi^2` is improved even though a fourth variable has been added to
 the fit.  In the simplest statistical sense, this suggests that ``gamma``
-is a significant variable in the model.
-
-
-This example shows how easy it can be to alter and compare fitting models
-for simple problems.  The example is included in the ``doc_peakmodels.py``
-file in the examples directory.
+is a significant variable in the model.  In addition, we can use both the
+Akaike or Bayesian Information Criteria (see
+:ref:`information_criteria_label`) to assess how likely the model with
+variable ``gamma`` is to explain the data than the model with ``gamma``
+fixed to the value of ``sigma``.  According to theory,
+:math:`\exp(-(\rm{AIC1}-\rm{AIC0})/2)` gives the probably that a model with
+AIC` is more likely than a model with AIC0.  For the two models here, with
+AIC values of -1432 and -1321 (Note: if we had more carefully set the value
+for ``weights`` based on the noise in the data, these values might be
+positive, but there difference would be roughly the same), this says that
+the model with ``gamma`` fixed to ``sigma`` has a probably less than 1.e-25
+of being the better model.
 
 
 Example 2: Fit data to a Composite Model with pre-defined models
@@ -773,29 +794,35 @@ telling it to use the ``erf`` form (see details above), and a
 and :meth:`guess` method for the initial step function paramaters, and
 :meth:`make_params` arguments for the linear component.
 After making a composite model, we run :meth:`fit` and report the
-results, which give::
-
+results, which gives::
 
     [[Model]]
-     Composite Model:
-        step(prefix='step_',form='erf')
-        linear(prefix='line_')
+    [[Model]]
+        (Model(step, prefix='step_', form='erf') + Model(linear, prefix='line_'))
     [[Fit Statistics]]
-        # function evals   = 49
+        # function evals   = 51
         # data points      = 201
         # variables        = 5
-        chi-square         = 633.465
-        reduced chi-square = 3.232
+        chi-square         = 648.584
+        reduced chi-square = 3.309
+        Akaike info crit   = 250.532
+        Bayesian info crit = 267.048
     [[Variables]]
-        line_intercept:   11.5685248 +/- 0.285611 (2.47%) (init= 10.72406)
-        line_slope:       2.03270159 +/- 0.096041 (4.72%) (init= 0)
-        step_amplitude:   112.270535 +/- 0.674790 (0.60%) (init= 136.3006)
-        step_center:      3.12343845 +/- 0.005370 (0.17%) (init= 2.5)
-        step_sigma:       0.67468813 +/- 0.011336 (1.68%) (init= 1.428571)
+        line_slope:       2.06986083 +/- 0.097005 (4.69%) (init= 0)
+        line_intercept:   11.7526825 +/- 0.288725 (2.46%) (init= 10.7017)
+        step_center:      3.12329688 +/- 0.005441 (0.17%) (init= 2.5)
+        step_sigma:       0.67050317 +/- 0.011480 (1.71%) (init= 1.428571)
+        step_amplitude:   111.673928 +/- 0.681024 (0.61%) (init= 134.6809)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(step_amplitude, step_sigma)  =  0.564
-        C(line_intercept, step_center)  =  0.428
-        C(step_amplitude, step_center)  =  0.109
+        C(line_slope, step_amplitude)  = -0.878
+        C(step_sigma, step_amplitude)  =  0.563
+        C(line_slope, step_sigma)    = -0.455
+        C(line_intercept, step_center)  =  0.426
+        C(line_slope, line_intercept)  = -0.307
+        C(line_slope, step_center)   = -0.234
+        C(line_intercept, step_sigma)  = -0.139
+        C(line_intercept, step_amplitude)  = -0.122
+        C(step_center, step_amplitude)  =  0.108
 
 with a plot of
 
@@ -819,15 +846,13 @@ involving a decaying exponential and two gaussians.
 
 .. literalinclude:: ../examples/doc_nistgauss.py
 
-
 where we give a separate prefix to each model (they all have an
 ``amplitude`` parameter).  The ``prefix`` values are attached transparently
 to the models.
 
-MN----: Note that the calls to :meth:`make_param` used the bare
-name, without the prefix.  We could have used them, but because we used the
+Note that the calls to :meth:`make_param` used the bare name, without the
+prefix.  We could have used the prefixes, but because we used the
 individual model ``gauss1`` and ``gauss2``, there was no need.
-
 
 Note also in the example here that we explicitly set bounds on many of the
 parameter values.
@@ -835,39 +860,45 @@ parameter values.
 The fit results printed out are::
 
     [[Model]]
-     Composite Model:
-        gaussian(prefix='g1_')
-        gaussian(prefix='g2_')
-        exponential(prefix='exp_')
+        ((Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')) + Model(exponential, prefix='exp_'))
     [[Fit Statistics]]
-        # function evals   = 55
+        # function evals   = 66
         # data points      = 250
         # variables        = 8
         chi-square         = 1247.528
         reduced chi-square = 5.155
+        Akaike info crit   = 425.995
+        Bayesian info crit = 454.167
     [[Variables]]
-        exp_amplitude:   99.0183291 +/- 0.537487 (0.54%) (init= 162.2102)
-        exp_decay:       90.9508788 +/- 1.103104 (1.21%) (init= 93.24905)
-        g1_amplitude:    4257.77384 +/- 42.38354 (1.00%) (init= 2000)
-        g1_center:       107.030955 +/- 0.150068 (0.14%) (init= 105)
-        g1_fwhm:         39.2609205 +/- 0.377907 (0.96%)  == '2.3548200*g1_sigma'
-        g1_sigma:        16.6725781 +/- 0.160482 (0.96%) (init= 15)
-        g2_amplitude:    2493.41747 +/- 36.16907 (1.45%) (init= 2000)
-        g2_center:       153.270103 +/- 0.194665 (0.13%) (init= 155)
-        g2_fwhm:         32.5128760 +/- 0.439860 (1.35%)  == '2.3548200*g2_sigma'
-        g2_sigma:        13.8069474 +/- 0.186791 (1.35%) (init= 15)
+        exp_amplitude:   99.0183282 +/- 0.537487 (0.54%) (init= 162.2102)
+        exp_decay:       90.9508861 +/- 1.103105 (1.21%) (init= 93.24905)
+        g1_amplitude:    4257.77318 +/- 42.38336 (1.00%) (init= 2000)
+        g1_sigma:        16.6725753 +/- 0.160481 (0.96%) (init= 15)
+        g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 105)
+        g1_fwhm:         39.2609137 +/- 0.377905 (0.96%)  == '2.3548200*g1_sigma'
+        g1_height:       101.880231 +/- 0.592170 (0.58%)  ==
+        '0.3989423*g1_amplitude/g1_    sigma'
+        g2_amplitude:    2493.41770 +/- 36.16947 (1.45%) (init= 2000)
+        g2_sigma:        13.8069484 +/- 0.186794 (1.35%) (init= 15)
+        g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 155)
+        g2_fwhm:         32.5128783 +/- 0.439866 (1.35%)  == '2.3548200*g2_sigma'
+        g2_height:       72.0455934 +/- 0.617220 (0.86%)  ==
+        '0.3989423*g2_amplitude/g2_    sigma'
     [[Correlations]] (unreported correlations are <  0.500)
         C(g1_amplitude, g1_sigma)    =  0.824
         C(g2_amplitude, g2_sigma)    =  0.815
+        C(exp_amplitude, exp_decay)  = -0.695
         C(g1_sigma, g2_center)       =  0.684
+        C(g1_center, g2_amplitude)   = -0.669
+        C(g1_center, g2_sigma)       = -0.652
         C(g1_amplitude, g2_center)   =  0.648
         C(g1_center, g2_center)      =  0.621
-        C(g1_center, g1_sigma)       =  0.507
+        C(g1_sigma, g1_center)       =  0.507
+        C(exp_decay, g1_amplitude)   = -0.507
 
 
-
-We get a very good fit to this challenging problem (described at the NIST
-site as of average difficulty, but the tests there are generally hard) by
+We get a very good fit to this problem (described at the NIST site as of
+average difficulty, but the tests there are generally deliberately challenging) by
 applying reasonable initial guesses and putting modest but explicit bounds
 on the parameter values.  This fit is shown on the left:
 
@@ -902,42 +933,48 @@ That is, with::
     gauss1.guess(y[ix1:ix2], x=x[ix1:ix2])
     gauss2.guess(y[ix2:ix3], x=x[ix2:ix3])
 
-we can get a better initial estimate, and the fit converges in fewer steps,
-getting to identical values (to the precision printed out in the report),
-and without any bounds on parameters at all::
+we can get a better initial estimate.  The fit converges to the same answer,
+giving to identical values (to the precision printed out in the report),
+but in few steps, and without any bounds on parameters at all::
 
     [[Model]]
-     Composite Model:
-        gaussian(prefix='g1_')
-        gaussian(prefix='g2_')
-        exponential(prefix='exp_')
+        ((Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')) +  Model(exponential,  prefix='exp_'))
     [[Fit Statistics]]
-        # function evals   = 46
+        # function evals   = 48
         # data points      = 250
         # variables        = 8
         chi-square         = 1247.528
         reduced chi-square = 5.155
+        Akaike info crit   = 425.995
+        Bayesian info crit = 454.167
     [[Variables]]
         exp_amplitude:   99.0183281 +/- 0.537487 (0.54%) (init= 94.53724)
-        exp_decay:       90.9508863 +/- 1.103105 (1.21%) (init= 111.1985)
-        g1_amplitude:    4257.77321 +/- 42.38338 (1.00%) (init= 2126.432)
+        exp_decay:       90.9508862 +/- 1.103105 (1.21%) (init= 111.1985)
+        g1_amplitude:    4257.77322 +/- 42.38338 (1.00%) (init= 2126.432)
+        g1_sigma:        16.6725754 +/- 0.160481 (0.96%) (init= 14.5)
         g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 106.5)
         g1_fwhm:         39.2609141 +/- 0.377905 (0.96%)  == '2.3548200*g1_sigma'
-        g1_sigma:        16.6725754 +/- 0.160481 (0.96%) (init= 14.5)
-        g2_amplitude:    2493.41766 +/- 36.16948 (1.45%) (init= 1878.892)
+        g1_height:       101.880231 +/- 0.592171 (0.58%)  ==
+        '0.3989423*g1_amplitude/g1_    sigma'
+        g2_amplitude:    2493.41766 +/- 36.16947 (1.45%) (init= 1878.892)
+        g2_sigma:        13.8069481 +/- 0.186794 (1.35%) (init= 15)
         g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 150)
         g2_fwhm:         32.5128777 +/- 0.439866 (1.35%)  == '2.3548200*g2_sigma'
-        g2_sigma:        13.8069481 +/- 0.186794 (1.35%) (init= 15)
+        g2_height:       72.0455935 +/- 0.617221 (0.86%)  ==
+        '0.3989423*g2_amplitude/g2_    sigma'
     [[Correlations]] (unreported correlations are <  0.500)
         C(g1_amplitude, g1_sigma)    =  0.824
         C(g2_amplitude, g2_sigma)    =  0.815
+        C(exp_amplitude, exp_decay)  = -0.695
         C(g1_sigma, g2_center)       =  0.684
+        C(g1_center, g2_amplitude)   = -0.669
+        C(g1_center, g2_sigma)       = -0.652
         C(g1_amplitude, g2_center)   =  0.648
         C(g1_center, g2_center)      =  0.621
-        C(g1_center, g1_sigma)       =  0.507
+        C(g1_sigma, g1_center)       =  0.507
+        C(exp_decay, g1_amplitude)   = -0.507
 
 
-
-This example is in the file ``doc_nistgauss2.py`` in the examples folder,
+This script is in the file ``doc_nistgauss2.py`` in the examples folder,
 and the fit result shown on the right above shows an improved initial
 estimate of the data.

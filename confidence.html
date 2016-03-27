@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.2',
+        VERSION:     '0.9.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -212,7 +212,7 @@ the covariance matrix are sufficient.</p>
 <p>Now we look at a problem where calculating the error from approximated
 covariance can lead to misleading result &#8211; two decaying exponentials.  In
 fact such a problem is particularly hard for the Levenberg-Marquardt
-method, so we fitst estimate the results using the slower but robust
+method, so we first estimate the results using the slower but robust
 Nelder-Mead  method, and <em>then</em> use Levenberg-Marquardt to estimate the
 uncertainties and correlations</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">lmfit</span>
@@ -334,6 +334,23 @@ parameters:</p>
 </div>
 <p>which shows the trace of values:</p>
 <a class="reference external image-reference" href="_images/conf_interval2.png"><img alt="_images/conf_interval2.png" src="_images/conf_interval2.png" style="width: 50%;" /></a>
+<p>The <a class="reference internal" href="fitting.html#Minimizer.emcee" title="Minimizer.emcee"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.emcee()</span></code></a> method uses Markov Chain Monte Carlo to sample
+the posterior probability distribution. These distributions demonstrate the
+range of solutions that the data supports. The following image was obtained
+by using <a class="reference internal" href="fitting.html#Minimizer.emcee" title="Minimizer.emcee"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.emcee()</span></code></a> on the same problem.</p>
+<img alt="_images/emcee_triangle.png" src="_images/emcee_triangle.png" />
+<p>Credible intervals (the Bayesian equivalent of the frequentist confidence
+interval) can be obtained with this method. MCMC can be used for model
+selection, to determine outliers, to marginalise over nuisance parameters, etc.
+For example, you may have fractionally underestimated the uncertainties on a
+dataset. MCMC can be used to estimate the true level of uncertainty on each
+datapoint. A tutorial on the possibilities offered by MCMC can be found at <a class="footnote-reference" href="#id2" id="id1">[1]</a>.</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/">http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/</a></td></tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="confidence-interval-functions">
 <h2>Confidence Interval Functions<a class="headerlink" href="#confidence-interval-functions" title="Permalink to this headline">¶</a></h2>
@@ -352,65 +369,39 @@ region.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minimizer</strong> : Minimizer</p>
-<blockquote>
-<div><p>The minimizer to use, holding objective function.</p>
-</div></blockquote>
-<p><strong>result</strong> : MinimizerResult</p>
-<blockquote>
-<div><p>The result of running minimize().</p>
-</div></blockquote>
-<p><strong>p_names</strong> : list, optional</p>
-<blockquote>
-<div><p>Names of the parameters for which the ci is calculated. If None,
-the ci is calculated for every parameter.</p>
-</div></blockquote>
-<p><strong>sigmas</strong> : list, optional</p>
-<blockquote>
-<div><p>The probabilities (1-alpha) to find. Default is 1,2 and 3-sigma.</p>
-</div></blockquote>
-<p><strong>trace</strong> : bool, optional</p>
-<blockquote>
-<div><p>Defaults to False, if true, each result of a probability calculation
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><em>Minimizer</em></a>) &#8211; The minimizer to use, holding objective function.</li>
+<li><strong>result</strong> (<a class="reference internal" href="fitting.html#MinimizerResult" title="MinimizerResult"><em>MinimizerResult</em></a>) &#8211; The result of running minimize().</li>
+<li><strong>p_names</strong> (<em>list, optional</em>) &#8211; Names of the parameters for which the ci is calculated. If None,
+the ci is calculated for every parameter.</li>
+<li><strong>sigmas</strong> (<em>list, optional</em>) &#8211; The probabilities (1-alpha) to find. Default is 1,2 and 3-sigma.</li>
+<li><strong>trace</strong> (<em>bool, optional</em>) &#8211; Defaults to False, if true, each result of a probability calculation
 is saved along with the parameter. This can be used to plot so
-called &#8220;profile traces&#8221;.</p>
-</div></blockquote>
+called &#8220;profile traces&#8221;.</li>
+<li><strong>maxiter</strong> (<em>int</em>) &#8211; Maximum of iteration to find an upper limit. Default is 200.</li>
+<li><strong>prob_func</strong> (<code class="docutils literal"><span class="pre">None</span></code> or callable) &#8211; Function to calculate the probability from the optimized chi-square.
+Default (<code class="docutils literal"><span class="pre">None</span></code>) uses built-in f_compare (F test).</li>
+<li><strong>verbose</strong> (<em>bool</em>) &#8211; print extra debuging information. Default is <code class="docutils literal"><span class="pre">False</span></code>.</li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>output</strong> : dict</p>
-<blockquote>
-<div><p>A dict, which contains a list of (sigma, vals)-tuples for each name.</p>
-</div></blockquote>
-<p><strong>trace_dict</strong> : dict</p>
-<blockquote>
-<div><p>Only if trace is set true. Is a dict, the key is the parameter which
-was fixed.The values are again a dict with the names as keys, but with
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>output</strong> (<em>dict</em>) &#8211;
+A dict, which contains a list of (sigma, vals)-tuples for each name.</li>
+<li><strong>trace_dict</strong> (<em>dict</em>) &#8211;
+Only if trace is set true. Is a dict, the key is the parameter which
+was fixed. The values are again a dict with the names as keys, but with
 an additional key &#8216;prob&#8217;. Each contains an array of the corresponding
-values.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>maxiter</strong> : int</p>
-<blockquote>
-<div><p>Maximum of iteration to find an upper limit.</p>
-</div></blockquote>
-<p><strong>prob_func</strong> : <code class="docutils literal"><span class="pre">None</span></code> or callable</p>
-<blockquote>
-<div><p>Function to calculate the probability from the optimized chi-square.
-Default (<code class="docutils literal"><span class="pre">None</span></code>) uses built-in f_compare (F test).</p>
-</div></blockquote>
-<p><strong>verbose: bool</strong></p>
-<blockquote class="last">
-<div><p>print extra debuggin information. Default is <code class="docutils literal"><span class="pre">False</span></code>.</p>
-</div></blockquote>
+values.</li>
+</ul>
+</p>
 </td>
 </tr>
 </tbody>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">conf_interval2d</span></code></p>
+<p class="last"><code class="xref py py-func docutils literal"><span class="pre">conf_interval2d()</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit.printfuncs</span> <span class="kn">import</span> <span class="o">*</span>
@@ -444,53 +435,26 @@ two parameters.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>minimizer</strong> : Minimizer</p>
-<blockquote>
-<div><p>The minimizer to use, holding objective function.</p>
-</div></blockquote>
-<p><strong>result</strong> : MinimizerResult</p>
-<blockquote>
-<div><p>The result of running minimize().</p>
-</div></blockquote>
-<p><strong>x_name</strong> : string</p>
-<blockquote>
-<div><p>The name of the parameter which will be the x direction.</p>
-</div></blockquote>
-<p><strong>y_name</strong> : string</p>
-<blockquote>
-<div><p>The name of the parameter which will be the y direction.</p>
-</div></blockquote>
-<p><strong>nx, ny</strong> : ints, optional</p>
-<blockquote>
-<div><p>Number of points.</p>
-</div></blockquote>
-<p><strong>limits</strong> : tuple: optional</p>
-<blockquote>
-<div><p>Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
-given, the default is 5 std-errs in each direction.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><em>Minimizer</em></a>) &#8211; The minimizer to use, holding objective function.</li>
+<li><strong>result</strong> (<a class="reference internal" href="fitting.html#MinimizerResult" title="MinimizerResult"><em>MinimizerResult</em></a>) &#8211; The result of running minimize().</li>
+<li><strong>x_name</strong> (<em>string</em>) &#8211; The name of the parameter which will be the x direction.</li>
+<li><strong>y_name</strong> (<em>string</em>) &#8211; The name of the parameter which will be the y direction.</li>
+<li><strong>ny</strong> (<em>nx,</em>) &#8211; Number of points.</li>
+<li><strong>limits</strong> (<em>tuple: optional</em>) &#8211; Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
+given, the default is 5 std-errs in each direction.</li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>x</strong> : (nx)-array</p>
-<blockquote>
-<div><p>x-coordinates</p>
-</div></blockquote>
-<p><strong>y</strong> : (ny)-array</p>
-<blockquote>
-<div><p>y-coordinates</p>
-</div></blockquote>
-<p><strong>grid</strong> : (nx,ny)-array</p>
-<blockquote>
-<div><p>grid contains the calculated probabilities.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>prob_func</strong> : <code class="docutils literal"><span class="pre">None</span></code> or callable</p>
-<blockquote class="last">
-<div><p>Function to calculate the probability from the optimized chi-square.
-Default (<code class="docutils literal"><span class="pre">None</span></code>) uses built-in f_compare (F test).</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
+<li><strong>x</strong> (<em>(nx)-array</em>) &#8211;
+x-coordinates</li>
+<li><strong>y</strong> (<em>(ny)-array</em>) &#8211;
+y-coordinates</li>
+<li><strong>grid</strong> (<em>(nx,ny)-array</em>) &#8211;
+grid contains the calculated probabilities.</li>
+</ul>
+</p>
 </td>
 </tr>
 </tbody>
@@ -502,6 +466,17 @@ Default (<code class="docutils literal"><span class="pre">None</span></code>) us
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">gr</span><span class="p">)</span>
 </pre></div>
 </div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><strong>prob_func</strong> (<code class="docutils literal"><span class="pre">None</span></code> or callable) &#8211;
+Function to calculate the probability from the optimized chi-square.
+Default (<code class="docutils literal"><span class="pre">None</span></code>) uses built-in f_compare (F test).</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
@@ -512,17 +487,16 @@ Default (<code class="docutils literal"><span class="pre">None</span></code>) us
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>with_offset</strong> : bool (default <cite>True</cite>)</p>
-<blockquote>
-<div><p>whether to subtract best value from all other values.</p>
-</div></blockquote>
-<p><strong>ndigits</strong> : int (default 5)</p>
-<blockquote>
-<div><p>number of significant digits to show</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>with_offset</strong> (bool (default <cite>True</cite>)) &#8211; whether to subtract best value from all other values.</li>
+<li><strong>ndigits</strong> (<em>int (default 5)</em>) &#8211; number of significant digits to show</li>
+</ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">text of formatted report on confidence intervals.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">text of formatted report on confidence intervals.</p>
 </td>
 </tr>
 </tbody>

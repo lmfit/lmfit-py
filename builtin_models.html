@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.2',
+        VERSION:     '0.9.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -202,8 +202,10 @@ common parameter names are used whenever possible.  Thus, most models have
 a parameter called <code class="docutils literal"><span class="pre">amplitude</span></code> that represents the overall height (or
 area of) a peak or function, a <code class="docutils literal"><span class="pre">center</span></code> parameter that represents a peak
 centroid position, and a <code class="docutils literal"><span class="pre">sigma</span></code> parameter that gives a characteristic
-width.   Some peak shapes also have a parameter <code class="docutils literal"><span class="pre">fwhm</span></code>, typically
-constrained by <code class="docutils literal"><span class="pre">sigma</span></code> to give the full width at half maximum.</p>
+width.  Many peak shapes also have a parameter <code class="docutils literal"><span class="pre">fwhm</span></code> (constrained by
+<code class="docutils literal"><span class="pre">sigma</span></code>) giving the full width at half maximum and a parameter <code class="docutils literal"><span class="pre">height</span></code>
+(constrained by <code class="docutils literal"><span class="pre">sigma</span></code> and <code class="docutils literal"><span class="pre">amplitude</span></code>) to give the maximum peak
+height.</p>
 <p>After a list of builtin models, a few examples of their use is given.</p>
 <div class="section" id="peak-like-models">
 <h2>Peak-like models<a class="headerlink" href="#peak-like-models" title="Permalink to this headline">¶</a></h2>
@@ -220,8 +222,9 @@ methods for all of these make a fairly crude guess for the value of
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Normal_distribution">Gaussian or normal distribution lineshape</a>.  Parameter names:
-<code class="docutils literal"><span class="pre">amplitude</span></code>, <code class="docutils literal"><span class="pre">center</span></code>, and <code class="docutils literal"><span class="pre">sigma</span></code>.  In addition, a constrained
-parameter <code class="docutils literal"><span class="pre">fwhm</span></code> is included.</p>
+<code class="docutils literal"><span class="pre">amplitude</span></code>, <code class="docutils literal"><span class="pre">center</span></code>, and <code class="docutils literal"><span class="pre">sigma</span></code>.
+In addition, parameters <code class="docutils literal"><span class="pre">fwhm</span></code> and <code class="docutils literal"><span class="pre">height</span></code> are included as constraints
+to report full width at half maximum and maximum peak height, respectively.</p>
 <div class="math">
 \[f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}\]</div>
 <p>where the parameter <code class="docutils literal"><span class="pre">amplitude</span></code> corresponds to <span class="math">\(A\)</span>, <code class="docutils literal"><span class="pre">center</span></code> to
@@ -237,8 +240,9 @@ half maximum is <span class="math">\(2\sigma\sqrt{2\ln{2}}\)</span>, approximate
 <dd></dd></dl>
 
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Cauchy_distribution">Lorentzian or Cauchy-Lorentz distribution function</a>.  Parameter names:
-<code class="docutils literal"><span class="pre">amplitude</span></code>, <code class="docutils literal"><span class="pre">center</span></code>, and <code class="docutils literal"><span class="pre">sigma</span></code>.  In addition, a constrained
-parameter <code class="docutils literal"><span class="pre">fwhm</span></code> is included.</p>
+<code class="docutils literal"><span class="pre">amplitude</span></code>, <code class="docutils literal"><span class="pre">center</span></code>, and <code class="docutils literal"><span class="pre">sigma</span></code>.
+In addition, parameters <code class="docutils literal"><span class="pre">fwhm</span></code> and <code class="docutils literal"><span class="pre">height</span></code> are included as constraints
+to report full width at half maximum and maximum peak height, respectively.</p>
 <div class="math">
 \[f(x; A, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]\]</div>
 <p>where the parameter <code class="docutils literal"><span class="pre">amplitude</span></code> corresponds to <span class="math">\(A\)</span>, <code class="docutils literal"><span class="pre">center</span></code> to
@@ -255,9 +259,10 @@ half maximum is <span class="math">\(2\sigma\)</span>.</p>
 <p>A model based on a <a class="reference external" href="http://en.wikipedia.org/wiki/Voigt_profile">Voigt distribution function</a>.  Parameter names:
 <code class="docutils literal"><span class="pre">amplitude</span></code>, <code class="docutils literal"><span class="pre">center</span></code>, and <code class="docutils literal"><span class="pre">sigma</span></code>.  A <code class="docutils literal"><span class="pre">gamma</span></code> parameter is also
 available.  By default, it is constrained to have value equal to <code class="docutils literal"><span class="pre">sigma</span></code>,
-though this can be varied independently.  In addition, a constrained
-parameter <code class="docutils literal"><span class="pre">fwhm</span></code> is included.  The definition for the Voigt function used
-here is</p>
+though this can be varied independently.  In addition, parameters <code class="docutils literal"><span class="pre">fwhm</span></code>
+and <code class="docutils literal"><span class="pre">height</span></code> are included as constraints to report full width at half
+maximum and maximum peak height, respectively.  The definition for the
+Voigt function used here is</p>
 <div class="math">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A \textrm{Re}[w(z)]}{\sigma\sqrt{2 \pi}}\]</div>
 <p>where</p>
@@ -322,8 +327,8 @@ parameters <code class="docutils literal"><span class="pre">amplitude</span></co
 <code class="docutils literal"><span class="pre">sigma</span></code> (<span class="math">\(\sigma\)</span>), and also an <code class="docutils literal"><span class="pre">exponent</span></code> (<span class="math">\(m\)</span>) in</p>
 <div class="math">
 \[f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}\]</div>
-<p>where <span class="math">\(\beta\)</span> is the beta function (see <code class="xref py py-func docutils literal"><span class="pre">scipy.special.beta()</span></code> in
-<a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/special.html#module-scipy.special" title="(in SciPy v0.16.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.special</span></code></a>).  The <code class="xref py py-meth docutils literal"><span class="pre">guess()</span></code> function always
+<p>where <span class="math">\(\beta\)</span> is the beta function (see <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/special.beta.html">special.beta</a> in
+<code class="xref py py-mod docutils literal"><span class="pre">scipy.special</span></code>).  The <code class="xref py py-meth docutils literal"><span class="pre">guess()</span></code> function always
 gives a starting value for <code class="docutils literal"><span class="pre">exponent</span></code> of 1.5.</p>
 </div>
 <div class="section" id="studentstmodel">
@@ -433,8 +438,8 @@ photo-emission. With the usual parameters <code class="docutils literal"><span c
 <div class="section" id="linear-and-polynomial-models">
 <h2>Linear and Polynomial Models<a class="headerlink" href="#linear-and-polynomial-models" title="Permalink to this headline">¶</a></h2>
 <p>These models correspond to polynomials of some degree.  Of course, lmfit is
-a very inefficient way to do linear regression (see <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html#numpy.polyfit" title="(in NumPy v1.9)"><code class="xref py py-func docutils literal"><span class="pre">numpy.polyfit()</span></code></a>
-or <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.linregress.html#scipy.stats.linregress" title="(in SciPy v0.16.0)"><code class="xref py py-func docutils literal"><span class="pre">scipy.stats.linregress()</span></code></a>), but these models may be useful as one
+a very inefficient way to do linear regression (see <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html">polyfit</a>
+or <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/stats.linregress.html">stats.linregress</a>), but these models may be useful as one
 of many components of composite model.</p>
 <div class="section" id="constantmodel">
 <h3><a class="reference internal" href="#models.ConstantModel" title="models.ConstantModel"><code class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></code></a><a class="headerlink" href="#constantmodel" title="Permalink to this headline">¶</a></h3>
@@ -494,7 +499,7 @@ value of 7).</p>
 \[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i\]</div>
 <p>with parameters <code class="docutils literal"><span class="pre">c0</span></code>, <code class="docutils literal"><span class="pre">c1</span></code>, ..., <code class="docutils literal"><span class="pre">c7</span></code>.  The supplied <code class="docutils literal"><span class="pre">degree</span></code>
 will specify how many of these are actual variable parameters.  This uses
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html#numpy.polyval" title="(in NumPy v1.9)"><code class="xref py py-func docutils literal"><span class="pre">numpy.polyval()</span></code></a> for its calculation of the polynomial.</p>
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html">polyval</a> for its calculation of the polynomial.</p>
 </div>
 </div>
 <div class="section" id="step-like-models">
@@ -599,7 +604,7 @@ mathematical constraints as discussed in <a class="reference internal" href="con
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expr</strong> (<a class="reference external" href="http://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; expression use to build model</li>
+<li><strong>expr</strong> (<em>string</em>) &#8211; expression use to build model</li>
 <li><strong>independent_vars</strong> (<code class="docutils literal"><span class="pre">None</span></code> (default) or list of strings for independent variables.) &#8211; list of argument names in expression that are independent variables.</li>
 <li><strong>init_script</strong> (<code class="docutils literal"><span class="pre">None</span></code> (default) or string) &#8211; python script to run before parsing and evaluating expression.</li>
 </ul>
@@ -672,9 +677,9 @@ and <cite>wid</cite>, and build a model that can be used to fit data.</p>
 <p>Here, we will fit data to three similar line shapes, in order to decide which
 might be the better model.  We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in <a class="reference internal" href="#models.GaussianModel" title="models.GaussianModel"><code class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></code></a> instead
-of one we write ourselves.  This is a slightly different version from the
+of writing one ourselves.  This is a slightly different version rom the
 one in previous example in that the parameter names are different, and have
-built-in default values.  So, we&#8217;ll simply use:</p>
+built-in default values.  We&#8217;ll simply use:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">loadtxt</span>
 <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">GaussianModel</span>
 
@@ -683,6 +688,7 @@ built-in default values.  So, we&#8217;ll simply use:</p>
 <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">()</span>
+
 <span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="n">out</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
@@ -692,91 +698,96 @@ built-in default values.  So, we&#8217;ll simply use:</p>
 <div class="highlight-python"><div class="highlight"><pre>[[Model]]
     gaussian
 [[Fit Statistics]]
-    # function evals   = 21
+    # function evals   = 23
     # data points      = 401
     # variables        = 3
     chi-square         = 29.994
     reduced chi-square = 0.075
+    Akaike info crit   = -1030.763
+    Bayesian info crit = -1018.781
 [[Variables]]
-    amplitude:   30.3135571 +/- 0.157126 (0.52%) (init= 29.08159)
-    center:      9.24277049 +/- 0.007374 (0.08%) (init= 9.25)
-    fwhm:        2.90156963 +/- 0.017366 (0.60%)  == &#39;2.3548200*sigma&#39;
     sigma:       1.23218319 +/- 0.007374 (0.60%) (init= 1.35)
+    fwhm:        2.90156963 +/- 0.017366 (0.60%)  == &#39;2.3548200*sigma&#39;
+    height:      9.81457973 +/- 0.050872 (0.52%)  == &#39;0.3989423*amplitude/sigma&#39;
+    center:      9.24277049 +/- 0.007374 (0.08%) (init= 9.25)
+    amplitude:   30.3135571 +/- 0.157126 (0.52%) (init= 29.08159)
 [[Correlations]] (unreported correlations are &lt;  0.250)
-    C(amplitude, sigma)          =  0.577
+    C(sigma, amplitude)          =  0.577
 </pre></div>
 </div>
-<dl class="docutils">
-<dt>[We see a few interesting differences from the results of the previous</dt>
-<dd>chapter. First, the parameter names are longer. Second, there is a
-<code class="docutils literal"><span class="pre">fwhm</span></code> parameter, defined as <span class="math">\(\sim 2.355\sigma\)</span>. And third, the
-automated initial guesses are pretty good. A plot of the fit shows not
-such a great fit:</dd>
-</dl>
+<p>We see a few interesting differences from the results of the previous
+chapter. First, the parameter names are longer. Second, there are <code class="docutils literal"><span class="pre">fwhm</span></code>
+and <code class="docutils literal"><span class="pre">height</span></code> parameters, to give the full width at half maximum and
+maximum peak height.  And third, the automated initial guesses are pretty
+good. A plot of the fit:</p>
 <blockquote id="figa1">
 <div><a class="reference external image-reference" href="_images/models_peak1.png"><img alt="_images/models_peak1.png" src="_images/models_peak1.png" style="width: 48%;" /></a>
 <a class="reference external image-reference" href="_images/models_peak2.png"><img alt="_images/models_peak2.png" src="_images/models_peak2.png" style="width: 48%;" /></a>
 <p>Fit to peak with Gaussian (left) and Lorentzian (right) models.</p>
 </div></blockquote>
-<p>suggesting that a different peak shape, with longer tails, should be used.
-Perhaps a Lorentzian would be better?  To do this, we simply replace
-<code class="docutils literal"><span class="pre">GaussianModel</span></code> with <code class="docutils literal"><span class="pre">LorentzianModel</span></code> to get a
-<a class="reference internal" href="#models.LorentzianModel" title="models.LorentzianModel"><code class="xref py py-class docutils literal"><span class="pre">LorentzianModel</span></code></a>:</p>
+<p>shows a decent match to the data &#8211; the fit worked with no explicit setting
+of initial parameter values.  Looking more closing, the fit is not perfect,
+especially in the tails of the peak, suggesting that a different peak
+shape, with longer tails, should be used.  Perhaps a Lorentzian would be
+better?  To do this, we simply replace <code class="docutils literal"><span class="pre">GaussianModel</span></code> with
+<code class="docutils literal"><span class="pre">LorentzianModel</span></code> to get a <a class="reference internal" href="#models.LorentzianModel" title="models.LorentzianModel"><code class="xref py py-class docutils literal"><span class="pre">LorentzianModel</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LorentzianModel</span>
 <span class="n">mod</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
-<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-<span class="n">out</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Predictably, the first thing we try gives results that are worse:</p>
+<p>with the rest of the script as above.  Perhaps predictably, the first thing
+we try gives results that are worse:</p>
 <div class="highlight-python"><div class="highlight"><pre>[[Model]]
-    lorentzian
+    Model(lorentzian)
 [[Fit Statistics]]
-    # function evals   = 25
+    # function evals   = 27
     # data points      = 401
     # variables        = 3
     chi-square         = 53.754
     reduced chi-square = 0.135
+    Akaike info crit   = -796.819
+    Bayesian info crit = -784.837
 [[Variables]]
-    amplitude:   38.9728645 +/- 0.313857 (0.81%) (init= 36.35199)
-    center:      9.24438944 +/- 0.009275 (0.10%) (init= 9.25)
-    fwhm:        2.30969034 +/- 0.026312 (1.14%)  == &#39;2.0000000*sigma&#39;
     sigma:       1.15484517 +/- 0.013156 (1.14%) (init= 1.35)
+    fwhm:        2.30969034 +/- 0.026312 (1.14%)  == &#39;2.0000000*sigma&#39;
+    height:      10.7420881 +/- 0.086336 (0.80%)  ==
+    &#39;0.3183099*amplitude/sigm    a&#39;
+    center:      9.24438944 +/- 0.009275 (0.10%) (init= 9.25)
+    amplitude:   38.9728645 +/- 0.313857 (0.81%) (init= 36.35199)
 [[Correlations]] (unreported correlations are &lt;  0.250)
-    C(amplitude, sigma)          =  0.709
+    C(sigma, amplitude)          =  0.709
 </pre></div>
 </div>
-<p>with the plot shown on the right in the figure above.</p>
-<p>A Voigt model does a better job.  Using <a class="reference internal" href="#models.VoigtModel" title="models.VoigtModel"><code class="xref py py-class docutils literal"><span class="pre">VoigtModel</span></code></a>, this is
-as simple as:</p>
+<p>with the plot shown on the right in the figure above.  The tails are now
+too big, and the value for <span class="math">\(\chi^2\)</span> almost doubled.  A Voigt model
+does a better job.  Using <a class="reference internal" href="#models.VoigtModel" title="models.VoigtModel"><code class="xref py py-class docutils literal"><span class="pre">VoigtModel</span></code></a>, this is as simple as using:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">VoigtModel</span>
 <span class="n">mod</span> <span class="o">=</span> <span class="n">VoigtModel</span><span class="p">()</span>
-<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-<span class="n">out</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>which gives:</p>
+<p>with all the rest of the script as above.  This gives:</p>
 <div class="highlight-python"><div class="highlight"><pre>[[Model]]
-    voigt
+    Model(voigt)
 [[Fit Statistics]]
-    # function evals   = 17
+    # function evals   = 19
     # data points      = 401
     # variables        = 3
     chi-square         = 14.545
     reduced chi-square = 0.037
+    Akaike info crit   = -1320.995
+    Bayesian info crit = -1309.013
 [[Variables]]
-    amplitude:   35.7554017 +/- 0.138614 (0.39%) (init= 43.62238)
-    center:      9.24411142 +/- 0.005054 (0.05%) (init= 9.25)
-    fwhm:        2.62951718 +/- 0.013269 (0.50%)  == &#39;3.6013100*sigma&#39;
-    gamma:       0.73015574 +/- 0.003684 (0.50%)  == &#39;sigma&#39;
     sigma:       0.73015574 +/- 0.003684 (0.50%) (init= 0.8775)
+    gamma:       0.73015574 +/- 0.003684 (0.50%)  == &#39;sigma&#39;
+    fwhm:        2.62951718 +/- 0.013269 (0.50%)  == &#39;3.6013100*sigma&#39;
+    height:      19.5360268 +/- 0.075691 (0.39%)  ==  &#39;0.3989423*amplitude/sigm    a&#39;
+    center:      9.24411142 +/- 0.005054 (0.05%) (init= 9.25)
+    amplitude:   35.7554017 +/- 0.138614 (0.39%) (init= 43.62238)
 [[Correlations]] (unreported correlations are &lt;  0.250)
-    C(amplitude, sigma)          =  0.651
+    C(sigma, amplitude)          =  0.651
 </pre></div>
 </div>
-<p>with the much better value for <span class="math">\(\chi^2\)</span> and the obviously better
+<p>which has a much better value for <span class="math">\(\chi^2\)</span> and an obviously better
 match to the data as seen in the figure below (left).</p>
 <blockquote id="figa2">
 <div><a class="reference external image-reference" href="_images/models_peak3.png"><img alt="_images/models_peak3.png" src="_images/models_peak3.png" style="width: 48%;" /></a>
@@ -784,50 +795,61 @@ match to the data as seen in the figure below (left).</p>
 <p>Fit to peak with Voigt model (left) and Voigt model with <code class="docutils literal"><span class="pre">gamma</span></code>
 varying independently of <code class="docutils literal"><span class="pre">sigma</span></code> (right).</p>
 </div></blockquote>
-<p>The Voigt function has a <span class="math">\(\gamma\)</span> parameter (<code class="docutils literal"><span class="pre">gamma</span></code>) that can be
-distinct from <code class="docutils literal"><span class="pre">sigma</span></code>.  The default behavior used above constrains
-<code class="docutils literal"><span class="pre">gamma</span></code> to have exactly the same value as <code class="docutils literal"><span class="pre">sigma</span></code>.  If we allow these
-to vary separately, does the fit improve?  To do this, we have to change
-the <code class="docutils literal"><span class="pre">gamma</span></code> parameter from a constrained expression and give it a
-starting value:</p>
+<p>Can we do better? The Voigt function has a <span class="math">\(\gamma\)</span> parameter
+(<code class="docutils literal"><span class="pre">gamma</span></code>) that can be distinct from <code class="docutils literal"><span class="pre">sigma</span></code>.  The default behavior used
+above constrains <code class="docutils literal"><span class="pre">gamma</span></code> to have exactly the same value as <code class="docutils literal"><span class="pre">sigma</span></code>.  If
+we allow these to vary separately, does the fit improve?  To do this, we
+have to change the <code class="docutils literal"><span class="pre">gamma</span></code> parameter from a constrained expression and
+give it a starting value using something like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">mod</span> <span class="o">=</span> <span class="n">VoigtModel</span><span class="p">()</span>
 <span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="n">pars</span><span class="p">[</span><span class="s">&#39;gamma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>
-
-<span class="n">out</span>  <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>which gives:</p>
 <div class="highlight-python"><div class="highlight"><pre>[[Model]]
-    voigt
+    Model(voigt)
 [[Fit Statistics]]
-    # function evals   = 21
+    # function evals   = 23
     # data points      = 401
     # variables        = 4
     chi-square         = 10.930
     reduced chi-square = 0.028
+    Akaike info crit   = -1432.556
+    Bayesian info crit = -1416.580
 [[Variables]]
-    amplitude:   34.1914716 +/- 0.179468 (0.52%) (init= 43.62238)
-    center:      9.24374845 +/- 0.004419 (0.05%) (init= 9.25)
-    fwhm:        3.22385491 +/- 0.050974 (1.58%)  == &#39;3.6013100*sigma&#39;
-    gamma:       0.52540157 +/- 0.018579 (3.54%) (init= 0.7)
     sigma:       0.89518950 +/- 0.014154 (1.58%) (init= 0.8775)
+    gamma:       0.52540156 +/- 0.018579 (3.54%) (init= 0.7)
+    fwhm:        3.22385492 +/- 0.050974 (1.58%)  == &#39;3.6013100*sigma&#39;
+    height:      15.2374711 +/- 0.299235 (1.96%)  ==
+&#39;0.3989423*amplitude/sigm    a&#39;
+    center:      9.24374845 +/- 0.004419 (0.05%) (init= 9.25)
+    amplitude:   34.1914716 +/- 0.179468 (0.52%) (init= 43.62238)
 [[Correlations]] (unreported correlations are &lt;  0.250)
-    C(amplitude, gamma)          =  0.821
+    C(sigma, gamma)              = -0.928
+    C(gamma, amplitude)          =  0.821
+    C(sigma, amplitude)          = -0.651
 </pre></div>
 </div>
 <p>and the fit shown on the right above.</p>
 <p>Comparing the two fits with the Voigt function, we see that <span class="math">\(\chi^2\)</span>
 is definitely improved with a separately varying <code class="docutils literal"><span class="pre">gamma</span></code> parameter.  In
 addition, the two values for <code class="docutils literal"><span class="pre">gamma</span></code> and <code class="docutils literal"><span class="pre">sigma</span></code> differ significantly
-&#8211; well outside the estimated uncertainties.  Even more compelling, reduced
+&#8211; well outside the estimated uncertainties.  More compelling, reduced
 <span class="math">\(\chi^2\)</span> is improved even though a fourth variable has been added to
 the fit.  In the simplest statistical sense, this suggests that <code class="docutils literal"><span class="pre">gamma</span></code>
-is a significant variable in the model.</p>
-<p>This example shows how easy it can be to alter and compare fitting models
-for simple problems.  The example is included in the <code class="docutils literal"><span class="pre">doc_peakmodels.py</span></code>
-file in the examples directory.</p>
+is a significant variable in the model.  In addition, we can use both the
+Akaike or Bayesian Information Criteria (see
+<a class="reference internal" href="fitting.html#information-criteria-label"><span>Akaike and Bayesian Information Criteria</span></a>) to assess how likely the model with
+variable <code class="docutils literal"><span class="pre">gamma</span></code> is to explain the data than the model with <code class="docutils literal"><span class="pre">gamma</span></code>
+fixed to the value of <code class="docutils literal"><span class="pre">sigma</span></code>.  According to theory,
+<span class="math">\(\exp(-(\rm{AIC1}-\rm{AIC0})/2)\)</span> gives the probably that a model with
+AIC` is more likely than a model with AIC0.  For the two models here, with
+AIC values of -1432 and -1321 (Note: if we had more carefully set the value
+for <code class="docutils literal"><span class="pre">weights</span></code> based on the noise in the data, these values might be
+positive, but there difference would be roughly the same), this says that
+the model with <code class="docutils literal"><span class="pre">gamma</span></code> fixed to <code class="docutils literal"><span class="pre">sigma</span></code> has a probably less than 1.e-25
+of being the better model.</p>
 </div>
 <div class="section" id="example-2-fit-data-to-a-composite-model-with-pre-defined-models">
 <h2>Example 2: Fit data to a Composite Model with pre-defined models<a class="headerlink" href="#example-2-fit-data-to-a-composite-model-with-pre-defined-models" title="Permalink to this headline">¶</a></h2>
@@ -874,27 +896,34 @@ telling it to use the <code class="docutils literal"><span class="pre">erf</span
 and <code class="xref py py-meth docutils literal"><span class="pre">guess()</span></code> method for the initial step function paramaters, and
 <code class="xref py py-meth docutils literal"><span class="pre">make_params()</span></code> arguments for the linear component.
 After making a composite model, we run <code class="xref py py-meth docutils literal"><span class="pre">fit()</span></code> and report the
-results, which give:</p>
+results, which gives:</p>
 <div class="highlight-python"><div class="highlight"><pre>[[Model]]
- Composite Model:
-    step(prefix=&#39;step_&#39;,form=&#39;erf&#39;)
-    linear(prefix=&#39;line_&#39;)
+[[Model]]
+    (Model(step, prefix=&#39;step_&#39;, form=&#39;erf&#39;) + Model(linear, prefix=&#39;line_&#39;))
 [[Fit Statistics]]
-    # function evals   = 49
+    # function evals   = 51
     # data points      = 201
     # variables        = 5
-    chi-square         = 633.465
-    reduced chi-square = 3.232
+    chi-square         = 648.584
+    reduced chi-square = 3.309
+    Akaike info crit   = 250.532
+    Bayesian info crit = 267.048
 [[Variables]]
-    line_intercept:   11.5685248 +/- 0.285611 (2.47%) (init= 10.72406)
-    line_slope:       2.03270159 +/- 0.096041 (4.72%) (init= 0)
-    step_amplitude:   112.270535 +/- 0.674790 (0.60%) (init= 136.3006)
-    step_center:      3.12343845 +/- 0.005370 (0.17%) (init= 2.5)
-    step_sigma:       0.67468813 +/- 0.011336 (1.68%) (init= 1.428571)
+    line_slope:       2.06986083 +/- 0.097005 (4.69%) (init= 0)
+    line_intercept:   11.7526825 +/- 0.288725 (2.46%) (init= 10.7017)
+    step_center:      3.12329688 +/- 0.005441 (0.17%) (init= 2.5)
+    step_sigma:       0.67050317 +/- 0.011480 (1.71%) (init= 1.428571)
+    step_amplitude:   111.673928 +/- 0.681024 (0.61%) (init= 134.6809)
 [[Correlations]] (unreported correlations are &lt;  0.100)
-    C(step_amplitude, step_sigma)  =  0.564
-    C(line_intercept, step_center)  =  0.428
-    C(step_amplitude, step_center)  =  0.109
+    C(line_slope, step_amplitude)  = -0.878
+    C(step_sigma, step_amplitude)  =  0.563
+    C(line_slope, step_sigma)    = -0.455
+    C(line_intercept, step_center)  =  0.426
+    C(line_slope, line_intercept)  = -0.307
+    C(line_slope, step_center)   = -0.234
+    C(line_intercept, step_sigma)  = -0.139
+    C(line_intercept, step_amplitude)  = -0.122
+    C(step_center, step_amplitude)  =  0.108
 </pre></div>
 </div>
 <p>with a plot of</p>
@@ -957,45 +986,52 @@ involving a decaying exponential and two gaussians.</p>
 <p>where we give a separate prefix to each model (they all have an
 <code class="docutils literal"><span class="pre">amplitude</span></code> parameter).  The <code class="docutils literal"><span class="pre">prefix</span></code> values are attached transparently
 to the models.</p>
-<p>MN&#8212;-: Note that the calls to <code class="xref py py-meth docutils literal"><span class="pre">make_param()</span></code> used the bare
-name, without the prefix.  We could have used them, but because we used the
+<p>Note that the calls to <code class="xref py py-meth docutils literal"><span class="pre">make_param()</span></code> used the bare name, without the
+prefix.  We could have used the prefixes, but because we used the
 individual model <code class="docutils literal"><span class="pre">gauss1</span></code> and <code class="docutils literal"><span class="pre">gauss2</span></code>, there was no need.</p>
 <p>Note also in the example here that we explicitly set bounds on many of the
 parameter values.</p>
 <p>The fit results printed out are:</p>
 <div class="highlight-python"><div class="highlight"><pre>[[Model]]
- Composite Model:
-    gaussian(prefix=&#39;g1_&#39;)
-    gaussian(prefix=&#39;g2_&#39;)
-    exponential(prefix=&#39;exp_&#39;)
+    ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) + Model(exponential, prefix=&#39;exp_&#39;))
 [[Fit Statistics]]
-    # function evals   = 55
+    # function evals   = 66
     # data points      = 250
     # variables        = 8
     chi-square         = 1247.528
     reduced chi-square = 5.155
+    Akaike info crit   = 425.995
+    Bayesian info crit = 454.167
 [[Variables]]
-    exp_amplitude:   99.0183291 +/- 0.537487 (0.54%) (init= 162.2102)
-    exp_decay:       90.9508788 +/- 1.103104 (1.21%) (init= 93.24905)
-    g1_amplitude:    4257.77384 +/- 42.38354 (1.00%) (init= 2000)
-    g1_center:       107.030955 +/- 0.150068 (0.14%) (init= 105)
-    g1_fwhm:         39.2609205 +/- 0.377907 (0.96%)  == &#39;2.3548200*g1_sigma&#39;
-    g1_sigma:        16.6725781 +/- 0.160482 (0.96%) (init= 15)
-    g2_amplitude:    2493.41747 +/- 36.16907 (1.45%) (init= 2000)
-    g2_center:       153.270103 +/- 0.194665 (0.13%) (init= 155)
-    g2_fwhm:         32.5128760 +/- 0.439860 (1.35%)  == &#39;2.3548200*g2_sigma&#39;
-    g2_sigma:        13.8069474 +/- 0.186791 (1.35%) (init= 15)
+    exp_amplitude:   99.0183282 +/- 0.537487 (0.54%) (init= 162.2102)
+    exp_decay:       90.9508861 +/- 1.103105 (1.21%) (init= 93.24905)
+    g1_amplitude:    4257.77318 +/- 42.38336 (1.00%) (init= 2000)
+    g1_sigma:        16.6725753 +/- 0.160481 (0.96%) (init= 15)
+    g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 105)
+    g1_fwhm:         39.2609137 +/- 0.377905 (0.96%)  == &#39;2.3548200*g1_sigma&#39;
+    g1_height:       101.880231 +/- 0.592170 (0.58%)  ==
+    &#39;0.3989423*g1_amplitude/g1_    sigma&#39;
+    g2_amplitude:    2493.41770 +/- 36.16947 (1.45%) (init= 2000)
+    g2_sigma:        13.8069484 +/- 0.186794 (1.35%) (init= 15)
+    g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 155)
+    g2_fwhm:         32.5128783 +/- 0.439866 (1.35%)  == &#39;2.3548200*g2_sigma&#39;
+    g2_height:       72.0455934 +/- 0.617220 (0.86%)  ==
+    &#39;0.3989423*g2_amplitude/g2_    sigma&#39;
 [[Correlations]] (unreported correlations are &lt;  0.500)
     C(g1_amplitude, g1_sigma)    =  0.824
     C(g2_amplitude, g2_sigma)    =  0.815
+    C(exp_amplitude, exp_decay)  = -0.695
     C(g1_sigma, g2_center)       =  0.684
+    C(g1_center, g2_amplitude)   = -0.669
+    C(g1_center, g2_sigma)       = -0.652
     C(g1_amplitude, g2_center)   =  0.648
     C(g1_center, g2_center)      =  0.621
-    C(g1_center, g1_sigma)       =  0.507
+    C(g1_sigma, g1_center)       =  0.507
+    C(exp_decay, g1_amplitude)   = -0.507
 </pre></div>
 </div>
-<p>We get a very good fit to this challenging problem (described at the NIST
-site as of average difficulty, but the tests there are generally hard) by
+<p>We get a very good fit to this problem (described at the NIST site as of
+average difficulty, but the tests there are generally deliberately challenging) by
 applying reasonable initial guesses and putting modest but explicit bounds
 on the parameter values.  This fit is shown on the left:</p>
 <blockquote id="figa3">
@@ -1023,41 +1059,48 @@ That is, with:</p>
 <span class="n">gauss2</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">ix2</span><span class="p">:</span><span class="n">ix3</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">ix2</span><span class="p">:</span><span class="n">ix3</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>we can get a better initial estimate, and the fit converges in fewer steps,
-getting to identical values (to the precision printed out in the report),
-and without any bounds on parameters at all:</p>
+<p>we can get a better initial estimate.  The fit converges to the same answer,
+giving to identical values (to the precision printed out in the report),
+but in few steps, and without any bounds on parameters at all:</p>
 <div class="highlight-python"><div class="highlight"><pre>[[Model]]
- Composite Model:
-    gaussian(prefix=&#39;g1_&#39;)
-    gaussian(prefix=&#39;g2_&#39;)
-    exponential(prefix=&#39;exp_&#39;)
+    ((Model(gaussian, prefix=&#39;g1_&#39;) + Model(gaussian, prefix=&#39;g2_&#39;)) +  Model(exponential,  prefix=&#39;exp_&#39;))
 [[Fit Statistics]]
-    # function evals   = 46
+    # function evals   = 48
     # data points      = 250
     # variables        = 8
     chi-square         = 1247.528
     reduced chi-square = 5.155
+    Akaike info crit   = 425.995
+    Bayesian info crit = 454.167
 [[Variables]]
     exp_amplitude:   99.0183281 +/- 0.537487 (0.54%) (init= 94.53724)
-    exp_decay:       90.9508863 +/- 1.103105 (1.21%) (init= 111.1985)
-    g1_amplitude:    4257.77321 +/- 42.38338 (1.00%) (init= 2126.432)
+    exp_decay:       90.9508862 +/- 1.103105 (1.21%) (init= 111.1985)
+    g1_amplitude:    4257.77322 +/- 42.38338 (1.00%) (init= 2126.432)
+    g1_sigma:        16.6725754 +/- 0.160481 (0.96%) (init= 14.5)
     g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 106.5)
     g1_fwhm:         39.2609141 +/- 0.377905 (0.96%)  == &#39;2.3548200*g1_sigma&#39;
-    g1_sigma:        16.6725754 +/- 0.160481 (0.96%) (init= 14.5)
-    g2_amplitude:    2493.41766 +/- 36.16948 (1.45%) (init= 1878.892)
+    g1_height:       101.880231 +/- 0.592171 (0.58%)  ==
+    &#39;0.3989423*g1_amplitude/g1_    sigma&#39;
+    g2_amplitude:    2493.41766 +/- 36.16947 (1.45%) (init= 1878.892)
+    g2_sigma:        13.8069481 +/- 0.186794 (1.35%) (init= 15)
     g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 150)
     g2_fwhm:         32.5128777 +/- 0.439866 (1.35%)  == &#39;2.3548200*g2_sigma&#39;
-    g2_sigma:        13.8069481 +/- 0.186794 (1.35%) (init= 15)
+    g2_height:       72.0455935 +/- 0.617221 (0.86%)  ==
+    &#39;0.3989423*g2_amplitude/g2_    sigma&#39;
 [[Correlations]] (unreported correlations are &lt;  0.500)
     C(g1_amplitude, g1_sigma)    =  0.824
     C(g2_amplitude, g2_sigma)    =  0.815
+    C(exp_amplitude, exp_decay)  = -0.695
     C(g1_sigma, g2_center)       =  0.684
+    C(g1_center, g2_amplitude)   = -0.669
+    C(g1_center, g2_sigma)       = -0.652
     C(g1_amplitude, g2_center)   =  0.648
     C(g1_center, g2_center)      =  0.621
-    C(g1_center, g1_sigma)       =  0.507
+    C(g1_sigma, g1_center)       =  0.507
+    C(exp_decay, g1_amplitude)   = -0.507
 </pre></div>
 </div>
-<p>This example is in the file <code class="docutils literal"><span class="pre">doc_nistgauss2.py</span></code> in the examples folder,
+<p>This script is in the file <code class="docutils literal"><span class="pre">doc_nistgauss2.py</span></code> in the examples folder,
 and the fit result shown on the right above shows an improved initial
 estimate of the data.</p>
 </div>

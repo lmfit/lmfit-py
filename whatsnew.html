@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.2',
+        VERSION:     '0.9.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -179,27 +179,25 @@ first fit <code class="docutils literal"><span class="pre">result1</span></code>
 <div class="section" id="discussion">
 <h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
 <p>The main goal for making this change were to</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li>give a better return value to <a class="reference internal" href="fitting.html#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> and
 <a class="reference internal" href="fitting.html#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a> that can hold all of the information
 about a fit.  By having the return value be an instance of the
 <a class="reference internal" href="fitting.html#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> class, it can hold an arbitrary amount of
 information that is easily accessed by attribute name, and even
 be given methods.  Using objects is good!</li>
-<li>To limit or even elimate the amount of &#8220;state information&#8221; a
+<li>To limit or even eliminate the amount of &#8220;state information&#8221; a
 <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> holds.  By state information, we mean how much of
 the previous fit is remembered after a fit is done.  Keeping (and
 especially using) such information about a previous fit means that
 a <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> might give different results even for the same
 problem if run a second time.  While it&#8217;s desirable to be able to
-adjust a set of <a class="reference internal" href="parameters.html#Parameters" title="Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> re-run a fit to get an improved
-result, doing this by changing an <a href="#id1"><span class="problematic" id="id2">*</span></a>internal attribute
+adjust a set of <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> re-run a fit to get an improved
+result, doing this by changing an internal attribute
 (<code class="xref py py-attr docutils literal"><span class="pre">Minimizer.params</span></code>) has the undesirable side-effect of not
 being able to &#8220;go back&#8221;, and makes it somewhat cumbersome to keep
 track of changes made while adjusting parameters and re-running fits.</li>
 </ol>
-</div></blockquote>
 </div>
 </div>
 </div>

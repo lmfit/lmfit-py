@@ -14,8 +14,8 @@ Non-Linear Least-Square Minimization and Curve-Fitting for Python
 
 Lmfit provides a high-level interface to non-linear optimization and curve
 fitting problems for Python. Lmfit builds on and extends many of the
-optimizatin algorithm of :mod:`scipy.optimize`, especially the
-`Levenberg-Marquardt`_ method from :func:`scipy.optimize.leastsq`.
+optimization algorithm of :mod:`scipy.optimize`, especially the
+`Levenberg-Marquardt`_ method from :scipydoc:`optimize.leastsq`.
 
 Lmfit provides a number of useful enhancements to optimization and data
 fitting problems, including:
@@ -31,14 +31,14 @@ fitting problems, including:
     without changing the objective function.
 
   * Improved estimation of confidence intervals.  While
-    :func:`scipy.optimize.leastsq` will automatically calculate
+    :scipydoc:`optimize.leastsq` will automatically calculate
     uncertainties and correlations from the covariance matrix, the accuracy
     of these estimates are often questionable.  To help address this, lmfit
     has functions to explicitly explore parameter space to determine
     confidence levels even for the most difficult cases.
 
   * Improved curve-fitting with the :class:`Model` class.  This
-    extends the capabilities of :func:`scipy.optimize.curve_fit`, allowing
+    extends the capabilities of :scipydoc:`optimize.curve_fit`, allowing
     you to turn a function that models for your data into a python class
     that helps you parametrize and fit data with that model.
 

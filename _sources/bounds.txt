@@ -9,7 +9,7 @@ Bounds Implementation
 .. _leastsqbound: https://github.com/jjhelmus/leastsqbound-scipy
 
 This section describes the implementation of :class:`Parameter` bounds.
-The `MINPACK-1`_ implementation used in :func:`scipy.optimize.leastsq` for
+The `MINPACK-1`_ implementation used in :scipydoc:`optimize.leastsq` for
 the Levenberg-Marquardt algorithm does not explicitly support bounds on
 parameters, and expects to be able to fully explore the available range of
 values for any Parameter.  Simply placing hard constraints (that is,
@@ -76,4 +76,3 @@ computation time), and in some cases may cause some instabilities, as the
 range of acceptable parameter values is not fully explored.  On the other
 hand, preliminary tests suggest that using ``max`` and ``min`` to set
 clearly outlandish bounds does not greatly affect performance or results.
-
