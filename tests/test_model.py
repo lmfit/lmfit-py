@@ -433,6 +433,26 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertEqual(param_values['p1_amplitude'], 1)
         self.assertEqual(param_values['p2_amplitude'], 2)
 
+    def test_hints_for_peakmodels(self):
+        # test that height/fwhm do not cause asteval errors.
+
+        x = np.linspace(-10, 10, 101)
+        y = np.sin(x / 3)  + x /100.
+
+        m1 = models.LinearModel(prefix='m1_')
+
+        params = m1.guess(y, x=x)
+
+        m2 = models.GaussianModel(prefix='m2_')
+        params.update(m2.make_params())
+
+        m = m1 + m2
+
+        param_values = {name: p.value for name, p in params.items()}
+        self.assertEqual(param_values['m1_amplitude'], 1)
+        self.assertTrue(param_values['m1_intercept'] < -0.0)
+
+
     def test_weird_param_hints(self):
         # tests Github Issue 312, a very weird way to access param_hints
         def func(x, amp):
@@ -531,7 +551,6 @@ class TestPolynomialOrder3(CommonTests, unittest.TestCase):
 
 
 class TestConstant(CommonTests, unittest.TestCase):
-
     def setUp(self):
         self.true_values = lambda: dict(c=5)
         self.guess = lambda: dict(c=2)
@@ -542,7 +561,6 @@ class TestConstant(CommonTests, unittest.TestCase):
         raise nose.SkipTest("ConstantModel has not independent_vars.")
 
 class TestPowerlaw(CommonTests, unittest.TestCase):
-
     def setUp(self):
         self.true_values = lambda: dict(amplitude=5, exponent=3)
         self.guess = lambda: dict(amplitude=2, exponent=8)
@@ -551,7 +569,6 @@ class TestPowerlaw(CommonTests, unittest.TestCase):
 
 
 class TestExponential(CommonTests, unittest.TestCase):
-
     def setUp(self):
         self.true_values = lambda: dict(amplitude=5, decay=3)
         self.guess = lambda: dict(amplitude=2, decay=8)
@@ -565,3 +582,5 @@ class TestComplexConstant(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(re=2,im=2)
         self.model_constructor = models.ComplexConstantModel
         super(TestComplexConstant, self).setUp()
+
+#
