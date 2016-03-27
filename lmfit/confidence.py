@@ -73,6 +73,14 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
         Defaults to False, if true, each result of a probability calculation
         is saved along with the parameter. This can be used to plot so
         called "profile traces".
+    maxiter : int
+        Maximum of iteration to find an upper limit. Default is 200.
+    prob_func : ``None`` or callable
+        Function to calculate the probability from the optimized chi-square.
+        Default (``None``) uses built-in f_compare (F test).
+    verbose: bool
+        print extra debuging information. Default is ``False``.
+
 
     Returns
     -------
@@ -87,17 +95,6 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
     See also
     --------
     conf_interval2d
-
-    Other Parameters
-    ----------------
-    maxiter : int
-        Maximum of iteration to find an upper limit.
-    prob_func : ``None`` or callable
-        Function to calculate the probability from the optimized chi-square.
-        Default (``None``) uses built-in f_compare (F test).
-    verbose: bool
-        print extra debuging information. Default is ``False``.
-
 
     Examples
     --------
@@ -120,7 +117,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
     >>> prob = trace['para1']['prob']
 
     This makes it possible to plot the dependence between free and fixed.
-    
+
     """
     ci = ConfidenceInterval(minimizer, result, p_names, prob_func, sigmas,
                             trace, verbose, maxiter)
