@@ -265,27 +265,8 @@ class Model(object):
         This applies any default values
         """
         params = Parameters()
-        # first build parameters defined in param_hints
-        # note that composites may define their own additional
-        # convenience parameters here
-        for basename, hint in self.param_hints.items():
-            name = "%s%s" % (self._prefix, basename)
-            if name in params:
-                par = params[name]
-            else:
-                par = Parameter(name=name)
-            par._delay_asteval = True
-            for item in self._hint_names:
-                if item in  hint:
-                    setattr(par, item, hint[item])
-            # Add the new parameter to self._param_names
-            if name not in self._param_names:
-                self._param_names.append(name)
-            params.add(par)
-            if verbose:
-                print( ' - Adding parameter for hint "%s"' % name)
 
-        # next, make sure that all named parameters are included
+        # make sure that all named parameters are included
         for name in self.param_names:
             if name in params:
                 par = params[name]
@@ -311,7 +292,27 @@ class Model(object):
                 par.value = kwargs[name]
             params.add(par)
             if verbose:
-                print( ' - Adding parameter "%s"' % name)
+                print( ' - Added parameter "%s"' % name)
+
+        # next build parameters defined in param_hints
+        # note that composites may define their own additional
+        # convenience parameters here
+        for basename, hint in self.param_hints.items():
+            name = "%s%s" % (self._prefix, basename)
+            if name in params:
+                par = params[name]
+            else:
+                par = Parameter(name=name)
+            par._delay_asteval = True
+            for item in self._hint_names:
+                if item in  hint:
+                    setattr(par, item, hint[item])
+            # Add the new parameter to self._param_names
+            if name not in self._param_names:
+                self._param_names.append(name)
+            params.add(par)
+            if verbose:
+                print( ' - Adding parameter for hint "%s"' % name)
 
         for p in params.values():
             p._delay_asteval = False
