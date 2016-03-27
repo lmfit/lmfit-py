@@ -270,7 +270,7 @@ specifying one or more independent variables.
    If ``params`` is ``None``, the internal ``params`` will be used. If it
    is supplied, these will replace the internal ones.   If supplied,
    ``weights`` will be used to weight the calculated residual so that the
-   quantitiy minimized in the least-squares sense is ``weights*(data -
+   quantity minimized in the least-squares sense is ``weights*(data -
    fit)``.  ``weights`` must be an ndarray-like object of same size and
    shape as ``data``.
 
@@ -653,7 +653,7 @@ with a model.
 A :class:`ModelResult` has several attributes holding values for fit results,
 and several methods for working with fits.  These include statistics
 inherited from :class:`Minimizer` useful for comparing different models,
-includind `chisqr`, `redchi`, `aic`, and `bic`.
+including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. class:: ModelResult()
 

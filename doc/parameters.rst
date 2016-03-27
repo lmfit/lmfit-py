@@ -203,7 +203,7 @@ The :class:`Parameters` class
     .. method:: loads(sval, **kws)
 
        use a JSON string representation of the :class:`Parameter` object in
-       `sval` to set all parameter settins. Optional keywords are sent
+       `sval` to set all parameter settings. Optional keywords are sent
        :py:func:`json.loads`.
 
     .. method:: load(file, **kws)

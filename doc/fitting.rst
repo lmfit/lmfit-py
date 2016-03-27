@@ -168,7 +168,7 @@ class as listed in the :ref:`Table of Supported Fitting Methods
 
 .. _fit-methods-table:
 
- Table of Supported Fitting Method, eithers:
+ Table of Supported Fitting Methods:
 
  +-----------------------+------------------------------------------------------------------+
  | Fitting Method        | ``method`` arg to :func:`minimize` or :meth:`Minimizer.minimize` |
@@ -382,7 +382,7 @@ these cases, the :attr:`errorbars` attribute of the fit result
 Akaike and Bayesian Information Criteria
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :class:`MinimizerResult` includes the tradtional chi-square and reduced chi-square statistics:
+The :class:`MinimizerResult` includes the traditional chi-square and reduced chi-square statistics:
 
 .. math::
    :nowrap:
@@ -493,7 +493,7 @@ The Minimizer object has a few public methods:
 
    perform fit using either :meth:`leastsq` or :meth:`scalar_minimize`.
 
-   :param method: name of fitting method.  Must be one of the naemes in
+   :param method: name of fitting method.  Must be one of the names in
                   :ref:`Table of Supported Fitting Methods <fit-methods-table>`
    :type  method:  str.
    :param params:  a :class:`Parameters` dictionary for starting values
@@ -505,7 +505,7 @@ The Minimizer object has a few public methods:
 .. versionchanged:: 0.9.0
    return value changed to :class:`MinimizerResult`
 
-   Additonal keywords are passed on to the correspond :meth:`leastsq`
+   Additional keywords are passed on to the correspond :meth:`leastsq`
    or :meth:`scalar_minimize` method.
 
 
