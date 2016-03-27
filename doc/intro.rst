@@ -79,7 +79,7 @@ including:
 
 These shortcomings are really do solely to the use of traditional arrays of
 variables, as matches closely the implementation of the Fortran code.  The
-lmfit module overcomes these shortcomings by using objects -- a core reason for wokring with
+lmfit module overcomes these shortcomings by using objects -- a core reason for working with
 Python.  The key concept for lmfit is to use :class:`Parameter`
 objects instead of plain floating point numbers as the variables for the
 fit.  By using :class:`Parameter` objects (or the closely related

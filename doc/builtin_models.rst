@@ -765,7 +765,7 @@ the fit.  In the simplest statistical sense, this suggests that ``gamma``
 is a significant variable in the model.  In addition, we can use both the
 Akaike or Bayesian Information Criteria (see
 :ref:`information_criteria_label`) to assess how likely the model with
-variable ``gamma`` is to explain the data than the model wih ``gamma``
+variable ``gamma`` is to explain the data than the model with ``gamma``
 fixed to the value of ``sigma``.  According to theory,
 :math:`\exp(-(\rm{AIC1}-\rm{AIC0})/2)` gives the probably that a model with
 AIC` is more likely than a model with AIC0.  For the two models here, with
