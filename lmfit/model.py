@@ -266,7 +266,7 @@ class Model(object):
         """
         params = Parameters()
 
-        # make sure that all named parameters are included
+        # make sure that all named parameters are in params
         for name in self.param_names:
             if name in params:
                 par = params[name]
@@ -292,7 +292,7 @@ class Model(object):
                 par.value = kwargs[name]
             params.add(par)
             if verbose:
-                print( ' - Added parameter "%s"' % name)
+                print( ' - Adding parameter "%s"' % name)
 
         # next build parameters defined in param_hints
         # note that composites may define their own additional
@@ -303,6 +303,9 @@ class Model(object):
                 par = params[name]
             else:
                 par = Parameter(name=name)
+                params.add(par)
+                if verbose:
+                    print( ' - Adding parameter for hint "%s"' % name)
             par._delay_asteval = True
             for item in self._hint_names:
                 if item in  hint:
@@ -310,9 +313,6 @@ class Model(object):
             # Add the new parameter to self._param_names
             if name not in self._param_names:
                 self._param_names.append(name)
-            params.add(par)
-            if verbose:
-                print( ' - Adding parameter for hint "%s"' % name)
 
         for p in params.values():
             p._delay_asteval = False
