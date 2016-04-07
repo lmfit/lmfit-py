@@ -149,7 +149,7 @@ class BaseFitter(object):
                 val = self.kwargs[key]
                 d = {key: val}
                 guess = self.model.guess(self._data, **d)
-                self.current_params = guess
+            self.current_params = guess
         except NotImplementedError:
             guessing_successful = False
         return guessing_successful
