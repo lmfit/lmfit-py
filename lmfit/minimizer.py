@@ -496,10 +496,13 @@ class Minimizer(object):
 
         if method == 'differential_evolution':
             fmin_kws['method'] = _differential_evolution
-            bounds = [(par.min, par.max) for par in params.values()]
-            if not np.all(np.isfinite(bounds)):
+            bounds = np.asarray([(par.min, par.max)
+                                 for par in params.values()])
+            varying = np.asarray([par.vary for par in params.values()])
+
+            if not np.all(np.isfinite(bounds[varying])):
                 raise ValueError('With differential evolution finite bounds '
-                                 'are required for each parameter')
+                                 'are required for each varying parameter')
             bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
             fmin_kws['bounds'] = bounds
 

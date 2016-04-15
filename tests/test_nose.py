@@ -361,8 +361,13 @@ class CommonMinimizerTest(unittest.TestCase):
         # You need finite (min, max) for each parameter if you're using
         # differential_evolution.
         self.fit_params['decay'].min = -np.inf
+        self.fit_params['decay'].vary = True
         self.minimizer = 'differential_evolution'
         np.testing.assert_raises(ValueError, self.scalar_minimizer)
+
+        # but only if a parameter is not fixed
+        self.fit_params['decay'].vary = False
+        self.mini.scalar_minimize(method='differential_evolution', maxiter=1)
 
     def test_scalar_minimizers(self):
         # test all the scalar minimizers
