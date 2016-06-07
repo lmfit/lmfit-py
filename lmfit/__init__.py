@@ -33,6 +33,8 @@ from scipy.optimize.  It has a number of useful enhancements, including:
              Daniel B. Allen, Johns Hopkins University
              Antonino Ingargiola, University of California, Los Angeles
 """
+import warnings
+import sys
 
 from .minimizer import minimize, Minimizer, MinimizerException
 from .parameter import Parameter, Parameters
@@ -49,5 +51,10 @@ from .uncertainties import ufloat, correlated_values
 
 ## versioneer code
 from ._version import get_versions
+
 __version__ = get_versions()['version']
 del get_versions
+
+# PY26 Depreciation Warning
+if sys.version_info[:2] == (2, 6):
+    warnings.warn('Support for Python 2.6.x is depreciated in Lmfit 0.9.4 and will be dropped in 0.9.5', DeprecationWarning)
