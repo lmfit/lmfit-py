@@ -2,7 +2,7 @@
 Parameter class
 """
 from __future__ import division
-from numpy import arcsin, cos, sin, sqrt, inf, nan, isfinite
+from numpy import array, arcsin, cos, sin, sqrt, inf, nan, isfinite
 import json
 from copy import deepcopy
 try:
@@ -151,6 +151,12 @@ class Parameters(OrderedDict):
         params = other.values()
         self.add_many(*params)
         return self
+
+    def __array__(self):
+        """
+        Parameters to array
+        """
+        return array([float(k) for k in self.values()])
 
     def __reduce__(self):
         """
@@ -688,6 +694,10 @@ class Parameter(object):
             self._expr_ast = self._expr_eval.parse(val)
             check_ast_errors(self._expr_eval)
             self._expr_deps = get_ast_names(self._expr_ast)
+
+    def __array__(self):
+        """array"""
+        return array(float(self._getval()))
 
     def __str__(self):
         """string"""
