@@ -6,14 +6,8 @@ from lmfit.lineshapes import gaussian, lorentzian
 
 
 def residual(pars, x, data):
-    model =  gaussian(x,
-                      pars['amp_g'].value,
-                      pars['cen_g'].value,
-                      pars['wid_g'].value)
-    model += lorentzian(x,
-                        pars['amp_l'].value,
-                        pars['cen_l'].value,
-                        pars['wid_l'].value)
+    model = (gaussian(x, pars['amp_g'], pars['cen_g'], pars['wid_g']) +
+             lorentzian(x, pars['amp_l'], pars['cen_l'], pars['wid_l']))
     return (model - data)
 
 

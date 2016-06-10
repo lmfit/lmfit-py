@@ -12,9 +12,9 @@ def gauss(x, amp, cen, sigma):
 def gauss_dataset(params, i, x):
     """calc gaussian from params for data set i
     using simple, hardwired naming convention"""
-    amp = params['amp_%i' % (i+1)].value
-    cen = params['cen_%i' % (i+1)].value
-    sig = params['sig_%i' % (i+1)].value
+    amp = params['amp_%i' % (i+1)]
+    cen = params['cen_%i' % (i+1)]
+    sig = params['sig_%i' % (i+1)]
     return gauss(x, amp, cen, sig)
 
 def objective(params, x, data):
@@ -66,4 +66,3 @@ for i in range(5):
     plt.plot(x, data[i, :], 'o', x, y_fit, '-')
 
 plt.show()
-
