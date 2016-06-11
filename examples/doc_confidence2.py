@@ -13,8 +13,7 @@ p = lmfit.Parameters()
 p.add_many(('a1', 4.), ('a2', 4.), ('t1', 3.), ('t2', 3.))
 
 def residual(p):
-   v = p.valuesdict()
-   return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1)/v['t2'])-y
+   return p['a1']*np.exp(-x/p['t1']) + p['a2']*np.exp(-(x-0.1)/p['t2'])-y
 
 # create Minimizer
 mini = lmfit.Minimizer(residual, p)
