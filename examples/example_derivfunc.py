@@ -10,21 +10,16 @@ except ImportError:
     HASPYLAB = False
 
 def func(pars, x, data=None):
-	a = pars['a'].value
-	b = pars['b'].value
-	c = pars['c'].value
-
+	a, b, c = pars['a'], pars['b'], pars['c']
 	model=a * np.exp(-b * x)+c
 	if data is None:
 		return model
 	return (model - data)
 
 def dfunc(pars, x, data=None):
-	a = pars['a'].value
-	b = pars['b'].value
-	c = pars['c'].value
+	a, b, c = pars['a'], pars['b'], pars['c']
 	v = np.exp(-b*x)
-	return [v, -a*x*v, np.ones(len(x))]
+	return np.array([v, -a*x*v, np.ones(len(x))])
 
 def f(var, x):
 	return var[0]* np.exp(-var[1] * x)+var[2]
@@ -70,9 +65,9 @@ Chi-square         |   %.4f    |   %.4f  |
 ''' %  (a, b, c,
         out1.nfev,   out2.nfev,
         out1.chisqr, out2.chisqr,
-        out1.params['a'].value, out2.params['a'].value,
-        out1.params['b'].value, out2.params['b'].value,
-        out1.params['c'].value, out2.params['c'].value )
+        out1.params['a'], out2.params['a'],
+        out1.params['b'], out2.params['b'],
+        out1.params['c'], out2.params['c'] )
 
 
 if HASPYLAB:
@@ -80,6 +75,3 @@ if HASPYLAB:
 	pylab.plot(x, fit1, 'b')
         pylab.plot(x, fit2, 'k')
 	pylab.show()
-
-
-

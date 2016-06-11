@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #<examples/doc_basic.py>
-from lmfit import minimize, Parameters, Parameter, report_fit
+from lmfit import minimize, Minimizer, Parameters, Parameter, report_fit
 import numpy as np
 
 # create data to be fitted
@@ -11,11 +11,10 @@ data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
 # define objective function: returns the array to be minimized
 def fcn2min(params, x, data):
     """ model decaying sine wave, subtract data"""
-    amp = params['amp'].value
-    shift = params['shift'].value
-    omega = params['omega'].value
-    decay = params['decay'].value
-
+    amp = params['amp']
+    shift = params['shift']
+    omega = params['omega']
+    decay = params['decay']
     model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
     return model - data
 
@@ -28,13 +27,16 @@ params.add('omega', value= 3.0)
 
 
 # do fit, here with leastsq model
-result = minimize(fcn2min, params, args=(x, data))
+minner = Minimizer(fcn2min, params, fcn_args=(x, data))
+kws  = {'options': {'maxiter':10}}
+result = minner.minimize()
+
 
 # calculate final result
 final = data + result.residual
 
 # write error report
-report_fit(result.params)
+report_fit(result)
 
 # try to plot results
 try:

@@ -15,14 +15,11 @@ p_true.add('shift', value=0.123)
 p_true.add('decay', value=0.010)
 
 def residual(pars, x, data=None):
-    amp = pars['amp'].value
-    per = pars['period'].value
-    shift = pars['shift'].value
-    decay = pars['decay'].value
-
+    argu  = (x*pars['decay'])**2
+    shift = pars['shift']
     if abs(shift) > pi/2:
         shift = shift - sign(shift)*pi
-    model = amp*sin(shift + x/per) * exp(-x*x*decay*decay)
+    model = pars['amp']*sin(shift + x/pars['period']) * exp(-argu)
     if data is None:
         return model
     return (model - data)

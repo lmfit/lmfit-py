@@ -8,12 +8,13 @@ from lmfit.models import LinearModel, GaussianModel
 from lmfit.lineshapes import gaussian
 
 def per_iteration(pars, iter, resid, *args, **kws):
-    if iter < 3 or iter % 10 == 0:
-        out = ['== %i ' % iter]
-        for key, val in pars.valuesdict().items():
-            out.append('%s=%.3f' % (key, val))
-        print ', '.join(out)
-        print args, kws
+    print(" ITER ", iter, ["%.5f" % p.value for p in pars.values()])
+    # if False and iter < 3 or iter % 10 == 0:
+    #    out = ['== %i ' % iter]
+    #    for key, val in pars.valuesdict().items():
+    #        out.append('%s=%.3f' % (key, val))
+    #    print ', '.join(out)
+    #    print args, kws
 
 
 x = linspace(0., 20, 401)
@@ -32,12 +33,12 @@ pars['bkg_slope'].value = 0.0
 
 out = mod.fit(y, pars, x=x, iter_cb=per_iteration)
 
-pylab.plot(x, y, 'b--')
+# pylab.plot(x, y, 'b--')
 
-# print(' Nfev = ', out.nfev)
-print( out.fit_report())
+print(' Nfev = ', out.nfev)
+# print( out.fit_report())
 
-pylab.plot(x, out.best_fit, 'k-')
-pylab.show()
+# pylab.plot(x, out.best_fit, 'k-')
+#pylab.show()
 
 #<end examples/doc_with_itercb.py>
