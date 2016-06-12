@@ -23,14 +23,10 @@ def test_constraints(with_plot=True):
     with_plot = with_plot and WITHPLOT
 
     def residual(pars, x, sigma=None, data=None):
-        yg = gaussian(x, pars['amp_g'].value,
-                   pars['cen_g'].value, pars['wid_g'].value)
-        yl = lorentzian(x, pars['amp_l'].value,
-                   pars['cen_l'].value, pars['wid_l'].value)
+        yg = gaussian(x, pars['amp_g'], pars['cen_g'], pars['wid_g'])
+        yl = lorentzian(x, pars['amp_l'], pars['cen_l'], pars['wid_l'])
 
-        slope = pars['line_slope'].value
-        offset = pars['line_off'].value
-        model =  yg +  yl + offset + x * slope
+        model =  yg +  yl + pars['line_off'] + x * pars['line_slope']
         if data is None:
             return model
         if sigma is None:
@@ -55,12 +51,12 @@ def test_constraints(with_plot=True):
     pfit.add(name='amp_g',  value=10)
     pfit.add(name='cen_g',  value=9)
     pfit.add(name='wid_g',  value=1)
-    
+
     pfit.add(name='amp_tot',  value=20)
     pfit.add(name='amp_l',  expr='amp_tot - amp_g')
     pfit.add(name='cen_l',  expr='1.5+cen_g')
     pfit.add(name='wid_l',  expr='2*wid_g')
-    
+
     pfit.add(name='line_slope', value=0.0)
     pfit.add(name='line_off', value=0.0)
 

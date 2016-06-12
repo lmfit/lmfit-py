@@ -12,10 +12,10 @@ def test_basic():
     # define objective function: returns the array to be minimized
     def fcn2min(params, x, data):
         """ model decaying sine wave, subtract data"""
-        amp = params['amp'].value
-        shift = params['shift'].value
-        omega = params['omega'].value
-        decay = params['decay'].value
+        amp = params['amp']
+        shift = params['shift']
+        omega = params['omega']
+        decay = params['decay']
 
         model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
         return model - data

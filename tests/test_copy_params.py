@@ -9,10 +9,7 @@ def get_data():
     return x, y1, y2
 
 def residual(params, x, data):
-    a = params['a'].value
-    b = params['b'].value
-
-    model = a*np.exp(b*x)
+    model = params['a']*np.exp(params['b']*x)
     return (data-model)
 
 def test_copy_params():
@@ -33,4 +30,3 @@ def test_copy_params():
 
     assert(abs(adiff) > 1.e-2)
     assert(abs(bdiff) > 1.e-2)
-

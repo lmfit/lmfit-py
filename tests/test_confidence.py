@@ -5,15 +5,10 @@ import lmfit
 from lmfit_testutils import assert_paramval
 
 def residual(params, x, data):
-    a = params['a'].value
-    b = params['b'].value
-    return data - 1.0/(a*x)+b
+    return data - 1.0/(params['a']*x)+ params['b']
 
 def residual2(params, x, data):
-    a = params['a'].value
-    b = params['b'].value
-    c = params['c'].value
-    return data - c/(a*x)+b
+    return data - params['c']/(params['a']*x)+params['b']
 
 def test_confidence1():
     x = np.linspace(0.3,10,100)

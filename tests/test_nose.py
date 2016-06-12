@@ -37,10 +37,10 @@ def test_simple():
     # define objective function: returns the array to be minimized
     def fcn2min(params, x, data):
         """ model decaying sine wave, subtract data"""
-        amp = params['amp'].value
-        shift = params['shift'].value
-        omega = params['omega'].value
-        decay = params['decay'].value
+        amp = params['amp']
+        shift = params['shift']
+        omega = params['omega']
+        decay = params['decay']
 
         model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
         return model - data
@@ -77,10 +77,10 @@ def test_lbfgsb():
     p_true.add('decay', value=0.010)
 
     def residual(pars, x, data=None):
-        amp = pars['amp'].value
-        per = pars['period'].value
-        shift = pars['shift'].value
-        decay = pars['decay'].value
+        amp = pars['amp']
+        per = pars['period']
+        shift = pars['shift']
+        decay = pars['decay']
 
         if abs(shift) > pi/2:
             shift = shift - np.sign(shift) * pi
@@ -117,21 +117,14 @@ def test_lbfgsb():
 
 def test_derive():
     def func(pars, x, data=None):
-        a = pars['a'].value
-        b = pars['b'].value
-        c = pars['c'].value
-
-        model=a * np.exp(-b * x)+c
+        model= pars['a'] * np.exp(-pars['b'] * x) + pars['c']
         if data is None:
             return model
         return model - data
 
     def dfunc(pars, x, data=None):
-        a = pars['a'].value
-        b = pars['b'].value
-        c = pars['c'].value
-        v = np.exp(-b*x)
-        return np.array([v, -a*x*v, np.ones(len(x))])
+        v = np.exp(-pars['b']*x)
+        return np.array([v, -pars['a']*x*v, np.ones(len(x))])
 
     def f(var, x):
         return var[0]* np.exp(-var[1] * x)+var[2]
@@ -187,8 +180,8 @@ def test_derive():
 
 def test_peakfit():
     def residual(pars, x, data=None):
-        g1 = gaussian(x, pars['a1'].value, pars['c1'].value, pars['w1'].value)
-        g2 = gaussian(x, pars['a2'].value, pars['c2'].value, pars['w2'].value)
+        g1 = gaussian(x, pars['a1'], pars['c1'], pars['w1'])
+        g2 = gaussian(x, pars['a2'], pars['c2'], pars['w2'])
         model = g1 + g2
         if data is None:
             return model
@@ -256,10 +249,10 @@ def test_scalar_minimize_has_no_uncertainties():
     # define objective function: returns the array to be minimized
     def fcn2min(params, x, data):
         """ model decaying sine wave, subtract data"""
-        amp = params['amp'].value
-        shift = params['shift'].value
-        omega = params['omega'].value
-        decay = params['decay'].value
+        amp = params['amp']
+        shift = params['shift']
+        omega = params['omega']
+        decay = params['decay']
 
         model = amp * np.sin(x * omega + shift) * np.exp(-x*x*decay)
         return model - data
@@ -301,9 +294,7 @@ def test_multidimensional_fit_GH205():
 
     def fcn2min(params, xv, yv, data):
         """ model decaying sine wave, subtract data"""
-        lambda1 = params['lambda1'].value
-        lambda2 = params['lambda2'].value
-        model = f(xv, yv, lambda1, lambda2)
+        model = f(xv, yv, params['lambda1'], params['lambda2'])
         return model - data
 
     # create a set of Parameters
@@ -345,10 +336,10 @@ class CommonMinimizerTest(unittest.TestCase):
         self.mini = Minimizer(self.residual, fit_params, [self.x, self.data])
 
     def residual(self, pars, x, data=None):
-        amp = pars['amp'].value
-        per = pars['period'].value
-        shift = pars['shift'].value
-        decay = pars['decay'].value
+        amp = pars['amp']
+        per = pars['period']
+        shift = pars['shift']
+        decay = pars['decay']
 
         if abs(shift) > pi/2:
             shift = shift - np.sign(shift) * pi
@@ -596,10 +587,10 @@ class CommonMinimizerTest(unittest.TestCase):
 def residual_for_multiprocessing(pars, x, data=None):
     # a residual function defined in the top level is needed for
     # multiprocessing. bound methods don't work.
-    amp = pars['amp'].value
-    per = pars['period'].value
-    shift = pars['shift'].value
-    decay = pars['decay'].value
+    amp = pars['amp']
+    per = pars['period']
+    shift = pars['shift']
+    decay = pars['decay']
 
     if abs(shift) > pi/2:
         shift = shift - np.sign(shift) * pi

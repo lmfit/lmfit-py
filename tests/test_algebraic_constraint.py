@@ -5,14 +5,10 @@ from lmfit.printfuncs import report_fit
 
 def test_constraints1():
     def residual(pars, x, sigma=None, data=None):
-        yg = gaussian(x, pars['amp_g'].value,
-                      pars['cen_g'].value, pars['wid_g'].value)
-        yl = lorentzian(x, pars['amp_l'].value,
-                   pars['cen_l'].value, pars['wid_l'].value)
+        yg = gaussian(x, pars['amp_g'], pars['cen_g'], pars['wid_g'])
+        yl = lorentzian(x, pars['amp_l'], pars['cen_l'], pars['wid_l'])
 
-        slope = pars['line_slope'].value
-        offset = pars['line_off'].value
-        model =  yg +  yl + offset + x * slope
+        model =  yg +  yl + pars['line_off'] + x * pars['line_slope']
         if data is None:
             return model
         if sigma is None:
@@ -68,14 +64,10 @@ def test_constraints1():
 def test_constraints2():
     """add a user-defined function to symbol table"""
     def residual(pars, x, sigma=None, data=None):
-        yg = gaussian(x, pars['amp_g'].value,
-                      pars['cen_g'].value, pars['wid_g'].value)
-        yl = lorentzian(x, pars['amp_l'].value,
-                   pars['cen_l'].value, pars['wid_l'].value)
+        yg = gaussian(x, pars['amp_g'], pars['cen_g'], pars['wid_g'])
+        yl = lorentzian(x, pars['amp_l'], pars['cen_l'], pars['wid_l'])
 
-        slope = pars['line_slope'].value
-        offset = pars['line_off'].value
-        model =  yg +  yl + offset + x * slope
+        model =  yg +  yl + pars['line_off'] + x * pars['line_slope']
         if data is None:
             return model
         if sigma is None:
