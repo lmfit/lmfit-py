@@ -56,8 +56,8 @@ example, here is a residual function to simultaneously fit two lines to two
 different arrays.  As a bonus, the two lines share the 'offset' parameter::
 
     def fit_function(params, x=None, dat1=None, dat2=None):
-        model1 = params['offset'].value + x * params['slope1'].value
-        model2 = params['offset'].value + x * params['slope2'].value
+        model1 = params['offset'] + x * params['slope1']
+        model2 = params['offset'] + x * params['slope2']
 
 	resid1 = dat1 - model1
         resid2 = dat2 - model2
