@@ -57,12 +57,12 @@ class CommonTests(object):
         assert_results_close(result.values, self.true_values())
 
         # Pass inidividual Parameter objects as kwargs.
-        kwargs = {name: p for name, p in params.items()}
+        kwargs = dict((name, p) for name, p in params.items())
         result = self.model.fit(self.data, x=self.x, **kwargs)
         assert_results_close(result.values, self.true_values())
 
         # Pass guess values (not Parameter objects) as kwargs.
-        kwargs = {name: p.value for name, p in params.items()}
+        kwargs = dict((name, p.value) for name, p in params.items())
         result = self.model.fit(self.data, x=self.x, **kwargs)
         assert_results_close(result.values, self.true_values())
 
@@ -429,7 +429,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
 
         mx = (m1 + m2)
         params = mx.make_params()
-        param_values = {name: p.value for name, p in params.items()}
+        param_values = dict((name, p.value) for name, p in params.items())
         self.assertEqual(param_values['p1_amplitude'], 1)
         self.assertEqual(param_values['p2_amplitude'], 2)
 
@@ -448,7 +448,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
 
         m = m1 + m2
 
-        param_values = {name: p.value for name, p in params.items()}
+        param_values = dict((name, p.value) for name, p in params.items())
         self.assertTrue(param_values['m1_intercept'] < -0.0)
         self.assertEqual(param_values['m2_amplitude'], 1)
 

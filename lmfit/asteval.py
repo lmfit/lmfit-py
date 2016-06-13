@@ -86,28 +86,28 @@ class Interpreter:
         symtable['print'] = self._printer
 
         # add python symbols
-        py_symtable = {sym: __builtins__[sym] for sym in FROM_PY
-                              if sym in __builtins__}
+        py_symtable = dict((sym, __builtins__[sym]) for sym in FROM_PY
+                              if sym in __builtins__)
         symtable.update(py_symtable)
 
         # add local symbols
-        local_symtable = {sym: obj for (sym, obj) in LOCALFUNCS.items()}
+        local_symtable = dict((sym, obj) for (sym, obj) in LOCALFUNCS.items())
         symtable.update(local_symtable)
 
         # add math symbols
-        math_symtable = {sym: getattr(math, sym) for sym in FROM_MATH
-                              if hasattr(math, sym)}
+        math_symtable = dict((sym, getattr(math, sym)) for sym in FROM_MATH
+                              if hasattr(math, sym))
         symtable.update(math_symtable)
 
         # add numpy symbols
         if self.use_numpy:
-            numpy_symtable = {sym: getattr(numpy, sym) for sym in FROM_NUMPY
-                              if hasattr(numpy, sym)}
+            numpy_symtable = dict((sym, getattr(numpy, sym)) for sym in FROM_NUMPY
+                              if hasattr(numpy, sym))
             symtable.update(numpy_symtable)
 
-            npy_rename_symtable = {name: getattr(numpy, sym) for name, sym
+            npy_rename_symtable = dict((name, getattr(numpy, sym)) for name, sym
                                    in NUMPY_RENAMES.items()
-                                   if hasattr(numpy, sym)}
+                                   if hasattr(numpy, sym))
             symtable.update(npy_rename_symtable)
 
         self.node_handlers = dict(((node, getattr(self, "on_%s" % node))

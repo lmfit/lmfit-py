@@ -43,9 +43,9 @@ def gformat(val, length=11):
     and have at least length-6 significant digits
     """
     length = max(length, 7)
-    fmt = '{: .%ig}' % (length-6)
+    fmt = '{0: .%ig}' % (length-6)
     if isinstance(val, int):
-        out = ('{: .%ig}' % (length-2)).format(val)
+        out = ('{0: .%ig}' % (length-2)).format(val)
         if len(out) > length:
             out = fmt.format(val)
     else:
@@ -57,7 +57,7 @@ def gformat(val, length=11):
                 out = out[:ie] + '.' + out[ie:]
             out = out.replace('e', '0'*(length-len(out))+'e')
         else:
-            fmt = '{: .%ig}' % (length-1)
+            fmt = '{0: .%ig}' % (length-1)
             out = fmt.format(val)[:length]
             if len(out) < length:
                 pad = '0' if '.' in  out else ' '
@@ -133,7 +133,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             serr = gformat(par.stderr, length=9)
 
             try:
-                spercent = '({:.2%})'.format(abs(par.stderr/par.value))
+                spercent = '({0:.2%})'.format(abs(par.stderr/par.value))
             except ZeroDivisionError:
                 spercent = ''
             sval = '%s +/-%s %s' % (sval, serr, spercent)
