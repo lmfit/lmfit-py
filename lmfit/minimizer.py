@@ -1254,10 +1254,9 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     # or filter them.
     mask = np.isnan(out)
     if mask_non_finite:
-        out = out[mask]
-    elif not np.all(mask):
-        raise ValueError("The userfcn supplied to Minimizer returned a"
-                         " non-finite value")
+        out = out[~mask]
+    elif np.any(mask):
+        raise ValueError("The userfcn supplied to Minimizer returned NaN")
 
     lnprob = np.asarray(out).ravel()
 
