@@ -466,7 +466,7 @@ Using the :class:`Minimizer` class
 For full control of the fitting process, you'll want to create a
 :class:`Minimizer` object.
 
-.. class:: Minimizer(function, params, fcn_args=None, fcn_kws=None, iter_cb=None, scale_covar=True, **kws)
+.. class:: Minimizer(function, params, fcn_args=None, fcn_kws=None, iter_cb=None, scale_covar=True, mask_non_finite=False, **kws)
 
    creates a Minimizer, for more detailed access to fitting methods and attributes.
 
@@ -484,6 +484,12 @@ For full control of the fitting process, you'll want to create a
    :type  iter_cb:  callable or ``None``
    :param scale_covar:  flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
    :type  scale_covar:  bool (default ``True``).
+   :param mask_non_finite:  if ``userfcn`` returns non-finite values then a
+                            ``ValueError`` is raised. However, if
+                            ``mask_non_finite`` is set to ``True`` then those
+                            non-finite values are ignored, allowing the fit to
+                            proceed with the finite values.
+   :type  mask_non_finite: bool (default ``False``)
    :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
    :type  kws:      dict
 

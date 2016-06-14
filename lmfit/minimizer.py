@@ -194,7 +194,8 @@ class Minimizer(object):
                   "or set leastsq_kws['maxfev']  to increase this maximum.")
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
-                 iter_cb=None, scale_covar=True, **kws):
+                 iter_cb=None, scale_covar=True, mask_non_finite=False,
+                 **kws):
         """
         Initialization of the Minimzer class
 
@@ -221,6 +222,11 @@ class Minimizer(object):
         scale_covar : bool, optional
             Whether to automatically scale the covariance matrix (leastsq
             only).
+        mask_non_finite : bool, optional
+            If `userfcn` returns non-finite values then a `ValueError` is
+            raised. However, if `mask_non_finite` is set to `True` then those
+            non-finite values are ignored, allowing the fit to proceed with the
+            finite values.
         kws : dict, optional
             Options to pass to the minimizer being used.
 
@@ -232,7 +238,9 @@ class Minimizer(object):
         fitting variables in the model. For the other methods, the return value
         can either be a scalar or an array. If an array is returned, the sum of
         squares of the array will be sent to the underlying fitting method,
-        effectively doing a least-squares optimization of the return values.
+        effectively doing a least-squares optimization of the return values. If
+        the objective function returns non-finite values then a `ValueError`
+        will be raised because the underlying solvers cannot deal with them.
 
         A common use for the fcn_args and fcn_kwds would be to pass in other
         data needed to calculate the residual, including such things as the
@@ -266,6 +274,7 @@ class Minimizer(object):
 
         self.params = params
         self.jacfcn = None
+        self.mask_non_finite = mask_non_finite
 
     @property
     def values(self):
@@ -316,6 +325,14 @@ class Minimizer(object):
         self.result.nfev += 1
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
+
+        mask = np.isfinite(out)
+        if self.mask_non_finite:
+            out = out[mask]
+        elif not np.all(mask):
+            raise ValueError("The userfcn supplied to Minimizer returned a"
+                             " non-finite value")
+
         if callable(self.iter_cb):
             abort = self.iter_cb(params, self.result.nfev, out,
                                  *self.userargs, **self.userkws)
@@ -790,7 +807,8 @@ class Minimizer(object):
         lnprob_kwargs = {'is_weighted': is_weighted,
                          'float_behavior': float_behavior,
                          'userargs': self.userargs,
-                         'userkws': self.userkws}
+                         'userkws': self.userkws,
+                         'mask_non_finite': self.mask_non_finite}
 
         if ntemps > 1:
             # the prior and likelihood function args and kwargs are the same
@@ -1174,7 +1192,8 @@ def _lnprior(theta, bounds):
 
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
-            userkws=None, float_behavior='posterior', is_weighted=True):
+            userkws=None, float_behavior='posterior', is_weighted=True,
+            mask_non_finite=False):
     """
     Calculates the log-posterior probability. See the `Minimizer.emcee` method
     for more details
@@ -1230,6 +1249,16 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
 
     # now calculate the log-likelihood
     out = userfcn(params, *userargs, **userkwargs)
+
+    # check if there are any nans in data. If there are, then raise an error
+    # or filter them.
+    mask = np.isnan(out)
+    if mask_non_finite:
+        out = out[mask]
+    elif not np.all(mask):
+        raise ValueError("The userfcn supplied to Minimizer returned a"
+                         " non-finite value")
+
     lnprob = np.asarray(out).ravel()
 
     if lnprob.size > 1:
