@@ -703,7 +703,7 @@ class ModelResult(Minimizer):
    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
          return a fit report.
 
-   plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
+   plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', xlabel = None, ylabel=None,
             numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
             ax_kws=None)
         Plot the fit results using matplotlib.
@@ -712,7 +712,7 @@ class ModelResult(Minimizer):
                   ax_kws=None)
         Plot the fit residuals using matplotlib.
 
-   plot(self, datafmt='o', fitfmt='-', initfmt='--', numpoints=None,
+   plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, numpoints=None,
         data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None,
         ax_fit_kws=None, fig_kws=None)
         Plot the fit results and residuals using matplotlib.
@@ -783,7 +783,7 @@ class ModelResult(Minimizer):
                                             fit_report(self, **kwargs))
 
     @_ensureMatplotlib
-    def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', yerr=None,
+    def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, yerr=None,
                  numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
                  ax_kws=None):
         """Plot the fit results using matplotlib.
@@ -803,6 +803,10 @@ class ModelResult(Minimizer):
             matplotlib format string for fitted curve
         initfmt : string, optional
             matplotlib format string for initial conditions for the fit
+        xlabel : string, optional
+            matplotlib format string for labeling the x-axis
+        ylabel : string, optional
+            matplotlib format string for labeling the y-axis
         yerr : ndarray, optional
             array of uncertainties for data array
         numpoints : int, optional
@@ -882,8 +886,12 @@ class ModelResult(Minimizer):
             ax.plot(x_array, self.data, datafmt, label='data', **data_kws)
 
         ax.set_title(self.model.name)
-        ax.set_xlabel(independent_var)
-        ax.set_ylabel('y')
+        if xlabel == None:
+            ax.set_xlabel(independent_var)
+        else: ax.set_xlabel(xlabel)
+        if ylabel == None:
+            ax.set_ylabel('y')
+        else: ax.set_ylabel(ylabel)
         ax.legend()
 
         return ax
@@ -972,7 +980,7 @@ class ModelResult(Minimizer):
         return ax
 
     @_ensureMatplotlib
-    def plot(self, datafmt='o', fitfmt='-', initfmt='--', yerr=None,
+    def plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, yerr=None,
              numpoints=None, fig=None, data_kws=None, fit_kws=None,
              init_kws=None, ax_res_kws=None, ax_fit_kws=None,
              fig_kws=None):
@@ -990,6 +998,10 @@ class ModelResult(Minimizer):
             matplotlib format string for fitted curve
         initfmt : string, optional
             matplotlib format string for initial conditions for the fit
+        xlabel : string, optional
+            matplotlib format string for labeling the x-axis
+        ylabel : string, optional
+            matplotlib format string for labeling the y-axis
         yerr : ndarray, optional
             array of uncertainties for data array
         numpoints : int, optional
@@ -1058,7 +1070,7 @@ class ModelResult(Minimizer):
         ax_fit = fig.add_subplot(gs[1], sharex=ax_res, **ax_fit_kws)
 
         self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt, yerr=yerr,
-                      initfmt=initfmt, numpoints=numpoints, data_kws=data_kws,
+                      initfmt=initfmt, xlabel=xlabel, ylabel=ylabel, numpoints=numpoints, data_kws=data_kws,
                       fit_kws=fit_kws, init_kws=init_kws, ax_kws=ax_fit_kws)
         self.plot_residuals(ax=ax_res, datafmt=datafmt, yerr=yerr,
                             data_kws=data_kws, fit_kws=fit_kws,
