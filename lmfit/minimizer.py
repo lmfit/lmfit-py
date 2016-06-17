@@ -53,10 +53,10 @@ except ImportError:
     pass
 
 # check for scipy.opitimize.least_squares
-HAS_NEW_LEAST_SQUARES_MIN = False
+HAS_LEAST_SQUARES = False
 try:
     from scipy.optimize import least_squares
-    HAS_NEW_LEAST_SQUARES_MIN = True
+    HAS_LEAST_SQUARES = True
 except ImportError:
     pass
 
@@ -278,26 +278,41 @@ class Minimizer(object):
 
         return dict([(name, p.value) for name, p in self.result.params.items()])
 
-    def __residual(self, fvars, apply_scaling=True):
+    def __residual(self, fvars, apply_bounds_transformation=True):
         """
         Residual function used for least-squares fit.
         With the new, candidate values of fvars (the fitting variables), this
         evaluates all parameters, including setting bounds and evaluating
         constraints, and then passes those to the user-supplied function to
         calculate the residual.
+
+        Parameters
+        ----------------
+        fvars : np.ndarray
+            Array of new parameter values suggested by the minimizer.
+        apply_bounds_transformation : bool, optional
+            If true, apply lmfits parameter transformation to constrain
+            parameters. This is needed for solvers without inbuilt support for
+            bounds.
+
+        Returns
+        -----------
+        residuals : np.ndarray
+             The evaluated function values for given fvars.
         """
         # set parameter values
         if self._abort:
             return None
         params = self.result.params
 
-        if apply_scaling:
+        if apply_bounds_transformation:
             for name, val in zip(self.result.var_names, fvars):
                 params[name].value = params[name].from_internal(val)
-                params.update_constraints()
         else:
             for name, val in zip(self.result.var_names, fvars):
                 params[name].value = val
+        params.update_constraints()
+
         self.result.nfev += 1
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
@@ -878,11 +893,10 @@ class Minimizer(object):
     def least_squares(self, params=None, **kws):
         """
         Use the least_squares (new in scipy 0.17) function to perform a fit.
-        This assumes that ModelParameters have been stored, and a function to
-        minimize has been properly set up. This method doesn't support
-        parameter.constraints.
+        This assumes that Parameters have been stored, and a function to
+        minimize has been properly set up.
 
-        This wraps scipy.optimize.least_squares, which has in build support
+        This wraps scipy.optimize.least_squares, which has inbuilt support
         for bounds and robust loss functions.
 
         Parameters
@@ -894,9 +908,9 @@ class Minimizer(object):
 
         """
 
-        if not HAS_NEW_LEAST_SQUARES_MIN:
-            raise NotImplementedError("Scipy with a Version higher than 0.17 "
-                                      "is need for this method.")
+        if not HAS_LEAST_SQUARES:
+            raise NotImplementedError("Scipy with a version higher than 0.17 "
+                                      "is needed for this method.")
 
         result = self.prepare_fit(params)
 
@@ -908,7 +922,7 @@ class Minimizer(object):
         ret = least_squares(self.__residual,
                             start_vals,
                             bounds=(lower_bounds, upper_bounds),
-                            args=(False,),  # don't use scaling for bounds.
+                            kwargs=dict(apply_bounds_transformation=False),
                             **kws
                             )
 
@@ -933,7 +947,7 @@ class Minimizer(object):
     def leastsq(self, params=None, **kws):
         """
         Use Levenberg-Marquardt minimization to perform a fit.
-        This assumes that ModelParameters have been stored, and a function to
+        This assumes that Parameters have been stored, and a function to
         minimize has been properly set up.
 
         This wraps scipy.optimize.leastsq.
