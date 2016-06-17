@@ -886,10 +886,10 @@ class ModelResult(Minimizer):
             ax.plot(x_array, self.data, datafmt, label='data', **data_kws)
 
         ax.set_title(self.model.name)
-        if xlabel == None:
+        if xlabel is None:
             ax.set_xlabel(independent_var)
         else: ax.set_xlabel(xlabel)
-        if ylabel == None:
+        if ylabel is None:
             ax.set_ylabel('y')
         else: ax.set_ylabel(ylabel)
         ax.legend()
