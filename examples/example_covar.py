@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 from numpy import linspace, zeros, sin, exp, random, sqrt, pi, sign
 from scipy.optimize import leastsq
@@ -14,17 +16,13 @@ except ImportError:
 HASPYLAB = False
 
 def residual(pars, x, sigma=None, data=None):
-    yg = gaussian(x, pars['amp_g'].value,
-                  pars['cen_g'].value, pars['wid_g'].value)
+    yg = gaussian(x, pars['amp_g'], pars['cen_g'], pars['wid_g'])
 
-    slope = pars['line_slope'].value
-    offset = pars['line_off'].value
-    model = yg + offset + x * slope
+    model = yg + pars['line_off'] + x * pars['line_slope']
     if data is None:
         return model
     if sigma is  None:
         return (model - data)
-
     return (model - data)/sigma
 
 
@@ -40,10 +38,9 @@ p_true.add('wid_g', value=1.6)
 p_true.add('line_off', value=-1.023)
 p_true.add('line_slope', value=0.62)
 
-data = (gaussian(x, p_true['amp_g'].value, p_true['cen_g'].value,
-                 p_true['wid_g'].value) +
+data = (gaussian(x, p_true['amp_g'], p_true['cen_g'], p_true['wid_g']) +
         random.normal(scale=0.23,  size=n) +
-        x*p_true['line_slope'].value + p_true['line_off'].value )
+        x*p_true['line_slope'] + p_true['line_off'])
 
 if HASPYLAB:
     pylab.plot(x, data, 'r+')
@@ -61,10 +58,10 @@ myfit = Minimizer(residual, p_fit,
 
 myfit.prepare_fit()
 #
-for scale_covar in (True, False):
-    myfit.scale_covar = scale_covar
-    print '  ====  scale_covar = ', myfit.scale_covar, ' ==='
-    for sigma in (0.1, 0.2, 0.23, 0.5):
+for sigma in (0.1, 0.2, 0.22, 0.5):
+    for scale_covar in (True, False):
+        myfit.scale_covar = scale_covar
+        print('====  scale_covar = %s, sigma=%.2f ===' %(myfit.scale_covar, sigma))
         myfit.userkws['sigma'] = sigma
 
         p_fit['amp_g'].value  = 10
@@ -74,20 +71,8 @@ for scale_covar in (True, False):
         p_fit['line_off'].value   =0.0
 
         out = myfit.leastsq()
-        print '  sigma          = ', sigma
-        print '  chisqr         = ', out.chisqr
-        print '  reduced_chisqr = ', out.redchi
+        print( 'chi-square, reduced chi-square = %.3f, %.3f ' % (
+            out.chisqr, out.redchi))
 
         report_fit(out.params, modelpars=p_true, show_correl=False)
-        print '  =============================='
-
-
-# if HASPYLAB:
-#     fit = residual(p_fit, x)
-#     pylab.plot(x, fit, 'k-')
-#     pylab.show()
-#
-
-
-
-
+        print( '====')

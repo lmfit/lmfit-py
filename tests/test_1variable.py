@@ -21,11 +21,7 @@ def linear_chisq(params, x, data, errs=None):
         msg = "No intercept parameter (c) defined in the model"
         raise KeyError(msg)
 
-    m = params["m"].value
-    c = params["c"].value
-
-    model = m*x+c
-
+    model = params["m"]*x + params["c"]
     residuals = (data-model)
     if errs is not None:
         residuals = residuals/errs

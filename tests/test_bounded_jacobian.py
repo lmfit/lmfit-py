@@ -14,16 +14,16 @@ def test_bounded_jacobian():
     jac_count = 0
 
     def resid(params):
-        x0 = params['x0'].value
-        x1 = params['x1'].value
+        x0 = params['x0']
+        x1 = params['x1']
         return np.array([10 * (x1 - x0*x0), 1-x0])
 
     def jac(params):
         global jac_count
         jac_count += 1
-        x0 = params['x0'].value
+        x0 = params['x0']
         return np.array([[-20*x0, 10], [-1, 0]])
-    
+
     out0 = minimize(resid, pars, Dfun=None)
 
     assert_paramval(out0.params['x0'], 1.2243, tol=0.02)

@@ -10,10 +10,7 @@ p = lmfit.Parameters()
 p.add_many(('a', 0.1), ('b', 1))
 
 def residual(p):
-   a = p['a'].value
-   b = p['b'].value
-
-   return 1/(a*x)+b-y
+   return 1/(p['a']*x)+p['b']-y
 
 minimizer = lmfit.Minimizer(residual, p)
 out = minimizer.leastsq()

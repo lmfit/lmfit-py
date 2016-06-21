@@ -13,10 +13,10 @@ def test_ci():
     p_true.add('decay', value=0.010)
 
     def residual(pars, x, data=None):
-        amp = pars['amp'].value
-        per = pars['period'].value
-        shift = pars['shift'].value
-        decay = pars['decay'].value
+        amp = pars['amp']
+        per = pars['period']
+        shift = pars['shift']
+        decay = pars['decay']
 
         if abs(shift) > pi / 2:
             shift = shift - np.sign(shift) * pi
@@ -55,4 +55,3 @@ def test_ci():
         stderr = out.params[p].stderr
         assert(abs(diff1 - stderr) / stderr < 0.05)
         assert(abs(diff2 - stderr) / stderr < 0.05)
-

@@ -97,10 +97,10 @@ as::
     from lmfit import minimize, Parameters
 
     def residual(params, x, data, eps_data):
-        amp = params['amp'].value
-        pshift = params['phase'].value
-	freq = params['frequency'].value
-        decay = params['decay'].value
+        amp = params['amp']
+        pshift = params['phase']
+	freq = params['frequency']
+        decay = params['decay']
 
 	model = amp * sin(x * freq  + pshift) * exp(-x*x*decay)
 

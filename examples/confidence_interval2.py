@@ -20,13 +20,8 @@ p_true.add('decay2', value=0.050)
 
 
 def residual(pars, x, data=None):
-    amp = pars['amp'].value
-    decay = pars['decay'].value
-    amp2 = pars['amp2'].value
-    decay2 = pars['decay2'].value
-
-
-    model = amp*np.exp(-x*decay)+amp2*np.exp(-x*decay2)
+    model = pars['amp']*np.exp(-x*pars['decay'])
+    model += pars['amp2']*np.exp(-x*pars['decay2'])
     if data is None:
         return model
     return (model - data)
@@ -67,16 +62,16 @@ if HASPYLAB:
                 pylab.xlabel(names[i])
                 pylab.ylabel(names[j])
 
-                x=trace[names[i]][names[i]]            
+                x=trace[names[i]][names[i]]
                 y=trace[names[i]][names[j]]
                 pr=trace[names[i]]['prob']
                 s=np.argsort(x)
                 pylab.scatter(x[s],y[s],c=pr[s],s=30,lw=1, cmap=cm)
             else:
-                x=trace[names[i]][names[i]]            
+                x=trace[names[i]][names[i]]
                 y=trace[names[i]]['prob']
 
-                t,s=np.unique(x,True)                       
+                t,s=np.unique(x,True)
                 f=interp1d(t,y[s],'slinear')
                 xn=np.linspace(x.min(),x.max(),50)
                 pylab.plot(xn,f(xn),'g',lw=1)
@@ -84,9 +79,3 @@ if HASPYLAB:
                 pylab.ylabel('prob')
 
     pylab.show()
-
-
-    
-
-
-

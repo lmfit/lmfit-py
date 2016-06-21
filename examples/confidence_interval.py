@@ -25,14 +25,11 @@ p_true.add('shift', value=0.123)
 p_true.add('decay', value=0.010)
 
 def residual(pars, x, data=None):
-    amp = pars['amp'].value
-    per = pars['period'].value
-    shift = pars['shift'].value
-    decay = pars['decay'].value
-
+    argu  = (x*pars['decay'])**2
+    shift = pars['shift']
     if abs(shift) > pi/2:
         shift = shift - sign(shift)*pi
-    model = amp*sin(shift + x/per) * exp(-x*x*decay*decay)
+    model = pars['amp']*sin(shift + x/pars['period']) * exp(-argu)
     if data is None:
         return model
     return (model - data)
@@ -59,23 +56,23 @@ fit = residual(out.params, x)
 print( ' N fev = ', out.nfev)
 print( out.chisqr, out.redchi, out.nfree)
 
-report_fit(out.params)
+report_fit(out)
 #ci=calc_ci(out)
 
 ci, tr = conf_interval(mini, out, trace=True)
 report_ci(ci)
-    
+
 if HASPYLAB:
     names=out.params.keys()
-    i=0  
+    i=0
     gs=pylab.GridSpec(4,4)
     sx={}
     sy={}
-    for fixed in names:   
-        j=0        
-        for free in names:                                         
-            if j in sx and i in sy:                
-                ax=pylab.subplot(gs[i,j],sharex=sx[j],sharey=sy[i])                                        
+    for fixed in names:
+        j=0
+        for free in names:
+            if j in sx and i in sy:
+                ax=pylab.subplot(gs[i,j],sharex=sx[j],sharey=sy[i])
             elif i in sy:
                 ax=pylab.subplot(gs[i,j],sharey=sy[i])
                 sx[j]=ax
@@ -91,25 +88,23 @@ if HASPYLAB:
             else:
                 ax.set_xlabel(free)
 
-            if j>0:                    
+            if j>0:
                 pylab.setp( ax.get_yticklabels(), visible=False)
             else:
-                ax.set_ylabel(fixed)        
+                ax.set_ylabel(fixed)
 
-            res=tr[fixed]                
+            res=tr[fixed]
             prob=res['prob']
             f=prob<0.96
-            
+
             x,y=res[free], res[fixed]
             ax.scatter(x[f],y[f],
                   c=1-prob[f],s=200*(1-prob[f]+0.5))
             ax.autoscale(1,1)
-            
-               
-            
-            j=j+1         
+
+
+
+            j=j+1
         i=i+1
-    
+
     pylab.show()
-
-

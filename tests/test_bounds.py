@@ -11,10 +11,10 @@ def test_bounds():
     p_true.add('decay', value=0.01000)
 
     def residual(pars, x, data=None):
-        amp = pars['amp'].value
-        per = pars['period'].value
-        shift = pars['shift'].value
-        decay = pars['decay'].value
+        amp = pars['amp']
+        per = pars['period']
+        shift = pars['shift']
+        decay = pars['decay']
 
         if abs(shift) > pi/2:
             shift = shift - sign(shift)*pi
