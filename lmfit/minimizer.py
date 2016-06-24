@@ -52,6 +52,14 @@ try:
 except ImportError:
     pass
 
+# check for scipy.opitimize.least_squares
+HAS_LEAST_SQUARES = False
+try:
+    from scipy.optimize import least_squares
+    HAS_LEAST_SQUARES = True
+except ImportError:
+    pass
+
 from .parameter import Parameter, Parameters
 
 # use locally modified version of uncertainties package
@@ -270,23 +278,43 @@ class Minimizer(object):
 
         return dict([(name, p.value) for name, p in self.result.params.items()])
 
-    def __residual(self, fvars):
+    def __residual(self, fvars, apply_bounds_transformation=True):
         """
         Residual function used for least-squares fit.
         With the new, candidate values of fvars (the fitting variables), this
         evaluates all parameters, including setting bounds and evaluating
         constraints, and then passes those to the user-supplied function to
         calculate the residual.
+
+        Parameters
+        ----------------
+        fvars : np.ndarray
+            Array of new parameter values suggested by the minimizer.
+        apply_bounds_transformation : bool, optional
+            If true, apply lmfits parameter transformation to constrain
+            parameters. This is needed for solvers without inbuilt support for
+            bounds.
+
+        Returns
+        -----------
+        residuals : np.ndarray
+             The evaluated function values for given fvars.
         """
         # set parameter values
         if self._abort:
             return None
         params = self.result.params
-        for name, val in zip(self.result.var_names, fvars):
-            params[name].value = params[name].from_internal(val)
+
+        if apply_bounds_transformation:
+            for name, val in zip(self.result.var_names, fvars):
+                params[name].value = params[name].from_internal(val)
+        else:
+            for name, val in zip(self.result.var_names, fvars):
+                params[name].value = val
+        params.update_constraints()
+
         self.result.nfev += 1
 
-        params.update_constraints()
         out = self.userfcn(params, *self.userargs, **self.userkws)
         if callable(self.iter_cb):
             abort = self.iter_cb(params, self.result.nfev, out,
@@ -348,7 +376,8 @@ class Minimizer(object):
         """
         # determine which parameters are actually variables
         # and which are defined expressions.
-        result = self.result = MinimizerResult()
+        self.result = MinimizerResult()
+        result = self.result
         if params is not None:
             self.params = params
         if isinstance(self.params, Parameters):
@@ -396,33 +425,7 @@ class Minimizer(object):
         """
         pass
 
-    @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
-                       'and method=\'L-BFGS-B\' instead')
-    def lbfgsb(self, **kws):
-        """
-        Use l-bfgs-b minimization
 
-        Parameters
-        ----------
-        kws : dict
-            Minimizer options to pass to the
-            scipy.optimize.lbfgsb.fmin_l_bfgs_b function.
-
-        """
-        raise NotImplementedError("use scalar_minimize(method='L-BFGS-B')")
-
-    @deprecate(message='    Deprecated in lmfit 0.8.2, use scalar_minimize '
-                       'and method=\'Nelder-Mead\' instead')
-    def fmin(self, **kws):
-        """
-        Use Nelder-Mead (simplex) minimization
-
-        Parameters
-        ----------
-        kws : dict
-            Minimizer options to pass to the scipy.optimize.fmin minimizer.
-        """
-        raise NotImplementedError("use scalar_minimize(method='Nelder-Mead')")
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """
@@ -887,10 +890,64 @@ class Minimizer(object):
 
         return result
 
+    def least_squares(self, params=None, **kws):
+        """
+        Use the least_squares (new in scipy 0.17) function to perform a fit.
+        This assumes that Parameters have been stored, and a function to
+        minimize has been properly set up.
+
+        This wraps scipy.optimize.least_squares, which has inbuilt support
+        for bounds and robust loss functions.
+
+        Parameters
+        ----------
+        params : Parameters, optional
+           Parameters to use as starting points.
+        kws : dict, optional
+            Minimizer options to pass to scipy.optimize.least_squares.
+
+        """
+
+        if not HAS_LEAST_SQUARES:
+            raise NotImplementedError("Scipy with a version higher than 0.17 "
+                                      "is needed for this method.")
+
+        result = self.prepare_fit(params)
+
+        replace_none = lambda x, sign: sign*np.inf if x is None else x
+        upper_bounds = [replace_none(i.max, 1) for i in self.params.values()]
+        lower_bounds = [replace_none(i.min, -1) for i in self.params.values()]
+        start_vals = [i.value for i in self.params.values()]
+
+        ret = least_squares(self.__residual,
+                            start_vals,
+                            bounds=(lower_bounds, upper_bounds),
+                            kwargs=dict(apply_bounds_transformation=False),
+                            **kws
+                            )
+
+        for attr in ret:
+            setattr(result, attr, ret[attr])
+
+        result.x = np.atleast_1d(result.x)
+        result.chisqr = result.residual = self.__residual(result.x, False)
+        result.nvarys = len(start_vals)
+        result.ndata = 1
+        result.nfree = 1
+        if isinstance(result.residual, ndarray):
+            result.chisqr = (result.chisqr**2).sum()
+            result.ndata = len(result.residual)
+            result.nfree = result.ndata - result.nvarys
+        result.redchi = result.chisqr / result.nfree
+        _log_likelihood = result.ndata * np.log(result.redchi)
+        result.aic = _log_likelihood + 2 * result.nvarys
+        result.bic = _log_likelihood + np.log(result.ndata) * result.nvarys
+        return result
+
     def leastsq(self, params=None, **kws):
         """
         Use Levenberg-Marquardt minimization to perform a fit.
-        This assumes that ModelParameters have been stored, and a function to
+        This assumes that Parameters have been stored, and a function to
         minimize has been properly set up.
 
         This wraps scipy.optimize.leastsq.
