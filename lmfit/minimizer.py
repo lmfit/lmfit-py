@@ -194,7 +194,7 @@ class Minimizer(object):
                   "or set leastsq_kws['maxfev']  to increase this maximum.")
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
-                 iter_cb=None, scale_covar=True, mask_non_finite=False,
+                 iter_cb=None, scale_covar=True, nan_policy='raise',
                  **kws):
         """
         Initialization of the Minimzer class
@@ -222,11 +222,14 @@ class Minimizer(object):
         scale_covar : bool, optional
             Whether to automatically scale the covariance matrix (leastsq
             only).
-        mask_non_finite : bool, optional
-            If `userfcn` returns non-finite values then a `ValueError` is
-            raised. However, if `mask_non_finite` is set to `True` then those
-            non-finite values are ignored, allowing the fit to proceed with the
-            finite values.
+        nan_policy : str, optional
+            Specifies action if `userfcn` (or a Jacobian) returns nan
+            values. One of:
+
+                'raise' - a `ValueError` is raised
+                'propagate' - the values returned from `userfcn` are un-altered
+                'omit' - the non-finite values are filtered.
+
         kws : dict, optional
             Options to pass to the minimizer being used.
 
@@ -274,7 +277,7 @@ class Minimizer(object):
 
         self.params = params
         self.jacfcn = None
-        self.mask_non_finite = mask_non_finite
+        self.nan_policy = nan_policy
 
     @property
     def values(self):
@@ -325,13 +328,7 @@ class Minimizer(object):
         self.result.nfev += 1
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
-
-        mask = np.isfinite(out)
-        if self.mask_non_finite:
-            out = out[mask]
-        elif not np.all(mask):
-            raise ValueError("The userfcn supplied to Minimizer returned a"
-                             " non-finite value")
+        out = _nan_policy(out, nan_policy=self.nan_policy)
 
         if callable(self.iter_cb):
             abort = self.iter_cb(params, self.result.nfev, out,
@@ -358,9 +355,12 @@ class Minimizer(object):
 
         self.result.nfev += 1
         pars.update_constraints()
+
         # compute the jacobian for "internal" unbounded variables,
-        # the rescale for bounded "external" variables.
+        # then rescale for bounded "external" variables.
         jac = self.jacfcn(pars, *self.userargs, **self.userkws)
+        jac = _nan_policy(jac, nan_policy=self.nan_policy)
+
         if self.col_deriv:
             jac = (jac.transpose()*grad_scale).transpose()
         else:
@@ -441,8 +441,6 @@ class Minimizer(object):
         removes ast compilations of constraint expressions
         """
         pass
-
-
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """
@@ -808,7 +806,7 @@ class Minimizer(object):
                          'float_behavior': float_behavior,
                          'userargs': self.userargs,
                          'userkws': self.userkws,
-                         'mask_non_finite': self.mask_non_finite}
+                         'nan_policy': self.nan_policy}
 
         if ntemps > 1:
             # the prior and likelihood function args and kwargs are the same
@@ -923,7 +921,6 @@ class Minimizer(object):
            Parameters to use as starting points.
         kws : dict, optional
             Minimizer options to pass to scipy.optimize.least_squares.
-
         """
 
         if not HAS_LEAST_SQUARES:
@@ -1193,7 +1190,7 @@ def _lnprior(theta, bounds):
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
             userkws=None, float_behavior='posterior', is_weighted=True,
-            mask_non_finite=False):
+            nan_policy='raise'):
     """
     Calculates the log-posterior probability. See the `Minimizer.emcee` method
     for more details
@@ -1224,6 +1221,14 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     is_weighted : bool
         If `userfcn` returns a vector of residuals then `is_weighted`
         specifies if the residuals have been weighted by data uncertainties.
+    nan_policy : str, optional
+        Specifies action if `userfcn` returns nan
+        values. One of:
+
+            'raise' - a `ValueError` is raised
+            'propagate' - the values returned from `userfcn` are un-altered
+            'omit' - the non-finite values are filtered.
+
 
     Returns
     -------
@@ -1249,14 +1254,7 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
 
     # now calculate the log-likelihood
     out = userfcn(params, *userargs, **userkwargs)
-
-    # check if there are any nans in data. If there are, then raise an error
-    # or filter them.
-    mask = np.isnan(out)
-    if mask_non_finite:
-        out = out[~mask]
-    elif np.any(mask):
-        raise ValueError("The userfcn supplied to Minimizer returned NaN")
+    out = _nan_policy(out, nan_policy=nan_policy, handle_inf=False)
 
     lnprob = np.asarray(out).ravel()
 
@@ -1299,6 +1297,65 @@ def _make_random_gen(seed):
         return seed
     raise ValueError('%r cannot be used to seed a numpy.random.RandomState'
                      ' instance' % seed)
+
+
+def _nan_policy(a, nan_policy='raise', handle_inf=True):
+    """
+    Specifies behaviour when an array contains np.nan or np.inf
+
+    Parameters
+    ----------
+    a : array_like
+        Input array to consider
+    nan_policy : str, optional
+        One of:
+
+        'raise' - raise a `ValueError` if `a` contains NaN.
+        'propagate' - propagate NaN
+        'omit' - filter NaN from input array
+    handle_inf : bool, optional
+        As well as nan consider +/- inf
+
+    Returns
+    -------
+    filtered_array : array_like
+    """
+
+    policies = ['propagate', 'raise', 'omit']
+    if nan_policy not in policies:
+        raise ValueError("nan_policy must be one of {%s}" %
+                         ', '.join("'%s'" % s for s in policies))
+
+    if handle_inf:
+        handler_func =  lambda a: ~np.isfinite(a)
+    else:
+        handler_func = np.isnan
+
+    if nan_policy == 'propagate':
+        # nan values are ignored.
+        return a
+    elif nan_policy == 'raise':
+        try:
+            # Calling np.sum to avoid creating a huge array into memory
+            # e.g. np.isnan(a).any()
+            with np.errstate(invalid='ignore'):
+                contains_nan = handler_func(np.sum(a))
+        except TypeError:
+            # If the check cannot be properly performed we fallback to omiting
+            # nan values and raising a warning. This can happen when attempting to
+            # sum things that are not numbers (e.g. as in the function `mode`).
+            contains_nan = False
+            warnings.warn("The input array could not be properly checked for nan "
+                          "values. nan values will be ignored.", RuntimeWarning)
+
+        if contains_nan:
+            raise ValueError("The input contains nan values")
+        return a
+
+    elif nan_policy == 'omit':
+        # nans are filtered
+        mask = handler_func(a)
+        return a[~mask]
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,

@@ -2,7 +2,7 @@
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
 from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
-                             MinimizerResult, _lnpost)
+                             MinimizerResult, _lnpost, _nan_policy)
 from lmfit.lineshapes import gaussian
 import numpy as np
 from numpy import pi
@@ -391,8 +391,8 @@ class CommonMinimizerTest(unittest.TestCase):
                                    self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=sig)
 
-    def test_mask_non_finite(self):
-        # check that an error is raised if there are non-finite points in
+    def test_nan_policy(self):
+        # check that an error is raised if there are nan in
         # the data returned by userfcn
         self.data[0] = np.nan
 
@@ -403,14 +403,26 @@ class CommonMinimizerTest(unittest.TestCase):
 
         assert_raises(ValueError, self.mini.minimize)
 
-        # now check that the fit proceeds if mask_non_finite is True
-        self.mini.mask_non_finite = True
+        # now check that the fit proceeds if nan_policy is 'omit'
+        self.mini.nan_policy = 'omit'
         res = self.mini.minimize()
         assert_equal(res.ndata, np.size(self.data, 0) - 1)
 
         for para, true_para in zip(res.params.values(),
                                    self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=0.15)
+
+    def test_nan_policy_function(self):
+        a = np.array([0, 1, 2, 3, np.nan])
+        assert_raises(ValueError, _nan_policy, a)
+        assert_(np.isnan(_nan_policy(a, nan_policy='propagate')[-1]))
+        assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
+
+        a[-1] = np.inf
+        assert_raises(ValueError, _nan_policy, a)
+        assert_(np.isposinf(_nan_policy(a, nan_policy='propagate')[-1]))
+        assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
+        assert_equal(_nan_policy(a, handle_inf=False), a)
 
     @decorators.slow
     def test_emcee(self):
