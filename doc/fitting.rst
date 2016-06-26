@@ -484,12 +484,12 @@ For full control of the fitting process, you'll want to create a
    :type  iter_cb:  callable or ``None``
    :param scale_covar:  flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
    :type  scale_covar:  bool (default ``True``).
-   :param mask_non_finite:  if ``userfcn`` returns non-finite values then a
-                            ``ValueError`` is raised. However, if
-                            ``mask_non_finite`` is set to ``True`` then those
-                            non-finite values are ignored, allowing the fit to
-                            proceed with the finite values.
-   :type  mask_non_finite: bool (default ``False``)
+   :param nan_policy: Specifies action if `userfcn` (or a Jacobian) returns nan
+            values. One of:
+                'raise' - a `ValueError` is raised
+                'propagate' - the values returned from `userfcn` are un-altered
+                'omit' - the non-finite values are filtered.
+   :type  nan_policy: str (default 'raise')
    :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
    :type  kws:      dict
 
