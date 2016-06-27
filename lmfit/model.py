@@ -409,7 +409,9 @@ class Model(object):
         # Handle special case of constant result and one
         # independent variable (of any dimension).
         if np.ndim(result) == 0 and len(self.independent_vars) == 1:
-            result = np.tile(result, kwargs[self.independent_vars[0]].shape)
+            indep_val = kwargs[self.independent_vars[0]]
+            if isinstance(indep_val, np.ndarray):
+                result = np.tile(result, indep_val.shape)
         return result
 
     @property
@@ -758,9 +760,17 @@ class ModelResult(Minimizer):
         self.best_values = self.model._make_all_args(_ret.params)
         self.best_fit    = self.model.eval(params=_ret.params, **self.userkws)
 
-    def eval(self, **kwargs):
-        self.userkws.update(kwargs)
-        return self.model.eval(params=self.params, **self.userkws)
+    def eval(self, params=None, **kwargs):
+       """
+       evaluate model function
+       Arguments:
+          params (Parameters):  parameters, defaults to ModelResult .params
+          kwargs (variable):  values of options, independent variables, etc
+       """
+       self.userkws.update(kwargs)
+        if params is None:
+            params = self.params
+        return self.model.eval(params=params, **self.userkws)
 
     def eval_components(self, **kwargs):
         self.userkws.update(kwargs)
