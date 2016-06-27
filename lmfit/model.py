@@ -692,15 +692,15 @@ class ModelResult(Minimizer):
          the previous fit.  This allows easily changing data or
          parameter settings, or both.
 
-    eval(**kwargs)
-         evaluate the current model, with the current parameter values,
-         with values in kwargs sent to the model function.
+    eval(params=None, **kwargs)
+         evaluate the current model, with parameters (defaults to the current
+         parameter values), with values in kwargs sent to the model function.
 
-    eval_components(**kwargs)
-         evaluate the current model, with the current parameter values,
-         with values in kwargs sent to the model function and returns
-         a ordered dict with the model names as the key and the component
-         results as the values.
+    eval_components(params=Nones, **kwargs)
+         evaluate the current model, with parameters (defaults to the current
+         parameter values), with values in kwargs sent to the model function
+         and returns an ordered dict with the model names as the key and the
+         component results as the values.
 
    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
          return a fit report.
@@ -766,15 +766,30 @@ class ModelResult(Minimizer):
        Arguments:
           params (Parameters):  parameters, defaults to ModelResult .params
           kwargs (variable):  values of options, independent variables, etc
+
+       Returns:
+          ndarray or float for evaluated model
        """
        self.userkws.update(kwargs)
         if params is None:
             params = self.params
         return self.model.eval(params=params, **self.userkws)
 
-    def eval_components(self, **kwargs):
+    def eval_components(self, params=None, **kwargs):
+        """
+        evaluate each component of a composite model function
+        Arguments:
+            params (Parameters):  parameters, defaults to ModelResult .params
+            kwargs (variable):  values of options, independent variables, etc
+
+        Returns:
+            ordered dictionary with keys of prefixes, and values of values for
+            each component of the model.
+        """
         self.userkws.update(kwargs)
-        return self.model.eval_components(params=self.params, **self.userkws)
+        if params is None:
+            params = self.params
+        return self.model.eval_components(params=params, **self.userkws)
 
     def conf_interval(self, **kwargs):
         """return explicitly calculated confidence intervals"""
