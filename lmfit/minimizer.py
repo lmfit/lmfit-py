@@ -1320,6 +1320,10 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
     -------
     filtered_array : array_like
     """
+    """
+    This function is copied, then modified, from
+    scipy/stats/stats.py/_contains_nan
+    """
 
     policies = ['propagate', 'raise', 'omit']
     if nan_policy not in policies:
