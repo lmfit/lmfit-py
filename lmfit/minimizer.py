@@ -1326,9 +1326,6 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
     """
 
     policies = ['propagate', 'raise', 'omit']
-    if nan_policy not in policies:
-        raise ValueError("nan_policy must be one of {%s}" %
-                         ', '.join("'%s'" % s for s in policies))
 
     if handle_inf:
         handler_func =  lambda a: ~np.isfinite(a)
@@ -1360,6 +1357,9 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
         # nans are filtered
         mask = handler_func(a)
         return a[~mask]
+    else:
+        raise ValueError("nan_policy must be one of {%s}" %
+                         ', '.join("'%s'" % s for s in policies))
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
