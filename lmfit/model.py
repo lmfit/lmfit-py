@@ -761,18 +761,18 @@ class ModelResult(Minimizer):
         self.best_fit    = self.model.eval(params=_ret.params, **self.userkws)
 
     def eval(self, params=None, **kwargs):
-       """
-       evaluate model function
-       Arguments:
-          params (Parameters):  parameters, defaults to ModelResult .params
-          kwargs (variable):  values of options, independent variables, etc
+        """
+        evaluate model function
+        Arguments:
+            params (Parameters):  parameters, defaults to ModelResult .params
+            kwargs (variable):  values of options, independent variables, etc
 
-       Returns:
-          ndarray or float for evaluated model
-       """
-       self.userkws.update(kwargs)
+        Returns:
+            ndarray or float for evaluated model
+        """
+        self.userkws.update(kwargs)
         if params is None:
-            params = self.params
+           params = self.params
         return self.model.eval(params=params, **self.userkws)
 
     def eval_components(self, params=None, **kwargs):
