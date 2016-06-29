@@ -405,14 +405,7 @@ class Model(object):
 
     def eval(self, params=None, **kwargs):
         """evaluate the model with the supplied parameters"""
-        result = self.func(**self.make_funcargs(params, kwargs))
-        # Handle special case of constant result and one
-        # independent variable (of any dimension).
-        if np.ndim(result) == 0 and len(self.independent_vars) == 1:
-            indep_val = kwargs[self.independent_vars[0]]
-            if isinstance(indep_val, np.ndarray):
-                result = np.tile(result, indep_val.shape)
-        return result
+        return self.func(**self.make_funcargs(params, kwargs))
 
     @property
     def components(self):
