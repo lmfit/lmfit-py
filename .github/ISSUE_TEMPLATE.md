@@ -1,6 +1,6 @@
 ###  Submitting an Issue:
 
-If you have not submitted an issue to LMFIT before, please read https://github.com/lmfit/lmfit-py/blob/master/.github/Contributing.md before submitting any Issues. Use the Mailing list  https://groups.google.com/group/lmfit-py for questions about LMFIT.
+If you have not submitted an issue to LMFIT before, please read https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md before submitting any Issues. Use the Mailing list  https://groups.google.com/group/lmfit-py for questions about LMFIT.
 
 When submitting an Issue please remember to include the following:
 
