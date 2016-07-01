@@ -57,4 +57,12 @@ del get_versions
 
 # PY26 Depreciation Warning
 if sys.version_info[:2] == (2, 6):
-    warnings.warn('Support for Python 2.6.x is depreciated in Lmfit 0.9.4 and will be dropped in 0.9.5', DeprecationWarning)
+    warnings.warn('Support for Python 2.6.x  will be dropped in lmfit 0.9.5')
+
+# SCIPY 0.13 Depreciation Warning
+import scipy
+scipy_major, scipy_minor, scipy_other = scipy.__version__.split('.', 2)
+
+if in(scipy_major) == 0 and int(scipy_minor) < 14:
+    print '--> warn'
+    warnings.warn('Support for Scipy 0.13 will be dropped in lmfit 0.9.5')
