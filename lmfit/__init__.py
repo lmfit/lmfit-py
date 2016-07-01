@@ -63,6 +63,6 @@ if sys.version_info[:2] == (2, 6):
 import scipy
 scipy_major, scipy_minor, scipy_other = scipy.__version__.split('.', 2)
 
-if in(scipy_major) == 0 and int(scipy_minor) < 14:
+if int(scipy_major) == 0 and int(scipy_minor) < 14:
     print '--> warn'
     warnings.warn('Support for Scipy 0.13 will be dropped in lmfit 0.9.5')
