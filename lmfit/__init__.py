@@ -25,8 +25,8 @@ from scipy.optimize.  It has a number of useful enhancements, including:
 
   * Many pre-built models for common lineshapes are included and ready to use.
 
-   version: 0.8.0
-   last update: 2014-Sep-21
+   version: 0.9.4
+   last update: 2016-Jul-1
    License: MIT
    Authors:  Matthew Newville, The University of Chicago
              Till Stensitzki, Freie Universitat Berlin
@@ -64,5 +64,4 @@ import scipy
 scipy_major, scipy_minor, scipy_other = scipy.__version__.split('.', 2)
 
 if int(scipy_major) == 0 and int(scipy_minor) < 14:
-    print '--> warn'
     warnings.warn('Support for Scipy 0.13 will be dropped in lmfit 0.9.5')
