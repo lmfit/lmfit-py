@@ -119,7 +119,6 @@ class CommonTests(object):
         # Check eval() output against init_fit and best_fit.
         pars = self.model.make_params(**self.guess())
         result = self.model.fit(self.data, pars, x=self.x)
-
         assert_allclose(result.eval(x=self.x, **result.values),
                         result.best_fit)
         assert_allclose(result.eval(x=self.x, **result.init_values),
@@ -132,7 +131,8 @@ class CommonTests(object):
 
         # Check that the independent variable is respected.
         short_eval = result.eval(x=np.array([0, 1, 2]), **result.values)
-        self.assertEqual(len(short_eval), 3)
+        if hasattr(short_eval, '__len__'):
+            self.assertEqual(len(short_eval), 3)
 
     def test_data_alignment(self):
         _skip_if_no_pandas()
@@ -585,5 +585,4 @@ class TestComplexConstant(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(re=2,im=2)
         self.model_constructor = models.ComplexConstantModel
         super(TestComplexConstant, self).setUp()
-
 #

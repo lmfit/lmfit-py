@@ -667,11 +667,12 @@ including `chisqr`, `redchi`, `aic`, and `bic`.
 These methods are all inherited from :class:`Minimize` or from
 :class:`Model`.
 
-.. method:: ModelResult.eval(**kwargs)
+.. method:: ModelResult.eval(params=None, **kwargs)
 
-   evaluate the model using the best-fit parameters and supplied
-   independent variables.  The ``**kwargs`` arguments can be used to update
-   parameter values and/or independent variables.
+   evaluate the model using parameters supplied (or the best-fit parameters
+   if not specified) and supplied independent variables.  The ``**kwargs``
+   arguments can be used to update parameter values and/or independent
+   variables.
 
 
 .. method:: ModelResult.eval_components(**kwargs)
