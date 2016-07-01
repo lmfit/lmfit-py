@@ -10,37 +10,43 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The lmfit package requires Python, Numpy, and Scipy.  Scipy version 0.13 or
-higher is recommended, but extensive testing on compatibility with various
-versions of scipy has not been done.  Lmfit works with Python 2.7, 3.3 and
-3.4.  Lmfit works with Python 2.6 only for versions <= 0.9.4. No testing has
-been done with Python 3.5, but as the package is pure Python, relying only on
-scipy and numpy, no significant troubles are expected.  The `nose`_ framework
-is required for running the test suite, and IPython and matplotib are
-recommended. If Pandas is available, it will be used in portions of lmfit.
+The lmfit package requires Python, Numpy, and Scipy.
+
+
+Lmfit works with Python 2.7, 3.3, 3.4, and 3.5 Lmfit currently does work
+with Python 2.6, but support will dropped with version 0.9.5.  Scipy
+version 0.13 or higher is required, with 0.17 or higher recommended to be
+able to use the latest optimization features from scipy.  Support for scipy
+0.13 will be dropped in version 0.9.5.  Numpy version 1.5 or higher is
+required.
+
+In order to run the test suite, the `nose`_ framework is required.  Some
+parts of lmfit will be able to make use of IPython (version 4 or higher),
+matplotlib, and pandas if those libraries are installed, but no core
+functionality of lmfit requires these.
 
 
 Downloads
 ~~~~~~~~~~~~~
 
-
-The latest stable version of lmfit is  available from `PyPi <http://pypi.python.org/pypi/lmfit/>`_.
+The latest stable version of lmfit is |release| is available from `PyPi
+<http://pypi.python.org/pypi/lmfit/>`_.
 
 Installation
 ~~~~~~~~~~~~~~~~~
 
-If you have `pip`_  installed, you can install lmfit with::
+If you have `pip`_ installed, you can install lmfit with::
 
     pip install lmfit
 
-or, if  you have `Python Setup Tools`_  installed, you install lmfit with::
-
-   easy_install -U lmfit
-
-
-or, you can download the source kit, unpack it and install with::
+or you can download the source kit, unpack it and install with::
 
    python setup.py install
+
+For Anaconda Python, lmfit is not an official packages, but several
+Anaconda channels provide it, allowing installation with (for example)::
+
+   conda install -c newville lmfit
 
 
 Development Version
@@ -49,7 +55,6 @@ Development Version
 To get the latest development version, use::
 
    git clone http://github.com/lmfit/lmfit-py.git
-
 
 and install using::
 
