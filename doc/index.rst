@@ -13,7 +13,8 @@ Non-Linear Least-Square Minimization and Curve-Fitting for Python
 
 .. warning::
 
-  Support for Python 2.6.x will be officially dropped following version 0.9.4 (in 0.9.5)
+  Support for Python 2.6 and scipy 0.13 will be dropped with version 0.9.5.
+
 
 Lmfit provides a high-level interface to non-linear optimization and curve
 fitting problems for Python. Lmfit builds on and extends many of the
