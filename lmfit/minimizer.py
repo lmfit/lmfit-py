@@ -1030,6 +1030,7 @@ class Minimizer(object):
         result.chisqr = (resid**2).sum()
         result.nfree = (result.ndata - nvars)
         result.redchi = result.chisqr / result.nfree
+        result.nvarys = nvars
         # this is -2*loglikelihood
         _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
         result.aic = _neg2_log_likel + 2 * result.nvarys
