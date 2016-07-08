@@ -1,5 +1,7 @@
 .. _parameters_chapter:
 
+.. currentmodule:: parameter
+
 ================================================
 :class:`Parameter`  and :class:`Parameters`
 ================================================
@@ -127,8 +129,6 @@ The :class:`Parameter` class
 
 The :class:`Parameters` class
 ========================================
-
-.. currentmodule:: lmfit.parameter
 
 .. class:: Parameters()
 
