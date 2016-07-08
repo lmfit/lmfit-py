@@ -551,9 +551,10 @@ class Minimizer(object):
             result.ndata = len(result.residual)
             result.nfree = result.ndata - result.nvarys
         result.redchi = result.chisqr / result.nfree
-        _log_likelihood = result.ndata * np.log(result.redchi)
-        result.aic = _log_likelihood + 2 * result.nvarys
-        result.bic = _log_likelihood + np.log(result.ndata) * result.nvarys
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
 
         return result
 
@@ -954,9 +955,10 @@ class Minimizer(object):
             result.ndata = len(result.residual)
             result.nfree = result.ndata - result.nvarys
         result.redchi = result.chisqr / result.nfree
-        _log_likelihood = result.ndata * np.log(result.redchi)
-        result.aic = _log_likelihood + 2 * result.nvarys
-        result.bic = _log_likelihood + np.log(result.ndata) * result.nvarys
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
         return result
 
     def leastsq(self, params=None, **kws):
@@ -1028,9 +1030,10 @@ class Minimizer(object):
         result.chisqr = (resid**2).sum()
         result.nfree = (result.ndata - nvars)
         result.redchi = result.chisqr / result.nfree
-        _log_likelihood = result.ndata * np.log(result.redchi)
-        result.aic = _log_likelihood + 2 * nvars
-        result.bic = _log_likelihood + np.log(result.ndata) * nvars
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
 
         params = result.params
 
