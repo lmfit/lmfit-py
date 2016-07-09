@@ -54,11 +54,11 @@ arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`optimize.curve_
     >>> from scipy.optimize import curve_fit
     >>>
     >>> x = linspace(-10,10)
-    >>> y = y = gaussian(x, 2.33, 0.21, 1.51) + np.random.normal(0, 0.2, len(x))
+    >>> y = gaussian(x, 2.33, 0.21, 1.51) + np.random.normal(0, 0.2, len(x))
     >>>
     >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
-    >>> print best_vals
+    >>> print(best_vals)
 
 
 We sample random data point, make an initial guess of the model
@@ -412,10 +412,10 @@ function is fairly easy. Let's try another::
     ...    return N*np.exp(-t/tau)
     ...
     >>> decay_model = Model(decay)
-    >>> print decay_model.independent_vars
+    >>> print(decay_model.independent_vars)
     ['t']
     >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    ...     print(pname, par)
     ...
     tau <Parameter 'tau', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
@@ -428,10 +428,10 @@ If you want ``tau`` to be the independent variable in the above example,
 you can say so::
 
     >>> decay_model = Model(decay, independent_vars=['tau'])
-    >>> print decay_model.independent_vars
+    >>> print(decay_model.independent_vars)
     ['tau']
     >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    ...     print(pname, par)
     ...
     t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
@@ -468,7 +468,7 @@ Parameters if the supplied default value was a valid number (but not
     ...
     >>> mod = Model(decay2)
     >>> for pname, par in mod.params.items():
-    ...     print pname, par
+    ...     print(pname, par)
     ...
     t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', 10, bounds=[None:None]>
@@ -499,7 +499,7 @@ the same name.  To avoid this, we can add a ``prefix`` to the
 
     >>> mod = Model(myfunc, prefix='f1_')
     >>> for pname, par in mod.params.items():
-    ...     print pname, par
+    ...     print(pname, par)
     ...
     f1_amplitude <Parameter 'f1_amplitude', None, bounds=[None:None]>
     f1_center <Parameter 'f1_center', None, bounds=[None:None]>
@@ -612,7 +612,7 @@ as with::
 Parameter hints are stored in a model's :attr:`param_hints` attribute,
 which is simply a nested dictionary::
 
-    >>> print mod.param_hints
+    >>> print(mod.param_hints)
     {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}}
 
 
