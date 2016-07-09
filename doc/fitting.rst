@@ -23,6 +23,8 @@ function that calculates the array to be minimized), a :class:`Parameters`
 object, and several optional arguments.  See :ref:`fit-func-label` for
 details on writing the objective.
 
+.. currentmodule:: minimizer
+
 .. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **fit_kws]]]]]])
 
    find values for the ``params`` so that the sum-of-squares of the array returned
@@ -455,9 +457,6 @@ exception is raised in the iteration callback. When a fit is aborted this
 way, the parameters will have the values from the last iteration.  The fit
 statistics are not likely to be meaningful, and uncertainties will not be computed.
 
-
-.. module:: Minimizer
-
 ..  _fit-minimizer-label:
 
 Using the :class:`Minimizer` class
@@ -485,10 +484,12 @@ For full control of the fitting process, you'll want to create a
    :param scale_covar:  flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
    :type  scale_covar:  bool (default ``True``).
    :param nan_policy: Specifies action if `userfcn` (or a Jacobian) returns nan
-            values. One of:
+    values. One of:
+
                 'raise' - a `ValueError` is raised
                 'propagate' - the values returned from `userfcn` are un-altered
                 'omit' - the non-finite values are filtered.
+
    :type  nan_policy: str (default 'raise')
    :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
    :type  kws:      dict
@@ -860,6 +861,8 @@ You can see that we recovered the right uncertainty level on the data.::
 
 Getting and Printing Fit Reports
 ===========================================
+
+.. currentmodule:: printfuncs
 
 .. function:: fit_report(result, modelpars=None, show_correl=True, min_correl=0.1)
 
