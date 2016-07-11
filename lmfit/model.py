@@ -277,6 +277,10 @@ class Model(object):
             # apply defaults from model function definition
             if basename in self.def_vals:
                 par.value = self.def_vals[basename]
+            if par.value in (None, -np.inf, np.inf, np.nan):
+                for key, val in self.def_vals.items():
+                    if key in name.lower():
+                        par.value = val
             # apply defaults from parameter hints
             if basename in self.param_hints:
                 hint = self.param_hints[basename]
