@@ -267,12 +267,12 @@ def powerlaw(x, amplitude=1, exponent=1.0):
     return amplitude * x**exponent
 
 
-def linear(x, slope, intercept):
+def linear(x, slope=1.0, intercept=0.0):
     "x -> slope * x + intercept"
     return slope * x + intercept
 
 
-def parabolic(x, a, b, c):
+def parabolic(x, a=0.0, b=0.0, c=0.0):
     "x -> a * x**2 + b * x + c"
     return a * x**2 + b * x + c
 
