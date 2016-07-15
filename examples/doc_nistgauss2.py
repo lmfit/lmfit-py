@@ -29,7 +29,7 @@ pars3 = gauss2.guess(y[ix2:ix3], x=x[ix2:ix3])
 pars = pars1 + pars2 + pars3
 mod = gauss1 + gauss2 + exp_mod
 
-out = mod.fit(y, pars, x=x, fit_kws={'maxfev': 5})
+out = mod.fit(y, pars, x=x)
 
 print(out.fit_report(min_correl=0.5))
 
