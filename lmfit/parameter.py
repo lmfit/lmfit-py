@@ -2,7 +2,6 @@
 Parameter class
 """
 from __future__ import division
-from numpy import array, arcsin, cos, sin, sqrt, inf, nan, isfinite
 import json
 from copy import deepcopy
 try:
@@ -10,8 +9,8 @@ try:
 except ImportError:
     from ordereddict import OrderedDict
 
+from numpy import array, arcsin, cos, sin, sqrt, inf, nan, isfinite
 from . import uncertainties
-
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name
 
@@ -98,7 +97,7 @@ class Parameters(OrderedDict):
         # find the symbols that were added by users, not during construction
         sym_unique = self._asteval.user_defined_symbols()
         unique_symbols = dict((key, deepcopy(self._asteval.symtable[key], memo))
-                          for key in sym_unique)
+                              for key in sym_unique)
         _pars._asteval.symtable.update(unique_symbols)
 
         # we're just about to add a lot of Parameter objects to the newly
@@ -168,7 +167,7 @@ class Parameters(OrderedDict):
         # find the symbols from _asteval.symtable, that need to be remembered.
         sym_unique = self._asteval.user_defined_symbols()
         unique_symbols = dict((key, deepcopy(self._asteval.symtable[key]))
-                          for key in sym_unique)
+                              for key in sym_unique)
 
         return self.__class__, (), {'unique_symbols': unique_symbols,
                                     'params': params}
@@ -197,14 +196,13 @@ class Parameters(OrderedDict):
         # then add all the parameters
         self.add_many(*state['params'])
 
-
     def update_constraints(self):
         """
         Update all constrained parameters, checking that dependencies are
         evaluated as needed.
         """
         requires_update = set(name for name, par in self.items()
-                           if par._expr is not None)
+                              if par._expr is not None)
         updated_tracker = set(requires_update)
 
         def _update_param(name):
@@ -248,11 +246,11 @@ class Parameters(OrderedDict):
         columns : list of strings
             list of columns names to print. All values must be valid
             :class:`Parameter` attributes.
-        precision : int
-            number of digits to be printed after floating point.
-        format : string
+        fmt : string
             single-char numeric formatter. Valid values: 'f' floating point,
             'g' floating point and exponential, 'e' exponential.
+        precision : int
+            number of digits to be printed after floating point.
         """
         if oneline:
             print(self.pretty_repr(oneline=oneline))
@@ -623,6 +621,7 @@ class Parameter(object):
         # becomes stale if parameter.expr is not None.
         if (isinstance(self._val, uncertainties.Variable)
             and self._val is not nan):
+
             try:
                 self.value = self._val.nominal_value
             except AttributeError:
@@ -640,8 +639,10 @@ class Parameter(object):
                     check_ast_errors(self._expr_eval)
 
         v = self._val
-        if v > self.max: v = self.max
-        if v < self.min: v = self.min
+        if v > self.max:
+            v = self.max
+        if v < self.min:
+            v = self.min
         self.value = self._val = v
         return self._val
 
