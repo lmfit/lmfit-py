@@ -33,8 +33,8 @@ details on writing the objective.
    :param function:  function to return fit residual.  See :ref:`fit-func-label` for details.
    :type  function:  callable.
    :param params:  a :class:`Parameters` dictionary.  Keywords must be strings
-                   that match ``[a-z_][a-z0-9_]*`` and cannot be a python
-                   reserved word.  Each value must be :class:`Parameter`.
+		   that match ``[a-z_][a-z0-9_]*`` and cannot be a python
+		   reserved word.  Each value must be :class:`Parameter`.
    :type  params:  :class:`Parameters`.
    :param args:  arguments tuple to pass to the residual function as  positional arguments.
    :type  args:  tuple
@@ -50,7 +50,7 @@ details on writing the objective.
    :type  fit_kws:  dict
 
    :return: :class:`MinimizerResult` instance, which will contain the
-            optimized parameter, and several goodness-of-fit statistics.
+	    optimized parameter, and several goodness-of-fit statistics.
 
 .. versionchanged:: 0.9.0
    return value changed to :class:`MinimizerResult`
@@ -65,7 +65,7 @@ details on writing the objective.
    wrapper around :class:`Minimizer` that runs a single fit, implemented as::
 
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
-                       iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
+		       iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
     return fitter.minimize(method=method)
 
 
@@ -112,26 +112,26 @@ simple way to do this is with :meth:`Parameters.valuesdict`, as with::
 
 
     def residual(pars, x, data=None, eps=None):
-        # unpack parameters:
-        #  extract .value attribute for each parameter
+	# unpack parameters:
+	#  extract .value attribute for each parameter
 	parvals = pars.valuesdict()
-        period = parvals['period']
-        shift = parvals['shift']
-        decay = parvals['decay']
+	period = parvals['period']
+	shift = parvals['shift']
+	decay = parvals['decay']
 
-        if abs(shift) > pi/2:
-            shift = shift - sign(shift)*pi
+	if abs(shift) > pi/2:
+	    shift = shift - sign(shift)*pi
 
-        if abs(period) < 1.e-10:
-            period = sign(period)*1.e-10
+	if abs(period) < 1.e-10:
+	    period = sign(period)*1.e-10
 
-        model = parvals['amp'] * sin(shift + x/period) * exp(-x*x*decay*decay)
+	model = parvals['amp'] * sin(shift + x/period) * exp(-x*x*decay*decay)
 
-        if data is None:
-            return model
+	if data is None:
+	    return model
 	if eps is None:
-            return (model - data)
-        return (model - data)/eps
+	    return (model - data)
+	return (model - data)/eps
 
 In this example, ``x`` is a positional (required) argument, while the
 ``data`` array is actually optional (so that the function returns the model
@@ -144,8 +144,8 @@ to use the bounds on the :class:`Parameter` to do this::
 
 but putting this directly in the function with::
 
-        if abs(period) < 1.e-10:
-            period = sign(period)*1.e-10
+	if abs(period) < 1.e-10:
+	    period = sign(period)*1.e-10
 
 is also a reasonable approach.   Similarly, one could place bounds on the
 ``decay`` parameter to take values only between ``-pi/2`` and ``pi/2``.
@@ -390,7 +390,7 @@ The :class:`MinimizerResult` includes the traditional chi-square and reduced chi
    :nowrap:
 
    \begin{eqnarray*}
-        \chi^2  &=&  \sum_i^N r_i^2 \\
+	\chi^2  &=&  \sum_i^N r_i^2 \\
 	\chi^2_\nu &=& = \chi^2 / (N-N_{\rm varys})
     \end{eqnarray*}
 
@@ -472,8 +472,8 @@ For full control of the fitting process, you'll want to create a
    :param function:  objective function to return fit residual.  See :ref:`fit-func-label` for details.
    :type  function:  callable.
    :param params:  a dictionary of Parameters.  Keywords must be strings
-                   that match ``[a-z_][a-z0-9_]*`` and is not a python
-                   reserved word.  Each value must be :class:`Parameter`.
+		   that match ``[a-z_][a-z0-9_]*`` and is not a python
+		   reserved word.  Each value must be :class:`Parameter`.
    :type  params:  dict
    :param fcn_args:  arguments tuple to pass to the residual function as  positional arguments.
    :type  fcn_args: tuple
@@ -486,9 +486,9 @@ For full control of the fitting process, you'll want to create a
    :param nan_policy: Specifies action if `userfcn` (or a Jacobian) returns nan
     values. One of:
 
-                'raise' - a `ValueError` is raised
-                'propagate' - the values returned from `userfcn` are un-altered
-                'omit' - the non-finite values are filtered.
+		'raise' - a `ValueError` is raised
+		'propagate' - the values returned from `userfcn` are un-altered
+		'omit' - the non-finite values are filtered.
 
    :type  nan_policy: str (default 'raise')
    :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
@@ -501,13 +501,13 @@ The Minimizer object has a few public methods:
    perform fit using either :meth:`leastsq` or :meth:`scalar_minimize`.
 
    :param method: name of fitting method.  Must be one of the names in
-                  :ref:`Table of Supported Fitting Methods <fit-methods-table>`
+		  :ref:`Table of Supported Fitting Methods <fit-methods-table>`
    :type  method:  str.
    :param params:  a :class:`Parameters` dictionary for starting values
    :type  params:  :class:`Parameters` or `None`
 
    :return: :class:`MinimizerResult` object, containing updated
-            parameters, fitting statistics, and information.
+	    parameters, fitting statistics, and information.
 
 .. versionchanged:: 0.9.0
    return value changed to :class:`MinimizerResult`
@@ -585,15 +585,15 @@ The Minimizer object has a few public methods:
   :param params: a :class:`Parameters` dictionary for starting values
   :type  params: :class:`Parameters` or `None`
   :param steps: How many samples you would like to draw from the posterior
-                 distribution for each of the walkers?
+		 distribution for each of the walkers?
   :type  steps: int
   :param nwalkers: Should be set so :math:`nwalkers >> nvarys`, where `nvarys`
-                    are the number of parameters being varied during the fit.
-                    "Walkers are the members of the ensemble. They are almost
-                    like separate Metropolis-Hastings chains but, of course,
-                    the proposal distribution for a given walker depends on the
-                    positions of all the other walkers in the ensemble." - from
-                    [1]_.
+		    are the number of parameters being varied during the fit.
+		    "Walkers are the members of the ensemble. They are almost
+		    like separate Metropolis-Hastings chains but, of course,
+		    the proposal distribution for a given walker depends on the
+		    positions of all the other walkers in the ensemble." - from
+		    [1]_.
   :type  nwalkers: int
   :param burn: Discard this many samples from the start of the sampling regime.
   :type  burn: int
@@ -602,33 +602,33 @@ The Minimizer object has a few public methods:
   :param ntemps: If `ntemps > 1` perform a Parallel Tempering.
   :type ntemps: int
   :param pos: Specify the initial positions for the sampler.  If `ntemps == 1`
-              then `pos.shape` should be `(nwalkers, nvarys)`. Otherwise,
-              `(ntemps, nwalkers, nvarys)`. You can also initialise using a
-              previous chain that had the same `ntemps`, `nwalkers` and `nvarys`.
+	      then `pos.shape` should be `(nwalkers, nvarys)`. Otherwise,
+	      `(ntemps, nwalkers, nvarys)`. You can also initialise using a
+	      previous chain that had the same `ntemps`, `nwalkers` and `nvarys`.
   :type pos: np.ndarray
   :param reuse_sampler:  If you have already run :meth:`emcee` on a given
-            :class:`Minimizer` object then it possesses an internal sampler
-            attribute. You can continue to draw from the same sampler (retaining
-            the chain history) if you set this option to `True`. Otherwise a new
-            sampler is created. The `nwalkers`, `ntemps` and `params` keywords
-            are ignored with this option.
-            **Important**: the :class:`Parameters` used to create the sampler
-            must not change in-between calls to :meth:`emcee`. Alteration of
-            :class:`Parameters` would include changed ``min``, ``max``,
-            ``vary`` and ``expr`` attributes. This may happen, for example, if
-            you use an altered :class:`Parameters` object and call the
-            :meth:`minimize` method in-between calls to :meth:`emcee` .
+	    :class:`Minimizer` object then it possesses an internal sampler
+	    attribute. You can continue to draw from the same sampler (retaining
+	    the chain history) if you set this option to `True`. Otherwise a new
+	    sampler is created. The `nwalkers`, `ntemps` and `params` keywords
+	    are ignored with this option.
+	    **Important**: the :class:`Parameters` used to create the sampler
+	    must not change in-between calls to :meth:`emcee`. Alteration of
+	    :class:`Parameters` would include changed ``min``, ``max``,
+	    ``vary`` and ``expr`` attributes. This may happen, for example, if
+	    you use an altered :class:`Parameters` object and call the
+	    :meth:`minimize` method in-between calls to :meth:`emcee` .
   :type  reuse_sampler:  bool
   :param workers: For parallelization of sampling.  It can be any Pool-like object
-            with a map method that follows the same calling sequence as the
-            built-in map function. If int is given as the argument, then a
-            multiprocessing-based pool is spawned internally with the
-            corresponding number of parallel processes. 'mpi4py'-based
-            parallelization and 'joblib'-based parallelization pools can also
-            be used here. **Note**: because of multiprocessing overhead it may
-            only be worth parallelising if the objective function is expensive
-            to calculate, or if there are a large number of objective
-            evaluations per step (`ntemps * nwalkers * nvarys`).
+	    with a map method that follows the same calling sequence as the
+	    built-in map function. If int is given as the argument, then a
+	    multiprocessing-based pool is spawned internally with the
+	    corresponding number of parallel processes. 'mpi4py'-based
+	    parallelization and 'joblib'-based parallelization pools can also
+	    be used here. **Note**: because of multiprocessing overhead it may
+	    only be worth parallelising if the objective function is expensive
+	    to calculate, or if there are a large number of objective
+	    evaluations per step (`ntemps * nwalkers * nvarys`).
   :type workers: int or Pool-like
   :type float_behavior: str
   :param float_behavior: Specifies the meaning of the objective function if it
@@ -640,40 +640,40 @@ The Minimizer object has a few public methods:
 
    See Notes for further details.
   :param is_weighted: Has your objective function been weighted by measurement
-            uncertainties? If `is_weighted is True` then your objective
-            function is assumed to return residuals that have been divided by
-            the true measurement uncertainty `(data - model) / sigma`. If
-            `is_weighted is False` then the objective function is assumed to
-            return unweighted residuals, `data - model`. In this case `emcee`
-            will employ a positive measurement uncertainty during the sampling.
-            This measurement uncertainty will be present in the output params
-            and output chain with the name `__lnsigma`. A side effect of this
-            is that you cannot use this parameter name yourself.
-            **Important** this parameter only has any effect if your objective
-            function returns an array. If your objective function returns a
-            float, then this parameter is ignored. See Notes for more details.
+	    uncertainties? If `is_weighted is True` then your objective
+	    function is assumed to return residuals that have been divided by
+	    the true measurement uncertainty `(data - model) / sigma`. If
+	    `is_weighted is False` then the objective function is assumed to
+	    return unweighted residuals, `data - model`. In this case `emcee`
+	    will employ a positive measurement uncertainty during the sampling.
+	    This measurement uncertainty will be present in the output params
+	    and output chain with the name `__lnsigma`. A side effect of this
+	    is that you cannot use this parameter name yourself.
+	    **Important** this parameter only has any effect if your objective
+	    function returns an array. If your objective function returns a
+	    float, then this parameter is ignored. See Notes for more details.
   :type is_weighted: bool
   :param seed: If `seed` is an int, a new `np.random.RandomState` instance is used,
-            seeded with `seed`.
-            If `seed` is already a `np.random.RandomState` instance, then that
-            `np.random.RandomState` instance is used.
-            Specify `seed` for repeatable sampling.
+	    seeded with `seed`.
+	    If `seed` is already a `np.random.RandomState` instance, then that
+	    `np.random.RandomState` instance is used.
+	    Specify `seed` for repeatable sampling.
   :type seed: int or np.random.RandomState
 
   :return: :class:`MinimizerResult` object containing updated params, statistics,
-            etc. The :class:`MinimizerResult` also contains the ``chain``,
-            ``flatchain`` and ``lnprob`` attributes. The ``chain``
-            and ``flatchain`` attributes contain the samples and have the shape
-            `(nwalkers, (steps - burn) // thin, nvarys)` or
-            `(ntemps, nwalkers, (steps - burn) // thin, nvarys)`,
-            depending on whether Parallel tempering was used or not.
-            `nvarys` is the number of parameters that are allowed to vary.
-            The ``flatchain`` attribute is a :class:`pandas.DataFrame` of the
-            flattened chain, `chain.reshape(-1, nvarys)`. To access flattened
-            chain values for a particular parameter use
-            `result.flatchain[parname]`. The ``lnprob`` attribute contains the
-            log probability for each sample in ``chain``. The sample with the
-            highest probability corresponds to the maximum likelihood estimate.
+	    etc. The :class:`MinimizerResult` also contains the ``chain``,
+	    ``flatchain`` and ``lnprob`` attributes. The ``chain``
+	    and ``flatchain`` attributes contain the samples and have the shape
+	    `(nwalkers, (steps - burn) // thin, nvarys)` or
+	    `(ntemps, nwalkers, (steps - burn) // thin, nvarys)`,
+	    depending on whether Parallel tempering was used or not.
+	    `nvarys` is the number of parameters that are allowed to vary.
+	    The ``flatchain`` attribute is a :class:`pandas.DataFrame` of the
+	    flattened chain, `chain.reshape(-1, nvarys)`. To access flattened
+	    chain values for a particular parameter use
+	    `result.flatchain[parname]`. The ``lnprob`` attribute contains the
+	    log probability for each sample in ``chain``. The sample with the
+	    highest probability corresponds to the maximum likelihood estimate.
 
   This method samples the posterior distribution of the parameters using
   Markov Chain Monte Carlo.  To do so it needs to calculate the
@@ -767,10 +767,10 @@ Solving with :func:`minimize` gives the Maximum Likelihood solution.::
     >>> mi = lmfit.minimize(residual, p, method='Nelder')
     >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
     [[Variables]]
-        a1:   2.98623688 (init= 4)
-        a2:  -4.33525596 (init= 4)
-        t1:   1.30993185 (init= 3)
-        t2:   11.8240752 (init= 3)
+	a1:   2.98623688 (init= 4)
+	a2:  -4.33525596 (init= 4)
+	t1:   1.30993185 (init= 3)
+	t2:   11.8240752 (init= 3)
     [[Correlations]] (unreported correlations are <  0.500)
     >>> plt.plot(x, y)
     >>> plt.plot(x, residual(mi.params) + y, 'r')
@@ -824,18 +824,18 @@ You can see that we recovered the right uncertainty level on the data.::
     median of posterior probability distribution
     ------------------------------------------
     [[Variables]]
-        a1:   3.00975345 +/- 0.151034 (5.02%) (init= 2.986237)
-        a2:  -4.35419204 +/- 0.127505 (2.93%) (init=-4.335256)
-        t1:   1.32726415 +/- 0.142995 (10.77%) (init= 1.309932)
-        t2:   11.7911935 +/- 0.495583 (4.20%) (init= 11.82408)
-        f:    0.09805494 +/- 0.004256 (4.34%) (init= 1)
+	a1:   3.00975345 +/- 0.151034 (5.02%) (init= 2.986237)
+	a2:  -4.35419204 +/- 0.127505 (2.93%) (init=-4.335256)
+	t1:   1.32726415 +/- 0.142995 (10.77%) (init= 1.309932)
+	t2:   11.7911935 +/- 0.495583 (4.20%) (init= 11.82408)
+	f:    0.09805494 +/- 0.004256 (4.34%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(a2, t2)                    =  0.981
-        C(a2, t1)                    = -0.927
-        C(t1, t2)                    = -0.880
-        C(a1, t1)                    = -0.519
-        C(a1, a2)                    =  0.195
-        C(a1, t2)                    =  0.146
+	C(a2, t2)                    =  0.981
+	C(a2, t1)                    = -0.927
+	C(t1, t2)                    = -0.880
+	C(a1, t1)                    = -0.519
+	C(a1, a2)                    =  0.195
+	C(a1, t2)                    =  0.146
 
     >>> # find the maximum likelihood solution
     >>> highest_prob = np.argmax(res.lnprob)
@@ -888,22 +888,22 @@ An example fit with report would be
 which would write out::
 
     [[Fit Statistics]]
-        # function evals   = 85
-        # data points      = 1001
-        # variables        = 4
-        chi-square         = 498.812
-        reduced chi-square = 0.500
-        Akaike info crit   = -685.215
-        Bayesian info crit = -665.579
+	# function evals   = 85
+	# data points      = 1001
+	# variables        = 4
+	chi-square         = 498.812
+	reduced chi-square = 0.500
+	Akaike info crit   = -689.223
+	Bayesian info crit = -669.587
     [[Variables]]
-        amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
-        period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
-        shift:    0.16203676 +/- 0.014056 (8.67%) (init= 0)
-        decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
+	amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
+	period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
+	shift:    0.16203676 +/- 0.014056 (8.67%) (init= 0)
+	decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(period, shift)             =  0.797
-        C(amp, decay)                =  0.582
-        C(amp, shift)                = -0.297
-        C(amp, period)               = -0.243
-        C(shift, decay)              = -0.182
-        C(period, decay)             = -0.150
+	C(period, shift)             =  0.797
+	C(amp, decay)                =  0.582
+	C(amp, shift)                = -0.297
+	C(amp, period)               = -0.243
+	C(shift, decay)              = -0.182
+	C(period, decay)             = -0.150
