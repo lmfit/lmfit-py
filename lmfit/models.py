@@ -35,7 +35,7 @@ def fwhm_expr(model):
 
 def height_expr(model):
     "return constraint expression for maximum peak height"
-    fmt = "{factor:.7f}*{prefix:s}amplitude/{prefix:s}sigma"
+    fmt = "{factor:.7f}*{prefix:s}amplitude/max(1.e-15, {prefix:s}sigma)"
     return fmt.format(factor=model.height_factor, prefix=model.prefix)
 
 def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
