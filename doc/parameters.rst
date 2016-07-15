@@ -1,6 +1,6 @@
 .. _parameters_chapter:
 
-.. currentmodule:: parameter
+.. currentmodule:: lmfit.parameter
 
 ================================================
 :class:`Parameter`  and :class:`Parameters`
