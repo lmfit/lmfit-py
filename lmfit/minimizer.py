@@ -1155,8 +1155,10 @@ class Minimizer(object):
         kwargs.update(kws)
 
         user_method = method.lower()
-        if user_method.startswith('least'):
+        if user_method.startswith('leasts'):
             function = self.leastsq
+        elif user_method.startswith('least_s'):
+            function = self.least_squares
         elif HAS_SCALAR_MIN:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
