@@ -328,8 +328,7 @@ class Minimizer(object):
         self.result.nfev += 1
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
-        if np.isnan(out).any():
-            out = _nan_policy(out, nan_policy=self.nan_policy)
+        out = _nan_policy(out, nan_policy=self.nan_policy)
 
         if callable(self.iter_cb):
             abort = self.iter_cb(params, self.result.nfev, out,
@@ -360,8 +359,7 @@ class Minimizer(object):
         # compute the jacobian for "internal" unbounded variables,
         # then rescale for bounded "external" variables.
         jac = self.jacfcn(pars, *self.userargs, **self.userkws)
-        if not np.isfinite(jac).all():
-            jac = _nan_policy(jac, nan_policy=self.nan_policy)
+        jac = _nan_policy(jac, nan_policy=self.nan_policy)
 
         if self.col_deriv:
             jac = (jac.transpose()*grad_scale).transpose()
@@ -1260,8 +1258,7 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
 
     # now calculate the log-likelihood
     out = userfcn(params, *userargs, **userkwargs)
-    if np.isnan(out).any():
-        out = _nan_policy(out, nan_policy=nan_policy, handle_inf=False)
+    out = _nan_policy(out, nan_policy=nan_policy, handle_inf=False)
 
     lnprob = np.asarray(out).ravel()
 
