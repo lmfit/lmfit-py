@@ -38,7 +38,36 @@ class MinimizeSuite:
         params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
         params.add('omega', value= 1.0, min=0, max=10)
 
-        out = minimize(obj_func, params, args=(x, data))
+        return minimize(obj_func, params, args=(x, data))
+
+    def time_minimize_withnan(self):
+        np.random.seed(201)
+        x = np.linspace(0, 15, 601)
+        x[53] = np.nan
+
+        data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
+                np.random.normal(size=len(x), scale=0.3) )
+        params = Parameters()
+        params.add('amp',   value= 1,  min=0, max=100)
+        params.add('decay', value= 0.0, min=0, max=10)
+        params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
+        params.add('omega', value= 1.0, min=0, max=10)
+
+        return minimize(obj_func, params, args=(x, data), nan_policy='omit')
+
+    def time_minimize_large(self):
+        np.random.seed(201)
+        x = np.linspace(0, 19, 70001)
+        data = (5. * np.sin(0.6* x - 0.1) * np.exp(-x*x*0.0165) +
+                np.random.normal(size=len(x), scale=0.3) )
+        params = Parameters()
+        params.add('amp',   value= 1,  min=0, max=100)
+        params.add('decay', value= 0.0, min=0, max=10)
+        params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
+        params.add('omega', value= 0.40, min=0, max=10)
+
+        return minimize(obj_func, params, args=(x, data))
+
 
     def time_confinterval(self):
         np.random.seed(0)
@@ -56,7 +85,7 @@ class MinimizeSuite:
 
         minimizer = Minimizer(residual, p)
         out = minimizer.leastsq()
-        ci = conf_interval(minimizer, out)
+        return conf_interval(minimizer, out)
 
 
 class MinimizerClassSuite:
@@ -91,10 +120,10 @@ class MinimizerClassSuite:
                                     fcn_args=(self.x, self.y))
 
     def time_differential_evolution(self):
-        self.mini_de.minimize(method='differential_evolution')
+        return self.mini_de.minimize(method='differential_evolution')
 
     def time_emcee(self):
-        self.mini_emcee.emcee(self.p_emcee, steps=100, seed=1)
+        return self.mini_emcee.emcee(self.p_emcee, steps=100, seed=1)
 
 
 def Minimizer_Residual(p, x, y):
