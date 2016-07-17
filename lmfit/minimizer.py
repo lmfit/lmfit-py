@@ -146,12 +146,13 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
 
 
 class MinimizerResult(object):
-    """ The result of a minimization.
+    """
+    The result of a minimization.
 
     Attributes
     ----------
-    params : Parameters
-        The best-fit parameters
+    params : lmfit.parameters.Parameters
+        The best-fit parameters resulting from the fit.
     success : bool
         Whether the minimization was successful
     status : int
@@ -1127,29 +1128,39 @@ class Minimizer(object):
         Parameters
         ----------
         method : str, optional
-            Name of the fitting method to use.
-            One of:
-            'leastsq'                -    Levenberg-Marquardt (default)
-            'nelder'                 -    Nelder-Mead
-            'lbfgsb'                 -    L-BFGS-B
-            'powell'                 -    Powell
-            'cg'                     -    Conjugate-Gradient
-            'newton'                 -    Newton-CG
-            'cobyla'                 -    Cobyla
-            'tnc'                    -    Truncate Newton
-            'trust-ncg'              -    Trust Newton-CGn
-            'dogleg'                 -    Dogleg
-            'slsqp'                  -    Sequential Linear Squares Programming
-            'differential_evolution' -    differential evolution
+            Name of the fitting method to use. Valid values are:
 
-        params : Parameters, optional
-            parameters to use as starting values
+            - `'leastsq'`: Levenberg-Marquardt (default).
+              Uses `scipy.optimize.leastsq`.
+            - `'least_squares'`: Levenberg-Marquardt.
+              Uses `scipy.optimize.least_squares`.
+            - 'nelder': Nelder-Mead
+            - `'lbfgsb'`: L-BFGS-B
+            - `'powell'`: Powell
+            - `'cg'`: Conjugate-Gradient
+            - `'newton'`: Newton-CG
+            - `'cobyla'`: Cobyla
+            - `'tnc'`: Truncate Newton
+            - `'trust-ncg'`: Trust Newton-CGn
+            - `'dogleg'`: Dogleg
+            - `'slsqp'`: Sequential Linear Squares Programming
+            - `'differential_evolution'`: differential evolution
+
+            For more details on the fitting methods please refer to the
+            `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
+
+        params : `lmfit.parameter.Parameters` object.
+            Parameters of the model to use as starting values.
+
+        **kwargs
+            Additional arguments to be passed to the underlying minimization
+            function.
 
         Returns
         -------
-        result : MinimizerResult
-
-            MinimizerResult object contains updated params, fit statistics, etc.
+        MinimizerResult
+            Object containing the optimized parameter
+            and several goodness-of-fit statistics.
 
         """
 
@@ -1410,8 +1421,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     params : `lmfit.parameter.Parameters` object.
         contains the Parameters for the model.
     method : str, optional
-        Name of the fitting method to use.
-        One of:
+        Name of the fitting method to use. Valid values are:
 
         - `'leastsq'`: Levenberg-Marquardt (default).
           Uses `scipy.optimize.leastsq`.
@@ -1429,7 +1439,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'slsqp'`: Sequential Linear Squares Programming
         - `'differential_evolution'`: differential evolution
 
-        For more details on the fitting methods refer to the
+        For more details on the fitting methods please refer to the
         `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
 
     args : tuple, optional
@@ -1451,7 +1461,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     Returns
     -------
     MinimizerResult
-        instance, which will contain the optimized parameter
+        Object containing the optimized parameter
         and several goodness-of-fit statistics.
 
 

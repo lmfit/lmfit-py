@@ -133,7 +133,7 @@ class as listed in the :ref:`Table of Supported Fitting Methods
  +-----------------------+------------------------------------------------------------------+
  | Fitting Method        | ``method`` arg to :func:`minimize` or :meth:`Minimizer.minimize` |
  +=======================+==================================================================+
- | Levenberg-Marquardt   |  ``leastsq``                                                     |
+ | Levenberg-Marquardt   |  ``leastsq`` or ``least_squares``                                |
  +-----------------------+------------------------------------------------------------------+
  | Nelder-Mead           |  ``nelder``                                                      |
  +-----------------------+------------------------------------------------------------------+
@@ -178,10 +178,6 @@ class as listed in the :ref:`Table of Supported Fitting Methods
 :class:`MinimizerResult` -- the optimization result
 ========================================================
 
-
-
-.. class:: MinimizerResult(**kws)
-
 .. versionadded:: 0.9.0
 
 An optimization with :func:`minimize` or :meth:`Minimizer.minimize`
@@ -195,6 +191,10 @@ Importantly, the parameters passed in to :meth:`Minimizer.minimize`
 will be not be changed.  To to find the best-fit values, uncertainties
 and so on for each parameter, one must use the
 :attr:`MinimizerResult.params` attribute.
+
+.. autoclass:: MinimizerResult
+
+The list of (possible) attributes follows:
 
 .. attribute::   params
 
@@ -215,6 +215,10 @@ and so on for each parameter, one must use the
 .. attribute:: init_vals
 
   list of initial values for variable parameters using :attr:`var_names`.
+
+.. attribute:: init_vals
+
+    dict of initial values for variable parameters.
 
 .. attribute::  nfev
 
@@ -294,9 +298,9 @@ Goodness-of-Fit Statistics
 +----------------------+----------------------------------------------------------------------------+
 |    ndata             | number of data points:  :math:`N`                                          |
 +----------------------+----------------------------------------------------------------------------+
-|    nfree `           | degrees of freedom in fit:  :math:`N - N_{\rm varys}`                      |
+|    nfree             | degrees of freedom in fit:  :math:`N - N_{\rm varys}`                      |
 +----------------------+----------------------------------------------------------------------------+
-|    residual          | residual array, return value of :func:`func`:  :math:`{\rm Resid}`         |
+|    residual          | residual array, returned by the objective function: :math:`\{\rm Resid_i\}`|
 +----------------------+----------------------------------------------------------------------------+
 |    chisqr            | chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`                    |
 +----------------------+----------------------------------------------------------------------------+
