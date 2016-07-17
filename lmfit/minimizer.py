@@ -386,7 +386,7 @@ class Minimizer(object):
             r = (r*r).sum()
         return r
 
-    def prepare_fit(self, params, method):
+    def prepare_fit(self, params):
         """
         Prepares parameters for fitting,
         return array of initial values
@@ -395,7 +395,6 @@ class Minimizer(object):
         # and which are defined expressions.
         self.result = MinimizerResult()
         result = self.result
-        result.method = method
         if params is not None:
             self.params = params
         if isinstance(self.params, Parameters):
@@ -491,7 +490,8 @@ class Minimizer(object):
         if not HAS_SCALAR_MIN:
             raise NotImplementedError
 
-        result = self.prepare_fit(params=params, method=method)
+        result = self.prepare_fit(params=params)
+        result.method = method
         vars = result.init_vals
         params = result.params
 
@@ -751,7 +751,8 @@ class Minimizer(object):
                 nwalkers = self._lastpos.shape[1]
             tparams = None
 
-        result = self.prepare_fit(params=tparams, method='emcee')
+        result = self.prepare_fit(params=tparams)
+        result.method = 'emcee'
         params = result.params
 
         # check if the userfcn returns a vector of residuals
@@ -931,7 +932,8 @@ class Minimizer(object):
             raise NotImplementedError("Scipy with a version higher than 0.17 "
                                       "is needed for this method.")
 
-        result = self.prepare_fit(params, method='least_squares')
+        result = self.prepare_fit(params)
+        result.method = 'least_squares'
 
         replace_none = lambda x, sign: sign*np.inf if x is None else x
         upper_bounds = [replace_none(i.max, 1) for i in self.params.values()]
@@ -989,7 +991,8 @@ class Minimizer(object):
         success : bool
             True if fit was successful, False if not.
         """
-        result = self.prepare_fit(params=params, method='leastsq')
+        result = self.prepare_fit(params=params)
+        result.method = 'leastsq'
         vars = result.init_vals
         nvars = len(vars)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
