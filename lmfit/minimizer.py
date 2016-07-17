@@ -386,7 +386,7 @@ class Minimizer(object):
             r = (r*r).sum()
         return r
 
-    def prepare_fit(self, params):
+    def prepare_fit(self, params=None):
         """
         Prepares parameters for fitting,
         return array of initial values
