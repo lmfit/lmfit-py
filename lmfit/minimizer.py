@@ -1377,51 +1377,11 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, iter_cb=None, **fit_kws):
     """
-    A general purpose curvefitting function
-    The minimize function takes a objective function to be minimized, a
-    dictionary (lmfit.parameter.Parameters) containing the model parameters,
-    and several optional arguments.
-
-    Parameters
-    ----------
-    fcn : callable
-        objective function that returns the residual (difference between
-        model and data) to be minimized in a least squares sense.  The
-        function must have the signature:
-        `fcn(params, *args, **kws)`
-    params : lmfit.parameter.Parameters object.
-        contains the Parameters for the model.
-    method : str, optional
-        Name of the fitting method to use.
-        One of:
-            'leastsq'                -    Levenberg-Marquardt (default)
-            'nelder'                 -    Nelder-Mead
-            'lbfgsb'                 -    L-BFGS-B
-            'powell'                 -    Powell
-            'cg'                     -    Conjugate-Gradient
-            'newton'                 -    Newton-CG
-            'cobyla'                 -    Cobyla
-            'tnc'                    -    Truncate Newton
-            'trust-ncg'              -    Trust Newton-CGn
-            'dogleg'                 -    Dogleg
-            'slsqp'                  -    Sequential Linear Squares Programming
-            'differential_evolution' -    differential evolution
-
-    args : tuple, optional
-        Positional arguments to pass to fcn.
-    kws : dict, optional
-        keyword arguments to pass to fcn.
-    iter_cb : callable, optional
-        Function to be called at each fit iteration. This function should
-        have the signature `iter_cb(params, iter, resid, *args, **kws)`,
-        where where `params` will have the current parameter values, `iter`
-        the iteration, `resid` the current residual array, and `*args`
-        and `**kws` as passed to the objective function.
-    scale_covar : bool, optional
-        Whether to automatically scale the covariance matrix (leastsq
-        only).
-    fit_kws : dict, optional
-        Options to pass to the minimizer being used.
+    This function performs a fit of a set of parameters by minimizing
+    an objective (or "cost") function using one one of the several
+    available methods. The minimize function takes a objective function
+    to be minimized, a dictionary (:class:`lmfit.parameter.Parameters`)
+    containing the model parameters, and several optional arguments.
 
     Notes
     -----
@@ -1437,6 +1397,79 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     data needed to calculate the residual, including such things as the
     data array, dependent variable, uncertainties in the data, and other
     data structures for the model calculation.
+
+    Parameters
+    ----------
+    fcn : callable
+        objective function to be minimized. When method is `leastsq` or
+        `least_squares`, the objective function need to return an array
+        of residuals (difference between model and data) to be minimized
+        in a least squares sense.  With other scalar methods the objective
+        function need ot return a scalar. The function must have the
+        signature: `fcn(params, *args, **kws)`
+    params : `lmfit.parameter.Parameters` object.
+        contains the Parameters for the model.
+    method : str, optional
+        Name of the fitting method to use.
+        One of:
+
+        - `'leastsq'`: Levenberg-Marquardt (default).
+          Uses `scipy.optimize.leastsq`.
+        - `'least_squares'`: Levenberg-Marquardt.
+          Uses `scipy.optimize.least_squares`.
+        - 'nelder': Nelder-Mead
+        - `'lbfgsb'`: L-BFGS-B
+        - `'powell'`: Powell
+        - `'cg'`: Conjugate-Gradient
+        - `'newton'`: Newton-CG
+        - `'cobyla'`: Cobyla
+        - `'tnc'`: Truncate Newton
+        - `'trust-ncg'`: Trust Newton-CGn
+        - `'dogleg'`: Dogleg
+        - `'slsqp'`: Sequential Linear Squares Programming
+        - `'differential_evolution'`: differential evolution
+
+        For more details on the fitting methods refer to the
+        `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
+
+    args : tuple, optional
+        Positional arguments to pass to `fcn`.
+    kws : dict, optional
+        keyword arguments to pass to `fcn`.
+    iter_cb : callable, optional
+        Function to be called at each fit iteration. This function should
+        have the signature `iter_cb(params, iter, resid, *args, **kws)`,
+        where where `params` will have the current parameter values, `iter`
+        the iteration, `resid` the current residual array, and `*args`
+        and `**kws` as passed to the objective function.
+    scale_covar : bool, optional
+        Whether to automatically scale the covariance matrix (leastsq
+        only).
+    fit_kws : dict, optional
+        Options to pass to the minimizer being used.
+
+    Returns
+    -------
+    MinimizerResult
+        instance, which will contain the optimized parameter
+        and several goodness-of-fit statistics.
+
+
+    .. versionchanged:: 0.9.0
+        return value changed to :class:`MinimizerResult`.
+
+    On output, the params will be unchanged.  The best-fit values, and where
+    appropriate, estimated uncertainties and correlations, will all be
+    contained in the returned :class:`MinimizerResult`.  See
+    :ref:`fit-results-label` for further details.
+
+    This function is simply a wrapper around :class:`Minimizer`
+    and is equivalent to::
+
+        fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
+        	           iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
+        fitter.minimize(method=method)
+
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)

@@ -15,7 +15,9 @@ when using complicated constraints or comparing results from related fits.
 
 
 The :func:`minimize` function
-===============================
+=============================
+
+.. currentmodule:: lmfit.minimizer
 
 The :func:`minimize` function is a wrapper around :class:`Minimizer` for
 running an optimization problem.  It takes an objective function (the
@@ -23,51 +25,7 @@ function that calculates the array to be minimized), a :class:`Parameters`
 object, and several optional arguments.  See :ref:`fit-func-label` for
 details on writing the objective.
 
-.. currentmodule:: minimizer
-
-.. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **fit_kws]]]]]])
-
-   find values for the ``params`` so that the sum-of-squares of the array returned
-   from ``function`` is minimized.
-
-   :param function:  function to return fit residual.  See :ref:`fit-func-label` for details.
-   :type  function:  callable.
-   :param params:  a :class:`Parameters` dictionary.  Keywords must be strings
-		   that match ``[a-z_][a-z0-9_]*`` and cannot be a python
-		   reserved word.  Each value must be :class:`Parameter`.
-   :type  params:  :class:`Parameters`.
-   :param args:  arguments tuple to pass to the residual function as  positional arguments.
-   :type  args:  tuple
-   :param kws:   dictionary to pass to the residual function as keyword arguments.
-   :type  kws:  dict
-   :param method:  name of fitting method to use. See  :ref:`fit-methods-label` for details
-   :type  method:  string (default ``leastsq``)
-   :param scale_covar:  whether to automatically scale covariance matrix (``leastsq`` only)
-   :type  scale_covar:  bool (default ``True``)
-   :param iter_cb:  function to be called at each fit iteration. See :ref:`fit-itercb-label` for details.
-   :type  iter_cb:  callable or ``None``
-   :param fit_kws:  dictionary to pass to :scipydoc:`optimize.leastsq` or :scipydoc:`optimize.minimize`.
-   :type  fit_kws:  dict
-
-   :return: :class:`MinimizerResult` instance, which will contain the
-	    optimized parameter, and several goodness-of-fit statistics.
-
-.. versionchanged:: 0.9.0
-   return value changed to :class:`MinimizerResult`
-
-
-   On output, the params will be unchanged.  The best-fit values, and where
-   appropriate, estimated uncertainties and correlations, will all be
-   contained in the returned :class:`MinimizerResult`.  See
-   :ref:`fit-results-label` for further details.
-
-   For clarity, it should be emphasized that this function is simply a
-   wrapper around :class:`Minimizer` that runs a single fit, implemented as::
-
-    fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
-		       iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
-    return fitter.minimize(method=method)
-
+.. autofunction:: minimize
 
 ..  _fit-func-label:
 
