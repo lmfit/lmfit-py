@@ -1398,7 +1398,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     ----------
     fcn : callable
         objective function to be minimized. When method is `leastsq` or
-        `least_squares`, the objective function need to return an array
+        `least_squares`, the objective function should return an array
         of residuals (difference between model and data) to be minimized
         in a least squares sense.  With other scalar methods the objective
         function need ot return a scalar. The function must have the
