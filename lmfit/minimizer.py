@@ -1394,21 +1394,6 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     to be minimized, a dictionary (:class:`lmfit.parameter.Parameters`)
     containing the model parameters, and several optional arguments.
 
-    Notes
-    -----
-    The objective function should return the value to be minimized. For the
-    Levenberg-Marquardt algorithm from leastsq(), this returned value must
-    be an array, with a length greater than or equal to the number of
-    fitting variables in the model. For the other methods, the return value
-    can either be a scalar or an array. If an array is returned, the sum of
-    squares of the array will be sent to the underlying fitting method,
-    effectively doing a least-squares optimization of the return values.
-
-    A common use for `args` and `kwds` would be to pass in other
-    data needed to calculate the residual, including such things as the
-    data array, dependent variable, uncertainties in the data, and other
-    data structures for the model calculation.
-
     Parameters
     ----------
     fcn : callable
@@ -1467,6 +1452,21 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
 
     .. versionchanged:: 0.9.0
         return value changed to :class:`MinimizerResult`.
+
+    Notes
+    -----
+    The objective function should return the value to be minimized. For the
+    Levenberg-Marquardt algorithm from leastsq(), this returned value must
+    be an array, with a length greater than or equal to the number of
+    fitting variables in the model. For the other methods, the return value
+    can either be a scalar or an array. If an array is returned, the sum of
+    squares of the array will be sent to the underlying fitting method,
+    effectively doing a least-squares optimization of the return values.
+
+    A common use for `args` and `kwds` would be to pass in other
+    data needed to calculate the residual, including such things as the
+    data array, dependent variable, uncertainties in the data, and other
+    data structures for the model calculation.
 
     On output, the params will be unchanged.  The best-fit values, and where
     appropriate, estimated uncertainties and correlations, will all be
