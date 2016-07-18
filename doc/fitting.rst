@@ -458,25 +458,7 @@ For full control of the fitting process, you'll want to create a
 
 The Minimizer object has a few public methods:
 
-.. method:: minimize(method='leastsq', params=None, **kws)
-
-   perform fit using either :meth:`leastsq` or :meth:`scalar_minimize`.
-
-   :param method: name of fitting method.  Must be one of the names in
-		  :ref:`Table of Supported Fitting Methods <fit-methods-table>`
-   :type  method:  str.
-   :param params:  a :class:`Parameters` dictionary for starting values
-   :type  params:  :class:`Parameters` or `None`
-
-   :return: :class:`MinimizerResult` object, containing updated
-	    parameters, fitting statistics, and information.
-
-.. versionchanged:: 0.9.0
-   return value changed to :class:`MinimizerResult`
-
-   Additional keywords are passed on to the correspond :meth:`leastsq`
-   or :meth:`scalar_minimize` method.
-
+.. automethod:: Minimizer.minimize
 
 .. method:: leastsq(params=None, scale_covar=True, **kws)
 

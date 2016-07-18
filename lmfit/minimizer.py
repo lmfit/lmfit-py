@@ -1149,12 +1149,12 @@ class Minimizer(object):
             For more details on the fitting methods please refer to the
             `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
 
-        params : `lmfit.parameter.Parameters` object.
+        params : :class:`lmfit.parameter.Parameters` object.
             Parameters of the model to use as starting values.
 
         **kwargs
-            Additional arguments to be passed to the underlying minimization
-            function.
+            Additional arguments are passed to the underlying minimization
+            method.
 
         Returns
         -------
@@ -1162,6 +1162,9 @@ class Minimizer(object):
             Object containing the optimized parameter
             and several goodness-of-fit statistics.
 
+
+        .. versionchanged:: 0.9.0
+           return value changed to :class:`MinimizerResult`
         """
 
         function = self.leastsq
@@ -1404,7 +1407,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         function can either return the residuals array or a single scalar
         value. The function must have the signature:
         `fcn(params, *args, **kws)`
-    params : `lmfit.parameter.Parameters` object.
+    params : :class:`lmfit.parameter.Parameters` object.
         contains the Parameters for the model.
     method : str, optional
         Name of the fitting method to use. Valid values are:
