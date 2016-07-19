@@ -14,13 +14,13 @@ Overview
 LMfit-py provides a Least-Squares Minimization routine and class with a
 simple, flexible approach to parameterizing a model for fitting to data.
 
-LMFIT is a pure python package, and so easy to install from source or witn
-`pip install lmfit`.
+LMfit is a pure python package, and so easy to install from source or with
+``pip install lmfit``.
 
-For questions, comments, and suggestions, please use the LMFIt mailing
+For questions, comments, and suggestions, please use the LMfit mailing
 list, https://groups.google.com/group/lmfit-py.  Using the bug tracking
-software in Github Issues is encouraged for known problems and bug reports.
-Please read Contributing.md before creating an Issue.
+software in GitHub Issues is encouraged for known problems and bug reports.
+Please read `Contributing.md <.github/CONTRIBUTING.md>`_ before creating an Issue.
 
 
 Parameters and Fitting
@@ -38,14 +38,14 @@ dictionary, containing named parameters::
 
     fit_params = Parameters()
     fit_params['amp'] = Parameter(value=1.2, min=0.1, max=1000)
-    fit_params['cen'] = Parameter(value=40.0, vary=False),
-    fit_params['wid'] = Parameter(value=4, min=0)}
+    fit_params['cen'] = Parameter(value=40.0, vary=False)
+    fit_params['wid'] = Parameter(value=4, min=0)
 
-or using the equivalent:
+or using the equivalent::
 
     fit_params = Parameters()
     fit_params.add('amp', value=1.2, min=0.1, max=1000)
-    fit_params.add('cen', value=40.0, vary=False),
+    fit_params.add('cen', value=40.0, vary=False)
     fit_params.add('wid', value=4, min=0)
 
 The programmer will also write a function to be minimized (in the
@@ -68,7 +68,7 @@ changed if different bounds or constraints are placed on the fitting
 Parameters.  The fitting model (as described in myfunc) is instead written
 in terms of physical parameters of the system, and remains remains
 independent of what is actually varied in the fit.  In addition, which
-parameters are adjuested and which are fixed happens at run-time, so that
+parameters are adjusted and which are fixed happens at run-time, so that
 changing what is varied and what constraints are placed on the parameters
 can easily be modified by the consumer in real-time data analysis.
 
@@ -83,5 +83,5 @@ statistics and information.
 
 By default, the underlying fit algorithm is the Levenberg-Marquart
 algorithm with numerically-calculated derivatives from MINPACK's lmdif
-function, as used by scipy.optimize.leastsq.  Other solvers (Nelder-Mead,
+function, as used by ``scipy.optimize.leastsq``.  Other solvers (Nelder-Mead,
 etc) are also available, though slightly less well-tested and supported.
