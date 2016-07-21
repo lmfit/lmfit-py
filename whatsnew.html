@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.3',
+        VERSION:     '0.9.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -138,23 +138,23 @@ improvement.  Modifying scripts that did work with 0.8.3 to work with 0.9.0
 is easy, but needs to be done.</p>
 <div class="section" id="summary">
 <h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
-<p>The upgrade from 0.8.3 to 0.9.0 introduced the <a class="reference internal" href="fitting.html#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a>
+<p>The upgrade from 0.8.3 to 0.9.0 introduced the <code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code>
 class (see <a class="reference internal" href="fitting.html#fit-results-label"><span>MinimizerResult &#8211; the optimization result</span></a>) which is now used to hold the return
-value from <a class="reference internal" href="fitting.html#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> and <a class="reference internal" href="fitting.html#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a>.  This returned
+value from <code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code> and <code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code>.  This returned
 object contains many goodness of fit statistics, and holds the optimized
 parameters from the fit.  Importantly, the parameters passed into
-<a class="reference internal" href="fitting.html#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> and <a class="reference internal" href="fitting.html#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a> are no longer modified by
+<code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code> and <code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code> are no longer modified by
 the fit. Instead, a copy of the passed-in parameters is made which is
-changed and returns as the <a class="reference internal" href="fitting.html#params" title="params"><code class="xref py py-attr docutils literal"><span class="pre">params</span></code></a> attribute of the returned
-<a class="reference internal" href="fitting.html#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a>.</p>
+changed and returns as the <code class="xref py py-attr docutils literal"><span class="pre">params</span></code> attribute of the returned
+<code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code>.</p>
 </div>
 <div class="section" id="impact">
 <h3>Impact<a class="headerlink" href="#impact" title="Permalink to this headline">¶</a></h3>
 <p>This upgrade means that a script that does:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">my_pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span>    <span class="n">value</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;center&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span>  <span class="mf">5.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span>  <span class="n">value</span><span class="o">=</span>  <span class="mf">1.0</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span>    <span class="n">value</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span>  <span class="mf">5.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span>  <span class="n">value</span><span class="o">=</span>  <span class="mf">1.0</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">my_pars</span><span class="p">)</span>
 </pre></div>
@@ -165,12 +165,12 @@ changed in the fit, and this copy is then put in <code class="docutils literal">
 look at fit results, use <code class="docutils literal"><span class="pre">result.params</span></code>, not <code class="docutils literal"><span class="pre">my_pars</span></code>.</p>
 <p>This has the effect that <code class="docutils literal"><span class="pre">my_pars</span></code> will still hold the starting parameter
 values, while all of the results from the fit are held in the <code class="docutils literal"><span class="pre">result</span></code>
-object returned by <a class="reference internal" href="fitting.html#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a>.</p>
+object returned by <code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code>.</p>
 <p>If you want to do an initial fit, then refine that fit to, for example, do
 a pre-fit, then refine that result different fitting method, such as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">result1</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">my_pars</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;nelder&#39;</span><span class="p">)</span>
-<span class="n">result1</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="bp">True</span>
-<span class="n">result2</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">result1</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&#39;leastsq&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">result1</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">my_pars</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nelder&#39;</span><span class="p">)</span>
+<span class="n">result1</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">result2</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">result1</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;leastsq&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>and have access to all of the starting parameters <code class="docutils literal"><span class="pre">my_pars</span></code>, the result of the
@@ -180,17 +180,17 @@ first fit <code class="docutils literal"><span class="pre">result1</span></code>
 <h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
 <p>The main goal for making this change were to</p>
 <ol class="arabic simple">
-<li>give a better return value to <a class="reference internal" href="fitting.html#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> and
-<a class="reference internal" href="fitting.html#Minimizer.minimize" title="Minimizer.minimize"><code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code></a> that can hold all of the information
+<li>give a better return value to <code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code> and
+<code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code> that can hold all of the information
 about a fit.  By having the return value be an instance of the
-<a class="reference internal" href="fitting.html#MinimizerResult" title="MinimizerResult"><code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code></a> class, it can hold an arbitrary amount of
+<code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code> class, it can hold an arbitrary amount of
 information that is easily accessed by attribute name, and even
 be given methods.  Using objects is good!</li>
 <li>To limit or even eliminate the amount of &#8220;state information&#8221; a
-<a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> holds.  By state information, we mean how much of
+<code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code> holds.  By state information, we mean how much of
 the previous fit is remembered after a fit is done.  Keeping (and
 especially using) such information about a previous fit means that
-a <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> might give different results even for the same
+a <code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code> might give different results even for the same
 problem if run a second time.  While it&#8217;s desirable to be able to
 adjust a set of <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> re-run a fit to get an improved
 result, doing this by changing an internal attribute
@@ -227,7 +227,7 @@ track of changes made while adjusting parameters and re-running fits.</li>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

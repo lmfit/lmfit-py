@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.3',
+        VERSION:     '0.9.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -125,7 +125,7 @@
             
   <div class="section" id="bounds-implementation">
 <span id="bounds-chapter"></span><h1>Bounds Implementation<a class="headerlink" href="#bounds-implementation" title="Permalink to this headline">¶</a></h1>
-<p>This section describes the implementation of <a class="reference internal" href="parameters.html#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> bounds.
+<p>This section describes the implementation of <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> bounds.
 The <a class="reference external" href="http://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> implementation used in <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/optimize.leastsq.html">optimize.leastsq</a> for
 the Levenberg-Marquardt algorithm does not explicitly support bounds on
 parameters, and expects to be able to fully explore the available range of
@@ -142,20 +142,20 @@ parameters <span class="math">\(P_{\rm bounded}\)</span>.   When both <code clas
 are specified, the mapping is</p>
 <div class="math">
 \[\begin{eqnarray*}
-     P_{\rm internal} &=& \arcsin\big(\frac{2 (P_{\rm bounded} - {\rm min})}{({\rm max} - {\rm min})} - 1\big) \\
-     P_{\rm bounded}  &=& {\rm min} + \big(\sin(P_{\rm internal}) + 1\big) \frac{({\rm max} - {\rm min})}{2}
+     P_{\rm internal} &amp;=&amp; \arcsin\big(\frac{2 (P_{\rm bounded} - {\rm min})}{({\rm max} - {\rm min})} - 1\big) \\
+     P_{\rm bounded}  &amp;=&amp; {\rm min} + \big(\sin(P_{\rm internal}) + 1\big) \frac{({\rm max} - {\rm min})}{2}
  \end{eqnarray*}\]</div><p>With only an upper limit <code class="docutils literal"><span class="pre">max</span></code> supplied, but <code class="docutils literal"><span class="pre">min</span></code> left unbounded, the
 mapping is:</p>
 <div class="math">
 \[\begin{eqnarray*}
-     P_{\rm internal} &=& \sqrt{({\rm max} - P_{\rm bounded} + 1)^2 - 1} \\
-     P_{\rm bounded}  &=& {\rm max} + 1 - \sqrt{P_{\rm internal}^2 + 1}
+     P_{\rm internal} &amp;=&amp; \sqrt{({\rm max} - P_{\rm bounded} + 1)^2 - 1} \\
+     P_{\rm bounded}  &amp;=&amp; {\rm max} + 1 - \sqrt{P_{\rm internal}^2 + 1}
  \end{eqnarray*}\]</div><p>With only a lower limit <code class="docutils literal"><span class="pre">min</span></code> supplied, but <code class="docutils literal"><span class="pre">max</span></code> left unbounded, the
 mapping is:</p>
 <div class="math">
 \[\begin{eqnarray*}
-     P_{\rm internal} &=& \sqrt{(P_{\rm bounded} - {\rm min} + 1)^2 - 1} \\
-     P_{\rm bounded}  &=& {\rm min} - 1 + \sqrt{P_{\rm internal}^2 + 1}
+     P_{\rm internal} &amp;=&amp; \sqrt{(P_{\rm bounded} - {\rm min} + 1)^2 - 1} \\
+     P_{\rm bounded}  &amp;=&amp; {\rm min} - 1 + \sqrt{P_{\rm internal}^2 + 1}
 \end{eqnarray*}\]</div><p>With these mappings, the value for the bounded Parameter cannot exceed the
 specified bounds, though the internally varied value can be freely varied.</p>
 <p>It bears repeating that code from <a class="reference external" href="https://github.com/jjhelmus/leastsqbound-scipy">leastsqbound</a> was adopted to implement
@@ -208,7 +208,7 @@ clearly outlandish bounds does not greatly affect performance or results.</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

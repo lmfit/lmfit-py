@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.3',
+        VERSION:     '0.9.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -141,31 +141,35 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The lmfit package requires Python, Numpy, and Scipy.  Scipy version 0.13 or
-higher is recommended, but extensive testing on compatibility with various
-versions of scipy has not been done.  Lmfit works with Python 2.7, 3.3 and
-3.4.  No testing has been done with Python 3.5, but as the package is pure
-Python, relying only on scipy and numpy, no significant troubles are
-expected.  The <a class="reference external" href="http://nose.readthedocs.org/">nose</a> framework is required for running the test suite,
-and IPython and matplotib are recommended.  If Pandas is available, it will
-be used in portions of lmfit.</p>
+<p>The lmfit package requires Python, Numpy, and Scipy.</p>
+<p>Lmfit works with Python 2.7, 3.3, 3.4, and 3.5. Lmfit version 0.9.4 works
+with Python 2.6, but support for it will dropped in version 0.9.5.  Scipy
+version 0.13 or higher is required, with 0.17 or higher recommended to be
+able to use the latest optimization features from scipy.  Support for scipy
+0.13 will be dropped in version 0.9.5.  Numpy version 1.5 or higher is
+required.</p>
+<p>In order to run the test suite, the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> framework is required.  Some
+parts of lmfit will be able to make use of IPython (version 4 or higher),
+matplotlib, and pandas if those libraries are installed, but no core
+functionality of lmfit requires these.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is  available from <a class="reference external" href="http://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+<p>The latest stable version of lmfit is 0.9.4 is available from <a class="reference external" href="http://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>If you have <a class="reference external" href="https://pip.pypa.io/">pip</a>  installed, you can install lmfit with:</p>
+<p>If you have <a class="reference external" href="https://pip.pypa.io/">pip</a> installed, you can install lmfit with:</p>
 <div class="highlight-python"><div class="highlight"><pre>pip install lmfit
 </pre></div>
 </div>
-<p>or, if  you have <a class="reference external" href="http://pypi.python.org/pypi/setuptools">Python Setup Tools</a>  installed, you install lmfit with:</p>
-<div class="highlight-python"><div class="highlight"><pre>easy_install -U lmfit
+<p>or you can download the source kit, unpack it and install with:</p>
+<div class="highlight-python"><div class="highlight"><pre>python setup.py install
 </pre></div>
 </div>
-<p>or, you can download the source kit, unpack it and install with:</p>
-<div class="highlight-python"><div class="highlight"><pre>python setup.py install
+<p>For Anaconda Python, lmfit is not an official packages, but several
+Anaconda channels provide it, allowing installation with (for example):</p>
+<div class="highlight-python"><div class="highlight"><pre>conda install -c newville lmfit
 </pre></div>
 </div>
 </div>
@@ -248,6 +252,40 @@ The LMFIT-py code is distribution under the following license:
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THIS SOFTWARE.
+
+-----------------------------------------
+Some code sections have been taken from the scipy library whose licence is below.
+
+Copyright (c) 2001, 2002 Enthought, Inc.
+All rights reserved.
+
+Copyright (c) 2003-2016 SciPy Developers.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  a. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+  b. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+  c. Neither the name of Enthought nor the names of the SciPy Developers
+     may be used to endorse or promote products derived from this software
+     without specific prior written permission.
+
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
 </pre></div>
 </div>
 </div>
@@ -284,7 +322,7 @@ The LMFIT-py code is distribution under the following license:
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

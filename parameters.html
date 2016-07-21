@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.3',
+        VERSION:     '0.9.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -133,39 +133,39 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="parameter-and-parameters">
-<span id="parameters-chapter"></span><h1><a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>  and <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code><a class="headerlink" href="#parameter-and-parameters" title="Permalink to this headline">¶</a></h1>
-<p>This chapter describes <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects which is the key concept
+  <span class="target" id="module-lmfit.parameter"><span id="parameters-chapter"></span></span><div class="section" id="parameter-and-parameters">
+<h1><a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>  and <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a><a class="headerlink" href="#parameter-and-parameters" title="Permalink to this headline">¶</a></h1>
+<p>This chapter describes <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects which is the key concept
 of lmfit.</p>
-<p>A <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> is the quantity to be optimized in all minimization
+<p>A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> is the quantity to be optimized in all minimization
 problems, replacing the plain floating point number used in the
-optimization routines from <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code>.  A <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
+optimization routines from <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code>.  A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
 a value that can be varied in the fit or have a fixed value, have upper
 and/or lower bounds.  It can even have a value that is constrained by an
-algebraic expression of other Parameter values.  Since <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code>
+algebraic expression of other Parameter values.  Since <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>
 live outside the core optimization routines, they can be used in <strong>all</strong>
 optimization routines from <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code>.  By using
-<a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects instead of plain variables, the objective
+<a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects instead of plain variables, the objective
 function does not have to be modified to reflect every change of what is
 varied in the fit.  This simplifies the writing of models, allowing general
 models that describe the phenomenon to be written, and gives the user more
 flexibility in using and testing variations of that model.</p>
-<p>Whereas a <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> expands on an individual floating point
+<p>Whereas a <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> expands on an individual floating point
 variable, the optimization methods need an ordered group of floating point
 variables.  In the <code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code> routines this is required to be a
-1-dimensional numpy ndarray.  For lmfit, where each <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
-a name, this is replaced by a <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> class, which works as an
-ordered dictionary of <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects, with a few additional
-features and methods.  That is, while the concept of a <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
+1-dimensional numpy ndarray.  For lmfit, where each <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
+a name, this is replaced by a <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> class, which works as an
+ordered dictionary of <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects, with a few additional
+features and methods.  That is, while the concept of a <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 is central to lmfit, one normally creates and interacts with a
-<code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> instance that contains many <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects.
+<a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> instance that contains many <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects.
 The objective functions you write for lmfit will take an instance of
-<code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> as its first argument.</p>
+<a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> as its first argument.</p>
 <div class="section" id="the-parameter-class">
-<h2>The <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> class<a class="headerlink" href="#the-parameter-class" title="Permalink to this headline">¶</a></h2>
+<h2>The <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> class<a class="headerlink" href="#the-parameter-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="Parameter">
-<em class="property">class </em><code class="descname">Parameter</code><span class="sig-paren">(</span><em>name=None</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Parameter" title="Permalink to this definition">¶</a></dt>
+<dt id="lmfit.parameter.Parameter">
+<em class="property">class </em><code class="descname">Parameter</code><span class="sig-paren">(</span><em>name=None</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>create a Parameter object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -187,19 +187,19 @@ The objective functions you write for lmfit will take an instance of
 <p>After a fit, a Parameter for a fitted variable (that is with <code class="docutils literal"><span class="pre">vary</span> <span class="pre">=</span>
 <span class="pre">True</span></code>) may have its <code class="xref py py-attr docutils literal"><span class="pre">value</span></code> attribute to hold the best-fit value.
 Depending on the success of the fit and fitting algorithm used, it may also
-have attributes <a class="reference internal" href="#Parameter.stderr" title="Parameter.stderr"><code class="xref py py-attr docutils literal"><span class="pre">stderr</span></code></a> and <a class="reference internal" href="#Parameter.correl" title="Parameter.correl"><code class="xref py py-attr docutils literal"><span class="pre">correl</span></code></a>.</p>
+have attributes <a class="reference internal" href="#lmfit.parameter.Parameter.stderr" title="lmfit.parameter.Parameter.stderr"><code class="xref py py-attr docutils literal"><span class="pre">stderr</span></code></a> and <a class="reference internal" href="#lmfit.parameter.Parameter.correl" title="lmfit.parameter.Parameter.correl"><code class="xref py py-attr docutils literal"><span class="pre">correl</span></code></a>.</p>
 <dl class="attribute">
-<dt id="Parameter.stderr">
-<code class="descname">stderr</code><a class="headerlink" href="#Parameter.stderr" title="Permalink to this definition">¶</a></dt>
+<dt id="lmfit.parameter.Parameter.stderr">
+<code class="descname">stderr</code><a class="headerlink" href="#lmfit.parameter.Parameter.stderr" title="Permalink to this definition">¶</a></dt>
 <dd><p>the estimated standard error for the best-fit value.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="Parameter.correl">
-<code class="descname">correl</code><a class="headerlink" href="#Parameter.correl" title="Permalink to this definition">¶</a></dt>
+<dt id="lmfit.parameter.Parameter.correl">
+<code class="descname">correl</code><a class="headerlink" href="#lmfit.parameter.Parameter.correl" title="Permalink to this definition">¶</a></dt>
 <dd><p>a dictionary of the correlation with the other fitted variables in the
 fit, of the form:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;decay&#39;</span><span class="p">:</span> <span class="mf">0.404</span><span class="p">,</span> <span class="s">&#39;phase&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.020</span><span class="p">,</span> <span class="s">&#39;frequency&#39;</span><span class="p">:</span> <span class="mf">0.102</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s1">&#39;decay&#39;</span><span class="p">:</span> <span class="mf">0.404</span><span class="p">,</span> <span class="s1">&#39;phase&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.020</span><span class="p">,</span> <span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="mf">0.102</span><span class="p">}</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -211,8 +211,8 @@ be used to compute the value for the Parameter at each step in the fit.
 See <a class="reference internal" href="constraints.html#constraints-chapter"><span>Using Mathematical Constraints</span></a> for more details and examples of this
 feature.</p>
 <span class="target" id="index-0"></span><dl class="method">
-<dt id="Parameter.set">
-<code class="descname">set</code><span class="sig-paren">(</span><em>value=None</em><span class="optional">[</span>, <em>vary=None</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Parameter.set" title="Permalink to this definition">¶</a></dt>
+<dt id="lmfit.parameter.Parameter.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>value=None</em><span class="optional">[</span>, <em>vary=None</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>set or update a Parameters value or other attributes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -232,11 +232,11 @@ feature.</p>
 </table>
 </dd></dl>
 
-<p>Each argument of <a class="reference internal" href="#Parameter.set" title="Parameter.set"><code class="xref py py-meth docutils literal"><span class="pre">set()</span></code></a> has a default value of <code class="docutils literal"><span class="pre">None</span></code>, and will
+<p>Each argument of <a class="reference internal" href="#lmfit.parameter.Parameter.set" title="lmfit.parameter.Parameter.set"><code class="xref py py-meth docutils literal"><span class="pre">set()</span></code></a> has a default value of <code class="docutils literal"><span class="pre">None</span></code>, and will
 be set only if the provided value is not <code class="docutils literal"><span class="pre">None</span></code>.  You can use this to
 update some Parameter attribute without affecting others, for example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">p1</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-<span class="n">p2</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p1</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 <span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">p2</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
@@ -245,31 +245,31 @@ update some Parameter attribute without affecting others, for example:</p>
 <p>Note that to use this approach to lift a lower or upper bound, doing:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="o">.....</span>
-<span class="c"># now lift the lower bound</span>
-<span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>   <span class="c"># won&#39;t work!  lower bound NOT changed</span>
+<span class="c1"># now lift the lower bound</span>
+<span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>   <span class="c1"># won&#39;t work!  lower bound NOT changed</span>
 </pre></div>
 </div>
 <p>won&#8217;t work &#8211; this will not change the current lower bound.  Instead
 you&#8217;ll have to use <code class="docutils literal"><span class="pre">np.inf</span></code> to remove a lower or upper bound:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># now lift the lower bound</span>
-<span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>   <span class="c"># will work!</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c1"># now lift the lower bound</span>
+<span class="n">p1</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>   <span class="c1"># will work!</span>
 </pre></div>
 </div>
 <p>Similarly, to clear an expression of a parameter, you need to pass an
 empty string, not <code class="docutils literal"><span class="pre">None</span></code>.  You also need to give a value and
 explicitly tell it to vary:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">p3</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;(a+b)/2&#39;</span><span class="p">)</span>
-<span class="n">p3</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>     <span class="c"># won&#39;t work!  expression NOT changed</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p3</span> <span class="o">=</span> <span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(a+b)/2&#39;</span><span class="p">)</span>
+<span class="n">p3</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>     <span class="c1"># won&#39;t work!  expression NOT changed</span>
 
-<span class="c"># remove constraint expression</span>
-<span class="n">p3</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">)</span>  <span class="c"># will work!  parameter now unconstrained</span>
+<span class="c1"># remove constraint expression</span>
+<span class="n">p3</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># will work!  parameter now unconstrained</span>
 </pre></div>
 </div>
 </dd></dl>
 
 </div>
 <div class="section" id="the-parameters-class">
-<h2>The <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> class<a class="headerlink" href="#the-parameters-class" title="Permalink to this headline">¶</a></h2>
+<h2>The <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> class<a class="headerlink" href="#the-parameters-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="lmfit.parameter.Parameters">
 <em class="property">class </em><code class="descname">Parameters</code><a class="headerlink" href="#lmfit.parameter.Parameters" title="Permalink to this definition">¶</a></dt>
@@ -279,19 +279,19 @@ dictionary, with the restrictions that:</p>
 <li>keys must be valid Python symbol names, so that they can be used in
 expressions of mathematical constraints.  This means the names must
 match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code>  and cannot be a Python reserved word.</li>
-<li>values must be valid <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects.</li>
+<li>values must be valid <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects.</li>
 </ol>
 <p>Two methods are provided for convenient initialization of a <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>,
-and one for extracting <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> values into a plain dictionary.</p>
+and one for extracting <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> values into a plain dictionary.</p>
 <blockquote>
 <div><dl class="method">
 <dt id="lmfit.parameter.Parameters.add">
 <code class="descname">add</code><span class="sig-paren">(</span><em>name</em><span class="optional">[</span>, <em>value=None</em><span class="optional">[</span>, <em>vary=True</em><span class="optional">[</span>, <em>min=None</em><span class="optional">[</span>, <em>max=None</em><span class="optional">[</span>, <em>expr=None</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>add a named parameter.  This creates a <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
+<dd><p>add a named parameter.  This creates a <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 object associated with the key <cite>name</cite>, with optional arguments
-passed to <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>:</p>
+passed to <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">p</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;myvar&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;myvar&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -308,13 +308,13 @@ with the following entries:</p>
 be useful when initially defining a parameter list so that it looks
 table-like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">p</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="c">#           (Name,  Value,  Vary,   Min,  Max,  Expr)</span>
-<span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s">&#39;amp1&#39;</span><span class="p">,</span>    <span class="mi">10</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
-           <span class="p">(</span><span class="s">&#39;cen1&#39;</span><span class="p">,</span>   <span class="mf">1.2</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">2.0</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
-           <span class="p">(</span><span class="s">&#39;wid1&#39;</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
-           <span class="p">(</span><span class="s">&#39;amp2&#39;</span><span class="p">,</span>   <span class="mf">7.5</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
-           <span class="p">(</span><span class="s">&#39;cen2&#39;</span><span class="p">,</span>   <span class="mf">1.9</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
-           <span class="p">(</span><span class="s">&#39;wid2&#39;</span><span class="p">,</span>  <span class="bp">None</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&#39;2*wid1/3&#39;</span><span class="p">))</span>
+<span class="c1">#           (Name,  Value,  Vary,   Min,  Max,  Expr)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s1">&#39;amp1&#39;</span><span class="p">,</span>    <span class="mi">10</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;cen1&#39;</span><span class="p">,</span>   <span class="mf">1.2</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span>  <span class="mf">2.0</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;wid1&#39;</span><span class="p">,</span>   <span class="mf">0.8</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">0.1</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;amp2&#39;</span><span class="p">,</span>   <span class="mf">7.5</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;cen2&#39;</span><span class="p">,</span>   <span class="mf">1.9</span><span class="p">,</span>  <span class="bp">True</span><span class="p">,</span>  <span class="mf">1.0</span><span class="p">,</span>  <span class="mf">3.0</span><span class="p">,</span>  <span class="bp">None</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;wid2&#39;</span><span class="p">,</span>  <span class="bp">None</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s1">&#39;2*wid1/3&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -331,10 +331,10 @@ table-like:</p>
 <li><strong>oneline</strong> (<em>boolean</em>) &#8211; If True prints a one-line parameters representation. Default False.</li>
 <li><strong>colwidth</strong> (<em>int</em>) &#8211; column width for all except the first (i.e. name) column.</li>
 <li><strong>columns</strong> (<em>list of strings</em>) &#8211; list of columns names to print. All values must be valid
-<a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> attributes.</li>
-<li><strong>precision</strong> (<em>int</em>) &#8211; number of digits to be printed after floating point.</li>
-<li><strong>format</strong> (<em>string</em>) &#8211; single-char numeric formatter. Valid values: &#8216;f&#8217; floating point,
+<a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> attributes.</li>
+<li><strong>fmt</strong> (<em>string</em>) &#8211; single-char numeric formatter. Valid values: &#8216;f&#8217; floating point,
 &#8216;g&#8217; floating point and exponential, &#8216;e&#8217; exponential.</li>
+<li><strong>precision</strong> (<em>int</em>) &#8211; number of digits to be printed after floating point.</li>
 </ul>
 </td>
 </tr>
@@ -348,7 +348,7 @@ table-like:</p>
 <dd><p>return an ordered dictionary of name:value pairs with the
 Paramater name as the key and Parameter value as value.</p>
 <p>This is distinct from the <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> itself, as the dictionary
-values are not <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects, just the <code class="xref py py-attr docutils literal"><span class="pre">value</span></code>.
+values are not <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects, just the <code class="xref py py-attr docutils literal"><span class="pre">value</span></code>.
 Using <a class="reference internal" href="#lmfit.parameter.Parameters.valuesdict" title="lmfit.parameter.Parameters.valuesdict"><code class="xref py py-meth docutils literal"><span class="pre">valuesdict()</span></code></a> can be a very convenient way to get updated
 values in a objective function.</p>
 </dd></dl>
@@ -356,7 +356,7 @@ values in a objective function.</p>
 <dl class="method">
 <dt id="lmfit.parameter.Parameters.dumps">
 <code class="descname">dumps</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.dumps" title="Permalink to this definition">¶</a></dt>
-<dd><p>return a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object.
+<dd><p>return a JSON string representation of the <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object.
 This can be saved or used to re-create or re-set parameters, using the
 <a class="reference internal" href="#lmfit.parameter.Parameters.loads" title="lmfit.parameter.Parameters.loads"><code class="xref py py-meth docutils literal"><span class="pre">loads()</span></code></a> method.</p>
 <p>Optional keywords are sent <code class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></code>.</p>
@@ -365,7 +365,7 @@ This can be saved or used to re-create or re-set parameters, using the
 <dl class="method">
 <dt id="lmfit.parameter.Parameters.dump">
 <code class="descname">dump</code><span class="sig-paren">(</span><em>file</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.dump" title="Permalink to this definition">¶</a></dt>
-<dd><p>write a JSON representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object to a file
+<dd><p>write a JSON representation of the <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object to a file
 or file-like object in <cite>file</cite> &#8211; really any object with a <code class="xref py py-meth docutils literal"><span class="pre">write()</span></code>
 method.  Optional keywords are sent <code class="xref py py-func docutils literal"><span class="pre">json.dumps()</span></code>.</p>
 </dd></dl>
@@ -373,7 +373,7 @@ method.  Optional keywords are sent <code class="xref py py-func docutils litera
 <dl class="method">
 <dt id="lmfit.parameter.Parameters.loads">
 <code class="descname">loads</code><span class="sig-paren">(</span><em>sval</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.loads" title="Permalink to this definition">¶</a></dt>
-<dd><p>use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object in
+<dd><p>use a JSON string representation of the <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object in
 <cite>sval</cite> to set all parameter settings. Optional keywords are sent
 <code class="xref py py-func docutils literal"><span class="pre">json.loads()</span></code>.</p>
 </dd></dl>
@@ -381,7 +381,7 @@ method.  Optional keywords are sent <code class="xref py py-func docutils litera
 <dl class="method">
 <dt id="lmfit.parameter.Parameters.load">
 <code class="descname">load</code><span class="sig-paren">(</span><em>file</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>read and use a JSON string representation of the <a class="reference internal" href="#Parameter" title="Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
+<dd><p>read and use a JSON string representation of the <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 object from a file or file-like object in <cite>file</cite> &#8211; really any object
 with a <code class="xref py py-meth docutils literal"><span class="pre">read()</span></code> method.  Optional keywords are sent
 <code class="xref py py-func docutils literal"><span class="pre">json.loads()</span></code>.</p>
@@ -393,56 +393,58 @@ with a <code class="xref py py-meth docutils literal"><span class="pre">read()</
 </div>
 <div class="section" id="simple-example">
 <h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
-<p>Using <code class="xref py py-class docutils literal"><span class="pre">Parameters`</span></code> and <a class="reference internal" href="fitting.html#minimize" title="minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> function (discussed in the
+<p>Using <code class="xref py py-class docutils literal"><span class="pre">Parameters`</span></code> and <code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code> function (discussed in the
 next chapter) might look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
-<span class="c">#&lt;examples/doc_basic.py&gt;</span>
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">report_fit</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#&lt;examples/doc_basic.py&gt;</span>
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">report_fit</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
-<span class="c"># create data to be fitted</span>
+<span class="c1"># create data to be fitted</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">301</span><span class="p">)</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="mf">5.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">x</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="mf">0.025</span><span class="p">)</span> <span class="o">+</span>
         <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span> <span class="p">)</span>
 
-<span class="c"># define objective function: returns the array to be minimized</span>
+<span class="c1"># define objective function: returns the array to be minimized</span>
 <span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; model decaying sine wave, subtract data&quot;&quot;&quot;</span>
-    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-    <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-    <span class="n">omega</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;omega&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-    <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
-
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span>
     <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">omega</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">model</span> <span class="o">-</span> <span class="n">data</span>
 
-<span class="c"># create a set of Parameters</span>
+<span class="c1"># create a set of Parameters</span>
 <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp&#39;</span><span class="p">,</span>   <span class="n">value</span><span class="o">=</span> <span class="mi">10</span><span class="p">,</span>  <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;omega&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">3.0</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span>   <span class="n">value</span><span class="o">=</span> <span class="mi">10</span><span class="p">,</span>  <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span> <span class="mf">3.0</span><span class="p">)</span>
 
 
-<span class="c"># do fit, here with leastsq model</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">fcn2min</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+<span class="c1"># do fit, here with leastsq model</span>
+<span class="n">minner</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">fcn2min</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">fcn_args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+<span class="n">kws</span>  <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;options&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;maxiter&#39;</span><span class="p">:</span><span class="mi">10</span><span class="p">}}</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">minner</span><span class="o">.</span><span class="n">minimize</span><span class="p">()</span>
 
-<span class="c"># calculate final result</span>
+
+<span class="c1"># calculate final result</span>
 <span class="n">final</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">residual</span>
 
-<span class="c"># write error report</span>
-<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+<span class="c1"># write error report</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
 
-<span class="c"># try to plot results</span>
+<span class="c1"># try to plot results</span>
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pylab</span>
-    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s">&#39;k+&#39;</span><span class="p">)</span>
-    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">final</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;k+&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">final</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
     <span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="k">pass</span>
 
-<span class="c">#&lt;end of examples/doc_basic.py&gt;</span>
+<span class="c1">#&lt;end of examples/doc_basic.py&gt;</span>
 </pre></div>
 </div>
 <p>Here, the objective function explicitly unpacks each Parameter value.  This
@@ -452,7 +454,7 @@ which would make the objective function <code class="docutils literal"><span cla
     <span class="sd">&quot;&quot;&quot; model decaying sine wave, subtract data&quot;&quot;&quot;</span>
     <span class="n">v</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;amp&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;omega&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="s">&#39;shift&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="s">&#39;decay&#39;</span><span class="p">])</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">model</span> <span class="o">-</span> <span class="n">data</span>
 </pre></div>
 </div>
@@ -491,7 +493,7 @@ which would make the objective function <code class="docutils literal"><span cla
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

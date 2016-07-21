@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.3',
+        VERSION:     '0.9.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -158,8 +158,8 @@ expression of the other parameters and a set of pre-defined operators and
 functions.   The constraint expressions are simple Python statements,
 allowing one to place constraints like:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frac_curve1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;frac_curve2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;1-frac_curve1&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;frac_curve1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;frac_curve2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;1-frac_curve1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>as the value of the <cite>frac_curve1</cite> parameter is updated at each step in the
@@ -192,20 +192,20 @@ are  several supported mathematical and trigonometric function:</p>
 <p>In addition, all Parameter names will be available in the mathematical
 expressions.  Thus, with parameters for a few peak-like functions:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;cen_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.2</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;wid_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;cen_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">2.2</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;wid_1&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The following expression are all valid:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;amp_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;(2.0 - amp_1**2)&#39;</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;cen_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;cen_1 * wid_2 / max(wid_1, 0.001)&#39;</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;wid_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;sqrt(pi)*wid_1&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;(2.0 - amp_1**2)&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;cen_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;cen_1 * wid_2 / max(wid_1, 0.001)&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;wid_2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;sqrt(pi)*wid_1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In fact, almost any valid Python expression is allowed.  A notable example
 is that Python&#8217;s 1-line <em>if expression</em> is supported:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;bounded&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s">&#39;param_a if test_val/2. &gt; 100 else param_b&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;bounded&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;param_a if test_val/2. &gt; 100 else param_b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>which is equivalent to the more familiar:</p>
@@ -227,9 +227,9 @@ freely varying parameter <cite>x</cite>.  Next, define a parameter
 <cite>delta</cite> to be variable with a maximum value of 10, and
 define parameter <cite>y</cite> as <cite>delta - x</cite>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;x&#39;</span><span class="p">,</span>     <span class="n">value</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;delta&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s">&#39;y&#39;</span><span class="p">,</span>     <span class="n">expr</span><span class="o">=</span><span class="s">&#39;delta-x&#39;</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span>     <span class="n">value</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span>     <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;delta-x&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The essential point is that an inequality still implies
@@ -258,16 +258,16 @@ which helps make the <a class="reference external" href="http://newville.github.
 <p>One important feature of the <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module is that you can add
 domain-specific functions into the it, for later use in constraint
 expressions.  To do this, you would use the <code class="xref py py-attr docutils literal"><span class="pre">asteval</span></code> attribute of
-the <a class="reference internal" href="fitting.html#module-Minimizer" title="Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> class, which contains a complete AST interpreter.
+the <code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code> class, which contains a complete AST interpreter.
 The <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> interpreter uses a flat namespace, implemented as a single
 dictionary. That means you can preload any Python symbol into the namespace
 for the constraints:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">mylorentzian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
-    <span class="s">&quot;lorentzian function: wid = half-width at half-max&quot;</span>
+    <span class="s2">&quot;lorentzian function: wid = half-width at half-max&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">amp</span>  <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">((</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">/</span><span class="n">wid</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
 
 <span class="n">fitter</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">()</span>
-<span class="n">fitter</span><span class="o">.</span><span class="n">asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s">&#39;lorentzian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mylorentzian</span>
+<span class="n">fitter</span><span class="o">.</span><span class="n">asteval</span><span class="o">.</span><span class="n">symtable</span><span class="p">[</span><span class="s1">&#39;lorentzian&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mylorentzian</span>
 </pre></div>
 </div>
 <p>and this <code class="xref py py-meth docutils literal"><span class="pre">lorentzian()</span></code> function can now be used in constraint
@@ -303,7 +303,7 @@ expressions.</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>
