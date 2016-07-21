@@ -4,7 +4,7 @@
 Modeling Data and Curve Fitting
 =================================================
 
-.. module:: model
+.. module:: lmfit.model
 
 A common use of least-squares minimization is *curve fitting*, where one
 has a parametrized model function meant to explain some phenomena and wants
@@ -54,11 +54,11 @@ arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`optimize.curve_
     >>> from scipy.optimize import curve_fit
     >>>
     >>> x = linspace(-10,10)
-    >>> y = gaussian(x, 2.33, 0.21, 1.51) + np.random.normal(0, 0.2, len(x))
+    >>> y = y = gaussian(x, 2.33, 0.21, 1.51) + np.random.normal(0, 0.2, len(x))
     >>>
     >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
-    >>> print(best_vals)
+    >>> print best_vals
 
 
 We sample random data point, make an initial guess of the model
@@ -146,21 +146,21 @@ a :class:`ModelResult` object.  As we will see below, this has many
 components, including a :meth:`fit_report` method, which will show::
 
     [[Model]]
-        gaussian
+	gaussian
     [[Fit Statistics]]
-        # function evals   = 33
-        # data points      = 101
-        # variables        = 3
-        chi-square         = 3.409
-        reduced chi-square = 0.035
-        Akaike info crit   = -333.218
-        Bayesian info crit = -325.373
+	# function evals   = 33
+	# data points      = 101
+	# variables        = 3
+	chi-square         = 3.409
+	reduced chi-square = 0.035
+	Akaike info crit   = -336.264
+	Bayesian info crit = -328.418
     [[Variables]]
-        amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
-        cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
-        wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
+	amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
+	cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
+	wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(amp, wid)                  =  0.577
+	C(amp, wid)                  =  0.577
 
 The result will also have :attr:`init_fit` for the fit with the initial
 parameter values and a :attr:`best_fit` for the fit with the best fit
@@ -348,9 +348,9 @@ specifying one or more independent variables.
     * ``None``: Do not check for null or missing values (default)
     * ``'none'``: Do not check for null or missing values.
     * ``'drop'``: Drop null or missing observations in data.  If pandas is
-                installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
+		installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
     * ``'raise'``: Raise a (more helpful) exception when data contains null
-                  or missing values.
+		  or missing values.
 
 .. attribute:: name
 
@@ -412,10 +412,10 @@ function is fairly easy. Let's try another::
     ...    return N*np.exp(-t/tau)
     ...
     >>> decay_model = Model(decay)
-    >>> print(decay_model.independent_vars)
+    >>> print decay_model.independent_vars
     ['t']
     >>> for pname, par in decay_model.params.items():
-    ...     print(pname, par)
+    ...     print pname, par
     ...
     tau <Parameter 'tau', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
@@ -428,10 +428,10 @@ If you want ``tau`` to be the independent variable in the above example,
 you can say so::
 
     >>> decay_model = Model(decay, independent_vars=['tau'])
-    >>> print(decay_model.independent_vars)
+    >>> print decay_model.independent_vars
     ['tau']
     >>> for pname, par in decay_model.params.items():
-    ...     print(pname, par)
+    ...     print pname, par
     ...
     t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
@@ -468,7 +468,7 @@ Parameters if the supplied default value was a valid number (but not
     ...
     >>> mod = Model(decay2)
     >>> for pname, par in mod.params.items():
-    ...     print(pname, par)
+    ...     print pname, par
     ...
     t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', 10, bounds=[None:None]>
@@ -499,7 +499,7 @@ the same name.  To avoid this, we can add a ``prefix`` to the
 
     >>> mod = Model(myfunc, prefix='f1_')
     >>> for pname, par in mod.params.items():
-    ...     print(pname, par)
+    ...     print pname, par
     ...
     f1_amplitude <Parameter 'f1_amplitude', None, bounds=[None:None]>
     f1_center <Parameter 'f1_center', None, bounds=[None:None]>
@@ -612,7 +612,7 @@ as with::
 Parameter hints are stored in a model's :attr:`param_hints` attribute,
 which is simply a nested dictionary::
 
-    >>> print(mod.param_hints)
+    >>> print mod.param_hints
     {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}}
 
 
@@ -976,11 +976,11 @@ to model a peak with a background. For such a simple problem, we could just
 build a model that included both components::
 
     def gaussian_plus_line(x, amp, cen, wid, slope, intercept):
-        "line + 1-d gaussian"
+	"line + 1-d gaussian"
 
-        gauss = (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
-        line = slope * x + intercept
-        return gauss + line
+	gauss = (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
+	line = slope * x + intercept
+	return gauss + line
 
 and use that with::
 
@@ -992,8 +992,8 @@ model function would have to be changed.  As an alternative we could define
 a linear function::
 
     def line(x, slope, intercept):
-        "a line"
-        return slope * x + intercept
+	"a line"
+	return slope * x + intercept
 
 and build a composite model with just::
 
@@ -1006,24 +1006,24 @@ This model has parameters for both component models, and can be used as:
 which prints out the results::
 
     [[Model]]
-        (Model(gaussian) + Model(line))
+	(Model(gaussian) + Model(line))
     [[Fit Statistics]]
-        # function evals   = 44
-        # data points      = 101
-        # variables        = 5
-        chi-square         = 2.579
-        reduced chi-square = 0.027
-        Akaike info crit   = -355.329
-        Bayesian info crit = -342.253
+	# function evals   = 44
+	# data points      = 101
+	# variables        = 5
+	chi-square         = 2.579
+	reduced chi-square = 0.027
+	Akaike info crit   = -360.457
+	Bayesian info crit = -347.381
     [[Variables]]
-        amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
-        cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
-        intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
-        slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
-        wid:         0.67545523 +/- 0.009916 (1.47%) (init= 1)
+	amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
+	cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
+	intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
+	slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
+	wid:         0.67545523 +/- 0.009916 (1.47%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(amp, wid)                  =  0.666
-        C(cen, intercept)            =  0.129
+	C(amp, wid)                  =  0.666
+	C(cen, intercept)            =  0.129
 
 
 and shows the plot on the left.
@@ -1100,13 +1100,13 @@ convolution function, perhaps as::
 
     import numpy as np
     def convolve(dat, kernel):
-        # simple convolution
-        npts = min(len(dat), len(kernel))
-        pad  = np.ones(npts)
-        tmp  = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
-        out  = np.convolve(tmp, kernel, mode='valid')
-        noff = int((len(out) - npts)/2)
-        return (out[noff:])[:npts]
+	# simple convolution
+	npts = min(len(dat), len(kernel))
+	pad  = np.ones(npts)
+	tmp  = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
+	out  = np.convolve(tmp, kernel, mode='valid')
+	noff = int((len(out) - npts)/2)
+	return (out[noff:])[:npts]
 
 which extends the data in both directions so that the convolving kernel
 function gives a valid result over the data range.  Because this function
@@ -1118,23 +1118,24 @@ binary operator.  A full script using this technique is here:
 which prints out the results::
 
     [[Model]]
-        (Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
+	(Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
     [[Fit Statistics]]
-        # function evals   = 23
-        # data points      = 201
-        # variables        = 3
-        chi-square         = 25.789
-        reduced chi-square = 0.130
-        Akaike info crit   = -403.702
-        Bayesian info crit = -393.793
+	# function evals   = 27
+	# data points      = 201
+	# variables        = 3
+	chi-square         = 22.091
+	reduced chi-square = 0.112
+	Akaike info crit   = -437.837
+	Bayesian info crit = -427.927
     [[Variables]]
-        mid:         5 (fixed)
-        amplitude:   0.62249894 +/- 0.001946 (0.31%) (init= 1)
-        sigma:       0.61438887 +/- 0.014057 (2.29%) (init= 1.5)
-        center:      4.51710256 +/- 0.010152 (0.22%) (init= 3.5)
+	mid:         5 (fixed)
+	sigma:       0.64118585 +/- 0.013233 (2.06%) (init= 1.5)
+	center:      4.51633608 +/- 0.009567 (0.21%) (init= 3.5)
+	amplitude:   0.62654849 +/- 0.001813 (0.29%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(amplitude, center)         =  0.335
-        C(amplitude, sigma)          =  0.273
+	C(center, amplitude)         =  0.344
+	C(sigma, amplitude)          =  0.280
+
 
 and shows the plots:
 
