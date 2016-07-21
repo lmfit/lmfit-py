@@ -3,7 +3,7 @@
 Calculation of confidence intervals
 ====================================
 
-.. module:: confidence
+.. module:: lmfit.confidence
 
 The lmfit :mod:`confidence` module allows you to explicitly calculate
 confidence intervals for variable parameters.  For most models, it is not
@@ -63,17 +63,17 @@ starting point::
     >>> result = mini.minimize()
     >>> print(lmfit.fit_report(result.params))
     [Variables]]
-        a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
-        b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
+	a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
+	b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(a, b)                      =  0.601
+	C(a, b)                      =  0.601
 
 Now it is just a simple function call to calculate the confidence
 intervals::
 
     >>> ci = lmfit.conf_interval(mini, result)
     >>> lmfit.printfuncs.report_ci(ci)
-         99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%
+	 99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%
     a   0.09886   0.09905   0.09925   0.09944   0.09963   0.09982   0.10003
     b   1.94751   1.96049   1.97274   1.97741   1.99680   2.00905   2.02203
 
@@ -103,16 +103,16 @@ uncertainties and correlations
 which will report::
 
     [[Variables]]
-        a1:   2.98622120 +/- 0.148671 (4.98%) (init= 2.986237)
-        a2:  -4.33526327 +/- 0.115275 (2.66%) (init=-4.335256)
-        t1:   1.30994233 +/- 0.131211 (10.02%) (init= 1.309932)
-        t2:   11.8240350 +/- 0.463164 (3.92%) (init= 11.82408)
+	a1:   2.98622120 +/- 0.148671 (4.98%) (init= 2.986237)
+	a2:  -4.33526327 +/- 0.115275 (2.66%) (init=-4.335256)
+	t1:   1.30994233 +/- 0.131211 (10.02%) (init= 1.309932)
+	t2:   11.8240350 +/- 0.463164 (3.92%) (init= 11.82408)
     [[Correlations]] (unreported correlations are <  0.500)
-        C(a2, t2)                    =  0.987
-        C(a2, t1)                    = -0.925
-        C(t1, t2)                    = -0.881
-        C(a1, t1)                    = -0.599
-          95.00%    68.00%     0.00%    68.00%    95.00%
+	C(a2, t2)                    =  0.987
+	C(a2, t1)                    = -0.925
+	C(t1, t2)                    = -0.881
+	C(a1, t1)                    = -0.599
+	  95.00%    68.00%     0.00%    68.00%    95.00%
     a1   2.71850   2.84525   2.98622   3.14874   3.34076
     a2  -4.63180  -4.46663  -4.33526  -4.22883  -4.14178
     t2  10.82699  11.33865  11.82404  12.28195  12.71094

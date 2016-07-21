@@ -4,7 +4,7 @@
 Built-in Fitting Models in the :mod:`models` module
 =====================================================
 
-.. module:: models
+.. module:: lmfit.models
 
 Lmfit provides several builtin fitting models in the :mod:`models` module.
 These pre-defined models each subclass from the :class:`model.Model` class of the

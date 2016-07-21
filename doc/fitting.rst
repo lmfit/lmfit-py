@@ -1,5 +1,7 @@
 .. _minimize_chapter:
 
+.. module:: lmfit.minimizer
+
 =======================================
 Performing Fits, Analyzing Outputs
 =======================================
@@ -23,7 +25,6 @@ function that calculates the array to be minimized), a :class:`Parameters`
 object, and several optional arguments.  See :ref:`fit-func-label` for
 details on writing the objective.
 
-.. currentmodule:: minimizer
 
 .. function:: minimize(function, params[, args=None[, kws=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **fit_kws]]]]]])
 
@@ -862,7 +863,7 @@ You can see that we recovered the right uncertainty level on the data.::
 Getting and Printing Fit Reports
 ===========================================
 
-.. currentmodule:: printfuncs
+.. currentmodule:: lmfit.printfuncs
 
 .. function:: fit_report(result, modelpars=None, show_correl=True, min_correl=0.1)
 
