@@ -146,12 +146,13 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
 
 
 class MinimizerResult(object):
-    """ The result of a minimization.
+    """
+    The result of a minimization.
 
     Attributes
     ----------
-    params : Parameters
-        The best-fit parameters
+    params : lmfit.parameters.Parameters
+        The best-fit parameters resulting from the fit.
     success : bool
         Whether the minimization was successful
     status : int
@@ -431,6 +432,8 @@ class Minimizer(object):
             if par.name is None:
                 par.name = name
         result.nvarys = len(result.var_names)
+        result.init_values = dict([(n, v) for n, v in zip(result.var_names,
+                                                          result.init_vals)])
         return result
 
     def unprepare_fit(self):
@@ -489,6 +492,7 @@ class Minimizer(object):
             raise NotImplementedError
 
         result = self.prepare_fit(params=params)
+        result.method = method
         vars = result.init_vals
         params = result.params
 
@@ -749,6 +753,7 @@ class Minimizer(object):
             tparams = None
 
         result = self.prepare_fit(params=tparams)
+        result.method = 'emcee'
         params = result.params
 
         # check if the userfcn returns a vector of residuals
@@ -929,6 +934,7 @@ class Minimizer(object):
                                       "is needed for this method.")
 
         result = self.prepare_fit(params)
+        result.method = 'least_squares'
 
         replace_none = lambda x, sign: sign*np.inf if x is None else x
         upper_bounds = [replace_none(i.max, 1) for i in self.params.values()]
@@ -987,6 +993,7 @@ class Minimizer(object):
             True if fit was successful, False if not.
         """
         result = self.prepare_fit(params=params)
+        result.method = 'leastsq'
         vars = result.init_vals
         nvars = len(vars)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
@@ -1121,30 +1128,43 @@ class Minimizer(object):
         Parameters
         ----------
         method : str, optional
-            Name of the fitting method to use.
-            One of:
-            'leastsq'                -    Levenberg-Marquardt (default)
-            'nelder'                 -    Nelder-Mead
-            'lbfgsb'                 -    L-BFGS-B
-            'powell'                 -    Powell
-            'cg'                     -    Conjugate-Gradient
-            'newton'                 -    Newton-CG
-            'cobyla'                 -    Cobyla
-            'tnc'                    -    Truncate Newton
-            'trust-ncg'              -    Trust Newton-CGn
-            'dogleg'                 -    Dogleg
-            'slsqp'                  -    Sequential Linear Squares Programming
-            'differential_evolution' -    differential evolution
+            Name of the fitting method to use. Valid values are:
 
-        params : Parameters, optional
-            parameters to use as starting values
+            - `'leastsq'`: Levenberg-Marquardt (default).
+              Uses `scipy.optimize.leastsq`.
+            - `'least_squares'`: Levenberg-Marquardt.
+              Uses `scipy.optimize.least_squares`.
+            - 'nelder': Nelder-Mead
+            - `'lbfgsb'`: L-BFGS-B
+            - `'powell'`: Powell
+            - `'cg'`: Conjugate-Gradient
+            - `'newton'`: Newton-CG
+            - `'cobyla'`: Cobyla
+            - `'tnc'`: Truncate Newton
+            - `'trust-ncg'`: Trust Newton-CGn
+            - `'dogleg'`: Dogleg
+            - `'slsqp'`: Sequential Linear Squares Programming
+            - `'differential_evolution'`: differential evolution
+
+            For more details on the fitting methods please refer to the
+            `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
+
+        params : :class:`lmfit.parameter.Parameters` object.
+            Parameters of the model to use as starting values.
+
+        **kwargs
+            Additional arguments are passed to the underlying minimization
+            method.
 
         Returns
         -------
-        result : MinimizerResult
+        MinimizerResult
+            Object containing the optimized parameter
+            and several goodness-of-fit statistics.
 
-            MinimizerResult object contains updated params, fit statistics, etc.
 
+        .. versionchanged:: 0.9.0
+           return value changed to :class:`MinimizerResult`
         """
 
         function = self.leastsq
@@ -1152,8 +1172,10 @@ class Minimizer(object):
         kwargs.update(kws)
 
         user_method = method.lower()
-        if user_method.startswith('least'):
+        if user_method.startswith('leasts'):
             function = self.leastsq
+        elif user_method.startswith('least_s'):
+            function = self.least_squares
         elif HAS_SCALAR_MIN:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -1369,40 +1391,50 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, iter_cb=None, **fit_kws):
     """
-    A general purpose curvefitting function
-    The minimize function takes a objective function to be minimized, a
-    dictionary (lmfit.parameter.Parameters) containing the model parameters,
-    and several optional arguments.
+    This function performs a fit of a set of parameters by minimizing
+    an objective (or "cost") function using one one of the several
+    available methods. The minimize function takes a objective function
+    to be minimized, a dictionary (:class:`lmfit.parameter.Parameters`)
+    containing the model parameters, and several optional arguments.
 
     Parameters
     ----------
     fcn : callable
-        objective function that returns the residual (difference between
-        model and data) to be minimized in a least squares sense.  The
-        function must have the signature:
+        objective function to be minimized. When method is `leastsq` or
+        `least_squares`, the objective function should return an array
+        of residuals (difference between model and data) to be minimized
+        in a least squares sense. With the scalar methods the objective
+        function can either return the residuals array or a single scalar
+        value. The function must have the signature:
         `fcn(params, *args, **kws)`
-    params : lmfit.parameter.Parameters object.
+    params : :class:`lmfit.parameter.Parameters` object.
         contains the Parameters for the model.
     method : str, optional
-        Name of the fitting method to use.
-        One of:
-            'leastsq'                -    Levenberg-Marquardt (default)
-            'nelder'                 -    Nelder-Mead
-            'lbfgsb'                 -    L-BFGS-B
-            'powell'                 -    Powell
-            'cg'                     -    Conjugate-Gradient
-            'newton'                 -    Newton-CG
-            'cobyla'                 -    Cobyla
-            'tnc'                    -    Truncate Newton
-            'trust-ncg'              -    Trust Newton-CGn
-            'dogleg'                 -    Dogleg
-            'slsqp'                  -    Sequential Linear Squares Programming
-            'differential_evolution' -    differential evolution
+        Name of the fitting method to use. Valid values are:
+
+        - `'leastsq'`: Levenberg-Marquardt (default).
+          Uses `scipy.optimize.leastsq`.
+        - `'least_squares'`: Levenberg-Marquardt.
+          Uses `scipy.optimize.least_squares`.
+        - 'nelder': Nelder-Mead
+        - `'lbfgsb'`: L-BFGS-B
+        - `'powell'`: Powell
+        - `'cg'`: Conjugate-Gradient
+        - `'newton'`: Newton-CG
+        - `'cobyla'`: Cobyla
+        - `'tnc'`: Truncate Newton
+        - `'trust-ncg'`: Trust Newton-CGn
+        - `'dogleg'`: Dogleg
+        - `'slsqp'`: Sequential Linear Squares Programming
+        - `'differential_evolution'`: differential evolution
+
+        For more details on the fitting methods please refer to the
+        `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
 
     args : tuple, optional
-        Positional arguments to pass to fcn.
+        Positional arguments to pass to `fcn`.
     kws : dict, optional
-        keyword arguments to pass to fcn.
+        keyword arguments to pass to `fcn`.
     iter_cb : callable, optional
         Function to be called at each fit iteration. This function should
         have the signature `iter_cb(params, iter, resid, *args, **kws)`,
@@ -1414,6 +1446,16 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         only).
     fit_kws : dict, optional
         Options to pass to the minimizer being used.
+
+    Returns
+    -------
+    MinimizerResult
+        Object containing the optimized parameter
+        and several goodness-of-fit statistics.
+
+
+    .. versionchanged:: 0.9.0
+        return value changed to :class:`MinimizerResult`.
 
     Notes
     -----
@@ -1429,6 +1471,19 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     data needed to calculate the residual, including such things as the
     data array, dependent variable, uncertainties in the data, and other
     data structures for the model calculation.
+
+    On output, the params will be unchanged.  The best-fit values, and where
+    appropriate, estimated uncertainties and correlations, will all be
+    contained in the returned :class:`MinimizerResult`.  See
+    :ref:`fit-results-label` for further details.
+
+    This function is simply a wrapper around :class:`Minimizer`
+    and is equivalent to::
+
+        fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
+        	           iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
+        fitter.minimize(method=method)
+
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
