@@ -1,13 +1,10 @@
-###  Submitting an Issue:
+### DO NOT IGNORE ###
 
-If you have not submitted an issue to LMFIT before, please read https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md before submitting any Issues. Use the Mailing list  https://groups.google.com/group/lmfit-py for questions about LMFIT.
+If you have not submitted an issue to LMFIT before, first read https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md.
 
-When submitting an Issue please remember to include the following:
+***DO NOT USE GITHUB ISSUES FOR QUESTIONS***
 
-- Include an example that shows the Issue, or explain why you did not.   It is OK to use gist or give a link to examples or data. It is OK to use or point to Jupyter notebooks.
+Use the Mailing list  https://groups.google.com/group/lmfit-py for questions about LMFIT.
 
-- Describe what output you expected.
-
-- Describe what output you actually got.
-
-- If an exception is raised, include the full traceback or explain why you did not.
+If you ignore this and do post a question as a Github Issue anyway, the Issue will be closed
+and not answered.
