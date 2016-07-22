@@ -147,17 +147,64 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
 
 class MinimizerResult(object):
     """
-    The result of a minimization.
+    A class that holds the results of a minimization.
+
+    This is a plain container (with no methods of its own) that
+    simply holds the results of the minimization.  Fit results
+    include data such as status and error messages, fit statistics,
+    and the updated (i.e. best-fit) parameters themselves :attr:`params`.
+
+    The list of (possible) `MinimizerResult` attributes follows.
 
     Attributes
     ----------
-    params : lmfit.parameters.Parameters
+    params : :class:`lmfit.parameters.Parameters`
         The best-fit parameters resulting from the fit.
-    success : bool
-        Whether the minimization was successful
     status : int
         Termination status of the optimizer. Its value depends on the
         underlying solver. Refer to `message` for details.
+    var_names : list
+        Ordered list of variable parameter names used in optimization, and
+        useful for understanding the the values in :attr:`init_vals` and
+        :attr:`covar`.
+    covar : numpy.ndarray
+        covariance matrix from minimization (`leastsq` only), with
+        rows/columns using :attr:`var_names`.
+    init_vals : list
+        List of initial values for variable parameters using :attr:`var_names`.
+    init_values : dict
+        Dictionary of initial values for variable parameters.
+    nfev : int
+        Number of function evaluations
+    success : bool
+        Boolean (``True``/``False``) for whether fit succeeded.
+    errorbars : bool
+        Boolean (``True``/``False``) for whether uncertainties were estimated.
+    message : string
+        Message about fit success.
+    ier : int
+        Integer error value from :scipydoc:`optimize.leastsq` (`leastsq` only).
+    lmdif_message : string
+        Message from :scipydoc:`optimize.leastsq` (`leastsq` only).
+    nvarys : int
+        Number of variables in fit :math:`N_{\\rm varys}`.
+    ndata : int
+        Number of data points:  :math:`N`
+    nfree : int
+        Degrees of freedom in fit:  :math:`N - N_{\\rm varys}`
+    residual : numpy.ndarray
+        Residual array :math:`{\\rm Resid_i}`. Return value of the objective
+        function.
+    chisqr : float
+        Chi-square: :math:`\chi^2 = \sum_i^N [{\\rm Resid}_i]^2`
+    redchi : float
+        Reduced chi-square:
+        :math:`\chi^2_{\\nu}= {\chi^2} / {(N - N_{\\rm varys})}`
+    aic : float
+        Akaike Information Criterion statistic.
+    bic : float
+        Bayesian Information Criterion statistic.
+
 
     Notes
     -----
@@ -188,11 +235,11 @@ class MinimizerResult(object):
 
 class Minimizer(object):
     """A general minimizer for curve fitting"""
-    err_nonparam = ("params must be a minimizer.Parameters() instance or list "
-                    "of Parameters()")
-    err_maxfev = ("Too many function calls (max set to %i)!  Use:"
-                  " minimize(func, params, ..., maxfev=NNN)"
-                  "or set leastsq_kws['maxfev']  to increase this maximum.")
+    _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
+                     "of Parameters()")
+    _err_maxfev = ("Too many function calls (max set to %i)!  Use:"
+                   " minimize(func, params, ..., maxfev=NNN)"
+                   "or set leastsq_kws['maxfev']  to increase this maximum.")
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
@@ -207,12 +254,12 @@ class Minimizer(object):
             model and data) to be minimized in a least squares sense.  The
             function must have the signature:
             `userfcn(params, *fcn_args, **fcn_kws)`
-        params : lmfit.parameter.Parameters object.
+        params : :class:`lmfit.parameter.Parameters` object.
             contains the Parameters for the model.
         fcn_args : tuple, optional
-            positional arguments to pass to userfcn.
+            positional arguments to pass to `userfcn`.
         fcn_kws : dict, optional
-            keyword arguments to pass to userfcn.
+            keyword arguments to pass to `userfcn`.
         iter_cb : callable, optional
             Function to be called at each fit iteration. This function should
             have the signature:
@@ -237,7 +284,8 @@ class Minimizer(object):
         Notes
         -----
         The objective function should return the value to be minimized. For the
-        Levenberg-Marquardt algorithm from leastsq(), this returned value must
+        Levenberg-Marquardt algorithm from :meth:`leastsq` or
+        :meth:`least_squares`, this returned value must
         be an array, with a length greater than or equal to the number of
         fitting variables in the model. For the other methods, the return value
         can either be a scalar or an array. If an array is returned, the sum of
@@ -246,10 +294,10 @@ class Minimizer(object):
         the objective function returns non-finite values then a `ValueError`
         will be raised because the underlying solvers cannot deal with them.
 
-        A common use for the fcn_args and fcn_kwds would be to pass in other
-        data needed to calculate the residual, including such things as the
-        data array, dependent variable, uncertainties in the data, and other
-        data structures for the model calculation.
+        A common use for the `fcn_args` and `fcn_kwds` would be to pass in
+        other data needed to calculate the residual, including such things
+        as the data array, dependent variable, uncertainties in the data,
+        and other data structures for the model calculation.
         """
         self.userfcn = userfcn
         self.userargs = fcn_args
@@ -282,14 +330,9 @@ class Minimizer(object):
 
     @property
     def values(self):
+        """dict : Parameter values in a simple dictionary.
         """
-        Returns
-        -------
-        param_values : dict
-            Parameter values in a simple dictionary.
-        """
-
-        return dict([(name, p.value) for name, p in self.result.params.items()])
+        return {name: p.value for name, p in self.result.params.items()}
 
     def __residual(self, fvars, apply_bounds_transformation=True):
         """
@@ -370,15 +413,16 @@ class Minimizer(object):
 
     def penalty(self, fvars):
         """
-        Penalty function for scalar minimizers:
+        Penalty function for scalar minimizers.
 
         Parameters
         ----------
-        fvars : array of values for the variable parameters
+        fvars : numpy.ndarray
+            Array of values for the variable parameters
 
         Returns
         -------
-        r - float
+        r : float
             The user evaluated user-supplied objective function. If the
             objective function is an array, return the array sum-of-squares
         """
@@ -389,8 +433,7 @@ class Minimizer(object):
 
     def prepare_fit(self, params=None):
         """
-        Prepares parameters for fitting,
-        return array of initial values
+        Prepares parameters for fitting, return array of initial values.
         """
         # determine which parameters are actually variables
         # and which are defined expressions.
@@ -404,11 +447,11 @@ class Minimizer(object):
             result.params = Parameters()
             for par in self.params:
                 if not isinstance(par, Parameter):
-                    raise MinimizerException(self.err_nonparam)
+                    raise MinimizerException(self._err_nonparam)
                 else:
                     result.params[par.name] = par
         elif self.params is None:
-            raise MinimizerException(self.err_nonparam)
+            raise MinimizerException(self._err_nonparam)
 
         # determine which parameters are actually variables
         # and which are defined expressions.
@@ -432,23 +475,23 @@ class Minimizer(object):
             if par.name is None:
                 par.name = name
         result.nvarys = len(result.var_names)
-        result.init_values = dict([(n, v) for n, v in zip(result.var_names,
-                                                          result.init_vals)])
+        result.init_values = {n: v for n, v in zip(result.var_names,
+                                                   result.init_vals)}
         return result
 
     def unprepare_fit(self):
         """
-        Unprepares the fit, so that subsequent fits will be
-        forced to run prepare_fit.
+        Clean fit state, so that subsequent fits will need to call prepare_fit.
 
-        removes ast compilations of constraint expressions
+        Removes AST compilations of constraint expressions.
         """
         pass
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """
-        Use one of the scalar minimization methods from
-        scipy.optimize.minimize.
+        Scalar minimization using `scipy.optimize.minimize`.
+
+
 
         Parameters
         ----------
@@ -470,7 +513,7 @@ class Minimizer(object):
         params : Parameters, optional
            Parameters to use as starting points.
         kws : dict, optional
-            Minimizer options pass to scipy.optimize.minimize.
+            Minimizer options pass to `scipy.optimize.minimize`.
 
         If the objective function returns a numpy array instead
         of the expected scalar, the sum of squares of the array
@@ -484,9 +527,13 @@ class Minimizer(object):
 
         Returns
         -------
-        success : bool
-            Whether the fit was successful.
+        :class:`MinimizerResult`
+            Object containing the optimized parameter
+            and several goodness-of-fit statistics.
 
+
+        .. versionchanged:: 0.9.0
+           return value changed to :class:`MinimizerResult`
         """
         if not HAS_SCALAR_MIN:
             raise NotImplementedError
@@ -566,6 +613,8 @@ class Minimizer(object):
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
               float_behavior='posterior', is_weighted=True, seed=None):
         """
+        Bayesian sampling of the posterior distribution using the `emcee`.
+
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
         that the prior is Uniform. You need to have `emcee` installed to use
@@ -657,7 +706,7 @@ class Minimizer(object):
 
         Returns
         -------
-        result : MinimizerResult
+        :class:`MinimizerResult`
             MinimizerResult object containing updated params, statistics,
             etc. The `MinimizerResult` also contains the ``chain``,
             ``flatchain`` and ``lnprob`` attributes. The ``chain``
@@ -915,11 +964,11 @@ class Minimizer(object):
     def least_squares(self, params=None, **kws):
         """
         Use the least_squares (new in scipy 0.17) function to perform a fit.
-        This assumes that Parameters have been stored, and a function to
-        minimize has been properly set up.
 
-        This wraps scipy.optimize.least_squares, which has inbuilt support
-        for bounds and robust loss functions.
+        This method assumes that Parameters have been stored, and a function to
+        minimize has been properly set up.
+        This method wraps scipy.optimize.least_squares, which has inbuilt
+        support for bounds and robust loss functions.
 
         Parameters
         ----------
@@ -927,6 +976,16 @@ class Minimizer(object):
            Parameters to use as starting points.
         kws : dict, optional
             Minimizer options to pass to scipy.optimize.least_squares.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the optimized parameter
+            and several goodness-of-fit statistics.
+
+
+        .. versionchanged:: 0.9.0
+           return value changed to :class:`MinimizerResult`
         """
 
         if not HAS_LEAST_SQUARES:
@@ -989,8 +1048,12 @@ class Minimizer(object):
 
         Returns
         -------
-        success : bool
-            True if fit was successful, False if not.
+        :class:`MinimizerResult`
+            Object containing the optimized parameter
+            and several goodness-of-fit statistics.
+
+        .. versionchanged:: 0.9.0
+           return value changed to :class:`MinimizerResult`
         """
         result = self.prepare_fit(params=params)
         result.method = 'leastsq'
@@ -1028,7 +1091,7 @@ class Minimizer(object):
         elif ier == 0:
             result.message = 'Invalid Input Parameters.'
         elif ier == 5:
-            result.message = self.err_maxfev % lskws['maxfev']
+            result.message = self._err_maxfev % lskws['maxfev']
         else:
             result.message = 'Tolerance seems to be too small.'
 
@@ -1158,7 +1221,7 @@ class Minimizer(object):
 
         Returns
         -------
-        MinimizerResult
+        :class:`MinimizerResult`
             Object containing the optimized parameter
             and several goodness-of-fit statistics.
 
@@ -1345,8 +1408,9 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
     Returns
     -------
     filtered_array : array_like
-    """
-    """
+
+    Note
+    ----
     This function is copied, then modified, from
     scipy/stats/stats.py/_contains_nan
     """
@@ -1449,7 +1513,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
 
     Returns
     -------
-    MinimizerResult
+    :class:`MinimizerResult`
         Object containing the optimized parameter
         and several goodness-of-fit statistics.
 
