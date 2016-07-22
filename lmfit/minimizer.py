@@ -285,7 +285,7 @@ class Minimizer(object):
     def values(self):
         """dict : Parameter values in a simple dictionary.
         """
-        return dict([(name, p.value) for name, p in self.result.params.items()])
+        return {name: p.value for name, p in self.result.params.items()}
 
     def __residual(self, fvars, apply_bounds_transformation=True):
         """
@@ -448,7 +448,7 @@ class Minimizer(object):
 
         Parameters
         ----------
-        method : str, optional        
+        method : str, optional
             Name of the fitting method to use.
             One of:
                 'Nelder-Mead' (default)
