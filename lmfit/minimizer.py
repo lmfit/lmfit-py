@@ -147,17 +147,64 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
 
 class MinimizerResult(object):
     """
-    The result of a minimization.
+    A class that holds the results of a minimization.
+
+    This is a plain container (with no methods of its own) that
+    simply holds the results of the minimization.  Fit results
+    include data such as status and error messages, fit statistics,
+    and the updated (i.e. best-fit) parameters themselves :attr:`params`.
+
+    The list of (possible) `MinimizerResult` attributes follows.
 
     Attributes
     ----------
-    params : lmfit.parameters.Parameters
+    params : :class:`lmfit.parameters.Parameters`
         The best-fit parameters resulting from the fit.
-    success : bool
-        Whether the minimization was successful
     status : int
         Termination status of the optimizer. Its value depends on the
         underlying solver. Refer to `message` for details.
+    var_names : list
+        Ordered list of variable parameter names used in optimization, and
+        useful for understanding the the values in :attr:`init_vals` and
+        :attr:`covar`.
+    covar : numpy.ndarray
+        covariance matrix from minimization (`leastsq` only), with
+        rows/columns using :attr:`var_names`.
+    init_vals : list
+        List of initial values for variable parameters using :attr:`var_names`.
+    init_values : dict
+        Dictionary of initial values for variable parameters.
+    nfev : int
+        Number of function evaluations
+    success : bool
+        Boolean (``True``/``False``) for whether fit succeeded.
+    errorbars : bool
+        Boolean (``True``/``False``) for whether uncertainties were estimated.
+    message : string
+        Message about fit success.
+    ier : int
+        Integer error value from :scipydoc:`optimize.leastsq` (`leastsq` only).
+    lmdif_message : string
+        Message from :scipydoc:`optimize.leastsq` (`leastsq` only).
+    nvarys : int
+        Number of variables in fit :math:`N_{\\rm varys}`.
+    ndata : int
+        Number of data points:  :math:`N`
+    nfree : int
+        Degrees of freedom in fit:  :math:`N - N_{\\rm varys}`
+    residual : numpy.ndarray
+        Residual array :math:`{\\rm Resid_i}`. Return value of the objective
+        function.
+    chisqr : float
+        Chi-square: :math:`\chi^2 = \sum_i^N [{\\rm Resid}_i]^2`
+    redchi : float
+        Reduced chi-square:
+        :math:`\chi^2_{\\nu}= {\chi^2} / {(N - N_{\\rm varys})}`
+    aic : float
+        Akaike Information Criterion statistic.
+    bic : float
+        Bayesian Information Criterion statistic.
+
 
     Notes
     -----
