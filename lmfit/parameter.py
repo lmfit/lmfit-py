@@ -96,8 +96,8 @@ class Parameters(OrderedDict):
 
         # find the symbols that were added by users, not during construction
         sym_unique = self._asteval.user_defined_symbols()
-        unique_symbols = dict((key, deepcopy(self._asteval.symtable[key], memo))
-                              for key in sym_unique)
+        unique_symbols = {key: deepcopy(self._asteval.symtable[key], memo)
+                              for key in sym_unique}
         _pars._asteval.symtable.update(unique_symbols)
 
         # we're just about to add a lot of Parameter objects to the newly
@@ -166,8 +166,8 @@ class Parameters(OrderedDict):
 
         # find the symbols from _asteval.symtable, that need to be remembered.
         sym_unique = self._asteval.user_defined_symbols()
-        unique_symbols = dict((key, deepcopy(self._asteval.symtable[key]))
-                              for key in sym_unique)
+        unique_symbols = {key: deepcopy(self._asteval.symtable[key])
+                          for key in sym_unique}
 
         return self.__class__, (), {'unique_symbols': unique_symbols,
                                     'params': params}
@@ -265,7 +265,7 @@ class Parameters(OrderedDict):
                            vary='{vary!s:>{n}}', expr='{expr!s:>{n}}')
         line = ' '.join([otherstyles.get(k, numstyle % k) for k in allcols])
         for name, values in sorted(self.items()):
-            pvalues = dict((k, getattr(values, k)) for k in columns)
+            pvalues = {k: getattr(values, k) for k in columns}
             pvalues['name'] = name
             # stderr is a special case: it is either numeric or None (i.e. str)
             if 'stderr' in columns and pvalues['stderr'] is not None:
