@@ -432,8 +432,8 @@ class Minimizer(object):
             if par.name is None:
                 par.name = name
         result.nvarys = len(result.var_names)
-        result.init_values = dict([(n, v) for n, v in zip(result.var_names,
-                                                          result.init_vals)])
+        result.init_values = {n: v for n, v in zip(result.var_names,
+                                                   result.init_vals)}
         return result
 
     def unprepare_fit(self):

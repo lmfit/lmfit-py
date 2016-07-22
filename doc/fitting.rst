@@ -19,8 +19,6 @@ when using complicated constraints or comparing results from related fits.
 The :func:`minimize` function
 =============================
 
-.. currentmodule:: lmfit.minimizer
-
 The :func:`minimize` function is a wrapper around :class:`Minimizer` for
 running an optimization problem.  It takes an objective function (the
 function that calculates the array to be minimized), a :class:`Parameters`
@@ -29,8 +27,8 @@ details on writing the objective.
 
 .. autofunction:: minimize
 
-..  _fit-func-label:
 
+..  _fit-func-label:
 
 Writing a Fitting Function
 ===============================
