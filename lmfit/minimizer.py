@@ -205,13 +205,6 @@ class MinimizerResult(object):
     bic : float
         Bayesian Information Criterion statistic.
 
-
-    Notes
-    -----
-    Additional attributes not listed above may be present, depending on the
-    specific solver. Since this class is essentially a subclass of dict
-    with attribute accessors, one can see which attributes are available
-    using the `keys()` method.
     """
     def __init__(self, **kws):
         for key, val in kws.items():
