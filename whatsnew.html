@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.4',
+        VERSION:     '0.9.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,6 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="prev" title="Using Mathematical Constraints" href="constraints.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
         "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
@@ -67,6 +68,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="constraints.html" title="Using Mathematical Constraints"
+             accesskey="P">previous</a> |</li>
    <li>[<a href="intro.html">intro</a>|</li>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
@@ -84,6 +88,9 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-0-9-5-release-notes">Version 0.9.5 Release Notes</a></li>
+<li><a class="reference internal" href="#version-0-9-4-release-notes">Version 0.9.4 Release Notes</a></li>
+<li><a class="reference internal" href="#version-0-9-3-release-notes">Version 0.9.3 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-0-release-notes">Version 0.9.0 Release Notes</a><ul>
 <li><a class="reference internal" href="#summary">Summary</a></li>
 <li><a class="reference internal" href="#impact">Impact</a></li>
@@ -94,6 +101,9 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="constraints.html"
+                        title="previous chapter">Using Mathematical Constraints</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -109,9 +119,6 @@
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -128,6 +135,29 @@
 changes to the use and behavior of the library.  This is not meant to be a
 comprehensive list of changes.  For such a complete record, consult the
 <a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
+<div class="section" id="version-0-9-5-release-notes">
+<span id="whatsnew-095-label"></span><h2>Version 0.9.5 Release Notes<a class="headerlink" href="#version-0-9-5-release-notes" title="Permalink to this headline">¶</a></h2>
+<p>Support for Python 2.6 and scipy 0.13 has been dropped.</p>
+</div>
+<div class="section" id="version-0-9-4-release-notes">
+<span id="whatsnew-094-label"></span><h2>Version 0.9.4 Release Notes<a class="headerlink" href="#version-0-9-4-release-notes" title="Permalink to this headline">¶</a></h2>
+<p>Some support for the new <cite>least_squares</cite> routine from scipy 0.17 has been
+added.</p>
+<p>Parameters can now be used directly in floating point or array expressions,
+so that the Parameter value does not need <cite>sigma = params[&#8216;sigma&#8217;].value</cite>.
+The older, explicit usage still works, but the docs, samples, and tests
+have been updated to use the simpler usage.</p>
+<p>Support for Python 2.6 and scipy 0.13 is now explicitly deprecated and wil
+be dropped in version 0.9.5.</p>
+</div>
+<div class="section" id="version-0-9-3-release-notes">
+<span id="whatsnew-093-label"></span><h2>Version 0.9.3 Release Notes<a class="headerlink" href="#version-0-9-3-release-notes" title="Permalink to this headline">¶</a></h2>
+<p>Models involving complex numbers have been improved.</p>
+<p>The <cite>emcee</cite> module can now be used for uncertainty estimation.</p>
+<p>Many bug fixes, and an important fix for performance slowdown on getting
+parameter values.</p>
+<p>ASV benchmarking code added.</p>
+</div>
 <div class="section" id="version-0-9-0-release-notes">
 <span id="whatsnew-090-label"></span><h2>Version 0.9.0 Release Notes<a class="headerlink" href="#version-0-9-0-release-notes" title="Permalink to this headline">¶</a></h2>
 <p>This upgrade makes an important, non-backward-compatible change to the way
@@ -139,7 +169,7 @@ is easy, but needs to be done.</p>
 <div class="section" id="summary">
 <h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
 <p>The upgrade from 0.8.3 to 0.9.0 introduced the <code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code>
-class (see <a class="reference internal" href="fitting.html#fit-results-label"><span>MinimizerResult &#8211; the optimization result</span></a>) which is now used to hold the return
+class (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult &#8211; the optimization result</span></a>) which is now used to hold the return
 value from <code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code> and <code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code>.  This returned
 object contains many goodness of fit statistics, and holds the optimized
 parameters from the fit.  Importantly, the parameters passed into
@@ -151,10 +181,10 @@ changed and returns as the <code class="xref py py-attr docutils literal"><span 
 <div class="section" id="impact">
 <h3>Impact<a class="headerlink" href="#impact" title="Permalink to this headline">¶</a></h3>
 <p>This upgrade means that a script that does:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">my_pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">my_pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span>    <span class="n">value</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span>  <span class="mf">5.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span>  <span class="n">value</span><span class="o">=</span>  <span class="mf">1.0</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span>  <span class="n">value</span><span class="o">=</span>  <span class="mf">1.0</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">result</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">my_pars</span><span class="p">)</span>
 </pre></div>
@@ -168,8 +198,8 @@ values, while all of the results from the fit are held in the <code class="docut
 object returned by <code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code>.</p>
 <p>If you want to do an initial fit, then refine that fit to, for example, do
 a pre-fit, then refine that result different fitting method, such as:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">result1</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">my_pars</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nelder&#39;</span><span class="p">)</span>
-<span class="n">result1</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="bp">True</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">result1</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">my_pars</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nelder&#39;</span><span class="p">)</span>
+<span class="n">result1</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">result2</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objfunc</span><span class="p">,</span> <span class="n">result1</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;leastsq&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -214,6 +244,9 @@ track of changes made while adjusting parameters and re-running fits.</li>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="constraints.html" title="Using Mathematical Constraints"
+             >previous</a> |</li>
    <li>[<a href="intro.html">intro</a>|</li>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
@@ -227,7 +260,7 @@ track of changes made while adjusting parameters and re-running fits.</li>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
     </div>
   </body>
 </html>
