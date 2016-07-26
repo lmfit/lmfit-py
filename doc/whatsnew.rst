@@ -11,6 +11,45 @@ changes to the use and behavior of the library.  This is not meant to be a
 comprehensive list of changes.  For such a complete record, consult the
 `lmfit github repository`_.
 
+.. _whatsnew_095_label:
+
+Version 0.9.5 Release Notes
+==========================================
+
+Support for Python 2.6 and scipy 0.13 has been dropped.
+
+.. _whatsnew_094_label:
+
+Version 0.9.4 Release Notes
+==========================================
+
+Some support for the new `least_squares` routine from scipy 0.17 has been
+added.
+
+
+Parameters can now be used directly in floating point or array expressions,
+so that the Parameter value does not need `sigma = params['sigma'].value`.
+The older, explicit usage still works, but the docs, samples, and tests
+have been updated to use the simpler usage.
+
+Support for Python 2.6 and scipy 0.13 is now explicitly deprecated and wil
+be dropped in version 0.9.5.
+
+.. _whatsnew_093_label:
+
+Version 0.9.3 Release Notes
+==========================================
+
+Models involving complex numbers have been improved.
+
+The `emcee` module can now be used for uncertainty estimation.
+
+Many bug fixes, and an important fix for performance slowdown on getting
+parameter values.
+
+ASV benchmarking code added.
+
+
 .. _whatsnew_090_label:
 
 Version 0.9.0 Release Notes

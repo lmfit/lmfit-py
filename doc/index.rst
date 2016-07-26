@@ -6,16 +6,6 @@ Non-Linear Least-Square Minimization and Curve-Fitting for Python
 .. _Levenberg-Marquardt:     http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
 .. _MINPACK-1:               http://en.wikipedia.org/wiki/MINPACK
 
-
-.. warning::
-
-  Upgrading scripts from version 0.8.3 to 0.9.0?  See  :ref:`whatsnew_090_label`
-
-.. warning::
-
-  Support for Python 2.6 and scipy 0.13 will be dropped with version 0.9.5.
-
-
 Lmfit provides a high-level interface to non-linear optimization and curve
 fitting problems for Python. Lmfit builds on and extends many of the
 optimization algorithm of :mod:`scipy.optimize`, especially the
@@ -70,3 +60,4 @@ participating in this effort please use the `lmfit github repository`_.
    confidence
    bounds
    constraints
+   whatsnew
