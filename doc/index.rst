@@ -51,8 +51,8 @@ fitting problems, including:
 
 .. _lmfit github repository:   http://github.com/lmfit/lmfit-py
 
-The lmfit package is Free software, using an MIT license.  The software and
-this document are works in progress.  If you are interested in
+The lmfit package is Free software, using an Open Source license.  The
+software and this document are works in progress.  If you are interested in
 participating in this effort please use the `lmfit github repository`_.
 
 
