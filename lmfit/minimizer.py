@@ -14,19 +14,38 @@ function-to-be-minimized (residual function) in terms of these Parameters.
 from copy import deepcopy
 import numpy as np
 from numpy import (dot, eye, ndarray, ones_like,
-                   sqrt, take, transpose, triu, deprecate)
+                   sqrt, take, transpose, triu)
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 import multiprocessing
 import numbers
 
+##
+##  scipy version notes:
+##  currently scipy 0.14 is required.
+##  feature           scipy version added
+##    minimize              0.11
+##    OptimizeResult        0.13
+##    diff_evolution        0.15
+##    least_squares         0.17
+##
+
 from scipy.optimize import leastsq as scipy_leastsq
+from scipy.optimize import minimize as scipy_minimize
 
 # differential_evolution is only present in scipy >= 0.15
 try:
     from scipy.optimize import differential_evolution as scipy_diffev
 except ImportError:
     from ._differentialevolution import differential_evolution as scipy_diffev
+
+# check for scipy.opitimize.least_squares
+HAS_LEAST_SQUARES = False
+try:
+    from scipy.optimize import least_squares
+    HAS_LEAST_SQUARES = True
+except ImportError:
+    pass
 
 # check for EMCEE
 HAS_EMCEE = False
@@ -41,22 +60,6 @@ HAS_PANDAS = False
 try:
     import pandas as pd
     HAS_PANDAS = True
-except ImportError:
-    pass
-
-# check for scipy.optimize.minimize
-HAS_SCALAR_MIN = False
-try:
-    from scipy.optimize import minimize as scipy_minimize
-    HAS_SCALAR_MIN = True
-except ImportError:
-    pass
-
-# check for scipy.opitimize.least_squares
-HAS_LEAST_SQUARES = False
-try:
-    from scipy.optimize import least_squares
-    HAS_LEAST_SQUARES = True
 except ImportError:
     pass
 
@@ -528,8 +531,6 @@ class Minimizer(object):
         .. versionchanged:: 0.9.0
            return value changed to :class:`MinimizerResult`
         """
-        if not HAS_SCALAR_MIN:
-            raise NotImplementedError
 
         result = self.prepare_fit(params=params)
         result.method = method
@@ -1232,17 +1233,12 @@ class Minimizer(object):
             function = self.leastsq
         elif user_method.startswith('least_s'):
             function = self.least_squares
-        elif HAS_SCALAR_MIN:
+        else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
                 if (key.lower().startswith(user_method) or
                     val.lower().startswith(user_method)):
                     kwargs['method'] = val
-        elif (user_method.startswith('nelder') or
-              user_method.startswith('fmin')):
-            function = self.fmin
-        elif user_method.startswith('lbfgsb'):
-            function = self.lbfgsb
         return function(**kwargs)
 
 
