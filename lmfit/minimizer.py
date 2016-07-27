@@ -230,7 +230,8 @@ class MinimizerResult(object):
 
 
 class Minimizer(object):
-    """A general minimizer for curve fitting"""
+    """A general minimizer for curve fitting and optimization.
+    """
     _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
                      "of Parameters()")
     _err_maxfev = ("Too many function calls (max set to %i)!  Use:"
@@ -241,7 +242,7 @@ class Minimizer(object):
                  iter_cb=None, scale_covar=True, nan_policy='raise',
                  **kws):
         """
-        Initialization of the Minimzer class
+        The Minimzer class initialization accepts the following parameters:
 
         Parameters
         ----------
@@ -270,9 +271,9 @@ class Minimizer(object):
             Specifies action if `userfcn` (or a Jacobian) returns nan
             values. One of:
 
-                'raise' - a `ValueError` is raised
-                'propagate' - the values returned from `userfcn` are un-altered
-                'omit' - the non-finite values are filtered.
+                - 'raise' - a `ValueError` is raised
+                - 'propagate' - the values returned from `userfcn` are un-altered
+                - 'omit' - the non-finite values are filtered.
 
         kws : dict, optional
             Options to pass to the minimizer being used.

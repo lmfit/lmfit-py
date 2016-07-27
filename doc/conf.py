@@ -31,6 +31,8 @@ extensions = [
     'sphinx.ext.mathjax',
     ]
 
+autoclass_content = 'both'
+
 try:
     import IPython.sphinxext.ipython_directive
     extensions.extend(['IPython.sphinxext.ipython_directive',

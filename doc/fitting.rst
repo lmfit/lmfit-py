@@ -343,34 +343,7 @@ Using the :class:`Minimizer` class
 For full control of the fitting process, you'll want to create a
 :class:`Minimizer` object.
 
-.. class:: Minimizer(function, params, fcn_args=None, fcn_kws=None, iter_cb=None, scale_covar=True, mask_non_finite=False, **kws)
-
-   creates a Minimizer, for more detailed access to fitting methods and attributes.
-
-   :param function:  objective function to return fit residual.  See :ref:`fit-func-label` for details.
-   :type  function:  callable.
-   :param params:  a dictionary of Parameters.  Keywords must be strings
-		   that match ``[a-z_][a-z0-9_]*`` and is not a python
-		   reserved word.  Each value must be :class:`Parameter`.
-   :type  params:  dict
-   :param fcn_args:  arguments tuple to pass to the residual function as  positional arguments.
-   :type  fcn_args: tuple
-   :param fcn_kws:  dictionary to pass to the residual function as keyword arguments.
-   :type  fcn_kws:  dict
-   :param iter_cb:  function to be called at each fit iteration.  See :ref:`fit-itercb-label` for details.
-   :type  iter_cb:  callable or ``None``
-   :param scale_covar:  flag for automatically scaling covariance matrix and uncertainties to reduced chi-square (``leastsq`` only)
-   :type  scale_covar:  bool (default ``True``).
-   :param nan_policy: Specifies action if `userfcn` (or a Jacobian) returns nan
-    values. One of:
-
-		'raise' - a `ValueError` is raised
-		'propagate' - the values returned from `userfcn` are un-altered
-		'omit' - the non-finite values are filtered.
-
-   :type  nan_policy: str (default 'raise')
-   :param kws:      dictionary to pass as keywords to the underlying :mod:`scipy.optimize` method.
-   :type  kws:      dict
+.. autoclass :: Minimizer
 
 The Minimizer object has a few public methods:
 
