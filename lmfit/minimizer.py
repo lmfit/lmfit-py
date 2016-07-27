@@ -547,7 +547,7 @@ class Minimizer(object):
 
 
         .. versionchanged:: 0.9.0
-           return value changed to :class:`MinimizerResult`
+           Return value changed to :class:`MinimizerResult`.
 
         Notes
         -----
@@ -1014,7 +1014,7 @@ class Minimizer(object):
 
 
         .. versionchanged:: 0.9.0
-           return value changed to :class:`MinimizerResult`
+           Return value changed to :class:`MinimizerResult`.
         """
 
         if not HAS_LEAST_SQUARES:
@@ -1086,7 +1086,7 @@ class Minimizer(object):
         params : :class:`lmfit.parameter.Parameters`, optional
            Parameters to use as starting point.
         kws : dict, optional
-            Minimizer options to pass to .
+            Minimizer options to pass to :scipydoc:`scipy.optimize.leastsq`.
 
         Returns
         -------
@@ -1270,7 +1270,7 @@ class Minimizer(object):
 
 
         .. versionchanged:: 0.9.0
-           return value changed to :class:`MinimizerResult`
+           Return value changed to :class:`MinimizerResult`.
         """
 
         function = self.leastsq
@@ -1557,7 +1557,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
 
 
     .. versionchanged:: 0.9.0
-        return value changed to :class:`MinimizerResult`.
+        Return value changed to :class:`MinimizerResult`.
 
     Notes
     -----
