@@ -967,8 +967,6 @@ class ModelResult(Minimizer):
             data_kws = {}
         if fit_kws is None:
             fit_kws = {}
-        if fit_kws is None:
-            fit_kws = {}
         if ax_kws is None:
             ax_kws = {}
 

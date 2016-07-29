@@ -242,7 +242,7 @@ class Minimizer(object):
                  iter_cb=None, scale_covar=True, nan_policy='raise',
                  **kws):
         """
-        The Minimzer class initialization accepts the following parameters:
+        The Minimizer class initialization accepts the following parameters:
 
         Parameters
         ----------
@@ -1275,6 +1275,7 @@ class Minimizer(object):
 
         function = self.leastsq
         kwargs = {'params': params}
+        kwargs.update(self.kws)
         kwargs.update(kws)
 
         user_method = method.lower()
