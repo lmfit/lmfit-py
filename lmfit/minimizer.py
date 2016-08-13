@@ -421,10 +421,11 @@ class Minimizer(object):
         -------
         r : float
             The user evaluated user-supplied objective function. If the
-            objective function is an array, return the array sum-of-squares
+            objective function is an array of size greater than 1, return the
+            array sum-of-squares
         """
         r = self.__residual(fvars)
-        if isinstance(r, ndarray):
+        if isinstance(r, ndarray) and r.size > 1:
             r = (r*r).sum()
         return r
 
