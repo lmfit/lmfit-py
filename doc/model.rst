@@ -713,6 +713,29 @@ These methods are all inherited from :class:`Minimize` or from
    return a nicely formatted text report of the confidence intervals, as
    from :func:`ci_report() <lmfit.ci_report>`.
 
+.. method:: ModelResult.eval_conf_band(**kwargs)
+
+   evaluate a confidence band for the *model function*, propagating the
+   uncertainties estimated for the best-fit parameters to uncertainties
+   in the model function.
+
+   :param params:  Parameters, defaults to :attr:`params`.
+   :param sigma:  confidence level, i.e., how many :math:`\sigma` values, default=1
+   :returns: ndarray to be added/subtracted to best-fit to give confidence band for model value
+
+   An example using this method::
+
+     out = model.fit(data, params, x=x)
+     dely = out.eval_conf_band(x=x)
+     plt.plot(x, data)
+     plt.plot(x, out.best_fit)
+     plt.fill_between(x, out.best_fit-dely, out.best_fit+dely, color='#888888')
+
+  This calculation is based on the excellent and clear example from
+  https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
+  which references the original work of
+  J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
+
 
 .. method:: ModelResult.plot(datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None, fig=None, data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None, fig_kws=None)
 
@@ -1150,3 +1173,29 @@ and shows the plots:
 
 Using composite models with built-in or custom operators allows you to
 build complex models from testable sub-components.
+
+
+Calculating uncertainties in the model function
+==============================================================
+
+Finally, we return to the first example above and ask not only for the
+uncertainties in the fitted parameters but for the range of values that
+those uncertainties mean for the model function itself.  We can use the
+:meth:`ModelResult.eval_conf_band` method of the model result object to
+evaluate the uncertainty in the model with a specified level for
+:math:`sigma`.
+
+That is, adding::
+
+    dely = result.eval_conf_band(sigma=3)
+    plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB")
+
+to the example fit to the Gaussian at the beginning of this chapter will
+give :math:`3-sigma` bands for the best-fit Gaussian, and produce the
+figure below.
+
+.. _figModel4:
+
+  .. image:: _images/model_fit4.png
+     :target: _images/model_fit4.png
+     :width: 50%
