@@ -17,7 +17,7 @@ gmod = Model(gaussian)
 result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
 print(result.fit_report())
-dely = result.eval_conf_band(sigma=3)
+dely = result.eval_uncertainty(sigma=3)
 
 plt.plot(x, y,         'bo')
 plt.plot(x, result.init_fit, 'k--')

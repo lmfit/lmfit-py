@@ -790,17 +790,19 @@ class ModelResult(Minimizer):
             params = self.params
         return self.model.eval_components(params=params, **self.userkws)
 
-    def eval_conf_band(self, params=None, sigma=1, **kwargs):
+    def eval_uncertainty(self, params=None, sigma=1, **kwargs):
         """
-        evaluate a confidence band for a model function, propagating the
-        uncertainties in the parameters to uncertainties in the model function
+        evaluate the uncertainty of the *model function* from the
+        uncertainties for the best-fit parameters.  This can be used
+        to give confidence bands for the model.
+
         Arguments:
             params (Parameters):  parameters, defaults to ModelResult .params
             sigma (float):  confidence level, i.e. how many sigma [default=1]
             kwargs (variable):  values of options, independent variables, etc
+
         Returns:
-            ndarray to be added/subtracted to best-fit to give confidence
-            band for model value
+            ndarray for the uncertainty at each value of the model.
 
         Example:
             out = model.fit(data, params, x=x)

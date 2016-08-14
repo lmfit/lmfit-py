@@ -713,20 +713,21 @@ These methods are all inherited from :class:`Minimize` or from
    return a nicely formatted text report of the confidence intervals, as
    from :func:`ci_report() <lmfit.ci_report>`.
 
-.. method:: ModelResult.eval_conf_band(**kwargs)
+.. method:: ModelResult.eval_uncertainty(**kwargs)
 
-   evaluate a confidence band for the *model function*, propagating the
-   uncertainties estimated for the best-fit parameters to uncertainties
-   in the model function.
+   evaluate the uncertainty of the *model function* from the
+   uncertainties for the best-fit parameters.  This can be used
+   to give confidence bands for the model.
 
    :param params:  Parameters, defaults to :attr:`params`.
    :param sigma:  confidence level, i.e., how many :math:`\sigma` values, default=1
-   :returns: ndarray to be added/subtracted to best-fit to give confidence band for model value
+   :returns: ndarray to be added/subtracted to best-fit to give
+   uncertaintay in the values for the model.
 
    An example using this method::
 
      out = model.fit(data, params, x=x)
-     dely = out.eval_conf_band(x=x)
+     dely = out.eval_uncertainty(x=x)
      plt.plot(x, data)
      plt.plot(x, out.best_fit)
      plt.fill_between(x, out.best_fit-dely, out.best_fit+dely, color='#888888')
@@ -1181,13 +1182,13 @@ Calculating uncertainties in the model function
 Finally, we return to the first example above and ask not only for the
 uncertainties in the fitted parameters but for the range of values that
 those uncertainties mean for the model function itself.  We can use the
-:meth:`ModelResult.eval_conf_band` method of the model result object to
+:meth:`ModelResult.eval_uncertainty` method of the model result object to
 evaluate the uncertainty in the model with a specified level for
 :math:`sigma`.
 
 That is, adding::
 
-    dely = result.eval_conf_band(sigma=3)
+    dely = result.eval_uncertainty(sigma=3)
     plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB")
 
 to the example fit to the Gaussian at the beginning of this chapter will
