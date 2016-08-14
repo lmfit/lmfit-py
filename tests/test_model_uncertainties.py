@@ -4,13 +4,11 @@ tests of ModelResult.eval_uncertainty()
 """
 import numpy as np
 from numpy.testing import assert_allclose
-
 from lmfit.models import LinearModel
 
-def setup(slope=0.8, intercept=0.5, noise=1.5):
-    np.random.seed(1)
-
+def get_modeldata(slope=0.8, intercept=0.5, noise=1.5):
     # create data to be fitted
+    np.random.seed(88)
     x = np.linspace(0, 10, 101)
     y = intercept + x*slope
     y = y + np.random.normal(size=len(x), scale=noise)
@@ -21,7 +19,7 @@ def setup(slope=0.8, intercept=0.5, noise=1.5):
     return x, y, model, params
 
 def test_linear_constant_intercept():
-    x, y, model, params = setup(slope=4, intercept=-10)
+    x, y, model, params = get_modeldata(slope=4, intercept=-10)
 
     params['intercept'].vary = False
 
@@ -35,7 +33,7 @@ def test_linear_constant_intercept():
     assert_allclose(dely.mean(),slope_stderr*x.mean(), rtol=1.e-2)
 
 def test_linear_constant_slope():
-    x, y, model, params = setup(slope=-4, intercept=12.5)
+    x, y, model, params = get_modeldata(slope=-4, intercept=2.3)
 
     params['slope'].vary = False
 
