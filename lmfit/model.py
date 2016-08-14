@@ -7,6 +7,8 @@ import inspect
 import operator
 from copy import deepcopy
 import numpy as np
+from scipy.stats import t
+from scipy.special import erf
 from . import Parameters, Parameter, Minimizer
 from .printfuncs import fit_report, ci_report
 from .confidence import conf_interval
@@ -787,6 +789,68 @@ class ModelResult(Minimizer):
         if params is None:
             params = self.params
         return self.model.eval_components(params=params, **self.userkws)
+
+    def eval_conf_band(self, params=None, sigma=1, **kwargs):
+        """
+        evaluate a confidence band for a model function, propagating the
+        uncertainties in the parameters to uncertainties in the model function
+        Arguments:
+            params (Parameters):  parameters, defaults to ModelResult .params
+            sigma (float):  confidence level, i.e. how many sigma [default=1]
+            kwargs (variable):  values of options, independent variables, etc
+        Returns:
+            ndarray to be added/subtracted to best-fit to give confidence
+            band for model value
+
+        Example:
+            out = model.fit(data, params, x=x)
+            dely = out.eval_confidence_band(x=x)
+            plt.plot(x, data)
+            plt.plot(x, out.best_fit)
+            plt.fill_between(x, out.best_fit-dely,
+                             out.best_fit+dely, color='#888888')
+
+        Notes:
+            This is based on the excellent and clear example from
+            https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
+            which references the original work of
+               J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
+
+
+        """
+        self.userkws.update(kwargs)
+        if params is None:
+            params = self.params
+
+        prob = (erf(sigma/np.sqrt(2))+ 1 )/2.0
+        nvarys = self.nvarys
+        ndata = self.ndata
+        covar = self.covar / self.redchi
+        fjac = np.zeros(ndata*nvarys).reshape((nvarys, ndata))
+        df2 = np.zeros(ndata)
+
+        # find derivative by hand!
+        for i in range(nvarys):
+            pname = self.var_names[i]
+            pars = self.params
+            val0 = pars[pname].value
+            dval = pars[pname].stderr/3.0
+
+            pars[pname].value = val0 + dval
+            res1 = self.model.eval(pars, **self.userkws)
+
+            pars[pname].value = val0 - dval
+            res2 = self.model.eval(pars, **self.userkws)
+
+            fjac[i] = (res1 - res2) / (2*dval)
+            pars[pname].value = val0
+
+        for i in range(nvarys):
+            for j in range(nvarys):
+                df2 += fjac[i]*fjac[j]*covar[i,j]
+
+        return np.sqrt(df2*self.redchi) * t.ppf(prob, ndata-nvarys)
+
 
     def conf_interval(self, **kwargs):
         """return explicitly calculated confidence intervals"""
