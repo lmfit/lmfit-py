@@ -813,18 +813,21 @@ class ModelResult(Minimizer):
                              out.best_fit+dely, color='#888888')
 
         Notes:
-            This is based on the excellent and clear example from
-            https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
-            which references the original work of
-               J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
-
+            1. This is based on the excellent and clear example from
+               https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
+               which references the original work of
+                 J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
+            2. the value of sigma is meant to be interpreted as the probability
+               for the evaluated uncertainty.   If the value is > 1, it is cast to
+               a probability using the standard statistical meaning.  Thus, sigma=1
+               will give the same result as sigma=0.6827, sigma=3 will give the same
+               result as sigma=0.9973, and so forth.
 
         """
         self.userkws.update(kwargs)
         if params is None:
             params = self.params
 
-        prob = (erf(sigma/np.sqrt(2))+ 1 )/2.0
         nvarys = self.nvarys
         ndata = self.ndata
         covar = self.covar / self.redchi
@@ -844,14 +847,16 @@ class ModelResult(Minimizer):
             pars[pname].value = val0 - dval
             res2 = self.model.eval(pars, **self.userkws)
 
-            fjac[i] = (res1 - res2) / (2*dval)
             pars[pname].value = val0
+            fjac[i] = (res1 - res2) / (2*dval)
 
         for i in range(nvarys):
             for j in range(nvarys):
                 df2 += fjac[i]*fjac[j]*covar[i,j]
 
-        return np.sqrt(df2*self.redchi) * t.ppf(prob, ndata-nvarys)
+        if isinstance(sigma, int) or sigma >= 1:
+            sigma = erf(sigma/np.sqrt(2))
+        return np.sqrt(df2*self.redchi) * t.ppf((sigma+1)/2.0, ndata-nvarys)
 
 
     def conf_interval(self, **kwargs):
