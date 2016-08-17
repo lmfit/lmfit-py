@@ -7,6 +7,7 @@ from __future__ import print_function
 from warnings import warn
 import numpy as np
 from scipy.stats import f
+from scipy.special import erf
 from scipy.optimize import brentq
 from .minimizer import MinimizerException
 
@@ -45,8 +46,7 @@ def restore_vals(tmp_params, params):
     for para_key in params:
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
-
-def conf_interval(minimizer, result, p_names=None, sigmas=(0.674, 0.95, 0.997),
+def conf_interval(minimizer, result, p_names=None, sigmas=(0.6827, 0.9545, 0.9973),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
     """Calculates the confidence interval for parameters
     from the given a MinimizerResult, output from minimize.
@@ -145,7 +145,7 @@ class ConfidenceInterval(object):
     Class used to calculate the confidence interval.
     """
     def __init__(self, minimizer, result, p_names=None, prob_func=None,
-                 sigmas=(0.674, 0.95, 0.997), trace=False, verbose=False,
+                 sigmas=(0.6827, 0.9545, 0.9973), trace=False, verbose=False,
                  maxiter=50):
         """
 
@@ -227,6 +227,9 @@ class ConfidenceInterval(object):
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
         for prob in self.sigmas:
+            if isinstance(prob, int) or prob >= 1:
+                prob = erf(prob/np.sqrt(2))
+
             if prob > max_prob:
                 ret.append((prob, direction*np.inf))
                 continue
