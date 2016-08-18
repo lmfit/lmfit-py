@@ -817,11 +817,10 @@ class ModelResult(Minimizer):
                https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
                which references the original work of
                  J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
-            2. the value of sigma is meant to be interpreted as the probability
-               for the evaluated uncertainty.   If the value is > 1, it is cast to
-               a probability using the standard statistical meaning.  Thus, sigma=1
-               will give the same result as sigma=0.6827, sigma=3 will give the same
-               result as sigma=0.9973, and so forth.
+            2. the value of sigma is number of `sigma` values, and is converted to a probability.
+               Values or 1, 2, or 3 give probalities of 0.6827, 0.9545, and 0.9973, respectively.
+               If the sigma value is < 1, it is interpreted as the probability itself.  That is,
+               `sigma=1` and `sigma=0.6827` will give the same results, within precision errors.
 
         """
         self.userkws.update(kwargs)
@@ -854,9 +853,11 @@ class ModelResult(Minimizer):
             for j in range(nvarys):
                 df2 += fjac[i]*fjac[j]*covar[i,j]
 
-        if isinstance(sigma, int) or sigma >= 1:
-            sigma = erf(sigma/np.sqrt(2))
-        return np.sqrt(df2*self.redchi) * t.ppf((sigma+1)/2.0, ndata-nvarys)
+        if sigma < 1.0:
+            prob = sigma
+        else:
+            prob = erf(sigma/np.sqrt(2))
+        return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, ndata-nvarys)
 
 
     def conf_interval(self, **kwargs):

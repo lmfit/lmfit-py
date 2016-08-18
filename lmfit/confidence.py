@@ -46,7 +46,7 @@ def restore_vals(tmp_params, params):
     for para_key in params:
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
-def conf_interval(minimizer, result, p_names=None, sigmas=(0.6827, 0.9545, 0.9973),
+def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
     """Calculates the confidence interval for parameters
     from the given a MinimizerResult, output from minimize.
@@ -68,7 +68,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.6827, 0.9545, 0.997
         Names of the parameters for which the ci is calculated. If None,
         the ci is calculated for every parameter.
     sigmas : list, optional
-        The probabilities (1-alpha) to find. Default is 1,2 and 3-sigma.
+        The sigma-levels to find. Default is [1, 2, 3]. See Note below.
     trace : bool, optional
         Defaults to False, if true, each result of a probability calculation
         is saved along with the parameter. This can be used to plot so
@@ -92,6 +92,15 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.6827, 0.9545, 0.997
         an additional key 'prob'. Each contains an array of the corresponding
         values.
 
+    Note
+    -----
+    The values for `sigma` are taken as the number of standard deviations for a normal
+    distribution and converted to probabilities.   That is, the default sigma=(1, 2, 3)
+    will use probabilities of 0.6827, 0.9545, and 0.9973.    If any of the sigma values
+    is less than 1, that will be interpreted as a probability. That is, a value of 1 and
+    0.6827 will give the same results, within precision errors.
+
+
     See also
     --------
     conf_interval2d
@@ -111,7 +120,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(0.6827, 0.9545, 0.997
 
     Now with quantiles for the sigmas and using the trace.
 
-    >>> ci, trace = conf_interval(mini, sigmas=(0.25, 0.5, 0.75, 0.999), trace=True)
+    >>> ci, trace = conf_interval(mini, sigmas=(0.5, 1, 2, 3), trace=True)
     >>> fixed = trace['para1']['para1']
     >>> free = trace['para1']['not_para1']
     >>> prob = trace['para1']['prob']
@@ -145,7 +154,7 @@ class ConfidenceInterval(object):
     Class used to calculate the confidence interval.
     """
     def __init__(self, minimizer, result, p_names=None, prob_func=None,
-                 sigmas=(0.6827, 0.9545, 0.9973), trace=False, verbose=False,
+                 sigmas=(1, 2, 3), trace=False, verbose=False,
                  maxiter=50):
         """
 
@@ -188,6 +197,13 @@ class ConfidenceInterval(object):
 
         self.sigmas = list(sigmas)
         self.sigmas.sort()
+        self.probs = []
+        for sigma in self.sigmas:
+            if sigma < 1:
+                prob = sigma
+            else:
+                prob = erf(sigma/np.sqrt(2))
+            self.probs.append(prob)
 
     def calc_all_ci(self):
         """
@@ -226,10 +242,7 @@ class ConfidenceInterval(object):
         ret = []
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
-        for prob in self.sigmas:
-            if isinstance(prob, int) or prob >= 1:
-                prob = erf(prob/np.sqrt(2))
-
+        for prob in self.probs:
             if prob > max_prob:
                 ret.append((prob, direction*np.inf))
                 continue
@@ -277,7 +290,7 @@ class ConfidenceInterval(object):
         limit = start_val
         i = 0
 
-        while old_prob < max(self.sigmas):
+        while old_prob < max(self.probs):
             i = i + 1
             limit += step * direction
 
