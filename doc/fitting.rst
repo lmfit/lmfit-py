@@ -236,7 +236,7 @@ Goodness-of-Fit Statistics
 +----------------------+----------------------------------------------------------------------------+
 |    var_names         | ordered list of variable parameter names used for init_vals and covar      |
 +----------------------+----------------------------------------------------------------------------+
-|    covar             | covariance matrix (with rows/columns using var_names                       |
+|    covar             | covariance matrix (with rows/columns using var_names)                      |
 +----------------------+----------------------------------------------------------------------------+
 |    init_vals         | list of initial values for variable parameters                             |
 +----------------------+----------------------------------------------------------------------------+

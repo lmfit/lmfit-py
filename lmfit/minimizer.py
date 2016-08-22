@@ -161,7 +161,7 @@ class MinimizerResult(object):
 
     Attributes
     ----------
-    params : :class:`lmfit.parameters.Parameters`
+    params : :class:`lmfit.parameter.Parameters`
         The best-fit parameters resulting from the fit.
     status : int
         Termination status of the optimizer. Its value depends on the

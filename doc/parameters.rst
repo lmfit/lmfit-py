@@ -220,8 +220,8 @@ The :class:`Parameters` class
 Simple Example
 ==================
 
-Using :class:`Parameters`` and :func:`minimize` function (discussed in the
-next chapter) might look like this:
+Using :class:`~lmfit.parameter.Parameters` and :func:`~lmfit.minimizer.minimize`
+function (discussed in the next chapter) might look like this:
 
 .. literalinclude:: ../examples/doc_basic.py
 

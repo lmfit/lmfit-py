@@ -11,7 +11,7 @@ has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model to most closely match some
 data.  With :mod:`scipy`, such problems are commonly solved with
 :scipydoc:`scipy.optimize.curve_fit`, which is a wrapper around
-:scipydoc:`scipy.optimize.leastsq`.  Since Lmfit's :func:`minimize` is also
+:scipydoc:`scipy.optimize.leastsq`.  Since Lmfit's :func:`~lmfit.minimizer.minimize` is also
 a high-level wrapper around :scipydoc:`scipy.optimize.leastsq` it can be used
 for curve-fitting problems, but requires more effort than using
 :scipydoc:`scipy.optimize.curve_fit`.
@@ -21,7 +21,7 @@ Here we discuss lmfit's :class:`Model` class.  This takes a model function
 -- a function that calculates a model for some data -- and provides methods
 to create parameters for that model and to fit data using that model
 function.  This is closer in spirit to :scipydoc:`scipy.optimize.curve_fit`,
-but with the advantages of using :class:`Parameters` and lmfit.
+but with the advantages of using :class:`~lmfit.parameter.Parameters` and lmfit.
 
 In addition to allowing you turn any model function into a curve-fitting
 method, Lmfit also provides canonical definitions for many known line shapes
@@ -49,7 +49,7 @@ own.  We start with a simple definition of the model function:
     ...
 
 We want to fit this objective function to data :math:`y(x)` represented by the
-arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`optimize.curve_fit`::
+arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`scipy.optimize.curve_fit`::
 
     >>> from scipy.optimize import curve_fit
     >>>
@@ -62,7 +62,7 @@ arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`optimize.curve_
 
 
 We sample random data point, make an initial guess of the model
-values, and run :scipydoc:`optimize.curve_fit` with the model function,
+values, and run :scipydoc:`scipy.optimize.curve_fit` with the model function,
 data arrays, and initial guesses.  The results returned are the optimal
 values for the parameters and the covariance matrix.  It's simple and very
 useful.  But it misses the benefits of lmfit.
@@ -73,7 +73,7 @@ such a function would be fairly simple (essentially, ``data - model``,
 possibly with some weighting), and we would need to define and use
 appropriately named parameters.  Though convenient, it is somewhat of a
 burden to keep the named parameter straight (on the other hand, with
-:scipydoc:`optimize.curve_fit` you are required to remember the parameter
+:scipydoc:`scipy.optimize.curve_fit` you are required to remember the parameter
 order).  After doing this a few times it appears as a recurring pattern,
 and we can imagine automating this process.  That's where the
 :class:`Model` class comes in.
@@ -109,7 +109,7 @@ the expected names:
 
     >>> params = gmod.make_params()
 
-This creates the :class:`Parameters` but doesn't necessarily give them
+This creates the :class:`~lmfit.parameter.Parameters` but doesn't necessarily give them
 initial values -- again, the model has no idea what the scale should be.
 You can set initial values for parameters with keyword arguments to
 :meth:`make_params`:
@@ -118,7 +118,7 @@ You can set initial values for parameters with keyword arguments to
     >>> params = gmod.make_params(cen=5, amp=200, wid=1)
 
 or assign them (and other parameter properties) after the
-:class:`Parameters` has been created.
+:class:`~lmfit.parameter.Parameters` has been created.
 
 A :class:`Model` has several methods associated with it.  For example, one
 can use the :meth:`eval` method to evaluate the model or the :meth:`fit`
@@ -182,12 +182,12 @@ Note that the model fitting was really performed with 2 lines of code::
 These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
 starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.
-This is much more expressive than :scipydoc:`optimize.curve_fit`::
+This is much more expressive than :scipydoc:`scipy.optimize.curve_fit`::
 
     best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
 In addition, all the other features of lmfit are included:
-:class:`Parameters` can have bounds and constraints and the result is a
+:class:`~lmfit.parameter.Parameters` can have bounds and constraints and the result is a
 rich object that can be reused to explore the model fit in detail.
 
 
@@ -286,7 +286,7 @@ specifying one or more independent variables.
     :param data: data array used to guess parameter values
     :type func:  ndarray
     :param kws:  additional options to pass to model function.
-    :return: :class:`Parameters` with guessed initial values for each parameter.
+    :return: :class:`lmfit.parameter.Parameters` with guessed initial values for each parameter.
 
    by default this is left to raise a ``NotImplementedError``, but may be
    overwritten by subclasses.  Generally, this method should take some
@@ -299,7 +299,7 @@ specifying one or more independent variables.
    Create a set of parameters for model.
 
     :param kws:  optional keyword/value pairs to set initial values for parameters.
-    :return: :class:`Parameters`.
+    :return: :class:`lmfit.parameter.Parameters`.
 
     The parameters may or may not have decent initial values for each
     parameter.
@@ -384,7 +384,7 @@ Determining parameter names and independent variables for a function
 -----------------------------------------------------------------------
 
 The :class:`Model` created from the supplied function ``func`` will create
-a :class:`Parameters` object, and names are inferred from the function
+a :class:`~lmfit.parameter.Parameters` object, and names are inferred from the function
 arguments, and a residual function is automatically constructed.
 
 
@@ -635,8 +635,8 @@ The :class:`ModelResult` class
 
 A :class:`ModelResult` (which had been called `ModelFit` prior to version
 0.9) is the object returned by :meth:`Model.fit`.  It is a subclass of
-:class:`Minimizer`, and so contains many of the fit results.  Of course, it
-knows the :class:`Model` and the set of :class:`Parameters` used in the
+:class:`~lmfit.minimizer.Minimizer`, and so contains many of the fit results.  Of course, it
+knows the :class:`Model` and the set of :class:`~lmfit.parameter.Parameters` used in the
 fit, and it has methods to evaluate the model, to fit the data (or re-fit
 the data with changes to the parameters, or fit with different or modified
 data) and to print out a report for that fit.
@@ -652,7 +652,7 @@ with a model.
 
 A :class:`ModelResult` has several attributes holding values for fit results,
 and several methods for working with fits.  These include statistics
-inherited from :class:`Minimizer` useful for comparing different models,
+inherited from :class:`~lmfit.minimizer.Minimizer` useful for comparing different models,
 including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. class:: ModelResult()
@@ -664,7 +664,7 @@ including `chisqr`, `redchi`, `aic`, and `bic`.
 :class:`ModelResult` methods
 ---------------------------------
 
-These methods are all inherited from :class:`Minimize` or from
+These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 :class:`Model`.
 
 .. method:: ModelResult.eval(params=None, **kwargs)
@@ -870,7 +870,7 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute::  ier
 
-   integer returned code from :scipydoc:`optimize.leastsq`.
+   integer returned code from :scipydoc:`scipy.optimize.leastsq`.
 
 .. attribute:: init_fit
 
@@ -899,15 +899,15 @@ These methods are all inherited from :class:`Minimize` or from
 
 .. attribute::  lmdif_message
 
-   string message returned from :scipydoc:`optimize.leastsq`.
+   string message returned from :scipydoc:`scipy.optimize.leastsq`.
 
 .. attribute::  message
 
-   string message returned from :func:`minimize`.
+   string message returned from :func:`~lmfit.minimizer.minimize`.
 
 .. attribute::  method
 
-   string naming fitting method for :func:`minimize`.
+   string naming fitting method for :func:`~lmfit.minimizer.minimize`.
 
 .. attribute::  model
 
