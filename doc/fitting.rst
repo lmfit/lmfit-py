@@ -190,7 +190,15 @@ messages, fit statistics, and the updated parameters themselves.
 Importantly, the parameters passed in to :meth:`Minimizer.minimize`
 will be not be changed.  To to find the best-fit values, uncertainties
 and so on for each parameter, one must use the
-:attr:`MinimizerResult.params` attribute.
+:attr:`MinimizerResult.params` attribute. For example, to print the
+fitted values, bounds and other parameters attributes in a
+well formatted text tables you can execute::
+
+    result.params.pretty_print()
+
+with `results` being a `MinimizerResult` object. Note that the method
+:meth:`lmfit.parameter.Parameters.pretty_print` accepts several arguments
+for customizing the output (e.g. column width, numeric format, etc.).
 
 .. autoclass:: MinimizerResult
 
