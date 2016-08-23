@@ -914,8 +914,7 @@ class ModelResult(Minimizer):
         if ylabel is None:
             ax.set_ylabel('y')
         else: ax.set_ylabel(ylabel)
-        ax.legend()
-
+        ax.legend(loc='best')
         return ax
 
     @_ensureMatplotlib
@@ -995,8 +994,7 @@ class ModelResult(Minimizer):
 
         ax.set_title(self.model.name)
         ax.set_ylabel('residuals')
-        ax.legend()
-
+        ax.legend(loc='best')
         return ax
 
     @_ensureMatplotlib
@@ -1029,7 +1027,7 @@ class ModelResult(Minimizer):
             only at data points, but refined to contain `numpoints` points in
             total.
         fig : matplotlib.figure.Figure, optional
-            The figure to plot on. The default in None, which means use the
+            The figure to plot on. The default is None, which means use the
             current pyplot figure or create one if there is none.
         data_kws : dictionary, optional
             keyword arguments passed on to the plot function for data points
@@ -1047,7 +1045,7 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        matplotlib.figure.Figure
+        A tuple with matplotlib's Figure and GridSpec objects.
 
         Notes
         ----
@@ -1057,7 +1055,8 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
         not specified and the fit includes weights, yerr set to 1/self.weights
 
-        If `fig` is None then matplotlib.pyplot.figure(**fig_kws) is called.
+        If `fig` is None then matplotlib.pyplot.figure(**fig_kws) is called,
+        otherwise `fig_kws` is ignored.
 
         See Also
         --------
@@ -1074,8 +1073,11 @@ class ModelResult(Minimizer):
             ax_res_kws = {}
         if ax_fit_kws is None:
             ax_fit_kws = {}
-        if fig_kws is None:
-            fig_kws = {}
+        # make a square figure with side equal to the default figure's x-size
+        figxsize = plt.rcParams['figure.figsize'][0]
+        fig_kws_ = dict(figsize=(figxsize, figxsize))
+        if fig_kws is not None:
+            fig_kws_.update(fig_kws)
 
         if len(self.model.independent_vars) != 1:
             print('Fit can only be plotted if the model function has one '
@@ -1083,17 +1085,19 @@ class ModelResult(Minimizer):
             return False
 
         if not isinstance(fig, plt.Figure):
-            fig = plt.figure(**fig_kws)
+            fig = plt.figure(**fig_kws_)
 
         gs = plt.GridSpec(nrows=2, ncols=1, height_ratios=[1, 4])
         ax_res = fig.add_subplot(gs[0], **ax_res_kws)
         ax_fit = fig.add_subplot(gs[1], sharex=ax_res, **ax_fit_kws)
 
         self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt, yerr=yerr,
-                      initfmt=initfmt, xlabel=xlabel, ylabel=ylabel, numpoints=numpoints, data_kws=data_kws,
+                      initfmt=initfmt, xlabel=xlabel, ylabel=ylabel,
+                      numpoints=numpoints, data_kws=data_kws,
                       fit_kws=fit_kws, init_kws=init_kws, ax_kws=ax_fit_kws)
         self.plot_residuals(ax=ax_res, datafmt=datafmt, yerr=yerr,
                             data_kws=data_kws, fit_kws=fit_kws,
                             ax_kws=ax_res_kws)
-
-        return fig
+        plt.setp(ax_res.get_xticklabels(), visible=False)
+        ax_fit.set_title('')
+        return fig, gs
