@@ -7,6 +7,8 @@ import inspect
 import operator
 from copy import deepcopy
 import numpy as np
+from scipy.stats import t
+from scipy.special import erf
 from . import Parameters, Parameter, Minimizer
 from .printfuncs import fit_report, ci_report
 from .confidence import conf_interval
@@ -787,6 +789,76 @@ class ModelResult(Minimizer):
         if params is None:
             params = self.params
         return self.model.eval_components(params=params, **self.userkws)
+
+    def eval_uncertainty(self, params=None, sigma=1, **kwargs):
+        """
+        evaluate the uncertainty of the *model function* from the
+        uncertainties for the best-fit parameters.  This can be used
+        to give confidence bands for the model.
+
+        Arguments:
+            params (Parameters):  parameters, defaults to ModelResult .params
+            sigma (float):  confidence level, i.e. how many sigma [default=1]
+            kwargs (variable):  values of options, independent variables, etc
+
+        Returns:
+            ndarray for the uncertainty at each value of the model.
+
+        Example:
+            out = model.fit(data, params, x=x)
+            dely = out.eval_confidence_band(x=x)
+            plt.plot(x, data)
+            plt.plot(x, out.best_fit)
+            plt.fill_between(x, out.best_fit-dely,
+                             out.best_fit+dely, color='#888888')
+
+        Notes:
+            1. This is based on the excellent and clear example from
+               https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
+               which references the original work of
+                 J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
+            2. the value of sigma is number of `sigma` values, and is converted to a probability.
+               Values or 1, 2, or 3 give probalities of 0.6827, 0.9545, and 0.9973, respectively.
+               If the sigma value is < 1, it is interpreted as the probability itself.  That is,
+               `sigma=1` and `sigma=0.6827` will give the same results, within precision errors.
+
+        """
+        self.userkws.update(kwargs)
+        if params is None:
+            params = self.params
+
+        nvarys = self.nvarys
+        ndata = self.ndata
+        covar = self.covar / self.redchi
+        fjac = np.zeros(ndata*nvarys).reshape((nvarys, ndata))
+        df2 = np.zeros(ndata)
+
+        # find derivative by hand!
+        for i in range(nvarys):
+            pname = self.var_names[i]
+            pars = self.params
+            val0 = pars[pname].value
+            dval = pars[pname].stderr/3.0
+
+            pars[pname].value = val0 + dval
+            res1 = self.model.eval(pars, **self.userkws)
+
+            pars[pname].value = val0 - dval
+            res2 = self.model.eval(pars, **self.userkws)
+
+            pars[pname].value = val0
+            fjac[i] = (res1 - res2) / (2*dval)
+
+        for i in range(nvarys):
+            for j in range(nvarys):
+                df2 += fjac[i]*fjac[j]*covar[i,j]
+
+        if sigma < 1.0:
+            prob = sigma
+        else:
+            prob = erf(sigma/np.sqrt(2))
+        return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, ndata-nvarys)
+
 
     def conf_interval(self, **kwargs):
         """return explicitly calculated confidence intervals"""

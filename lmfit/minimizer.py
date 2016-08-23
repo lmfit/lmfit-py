@@ -1180,6 +1180,8 @@ class Minimizer(object):
         except (LinAlgError, ValueError):
             result.covar = None
 
+        result.fjac = infodict['fjac']
+
         has_expr = False
         for par in params.values():
             par.stderr, par.correl = 0, None

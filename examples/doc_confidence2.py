@@ -27,7 +27,7 @@ out2 = mini.minimize(method='leastsq', params=out1.params)
 
 lmfit.report_fit(out2.params, min_correl=0.5)
 
-ci, trace = lmfit.conf_interval(mini, out2, sigmas=[0.68,0.95],
+ci, trace = lmfit.conf_interval(mini, out2, sigmas=[1, 2],
                                 trace=True, verbose=False)
 lmfit.printfuncs.report_ci(ci)
 
