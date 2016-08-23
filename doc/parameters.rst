@@ -32,7 +32,10 @@ ordered dictionary of :class:`Parameter` objects, with a few additional
 features and methods.  That is, while the concept of a :class:`Parameter`
 is central to lmfit, one normally creates and interacts with a
 :class:`Parameters` instance that contains many :class:`Parameter` objects.
-The objective functions you write for lmfit will take an instance of
+A table of parameter values, bounds and other attributes can be
+printed using :meth:`Parameters.pretty_print`.
+
+Finally, the objective functions you write for lmfit will take an instance of
 :class:`Parameters` as its first argument.
 
 
@@ -217,8 +220,8 @@ The :class:`Parameters` class
 Simple Example
 ==================
 
-Using :class:`Parameters`` and :func:`minimize` function (discussed in the
-next chapter) might look like this:
+Using :class:`~lmfit.parameter.Parameters` and :func:`~lmfit.minimizer.minimize`
+function (discussed in the next chapter) might look like this:
 
 .. literalinclude:: ../examples/doc_basic.py
 
