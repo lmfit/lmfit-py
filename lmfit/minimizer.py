@@ -733,9 +733,12 @@ class Minimizer(object):
         -------
         :class:`MinimizerResult`
             MinimizerResult object containing updated params, statistics,
-            etc. The `MinimizerResult` also contains the ``chain``,
-            ``flatchain`` and ``lnprob`` attributes. The ``chain``
-            and ``flatchain`` attributes contain the samples and have the shape
+            etc. The updated params represent the median (50th percentile) of
+            all the samples, whilst the parameter uncertainties are half of the
+            difference between the 15.87 and 84.13 percentiles.
+            The `MinimizerResult` also contains the ``chain``, ``flatchain``
+            and ``lnprob`` attributes. The ``chain`` and ``flatchain``
+            attributes contain the samples and have the shape
             `(nwalkers, (steps - burn) // thin, nvarys)` or
             `(ntemps, nwalkers, (steps - burn) // thin, nvarys)`,
             depending on whether Parallel tempering was used or not.
@@ -773,8 +776,10 @@ class Minimizer(object):
             \ln p(D|F_{true}) = -\\frac{1}{2}\sum_n \left[\\frac{\left(g_n(F_{true}) - D_n \\right)^2}{s_n^2}+\ln (2\pi s_n^2)\\right]
 
         The first summand in the square brackets represents the residual for a
-        given datapoint (:math:`g` being the generative model) . This term
-        represents :math:`\chi^2` when summed over all data points.
+        given datapoint (:math:`g` being the generative model, :math:`D_n` the
+        data and :math:`s_n` the standard deviation, or measurement
+        uncertainty, of the datapoint). This term represents :math:`\chi^2`
+        when summed over all data points.
         Ideally the objective function used to create `lmfit.Minimizer` should
         return the log-posterior probability, :math:`\ln p(F_{true} | D)`.
         However, since the in-built log-prior term is zero, the objective
@@ -792,9 +797,10 @@ class Minimizer(object):
         a vector of (possibly weighted) residuals. Therefore, if your objective
         function returns a vector, `res`, then the vector is assumed to contain
         the residuals. If `is_weighted is True` then your residuals are assumed
-        to be correctly weighted by the standard deviation of the data points
-        (`res = (data - model) / sigma`) and the log-likelihood (and
-        log-posterior probability) is calculated as: `-0.5 * np.sum(res **2)`.
+        to be correctly weighted by the standard deviation (measurement
+        uncertainty) of the data points (`res = (data - model) / sigma`) and
+        the log-likelihood (and log-posterior probability) is calculated as:
+        `-0.5 * np.sum(res**2)`.
         This ignores the second summand in the square brackets. Consequently,
         in order to calculate a fully correct log-posterior probability value
         your objective function should return a single value. If
