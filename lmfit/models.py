@@ -3,7 +3,7 @@ from .model import Model
 
 from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, moffat, pearson7,
                          step, rectangle, breit_wigner, logistic,
-                         students_t, lognormal, damped_oscillator,
+                         students_t, lognormal, damped_oscillator, dho,
                          expgaussian, skewed_gaussian, donaich,
                          skewed_voigt, exponential, powerlaw, linear,
                          parabolic)
@@ -294,6 +294,18 @@ class DampedOscillatorModel(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         pars =guess_from_peak(self, data, x, negative,
                               ampscale=0.1, sigscale=0.1)
+        return update_param_vals(pars, self.prefix, **kwargs)
+
+
+class DampedHarmonicOscillatorModel(Model):
+    __doc__ = dho.__doc__ + COMMON_DOC if dho.__doc__ else ""
+    def __init__(self, *args, **kwargs):
+        super(DampedOscillatorModel, self).__init__(dho, *args, **kwargs)
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        pars =guess_from_peak(self, data, x, negative,
+                              ampscale=0.1, sigscale=0.1)
+        pars['%sgamma' % self.prefix].set(value=1.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
 class ExponentialGaussianModel(Model):
