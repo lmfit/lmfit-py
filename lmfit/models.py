@@ -1,4 +1,4 @@
-simport numpy as np
+import numpy as np
 from .model import Model
 
 from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, moffat, pearson7,
