@@ -162,7 +162,7 @@ class Model(object):
             kw_args = {}
             for name, defval in self.func.kwargs:
                 kw_args[name] = defval
-             keywords_ = list(kw_args.keys())
+            keywords_ = list(kw_args.keys())
         else:
             argspec = inspect.getargspec(self.func)
             pos_args = argspec.args[:]
