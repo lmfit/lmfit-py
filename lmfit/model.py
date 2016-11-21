@@ -156,13 +156,21 @@ class Model(object):
         "build params from function arguments"
         if self.func is None:
             return
-        argspec = inspect.getargspec(self.func)
-        pos_args = argspec.args[:]
-        keywords = argspec.keywords
-        kw_args = {}
-        if argspec.defaults is not None:
-            for val in reversed(argspec.defaults):
-                kw_args[pos_args.pop()] = val
+        if (hasattr(self.func, 'argnames') and
+            hasattr(self.func, 'kwargs')):
+            pos_args = self.func.argnames[:]
+            kw_args = {}
+            for name, defval in self.func.kwargs:
+                kw_args[name] = defval
+             keywords_ = list(kw_args.keys())
+        else:
+            argspec = inspect.getargspec(self.func)
+            pos_args = argspec.args[:]
+            keywords_ = argspec.keywords
+            kw_args = {}
+            if argspec.defaults is not None:
+                for val in reversed(argspec.defaults):
+                    kw_args[pos_args.pop()] = val
 
         self._func_haskeywords = keywords is not None
         self._func_allargs = pos_args + list(kw_args.keys())
