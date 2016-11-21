@@ -1,4 +1,4 @@
-import numpy as np
+simport numpy as np
 from .model import Model
 
 from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, moffat, pearson7,
@@ -46,13 +46,13 @@ def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     maxx, minx = max(x), min(x)
     imaxy = index_of(y, maxy)
     cen = x[imaxy]
-    amp = (maxy - miny)*2.0
+    amp = (maxy - miny)*3.0
     sig = (maxx-minx)/6.0
 
     halfmax_vals = np.where(y > (maxy+miny)/2.0)[0]
     if negative:
         imaxy = index_of(y, miny)
-        amp = -(maxy - miny)*2.0
+        amp = -(maxy - miny)*3.0
         halfmax_vals = np.where(y < (maxy+miny)/2.0)[0]
     if len(halfmax_vals) > 2:
         sig = (x[halfmax_vals[-1]] - x[halfmax_vals[0]])/2.0
