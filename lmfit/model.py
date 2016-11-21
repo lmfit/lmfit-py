@@ -178,11 +178,11 @@ class Model(object):
                 for val in reversed(argspec.defaults):
                     kw_args[pos_args.pop()] = val
 
-        self._func_haskeywords = keywords is not None
+        self._func_haskeywords = keywords_ is not None
         self._func_allargs = pos_args + list(kw_args.keys())
         allargs = self._func_allargs
 
-        if len(allargs) == 0 and keywords is not None:
+        if len(allargs) == 0 and keywords_ is not None:
             return
 
         # default independent_var = 1st argument
