@@ -5,6 +5,7 @@ from __future__ import print_function
 import warnings
 import inspect
 import operator
+from functools import wraps
 from copy import deepcopy
 import numpy as np
 from scipy.stats import t
@@ -44,12 +45,9 @@ except ImportError:
 
 def _ensureMatplotlib(function):
     if _HAS_MATPLOTLIB:
+        @wraps(function)
         def wrapper(*args, **kws):
-            out = function(*args, **kws)
-            return out
-        wrapper.__doc__ = function.__doc__
-        wrapper.__name__ = function.__name__
-        wrapper.__dict__.update(function.__dict__)
+            return function(*args, **kws)
         return wrapper
     else:
         def no_op(*args, **kwargs):
