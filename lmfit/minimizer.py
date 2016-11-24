@@ -1322,7 +1322,7 @@ def _lnprior(theta, bounds):
         or np.any(theta < bounds[:, 0])):
         return -np.inf
     else:
-        return 0
+        return -np.sum(np.log(bounds.dot([ -1, 1 ])))
 
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
