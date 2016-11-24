@@ -1320,10 +1320,14 @@ def _lnprior(theta, bounds):
     """
     if (np.any(theta > bounds[:, 1])
         or np.any(theta < bounds[:, 0])):
-        return -np.inf
+        logp = -np.inf
     else:
-        return -np.sum(np.log(bounds.dot([ -1, 1 ])))
+        logp = -np.sum(np.log(bounds.dot([ -1, 1 ])))
 
+        if not np.isfinite(logp):
+            logp = 0
+
+    return logp
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
             userkws=None, float_behavior='posterior', is_weighted=True,
