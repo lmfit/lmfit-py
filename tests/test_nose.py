@@ -436,6 +436,19 @@ class CommonMinimizerTest(unittest.TestCase):
 
         check_paras(out.params, self.p_true, sig=3)
 
+    def test_emcee_kwargs(self):
+        # test emcee
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        out = self.mini.emcee(nwalkers=100, steps=200,
+                              burn=50, thin=10,
+                              sampler_kwargs={'a': 1.9})
+
+        check_paras(out.params, self.p_true, sig=3)
+
+
     @decorators.slow
     def test_emcee_PT(self):
         # test emcee with parallel tempering
@@ -448,6 +461,7 @@ class CommonMinimizerTest(unittest.TestCase):
                               burn=100, thin=10, workers=2)
 
         check_paras(out.params, self.p_true, sig=3)
+
 
     @decorators.slow
     def test_emcee_multiprocessing(self):
