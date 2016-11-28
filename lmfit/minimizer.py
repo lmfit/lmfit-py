@@ -750,9 +750,9 @@ class Minimizer(object):
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              float_behavior='posterior', is_weighted=True, seed=None):
-        r"""
-        Bayesian sampling of the posterior distribution using the `emcee`.
+              float_behavior='posterior', is_weighted=True, seed=None,
+              sampler_kwargs=None):
+        """Bayesian sampling of the posterior distribution using the `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
@@ -842,6 +842,9 @@ class Minimizer(object):
             If `seed` is already a `np.random.RandomState` instance, then that
             `np.random.RandomState` instance is used.
             Specify `seed` for repeatable minimizations.
+        sampler_kwargs : dict, optional
+            Additional keyword arguments that can be used to construct
+            the emcee.PTSampler or emcee.EnsembleSampler objects [1]_
 
         Returns
         -------
@@ -863,7 +866,6 @@ class Minimizer(object):
             `result.flatchain[parname]`. The ``lnprob`` attribute contains the
             log probability for each sample in ``chain``. The sample with the
             highest probability corresponds to the maximum likelihood estimate.
-
 
         Notes
         -----
@@ -928,6 +930,7 @@ class Minimizer(object):
         References
         ----------
         .. [1] http://dan.iel.fm/emcee/current/user/line/
+
         """
         if not HAS_EMCEE:
             raise NotImplementedError('You must have emcee to use'
@@ -992,8 +995,9 @@ class Minimizer(object):
         self.nvarys = len(result.var_names)
 
         # set up multiprocessing options for the samplers
+        if sampler_kwargs is None:
+            sampler_kwargs = {}
         auto_pool = None
-        sampler_kwargs = {}
         if isinstance(workers, int) and workers > 1:
             auto_pool = multiprocessing.Pool(workers)
             sampler_kwargs['pool'] = auto_pool
