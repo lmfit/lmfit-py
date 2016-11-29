@@ -1133,18 +1133,21 @@ class Minimizer(object):
         result.residual = resid = infodict['fvec']
         result.ier = ier
         result.lmdif_message = errmsg
-        result.message = 'Fit succeeded.'
         result.success = ier in [1, 2, 3, 4]
         if result.aborted:
             result.message = 'Fit aborted by user callback.'
             result.success = False
+        elif ier in {1,2,3}:
+            result.message = 'Fit succeeded.'
         elif ier == 0:
-            result.message = 'Invalid Input Parameters.'
+            result.message = 'Invalid Input Parameters. I.e. more variables than data points given, tolerance < 0.0, or no data provided.'
+        elif ier == 4:
+            result.message = 'One or more variable did not affect the fit.'
         elif ier == 5:
             result.message = self._err_maxfev % lskws['maxfev']
         else:
             result.message = 'Tolerance seems to be too small.'
-
+        
         result.ndata = len(resid)
 
         result.chisqr = (resid**2).sum()
@@ -1231,7 +1234,7 @@ class Minimizer(object):
                         params[nam].value = v.nominal_value
 
         if not result.errorbars:
-            result.message = '%s. Could not estimate error-bars' % result.message
+            result.message = '%s Could not estimate error-bars.' % result.message
 
         np.seterr(**orig_warn_settings)
         return result
