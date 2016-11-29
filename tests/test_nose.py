@@ -489,6 +489,7 @@ class CommonMinimizerTest(unittest.TestCase):
                               burn=50, thin=10,
                               sampler_kwargs={'a': 1.9})
 
+        assert_equal(self.mini.sampler.a, 1.9)
         check_paras(out.params, self.p_true, sig=3)
 
 
