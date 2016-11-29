@@ -728,6 +728,9 @@ class Minimizer(object):
             If `seed` is already a `np.random.RandomState` instance, then that
             `np.random.RandomState` instance is used.
             Specify `seed` for repeatable minimizations.
+        sampler_kwargs : dict, optional
+            Add any sampler keyword arguments here., Typically ``a``,
+            ``betas`` or ``Tmax``
 
         Returns
         -------
@@ -749,9 +752,6 @@ class Minimizer(object):
             `result.flatchain[parname]`. The ``lnprob`` attribute contains the
             log probability for each sample in ``chain``. The sample with the
             highest probability corresponds to the maximum likelihood estimate.
-        sampler_kwargs : dict, optional
-            Add any sampler keyword arguments here., Typically ``a``,
-            ``betas`` or ``Tmax``
 
         Notes
         -----
