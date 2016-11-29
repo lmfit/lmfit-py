@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
-from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
+from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE, HAS_NESTLE,
                              MinimizerResult, _lnpost, _nan_policy)
 from lmfit.lineshapes import gaussian
 import numpy as np
@@ -615,6 +615,78 @@ class CommonMinimizerTest(unittest.TestCase):
                                steps=1, seed=1)
 
         assert_almost_equal(out.chain, out2.chain)
+
+    @decorators.slow
+    def test_nestle(self):
+        # test nestle
+        if not HAS_NESTLE:
+            return True
+
+        np.random.seed(123456)
+        out = self.mini.nestle(nwalkers=10, steps=2000, thin=10)
+
+        check_paras(out.params, self.p_true, sig=3)
+
+    @decorators.slow
+    def test_nestle_partial_bounds(self):
+        # mcmc with partial bounds
+        if not HAS_NESTLE:
+            return True
+
+        np.random.seed(123456)
+        # test mcmc output vs lm, some parameters not bounded
+        self.fit_params['amp'].max = np.inf
+        # self.fit_params['amp'].min = -np.inf
+        assert_raises(ValueError,
+                      self.mini.nestle,
+                      nwalkers=10,
+                      steps=10,
+                      thin=10)
+
+    def test_nestle_output(self):
+        # test mcmc output
+        if not HAS_NESTLE:
+            return True
+        try:
+            from pandas import DataFrame
+        except ImportError:
+            return True
+        out = self.mini.nestle(nwalkers=10, steps=100, thin=2)
+        assert_(isinstance(out, MinimizerResult))
+        assert_(isinstance(out.flatchain, DataFrame))
+
+        # check that we can access the chains via parameter name
+        assert_(out.flatchain['amp'].shape[0] == 110)
+        assert_(out.errorbars is True)
+        assert_(np.isfinite(out.params['amp'].correl['period']))
+
+        # the lnprob array should be the same as the chain size
+        assert_(np.size(out.chain)//4 == np.size(out.lnprob))
+
+
+    @decorators.slow
+    def test_nestle_float(self):
+        # test that it works if the residuals returns a float, not a vector
+        if not HAS_NESTLE:
+            return True
+
+        def resid(pars, x, data=None):
+            return -0.5 * np.sum(self.residual(pars, x, data=data)**2)
+
+        # just return chi2
+        def resid2(pars, x, data=None):
+            return np.sum(self.residual(pars, x, data=data)**2)
+
+        self.mini.userfcn = resid
+        np.random.seed(123456)
+        out = self.mini.nestle(nwalkers=10, steps=2000, thin=10)
+        check_paras(out.params, self.p_true, sig=3)
+
+        self.mini.userfcn = resid2
+        np.random.seed(123456)
+        out = self.mini.nestle(nwalkers=10, steps=2000,
+                               thin=10, float_behavior='chi2')
+        check_paras(out.params, self.p_true, sig=3)
 
 
 def residual_for_multiprocessing(pars, x, data=None):
