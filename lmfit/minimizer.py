@@ -843,8 +843,8 @@ class Minimizer(object):
             `np.random.RandomState` instance is used.
             Specify `seed` for repeatable minimizations.
         sampler_kwargs : dict, optional
-            Add any sampler keyword arguments here., Typically ``a``,
-            ``betas`` or ``Tmax``
+            Additional keyword arguments that can be used to construct
+            the emcee.PTSampler or emcee.EnsembleSampler objects [1]_
 
         Returns
         -------
