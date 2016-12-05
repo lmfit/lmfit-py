@@ -11,6 +11,7 @@ function-to-be-minimized (residual function) in terms of these Parameters.
    <newville@cars.uchicago.edu>
 """
 
+from collections import namedtuple
 from copy import deepcopy
 import numpy as np
 from numpy import (dot, eye, ndarray, ones_like,
@@ -33,6 +34,7 @@ import six
 
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
+from scipy.optimize import brute as scipy_brute
 
 # differential_evolution is only present in scipy >= 0.15
 try:
@@ -257,6 +259,16 @@ class MinimizerResult(object):
         else:
             return None
 
+    @property
+    def show_candidates(self):
+        """
+        A pretty_print() representation of the candidates from the brute force
+        method.
+        """
+        if hasattr(self, 'candidates'):
+            for i, candidate in enumerate(self.candidates):
+                print("\nCandidate # {}, chisqr = {:.3f}".format(i, candidate.score))
+                candidate.params.pretty_print()
 
 class Minimizer(object):
     """A general minimizer for curve fitting and optimization.
@@ -396,6 +408,9 @@ class Minimizer(object):
             return None
         params = self.result.params
 
+        if fvars.shape == ():
+            fvars = fvars.reshape((1,))
+
         if apply_bounds_transformation:
             for name, val in zip(self.result.var_names, fvars):
                 params[name].value = params[name].from_internal(val)
@@ -469,6 +484,27 @@ class Minimizer(object):
             r = self.reduce_fcn(r)
             if isinstance(r, ndarray) and r.size > 1:
                 r = r.sum()
+        return r
+
+    def penalty_brute(self, fvars):
+        """
+        Penalty function for brute force method.
+
+        Parameters
+        ----------
+        fvars : numpy.ndarray
+            Array of values for the variable parameters
+
+        Returns
+        -------
+        r : float
+            The user evaluated user-supplied objective function. If the
+            objective function is an array of size greater than 1, return the
+            array sum-of-squares
+        """
+        r = self.__residual(fvars, apply_bounds_transformation=False)
+        if isinstance(r, ndarray) and r.size > 1:
+            r = (r*r).sum()
         return r
 
     def prepare_fit(self, params=None):
@@ -1294,6 +1330,121 @@ class Minimizer(object):
         np.seterr(**orig_warn_settings)
         return result
 
+    def brute(self, params=None, Ns=20, keep=50):
+        """
+        Use the ``brute force`` method, :scipydoc:`scipy.optimize.brute`,
+        to find the global minimum of a function.
+
+        It assumes that the input Parameters have been initialized, and a
+        function to minimize has been properly set up.
+
+        Parameters
+        ----------
+        params : :class:`lmfit.parameter.Parameters` object, optional
+            Contains the Parameters for the model; if None, then the
+            Parameters used to initialize the Minimizer object are used.
+        Ns : int, optional
+            Number of grid points along the axes, if not otherwise specified
+        keep : int, optional
+            Number of best candidates from the brute force method that are
+            stored in the .candidates attribute. If 'all', then all grid
+            points from brute are stored as candidates.
+
+        The following, default, minimizer options are passed to
+        :scipydoc:`scipy.optimize.brute` and cannot be changed:
+            full_output=1, finish=None, disp=False
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the parameters from the brute force method.
+            The return values (x0, fval, grid, Jout) from
+            `scipy.optimize.brute` are stored as ``brute_<parname>`` attributes.
+            The `MinimizerResult` also contains the ``candidates`` and
+            ``show_candidates`` attributes. The ``candidates`` attribute
+            contains the parameters and chisqr from the brute force method as
+            a namedtuple, ('Candidate', ['params', 'score']), sorted on the
+            (lowest) chisqr value. To access the values for a particular
+            candidate use `result.candidate[#].params` or
+            `result.candidate[#].score`, where a lower # represents a better
+            candidate. The ``show_candidates`` attribute, will show the
+            candidates using the `pretty_print` method.
+        """
+        result = self.prepare_fit(params=params)
+        result.method = 'brute'
+
+        brute_kws = dict(full_output=1, finish=None, disp=False)
+
+        varying = np.asarray([par.vary for par in self.params.values()])
+        replace_none = lambda x, sign: sign*np.inf if x is None else x
+        lower_bounds = np.asarray([replace_none(i.min, -1) for i in
+                                   self.params.values()])[varying]
+        upper_bounds = np.asarray([replace_none(i.max, 1) for i in
+                                   self.params.values()])[varying]
+        value = np.asarray([i.value for i in self.params.values()])[varying]
+        stepsize = np.asarray([i.brute_step for i in self.params.values()])[varying]
+
+        ranges = []
+        for i, step in enumerate(stepsize):
+            if np.all(np.isfinite([lower_bounds[i], upper_bounds[i]])):
+                # lower AND upper bounds are specified (brute_step optional)
+                par_range = ((lower_bounds[i], upper_bounds[i], step)
+                             if step else (lower_bounds[i], upper_bounds[i]))
+            elif np.isfinite(lower_bounds[i]) and step:
+                # lower bound AND brute_step are specified
+                par_range = (lower_bounds[i], lower_bounds[i] + Ns*step, step)
+            elif np.isfinite(upper_bounds[i]) and step:
+                # upper bound AND brute_step are specified
+                par_range = (upper_bounds[i] - Ns*step, upper_bounds[i], step)
+            elif np.isfinite(value[i]) and step:
+                # no bounds, but an initial value is specified
+                par_range = (value[i] - (Ns//2)*step, value[i] + (Ns//2)*step,
+                             step)
+            else:
+              raise ValueError('Not enough information provided for the brute '
+                               'force method. Please specify bounds or at '
+                               'least an initial value and brute_step for '
+                               'parameter "{}".'.format(result.var_names[i]))
+            ranges.append(par_range)
+
+        ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)
+
+        result.brute_x0 = ret[0]
+        result.brute_fval = ret[1]
+        result.brute_grid = ret[2]
+        result.brute_Jout = ret[3]
+
+        # sort the results of brute and populate .candidates attribute
+        grid_score = ret[3].ravel()  # chisqr
+        grid_points = [par.ravel() for par in ret[2]]
+
+        if len(result.var_names) == 1:
+            grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
+                                   dtype=[('par', 'O'), ('score', 'float64')])
+        else:
+            grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
+                                   dtype=[('par', 'O'), ('score', 'float64')])
+        grid_result_sorted = grid_result[grid_result.argsort(order='score')]
+
+        result.candidates = []
+        candidate = namedtuple('Candidate', ['params', 'score'])
+
+        if keep == 'all':
+            keep_candidates = len(grid_result_sorted)
+        else:
+            keep_candidates = min(len(grid_result_sorted), keep)
+
+        for data in grid_result_sorted[:keep_candidates]:
+            pars = deepcopy(self.params)
+            for i, par in enumerate(result.var_names):
+                pars[par].value = data[0][i]
+            result.candidates.append(candidate(params=pars, score=data[1]))
+
+        result.params = result.candidates[0].params
+        result.chisqr = ret[1]
+
+        return result
+
     def minimize(self, method='leastsq', params=None, **kws):
         """
         Perform the minimization.
@@ -1318,6 +1469,8 @@ class Minimizer(object):
             - `'dogleg'`: Dogleg
             - `'slsqp'`: Sequential Linear Squares Programming
             - `'differential_evolution'`: differential evolution
+            - `'brute'`: brute force method.
+              Uses `scipy.optimize.brute`.
 
             For more details on the fitting methods please refer to the
             `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
@@ -1350,6 +1503,8 @@ class Minimizer(object):
             function = self.leastsq
         elif user_method.startswith('least_s'):
             function = self.least_squares
+        elif user_method.startswith('brute'):
+            function = self.brute
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -1653,7 +1808,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     and is equivalent to::
 
         fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
-        	           iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
+                           iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
         fitter.minimize(method=method)
 
     """

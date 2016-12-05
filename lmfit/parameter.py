@@ -505,7 +505,7 @@ class Parameter(object):
             To remove a constraint you must supply an empty string.
         brute_step : float, optional
             Step size for grid points in brute force method. To remove the step
-            size you must supply an emtpy string.
+            size you must supply 0 ("zero").
         """
 
         if value is not None:
@@ -527,7 +527,7 @@ class Parameter(object):
             self.__set_expression(expr)
 
         if brute_step is not None:
-            if brute_step == '':
+            if brute_step == 0.0:
                 self.brute_step = None
             else:
                 self.brute_step = brute_step
