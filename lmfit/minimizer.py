@@ -19,6 +19,7 @@ from numpy.dual import inv
 from numpy.linalg import LinAlgError
 import multiprocessing
 import numbers
+import six
 
 ##
 ##  scipy version notes:
@@ -147,6 +148,18 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'trust-ncg': 'trust-ncg',
                   'differential_evolution': 'differential_evolution'}
 
+def reduce_chisquare(r):
+    """reduce residual array r to scalar as chi-square
+    (r*r).sum()
+    """
+    return (r*r).sum()
+
+def reduce_negloglikelihood(r):
+    """reduce residual array r to scalar as negative log-likelihood
+    len(r)*log((r*r).sum()/len(r))/ 2.0
+    """
+    return len(r)*np.log((r*r).sum()/len(r))/ 2.0
+
 
 class MinimizerResult(object):
     """
@@ -240,7 +253,7 @@ class Minimizer(object):
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
-                 **kws):
+                 reducefunc=None, **kws):
         """
         The Minimizer class initialization accepts the following parameters:
 
@@ -270,10 +283,15 @@ class Minimizer(object):
         nan_policy : str, optional
             Specifies action if `userfcn` (or a Jacobian) returns nan
             values. One of:
-
-                - 'raise' - a `ValueError` is raised
-                - 'propagate' - the values returned from `userfcn` are un-altered
-                - 'omit' - the non-finite values are filtered.
+             - 'raise' - a `ValueError` is raised
+             - 'propagate' - the values returned from `userfcn` are un-altered
+             - 'omit' - the non-finite values are filtered.
+        reducefunc : str or callable, optional
+            function to convert a residual array to a scalar value for the scalar
+            minimizers. Optional values are (where `r` is the residual array):
+             - None        : (r*r).sum() sum of squares of residual    [default]
+             - 'negloglike': len(r)*log((r*r).sum()/len(r))/ 2.0
+             - callable    : must take 1 argument (r) and return a float.
 
         kws : dict, optional
             Options to pass to the minimizer being used.
@@ -320,7 +338,7 @@ class Minimizer(object):
         self.redchi = None
         self.covar = None
         self.residual = None
-
+        self.reducefunc = reducefunc
         self.params = params
         self.jacfcn = None
         self.nan_policy = nan_policy
@@ -420,13 +438,15 @@ class Minimizer(object):
         Returns
         -------
         r : float
-            The user evaluated user-supplied objective function. If the
-            objective function is an array of size greater than 1, return the
-            array sum-of-squares
+            The user evaluated user-supplied objective function.
+
+            If the objective function is an array of size greater than 1,
+            use the scalar returned by `self.reducefunc`.  This defaults
+            to sum-of-squares, but can be replaced by other options.
         """
         r = self.__residual(fvars)
         if isinstance(r, ndarray) and r.size > 1:
-            r = (r*r).sum()
+            r = self.reducefunc(r)
         return r
 
     def prepare_fit(self, params=None):
@@ -488,6 +508,18 @@ class Minimizer(object):
         result.nvarys = len(result.var_names)
         result.init_values = {n: v for n, v in zip(result.var_names,
                                                    result.init_vals)}
+
+        # set up reduce function for scalar minimizers
+        #    1. user supplied callable
+        #    2. string starting with 'neglogl'
+        #    3. sum of squares
+        if not callable(self.reducefunc):
+            if isinstance(self.reducefunc, six.string_types):
+                if self.reducefunc.lower().startswith('neglogl'):
+                    self.reducefunc = reduce_negloglikelihood
+            if self.reducefunc is None:
+                self.reducefunc = reduce_chisquare
+
         return result
 
     def unprepare_fit(self):
@@ -1147,7 +1179,7 @@ class Minimizer(object):
             result.message = self._err_maxfev % lskws['maxfev']
         else:
             result.message = 'Tolerance seems to be too small.'
-        
+
         result.ndata = len(resid)
 
         result.chisqr = (resid**2).sum()
@@ -1504,7 +1536,7 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
-             scale_covar=True, iter_cb=None, **fit_kws):
+             scale_covar=True, iter_cb=None, reducefunc=None, **fit_kws):
     """
     This function performs a fit of a set of parameters by minimizing
     an objective (or "cost") function using one one of the several
@@ -1557,8 +1589,10 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         the iteration, `resid` the current residual array, and `*args`
         and `**kws` as passed to the objective function.
     scale_covar : bool, optional
-        Whether to automatically scale the covariance matrix (leastsq
-        only).
+        Whether to automatically scale the covariance matrix (leastsq only).
+    reducefunc : str or callable, optional
+        function to convert a residual array to a scalar value for the scalar
+        minimizers. See notes in `Minimizer`.
     fit_kws : dict, optional
         Options to pass to the minimizer being used.
 
@@ -1601,5 +1635,6 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
 
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
-                       iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
+                       iter_cb=iter_cb, scale_covar=scale_covar,
+                       reducefunc=reducefunc, **fit_kws)
     return fitter.minimize(method=method)
