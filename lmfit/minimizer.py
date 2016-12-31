@@ -40,6 +40,9 @@ try:
 except ImportError:
     from ._differentialevolution import differential_evolution as scipy_diffev
 
+from scipy.stats import cauchy as cauchy_dist
+from scipy.stats import norm as norm_dist
+
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
 try:
@@ -154,11 +157,24 @@ def reduce_chisquare(r):
     """
     return (r*r).sum()
 
-def reduce_negloglikelihood(r):
-    """reduce residual array r to scalar as negative log-likelihood
-    len(r)*log((r*r).sum()/len(r))/ 2.0
+def reduce_negentropy(r):
+    """reduce residual array r to scalar using negative entropy
+    and the normal (Gaussian) probability distribution of r as pdf
+       (norm.pdf(r)*norm.logpdf(r)).sum()
+    since pdf(r) = exp(-r*r/2)/sqrt(2*pi), this is
+       ((r*r/2 - log(sqrt(2*pi))) * exp(-r*r/2)).sum()
     """
-    return len(r)*np.log((r*r).sum()/len(r))/ 2.0
+    return (norm_dist.pdf(r)*norm_dist.logpdf(r)).sum()
+
+
+def reduce_cauchylogpdf(r):
+    """reduce residual array r to scalar using negative
+    log-likelihood and a Cauchy (Lorentzian) distribution of r:
+       -scipy.stats.cauchy.logpdf(r)
+    (where the Cauchy pdf = 1/(pi*(1+r*r))). This gives greater
+    suppression of outliers compared to normal sum-of-squares.
+    """
+    return -cauchy_dist.logpdf(r).sum()
 
 
 class MinimizerResult(object):
@@ -289,9 +305,13 @@ class Minimizer(object):
         reducefunc : str or callable, optional
             function to convert a residual array to a scalar value for the scalar
             minimizers. Optional values are (where `r` is the residual array):
-             - None        : (r*r).sum() sum of squares of residual    [default]
-             - 'negloglike': len(r)*log((r*r).sum()/len(r))/ 2.0
-             - callable    : must take 1 argument (r) and return a float.
+             - None           : sum of squares of residual [default]
+                                (r*r).sum()
+             - 'negentropy'   : neg entropy, using normal distribution
+                                (rho*log(rho)).sum() for rho=exp(-r*r/2)/(sqrt(2*pi))
+             - 'neglogcauchy' : neg log likelihood, using Cauchy distribution
+                                -log(1/(pi*(1+r*r))).sum()
+             - callable       : must take 1 argument (r) and return a float.
 
         kws : dict, optional
             Options to pass to the minimizer being used.
@@ -447,6 +467,8 @@ class Minimizer(object):
         r = self.__residual(fvars)
         if isinstance(r, ndarray) and r.size > 1:
             r = self.reducefunc(r)
+            if isinstance(r, ndarray) and r.size > 1:
+                r = r.sum()
         return r
 
     def prepare_fit(self, params=None):
@@ -511,15 +533,16 @@ class Minimizer(object):
 
         # set up reduce function for scalar minimizers
         #    1. user supplied callable
-        #    2. string starting with 'neglogl'
+        #    2. string starting with 'neglogc' or 'negent'
         #    3. sum of squares
         if not callable(self.reducefunc):
             if isinstance(self.reducefunc, six.string_types):
-                if self.reducefunc.lower().startswith('neglogl'):
-                    self.reducefunc = reduce_negloglikelihood
+                if self.reducefunc.lower().startswith('neglogc'):
+                    self.reducefunc = reduce_cauchylogpdf
+                elif self.reducefunc.lower().startswith('negent'):
+                    self.reducefunc = reduce_negentropy
             if self.reducefunc is None:
                 self.reducefunc = reduce_chisquare
-
         return result
 
     def unprepare_fit(self):
