@@ -146,7 +146,6 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             add("    %s % .7g (fixed)" % (nout, par.value))
 
     if show_correl:
-        add(CORREL_HEAD % min_correl)
         correls = {}
         for i, name in enumerate(parnames):
             par = params[name]
@@ -160,6 +159,8 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
         sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
         sort_correl.reverse()
+        if len(sort_correl) > 0:
+            add(CORREL_HEAD % min_correl)
         for name, val in sort_correl:
             lspace = max(1, 25 - len(name))
             add('    C(%s)%s = % .3f ' % (name, (' '*30)[:lspace], val))
