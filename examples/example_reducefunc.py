@@ -16,51 +16,45 @@ except ImportError:
 
 
 np.random.seed(2)
-x = np.linspace(-5, 5, 31)
+x = np.linspace(0, 10, 101)
 
 # Setup example
-w = 0.5
-c = 1.5
-amp_sin = 2
-omega = 3
-amp_erf = 5
+decay  = 5
+offset = 1.0
+amp    = 2.0
+omega  = 4.0
 
-y  = amp_erf*sp.erf(x/w)+2*np.sin(x*omega)+c
-yn = y + np.random.randn(*y.shape)*0.3
-outliers = np.random.random_integers(0, x.size-1, x.size/5)
-yn[outliers] += np.random.randn(outliers.size)*5.0
+y = offset + amp*np.sin(omega * x) * np.exp(-x / decay)
 
+yn = y + np.random.normal(size=len(y), scale=0.250)
+
+outliers = np.random.random_integers(len(x)/3.0, len(x)-1, len(x)/12)
+yn[outliers] += 5*np.random.random(len(outliers))
 
 def resid(params, x, ydata):
-    amp_erf = params['amp_erf'].value
-    w       = params['w'].value
-    c       = params['c'].value
-    omega   = params['omega'].value
-    amp_sin = params['amp_sin'].value
+    decay = params['decay'].value
+    offset= params['offset'].value
+    omega = params['omega'].value
+    amp   = params['amp'].value
 
-    y_model = amp_erf*sp.erf(x/w) + amp_sin* np.sin(x*omega) + c
+    y_model = offset + amp * np.sin(x*omega) * np.exp(-x/decay)
     return y_model - ydata
 
 params = lmfit.Parameters()
-params.add('w', 0.25)
-params.add('c', 0.75)
-params.add('omega', 2.5, min=2, max=4)
-params.add('amp_sin', 3.6)
-params.add('amp_erf', 2.7)
 
+params.add('offset', 2.0)
+params.add('omega',  3.3)
+params.add('amp',    2.5)
+params.add('decay',  1.0, min=0)
 
-def logln(x):
-    "Returning the t-log-likehood of x with df=2"
-    return -stats.t.logpdf(x, df=2).sum()
+method='L-BFGS-B'
 
-o1 = lmfit.minimize(resid, params, args=(x, yn), method='L-BFGS-B')
-print("# Sum of Squares Fit:")
+o1 = lmfit.minimize(resid, params, args=(x, yn), method=method)
+print("# Fit using sum of squares:")
 lmfit.report_fit(o1)
 
-o2 = lmfit.minimize(resid, params, args=(x, yn), method='L-BFGS-B',
-                    reducefunc=logln)
-
-print("# Robust Fit, using logpdf():")
+o2 = lmfit.minimize(resid, params, args=(x, yn), method=method, reducefunc='neglogcauchy')
+print("# Robust Fit, using log-likelihood with Cauchy PDF:")
 lmfit.report_fit(o2)
 
 
