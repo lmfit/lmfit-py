@@ -282,8 +282,8 @@ def test_scalar_minimize_has_no_uncertainties():
     assert_(out2.errorbars == False)
 
 
-def test_scalar_minimize_reducefunc():
-    # test that the reducefunc option for scalar_minimize
+def test_scalar_minimize_reducefcn():
+    # test that the reducefcn option for scalar_minimize
     # gives different and improved results with outliers
 
     np.random.seed(2)
@@ -313,7 +313,7 @@ def test_scalar_minimize_reducefunc():
     method='L-BFGS-B'
     out1 = minimize(objfunc, params, args=(x, y), method=method)
     out2 = minimize(objfunc, params, args=(x, y), method=method,
-                    reducefunc='neglogcauchy')
+                    reducefcn='neglogcauchy')
 
     #print assert all
     assert_allclose(out1.params['omega'].value, 4.0, rtol=0.01)
