@@ -328,6 +328,8 @@ class Model(object):
             for item in self._hint_names:
                 if item in  hint:
                     setattr(par, item, hint[item])
+            if basename in kwargs:
+                par.value = kwargs[basename]
             # Add the new parameter to self._param_names
             if name not in self._param_names:
                 self._param_names.append(name)
