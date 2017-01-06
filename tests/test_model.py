@@ -7,6 +7,7 @@ import numpy as np
 
 from lmfit import Model, Parameter, models
 from lmfit.lineshapes import gaussian
+from lmfit.models import PseudoVoigtModel
 
 def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03,
                          err_msg='', verbose=True):
@@ -473,6 +474,11 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertEqual(models[0].param_hints['amp'],
                          models[1].param_hints['amp'])
 
+    def test_param_hint_explicit_value(self):
+        # tests Github Issue 384
+        pmod = PseudoVoigtModel()
+        params = pmod.make_params(sigma=2, fraction=0.77)
+        assert_allclose(params['fraction'].value, 0.77, rtol=0.01)
 
     def test_composite_model_with_expr_constrains(self):
         """Smoke test for composite model fitting with expr constraints.
