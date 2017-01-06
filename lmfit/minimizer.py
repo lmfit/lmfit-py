@@ -269,7 +269,7 @@ class Minimizer(object):
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
-                 reducefcn=None, **kws):
+                 reduce_fcn=None, **kws):
         """
         The Minimizer class initialization accepts the following parameters:
 
@@ -302,7 +302,7 @@ class Minimizer(object):
              - 'raise' - a `ValueError` is raised
              - 'propagate' - the values returned from `userfcn` are un-altered
              - 'omit' - the non-finite values are filtered.
-        reducefcn : str or callable, optional
+        reduce_fcn : str or callable, optional
             function to convert a residual array to a scalar value for the scalar
             minimizers. Optional values are (where `r` is the residual array):
              - None           : sum of squares of residual [default]
@@ -358,7 +358,7 @@ class Minimizer(object):
         self.redchi = None
         self.covar = None
         self.residual = None
-        self.reducefcn = reducefcn
+        self.reduce_fcn = reduce_fcn
         self.params = params
         self.jacfcn = None
         self.nan_policy = nan_policy
@@ -461,12 +461,12 @@ class Minimizer(object):
             The user evaluated user-supplied objective function.
 
             If the objective function is an array of size greater than 1,
-            use the scalar returned by `self.reducefcn`.  This defaults
+            use the scalar returned by `self.reduce_fcn`.  This defaults
             to sum-of-squares, but can be replaced by other options.
         """
         r = self.__residual(fvars)
         if isinstance(r, ndarray) and r.size > 1:
-            r = self.reducefcn(r)
+            r = self.reduce_fcn(r)
             if isinstance(r, ndarray) and r.size > 1:
                 r = r.sum()
         return r
@@ -535,14 +535,14 @@ class Minimizer(object):
         #    1. user supplied callable
         #    2. string starting with 'neglogc' or 'negent'
         #    3. sum of squares
-        if not callable(self.reducefcn):
-            if isinstance(self.reducefcn, six.string_types):
-                if self.reducefcn.lower().startswith('neglogc'):
-                    self.reducefcn = reduce_cauchylogpdf
-                elif self.reducefcn.lower().startswith('negent'):
-                    self.reducefcn = reduce_negentropy
-            if self.reducefcn is None:
-                self.reducefcn = reduce_chisquare
+        if not callable(self.reduce_fcn):
+            if isinstance(self.reduce_fcn, six.string_types):
+                if self.reduce_fcn.lower().startswith('neglogc'):
+                    self.reduce_fcn = reduce_cauchylogpdf
+                elif self.reduce_fcn.lower().startswith('negent'):
+                    self.reduce_fcn = reduce_negentropy
+            if self.reduce_fcn is None:
+                self.reduce_fcn = reduce_chisquare
         return result
 
     def unprepare_fit(self):
@@ -1559,7 +1559,7 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
-             scale_covar=True, iter_cb=None, reducefcn=None, **fit_kws):
+             scale_covar=True, iter_cb=None, reduce_fcn=None, **fit_kws):
     """
     This function performs a fit of a set of parameters by minimizing
     an objective (or "cost") function using one one of the several
@@ -1613,7 +1613,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         and `**kws` as passed to the objective function.
     scale_covar : bool, optional
         Whether to automatically scale the covariance matrix (leastsq only).
-    reducefcn : str or callable, optional
+    reduce_fcn : str or callable, optional
         function to convert a residual array to a scalar value for the scalar
         minimizers. See notes in `Minimizer`.
     fit_kws : dict, optional
@@ -1659,5 +1659,5 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar,
-                       reducefcn=reducefcn, **fit_kws)
+                       reduce_fcn=reduce_fcn, **fit_kws)
     return fitter.minimize(method=method)

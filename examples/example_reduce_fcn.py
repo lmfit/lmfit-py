@@ -53,7 +53,7 @@ o1 = lmfit.minimize(resid, params, args=(x, yn), method=method)
 print("# Fit using sum of squares:")
 lmfit.report_fit(o1)
 
-o2 = lmfit.minimize(resid, params, args=(x, yn), method=method, reducefcn='neglogcauchy')
+o2 = lmfit.minimize(resid, params, args=(x, yn), method=method, reduce_fcn='neglogcauchy')
 print("# Robust Fit, using log-likelihood with Cauchy PDF:")
 lmfit.report_fit(o2)
 
