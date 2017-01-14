@@ -24,21 +24,19 @@ sys.path.append(os.path.abspath(os.path.join('.')))
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 from extensions import extensions
 
-extensions = [
-    'sphinx.ext.extlinks',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.mathjax',
-    ]
+extensions = ['sphinx.ext.extlinks',
+              'sphinx.ext.autodoc',
+              'sphinx.ext.napoleon',
+              'sphinx.ext.mathjax']
 
 autoclass_content = 'both'
-
-try:
-    import IPython.sphinxext.ipython_directive
-    extensions.extend(['IPython.sphinxext.ipython_directive',
-                       'IPython.sphinxext.ipython_console_highlighting'])
-except ImportError:
-    pass
+#
+# try:
+#     import IPython.sphinxext.ipython_directive
+#     extensions.extend(['IPython.sphinxext.ipython_directive',
+#                        'IPython.sphinxext.ipython_console_highlighting'])
+# except ImportError:
+#     pass
 
 intersphinx_mapping = {'py': ('http://docs.python.org/2', None),
                        'numpy': ('http://docs.scipy.org/doc/numpy/', None),
@@ -48,8 +46,8 @@ intersphinx_mapping = {'py': ('http://docs.python.org/2', None),
 ## intersphinx_cache_limit = 10
 
 extlinks = {
-    'scipydoc' : ('http://docs.scipy.org/doc/scipy/reference/generated/%s.html', ''),
-    'numpydoc' : ('http://docs.scipy.org/doc/numpy/reference/generated/numpy.%s.html', ''),
+    'scipydoc' : ('http://docs.scipy.org/doc/scipy/reference/generated/scipy.%s.html', 'scipy.'),
+    'numpydoc' : ('http://docs.scipy.org/doc/numpy/reference/generated/numpy.%s.html', 'numpy.'),
     }
 
 # Add any paths that contain templates here, relative to this directory.
@@ -66,7 +64,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'lmfit'
-copyright = u'2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin'
+copyright = u'2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

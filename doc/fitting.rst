@@ -11,10 +11,6 @@ As shown in the previous chapter, a simple fit can be performed with the
 :class:`Minimizer` class can be used to gain a bit more control, especially
 when using complicated constraints or comparing results from related fits.
 
-.. warning::
-
-  Upgrading scripts from version 0.8.3 to 0.9.0?  See  :ref:`whatsnew_090_label`
-
 
 The :func:`minimize` function
 =============================

@@ -8,17 +8,19 @@ The lmfit package is designed to provide simple tools to help you build
 complex fitting models for non-linear least-squares problems and apply
 these models to real data.  This section gives an overview of the concepts
 and describes how to set up and perform simple fits.  Some basic knowledge
-of Python, numpy, and modeling data are assumed.
+of Python, numpy, and modeling data are assumed -- this is not a tutorial
+on why or how to perform a minimization or fit data, but is rather aimed at
+explaining how to use lmfit to do these things.
 
-To do a non-linear least-squares fit of a model to data or for a variety of other
-optimization problems, the main task is to write an *objective function*
-that takes the values of the fitting variables and calculates either a
-scalar value to be minimized or an array of values that is to be minimized
-in the least-squares sense.   For many data fitting processes, the
-least-squares approach is used, and the objective function should
-return an array of (data-model), perhaps scaled by some weighting factor
-such as the inverse of the uncertainty in the data.  For such a problem,
-the chi-square (:math:`\chi^2`) statistic is often defined as:
+In order to do a non-linear least-squares fit of a model to data or for a
+variety of other optimization problems, the main task is to write an
+*objective function* that takes the values of the fitting variables and
+calculates either a scalar value to be minimized or an array of values that
+are to be minimized in the least-squares sense.  For many data fitting
+processes, the least-squares approach is used, and the objective function
+should return an array of (data-model), perhaps scaled by some weighting
+factor such as the inverse of the uncertainty in the data.  For such a
+problem, the chi-square (:math:`\chi^2`) statistic is often defined as:
 
 .. math::
 

@@ -7,7 +7,8 @@ from lmfit.lineshapes import gaussian
 import numpy as np
 from numpy import pi
 from numpy.testing import (assert_, decorators, assert_raises,
-                           assert_almost_equal, assert_equal)
+                           assert_almost_equal, assert_equal,
+                           assert_allclose)
 import unittest
 import nose
 from nose import SkipTest
@@ -279,6 +280,47 @@ def test_scalar_minimize_has_no_uncertainties():
     assert_(out2.params['shift'].correl is None)
     assert_(out2.params['omega'].correl is None)
     assert_(out2.errorbars == False)
+
+
+def test_scalar_minimize_reduce_fcn():
+    # test that the reduce_fcn option for scalar_minimize
+    # gives different and improved results with outliers
+
+    np.random.seed(2)
+    x = np.linspace(0, 10, 101)
+
+    yo = 1.0 + 2.0*np.sin(4*x) * np.exp(-x / 5)
+    y = yo + np.random.normal(size=len(yo), scale=0.250)
+    outliers = np.random.random_integers(len(x)/3.0, len(x)-1, len(x)/12)
+    y[outliers] += 5*np.random.random(len(outliers))
+
+    # define objective function: returns the array to be minimized
+    def objfunc(pars, x, data):
+        decay = pars['decay']
+        offset= pars['offset']
+        omega = pars['omega']
+        amp   = pars['amp']
+        model = offset + amp * np.sin(x*omega) * np.exp(-x/decay)
+        return model - data
+
+    # create a set of Parameters
+    params = Parameters()
+    params.add('offset', 2.0)
+    params.add('omega',  3.3)
+    params.add('amp',    2.5)
+    params.add('decay',  1.0)
+
+    method='L-BFGS-B'
+    out1 = minimize(objfunc, params, args=(x, y), method=method)
+    out2 = minimize(objfunc, params, args=(x, y), method=method,
+                    reduce_fcn='neglogcauchy')
+
+    #print assert all
+    assert_allclose(out1.params['omega'].value, 4.0, rtol=0.01)
+    assert_allclose(out1.params['decay'].value, 7.6, rtol=0.01)
+
+    assert_allclose(out2.params['omega'].value, 4.0, rtol=0.01)
+    assert_allclose(out2.params['decay'].value, 5.8, rtol=0.01)
 
 
 def test_multidimensional_fit_GH205():
