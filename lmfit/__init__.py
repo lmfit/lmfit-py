@@ -66,6 +66,3 @@ scipy_major, scipy_minor, scipy_other = scipy.__version__.split('.', 2)
 if int(scipy_major) == 0 and int(scipy_minor) < 15:
     warnings.warn('Support for Scipy 0.14 was dropped with lmfit 0.9.5')
 
-from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions
