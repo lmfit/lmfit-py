@@ -493,8 +493,7 @@ class Parameter(object):
             To remove a constraint you must supply an empty string.
         """
 
-        if expr is not None:
-            self.__set_expression(expr)
+        self.__set_expression(expr)
 
         if value is not None:
             self._val = value
