@@ -45,4 +45,48 @@ def test_param_set():
     assert(params['gamma'].vary)
     assert_allclose(params['gamma'].value, gamval, 1e-4, 1e-4, '', True)
 
+    # tests to make sure issue #389 is fixed: set boundaries and make sure
+    # they are kept when changing the value
+    amplitude_vary = params['amplitude'].vary
+    amplitude_expr = params['amplitude'].expr
+    params['amplitude'].set(min=0.0, max=100.0)
+    assert_allclose(params['amplitude'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
+    params['amplitude'].set(value=40.0)
+    assert_allclose(params['amplitude'].value, 40.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].expr == amplitude_expr)
+    assert(params['amplitude'].vary == amplitude_vary)
+
+    # test for possible regressions of this fix:
+    # using the set function should only change the requested attribute and
+    # not any others (in case no expression is set)
+    params['amplitude'].set(value=35.0)
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == amplitude_vary)
+    assert(params['amplitude'].expr == amplitude_expr)
+
+    params['amplitude'].set(min=10.0)
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == amplitude_vary)
+    assert(params['amplitude'].expr == amplitude_expr)
+
+    params['amplitude'].set(max=110.0)
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == amplitude_vary)
+    assert(params['amplitude'].expr == amplitude_expr)
+
+    params['amplitude'].set(vary=False)
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == False)
+
 test_param_set()
