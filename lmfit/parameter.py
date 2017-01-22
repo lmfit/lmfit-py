@@ -493,21 +493,23 @@ class Parameter(object):
             To remove a constraint you must supply an empty string.
         """
 
-        self.__set_expression(expr)
-
         if value is not None:
             self._val = value
+            self.__set_expression('')
+
         if vary is not None:
             self.vary = vary
+            if vary == True:
+                self.__set_expression('')
 
         if min is not None:
             self.min = min
+
         if max is not None:
             self.max = max
-        if self.min is None:
-            self.min = -inf
-        if self.max is None:
-            self.max = inf
+
+        if expr is not None:
+            self.__set_expression(expr)
 
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
