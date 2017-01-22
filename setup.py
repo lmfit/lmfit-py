@@ -1,14 +1,7 @@
 #!/usr/bin/env python
 # from distutils.core import setup
 from setuptools import setup
-
 import versioneer
-versioneer.VCS = 'git'
-versioneer.versionfile_source = 'lmfit/_version.py'
-versioneer.versionfile_build = 'lmfit/_version.py'
-versioneer.tag_prefix = ''
-versioneer.parentdir_prefix = 'lmfit-'
-
 
 long_desc = """A library for least-squares minimization and data fitting in
 Python.  Built on top of scipy.optimize, lmfit provides a Parameter object
@@ -51,4 +44,3 @@ setup(name = 'lmfit',
       package_dir = {'lmfit': 'lmfit'},
       packages = ['lmfit', 'lmfit.ui', 'lmfit.uncertainties'],
       )
-
