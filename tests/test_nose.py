@@ -291,7 +291,8 @@ def test_scalar_minimize_reduce_fcn():
 
     yo = 1.0 + 2.0*np.sin(4*x) * np.exp(-x / 5)
     y = yo + np.random.normal(size=len(yo), scale=0.250)
-    outliers = np.random.random_integers(len(x)/3.0, len(x)-1, len(x)/12)
+    outliers = np.random.random_integers(int(len(x)/3.0), len(x)-1,
+                                         int(len(x)/12))
     y[outliers] += 5*np.random.random(len(outliers))
 
     # define objective function: returns the array to be minimized

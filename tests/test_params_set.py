@@ -16,7 +16,7 @@ def test_param_set():
     # test #1:  gamma is constrained to equal sigma
     assert(params['gamma'].expr == 'sigma')
     params.update_constraints()
-    sigval = params['gamma'].value
+    sigval = params['sigma'].value
     assert_allclose(params['gamma'].value, sigval, 1e-4, 1e-4, '', True)
 
     # test #2: explicitly setting a param value should work, even when
@@ -44,5 +44,112 @@ def test_param_set():
     assert(params['gamma'].expr is None)
     assert(params['gamma'].vary)
     assert_allclose(params['gamma'].value, gamval, 1e-4, 1e-4, '', True)
+
+    # test 5: make sure issue #389 is fixed: set boundaries and make sure
+    #         they are kept when changing the value
+    amplitude_vary = params['amplitude'].vary
+    amplitude_expr = params['amplitude'].expr
+    params['amplitude'].set(min=0.0, max=100.0)
+    params.update_constraints()
+    assert_allclose(params['amplitude'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
+    params['amplitude'].set(value=40.0)
+    params.update_constraints()
+    assert_allclose(params['amplitude'].value, 40.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].expr == amplitude_expr)
+    assert(params['amplitude'].vary == amplitude_vary)
+
+    # test for possible regressions of this fix (without 'expr'):
+    # the set function should only change the requested attribute(s)
+    params['amplitude'].set(value=35.0)
+    params.update_constraints()
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == amplitude_vary)
+    assert(params['amplitude'].expr == amplitude_expr)
+
+    # set minimum
+    params['amplitude'].set(min=10.0)
+    params.update_constraints()
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == amplitude_vary)
+    assert(params['amplitude'].expr == amplitude_expr)
+
+    # set maximum
+    params['amplitude'].set(max=110.0)
+    params.update_constraints()
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == amplitude_vary)
+    assert(params['amplitude'].expr == amplitude_expr)
+
+    # set vary
+    params['amplitude'].set(vary=False)
+    params.update_constraints()
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == False)
+    assert(params['amplitude'].expr == amplitude_expr)
+
+    # test for possible regressions of this fix for variables WITH 'expr':
+    height_value = params['height'].value
+    height_min = params['height'].min
+    height_max = params['height'].max
+    height_vary = params['height'].vary
+    height_expr = params['height'].expr
+
+    # set vary=True should remove expression
+    params['height'].set(vary=True)
+    params.update_constraints()
+    assert_allclose(params['height'].value, height_value, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].min, height_min, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
+    assert(params['height'].vary == True)
+    assert(params['height'].expr == None)
+
+    # setting an expression should set vary=False
+    params['height'].set(expr=height_expr)
+    params.update_constraints()
+    assert_allclose(params['height'].value, height_value, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].min, height_min, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
+    assert(params['height'].vary == False)
+    assert(params['height'].expr == height_expr)
+
+    # changing min/max should not remove expression
+    params['height'].set(min=0)
+    params.update_constraints()
+    assert_allclose(params['height'].value, height_value, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
+    assert(params['height'].vary == height_vary)
+    assert(params['height'].expr == height_expr)
+
+    # changing the value should remove expression and keep vary=False
+    params['height'].set(value=10.0)
+    params.update_constraints()
+    assert_allclose(params['height'].value, 10.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
+    assert(params['height'].vary == False)
+    assert(params['height'].expr == None)
+
+    # passing expr='' should only remove the expression
+    params['height'].set(expr=height_expr) # first restore the original expr
+    params.update_constraints()
+    params['height'].set(expr='')
+    params.update_constraints()
+    assert_allclose(params['height'].value, height_value, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
+    assert(params['height'].vary == False)
+    assert(params['height'].expr == None)
 
 test_param_set()

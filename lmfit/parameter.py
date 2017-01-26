@@ -474,7 +474,7 @@ class Parameter(object):
         self.from_internal = lambda val: val
         self._init_bounds()
 
-    def set(self, value=None, vary=None, min=-inf, max=inf, expr=None):
+    def set(self, value=None, vary=None, min=None, max=None, expr=None):
         """
         Set or update Parameter attributes.
 
@@ -493,17 +493,23 @@ class Parameter(object):
             To remove a constraint you must supply an empty string.
         """
 
-        self.__set_expression(expr)
         if value is not None:
             self._val = value
+            self.__set_expression('')
+
         if vary is not None:
             self.vary = vary
-        if min is None:
-            min = -inf
-        if max is None:
-            max = inf
-        self.min = min
-        self.max = max
+            if vary == True:
+                self.__set_expression('')
+
+        if min is not None:
+            self.min = min
+
+        if max is not None:
+            self.max = max
+
+        if expr is not None:
+            self.__set_expression(expr)
 
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
