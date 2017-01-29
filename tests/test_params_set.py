@@ -60,6 +60,7 @@ def test_param_set():
     assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
     assert(params['amplitude'].expr == amplitude_expr)
     assert(params['amplitude'].vary == amplitude_vary)
+    assert(not params['amplitude'].brute_step)
 
     # test for possible regressions of this fix (without 'expr'):
     # the set function should only change the requested attribute(s)
@@ -70,6 +71,7 @@ def test_param_set():
     assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
     assert(params['amplitude'].vary == amplitude_vary)
     assert(params['amplitude'].expr == amplitude_expr)
+    assert(not params['amplitude'].brute_step)
 
     # set minimum
     params['amplitude'].set(min=10.0)
@@ -79,6 +81,7 @@ def test_param_set():
     assert_allclose(params['amplitude'].max, 100.0, 1e-4, 1e-4, '', True)
     assert(params['amplitude'].vary == amplitude_vary)
     assert(params['amplitude'].expr == amplitude_expr)
+    assert(not params['amplitude'].brute_step)
 
     # set maximum
     params['amplitude'].set(max=110.0)
@@ -88,6 +91,7 @@ def test_param_set():
     assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
     assert(params['amplitude'].vary == amplitude_vary)
     assert(params['amplitude'].expr == amplitude_expr)
+    assert(not params['amplitude'].brute_step)
 
     # set vary
     params['amplitude'].set(vary=False)
@@ -97,6 +101,17 @@ def test_param_set():
     assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
     assert(params['amplitude'].vary == False)
     assert(params['amplitude'].expr == amplitude_expr)
+    assert(not params['amplitude'].brute_step)
+
+    # set brute_step
+    params['amplitude'].set(brute_step=0.1)
+    params.update_constraints()
+    assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
+    assert(params['amplitude'].vary == False)
+    assert(params['amplitude'].expr == amplitude_expr)
+    assert_allclose(params['amplitude'].brute_step, 0.1, 1e-4, 1e-4, '', True)
 
     # test for possible regressions of this fix for variables WITH 'expr':
     height_value = params['height'].value
@@ -104,6 +119,7 @@ def test_param_set():
     height_max = params['height'].max
     height_vary = params['height'].vary
     height_expr = params['height'].expr
+    height_brute_step = params['height'].brute_step
 
     # set vary=True should remove expression
     params['height'].set(vary=True)
@@ -113,6 +129,7 @@ def test_param_set():
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
     assert(params['height'].vary == True)
     assert(params['height'].expr == None)
+    assert(params['height'].brute_step == height_brute_step)
 
     # setting an expression should set vary=False
     params['height'].set(expr=height_expr)
@@ -122,6 +139,7 @@ def test_param_set():
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
     assert(params['height'].vary == False)
     assert(params['height'].expr == height_expr)
+    assert(params['height'].brute_step == height_brute_step)
 
     # changing min/max should not remove expression
     params['height'].set(min=0)
@@ -131,8 +149,20 @@ def test_param_set():
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
     assert(params['height'].vary == height_vary)
     assert(params['height'].expr == height_expr)
+    assert(params['height'].brute_step == height_brute_step)
+
+    # changing brute_step should not remove expression
+    params['height'].set(brute_step=0.1)
+    params.update_constraints()
+    assert_allclose(params['height'].value, height_value, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].min, 0.0, 1e-4, 1e-4, '', True)
+    assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
+    assert(params['height'].vary == height_vary)
+    assert(params['height'].expr == height_expr)
+    assert_allclose(params['amplitude'].brute_step, 0.1, 1e-4, 1e-4, '', True)
 
     # changing the value should remove expression and keep vary=False
+    params['height'].set(brute_step=0)
     params['height'].set(value=10.0)
     params.update_constraints()
     assert_allclose(params['height'].value, 10.0, 1e-4, 1e-4, '', True)
@@ -140,6 +170,7 @@ def test_param_set():
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
     assert(params['height'].vary == False)
     assert(params['height'].expr == None)
+    assert(params['height'].brute_step == height_brute_step)
 
     # passing expr='' should only remove the expression
     params['height'].set(expr=height_expr) # first restore the original expr
@@ -151,5 +182,6 @@ def test_param_set():
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
     assert(params['height'].vary == False)
     assert(params['height'].expr == None)
+    assert(params['height'].brute_step == height_brute_step)
 
 test_param_set()
