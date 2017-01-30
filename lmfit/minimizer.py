@@ -186,7 +186,7 @@ class MinimizerResult(object):
     This is a plain container (with no methods of its own) that
     simply holds the results of the minimization.  Fit results
     include data such as status and error messages, fit statistics,
-    and the updated (i.e. best-fit) parameters themselves :attr:`params`.
+    and the updated (i.e., best-fit) parameters themselves :attr:`params`.
 
     The list of (possible) `MinimizerResult` attributes follows.
 
@@ -202,14 +202,14 @@ class MinimizerResult(object):
         useful for understanding the the values in :attr:`init_vals` and
         :attr:`covar`.
     covar : numpy.ndarray
-        covariance matrix from minimization (`leastsq` only), with
+        Covariance matrix from minimization (`leastsq` only), with
         rows/columns using :attr:`var_names`.
     init_vals : list
         List of initial values for variable parameters using :attr:`var_names`.
     init_values : dict
         Dictionary of initial values for variable parameters.
     nfev : int
-        Number of function evaluations
+        Number of function evaluations.
     success : bool
         Boolean (``True``/``False``) for whether fit succeeded.
     errorbars : bool
@@ -223,17 +223,17 @@ class MinimizerResult(object):
     nvarys : int
         Number of variables in fit :math:`N_{\\rm varys}`.
     ndata : int
-        Number of data points:  :math:`N`
+        Number of data points:  :math:`N`.
     nfree : int
-        Degrees of freedom in fit:  :math:`N - N_{\\rm varys}`
+        Degrees of freedom in fit:  :math:`N - N_{\\rm varys}`.
     residual : numpy.ndarray
         Residual array :math:`{\\rm Resid_i}`. Return value of the objective
         function.
     chisqr : float
-        Chi-square: :math:`\chi^2 = \sum_i^N [{\\rm Resid}_i]^2`
+        Chi-square: :math:`\chi^2 = \sum_i^N [{\\rm Resid}_i]^2`.
     redchi : float
         Reduced chi-square:
-        :math:`\chi^2_{\\nu}= {\chi^2} / {(N - N_{\\rm varys})}`
+        :math:`\chi^2_{\\nu}= {\chi^2} / {(N - N_{\\rm varys})}`.
     aic : float
         Akaike Information Criterion statistic.
     bic : float
@@ -288,21 +288,21 @@ class Minimizer(object):
         Parameters
         ----------
         userfcn : callable
-            objective function that returns the residual (difference between
+            Objective function that returns the residual (difference between
             model and data) to be minimized in a least squares sense.  The
             function must have the signature:
             `userfcn(params, *fcn_args, **fcn_kws)`
         params : :class:`lmfit.parameter.Parameters` object.
-            contains the Parameters for the model.
+            Contains the Parameters for the model.
         fcn_args : tuple, optional
-            positional arguments to pass to `userfcn`.
+            Positional arguments to pass to `userfcn`.
         fcn_kws : dict, optional
-            keyword arguments to pass to `userfcn`.
+            Keyword arguments to pass to `userfcn`.
         iter_cb : callable, optional
             Function to be called at each fit iteration. This function should
             have the signature:
             `iter_cb(params, iter, resid, *fcn_args, **fcn_kws)`,
-            where where `params` will have the current parameter values, `iter`
+            where `params` will have the current parameter values, `iter`
             the iteration, `resid` the current residual array, and `*fcn_args`
             and `**fcn_kws` as passed to the objective function.
         scale_covar : bool, optional
@@ -315,7 +315,7 @@ class Minimizer(object):
              - 'propagate' - the values returned from `userfcn` are un-altered
              - 'omit' - the non-finite values are filtered.
         reduce_fcn : str or callable, optional
-            function to convert a residual array to a scalar value for the scalar
+            Function to convert a residual array to a scalar value for the scalar
             minimizers. Optional values are (where `r` is the residual array):
              - None           : sum of squares of residual [default]
                                 (r*r).sum()
@@ -341,7 +341,7 @@ class Minimizer(object):
         the objective function returns non-finite values then a `ValueError`
         will be raised because the underlying solvers cannot deal with them.
 
-        A common use for the `fcn_args` and `fcn_kwds` would be to pass in
+        A common use for the `fcn_args` and `fcn_kws` would be to pass in
         other data needed to calculate the residual, including such things
         as the data array, dependent variable, uncertainties in the data,
         and other data structures for the model calculation.
@@ -591,10 +591,10 @@ class Minimizer(object):
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """
-        Scalar minimization using :scipydoc:`scipy.optimize.minimize`.
+        Scalar minimization using :scipydoc:`optimize.minimize`.
 
         Perform fit with any of the scalar minimization algorithms supported by
-        :scipydoc:`scipy.optimize.minimize`. Default argument values are:
+        :scipydoc:`optimize.minimize`. Default argument values are:
 
         +-------------------------+-----------------+-----------------------------------------------------+
         | :meth:`scalar_minimize` | Default Value   | Description                                         |
@@ -629,7 +629,7 @@ class Minimizer(object):
         params : Parameters, optional
            Parameters to use as starting points.
         kws : dict, optional
-            Minimizer options pass to :scipydoc:`scipy.optimize.minimize`.
+            Minimizer options pass to :scipydoc:`optimize.minimize`.
 
         Returns
         -------
@@ -651,7 +651,7 @@ class Minimizer(object):
         for any of these methods, so are not supported separately
         for those designed to use bounds. However, if you use the
         differential_evolution method you must specify finite
-        (min, max) for each Parameter.
+        (min, max) for each varying Parameter.
         """
 
         result = self.prepare_fit(params=params)
@@ -1093,7 +1093,7 @@ class Minimizer(object):
         When possible, this calculates the estimated uncertainties and
         variable correlations from the covariance matrix.
 
-        This method wraps :scipydoc:`scipy.optimize.least_squares`, which
+        This method wraps :scipydoc:`optimize.least_squares`, which
         has inbuilt support for bounds and robust loss functions.
 
         Parameters
@@ -1102,7 +1102,7 @@ class Minimizer(object):
            Parameters to use as starting points.
         kws : dict, optional
             Minimizer options to pass to
-            :scipydoc:`scipy.optimize.least_squares`.
+            :scipydoc:`optimize.least_squares`.
 
         Returns
         -------
@@ -1162,7 +1162,7 @@ class Minimizer(object):
         When possible, this calculates the estimated uncertainties and
         variable correlations from the covariance matrix.
 
-        This method calls :scipydoc:`scipy.optimize.leastsq`.
+        This method calls :scipydoc:`optimize.leastsq`.
         By default, numerical derivatives are used, and the following
         arguments are set:
 
@@ -1174,9 +1174,9 @@ class Minimizer(object):
         +------------------+----------------+------------------------------------------------------------+
         |   ftol           |  1.e-7         | Relative error in the desired sum of squares               |
         +------------------+----------------+------------------------------------------------------------+
-        |   maxfev         | 2000*(nvar+1)  | maximum number of function calls (nvar= # of variables)    |
+        |   maxfev         | 2000*(nvar+1)  | Maximum number of function calls (nvar= # of variables)    |
         +------------------+----------------+------------------------------------------------------------+
-        |   Dfun           | ``None``       | function to call for Jacobian calculation                  |
+        |   Dfun           | ``None``       | Function to call for Jacobian calculation                  |
         +------------------+----------------+------------------------------------------------------------+
 
         Parameters
@@ -1184,7 +1184,7 @@ class Minimizer(object):
         params : :class:`lmfit.parameter.Parameters`, optional
            Parameters to use as starting point.
         kws : dict, optional
-            Minimizer options to pass to :scipydoc:`scipy.optimize.leastsq`.
+            Minimizer options to pass to :scipydoc:`optimize.leastsq`.
 
         Returns
         -------
@@ -1332,8 +1332,20 @@ class Minimizer(object):
 
     def brute(self, params=None, Ns=20, keep=50):
         """
-        Use the ``brute force`` method, :scipydoc:`scipy.optimize.brute`,
-        to find the global minimum of a function.
+        Use the `brute` force method (:scipydoc:`optimize.brute`) to find the
+        global minimum of a function. The following parameters are passed to
+        :scipydoc:`optimize.brute` and cannot be changed:
+
+        +-------------------+-------+-----------------------------------------------------------------------+
+        | :meth:`brute` arg | Value | Description                                                           |
+        +===================+=======+=======================================================================+
+        +-------------------+-------+-----------------------------------------------------------------------+
+        |   full_output     | 1     | Return the evaluation grid and the objective function’s values on it. |
+        +-------------------+-------+-----------------------------------------------------------------------+
+        |   finish          | None  | No “polishing” function is to be used after the grid search.          |
+        +-------------------+-------+-----------------------------------------------------------------------+
+        |   disp            | False | Do not print convergence messages (when finish is not None).          |
+        +-------------------+-------+-----------------------------------------------------------------------+
 
         It assumes that the input Parameters have been initialized, and a
         function to minimize has been properly set up.
@@ -1345,30 +1357,53 @@ class Minimizer(object):
             Parameters used to initialize the Minimizer object are used.
         Ns : int, optional
             Number of grid points along the axes, if not otherwise specified
+            (see Notes).
         keep : int, optional
             Number of best candidates from the brute force method that are
-            stored in the .candidates attribute. If 'all', then all grid
-            points from brute are stored as candidates.
-
-        The following, default, minimizer options are passed to
-        :scipydoc:`scipy.optimize.brute` and cannot be changed:
-            full_output=1, finish=None, disp=False
+            stored in the `candidates` attribute. If 'all', then all grid
+            points from `brute` are stored as candidates.
 
         Returns
         -------
         :class:`MinimizerResult`
             Object containing the parameters from the brute force method.
-            The return values (x0, fval, grid, Jout) from
-            `scipy.optimize.brute` are stored as ``brute_<parname>`` attributes.
-            The `MinimizerResult` also contains the ``candidates`` and
-            ``show_candidates`` attributes. The ``candidates`` attribute
+            The return values (`x0`, `fval`, `grid`, `Jout`) from
+            :scipydoc:`optimize.brute` are stored as `brute_<parname>` attributes.
+            The `MinimizerResult` also contains the `candidates` and
+            `show_candidates` attributes. The `candidates` attribute
             contains the parameters and chisqr from the brute force method as
             a namedtuple, ('Candidate', ['params', 'score']), sorted on the
             (lowest) chisqr value. To access the values for a particular
-            candidate use `result.candidate[#].params` or
+            candidate one can use `result.candidate[#].params` or
             `result.candidate[#].score`, where a lower # represents a better
-            candidate. The ``show_candidates`` attribute, will show the
-            candidates using the `pretty_print` method.
+            candidate. The `show_candidates` attribute, will show the
+            candidates using the :meth:`pretty_print` method.
+
+
+        .. versionadded:: 0.96
+
+
+        Notes
+        -----
+        The :meth:`brute` method evalutes the function at each point of a
+        multidimensional grid of points. The grid points are generated from the
+        parameter ranges using `Ns` and (optional) `brute_step`.
+        The implementation in :scipydoc:`optimize.brute` requires finite bounds
+        and the `range` is specified as a two-tuple `(min, max)` or slice-object
+        `(min, max, brute_step)`. A slice-object is used directly, whereas a
+        two-tuple is converted to a slice object that interpolates `Ns` points
+        from `min` to `max`, inclusive.
+
+        In addition, the :meth:`brute` method in lmfit, handles three other
+        scenarios given below with their respective slice-object:
+
+            - lower bound (:attr:`min`) and :attr:`brute_step` are specified:
+                range = (min, min + Ns*brute_step, brute_step).
+            - upper bound (:attr:`max`) and :attr:`brute_step` are specified:
+                range = (max - Ns*brute_step, max, brute_step).
+            - numerical value (:attr:`value`) and :attr:`brute_step` are specified:
+                range = (value - (Ns//2)*brute_step, value + (Ns//2)*brute_step, brute_step).
+
         """
         result = self.prepare_fit(params=params)
         result.method = 'brute'
@@ -1521,7 +1556,7 @@ def _lnprior(theta, bounds):
     Parameters
     ----------
     theta : sequence
-        float parameter values (only those being varied)
+        Float parameter values (only those being varied)
     bounds : np.ndarray
         Lower and upper bounds of parameters that are varying.
         Has shape (nvarys, 2).
@@ -1548,7 +1583,7 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     Parameters
     ----------
     theta : sequence
-        float parameter values (only those being varied)
+        Float parameter values (only those being varied)
     userfcn : callable
         User objective function
     params : lmfit.Parameters
@@ -1725,15 +1760,15 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     Parameters
     ----------
     fcn : callable
-        objective function to be minimized. When method is `leastsq` or
+        Objective function to be minimized. When method is `leastsq` or
         `least_squares`, the objective function should return an array
         of residuals (difference between model and data) to be minimized
         in a least squares sense. With the scalar methods the objective
         function can either return the residuals array or a single scalar
         value. The function must have the signature:
         `fcn(params, *args, **kws)`
-    params : :class:`lmfit.parameter.Parameters` object.
-        contains the Parameters for the model.
+    params : :class:`lmfit.parameter.Parameters` object
+        Contains the Parameters for the model.
     method : str, optional
         Name of the fitting method to use. Valid values are:
 
@@ -1752,6 +1787,8 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'dogleg'`: Dogleg
         - `'slsqp'`: Sequential Linear Squares Programming
         - `'differential_evolution'`: differential evolution
+        - `'brute'`: brute force method.
+          Uses `scipy.optimize.brute`.
 
         For more details on the fitting methods please refer to the
         `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
@@ -1759,7 +1796,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     args : tuple, optional
         Positional arguments to pass to `fcn`.
     kws : dict, optional
-        keyword arguments to pass to `fcn`.
+        Keyword arguments to pass to `fcn`.
     iter_cb : callable, optional
         Function to be called at each fit iteration. This function should
         have the signature `iter_cb(params, iter, resid, *args, **kws)`,
@@ -1769,7 +1806,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     scale_covar : bool, optional
         Whether to automatically scale the covariance matrix (leastsq only).
     reduce_fcn : str or callable, optional
-        function to convert a residual array to a scalar value for the scalar
+        Function to convert a residual array to a scalar value for the scalar
         minimizers. See notes in `Minimizer`.
     fit_kws : dict, optional
         Options to pass to the minimizer being used.
@@ -1794,12 +1831,12 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     squares of the array will be sent to the underlying fitting method,
     effectively doing a least-squares optimization of the return values.
 
-    A common use for `args` and `kwds` would be to pass in other
+    A common use for `args` and `kws` would be to pass in other
     data needed to calculate the residual, including such things as the
     data array, dependent variable, uncertainties in the data, and other
     data structures for the model calculation.
 
-    On output, the params will be unchanged.  The best-fit values, and where
+    On output, `params` will be unchanged.  The best-fit values, and where
     appropriate, estimated uncertainties and correlations, will all be
     contained in the returned :class:`MinimizerResult`.  See
     :ref:`fit-results-label` for further details.

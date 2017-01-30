@@ -70,7 +70,7 @@ to report full width at half maximum and maximum peak height, respectively.
 where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
 :math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
 half maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
-:math:`2.3548\sigma`
+:math:`2.3548\sigma`.
 
 
 :class:`LorentzianModel`
@@ -289,7 +289,7 @@ It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) 
     f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
   e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
       {\operatorname{erf}}\bigl[
-	 \frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
+     \frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
      \bigr] \Bigr\}
 
 
@@ -326,7 +326,7 @@ of many components of composite model.
 
 .. class:: ConstantModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
-   a class that consists of a single value, ``c``.  This is constant in the
+   A class that consists of a single value, ``c``.  This is constant in the
    sense of having no dependence on the independent variable ``x``, not in
    the sense of being non-varying.  To be clear, ``c`` will be a variable
    Parameter.
@@ -336,7 +336,7 @@ of many components of composite model.
 
 .. class:: LinearModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
-   a class that gives a linear model:
+   A class that gives a linear model:
 
 .. math::
 
@@ -351,7 +351,7 @@ with parameters ``slope`` for :math:`m` and  ``intercept`` for :math:`b`.
 .. class:: QuadraticModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
 
-   a class that gives a quadratic model:
+   A class that gives a quadratic model:
 
 .. math::
 
@@ -365,7 +365,7 @@ with parameters ``a``, ``b``, and ``c``.
 
 .. class:: ParabolicModel(missing=None[, prefix=''[, name=None[, **kws]]])
 
-   same as :class:`QuadraticModel`.
+   Same as :class:`QuadraticModel`.
 
 
 :class:`PolynomialModel`
@@ -374,7 +374,7 @@ with parameters ``a``, ``b``, and ``c``.
 
 .. class:: PolynomialModel(degree, missing=None[, prefix=''[, name=None[, **kws]]])
 
-   a class that gives a polynomial model up to ``degree`` (with maximum
+   A class that gives a polynomial model up to ``degree`` (with maximum
    value of 7).
 
 .. math::
@@ -505,11 +505,11 @@ mathematical constraints as discussed in :ref:`constraints_chapter`.
 
     A model using the user-supplied mathematical expression, which can be nearly any valid Python expresion.
 
-    :param expr: expression use to build model
+    :param expr: Expression use to build model.
     :type expr: string
-    :param independent_vars: list of argument names in expression that are independent variables.
-    :type independent_vars: ``None`` (default) or list of strings for independent variables.
-    :param init_script: python script to run before parsing and evaluating expression.
+    :param independent_vars: List of argument names in expression that are independent variables.
+    :type independent_vars: ``None`` (default) or list of strings for independent variables
+    :param init_script: Python script to run before parsing and evaluating expression.
     :type init_script: ``None`` (default) or string
 
 with other parameters passed to :class:`model.Model`, with the notable
@@ -560,16 +560,16 @@ could to define this in a script::
 
     >>> script = """
     def mycurve(x, amp, cen, sig):
-	loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
-	gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)
-	return log(loren)*gradient(gauss)/gradient(x)
+        loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
+        gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)
+        return log(loren)*gradient(gauss)/gradient(x)
     """
 
 and then use this with :class:`ExpressionModel` as::
 
     >>> mod = ExpressionModel('mycurve(x, height, mid, wid)',
-			      init_script=script,
-			      independent_vars=['x'])
+                              init_script=script,
+                              independent_vars=['x'])
 
 As above, this will interpret the parameter names to be `height`, `mid`,
 and `wid`, and build a model that can be used to fit data.
@@ -603,23 +603,23 @@ built-in default values.  We'll simply use::
 which prints out the results::
 
     [[Model]]
-	Model(gaussian)
+        Model(gaussian)
     [[Fit Statistics]]
-	# function evals   = 23
-	# data points      = 401
-	# variables        = 3
-	chi-square         = 29.994
-	reduced chi-square = 0.075
-	Akaike info crit   = -1033.774
-	Bayesian info crit = -1021.792
+        # function evals   = 23
+        # data points      = 401
+        # variables        = 3
+        chi-square         = 29.994
+        reduced chi-square = 0.075
+        Akaike info crit   = -1033.774
+        Bayesian info crit = -1021.792
     [[Variables]]
-	sigma:       1.23218319 +/- 0.007374 (0.60%) (init= 1.35)
-	center:      9.24277049 +/- 0.007374 (0.08%) (init= 9.25)
-	amplitude:   30.3135571 +/- 0.157126 (0.52%) (init= 29.08159)
-	fwhm:        2.90156963 +/- 0.017366 (0.60%)  == '2.3548200*sigma'
-	height:      9.81457973 +/- 0.050872 (0.52%)  == '0.3989423*amplitude/max(1.e-15, sigma)'
+        sigma:       1.23218319 +/- 0.007374 (0.60%) (init= 1.35)
+        center:      9.24277049 +/- 0.007374 (0.08%) (init= 9.25)
+        amplitude:   30.3135571 +/- 0.157126 (0.52%) (init= 29.08159)
+        fwhm:        2.90156963 +/- 0.017366 (0.60%)  == '2.3548200*sigma'
+        height:      9.81457973 +/- 0.050872 (0.52%)  == '0.3989423*amplitude/max(1.e-15, sigma)'
     [[Correlations]] (unreported correlations are <  0.250)
-	C(sigma, amplitude)          =  0.577
+        C(sigma, amplitude)          =  0.577
 
 We see a few interesting differences from the results of the previous
 chapter. First, the parameter names are longer. Second, there are ``fwhm``
@@ -652,23 +652,23 @@ with the rest of the script as above.  Perhaps predictably, the first thing
 we try gives results that are worse::
 
     [[Model]]
-	Model(lorentzian)
+        Model(lorentzian)
     [[Fit Statistics]]
-	# function evals   = 27
-	# data points      = 401
-	# variables        = 3
-	chi-square         = 53.754
-	reduced chi-square = 0.135
-	Akaike info crit   = -799.830
-	Bayesian info crit = -787.848
+        # function evals   = 27
+        # data points      = 401
+        # variables        = 3
+        chi-square         = 53.754
+        reduced chi-square = 0.135
+        Akaike info crit   = -799.830
+        Bayesian info crit = -787.848
     [[Variables]]
-	sigma:       1.15484517 +/- 0.013156 (1.14%) (init= 1.35)
-	center:      9.24438944 +/- 0.009275 (0.10%) (init= 9.25)
-	amplitude:   38.9728645 +/- 0.313857 (0.81%) (init= 36.35199)
-	fwhm:        2.30969034 +/- 0.026312 (1.14%)  == '2.0000000*sigma'
-	height:      10.7420881 +/- 0.086336 (0.80%)  == '0.3183099*amplitude/max(1.e-15, sigma)'
+        sigma:       1.15484517 +/- 0.013156 (1.14%) (init= 1.35)
+        center:      9.24438944 +/- 0.009275 (0.10%) (init= 9.25)
+        amplitude:   38.9728645 +/- 0.313857 (0.81%) (init= 36.35199)
+        fwhm:        2.30969034 +/- 0.026312 (1.14%)  == '2.0000000*sigma'
+        height:      10.7420881 +/- 0.086336 (0.80%)  == '0.3183099*amplitude/max(1.e-15, sigma)'
     [[Correlations]] (unreported correlations are <  0.250)
-	C(sigma, amplitude)          =  0.709
+        C(sigma, amplitude)          =  0.709
 
 
 with the plot shown on the right in the figure above.  The tails are now
@@ -681,24 +681,24 @@ does a better job.  Using :class:`VoigtModel`, this is as simple as using::
 with all the rest of the script as above.  This gives::
 
     [[Model]]
-	Model(voigt)
+        Model(voigt)
     [[Fit Statistics]]
-	# function evals   = 19
-	# data points      = 401
-	# variables        = 3
-	chi-square         = 14.545
-	reduced chi-square = 0.037
-	Akaike info crit   = -1324.006
-	Bayesian info crit = -1312.024
+        # function evals   = 19
+        # data points      = 401
+        # variables        = 3
+        chi-square         = 14.545
+        reduced chi-square = 0.037
+        Akaike info crit   = -1324.006
+        Bayesian info crit = -1312.024
     [[Variables]]
-	amplitude:   35.7554017 +/- 0.138614 (0.39%) (init= 43.62238)
-	sigma:       0.73015574 +/- 0.003684 (0.50%) (init= 0.8775)
-	center:      9.24411142 +/- 0.005054 (0.05%) (init= 9.25)
-	gamma:       0.73015574 +/- 0.003684 (0.50%)  == 'sigma'
-	fwhm:        2.62951718 +/- 0.013269 (0.50%)  == '3.6013100*sigma'
-	height:      19.5360268 +/- 0.075691 (0.39%)  == '0.3989423*amplitude/max(1.e-15, sigma)'
+        amplitude:   35.7554017 +/- 0.138614 (0.39%) (init= 43.62238)
+        sigma:       0.73015574 +/- 0.003684 (0.50%) (init= 0.8775)
+        center:      9.24411142 +/- 0.005054 (0.05%) (init= 9.25)
+        gamma:       0.73015574 +/- 0.003684 (0.50%)  == 'sigma'
+        fwhm:        2.62951718 +/- 0.013269 (0.50%)  == '3.6013100*sigma'
+        height:      19.5360268 +/- 0.075691 (0.39%)  == '0.3989423*amplitude/max(1.e-15, sigma)'
     [[Correlations]] (unreported correlations are <  0.250)
-	C(sigma, amplitude)          =  0.651
+        C(sigma, amplitude)          =  0.651
 
 
 which has a much better value for :math:`\chi^2` and an obviously better
@@ -731,26 +731,26 @@ give it a starting value using something like::
 which gives::
 
     [[Model]]
-	Model(voigt)
+        Model(voigt)
     [[Fit Statistics]]
-	# function evals   = 23
-	# data points      = 401
-	# variables        = 4
-	chi-square         = 10.930
-	reduced chi-square = 0.028
-	Akaike info crit   = -1436.576
-	Bayesian info crit = -1420.600
+        # function evals   = 23
+        # data points      = 401
+        # variables        = 4
+        chi-square         = 10.930
+        reduced chi-square = 0.028
+        Akaike info crit   = -1436.576
+        Bayesian info crit = -1420.600
     [[Variables]]
-	amplitude:   34.1914716 +/- 0.179468 (0.52%) (init= 43.62238)
-	sigma:       0.89518950 +/- 0.014154 (1.58%) (init= 0.8775)
-	center:      9.24374845 +/- 0.004419 (0.05%) (init= 9.25)
-	gamma:       0.52540156 +/- 0.018579 (3.54%) (init= 0.7)
-	fwhm:        3.22385492 +/- 0.050974 (1.58%)  == '3.6013100*sigma'
-	height:      15.2374711 +/- 0.299235 (1.96%)  == '0.3989423*amplitude/max(1.e-15, sigma)'
+        amplitude:   34.1914716 +/- 0.179468 (0.52%) (init= 43.62238)
+        sigma:       0.89518950 +/- 0.014154 (1.58%) (init= 0.8775)
+        center:      9.24374845 +/- 0.004419 (0.05%) (init= 9.25)
+        gamma:       0.52540156 +/- 0.018579 (3.54%) (init= 0.7)
+        fwhm:        3.22385492 +/- 0.050974 (1.58%)  == '3.6013100*sigma'
+        height:      15.2374711 +/- 0.299235 (1.96%)  == '0.3989423*amplitude/max(1.e-15, sigma)'
     [[Correlations]] (unreported correlations are <  0.250)
-	C(sigma, gamma)              = -0.928
-	C(gamma, amplitude)          =  0.821
-	C(sigma, amplitude)          = -0.651
+        C(sigma, gamma)              = -0.928
+        C(gamma, amplitude)          =  0.821
+        C(sigma, amplitude)          = -0.651
 
 and the fit shown on the right above.
 
@@ -795,31 +795,31 @@ After making a composite model, we run :meth:`fit` and report the
 results, which gives::
 
     [[Model]]
-	(Model(step, prefix='step_', form='erf') + Model(linear, prefix='line_'))
+        (Model(step, prefix='step_', form='erf') + Model(linear, prefix='line_'))
     [[Fit Statistics]]
-	# function evals   = 51
-	# data points      = 201
-	# variables        = 5
-	chi-square         = 584.829
-	reduced chi-square = 2.984
-	Akaike info crit   = 224.671
-	Bayesian info crit = 241.187
+        # function evals   = 51
+        # data points      = 201
+        # variables        = 5
+        chi-square         = 584.829
+        reduced chi-square = 2.984
+        Akaike info crit   = 224.671
+        Bayesian info crit = 241.187
     [[Variables]]
-	line_slope:       2.03039786 +/- 0.092221 (4.54%) (init= 0)
-	line_intercept:   11.7234542 +/- 0.274094 (2.34%) (init= 10.7816)
-	step_amplitude:   112.071629 +/- 0.647316 (0.58%) (init= 134.0885)
-	step_sigma:       0.67132341 +/- 0.010873 (1.62%) (init= 1.428571)
-	step_center:      3.12697699 +/- 0.005151 (0.16%) (init= 2.5)
+        line_slope:       2.03039786 +/- 0.092221 (4.54%) (init= 0)
+        line_intercept:   11.7234542 +/- 0.274094 (2.34%) (init= 10.7816)
+        step_amplitude:   112.071629 +/- 0.647316 (0.58%) (init= 134.0885)
+        step_sigma:       0.67132341 +/- 0.010873 (1.62%) (init= 1.428571)
+        step_center:      3.12697699 +/- 0.005151 (0.16%) (init= 2.5)
     [[Correlations]] (unreported correlations are <  0.100)
-	C(line_slope, step_amplitude)  = -0.878
-	C(step_amplitude, step_sigma)  =  0.563
-	C(line_slope, step_sigma)    = -0.455
-	C(line_intercept, step_center)  =  0.427
-	C(line_slope, line_intercept)  = -0.308
-	C(line_slope, step_center)   = -0.234
-	C(line_intercept, step_sigma)  = -0.139
-	C(line_intercept, step_amplitude)  = -0.121
-	C(step_amplitude, step_center)  =  0.109
+        C(line_slope, step_amplitude)  = -0.878
+        C(step_amplitude, step_sigma)  =  0.563
+        C(line_slope, step_sigma)    = -0.455
+        C(line_intercept, step_center)  =  0.427
+        C(line_slope, line_intercept)  = -0.308
+        C(line_slope, step_center)   = -0.234
+        C(line_intercept, step_sigma)  = -0.139
+        C(line_intercept, step_amplitude)  = -0.121
+        C(step_amplitude, step_center)  =  0.109
 
 with a plot of
 
@@ -857,39 +857,39 @@ parameter values.
 The fit results printed out are::
 
     [[Model]]
-	((Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')) + Model(exponential, prefix='exp_'))
+        ((Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')) + Model(exponential, prefix='exp_'))
     [[Fit Statistics]]
-	# function evals   = 66
-	# data points      = 250
-	# variables        = 8
-	chi-square         = 1247.528
-	reduced chi-square = 5.155
-	Akaike info crit   = 417.865
-	Bayesian info crit = 446.036
+        # function evals   = 66
+        # data points      = 250
+        # variables        = 8
+        chi-square         = 1247.528
+        reduced chi-square = 5.155
+        Akaike info crit   = 417.865
+        Bayesian info crit = 446.036
     [[Variables]]
-	exp_amplitude:   99.0183282 +/- 0.537487 (0.54%) (init= 162.2102)
-	exp_decay:       90.9508859 +/- 1.103105 (1.21%) (init= 93.24905)
-	g1_sigma:        16.6725753 +/- 0.160481 (0.96%) (init= 15)
-	g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 105)
-	g1_amplitude:    4257.77319 +/- 42.38336 (1.00%) (init= 2000)
-	g1_fwhm:         39.2609139 +/- 0.377905 (0.96%)  == '2.3548200*g1_sigma'
-	g1_height:       101.880231 +/- 0.592170 (0.58%)  == '0.3989423*g1_amplitude/max(1.e-15, g1_sigma)'
-	g2_sigma:        13.8069484 +/- 0.186794 (1.35%) (init= 15)
-	g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 155)
-	g2_amplitude:    2493.41770 +/- 36.16947 (1.45%) (init= 2000)
-	g2_fwhm:         32.5128782 +/- 0.439866 (1.35%)  == '2.3548200*g2_sigma'
-	g2_height:       72.0455934 +/- 0.617220 (0.86%)  == '0.3989423*g2_amplitude/max(1.e-15, g2_sigma)'
+        exp_amplitude:   99.0183282 +/- 0.537487 (0.54%) (init= 162.2102)
+        exp_decay:       90.9508859 +/- 1.103105 (1.21%) (init= 93.24905)
+        g1_sigma:        16.6725753 +/- 0.160481 (0.96%) (init= 15)
+        g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 105)
+        g1_amplitude:    4257.77319 +/- 42.38336 (1.00%) (init= 2000)
+        g1_fwhm:         39.2609139 +/- 0.377905 (0.96%)  == '2.3548200*g1_sigma'
+        g1_height:       101.880231 +/- 0.592170 (0.58%)  == '0.3989423*g1_amplitude/max(1.e-15, g1_sigma)'
+        g2_sigma:        13.8069484 +/- 0.186794 (1.35%) (init= 15)
+        g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 155)
+        g2_amplitude:    2493.41770 +/- 36.16947 (1.45%) (init= 2000)
+        g2_fwhm:         32.5128782 +/- 0.439866 (1.35%)  == '2.3548200*g2_sigma'
+        g2_height:       72.0455934 +/- 0.617220 (0.86%)  == '0.3989423*g2_amplitude/max(1.e-15, g2_sigma)'
     [[Correlations]] (unreported correlations are <  0.500)
-	C(g1_sigma, g1_amplitude)    =  0.824
-	C(g2_sigma, g2_amplitude)    =  0.815
-	C(exp_amplitude, exp_decay)  = -0.695
-	C(g1_sigma, g2_center)       =  0.684
-	C(g1_center, g2_amplitude)   = -0.669
-	C(g1_center, g2_sigma)       = -0.652
-	C(g1_amplitude, g2_center)   =  0.648
-	C(g1_center, g2_center)      =  0.621
-	C(g1_sigma, g1_center)       =  0.507
-	C(exp_decay, g1_amplitude)   = -0.507
+        C(g1_sigma, g1_amplitude)    =  0.824
+        C(g2_sigma, g2_amplitude)    =  0.815
+        C(exp_amplitude, exp_decay)  = -0.695
+        C(g1_sigma, g2_center)       =  0.684
+        C(g1_center, g2_amplitude)   = -0.669
+        C(g1_center, g2_sigma)       = -0.652
+        C(g1_amplitude, g2_center)   =  0.648
+        C(g1_center, g2_center)      =  0.621
+        C(g1_sigma, g1_center)       =  0.507
+        C(exp_decay, g1_amplitude)   = -0.507
 
 We get a very good fit to this problem (described at the NIST site as of
 average difficulty, but the tests there are generally deliberately challenging) by
@@ -915,9 +915,9 @@ this, and by defining an :func:`index_of` function to limit the data range.
 That is, with::
 
     def index_of(arrval, value):
-	"return index of array *at or below* value "
-	if value < min(arrval):  return 0
-	return max(np.where(arrval<=value)[0])
+        "return index of array *at or below* value "
+        if value < min(arrval):  return 0
+        return max(np.where(arrval<=value)[0])
 
     ix1 = index_of(x,  75)
     ix2 = index_of(x, 135)
@@ -932,39 +932,39 @@ giving to identical values (to the precision printed out in the report),
 but in few steps, and without any bounds on parameters at all::
 
     [[Model]]
-	((Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')) +  Model(exponential,  prefix='exp_'))
+        ((Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')) +  Model(exponential,  prefix='exp_'))
     [[Fit Statistics]]
-	# function evals   = 48
-	# data points      = 250
-	# variables        = 8
-	chi-square         = 1247.528
-	reduced chi-square = 5.155
-	Akaike info crit   = 417.865
-	Bayesian info crit = 446.036
+        # function evals   = 48
+        # data points      = 250
+        # variables        = 8
+        chi-square         = 1247.528
+        reduced chi-square = 5.155
+        Akaike info crit   = 417.865
+        Bayesian info crit = 446.036
     [[Variables]]
-	exp_amplitude:   99.0183281 +/- 0.537487 (0.54%) (init= 94.53724)
-	exp_decay:       90.9508862 +/- 1.103105 (1.21%) (init= 111.1985)
-	g1_sigma:        16.6725754 +/- 0.160481 (0.96%) (init= 14.5)
-	g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 106.5)
-	g1_amplitude:    4257.77322 +/- 42.38338 (1.00%) (init= 2126.432)
-	g1_fwhm:         39.2609141 +/- 0.377905 (0.96%)  == '2.3548200*g1_sigma'
-	g1_height:       101.880231 +/- 0.592171 (0.58%)  == '0.3989423*g1_amplitude/max(1.e-15, g1_sigma)'
-	g2_sigma:        13.8069481 +/- 0.186794 (1.35%) (init= 15)
-	g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 150)
-	g2_amplitude:    2493.41766 +/- 36.16948 (1.45%) (init= 1878.892)
-	g2_fwhm:         32.5128777 +/- 0.439866 (1.35%)  == '2.3548200*g2_sigma'
-	g2_height:       72.0455935 +/- 0.617221 (0.86%)  == '0.3989423*g2_amplitude/max(1.e-15, g2_sigma)'
+        exp_amplitude:   99.0183281 +/- 0.537487 (0.54%) (init= 94.53724)
+        exp_decay:       90.9508862 +/- 1.103105 (1.21%) (init= 111.1985)
+        g1_sigma:        16.6725754 +/- 0.160481 (0.96%) (init= 14.5)
+        g1_center:       107.030954 +/- 0.150067 (0.14%) (init= 106.5)
+        g1_amplitude:    4257.77322 +/- 42.38338 (1.00%) (init= 2126.432)
+        g1_fwhm:         39.2609141 +/- 0.377905 (0.96%)  == '2.3548200*g1_sigma'
+        g1_height:       101.880231 +/- 0.592171 (0.58%)  == '0.3989423*g1_amplitude/max(1.e-15, g1_sigma)'
+        g2_sigma:        13.8069481 +/- 0.186794 (1.35%) (init= 15)
+        g2_center:       153.270100 +/- 0.194667 (0.13%) (init= 150)
+        g2_amplitude:    2493.41766 +/- 36.16948 (1.45%) (init= 1878.892)
+        g2_fwhm:         32.5128777 +/- 0.439866 (1.35%)  == '2.3548200*g2_sigma'
+        g2_height:       72.0455935 +/- 0.617221 (0.86%)  == '0.3989423*g2_amplitude/max(1.e-15, g2_sigma)'
     [[Correlations]] (unreported correlations are <  0.500)
-	C(g1_sigma, g1_amplitude)    =  0.824
-	C(g2_sigma, g2_amplitude)    =  0.815
-	C(exp_amplitude, exp_decay)  = -0.695
-	C(g1_sigma, g2_center)       =  0.684
-	C(g1_center, g2_amplitude)   = -0.669
-	C(g1_center, g2_sigma)       = -0.652
-	C(g1_amplitude, g2_center)   =  0.648
-	C(g1_center, g2_center)      =  0.621
-	C(g1_sigma, g1_center)       =  0.507
-	C(exp_decay, g1_amplitude)   = -0.507
+        C(g1_sigma, g1_amplitude)    =  0.824
+        C(g2_sigma, g2_amplitude)    =  0.815
+        C(exp_amplitude, exp_decay)  = -0.695
+        C(g1_sigma, g2_center)       =  0.684
+        C(g1_center, g2_amplitude)   = -0.669
+        C(g1_center, g2_sigma)       = -0.652
+        C(g1_amplitude, g2_center)   =  0.648
+        C(g1_center, g2_center)      =  0.621
+        C(g1_sigma, g1_center)       =  0.507
+        C(exp_decay, g1_amplitude)   = -0.507
 
 This script is in the file ``doc_nistgauss2.py`` in the examples folder,
 and the fit result shown on the right above shows an improved initial

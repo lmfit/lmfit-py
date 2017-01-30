@@ -32,18 +32,18 @@ Writing a Fitting Function
 An important component of a fit is writing a function to be minimized --
 the *objective function*.  Since this function will be called by other
 routines, there are fairly stringent requirements for its call signature
-and return value.  In principle, your function can be any python callable,
+and return value.  In principle, your function can be any Python callable,
 but it must look like this:
 
 .. function:: func(params, *args, **kws):
 
-   calculate objective residual to be minimized from parameters.
+   Calculate objective residual to be minimized from parameters.
 
-   :param params: parameters.
-   :type  params: :class:`Parameters`.
-   :param args:  positional arguments.  Must match ``args`` argument to :func:`minimize`
-   :param kws:   keyword arguments.  Must match ``kws`` argument to :func:`minimize`
-   :return: residual array (generally data-model) to be minimized in the least-squares sense.
+   :param params: Parameters.
+   :type  params: :class:`Parameters`
+   :param args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`.
+   :param kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`.
+   :return: Residual array (generally data-model) to be minimized in the least-squares sense.
    :rtype: numpy array.  The length of this array cannot change between calls.
 
 
@@ -62,30 +62,30 @@ method, effectively doing a least-squares optimization of the return values.
 
 Since the function will be passed in a dictionary of :class:`Parameters`, it is advisable
 to unpack these to get numerical values at the top of the function.  A
-simple way to do this is with :meth:`Parameters.valuesdict`, as with::
+simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
 
 
     def residual(pars, x, data=None, eps=None):
-	# unpack parameters:
-	#  extract .value attribute for each parameter
-	parvals = pars.valuesdict()
-	period = parvals['period']
-	shift = parvals['shift']
-	decay = parvals['decay']
+        # unpack parameters:
+        #  extract .value attribute for each parameter
+        parvals = pars.valuesdict()
+        period = parvals['period']
+        shift = parvals['shift']
+        decay = parvals['decay']
 
-	if abs(shift) > pi/2:
-	    shift = shift - sign(shift)*pi
+        if abs(shift) > pi/2:
+            shift = shift - sign(shift)*pi
 
-	if abs(period) < 1.e-10:
-	    period = sign(period)*1.e-10
+        if abs(period) < 1.e-10:
+            period = sign(period)*1.e-10
 
-	model = parvals['amp'] * sin(shift + x/period) * exp(-x*x*decay*decay)
+        model = parvals['amp'] * sin(shift + x/period) * exp(-x*x*decay*decay)
 
-	if data is None:
-	    return model
-	if eps is None:
-	    return (model - data)
-	return (model - data)/eps
+        if data is None:
+            return model
+        if eps is None:
+            return (model - data)
+        return (model - data)/eps
 
 In this example, ``x`` is a positional (required) argument, while the
 ``data`` array is actually optional (so that the function returns the model
@@ -98,8 +98,8 @@ to use the bounds on the :class:`Parameter` to do this::
 
 but putting this directly in the function with::
 
-	if abs(period) < 1.e-10:
-	    period = sign(period)*1.e-10
+    if abs(period) < 1.e-10:
+        period = sign(period)*1.e-10
 
 is also a reasonable approach.   Similarly, one could place bounds on the
 ``decay`` parameter to take values only between ``-pi/2`` and ``pi/2``.
@@ -153,6 +153,8 @@ class as listed in the :ref:`Table of Supported Fitting Methods
  | Differential          |  ``differential_evolution``                                      |
  | Evolution             |                                                                  |
  +-----------------------+------------------------------------------------------------------+
+ | Brute force method    |  ``brute``                                                       |
+ +-----------------------+------------------------------------------------------------------+
 
 
 .. note::
@@ -194,7 +196,7 @@ well formatted text tables you can execute::
 
 with `results` being a `MinimizerResult` object. Note that the method
 :meth:`lmfit.parameter.Parameters.pretty_print` accepts several arguments
-for customizing the output (e.g. column width, numeric format, etc.).
+for customizing the output (e.g., column width, numeric format, etc.).
 
 .. autoclass:: MinimizerResult
 
@@ -246,7 +248,7 @@ After a fit using using the :meth:`leastsq` method has completed
 successfully, standard errors for the fitted variables and correlations
 between pairs of fitted variables are automatically calculated from the
 covariance matrix.  The standard error (estimated :math:`1\sigma`
-error-bar) go into the :attr:`stderr` attribute of the Parameter.  The
+error-bar) goes into the :attr:`stderr` attribute of the Parameter.  The
 correlations with all other variables will be put into the
 :attr:`correl` attribute of the Parameter -- a dictionary with keys for
 all other Parameters and values of the corresponding correlation.
@@ -272,8 +274,8 @@ The :class:`MinimizerResult` includes the traditional chi-square and reduced chi
    :nowrap:
 
    \begin{eqnarray*}
-	\chi^2  &=&  \sum_i^N r_i^2 \\
-	\chi^2_\nu &=& = \chi^2 / (N-N_{\rm varys})
+        \chi^2  &=&  \sum_i^N r_i^2 \\
+        \chi^2_\nu &=& = \chi^2 / (N-N_{\rm varys})
     \end{eqnarray*}
 
 where :math:`r` is the residual array returned by the objective function
@@ -288,7 +290,7 @@ Also included are the `Akaike Information Criterion
 held in the ``aic`` and ``bic`` attributes, respectively.  These give slightly
 different measures of the relative quality for a fit, trying to balance
 quality of fit with the number of variable parameters used in the fit.
-These are calculated as
+These are calculated as:
 
 .. math::
    :nowrap:
@@ -318,17 +320,17 @@ used to abort a fit.
 
 .. function:: iter_cb(params, iter, resid, *args, **kws):
 
-   user-supplied function to be run at each iteration
+   User-supplied function to be run at each iteration.
 
-   :param params: parameters.
+   :param params: Parameters.
    :type  params: :class:`Parameters`.
-   :param iter:   iteration number
+   :param iter:   Iteration number.
    :type  iter:   integer
-   :param resid:  residual array.
+   :param resid:  Residual array.
    :type  resid:  ndarray
-   :param args:  positional arguments.  Must match ``args`` argument to :func:`minimize`
-   :param kws:   keyword arguments.  Must match ``kws`` argument to :func:`minimize`
-   :return:      residual array (generally data-model) to be minimized in the least-squares sense.
+   :param args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`
+   :param kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`
+   :return:      Residual array (generally data-model) to be minimized in the least-squares sense.
    :rtype:    ``None`` for normal behavior, any value like ``True`` to abort fit.
 
 
@@ -361,8 +363,11 @@ The Minimizer object has a few public methods:
 
 .. automethod:: Minimizer.prepare_fit
 
-.. automethod:: Minimizer.emcee
+.. automethod:: Minimizer.brute
 
+For more information, check the examples in 'examples/lmfit_brute.py'
+
+.. automethod:: Minimizer.emcee
 
 .. _label-emcee:
 
@@ -398,10 +403,10 @@ Solving with :func:`minimize` gives the Maximum Likelihood solution.::
     >>> mi = lmfit.minimize(residual, p, method='Nelder')
     >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
     [[Variables]]
-	a1:   2.98623688 (init= 4)
-	a2:  -4.33525596 (init= 4)
-	t1:   1.30993185 (init= 3)
-	t2:   11.8240752 (init= 3)
+        a1:   2.98623688 (init= 4)
+        a2:  -4.33525596 (init= 4)
+        t1:   1.30993185 (init= 3)
+        t2:   11.8240752 (init= 3)
     [[Correlations]] (unreported correlations are <  0.500)
     >>> plt.plot(x, y)
     >>> plt.plot(x, residual(mi.params) + y, 'r')
@@ -455,18 +460,18 @@ You can see that we recovered the right uncertainty level on the data.::
     median of posterior probability distribution
     ------------------------------------------
     [[Variables]]
-	a1:   3.00975345 +/- 0.151034 (5.02%) (init= 2.986237)
-	a2:  -4.35419204 +/- 0.127505 (2.93%) (init=-4.335256)
-	t1:   1.32726415 +/- 0.142995 (10.77%) (init= 1.309932)
-	t2:   11.7911935 +/- 0.495583 (4.20%) (init= 11.82408)
-	f:    0.09805494 +/- 0.004256 (4.34%) (init= 1)
+        a1:   3.00975345 +/- 0.151034 (5.02%) (init= 2.986237)
+        a2:  -4.35419204 +/- 0.127505 (2.93%) (init=-4.335256)
+        t1:   1.32726415 +/- 0.142995 (10.77%) (init= 1.309932)
+        t2:   11.7911935 +/- 0.495583 (4.20%) (init= 11.82408)
+        f:    0.09805494 +/- 0.004256 (4.34%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-	C(a2, t2)                    =  0.981
-	C(a2, t1)                    = -0.927
-	C(t1, t2)                    = -0.880
-	C(a1, t1)                    = -0.519
-	C(a1, a2)                    =  0.195
-	C(a1, t2)                    =  0.146
+        C(a2, t2)                    =  0.981
+        C(a2, t1)                    = -0.927
+        C(t1, t2)                    = -0.880
+        C(a1, t1)                    = -0.519
+        C(a1, a2)                    =  0.195
+        C(a1, t2)                    =  0.146
 
     >>> # find the maximum likelihood solution
     >>> highest_prob = np.argmax(res.lnprob)
@@ -497,20 +502,20 @@ Getting and Printing Fit Reports
 
 .. function:: fit_report(result, modelpars=None, show_correl=True, min_correl=0.1)
 
-   generate and return text of report of best-fit values, uncertainties,
+   Generate and return text of report of best-fit values, uncertainties,
    and correlations from fit.
 
    :param result:       :class:`MinimizerResult` object as returned by :func:`minimize`.
    :param modelpars:    Parameters with "Known Values" (optional, default None)
-   :param show_correl:  whether to show list of sorted correlations [``True``]
-   :param min_correl:   smallest correlation absolute value to show [0.1]
+   :param show_correl:  Whether to show list of sorted correlations [``True``]
+   :param min_correl:   Smallest correlation absolute value to show [0.1]
 
    If the first argument is a :class:`Parameters` object,
    goodness-of-fit statistics will not be included.
 
 .. function:: report_fit(result, modelpars=None, show_correl=True, min_correl=0.1)
 
-   print text of report from :func:`fit_report`.
+   Print text of report from :func:`fit_report`.
 
 An example fit with report would be
 
@@ -519,22 +524,22 @@ An example fit with report would be
 which would write out::
 
     [[Fit Statistics]]
-	# function evals   = 85
-	# data points      = 1001
-	# variables        = 4
-	chi-square         = 498.812
-	reduced chi-square = 0.500
-	Akaike info crit   = -689.223
-	Bayesian info crit = -669.587
+        # function evals   = 85
+        # data points      = 1001
+        # variables        = 4
+        chi-square         = 498.812
+        reduced chi-square = 0.500
+        Akaike info crit   = -689.223
+        Bayesian info crit = -669.587
     [[Variables]]
-	amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
-	period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
-	shift:    0.16203676 +/- 0.014056 (8.67%) (init= 0)
-	decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
+        amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
+        period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
+        shift:    0.16203676 +/- 0.014056 (8.67%) (init= 0)
+        decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
     [[Correlations]] (unreported correlations are <  0.100)
-	C(period, shift)             =  0.797
-	C(amp, decay)                =  0.582
-	C(amp, shift)                = -0.297
-	C(amp, period)               = -0.243
-	C(shift, decay)              = -0.182
-	C(period, decay)             = -0.150
+        C(period, shift)             =  0.797
+        C(amp, decay)                =  0.582
+        C(amp, shift)                = -0.297
+        C(amp, period)               = -0.243
+        C(shift, decay)              = -0.182
+        C(period, decay)             = -0.150

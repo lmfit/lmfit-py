@@ -26,7 +26,7 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
     The truth whether two numbers are the same, within an absolute and
     relative tolerance.
 
-    i.e. abs(`x` - `y`) <= (`atol` + `rtol` * absolute(`y`))
+    i.e., abs(`x` - `y`) <= (`atol` + `rtol` * absolute(`y`))
 
     Parameters
     ----------
@@ -244,15 +244,15 @@ class Parameters(OrderedDict):
         oneline : boolean
             If True prints a one-line parameters representation. Default False.
         colwidth : int
-            column width for all except the first (i.e. name) column.
-        columns : list of strings
-            list of columns names to print. All values must be valid
-            :class:`Parameter` attributes.
-        fmt : string
-            single-char numeric formatter. Valid values: 'f' floating point,
-            'g' floating point and exponential, 'e' exponential.
+            Column width for all except the first (i.e. name) column.
         precision : int
-            number of digits to be printed after floating point.
+            Number of digits to be printed after floating point.
+        fmt : string
+            Single-char numeric formatter. Valid values: 'f' floating point,
+            'g' floating point and exponential, 'e' exponential.
+        columns : list of strings
+            List of columns names to print. All values must be valid
+            :class:`Parameter` attributes.
         """
         if oneline:
             print(self.pretty_repr(oneline=oneline))
@@ -436,9 +436,9 @@ class Parameter(object):
     vary : bool
         Whether the Parameter is fixed during a fit.
     min : float
-        Lower bound for value (None or -inf means no lower bound).
+        Lower bound for value (np.-inf means no lower bound).
     max : float
-        Upper bound for value (None or inf means no upper bound).
+        Upper bound for value (np.inf means no upper bound).
     expr : str
         An expression specifying constraints for the parameter.
     stderr : float
@@ -459,9 +459,9 @@ class Parameter(object):
         vary : bool, optional
             Whether the Parameter is fixed during a fit.
         min : float, optional
-            Lower bound for value (None or -inf means no lower bound).
+            Lower bound for value (np.-inf means no lower bound).
         max : float, optional
-            Upper bound for value (None or inf means no upper bound).
+            Upper bound for value (np.inf means no upper bound).
         expr : str, optional
             Mathematical expression used to constrain the value during the fit.
         brute_step : float, optional

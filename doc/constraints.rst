@@ -7,27 +7,27 @@ Using Mathematical Constraints
 .. _asteval: http://newville.github.io/asteval/
 
 Being able to fix variables to a constant value or place upper and lower
-bounds on their values can greatly simplify modeling real data.  These 
-capabilities are key to lmfit's Parameters.  In addition, it is sometimes 
-highly desirable to place mathematical constraints on parameter values.  
-For example, one might want to require that two Gaussian peaks have the 
-same width, or have amplitudes that are constrained to add to some value.  
-Of course, one could rewrite the objective or model function to place such 
-requirements, but this is somewhat error prone, and limits the flexibility 
+bounds on their values can greatly simplify modeling real data.  These
+capabilities are key to lmfit's Parameters.  In addition, it is sometimes
+highly desirable to place mathematical constraints on parameter values.
+For example, one might want to require that two Gaussian peaks have the
+same width, or have amplitudes that are constrained to add to some value.
+Of course, one could rewrite the objective or model function to place such
+requirements, but this is somewhat error prone, and limits the flexibility
 so that exploring constraints becomes laborious.
 
-To simplify the setting of constraints, Parameters can be assigned a 
-mathematical expression of other Parameters, builtin constants, and builtin 
-mathematical functions that will be used to determine its value.  The 
-expressions used for constraints are evaluated using the `asteval`_ module, 
-which uses Python syntax, and evaluates the constraint expressions in a safe 
+To simplify the setting of constraints, Parameters can be assigned a
+mathematical expression of other Parameters, builtin constants, and builtin
+mathematical functions that will be used to determine its value.  The
+expressions used for constraints are evaluated using the `asteval`_ module,
+which uses Python syntax, and evaluates the constraint expressions in a safe
 and isolated  namespace.
 
-This approach to mathematical constraints allows one to not have to write a 
-separate model function for two Gaussians where the two ``sigma`` values are 
+This approach to mathematical constraints allows one to not have to write a
+separate model function for two Gaussians where the two ``sigma`` values are
 forced to be equal, or where amplitudes are related.  Instead, one can write a
-more general two Gaussian model (perhaps using :class:`GaussianModel`) and 
-impose such constraints on the Parameters for a particular fit. 
+more general two Gaussian model (perhaps using :class:`GaussianModel`) and
+impose such constraints on the Parameters for a particular fit.
 
 
 Overview

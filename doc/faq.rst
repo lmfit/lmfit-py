@@ -59,7 +59,7 @@ different arrays.  As a bonus, the two lines share the 'offset' parameter::
         model1 = params['offset'] + x * params['slope1']
         model2 = params['offset'] + x * params['slope2']
 
-	resid1 = dat1 - model1
+        resid1 = dat1 - model1
         resid2 = dat2 - model2
         return numpy.concatenate((resid1, resid2))
 
