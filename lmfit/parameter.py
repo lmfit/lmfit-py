@@ -113,6 +113,7 @@ class Parameters(OrderedDict):
                 param.correl = par.correl
                 param.init_value = par.init_value
                 param.expr = par.expr
+                param.user_value = par.user_value
                 parameter_list.append(param)
 
         _pars.add_many(*parameter_list)
