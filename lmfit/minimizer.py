@@ -259,16 +259,20 @@ class MinimizerResult(object):
         else:
             return None
 
-    @property
-    def show_candidates(self):
+    def show_candidates(self, candidate_nmb='all'):
         """
         A pretty_print() representation of the candidates from the brute force
-        method.
+        method, showing all candidates (default) or the specified candidate-#.
         """
         if hasattr(self, 'candidates'):
-            for i, candidate in enumerate(self.candidates):
-                print("\nCandidate # {}, chisqr = {:.3f}".format(i, candidate.score))
+            try:
+                candidate = self.candidates[candidate_nmb]
+                print("\nCandidate #{}, chisqr = {:.3f}".format(candidate_nmb, candidate.score))
                 candidate.params.pretty_print()
+            except:
+                for i, candidate in enumerate(self.candidates):
+                    print("\nCandidate #{}, chisqr = {:.3f}".format(i, candidate.score))
+                    candidate.params.pretty_print()
 
 class Minimizer(object):
     """A general minimizer for curve fitting and optimization.
@@ -1360,8 +1364,8 @@ class Minimizer(object):
             (see Notes).
         keep : int, optional
             Number of best candidates from the brute force method that are
-            stored in the `candidates` attribute. If 'all', then all grid
-            points from `brute` are stored as candidates.
+            stored in the :attr:`candidates` attribute. If 'all', then all grid
+            points from :scipydoc:`optimize.brute` are stored as candidates.
 
         Returns
         -------
@@ -1369,15 +1373,15 @@ class Minimizer(object):
             Object containing the parameters from the brute force method.
             The return values (`x0`, `fval`, `grid`, `Jout`) from
             :scipydoc:`optimize.brute` are stored as `brute_<parname>` attributes.
-            The `MinimizerResult` also contains the `candidates` and
-            `show_candidates` attributes. The `candidates` attribute
-            contains the parameters and chisqr from the brute force method as
-            a namedtuple, ('Candidate', ['params', 'score']), sorted on the
-            (lowest) chisqr value. To access the values for a particular
-            candidate one can use `result.candidate[#].params` or
-            `result.candidate[#].score`, where a lower # represents a better
-            candidate. The `show_candidates` attribute, will show the
-            candidates using the :meth:`pretty_print` method.
+            The `MinimizerResult` also contains the `candidates` attribute and
+            `show_candidates()` method. The `candidates` attribute contains the
+            parameters and chisqr from the brute force method as a namedtuple,
+            ('Candidate', ['params', 'score']), sorted on the (lowest) chisqr
+            value. To access the values for a particular candidate one can use
+            `result.candidate[#].params` or `result.candidate[#].score`, where
+            a lower # represents a better candidate. The `show_candidates(#)`
+            uses the :meth:`pretty_print` method to show a specific candidate-#
+            or all candidates when no number is specified.
 
 
         .. versionadded:: 0.96
