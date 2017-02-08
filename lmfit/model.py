@@ -5,6 +5,7 @@ from __future__ import print_function
 import warnings
 import inspect
 import operator
+from functools import wraps
 from copy import deepcopy
 import numpy as np
 from scipy.stats import t
@@ -44,7 +45,10 @@ except ImportError:
 
 def _ensureMatplotlib(function):
     if _HAS_MATPLOTLIB:
-        return function
+        @wraps(function)
+        def wrapper(*args, **kws):
+            return function(*args, **kws)
+        return wrapper
     else:
         def no_op(*args, **kwargs):
             print('matplotlib module is required for plotting the results')
@@ -156,19 +160,27 @@ class Model(object):
         "build params from function arguments"
         if self.func is None:
             return
-        argspec = inspect.getargspec(self.func)
-        pos_args = argspec.args[:]
-        keywords = argspec.keywords
-        kw_args = {}
-        if argspec.defaults is not None:
-            for val in reversed(argspec.defaults):
-                kw_args[pos_args.pop()] = val
+        if (hasattr(self.func, 'argnames') and
+            hasattr(self.func, 'kwargs')):
+            pos_args = self.func.argnames[:]
+            kw_args = {}
+            for name, defval in self.func.kwargs:
+                kw_args[name] = defval
+            keywords_ = list(kw_args.keys())
+        else:
+            argspec = inspect.getargspec(self.func)
+            pos_args = argspec.args[:]
+            keywords_ = argspec.keywords
+            kw_args = {}
+            if argspec.defaults is not None:
+                for val in reversed(argspec.defaults):
+                    kw_args[pos_args.pop()] = val
 
-        self._func_haskeywords = keywords is not None
+        self._func_haskeywords = keywords_ is not None
         self._func_allargs = pos_args + list(kw_args.keys())
         allargs = self._func_allargs
 
-        if len(allargs) == 0 and keywords is not None:
+        if len(allargs) == 0 and keywords_ is not None:
             return
 
         # default independent_var = 1st argument
@@ -316,6 +328,8 @@ class Model(object):
             for item in self._hint_names:
                 if item in  hint:
                     setattr(par, item, hint[item])
+            if basename in kwargs:
+                par.value = kwargs[basename]
             # Add the new parameter to self._param_names
             if name not in self._param_names:
                 self._param_names.append(name)
