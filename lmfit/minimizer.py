@@ -19,6 +19,7 @@ from numpy.dual import inv
 from numpy.linalg import LinAlgError
 import multiprocessing
 import numbers
+import six
 
 ##
 ##  scipy version notes:
@@ -38,6 +39,9 @@ try:
     from scipy.optimize import differential_evolution as scipy_diffev
 except ImportError:
     from ._differentialevolution import differential_evolution as scipy_diffev
+
+from scipy.stats import cauchy as cauchy_dist
+from scipy.stats import norm as norm_dist
 
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
@@ -155,6 +159,31 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'trust-ncg': 'trust-ncg',
                   'differential_evolution': 'differential_evolution'}
 
+def reduce_chisquare(r):
+    """reduce residual array r to scalar as chi-square
+    (r*r).sum()
+    """
+    return (r*r).sum()
+
+def reduce_negentropy(r):
+    """reduce residual array r to scalar using negative entropy
+    and the normal (Gaussian) probability distribution of r as pdf
+       (norm.pdf(r)*norm.logpdf(r)).sum()
+    since pdf(r) = exp(-r*r/2)/sqrt(2*pi), this is
+       ((r*r/2 - log(sqrt(2*pi))) * exp(-r*r/2)).sum()
+    """
+    return (norm_dist.pdf(r)*norm_dist.logpdf(r)).sum()
+
+
+def reduce_cauchylogpdf(r):
+    """reduce residual array r to scalar using negative
+    log-likelihood and a Cauchy (Lorentzian) distribution of r:
+       -scipy.stats.cauchy.logpdf(r)
+    (where the Cauchy pdf = 1/(pi*(1+r*r))). This gives greater
+    suppression of outliers compared to normal sum-of-squares.
+    """
+    return -cauchy_dist.logpdf(r).sum()
+
 
 class MinimizerResult(object):
     """
@@ -248,7 +277,7 @@ class Minimizer(object):
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
-                 **kws):
+                 reduce_fcn=None, **kws):
         """
         The Minimizer class initialization accepts the following parameters:
 
@@ -278,10 +307,19 @@ class Minimizer(object):
         nan_policy : str, optional
             Specifies action if `userfcn` (or a Jacobian) returns nan
             values. One of:
-
-                - 'raise' - a `ValueError` is raised
-                - 'propagate' - the values returned from `userfcn` are un-altered
-                - 'omit' - the non-finite values are filtered.
+             - 'raise' - a `ValueError` is raised
+             - 'propagate' - the values returned from `userfcn` are un-altered
+             - 'omit' - the non-finite values are filtered.
+        reduce_fcn : str or callable, optional
+            function to convert a residual array to a scalar value for the scalar
+            minimizers. Optional values are (where `r` is the residual array):
+             - None           : sum of squares of residual [default]
+                                (r*r).sum()
+             - 'negentropy'   : neg entropy, using normal distribution
+                                (rho*log(rho)).sum() for rho=exp(-r*r/2)/(sqrt(2*pi))
+             - 'neglogcauchy' : neg log likelihood, using Cauchy distribution
+                                -log(1/(pi*(1+r*r))).sum()
+             - callable       : must take 1 argument (r) and return a float.
 
         kws : dict, optional
             Options to pass to the minimizer being used.
@@ -328,7 +366,7 @@ class Minimizer(object):
         self.redchi = None
         self.covar = None
         self.residual = None
-
+        self.reduce_fcn = reduce_fcn
         self.params = params
         self.jacfcn = None
         self.nan_policy = nan_policy
@@ -428,13 +466,17 @@ class Minimizer(object):
         Returns
         -------
         r : float
-            The user evaluated user-supplied objective function. If the
-            objective function is an array of size greater than 1, return the
-            array sum-of-squares
+            The user evaluated user-supplied objective function.
+
+            If the objective function is an array of size greater than 1,
+            use the scalar returned by `self.reduce_fcn`.  This defaults
+            to sum-of-squares, but can be replaced by other options.
         """
         r = self.__residual(fvars)
         if isinstance(r, ndarray) and r.size > 1:
-            r = (r*r).sum()
+            r = self.reduce_fcn(r)
+            if isinstance(r, ndarray) and r.size > 1:
+                r = r.sum()
         return r
 
     def prepare_fit(self, params=None):
@@ -496,6 +538,19 @@ class Minimizer(object):
         result.nvarys = len(result.var_names)
         result.init_values = {n: v for n, v in zip(result.var_names,
                                                    result.init_vals)}
+
+        # set up reduce function for scalar minimizers
+        #    1. user supplied callable
+        #    2. string starting with 'neglogc' or 'negent'
+        #    3. sum of squares
+        if not callable(self.reduce_fcn):
+            if isinstance(self.reduce_fcn, six.string_types):
+                if self.reduce_fcn.lower().startswith('neglogc'):
+                    self.reduce_fcn = reduce_cauchylogpdf
+                elif self.reduce_fcn.lower().startswith('negent'):
+                    self.reduce_fcn = reduce_negentropy
+            if self.reduce_fcn is None:
+                self.reduce_fcn = reduce_chisquare
         return result
 
     def unprepare_fit(self):
@@ -1349,13 +1404,16 @@ class Minimizer(object):
         result.residual = resid = infodict['fvec']
         result.ier = ier
         result.lmdif_message = errmsg
-        result.message = 'Fit succeeded.'
         result.success = ier in [1, 2, 3, 4]
         if result.aborted:
             result.message = 'Fit aborted by user callback.'
             result.success = False
+        elif ier in {1,2,3}:
+            result.message = 'Fit succeeded.'
         elif ier == 0:
-            result.message = 'Invalid Input Parameters.'
+            result.message = 'Invalid Input Parameters. I.e. more variables than data points given, tolerance < 0.0, or no data provided.'
+        elif ier == 4:
+            result.message = 'One or more variable did not affect the fit.'
         elif ier == 5:
             result.message = self._err_maxfev % lskws['maxfev']
         else:
@@ -1447,7 +1505,7 @@ class Minimizer(object):
                         params[nam].value = v.nominal_value
 
         if not result.errorbars:
-            result.message = '%s. Could not estimate error-bars' % result.message
+            result.message = '%s Could not estimate error-bars.' % result.message
 
         np.seterr(**orig_warn_settings)
         return result
@@ -1731,7 +1789,7 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
-             scale_covar=True, iter_cb=None, **fit_kws):
+             scale_covar=True, iter_cb=None, reduce_fcn=None, **fit_kws):
     """
     This function performs a fit of a set of parameters by minimizing
     an objective (or "cost") function using one one of the several
@@ -1784,8 +1842,10 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         the iteration, `resid` the current residual array, and `*args`
         and `**kws` as passed to the objective function.
     scale_covar : bool, optional
-        Whether to automatically scale the covariance matrix (leastsq
-        only).
+        Whether to automatically scale the covariance matrix (leastsq only).
+    reduce_fcn : str or callable, optional
+        function to convert a residual array to a scalar value for the scalar
+        minimizers. See notes in `Minimizer`.
     fit_kws : dict, optional
         Options to pass to the minimizer being used.
 
@@ -1828,5 +1888,6 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
 
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
-                       iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
+                       iter_cb=iter_cb, scale_covar=scale_covar,
+                       reduce_fcn=reduce_fcn, **fit_kws)
     return fitter.minimize(method=method)

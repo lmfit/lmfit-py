@@ -15,7 +15,7 @@ spi  = sqrt(pi)
 s2   = sqrt(2.0)
 
 functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
-             'breit_wigner', 'damped_oscillator', 'logistic', 'lognormal',
+             'breit_wigner', 'damped_oscillator', 'dho', 'logistic', 'lognormal',
              'students_t', 'expgaussian', 'donaich', 'skewed_gaussian',
              'skewed_voigt', 'step', 'rectangle', 'erf', 'erfc', 'wofz',
              'gamma', 'gammaln', 'exponential', 'powerlaw', 'linear',
@@ -92,6 +92,21 @@ def damped_oscillator(x, amplitude=1.0, center=1., sigma=0.1):
     """
     center = max(1.e-9, abs(center))
     return (amplitude/sqrt( (1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2))
+
+def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
+    """Damped Harmonic Oscillator, similar to version from PAN
+     = (amplitude*sigma*(bose/pi)* (lm - lp)
+   
+   where  
+      bose(x, gamma) =  1.0/ (1.0 - exp(-x/gamma))
+      lm(x, center, sigma) = 1.0 / ((x-center)**2 + sigma**2)
+      lp(x, center, sigma) = 1.0 / ((x+center)**2 + sigma**2)
+    """
+
+    bose = 1.0/(1.0 - exp(-x/gamma))
+    lm = 1.0/((x-center)**2 + sigma**2)
+    lp = 1.0/((x+center)**2 + sigma**2)
+    return amplitude*sigma*pi*bose*(lm - lp)
 
 def logistic(x, amplitude=1., center=0., sigma=1.):
     """Logistic lineshape (yet another sigmoidal curve)
