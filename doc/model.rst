@@ -10,21 +10,21 @@ A common use of least-squares minimization is *curve fitting*, where one
 has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model to most closely match some
 data.  With :mod:`scipy`, such problems are commonly solved with
-:scipydoc:`scipy.optimize.curve_fit`, which is a wrapper around
-:scipydoc:`scipy.optimize.leastsq`.  Since Lmfit's :func:`~lmfit.minimizer.minimize` is also
-a high-level wrapper around :scipydoc:`scipy.optimize.leastsq` it can be used
+:scipydoc:`optimize.curve_fit`, which is a wrapper around
+:scipydoc:`optimize.leastsq`.  Since lmfit's :func:`~lmfit.minimizer.minimize` is also
+a high-level wrapper around :scipydoc:`optimize.leastsq` it can be used
 for curve-fitting problems, but requires more effort than using
-:scipydoc:`scipy.optimize.curve_fit`.
+:scipydoc:`optimize.curve_fit`.
 
 
 Here we discuss lmfit's :class:`Model` class.  This takes a model function
 -- a function that calculates a model for some data -- and provides methods
 to create parameters for that model and to fit data using that model
-function.  This is closer in spirit to :scipydoc:`scipy.optimize.curve_fit`,
+function.  This is closer in spirit to :scipydoc:`optimize.curve_fit`,
 but with the advantages of using :class:`~lmfit.parameter.Parameters` and lmfit.
 
 In addition to allowing you turn any model function into a curve-fitting
-method, Lmfit also provides canonical definitions for many known line shapes
+method, lmfit also provides canonical definitions for many known line shapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
 used in many scientific domains.  These are available in the :mod:`models`
 module that will be discussed in more detail in the next chapter
@@ -49,7 +49,7 @@ own.  We start with a simple definition of the model function:
     ...
 
 We want to fit this objective function to data :math:`y(x)` represented by the
-arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`scipy.optimize.curve_fit`::
+arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`optimize.curve_fit`::
 
     >>> from scipy.optimize import curve_fit
     >>>
@@ -62,7 +62,7 @@ arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`scipy.optimize.
 
 
 We sample random data point, make an initial guess of the model
-values, and run :scipydoc:`scipy.optimize.curve_fit` with the model function,
+values, and run :scipydoc:`optimize.curve_fit` with the model function,
 data arrays, and initial guesses.  The results returned are the optimal
 values for the parameters and the covariance matrix.  It's simple and very
 useful.  But it misses the benefits of lmfit.
@@ -73,7 +73,7 @@ such a function would be fairly simple (essentially, ``data - model``,
 possibly with some weighting), and we would need to define and use
 appropriately named parameters.  Though convenient, it is somewhat of a
 burden to keep the named parameter straight (on the other hand, with
-:scipydoc:`scipy.optimize.curve_fit` you are required to remember the parameter
+:scipydoc:`optimize.curve_fit` you are required to remember the parameter
 order).  After doing this a few times it appears as a recurring pattern,
 and we can imagine automating this process.  That's where the
 :class:`Model` class comes in.
@@ -146,21 +146,21 @@ a :class:`ModelResult` object.  As we will see below, this has many
 components, including a :meth:`fit_report` method, which will show::
 
     [[Model]]
-	gaussian
+        gaussian
     [[Fit Statistics]]
-	# function evals   = 33
-	# data points      = 101
-	# variables        = 3
-	chi-square         = 3.409
-	reduced chi-square = 0.035
-	Akaike info crit   = -336.264
-	Bayesian info crit = -328.418
+        # function evals   = 33
+        # data points      = 101
+        # variables        = 3
+        chi-square         = 3.409
+        reduced chi-square = 0.035
+        Akaike info crit   = -336.264
+        Bayesian info crit = -328.418
     [[Variables]]
-	amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
-	cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
-	wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
+        amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
+        cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
+        wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-	C(amp, wid)                  =  0.577
+        C(amp, wid)                  =  0.577
 
 The result will also have :attr:`init_fit` for the fit with the initial
 parameter values and a :attr:`best_fit` for the fit with the best fit
@@ -182,7 +182,7 @@ Note that the model fitting was really performed with 2 lines of code::
 These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
 starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.
-This is much more expressive than :scipydoc:`scipy.optimize.curve_fit`::
+This is much more expressive than :scipydoc:`optimize.curve_fit`::
 
     best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
@@ -203,19 +203,19 @@ function as a fitting model.
     introspection to automatically converting argument names of the
     function to Parameter names.
 
-    :param func: model function to be wrapped
+    :param func: Model function to be wrapped.
     :type func: callable
-    :param independent_vars: list of argument names to ``func`` that are independent variables.
+    :param independent_vars: List of argument names to ``func`` that are independent variables.
     :type independent_vars: ``None`` (default) or list of strings.
-    :param param_names: list of argument names to ``func`` that should be made into Parameters.
+    :param param_names: List of argument names to ``func`` that should be made into Parameters.
     :type param_names: ``None`` (default) or list of strings
-    :param missing: how to handle missing values.
+    :param missing: How to handle missing values.
     :type missing: one of ``None`` (default), 'none', 'drop', or 'raise'.
-    :param prefix: prefix to add to all parameter names to distinguish components in a :class:`CompositeModel`.
+    :param prefix: Prefix to add to all parameter names to distinguish components in a :class:`CompositeModel`.
     :type prefix: string
-    :param name: name for the model. When ``None`` (default) the name is the same  as the model function (``func``).
+    :param name: Name for the model. When ``None`` (default) the name is the same  as the model function (``func``).
     :type name: ``None`` or string.
-    :param kws:   additional keyword arguments to pass to model function.
+    :param kws:   Additional keyword arguments to pass to model function.
 
 
 Of course, the model function will have to return an array that will be the
@@ -228,11 +228,11 @@ specifying one or more independent variables.
 
 .. method:: Model.eval(params=None[, **kws])
 
-   evaluate the model function for a set of parameters and inputs.
+   Evaluate the model function for a set of parameters and inputs.
 
-   :param params: parameters to use for fit.
+   :param params: Parameters to use for fit.
    :type params: ``None`` (default) or Parameters
-   :param kws:    additional keyword arguments to pass to model function.
+   :param kws:    Additional keyword arguments to pass to model function.
    :return:       ndarray for model given the parameters and other arguments.
 
    If ``params`` is ``None``, the values for all parameters are expected to
@@ -247,24 +247,24 @@ specifying one or more independent variables.
 
 .. method:: Model.fit(data[, params=None[, weights=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **kws]]]]]])
 
-   perform a fit of the model to the ``data`` array with a set of
+   Perform a fit of the model to the ``data`` array with a set of
    parameters.
 
-   :param data: array of data to be fitted.
+   :param data: Array of data to be fitted.
    :type data: ndarray-like
-   :param params: parameters to use for fit.
+   :param params: Parameters to use for fit.
    :type params: ``None`` (default) or Parameters
-   :param weights: weights to use for residual calculation in fit.
+   :param weights: Weights to use for residual calculation in fit.
    :type weights: ``None`` (default) or ndarray-like.
-   :param method:  name of fitting method to use. See  :ref:`fit-methods-label` for details
+   :param method:  Name of fitting method to use. See  :ref:`fit-methods-label` for details.
    :type  method:  string (default ``leastsq``)
-   :param scale_covar:  whether to automatically scale covariance matrix (``leastsq`` only)
+   :param scale_covar:  Whether to automatically scale covariance matrix (``leastsq`` only).
    :type  scale_covar:  bool (default ``True``)
-   :param iter_cb:  function to be called at each fit iteration. See :ref:`fit-itercb-label` for details.
+   :param iter_cb:  Function to be called at each fit iteration. See :ref:`fit-itercb-label` for details.
    :type  iter_cb:  callable or ``None``
-   :param verbose:  print a message when a new parameter is created due to a *hint*
+   :param verbose:  Print a message when a new parameter is created due to a *hint*.
    :type  verbose:  bool (default ``True``)
-   :param kws:      additional keyword arguments to pass to model function.
+   :param kws:      Additional keyword arguments to pass to model function.
    :return:         :class:`ModelResult` object.
 
    If ``params`` is ``None``, the internal ``params`` will be used. If it
@@ -283,9 +283,9 @@ specifying one or more independent variables.
 
    Guess starting values for model parameters.
 
-    :param data: data array used to guess parameter values
+    :param data: Data array used to guess parameter values.
     :type func:  ndarray
-    :param kws:  additional options to pass to model function.
+    :param kws:  Additional options to pass to model function.
     :return: :class:`lmfit.parameter.Parameters` with guessed initial values for each parameter.
 
    by default this is left to raise a ``NotImplementedError``, but may be
@@ -298,7 +298,7 @@ specifying one or more independent variables.
 
    Create a set of parameters for model.
 
-    :param kws:  optional keyword/value pairs to set initial values for parameters.
+    :param kws:  Optional keyword/value pairs to set initial values for parameters.
     :return: :class:`lmfit.parameter.Parameters`.
 
     The parameters may or may not have decent initial values for each
@@ -307,21 +307,21 @@ specifying one or more independent variables.
 
 .. method:: Model.set_param_hint(name, value=None[, min=None[, max=None[, vary=True[, expr=None]]]])
 
-   set *hints* to use when creating parameters with :meth:`Model.make_param` for
+   Set *hints* to use when creating parameters with :meth:`Model.make_param` for
    the named parameter.  This is especially convenient for setting initial
    values.  The ``name`` can include the models ``prefix`` or not.
 
-   :param name: parameter name.
+   :param name: Parameter name.
    :type name: string
-   :param value: value for parameter
+   :param value: Value for parameter.
    :type value: float
-   :param min:  lower bound for parameter value
-   :type min: ``None`` or float
-   :param max:  upper bound for parameter value
-   :type max: ``None`` or float
-   :param vary:  whether to vary parameter in fit.
+   :param min:  Lower bound for parameter value.
+   :type min: ``-np.inf`` or float
+   :param max:  Upper bound for parameter value.
+   :type max: ``np.inf`` or float
+   :param vary:  Whether to vary parameter in fit.
    :type vary: boolean
-   :param expr:  mathematical expression for constraint
+   :param expr:  Mathematical expression for constraint.
    :type expr: string
 
    See :ref:`model_param_hints_section`.
@@ -339,27 +339,25 @@ specifying one or more independent variables.
 
 .. attribute:: independent_vars
 
-   list of strings for names of the independent variables.
+   List of strings for names of the independent variables.
 
 .. attribute:: missing
 
-   describes what to do for missing values.  The choices are
+   Describes what to do for missing values.  The choices are:
 
-    * ``None``: Do not check for null or missing values (default)
+    * ``None``: Do not check for null or missing values (default).
     * ``'none'``: Do not check for null or missing values.
-    * ``'drop'``: Drop null or missing observations in data.  If pandas is
-		installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
-    * ``'raise'``: Raise a (more helpful) exception when data contains null
-		  or missing values.
+    * ``'drop'``: Drop null or missing observations in data.  If pandas is installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
+    * ``'raise'``: Raise a (more helpful) exception when data contains null or missing values.
 
 .. attribute:: name
 
-   name of the model, used only in the string representation of the
+   Name of the model, used only in the string representation of the
    model. By default this will be taken from the model function.
 
 .. attribute:: opts
 
-   extra keyword arguments to pass to model function.  Normally this will
+   Extra keyword arguments to pass to model function.  Normally this will
    be determined internally and should not be changed.
 
 .. attribute:: param_hints
@@ -368,11 +366,11 @@ specifying one or more independent variables.
 
 .. attribute:: param_names
 
-   list of strings of parameter names.
+   List of strings of parameter names.
 
 .. attribute:: prefix
 
-   prefix used for name-mangling of parameter names.  The default is ''.
+   Prefix used for name-mangling of parameter names.  The default is ''.
    If a particular :class:`Model` has arguments ``amplitude``,
    ``center``, and ``sigma``, these would become the parameter names.
    Using a prefix of ``g1_`` would convert these parameter names to
@@ -669,7 +667,7 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. method:: ModelResult.eval(params=None, **kwargs)
 
-   evaluate the model using parameters supplied (or the best-fit parameters
+   Evaluate the model using parameters supplied (or the best-fit parameters
    if not specified) and supplied independent variables.  The ``**kwargs``
    arguments can be used to update parameter values and/or independent
    variables.
@@ -677,7 +675,7 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. method:: ModelResult.eval_components(**kwargs)
 
-   evaluate each component of a :class:`CompositeModel`, returning an
+   Evaluate each component of a :class:`CompositeModel`, returning an
    ordered dictionary of with the values for each component model.  The
    returned dictionary will have keys of the model prefix or (if no prefix
    is given), the model name.  The ``**kwargs`` arguments can be used to
@@ -685,44 +683,43 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. method:: ModelResult.fit(data=None[, params=None[, weights=None[, method=None[, **kwargs]]]])
 
-   fit (or re-fit), optionally changing ``data``, ``params``, ``weights``,
+   Fit (or re-fit), optionally changing ``data``, ``params``, ``weights``,
    or ``method``, or changing the independent variable(s) with the
    ``**kwargs`` argument.  See :meth:`Model.fit` for argument
    descriptions, and note that any value of ``None`` defaults to the last
    used value.
 
-.. method:: ModelResult.fit_report(modelpars=None[, show_correl=True[,`< min_correl=0.1]])
+.. method:: ModelResult.fit_report(modelpars=None[, show_correl=True[, min_correl=0.1]])
 
-   return a printable fit report for the fit with fit statistics, best-fit
+   Return a printable fit report for the fit with fit statistics, best-fit
    values with uncertainties and correlations.  As with :func:`fit_report`.
 
-   :param modelpars:    Parameters with "Known Values" (optional, default None)
-   :param show_correl:  whether to show list of sorted correlations [``True``]
-   :param min_correl:   smallest correlation absolute value to show [0.1]
+   :param modelpars:    Parameters with "Known Values" (optional, default None).
+   :param show_correl:  Whether to show list of sorted correlations [``True``].
+   :param min_correl:   Smallest correlation absolute value to show [0.1].
 
 
 .. method:: ModelResult.conf_interval(**kwargs)
 
-   calculate the confidence intervals for the variable parameters using
+   Calculate the confidence intervals for the variable parameters using
    :func:`confidence.conf_interval() <lmfit.conf_interval>`.  All keyword
    arguments are passed to that function.  The result is stored in
    :attr:`ci_out`, and so can be accessed without recalculating them.
 
 .. method:: ModelResult.ci_report(with_offset=True)
 
-   return a nicely formatted text report of the confidence intervals, as
+   Return a nicely formatted text report of the confidence intervals, as
    from :func:`ci_report() <lmfit.ci_report>`.
 
 .. method:: ModelResult.eval_uncertainty(**kwargs)
 
-   evaluate the uncertainty of the *model function* from the
+   Evaluate the uncertainty of the *model function* from the
    uncertainties for the best-fit parameters.  This can be used
    to give confidence bands for the model.
 
    :param params:  Parameters, defaults to :attr:`params`.
-   :param sigma:  confidence level, i.e., how many :math:`\sigma` values, default=1
-   :returns: ndarray to be added/subtracted to best-fit to give
-   uncertaintay in the values for the model.
+   :param sigma:  Confidence level, i.e. how many :math:`\sigma` values, default=1.
+   :returns: ndarray to be added/subtracted to best-fit to give uncertaintay in the values for the model.
 
    An example using this method::
 
@@ -740,35 +737,35 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. method:: ModelResult.plot(datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None, fig=None, data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None, fig_kws=None)
 
-   Plot the fit results and residuals using matplotlib, if available.  The
+   Plot the fit results and residuals using Matplotlib, if available.  The
    plot will include two panels, one showing the fit residual, and the
    other with the data points, the initial fit curve, and the best-fit
    curve. If the fit model included weights or if ``yerr`` is specified,
    errorbars will also be plotted.
 
-   :param datafmt: matplotlib format string for data curve.
-   :type  datafmt: ``None`` or string.
-   :param fitfmt:  matplotlib format string for best-fit curve.
-   :type fitfmt: ``None`` or string.
-   :param initfmt:  matplotlib format string for initial curve.
-   :type intfmt: ``None`` or string.
-   :param yerr:  array of uncertainties for data array.
-   :type  yerr: ``None`` or ndarray.
-   :param numpoints:  number of points to display
+   :param datafmt: Matplotlib format string for data curve.
+   :type  datafmt: ``None`` or string
+   :param fitfmt:  Matplotlib format string for best-fit curve.
+   :type fitfmt: ``None`` or string
+   :param initfmt:  Matplotlib format string for initial curve.
+   :type intfmt: ``None`` or string
+   :param yerr:  Array of uncertainties for data array.
+   :type  yerr: ``None`` or ndarray
+   :param numpoints:  Number of points to display
    :type numpoints: ``None`` or integer
-   :param fig: matplotlib Figure to plot on.
+   :param fig: Matplotlib Figure to plot on.
    :type fig:  ``None`` or matplotlib.figure.Figure
-   :param data_kws:  keyword arguments passed to plot for data curve.
+   :param data_kws:  Keyword arguments passed to plot for data curve.
    :type data_kws: ``None`` or dictionary
-   :param fit_kws:  keyword arguments passed to plot for best-fit curve.
+   :param fit_kws:  Keyword arguments passed to plot for best-fit curve.
    :type fit_kws: ``None`` or dictionary
-   :param init_kws:  keyword arguments passed to plot for initial curve.
+   :param init_kws:  Keyword arguments passed to plot for initial curve.
    :type init_kws: ``None`` or dictionary
-   :param ax_res_kws:  keyword arguments passed to creation of matplotlib axes for the residual plot.
+   :param ax_res_kws:  Keyword arguments passed to creation of Matplotlib axes for the residual plot.
    :type ax_res_kws: ``None`` or dictionary
-   :param ax_fit_kws:  keyword arguments passed to creation of matplotlib axes for the fit plot.
+   :param ax_fit_kws:  Keyword arguments passed to creation of Matplotlib axes for the fit plot.
    :type ax_fit_kws: ``None`` or dictionary
-   :param fig_kws:  keyword arguments passed to creation of matplotlib figure.
+   :param fig_kws:  Keyword arguments passed to creation of Matplotlib figure.
    :type fig_kws: ``None`` or dictionary
    :returns:     matplotlib.figure.Figure
 
@@ -787,25 +784,25 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
    model included weights or if ``yerr`` is specified, errorbars will also
    be plotted.
 
-   :param ax: matplotlib axes to plot on.
-   :type ax:  ``None`` or matplotlib.axes.Axes.
-   :param datafmt: matplotlib format string for data curve.
-   :type  datafmt: ``None`` or string.
-   :param fitfmt:  matplotlib format string for best-fit curve.
-   :type fitfmt: ``None`` or string.
-   :param initfmt:  matplotlib format string for initial curve.
-   :type intfmt: ``None`` or string.
-   :param yerr:  array of uncertainties for data array.
-   :type  yerr: ``None`` or ndarray.
-   :param numpoints:  number of points to display
+   :param ax: Matplotlib axes to plot on.
+   :type ax:  ``None`` or matplotlib.axes.Axes
+   :param datafmt: Matplotlib format string for data curve.
+   :type  datafmt: ``None`` or string
+   :param fitfmt:  Matplotlib format string for best-fit curve.
+   :type fitfmt: ``None`` or string
+   :param initfmt:  Matplotlib format string for initial curve.
+   :type intfmt: ``None`` or string
+   :param yerr:  Array of uncertainties for data array.
+   :type  yerr: ``None`` or ndarray
+   :param numpoints:  Number of points to display.
    :type numpoints: ``None`` or integer
-   :param data_kws:  keyword arguments passed to plot for data curve.
+   :param data_kws:  Keyword arguments passed to plot for data curve.
    :type data_kws: ``None`` or dictionary
-   :param fit_kws:  keyword arguments passed to plot for best-fit curve.
+   :param fit_kws:  Keyword arguments passed to plot for best-fit curve.
    :type fit_kws: ``None`` or dictionary
-   :param init_kws:  keyword arguments passed to plot for initial curve.
+   :param init_kws:  Keyword arguments passed to plot for initial curve.
    :type init_kws: ``None`` or dictionary
-   :param ax_kws:  keyword arguments passed to creation of matplotlib axes.
+   :param ax_kws:  Keyword arguments passed to creation of matplotlib axes.
    :type ax_kws: ``None`` or dictionary
    :returns:     matplotlib.axes.Axes
 
@@ -823,19 +820,19 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
   Plot the fit residuals (data - fit) using matplotlib.  If ``yerr`` is
   supplied or if the model included weights, errorbars will also be plotted.
 
-   :param ax: matplotlib axes to plot on.
-   :type ax:  ``None`` or matplotlib.axes.Axes.
-   :param datafmt: matplotlib format string for data curve.
-   :type  datafmt: ``None`` or string.
-   :param yerr:  array of uncertainties for data array.
-   :type  yerr: ``None`` or ndarray.
-   :param numpoints:  number of points to display
+   :param ax: Matplotlib axes to plot on.
+   :type ax:  ``None`` or matplotlib.axes.Axes
+   :param datafmt: Matplotlib format string for data curve.
+   :type  datafmt: ``None`` or string
+   :param yerr:  Array of uncertainties for data array.
+   :type  yerr: ``None`` or ndarray
+   :param numpoints:  Number of points to display
    :type numpoints: ``None`` or integer
-   :param data_kws:  keyword arguments passed to plot for data curve.
+   :param data_kws:  Keyword arguments passed to plot for data curve.
    :type data_kws: ``None`` or dictionary
-   :param fit_kws:  keyword arguments passed to plot for best-fit curve.
+   :param fit_kws:  Keyword arguments passed to plot for best-fit curve.
    :type fit_kws: ``None`` or dictionary
-   :param ax_kws:  keyword arguments passed to creation of matplotlib axes.
+   :param ax_kws:  Keyword arguments passed to creation of matplotlib axes.
    :type ax_kws: ``None`` or dictionary
    :returns:     matplotlib.axes.Axes
 
@@ -856,7 +853,7 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. attribute:: aic
 
-   floating point best-fit Akaike Information Criterion statistic (see :ref:`fit-results-label`).
+   Floating point best-fit Akaike Information Criterion statistic (see :ref:`fit-results-label`).
 
 .. attribute:: best_fit
 
@@ -865,19 +862,19 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. attribute:: best_values
 
-   dictionary with  parameter names as keys, and best-fit values as values.
+   Dictionary with parameter names as keys, and best-fit values as values.
 
 .. attribute:: bic
 
-   floating point best-fit Bayesian Information Criterion statistic (see :ref:`fit-results-label`).
+   Floating point best-fit Bayesian Information Criterion statistic (see :ref:`fit-results-label`).
 
 .. attribute:: chisqr
 
-   floating point best-fit chi-square statistic (see :ref:`fit-results-label`).
+   Floating point best-fit chi-square statistic (see :ref:`fit-results-label`).
 
 .. attribute:: ci_out
 
-   confidence interval data (see :ref:`confidence_chapter`) or `None`  if
+   Confidence interval data (see :ref:`confidence_chapter`) or `None`  if
    the confidence intervals have not been calculated.
 
 .. attribute:: covar
@@ -890,28 +887,28 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. attribute:: errorbars
 
-   boolean for whether error bars were estimated by fit.
+   Boolean for whether error bars were estimated by fit.
 
 .. attribute::  ier
 
-   integer returned code from :scipydoc:`scipy.optimize.leastsq`.
+   Integer returned code from :scipydoc:`optimize.leastsq`.
 
 .. attribute:: init_fit
 
-   ndarray result of model function, evaluated at provided
+   Ndarray result of model function, evaluated at provided
    independent variables and with initial parameters.
 
 .. attribute:: init_params
 
-   initial parameters.
+   Initial parameters.
 
 .. attribute:: init_values
 
-   dictionary with  parameter names as keys, and initial values as values.
+   Dictionary with  parameter names as keys, and initial values as values.
 
 .. attribute:: iter_cb
 
-   optional callable function, to be called at each fit iteration.  This
+   Optional callable function, to be called at each fit iteration.  This
    must take take arguments of ``params, iter, resid, *args, **kws``, where
    ``params`` will have the current parameter values, ``iter`` the
    iteration, ``resid`` the current residual array, and ``*args`` and
@@ -919,47 +916,47 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. attribute:: jacfcn
 
-   optional callable function, to be called to calculate jacobian array.
+   Optional callable function, to be called to calculate jacobian array.
 
 .. attribute::  lmdif_message
 
-   string message returned from :scipydoc:`scipy.optimize.leastsq`.
+   String message returned from :scipydoc:`optimize.leastsq`.
 
 .. attribute::  message
 
-   string message returned from :func:`~lmfit.minimizer.minimize`.
+   String message returned from :func:`~lmfit.minimizer.minimize`.
 
 .. attribute::  method
 
-   string naming fitting method for :func:`~lmfit.minimizer.minimize`.
+   String naming fitting method for :func:`~lmfit.minimizer.minimize`.
 
 .. attribute::  model
 
-   instance of :class:`Model` used for model.
+   Instance of :class:`Model` used for model.
 
 .. attribute::  ndata
 
-    integer number of data points.
+   Integer number of data points.
 
 .. attribute::  nfev
 
-    integer number of function evaluations used for fit.
+   Integer number of function evaluations used for fit.
 
 .. attribute::  nfree
 
-    integer number of free parameters in fit.
+   Integer number of free parameters in fit.
 
 .. attribute::  nvarys
 
-    integer number of independent, freely varying variables in fit.
+   Integer number of independent, freely varying variables in fit.
 
 .. attribute::  params
 
-    Parameters used in fit.  Will have best-fit values.
+   Parameters used in fit.  Will have best-fit values.
 
 .. attribute::  redchi
 
-    floating point reduced chi-square statistic (see :ref:`fit-results-label`).
+   Floating point reduced chi-square statistic (see :ref:`fit-results-label`).
 
 .. attribute::  residual
 
@@ -967,11 +964,11 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 
 .. attribute::  scale_covar
 
-   boolean flag for whether to automatically scale covariance matrix.
+   Boolean flag for whether to automatically scale covariance matrix.
 
 .. attribute:: success
 
-   boolean value of whether fit succeeded.
+   Boolean value of whether fit succeeded.
 
 .. attribute:: weights
 
@@ -1000,11 +997,11 @@ to model a peak with a background. For such a simple problem, we could just
 build a model that included both components::
 
     def gaussian_plus_line(x, amp, cen, wid, slope, intercept):
-	"line + 1-d gaussian"
+        "line + 1-d gaussian"
 
-	gauss = (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
-	line = slope * x + intercept
-	return gauss + line
+        gauss = (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
+        line = slope * x + intercept
+        return gauss + line
 
 and use that with::
 
@@ -1016,8 +1013,8 @@ model function would have to be changed.  As an alternative we could define
 a linear function::
 
     def line(x, slope, intercept):
-	"a line"
-	return slope * x + intercept
+        "a line"
+        return slope * x + intercept
 
 and build a composite model with just::
 
@@ -1030,24 +1027,24 @@ This model has parameters for both component models, and can be used as:
 which prints out the results::
 
     [[Model]]
-	(Model(gaussian) + Model(line))
+        (Model(gaussian) + Model(line))
     [[Fit Statistics]]
-	# function evals   = 44
-	# data points      = 101
-	# variables        = 5
-	chi-square         = 2.579
-	reduced chi-square = 0.027
-	Akaike info crit   = -360.457
-	Bayesian info crit = -347.381
+        # function evals   = 44
+        # data points      = 101
+        # variables        = 5
+        chi-square         = 2.579
+        reduced chi-square = 0.027
+        Akaike info crit   = -360.457
+        Bayesian info crit = -347.381
     [[Variables]]
-	amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
-	cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
-	intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
-	slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
-	wid:         0.67545523 +/- 0.009916 (1.47%) (init= 1)
+        amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
+        cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
+        intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
+        slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
+        wid:         0.67545523 +/- 0.009916 (1.47%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-	C(amp, wid)                  =  0.666
-	C(cen, intercept)            =  0.129
+        C(amp, wid)                  =  0.666
+        C(cen, intercept)            =  0.129
 
 
 and shows the plot on the left.
@@ -1098,11 +1095,11 @@ provides a simple way to build up complex models.
     binary operator (`op`).  Additional keywords are passed to
     :class:`Model`.
 
-    :param left: left-hand side Model
+    :param left: Left-hand side Model.
     :type left: :class:`Model`
-    :param right: right-hand side Model
+    :param right: Right-hand side Model.l
     :type right: :class:`Model`
-    :param op: binary operator
+    :param op: Binary operator.
     :type op: callable, and taking 2 arguments (`left` and `right`).
 
 Normally, one does not have to explicitly create a :class:`CompositeModel`,
@@ -1124,13 +1121,13 @@ convolution function, perhaps as::
 
     import numpy as np
     def convolve(dat, kernel):
-	# simple convolution
-	npts = min(len(dat), len(kernel))
-	pad  = np.ones(npts)
-	tmp  = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
-	out  = np.convolve(tmp, kernel, mode='valid')
-	noff = int((len(out) - npts)/2)
-	return (out[noff:])[:npts]
+        # simple convolution
+        npts = min(len(dat), len(kernel))
+        pad  = np.ones(npts)
+        tmp  = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
+        out  = np.convolve(tmp, kernel, mode='valid')
+        noff = int((len(out) - npts)/2)
+        return (out[noff:])[:npts]
 
 which extends the data in both directions so that the convolving kernel
 function gives a valid result over the data range.  Because this function
@@ -1142,23 +1139,23 @@ binary operator.  A full script using this technique is here:
 which prints out the results::
 
     [[Model]]
-	(Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
+        (Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
     [[Fit Statistics]]
-	# function evals   = 27
-	# data points      = 201
-	# variables        = 3
-	chi-square         = 22.091
-	reduced chi-square = 0.112
-	Akaike info crit   = -437.837
-	Bayesian info crit = -427.927
+        # function evals   = 27
+        # data points      = 201
+        # variables        = 3
+        chi-square         = 22.091
+        reduced chi-square = 0.112
+        Akaike info crit   = -437.837
+        Bayesian info crit = -427.927
     [[Variables]]
-	mid:         5 (fixed)
-	sigma:       0.64118585 +/- 0.013233 (2.06%) (init= 1.5)
-	center:      4.51633608 +/- 0.009567 (0.21%) (init= 3.5)
-	amplitude:   0.62654849 +/- 0.001813 (0.29%) (init= 1)
+        mid:         5 (fixed)
+        sigma:       0.64118585 +/- 0.013233 (2.06%) (init= 1.5)
+        center:      4.51633608 +/- 0.009567 (0.21%) (init= 3.5)
+        amplitude:   0.62654849 +/- 0.001813 (0.29%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-	C(center, amplitude)         =  0.344
-	C(sigma, amplitude)          =  0.280
+        C(center, amplitude)         =  0.344
+        C(sigma, amplitude)          =  0.280
 
 
 and shows the plots:

@@ -23,14 +23,14 @@ for `MINUIT`_.  This is implemented following (and borrowing heavily from)
 the `leastsqbound`_ from J. J. Helmus.   Parameter values are mapped from
 internally used, freely variable values :math:`P_{\rm internal}` to bounded
 parameters :math:`P_{\rm bounded}`.   When both ``min`` and ``max`` bounds
-are specified, the mapping is
+are specified, the mapping is:
 
 .. math::
    :nowrap:
 
    \begin{eqnarray*}
         P_{\rm internal} &=& \arcsin\big(\frac{2 (P_{\rm bounded} - {\rm min})}{({\rm max} - {\rm min})} - 1\big) \\
-	P_{\rm bounded}  &=& {\rm min} + \big(\sin(P_{\rm internal}) + 1\big) \frac{({\rm max} - {\rm min})}{2}
+        P_{\rm bounded}  &=& {\rm min} + \big(\sin(P_{\rm internal}) + 1\big) \frac{({\rm max} - {\rm min})}{2}
     \end{eqnarray*}
 
 With only an upper limit ``max`` supplied, but ``min`` left unbounded, the

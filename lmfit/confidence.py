@@ -79,7 +79,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
         Function to calculate the probability from the optimized chi-square.
         Default (``None``) uses built-in f_compare (F test).
     verbose: bool
-        print extra debuging information. Default is ``False``.
+        Print extra debuging information. Default is ``False``.
 
 
     Returns
@@ -363,7 +363,7 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     y : (ny)-array
         y-coordinates
     grid : (nx,ny)-array
-        grid contains the calculated probabilities.
+        Grid contains the calculated probabilities.
 
     Examples
     --------

@@ -26,7 +26,7 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
     The truth whether two numbers are the same, within an absolute and
     relative tolerance.
 
-    i.e. abs(`x` - `y`) <= (`atol` + `rtol` * absolute(`y`))
+    i.e., abs(`x` - `y`) <= (`atol` + `rtol` * absolute(`y`))
 
     Parameters
     ----------
@@ -109,6 +109,7 @@ class Parameters(OrderedDict):
                                   min=par.min,
                                   max=par.max)
                 param.vary = par.vary
+                param.brute_step = par.brute_step
                 param.stderr = par.stderr
                 param.correl = par.correl
                 param.init_value = par.init_value
@@ -234,7 +235,8 @@ class Parameters(OrderedDict):
         return s
 
     def pretty_print(self, oneline=False, colwidth=8, precision=4, fmt='g',
-                     columns=['value', 'min', 'max', 'stderr', 'vary', 'expr']):
+                     columns=['value', 'min', 'max', 'stderr', 'vary', 'expr',
+                              'brute_step']):
         """Pretty-print parameters data.
 
         Parameters
@@ -242,15 +244,15 @@ class Parameters(OrderedDict):
         oneline : boolean
             If True prints a one-line parameters representation. Default False.
         colwidth : int
-            column width for all except the first (i.e. name) column.
-        columns : list of strings
-            list of columns names to print. All values must be valid
-            :class:`Parameter` attributes.
-        fmt : string
-            single-char numeric formatter. Valid values: 'f' floating point,
-            'g' floating point and exponential, 'e' exponential.
+            Column width for all except the first (i.e. name) column.
         precision : int
-            number of digits to be printed after floating point.
+            Number of digits to be printed after floating point.
+        fmt : string
+            Single-char numeric formatter. Valid values: 'f' floating point,
+            'g' floating point and exponential, 'e' exponential.
+        columns : list of strings
+            List of columns names to print. All values must be valid
+            :class:`Parameter` attributes.
         """
         if oneline:
             print(self.pretty_repr(oneline=oneline))
@@ -262,7 +264,8 @@ class Parameters(OrderedDict):
         print(title.format(*allcols, name_len=name_len, n=colwidth).title())
         numstyle = '{%s:>{n}.{p}{f}}'  # format for numeric columns
         otherstyles = dict(name='{name:<{name_len}} ', stderr='{stderr!s:>{n}}',
-                           vary='{vary!s:>{n}}', expr='{expr!s:>{n}}')
+                           vary='{vary!s:>{n}}', expr='{expr!s:>{n}}',
+                           brute_step='{brute_step!s:>{n}}')
         line = ' '.join([otherstyles.get(k, numstyle % k) for k in allcols])
         for name, values in sorted(self.items()):
             pvalues = {k: getattr(values, k) for k in columns}
@@ -271,10 +274,14 @@ class Parameters(OrderedDict):
             if 'stderr' in columns and pvalues['stderr'] is not None:
                 pvalues['stderr'] = (numstyle % '').format(
                     pvalues['stderr'], n=colwidth, p=precision, f=fmt)
+            elif 'brute_step' in columns and pvalues['brute_step'] is not None:
+                pvalues['brute_step'] = (numstyle % '').format(
+                    pvalues['brute_step'], n=colwidth, p=precision, f=fmt)
             print(line.format(name_len=name_len, n=colwidth, p=precision, f=fmt,
                               **pvalues))
 
-    def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None):
+    def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None,
+            brute_step=None):
         """
         Convenience function for adding a Parameter:
 
@@ -290,7 +297,8 @@ class Parameters(OrderedDict):
             self.__setitem__(name.name, name)
         else:
             self.__setitem__(name, Parameter(value=value, name=name, vary=vary,
-                                             min=min, max=max, expr=expr))
+                                             min=min, max=max, expr=expr,
+                                             brute_step=brute_step))
 
     def add_many(self, *parlist):
         """
@@ -303,15 +311,15 @@ class Parameters(OrderedDict):
             is a sequence of tuples, then each tuple must contain at least the
             name. The order in each tuple is the following:
 
-                name, value, vary, min, max, expr
+                name, value, vary, min, max, expr, brute_step
 
         Example
         -------
         p = Parameters()
         # add a sequence of tuples
-        p.add_many( (name1, val1, True, None, None, None),
-                    (name2, val2, True,  0.0, None, None),
-                    (name3, val3, False, None, None, None),
+        p.add_many( (name1, val1, True, None, None, None, None),
+                    (name2, val2, True,  0.0, None, None, None),
+                    (name3, val3, False, None, None, None, None),
                     (name4, val4))
 
         # add a sequence of Parameter
@@ -428,9 +436,9 @@ class Parameter(object):
     vary : bool
         Whether the Parameter is fixed during a fit.
     min : float
-        Lower bound for value (None or -inf means no lower bound).
+        Lower bound for value (np.-inf means no lower bound).
     max : float
-        Upper bound for value (None or inf means no upper bound).
+        Upper bound for value (np.inf means no upper bound).
     expr : str
         An expression specifying constraints for the parameter.
     stderr : float
@@ -440,7 +448,7 @@ class Parameter(object):
         Of the form `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
     """
     def __init__(self, name=None, value=None, vary=True,
-                 min=-inf, max=inf, expr=None):
+                 min=-inf, max=inf, expr=None, brute_step=None):
         """
         Parameters
         ----------
@@ -451,11 +459,13 @@ class Parameter(object):
         vary : bool, optional
             Whether the Parameter is fixed during a fit.
         min : float, optional
-            Lower bound for value (None or -inf means no lower bound).
+            Lower bound for value (np.-inf means no lower bound).
         max : float, optional
-            Upper bound for value (None or inf means no upper bound).
+            Upper bound for value (np.inf means no upper bound).
         expr : str, optional
             Mathematical expression used to constrain the value during the fit.
+        brute_step : float, optional
+            Step size for grid points in brute force method.
         """
         self.name = name
         self._val = value
@@ -463,6 +473,7 @@ class Parameter(object):
         self.init_value = value
         self.min = min
         self.max = max
+        self.brute_step = brute_step
         self.vary = vary
         self._expr = expr
         self._expr_ast = None
@@ -474,7 +485,8 @@ class Parameter(object):
         self.from_internal = lambda val: val
         self._init_bounds()
 
-    def set(self, value=None, vary=None, min=None, max=None, expr=None):
+    def set(self, value=None, vary=None, min=None, max=None, expr=None,
+            brute_step=None):
         """
         Set or update Parameter attributes.
 
@@ -491,6 +503,9 @@ class Parameter(object):
         expr : str, optional
             Mathematical expression used to constrain the value during the fit.
             To remove a constraint you must supply an empty string.
+        brute_step : float, optional
+            Step size for grid points in brute force method. To remove the step
+            size you must supply 0 ("zero").
         """
 
         if value is not None:
@@ -510,6 +525,12 @@ class Parameter(object):
 
         if expr is not None:
             self.__set_expression(expr)
+
+        if brute_step is not None:
+            if brute_step == 0.0:
+                self.brute_step = None
+            else:
+                self.brute_step = brute_step
 
     def _init_bounds(self):
         """make sure initial bounds are self-consistent"""
@@ -535,12 +556,13 @@ class Parameter(object):
     def __getstate__(self):
         """get state for pickle"""
         return (self.name, self.value, self.vary, self.expr, self.min,
-                self.max, self.stderr, self.correl, self.init_value)
+                self.max, self.brute_step, self.stderr, self.correl,
+                self.init_value)
 
     def __setstate__(self, state):
         """set state for pickle"""
-        (self.name, self.value, self.vary, self.expr, self.min,
-         self.max, self.stderr, self.correl, self.init_value) = state
+        (self.name, self.value, self.vary, self.expr, self.min, self.max,
+         self.brute_step, self.stderr, self.correl, self.init_value) = state
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
@@ -560,6 +582,8 @@ class Parameter(object):
         s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
         if self._expr is not None:
             s.append("expr='%s'" % self.expr)
+        if self.brute_step is not None:
+            s.append("brute_step=%s" % (self.brute_step))
         return "<Parameter %s>" % ', '.join(s)
 
     def setup_bounds(self):

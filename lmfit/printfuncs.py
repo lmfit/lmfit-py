@@ -178,18 +178,18 @@ def report_fit(params, **kws):
 
 
 def ci_report(ci, with_offset=True, ndigits=5):
-    """return text of a report for confidence intervals
+    """Return text of a report for confidence intervals.
 
     Parameters
     ----------
     with_offset : bool (default `True`)
-        whether to subtract best value from all other values.
+        Whether to subtract best value from all other values.
     ndigits : int (default 5)
-        number of significant digits to show
+        Number of significant digits to show.
 
     Returns
     -------
-       text of formatted report on confidence intervals.
+       Text of formatted report on confidence intervals.
     """
     maxlen = max([len(i) for i in ci])
     buff = []

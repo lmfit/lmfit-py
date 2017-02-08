@@ -41,10 +41,10 @@ simple example, one might write an objective function like this::
     def residual(vars, x, data, eps_data):
         amp = vars[0]
         phaseshift = vars[1]
-	freq = vars[2]
+        freq = vars[2]
         decay = vars[3]
 
-	model = amp * sin(x * freq  + phaseshift) * exp(-x*x*decay)
+        model = amp * sin(x * freq  + phaseshift) * exp(-x*x*decay)
 
         return (data-model)/eps_data
 
@@ -79,13 +79,13 @@ including:
      Again, this is acceptable for small or one-off cases, but becomes
      painful if the fitting model needs to change.
 
-These shortcomings are really do solely to the use of traditional arrays of
+These shortcomings are really solely due to the use of traditional arrays of
 variables, as matches closely the implementation of the Fortran code.  The
 lmfit module overcomes these shortcomings by using objects -- a core reason for working with
 Python.  The key concept for lmfit is to use :class:`Parameter`
 objects instead of plain floating point numbers as the variables for the
 fit.  By using :class:`Parameter` objects (or the closely related
-:class:`Parameters` -- a dictionary of :class:`Parameter` objects), one can
+:class:`Parameters` -- a dictionary of :class:`Parameter` objects), one can:
 
    a) forget about the order of variables and refer to Parameters
       by meaningful names.
@@ -101,10 +101,10 @@ as::
     def residual(params, x, data, eps_data):
         amp = params['amp']
         pshift = params['phase']
-	freq = params['frequency']
+        freq = params['frequency']
         decay = params['decay']
 
-	model = amp * sin(x * freq  + pshift) * exp(-x*x*decay)
+        model = amp * sin(x * freq  + pshift) * exp(-x*x*decay)
 
         return (data-model)/eps_data
 
