@@ -14,10 +14,7 @@ from . import Parameters, Parameter, Minimizer
 from .printfuncs import fit_report, ci_report
 from .confidence import conf_interval
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
+from collections import OrderedDict
 
 # Use pandas.isnull for aligning missing data is pandas is available.
 # otherwise use numpy.isnan

@@ -4,11 +4,7 @@ Parameter class
 from __future__ import division
 import json
 from copy import deepcopy
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
-
+from collections import OrderedDict
 from numpy import array, arcsin, cos, sin, sqrt, inf, nan, isfinite
 from . import uncertainties
 from .asteval import Interpreter

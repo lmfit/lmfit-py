@@ -11,10 +11,7 @@ from scipy.special import erf
 from scipy.optimize import brentq
 from .minimizer import MinimizerException
 
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
+from collections import OrderedDict
 
 CONF_ERR_GEN    = 'Cannot determine Confidence Intervals'
 CONF_ERR_STDERR = '%s without sensible uncertainty estimates' % CONF_ERR_GEN
