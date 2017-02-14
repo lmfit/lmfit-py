@@ -1,15 +1,15 @@
 import warnings
+
+import IPython
+from IPython.display import clear_output, display
 import numpy as np
 
 from ..model import Model
-
-from .basefitter import MPLFitter, _COMMON_DOC, _COMMON_EXAMPLES_DOC
+from .basefitter import _COMMON_DOC, _COMMON_EXAMPLES_DOC, MPLFitter
 
 # Note: If IPython is not available of the version is < 2,
 # this module will not be imported, and a different Fitter.
 
-import IPython
-from IPython.display import display, clear_output
 # Widgets were only experimental in IPython 2.x, but this does work there.
 # Handle the change in naming from 2.x to 3.x.
 IPY2 = IPython.release.version_info[0] == 2

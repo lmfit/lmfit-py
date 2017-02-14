@@ -38,13 +38,14 @@ author.'''
 from __future__ import division  # Many analytical derivatives depend on this
 
 # Standard modules
+import functools
+import itertools
 import math
 import sys
-import itertools
-import functools
 
 # Local modules
-from __init__ import wrap, set_doc, __author__, to_affine_scalar, AffineScalarFunc
+from __init__ import (AffineScalarFunc, __author__, set_doc, to_affine_scalar,
+                      wrap)
 
 ###############################################################################
 

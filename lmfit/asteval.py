@@ -11,13 +11,14 @@ later, using the current values in the
 """
 
 from __future__ import division, print_function
-from sys import exc_info, stdout, version_info
+
 import ast
 import math
+from sys import exc_info, stdout, version_info
 
-from .astutils import (FROM_PY, FROM_MATH, FROM_NUMPY, UNSAFE_ATTRS,
-                       LOCALFUNCS, NUMPY_RENAMES, op2func,
-                       ExceptionHolder, ReturnedNone, valid_symbol_name)
+from .astutils import (FROM_MATH, FROM_NUMPY, FROM_PY, LOCALFUNCS,
+                       NUMPY_RENAMES, UNSAFE_ATTRS, ExceptionHolder,
+                       ReturnedNone, op2func, valid_symbol_name)
 
 HAS_NUMPY = False
 try:

@@ -2,19 +2,21 @@
 Concise nonlinear curve fitting.
 """
 from __future__ import print_function
-import warnings
-import inspect
-import operator
-from functools import wraps
-from copy import deepcopy
-import numpy as np
-from scipy.stats import t
-from scipy.special import erf
-from . import Parameters, Parameter, Minimizer
-from .printfuncs import fit_report, ci_report
-from .confidence import conf_interval
 
 from collections import OrderedDict
+from copy import deepcopy
+from functools import wraps
+import inspect
+import operator
+import warnings
+
+import numpy as np
+from scipy.special import erf
+from scipy.stats import t
+
+from . import Minimizer, Parameter, Parameters
+from .confidence import conf_interval
+from .printfuncs import ci_report, fit_report
 
 # Use pandas.isnull for aligning missing data is pandas is available.
 # otherwise use numpy.isnan

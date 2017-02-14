@@ -2,10 +2,13 @@
 Parameter class
 """
 from __future__ import division
-import json
-from copy import deepcopy
+
 from collections import OrderedDict
-from numpy import array, arcsin, cos, sin, sqrt, inf, nan, isfinite
+from copy import deepcopy
+import json
+
+from numpy import arcsin, array, cos, inf, isfinite, nan, sin, sqrt
+
 from . import uncertainties
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name

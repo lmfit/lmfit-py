@@ -18,8 +18,11 @@ Changes:
 """
 
 from __future__ import print_function
-from .parameter import Parameters
+
 import re
+
+from .parameter import Parameters
+
 
 def alphanumeric_sort(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()

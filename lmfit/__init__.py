@@ -33,12 +33,14 @@ from scipy.optimize.  It has a number of useful enhancements, including:
              Daniel B. Allen, Johns Hopkins University
              Antonino Ingargiola, University of California, Los Angeles
 """
-import warnings
 import sys
+import warnings
 
-from .minimizer import minimize, Minimizer, MinimizerException
-from .parameter import Parameter, Parameters
+import scipy
+
 from .confidence import conf_interval, conf_interval2d
+from .minimizer import Minimizer, MinimizerException, minimize
+from .parameter import Parameter, Parameters
 from .printfuncs import (fit_report, ci_report,
                          report_fit, report_ci, report_errors)
 
@@ -47,7 +49,6 @@ from . import models
 
 from . import uncertainties
 from .uncertainties import ufloat, correlated_values
-
 
 ## versioneer code
 from ._version import get_versions
@@ -60,7 +61,6 @@ if sys.version_info[:2] == (2, 6):
     warnings.warn('Support for Python 2.6.x was dropped with lmfit 0.9.5')
 
 # SCIPY 0.13 Depreciation Warning
-import scipy
 scipy_major, scipy_minor, scipy_other = scipy.__version__.split('.', 2)
 
 if int(scipy_major) == 0 and int(scipy_minor) < 15:

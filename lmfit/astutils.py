@@ -5,8 +5,9 @@ utility functions for asteval
    The University of Chicago
 """
 from __future__ import division, print_function
-import re
+
 import ast
+import re
 from sys import exc_info
 
 RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'class', 'continue',

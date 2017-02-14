@@ -13,15 +13,24 @@ function-to-be-minimized (residual function) in terms of these Parameters.
 
 from collections import namedtuple
 from copy import deepcopy
-import numpy as np
-from numpy import (dot, eye, ndarray, ones_like,
-                   sqrt, take, transpose, triu)
-from numpy.dual import inv
-from numpy.linalg import LinAlgError
 import multiprocessing
 import numbers
-import six
 import warnings
+
+import numpy as np
+from numpy import dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
+from numpy.dual import inv
+from numpy.linalg import LinAlgError
+from scipy.optimize import brute as scipy_brute
+from scipy.optimize import leastsq as scipy_leastsq
+from scipy.optimize import minimize as scipy_minimize
+from scipy.stats import cauchy as cauchy_dist
+from scipy.stats import norm as norm_dist
+import six
+
+# use locally modified version of uncertainties package
+from . import uncertainties
+from .parameter import Parameter, Parameters
 
 ##
 ##  scipy version notes:
@@ -33,9 +42,6 @@ import warnings
 ##    least_squares         0.17
 ##
 
-from scipy.optimize import leastsq as scipy_leastsq
-from scipy.optimize import minimize as scipy_minimize
-from scipy.optimize import brute as scipy_brute
 
 # differential_evolution is only present in scipy >= 0.15
 try:
@@ -43,8 +49,6 @@ try:
 except ImportError:
     from ._differentialevolution import differential_evolution as scipy_diffev
 
-from scipy.stats import cauchy as cauchy_dist
-from scipy.stats import norm as norm_dist
 
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
@@ -70,10 +74,7 @@ try:
 except ImportError:
     pass
 
-from .parameter import Parameter, Parameters
 
-# use locally modified version of uncertainties package
-from . import uncertainties
 
 
 def asteval_with_uncertainties(*vals, **kwargs):

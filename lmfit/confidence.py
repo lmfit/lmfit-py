@@ -4,14 +4,16 @@
 Contains functions to calculate confidence intervals.
 """
 from __future__ import print_function
-from warnings import warn
-import numpy as np
-from scipy.stats import f
-from scipy.special import erf
-from scipy.optimize import brentq
-from .minimizer import MinimizerException
 
 from collections import OrderedDict
+from warnings import warn
+
+import numpy as np
+from scipy.optimize import brentq
+from scipy.special import erf
+from scipy.stats import f
+
+from .minimizer import MinimizerException
 
 CONF_ERR_GEN    = 'Cannot determine Confidence Intervals'
 CONF_ERR_STDERR = '%s without sensible uncertainty estimates' % CONF_ERR_GEN

@@ -1,17 +1,15 @@
 import numpy as np
-from .model import Model
-
-from .lineshapes import (gaussian, lorentzian, voigt, pvoigt, moffat, pearson7,
-                         step, rectangle, breit_wigner, logistic,
-                         students_t, lognormal, damped_oscillator, dho,
-                         expgaussian, skewed_gaussian, donaich,
-                         skewed_voigt, exponential, powerlaw, linear,
-                         parabolic)
 
 from . import lineshapes
-
 from .asteval import Interpreter
 from .astutils import get_ast_names
+from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
+                         expgaussian, exponential, gaussian, linear, logistic,
+                         lognormal, lorentzian, moffat, parabolic, pearson7,
+                         powerlaw, pvoigt, rectangle, skewed_gaussian,
+                         skewed_voigt, step, students_t, voigt)
+from .model import Model
+
 
 class DimensionalError(Exception):
     pass
