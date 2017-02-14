@@ -510,7 +510,7 @@ class Parameter(object):
 
         if vary is not None:
             self.vary = vary
-            if vary == True:
+            if vary:
                 self.__set_expression('')
 
         if min is not None:
