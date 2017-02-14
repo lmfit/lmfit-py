@@ -300,13 +300,15 @@ class ConfidenceInterval(object):
             # Check convergence.
             if i > self.maxiter:
                 errmsg = "Warning, maxiter={0} reached".format(self.maxiter)
-                errmsg += "and prob({0}={1}) = {2} < max(sigmas).".format(para.name, limit, new_prob)
+                errmsg += ("and prob({0}={1}) = {2} < "
+                           "max(sigmas).".format(para.name, limit, new_prob))
                 warn(errmsg)
                 break
 
             if rel_change < self.min_rel_change:
                 errmsg = "Warning, rel_change={0} < 0.01 ".format(rel_change)
-                errmsg += " at iteration {3} and prob({0}={1}) = {2} < max(sigmas).".format(para.name, limit, new_prob, i)
+                errmsg += (" at iteration {3} and prob({0}={1}) = {2} < max"
+                           "(sigmas).".format(para.name, limit, new_prob, i))
                 warn(errmsg)
                 break
 

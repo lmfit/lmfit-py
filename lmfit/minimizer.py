@@ -269,11 +269,13 @@ class MinimizerResult(object):
         if hasattr(self, 'candidates'):
             try:
                 candidate = self.candidates[candidate_nmb]
-                print("\nCandidate #{}, chisqr = {:.3f}".format(candidate_nmb, candidate.score))
+                print("\nCandidate #{}, chisqr = "
+                      "{:.3f}".format(candidate_nmb, candidate.score))
                 candidate.params.pretty_print()
             except:
                 for i, candidate in enumerate(self.candidates):
-                    print("\nCandidate #{}, chisqr = {:.3f}".format(i, candidate.score))
+                    print("\nCandidate #{}, chisqr = "
+                          "{:.3f}".format(i, candidate.score))
                     candidate.params.pretty_print()
 
 class Minimizer(object):
@@ -1240,7 +1242,9 @@ class Minimizer(object):
         elif ier in {1, 2, 3}:
             result.message = 'Fit succeeded.'
         elif ier == 0:
-            result.message = 'Invalid Input Parameters. I.e. more variables than data points given, tolerance < 0.0, or no data provided.'
+            result.message = ('Invalid Input Parameters. I.e. more variables '
+                              'than data points given, tolerance < 0.0, or '
+                              'no data provided.')
         elif ier == 4:
             result.message = 'One or more variable did not affect the fit.'
         elif ier == 5:

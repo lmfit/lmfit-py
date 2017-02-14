@@ -276,8 +276,8 @@ class Parameters(OrderedDict):
             elif 'brute_step' in columns and pvalues['brute_step'] is not None:
                 pvalues['brute_step'] = (numstyle % '').format(
                     pvalues['brute_step'], n=colwidth, p=precision, f=fmt)
-            print(line.format(name_len=name_len, n=colwidth, p=precision, f=fmt,
-                              **pvalues))
+            print(line.format(name_len=name_len, n=colwidth, p=precision,
+                              f=fmt, **pvalues))
 
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None,
             brute_step=None):

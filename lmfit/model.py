@@ -443,7 +443,8 @@ class Model(object):
         return {key: self.eval(params=params, **kwargs)}
 
     def fit(self, data, params=None, weights=None, method='leastsq',
-            iter_cb=None, scale_covar=True, verbose=False, fit_kws=None, **kwargs):
+            iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
+            **kwargs):
         """Fit the model to the data.
 
         Parameters
@@ -892,9 +893,9 @@ class ModelResult(Minimizer):
                                             fit_report(self, **kwargs))
 
     @_ensureMatplotlib
-    def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, yerr=None,
-                 numpoints=None, data_kws=None, fit_kws=None, init_kws=None,
-                 ax_kws=None):
+    def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
+                 xlabel=None, ylabel=None, yerr=None, numpoints=None,
+                 data_kws=None, fit_kws=None, init_kws=None, ax_kws=None):
         """Plot the fit results using matplotlib.
 
         The method will plot results of the fit using matplotlib, including:
@@ -1090,9 +1091,9 @@ class ModelResult(Minimizer):
         return ax
 
     @_ensureMatplotlib
-    def plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, yerr=None,
-             numpoints=None, fig=None, data_kws=None, fit_kws=None,
-             init_kws=None, ax_res_kws=None, ax_fit_kws=None,
+    def plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None,
+             ylabel=None, yerr=None, numpoints=None, fig=None, data_kws=None,
+             fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None,
              fig_kws=None):
         """Plot the fit results and residuals using matplotlib.
 
