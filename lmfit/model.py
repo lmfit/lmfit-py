@@ -394,8 +394,10 @@ class Model(object):
 
     def make_funcargs(self, params=None, kwargs=None, strip=True):
         """convert parameter values and keywords to function arguments"""
-        if params is None: params = {}
-        if kwargs is None: kwargs = {}
+        if params is None:
+            params = {}
+        if kwargs is None:
+            kwargs = {}
         out = {}
         out.update(self.opts)
         for name, par in params.items():
@@ -629,7 +631,8 @@ class CompositeModel(Model):
         if 'missing' not in kws:
             kws['missing'] = self.left.missing
 
-        def _tmp(self, *args, **kws): pass
+        def _tmp(self, *args, **kws):
+            pass
         Model.__init__(self, _tmp, **kws)
 
         for side in (left, right):
@@ -997,10 +1000,12 @@ class ModelResult(Minimizer):
         ax.set_title(self.model.name)
         if xlabel is None:
             ax.set_xlabel(independent_var)
-        else: ax.set_xlabel(xlabel)
+        else:
+            ax.set_xlabel(xlabel)
         if ylabel is None:
             ax.set_ylabel('y')
-        else: ax.set_ylabel(ylabel)
+        else:
+            ax.set_ylabel(ylabel)
         ax.legend(loc='best')
         return ax
 
