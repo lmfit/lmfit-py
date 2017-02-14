@@ -157,7 +157,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             if hasattr(par, 'correl') and par.correl is not None:
                 for name2 in parnames[i+1:]:
                     if (name != name2 and name2 in par.correl and
-                        abs(par.correl[name2]) > min_correl):
+                            abs(par.correl[name2]) > min_correl):
                         correls["%s, %s" % (name, name2)] = par.correl[name2]
 
         sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
@@ -208,8 +208,8 @@ def ci_report(ci, with_offset=True, ndigits=5):
         fmt_diff = "{0:+.%if}" % ndigits
     for name, row in ci.items():
         if not title_shown:
-            add("".join([''.rjust(maxlen+1)]+[i.rjust(ndigits+5)
-                                            for i in map(convp, row)]))
+            add("".join([''.rjust(maxlen+1)] + [i.rjust(ndigits+5)
+                                                for i in map(convp, row)]))
             title_shown = True
         thisrow = [" %s:" % name.ljust(maxlen)]
         offset = 0.0

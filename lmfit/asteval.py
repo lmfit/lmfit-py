@@ -88,7 +88,7 @@ class Interpreter:
 
         # add python symbols
         py_symtable = dict((sym, __builtins__[sym]) for sym in FROM_PY
-                              if sym in __builtins__)
+                           if sym in __builtins__)
         symtable.update(py_symtable)
 
         # add local symbols
@@ -97,18 +97,18 @@ class Interpreter:
 
         # add math symbols
         math_symtable = dict((sym, getattr(math, sym)) for sym in FROM_MATH
-                              if hasattr(math, sym))
+                             if hasattr(math, sym))
         symtable.update(math_symtable)
 
         # add numpy symbols
         if self.use_numpy:
             numpy_symtable = dict((sym, getattr(numpy, sym)) for sym in FROM_NUMPY
-                              if hasattr(numpy, sym))
+                                  if hasattr(numpy, sym))
             symtable.update(numpy_symtable)
 
             npy_rename_symtable = dict((name, getattr(numpy, sym)) for name, sym
-                                   in NUMPY_RENAMES.items()
-                                   if hasattr(numpy, sym))
+                                       in NUMPY_RENAMES.items()
+                                       if hasattr(numpy, sym))
             symtable.update(npy_rename_symtable)
 
         self.node_handlers = dict(((node, getattr(self, "on_%s" % node))

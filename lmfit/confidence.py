@@ -391,10 +391,8 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     y = params[y_name]
 
     if limits is None:
-        (x_upper, x_lower) = (x.value + 5 * x.stderr, x.value - 5
-                                                      * x.stderr)
-        (y_upper, y_lower) = (y.value + 5 * y.stderr, y.value - 5
-                                                      * y.stderr)
+        (x_upper, x_lower) = (x.value + 5 * x.stderr, x.value - 5 * x.stderr)
+        (y_upper, y_lower) = (y.value + 5 * y.stderr, y.value - 5 * y.stderr)
     elif len(limits) == 2:
         (x_upper, x_lower) = limits[0]
         (y_upper, y_lower) = limits[1]

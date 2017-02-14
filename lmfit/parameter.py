@@ -96,7 +96,7 @@ class Parameters(OrderedDict):
         # find the symbols that were added by users, not during construction
         sym_unique = self._asteval.user_defined_symbols()
         unique_symbols = {key: deepcopy(self._asteval.symtable[key], memo)
-                              for key in sym_unique}
+                          for key in sym_unique}
         _pars._asteval.symtable.update(unique_symbols)
 
         # we're just about to add a lot of Parameter objects to the newly
@@ -648,8 +648,8 @@ class Parameter(object):
         # If you just assign to self._val then
         # _expr_eval.symtable[self.name]
         # becomes stale if parameter.expr is not None.
-        if (isinstance(self._val, uncertainties.Variable)
-            and self._val is not nan):
+        if (isinstance(self._val, uncertainties.Variable) and
+                self._val is not nan):
 
             try:
                 self.value = self._val.nominal_value

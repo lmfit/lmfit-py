@@ -57,7 +57,7 @@ def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
     """
     sigma_g = sigma / sqrt(2*log2)
     return ((1-fraction)*gaussian(x, amplitude, center, sigma_g) +
-               fraction*lorentzian(x, amplitude, center, sigma))
+            fraction*lorentzian(x, amplitude, center, sigma))
 
 def moffat(x, amplitude=1, center=0., sigma=1, beta=1.):
     """ 1 dimensional moffat function:

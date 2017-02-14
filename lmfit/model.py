@@ -159,8 +159,7 @@ class Model(object):
         "build params from function arguments"
         if self.func is None:
             return
-        if (hasattr(self.func, 'argnames') and
-            hasattr(self.func, 'kwargs')):
+        if hasattr(self.func, 'argnames') and hasattr(self.func, 'kwargs'):
             pos_args = self.func.argnames[:]
             kw_args = {}
             for name, defval in self.func.kwargs:
@@ -194,7 +193,7 @@ class Model(object):
             self._param_root_names = pos_args[:]
             for key, val in kw_args.items():
                 if (not isinstance(val, bool) and
-                    isinstance(val, (float, int))):
+                        isinstance(val, (float, int))):
                     self._param_root_names.append(key)
                     self.def_vals[key] = val
                 elif val is None:
@@ -206,7 +205,7 @@ class Model(object):
         new_opts = {}
         for opt, val in self.opts.items():
             if (opt in self._param_root_names or opt in might_be_param and
-                isinstance(val, Parameter)):
+                    isinstance(val, Parameter)):
                 self.set_param_hint(opt, value=val.value,
                                     min=val.min, max=val.max, expr=val.expr)
             elif opt in self._func_allargs:
@@ -227,7 +226,7 @@ class Model(object):
                 raise ValueError(self._invalid_ivar % (arg, fname))
         for arg in names:
             if (self._strip_prefix(arg) not in allargs or
-                arg in self._forbidden_args):
+                    arg in self._forbidden_args):
                 raise ValueError(self._invalid_par % (arg, fname))
         # the following as been changed from OrderedSet for the time being.
         self._param_names = names[:]
@@ -518,7 +517,7 @@ class Model(object):
                    'Parameters or keyword arguments to fit.\n')
             missing = [p for p in self.param_names if p not in params.keys()]
             blank = [name for name, p in params.items()
-                                    if p.value is None and p.expr is None]
+                     if p.value is None and p.expr is None]
             msg += 'Missing parameters: %s\n' % str(missing)
             msg += 'Non initialized parameters: %s' % str(blank)
             raise ValueError(msg)
@@ -977,12 +976,15 @@ class ModelResult(Minimizer):
         else:
             x_array_dense = x_array
 
-        ax.plot(x_array_dense, self.model.eval(self.init_params,
-                **{independent_var: x_array_dense}), initfmt,
-                label='init', **init_kws)
-        ax.plot(x_array_dense, self.model.eval(self.params,
-                **{independent_var: x_array_dense}), fitfmt,
-                label='best-fit', **fit_kws)
+        ax.plot(
+            x_array_dense,
+            self.model.eval(self.init_params,
+                            **{independent_var: x_array_dense}),
+            initfmt, label='init', **init_kws)
+        ax.plot(
+            x_array_dense,
+            self.model.eval(self.params, **{independent_var: x_array_dense}),
+            fitfmt, label='best-fit', **fit_kws)
 
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights

@@ -89,7 +89,7 @@ def asteval_with_uncertainties(*vals, **kwargs):
     _names = kwargs.get('_names', None)
     _asteval = _pars._asteval
     if (_obj is None or _pars is None or _names is None or
-        _asteval is None or _obj._expr_ast is None):
+            _asteval is None or _obj._expr_ast is None):
         return 0
     for val, name in zip(vals, _names):
         _asteval.symtable[name] = val
@@ -1141,8 +1141,7 @@ class Minimizer(object):
                             start_vals,
                             bounds=(lower_bounds, upper_bounds),
                             kwargs=dict(apply_bounds_transformation=False),
-                            **kws
-                            )
+                            **kws)
 
         for attr in ret:
             setattr(result, attr, ret[attr])
@@ -1312,8 +1311,9 @@ class Minimizer(object):
                     result.errorbars = result.errorbars and (par.stderr > 0.0)
                     for jvar, varn2 in enumerate(result.var_names):
                         if jvar != ivar:
-                            par.correl[varn2] = (result.covar[ivar, jvar] /
-                                 (par.stderr * sqrt(result.covar[jvar, jvar])))
+                            par.correl[varn2] = (
+                                result.covar[ivar, jvar] /
+                                (par.stderr * sqrt(result.covar[jvar, jvar])))
                 except:
                     result.errorbars = False
 
@@ -1554,7 +1554,7 @@ class Minimizer(object):
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
                 if (key.lower().startswith(user_method) or
-                    val.lower().startswith(user_method)):
+                        val.lower().startswith(user_method)):
                     kwargs['method'] = val
         return function(**kwargs)
 
@@ -1576,8 +1576,7 @@ def _lnprior(theta, bounds):
     lnprob : float
         Log prior probability
     """
-    if (np.any(theta > bounds[:, 1])
-        or np.any(theta < bounds[:, 0])):
+    if np.any(theta > bounds[:, 1]) or np.any(theta < bounds[:, 0]):
         return -np.inf
     else:
         return 0
@@ -1633,8 +1632,7 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     # the comparison has to be done on theta and bounds. DO NOT inject theta
     # values into Parameters, then compare Parameters values to the bounds.
     # Parameters values are clipped to stay within bounds.
-    if (np.any(theta > bounds[:, 1])
-        or np.any(theta < bounds[:, 0])):
+    if np.any(theta > bounds[:, 1]) or np.any(theta < bounds[:, 0]):
         return -np.inf
 
     for name, val in zip(var_names, theta):
