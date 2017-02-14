@@ -1,6 +1,4 @@
-"""
-Concise nonlinear curve fitting.
-"""
+"""Concise nonlinear curve fitting."""
 from __future__ import print_function
 
 from collections import OrderedDict
@@ -18,7 +16,7 @@ from . import Minimizer, Parameter, Parameters
 from .confidence import conf_interval
 from .printfuncs import ci_report, fit_report
 
-# Use pandas.isnull for aligning missing data is pandas is available.
+# Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
 try:
     from pandas import isnull, Series
@@ -28,7 +26,7 @@ except ImportError:
 
 
 def _align(var, mask, data):
-    "align missing data, with pandas is available"
+    """Align missing data, if pandas is available."""
     if isinstance(data, Series) and isinstance(var, Series):
         return var.reindex_like(data).dropna()
     elif mask is not None:
@@ -88,6 +86,7 @@ class Model(object):
     ...     return N*np.exp(-t/tau)
     ...
     >>> my_model = Model(decay, independent_vars=['t'])
+
     """
 
     _forbidden_args = ('data', 'weights', 'params')
@@ -101,6 +100,7 @@ class Model(object):
 
     def __init__(self, func, independent_vars=None, param_names=None,
                  missing='none', prefix='', name=None, **kws):
+        """TODO: docstring in public method."""
         self.func = func
         self._prefix = prefix
         self._param_root_names = param_names  # will not include prefixes
@@ -135,6 +135,7 @@ class Model(object):
 
     @property
     def name(self):
+        """TODO: add method docstring."""
         return self._reprstring(long=False)
 
     @name.setter
@@ -143,21 +144,24 @@ class Model(object):
 
     @property
     def prefix(self):
+        """TODO: add method docstring."""
         return self._prefix
 
     @property
     def param_names(self):
+        """TODO: add method docstring."""
         return self._param_names
 
     def __repr__(self):
+        """TODO: docstring in magic method."""
         return "<lmfit.Model: %s>" % (self.name)
 
     def copy(self, **kwargs):
-        """DOES NOT WORK"""
+        """DOES NOT WORK."""
         raise NotImplementedError("Model.copy does not work. Make a new Model")
 
     def _parse_params(self):
-        "build params from function arguments"
+        """Build params from function arguments."""
         if self.func is None:
             return
         if hasattr(self.func, 'argnames') and hasattr(self.func, 'kwargs'):
@@ -233,14 +237,16 @@ class Model(object):
         self._param_names = names[:]
 
     def set_param_hint(self, name, **kwargs):
-        """set hints for parameter, including optional bounds
-        and constraints  (value, vary, min, max, expr)
-        these will be used by make_params() when building
-        default parameters
+        """Set hints for parameter.
+
+        Including optional bounds and constraints
+        (value, vary, min, max, expr) these will be used by make_params()
+        when building default parameters.
 
         example:
           model = GaussianModel()
           model.set_param_hint('amplitude', min=-100.0, max=0.)
+
         """
         npref = len(self._prefix)
         if npref > 0 and name.startswith(self._prefix):
@@ -256,10 +262,11 @@ class Model(object):
                 warnings.warn(self._invalid_hint % (key, name))
 
     def print_param_hints(self, colwidth=8):
-        """Prints a nicely aligned text-table of parameters hints.
+        """Print a nicely aligned text-table of parameters hints.
 
-        The argument `colwidth` is the width of each column,
-        except for first and last columns.
+        The argument `colwidth` is the width of each column, except for
+        first and last columns.
+
         """
         name_len = max(len(s) for s in self.param_hints)
         print('{:{name_len}}  {:>{n}} {:>{n}} {:>{n}} {:>{n}}    {:{n}}'
@@ -274,8 +281,10 @@ class Model(object):
             print(line.format(name_len=name_len, n=colwidth, **pvalues))
 
     def make_params(self, verbose=False, **kwargs):
-        """create and return a Parameters object for a Model.
+        """Create and return a Parameters object for a Model.
+
         This applies any default values
+
         """
         params = Parameters()
 
@@ -338,26 +347,37 @@ class Model(object):
         return params
 
     def guess(self, data=None, **kws):
-        """stub for guess starting values --
-        should be implemented for each model subclass to
-        run self.make_params(), update starting values
-        and return a Parameters object"""
+        """Stub for guess starting values.
+
+        Note
+        ----
+        Should be implemented for each model subclass to run
+        self.make_params(), update starting values and return a
+        Parameters object.
+
+        """
         cname = self.__class__.__name__
         msg = 'guess() not implemented for %s' % cname
         raise NotImplementedError(msg)
 
     def _residual(self, params, data, weights, **kwargs):
-        """default residual:  (data-model)*weights
+        """Return the residual.
 
-        If the model returns complex values, the residual is computed by treating the real and imaginary
-        parts separately. In this case, if the weights provided are real, they are assumed to apply equally to the
-        real and imaginary parts. If the weights are complex, the real part of the weights are applied to the real
-        part of the residual and the imaginary part is treated correspondingly.
+        Default residual: (data-model)*weights.
 
-        Since the underlying scipy.optimize routines expect np.float arrays, the only complex type supported is
-        np.complex.
+        If the model returns complex values, the residual is computed by
+        treating the real and imaginary parts separately. In this case,
+        if the weights provided are real, they are assumed to apply
+        equally to the real and imaginary parts. If the weights are
+        complex, the real part of the weights are applied to the real
+        part of the residual and the imaginary part is treated
+        correspondingly.
+
+        Since the underlying scipy.optimize routines expect np.float
+        arrays, the only complex type supported is np.complex.
 
         The "ravels" throughout are necessary to support pandas.Series.
+
         """
         diff = self.eval(params, **kwargs) - data
 
@@ -376,7 +396,7 @@ class Model(object):
         return np.asarray(diff).ravel()  # for compatibility with pandas.Series
 
     def _handle_missing(self, data):
-        "handle missing data"
+        """Handle missing data."""
         if self.missing == 'raise':
             if np.any(isnull(data)):
                 raise ValueError("Data contains a null value.")
@@ -394,7 +414,7 @@ class Model(object):
         return name
 
     def make_funcargs(self, params=None, kwargs=None, strip=True):
-        """convert parameter values and keywords to function arguments"""
+        """Convert parameter values and keywords to function arguments."""
         if params is None:
             params = {}
         if kwargs is None:
@@ -418,25 +438,26 @@ class Model(object):
         return out
 
     def _make_all_args(self, params=None, **kwargs):
-        """generate **all** function args for all functions"""
+        """Generate **all** function args for all functions."""
         args = {}
         for key, val in self.make_funcargs(params, kwargs).items():
             args["%s%s" % (self._prefix, key)] = val
         return args
 
     def eval(self, params=None, **kwargs):
-        """evaluate the model with the supplied parameters"""
+        """Evaluate the model with the supplied parameters."""
         return self.func(**self.make_funcargs(params, kwargs))
 
     @property
     def components(self):
-        """return components for composite model"""
+        """Return components for composite model."""
         return [self]
 
     def eval_components(self, params=None, **kwargs):
-        """
-        evaluate the model with the supplied parameters and returns a ordered
-        dict containting name, result pairs.
+        """Evaluate the model with the supplied parameters.
+
+        Returns a ordered dict containting name, result pairs.
+
         """
         key = self._prefix
         if len(key) < 1:
@@ -561,23 +582,28 @@ class Model(object):
         return output
 
     def __add__(self, other):
+        """TODO: docstring in magic method."""
         return CompositeModel(self, other, operator.add)
 
     def __sub__(self, other):
+        """TODO: docstring in magic method."""
         return CompositeModel(self, other, operator.sub)
 
     def __mul__(self, other):
+        """TODO: docstring in magic method."""
         return CompositeModel(self, other, operator.mul)
 
     def __div__(self, other):
+        """TODO: docstring in magic method."""
         return CompositeModel(self, other, operator.truediv)
 
     def __truediv__(self, other):
+        """TODO: docstring in magic method."""
         return CompositeModel(self, other, operator.truediv)
 
 
 class CompositeModel(Model):
-    """Create a composite model -- a binary operator of two Models
+    """Create a composite model -- a binary operator of two Models.
 
     Parameters
     ----------
@@ -601,6 +627,7 @@ class CompositeModel(Model):
         the model function (`func`).
 
     """
+
     _names_collide = ("\nTwo models have parameters named '{clash}'. "
                       "Use distinct names.")
     _bad_arg = "CompositeModel: argument {arg} is not a Model"
@@ -609,6 +636,7 @@ class CompositeModel(Model):
                   operator.mul: '*', operator.truediv: '/'}
 
     def __init__(self, left, right, op, **kws):
+        """TODO: docstring in public method."""
         if not isinstance(left, Model):
             raise ValueError(self._bad_arg.format(arg=left))
         if not isinstance(right, Model):
@@ -658,86 +686,91 @@ class CompositeModel(Model):
                                self.right._reprstring(long=long))
 
     def eval(self, params=None, **kwargs):
+        """TODO: docstring in public method."""
         return self.op(self.left.eval(params=params, **kwargs),
                        self.right.eval(params=params, **kwargs))
 
     def eval_components(self, **kwargs):
-        """return ordered dict of name, results for each component"""
+        """Return ordered dict of name, results for each component."""
         out = OrderedDict(self.left.eval_components(**kwargs))
         out.update(self.right.eval_components(**kwargs))
         return out
 
     @property
     def param_names(self):
+        """TODO: docstring in public method."""
         return self.left.param_names + self.right.param_names
 
     @property
     def components(self):
-        """return components for composite model"""
+        """Return components for composite model."""
         return self.left.components + self.right.components
 
     def _make_all_args(self, params=None, **kwargs):
-        """generate **all** function args for all functions"""
+        """Generate **all** function args for all functions."""
         out = self.right._make_all_args(params=params, **kwargs)
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
 
 class ModelResult(Minimizer):
-    """Result from Model fit
+    """Result from Model fit.
 
-    Attributes
-    -----------
-    model         instance of Model -- the model function
-    params        instance of Parameters -- the fit parameters
-    data          array of data values to compare to model
-    weights       array of weights used in fitting
-    init_params   copy of params, before being updated by fit()
-    init_values   array of parameter values, before being updated by fit()
-    init_fit      model evaluated with init_params.
-    best_fit      model evaluated with params after being updated by fit()
+     Attributes
+     -----------
+     model         instance of Model -- the model function
+     params        instance of Parameters -- the fit parameters
+     data          array of data values to compare to model
+     weights       array of weights used in fitting
+     init_params   copy of params, before being updated by fit()
+     init_values   array of parameter values, before being updated by fit()
+     init_fit      model evaluated with init_params.
+     best_fit      model evaluated with params after being updated by fit()
 
-    Methods:
-    --------
-    fit(data=None, params=None, weights=None, method=None, **kwargs)
-         fit (or re-fit) model with params to data (with weights)
-         using supplied method.  The keyword arguments are sent to
-         as keyword arguments to the model function.
+     Methods:
+     --------
+     fit(data=None, params=None, weights=None, method=None, **kwargs)
+          fit (or re-fit) model with params to data (with weights)
+          using supplied method.  The keyword arguments are sent to
+          as keyword arguments to the model function.
 
-         all inputs are optional, defaulting to the value used in
-         the previous fit.  This allows easily changing data or
-         parameter settings, or both.
+          all inputs are optional, defaulting to the value used in
+          the previous fit.  This allows easily changing data or
+          parameter settings, or both.
 
-    eval(params=None, **kwargs)
-         evaluate the current model, with parameters (defaults to the current
-         parameter values), with values in kwargs sent to the model function.
+     eval(params=None, **kwargs)
+          evaluate the current model, with parameters (defaults to the current
+          parameter values), with values in kwargs sent to the model function.
 
-    eval_components(params=Nones, **kwargs)
-         evaluate the current model, with parameters (defaults to the current
-         parameter values), with values in kwargs sent to the model function
-         and returns an ordered dict with the model names as the key and the
-         component results as the values.
+     eval_components(params=Nones, **kwargs)
+          evaluate the current model, with parameters (defaults to the current
+          parameter values), with values in kwargs sent to the model function
+          and returns an ordered dict with the model names as the key and the
+          component results as the values.
 
-   fit_report(modelpars=None, show_correl=True, min_correl=0.1)
-         return a fit report.
+    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
+          return a fit report.
 
-   plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', xlabel = None, ylabel=None,
-            numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
-            ax_kws=None)
-        Plot the fit results using matplotlib.
+    plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', xlabel = None, ylabel=None,
+             numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
+             ax_kws=None)
+         Plot the fit results using matplotlib.
 
-   plot_residuals(self, ax=None, datafmt='o', data_kws=None, fit_kws=None,
-                  ax_kws=None)
-        Plot the fit residuals using matplotlib.
+    plot_residuals(self, ax=None, datafmt='o', data_kws=None, fit_kws=None,
+                   ax_kws=None)
+         Plot the fit residuals using matplotlib.
 
-   plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, numpoints=None,
-        data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None,
-        ax_fit_kws=None, fig_kws=None)
-        Plot the fit results and residuals using matplotlib.
+    plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, numpoints=None,
+         data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None,
+         ax_fit_kws=None, fig_kws=None)
+         Plot the fit results and residuals using matplotlib.
+
     """
+
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **fit_kws):
+        """TODO: docstring in public method."""
         self.model = model
         self.data = data
         self.weights = weights
@@ -749,7 +782,7 @@ class ModelResult(Minimizer):
                            scale_covar=scale_covar, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None, **kwargs):
-        """perform fit for a Model, given data and params"""
+        """Perform fit for a Model, given data and params."""
         if data is not None:
             self.data = data
         if params is not None:
@@ -777,14 +810,14 @@ class ModelResult(Minimizer):
         self.best_fit = self.model.eval(params=_ret.params, **self.userkws)
 
     def eval(self, params=None, **kwargs):
-        """
-        evaluate model function
-        Arguments:
-            params (Parameters):  parameters, defaults to ModelResult .params
-            kwargs (variable):  values of options, independent variables, etc
+        """Evaluate model function.
 
-        Returns:
-            ndarray or float for evaluated model
+        Arguments: params (Parameters):  parameters,
+        defaults to ModelResult .params kwargs (variable):  values of options,
+        independent variables, etc.
+
+        Returns:     ndarray or float for evaluated model
+
         """
         self.userkws.update(kwargs)
         if params is None:
@@ -792,15 +825,15 @@ class ModelResult(Minimizer):
         return self.model.eval(params=params, **self.userkws)
 
     def eval_components(self, params=None, **kwargs):
-        """
-        evaluate each component of a composite model function
-        Arguments:
-            params (Parameters):  parameters, defaults to ModelResult .params
-            kwargs (variable):  values of options, independent variables, etc
+        """Evaluate each component of a composite model function.
 
-        Returns:
-            ordered dictionary with keys of prefixes, and values of values for
-            each component of the model.
+        Arguments:
+        params (Parameters):  parameters, defaults to ModelResult .params
+        kwargs (variable):  values of options, independent variables, etc.
+
+        Returns:     ordered dictionary with keys of prefixes, and
+        values of values for     each component of the model.
+
         """
         self.userkws.update(kwargs)
         if params is None:
@@ -808,10 +841,11 @@ class ModelResult(Minimizer):
         return self.model.eval_components(params=params, **self.userkws)
 
     def eval_uncertainty(self, params=None, sigma=1, **kwargs):
-        """
-        evaluate the uncertainty of the *model function* from the
-        uncertainties for the best-fit parameters.  This can be used
-        to give confidence bands for the model.
+        """Evaluate the uncertainty of the *model function*.
+
+        The uncertainty is evaluated from the uncertainties for the
+        best-fit parameters.  This can be used to give confidence bands
+        for the model.
 
         Arguments:
             params (Parameters):  parameters, defaults to ModelResult .params
@@ -877,18 +911,18 @@ class ModelResult(Minimizer):
         return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, ndata-nvarys)
 
     def conf_interval(self, **kwargs):
-        """return explicitly calculated confidence intervals"""
+        """Return explicitly calculated confidence intervals."""
         if self.ci_out is None:
             self.ci_out = conf_interval(self, self, **kwargs)
         return self.ci_out
 
     def ci_report(self, with_offset=True, ndigits=5, **kwargs):
-        """return nicely formatted report about confidence intervals"""
+        """Return nicely formatted report about confidence intervals."""
         return ci_report(self.conf_interval(**kwargs),
                          with_offset=with_offset, ndigits=ndigits)
 
     def fit_report(self, **kwargs):
-        "return fit report"
+        """Return fit report."""
         return '[[Model]]\n    %s\n%s\n' % (self.model._reprstring(long=True),
                                             fit_report(self, **kwargs))
 
@@ -952,6 +986,7 @@ class ModelResult(Minimizer):
         --------
         ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
         ModelResult.plot : Plot the fit results and residuals using matplotlib.
+
         """
         if data_kws is None:
             data_kws = {}
@@ -1054,6 +1089,7 @@ class ModelResult(Minimizer):
         --------
         ModelResult.plot_fit : Plot the fit results using matplotlib.
         ModelResult.plot : Plot the fit results and residuals using matplotlib.
+
         """
         if data_kws is None:
             data_kws = {}
@@ -1155,6 +1191,7 @@ class ModelResult(Minimizer):
         --------
         ModelResult.plot_fit : Plot the fit results using matplotlib.
         ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
+
         """
         if data_kws is None:
             data_kws = {}

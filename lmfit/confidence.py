@@ -1,8 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-"""
-Contains functions to calculate confidence intervals.
-"""
+"""Contains functions to calculate confidence intervals."""
 from __future__ import print_function
 
 from collections import OrderedDict
@@ -21,9 +17,10 @@ CONF_ERR_NVARS = '%s with < 2 variables' % CONF_ERR_GEN
 
 
 def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
-    """
-    Returns the probalitiy for two given parameter sets.
+    """Return the probalitiy for two given parameter sets.
+
     nfix is the number of fixed parameters.
+
     """
     nparas = nparas + nfix
     nfree = ndata - nparas
@@ -33,7 +30,7 @@ def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
 
 
 def copy_vals(params):
-    """Saves the values and stderrs of params in temporay dict"""
+    """Save the values and stderrs of params in temporay dict."""
     tmp_params = {}
     for para_key in params:
         tmp_params[para_key] = (params[para_key].value,
@@ -42,15 +39,14 @@ def copy_vals(params):
 
 
 def restore_vals(tmp_params, params):
-    """Restores values and stderrs of params in temporay dict"""
+    """Restore values and stderrs of params in temporay dict."""
     for para_key in params:
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
 
 def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
-    """Calculates the confidence interval for parameters
-    from the given a MinimizerResult, output from minimize.
+    """Calculate the confidence interval for parameters.
 
     The parameter for which the ci is calculated will be varied, while
     the remaining parameters are re-optimized for minimizing chi-square.
@@ -138,7 +134,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
 
 
 def map_trace_to_names(trace, params):
-    "maps trace to param names"
+    """Map trace to param names."""
     out = {}
     allnames = list(params.keys()) + ['prob']
     for name in trace.keys():
@@ -151,15 +147,12 @@ def map_trace_to_names(trace, params):
 
 
 class ConfidenceInterval(object):
-    """
-    Class used to calculate the confidence interval.
-    """
+    """Class used to calculate the confidence interval."""
+
     def __init__(self, minimizer, result, p_names=None, prob_func=None,
                  sigmas=(1, 2, 3), trace=False, verbose=False,
                  maxiter=50):
-        """
-
-        """
+        """TODO: docstring in public method."""
         self.verbose = verbose
         self.minimizer = minimizer
         self.result = result
@@ -207,9 +200,7 @@ class ConfidenceInterval(object):
             self.probs.append(prob)
 
     def calc_all_ci(self):
-        """
-        Calculates all cis.
-        """
+        """Calculate all confidence intervals."""
         out = OrderedDict()
 
         for p in self.p_names:
@@ -223,11 +214,11 @@ class ConfidenceInterval(object):
         return out
 
     def calc_ci(self, para, direction):
-        """
-        Calculate the ci for a single parameter for a single direction.
-        Direction is either positive or negative 1.
-        """
+        """Calculate the ci for a single parameter for a single direction.
 
+        Direction is either positive or negative 1.
+
+        """
         if isinstance(para, str):
             para = self.params[para]
 
@@ -269,12 +260,11 @@ class ConfidenceInterval(object):
         return ret
 
     def reset_vals(self):
+        """TODO: add method docstring."""
         restore_vals(self.org, self.params)
 
     def find_limit(self, para, direction):
-        """
-        For given para, search a value so that prob(val) > sigmas.
-        """
+        """For given para, search a value so that prob(val) > sigmas."""
         if self.verbose:
             print('Calculating CI for ' + para.name)
         self.reset_vals()
@@ -319,7 +309,7 @@ class ConfidenceInterval(object):
         return limit, new_prob
 
     def calc_prob(self, para, val, offset=0., restore=False):
-        """Returns the probability for given Value."""
+        """Calculate the probability for given value."""
         if restore:
             restore_vals(self.org, self.params)
         para.value = val
@@ -339,7 +329,7 @@ class ConfidenceInterval(object):
 
 def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
                     limits=None, prob_func=None):
-    r"""Calculates confidence regions for two fixed parameters.
+    r"""Calculate confidence regions for two fixed parameters.
 
     The method is explained in *conf_interval*: here we are fixing
     two parameters.
@@ -410,6 +400,7 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     y.vary = False
 
     def calc_prob(vals, restore=False):
+        """Calculate the probability."""
         if restore:
             restore_vals(org, result.params)
         x.value = vals[0]

@@ -1,37 +1,42 @@
-"""
-Lmfit provides a high-level interface to non-linear optimization and curve
-fitting problems for Python. Lmfit builds on Levenberg-Marquardt algorithm of
-scipy.optimize.leastsq(), but also supports most of the optimization methods
-from scipy.optimize.  It has a number of useful enhancements, including:
+"""Lmfit provides a high-level interface to non-linear optimization and
+curve fitting problems for Python.
 
-  * Using Parameter objects instead of plain floats as variables.  A Parameter
-    has a value that can be varied in the fit, fixed, have upper and/or lower
-    bounds.  It can even have a value that is constrained by an algebraic
-    expression of other Parameter values.
+Lmfit builds on the Levenberg-Marquardt algorithm of
+scipy.optimize.leastsq(), but also supports most of the optimization
+methods from scipy.optimize.  It has a number of useful enhancements,
+including:
 
-  * Ease of changing fitting algorithms.  Once a fitting model is set up, one
-    can change the fitting algorithm without changing the objective function.
+  * Using Parameter objects instead of plain floats as variables.  A
+    Parameter has a value that can be varied in the fit, fixed, have
+    upper and/or lower bounds.  It can even have a value that is
+    constrained by an algebraic expression of other Parameter values.
+
+  * Ease of changing fitting algorithms.  Once a fitting model is set
+    up, one can change the fitting algorithm without changing the
+    objective function.
 
   * Improved estimation of confidence intervals.  While
-    scipy.optimize.leastsq() will automatically calculate uncertainties and
-    correlations from the covariance matrix, lmfit also has functions to
-    explicitly explore parameter space to determine confidence levels even for
-    the most difficult cases.
+    scipy.optimize.leastsq() will automatically calculate uncertainties
+    and correlations from the covariance matrix, lmfit also has functions
+    to explicitly explore parameter space to determine confidence levels
+    even for the most difficult cases.
 
   * Improved curve-fitting with the Model class.  This which extends the
-    capabilities of scipy.optimize.curve_fit(), allowing you to turn a function
-    that models for your data into a python class that helps you parametrize
-    and fit data with that model.
+    capabilities of scipy.optimize.curve_fit(), allowing you to turn a
+    function that models for your data into a python class that helps you
+    parametrize and fit data with that model.
 
-  * Many pre-built models for common lineshapes are included and ready to use.
+  * Many pre-built models for common lineshapes are included and ready
+    to use.
 
-   version: 0.9.5
-   last update: 2016-Jul-26
-   License: BSD
-   Authors:  Matthew Newville, The University of Chicago
-             Till Stensitzki, Freie Universitat Berlin
-             Daniel B. Allen, Johns Hopkins University
-             Antonino Ingargiola, University of California, Los Angeles
+version: 0.9.5
+last update: 2016-Jul-26
+License: BSD
+Authors: Matthew Newville, The University of Chicago
+         Till Stensitzki, Freie Universitat Berlin
+         Daniel B. Allen, Johns Hopkins University
+         Antonino Ingargiola, University of California, Los Angeles
+
 """
 import sys
 import warnings

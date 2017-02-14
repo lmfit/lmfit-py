@@ -1,8 +1,7 @@
-"""
-utility functions for asteval
+"""Utility functions for asteval.
 
-   Matthew Newville <newville@cars.uchicago.edu>,
-   The University of Chicago
+Matthew Newville <newville@cars.uchicago.edu>, The University of Chicago
+
 """
 from __future__ import division, print_function
 
@@ -140,7 +139,7 @@ NUMPY_RENAMES = {'ln': 'log', 'asin': 'arcsin', 'acos': 'arccos',
 
 
 def _open(filename, mode='r', buffering=0):
-    """read only version of open()"""
+    """Read-only version of open()."""
     umode = 'r'
     if mode == 'rb':
         umode = 'rb'
@@ -180,10 +179,11 @@ OPERATORS = {ast.Is: lambda a, b: a is b,
 
 
 def valid_symbol_name(name):
-    """determines whether the input symbol name is a valid name
+    """Determine whether the input symbol name is a valid name.
 
     This checks for reserved words, and that the name matches the
     regular expression ``[a-zA-Z_][a-zA-Z0-9_]``
+
     """
     if name in RESERVED_WORDS:
         return False
@@ -191,16 +191,19 @@ def valid_symbol_name(name):
 
 
 def op2func(op):
-    "return function for operator nodes"
+    """Return function for operator nodes."""
     return OPERATORS[op.__class__]
 
 
 class Empty:
-    """empty class"""
+    """Empty class."""
+
     def __init__(self):
+        """TODO: docstring in public method."""
         pass
 
     def __nonzero__(self):
+        """TODO: docstring in magic method."""
         return False
 
 
@@ -208,8 +211,10 @@ ReturnedNone = Empty()
 
 
 class ExceptionHolder(object):
-    "basic exception handler"
+    """Basic exception handler."""
+
     def __init__(self, node, exc=None, msg='', expr=None, lineno=None):
+        """TODO: docstring in public method."""
         self.node = node
         self.expr = expr
         self.msg = msg
@@ -222,7 +227,7 @@ class ExceptionHolder(object):
             self.msg = self.exc_info[1]
 
     def get_error(self):
-        "retrieve error data"
+        """Retrieve error data."""
         col_offset = -1
         if self.node is not None:
             try:
@@ -244,12 +249,15 @@ class ExceptionHolder(object):
 
 
 class NameFinder(ast.NodeVisitor):
-    """find all symbol names used by a parsed node"""
+    """Find all symbol names used by a parsed node."""
+
     def __init__(self):
+        """TODO: docstring in public method."""
         self.names = []
         ast.NodeVisitor.__init__(self)
 
     def generic_visit(self, node):
+        """TODO: docstring in public method."""
         if node.__class__.__name__ == 'Name':
             if node.ctx.__class__ == ast.Load and node.id not in self.names:
                 self.names.append(node.id)
@@ -257,7 +265,7 @@ class NameFinder(ast.NodeVisitor):
 
 
 def get_ast_names(astnode):
-    "returns symbol Names from an AST node"
+    """Return symbol Names from an AST node."""
     finder = NameFinder()
     finder.generic_visit(astnode)
     return finder.names
