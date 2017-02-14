@@ -21,6 +21,7 @@ from numpy.linalg import LinAlgError
 import multiprocessing
 import numbers
 import six
+import warnings
 
 ##
 ##  scipy version notes:
