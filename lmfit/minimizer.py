@@ -1062,7 +1062,7 @@ class Minimizer(object):
 
         # take the zero'th PTsampler temperature for the parameter estimators
         if ntemps > 1:
-            flatchain = chain[0,...].reshape((-1, self.nvarys))
+            flatchain = chain[0, ...].reshape((-1, self.nvarys))
         else:
             flatchain = chain.reshape((-1, self.nvarys))
 
@@ -1238,7 +1238,7 @@ class Minimizer(object):
         if result.aborted:
             result.message = 'Fit aborted by user callback.'
             result.success = False
-        elif ier in {1,2,3}:
+        elif ier in {1, 2, 3}:
             result.message = 'Fit succeeded.'
         elif ier == 0:
             result.message = 'Invalid Input Parameters. I.e. more variables than data points given, tolerance < 0.0, or no data provided.'
@@ -1724,7 +1724,7 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
     policies = ['propagate', 'raise', 'omit']
 
     if handle_inf:
-        handler_func =  lambda a: ~np.isfinite(a)
+        handler_func = lambda a: ~np.isfinite(a)
     else:
         handler_func = np.isnan
 

@@ -11,8 +11,8 @@ from scipy.special import gamma as gamfcn
 
 log2 = log(2)
 s2pi = sqrt(2*pi)
-spi  = sqrt(pi)
-s2   = sqrt(2.0)
+spi = sqrt(pi)
+s2 = sqrt(2.0)
 
 functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'breit_wigner', 'damped_oscillator', 'dho', 'logistic', 'lognormal',
@@ -25,13 +25,13 @@ def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
     """1 dimensional gaussian:
     gaussian(x, amplitude, center, sigma)
     """
-    return (amplitude/(s2pi*sigma)) * exp(-(1.0*x-center)**2 /(2*sigma**2))
+    return (amplitude/(s2pi*sigma)) * exp(-(1.0*x-center)**2 / (2*sigma**2))
 
 def lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0):
     """1 dimensional lorentzian
     lorentzian(x, amplitude, center, sigma)
     """
-    return (amplitude/(1 + ((1.0*x-center)/sigma)**2) ) / (pi*sigma)
+    return (amplitude/(1 + ((1.0*x-center)/sigma)**2)) / (pi*sigma)
 
 def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
     """1 dimensional voigt function.
@@ -39,7 +39,7 @@ def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
     """
     if gamma is None:
         gamma = sigma
-    z = (x-center + 1j*gamma)/ (sigma*s2)
+    z = (x-center + 1j*gamma) / (sigma*s2)
     return amplitude*wofz(z).real / (sigma*s2pi)
 
 def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
@@ -77,21 +77,21 @@ def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
     """
     arg = (x-center)/sigma
     scale = amplitude * gamfcn(expon)/(gamfcn(0.5)*gamfcn(expon-0.5))
-    return  scale*(1+arg**2)**(-expon)/sigma
+    return scale*(1+arg**2)**(-expon)/sigma
 
 def breit_wigner(x, amplitude=1.0, center=0.0, sigma=1.0, q=1.0):
     """Breit-Wigner-Fano lineshape:
        = amplitude*(q*sigma/2 + x - center)**2 / ( (sigma/2)**2 + (x - center)**2 )
     """
     gam = sigma/2.0
-    return  amplitude*(q*gam + x - center)**2 / (gam*gam + (x-center)**2)
+    return amplitude*(q*gam + x - center)**2 / (gam*gam + (x-center)**2)
 
 def damped_oscillator(x, amplitude=1.0, center=1., sigma=0.1):
     """amplitude for a damped harmonic oscillator
     amplitude/sqrt( (1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2))
     """
     center = max(1.e-9, abs(center))
-    return (amplitude/sqrt( (1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2))
+    return (amplitude/sqrt((1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2))
 
 def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
     """Damped Harmonic Oscillator, similar to version from PAN
@@ -119,8 +119,8 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
     lognormal(x, center, sigma)
         = (amplitude/x) * exp(-(ln(x) - center)/ (2* sigma**2))
     """
-    x[where(x<=1.e-19)] = 1.e-19
-    return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2/ (2* sigma**2))
+    x[where(x <= 1.e-19)] = 1.e-19
+    return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2 / (2*sigma**2))
 
 def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
     """Student's t distribution:
@@ -129,7 +129,7 @@ def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
         sqrt(sigma*pi)gamma(sigma/2)
 
     """
-    s1  = (sigma+1)/2.0
+    s1 = (sigma+1)/2.0
     denom = (sqrt(sigma*pi)*gamfcn(sigma/2))
     return amplitude*(1 + (x-center)**2/sigma)**(-s1) * gamfcn(s1) / denom
 
@@ -143,7 +143,7 @@ def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
     http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution
     """
     gss = gamma*sigma*sigma
-    arg1 = gamma*(center +gss/2.0 - x)
+    arg1 = gamma*(center + gss/2.0 - x)
     arg2 = (center + gss - x)/(s2*sigma)
     return amplitude*(gamma/2) * exp(arg1) * erfc(arg2)
 
@@ -202,7 +202,7 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
 
     where arg = (x - center)/sigma
     """
-    if abs(sigma) <  1.e-13:
+    if abs(sigma) < 1.e-13:
         sigma = 1.e-13
 
     out = (x - center)/sigma
@@ -230,9 +230,9 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
     where arg1 =  (x - center1)/sigma1
     and   arg2 = -(x - center2)/sigma2
     """
-    if abs(sigma1) <  1.e-13:
+    if abs(sigma1) < 1.e-13:
         sigma1 = 1.e-13
-    if abs(sigma2) <  1.e-13:
+    if abs(sigma2) < 1.e-13:
         sigma2 = 1.e-13
 
     arg1 = (x - center1)/sigma1
@@ -244,9 +244,9 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
     elif form in ('atan', 'arctan'):
         out = (arctan(arg1) + arctan(arg2))/pi
     else:
-        arg1[where(arg1 <  0)]  = 0.0
-        arg1[where(arg1 >  1)]  = 1.0
-        arg2[where(arg2 >  0)]  = 0.0
+        arg1[where(arg1 < 0)] = 0.0
+        arg1[where(arg1 > 1)] = 1.0
+        arg2[where(arg2 > 0)] = 0.0
         arg2[where(arg2 < -1)] = -1.0
         out = arg1 + arg2
     return amplitude*out

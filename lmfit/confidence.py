@@ -15,9 +15,9 @@ from scipy.stats import f
 
 from .minimizer import MinimizerException
 
-CONF_ERR_GEN    = 'Cannot determine Confidence Intervals'
+CONF_ERR_GEN = 'Cannot determine Confidence Intervals'
 CONF_ERR_STDERR = '%s without sensible uncertainty estimates' % CONF_ERR_GEN
-CONF_ERR_NVARS  = '%s with < 2 variables' % CONF_ERR_GEN
+CONF_ERR_NVARS = '%s with < 2 variables' % CONF_ERR_GEN
 
 def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
     """

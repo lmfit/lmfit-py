@@ -141,10 +141,10 @@ ParabolicModel = QuadraticModel
 
 class PolynomialModel(Model):
     __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ... c7 * x**7" + COMMON_DOC
-    MAX_DEGREE=7
+    MAX_DEGREE = 7
     DEGREE_ERR = "degree must be an integer less than %d."
     def __init__(self, degree, *args, **kwargs):
-        if not isinstance(degree, int)  or degree > self.MAX_DEGREE:
+        if not isinstance(degree, int) or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
 
         self.poly_degree = degree
@@ -161,7 +161,7 @@ class PolynomialModel(Model):
         if x is not None:
             out = np.polyfit(x, data, self.poly_degree)
             for i, coef in enumerate(out[::-1]):
-                pars['%sc%i'% (self.prefix, i)].set(value=coef)
+                pars['%sc%i' % (self.prefix, i)].set(value=coef)
         return update_param_vals(pars, self.prefix, **kwargs)
 
 
@@ -203,7 +203,7 @@ class VoigtModel(Model):
         super(VoigtModel, self).__init__(voigt, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
-        self.set_param_hint('fwhm',  expr=fwhm_expr(self))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -219,7 +219,7 @@ class PseudoVoigtModel(Model):
         super(PseudoVoigtModel, self).__init__(pvoigt, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fraction', value=0.5)
-        self.set_param_hint('fwhm',  expr=fwhm_expr(self))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
@@ -244,7 +244,7 @@ class Pearson7Model(Model):
     __doc__ = pearson7.__doc__ + COMMON_DOC if pearson7.__doc__ else ""
     def __init__(self, *args, **kwargs):
         super(Pearson7Model, self).__init__(pearson7, *args, **kwargs)
-        self.set_param_hint('expon',  value=1.5)
+        self.set_param_hint('expon', value=1.5)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -290,8 +290,8 @@ class DampedOscillatorModel(Model):
         super(DampedOscillatorModel, self).__init__(damped_oscillator, *args, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        pars =guess_from_peak(self, data, x, negative,
-                              ampscale=0.1, sigscale=0.1)
+        pars = guess_from_peak(self, data, x, negative,
+                               ampscale=0.1, sigscale=0.1)
         return update_param_vals(pars, self.prefix, **kwargs)
 
 
@@ -301,8 +301,8 @@ class DampedHarmonicOscillatorModel(Model):
         super(DampedOscillatorModel, self).__init__(dho, *args, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        pars =guess_from_peak(self, data, x, negative,
-                              ampscale=0.1, sigscale=0.1)
+        pars = guess_from_peak(self, data, x, negative,
+                               ampscale=0.1, sigscale=0.1)
         pars['%sgamma' % self.prefix].set(value=1.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -421,9 +421,9 @@ missing: None, 'drop', or 'raise'
 prefix: NOT supported for ExpressionModel
 """
 
-    idvar_missing  = "No independent variable found in\n %s"
+    idvar_missing = "No independent variable found in\n %s"
     idvar_notfound = "Cannot find independent variables '%s' in\n %s"
-    no_prefix      = "ExpressionModel does not support `prefix` argument"
+    no_prefix = "ExpressionModel does not support `prefix` argument"
     def __init__(self, expr, independent_vars=None, init_script=None,
                  *args, **kwargs):
 
@@ -485,7 +485,7 @@ prefix: NOT supported for ExpressionModel
         self.def_vals = {}
 
     def __repr__(self):
-        return  "<lmfit.ExpressionModel('%s')>" % (self.expr)
+        return "<lmfit.ExpressionModel('%s')>" % (self.expr)
 
     def _parse_params(self):
         """ExpressionModel._parse_params is over-written (as `pass`)

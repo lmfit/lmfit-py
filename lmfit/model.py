@@ -90,10 +90,10 @@ class Model(object):
     """
 
     _forbidden_args = ('data', 'weights', 'params')
-    _invalid_ivar  = "Invalid independent variable name ('%s') for function %s"
-    _invalid_par   = "Invalid parameter name ('%s') for function %s"
+    _invalid_ivar = "Invalid independent variable name ('%s') for function %s"
+    _invalid_par = "Invalid parameter name ('%s') for function %s"
     _invalid_missing = "missing must be None, 'none', 'drop', or 'raise'."
-    _valid_missing   = (None, 'none', 'drop', 'raise')
+    _valid_missing = (None, 'none', 'drop', 'raise')
 
     _invalid_hint = "unknown parameter hint '%s' for param '%s'"
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
@@ -309,7 +309,7 @@ class Model(object):
                 par.value = kwargs[name]
             params.add(par)
             if verbose:
-                print( ' - Adding parameter "%s"' % name)
+                print(' - Adding parameter "%s"' % name)
 
         # next build parameters defined in param_hints
         # note that composites may define their own additional
@@ -322,10 +322,10 @@ class Model(object):
                 par = Parameter(name=name)
                 params.add(par)
                 if verbose:
-                    print( ' - Adding parameter for hint "%s"' % name)
+                    print(' - Adding parameter for hint "%s"' % name)
             par._delay_asteval = True
             for item in self._hint_names:
-                if item in  hint:
+                if item in hint:
                     setattr(par, item, hint[item])
             if basename in kwargs:
                 par.value = kwargs[basename]
@@ -600,8 +600,8 @@ class CompositeModel(Model):
     """
     _names_collide = ("\nTwo models have parameters named '{clash}'. "
                       "Use distinct names.")
-    _bad_arg   = "CompositeModel: argument {arg} is not a Model"
-    _bad_op    = "CompositeModel: operator {op} is not callable"
+    _bad_arg = "CompositeModel: argument {arg} is not a Model"
+    _bad_op = "CompositeModel: operator {op} is not callable"
     _known_ops = {operator.add: '+', operator.sub: '-',
                   operator.mul: '*', operator.truediv: '/'}
 
@@ -613,9 +613,9 @@ class CompositeModel(Model):
         if not callable(op):
             raise ValueError(self._bad_op.format(op=op))
 
-        self.left  = left
+        self.left = left
         self.right = right
-        self.op    = op
+        self.op = op
 
         name_collisions = set(left.param_names) & set(right.param_names)
         if len(name_collisions) > 0:
@@ -665,7 +665,7 @@ class CompositeModel(Model):
 
     @property
     def param_names(self):
-        return  self.left.param_names + self.right.param_names
+        return self.left.param_names + self.right.param_names
 
     @property
     def components(self):
@@ -757,12 +757,12 @@ class ModelResult(Minimizer):
         self.ci_out = None
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
-        self.init_fit    = self.model.eval(params=self.params, **self.userkws)
+        self.init_fit = self.model.eval(params=self.params, **self.userkws)
 
         _ret = self.minimize(method=self.method)
 
         for attr in dir(_ret):
-            if not attr.startswith('_') :
+            if not attr.startswith('_'):
                 try:
                     setattr(self, attr, getattr(_ret, attr))
                 except AttributeError:
@@ -770,7 +770,7 @@ class ModelResult(Minimizer):
 
         self.init_values = self.model._make_all_args(self.init_params)
         self.best_values = self.model._make_all_args(_ret.params)
-        self.best_fit    = self.model.eval(params=_ret.params, **self.userkws)
+        self.best_fit = self.model.eval(params=_ret.params, **self.userkws)
 
     def eval(self, params=None, **kwargs):
         """
@@ -864,7 +864,7 @@ class ModelResult(Minimizer):
 
         for i in range(nvarys):
             for j in range(nvarys):
-                df2 += fjac[i]*fjac[j]*covar[i,j]
+                df2 += fjac[i]*fjac[j]*covar[i, j]
 
         if sigma < 1.0:
             prob = sigma
@@ -884,14 +884,14 @@ class ModelResult(Minimizer):
         return ci_report(self.conf_interval(**kwargs),
                          with_offset=with_offset, ndigits=ndigits)
 
-    def fit_report(self,  **kwargs):
+    def fit_report(self, **kwargs):
         "return fit report"
         return '[[Model]]\n    %s\n%s\n' % (self.model._reprstring(long=True),
                                             fit_report(self, **kwargs))
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, yerr=None,
-                 numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
+                 numpoints=None, data_kws=None, fit_kws=None, init_kws=None,
                  ax_kws=None):
         """Plot the fit results using matplotlib.
 

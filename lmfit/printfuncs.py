@@ -63,7 +63,7 @@ def gformat(val, length=11):
             fmt = '{0: .%ig}' % (length-1)
             out = fmt.format(val)[:length]
             if len(out) < length:
-                pad = '0' if '.' in  out else ' '
+                pad = '0' if '.' in out else ' '
                 out += pad*(length-len(out))
     return out
 
@@ -203,7 +203,7 @@ def ci_report(ci, with_offset=True, ndigits=5):
         return "%.2f%%" % (x[0]*100)
 
     title_shown = False
-    fmt_best = fmt_diff  = "{0:.%if}" % ndigits
+    fmt_best = fmt_diff = "{0:.%if}" % ndigits
     if with_offset:
         fmt_diff = "{0:+.%if}" % ndigits
     for name, row in ci.items():
