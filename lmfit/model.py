@@ -500,7 +500,7 @@ class Model(object):
             del kwargs[name]
 
         # All remaining kwargs should correspond to independent variables.
-        for name in kwargs.keys():
+        for name in kwargs:
             if name not in self.independent_vars:
                 warnings.warn("The keyword argument %s does not" % name +
                               "match any arguments of the model function." +
