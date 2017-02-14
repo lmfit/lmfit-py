@@ -1445,10 +1445,10 @@ class Minimizer(object):
                 par_range = (value[i] - (Ns//2)*step, value[i] + (Ns//2)*step,
                              step)
             else:
-              raise ValueError('Not enough information provided for the brute '
-                               'force method. Please specify bounds or at '
-                               'least an initial value and brute_step for '
-                               'parameter "{}".'.format(result.var_names[i]))
+                raise ValueError('Not enough information provided for the brute '
+                                 'force method. Please specify bounds or at '
+                                 'least an initial value and brute_step for '
+                                 'parameter "{}".'.format(result.var_names[i]))
             ranges.append(par_range)
 
         ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)

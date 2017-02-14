@@ -782,7 +782,7 @@ class ModelResult(Minimizer):
         """
         self.userkws.update(kwargs)
         if params is None:
-           params = self.params
+            params = self.params
         return self.model.eval(params=params, **self.userkws)
 
     def eval_components(self, params=None, **kwargs):
