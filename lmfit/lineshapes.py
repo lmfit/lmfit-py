@@ -21,17 +21,20 @@ functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'gamma', 'gammaln', 'exponential', 'powerlaw', 'linear',
              'parabolic')
 
+
 def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
     """1 dimensional gaussian:
     gaussian(x, amplitude, center, sigma)
     """
     return (amplitude/(s2pi*sigma)) * exp(-(1.0*x-center)**2 / (2*sigma**2))
 
+
 def lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0):
     """1 dimensional lorentzian
     lorentzian(x, amplitude, center, sigma)
     """
     return (amplitude/(1 + ((1.0*x-center)/sigma)**2)) / (pi*sigma)
+
 
 def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
     """1 dimensional voigt function.
@@ -41,6 +44,7 @@ def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
         gamma = sigma
     z = (x-center + 1j*gamma) / (sigma*s2)
     return amplitude*wofz(z).real / (sigma*s2pi)
+
 
 def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
     """1 dimensional pseudo-voigt:
@@ -59,12 +63,14 @@ def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
     return ((1-fraction)*gaussian(x, amplitude, center, sigma_g) +
             fraction*lorentzian(x, amplitude, center, sigma))
 
+
 def moffat(x, amplitude=1, center=0., sigma=1, beta=1.):
     """ 1 dimensional moffat function:
 
     moffat(amplitude, center, sigma, beta) = amplitude / (((x - center)/sigma)**2 + 1)**beta
     """
     return amplitude / (((x - center)/sigma)**2 + 1)**beta
+
 
 def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
     """pearson7 lineshape, using the wikipedia definition:
@@ -79,6 +85,7 @@ def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
     scale = amplitude * gamfcn(expon)/(gamfcn(0.5)*gamfcn(expon-0.5))
     return scale*(1+arg**2)**(-expon)/sigma
 
+
 def breit_wigner(x, amplitude=1.0, center=0.0, sigma=1.0, q=1.0):
     """Breit-Wigner-Fano lineshape:
        = amplitude*(q*sigma/2 + x - center)**2 / ( (sigma/2)**2 + (x - center)**2 )
@@ -86,12 +93,14 @@ def breit_wigner(x, amplitude=1.0, center=0.0, sigma=1.0, q=1.0):
     gam = sigma/2.0
     return amplitude*(q*gam + x - center)**2 / (gam*gam + (x-center)**2)
 
+
 def damped_oscillator(x, amplitude=1.0, center=1., sigma=0.1):
     """amplitude for a damped harmonic oscillator
     amplitude/sqrt( (1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2))
     """
     center = max(1.e-9, abs(center))
     return amplitude/sqrt((1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2)
+
 
 def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
     """Damped Harmonic Oscillator, similar to version from PAN
@@ -108,11 +117,13 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
     lp = 1.0/((x+center)**2 + sigma**2)
     return amplitude*sigma*pi*bose*(lm - lp)
 
+
 def logistic(x, amplitude=1., center=0., sigma=1.):
     """Logistic lineshape (yet another sigmoidal curve)
         = amplitude*(1.  - 1. / (1 + exp((x-center)/sigma)))
     """
     return amplitude*(1. - 1./(1. + exp((x-center)/sigma)))
+
 
 def lognormal(x, amplitude=1.0, center=0., sigma=1):
     """log-normal function
@@ -121,6 +132,7 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
     """
     x[where(x <= 1.e-19)] = 1.e-19
     return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2 / (2*sigma**2))
+
 
 def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
     """Student's t distribution:
@@ -147,6 +159,7 @@ def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
     arg2 = (center + gss - x)/(s2*sigma)
     return amplitude*(gamma/2) * exp(arg1) * erfc(arg2)
 
+
 def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     """Doniach Sunjic asymmetric lineshape, used for photo-emission
 
@@ -159,6 +172,7 @@ def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     gm1 = (1.0 - gamma)
     scale = amplitude/(sigma**gm1)
     return scale*cos(pi*gamma/2 + gm1*arctan(arg))/(1 + arg**2)**(gm1/2)
+
 
 def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):
     """Gaussian, skewed with error function, equal to
@@ -175,6 +189,7 @@ def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):
     asym = 1 + erf(gamma*(x-center)/(s2*sigma))
     return asym * gaussian(x, amplitude, center, sigma)
 
+
 def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     """Skewed Voigt lineshape, skewed with error function
     useful for ad-hoc Compton scatter profile
@@ -190,6 +205,7 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     beta = skew/(s2*sigma)
     asym = 1 + erf(beta*(x-center))
     return asym * voigt(x, amplitude, center, sigma, gamma=gamma)
+
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """step function:
@@ -216,6 +232,7 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
         out[where(out < 0)] = 0.0
         out[where(out > 1)] = 1.0
     return amplitude*out
+
 
 def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
               center2=1.0, sigma2=1.0, form='linear'):
@@ -251,21 +268,26 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
         out = arg1 + arg2
     return amplitude*out
 
+
 def _erf(x):
     """error function.  = 2/sqrt(pi)*integral(exp(-t**2), t=[0, z])"""
     return erf(x)
+
 
 def _erfc(x):
     """complented error function.  = 1 - erf(x)"""
     return erfc(x)
 
+
 def _wofz(x):
     """fadeeva function for complex argument. = exp(-x**2)*erfc(-i*x)"""
     return wofz(x)
 
+
 def _gamma(x):
     """gamma function"""
     return gamfcn(x)
+
 
 def _gammaln(x):
     """log of absolute value of gamma function"""

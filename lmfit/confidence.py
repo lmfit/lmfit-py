@@ -19,6 +19,7 @@ CONF_ERR_GEN = 'Cannot determine Confidence Intervals'
 CONF_ERR_STDERR = '%s without sensible uncertainty estimates' % CONF_ERR_GEN
 CONF_ERR_NVARS = '%s with < 2 variables' % CONF_ERR_GEN
 
+
 def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
     """
     Returns the probalitiy for two given parameter sets.
@@ -44,6 +45,7 @@ def restore_vals(tmp_params, params):
     """Restores values and stderrs of params in temporay dict"""
     for para_key in params:
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
+
 
 def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
                   trace=False, maxiter=200, verbose=False, prob_func=None):
@@ -229,7 +231,7 @@ class ConfidenceInterval(object):
         if isinstance(para, str):
             para = self.params[para]
 
-        #function used to calculate the pro
+        # function used to calculate the pro
         calc_prob = lambda val, prob: self.calc_prob(para, val, prob)
         if self.trace:
             x = [i.value for i in self.params.values()]
@@ -277,7 +279,7 @@ class ConfidenceInterval(object):
             print('Calculating CI for ' + para.name)
         self.reset_vals()
 
-        #starting steps:
+        # starting steps:
         if para.stderr > 0 and para.stderr < abs(para.value):
             step = para.stderr
         else:
@@ -333,6 +335,7 @@ class ConfidenceInterval(object):
             self.trace_dict[para.name].append(x + [prob])
         self.params[para.name] = save_para
         return prob - offset
+
 
 def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
                     limits=None, prob_func=None):

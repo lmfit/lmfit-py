@@ -32,16 +32,13 @@ import six
 from . import uncertainties
 from .parameter import Parameter, Parameters
 
-##
-##  scipy version notes:
-##  currently scipy 0.14 is required.
-##  feature           scipy version added
-##    minimize              0.11
-##    OptimizeResult        0.13
-##    diff_evolution        0.15
-##    least_squares         0.17
-##
-
+#  scipy version notes:
+#  currently scipy 0.14 is required.
+#  feature           scipy version added
+#    minimize              0.11
+#    OptimizeResult        0.13
+#    diff_evolution        0.15
+#    least_squares         0.17
 
 # differential_evolution is only present in scipy >= 0.15
 try:
@@ -75,8 +72,6 @@ except ImportError:
     pass
 
 
-
-
 def asteval_with_uncertainties(*vals, **kwargs):
     """
     given values for variables, calculate object value.
@@ -94,6 +89,7 @@ def asteval_with_uncertainties(*vals, **kwargs):
     for val, name in zip(vals, _names):
         _asteval.symtable[name] = val
     return _asteval.eval(_obj._expr_ast)
+
 
 wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
 
@@ -141,6 +137,7 @@ def _differential_evolution(func, x0, **kwds):
 
     return scipy_diffev(func, kwds['bounds'], **kwargs)
 
+
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'powell': 'Powell',
                   'cg': 'CG',
@@ -155,11 +152,13 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'trust-ncg': 'trust-ncg',
                   'differential_evolution': 'differential_evolution'}
 
+
 def reduce_chisquare(r):
     """reduce residual array r to scalar as chi-square
     (r*r).sum()
     """
     return (r*r).sum()
+
 
 def reduce_negentropy(r):
     """reduce residual array r to scalar using negative entropy
@@ -277,6 +276,7 @@ class MinimizerResult(object):
                     print("\nCandidate #{}, chisqr = "
                           "{:.3f}".format(i, candidate.score))
                     candidate.params.pretty_print()
+
 
 class Minimizer(object):
     """A general minimizer for curve fitting and optimization.

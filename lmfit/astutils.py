@@ -138,12 +138,14 @@ NUMPY_RENAMES = {'ln': 'log', 'asin': 'arcsin', 'acos': 'arccos',
                  'atan': 'arctan', 'atan2': 'arctan2', 'atanh':
                  'arctanh', 'acosh': 'arccosh', 'asinh': 'arcsinh'}
 
+
 def _open(filename, mode='r', buffering=0):
     """read only version of open()"""
     umode = 'r'
     if mode == 'rb':
         umode = 'rb'
     return open(filename, umode, buffering)
+
 
 LOCALFUNCS = {'open': _open}
 
@@ -201,6 +203,7 @@ class Empty:
     def __nonzero__(self):
         return False
 
+
 ReturnedNone = Empty()
 
 
@@ -251,6 +254,7 @@ class NameFinder(ast.NodeVisitor):
             if node.ctx.__class__ == ast.Load and node.id not in self.names:
                 self.names.append(node.id)
         ast.NodeVisitor.generic_visit(self, node)
+
 
 def get_ast_names(astnode):
     "returns symbol Names from an AST node"

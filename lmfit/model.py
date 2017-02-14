@@ -26,6 +26,7 @@ except ImportError:
     isnull = np.isnan
     Series = type(NotImplemented)
 
+
 def _align(var, mask, data):
     "align missing data, with pandas is available"
     if isinstance(data, Series) and isinstance(var, Series):
@@ -874,7 +875,6 @@ class ModelResult(Minimizer):
         else:
             prob = erf(sigma/np.sqrt(2))
         return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, ndata-nvarys)
-
 
     def conf_interval(self, **kwargs):
         """return explicitly calculated confidence intervals"""

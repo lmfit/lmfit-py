@@ -50,7 +50,7 @@ from . import models
 from . import uncertainties
 from .uncertainties import ufloat, correlated_values
 
-## versioneer code
+# versioneer code
 from ._version import get_versions
 
 __version__ = get_versions()['version']

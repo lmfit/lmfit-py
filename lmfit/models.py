@@ -14,10 +14,12 @@ from .model import Model
 class DimensionalError(Exception):
     pass
 
+
 def _validate_1d(independent_vars):
     if len(independent_vars) != 1:
         raise DimensionalError(
             "This model requires exactly one independent variable.")
+
 
 def index_of(arr, val):
     """return index of array nearest to a value
@@ -26,15 +28,18 @@ def index_of(arr, val):
         return 0
     return np.abs(arr-val).argmin()
 
+
 def fwhm_expr(model):
     "return constraint expression for fwhm"
     fmt = "{factor:.7f}*{prefix:s}sigma"
     return fmt.format(factor=model.fwhm_factor, prefix=model.prefix)
 
+
 def height_expr(model):
     "return constraint expression for maximum peak height"
     fmt = "{factor:.7f}*{prefix:s}amplitude/max(1.e-15, {prefix:s}sigma)"
     return fmt.format(factor=model.height_factor, prefix=model.prefix)
+
 
 def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     "estimate amp, cen, sigma for a peak, create params"
@@ -62,6 +67,7 @@ def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     pars['%ssigma' % model.prefix].set(min=0.0)
     return pars
 
+
 def update_param_vals(pars, prefix, **kwargs):
     """convenience function to update parameter values
     with keyword arguments"""
@@ -70,6 +76,7 @@ def update_param_vals(pars, prefix, **kwargs):
         if pname in pars:
             pars[pname].value = val
     return pars
+
 
 COMMON_DOC = """
 
@@ -87,8 +94,10 @@ prefix: string to prepend to paramter names, needed to add two Models that
     have parameter names in common. None by default.
 """
 
+
 class ConstantModel(Model):
     __doc__ = "x -> c" + COMMON_DOC
+
     def __init__(self, *args, **kwargs):
         def constant(x, c):
             return c
@@ -99,8 +108,10 @@ class ConstantModel(Model):
         pars['%sc' % self.prefix].set(value=data.mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
+
 class ComplexConstantModel(Model):
     __doc__ = "x -> re+1j*im" + COMMON_DOC
+
     def __init__(self, *args, **kwargs):
         def constant(x, re, im):
             return re + 1j*im
@@ -112,8 +123,10 @@ class ComplexConstantModel(Model):
         pars['%sim' % self.prefix].set(value=data.imag.mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
+
 class LinearModel(Model):
     __doc__ = linear.__doc__ + COMMON_DOC if linear.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(LinearModel, self).__init__(linear, *args, **kwargs)
 
@@ -127,6 +140,7 @@ class LinearModel(Model):
 
 class QuadraticModel(Model):
     __doc__ = parabolic.__doc__ + COMMON_DOC if parabolic.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(QuadraticModel, self).__init__(parabolic, *args, **kwargs)
 
@@ -137,12 +151,15 @@ class QuadraticModel(Model):
         pars = self.make_params(a=a, b=b, c=c)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+
 ParabolicModel = QuadraticModel
+
 
 class PolynomialModel(Model):
     __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ... c7 * x**7" + COMMON_DOC
     MAX_DEGREE = 7
     DEGREE_ERR = "degree must be an integer less than %d."
+
     def __init__(self, degree, *args, **kwargs):
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
@@ -169,6 +186,7 @@ class GaussianModel(Model):
     __doc__ = gaussian.__doc__ + COMMON_DOC if gaussian.__doc__ else ""
     fwhm_factor = 2.354820
     height_factor = 1./np.sqrt(2*np.pi)
+
     def __init__(self, *args, **kwargs):
         super(GaussianModel, self).__init__(gaussian, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -184,6 +202,7 @@ class LorentzianModel(Model):
     __doc__ = lorentzian.__doc__ + COMMON_DOC if lorentzian.__doc__ else ""
     fwhm_factor = 2.0
     height_factor = 1./np.pi
+
     def __init__(self, *args, **kwargs):
         super(LorentzianModel, self).__init__(lorentzian, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -199,6 +218,7 @@ class VoigtModel(Model):
     __doc__ = voigt.__doc__ + COMMON_DOC if voigt.__doc__ else ""
     fwhm_factor = 3.60131
     height_factor = 1./np.sqrt(2*np.pi)
+
     def __init__(self, *args, **kwargs):
         super(VoigtModel, self).__init__(voigt, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -215,6 +235,7 @@ class VoigtModel(Model):
 class PseudoVoigtModel(Model):
     __doc__ = pvoigt.__doc__ + COMMON_DOC if pvoigt.__doc__ else ""
     fwhm_factor = 2.0
+
     def __init__(self, *args, **kwargs):
         super(PseudoVoigtModel, self).__init__(pvoigt, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -229,6 +250,7 @@ class PseudoVoigtModel(Model):
 
 class MoffatModel(Model):
     __doc__ = moffat.__doc__ + COMMON_DOC if moffat.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(MoffatModel, self).__init__(moffat, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -242,6 +264,7 @@ class MoffatModel(Model):
 
 class Pearson7Model(Model):
     __doc__ = pearson7.__doc__ + COMMON_DOC if pearson7.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(Pearson7Model, self).__init__(pearson7, *args, **kwargs)
         self.set_param_hint('expon', value=1.5)
@@ -254,6 +277,7 @@ class Pearson7Model(Model):
 
 class StudentsTModel(Model):
     __doc__ = students_t.__doc__ + COMMON_DOC if students_t.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(StudentsTModel, self).__init__(students_t, *args, **kwargs)
 
@@ -264,6 +288,7 @@ class StudentsTModel(Model):
 
 class BreitWignerModel(Model):
     __doc__ = breit_wigner.__doc__ + COMMON_DOC if breit_wigner.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(BreitWignerModel, self).__init__(breit_wigner, *args, **kwargs)
 
@@ -275,6 +300,7 @@ class BreitWignerModel(Model):
 
 class LognormalModel(Model):
     __doc__ = lognormal.__doc__ + COMMON_DOC if lognormal.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(LognormalModel, self).__init__(lognormal, *args, **kwargs)
 
@@ -286,6 +312,7 @@ class LognormalModel(Model):
 
 class DampedOscillatorModel(Model):
     __doc__ = damped_oscillator.__doc__ + COMMON_DOC if damped_oscillator.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(DampedOscillatorModel, self).__init__(damped_oscillator, *args, **kwargs)
 
@@ -297,6 +324,7 @@ class DampedOscillatorModel(Model):
 
 class DampedHarmonicOscillatorModel(Model):
     __doc__ = dho.__doc__ + COMMON_DOC if dho.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(DampedOscillatorModel, self).__init__(dho, *args, **kwargs)
 
@@ -306,8 +334,10 @@ class DampedHarmonicOscillatorModel(Model):
         pars['%sgamma' % self.prefix].set(value=1.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+
 class ExponentialGaussianModel(Model):
     __doc__ = expgaussian.__doc__ + COMMON_DOC if expgaussian.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(ExponentialGaussianModel, self).__init__(expgaussian, *args, **kwargs)
 
@@ -315,9 +345,11 @@ class ExponentialGaussianModel(Model):
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+
 class SkewedGaussianModel(Model):
     __doc__ = skewed_gaussian.__doc__ + COMMON_DOC if skewed_gaussian.__doc__ else ""
     fwhm_factor = 2.354820
+
     def __init__(self, *args, **kwargs):
         super(SkewedGaussianModel, self).__init__(skewed_gaussian, *args, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -326,8 +358,10 @@ class SkewedGaussianModel(Model):
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+
 class DonaichModel(Model):
     __doc__ = donaich.__doc__ + COMMON_DOC if donaich.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(DonaichModel, self).__init__(donaich, *args, **kwargs)
 
@@ -338,6 +372,7 @@ class DonaichModel(Model):
 
 class PowerLawModel(Model):
     __doc__ = powerlaw.__doc__ + COMMON_DOC if powerlaw.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(PowerLawModel, self).__init__(powerlaw, *args, **kwargs)
 
@@ -353,6 +388,7 @@ class PowerLawModel(Model):
 
 class ExponentialModel(Model):
     __doc__ = exponential.__doc__ + COMMON_DOC if exponential.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(ExponentialModel, self).__init__(exponential, *args, **kwargs)
 
@@ -367,6 +403,7 @@ class ExponentialModel(Model):
 
 class StepModel(Model):
     __doc__ = step.__doc__ + COMMON_DOC if step.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(StepModel, self).__init__(step, *args, **kwargs)
 
@@ -383,6 +420,7 @@ class StepModel(Model):
 
 class RectangleModel(Model):
     __doc__ = rectangle.__doc__ + COMMON_DOC if rectangle.__doc__ else ""
+
     def __init__(self, *args, **kwargs):
         super(RectangleModel, self).__init__(rectangle, *args, **kwargs)
 
@@ -391,6 +429,7 @@ class RectangleModel(Model):
         self.set_param_hint('midpoint',
                             expr='(%scenter1+%scenter2)/2.0' % (self.prefix,
                                                                 self.prefix))
+
     def guess(self, data, x=None, **kwargs):
         if x is None:
             return
@@ -424,6 +463,7 @@ prefix: NOT supported for ExpressionModel
     idvar_missing = "No independent variable found in\n %s"
     idvar_notfound = "Cannot find independent variables '%s' in\n %s"
     no_prefix = "ExpressionModel does not support `prefix` argument"
+
     def __init__(self, expr, independent_vars=None, init_script=None,
                  *args, **kwargs):
 

@@ -167,7 +167,6 @@ class Interpreter:
                 exc = RuntimeError
         raise exc(self.error_msg)
 
-
     # main entry point for Ast node evaluation
     #  parse:  text of statements -> ast
     #  run:    ast -> result

@@ -28,6 +28,7 @@ def alphanumeric_sort(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
 
+
 def getfloat_attr(obj, attr, fmt='%.3f'):
     "format an attribute of an object for printing"
     val = getattr(obj, attr, None)
@@ -39,6 +40,7 @@ def getfloat_attr(obj, attr, fmt='%.3f'):
         return fmt % val
     else:
         return repr(val)
+
 
 def gformat(val, length=11):
     """format a number with '%g'-like format, except that
@@ -67,7 +69,9 @@ def gformat(val, length=11):
                 out += pad*(length-len(out))
     return out
 
+
 CORREL_HEAD = '[[Correlations]] (unreported correlations are < % .3f)'
+
 
 def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
                sort_pars=False):
@@ -197,6 +201,7 @@ def ci_report(ci, with_offset=True, ndigits=5):
     maxlen = max([len(i) for i in ci])
     buff = []
     add = buff.append
+
     def convp(x):
         if abs(x[0]) < 1.e-2:
             return "_BEST_"
