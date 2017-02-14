@@ -104,7 +104,7 @@ class Model(object):
         self.independent_vars = independent_vars
         self._func_allargs = []
         self._func_haskeywords = False
-        if not missing in self._valid_missing:
+        if missing not in self._valid_missing:
             raise ValueError(self._invalid_missing)
         self.missing = missing
         self.opts = kws
