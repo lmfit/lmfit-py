@@ -518,7 +518,7 @@ class Model(object):
                    'Parameters or keyword arguments to fit.\n')
             missing = [p for p in self.param_names if p not in params.keys()]
             blank = [name for name, p in params.items()
-                                    if (p.value is None and p.expr is None)]
+                                    if p.value is None and p.expr is None]
             msg += 'Missing parameters: %s\n' % str(missing)
             msg += 'Non initialized parameters: %s' % str(blank)
             raise ValueError(msg)

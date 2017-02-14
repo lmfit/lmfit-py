@@ -1035,7 +1035,7 @@ class Minimizer(object):
             if p0.shape == tpos.shape:
                 pass
             # trying to initialise with a previous chain
-            elif (tpos.shape[0::2] == (nwalkers, self.nvarys)):
+            elif tpos.shape[0::2] == (nwalkers, self.nvarys):
                 tpos = tpos[:, -1, :]
             # initialising with a PTsampler chain.
             elif ntemps > 1 and tpos.ndim == 4:
