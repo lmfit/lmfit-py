@@ -1058,7 +1058,11 @@ class Minimizer(object):
         chain = self.sampler.chain[..., burn::thin, :]
         lnprobability = self.sampler.lnprobability[:, burn::thin]
 
-        flatchain = chain.reshape((-1, self.nvarys))
+        # take the zero'th PTsampler temperature for the parameter estimators
+        if ntemps > 1:
+            flatchain = chain[0,...].reshape((-1, self.nvarys))
+        else:
+            flatchain = chain.reshape((-1, self.nvarys))
 
         quantiles = np.percentile(flatchain, [15.87, 50, 84.13], axis=0)
 
