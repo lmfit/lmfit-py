@@ -182,7 +182,7 @@ def reduce_cauchylogpdf(r):
 
 
 class MinimizerResult(object):
-    """
+    r"""
     A class that holds the results of a minimization.
 
     This is a plain container (with no methods of its own) that
@@ -734,7 +734,7 @@ class Minimizer(object):
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
               float_behavior='posterior', is_weighted=True, seed=None):
-        """
+        r"""
         Bayesian sampling of the posterior distribution using the `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
