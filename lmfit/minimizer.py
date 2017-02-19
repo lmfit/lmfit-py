@@ -731,7 +731,8 @@ class Minimizer(object):
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              float_behavior='posterior', is_weighted=True, seed=None):
+              float_behavior='posterior', is_weighted=True, seed=None,
+              betas=None):
         """
         Bayesian sampling of the posterior distribution using the `emcee`.
 
@@ -823,6 +824,12 @@ class Minimizer(object):
             If `seed` is already a `np.random.RandomState` instance, then that
             `np.random.RandomState` instance is used.
             Specify `seed` for repeatable minimizations.
+        betas : np.ndarray, optional
+            Array giving the inverse temperatures, :math:`\\beta=1/T`,
+            used in the ladder.  The default is chosen so that a Gaussian
+            posterior in the given number of dimensions will have a 0.25
+            tswap acceptance rate.
+
 
         Returns
         -------
@@ -991,6 +998,7 @@ class Minimizer(object):
                          'nan_policy': self.nan_policy}
 
         if ntemps > 1:
+            sampler_kwargs['betas'] = betas
             # the prior and likelihood function args and kwargs are the same
             sampler_kwargs['loglargs'] = lnprob_args
             sampler_kwargs['loglkwargs'] = lnprob_kwargs
@@ -1576,10 +1584,14 @@ def _lnprior(theta, bounds):
     """
     if (np.any(theta > bounds[:, 1])
         or np.any(theta < bounds[:, 0])):
-        return -np.inf
+        logp = -np.inf
     else:
-        return 0
+        logp = -np.sum(np.log(bounds.dot([ -1, 1 ])))
 
+        if not np.isfinite(logp):
+            logp = 0
+
+    return logp
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
             userkws=None, float_behavior='posterior', is_weighted=True,

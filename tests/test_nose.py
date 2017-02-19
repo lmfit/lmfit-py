@@ -493,6 +493,21 @@ class CommonMinimizerTest(unittest.TestCase):
         check_paras(out.params, self.p_true, sig=3)
 
     @decorators.slow
+    def test_emcee_PT_betas(self):
+        # test emcee with parallel tempering
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        self.mini.userfcn = residual_for_multiprocessing
+        out = self.mini.emcee(ntemps=4, nwalkers=50, steps=200,
+                              burn=100, thin=10, workers=2,
+                              betas=np.exp(np.linspace(0.0, -np.log(1e6), 4) ) )
+
+        check_paras(out.params, self.p_true, sig=3)
+
+
+    @decorators.slow
     def test_emcee_multiprocessing(self):
         # test multiprocessing runs
         if not HAS_EMCEE:
