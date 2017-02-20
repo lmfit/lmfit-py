@@ -1344,16 +1344,18 @@ class Minimizer(object):
         global minimum of a function. The following parameters are passed to
         :scipydoc:`optimize.brute` and cannot be changed:
 
-        +-------------------+-------+-----------------------------------------------------------------------+
-        | :meth:`brute` arg | Value | Description                                                           |
-        +===================+=======+=======================================================================+
-        +-------------------+-------+-----------------------------------------------------------------------+
-        |   full_output     | 1     | Return the evaluation grid and the objective function’s values on it. |
-        +-------------------+-------+-----------------------------------------------------------------------+
-        |   finish          | None  | No “polishing” function is to be used after the grid search.          |
-        +-------------------+-------+-----------------------------------------------------------------------+
-        |   disp            | False | Do not print convergence messages (when finish is not None).          |
-        +-------------------+-------+-----------------------------------------------------------------------+
+        +-------------------+-------+----------------------------------------+
+        | :meth:`brute` arg | Value | Description                            |
+        +===================+=======+========================================+
+        |   full_output     | 1     | Return the evaluation grid and         |
+        |                   |       | the objective function's values on it. |
+        +-------------------+-------+----------------------------------------+
+        |   finish          | None  | No "polishing" function is to be used  |
+        |                   |       | after the grid search.                 |
+        +-------------------+-------+----------------------------------------+
+        |   disp            | False | Do not print convergence messages      |
+        |                   |       | (when finish is not None).             |
+        +-------------------+-------+----------------------------------------+
 
         It assumes that the input Parameters have been initialized, and a
         function to minimize has been properly set up.
