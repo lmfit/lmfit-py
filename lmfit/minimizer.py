@@ -1056,7 +1056,7 @@ class Minimizer(object):
 
         # discard the burn samples and thin
         chain = self.sampler.chain[..., burn::thin, :]
-        lnprobability = self.sampler.lnprobability[:, burn::thin]
+        lnprobability = self.sampler.lnprobability[..., burn::thin]
 
         # take the zero'th PTsampler temperature for the parameter estimators
         if ntemps > 1:
