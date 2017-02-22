@@ -617,7 +617,38 @@ class CommonMinimizerTest(unittest.TestCase):
         assert_(np.isfinite(out.params['amp'].correl['period']))
 
         # the lnprob array should be the same as the chain size
-        assert_(np.size(out.chain)//4 == np.size(out.lnprob))
+        assert_(np.size(out.chain)//out.nvarys == np.size(out.lnprob))
+
+        # test chain output shapes
+        assert_(out.lnprob.shape == (10, (20-5+1)/2) )
+        assert_(out.chain.shape == (10, (20-5+1)/2, out.nvarys) )
+        assert_(out.flatchain.shape == (10*(20-5+1)/2, out.nvarys))
+
+    def test_emcee_PT_output(self):
+        # test mcmc output when using parallel tempering
+        if not HAS_EMCEE:
+            return True
+        try:
+            from pandas import DataFrame
+        except ImportError:
+            return True
+        out = self.mini.emcee(ntemps=6, nwalkers=10, steps=20, burn=5, thin=2)
+        assert_(isinstance(out, MinimizerResult))
+        assert_(isinstance(out.flatchain, DataFrame))
+
+        # check that we can access the chains via parameter name
+        assert_(out.flatchain['amp'].shape[0] == 80)
+        assert_(out.errorbars is True)
+        assert_(np.isfinite(out.params['amp'].correl['period']))
+
+        # the lnprob array should be the same as the chain size
+        assert_(np.size(out.chain)//out.nvarys == np.size(out.lnprob))
+
+        # test chain output shapes
+        assert_(out.lnprob.shape == (6, 10, (20-5+1)/2) )
+        assert_(out.chain.shape == (6, 10, (20-5+1)/2, out.nvarys) )
+        # Only the 0th temperature is returned
+        assert_(out.flatchain.shape == (10*(20-5+1)/2, out.nvarys))
 
     @decorators.slow
     def test_emcee_float(self):
