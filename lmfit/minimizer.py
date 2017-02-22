@@ -251,8 +251,12 @@ class MinimizerResult(object):
         """
         if hasattr(self, 'chain'):
             if HAS_PANDAS:
-                return pd.DataFrame(self.chain.reshape((-1, self.nvarys)),
-                                    columns=self.var_names)
+                if len(self.chain.shape) == 4:
+                    return pd.DataFrame(self.chain[0,...].reshape((-1, self.nvarys)),
+                                        columns=self.var_names)
+                elif len(self.chain.shape) == 3:
+                    return pd.DataFrame(self.chain.reshape((-1, self.nvarys)),
+                                        columns=self.var_names)
             else:
                 raise NotImplementedError('Please install Pandas to see the '
                                           'flattened chain')
