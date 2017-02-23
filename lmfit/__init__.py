@@ -39,7 +39,6 @@ Authors: Matthew Newville, The University of Chicago
 
 """
 import sys
-import warnings
 
 from .confidence import conf_interval, conf_interval2d
 from .minimizer import Minimizer, MinimizerException, minimize
@@ -58,7 +57,3 @@ from ._version import get_versions
 
 __version__ = get_versions()['version']
 del get_versions
-
-# PY26 Depreciation Warning
-if sys.version_info[:2] == (2, 6):
-    warnings.warn('Support for Python 2.6.x was dropped with lmfit 0.9.5')
