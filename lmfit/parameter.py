@@ -1,30 +1,25 @@
-"""
-Parameter class
-"""
+"""Parameter class."""
 from __future__ import division
-import json
-from copy import deepcopy
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
 
-from numpy import array, arcsin, cos, sin, sqrt, inf, nan, isfinite
+from collections import OrderedDict
+from copy import deepcopy
+import json
+
+from numpy import arcsin, array, cos, inf, isfinite, nan, sin, sqrt
+
 from . import uncertainties
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name
 
 
 def check_ast_errors(expr_eval):
-    """check for errors derived from asteval"""
+    """Check for errors derived from asteval."""
     if len(expr_eval.error) > 0:
         expr_eval.raise_exception(None)
 
 
 def isclose(x, y, rtol=1e-5, atol=1e-8):
-    """
-    The truth whether two numbers are the same, within an absolute and
-    relative tolerance.
+    """Check whether two numbers are the same within a tolerance.
 
     i.e., abs(`x` - `y`) <= (`atol` + `rtol` * absolute(`y`))
 
@@ -41,8 +36,10 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
     -------
     y : bool
         Are `x` and `x` are equal within tolerance?
+
     """
     def within_tol(x, y, atol, rtol):
+        """TODO: function docstring."""
         return abs(x - y) <= atol + rtol * abs(y)
 
     xfin = isfinite(x)
@@ -58,8 +55,7 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
 
 
 class Parameters(OrderedDict):
-    """
-    A dictionary of all the Parameters required to specify a fit model.
+    """A dictionary of all the Parameters required to specify a fit model.
 
     All keys must be strings, and valid Python symbol names, and all values
     must be Parameters.
@@ -71,8 +67,11 @@ class Parameters(OrderedDict):
     add_many()
     dumps() / dump()
     loads() / load()
+
     """
+
     def __init__(self, asteval=None, *args, **kwds):
+        """TODO: add public method docstring."""
         super(Parameters, self).__init__(self)
         self._asteval = asteval
 
@@ -81,23 +80,23 @@ class Parameters(OrderedDict):
         self.update(*args, **kwds)
 
     def copy(self):
-        """Parameters.copy() should always be a deepcopy"""
+        """Parameters.copy() should always be a deepcopy."""
         return self.__deepcopy__(None)
 
     def __copy__(self, memo):
-        """Parameters.copy() should always be a deepcopy"""
+        """Parameters.copy() should always be a deepcopy."""
         self.__deepcopy__(memo)
 
     def __deepcopy__(self, memo):
-        """Parameters deepcopy needs to make sure that
-        asteval is available and that all individula
-        parameter objects are copied"""
+        """Parameters deepcopy needs to make sure that asteval is available and
+        that all individula parameter objects are copied.
+        """
         _pars = Parameters(asteval=None)
 
         # find the symbols that were added by users, not during construction
         sym_unique = self._asteval.user_defined_symbols()
         unique_symbols = {key: deepcopy(self._asteval.symtable[key], memo)
-                              for key in sym_unique}
+                          for key in sym_unique}
         _pars._asteval.symtable.update(unique_symbols)
 
         # we're just about to add a lot of Parameter objects to the newly
@@ -121,6 +120,7 @@ class Parameters(OrderedDict):
         return _pars
 
     def __setitem__(self, key, par):
+        """TODO: add magic method docstring."""
         if key not in self:
             if not valid_symbol_name(key):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
@@ -132,9 +132,7 @@ class Parameters(OrderedDict):
         self._asteval.symtable[key] = par.value
 
     def __add__(self, other):
-        """
-        Add Parameters objects
-        """
+        """Add Parameters objects."""
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         out = deepcopy(self)
@@ -143,9 +141,7 @@ class Parameters(OrderedDict):
         return out
 
     def __iadd__(self, other):
-        """
-        Add/assign Parameters objects
-        """
+        """Add/assign Parameters objects."""
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         params = other.values()
@@ -153,15 +149,11 @@ class Parameters(OrderedDict):
         return self
 
     def __array__(self):
-        """
-        Parameters to array
-        """
+        """Parameters to array."""
         return array([float(k) for k in self.values()])
 
     def __reduce__(self):
-        """
-        Required to pickle a Parameters instance.
-        """
+        """Required to pickle a Parameters instance."""
         # make a list of all the parameters
         params = [self[k] for k in self]
 
@@ -174,8 +166,7 @@ class Parameters(OrderedDict):
                                     'params': params}
 
     def __setstate__(self, state):
-        """
-        Unpickle a Parameters instance.
+        """Unpickle a Parameters instance.
 
         Parameters
         ----------
@@ -183,6 +174,7 @@ class Parameters(OrderedDict):
             state['unique_symbols'] is a dictionary containing symbols that
             need to be injected into _asteval.symtable
             state['params'] is a list of Parameter instances to be added
+
         """
         # first update the Interpreter symbol table. This needs to be done
         # first because Parameter's early in the list may depend on later
@@ -198,20 +190,19 @@ class Parameters(OrderedDict):
         self.add_many(*state['params'])
 
     def update_constraints(self):
-        """
-        Update all constrained parameters, checking that dependencies are
-        evaluated as needed.
-        """
+        """Update all constrained parameters, checking that dependencies are
+        evaluated as needed."""
         requires_update = set(name for name, par in self.items()
                               if par._expr is not None)
         updated_tracker = set(requires_update)
 
         def _update_param(name):
-            """
-            Update a parameter value, including setting bounds.
-            For a constrained parameter (one with an expr defined),
-            this first updates (recursively) all parameters on which
-            the parameter depends (using the 'deps' field).
+            """Update a parameter value, including setting bounds.
+
+            For a constrained parameter (one with an expr defined), this
+            first updates (recursively) all parameters on which the
+            parameter depends (using the 'deps' field).
+
             """
             par = self.__getitem__(name)
             if par._expr_eval is None:
@@ -226,6 +217,7 @@ class Parameters(OrderedDict):
             _update_param(name)
 
     def pretty_repr(self, oneline=False):
+        """TODO: add method docstring."""
         if oneline:
             return super(Parameters, self).__repr__()
         s = "Parameters({\n"
@@ -253,6 +245,7 @@ class Parameters(OrderedDict):
         columns : list of strings
             List of columns names to print. All values must be valid
             :class:`Parameter` attributes.
+
         """
         if oneline:
             print(self.pretty_repr(oneline=oneline))
@@ -277,13 +270,12 @@ class Parameters(OrderedDict):
             elif 'brute_step' in columns and pvalues['brute_step'] is not None:
                 pvalues['brute_step'] = (numstyle % '').format(
                     pvalues['brute_step'], n=colwidth, p=precision, f=fmt)
-            print(line.format(name_len=name_len, n=colwidth, p=precision, f=fmt,
-                              **pvalues))
+            print(line.format(name_len=name_len, n=colwidth, p=precision,
+                              f=fmt, **pvalues))
 
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None,
             brute_step=None):
-        """
-        Convenience function for adding a Parameter:
+        """Convenience function for adding a Parameter.
 
         Example
         -------
@@ -292,6 +284,7 @@ class Parameters(OrderedDict):
 
         is equivalent to:
         p[name] = Parameter(name=name, value=XX, ....
+
         """
         if isinstance(name, Parameter):
             self.__setitem__(name.name, name)
@@ -301,8 +294,7 @@ class Parameters(OrderedDict):
                                              brute_step=brute_step))
 
     def add_many(self, *parlist):
-        """
-        Convenience function for adding a list of Parameters.
+        """Convenience function for adding a list of Parameters.
 
         Parameters
         ----------
@@ -326,6 +318,7 @@ class Parameters(OrderedDict):
         f = Parameter('name5', val5)
         g = Parameter('name6', val6)
         p.add_many(f, g)
+
         """
         for para in parlist:
             if isinstance(para, Parameter):
@@ -335,18 +328,20 @@ class Parameters(OrderedDict):
                 self.__setitem__(param.name, param)
 
     def valuesdict(self):
-        """
+        """Return an ordered dictionary of parameter values.
+
         Returns
         -------
         An ordered dictionary of name:value pairs for each Parameter.
         This is distinct from the Parameters itself, as it has values of
         the Parameter values, not the full Parameter object.
+
         """
 
         return OrderedDict(((p.name, p.value) for p in self.values()))
 
     def dumps(self, **kws):
-        """represent Parameters as a JSON string.
+        """Represent Parameters as a JSON string.
 
         all keyword arguments are passed to `json.dumps()`
 
@@ -357,12 +352,13 @@ class Parameters(OrderedDict):
         See Also
         --------
         dump(), loads(), load(), json.dumps()
+
         """
         out = [p.__getstate__() for p in self.values()]
         return json.dumps(out, **kws)
 
     def loads(self, s, **kws):
-        """load Parameters from a JSON string.
+        """Load Parameters from a JSON string.
 
         current Parameters will be cleared before loading.
 
@@ -384,8 +380,8 @@ class Parameters(OrderedDict):
             self.__setitem__(parstate[0], _par)
 
     def dump(self, fp, **kws):
-        """write JSON representation of Parameters to a file
-        or file-like object (must have a `write()` method).
+        """Write JSON representation of Parameters to a file or file-like
+        object (must have a `write()` method).
 
         Arguments
         ---------
@@ -400,12 +396,13 @@ class Parameters(OrderedDict):
         See Also
         --------
         dump(), load(), json.dump()
+
         """
         return fp.write(self.dumps(**kws))
 
     def load(self, fp, **kws):
-        """load JSON representation of Parameters from a file
-        or file-like object (must have a `read()` method).
+        """Load JSON representation of Parameters from a file or file-like
+        object (must have a `read()` method).
 
         Arguments
         ---------
@@ -420,13 +417,14 @@ class Parameters(OrderedDict):
         See Also
         --------
         dump(), loads(), json.load()
+
         """
         return self.loads(fp.read(), **kws)
 
 
 class Parameter(object):
-    """
-    A Parameter is an object used to define a Fit Model.
+    """A Parameter is an object used to define a Fit Model.
+
     Attributes
     ----------
     name : str
@@ -446,7 +444,9 @@ class Parameter(object):
     correl : dict
         Specifies correlation with the other fitted Parameter after a fit.
         Of the form `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
+
     """
+
     def __init__(self, name=None, value=None, vary=True,
                  min=-inf, max=inf, expr=None, brute_step=None):
         """
@@ -487,8 +487,7 @@ class Parameter(object):
 
     def set(self, value=None, vary=None, min=None, max=None, expr=None,
             brute_step=None):
-        """
-        Set or update Parameter attributes.
+        """Set or update Parameter attributes.
 
         Parameters
         ----------
@@ -506,6 +505,7 @@ class Parameter(object):
         brute_step : float, optional
             Step size for grid points in brute force method. To remove the step
             size you must supply 0 ("zero").
+
         """
 
         if value is not None:
@@ -514,7 +514,7 @@ class Parameter(object):
 
         if vary is not None:
             self.vary = vary
-            if vary == True:
+            if vary:
                 self.__set_expression('')
 
         if min is not None:
@@ -533,7 +533,7 @@ class Parameter(object):
                 self.brute_step = brute_step
 
     def _init_bounds(self):
-        """make sure initial bounds are self-consistent"""
+        """Make sure initial bounds are self-consistent."""
         # _val is None means - infinity.
         if self.max is None:
             self.max = inf
@@ -554,13 +554,13 @@ class Parameter(object):
         self.setup_bounds()
 
     def __getstate__(self):
-        """get state for pickle"""
+        """Get state for pickle."""
         return (self.name, self.value, self.vary, self.expr, self.min,
                 self.max, self.brute_step, self.stderr, self.correl,
                 self.init_value)
 
     def __setstate__(self, state):
-        """set state for pickle"""
+        """Set state for pickle."""
         (self.name, self.value, self.vary, self.expr, self.min, self.max,
          self.brute_step, self.stderr, self.correl, self.init_value) = state
         self._expr_ast = None
@@ -570,6 +570,7 @@ class Parameter(object):
         self._init_bounds()
 
     def __repr__(self):
+        """TODO: add magic method docstring."""
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)
@@ -587,9 +588,8 @@ class Parameter(object):
         return "<Parameter %s>" % ', '.join(s)
 
     def setup_bounds(self):
-        """
-        Set up Minuit-style internal/external parameter transformation
-        of min/max bounds.
+        """Set up Minuit-style internal/external parameter transformation of
+        min/max bounds.
 
         As a side-effect, this also defines the self.from_internal method
         used to re-calculate self.value from the internal value, applying
@@ -604,6 +604,7 @@ class Parameter(object):
         The internal value for parameter from self.value (which holds
         the external, user-expected value).   This internal value should
         actually be used in a fit.
+
         """
         if self.min is None:
             self.min = -inf
@@ -625,11 +626,13 @@ class Parameter(object):
         return _val
 
     def scale_gradient(self, val):
-        """
+        """Return scaling factor for gradient.
+
         Returns
         -------
         scaling factor for gradient the according to Minuit-style
         transformation.
+
         """
         if self.min == -inf and self.max == inf:
             return 1.0
@@ -641,7 +644,7 @@ class Parameter(object):
             return cos(val) * (self.max - self.min) / 2.0
 
     def _getval(self):
-        """get value, with bounds applied"""
+        """Get value, with bounds applied."""
 
         # Note assignment to self._val has been changed to self.value
         # The self.value property setter makes sure that the
@@ -649,8 +652,8 @@ class Parameter(object):
         # If you just assign to self._val then
         # _expr_eval.symtable[self.name]
         # becomes stale if parameter.expr is not None.
-        if (isinstance(self._val, uncertainties.Variable)
-            and self._val is not nan):
+        if (isinstance(self._val, uncertainties.Variable) and
+                self._val is not nan):
 
             try:
                 self.value = self._val.nominal_value
@@ -677,19 +680,17 @@ class Parameter(object):
         return self._val
 
     def set_expr_eval(self, evaluator):
-        """set expression evaluator instance"""
+        """Set expression evaluator instance."""
         self._expr_eval = evaluator
 
     @property
     def value(self):
-        """The numerical value of the Parameter, with bounds applied"""
+        """The numerical value of the Parameter, with bounds applied."""
         return self._getval()
 
     @value.setter
     def value(self, val):
-        """
-        Set the numerical Parameter value.
-        """
+        """Set the numerical Parameter value."""
         self._val = val
         if not hasattr(self, '_expr_eval'):
             self._expr_eval = None
@@ -698,16 +699,17 @@ class Parameter(object):
 
     @property
     def expr(self):
-        """
-        The mathematical expression used to constrain the value during the fit.
-        """
+        """The mathematical expression used to constrain the value during the
+        fit."""
         return self._expr
 
     @expr.setter
     def expr(self, val):
-        """
-        The mathematical expression used to constrain the value during the fit.
+        """The mathematical expression used to constrain the value during the
+        fit.
+
         To remove a constraint you must supply an empty string.
+
         """
         self.__set_expression(val)
 
@@ -727,39 +729,39 @@ class Parameter(object):
             self._expr_deps = get_ast_names(self._expr_ast)
 
     def __array__(self):
-        """array"""
+        """array."""
         return array(float(self._getval()))
 
     def __str__(self):
-        """string"""
+        """string."""
         return self.__repr__()
 
     def __abs__(self):
-        """abs"""
+        """abs."""
         return abs(self._getval())
 
     def __neg__(self):
-        """neg"""
+        """neg."""
         return -self._getval()
 
     def __pos__(self):
-        """positive"""
+        """positive."""
         return +self._getval()
 
     def __nonzero__(self):
-        """not zero"""
+        """not zero."""
         return self._getval() != 0
 
     def __int__(self):
-        """int"""
+        """int."""
         return int(self._getval())
 
     def __float__(self):
-        """float"""
+        """float."""
         return float(self._getval())
 
     def __trunc__(self):
-        """trunc"""
+        """trunc."""
         return self._getval().__trunc__()
 
     def __add__(self, other):
@@ -780,7 +782,7 @@ class Parameter(object):
         return self._getval() // other
 
     def __divmod__(self, other):
-        """divmod"""
+        """divmod."""
         return divmod(self._getval(), other)
 
     def __mod__(self, other):
@@ -854,6 +856,6 @@ class Parameter(object):
 
 
 def isParameter(x):
-    """Test for Parameter-ness"""
+    """Test for Parameter-ness."""
     return (isinstance(x, Parameter) or
             x.__class__.__name__ == 'Parameter')

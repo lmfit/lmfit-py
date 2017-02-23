@@ -2,11 +2,13 @@
 differential_evolution: The differential evolution global optimization algorithm
 Added by Andrew Nelson 2014
 """
-from __future__ import division, print_function, absolute_import
+from __future__ import absolute_import, division, print_function
+
+import numbers
+
 import numpy as np
 from scipy.optimize import minimize
 from scipy.optimize.optimize import _status_message
-import numbers
 
 __all__ = ['differential_evolution']
 

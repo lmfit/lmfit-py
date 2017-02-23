@@ -1,10 +1,11 @@
 import warnings
+
 import numpy as np
 
-from ..model import Model
-from ..models import ExponentialModel  # arbitrary default
 from ..asteval import Interpreter
 from ..astutils import NameFinder
+from ..model import Model
+from ..models import ExponentialModel  # arbitrary default
 from ..parameter import check_ast_errors
 
 
