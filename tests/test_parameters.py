@@ -138,6 +138,19 @@ class TestParameters(unittest.TestCase):
         pkl = pickle.dumps(p)
         q = pickle.loads(pkl)
 
+    def test_dumps_loads_parameters(self):
+        # test that we can dumps() and then loads() a Parameters
+        pars = Parameters()
+        pars.add('x', value=1.0)
+        pars.add('y', value=2.0)
+        pars['x'].expr = 'y / 2.0'
+
+        dumps = pars.dumps()
+
+        newpars = Parameters().loads(dumps)
+        newpars['y'].value = 100.0
+        assert_(isclose(newpars['x'].value, 50.0))
+
     def test_isclose(self):
         assert_(isclose(1., 1+1e-5, atol=1e-4, rtol=0))
         assert_(not isclose(1., 1+1e-5, atol=1e-6, rtol=0))

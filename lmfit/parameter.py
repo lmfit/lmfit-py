@@ -354,8 +354,14 @@ class Parameters(OrderedDict):
         dump(), loads(), load(), json.dumps()
 
         """
-        out = [p.__getstate__() for p in self.values()]
-        return json.dumps(out, **kws)
+
+        params = [p.__getstate__() for p in self.values()]
+        sym_unique = self._asteval.user_defined_symbols()
+        unique_symbols = {key: deepcopy(self._asteval.symtable[key])
+                          for key in sym_unique}
+        return json.dumps({'unique_symbols': unique_symbols,
+                           'params': params}, **kws)
+
 
     def loads(self, s, **kws):
         """Load Parameters from a JSON string.
@@ -374,10 +380,16 @@ class Parameters(OrderedDict):
 
         """
         self.clear()
-        for parstate in json.loads(s, **kws):
+
+        tmp = json.loads(s, **kws)
+        state = {'unique_symbols': tmp['unique_symbols'],
+                 'params': []}
+        for parstate in tmp['params']:
             _par = Parameter()
             _par.__setstate__(parstate)
-            self.__setitem__(parstate[0], _par)
+            state['params'].append(_par)
+        self.__setstate__(state)
+        return self
 
     def dump(self, fp, **kws):
         """Write JSON representation of Parameters to a file or file-like
