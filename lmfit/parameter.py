@@ -570,12 +570,13 @@ class Parameter(object):
         """Get state for pickle."""
         return (self.name, self.value, self.vary, self.expr, self.min,
                 self.max, self.brute_step, self.stderr, self.correl,
-                self.init_value)
+                self.init_value, self.user_data)
 
     def __setstate__(self, state):
         """Set state for pickle."""
         (self.name, self.value, self.vary, self.expr, self.min, self.max,
-         self.brute_step, self.stderr, self.correl, self.init_value) = state
+         self.brute_step, self.stderr, self.correl, self.init_value,
+         self.user_data) = state
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
