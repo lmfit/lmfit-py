@@ -113,7 +113,7 @@ class Parameters(OrderedDict):
                 param.correl = par.correl
                 param.init_value = par.init_value
                 param.expr = par.expr
-                param.user_value = par.user_value
+                param.user_data = par.user_data
                 parameter_list.append(param)
 
         _pars.add_many(*parameter_list)
@@ -482,7 +482,7 @@ class Parameter(object):
         """
         self.name = name
         self._val = value
-        self.user_value = value
+        self.user_data = None
         self.init_value = value
         self.min = min
         self.max = max
