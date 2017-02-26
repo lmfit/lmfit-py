@@ -113,6 +113,7 @@ class Parameters(OrderedDict):
                 param.correl = par.correl
                 param.init_value = par.init_value
                 param.expr = par.expr
+                param.user_data = par.user_data
                 parameter_list.append(param)
 
         _pars.add_many(*parameter_list)
@@ -481,7 +482,7 @@ class Parameter(object):
         """
         self.name = name
         self._val = value
-        self.user_value = value
+        self.user_data = None
         self.init_value = value
         self.min = min
         self.max = max
@@ -569,12 +570,13 @@ class Parameter(object):
         """Get state for pickle."""
         return (self.name, self.value, self.vary, self.expr, self.min,
                 self.max, self.brute_step, self.stderr, self.correl,
-                self.init_value)
+                self.init_value, self.user_data)
 
     def __setstate__(self, state):
         """Set state for pickle."""
         (self.name, self.value, self.vary, self.expr, self.min, self.max,
-         self.brute_step, self.stderr, self.correl, self.init_value) = state
+         self.brute_step, self.stderr, self.correl, self.init_value,
+         self.user_data) = state
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
