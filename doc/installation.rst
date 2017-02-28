@@ -13,7 +13,7 @@ Prerequisites
 The lmfit package requires Python, Numpy, and Scipy.
 
 Lmfit works with Python 2.7, 3.3, 3.4, and 3.5. Support for Python 2.6
-ended with lmfit version 0.9.4.  Scipy version 0.14 or higher is required,
+ended with lmfit version 0.9.4.  Scipy version 0.15 or higher is required,
 with 0.17 or higher recommended to be able to use the latest optimization
 features from scipy.  Numpy version 1.5 or higher is required.
 

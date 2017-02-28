@@ -1,7 +1,19 @@
 #!/usr/bin/env python
 # from distutils.core import setup
+from __future__ import print_function
+
+import sys
+
 from setuptools import setup
 import versioneer
+
+# Minimal Python version sanity check
+# taken from the Jupyter Notebook setup.py -- Modified BSD License
+v = sys.version_info
+if v[:2] < (2, 7) or (v[0] >= 3 and v[:2] < (3, 3)):
+    error = "ERROR: lmfit requires Python version 2.7 or 3.3 or above."
+    print(error, file=sys.stderr)
+    sys.exit(1)
 
 long_desc = """A library for least-squares minimization and data fitting in
 Python.  Built on top of scipy.optimize, lmfit provides a Parameter object
