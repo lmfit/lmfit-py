@@ -138,6 +138,18 @@ class TestParameters(unittest.TestCase):
         pkl = pickle.dumps(p)
         q = pickle.loads(pkl)
 
+
+    def test_set_symtable(self):
+        # test that we use Parameter.set(value=XXX) and have
+        # that new value be used in constraint expressions
+        pars = Parameters()
+        pars.add('x', value=1.0)
+        pars.add('y', expr='x + 1')
+
+        assert_(isclose(pars['y'].value, 2.0))
+        pars['x'].set(value=3.0)
+        assert_(isclose(pars['y'].value, 4.0))
+
     def test_dumps_loads_parameters(self):
         # test that we can dumps() and then loads() a Parameters
         pars = Parameters()
