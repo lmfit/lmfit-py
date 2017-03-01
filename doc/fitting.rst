@@ -2,6 +2,8 @@
 
 .. module:: lmfit.minimizer
 
+
+
 =======================================
 Performing Fits, Analyzing Outputs
 =======================================
@@ -10,6 +12,7 @@ As shown in the previous chapter, a simple fit can be performed with the
 :func:`minimize` function.  For more sophisticated modeling, the
 :class:`Minimizer` class can be used to gain a bit more control, especially
 when using complicated constraints or comparing results from related fits.
+
 
 
 The :func:`minimize` function
@@ -297,7 +300,7 @@ These are calculated as:
 
    \begin{eqnarray*}
      {\rm aic} &=&  N \ln(\chi^2/N) + 2 N_{\rm varys} \\
-     {\rm bic} &=&  N \ln(\chi^2/N) + \ln(N) *N_{\rm varys} \\
+     {\rm bic} &=&  N \ln(\chi^2/N) + \ln(N) N_{\rm varys} \\
     \end{eqnarray*}
 
 
