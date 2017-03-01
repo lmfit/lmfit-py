@@ -53,7 +53,6 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
     else:
         return False
 
-
 class Parameters(OrderedDict):
     """A dictionary of all the Parameters required to specify a fit model.
 
@@ -436,32 +435,28 @@ class Parameters(OrderedDict):
 
 
 class Parameter(object):
-    """A Parameter is an object used to define a Fit Model.
 
-    Attributes
-    ----------
-    name : str
-        Parameter name.
-    value : float
-        The numerical value of the Parameter.
-    vary : bool
-        Whether the Parameter is fixed during a fit.
-    min : float
-        Lower bound for value (np.-inf means no lower bound).
-    max : float
-        Upper bound for value (np.inf means no upper bound).
-    expr : str
-        An expression specifying constraints for the parameter.
-    stderr : float
-        The estimated standard error for the best-fit value.
-    correl : dict
-        Specifies correlation with the other fitted Parameter after a fit.
-        Of the form `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
+    """A Parameter is an object used to define a parameter used in a fit or
+    model. It is a central component of lmfit, and all minimization and
+    modelling methods use Parameter objects.
+
+    A Parameter has a `name` attribute, and a floating point `value`.  It
+    also has a `vary` attribute that describes whether the value should be
+    varied during the minimization.  Finite bounds can be placed of the
+    Parameters value by setting its `min` and/or `max` attributes.  It can
+    also have its value determined by a mathematical expression of other
+    Parameter values, by setting the `expr` attrribute.  Addition
+    attributes include `brute_step` used as the step size to use in a
+    brute-force minimization, and `user_data` reserved for user's need.
+
+    After a minimization, a Parameter may also gain attributes of `stderr`
+    holding the estimated standard error in the Parameter's value, and
+    `correl`, a dictionary of correlation values with other Parameters used
+    in the minimization.
 
     """
-
-    def __init__(self, name=None, value=None, vary=True,
-                 min=-inf, max=inf, expr=None, brute_step=None):
+    def __init__(self, name=None, value=None, vary=True, min=-inf, max=inf,
+                 expr=None, brute_step=None, user_data=None):
         """
         Parameters
         ----------
@@ -472,13 +467,25 @@ class Parameter(object):
         vary : bool, optional
             Whether the Parameter is fixed during a fit.
         min : float, optional
-            Lower bound for value (np.-inf means no lower bound).
+            Lower bound for value (-inf means no lower bound).
         max : float, optional
-            Upper bound for value (np.inf means no upper bound).
+            Upper bound for value (inf means no upper bound).
         expr : str, optional
             Mathematical expression used to constrain the value during the fit.
         brute_step : float, optional
-            Step size for grid points in brute force method.
+            Step size for grid points in brute force method (use `0` for no step size).
+        user_data : optional
+            user-definable extra attribute used for a parameter.
+
+        Attributes
+        ----------
+        stderr : float
+            The estimated standard error for the best-fit value.
+        correl : dict
+            A dictionary of the correlation with the other fitted Parameter
+            after a fit, of the form::
+
+            `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
         """
         self.name = name
         self._val = value
@@ -519,6 +526,30 @@ class Parameter(object):
             Step size for grid points in brute force method. To remove the step
             size you must supply 0 ("zero").
 
+        Notes
+        -----
+
+        Each argument to `set()` has a default value of ``None``, which
+        will the current value for the attribute unchanged.  Thus, to lift
+        a lower or upper bound, passing in ``None`` will not work.  Instead,
+        you must set these to ``np.inf`` or ``-np.inf``, as with::
+
+            par.set(min=None)     # no, will leave lower bound unchanged
+            par.set(min=-np.inf)  # yes.
+
+        Similarly, to clear an expression, pass a blank string, (not
+        ``None``!) as with::
+
+            par.set(expr=None)    # leaves expression unchanged.
+            par.set(expr='')      # removes expression
+
+        Explicitly setting a value or setting `vary=True` will also
+        clear the expression.
+
+        Finally, to clear the brute_step size, pass ``0``, not ``None``::
+
+            par.set(brute_step=None)  # leaves brute_step unchanged
+            par.set(brute_step=0)     # removes brute_step
         """
 
         if value is not None:
