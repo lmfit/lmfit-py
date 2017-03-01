@@ -522,7 +522,7 @@ class Parameter(object):
         """
 
         if value is not None:
-            self._val = value
+            self.value = value
             self.__set_expression('')
 
         if vary is not None:
