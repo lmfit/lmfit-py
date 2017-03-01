@@ -866,9 +866,7 @@ class Minimizer(object):
             `result.flatchain[parname]`. The ``lnprob`` attribute contains the
             log probability for each sample in ``chain``. The sample with the
             highest probability corresponds to the maximum likelihood estimate.
-        sampler_kwargs : dict, optional
-            Add any sampler keyword arguments here., Typically ``a``,
-            ``betas`` or ``Tmax``
+
         Notes
         -----
         This method samples the posterior distribution of the parameters using
