@@ -6,9 +6,9 @@ Parameters.
 The user sets up a model in terms of instance of Parameters and writes a
 function-to-be-minimized (residual function) in terms of these Parameters.
 
+Original copyright:
    Copyright (c) 2011 Matthew Newville, The University of Chicago
-   <newville@cars.uchicago.edu>
-
+See LICENSE for more complete authorship information and license.
 """
 
 from collections import namedtuple
@@ -189,12 +189,11 @@ def reduce_cauchylogpdf(r):
 
 class MinimizerResult(object):
     r"""
-    A class that holds the results of a minimization.
+    The results of a minimization.
 
-    This is a plain container (with no methods of its own) that
-    simply holds the results of the minimization.  Fit results
-    include data such as status and error messages, fit statistics,
-    and the updated (i.e., best-fit) parameters themselves :attr:`params`.
+    Minimization results include data such as status and error messages,
+    fit statistics, and the updated (i.e., best-fit) parameters themselves
+    :attr:`params`.
 
     The list of (possible) `MinimizerResult` attributes follows.
 
@@ -207,11 +206,11 @@ class MinimizerResult(object):
         underlying solver. Refer to `message` for details.
     var_names : list
         Ordered list of variable parameter names used in optimization, and
-        useful for understanding the the values in :attr:`init_vals` and
+        useful for understanding the values in :attr:`init_vals` and
         :attr:`covar`.
     covar : numpy.ndarray
         Covariance matrix from minimization (`leastsq` only), with
-        rows/columns using :attr:`var_names`.
+        rows and columns corresponding to  :attr:`var_names`.
     init_vals : list
         List of initial values for variable parameters using :attr:`var_names`.
     init_values : dict
@@ -236,7 +235,7 @@ class MinimizerResult(object):
         Degrees of freedom in fit:  :math:`N - N_{\\rm varys}`.
     residual : numpy.ndarray
         Residual array :math:`{\\rm Resid_i}`. Return value of the objective
-        function.
+        function when using the best-fit values of the parameters.
     chisqr : float
         Chi-square: :math:`\chi^2 = \sum_i^N [{\\rm Resid}_i]^2`.
     redchi : float
@@ -244,9 +243,17 @@ class MinimizerResult(object):
         :math:`\chi^2_{\\nu}= {\chi^2} / {(N - N_{\\rm varys})}`.
     aic : float
         Akaike Information Criterion statistic.
+        :math:`N \ln(\chi^2/N) + 2 N_{\\rm varys}`
     bic : float
         Bayesian Information Criterion statistic.
+        :math:`N \ln(\chi^2/N) + \ln(N) N_{\\rm varys}`
+    flatchain : pandas.DataFrame
+        a flatchain view of the sampling chain from the `emcee` method.
 
+    Methods
+    ----------
+    show_candidates:  pretty_print() representaiton of candidates from
+       `brute` method.
     """
 
     def __init__(self, **kws):
@@ -412,17 +419,17 @@ class Minimizer(object):
         function to calculate the residual.
 
         Parameters
-        ----------------
+        ----------
         fvars : np.ndarray
             Array of new parameter values suggested by the minimizer.
-        apply_bounds_transformation : bool, optional
-            If true, apply lmfits parameter transformation to constrain
+        apply_bounds_transformation : bool, optional, default=`True`
+            whether to apply lmfits parameter transformation to constrain
             parameters. This is needed for solvers without inbuilt support for
             bounds.
 
         Returns
-        -----------
-        residuals : np.ndarray
+        -------
+        residual : np.ndarray
              The evaluated function values for given fvars.
 
         """
@@ -605,11 +612,9 @@ class Minimizer(object):
         return result
 
     def unprepare_fit(self):
-        """Clean the fit state.
+        """Clean fit state, so thatt subsequent fits will need to call prepare_fit().
 
-        AST compilations of constraint expressions are removed, so that
-        subsequent fits will need to call prepare_fit.
-
+        removes AST compilations of constraint expressions.
         """
         pass
 
@@ -740,7 +745,7 @@ class Minimizer(object):
             result.chisqr = (result.chisqr**2).sum()
             result.ndata = len(result.residual)
             result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
+        result.redchi = result.chisqr / max(1, result.nfree)
         # this is -2*loglikelihood
         _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
         result.aic = _neg2_log_likel + 2 * result.nvarys
@@ -1410,7 +1415,7 @@ class Minimizer(object):
             or all candidates when no number is specified.
 
 
-        .. versionadded:: 0.96
+        .. versionadded:: 0.9.6
 
 
         Notes
@@ -1522,7 +1527,7 @@ class Minimizer(object):
               Uses `scipy.optimize.leastsq`.
             - `'least_squares'`: Levenberg-Marquardt.
               Uses `scipy.optimize.least_squares`.
-            - 'nelder': Nelder-Mead
+            - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
             - `'powell'`: Powell
             - `'cg'`: Conjugate-Gradient
@@ -1573,7 +1578,7 @@ class Minimizer(object):
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
                 if (key.lower().startswith(user_method) or
-                        val.lower().startswith(user_method)):
+                    val.lower().startswith(user_method)):
                     kwargs['method'] = val
         return function(**kwargs)
 
@@ -1804,7 +1809,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
           Uses `scipy.optimize.leastsq`.
         - `'least_squares'`: Levenberg-Marquardt.
           Uses `scipy.optimize.least_squares`.
-        - 'nelder': Nelder-Mead
+        - '`nelder`': Nelder-Mead
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
         - `'cg'`: Conjugate-Gradient
