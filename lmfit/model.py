@@ -53,42 +53,54 @@ def _ensureMatplotlib(function):
 
         return no_op
 
-
 class Model(object):
-    """Create a model from a user-defined function.
+    """Create a model from a user-supplied model function that returns an
+    array of data to model some data as for a curve-fitting problem.
 
-    Parameters
-    ----------
-    func: function to be wrapped
-    independent_vars: list of strings or None (default)
-        arguments to func that are independent variables
-    param_names: list of strings or None (default)
-        names of arguments to func that are to be made into parameters
-    missing: None, 'none', 'drop', or 'raise'
-        'none' or None: Do not check for null or missing values (default)
-        'drop': Drop null or missing observations in data.
-            if pandas is installed, pandas.isnull is used, otherwise
-            numpy.isnan is used.
-        'raise': Raise a (more helpful) exception when data contains null
-            or missing values.
-    name: None or string
-        name for the model. When `None` (default) the name is the same as
-        the model function (`func`).
+    The model function will normally take an independent variable (generally,
+    the first argument) and a series of arguments that are meant to be parameters
+    for the model.  Thus, a simple peak using a Gaussian defined as
 
-    Note
-    ----
-    Parameter names are inferred from the function arguments,
-    and a residual function is automatically constructed.
+    >>> import numpy as np
+    >>> def gaussian(x, amp, cen, wid):
+    ...     return amp * np.exp(-(x-cen)**2 / wid)
 
-    Example
-    -------
-    >>> def decay(t, tau, N):
-    ...     return N*np.exp(-t/tau)
-    ...
-    >>> my_model = Model(decay, independent_vars=['t'])
+    can be turned into a Model with
 
+    >>> gmodel = Model(gaussian)
+
+    this will automatically discover the names of the independent variables and parameters:
+
+    >>> print(gmodel.param_names, gmodel.independent_vars)
+    ['amp', 'cen', 'wid'], ['x']
+
+    The :meth:`make_params` method will create a Parameters object for this model, optionally
+    taking initial values:
+
+    >>> params = gmodel.make_params(amp=1, cen=0, wid=1)
+
+    You can also use :meth:`set_param_hint` to set default attributes for the parameters
+    created, so that doing
+
+    >>> gmodel.set_param_hint('wid', min=0.0)
+
+    would set a bound on the 'wid' Parameter created by :meth:`make_params`.
+
+    A model and corresponding Parameters can be used to evaluate the model for a given
+    input array (or single value) of independent variables with:
+
+    >>> xdata = np.linspace(-1, 1, 101)
+    >>> yinit = gmodel.eval(params, x=xdata)
+
+    and can be used to fit the Parameters to match an array of data:
+
+    >>> result = gmodel.fit(data=ydata, params, x=xdata)
+
+    which will return a `ModelResult` object.
+
+    Models can be combined into a `CompositeModel` by adding (or
+    multiplying, subtracting, or dividing) two or models.
     """
-
     _forbidden_args = ('data', 'weights', 'params')
     _invalid_ivar = "Invalid independent variable name ('%s') for function %s"
     _invalid_par = "Invalid parameter name ('%s') for function %s"
@@ -100,7 +112,46 @@ class Model(object):
 
     def __init__(self, func, independent_vars=None, param_names=None,
                  missing='none', prefix='', name=None, **kws):
-        """TODO: docstring in public method."""
+        """
+        Parameters
+        ----------
+        func: function to be wrapped
+        independent_vars: list of strings or ``None`` (default)
+            arguments to func that are independent variables
+        param_names: list of strings or ``None`` (default)
+            names of arguments to func that are to be made into parameters
+        missing:  ``None`` or string
+            how to handle `nan` and missing values in data. One of:
+
+            - 'none' or ``None``: Do not check for null or missing values (default)
+
+            - 'drop': Drop null or missing observations in data. if pandas is
+              installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
+
+            - 'raise': Raise a (more helpful) exception when data contains null
+               or missing values.
+
+        name: ``None`` or string
+            name for the model. When ``None`` (default) the name is the same as
+            the model function (`func`).
+        kws: optional dict
+            additional keyword arguments to pass to model function.
+
+        Note
+        ----
+        1. Parameter names are inferred from the function arguments,
+        and a residual function is automatically constructed.
+
+        2. The model function must return an array that will be the same
+        size as the data being modeled.
+
+        Example
+        -------
+        >>> def decay(t, tau, N):
+        ...     return N*np.exp(-t/tau)
+        ...
+        >>> my_model = Model(decay, independent_vars=['t'])
+        """
         self.func = func
         self._prefix = prefix
         self._param_root_names = param_names  # will not include prefixes
@@ -135,7 +186,7 @@ class Model(object):
 
     @property
     def name(self):
-        """TODO: add method docstring."""
+        """return Model name"""
         return self._reprstring(long=False)
 
     @name.setter
@@ -144,7 +195,7 @@ class Model(object):
 
     @property
     def prefix(self):
-        """TODO: add method docstring."""
+        """return Model prefix"""
         return self._prefix
 
     @property
@@ -284,7 +335,6 @@ class Model(object):
         """Create and return a Parameters object for a Model.
 
         This applies any default values
-
         """
         params = Parameters()
 
@@ -347,7 +397,7 @@ class Model(object):
         return params
 
     def guess(self, data=None, **kws):
-        """Stub for guess starting values.
+        """Guess starting values for a model.  Not implemented or all models.
 
         Note
         ----
@@ -445,7 +495,31 @@ class Model(object):
         return args
 
     def eval(self, params=None, **kwargs):
-        """Evaluate the model with the supplied parameters."""
+        """Evaluate the model with the supplied parameters and keyword arguments
+
+        Parameters
+        -----------
+        params : Parameters or ``None``
+            parameters to use in Model
+        kwargs : optional
+            keyword arguments to pass to model function.
+
+        Returns
+        -------
+        val : ndarray
+            value of model given the parameters and other arguments.
+
+        Notes
+        -----
+        1. if `params` is ``None``, the values for all parameters are
+        expected to be provided as keyword arguments.  If `params` is
+        given, and a keyword argument for a parameter value is also given,
+        the keyword argument will be used.
+
+        2. all non-parameter arguments for the model function, **including
+        all the independent variables** will need to be passed in using
+        keyword arguments.
+        """
         return self.func(**self.make_funcargs(params, kwargs))
 
     @property
@@ -456,8 +530,17 @@ class Model(object):
     def eval_components(self, params=None, **kwargs):
         """Evaluate the model with the supplied parameters.
 
-        Returns a ordered dict containting name, result pairs.
+        Parameters
+        -----------
+        params : Parameters or ``None``
+            parameters to use in Model
+        kwargs : optional
+            keyword arguments to pass to model function.
 
+        Returns:
+        --------
+        comps : OrderedDict
+            keys are prefixes for component model, values are value of each component.
         """
         key = self._prefix
         if len(key) < 1:
@@ -467,22 +550,27 @@ class Model(object):
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
             **kwargs):
-        """Fit the model to the data.
+        """Fit the model to the data using the supplied Parameters
 
         Parameters
         ----------
         data: array-like
-        params: Parameters object
-        weights: array-like of same size as data
-            used for weighted fit
-        method: fitting method to use (default = 'leastsq')
-        iter_cb:  None or callable  callback function to call at each iteration.
-        scale_covar:  bool (default True) whether to auto-scale covariance matrix
-        verbose: bool (default True) print a message when a new parameter is
+        params: Parameters or ``None``
+            parameters to use in fit.
+        weights: array-like of same size as data or ``None``
+            used for weighted fit.
+        method: string  (default = 'leastsq')
+            fitting method to use
+        iter_cb:  ``None`` or callable
+             callback function to call at each iteration.
+        scale_covar:  bool (default ``True``)
+             whether to auto-scale covariance matrix
+        verbose: bool (default ``True``)
+             print a message when a new parameter is
             added because of a hint.
         fit_kws: dict
             default fitting options, such as xtol and maxfev, for scipy optimizer
-        keyword arguments: optional, named like the arguments of the
+        kwargs: optional, named like the arguments of the
             model function, will override params. See examples below.
 
         Returns
@@ -503,11 +591,20 @@ class Model(object):
         # Keyword arguments override Parameters.
         >>> result = my_model.fit(data, params, tau=5, t=t)
 
-        Note
-        ----
-        All parameters, however passed, are copied on input, so the original
-        Parameter objects are unchanged.
+       Notes
+        -----
+        1. if `params` is ``None``, the values for all parameters are
+        expected to be provided as keyword arguments.  If `params` is
+        given, and a keyword argument for a parameter value is also given,
+        the keyword argument will be used.
 
+        2. all non-parameter arguments for the model function, **including
+        all the independent variables** will need to be passed in using
+        keyword arguments.
+
+        3. Parameters (however passed in), are copied on input, so the
+        original Parameter objects are unchanged, and the updated values
+        are in the returned `ModelResult`.
         """
         if params is None:
             params = self.make_params(verbose=verbose)

@@ -8,20 +8,24 @@ Modeling Data and Curve Fitting
 
 A common use of least-squares minimization is *curve fitting*, where one
 has a parametrized model function meant to explain some phenomena and wants
-to adjust the numerical values for the model to most closely match some
-data.  With :mod:`scipy`, such problems are commonly solved with
-:scipydoc:`optimize.curve_fit`, which is a wrapper around
-:scipydoc:`optimize.leastsq`.  Since lmfit's :func:`~lmfit.minimizer.minimize` is also
-a high-level wrapper around :scipydoc:`optimize.leastsq` it can be used
-for curve-fitting problems, but requires more effort than using
-:scipydoc:`optimize.curve_fit`.
+to adjust the numerical values for the model so that it most closely
+matches some data.  With :mod:`scipy`, such problems are typically solved
+with :scipydoc:`optimize.curve_fit`, which is a wrapper around
+:scipydoc:`optimize.leastsq`.  Since lmfit's
+:func:`~lmfit.minimizer.minimize` is also a high-level wrapper around
+:scipydoc:`optimize.leastsq` it can be used for curve-fitting problems.
+While it offers many benefits over :scipydoc:`optimize.leastsq`, using
+:func:`~lmfit.minimizer.minimize` for many curve-fitting problems still
+requires more effort than using :scipydoc:`optimize.curve_fit`.
 
-
-Here we discuss lmfit's :class:`Model` class.  This takes a model function
--- a function that calculates a model for some data -- and provides methods
-to create parameters for that model and to fit data using that model
-function.  This is closer in spirit to :scipydoc:`optimize.curve_fit`,
-but with the advantages of using :class:`~lmfit.parameter.Parameters` and lmfit.
+The :class:`Model` class in lmfit provides a simple and flexible approach
+to curve-fitting problems.  Like scipydoc:`optimize.curve_fit`, a
+:class:`Model` uses a *model function* -- a function that is meant to
+calculate a model for some phenomenon -- and then` uses that to best match
+an array of supplied data.  Beyond that similarity, its interface is rather
+different from scipydoc:`optimize.curve_fit`, for example in that it uses
+:class:`~lmfit.parameter.Parameters`, but also offers several other
+important advantages.
 
 In addition to allowing you turn any model function into a curve-fitting
 method, lmfit also provides canonical definitions for many known line shapes
@@ -34,13 +38,13 @@ turning python function into high-level fitting models with the
 :class:`Model` class, and using these to fit data.
 
 
-Example: Fit data to Gaussian profile
-================================================
+Motivation and simple example: Fit data to Gaussian profile
+=============================================================
 
 Let's start with a simple and common example of fitting data to a Gaussian
 peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
-provides a model function for a Gaussian profile, but here we'll build our
-own.  We start with a simple definition of the model function:
+can help do this, but here we'll build our own.  We start with a simple
+definition of the model function:
 
     >>> from numpy import sqrt, pi, exp, linspace
     >>>
@@ -48,12 +52,12 @@ own.  We start with a simple definition of the model function:
     ...    return amp * exp(-(x-cen)**2 /wid)
     ...
 
-We want to fit this objective function to data :math:`y(x)` represented by the
-arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`optimize.curve_fit`::
+We want to use this function to fit to data :math:`y(x)` represented by the
+arrays ``y`` and ``x``.  With :scipydoc:`optimize.curve_fit`, this would be::
 
     >>> from scipy.optimize import curve_fit
     >>>
-    >>> x = linspace(-10,10)
+    >>> x = linspace(-10,10, 101)
     >>> y = y = gaussian(x, 2.33, 0.21, 1.51) + np.random.normal(0, 0.2, len(x))
     >>>
     >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
@@ -61,46 +65,37 @@ arrays ``y`` and ``x``.  This can be done easily with :scipydoc:`optimize.curve_
     >>> print best_vals
 
 
-We sample random data point, make an initial guess of the model
-values, and run :scipydoc:`optimize.curve_fit` with the model function,
-data arrays, and initial guesses.  The results returned are the optimal
-values for the parameters and the covariance matrix.  It's simple and very
-useful.  But it misses the benefits of lmfit.
+That is, we create data, make an initial guess of the model values, and run
+:scipydoc:`optimize.curve_fit` with the model function, data arrays, and
+initial guesses.  The results returned are the optimal values for the
+parameters and the covariance matrix.  It's simple and useful, but it
+misses the benefits of lmfit.
 
-
-To solve this with lmfit we would have to write an objective function. But
-such a function would be fairly simple (essentially, ``data - model``,
-possibly with some weighting), and we would need to define and use
-appropriately named parameters.  Though convenient, it is somewhat of a
-burden to keep the named parameter straight (on the other hand, with
-:scipydoc:`optimize.curve_fit` you are required to remember the parameter
-order).  After doing this a few times it appears as a recurring pattern,
-and we can imagine automating this process.  That's where the
-:class:`Model` class comes in.
-
-:class:`Model` allows us to easily wrap a model function such as the
-``gaussian`` function.  This automatically generate the appropriate
-residual function, and determines the corresponding parameter names from
-the function signature itself::
+With :class:`Model`, we create a Model that wraps the ``gaussian`` model
+function, which automatically generate the appropriate residual function,
+and determines the corresponding parameter names from the function
+signature itself::
 
     >>> from lmfit import Model
-    >>> gmod = Model(gaussian)
-    >>> gmod.param_names
+    >>> gmodel = Model(gaussian)
+    >>> gmodel.param_names
     set(['amp', 'wid', 'cen'])
-    >>> gmod.independent_vars)
+    >>> gmodel.independent_vars)
     ['x']
 
-The Model ``gmod`` knows the names of the parameters and the independent
-variables.  By default, the first argument of the function is taken as the
-independent variable, held in :attr:`independent_vars`, and the rest of the
-functions positional arguments (and, in certain cases, keyword arguments --
-see below) are used for Parameter names.  Thus, for the ``gaussian``
-function above, the parameters are named ``amp``, ``cen``, and ``wid``, and
-``x`` is the independent variable -- all taken directly from the signature
-of the model function. As we will see below, you can specify what the
-independent variable is, and you can add or alter parameters, too.
+As you can see, the Model ``gmodel`` determined the names of the parameters
+and the independent variables.  By default, the first argument of the
+function is taken as the independent variable, held in
+:attr:`independent_vars`, and the rest of the functions positional
+arguments (and, in certain cases, keyword arguments -- see below) are used
+for Parameter names.  Thus, for the ``gaussian`` function above, the
+parameters are named ``amp``, ``cen``, and ``wid``, and ``x`` is the
+independent variable -- all taken directly from the signature of the model
+function. As we will see below, you can modify these default determination
+of what is the independent variable is and which function arguments should
+be identified as parameter names.
 
-The parameters are *not* created when the model is created. The model knows
+The Parameters are *not* created when the model is created. The model knows
 what the parameters should be named, but not anything about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initial values and other attributes.  To help you do this, each
@@ -113,7 +108,6 @@ This creates the :class:`~lmfit.parameter.Parameters` but doesn't necessarily gi
 initial values -- again, the model has no idea what the scale should be.
 You can set initial values for parameters with keyword arguments to
 :meth:`make_params`:
-
 
     >>> params = gmod.make_params(cen=5, amp=200, wid=1)
 
@@ -128,15 +122,24 @@ For example, one could use :meth:`eval` to calculate the predicted
 function::
 
     >>> x = linspace(0, 10, 201)
-    >>> y = gmod.eval(x=x, amp=10, cen=6.2, wid=0.75)
+    >>> y = gmod.eval(params, x=x)
+
+or with
+
+    >>> y = gmod.eval(x=x, cen=6.5, amp=100, wid=2.0)
+
 
 Admittedly, this a slightly long-winded way to calculate a Gaussian
-function.   But now that the model is set up, we can also use its
+function, given that you could have called your ``gaussian`` function
+directly. But now that the model is set up, we can use its
 :meth:`fit` method to fit this model to data, as with::
 
-    >>> result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+    >>> result = gmod.fit(y, params)
 
-Putting everything together, the script to do such a fit (included in the
+or with
+    >>> result = gmod.fit(y, cen=6.5, amp=100, wid=2.0)
+
+Putting everything together,  (included in the
 ``examples`` folder with the source code) is:
 
 .. literalinclude:: ../examples/doc_model1.py
@@ -146,9 +149,9 @@ a :class:`ModelResult` object.  As we will see below, this has many
 components, including a :meth:`fit_report` method, which will show::
 
     [[Model]]
-        gaussian
+        Model(gaussian)
     [[Fit Statistics]]
-        # function evals   = 33
+        # function evals   = 31
         # data points      = 101
         # variables        = 3
         chi-square         = 3.409
@@ -156,16 +159,17 @@ components, including a :meth:`fit_report` method, which will show::
         Akaike info crit   = -336.264
         Bayesian info crit = -328.418
     [[Variables]]
-        amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
-        cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
-        wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
+        amp:   5.07800631 +/- 0.064957 (1.28%) (init= 5)
+        cen:   5.65866112 +/- 0.010304 (0.18%) (init= 5)
+        wid:   0.97344373 +/- 0.028756 (2.95%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(amp, wid)                  =  0.577
+        C(amp, wid)                  = -0.577
 
-The result will also have :attr:`init_fit` for the fit with the initial
-parameter values and a :attr:`best_fit` for the fit with the best fit
-parameter values.  These can be used to generate the following plot:
 
+As the script shows, the result will also have :attr:`init_fit` for the fit
+with the initial parameter values and a :attr:`best_fit` for the fit with
+the best fit parameter values.  These can be used to generate the following
+plot:
 
 .. image:: _images/model_fit1.png
    :target: _images/model_fit1.png
@@ -174,21 +178,22 @@ parameter values.  These can be used to generate the following plot:
 which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit as a dashed black line.
 
-Note that the model fitting was really performed with 2 lines of code::
+Note that the model fitting was really performed with::
 
-    gmod = Model(gaussian)
-    result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+    gmodel = Model(gaussian)
+    result = gmodel.fit(y, params, x=x, amp=5, cen=5, wid=1)
 
 These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
 starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.
-This is much more expressive than :scipydoc:`optimize.curve_fit`::
+This compares to :scipydoc:`optimize.curve_fit`::
 
     best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
 
 In addition, all the other features of lmfit are included:
-:class:`~lmfit.parameter.Parameters` can have bounds and constraints and the result is a
-rich object that can be reused to explore the model fit in detail.
+:class:`~lmfit.parameter.Parameters` can have bounds and constraints and
+the result is a rich object that can be reused to explore the model fit in
+detail.
 
 
 The :class:`Model` class
@@ -197,53 +202,13 @@ The :class:`Model` class
 The :class:`Model` class provides a general way to wrap a pre-defined
 function as a fitting model.
 
-.. class::  Model(func[, independent_vars=None[, param_names=None[, missing=None[, prefix=''[, name=None[, **kws]]]]]])
-
-    Create a model based on the user-supplied function.  This uses
-    introspection to automatically converting argument names of the
-    function to Parameter names.
-
-    :param func: Model function to be wrapped.
-    :type func: callable
-    :param independent_vars: List of argument names to ``func`` that are independent variables.
-    :type independent_vars: ``None`` (default) or list of strings.
-    :param param_names: List of argument names to ``func`` that should be made into Parameters.
-    :type param_names: ``None`` (default) or list of strings
-    :param missing: How to handle missing values.
-    :type missing: one of ``None`` (default), 'none', 'drop', or 'raise'.
-    :param prefix: Prefix to add to all parameter names to distinguish components in a :class:`CompositeModel`.
-    :type prefix: string
-    :param name: Name for the model. When ``None`` (default) the name is the same  as the model function (``func``).
-    :type name: ``None`` or string.
-    :param kws:   Additional keyword arguments to pass to model function.
-
-
-Of course, the model function will have to return an array that will be the
-same size as the data being modeled.  Generally this is handled by also
-specifying one or more independent variables.
+.. autoclass::  Model
 
 
 :class:`Model` class Methods
 ---------------------------------
 
-.. method:: Model.eval(params=None[, **kws])
-
-   Evaluate the model function for a set of parameters and inputs.
-
-   :param params: Parameters to use for fit.
-   :type params: ``None`` (default) or Parameters
-   :param kws:    Additional keyword arguments to pass to model function.
-   :return:       ndarray for model given the parameters and other arguments.
-
-   If ``params`` is ``None``, the values for all parameters are expected to
-   be provided as keyword arguments.  If ``params`` is given, and a keyword
-   argument for a parameter value is also given, the keyword argument will
-   be used.
-
-   Note that all non-parameter arguments for the model function --
-   **including all the independent variables!** -- will need to be passed
-   in using keyword arguments.
-
+.. automethod:: Model.eval
 
 .. method:: Model.fit(data[, params=None[, weights=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **kws]]]]]])
 
