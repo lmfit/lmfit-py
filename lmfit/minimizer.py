@@ -8,6 +8,7 @@ function-to-be-minimized (residual function) in terms of these Parameters.
 
 Original copyright:
    Copyright (c) 2011 Matthew Newville, The University of Chicago
+
 See LICENSE for more complete authorship information and license.
 """
 
@@ -299,7 +300,9 @@ class MinimizerResult(object):
 
 
 class Minimizer(object):
-    """A general minimizer for curve fitting and optimization."""
+    """
+    A general minimizer for curve fitting and optimization.
+    """
 
     _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
                      "of Parameters()")
@@ -310,17 +313,16 @@ class Minimizer(object):
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
                  reduce_fcn=None, **kws):
-        """The Minimizer class initialization.
-
-        The following parameters are accepted:
-
+        """
         Parameters
         ----------
         userfcn : callable
             Objective function that returns the residual (difference between
             model and data) to be minimized in a least squares sense.  The
-            function must have the signature:
-            `userfcn(params, *fcn_args, **fcn_kws)`
+            function must have the signature::
+
+                userfcn(params, *fcn_args, **fcn_kws)
+
         params : :class:`lmfit.parameter.Parameters` object.
             Contains the Parameters for the model.
         fcn_args : tuple, optional
@@ -329,30 +331,40 @@ class Minimizer(object):
             Keyword arguments to pass to `userfcn`.
         iter_cb : callable, optional
             Function to be called at each fit iteration. This function should
-            have the signature:
-            `iter_cb(params, iter, resid, *fcn_args, **fcn_kws)`,
+            have the signature::
+
+                iter_cb(params, iter, resid, *fcn_args, **fcn_kws)
+
             where `params` will have the current parameter values, `iter`
             the iteration, `resid` the current residual array, and `*fcn_args`
             and `**fcn_kws` as passed to the objective function.
         scale_covar : bool, optional
-            Whether to automatically scale the covariance matrix (leastsq
-            only).
+            Whether to automatically scale the covariance matrix (leastsq only).
         nan_policy : str, optional
             Specifies action if `userfcn` (or a Jacobian) returns nan
             values. One of:
-             - 'raise' - a `ValueError` is raised
-             - 'propagate' - the values returned from `userfcn` are un-altered
-             - 'omit' - the non-finite values are filtered.
+
+            - 'raise' : a `ValueError` is raised
+            - 'propagate' : the values returned from `userfcn` are un-altered
+            - 'omit' : non-finite values are filtered.
+
         reduce_fcn : str or callable, optional
             Function to convert a residual array to a scalar value for the scalar
             minimizers. Optional values are (where `r` is the residual array):
-             - None           : sum of squares of residual [default]
-                                (r*r).sum()
-             - 'negentropy'   : neg entropy, using normal distribution
-                                (rho*log(rho)).sum() for rho=exp(-r*r/2)/(sqrt(2*pi))
-             - 'neglogcauchy' : neg log likelihood, using Cauchy distribution
-                                -log(1/(pi*(1+r*r))).sum()
-             - callable       : must take 1 argument (r) and return a float.
+
+            - None       : sum of squares of residual [default]
+
+               = (r*r).sum()
+
+            - 'negentropy' : neg entropy, using normal distribution
+
+               = rho*log(rho)).sum()` for rho=exp(-r*r/2)/(sqrt(2*pi))
+
+            - 'neglogcauchy': neg log likelihood, using Cauchy distribution
+
+               = -log(1/(pi*(1+r*r))).sum()
+
+            - callable   : must take 1 argument (r) and return a float.
 
         kws : dict, optional
             Options to pass to the minimizer being used.
@@ -892,7 +904,7 @@ class Minimizer(object):
 
         .. math::
 
-            \ln p(D|F_{true}) = -\\frac{1}{2}\sum_n \left[\\frac{\left(g_n(F_{true}) - D_n \\right)^2}{s_n^2}+\ln (2\pi s_n^2)\\right]
+            \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{(g_n(F_{true}) - D_n)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
 
         The first summand in the square brackets represents the residual for a
         given datapoint (:math:`g` being the generative model, :math:`D_n` the
@@ -926,8 +938,8 @@ class Minimizer(object):
         `is_weighted is False` then the data uncertainty, `s_n`, will be
         treated as a nuisance parameter and will be marginalized out. This is
         achieved by employing a strictly positive uncertainty
-        (homoscedasticity) for each data point, :math:`s_n = \exp(\_\_lnsigma)`.
-        `__lnsigma` will be present in `MinimizerResult.params`, as well as
+        (homoscedasticity) for each data point, :math:`s_n = \exp(\_lnsigma)`.
+        `_lnsigma` will be present in `MinimizerResult.params`, as well as
         `Minimizer.chain`, `nvarys` will also be increased by one.
 
         References
@@ -1524,9 +1536,9 @@ class Minimizer(object):
             Name of the fitting method to use. Valid values are:
 
             - `'leastsq'`: Levenberg-Marquardt (default).
-              Uses `scipy.optimize.leastsq`.
-            - `'least_squares'`: Levenberg-Marquardt.
-              Uses `scipy.optimize.least_squares`.
+            - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default.
+            - `'differential_evolution'`: differential evolution
+            - `'brute'`: brute force method.
             - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
             - `'powell'`: Powell
@@ -1537,9 +1549,13 @@ class Minimizer(object):
             - `'trust-ncg'`: Trust Newton-CGn
             - `'dogleg'`: Dogleg
             - `'slsqp'`: Sequential Linear Squares Programming
-            - `'differential_evolution'`: differential evolution
-            - `'brute'`: brute force method.
-              Uses `scipy.optimize.brute`.
+
+            In most cases, these methods wrap and use the method of the
+            same name from `scipy.optimize`, or uses
+            `scipy.optimize.minimize` with the same `method` argument.
+            Thus '`leastsq`' will use `scipy.optimize.leastsq`, while
+            '`powell`' will use `scipy.optimize.minimizer(....,
+            method='powell')`
 
             For more details on the fitting methods please refer to the
             `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
@@ -1784,7 +1800,7 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, iter_cb=None, reduce_fcn=None, **fit_kws):
     """Perform a fit of a set of parameters by minimizing an objective (or
-    "cost") function using one one of the several available methods.
+    cost) function using one one of the several available methods.
 
     The minimize function takes a objective function to be minimized,
     a dictionary (:class:`lmfit.parameter.Parameters`) containing the model
@@ -1806,22 +1822,25 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         Name of the fitting method to use. Valid values are:
 
         - `'leastsq'`: Levenberg-Marquardt (default).
-          Uses `scipy.optimize.leastsq`.
-        - `'least_squares'`: Levenberg-Marquardt.
-          Uses `scipy.optimize.least_squares`.
+        - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default.
+        - `'differential_evolution'`: differential evolution.
+        - `'brute'`: brute force method.
         - '`nelder`': Nelder-Mead
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
         - `'cg'`: Conjugate-Gradient
-        - `'newton'`: Newton-CG
+        - `'newton'`: Newton-Congugate-Gradient
         - `'cobyla'`: Cobyla
         - `'tnc'`: Truncate Newton
-        - `'trust-ncg'`: Trust Newton-CGn
+        - `'trust-ncg'`: Trust Newton-Congugate-Gradient
         - `'dogleg'`: Dogleg
         - `'slsqp'`: Sequential Linear Squares Programming
-        - `'differential_evolution'`: differential evolution
-        - `'brute'`: brute force method.
-          Uses `scipy.optimize.brute`.
+
+        In most cases, these methods wrap and use the method of the same
+        name from `scipy.optimize`, or uses `scipy.optimize.minimize` with
+        the same `method` argument.  Thus '`leastsq`' will use
+        `scipy.optimize.leastsq`, while '`powell`' will use
+        `scipy.optimize.minimizer(...., method='powell')`
 
         For more details on the fitting methods please refer to the
         `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.

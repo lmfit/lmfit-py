@@ -359,9 +359,10 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        An ordered dictionary of name:value pairs for each Parameter.
-        This is distinct from the Parameters itself, as it has values of
-        the Parameter *values*, not the full Parameter object.
+        vals : ordered dict
+           An ordered dictionary of name:value pairs for each Parameter.
+           This is distinct from the Parameters itself, as it has values of
+           the Parameter *values*, not the full Parameter object.
         """
         return OrderedDict(((p.name, p.value) for p in self.values()))
 
@@ -372,7 +373,8 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        json string representation of Parameters
+        s : string
+           json string representation of Parameters
 
         See Also
         --------
@@ -397,7 +399,8 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        None.   Parameters are updated as a side-effect
+        ``None``
+           Parameters are updated as a side-effect
 
         See Also
         --------
@@ -449,7 +452,8 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        None.   Parameters are updated as a side-effect
+        ``None``.
+           Parameters are updated as a side-effect
 
         See Also
         --------
