@@ -61,88 +61,23 @@ The :class:`Parameter` class
 The :class:`Parameters` class
 ========================================
 
-.. class:: Parameters()
+.. autoclass:: Parameters
 
-   Create a Parameters object.  This is little more than a fancy ordered
-   dictionary, with the restrictions that:
+    .. automethod:: add
 
-   1. keys must be valid Python symbol names, so that they can be used in
-      expressions of mathematical constraints.  This means the names must
-      match ``[a-z_][a-z0-9_]*``  and cannot be a Python reserved word.
+    .. automethod:: add_many
 
-   2. values must be valid :class:`Parameter` objects.
+    .. automethod:: pretty_print
 
-   Two methods are provided for convenient initialization of a :class:`Parameters`,
-   and one for extracting :class:`Parameter` values into a plain dictionary.
+    .. automethod:: valuesdict
 
-    .. method:: add(name[, value=None[, vary=True[, min=-np.inf[, max=np.inf[, expr=None[, brute_step=None]]]]]])
+    .. automethod:: dumps
 
-       Add a named parameter.  This creates a :class:`Parameter`
-       object associated with the key `name`, with optional arguments
-       passed to :class:`Parameter`::
+    .. automethod:: dump
 
-         p = Parameters()
-         p.add('myvar', value=1, vary=True)
+    .. automethod:: loads
 
-    .. method:: add_many(self, paramlist)
-
-       Add a list of named parameters.  Each entry must be a tuple
-       with the following entries::
-
-            name, value, vary, min, max, expr, brute_step
-
-       This method is somewhat rigid and verbose (no default values), but can
-       be useful when initially defining a parameter list so that it looks
-       table-like::
-
-         p = Parameters()
-         #          (Name,  Value,  Vary,   Min,  Max,  Expr, Brute_step)
-         p.add_many(('amp1',    10,  True, None, None,  None, None),
-                    ('cen1',   1.2,  True,  0.5,  2.0,  None, None),
-                    ('wid1',   0.8,  True,  0.1, None,  None, None),
-                    ('amp2',   7.5,  True, None, None,  None, None),
-                    ('cen2',   1.9,  True,  1.0,  3.0,  None, 0.1),
-                    ('wid2',  None, False, None, None, '2*wid1/3', None))
-
-
-    .. automethod:: Parameters.pretty_print
-
-    .. method:: valuesdict()
-
-       Return an ordered dictionary of name:value pairs with the
-       Paramater name as the key and Parameter value as value.
-
-       This is distinct from the :class:`Parameters` itself, as the dictionary
-       values are not :class:`Parameter` objects, just the :attr:`value`.
-       Using :meth:`valuesdict` can be a very convenient way to get updated
-       values in a objective function.
-
-    .. method:: dumps(**kws)
-
-       Return a JSON string representation of the :class:`Parameter` object.
-       This can be saved or used to re-create or re-set parameters, using the
-       :meth:`loads` method.
-
-       Optional keywords are sent :py:func:`json.dumps`.
-
-    .. method:: dump(file, **kws)
-
-       Write a JSON representation of the :class:`Parameter` object to a file
-       or file-like object in `file` -- really any object with a :meth:`write`
-       method.  Optional keywords are sent :py:func:`json.dumps`.
-
-    .. method:: loads(sval, **kws)
-
-       Use a JSON string representation of the :class:`Parameter` object in
-       `sval` to set all parameter settings. Optional keywords are sent
-       :py:func:`json.loads`.
-
-    .. method:: load(file, **kws)
-
-       Read and use a JSON string representation of the :class:`Parameter`
-       object from a file or file-like object in `file` -- really any object
-       with a :meth:`read` method.  Optional keywords are sent
-       :py:func:`json.loads`.
+    .. automethod:: load
 
 
 Simple Example
