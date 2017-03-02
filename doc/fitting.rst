@@ -3,7 +3,6 @@
 .. module:: lmfit.minimizer
 
 
-
 =======================================
 Performing Fits, Analyzing Outputs
 =======================================
@@ -12,7 +11,6 @@ As shown in the previous chapter, a simple fit can be performed with the
 :func:`minimize` function.  For more sophisticated modeling, the
 :class:`Minimizer` class can be used to gain a bit more control, especially
 when using complicated constraints or comparing results from related fits.
-
 
 
 The :func:`minimize` function
@@ -25,7 +23,6 @@ object, and several optional arguments.  See :ref:`fit-func-label` for
 details on writing the objective.
 
 .. autofunction:: minimize
-
 
 ..  _fit-func-label:
 
@@ -61,7 +58,6 @@ array, with a length greater than or equal to the number of fitting variables in
 model.  For the other methods, the return value can either be a scalar or an array.  If an
 array is returned, the sum of squares of the array will be sent to the underlying fitting
 method, effectively doing a least-squares optimization of the return values.
-
 
 Since the function will be passed in a dictionary of :class:`Parameters`, it is advisable
 to unpack these to get numerical values at the top of the function.  A
@@ -503,24 +499,9 @@ Getting and Printing Fit Reports
 
 .. currentmodule:: lmfit.printfuncs
 
-.. function:: fit_report(result, modelpars=None, show_correl=True, min_correl=0.1)
+.. autofunction:: fit_report
 
-   Generate and return text of report of best-fit values, uncertainties,
-   and correlations from fit.
-
-   :param result:       :class:`MinimizerResult` object as returned by :func:`minimize`.
-   :param modelpars:    Parameters with "Known Values" (optional, default None)
-   :param show_correl:  Whether to show list of sorted correlations [``True``]
-   :param min_correl:   Smallest correlation absolute value to show [0.1]
-
-   If the first argument is a :class:`Parameters` object,
-   goodness-of-fit statistics will not be included.
-
-.. function:: report_fit(result, modelpars=None, show_correl=True, min_correl=0.1)
-
-   Print text of report from :func:`fit_report`.
-
-An example fit with report would be
+An example using this to write out a fit report would be
 
 .. literalinclude:: ../examples/doc_withreport.py
 
