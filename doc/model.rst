@@ -541,10 +541,10 @@ more useful) object that represents a fit with a set of parameters to data
 with a model.
 
 
-A :class:`ModelResult` has several attributes holding values for fit results,
-and several methods for working with fits.  These include statistics
-inherited from :class:`~lmfit.minimizer.Minimizer` useful for comparing different models,
-including `chisqr`, `redchi`, `aic`, and `bic`.
+A :class:`ModelResult` has several attributes holding values for fit
+results, and several methods for working with fits.  These include
+statistics inherited from :class:`~lmfit.minimizer.Minimizer` useful for
+comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. autoclass:: ModelResult
 
@@ -553,26 +553,13 @@ including `chisqr`, `redchi`, `aic`, and `bic`.
 :class:`ModelResult` methods
 ---------------------------------
 
-These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
-:class:`Model`.
-
 .. automethod:: ModelResult.eval
+
 
 .. automethod:: ModelResult.eval_components
 
-   Evaluate each component of a :class:`CompositeModel`, returning an
-   ordered dictionary of with the values for each component model.  The
-   returned dictionary will have keys of the model prefix or (if no prefix
-   is given), the model name.  The ``**kwargs`` arguments can be used to
-   update parameter values and/or independent variables.
+.. automethod:: ModelResult.fit
 
-.. method:: ModelResult.fit(data=None[, params=None[, weights=None[, method=None[, **kwargs]]]])
-
-   Fit (or re-fit), optionally changing ``data``, ``params``, ``weights``,
-   or ``method``, or changing the independent variable(s) with the
-   ``**kwargs`` argument.  See :meth:`Model.fit` for argument
-   descriptions, and note that any value of ``None`` defaults to the last
-   used value.
 
 .. method:: ModelResult.fit_report(modelpars=None[, show_correl=True[, min_correl=0.1]])
 
@@ -729,7 +716,6 @@ These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
    not specified and the fit includes weights, ``yerr`` set to ``1/self.weights``
 
    If ``ax`` is None then ``matplotlib.pyplot.gca(**ax_kws)`` is called.
-
 
 
 

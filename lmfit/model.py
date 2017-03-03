@@ -861,31 +861,28 @@ class CompositeModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
+xxx ="""
+  Attributes
+        ----------
+        model         instance of Model -- the model function
+        params        instance of Parameters -- the fit parameters
+        data          array of data values to compare to model
+        weights       array of weights used in fitting
+        init_params   copy of params, before being updated by fit()
+        init_values   array of parameter values, before being updated by fit()
+        init_fit      model evaluated with init_params.
+        best_fit      model evaluated with params after being updated by fit()
 
-class ModelResult(Minimizer):
-    """Result from Model fit.
+        Methods
+        --------
+        fit(data=None, params=None, weights=None, method=None, **kwargs)
+            fit (or re-fit) model with params to data (with weights)
+            using supplied method.  The keyword arguments are sent to
+            as keyword arguments to the model function.
 
-     Attributes
-     -----------
-     model         instance of Model -- the model function
-     params        instance of Parameters -- the fit parameters
-     data          array of data values to compare to model
-     weights       array of weights used in fitting
-     init_params   copy of params, before being updated by fit()
-     init_values   array of parameter values, before being updated by fit()
-     init_fit      model evaluated with init_params.
-     best_fit      model evaluated with params after being updated by fit()
-
-     Methods:
-     --------
-     fit(data=None, params=None, weights=None, method=None, **kwargs)
-          fit (or re-fit) model with params to data (with weights)
-          using supplied method.  The keyword arguments are sent to
-          as keyword arguments to the model function.
-
-          all inputs are optional, defaulting to the value used in
-          the previous fit.  This allows easily changing data or
-          parameter settings, or both.
+            all inputs are optional, defaulting to the value used in
+            the previous fit.  This allows easily changing data or
+            parameter settings, or both.
 
      eval(params=None, **kwargs)
           evaluate the current model, with parameters (defaults to the current
@@ -914,12 +911,43 @@ class ModelResult(Minimizer):
          ax_fit_kws=None, fig_kws=None)
          Plot the fit results and residuals using matplotlib.
 
+        """
+
+class ModelResult(Minimizer):
+    """Result from Model fit.
+    This has many attributes and methods for viewing and working with the
+    results of a fit using Model.  It inherits from Minimizer, so that it
+    can be used to modify and re-run the fit for the Model.
+
     """
 
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **fit_kws):
-        """TODO: docstring in public method."""
+        """
+        Parameters
+        ----------
+        model : Model instance
+            model to use.
+        params : Parameters instance
+            parameters with initial values for model.
+        data : array-like or ``None``
+            data to be modeled.
+        weights : array-like or ``None``
+            weights to multiply (data-model) for fit residual.
+        method : string
+            name of minimization method to use
+        fcn_args : sequence or ``None``
+            positional arguments to send to model function
+        fcn_dict : dict or ``None``
+            keyword arguments to send to model function
+        iter_cb : callable or ``None``
+            function to call on each iteration of fit.
+        scale_covar :  bool
+            whether to scale covariance matrix for uncertainty evaluation
+        fit_kws : optional
+            keyword arguments to send to minimization routine.
+        """
         self.model = model
         self.data = data
         self.weights = weights
@@ -931,7 +959,21 @@ class ModelResult(Minimizer):
                            scale_covar=scale_covar, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None, **kwargs):
-        """Perform fit for a Model, given data and params."""
+        """Perform fit for a Model, given data and params.
+
+        Parameters
+        ----------
+        data : array-like or ``None``
+            data to be modeled.
+        params : Parameters instance
+            parameters with initial values for model.
+        weights : array-like or ``None``
+            weights to multiply (data-model) for fit residual.
+        method : string
+            name of minimization method to use
+        kwwargs : optional
+            keyword arguments to send to minimization routine.
+        """
         if data is not None:
             self.data = data
         if params is not None:
@@ -976,12 +1018,18 @@ class ModelResult(Minimizer):
     def eval_components(self, params=None, **kwargs):
         """Evaluate each component of a composite model function.
 
-        Arguments:
-        params (Parameters):  parameters, defaults to ModelResult .params
-        kwargs (variable):  values of options, independent variables, etc.
+        Parameters
+        ----------
+        params : Parameters or ``None``
+            parameters, defaults to ModelResult.params
+        kwargs : optional
+             keyword arguments to pass to model function.
 
-        Returns:     ordered dictionary with keys of prefixes, and
-        values of values for     each component of the model.
+        Returns
+        -------
+        comps : ordered dictionary
+             keys are prefixes of component models, and values are
+             the estimated model value for each component of the model.
 
         """
         self.userkws.update(kwargs)
