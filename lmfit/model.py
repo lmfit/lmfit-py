@@ -137,8 +137,8 @@ class Model(object):
         kws: optional dict
             additional keyword arguments to pass to model function.
 
-        Note
-        ----
+        Notes
+        -----
         1. Parameter names are inferred from the function arguments,
         and a residual function is automatically constructed.
 
@@ -288,15 +288,34 @@ class Model(object):
         self._param_names = names[:]
 
     def set_param_hint(self, name, **kwargs):
-        """Set hints for parameter.
+        """Set *hints* to use when creating parameters with `make_params()`
+        for the named parameter.  This is especially convenient for setting initial
+        values.  The ``name`` can include the models ``prefix`` or not.
 
-        Including optional bounds and constraints
-        (value, vary, min, max, expr) these will be used by make_params()
+        The hint given can also include optional bounds and constraints
+        (value, vary, min, max, expr) which will be used by make_params()
         when building default parameters.
 
-        example:
-          model = GaussianModel()
-          model.set_param_hint('amplitude', min=-100.0, max=0.)
+        Parameters
+        ----------
+        name : string
+            Parameter name
+        value : float or ``None`` (default)
+            value for parameter.
+        min : float or ``-np.inf`` (default)
+            lower bound for parameter value.
+        max : float or ``np.inf`` (default)
+            upper bound for parameter value.
+        vary : bool (default ``True``)
+            whether to vary of fix parameter value
+        expr : string or ``None`` (default)
+            expression to use to constrain parameter value.
+
+        Example
+        --------
+
+        >>> model = GaussianModel()
+        >>> model.set_param_hint('sigma', min=0)
 
         """
         npref = len(self._prefix)
@@ -332,9 +351,25 @@ class Model(object):
             print(line.format(name_len=name_len, n=colwidth, **pvalues))
 
     def make_params(self, verbose=False, **kwargs):
-        """Create and return a Parameters object for a Model.
+        """Create a Parameters object for a Model.
 
-        This applies any default values
+        Parameters
+        ----------
+        kwargs : optional initial values
+            parameter names and initial values
+
+        verbose : bool (default ``False``):
+            whether to print out messages
+
+        Returns
+        ---------
+        params : Parameters
+
+        Notes
+        -----
+        1. The parameters may or may not have decent initial values for each
+        parameter.
+        2. This applies any default values or parameter hints that may have been set.
         """
         params = Parameters()
 
@@ -396,15 +431,30 @@ class Model(object):
             p._delay_asteval = False
         return params
 
-    def guess(self, data=None, **kws):
-        """Guess starting values for a model.  Not implemented or all models.
+    def guess(self, data, **kws):
+        """Guess starting values for the parameteters of a model.
+        This is not implemented for all models, but is available
+        for many of the built-in models.
 
-        Note
-        ----
+        Parameters
+        ----------
+        data : array-like
+            array of data to use to guess parameter values.
+        kws : additional keyword arguments, passed to model function.
+
+        Returns
+        -------
+        params  : Parameters
+
+        Notes
+        -----
         Should be implemented for each model subclass to run
         self.make_params(), update starting values and return a
         Parameters object.
 
+        Raises
+        ------
+        NotImplementedError
         """
         cname = self.__class__.__name__
         msg = 'guess() not implemented for %s' % cname
@@ -555,23 +605,24 @@ class Model(object):
         Parameters
         ----------
         data: array-like
-        params: Parameters or ``None``
+            array of data to be fig.
+        params: Parameters or ``None`` (default)
             parameters to use in fit.
-        weights: array-like of same size as data or ``None``
-            used for weighted fit.
+        weights: array-like of same size as data or ``None`` (default)
+            weights to use for the calculation of the fit residual.
         method: string  (default = 'leastsq')
-            fitting method to use
-        iter_cb:  ``None`` or callable
+            name of fitting method to use
+        iter_cb:  callable or ``None`` (default)
              callback function to call at each iteration.
         scale_covar:  bool (default ``True``)
-             whether to auto-scale covariance matrix
+             whether to automatically scale the covariance matrix when calculating
+             uncertainties. `leastsq` method only.
         verbose: bool (default ``True``)
-             print a message when a new parameter is
-            added because of a hint.
-        fit_kws: dict
-            default fitting options, such as xtol and maxfev, for scipy optimizer
-        kwargs: optional, named like the arguments of the
-            model function, will override params. See examples below.
+             whether to print a message when a new parameter is added because of a hint.
+        fit_kws: dict or ``None`` (default)
+             default fitting options, such as xtol and maxfev, for scipy optimizer
+        kwargs: optional
+             arguments to pass to the  model function, possibly overriding params
 
         Returns
         -------
@@ -579,19 +630,20 @@ class Model(object):
 
         Examples
         --------
-        # Take t to be the independent variable and data to be the
-        # curve we will fit.
+        Take t to be the independent variable and data to be the curve we will fit.
+        Use keyword arguments to set initial guesses:
 
-        # Using keyword arguments to set initial guesses
         >>> result = my_model.fit(data, tau=5, N=3, t=t)
 
-        # Or, for more control, pass a Parameters object.
+        Or, for more control, pass a Parameters object.
+
         >>> result = my_model.fit(data, params, t=t)
 
-        # Keyword arguments override Parameters.
+        Keyword arguments override Parameters.
+
         >>> result = my_model.fit(data, params, tau=5, t=t)
 
-       Notes
+        Notes
         -----
         1. if `params` is ``None``, the values for all parameters are
         expected to be provided as keyword arguments.  If `params` is

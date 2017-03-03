@@ -210,89 +210,19 @@ function as a fitting model.
 
 .. automethod:: Model.eval
 
-.. method:: Model.fit(data[, params=None[, weights=None[, method='leastsq'[, scale_covar=True[, iter_cb=None[, **kws]]]]]])
+.. automethod:: Model.fit
 
-   Perform a fit of the model to the ``data`` array with a set of
-   parameters.
+.. automethod:: Model.guess
 
-   :param data: Array of data to be fitted.
-   :type data: ndarray-like
-   :param params: Parameters to use for fit.
-   :type params: ``None`` (default) or Parameters
-   :param weights: Weights to use for residual calculation in fit.
-   :type weights: ``None`` (default) or ndarray-like.
-   :param method:  Name of fitting method to use. See  :ref:`fit-methods-label` for details.
-   :type  method:  string (default ``leastsq``)
-   :param scale_covar:  Whether to automatically scale covariance matrix (``leastsq`` only).
-   :type  scale_covar:  bool (default ``True``)
-   :param iter_cb:  Function to be called at each fit iteration. See :ref:`fit-itercb-label` for details.
-   :type  iter_cb:  callable or ``None``
-   :param verbose:  Print a message when a new parameter is created due to a *hint*.
-   :type  verbose:  bool (default ``True``)
-   :param kws:      Additional keyword arguments to pass to model function.
-   :return:         :class:`ModelResult` object.
-
-   If ``params`` is ``None``, the internal ``params`` will be used. If it
-   is supplied, these will replace the internal ones.   If supplied,
-   ``weights`` will be used to weight the calculated residual so that the
-   quantity minimized in the least-squares sense is ``weights*(data -
-   fit)``.  ``weights`` must be an ndarray-like object of same size and
-   shape as ``data``.
-
-   Note that other arguments for the model function (including all the
-   independent variables!) will need to be passed in using keyword
-   arguments.
+.. automethod:: Model.make_params
 
 
-.. method:: Model.guess(data, **kws)
-
-   Guess starting values for model parameters.
-
-    :param data: Data array used to guess parameter values.
-    :type func:  ndarray
-    :param kws:  Additional options to pass to model function.
-    :return: :class:`lmfit.parameter.Parameters` with guessed initial values for each parameter.
-
-   by default this is left to raise a ``NotImplementedError``, but may be
-   overwritten by subclasses.  Generally, this method should take some
-   values for ``data`` and use it to construct reasonable starting values for
-   the parameters.
-
-
-.. method:: Model.make_params(**kws)
-
-   Create a set of parameters for model.
-
-    :param kws:  Optional keyword/value pairs to set initial values for parameters.
-    :return: :class:`lmfit.parameter.Parameters`.
-
-    The parameters may or may not have decent initial values for each
-    parameter.
-
-
-.. method:: Model.set_param_hint(name, value=None[, min=None[, max=None[, vary=True[, expr=None]]]])
-
-   Set *hints* to use when creating parameters with :meth:`Model.make_param` for
-   the named parameter.  This is especially convenient for setting initial
-   values.  The ``name`` can include the models ``prefix`` or not.
-
-   :param name: Parameter name.
-   :type name: string
-   :param value: Value for parameter.
-   :type value: float
-   :param min:  Lower bound for parameter value.
-   :type min: ``-np.inf`` or float
-   :param max:  Upper bound for parameter value.
-   :type max: ``np.inf`` or float
-   :param vary:  Whether to vary parameter in fit.
-   :type vary: boolean
-   :param expr:  Mathematical expression for constraint.
-   :type expr: string
+.. automethod:: Model.set_param_hint
 
    See :ref:`model_param_hints_section`.
 
 
-.. automethod:: lmfit.model.Model.print_param_hints
+.. automethod:: Model.print_param_hints
 
 
 :class:`Model` class Attributes
@@ -560,7 +490,6 @@ can set parameter hints but then change the initial value explicitly with
 Using parameter hints
 --------------------------------
 
-
 After a model has been created, you can give it hints for how to create
 parameters with :meth:`Model.make_params`.  This allows you to set not only a
 default initial value but also to set other parameter attributes
@@ -592,7 +521,6 @@ at half maximum of a Gaussian model, one could use a parameter hint of::
     >>> mod.set_param_hint('fwhm', expr='2.3548*sigma')
 
 
-
 The :class:`ModelResult` class
 =======================================
 
@@ -618,9 +546,7 @@ and several methods for working with fits.  These include statistics
 inherited from :class:`~lmfit.minimizer.Minimizer` useful for comparing different models,
 including `chisqr`, `redchi`, `aic`, and `bic`.
 
-.. class:: ModelResult()
-
-    Model fit is intended to be created and returned by :meth:`Model.fit`.
+.. autoclass:: ModelResult
 
 
 
@@ -630,15 +556,9 @@ including `chisqr`, `redchi`, `aic`, and `bic`.
 These methods are all inherited from :class:`~lmfit.minimizer.Minimize` or from
 :class:`Model`.
 
-.. method:: ModelResult.eval(params=None, **kwargs)
+.. automethod:: ModelResult.eval
 
-   Evaluate the model using parameters supplied (or the best-fit parameters
-   if not specified) and supplied independent variables.  The ``**kwargs``
-   arguments can be used to update parameter values and/or independent
-   variables.
-
-
-.. method:: ModelResult.eval_components(**kwargs)
+.. automethod:: ModelResult.eval_components
 
    Evaluate each component of a :class:`CompositeModel`, returning an
    ordered dictionary of with the values for each component model.  The
