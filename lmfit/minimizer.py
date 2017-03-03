@@ -42,11 +42,12 @@ from .parameter import Parameter, Parameters
 #    least_squares         0.17
 
 # differential_evolution is only present in scipy >= 0.15
+HAS_DIFFEV = False
 try:
     from scipy.optimize import differential_evolution as scipy_diffev
+    HAS_DIFFEV = True
 except ImportError:
-    from ._differentialevolution import differential_evolution as scipy_diffev
-
+    HAS_DIFFEV = False
 
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
@@ -127,21 +128,6 @@ class MinimizerException(Exception):
     def __str__(self):
         """TODO: add magic method docstring."""
         return "\n%s" % self.msg
-
-
-def _differential_evolution(func, x0, **kwds):
-    """A wrapper for differential_evolution that can be used with
-    scipy.minimize."""
-    kwargs = dict(args=(), strategy='best1bin', maxiter=None, popsize=15,
-                  tol=0.01, mutation=(0.5, 1), recombination=0.7, seed=None,
-                  callback=None, disp=False, polish=True,
-                  init='latinhypercube')
-
-    for k, v in kwds.items():
-        if k in kwargs:
-            kwargs[k] = v
-
-    return scipy_diffev(func, kwds['bounds'], **kwargs)
 
 
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
@@ -720,21 +706,25 @@ class Minimizer(object):
             fmin_kws.pop('jac')
 
         if method == 'differential_evolution':
-            fmin_kws['method'] = _differential_evolution
-            bounds = np.asarray([(par.min, par.max)
-                                 for par in params.values()])
-            varying = np.asarray([par.vary for par in params.values()])
+            if not HAS_DIFFEV:
+                raise NotImplementedError('You must have scipy 0.15 or higher '
+                                          'for differential_evolution')
+            for par in params.values():
+                if (par.vary and
+                    not (np.isfinite(par.min) and np.isfinite(par.max))):
+                    raise ValueError('differential_evolution requires finite '
+                                     'bound for all varying parameters')
 
-            if not np.all(np.isfinite(bounds[varying])):
-                raise ValueError('With differential evolution finite bounds '
-                                 'are required for each varying parameter')
-            bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
-            fmin_kws['bounds'] = bounds
+            internal_bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
+            kwargs = dict(args=(), strategy='best1bin', maxiter=None,
+                          popsize=15, tol=0.01, mutation=(0.5, 1),
+                          recombination=0.7, seed=None, callback=None,
+                          disp=False, polish=True, init='latinhypercube')
 
-            # in scipy 0.14 this can be called directly from scipy_minimize
-            # When minimum scipy is 0.14 the following line and the else
-            # can be removed.
-            ret = _differential_evolution(self.penalty, vars, **fmin_kws)
+            for k, v in fmin_kws.items():
+                if k in kwargs:
+                    kwargs[k] = v
+            ret = scipy_diffev(self.penalty, internal_bounds, **kwargs)
         else:
             ret = scipy_minimize(self.penalty, vars, **fmin_kws)
 
