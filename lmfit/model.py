@@ -509,7 +509,6 @@ class Model(object):
 
     def _strip_prefix(self, name):
         npref = len(self._prefix)
-        print("_MODEL _strip_prefix ", name, self._prefix)
         if npref > 0 and name.startswith(self._prefix):
             name = name[npref:]
         return name
