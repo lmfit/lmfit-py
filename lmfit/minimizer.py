@@ -34,20 +34,15 @@ from . import uncertainties
 from .parameter import Parameter, Parameters
 
 #  scipy version notes:
-#  currently scipy 0.14 is required.
+#  currently scipy 0.15 is required.
 #  feature           scipy version added
 #    minimize              0.11
 #    OptimizeResult        0.13
 #    diff_evolution        0.15
 #    least_squares         0.17
 
-# differential_evolution is only present in scipy >= 0.15
-HAS_DIFFEV = False
-try:
-    from scipy.optimize import differential_evolution as scipy_diffev
-    HAS_DIFFEV = True
-except ImportError:
-    HAS_DIFFEV = False
+
+from scipy.optimize import differential_evolution as scipy_diffev
 
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
@@ -706,9 +701,6 @@ class Minimizer(object):
             fmin_kws.pop('jac')
 
         if method == 'differential_evolution':
-            if not HAS_DIFFEV:
-                raise NotImplementedError('You must have scipy 0.15 or higher '
-                                          'for differential_evolution')
             for par in params.values():
                 if (par.vary and
                     not (np.isfinite(par.min) and np.isfinite(par.max))):
