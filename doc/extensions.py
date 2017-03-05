@@ -1,4 +1,4 @@
-# sphinx extensions for mathjax
+# sphinx extensions for pngmath
 
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
@@ -6,4 +6,4 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.intersphinx',
               'sphinx.ext.extlinks',
               'sphinx.ext.napoleon',
-              'sphinx.ext.mathjax']
+              'sphinx.ext.pngmath']
