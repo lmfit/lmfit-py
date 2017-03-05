@@ -11,6 +11,44 @@ changes to the use and behavior of the library.  This is not meant to be a
 comprehensive list of changes.  For such a complete record, consult the
 `lmfit github repository`_.
 
+.. _whatsnew_096_label:
+
+Version 0.9.6 Release Notes
+==========================================
+
+Support for scipy 0.14 has been dropped: scipy 0.15 is not required.  This
+is especially important for lmfit maintenance, as it means we can now rely
+on scipy having code for differential evolution and do not need to keep a
+local copy.
+
+A brute force method was added, which can be used either with
+:meth:`Minimizer.brute` or using the `method='brute'` option to
+:meth:`Minimizer.minimize`.   This method requires that finite bounds be
+placed on each variable parameter, and that the parameter has a finite
+`brute_step` attribute set to specify the step size.
+
+Custom cost functions can now be used for the scalar minimizers using the
+`reduce_fcn` option.
+
+Many improvements to documentation and docstrings in the code were made.
+As part of that effort, all API documentation in this main sphinx
+documentation now derives from the docstrings.
+
+Uncertainties in the resulting best-fit for a model can now be calculated
+from the uncertainties in the model parameters.
+
+Parameters now have two new attributes: `brute_step` to specify the step
+size to take with the `brute` method, and `user_data` which is unused but
+can be used to hold additional information the user may desire.   This will
+be preserved on copy and pickling.
+
+Several bug fixes and cleanups.
+
+Versioneer was updated to 0.18.
+
+Tests can now be run either with nose or pytest.
+
+
 .. _whatsnew_095_label:
 
 Version 0.9.5 Release Notes
