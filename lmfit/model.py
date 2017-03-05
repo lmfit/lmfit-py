@@ -432,7 +432,7 @@ class Model(object):
         return params
 
     def guess(self, data, **kws):
-        """Guess starting values for the parameteters of a model.
+        """Guess starting values for the parameters of a model.
         This is not implemented for all models, but is available
         for many of the built-in models.
 
@@ -959,7 +959,7 @@ class ModelResult(Minimizer):
                            scale_covar=scale_covar, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None, **kwargs):
-        """Perform fit for a Model, given data and params.
+        """Re-perform fit for a Model, given data and params.
 
         Parameters
         ----------
@@ -971,7 +971,7 @@ class ModelResult(Minimizer):
             weights to multiply (data-model) for fit residual.
         method : string
             name of minimization method to use
-        kwwargs : optional
+        kwargs : optional
             keyword arguments to send to minimization routine.
         """
         if data is not None:
@@ -1003,12 +1003,17 @@ class ModelResult(Minimizer):
     def eval(self, params=None, **kwargs):
         """Evaluate model function.
 
-        Arguments: params (Parameters):  parameters,
-        defaults to ModelResult .params kwargs (variable):  values of options,
-        independent variables, etc.
+        Parameters
+        ----------
+        params : Parameters or ``None`` (default)
+            Parameters to use.
+        kwargs : optional
+            options to send Model.eval()
 
-        Returns:     ndarray or float for evaluated model
-
+        Returns
+        -------
+        out : ndarray
+           array for evaluated model
         """
         self.userkws.update(kwargs)
         if params is None:
@@ -1038,38 +1043,44 @@ class ModelResult(Minimizer):
         return self.model.eval_components(params=params, **self.userkws)
 
     def eval_uncertainty(self, params=None, sigma=1, **kwargs):
-        """Evaluate the uncertainty of the *model function*.
+        """Evaluate the uncertainty of the *model function* from the
+        uncertainties for the best-fit parameters.  This can be used
+        to give confidence bands for the model.
 
-        The uncertainty is evaluated from the uncertainties for the
-        best-fit parameters.  This can be used to give confidence bands
-        for the model.
+        Parameters
+        ----------
+        params : Parameters or ``None``
+             parameters, defaults to ModelResult .params
+        sigma : float
+             confidence level, i.e. how many sigma [default=1]
+        kwargs : optional
+             values of options, independent variables, etc
 
-        Arguments:
-            params (Parameters):  parameters, defaults to ModelResult .params
-            sigma (float):  confidence level, i.e. how many sigma [default=1]
-            kwargs (variable):  values of options, independent variables, etc
+        Returns
+        -------
+        out : ndarray
+           uncertainty at each value of the model.
 
-        Returns:
-            ndarray for the uncertainty at each value of the model.
+        Example
+        -------
 
-        Example:
-            out = model.fit(data, params, x=x)
-            dely = out.eval_confidence_band(x=x)
-            plt.plot(x, data)
-            plt.plot(x, out.best_fit)
-            plt.fill_between(x, out.best_fit-dely,
-                             out.best_fit+dely, color='#888888')
+        >>> out = model.fit(data, params, x=x)
+        >>> dely = out.eval_confidence_band(x=x)
+        >>> plt.plot(x, data)
+        >>> plt.plot(x, out.best_fit)
+        >>> plt.fill_between(x, out.best_fit-dely,
+        ...                 out.best_fit+dely, color='#888888')
 
-        Notes:
-            1. This is based on the excellent and clear example from
-               https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
-               which references the original work of
-                 J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
-            2. the value of sigma is number of `sigma` values, and is converted to a probability.
-               Values or 1, 2, or 3 give probalities of 0.6827, 0.9545, and 0.9973, respectively.
-               If the sigma value is < 1, it is interpreted as the probability itself.  That is,
-               `sigma=1` and `sigma=0.6827` will give the same results, within precision errors.
-
+        Notes
+        -----
+        1. This is based on the excellent and clear example from
+           https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals which references the original work of
+           J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
+        2. the value of sigma is number of `sigma` values, and is converted to a
+           probability.  Values or 1, 2, or 3 give probalities of 0.6827, 0.9545,
+           and 0.9973, respectively. If the sigma value is < 1, it is interpreted
+           as the probability itself.  That is, `sigma=1` and `sigma=0.6827` will
+           give the same results, within precision errors.
         """
         self.userkws.update(kwargs)
         if params is None:
@@ -1108,30 +1119,82 @@ class ModelResult(Minimizer):
         return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, ndata-nvarys)
 
     def conf_interval(self, **kwargs):
-        """Return explicitly calculated confidence intervals."""
+        """Calculate the confidence intervals for the variable parameters
+        using :func:`confidence.conf_interval()`.  keyword arguments are
+        passed to that function.  The result is stored in :attr:`ci_out`,
+        and so can be accessed without recalculating them.
+        """
         if self.ci_out is None:
             self.ci_out = conf_interval(self, self, **kwargs)
         return self.ci_out
 
     def ci_report(self, with_offset=True, ndigits=5, **kwargs):
-        """Return nicely formatted report about confidence intervals."""
+        """Return a nicely formatted text report of the confidence
+        intervals, as from :func:`ci_report()`.
+
+        Parameters
+        ----------
+        with_offset : bool (default `True`)
+             Whether to subtract best value from all other values.
+        ndigits : int (default 5)
+            Number of significant digits to show.
+
+        Returns
+        -------
+        Text of formatted report on confidence intervals.
+
+        """
         return ci_report(self.conf_interval(**kwargs),
                          with_offset=with_offset, ndigits=ndigits)
 
-    def fit_report(self, **kwargs):
-        """Return fit report."""
-        return '[[Model]]\n    %s\n%s\n' % (self.model._reprstring(long=True),
-                                            fit_report(self, **kwargs))
+    def fit_report(self, inpars, modelpars=None, show_correl=True,
+                   min_correl=0.1, sort_pars=False):
+        """Return a printable fit report for the fit with fit statistics,
+        best-fit values with uncertainties and correlations.
+
+
+        Parameters
+        ----------
+        inpars  : Parameters
+           input Parameters from fit or MinimizerResult returned from a fit.
+        modelpars : optional
+           known Model Parameters
+        show_correl : bool, default ``True``
+           whether to show list of sorted correlations
+        min_correl : float, default 0.1
+           smallest correlation absolute value to show.
+        sort_pars : bool, default ``False``, or callable
+           whether to show parameter names sorted in alphanumerical order.  If
+           ``False``, then the parameters will be listed in the order they were
+           added to the Parameters dictionary. If callable, then this (one
+           argument) function is used to extract a comparison key from each
+           list element.
+
+        Returns
+        -------
+        text : string
+           multi-line text of fit report
+
+        See Also
+        --------
+        :func:`fit_report()`
+        """
+        report = fit_report(inpars, modelpars=modelpars,
+                            show_correl=show_correl,
+                            min_correl=min_correl, sort_pars=sort_pars)
+        modname = self.model._reprstring(long=True)
+        return '[[Model]]\n    %s\n%s\n' % (modname, report)
+
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
                  xlabel=None, ylabel=None, yerr=None, numpoints=None,
                  data_kws=None, fit_kws=None, init_kws=None, ax_kws=None):
-        """Plot the fit results using matplotlib.
+        """Plot the fit results using matplotlib, if available.
+        The plot will include the data points, the initial fit curve, and
+        the best-fit curve. If the fit  model included weights or if ``yerr``
+        is specified, errorbars will also be plotted.
 
-        The method will plot results of the fit using matplotlib, including:
-        the data points, the initial fit curve and the fitted curve. If the fit
-        model included weights, errorbars will also be plotted.
 
         Parameters
         ----------
@@ -1169,7 +1232,7 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes
 
         Notes
-        ----
+        -----
         For details about plot format strings and keyword arguments see
         documentation of matplotlib.axes.Axes.plot.
 
@@ -1177,7 +1240,7 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
         not specified and the fit includes weights, yerr set to 1/self.weights
 
-        If `ax` is None then matplotlib.pyplot.gca(**ax_kws) is called.
+        If `ax` is None then `matplotlib.pyplot.gca(**ax_kws)` is called.
 
         See Also
         --------
@@ -1245,11 +1308,9 @@ class ModelResult(Minimizer):
     @_ensureMatplotlib
     def plot_residuals(self, ax=None, datafmt='o', yerr=None, data_kws=None,
                        fit_kws=None, ax_kws=None):
-        """Plot the fit residuals using matplotlib.
-
-        The method will plot residuals of the fit using matplotlib, including:
-        the data points and the fitted curve (as horizontal line). If the fit
-        model included weights, errorbars will also be plotted.
+        """Plot the fit residuals using matplotlib, if available. If ``yerr``
+        is supplied or if the model included weights, errorbars will also
+        be plotted.
 
         Parameters
         ----------
@@ -1272,7 +1333,7 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes
 
         Notes
-        ----
+        -----
         For details about plot format strings and keyword arguments see
         documentation of matplotlib.axes.Axes.plot.
 
@@ -1280,7 +1341,7 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
         not specified and the fit includes weights, yerr set to 1/self.weights
 
-        If `ax` is None then matplotlib.pyplot.gca(**ax_kws) is called.
+        If `ax` is None then `matplotlib.pyplot.gca(**ax_kws)` is called.
 
         See Also
         --------
@@ -1328,8 +1389,7 @@ class ModelResult(Minimizer):
              ylabel=None, yerr=None, numpoints=None, fig=None, data_kws=None,
              fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None,
              fig_kws=None):
-        """Plot the fit results and residuals using matplotlib.
-
+        """Plot the fit results and residuals using matplotlib, if available.
         The method will produce a matplotlib figure with both results of the
         fit and the residuals plotted. If the fit model included weights,
         errorbars will also be plotted.
@@ -1374,14 +1434,14 @@ class ModelResult(Minimizer):
         A tuple with matplotlib's Figure and GridSpec objects.
 
         Notes
-        ----
+        -----
         The method combines ModelResult.plot_fit and ModelResult.plot_residuals.
 
         If yerr is specified or if the fit model included weights, then
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
         not specified and the fit includes weights, yerr set to 1/self.weights
 
-        If `fig` is None then matplotlib.pyplot.figure(**fig_kws) is called,
+        If `fig` is None then `matplotlib.pyplot.figure(**fig_kws)` is called,
         otherwise `fig_kws` is ignored.
 
         See Also
