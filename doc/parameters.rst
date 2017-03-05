@@ -44,7 +44,6 @@ The :class:`Parameter` class
 
 .. autoclass:: Parameter
 
-
     See :ref:`bounds_chapter` for details on the math used to implement the
     bounds with :attr:`min` and :attr:`max`.
 
@@ -55,7 +54,7 @@ The :class:`Parameter` class
 
     .. index:: Removing a Constraint Expression
 
-    .. automethod:: Parameter.set
+    .. automethod:: set
 
 
 The :class:`Parameters` class
