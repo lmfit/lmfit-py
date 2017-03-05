@@ -11,25 +11,20 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          skewed_voigt, step, students_t, voigt)
 from .model import Model
 
-
 class DimensionalError(Exception):
     """TODO: class docstring."""
-
     pass
-
 
 def _validate_1d(independent_vars):
     if len(independent_vars) != 1:
         raise DimensionalError(
             "This model requires exactly one independent variable.")
 
-
 def index_of(arr, val):
     """Return index of array nearest to a value."""
     if val < min(arr):
         return 0
     return np.abs(arr-val).argmin()
-
 
 def fwhm_expr(model):
     """Return constraint expression for fwhm."""
@@ -84,10 +79,10 @@ COMMON_INIT_DOC = """
     ----------
     independent_vars: ['x']
         arguments to func that are independent variables
-    prefix: ``None`` or string
+    prefix: string or ``None``
        string to prepend to paramter names, needed to add two Models that
        have parameter names in common.
-    missing:  ``None`` or string
+    missing:  string or ``None``
         how to handle `nan` and missing values in data. One of:
 
         - 'none' or ``None``: Do not check for null or missing values (default)
@@ -95,7 +90,7 @@ COMMON_INIT_DOC = """
         - 'drop': Drop null or missing observations in data. if pandas is
           installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
 
-        - 'raise': Raise a (more helpful) exception when data contains null
+        - 'raise': Raise a (more helpful) exception when data contains nullz
           or missing values.
     kwargs : optional
         keyword arguments to pass to :class:`Model`.
@@ -423,156 +418,302 @@ class PseudoVoigtModel(Model):
 
 
 class MoffatModel(Model):
-    __doc__ = moffat.__doc__ + COMMON_DOC if moffat.__doc__ else ""
+    r"""A model based on the Moffat distribution function
+    (see https://en.wikipedia.org/wiki/Moffat_distribution), with four Parameters:
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`), a width parameter
+    ``sigma`` (:math:`\sigma`) and an exponent ``beta`` (:math:`\beta`).
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(MoffatModel, self).__init__(moffat, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma, \beta) = A \big[(\frac{x-\mu}{\sigma})^2+1\big]^{-\beta}
+
+    the full width have maximum is :math:`2\sigma\sqrt{2^{1/\beta}-1}`.
+    :meth:`guess` function always sets the starting value for ``beta`` to 1.
+
+    Note that for (:math:`\beta=1`) the Moffat has a Lorentzian shape.
+    """
+
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(MoffatModel, self).__init__(moffat, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('beta')
         self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/%sbeta)-1)" % (self.prefix, self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5, sigscale=1.)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class Pearson7Model(Model):
-    __doc__ = pearson7.__doc__ + COMMON_DOC if pearson7.__doc__ else ""
+    r"""A model based on a Pearson VII distribution (see
+    http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution),
+    with four parameers: ``amplitude`` (:math:`A`), ``center``
+    (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(Pearson7Model, self).__init__(pearson7, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
+
+    where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
+    :mod:`scipy.special`).  The :meth:`guess` function always
+    gives a starting value for ``exponent`` of 1.5.
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(Pearson7Model, self).__init__(pearson7, **kwargs)
         self.set_param_hint('expon', value=1.5)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative)
         pars['%sexpon' % self.prefix].set(value=1.5)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class StudentsTModel(Model):
-    __doc__ = students_t.__doc__ + COMMON_DOC if students_t.__doc__ else ""
+    r"""A model based on a Student's t distribution function (see
+    http://en.wikipedia.org/wiki/Student%27s_t-distribution), with three Parameters:
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(StudentsTModel, self).__init__(students_t, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma) = \frac{A \Gamma(\frac{\sigma+1}{2})} {\sqrt{\sigma\pi}\,\Gamma(\frac{\sigma}{2})} \Bigl[1+\frac{(x-\mu)^2}{\sigma}\Bigr]^{-\frac{\sigma+1}{2}}
+
+
+    where :math:`\Gamma(x)` is the gamma function.
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(StudentsTModel, self).__init__(students_t, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class BreitWignerModel(Model):
-    __doc__ = breit_wigner.__doc__ + COMMON_DOC if breit_wigner.__doc__ else ""
+    r"""A model based on a Breit-Wigner-Fano function (see
+    http://en.wikipedia.org/wiki/Fano_resonance>), with four Parameters:
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
+    ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(BreitWignerModel, self).__init__(breit_wigner, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma, q) = \frac{A (q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative)
         pars['%sq' % self.prefix].set(value=1.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class LognormalModel(Model):
-    __doc__ = lognormal.__doc__ + COMMON_DOC if lognormal.__doc__ else ""
+    r"""A model based on the Log-normal distribution function
+    (see http://en.wikipedia.org/wiki/Lognormal), with three Parameters
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma``
+    (:math:`\sigma`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(LognormalModel, self).__init__(lognormal, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma) = \frac{A e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}
+
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(LognormalModel, self).__init__(lognormal, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = self.make_params(amplitude=1.0, center=0.0, sigma=0.25)
         pars['%ssigma' % self.prefix].set(min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class DampedOscillatorModel(Model):
-    __doc__ = damped_oscillator.__doc__ + COMMON_DOC if damped_oscillator.__doc__ else ""
+    r"""A model based on the Damped Harmonic Oscillator Amplitude
+    (see http://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part), with
+    three Parameters:  ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
+    ``sigma`` (:math:`\sigma`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(DampedOscillatorModel, self).__init__(damped_oscillator, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma) = \frac{A}{\sqrt{ [1 - (x/\mu)^2]^2 + (2\sigma x/\mu)^2}}
+
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative,
                                ampscale=0.1, sigscale=0.1)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class DampedHarmonicOscillatorModel(Model):
-    __doc__ = dho.__doc__ + COMMON_DOC if dho.__doc__ else ""
+    r"""A model based on a variation of the Damped Harmonic Oscillator (see
+    http://en.wikipedia.org/wiki/Harmonic_oscillator), following the
+    definition given in DAVE/PAN (see https://www.ncnr.nist.gov/dave/) with
+    four Parameters: ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
+    ``sigma`` (:math:`\sigma`), and ``gamma`` (:math:`\gamma`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(DampedOscillatorModel, self).__init__(dho, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma, \gamma) = \frac{A\sigma}{\pi [1 - \exp(-x/\gamma)]}
+                \Big[ \frac{1}{(x-\mu)^2 + \sigma^2} - \frac{1}{(x+\mu)^2 + \sigma^2} \Big]
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(DampedHarmonicOscillatorModel, self).__init__(dho,  **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative,
                                ampscale=0.1, sigscale=0.1)
         pars['%sgamma' % self.prefix].set(value=1.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class ExponentialGaussianModel(Model):
-    __doc__ = expgaussian.__doc__ + COMMON_DOC if expgaussian.__doc__ else ""
+    r"""A model of an Exponentially modified Gaussian distribution
+    (see http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution) with
+    four Parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
+    ``sigma`` (:math:`\sigma`), and  ``gamma`` (:math:`\gamma`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(ExponentialGaussianModel, self).__init__(expgaussian, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
+        \exp\bigl[\gamma({\mu - x  + \gamma\sigma^2/2})\bigr]
+        {\operatorname{erfc}}\Bigl(\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\Bigr)
+
+
+    where :func:`erfc` is the complimentary error function.
+
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 
 class SkewedGaussianModel(Model):
-    __doc__ = skewed_gaussian.__doc__ + COMMON_DOC if skewed_gaussian.__doc__ else ""
-    fwhm_factor = 2.354820
+    r"""A variation of the Exponential Gaussian, this uses a skewed normal distribution
+    (see http://en.wikipedia.org/wiki/Skew_normal_distribution), with Parameters
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),  ``sigma`` (:math:`\sigma`),
+    and ``gamma`` (:math:`\gamma`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(SkewedGaussianModel, self).__init__(skewed_gaussian, *args, **kwargs)
+    .. math::
+
+       f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
+       e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
+       {\operatorname{erf}}\bigl[
+       \frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
+       \bigr] \Bigr\}
+
+
+    where :func:`erf` is the error function.
+    """
+    fwhm_factor = 2.354820
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(SkewedGaussianModel, self).__init__(skewed_gaussian,  **kwargs)
         self.set_param_hint('sigma', min=0)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class DonaichModel(Model):
-    __doc__ = donaich.__doc__ + COMMON_DOC if donaich.__doc__ else ""
+    r"""A model of an Doniach Sunjic asymmetric lineshape
+    (see http://www.casaxps.com/help_manual/line_shapes.htm), used in
+    photo-emission, with four Parameters ``amplitude`` (:math:`A`),
+    ``center`` (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``gamma``
+    (:math:`\gamma`) in
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(DonaichModel, self).__init__(donaich, *args, **kwargs)
+    .. math::
+
+        f(x; A, \mu, \sigma, \gamma) = A\frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
+        \arctan{(x - \mu)}/\sigma\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(DonaichModel, self).__init__(donaich,  **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 class PowerLawModel(Model):
-    __doc__ = powerlaw.__doc__ + COMMON_DOC if powerlaw.__doc__ else ""
+    r"""A model based on a Power Law (see http://en.wikipedia.org/wiki/Power_law>),
+    with two Parameters: ``amplitude`` (:math:`A`), and ``exponent`` (:math:`k`), in:
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(PowerLawModel, self).__init__(powerlaw, *args, **kwargs)
+    .. math::
+
+        f(x; A, k) = A x^k
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(PowerLawModel, self).__init__(powerlaw, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
-        """TODO: docstring in public method."""
         try:
             expon, amp = np.polyfit(np.log(x+1.e-14), np.log(data+1.e-14), 1)
         except:
@@ -581,16 +722,27 @@ class PowerLawModel(Model):
         pars = self.make_params(amplitude=np.exp(amp), exponent=expon)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class ExponentialModel(Model):
-    __doc__ = exponential.__doc__ + COMMON_DOC if exponential.__doc__ else ""
+    r"""A model based on an exponential decay function
+    (see http://en.wikipedia.org/wiki/Exponential_decay) with two Parameters:
+    ``amplitude`` (:math:`A`), and ``decay`` (:math:`\tau`), in:
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(ExponentialModel, self).__init__(exponential, *args, **kwargs)
+    .. math::
+
+        f(x; A, \tau) = A e^{-x/\tau}
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(ExponentialModel, self).__init__(exponential, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
-        """TODO: docstring in public method."""
+
         try:
             sval, oval = np.polyfit(x, np.log(abs(data)+1.e-15), 1)
         except:
@@ -598,16 +750,46 @@ class ExponentialModel(Model):
         pars = self.make_params(amplitude=np.exp(oval), decay=-1.0/sval)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class StepModel(Model):
-    __doc__ = step.__doc__ + COMMON_DOC if step.__doc__ else ""
+    r"""A model based on a Step function, with three Parameters:
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`)
+    and four choices for functional form:
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(StepModel, self).__init__(step, *args, **kwargs)
+    - ``linear`` (the default)
+
+    - ``atan`` or ``arctan`` for an arc-tangent function
+
+    - ``erf`` for an error function
+
+    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function).
+
+    The step function starts with a value 0, and ends with a value of
+    :math:`A` rising to :math:`A/2` at :math:`\mu`, with :math:`\sigma`
+    setting the characteristic width. The forms are
+
+    .. math::
+        :nowrap:
+
+        \begin{eqnarray*}
+        & f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})  & = A \min{[1, \max{(0,  \alpha)}]} \\
+        & f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})  & = A [1/2 + \arctan{(\alpha)}/{\pi}] \\
+        & f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})     & = A [1 + {\operatorname{erf}}(\alpha)]/2 \\
+        & f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}})& = A [1 - \frac{1}{1 +  e^{\alpha}} ]
+        \end{eqnarray*}
+
+    where :math:`\alpha  = (x - \mu)/{\sigma}`.
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(StepModel, self).__init__(step, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
-        """TODO: docstring in public method."""
         if x is None:
             return
         ymin, ymax = min(data), max(data)
@@ -617,13 +799,49 @@ class StepModel(Model):
         pars['%ssigma' % self.prefix].set(value=(xmax-xmin)/7.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 class RectangleModel(Model):
-    __doc__ = rectangle.__doc__ + COMMON_DOC if rectangle.__doc__ else ""
+    r"""A model based on a Step-up and Step-down function, with five
+    Parameters: ``amplitude`` (:math:`A`), ``center1`` (:math:`\mu_1`),
+    ``center2`` (:math:`\mu_2`), `sigma1`` (:math:`\sigma_1`) and
+    ``sigma2`` (:math:`\sigma_2`) and four choices for functional form
+    (which is used for both the Step up and the Step down:
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(RectangleModel, self).__init__(rectangle, *args, **kwargs)
+    - ``linear`` (the default)
+
+    - ``atan`` or ``arctan`` for an arc-tangent function
+
+    - ``erf`` for an error function
+
+    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function).
+
+    The function starts with a value 0, transitions to a value of
+    :math:`A`, taking the value :math:`A/2` at :math:`\mu_1`, with :math:`\sigma_1`
+    setting the characteristic width. The function then transitions again to
+    the value :math:`A/2` at :math:`\mu_2`, with :math:`\sigma_2` setting the
+    characteristic width. The forms are
+
+    .. math::
+        :nowrap:
+
+        \begin{eqnarray*}
+        &f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})   &= A \{ \min{[1, \max{(0, \alpha_1)}]} + \min{[-1, \max{(0,  \alpha_2)}]} \} \\
+        &f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})   &= A [\arctan{(\alpha_1)} + \arctan{(\alpha_2)}]/{\pi} \\
+        &f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})      &= A [{\operatorname{erf}}(\alpha_1) + {\operatorname{erf}}(\alpha_2)]/2 \\
+        &f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}}) &= A [1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 +  e^{\alpha_2}} ]
+        \end{eqnarray*}
+
+
+    where :math:`\alpha_1  = (x - \mu_1)/{\sigma_1}` and
+    :math:`\alpha_2  = -(x - \mu_2)/{\sigma_2}`.
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(RectangleModel, self).__init__(rectangle, **kwargs)
 
         self.set_param_hint('center1')
         self.set_param_hint('center2')
@@ -632,7 +850,6 @@ class RectangleModel(Model):
                                                                 self.prefix))
 
     def guess(self, data, x=None, **kwargs):
-        """TODO: docstring in public method."""
         if x is None:
             return
         ymin, ymax = min(data), max(data)
@@ -644,32 +861,49 @@ class RectangleModel(Model):
         pars['%ssigma2' % self.prefix].set(value=(xmax-xmin)/7.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class ExpressionModel(Model):
-    """Model from User-supplied expression.
-
-    Parameters
-    ----------
-    expr:    string of mathematical expression for model.
-    independent_vars: list of strings to be set as variable names
-    missing: None, 'drop', or 'raise'
-        None: Do not check for null or missing values.
-        'drop': Drop null or missing observations in data.
-            Use pandas.isnull if pandas is available; otherwise,
-            silently fall back to numpy.isnan.
-        'raise': Raise a (more helpful) exception when data contains null
-            or missing values.
-    prefix: NOT supported for ExpressionModel
-
-    """
 
     idvar_missing = "No independent variable found in\n %s"
     idvar_notfound = "Cannot find independent variables '%s' in\n %s"
     no_prefix = "ExpressionModel does not support `prefix` argument"
 
     def __init__(self, expr, independent_vars=None, init_script=None,
-                 *args, **kwargs):
-        """TODO: docstring in public method."""
+                 missing=None, **kws):
+        """Model from User-supplied expression.
+
+        Parameters
+        ----------
+        expr:    string
+            mathematical expression for model.
+        independent_vars: list of strings or ``None``
+            variable names to use as independent variables
+        init_script: string or ``None``
+            initial script to run in asteval interpreter
+        missing:  string or ``None``
+            how to handle `nan` and missing values in data. One of:
+
+            - 'none' or ``None``: Do not check for null or missing values (default)
+
+            - 'drop': Drop null or missing observations in data. if pandas is
+              installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
+
+            - 'raise': Raise a (more helpful) exception when data contains nullz
+              or missing values.
+
+        kwargs : optional
+            keyword arguments to pass to :class:`Model`.
+
+        Notes
+        -----
+        1. each instance of ExpressionModel will create and using its own
+           version of an asteval interpreter.
+        2. prefix is **not supported** for ExpressionModel
+
+        """
         # create ast evaluator, load custom functions
         self.asteval = Interpreter()
         for name in lineshapes.functions:
@@ -708,8 +942,8 @@ class ExpressionModel(Model):
             lost = ', '.join(lost)
             raise ValueError(self.idvar_notfound % (lost, self.expr))
 
-        kwargs['independent_vars'] = independent_vars
-        if 'prefix' in kwargs:
+        kws['independent_vars'] = independent_vars
+        if 'prefix' in kws:
             raise Warning(self.no_prefix)
 
         def _eval(**kwargs):
@@ -717,7 +951,7 @@ class ExpressionModel(Model):
                 self.asteval.symtable[name] = val
             return self.asteval.run(self.astcode)
 
-        super(ExpressionModel, self).__init__(_eval, *args, **kwargs)
+        super(ExpressionModel, self).__init__(_eval, **kws)
 
         # set param names here, and other things normally
         # set in _parse_params(), which will be short-circuited.
