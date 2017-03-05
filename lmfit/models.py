@@ -79,98 +79,164 @@ def update_param_vals(pars, prefix, **kwargs):
     return pars
 
 
-COMMON_DOC = """
+COMMON_INIT_DOC = """
+    Parameters
+    ----------
+    independent_vars: ['x']
+        arguments to func that are independent variables
+    prefix: ``None`` or string
+       string to prepend to paramter names, needed to add two Models that
+       have parameter names in common.
+    missing:  ``None`` or string
+        how to handle `nan` and missing values in data. One of:
 
-Parameters
-----------
-independent_vars: list of strings to be set as variable names
-missing: None, 'drop', or 'raise'
-    None: Do not check for null or missing values.
-    'drop': Drop null or missing observations in data.
-        Use pandas.isnull if pandas is available; otherwise,
-        silently fall back to numpy.isnan.
-    'raise': Raise a (more helpful) exception when data contains null
-        or missing values.
-prefix: string to prepend to paramter names, needed to add two Models that
-    have parameter names in common. None by default.
+        - 'none' or ``None``: Do not check for null or missing values (default)
+
+        - 'drop': Drop null or missing observations in data. if pandas is
+          installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
+
+        - 'raise': Raise a (more helpful) exception when data contains null
+          or missing values.
+    kwargs : optional
+        keyword arguments to pass to :class:`Model`.
 """
 
+COMMON_GUESS_DOC = """Guess starting values for the parameters of a model.
+
+    Parameters
+    ----------
+    data : array-like
+        array of data to use to guess parameter values.
+    kws : additional keyword arguments, passed to model function.
+
+    Returns
+    -------
+    params  : Parameters
+"""
+
+COMMON_DOC = COMMON_INIT_DOC
 
 class ConstantModel(Model):
-    __doc__ = "x -> c" + COMMON_DOC
+    """Constant model, with a single Parameter: ``c``
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
+    Note that this is 'constant' in the sense of having no dependence on
+    the independent variable ``x``, not in the sense of being non-varying.
+    To be clear, ``c`` will be a Parameter that will be varied in the
+    fit (by default, of course).
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
         def constant(x, c):
             return c
-        super(ConstantModel, self).__init__(constant, *args, **kwargs)
+        super(ConstantModel, self).__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
-        """TODO: docstring in public method."""
         pars = self.make_params()
         pars['%sc' % self.prefix].set(value=data.mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 class ComplexConstantModel(Model):
-    __doc__ = "x -> re+1j*im" + COMMON_DOC
+    """Complex constant model, with wo Parameters:
+    ``re``, and ``im``.
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
+    Note that ``re`` and ``im`` are 'constant' in the sense of having no
+    dependence on the independent variable ``x``, not in the sense of
+    being non-varying. To be clear, ``re`` and ``im`` will be Parameters
+    that will be varied in the fit (by default, of course).
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
         def constant(x, re, im):
             return re + 1j*im
-        super(ComplexConstantModel, self).__init__(constant, *args, **kwargs)
+        super(ComplexConstantModel, self).__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
-        """TODO: docstring in public method."""
         pars = self.make_params()
         pars['%sre' % self.prefix].set(value=data.real.mean())
         pars['%sim' % self.prefix].set(value=data.imag.mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 class LinearModel(Model):
-    __doc__ = linear.__doc__ + COMMON_DOC if linear.__doc__ else ""
+    """Linear model, with two Parameters
+    ``intercept`` and ``slope``, defined as
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(LinearModel, self).__init__(linear, *args, **kwargs)
+    .. math::
+
+        f(x; m, b) = m x + b
+
+    with  ``slope`` for :math:`m` and  ``intercept`` for :math:`b`.
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(LinearModel, self).__init__(linear, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
-        """TODO: docstring in public method."""
         sval, oval = 0., 0.
         if x is not None:
             sval, oval = np.polyfit(x, data, 1)
         pars = self.make_params(intercept=oval, slope=sval)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class QuadraticModel(Model):
-    __doc__ = parabolic.__doc__ + COMMON_DOC if parabolic.__doc__ else ""
+    """A quadratic model, with three Parameters
+    ``a``, ``b``, and ``c``, defined as
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(QuadraticModel, self).__init__(parabolic, *args, **kwargs)
+    .. math::
+
+        f(x; a, b, c) = a x^2 + b x + c
+    """
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(QuadraticModel, self).__init__(parabolic, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
-        """TODO: docstring in public method."""
         a, b, c = 0., 0., 0.
         if x is not None:
             a, b, c = np.polyfit(x, data, 2)
         pars = self.make_params(a=a, b=b, c=c)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 ParabolicModel = QuadraticModel
 
 
 class PolynomialModel(Model):
-    __doc__ = "x -> c0 + c1 * x + c2 * x**2 + ... c7 * x**7" + COMMON_DOC
+    """A polynomial model with up to 7 Parameters, specfied by ``degree``.
+
+    .. math::
+
+    f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i
+
+    with parameters ``c0``, ``c1``, ..., ``c7``.  The supplied ``degree``
+    will specify how many of these are actual variable parameters.  This
+    uses :numpydoc:`polyval` for its calculation of the polynomial.
+    """
     MAX_DEGREE = 7
     DEGREE_ERR = "degree must be an integer less than %d."
-
-    def __init__(self, degree, *args, **kwargs):
-        """TODO: docstring in public method."""
+    def __init__(self, degree, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
 
@@ -181,10 +247,9 @@ class PolynomialModel(Model):
         def polynomial(x, c0=0, c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0):
             return np.polyval([c7, c6, c5, c4, c3, c2, c1, c0], x)
 
-        super(PolynomialModel, self).__init__(polynomial, *args, **kwargs)
+        super(PolynomialModel, self).__init__(polynomial, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
-        """TODO: docstring in public method."""
         pars = self.make_params()
         if x is not None:
             out = np.polyfit(x, data, self.poly_degree)
@@ -192,79 +257,169 @@ class PolynomialModel(Model):
                 pars['%sc%i' % (self.prefix, i)].set(value=coef)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 class GaussianModel(Model):
-    __doc__ = gaussian.__doc__ + COMMON_DOC if gaussian.__doc__ else ""
+    r"""A model based on a Gaussian or normal distribution lineshape
+    (see http://en.wikipedia.org/wiki/Normal_distribution), with three Parameters:
+    ``amplitude``, ``center``, and ``sigma``.
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
+
+    .. math::
+
+        f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}
+
+    where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
+    :math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
+    half maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
+    :math:`2.3548\sigma`.
+    """
     fwhm_factor = 2.354820
     height_factor = 1./np.sqrt(2*np.pi)
-
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(GaussianModel, self).__init__(gaussian, *args, **kwargs)
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(GaussianModel, self).__init__(gaussian, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 class LorentzianModel(Model):
-    __doc__ = lorentzian.__doc__ + COMMON_DOC if lorentzian.__doc__ else ""
+    r"""A model based on a Lorentzian or Cauchy-Lorentz distribution function
+    (see http://en.wikipedia.org/wiki/Cauchy_distribution), with three Parameters:
+    ``amplitude``, ``center``, and ``sigma``.
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
+
+    .. math::
+
+        f(x; A, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
+
+    where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
+    :math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
+    half maximum is :math:`2\sigma`.
+    """
     fwhm_factor = 2.0
     height_factor = 1./np.pi
-
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(LorentzianModel, self).__init__(lorentzian, *args, **kwargs)
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(LorentzianModel, self).__init__(lorentzian, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class VoigtModel(Model):
-    __doc__ = voigt.__doc__ + COMMON_DOC if voigt.__doc__ else ""
+    r"""A model based on a Voigt distribution function (see
+    http://en.wikipedia.org/wiki/Voigt_profile>), with four Parameters:
+    ``amplitude``, ``center``, ``sigma``, and ``gamma``.  By default,
+    ``gamma`` is constrained to have value equal to ``sigma``, though it
+    can be varied independently.  In addition, parameters ``fwhm`` and
+    ``height`` are included as constraints to report full width at half
+    maximum and maximum peak height, respectively.  The definition for the
+    Voigt function used here is
+
+    .. math::
+
+        f(x; A, \mu, \sigma, \gamma) = \frac{A \textrm{Re}[w(z)]}{\sigma\sqrt{2 \pi}}
+
+    where
+
+    .. math::
+        :nowrap:
+
+        \begin{eqnarray*}
+            z &=& \frac{x-\mu +i\gamma}{\sigma\sqrt{2}} \\
+            w(z) &=& e^{-z^2}{\operatorname{erfc}}(-iz)
+        \end{eqnarray*}
+
+    and :func:`erfc` is the complimentary error function.  As above,
+    ``amplitude`` corresponds to :math:`A`, ``center`` to
+    :math:`\mu`, and ``sigma`` to :math:`\sigma`. The parameter ``gamma``
+    corresponds  to :math:`\gamma`.
+    If ``gamma`` is kept at the default value (constrained to ``sigma``),
+    the full width at half maximum is approximately :math:`3.6013\sigma`.
+
+    """
     fwhm_factor = 3.60131
     height_factor = 1./np.sqrt(2*np.pi)
-
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(VoigtModel, self).__init__(voigt, *args, **kwargs)
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(VoigtModel, self).__init__(voigt, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative,
                                ampscale=1.5, sigscale=0.65)
         return update_param_vals(pars, self.prefix, **kwargs)
 
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
+
 
 class PseudoVoigtModel(Model):
-    __doc__ = pvoigt.__doc__ + COMMON_DOC if pvoigt.__doc__ else ""
+    r"""A model based on a pseudo-Voigt distribution function
+    (see http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
+    which is a weighted sum of a Gaussian and Lorentzian distribution functions
+    with that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
+    and full width at half maximum (and so have  constrained values of
+    ``sigma`` (:math:`\sigma`).  A parameter ``fraction`` (:math:`\alpha`)
+    controls the relative weight of the Gaussian and Lorentzian components,
+    giving the full definition of
+
+    .. math::
+
+        f(x; A, \mu, \sigma, \alpha) = \frac{(1-\alpha)A}{\sigma_g\sqrt{2\pi}}
+        e^{[{-{(x-\mu)^2}/{{2\sigma_g}^2}}]}
+        + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
+
+    where :math:`\sigma_g = {\sigma}/{\sqrt{2\ln{2}}}` so that the full width
+    at half maximum of each component and of the sum is :math:`2\sigma`. The
+    :meth:`guess` function always sets the starting value for ``fraction`` at 0.5.
+    """
+
     fwhm_factor = 2.0
 
-    def __init__(self, *args, **kwargs):
-        """TODO: docstring in public method."""
-        super(PseudoVoigtModel, self).__init__(pvoigt, *args, **kwargs)
+    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+                 name=None,  **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing,
+                       'independent_vars': independent_vars})
+        super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fraction', value=0.5)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
-        """TODO: docstring in public method."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
         pars['%sfraction' % self.prefix].set(value=0.5)
         return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__    = COMMON_GUESS_DOC
 
 
 class MoffatModel(Model):
