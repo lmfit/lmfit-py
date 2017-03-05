@@ -71,7 +71,7 @@ initial guesses.  The results returned are the optimal values for the
 parameters and the covariance matrix.  It's simple and useful, but it
 misses the benefits of lmfit.
 
-With :class:`Model`, we create a Model that wraps the ``gaussian`` model
+With lmfit, we create a :class:`Model` that wraps the ``gaussian`` model
 function, which automatically generate the appropriate residual function,
 and determines the corresponding parameter names from the function
 signature itself::
@@ -89,11 +89,11 @@ function is taken as the independent variable, held in
 :attr:`independent_vars`, and the rest of the functions positional
 arguments (and, in certain cases, keyword arguments -- see below) are used
 for Parameter names.  Thus, for the ``gaussian`` function above, the
-parameters are named ``amp``, ``cen``, and ``wid``, and ``x`` is the
-independent variable -- all taken directly from the signature of the model
-function. As we will see below, you can modify these default determination
-of what is the independent variable is and which function arguments should
-be identified as parameter names.
+independent variable is ``x``, and the parameters are named ``amp``,
+``cen``, and ``wid``, and -- all taken directly from the signature of the
+model function. As we will see below, you can modify these default
+determination of what is the independent variable is and which function
+arguments should be identified as parameter names.
 
 The Parameters are *not* created when the model is created. The model knows
 what the parameters should be named, but not anything about the scale and
@@ -104,10 +104,10 @@ the expected names:
 
     >>> params = gmod.make_params()
 
-This creates the :class:`~lmfit.parameter.Parameters` but doesn't necessarily give them
-initial values -- again, the model has no idea what the scale should be.
-You can set initial values for parameters with keyword arguments to
-:meth:`make_params`:
+This creates the :class:`~lmfit.parameter.Parameters` but does not
+automaticaly give them initial values since it has no idea what the scale
+should be.  You can set initial values for parameters with keyword
+arguments to :meth:`make_params`:
 
     >>> params = gmod.make_params(cen=5, amp=200, wid=1)
 
@@ -124,19 +124,19 @@ function::
     >>> x = linspace(0, 10, 201)
     >>> y = gmod.eval(params, x=x)
 
-or with
+or with::
 
     >>> y = gmod.eval(x=x, cen=6.5, amp=100, wid=2.0)
 
-
 Admittedly, this a slightly long-winded way to calculate a Gaussian
 function, given that you could have called your ``gaussian`` function
-directly. But now that the model is set up, we can use its
+directly.  But now that the model is set up, we can use its
 :meth:`fit` method to fit this model to data, as with::
 
     >>> result = gmod.fit(y, params)
 
-or with
+or with::
+
     >>> result = gmod.fit(y, cen=6.5, amp=100, wid=2.0)
 
 Putting everything together,  (included in the
@@ -185,12 +185,8 @@ Note that the model fitting was really performed with::
 
 These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
-starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.
-This compares to :scipydoc:`optimize.curve_fit`::
-
-    best_vals, covar = curve_fit(gaussian, x, y, p0=[5, 5, 1])
-
-In addition, all the other features of lmfit are included:
+starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.  In
+addition, all the other features of lmfit are included:
 :class:`~lmfit.parameter.Parameters` can have bounds and constraints and
 the result is a rich object that can be reused to explore the model fit in
 detail.
@@ -403,7 +399,7 @@ the model will know to map these to the ``amplitude`` argument of ``myfunc``.
 
 
 Initializing model parameters
------------------------------------------
+--------------------------------
 
 As mentioned above, the parameters created by :meth:`Model.make_params` are
 generally created with invalid initial values of ``None``.  These values
@@ -494,6 +490,8 @@ After a model has been created, you can give it hints for how to create
 parameters with :meth:`Model.make_params`.  This allows you to set not only a
 default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
+
+
 expression.   To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
@@ -704,6 +702,34 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
    array, so that ``weights*(data - fit)`` is minimized in the
    least-squares sense.
 
+
+Calculating uncertainties in the model function
+-------------------------------------------------
+
+We return to the first example above and ask not only for the
+uncertainties in the fitted parameters but for the range of values that
+those uncertainties mean for the model function itself.  We can use the
+:meth:`ModelResult.eval_uncertainty` method of the model result object to
+evaluate the uncertainty in the model with a specified level for
+:math:`sigma`.
+
+That is, adding::
+
+    dely = result.eval_uncertainty(sigma=3)
+    plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB")
+
+to the example fit to the Gaussian at the beginning of this chapter will
+give :math:`3-sigma` bands for the best-fit Gaussian, and produce the
+figure below.
+
+.. _figModel4:
+
+  .. image:: _images/model_fit4.png
+     :target: _images/model_fit4.png
+     :width: 50%
+
+
+
 .. index:: Composite models
 
 .. _composite_models_section:
@@ -736,8 +762,11 @@ and use that with::
 
 But we already had a function for a gaussian function, and maybe we'll
 discover that a linear background isn't sufficient which would mean the
-model function would have to be changed.  As an alternative we could define
-a linear function::
+model function would have to be changed.
+
+Instead, lmfit allows models to be combined into a :class:`CompositeModel`.
+As an alternative to including a linear background in our model function,
+we could define a linear function::
 
     def line(x, slope, intercept):
         "a line"
@@ -772,7 +801,6 @@ which prints out the results::
     [[Correlations]] (unreported correlations are <  0.100)
         C(amp, wid)                  =  0.666
         C(cen, intercept)            =  0.129
-
 
 and shows the plot on the left.
 
@@ -816,32 +844,20 @@ us to identify which parameter went with which component model.  As we will
 see in the next chapter, using composite models with the built-in models
 provides a simple way to build up complex models.
 
-.. class::  CompositeModel(left, right, op[, **kws])
+.. autoclass::  CompositeModel(left, right, op[, **kws])
 
-    Create a composite model from two models (`left` and `right` and an
-    binary operator (`op`).  Additional keywords are passed to
-    :class:`Model`.
-
-    :param left: Left-hand side Model.
-    :type left: :class:`Model`
-    :param right: Right-hand side Model.l
-    :type right: :class:`Model`
-    :param op: Binary operator.
-    :type op: callable, and taking 2 arguments (`left` and `right`).
-
-Normally, one does not have to explicitly create a :class:`CompositeModel`,
-as doing::
+Note that when using builtin Python binary operators, a
+:class:`CompositeModel` will automatically be constructed for you. That is,
+doing::
 
      mod = Model(fcn1) + Model(fcn2) * Model(fcn3)
 
-will automatically create a :class:`CompositeModel`.  In this example,
-`mod.left` will be `Model(fcn1)`, `mod.op` will be :meth:`operator.add`,
-and `mod.right` will be another CompositeModel that has a `left` attribute
-of `Model(fcn2)`, an `op` of :meth:`operator.mul`, and a `right` of
-`Model(fcn3)`.
+will create a :class:`CompositeModel`.  Here, `left` will be `Model(fcn1)`,
+`op` will be :meth:`operator.add`, and `right` will be another
+CompositeModel that has a `left` attribute of `Model(fcn2)`, an `op` of
+:meth:`operator.mul`, and a `right` of `Model(fcn3)`.
 
-If you want to use a binary operator other than add, subtract, multiply, or
-divide that are supported through normal Python syntax, you'll need to
+To use a binary operator other than '+', '-', '*', or '/' you can
 explicitly create a :class:`CompositeModel` with the appropriate binary
 operator.  For example, to convolve two models, you could define a simple
 convolution function, perhaps as::
@@ -898,29 +914,3 @@ and shows the plots:
 
 Using composite models with built-in or custom operators allows you to
 build complex models from testable sub-components.
-
-
-Calculating uncertainties in the model function
-==============================================================
-
-Finally, we return to the first example above and ask not only for the
-uncertainties in the fitted parameters but for the range of values that
-those uncertainties mean for the model function itself.  We can use the
-:meth:`ModelResult.eval_uncertainty` method of the model result object to
-evaluate the uncertainty in the model with a specified level for
-:math:`sigma`.
-
-That is, adding::
-
-    dely = result.eval_uncertainty(sigma=3)
-    plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB")
-
-to the example fit to the Gaussian at the beginning of this chapter will
-give :math:`3-sigma` bands for the best-fit Gaussian, and produce the
-figure below.
-
-.. _figModel4:
-
-  .. image:: _images/model_fit4.png
-     :target: _images/model_fit4.png
-     :width: 50%

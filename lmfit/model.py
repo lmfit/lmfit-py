@@ -752,31 +752,16 @@ class Model(object):
 
 
 class CompositeModel(Model):
-    """Create a composite model -- a binary operator of two Models.
+    """A composite model combines two models (`left` and `right`) with a
+    binary operator (`op`).
 
-    Parameters
-    ----------
-    left_model:    left-hand side model-- must be a Model()
-    right_model:   right-hand side model -- must be a Model()
-    oper:          callable binary operator (typically, operator.add, operator.mul, etc)
 
-    independent_vars: list of strings or None (default)
-        arguments to func that are independent variables
-    param_names: list of strings or None (default)
-        names of arguments to func that are to be made into parameters
-    missing: None, 'none', 'drop', or 'raise'
-        'none' or None: Do not check for null or missing values (default)
-        'drop': Drop null or missing observations in data.
-            if pandas is installed, pandas.isnull is used, otherwise
-            numpy.isnan is used.
-        'raise': Raise a (more helpful) exception when data contains null
-            or missing values.
-    name: None or string
-        name for the model. When `None` (default) the name is the same as
-        the model function (`func`).
+    Normally, one does not have to explicitly create a `CompositeModel`,
+    but can use normal Python operators `+`, '-', `*`, and `/` to combine
+    components as doing::
 
+    >>> mod = Model(fcn1) + Model(fcn2) * Model(fcn3)
     """
-
     _names_collide = ("\nTwo models have parameters named '{clash}'. "
                       "Use distinct names.")
     _bad_arg = "CompositeModel: argument {arg} is not a Model"
@@ -785,7 +770,23 @@ class CompositeModel(Model):
                   operator.mul: '*', operator.truediv: '/'}
 
     def __init__(self, left, right, op, **kws):
-        """TODO: docstring in public method."""
+        """
+        Parameters
+        ----------
+        left :  `Model` instance
+            left-hand model
+        right :  `Model` instance
+            right-hand model
+        op :  callable binary operator
+            operator to combine `left` and `right` models.
+        kwargs : optional
+            additional keywords are passed to `Model` when creating this
+            new model.
+
+        Notes
+        -----
+        1. The two models must use the same independent variable.
+        """
         if not isinstance(left, Model):
             raise ValueError(self._bad_arg.format(arg=left))
         if not isinstance(right, Model):
@@ -861,66 +862,12 @@ class CompositeModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
-xxx ="""
-  Attributes
-        ----------
-        model         instance of Model -- the model function
-        params        instance of Parameters -- the fit parameters
-        data          array of data values to compare to model
-        weights       array of weights used in fitting
-        init_params   copy of params, before being updated by fit()
-        init_values   array of parameter values, before being updated by fit()
-        init_fit      model evaluated with init_params.
-        best_fit      model evaluated with params after being updated by fit()
-
-        Methods
-        --------
-        fit(data=None, params=None, weights=None, method=None, **kwargs)
-            fit (or re-fit) model with params to data (with weights)
-            using supplied method.  The keyword arguments are sent to
-            as keyword arguments to the model function.
-
-            all inputs are optional, defaulting to the value used in
-            the previous fit.  This allows easily changing data or
-            parameter settings, or both.
-
-     eval(params=None, **kwargs)
-          evaluate the current model, with parameters (defaults to the current
-          parameter values), with values in kwargs sent to the model function.
-
-     eval_components(params=Nones, **kwargs)
-          evaluate the current model, with parameters (defaults to the current
-          parameter values), with values in kwargs sent to the model function
-          and returns an ordered dict with the model names as the key and the
-          component results as the values.
-
-    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
-          return a fit report.
-
-    plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', xlabel = None, ylabel=None,
-             numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
-             ax_kws=None)
-         Plot the fit results using matplotlib.
-
-    plot_residuals(self, ax=None, datafmt='o', data_kws=None, fit_kws=None,
-                   ax_kws=None)
-         Plot the fit residuals using matplotlib.
-
-    plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, numpoints=None,
-         data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None,
-         ax_fit_kws=None, fig_kws=None)
-         Plot the fit results and residuals using matplotlib.
-
-        """
-
 class ModelResult(Minimizer):
     """Result from Model fit.
     This has many attributes and methods for viewing and working with the
     results of a fit using Model.  It inherits from Minimizer, so that it
     can be used to modify and re-run the fit for the Model.
-
     """
-
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **fit_kws):
