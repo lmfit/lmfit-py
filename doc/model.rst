@@ -549,7 +549,6 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 .. autoclass:: ModelResult
 
 
-
 :class:`ModelResult` methods
 ---------------------------------
 
@@ -561,162 +560,19 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 .. automethod:: ModelResult.fit
 
 
-.. method:: ModelResult.fit_report(modelpars=None[, show_correl=True[, min_correl=0.1]])
+.. automethod:: ModelResult.fit_report
 
-   Return a printable fit report for the fit with fit statistics, best-fit
-   values with uncertainties and correlations.  As with :func:`fit_report`.
+.. automethod:: ModelResult.conf_interval
 
-   :param modelpars:    Parameters with "Known Values" (optional, default None).
-   :param show_correl:  Whether to show list of sorted correlations [``True``].
-   :param min_correl:   Smallest correlation absolute value to show [0.1].
+.. automethod:: ModelResult.ci_report
 
+.. automethod:: ModelResult.eval_uncertainty
 
-.. method:: ModelResult.conf_interval(**kwargs)
+.. automethod:: ModelResult.plot
 
-   Calculate the confidence intervals for the variable parameters using
-   :func:`confidence.conf_interval() <lmfit.conf_interval>`.  All keyword
-   arguments are passed to that function.  The result is stored in
-   :attr:`ci_out`, and so can be accessed without recalculating them.
+.. automethod:: ModelResult.plot_fit
 
-.. method:: ModelResult.ci_report(with_offset=True)
-
-   Return a nicely formatted text report of the confidence intervals, as
-   from :func:`ci_report() <lmfit.ci_report>`.
-
-.. method:: ModelResult.eval_uncertainty(**kwargs)
-
-   Evaluate the uncertainty of the *model function* from the
-   uncertainties for the best-fit parameters.  This can be used
-   to give confidence bands for the model.
-
-   :param params:  Parameters, defaults to :attr:`params`.
-   :param sigma:  Confidence level, i.e. how many :math:`\sigma` values, default=1.
-   :returns: ndarray to be added/subtracted to best-fit to give uncertaintay in the values for the model.
-
-   An example using this method::
-
-     out = model.fit(data, params, x=x)
-     dely = out.eval_uncertainty(x=x)
-     plt.plot(x, data)
-     plt.plot(x, out.best_fit)
-     plt.fill_between(x, out.best_fit-dely, out.best_fit+dely, color='#888888')
-
-  This calculation is based on the excellent and clear example from
-  https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
-  which references the original work of
-  J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
-
-
-.. method:: ModelResult.plot(datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None, fig=None, data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None, fig_kws=None)
-
-   Plot the fit results and residuals using Matplotlib, if available.  The
-   plot will include two panels, one showing the fit residual, and the
-   other with the data points, the initial fit curve, and the best-fit
-   curve. If the fit model included weights or if ``yerr`` is specified,
-   errorbars will also be plotted.
-
-   :param datafmt: Matplotlib format string for data curve.
-   :type  datafmt: ``None`` or string
-   :param fitfmt:  Matplotlib format string for best-fit curve.
-   :type fitfmt: ``None`` or string
-   :param initfmt:  Matplotlib format string for initial curve.
-   :type intfmt: ``None`` or string
-   :param yerr:  Array of uncertainties for data array.
-   :type  yerr: ``None`` or ndarray
-   :param numpoints:  Number of points to display
-   :type numpoints: ``None`` or integer
-   :param fig: Matplotlib Figure to plot on.
-   :type fig:  ``None`` or matplotlib.figure.Figure
-   :param data_kws:  Keyword arguments passed to plot for data curve.
-   :type data_kws: ``None`` or dictionary
-   :param fit_kws:  Keyword arguments passed to plot for best-fit curve.
-   :type fit_kws: ``None`` or dictionary
-   :param init_kws:  Keyword arguments passed to plot for initial curve.
-   :type init_kws: ``None`` or dictionary
-   :param ax_res_kws:  Keyword arguments passed to creation of Matplotlib axes for the residual plot.
-   :type ax_res_kws: ``None`` or dictionary
-   :param ax_fit_kws:  Keyword arguments passed to creation of Matplotlib axes for the fit plot.
-   :type ax_fit_kws: ``None`` or dictionary
-   :param fig_kws:  Keyword arguments passed to creation of Matplotlib figure.
-   :type fig_kws: ``None`` or dictionary
-   :returns:     matplotlib.figure.Figure
-
-   This combines :meth:`ModelResult.plot_fit` and :meth:`ModelResult.plot_residual`.
-
-   If ``yerr`` is specified or if the fit model included weights, then
-   matplotlib.axes.Axes.errorbar is used to plot the data.  If ``yerr`` is
-   not specified and the fit includes weights, ``yerr`` set to ``1/self.weights``
-
-   If ``fig`` is None then ``matplotlib.pyplot.figure(**fig_kws)`` is called.
-
-.. method:: ModelResult.plot_fit(ax=None, datafmt='o', fitfmt='-', initfmt='--', yerr=None, numpoints=None,  data_kws=None, fit_kws=None, init_kws=None, ax_kws=None)
-
-   Plot the fit results using matplotlib, if available.  The plot will include
-   the data points, the initial fit curve, and the best-fit curve. If the fit
-   model included weights or if ``yerr`` is specified, errorbars will also
-   be plotted.
-
-   :param ax: Matplotlib axes to plot on.
-   :type ax:  ``None`` or matplotlib.axes.Axes
-   :param datafmt: Matplotlib format string for data curve.
-   :type  datafmt: ``None`` or string
-   :param fitfmt:  Matplotlib format string for best-fit curve.
-   :type fitfmt: ``None`` or string
-   :param initfmt:  Matplotlib format string for initial curve.
-   :type intfmt: ``None`` or string
-   :param yerr:  Array of uncertainties for data array.
-   :type  yerr: ``None`` or ndarray
-   :param numpoints:  Number of points to display.
-   :type numpoints: ``None`` or integer
-   :param data_kws:  Keyword arguments passed to plot for data curve.
-   :type data_kws: ``None`` or dictionary
-   :param fit_kws:  Keyword arguments passed to plot for best-fit curve.
-   :type fit_kws: ``None`` or dictionary
-   :param init_kws:  Keyword arguments passed to plot for initial curve.
-   :type init_kws: ``None`` or dictionary
-   :param ax_kws:  Keyword arguments passed to creation of matplotlib axes.
-   :type ax_kws: ``None`` or dictionary
-   :returns:     matplotlib.axes.Axes
-
-   For details about plot format strings and keyword arguments see
-   documentation of :func:`matplotlib.axes.Axes.plot`.
-
-   If ``yerr`` is specified or if the fit model included weights, then
-   matplotlib.axes.Axes.errorbar is used to plot the data.  If ``yerr`` is
-   not specified and the fit includes weights, ``yerr`` set to ``1/self.weights``
-
-   If ``ax`` is None then ``matplotlib.pyplot.gca(**ax_kws)`` is called.
-
-.. method:: ModelResult.plot_residuals(ax=None, datafmt='o', yerr=None, data_kws=None, fit_kws=None, ax_kws=None)
-
-  Plot the fit residuals (data - fit) using matplotlib.  If ``yerr`` is
-  supplied or if the model included weights, errorbars will also be plotted.
-
-   :param ax: Matplotlib axes to plot on.
-   :type ax:  ``None`` or matplotlib.axes.Axes
-   :param datafmt: Matplotlib format string for data curve.
-   :type  datafmt: ``None`` or string
-   :param yerr:  Array of uncertainties for data array.
-   :type  yerr: ``None`` or ndarray
-   :param numpoints:  Number of points to display
-   :type numpoints: ``None`` or integer
-   :param data_kws:  Keyword arguments passed to plot for data curve.
-   :type data_kws: ``None`` or dictionary
-   :param fit_kws:  Keyword arguments passed to plot for best-fit curve.
-   :type fit_kws: ``None`` or dictionary
-   :param ax_kws:  Keyword arguments passed to creation of matplotlib axes.
-   :type ax_kws: ``None`` or dictionary
-   :returns:     matplotlib.axes.Axes
-
-   For details about plot format strings and keyword arguments see
-   documentation of :func:`matplotlib.axes.Axes.plot`.
-
-   If ``yerr`` is specified or if the fit model included weights, then
-   matplotlib.axes.Axes.errorbar is used to plot the data.  If ``yerr`` is
-   not specified and the fit includes weights, ``yerr`` set to ``1/self.weights``
-
-   If ``ax`` is None then ``matplotlib.pyplot.gca(**ax_kws)`` is called.
-
+.. automethod:: ModelResult.plot_residuals
 
 
 :class:`ModelResult` attributes
