@@ -509,6 +509,7 @@ class Model(object):
 
     def _strip_prefix(self, name):
         npref = len(self._prefix)
+        print("_MODEL _strip_prefix ", name, self._prefix)
         if npref > 0 and name.startswith(self._prefix):
             name = name[npref:]
         return name
@@ -1147,7 +1148,7 @@ class ModelResult(Minimizer):
         return ci_report(self.conf_interval(**kwargs),
                          with_offset=with_offset, ndigits=ndigits)
 
-    def fit_report(self, inpars, modelpars=None, show_correl=True,
+    def fit_report(self, modelpars=None, show_correl=True,
                    min_correl=0.1, sort_pars=False):
         """Return a printable fit report for the fit with fit statistics,
         best-fit values with uncertainties and correlations.
@@ -1179,7 +1180,7 @@ class ModelResult(Minimizer):
         --------
         :func:`fit_report()`
         """
-        report = fit_report(inpars, modelpars=modelpars,
+        report = fit_report(self.params, modelpars=modelpars,
                             show_correl=show_correl,
                             min_correl=min_correl, sort_pars=sort_pars)
         modname = self.model._reprstring(long=True)
