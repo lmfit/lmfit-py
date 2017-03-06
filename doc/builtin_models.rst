@@ -55,263 +55,82 @@ methods for all of these make a fairly crude guess for the value of
 :class:`GaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: GaussianModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on a `Gaussian or normal distribution lineshape
-<http://en.wikipedia.org/wiki/Normal_distribution>`_.  Parameter names:
-``amplitude``, ``center``, and ``sigma``.
-In addition, parameters ``fwhm`` and ``height`` are included as constraints
-to report full width at half maximum and maximum peak height, respectively.
-
-.. math::
-
-  f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}
-
-where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
-:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
-half maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
-:math:`2.3548\sigma`.
-
+.. autoclass:: GaussianModel
 
 :class:`LorentzianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: LorentzianModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on a `Lorentzian or Cauchy-Lorentz distribution function
-<http://en.wikipedia.org/wiki/Cauchy_distribution>`_.  Parameter names:
-``amplitude``, ``center``, and ``sigma``.
-In addition, parameters ``fwhm`` and ``height`` are included as constraints
-to report full width at half maximum and maximum peak height, respectively.
-
-.. math::
-
-  f(x; A, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
-
-where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
-:math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
-half maximum is :math:`2\sigma`.
+.. autoclass:: LorentzianModel
 
 
 :class:`VoigtModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: VoigtModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on a `Voigt distribution function
-<http://en.wikipedia.org/wiki/Voigt_profile>`_.  Parameter names:
-``amplitude``, ``center``, and ``sigma``.  A ``gamma`` parameter is also
-available.  By default, it is constrained to have value equal to ``sigma``,
-though this can be varied independently.  In addition, parameters ``fwhm``
-and ``height`` are included as constraints to report full width at half
-maximum and maximum peak height, respectively.  The definition for the
-Voigt function used here is
-
-.. math::
-
-    f(x; A, \mu, \sigma, \gamma) = \frac{A \textrm{Re}[w(z)]}{\sigma\sqrt{2 \pi}}
-
-where
-
-.. math::
-   :nowrap:
-
-   \begin{eqnarray*}
-     z &=& \frac{x-\mu +i\gamma}{\sigma\sqrt{2}} \\
-     w(z) &=& e^{-z^2}{\operatorname{erfc}}(-iz)
-   \end{eqnarray*}
-
-and :func:`erfc` is the complimentary error function.  As above,
-``amplitude`` corresponds to :math:`A`, ``center`` to
-:math:`\mu`, and ``sigma`` to :math:`\sigma`. The parameter ``gamma``
-corresponds  to :math:`\gamma`.
-If ``gamma`` is kept at the default value (constrained to ``sigma``),
-the full width at half maximum is approximately :math:`3.6013\sigma`.
+.. autoclass:: VoigtModel
 
 
 :class:`PseudoVoigtModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: PseudoVoigtModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-a model based on a `pseudo-Voigt distribution function
-<http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation>`_,
-which is a weighted sum of a Gaussian and Lorentzian distribution functions
-with that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
-and full width at half maximum (and so have  constrained values of
-``sigma`` (:math:`\sigma`).  A parameter ``fraction`` (:math:`\alpha`)
-controls the relative weight of the Gaussian and Lorentzian components,
-giving the full definition of
-
-.. math::
-
-  f(x; A, \mu, \sigma, \alpha) = \frac{(1-\alpha)A}{\sigma_g\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma_g}^2}}]}
- + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]
-
-where :math:`\sigma_g = {\sigma}/{\sqrt{2\ln{2}}}` so that the full width
-at half maximum of each component and of the sum is :math:`2\sigma`. The
-:meth:`guess` function always sets the starting value for ``fraction`` at 0.5.
+.. autoclass:: PseudoVoigtModel
 
 
 :class:`MoffatModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: MoffatModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-a model based on a `Moffat distribution function
-<https://en.wikipedia.org/wiki/Moffat_distribution>`_, the parameters are
-``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
-a width parameter ``sigma`` (:math:`\sigma`) and an exponent ``beta`` (:math:`\beta`).
-For (:math:`\beta=1`) the Moffat has a Lorentzian shape.
-
-.. math::
-
-  f(x; A, \mu, \sigma, \beta) = A \big[(\frac{x-\mu}{\sigma})^2+1\big]^{-\beta}
-
-the full width have maximum is :math:`2\sigma\sqrt{2^{1/\beta}-1}`.
-:meth:`guess` function always sets the starting value for ``beta`` to 1.
+.. autoclass:: MoffatModel
 
 
 :class:`Pearson7Model`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: Pearson7Model(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on a `Pearson VII distribution
-<http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution>`_.
-This is a Lorenztian-like distribution function.  It has the usual
-parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-``sigma`` (:math:`\sigma`), and also an ``exponent`` (:math:`m`) in
-
-.. math::
-
-    f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
-
-where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
-:mod:`scipy.special`).  The :meth:`guess` function always
-gives a starting value for ``exponent`` of 1.5.
+.. autoclass:: Pearson7Model
 
 :class:`StudentsTModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: StudentsTModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on a `Student's t distribution function
-<http://en.wikipedia.org/wiki/Student%27s_t-distribution>`_, with the usual
-parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-``sigma`` (:math:`\sigma`) in
-
-.. math::
-
-    f(x; A, \mu, \sigma) = \frac{A \Gamma(\frac{\sigma+1}{2})} {\sqrt{\sigma\pi}\,\Gamma(\frac{\sigma}{2})} \Bigl[1+\frac{(x-\mu)^2}{\sigma}\Bigr]^{-\frac{\sigma+1}{2}}
-
-
-where :math:`\Gamma(x)` is the gamma function.
+.. autoclass:: StudentsTModel
 
 
 :class:`BreitWignerModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: BreitWignerModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on a `Breit-Wigner-Fano function
-<http://en.wikipedia.org/wiki/Fano_resonance>`_.  It has the usual
-parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-``sigma`` (:math:`\sigma`), plus ``q`` (:math:`q`) in
-
-.. math::
-
-    f(x; A, \mu, \sigma, q) = \frac{A (q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}
+.. autoclass:: BreitWignerModel
 
 
 :class:`LognormalModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: LognormalModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on the `Log-normal distribution function
-<http://en.wikipedia.org/wiki/Lognormal>`_.
-It has the usual parameters
-``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma``
-(:math:`\sigma`) in
-
-.. math::
-
-    f(x; A, \mu, \sigma) = \frac{A e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}
+.. autoclass:: LognormalModel
 
 
 :class:`DampedOcsillatorModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: DampedOcsillatorModel(missing=None[, prefix=''[, name=None[, **kws]]])
+.. autoclass:: DampedOscillatorModel
 
-A model based on the `Damped Harmonic Oscillator Amplitude
-<http://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part>`_.
-It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-``sigma`` (:math:`\sigma`) in
+:class:`DampedHarmonicOcsillatorModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. math::
-
-    f(x; A, \mu, \sigma) = \frac{A}{\sqrt{ [1 - (x/\mu)^2]^2 + (2\sigma x/\mu)^2}}
+.. autoclass:: DampedHarmonicOscillatorModel
 
 
 :class:`ExponentialGaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ExponentialGaussianModel(missing=None[, prefix=''[, name=None[, **kws]]])
+.. autoclass:: ExponentialGaussianModel
 
-A model of an `Exponentially modified Gaussian distribution
-<http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution>`_.
-It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-``sigma`` (:math:`\sigma`), and also ``gamma`` (:math:`\gamma`) in
-
-.. math::
-
-    f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
-    \exp\bigl[\gamma({\mu - x  + \gamma\sigma^2/2})\bigr]
-    {\operatorname{erfc}}\Bigl(\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\Bigr)
-
-
-where :func:`erfc` is the complimentary error function.
 
 :class:`SkewedGaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: SkewedGaussianModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A variation of the above model, this is a `Skewed normal distribution
-<http://en.wikipedia.org/wiki/Skew_normal_distribution>`_.
-It has the usual parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-``sigma`` (:math:`\sigma`), and also ``gamma`` (:math:`\gamma`) in
-
-.. math::
-
-    f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
-  e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
-      {\operatorname{erf}}\bigl[
-     \frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
-     \bigr] \Bigr\}
-
-
-where :func:`erf` is the error function.
+.. autoclass:: SkewedGaussianModel
 
 
 :class:`DonaichModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: DonaichModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model of an `Doniach Sunjic asymmetric lineshape
-<http://www.casaxps.com/help_manual/line_shapes.htm>`_, used in
-photo-emission. With the usual parameters ``amplitude`` (:math:`A`),
-``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`), and also ``gamma``
-(:math:`\gamma`) in
-
-.. math::
-
-    f(x; A, \mu, \sigma, \gamma) = A\frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
-    \arctan{(x - \mu)}/\sigma\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
-
+.. autoclass:: DonaichModel
 
 Linear and Polynomial Models
 ------------------------------------
@@ -324,67 +143,22 @@ of many components of composite model.
 :class:`ConstantModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ConstantModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-   A class that consists of a single value, ``c``.  This is constant in the
-   sense of having no dependence on the independent variable ``x``, not in
-   the sense of being non-varying.  To be clear, ``c`` will be a variable
-   Parameter.
+.. autoclass:: ConstantModel
 
 :class:`LinearModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: LinearModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-   A class that gives a linear model:
-
-.. math::
-
-    f(x; m, b) = m x + b
-
-with parameters ``slope`` for :math:`m` and  ``intercept`` for :math:`b`.
-
+.. autoclass:: LinearModel
 
 :class:`QuadraticModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: QuadraticModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-
-   A class that gives a quadratic model:
-
-.. math::
-
-    f(x; a, b, c) = a x^2 + b x + c
-
-with parameters ``a``, ``b``, and ``c``.
-
-
-:class:`ParabolicModel`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. class:: ParabolicModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-   Same as :class:`QuadraticModel`.
-
+.. autoclass:: QuadraticModel
 
 :class:`PolynomialModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-.. class:: PolynomialModel(degree, missing=None[, prefix=''[, name=None[, **kws]]])
-
-   A class that gives a polynomial model up to ``degree`` (with maximum
-   value of 7).
-
-.. math::
-
-    f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i
-
-with parameters ``c0``, ``c1``, ..., ``c7``.  The supplied ``degree``
-will specify how many of these are actual variable parameters.  This uses
-:numpydoc:`polyval` for its calculation of the polynomial.
-
+.. autoclass:: PolynomialModel
 
 
 Step-like models
@@ -395,55 +169,13 @@ Two models represent step-like functions, and share many characteristics.
 :class:`StepModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: StepModel(form='linear'[, missing=None[, prefix=''[, name=None[, **kws]]]])
+.. autoclass:: StepModel
 
-A model based on a Step function, with four choices for functional form.
-The step function starts with a value 0, and ends with a value of :math:`A`
-(``amplitude``), rising to :math:`A/2` at :math:`\mu` (``center``),
-with :math:`\sigma` (``sigma``) setting the characteristic width. The
-supported functional forms are ``linear`` (the default), ``atan`` or
-``arctan`` for an arc-tangent function,  ``erf`` for an error function, or
-``logistic`` for a `logistic function <http://en.wikipedia.org/wiki/Logistic_function>`_.
-The forms are
-
-.. math::
-   :nowrap:
-
-   \begin{eqnarray*}
-   & f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})  & = A \min{[1, \max{(0,  \alpha)}]} \\
-   & f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})  & = A [1/2 + \arctan{(\alpha)}/{\pi}] \\
-   & f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})     & = A [1 + {\operatorname{erf}}(\alpha)]/2 \\
-   & f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}})& = A [1 - \frac{1}{1 +  e^{\alpha}} ]
-   \end{eqnarray*}
-
-where :math:`\alpha  = (x - \mu)/{\sigma}`.
 
 :class:`RectangleModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-.. class:: RectangleModel(form='linear'[, missing=None[, prefix=''[, name=None[, **kws]]]])
-
-A model based on a Step-up and Step-down function of the same form.  The
-same choices for functional form as for :class:`StepModel` are supported,
-with ``linear`` as the default.  The function starts with a value 0, and
-ends with a value of :math:`A` (``amplitude``), rising to :math:`A/2` at
-:math:`\mu_1` (``center1``), with :math:`\sigma_1` (``sigma1``) setting the
-characteristic width.  It drops to rising to :math:`A/2` at :math:`\mu_2`
-(``center2``), with characteristic width :math:`\sigma_2` (``sigma2``).
-
-.. math::
-   :nowrap:
-
-   \begin{eqnarray*}
-   &f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})   &= A \{ \min{[1, \max{(0, \alpha_1)}]} + \min{[-1, \max{(0,  \alpha_2)}]} \} \\
-   &f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})   &= A [\arctan{(\alpha_1)} + \arctan{(\alpha_2)}]/{\pi} \\
-   &f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})      &= A [{\operatorname{erf}}(\alpha_1) + {\operatorname{erf}}(\alpha_2)]/2 \\
-   &f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}}) &= A [1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 +  e^{\alpha_2}} ]
-   \end{eqnarray*}
-
-
-where :math:`\alpha_1  = (x - \mu_1)/{\sigma_1}` and :math:`\alpha_2  = -(x - \mu_2)/{\sigma_2}`.
+.. autoclass:: RectangleModel
 
 
 Exponential and Power law models
@@ -452,31 +184,12 @@ Exponential and Power law models
 :class:`ExponentialModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ExponentialModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on an `exponential decay function
-<http://en.wikipedia.org/wiki/Exponential_decay>`_. With parameters named
-``amplitude`` (:math:`A`), and ``decay`` (:math:`\tau`), this has the form:
-
-.. math::
-
-   f(x; A, \tau) = A e^{-x/\tau}
-
+.. autoclass:: ExponentialModel
 
 :class:`PowerLawModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: PowerLawModel(missing=None[, prefix=''[, name=None[, **kws]]])
-
-A model based on a `Power Law <http://en.wikipedia.org/wiki/Power_law>`_.
-With parameters
-named ``amplitude`` (:math:`A`), and ``exponent`` (:math:`k`), this has the
-form:
-
-.. math::
-
-   f(x; A, k) = A x^k
-
+.. autoclass:: PowerLawModel
 
 User-defined Models
 ----------------------------
@@ -501,19 +214,7 @@ mathematical constraints as discussed in :ref:`constraints_chapter`.
 :class:`ExpressionModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. class:: ExpressionModel(expr, independent_vars=None, init_script=None, **kws)
-
-    A model using the user-supplied mathematical expression, which can be nearly any valid Python expresion.
-
-    :param expr: Expression use to build model.
-    :type expr: string
-    :param independent_vars: List of argument names in expression that are independent variables.
-    :type independent_vars: ``None`` (default) or list of strings for independent variables
-    :param init_script: Python script to run before parsing and evaluating expression.
-    :type init_script: ``None`` (default) or string
-
-with other parameters passed to :class:`model.Model`, with the notable
-exception that :class:`ExpressionModel` does **not** support the `prefix` argument.
+.. autoclass:: ExpressionModel
 
 Since the point of this model is that an arbitrary expression will be
 supplied, the determination of what are the parameter names for the model
@@ -543,7 +244,6 @@ To evaluate this model, you might do the following::
     >>> x = numpy.linspace(0, 10, 501)
     >>> params = mod.make_params(off=0.25, amp=1.0, x0=2.0, phase=0.04)
     >>> y = mod.eval(params, x=x)
-
 
 While many custom models can be built with a single line expression
 (especially since the names of the lineshapes like `gaussian`, `lorentzian`

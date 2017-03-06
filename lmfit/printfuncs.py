@@ -65,19 +65,27 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     The report contains the best-fit values for the parameters and their
     uncertainties and correlations.
 
-    arguments
+    Parameters
     ----------
-       inpars       Parameters from fit or Minizer object returned from
-                    a fit.
-       modelpars    Optional Known Model Parameters [None]
-       show_correl  whether to show list of sorted correlations [True]
-       min_correl   smallest correlation absolute value to show [0.1]
-       sort_pars    If True, then fit_report will show parameter names
-                    sorted in alphanumerical order.  If False, then the
-                    parameters will be listed in the order they were
-                    added to the Parameters dictionary. If sort_pars is
-                    callable, then this (one argument) function is used
-                    to extract a comparison key from each list element.
+    inpars  : Parameters
+       input Parameters from fit or MinimizerResult returned from a fit.
+    modelpars : optional
+       known Model Parameters
+    show_correl : bool, default ``True``
+       whether to show list of sorted correlations
+    min_correl : float, default 0.1
+       smallest correlation absolute value to show.
+    sort_pars : bool, default ``False``, or callable
+       whether to show parameter names sorted in alphanumerical order.  If
+       ``False``, then the parameters will be listed in the order they were
+       added to the Parameters dictionary. If callable, then this (one
+       argument) function is used to extract a comparison key from each
+       list element.
+
+    Returns
+    -------
+    text : string
+       multi-line text of fit report
 
     """
     if isinstance(inpars, Parameters):

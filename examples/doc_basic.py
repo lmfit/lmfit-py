@@ -28,9 +28,7 @@ params.add('omega', value= 3.0)
 
 # do fit, here with leastsq model
 minner = Minimizer(fcn2min, params, fcn_args=(x, data))
-kws  = {'options': {'maxiter':10}}
 result = minner.minimize()
-
 
 # calculate final result
 final = data + result.residual

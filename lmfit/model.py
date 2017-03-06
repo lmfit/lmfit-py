@@ -53,42 +53,54 @@ def _ensureMatplotlib(function):
 
         return no_op
 
-
 class Model(object):
-    """Create a model from a user-defined function.
+    """Create a model from a user-supplied model function that returns an
+    array of data to model some data as for a curve-fitting problem.
 
-    Parameters
-    ----------
-    func: function to be wrapped
-    independent_vars: list of strings or None (default)
-        arguments to func that are independent variables
-    param_names: list of strings or None (default)
-        names of arguments to func that are to be made into parameters
-    missing: None, 'none', 'drop', or 'raise'
-        'none' or None: Do not check for null or missing values (default)
-        'drop': Drop null or missing observations in data.
-            if pandas is installed, pandas.isnull is used, otherwise
-            numpy.isnan is used.
-        'raise': Raise a (more helpful) exception when data contains null
-            or missing values.
-    name: None or string
-        name for the model. When `None` (default) the name is the same as
-        the model function (`func`).
+    The model function will normally take an independent variable (generally,
+    the first argument) and a series of arguments that are meant to be parameters
+    for the model.  Thus, a simple peak using a Gaussian defined as
 
-    Note
-    ----
-    Parameter names are inferred from the function arguments,
-    and a residual function is automatically constructed.
+    >>> import numpy as np
+    >>> def gaussian(x, amp, cen, wid):
+    ...     return amp * np.exp(-(x-cen)**2 / wid)
 
-    Example
-    -------
-    >>> def decay(t, tau, N):
-    ...     return N*np.exp(-t/tau)
-    ...
-    >>> my_model = Model(decay, independent_vars=['t'])
+    can be turned into a Model with
 
+    >>> gmodel = Model(gaussian)
+
+    this will automatically discover the names of the independent variables and parameters:
+
+    >>> print(gmodel.param_names, gmodel.independent_vars)
+    ['amp', 'cen', 'wid'], ['x']
+
+    The :meth:`make_params` method will create a Parameters object for this model, optionally
+    taking initial values:
+
+    >>> params = gmodel.make_params(amp=1, cen=0, wid=1)
+
+    You can also use :meth:`set_param_hint` to set default attributes for the parameters
+    created, so that doing
+
+    >>> gmodel.set_param_hint('wid', min=0.0)
+
+    would set a bound on the 'wid' Parameter created by :meth:`make_params`.
+
+    A model and corresponding Parameters can be used to evaluate the model for a given
+    input array (or single value) of independent variables with:
+
+    >>> xdata = np.linspace(-1, 1, 101)
+    >>> yinit = gmodel.eval(params, x=xdata)
+
+    and can be used to fit the Parameters to match an array of data:
+
+    >>> result = gmodel.fit(data=ydata, params, x=xdata)
+
+    which will return a `ModelResult` object.
+
+    Models can be combined into a `CompositeModel` by adding (or
+    multiplying, subtracting, or dividing) two or models.
     """
-
     _forbidden_args = ('data', 'weights', 'params')
     _invalid_ivar = "Invalid independent variable name ('%s') for function %s"
     _invalid_par = "Invalid parameter name ('%s') for function %s"
@@ -100,7 +112,46 @@ class Model(object):
 
     def __init__(self, func, independent_vars=None, param_names=None,
                  missing='none', prefix='', name=None, **kws):
-        """TODO: docstring in public method."""
+        """
+        Parameters
+        ----------
+        func: function to be wrapped
+        independent_vars: list of strings or ``None`` (default)
+            arguments to func that are independent variables
+        param_names: list of strings or ``None`` (default)
+            names of arguments to func that are to be made into parameters
+        missing:  ``None`` or string
+            how to handle `nan` and missing values in data. One of:
+
+            - 'none' or ``None``: Do not check for null or missing values (default)
+
+            - 'drop': Drop null or missing observations in data. if pandas is
+              installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
+
+            - 'raise': Raise a (more helpful) exception when data contains null
+               or missing values.
+
+        name: ``None`` or string
+            name for the model. When ``None`` (default) the name is the same as
+            the model function (`func`).
+        kws: optional dict
+            additional keyword arguments to pass to model function.
+
+        Notes
+        -----
+        1. Parameter names are inferred from the function arguments,
+        and a residual function is automatically constructed.
+
+        2. The model function must return an array that will be the same
+        size as the data being modeled.
+
+        Example
+        -------
+        >>> def decay(t, tau, N):
+        ...     return N*np.exp(-t/tau)
+        ...
+        >>> my_model = Model(decay, independent_vars=['t'])
+        """
         self.func = func
         self._prefix = prefix
         self._param_root_names = param_names  # will not include prefixes
@@ -135,7 +186,7 @@ class Model(object):
 
     @property
     def name(self):
-        """TODO: add method docstring."""
+        """return Model name"""
         return self._reprstring(long=False)
 
     @name.setter
@@ -144,7 +195,7 @@ class Model(object):
 
     @property
     def prefix(self):
-        """TODO: add method docstring."""
+        """return Model prefix"""
         return self._prefix
 
     @property
@@ -237,15 +288,34 @@ class Model(object):
         self._param_names = names[:]
 
     def set_param_hint(self, name, **kwargs):
-        """Set hints for parameter.
+        """Set *hints* to use when creating parameters with `make_params()`
+        for the named parameter.  This is especially convenient for setting initial
+        values.  The ``name`` can include the models ``prefix`` or not.
 
-        Including optional bounds and constraints
-        (value, vary, min, max, expr) these will be used by make_params()
+        The hint given can also include optional bounds and constraints
+        (value, vary, min, max, expr) which will be used by make_params()
         when building default parameters.
 
-        example:
-          model = GaussianModel()
-          model.set_param_hint('amplitude', min=-100.0, max=0.)
+        Parameters
+        ----------
+        name : string
+            Parameter name
+        value : float or ``None`` (default)
+            value for parameter.
+        min : float or ``-np.inf`` (default)
+            lower bound for parameter value.
+        max : float or ``np.inf`` (default)
+            upper bound for parameter value.
+        vary : bool (default ``True``)
+            whether to vary of fix parameter value
+        expr : string or ``None`` (default)
+            expression to use to constrain parameter value.
+
+        Example
+        --------
+
+        >>> model = GaussianModel()
+        >>> model.set_param_hint('sigma', min=0)
 
         """
         npref = len(self._prefix)
@@ -281,10 +351,25 @@ class Model(object):
             print(line.format(name_len=name_len, n=colwidth, **pvalues))
 
     def make_params(self, verbose=False, **kwargs):
-        """Create and return a Parameters object for a Model.
+        """Create a Parameters object for a Model.
 
-        This applies any default values
+        Parameters
+        ----------
+        kwargs : optional initial values
+            parameter names and initial values
 
+        verbose : bool (default ``False``):
+            whether to print out messages
+
+        Returns
+        ---------
+        params : Parameters
+
+        Notes
+        -----
+        1. The parameters may or may not have decent initial values for each
+        parameter.
+        2. This applies any default values or parameter hints that may have been set.
         """
         params = Parameters()
 
@@ -346,15 +431,30 @@ class Model(object):
             p._delay_asteval = False
         return params
 
-    def guess(self, data=None, **kws):
-        """Stub for guess starting values.
+    def guess(self, data, **kws):
+        """Guess starting values for the parameters of a model.
+        This is not implemented for all models, but is available
+        for many of the built-in models.
 
-        Note
-        ----
+        Parameters
+        ----------
+        data : array-like
+            array of data to use to guess parameter values.
+        kws : additional keyword arguments, passed to model function.
+
+        Returns
+        -------
+        params  : Parameters
+
+        Notes
+        -----
         Should be implemented for each model subclass to run
         self.make_params(), update starting values and return a
         Parameters object.
 
+        Raises
+        ------
+        NotImplementedError
         """
         cname = self.__class__.__name__
         msg = 'guess() not implemented for %s' % cname
@@ -445,7 +545,31 @@ class Model(object):
         return args
 
     def eval(self, params=None, **kwargs):
-        """Evaluate the model with the supplied parameters."""
+        """Evaluate the model with the supplied parameters and keyword arguments
+
+        Parameters
+        -----------
+        params : Parameters or ``None``
+            parameters to use in Model
+        kwargs : optional
+            keyword arguments to pass to model function.
+
+        Returns
+        -------
+        val : ndarray
+            value of model given the parameters and other arguments.
+
+        Notes
+        -----
+        1. if `params` is ``None``, the values for all parameters are
+        expected to be provided as keyword arguments.  If `params` is
+        given, and a keyword argument for a parameter value is also given,
+        the keyword argument will be used.
+
+        2. all non-parameter arguments for the model function, **including
+        all the independent variables** will need to be passed in using
+        keyword arguments.
+        """
         return self.func(**self.make_funcargs(params, kwargs))
 
     @property
@@ -456,8 +580,17 @@ class Model(object):
     def eval_components(self, params=None, **kwargs):
         """Evaluate the model with the supplied parameters.
 
-        Returns a ordered dict containting name, result pairs.
+        Parameters
+        -----------
+        params : Parameters or ``None``
+            parameters to use in Model
+        kwargs : optional
+            keyword arguments to pass to model function.
 
+        Returns:
+        --------
+        comps : OrderedDict
+            keys are prefixes for component model, values are value of each component.
         """
         key = self._prefix
         if len(key) < 1:
@@ -467,23 +600,29 @@ class Model(object):
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
             **kwargs):
-        """Fit the model to the data.
+        """Fit the model to the data using the supplied Parameters
 
         Parameters
         ----------
         data: array-like
-        params: Parameters object
-        weights: array-like of same size as data
-            used for weighted fit
-        method: fitting method to use (default = 'leastsq')
-        iter_cb:  None or callable  callback function to call at each iteration.
-        scale_covar:  bool (default True) whether to auto-scale covariance matrix
-        verbose: bool (default True) print a message when a new parameter is
-            added because of a hint.
-        fit_kws: dict
-            default fitting options, such as xtol and maxfev, for scipy optimizer
-        keyword arguments: optional, named like the arguments of the
-            model function, will override params. See examples below.
+            array of data to be fig.
+        params: Parameters or ``None`` (default)
+            parameters to use in fit.
+        weights: array-like of same size as data or ``None`` (default)
+            weights to use for the calculation of the fit residual.
+        method: string  (default = 'leastsq')
+            name of fitting method to use
+        iter_cb:  callable or ``None`` (default)
+             callback function to call at each iteration.
+        scale_covar:  bool (default ``True``)
+             whether to automatically scale the covariance matrix when calculating
+             uncertainties. `leastsq` method only.
+        verbose: bool (default ``True``)
+             whether to print a message when a new parameter is added because of a hint.
+        fit_kws: dict or ``None`` (default)
+             default fitting options, such as xtol and maxfev, for scipy optimizer
+        kwargs: optional
+             arguments to pass to the  model function, possibly overriding params
 
         Returns
         -------
@@ -491,23 +630,33 @@ class Model(object):
 
         Examples
         --------
-        # Take t to be the independent variable and data to be the
-        # curve we will fit.
+        Take t to be the independent variable and data to be the curve we will fit.
+        Use keyword arguments to set initial guesses:
 
-        # Using keyword arguments to set initial guesses
         >>> result = my_model.fit(data, tau=5, N=3, t=t)
 
-        # Or, for more control, pass a Parameters object.
+        Or, for more control, pass a Parameters object.
+
         >>> result = my_model.fit(data, params, t=t)
 
-        # Keyword arguments override Parameters.
+        Keyword arguments override Parameters.
+
         >>> result = my_model.fit(data, params, tau=5, t=t)
 
-        Note
-        ----
-        All parameters, however passed, are copied on input, so the original
-        Parameter objects are unchanged.
+        Notes
+        -----
+        1. if `params` is ``None``, the values for all parameters are
+        expected to be provided as keyword arguments.  If `params` is
+        given, and a keyword argument for a parameter value is also given,
+        the keyword argument will be used.
 
+        2. all non-parameter arguments for the model function, **including
+        all the independent variables** will need to be passed in using
+        keyword arguments.
+
+        3. Parameters (however passed in), are copied on input, so the
+        original Parameter objects are unchanged, and the updated values
+        are in the returned `ModelResult`.
         """
         if params is None:
             params = self.make_params(verbose=verbose)
@@ -603,31 +752,16 @@ class Model(object):
 
 
 class CompositeModel(Model):
-    """Create a composite model -- a binary operator of two Models.
+    """A composite model combines two models (`left` and `right`) with a
+    binary operator (`op`).
 
-    Parameters
-    ----------
-    left_model:    left-hand side model-- must be a Model()
-    right_model:   right-hand side model -- must be a Model()
-    oper:          callable binary operator (typically, operator.add, operator.mul, etc)
 
-    independent_vars: list of strings or None (default)
-        arguments to func that are independent variables
-    param_names: list of strings or None (default)
-        names of arguments to func that are to be made into parameters
-    missing: None, 'none', 'drop', or 'raise'
-        'none' or None: Do not check for null or missing values (default)
-        'drop': Drop null or missing observations in data.
-            if pandas is installed, pandas.isnull is used, otherwise
-            numpy.isnan is used.
-        'raise': Raise a (more helpful) exception when data contains null
-            or missing values.
-    name: None or string
-        name for the model. When `None` (default) the name is the same as
-        the model function (`func`).
+    Normally, one does not have to explicitly create a `CompositeModel`,
+    but can use normal Python operators `+`, '-', `*`, and `/` to combine
+    components as doing::
 
+    >>> mod = Model(fcn1) + Model(fcn2) * Model(fcn3)
     """
-
     _names_collide = ("\nTwo models have parameters named '{clash}'. "
                       "Use distinct names.")
     _bad_arg = "CompositeModel: argument {arg} is not a Model"
@@ -636,7 +770,23 @@ class CompositeModel(Model):
                   operator.mul: '*', operator.truediv: '/'}
 
     def __init__(self, left, right, op, **kws):
-        """TODO: docstring in public method."""
+        """
+        Parameters
+        ----------
+        left :  `Model` instance
+            left-hand model
+        right :  `Model` instance
+            right-hand model
+        op :  callable binary operator
+            operator to combine `left` and `right` models.
+        kwargs : optional
+            additional keywords are passed to `Model` when creating this
+            new model.
+
+        Notes
+        -----
+        1. The two models must use the same independent variable.
+        """
         if not isinstance(left, Model):
             raise ValueError(self._bad_arg.format(arg=left))
         if not isinstance(right, Model):
@@ -712,65 +862,39 @@ class CompositeModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
-
 class ModelResult(Minimizer):
     """Result from Model fit.
-
-     Attributes
-     -----------
-     model         instance of Model -- the model function
-     params        instance of Parameters -- the fit parameters
-     data          array of data values to compare to model
-     weights       array of weights used in fitting
-     init_params   copy of params, before being updated by fit()
-     init_values   array of parameter values, before being updated by fit()
-     init_fit      model evaluated with init_params.
-     best_fit      model evaluated with params after being updated by fit()
-
-     Methods:
-     --------
-     fit(data=None, params=None, weights=None, method=None, **kwargs)
-          fit (or re-fit) model with params to data (with weights)
-          using supplied method.  The keyword arguments are sent to
-          as keyword arguments to the model function.
-
-          all inputs are optional, defaulting to the value used in
-          the previous fit.  This allows easily changing data or
-          parameter settings, or both.
-
-     eval(params=None, **kwargs)
-          evaluate the current model, with parameters (defaults to the current
-          parameter values), with values in kwargs sent to the model function.
-
-     eval_components(params=Nones, **kwargs)
-          evaluate the current model, with parameters (defaults to the current
-          parameter values), with values in kwargs sent to the model function
-          and returns an ordered dict with the model names as the key and the
-          component results as the values.
-
-    fit_report(modelpars=None, show_correl=True, min_correl=0.1)
-          return a fit report.
-
-    plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--', xlabel = None, ylabel=None,
-             numpoints=None,  data_kws=None, fit_kws=None, init_kws=None,
-             ax_kws=None)
-         Plot the fit results using matplotlib.
-
-    plot_residuals(self, ax=None, datafmt='o', data_kws=None, fit_kws=None,
-                   ax_kws=None)
-         Plot the fit residuals using matplotlib.
-
-    plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None, ylabel=None, numpoints=None,
-         data_kws=None, fit_kws=None, init_kws=None, ax_res_kws=None,
-         ax_fit_kws=None, fig_kws=None)
-         Plot the fit results and residuals using matplotlib.
-
+    This has many attributes and methods for viewing and working with the
+    results of a fit using Model.  It inherits from Minimizer, so that it
+    can be used to modify and re-run the fit for the Model.
     """
-
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, **fit_kws):
-        """TODO: docstring in public method."""
+        """
+        Parameters
+        ----------
+        model : Model instance
+            model to use.
+        params : Parameters instance
+            parameters with initial values for model.
+        data : array-like or ``None``
+            data to be modeled.
+        weights : array-like or ``None``
+            weights to multiply (data-model) for fit residual.
+        method : string
+            name of minimization method to use
+        fcn_args : sequence or ``None``
+            positional arguments to send to model function
+        fcn_dict : dict or ``None``
+            keyword arguments to send to model function
+        iter_cb : callable or ``None``
+            function to call on each iteration of fit.
+        scale_covar :  bool
+            whether to scale covariance matrix for uncertainty evaluation
+        fit_kws : optional
+            keyword arguments to send to minimization routine.
+        """
         self.model = model
         self.data = data
         self.weights = weights
@@ -782,7 +906,21 @@ class ModelResult(Minimizer):
                            scale_covar=scale_covar, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None, **kwargs):
-        """Perform fit for a Model, given data and params."""
+        """Re-perform fit for a Model, given data and params.
+
+        Parameters
+        ----------
+        data : array-like or ``None``
+            data to be modeled.
+        params : Parameters instance
+            parameters with initial values for model.
+        weights : array-like or ``None``
+            weights to multiply (data-model) for fit residual.
+        method : string
+            name of minimization method to use
+        kwargs : optional
+            keyword arguments to send to minimization routine.
+        """
         if data is not None:
             self.data = data
         if params is not None:
@@ -812,12 +950,17 @@ class ModelResult(Minimizer):
     def eval(self, params=None, **kwargs):
         """Evaluate model function.
 
-        Arguments: params (Parameters):  parameters,
-        defaults to ModelResult .params kwargs (variable):  values of options,
-        independent variables, etc.
+        Parameters
+        ----------
+        params : Parameters or ``None`` (default)
+            Parameters to use.
+        kwargs : optional
+            options to send Model.eval()
 
-        Returns:     ndarray or float for evaluated model
-
+        Returns
+        -------
+        out : ndarray
+           array for evaluated model
         """
         self.userkws.update(kwargs)
         if params is None:
@@ -827,12 +970,18 @@ class ModelResult(Minimizer):
     def eval_components(self, params=None, **kwargs):
         """Evaluate each component of a composite model function.
 
-        Arguments:
-        params (Parameters):  parameters, defaults to ModelResult .params
-        kwargs (variable):  values of options, independent variables, etc.
+        Parameters
+        ----------
+        params : Parameters or ``None``
+            parameters, defaults to ModelResult.params
+        kwargs : optional
+             keyword arguments to pass to model function.
 
-        Returns:     ordered dictionary with keys of prefixes, and
-        values of values for     each component of the model.
+        Returns
+        -------
+        comps : ordered dictionary
+             keys are prefixes of component models, and values are
+             the estimated model value for each component of the model.
 
         """
         self.userkws.update(kwargs)
@@ -841,38 +990,44 @@ class ModelResult(Minimizer):
         return self.model.eval_components(params=params, **self.userkws)
 
     def eval_uncertainty(self, params=None, sigma=1, **kwargs):
-        """Evaluate the uncertainty of the *model function*.
+        """Evaluate the uncertainty of the *model function* from the
+        uncertainties for the best-fit parameters.  This can be used
+        to give confidence bands for the model.
 
-        The uncertainty is evaluated from the uncertainties for the
-        best-fit parameters.  This can be used to give confidence bands
-        for the model.
+        Parameters
+        ----------
+        params : Parameters or ``None``
+             parameters, defaults to ModelResult .params
+        sigma : float
+             confidence level, i.e. how many sigma [default=1]
+        kwargs : optional
+             values of options, independent variables, etc
 
-        Arguments:
-            params (Parameters):  parameters, defaults to ModelResult .params
-            sigma (float):  confidence level, i.e. how many sigma [default=1]
-            kwargs (variable):  values of options, independent variables, etc
+        Returns
+        -------
+        out : ndarray
+           uncertainty at each value of the model.
 
-        Returns:
-            ndarray for the uncertainty at each value of the model.
+        Example
+        -------
 
-        Example:
-            out = model.fit(data, params, x=x)
-            dely = out.eval_confidence_band(x=x)
-            plt.plot(x, data)
-            plt.plot(x, out.best_fit)
-            plt.fill_between(x, out.best_fit-dely,
-                             out.best_fit+dely, color='#888888')
+        >>> out = model.fit(data, params, x=x)
+        >>> dely = out.eval_confidence_band(x=x)
+        >>> plt.plot(x, data)
+        >>> plt.plot(x, out.best_fit)
+        >>> plt.fill_between(x, out.best_fit-dely,
+        ...                 out.best_fit+dely, color='#888888')
 
-        Notes:
-            1. This is based on the excellent and clear example from
-               https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals
-               which references the original work of
-                 J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
-            2. the value of sigma is number of `sigma` values, and is converted to a probability.
-               Values or 1, 2, or 3 give probalities of 0.6827, 0.9545, and 0.9973, respectively.
-               If the sigma value is < 1, it is interpreted as the probability itself.  That is,
-               `sigma=1` and `sigma=0.6827` will give the same results, within precision errors.
-
+        Notes
+        -----
+        1. This is based on the excellent and clear example from
+           https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals which references the original work of
+           J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
+        2. the value of sigma is number of `sigma` values, and is converted to a
+           probability.  Values or 1, 2, or 3 give probalities of 0.6827, 0.9545,
+           and 0.9973, respectively. If the sigma value is < 1, it is interpreted
+           as the probability itself.  That is, `sigma=1` and `sigma=0.6827` will
+           give the same results, within precision errors.
         """
         self.userkws.update(kwargs)
         if params is None:
@@ -911,30 +1066,82 @@ class ModelResult(Minimizer):
         return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, ndata-nvarys)
 
     def conf_interval(self, **kwargs):
-        """Return explicitly calculated confidence intervals."""
+        """Calculate the confidence intervals for the variable parameters
+        using :func:`confidence.conf_interval()`.  keyword arguments are
+        passed to that function.  The result is stored in :attr:`ci_out`,
+        and so can be accessed without recalculating them.
+        """
         if self.ci_out is None:
             self.ci_out = conf_interval(self, self, **kwargs)
         return self.ci_out
 
     def ci_report(self, with_offset=True, ndigits=5, **kwargs):
-        """Return nicely formatted report about confidence intervals."""
+        """Return a nicely formatted text report of the confidence
+        intervals, as from :func:`ci_report()`.
+
+        Parameters
+        ----------
+        with_offset : bool (default `True`)
+             Whether to subtract best value from all other values.
+        ndigits : int (default 5)
+            Number of significant digits to show.
+
+        Returns
+        -------
+        Text of formatted report on confidence intervals.
+
+        """
         return ci_report(self.conf_interval(**kwargs),
                          with_offset=with_offset, ndigits=ndigits)
 
-    def fit_report(self, **kwargs):
-        """Return fit report."""
-        return '[[Model]]\n    %s\n%s\n' % (self.model._reprstring(long=True),
-                                            fit_report(self, **kwargs))
+    def fit_report(self, modelpars=None, show_correl=True,
+                   min_correl=0.1, sort_pars=False):
+        """Return a printable fit report for the fit with fit statistics,
+        best-fit values with uncertainties and correlations.
+
+
+        Parameters
+        ----------
+        inpars  : Parameters
+           input Parameters from fit or MinimizerResult returned from a fit.
+        modelpars : optional
+           known Model Parameters
+        show_correl : bool, default ``True``
+           whether to show list of sorted correlations
+        min_correl : float, default 0.1
+           smallest correlation absolute value to show.
+        sort_pars : bool, default ``False``, or callable
+           whether to show parameter names sorted in alphanumerical order.  If
+           ``False``, then the parameters will be listed in the order they were
+           added to the Parameters dictionary. If callable, then this (one
+           argument) function is used to extract a comparison key from each
+           list element.
+
+        Returns
+        -------
+        text : string
+           multi-line text of fit report
+
+        See Also
+        --------
+        :func:`fit_report()`
+        """
+        report = fit_report(self.params, modelpars=modelpars,
+                            show_correl=show_correl,
+                            min_correl=min_correl, sort_pars=sort_pars)
+        modname = self.model._reprstring(long=True)
+        return '[[Model]]\n    %s\n%s\n' % (modname, report)
+
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
                  xlabel=None, ylabel=None, yerr=None, numpoints=None,
                  data_kws=None, fit_kws=None, init_kws=None, ax_kws=None):
-        """Plot the fit results using matplotlib.
+        """Plot the fit results using matplotlib, if available.
+        The plot will include the data points, the initial fit curve, and
+        the best-fit curve. If the fit  model included weights or if ``yerr``
+        is specified, errorbars will also be plotted.
 
-        The method will plot results of the fit using matplotlib, including:
-        the data points, the initial fit curve and the fitted curve. If the fit
-        model included weights, errorbars will also be plotted.
 
         Parameters
         ----------
@@ -972,7 +1179,7 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes
 
         Notes
-        ----
+        -----
         For details about plot format strings and keyword arguments see
         documentation of matplotlib.axes.Axes.plot.
 
@@ -980,7 +1187,7 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
         not specified and the fit includes weights, yerr set to 1/self.weights
 
-        If `ax` is None then matplotlib.pyplot.gca(**ax_kws) is called.
+        If `ax` is None then `matplotlib.pyplot.gca(**ax_kws)` is called.
 
         See Also
         --------
@@ -1048,11 +1255,9 @@ class ModelResult(Minimizer):
     @_ensureMatplotlib
     def plot_residuals(self, ax=None, datafmt='o', yerr=None, data_kws=None,
                        fit_kws=None, ax_kws=None):
-        """Plot the fit residuals using matplotlib.
-
-        The method will plot residuals of the fit using matplotlib, including:
-        the data points and the fitted curve (as horizontal line). If the fit
-        model included weights, errorbars will also be plotted.
+        """Plot the fit residuals using matplotlib, if available. If ``yerr``
+        is supplied or if the model included weights, errorbars will also
+        be plotted.
 
         Parameters
         ----------
@@ -1075,7 +1280,7 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes
 
         Notes
-        ----
+        -----
         For details about plot format strings and keyword arguments see
         documentation of matplotlib.axes.Axes.plot.
 
@@ -1083,7 +1288,7 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
         not specified and the fit includes weights, yerr set to 1/self.weights
 
-        If `ax` is None then matplotlib.pyplot.gca(**ax_kws) is called.
+        If `ax` is None then `matplotlib.pyplot.gca(**ax_kws)` is called.
 
         See Also
         --------
@@ -1131,8 +1336,7 @@ class ModelResult(Minimizer):
              ylabel=None, yerr=None, numpoints=None, fig=None, data_kws=None,
              fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None,
              fig_kws=None):
-        """Plot the fit results and residuals using matplotlib.
-
+        """Plot the fit results and residuals using matplotlib, if available.
         The method will produce a matplotlib figure with both results of the
         fit and the residuals plotted. If the fit model included weights,
         errorbars will also be plotted.
@@ -1177,14 +1381,14 @@ class ModelResult(Minimizer):
         A tuple with matplotlib's Figure and GridSpec objects.
 
         Notes
-        ----
+        -----
         The method combines ModelResult.plot_fit and ModelResult.plot_residuals.
 
         If yerr is specified or if the fit model included weights, then
         matplotlib.axes.Axes.errorbar is used to plot the data.  If yerr is
         not specified and the fit includes weights, yerr set to 1/self.weights
 
-        If `fig` is None then matplotlib.pyplot.figure(**fig_kws) is called,
+        If `fig` is None then `matplotlib.pyplot.figure(**fig_kws)` is called,
         otherwise `fig_kws` is ignored.
 
         See Also

@@ -6,9 +6,10 @@ Parameters.
 The user sets up a model in terms of instance of Parameters and writes a
 function-to-be-minimized (residual function) in terms of these Parameters.
 
+Original copyright:
    Copyright (c) 2011 Matthew Newville, The University of Chicago
-   <newville@cars.uchicago.edu>
 
+See LICENSE for more complete authorship information and license.
 """
 
 from collections import namedtuple
@@ -33,19 +34,15 @@ from . import uncertainties
 from .parameter import Parameter, Parameters
 
 #  scipy version notes:
-#  currently scipy 0.14 is required.
+#  currently scipy 0.15 is required.
 #  feature           scipy version added
 #    minimize              0.11
 #    OptimizeResult        0.13
 #    diff_evolution        0.15
 #    least_squares         0.17
 
-# differential_evolution is only present in scipy >= 0.15
-try:
-    from scipy.optimize import differential_evolution as scipy_diffev
-except ImportError:
-    from ._differentialevolution import differential_evolution as scipy_diffev
 
+from scipy.optimize import differential_evolution
 
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
@@ -128,21 +125,6 @@ class MinimizerException(Exception):
         return "\n%s" % self.msg
 
 
-def _differential_evolution(func, x0, **kwds):
-    """A wrapper for differential_evolution that can be used with
-    scipy.minimize."""
-    kwargs = dict(args=(), strategy='best1bin', maxiter=None, popsize=15,
-                  tol=0.01, mutation=(0.5, 1), recombination=0.7, seed=None,
-                  callback=None, disp=False, polish=True,
-                  init='latinhypercube')
-
-    for k, v in kwds.items():
-        if k in kwargs:
-            kwargs[k] = v
-
-    return scipy_diffev(func, kwds['bounds'], **kwargs)
-
-
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'powell': 'Powell',
                   'cg': 'CG',
@@ -189,12 +171,11 @@ def reduce_cauchylogpdf(r):
 
 class MinimizerResult(object):
     r"""
-    A class that holds the results of a minimization.
+    The results of a minimization.
 
-    This is a plain container (with no methods of its own) that
-    simply holds the results of the minimization.  Fit results
-    include data such as status and error messages, fit statistics,
-    and the updated (i.e., best-fit) parameters themselves :attr:`params`.
+    Minimization results include data such as status and error messages,
+    fit statistics, and the updated (i.e., best-fit) parameters themselves
+    :attr:`params`.
 
     The list of (possible) `MinimizerResult` attributes follows.
 
@@ -207,11 +188,11 @@ class MinimizerResult(object):
         underlying solver. Refer to `message` for details.
     var_names : list
         Ordered list of variable parameter names used in optimization, and
-        useful for understanding the the values in :attr:`init_vals` and
+        useful for understanding the values in :attr:`init_vals` and
         :attr:`covar`.
     covar : numpy.ndarray
         Covariance matrix from minimization (`leastsq` only), with
-        rows/columns using :attr:`var_names`.
+        rows and columns corresponding to  :attr:`var_names`.
     init_vals : list
         List of initial values for variable parameters using :attr:`var_names`.
     init_values : dict
@@ -236,7 +217,7 @@ class MinimizerResult(object):
         Degrees of freedom in fit:  :math:`N - N_{\\rm varys}`.
     residual : numpy.ndarray
         Residual array :math:`{\\rm Resid_i}`. Return value of the objective
-        function.
+        function when using the best-fit values of the parameters.
     chisqr : float
         Chi-square: :math:`\chi^2 = \sum_i^N [{\\rm Resid}_i]^2`.
     redchi : float
@@ -244,9 +225,17 @@ class MinimizerResult(object):
         :math:`\chi^2_{\\nu}= {\chi^2} / {(N - N_{\\rm varys})}`.
     aic : float
         Akaike Information Criterion statistic.
+        :math:`N \ln(\chi^2/N) + 2 N_{\\rm varys}`
     bic : float
         Bayesian Information Criterion statistic.
+        :math:`N \ln(\chi^2/N) + \ln(N) N_{\\rm varys}`
+    flatchain : pandas.DataFrame
+        a flatchain view of the sampling chain from the `emcee` method.
 
+    Methods
+    ----------
+    show_candidates:  pretty_print() representaiton of candidates from
+       `brute` method.
     """
 
     def __init__(self, **kws):
@@ -292,7 +281,9 @@ class MinimizerResult(object):
 
 
 class Minimizer(object):
-    """A general minimizer for curve fitting and optimization."""
+    """
+    A general minimizer for curve fitting and optimization.
+    """
 
     _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
                      "of Parameters()")
@@ -303,17 +294,16 @@ class Minimizer(object):
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
                  reduce_fcn=None, **kws):
-        """The Minimizer class initialization.
-
-        The following parameters are accepted:
-
+        """
         Parameters
         ----------
         userfcn : callable
             Objective function that returns the residual (difference between
             model and data) to be minimized in a least squares sense.  The
-            function must have the signature:
-            `userfcn(params, *fcn_args, **fcn_kws)`
+            function must have the signature::
+
+                userfcn(params, *fcn_args, **fcn_kws)
+
         params : :class:`lmfit.parameter.Parameters` object.
             Contains the Parameters for the model.
         fcn_args : tuple, optional
@@ -322,30 +312,40 @@ class Minimizer(object):
             Keyword arguments to pass to `userfcn`.
         iter_cb : callable, optional
             Function to be called at each fit iteration. This function should
-            have the signature:
-            `iter_cb(params, iter, resid, *fcn_args, **fcn_kws)`,
+            have the signature::
+
+                iter_cb(params, iter, resid, *fcn_args, **fcn_kws)
+
             where `params` will have the current parameter values, `iter`
             the iteration, `resid` the current residual array, and `*fcn_args`
             and `**fcn_kws` as passed to the objective function.
         scale_covar : bool, optional
-            Whether to automatically scale the covariance matrix (leastsq
-            only).
+            Whether to automatically scale the covariance matrix (leastsq only).
         nan_policy : str, optional
             Specifies action if `userfcn` (or a Jacobian) returns nan
             values. One of:
-             - 'raise' - a `ValueError` is raised
-             - 'propagate' - the values returned from `userfcn` are un-altered
-             - 'omit' - the non-finite values are filtered.
+
+            - 'raise' : a `ValueError` is raised
+            - 'propagate' : the values returned from `userfcn` are un-altered
+            - 'omit' : non-finite values are filtered.
+
         reduce_fcn : str or callable, optional
             Function to convert a residual array to a scalar value for the scalar
             minimizers. Optional values are (where `r` is the residual array):
-             - None           : sum of squares of residual [default]
-                                (r*r).sum()
-             - 'negentropy'   : neg entropy, using normal distribution
-                                (rho*log(rho)).sum() for rho=exp(-r*r/2)/(sqrt(2*pi))
-             - 'neglogcauchy' : neg log likelihood, using Cauchy distribution
-                                -log(1/(pi*(1+r*r))).sum()
-             - callable       : must take 1 argument (r) and return a float.
+
+            - None       : sum of squares of residual [default]
+
+               = (r*r).sum()
+
+            - 'negentropy' : neg entropy, using normal distribution
+
+               = rho*log(rho)).sum()` for rho=exp(-r*r/2)/(sqrt(2*pi))
+
+            - 'neglogcauchy': neg log likelihood, using Cauchy distribution
+
+               = -log(1/(pi*(1+r*r))).sum()
+
+            - callable   : must take 1 argument (r) and return a float.
 
         kws : dict, optional
             Options to pass to the minimizer being used.
@@ -412,17 +412,17 @@ class Minimizer(object):
         function to calculate the residual.
 
         Parameters
-        ----------------
+        ----------
         fvars : np.ndarray
             Array of new parameter values suggested by the minimizer.
-        apply_bounds_transformation : bool, optional
-            If true, apply lmfits parameter transformation to constrain
+        apply_bounds_transformation : bool, optional, default=`True`
+            whether to apply lmfits parameter transformation to constrain
             parameters. This is needed for solvers without inbuilt support for
             bounds.
 
         Returns
-        -----------
-        residuals : np.ndarray
+        -------
+        residual : np.ndarray
              The evaluated function values for given fvars.
 
         """
@@ -605,11 +605,9 @@ class Minimizer(object):
         return result
 
     def unprepare_fit(self):
-        """Clean the fit state.
+        """Clean fit state, so thatt subsequent fits will need to call prepare_fit().
 
-        AST compilations of constraint expressions are removed, so that
-        subsequent fits will need to call prepare_fit.
-
+        removes AST compilations of constraint expressions.
         """
         pass
 
@@ -703,21 +701,22 @@ class Minimizer(object):
             fmin_kws.pop('jac')
 
         if method == 'differential_evolution':
-            fmin_kws['method'] = _differential_evolution
-            bounds = np.asarray([(par.min, par.max)
-                                 for par in params.values()])
-            varying = np.asarray([par.vary for par in params.values()])
+            for par in params.values():
+                if (par.vary and
+                    not (np.isfinite(par.min) and np.isfinite(par.max))):
+                    raise ValueError('differential_evolution requires finite '
+                                     'bound for all varying parameters')
 
-            if not np.all(np.isfinite(bounds[varying])):
-                raise ValueError('With differential evolution finite bounds '
-                                 'are required for each varying parameter')
-            bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
-            fmin_kws['bounds'] = bounds
+            _bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
+            kwargs = dict(args=(), strategy='best1bin', maxiter=None,
+                          popsize=15, tol=0.01, mutation=(0.5, 1),
+                          recombination=0.7, seed=None, callback=None,
+                          disp=False, polish=True, init='latinhypercube')
 
-            # in scipy 0.14 this can be called directly from scipy_minimize
-            # When minimum scipy is 0.14 the following line and the else
-            # can be removed.
-            ret = _differential_evolution(self.penalty, vars, **fmin_kws)
+            for k, v in fmin_kws.items():
+                if k in kwargs:
+                    kwargs[k] = v
+            ret = differential_evolution(self.penalty, _bounds, **kwargs)
         else:
             ret = scipy_minimize(self.penalty, vars, **fmin_kws)
 
@@ -740,7 +739,7 @@ class Minimizer(object):
             result.chisqr = (result.chisqr**2).sum()
             result.ndata = len(result.residual)
             result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
+        result.redchi = result.chisqr / max(1, result.nfree)
         # this is -2*loglikelihood
         _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
         result.aic = _neg2_log_likel + 2 * result.nvarys
@@ -887,7 +886,7 @@ class Minimizer(object):
 
         .. math::
 
-            \ln p(D|F_{true}) = -\\frac{1}{2}\sum_n \left[\\frac{\left(g_n(F_{true}) - D_n \\right)^2}{s_n^2}+\ln (2\pi s_n^2)\\right]
+            \ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{(g_n(F_{true}) - D_n)^2}{s_n^2}+\ln (2\pi s_n^2)\right]
 
         The first summand in the square brackets represents the residual for a
         given datapoint (:math:`g` being the generative model, :math:`D_n` the
@@ -1410,7 +1409,7 @@ class Minimizer(object):
             or all candidates when no number is specified.
 
 
-        .. versionadded:: 0.96
+        .. versionadded:: 0.9.6
 
 
         Notes
@@ -1519,10 +1518,10 @@ class Minimizer(object):
             Name of the fitting method to use. Valid values are:
 
             - `'leastsq'`: Levenberg-Marquardt (default).
-              Uses `scipy.optimize.leastsq`.
-            - `'least_squares'`: Levenberg-Marquardt.
-              Uses `scipy.optimize.least_squares`.
-            - 'nelder': Nelder-Mead
+            - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default.
+            - `'differential_evolution'`: differential evolution
+            - `'brute'`: brute force method.
+            - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
             - `'powell'`: Powell
             - `'cg'`: Conjugate-Gradient
@@ -1532,9 +1531,13 @@ class Minimizer(object):
             - `'trust-ncg'`: Trust Newton-CGn
             - `'dogleg'`: Dogleg
             - `'slsqp'`: Sequential Linear Squares Programming
-            - `'differential_evolution'`: differential evolution
-            - `'brute'`: brute force method.
-              Uses `scipy.optimize.brute`.
+
+            In most cases, these methods wrap and use the method of the
+            same name from `scipy.optimize`, or uses
+            `scipy.optimize.minimize` with the same `method` argument.
+            Thus '`leastsq`' will use `scipy.optimize.leastsq`, while
+            '`powell`' will use `scipy.optimize.minimizer(....,
+            method='powell')`
 
             For more details on the fitting methods please refer to the
             `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
@@ -1573,7 +1576,7 @@ class Minimizer(object):
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
                 if (key.lower().startswith(user_method) or
-                        val.lower().startswith(user_method)):
+                    val.lower().startswith(user_method)):
                     kwargs['method'] = val
         return function(**kwargs)
 
@@ -1779,7 +1782,7 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
              scale_covar=True, iter_cb=None, reduce_fcn=None, **fit_kws):
     """Perform a fit of a set of parameters by minimizing an objective (or
-    "cost") function using one one of the several available methods.
+    cost) function using one one of the several available methods.
 
     The minimize function takes a objective function to be minimized,
     a dictionary (:class:`lmfit.parameter.Parameters`) containing the model
@@ -1801,22 +1804,25 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         Name of the fitting method to use. Valid values are:
 
         - `'leastsq'`: Levenberg-Marquardt (default).
-          Uses `scipy.optimize.leastsq`.
-        - `'least_squares'`: Levenberg-Marquardt.
-          Uses `scipy.optimize.least_squares`.
-        - 'nelder': Nelder-Mead
+        - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default.
+        - `'differential_evolution'`: differential evolution.
+        - `'brute'`: brute force method.
+        - '`nelder`': Nelder-Mead
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
         - `'cg'`: Conjugate-Gradient
-        - `'newton'`: Newton-CG
+        - `'newton'`: Newton-Congugate-Gradient
         - `'cobyla'`: Cobyla
         - `'tnc'`: Truncate Newton
-        - `'trust-ncg'`: Trust Newton-CGn
+        - `'trust-ncg'`: Trust Newton-Congugate-Gradient
         - `'dogleg'`: Dogleg
         - `'slsqp'`: Sequential Linear Squares Programming
-        - `'differential_evolution'`: differential evolution
-        - `'brute'`: brute force method.
-          Uses `scipy.optimize.brute`.
+
+        In most cases, these methods wrap and use the method of the same
+        name from `scipy.optimize`, or uses `scipy.optimize.minimize` with
+        the same `method` argument.  Thus '`leastsq`' will use
+        `scipy.optimize.leastsq`, while '`powell`' will use
+        `scipy.optimize.minimizer(...., method='powell')`
 
         For more details on the fitting methods please refer to the
         `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.

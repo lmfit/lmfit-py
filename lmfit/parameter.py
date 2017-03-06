@@ -53,25 +53,33 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
     else:
         return False
 
-
 class Parameters(OrderedDict):
-    """A dictionary of all the Parameters required to specify a fit model.
+    """An ordered dictionary of all the Parameter objects required to
+    specify a fit model.  All minimization and Model fitting routines in
+    lmfit will use exactly one Parameters object, typically given as the
+    first argument to the objective function.
 
-    All keys must be strings, and valid Python symbol names, and all values
-    must be Parameters.
+    All keys of a Parameters() instance must be strings, and valid Python
+    symbol names, so that the name must match ``[a-z_][a-z0-9_]*`` and
+    cannot be a Python reserved word.
 
-    Custom methods:
-    ---------------
+    All values of a Parameters() instance must be Parameter objects.
 
-    add()
-    add_many()
-    dumps() / dump()
-    loads() / load()
+    A Parameters() instance includes an asteval interpreter used for
+    evaluation of constrained Parameters.
 
+    Parameters() support copying and pickling, and have methods to convert
+    to and from serializations using json strings.
     """
 
     def __init__(self, asteval=None, *args, **kwds):
-        """TODO: add public method docstring."""
+        """
+        Arguments
+        ----------
+        asteval : ``None`` or instance of asteval.Interpreter
+            instance of Interpretr to use for constraint expressions.
+            If ``None``, a new interpreter will be created.
+        """
         super(Parameters, self).__init__(self)
         self._asteval = asteval
 
@@ -276,15 +284,37 @@ class Parameters(OrderedDict):
 
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None,
             brute_step=None):
-        """Convenience function for adding a Parameter.
+        """Add a Parameter.
 
-        Example
-        -------
-        p = Parameters()
-        p.add(name, value=XX, ...)
+        Arguments
+        ---------
+        name : string
+            name of parameter.  Must match ``[a-z_][a-z0-9_]*`` and
+            cannot be a Python reserved word.
+        value : ``None`` or float
+            floating point value for parameter, typically the *initial value*.
+        vary : bool (default ``True``)
+            whether the parameter should be varied in the fit.
+        min : float (default ``-np.inf``)
+            lower bound for parameter value.
+        max : float (default ``np.inf``)
+            upper bound for parameter value.
+        expr : ``None`` or string
+            expression in terms of other parameter names to constrain value.
+        brute_step : ``None``
+            size of step to take when using the `brute()` method.
 
-        is equivalent to:
-        p[name] = Parameter(name=name, value=XX, ....
+        Examples
+        --------
+        >>> params = Parameters()
+        >>> params.add('xvar', value=0.50, min=0, max=1)
+        >>> params.add('yvar', expr='1.0 - xvar')
+
+        which is equivalent to:
+
+        >>> params = Parameters()
+        >>> params['xvar'] = Parameter(name='xvar', value=0.50, min=0, max=1)
+        >>> params['yvar'] = Parameter(name='yvar', expr='1.0 - xvar')
 
         """
         if isinstance(name, Parameter):
@@ -295,31 +325,27 @@ class Parameters(OrderedDict):
                                              brute_step=brute_step))
 
     def add_many(self, *parlist):
-        """Convenience function for adding a list of Parameters.
+        """Add many parameters, using a sequence of tuples.
 
-        Parameters
+        Arguments
         ----------
-        parlist : sequence
+        parlist : sequence of tuples
             A sequence of tuples, or a sequence of `Parameter` instances. If it
             is a sequence of tuples, then each tuple must contain at least the
-            name. The order in each tuple is the following:
+            name. The order in each tuple must be `(name, value, vary, min, max, expr, brute_step)`
 
-                name, value, vary, min, max, expr, brute_step
-
-        Example
-        -------
-        p = Parameters()
-        # add a sequence of tuples
-        p.add_many( (name1, val1, True, None, None, None, None),
-                    (name2, val2, True,  0.0, None, None, None),
-                    (name3, val3, False, None, None, None, None),
-                    (name4, val4))
-
-        # add a sequence of Parameter
-        f = Parameter('name5', val5)
-        g = Parameter('name6', val6)
-        p.add_many(f, g)
-
+        Examples
+        --------
+        >>>  params = Parameters()
+        # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+        >>> params.add_many(('amp',   10, True, None, None, None, None),
+        ...                 ('cen',   4, True,  0.0, None, None, None),
+        ...                 ('wid',   1, False, None, None, None, None),
+        ...                 ('frac', 0.5))
+        # add a sequence of Parameters
+        >>> f = Parameter('par_f', 100)
+        >>> g = Parameter('par_g',  2.)
+        >>> params.add_many(f, g)
         """
         for para in parlist:
             if isinstance(para, Parameter):
@@ -333,12 +359,11 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        An ordered dictionary of name:value pairs for each Parameter.
-        This is distinct from the Parameters itself, as it has values of
-        the Parameter values, not the full Parameter object.
-
+        vals : ordered dict
+           An ordered dictionary of name:value pairs for each Parameter.
+           This is distinct from the Parameters itself, as it has values of
+           the Parameter *values*, not the full Parameter object.
         """
-
         return OrderedDict(((p.name, p.value) for p in self.values()))
 
     def dumps(self, **kws):
@@ -348,7 +373,8 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        json string representation of Parameters
+        s : string
+           json string representation of Parameters
 
         See Also
         --------
@@ -373,7 +399,8 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        None.   Parameters are updated as a side-effect
+        ``None``
+           Parameters are updated as a side-effect
 
         See Also
         --------
@@ -425,7 +452,8 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        None.   Parameters are updated as a side-effect
+        ``None``.
+           Parameters are updated as a side-effect
 
         See Also
         --------
@@ -436,32 +464,29 @@ class Parameters(OrderedDict):
 
 
 class Parameter(object):
-    """A Parameter is an object used to define a Fit Model.
 
-    Attributes
-    ----------
-    name : str
-        Parameter name.
-    value : float
-        The numerical value of the Parameter.
-    vary : bool
-        Whether the Parameter is fixed during a fit.
-    min : float
-        Lower bound for value (np.-inf means no lower bound).
-    max : float
-        Upper bound for value (np.inf means no upper bound).
-    expr : str
-        An expression specifying constraints for the parameter.
-    stderr : float
-        The estimated standard error for the best-fit value.
-    correl : dict
-        Specifies correlation with the other fitted Parameter after a fit.
-        Of the form `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
+    """A Parameter is an object that can be varied in a fit, or one of the
+    controlling variables in a model. It is a central component of lmfit,
+    and all minimization and modelling methods use Parameter objects.
+
+    A Parameter has a `name` attribute, and a scalar floating point
+    `value`.  It also has a `vary` attribute that describes whether the
+    value should be varied during the minimization.  Finite bounds can be
+    placed on the Parameter's value by setting its `min` and/or `max`
+    attributes.  A Parameter can also have its value determined by a
+    mathematical expression of other Parameter values held in the `expr`
+    attrribute.  Addition attributes include `brute_step` used as the step
+    size to use in a brute-force minimization, and `user_data` reserved
+    exclusively for user's need.
+
+    After a minimization, a Parameter may also gain other attributes,
+    including `stderr` holding the estimated standard error in the
+    Parameter's value, and `correl`, a dictionary of correlation values
+    with other Parameters used in the minimization.
 
     """
-
-    def __init__(self, name=None, value=None, vary=True,
-                 min=-inf, max=inf, expr=None, brute_step=None):
+    def __init__(self, name=None, value=None, vary=True, min=-inf, max=inf,
+                 expr=None, brute_step=None, user_data=None):
         """
         Parameters
         ----------
@@ -472,13 +497,25 @@ class Parameter(object):
         vary : bool, optional
             Whether the Parameter is fixed during a fit.
         min : float, optional
-            Lower bound for value (np.-inf means no lower bound).
+            Lower bound for value (-inf means no lower bound).
         max : float, optional
-            Upper bound for value (np.inf means no upper bound).
+            Upper bound for value (inf means no upper bound).
         expr : str, optional
             Mathematical expression used to constrain the value during the fit.
         brute_step : float, optional
-            Step size for grid points in brute force method.
+            Step size for grid points in brute force method (use `0` for no step size).
+        user_data : optional
+            user-definable extra attribute used for a parameter.
+
+        Attributes
+        ----------
+        stderr : float
+            The estimated standard error for the best-fit value.
+        correl : dict
+            A dictionary of the correlation with the other fitted Parameter
+            after a fit, of the form::
+
+            `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
         """
         self.name = name
         self._val = value
@@ -519,6 +556,30 @@ class Parameter(object):
             Step size for grid points in brute force method. To remove the step
             size you must supply 0 ("zero").
 
+        Notes
+        -----
+
+        Each argument to `set()` has a default value of ``None``, which
+        will the current value for the attribute unchanged.  Thus, to lift
+        a lower or upper bound, passing in ``None`` will not work.  Instead,
+        you must set these to ``np.inf`` or ``-np.inf``, as with::
+
+            par.set(min=None)     # no, will leave lower bound unchanged
+            par.set(min=-np.inf)  # yes.
+
+        Similarly, to clear an expression, pass a blank string, (not
+        ``None``!) as with::
+
+            par.set(expr=None)    # leaves expression unchanged.
+            par.set(expr='')      # removes expression
+
+        Explicitly setting a value or setting `vary=True` will also
+        clear the expression.
+
+        Finally, to clear the brute_step size, pass ``0``, not ``None``::
+
+            par.set(brute_step=None)  # leaves brute_step unchanged
+            par.set(brute_step=0)     # removes brute_step
         """
 
         if value is not None:

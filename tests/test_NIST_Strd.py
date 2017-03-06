@@ -9,7 +9,7 @@ from NISTModels import Models, ReadNistData
 
 HASPYLAB = False
 for arg in sys.argv:
-    if 'nose' in arg:
+    if 'nose' in arg or 'pytest' in arg:
         HASPYLAB = False
 
 if HASPYLAB:

@@ -8,7 +8,7 @@ import sys
 # Turn off plotting if run by nosetests.
 WITHPLOT = True
 for arg in sys.argv:
-    if 'nose' in arg:
+    if 'nose' in arg or 'pytest' in arg:
         WITHPLOT = False
 
 if WITHPLOT:

@@ -11,10 +11,10 @@ y = data[:, 1]
 
 def gaussian(x, amp, cen, wid):
     "1-d gaussian: gaussian(x, amp, cen, wid)"
-    return (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
+    return amp * exp(-(x-cen)**2 /wid)
 
-gmod = Model(gaussian)
-result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+gmodel = Model(gaussian)
+result = gmodel.fit(y, params, x=x, amp=5, cen=5, wid=1)
 
 print(result.fit_report())
 

@@ -36,8 +36,14 @@ plt.plot(x, init, 'k--')
 
 out = mod.fit(y, pars, x=x)
 
+comps = out.eval_components(x=x)
+
 print(out.fit_report(min_correl=0.5))
 
 plt.plot(x, out.best_fit, 'r-')
+plt.plot(x, comps['g1_'], 'b--')
+plt.plot(x, comps['g2_'], 'b--')
+plt.plot(x, comps['exp_'], 'k--')
+
 plt.show()
 #<end examples/doc_nistgauss.py>
