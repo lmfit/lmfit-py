@@ -42,7 +42,7 @@ from .parameter import Parameter, Parameters
 #    least_squares         0.17
 
 
-from scipy.optimize import differential_evolution as scipy_diffev
+from scipy.optimize import differential_evolution
 
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
@@ -707,7 +707,7 @@ class Minimizer(object):
                     raise ValueError('differential_evolution requires finite '
                                      'bound for all varying parameters')
 
-            internal_bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
+            _bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
             kwargs = dict(args=(), strategy='best1bin', maxiter=None,
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
@@ -716,7 +716,7 @@ class Minimizer(object):
             for k, v in fmin_kws.items():
                 if k in kwargs:
                     kwargs[k] = v
-            ret = scipy_diffev(self.penalty, internal_bounds, **kwargs)
+            ret = differential_evolution(self.penalty, _bounds, **kwargs)
         else:
             ret = scipy_minimize(self.penalty, vars, **fmin_kws)
 
@@ -920,8 +920,8 @@ class Minimizer(object):
         `is_weighted is False` then the data uncertainty, `s_n`, will be
         treated as a nuisance parameter and will be marginalized out. This is
         achieved by employing a strictly positive uncertainty
-        (homoscedasticity) for each data point, :math:`s_n = \exp(\_lnsigma)`.
-        `_lnsigma` will be present in `MinimizerResult.params`, as well as
+        (homoscedasticity) for each data point, :math:`s_n = \exp(\_\_lnsigma)`.
+        `__lnsigma` will be present in `MinimizerResult.params`, as well as
         `Minimizer.chain`, `nvarys` will also be increased by one.
 
         References
