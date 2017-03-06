@@ -60,6 +60,14 @@ try:
 except ImportError:
     pass
 
+# check for nestle
+HAS_NESTLE = False
+try:
+    import nestle as nestle
+    HAS_NESTLE = True
+except ImportError:
+    pass
+
 # check for pandas
 HAS_PANDAS = False
 try:
@@ -1110,6 +1118,214 @@ class Minimizer(object):
 
         return result
 
+    def nestle(self, steps=None, nwalkers=100, thin=20,
+               float_behavior='likelihood', is_weighted=True,
+               prior_transform=None, nestle_kwargs=None ):
+        """Bayesian sampling for integrating posterior probability using the `nestle`.
+
+        Nested Sampling is a computational approach for integrating
+        posterior probability in order to compare models in Bayesian
+        statistics. By default, the method assumes that the prior is
+        Uniform. You need to have `nestle` installed to use this
+        method.
+
+        Parameters
+        ----------
+        steps : int, optional
+            The `nestle.maxiter` parameter : Maximum number of
+            iterations. Iteration may stop earlier if termination
+            condition is reached. Default is no limit. -- from the
+            `nestle` documentation
+        nwalkers : int, optional
+            The `nestle.npoints` parameter : Number of active
+            points. Larger numbers result in a more finely sampled
+            posterior (more accurate evidence), but also a larger
+            number of iterations required to converge. Default is
+            100. -- from the `nestle` documentation
+        thin : int, optional
+            The `nestle.steps` parameter : Only accept 1 in every `thin` samples.
+        float_behavior : str, optional
+            Specifies meaning of the objective function output if it returns a
+            float. One of:
+
+            - 'likelihood' - objective function returns a log-likelihood
+              probability
+            - 'chi2' - objective function returns :math:`\chi^2`.
+
+            See Notes for further details.
+       is_weighted : bool, optional
+            Has your objective function been weighted by measurement
+            uncertainties? If `is_weighted is True` then your objective
+            function is assumed to return residuals that have been divided by
+            the true measurement uncertainty `(data - model) / sigma`. If
+            `is_weighted is False` then the objective function is assumed to
+            return unweighted residuals, `data - model`. In this case `emcee`
+            will employ a positive measurement uncertainty during the sampling.
+            This measurement uncertainty will be present in the output params
+            and output chain with the name `__lnsigma`. A side effect of this
+            is that you cannot use this parameter name yourself.
+            **Important** this parameter only has any effect if your objective
+            function returns an array. If your objective function returns a
+            float, then this parameter is ignored. See Notes for more details.
+        prior_transform : function
+            Function translating a unit cube to the parameter space according to
+            the prior. The input is a 1-d numpy array with length *nvarys*, where
+            each value is in the range [0, 1). The return value should also be a
+            1-d numpy array with length *nvarys*, where each value is a parameter.
+            The return value is passed to the loglikelihood function. For example,
+            for a 2 parameter model with flat priors in the range [0, 2), the
+            function would be::
+
+                def prior_transform(u, bounds):
+                    return 2.0 * u
+
+            Default is the internal uniform prior which require
+            defined finite bounds for all varying parameters (see [2]_
+            for more information)
+        nestle_kwargs : dictionary
+            Additional keyword arguments that can be passed to the
+            ``nestle.sample`` function [3]_
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            MinimizerResult object containing updated params,
+            statistics, etc. The updated params represent the mean of
+            all the samples, whilst the parameter uncertainties are
+            derived from the covariance matrix
+            The `MinimizerResult` also contains the ``chain``, ``flatchain``
+            and ``lnprob`` attributes. The ``chain`` and ``flatchain``
+            attributes contain the samples and have the shape
+            `(nwalkers, steps , nvarys)`.
+            `nvarys` is the number of parameters that are allowed to vary.
+            The ``flatchain`` attribute is a `pandas.DataFrame` of the
+            flattened chain, `chain.reshape(-1, nvarys)`. To access flattened
+            chain values for a particular parameter use
+            `result.flatchain[parname]`. The ``lnprob`` attribute contains the
+            log probability for each sample in ``chain``. The sample with the
+            highest probability corresponds to the maximum likelihood estimate.
+
+        Notes
+        -----
+            Some of the `nestle.sample` keyword parameters have been
+            mapped in order to keep the call as close as the
+            `Minimizer.emcee` function.
+
+        References
+        ----------
+        .. [2] http://kbarbary.github.io/nestle/prior.html
+        .. [3] http://kbarbary.github.io/nestle/api.html
+
+        """
+        if not HAS_NESTLE:
+            raise NotImplementedError('You must have nestle to use'
+                                      ' the nestle method')
+
+        result = self.prepare_fit()
+        result.method = 'nestle'
+        params = result.params
+
+        # check that the userfcn returns a vector of residuals
+        out = self.userfcn(params, *self.userargs, **self.userkws)
+        out = np.asarray(out).ravel()
+        if out.size > 1 and is_weighted is False:
+            # we need to marginalise over a constant data uncertainty
+            if '__lnsigma' not in params:
+                # __lnsigma should already be in params if is_weighted was
+                # previously set to True.
+                params.add('__lnsigma', value=0.01, min=-np.inf, max=np.inf, vary=True)
+                # have to re-prepare the fit
+                result = self.prepare_fit(params)
+                params = result.params
+
+        # Removing internal parameter scaling. We could possibly keep it,
+        # but I don't know how this affects the emcee sampling.
+        bounds = []
+        var_arr = np.zeros(len(result.var_names))
+        i = 0
+        for par in params:
+            param = params[par]
+            if param.expr is not None:
+                param.vary = False
+            if param.vary:
+                var_arr[i] = param.value
+                i += 1
+            else:
+                # don't want to append bounds if they're not being varied.
+                continue
+
+            param.from_internal = lambda val: val
+            lb, ub = param.min, param.max
+            if lb is None or lb is np.nan:
+                lb = -np.inf
+            if ub is None or ub is np.nan:
+                ub = np.inf
+
+            if lb is -np.inf or ub is np.inf and prior_transform is None:
+                raise ValueError('The Parameter {} must have '
+                                 'defined finite bounds when using the '
+                                 'default prior transform function'.format(par))
+
+            bounds.append((lb, ub))
+        bounds = np.array(bounds)
+
+        self.nvarys = len(result.var_names)
+
+        if nestle_kwargs is None:
+            nestle_kwargs = {}
+
+        # Make the nestle call as close as the emcee one
+        nestle_kwargs['steps'] = thin
+        nestle_kwargs['npoints'] = nwalkers
+        nestle_kwargs['maxiter'] = steps
+
+        # function arguments for the log-probability functions
+        # these values are sent to the log-probability functions by the sampler.
+        lnprob_args = (self.userfcn, params, result.var_names, bounds)
+        lnprob_kwargs = {'is_weighted': is_weighted,
+                         'float_behavior': float_behavior,
+                         'userargs': self.userargs,
+                         'userkws': self.userkws,
+                         'nan_policy': self.nan_policy}
+
+        # nestle does not support *lnprob_args and kwargs
+
+        _loglikelihood = lambda theta: _lnpost(theta, *lnprob_args, **lnprob_kwargs)
+
+        if prior_transform is None:
+            _prior_transform = lambda theta: _uniform_prior_transform(theta, bounds)
+        else:
+            _prior_transform = lambda theta: prior_transform(theta, bounds)
+
+        output = nestle.sample(_loglikelihood, _prior_transform,
+                               self.nvarys, **nestle_kwargs)
+
+        # keep everything
+        result._output = output
+        result.nfev = output['ncall']
+
+        p, cov = nestle.mean_and_cov(output.samples, output.weights)
+
+        for i, ( var_name, value ) in enumerate(zip(result.var_names, p)):
+            params[var_name].value = value
+            params[var_name].stderr = np.sqrt(cov[i,i])
+            params[var_name].correl = {}
+
+        params.update_constraints()
+
+        for i, var_name in enumerate(result.var_names):
+            for j, var_name2 in enumerate(result.var_names):
+                if i != j:
+                    result.params[var_name].correl[var_name2] = cov[i, j] / np.sqrt( cov[i, i] * cov[j, j] )
+
+        result.chain = np.copy(output['samples'])
+        result.lnprob = np.copy(output['logl'])
+        result.errorbars = True
+        result.covar = cov
+
+        return result
+
+
     def least_squares(self, params=None, **kws):
         """Use the ``least_squares`` (new in scipy 0.17) to perform a fit.
 
@@ -1580,6 +1796,19 @@ class Minimizer(object):
                     kwargs['method'] = val
         return function(**kwargs)
 
+def _uniform_prior_transform(theta, bounds):
+    """Function translating a unit cube to the to the parameter space
+    according to the prior. The input is a 1-d numpy array with length
+    ndim, where each value is in the range [0, 1). The return value
+    should also be a 1-d numpy array with length ndim, where each
+    value is a parameter. The return value is passed to the
+    loglikelihood function.
+    """
+
+    # uniform prior for all parameters
+    return bounds.dot([ -1, 1 ]) * theta + bounds.min(axis=1)
+
+
 
 def _lnprior(theta, bounds):
     """Calculate an improper uniform log-prior probability.
@@ -1602,7 +1831,6 @@ def _lnprior(theta, bounds):
         return -np.inf
     else:
         return 0
-
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
             userkws=None, float_behavior='posterior', is_weighted=True,
@@ -1630,7 +1858,9 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     float_behavior : str, optional
         Specifies meaning of objective when it returns a float. One of:
 
-        'posterior' - objective function returnins a log-posterior
+        'posterior' - objective function returning a log-posterior
+                      probability.
+        'likelihood' - objective function returning a log-likelihood
                       probability.
         'chi2' - objective function returns a chi2 value.
 
@@ -1686,13 +1916,13 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     else:
         # objective function returns a single value.
         # use float_behaviour to figure out if the value is posterior or chi2
-        if float_behavior == 'posterior':
+        if float_behavior in ['posterior', 'likelihood']:
             pass
         elif float_behavior == 'chi2':
             lnprob *= -0.5
         else:
-            raise ValueError("float_behaviour must be either 'posterior' or"
-                             " 'chi2' " + float_behavior)
+            raise ValueError("float_behaviour must be either 'posterior'"
+                             ", 'likelihood' or 'chi2' " + float_behavior)
 
     return lnprob
 
