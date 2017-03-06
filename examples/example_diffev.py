@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
-Example using the Student's t log-likelihood
-for robust fitting of data with outliers.
+Example comparing leastsq with differential_evolution
+on a fairly simple problem.
 """
 import numpy as np
 import scipy.special as sp
