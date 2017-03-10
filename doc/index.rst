@@ -1,6 +1,6 @@
 .. lmfit documentation master file,
 
-Non-Linear Least-Square Minimization and Curve-Fitting for Python
+Non-Linear Least-Squares Minimization and Curve-Fitting for Python
 ===========================================================================
 
 .. _Levenberg-Marquardt:     http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
@@ -10,7 +10,7 @@ Non-Linear Least-Square Minimization and Curve-Fitting for Python
 
 Lmfit provides a high-level interface to non-linear optimization and curve
 fitting problems for Python. It builds on and extends many of the
-optimization methods of scipy `scipy.optimize`_.  Initially inspired by (and
+optimization methods of `scipy.optimize`_.  Initially inspired by (and
 named for) extending the `Levenberg-Marquardt`_ method from
 :scipydoc:`optimize.leastsq`, lmfit now provides a number of useful
 enhancements to optimization and data fitting problems, including:
@@ -30,16 +30,16 @@ enhancements to optimization and data fitting problems, including:
   * Improved estimation of confidence intervals.  While
     :scipydoc:`optimize.leastsq` will automatically calculate
     uncertainties and correlations from the covariance matrix, the accuracy
-    of these estimates are sometimes questionable.  To help address this,
-    lmfit has functions to explicitly explore parameter space to determine
+    of these estimates is sometimes questionable.  To help address this,
+    lmfit has functions to explicitly explore parameter space and determine
     confidence levels even for the most difficult cases.
 
   * Improved curve-fitting with the :class:`~lmfit.model.Model` class.  This
     extends the capabilities of :scipydoc:`optimize.curve_fit`, allowing
-    you to turn a function that models for your data into a python class
+    you to turn a function that models your data into a Python class
     that helps you parametrize and fit data with that model.
 
-  * Many :ref:`pre-built models <builtin_models_chapter>` for common
+  * Many :ref:`built-in models <builtin_models_chapter>` for common
     lineshapes are included and ready to use.
 
 The lmfit package is Free software, using an Open Source license.  The

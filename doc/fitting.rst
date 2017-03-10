@@ -4,7 +4,7 @@
 
 
 =======================================
-Performing Fits, Analyzing Outputs
+Performing Fits and Analyzing Outputs
 =======================================
 
 As shown in the previous chapter, a simple fit can be performed with the
@@ -40,15 +40,15 @@ but it must look like this:
    Calculate objective residual to be minimized from parameters.
 
    :param params: Parameters.
-   :type  params: :class:`Parameters`
-   :param args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`.
-   :param kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`.
+   :type  params: :class:`~lmfit.parameter.Parameters`
+   :param *args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`.
+   :param **kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`.
    :return: Residual array (generally data-model) to be minimized in the least-squares sense.
-   :rtype: numpy array.  The length of this array cannot change between calls.
+   :rtype: numpy.ndarray.  The length of this array cannot change between calls.
 
 
 A common use for the positional and keyword arguments would be to pass in other
-data needed to calculate the residual, including such things as the data array,
+data needed to calculate the residual, including things as the data array,
 dependent variable, uncertainties in the data, and other data structures for the
 model calculation.
 
@@ -86,10 +86,10 @@ simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
             return (model - data)
         return (model - data)/eps
 
-In this example, ``x`` is a positional (required) argument, while the
-``data`` array is actually optional (so that the function returns the model
+In this example, `x` is a positional (required) argument, while the
+`data` array is actually optional (so that the function returns the model
 calculation if the data is neglected).  Also note that the model
-calculation will divide ``x`` by the value of the 'period' Parameter.  It
+calculation will divide `x` by the value of the ``period`` Parameter.  It
 might be wise to ensure this parameter cannot be 0.  It would be possible
 to use the bounds on the :class:`Parameter` to do this::
 
@@ -166,9 +166,9 @@ class as listed in the :ref:`Table of Supported Fitting Methods
 .. warning::
 
   Much of this documentation assumes that the Levenberg-Marquardt method is
-  the method used.  Many of the fit statistics and estimates for
-  uncertainties in parameters discussed in :ref:`fit-results-label` are
-  done only for this method.
+  used.  Many of the fit statistics and estimates for uncertainties in
+  parameters discussed in :ref:`fit-results-label` are done only for this
+  method.
 
 ..  _fit-results-label:
 
@@ -194,8 +194,8 @@ well formatted text tables you can execute::
     result.params.pretty_print()
 
 with `results` being a `MinimizerResult` object. Note that the method
-:meth:`lmfit.parameter.Parameters.pretty_print` accepts several arguments
-for customizing the output (e.g., column width, numeric format, etc.).
+:meth:`~lmfit.parameter.Parameters.pretty_print` accepts several arguments
+for customizing the output (e.g., column width, numeric format, etcetera).
 
 .. autoclass:: MinimizerResult
 
@@ -241,7 +241,7 @@ Goodness-of-Fit Statistics
 Note that the calculation of chi-square and reduced chi-square assume
 that the returned residual function is scaled properly to the
 uncertainties in the data.  For these statistics to be meaningful, the
-person writing the function to be minimized must scale them properly.
+person writing the function to be minimized **must** scale them properly.
 
 After a fit using using the :meth:`leastsq` method has completed
 successfully, standard errors for the fitted variables and correlations
@@ -322,15 +322,15 @@ used to abort a fit.
    User-supplied function to be run at each iteration.
 
    :param params: Parameters.
-   :type  params: :class:`Parameters`.
+   :type  params: :class:`~lmfit.parameter.Parameters`
    :param iter:   Iteration number.
-   :type  iter:   integer
+   :type  iter:   int
    :param resid:  Residual array.
-   :type  resid:  ndarray
-   :param args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`
-   :param kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`
+   :type  resid:  numpy.ndarray
+   :param *args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`
+   :param **kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`
    :return:      Residual array (generally data-model) to be minimized in the least-squares sense.
-   :rtype:    ``None`` for normal behavior, any value like ``True`` to abort fit.
+   :rtype:    None for normal behavior, any value like True to abort the fit.
 
 
 Normally, the iteration callback would have no return value or return
@@ -345,7 +345,7 @@ statistics are not likely to be meaningful, and uncertainties will not be comput
 Using the :class:`Minimizer` class
 =======================================
 
-For full control of the fitting process, you'll want to create a
+For full control of the fitting process, you will want to create a
 :class:`Minimizer` object.
 
 .. autoclass :: Minimizer
@@ -364,7 +364,7 @@ The Minimizer object has a few public methods:
 
 .. automethod:: Minimizer.brute
 
-For more information, check the examples in 'examples/lmfit_brute.py'
+For more information, check the examples in ``examples/lmfit_brute.py``.
 
 .. automethod:: Minimizer.emcee
 
@@ -415,11 +415,11 @@ Solving with :func:`minimize` gives the Maximum Likelihood solution.::
 
 However, this doesn't give a probability distribution for the parameters.
 Furthermore, we wish to deal with the data uncertainty. This is called
-marginalisation of a nuisance parameter. emcee requires a function that returns
+marginalisation of a nuisance parameter. ``emcee`` requires a function that returns
 the log-posterior probability. The log-posterior probability is a sum of the
 log-prior probability and log-likelihood functions. The log-prior probability is
-assumed to be zero if all the parameters are within their bounds and `-np.inf`
-if any of the parameters are outside their bounds.::
+assumed to be zero if all the parameters are within their bounds and ``-np.inf``
+if any of the parameters are outside their bounds.
 
     >>> # add a noise parameter
     >>> mi.params.add('f', value=1, min=0.001, max=2)
@@ -434,13 +434,13 @@ if any of the parameters are outside their bounds.::
     ...    resid += np.log(2 * np.pi * s**2)
     ...    return -0.5 * np.sum(resid)
 
-Now we have to set up the minimizer and do the sampling.::
+Now we have to set up the minimizer and do the sampling::
 
     >>> mini = lmfit.Minimizer(lnprob, mi.params)
     >>> res = mini.emcee(burn=300, steps=600, thin=10, params=mi.params)
 
 Lets have a look at those posterior distributions for the parameters.  This requires
-installation of the `corner` package.::
+installation of the `corner` package::
 
     >>> import corner
     >>> corner.corner(res.flatchain, labels=res.var_names, truths=list(res.params.valuesdict().values()))
@@ -501,7 +501,7 @@ Getting and Printing Fit Reports
 
 .. autofunction:: fit_report
 
-An example using this to write out a fit report would be
+An example using this to write out a fit report would be:
 
 .. literalinclude:: ../examples/doc_withreport.py
 
