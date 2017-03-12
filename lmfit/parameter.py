@@ -549,7 +549,7 @@ class Parameter(object):
         """
         self.name = name
         self._val = value
-        self.user_data = None
+        self.user_data = user_data
         self.init_value = value
         self.min = min
         self.max = max
