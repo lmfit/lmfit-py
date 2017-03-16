@@ -1,2 +1,2 @@
-numpy>=1.5
+numpy>=1.5.1
 scipy>=0.15

@@ -13,12 +13,14 @@ python:
 # test minium required and current version of scipy
 env:
     - SCIPY_VERSION=0.15
-    - SCIPY_VERSION=0.18.1
+    - SCIPY_VERSION=0.19
 
 matrix:
     exclude:
         -  python: 3.3
-           env: SCIPY_VERSION=0.18.1
+           env: SCIPY_VERSION=0.19
+        -  python: 3.4
+           env: SCIPY_VERSION=0.19
         -  python: 3.5
            env: SCIPY_VERSION=0.15
         -  python: 3.6

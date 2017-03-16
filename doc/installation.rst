@@ -21,7 +21,7 @@ The lmfit package requires `Python`_, `NumPy`_, and `SciPy`_.
 Lmfit works with Python versions 2.7, 3.3, 3.4, 3.5, and 3.6. Support for Python 2.6
 ended with lmfit version 0.9.4.  Scipy version 0.15 or higher is required,
 with 0.17 or higher recommended to be able to use the latest optimization
-features.  NumPy version 1.5 or higher is required.
+features.  NumPy version 1.5.1 or higher is required.
 
 In order to run the test suite, either the `nose`_ or `pytest`_ package is
 required.  Some functionality of lmfit requires the `emcee`_ package, some
