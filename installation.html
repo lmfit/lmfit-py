@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Downloading and Installation &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <title>Downloading and Installation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,17 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.5',
+        VERSION:     '0.9.6rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Help" href="support.html" />
     <link rel="prev" title="Getting started with Non-Linear Least-Squares Fitting" href="intro.html" />
   <script type="text/x-mathjax-config">
@@ -112,15 +114,15 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/installation.txt"
+      <li><a href="_sources/installation.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -139,33 +141,33 @@
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <p>The lmfit package requires Python, Numpy, and Scipy.</p>
-<p>Lmfit works with Python 2.7, 3.3, 3.4, and 3.5. Support for Python 2.6
-ended with Lmfit version 0.9.4.  Scipy version 0.14 or higher is required,
+<p>Lmfit works with Python 2.7, 3.3, 3.4, 3.5, and 3.6. Support for Python 2.6
+ended with lmfit version 0.9.4.  Scipy version 0.15 or higher is required,
 with 0.17 or higher recommended to be able to use the latest optimization
 features from scipy.  Numpy version 1.5 or higher is required.</p>
-<p>In order to run the test suite, the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> framework is required.  Some
-parts of lmfit will be able to make use of IPython (version 4 or higher),
-matplotlib, and pandas if those libraries are installed, but no core
-functionality of lmfit requires these.</p>
+<p>In order to run the test suite, either the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> or <a class="reference external" href="http://pytest.org/">pytest</a> package is
+required.  Some functionality of lmfit requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> package, some
+functionality will make use of the <a class="reference external" href="http://pandas.pydata.org/">pandas</a>, <a class="reference external" href="http://jupyter.org/">Jupyter</a> or <a class="reference external" href="http://matplotlib.org/">matplotlib</a>
+packages if these are available.  We highly recommend each of these
+packages.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is 0.9.5 is available from <a class="reference external" href="http://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+<p>The latest stable version of lmfit is 0.9.6rc1 is available from <a class="reference external" href="http://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>If you have <a class="reference external" href="https://pip.pypa.io/">pip</a> installed, you can install lmfit with:</p>
+<p>With pip now widely avaliable, you can install lmfit with:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lmfit</span>
 </pre></div>
 </div>
-<p>or you can download the source kit, unpack it and install with:</p>
+<p>Alternatively, you can download the source kit, unpack it and install with:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>For Anaconda Python, lmfit is not an official packages, but several
 Anaconda channels provide it, allowing installation with (for example):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">lmfit</span>
-<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">newville</span> <span class="n">lmfit</span>
 </pre></div>
 </div>
 </div>
@@ -182,39 +184,58 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
-<p>A battery of tests scripts that can be run with the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> testing
-framework is distributed with lmfit in the <code class="docutils literal"><span class="pre">tests</span></code> folder.  These are
-routinely run on the development version.  Running <code class="docutils literal"><span class="pre">nosetests</span></code> should run
-all of these tests to completion without errors or failures.</p>
+<p>A battery of tests scripts that can be run with either the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> or
+<a class="reference external" href="http://pytest.org/">pytest</a> testing framework is distributed with lmfit in the <code class="docutils literal"><span class="pre">tests</span></code>
+folder.  These are automatically run as part of the development process.
+For any release or any master branch from the git repository, running
+<code class="docutils literal"><span class="pre">pytest</span></code> or <code class="docutils literal"><span class="pre">nosetests</span></code> should run all of these tests to completion
+without errors or failures.</p>
 <p>Many of the examples in this documentation are distributed with lmfit in
-the <code class="docutils literal"><span class="pre">examples</span></code> folder, and should also run for you.  Many of these require</p>
+the <code class="docutils literal"><span class="pre">examples</span></code> folder, and should also run for you.  Some of these
+examples assume <a class="reference external" href="http://matplotlib.org/">matplotlib</a> has been installed and is working correctly.</p>
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Many</span> <span class="n">people</span> <span class="n">have</span> <span class="n">contributed</span> <span class="n">to</span> <span class="n">lmfit</span><span class="o">.</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Many</span> <span class="n">people</span> <span class="n">have</span> <span class="n">contributed</span> <span class="n">to</span> <span class="n">lmfit</span><span class="o">.</span>  <span class="n">The</span> <span class="n">attribution</span> <span class="n">of</span> <span class="n">credit</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">project</span> <span class="n">such</span> <span class="k">as</span>
+<span class="n">this</span> <span class="ow">is</span> <span class="n">very</span> <span class="n">difficult</span> <span class="n">to</span> <span class="n">get</span> <span class="n">perfect</span><span class="p">,</span> <span class="ow">and</span> <span class="n">there</span> <span class="n">are</span> <span class="n">no</span> <span class="n">doubt</span> <span class="n">important</span> <span class="n">contributions</span>
+<span class="n">missing</span> <span class="ow">or</span> <span class="n">under</span><span class="o">-</span><span class="n">represented</span> <span class="n">here</span><span class="o">.</span>  <span class="n">Please</span> <span class="n">consider</span> <span class="n">this</span> <span class="n">file</span> <span class="k">as</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">documentation</span>
+<span class="n">that</span> <span class="n">may</span> <span class="n">have</span> <span class="n">bugs</span> <span class="n">that</span> <span class="n">need</span> <span class="n">fixing</span><span class="o">.</span>
 
-<span class="n">Matthew</span> <span class="n">Newville</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">original</span> <span class="n">version</span> <span class="ow">and</span> <span class="n">maintains</span> <span class="n">the</span> <span class="n">project</span><span class="o">.</span>
-<span class="n">Till</span> <span class="n">Stensitzki</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">improved</span> <span class="n">estimates</span> <span class="n">of</span> <span class="n">confidence</span> <span class="n">intervals</span><span class="p">,</span> <span class="ow">and</span>
-    <span class="n">contributed</span> <span class="n">many</span> <span class="n">tests</span><span class="p">,</span> <span class="n">bug</span> <span class="n">fixes</span><span class="p">,</span> <span class="ow">and</span> <span class="n">documentation</span><span class="o">.</span>
-<span class="n">Daniel</span> <span class="n">B</span><span class="o">.</span> <span class="n">Allan</span> <span class="n">wrote</span> <span class="n">much</span> <span class="n">of</span> <span class="n">the</span> <span class="n">high</span> <span class="n">level</span> <span class="n">Model</span> <span class="n">code</span><span class="p">,</span> <span class="ow">and</span> <span class="n">many</span>
-    <span class="n">improvements</span> <span class="n">to</span> <span class="n">the</span> <span class="n">testing</span> <span class="ow">and</span> <span class="n">documentation</span><span class="o">.</span>
-<span class="n">Antonino</span> <span class="n">Ingargiola</span> <span class="n">wrote</span> <span class="n">much</span> <span class="n">of</span> <span class="n">the</span> <span class="n">high</span> <span class="n">level</span> <span class="n">Model</span> <span class="n">code</span> <span class="ow">and</span> <span class="n">provided</span>
-    <span class="n">many</span> <span class="n">bug</span> <span class="n">fixes</span><span class="o">.</span>
-<span class="n">J</span><span class="o">.</span> <span class="n">J</span><span class="o">.</span> <span class="n">Helmus</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">MINUT</span> <span class="n">bounds</span> <span class="k">for</span> <span class="n">leastsq</span><span class="p">,</span> <span class="n">originally</span> <span class="ow">in</span>
-    <span class="n">leastsqbounds</span><span class="o">.</span><span class="n">py</span><span class="p">,</span> <span class="ow">and</span> <span class="n">ported</span> <span class="n">to</span> <span class="n">lmfit</span><span class="o">.</span>
-<span class="n">E</span><span class="o">.</span> <span class="n">O</span><span class="o">.</span> <span class="n">Le</span> <span class="n">Bigot</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">uncertainties</span> <span class="n">package</span><span class="p">,</span> <span class="n">a</span> <span class="n">version</span> <span class="n">of</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">used</span>
-    <span class="n">by</span> <span class="n">lmfit</span><span class="o">.</span>
-<span class="n">Michal</span> <span class="n">Rawlik</span> <span class="n">added</span> <span class="n">plotting</span> <span class="n">capabilities</span> <span class="k">for</span> <span class="n">Models</span><span class="o">.</span>
-<span class="n">A</span><span class="o">.</span> <span class="n">R</span><span class="o">.</span> <span class="n">J</span><span class="o">.</span> <span class="n">Nelson</span> <span class="n">added</span> <span class="n">differential_evolution</span><span class="p">,</span> <span class="n">emcee</span><span class="p">,</span> <span class="ow">and</span> <span class="n">greatly</span> <span class="n">improved</span> <span class="n">the</span>
-    <span class="n">code</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">docstrings</span><span class="o">.</span>
+<span class="n">Some</span> <span class="n">of</span> <span class="n">the</span> <span class="n">largest</span> <span class="ow">and</span> <span class="n">most</span> <span class="n">important</span> <span class="n">contributions</span> <span class="p">(</span><span class="n">approximately</span> <span class="ow">in</span> <span class="n">order</span> <span class="n">of</span>
+<span class="n">contribution</span> <span class="ow">in</span> <span class="n">size</span> <span class="n">to</span> <span class="n">the</span> <span class="n">existing</span> <span class="n">code</span><span class="p">)</span> <span class="n">are</span> <span class="n">from</span><span class="p">:</span>
 
-<span class="n">Additional</span> <span class="n">patches</span><span class="p">,</span> <span class="n">bug</span> <span class="n">fixes</span><span class="p">,</span> <span class="ow">and</span> <span class="n">suggestions</span> <span class="n">have</span> <span class="n">come</span> <span class="kn">from</span> <span class="nn">Christoph</span>
-    <span class="n">Deil</span><span class="p">,</span> <span class="n">Francois</span> <span class="n">Boulogne</span><span class="p">,</span> <span class="n">Thomas</span> <span class="n">Caswell</span><span class="p">,</span> <span class="n">Colin</span> <span class="n">Brosseau</span><span class="p">,</span> <span class="n">nmearl</span><span class="p">,</span>
-    <span class="n">Gustavo</span> <span class="n">Pasquevich</span><span class="p">,</span> <span class="n">Clemens</span> <span class="n">Prescher</span><span class="p">,</span> <span class="n">LiCode</span><span class="p">,</span> <span class="ow">and</span> <span class="n">Ben</span> <span class="n">Gamari</span><span class="o">.</span>
+  <span class="n">Matthew</span> <span class="n">Newville</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">original</span> <span class="n">version</span> <span class="ow">and</span> <span class="n">maintains</span> <span class="n">the</span> <span class="n">project</span><span class="o">.</span>
 
-<span class="n">The</span> <span class="n">lmfit</span> <span class="n">code</span> <span class="n">obviously</span> <span class="n">depends</span> <span class="n">on</span><span class="p">,</span> <span class="ow">and</span> <span class="n">owes</span> <span class="n">a</span> <span class="n">very</span> <span class="n">large</span> <span class="n">debt</span> <span class="n">to</span> <span class="n">the</span> <span class="n">code</span>
-<span class="ow">in</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span>  <span class="n">Several</span> <span class="n">discussions</span> <span class="n">on</span> <span class="n">the</span> <span class="n">scipy</span><span class="o">-</span><span class="n">user</span> <span class="ow">and</span> <span class="n">lmfit</span> <span class="n">mailing</span>
-<span class="n">lists</span> <span class="n">have</span> <span class="n">also</span> <span class="n">led</span> <span class="n">to</span> <span class="n">improvements</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">code</span><span class="o">.</span>
+  <span class="n">Till</span> <span class="n">Stensitzki</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">improved</span> <span class="n">estimates</span> <span class="n">of</span> <span class="n">confidence</span> <span class="n">intervals</span><span class="p">,</span> <span class="ow">and</span> <span class="n">contributed</span>
+  <span class="n">many</span> <span class="n">tests</span><span class="p">,</span> <span class="n">bug</span> <span class="n">fixes</span><span class="p">,</span> <span class="ow">and</span> <span class="n">documentation</span><span class="o">.</span>
+
+  <span class="n">A</span><span class="o">.</span> <span class="n">R</span><span class="o">.</span> <span class="n">J</span><span class="o">.</span> <span class="n">Nelson</span> <span class="n">added</span> <span class="n">differential_evolution</span><span class="p">,</span> <span class="n">emcee</span><span class="p">,</span> <span class="ow">and</span> <span class="n">greatly</span> <span class="n">improved</span> <span class="n">the</span> <span class="n">code</span><span class="p">,</span>
+  <span class="n">docstrings</span><span class="p">,</span> <span class="ow">and</span> <span class="n">overall</span> <span class="n">project</span><span class="o">.</span>
+
+  <span class="n">Daniel</span> <span class="n">B</span><span class="o">.</span> <span class="n">Allan</span> <span class="n">wrote</span> <span class="n">much</span> <span class="n">of</span> <span class="n">the</span> <span class="n">high</span> <span class="n">level</span> <span class="n">Model</span> <span class="n">code</span><span class="p">,</span> <span class="ow">and</span> <span class="n">many</span> <span class="n">improvements</span> <span class="n">to</span> <span class="n">the</span>
+  <span class="n">testing</span> <span class="ow">and</span> <span class="n">documentation</span><span class="o">.</span>
+
+  <span class="n">Antonino</span> <span class="n">Ingargiola</span> <span class="n">wrote</span> <span class="n">much</span> <span class="n">of</span> <span class="n">the</span> <span class="n">high</span> <span class="n">level</span> <span class="n">Model</span> <span class="n">code</span> <span class="ow">and</span> <span class="n">has</span> <span class="n">provided</span> <span class="n">many</span> <span class="n">bug</span>
+  <span class="n">fixes</span> <span class="ow">and</span> <span class="n">improvements</span><span class="o">.</span>
+
+  <span class="n">Renee</span> <span class="n">Otten</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">brute</span> <span class="n">force</span> <span class="n">method</span><span class="p">,</span> <span class="ow">and</span> <span class="n">has</span> <span class="n">improved</span> <span class="n">the</span> <span class="n">code</span>  <span class="ow">and</span> <span class="n">documentation</span>
+  <span class="ow">in</span> <span class="n">many</span> <span class="n">places</span><span class="o">.</span>
+
+  <span class="n">Michal</span> <span class="n">Rawlik</span> <span class="n">added</span> <span class="n">plotting</span> <span class="n">capabilities</span> <span class="k">for</span> <span class="n">Models</span><span class="o">.</span>
+
+  <span class="n">J</span><span class="o">.</span> <span class="n">J</span><span class="o">.</span> <span class="n">Helmus</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">MINUT</span> <span class="n">bounds</span> <span class="k">for</span> <span class="n">leastsq</span><span class="p">,</span> <span class="n">originally</span> <span class="ow">in</span> <span class="n">leastsqbounds</span><span class="o">.</span><span class="n">py</span><span class="p">,</span> <span class="ow">and</span>
+  <span class="n">ported</span> <span class="n">to</span> <span class="n">lmfit</span><span class="o">.</span>
+
+  <span class="n">E</span><span class="o">.</span> <span class="n">O</span><span class="o">.</span> <span class="n">Le</span> <span class="n">Bigot</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">uncertainties</span> <span class="n">package</span><span class="p">,</span> <span class="n">a</span> <span class="n">version</span> <span class="n">of</span> <span class="n">which</span> <span class="ow">is</span> <span class="n">used</span> <span class="n">by</span> <span class="n">lmfit</span><span class="o">.</span>
+
+
+<span class="n">Additional</span> <span class="n">patches</span><span class="p">,</span> <span class="n">bug</span> <span class="n">fixes</span><span class="p">,</span> <span class="ow">and</span> <span class="n">suggestions</span> <span class="n">have</span> <span class="n">come</span> <span class="kn">from</span> <span class="nn">Christoph</span> <span class="n">Deil</span><span class="p">,</span> <span class="n">Francois</span>
+<span class="n">Boulogne</span><span class="p">,</span> <span class="n">Thomas</span> <span class="n">Caswell</span><span class="p">,</span> <span class="n">Colin</span> <span class="n">Brosseau</span><span class="p">,</span> <span class="n">nmearl</span><span class="p">,</span> <span class="n">Gustavo</span> <span class="n">Pasquevich</span><span class="p">,</span> <span class="n">Clemens</span> <span class="n">Prescher</span><span class="p">,</span>
+<span class="n">LiCode</span><span class="p">,</span> <span class="n">Ben</span> <span class="n">Gamari</span><span class="p">,</span> <span class="n">Yoav</span> <span class="n">Roam</span><span class="p">,</span> <span class="n">Alexander</span> <span class="n">Stark</span><span class="p">,</span> <span class="n">Alexandre</span> <span class="n">Beelen</span><span class="p">,</span> <span class="ow">and</span> <span class="n">many</span> <span class="n">others</span><span class="o">.</span>
+
+<span class="n">The</span> <span class="n">lmfit</span> <span class="n">code</span> <span class="n">obviously</span> <span class="n">depends</span> <span class="n">on</span><span class="p">,</span> <span class="ow">and</span> <span class="n">owes</span> <span class="n">a</span> <span class="n">very</span> <span class="n">large</span> <span class="n">debt</span> <span class="n">to</span> <span class="n">the</span> <span class="n">code</span> <span class="ow">in</span>
+<span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span>  <span class="n">Several</span> <span class="n">discussions</span> <span class="n">on</span> <span class="n">the</span> <span class="n">scipy</span><span class="o">-</span><span class="n">user</span> <span class="ow">and</span> <span class="n">lmfit</span> <span class="n">mailing</span> <span class="n">lists</span> <span class="n">have</span> <span class="n">also</span>
+<span class="n">led</span> <span class="n">to</span> <span class="n">improvements</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">code</span><span class="o">.</span>
 </pre></div>
 </div>
 </div>
@@ -317,8 +338,8 @@ the <code class="docutils literal"><span class="pre">examples</span></code> fold
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
+        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Contents &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <title>Contents &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,17 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.5',
+        VERSION:     '0.9.6rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
         "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
@@ -84,15 +86,15 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/contents.txt"
+      <li><a href="_sources/contents.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -122,6 +124,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="whatsnew.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-0-9-6-release-notes">Version 0.9.6 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-0-9-5-release-notes">Version 0.9.5 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-0-9-4-release-notes">Version 0.9.4 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-0-9-3-release-notes">Version 0.9.3 Release Notes</a></li>
@@ -162,12 +165,12 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#using-a-iteration-callback-function">Using a Iteration Callback Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#using-the-minimizer-class">Using the <code class="docutils literal"><span class="pre">Minimizer</span></code> class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fitting.html#emcee-calculating-the-posterior-probability-distribution-of-parameters"><code class="docutils literal"><span class="pre">emcee()</span></code> - calculating the posterior probability distribution of parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#minimizer-emcee-calculating-the-posterior-probability-distribution-of-parameters"><code class="docutils literal"><span class="pre">Minimizer.emcee()</span></code> - calculating the posterior probability distribution of parameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#getting-and-printing-fit-reports">Getting and Printing Fit Reports</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="model.html">Modeling Data and Curve Fitting</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="model.html#example-fit-data-to-gaussian-profile">Example: Fit data to Gaussian profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.html#motivation-and-simple-example-fit-data-to-gaussian-profile">Motivation and simple example: Fit data to Gaussian profile</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model.html#the-model-class">The <code class="docutils literal"><span class="pre">Model</span></code> class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="model.html#model-class-methods"><code class="docutils literal"><span class="pre">Model</span></code> class Methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#model-class-attributes"><code class="docutils literal"><span class="pre">Model</span></code> class Attributes</a></li>
@@ -182,6 +185,7 @@
 <li class="toctree-l2"><a class="reference internal" href="model.html#the-modelresult-class">The <code class="docutils literal"><span class="pre">ModelResult</span></code> class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="model.html#modelresult-methods"><code class="docutils literal"><span class="pre">ModelResult</span></code> methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#modelresult-attributes"><code class="docutils literal"><span class="pre">ModelResult</span></code> attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#calculating-uncertainties-in-the-model-function">Calculating uncertainties in the model function</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="model.html#composite-models-adding-or-multiplying-models">Composite Models : adding (or multiplying) Models</a></li>
@@ -199,6 +203,7 @@
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#breitwignermodel"><code class="docutils literal"><span class="pre">BreitWignerModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#lognormalmodel"><code class="docutils literal"><span class="pre">LognormalModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#dampedocsillatormodel"><code class="docutils literal"><span class="pre">DampedOcsillatorModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#dampedharmonicocsillatormodel"><code class="docutils literal"><span class="pre">DampedHarmonicOcsillatorModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#exponentialgaussianmodel"><code class="docutils literal"><span class="pre">ExponentialGaussianModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#skewedgaussianmodel"><code class="docutils literal"><span class="pre">SkewedGaussianModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#donaichmodel"><code class="docutils literal"><span class="pre">DonaichModel</span></code></a></li>
@@ -208,7 +213,6 @@
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#constantmodel"><code class="docutils literal"><span class="pre">ConstantModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#linearmodel"><code class="docutils literal"><span class="pre">LinearModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#quadraticmodel"><code class="docutils literal"><span class="pre">QuadraticModel</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#parabolicmodel"><code class="docutils literal"><span class="pre">ParabolicModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#polynomialmodel"><code class="docutils literal"><span class="pre">PolynomialModel</span></code></a></li>
 </ul>
 </li>
@@ -274,8 +278,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
+        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
     </div>
   </body>
 </html>

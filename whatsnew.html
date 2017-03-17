@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Release Notes &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <title>Release Notes &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,17 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.5',
+        VERSION:     '0.9.6rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Using Mathematical Constraints" href="constraints.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
@@ -88,6 +90,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-0-9-6-release-notes">Version 0.9.6 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-5-release-notes">Version 0.9.5 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-4-release-notes">Version 0.9.4 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-3-release-notes">Version 0.9.3 Release Notes</a></li>
@@ -107,15 +110,15 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/whatsnew.txt"
+      <li><a href="_sources/whatsnew.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -135,6 +138,32 @@
 changes to the use and behavior of the library.  This is not meant to be a
 comprehensive list of changes.  For such a complete record, consult the
 <a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
+<div class="section" id="version-0-9-6-release-notes">
+<span id="whatsnew-096-label"></span><h2>Version 0.9.6 Release Notes<a class="headerlink" href="#version-0-9-6-release-notes" title="Permalink to this headline">¶</a></h2>
+<p>Support for scipy 0.14 has been dropped: scipy 0.15 is not required.  This
+is especially important for lmfit maintenance, as it means we can now rely
+on scipy having code for differential evolution and do not need to keep a
+local copy.</p>
+<p>A brute force method was added, which can be used either with
+<code class="xref py py-meth docutils literal"><span class="pre">Minimizer.brute()</span></code> or using the <cite>method=&#8217;brute&#8217;</cite> option to
+<code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code>.   This method requires that finite bounds be
+placed on each variable parameter, and that the parameter has a finite
+<cite>brute_step</cite> attribute set to specify the step size.</p>
+<p>Custom cost functions can now be used for the scalar minimizers using the
+<cite>reduce_fcn</cite> option.</p>
+<p>Many improvements to documentation and docstrings in the code were made.
+As part of that effort, all API documentation in this main sphinx
+documentation now derives from the docstrings.</p>
+<p>Uncertainties in the resulting best-fit for a model can now be calculated
+from the uncertainties in the model parameters.</p>
+<p>Parameters now have two new attributes: <cite>brute_step</cite> to specify the step
+size to take with the <cite>brute</cite> method, and <cite>user_data</cite> which is unused but
+can be used to hold additional information the user may desire.   This will
+be preserved on copy and pickling.</p>
+<p>Several bug fixes and cleanups.</p>
+<p>Versioneer was updated to 0.18.</p>
+<p>Tests can now be run either with nose or pytest.</p>
+</div>
 <div class="section" id="version-0-9-5-release-notes">
 <span id="whatsnew-095-label"></span><h2>Version 0.9.5 Release Notes<a class="headerlink" href="#version-0-9-5-release-notes" title="Permalink to this headline">¶</a></h2>
 <p>Support for Python 2.6 and scipy 0.13 has been dropped.</p>
@@ -259,8 +288,8 @@ track of changes made while adjusting parameters and re-running fits.</li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
+        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
     </div>
   </body>
 </html>

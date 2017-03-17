@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Frequently Asked Questions &mdash; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,17 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.5',
+        VERSION:     '0.9.6rc1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Parameter and Parameters" href="parameters.html" />
     <link rel="prev" title="Getting Help" href="support.html" />
   <script type="text/x-mathjax-config">
@@ -113,15 +115,15 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/faq.txt"
+      <li><a href="_sources/faq.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
@@ -161,7 +163,7 @@
 <p>The fitting routines accept data arrays that are 1 dimensional and double
 precision.  So you need to convert the data and model (or the value
 returned by the objective function) to be one dimensional.  A simple way to
-do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">ndarray.flatten</a>, for example:</p>
+do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_multidim_residual</span><span class="p">()</span>
@@ -174,7 +176,7 @@ do this is to use numpy&#8217;s <a class="reference external" href="http://docs.
 <p>As above, the fitting routines accept data arrays that are 1 dimensional
 and double precision.  So you need to convert the sets of data and models
 (or the value returned by the objective function) to be one dimensional.  A
-simple way to do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">concatenate</a>.  As an
+simple way to do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>.  As an
 example, here is a residual function to simultaneously fit two lines to two
 different arrays.  As a bonus, the two lines share the &#8216;offset&#8217; parameter:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_function</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -192,7 +194,7 @@ different arrays.  As a bonus, the two lines share the &#8216;offset&#8217; para
 <p>As with working with multidimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
 precision floating point numbers. The simplest approach is to use numpy&#8217;s
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">ndarray.view</a> method, perhaps like:</p>
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a> method, perhaps like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
      <span class="o">....</span>
@@ -244,8 +246,8 @@ the value to be minimized.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2014, Matthew Newville, The University of Chicago,  Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
+        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
     </div>
   </body>
 </html>
