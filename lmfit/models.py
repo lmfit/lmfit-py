@@ -216,11 +216,11 @@ ParabolicModel = QuadraticModel
 
 
 class PolynomialModel(Model):
-    """A polynomial model with up to 7 Parameters, specfied by ``degree``.
+    r"""A polynomial model with up to 7 Parameters, specfied by ``degree`` (OK):
 
     .. math::
 
-    f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i
+        f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i
 
     with parameters ``c0``, ``c1``, ..., ``c7``.  The supplied ``degree``
     will specify how many of these are actual variable parameters.  This
