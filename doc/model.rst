@@ -19,11 +19,11 @@ While it offers many benefits over :scipydoc:`optimize.leastsq`, using
 requires more effort than using :scipydoc:`optimize.curve_fit`.
 
 The :class:`Model` class in lmfit provides a simple and flexible approach
-to curve-fitting problems.  Like scipydoc:`optimize.curve_fit`, a
+to curve-fitting problems.  Like :scipydoc:`optimize.curve_fit`, a
 :class:`Model` uses a *model function* -- a function that is meant to
 calculate a model for some phenomenon -- and then` uses that to best match
 an array of supplied data.  Beyond that similarity, its interface is rather
-different from scipydoc:`optimize.curve_fit`, for example in that it uses
+different from :scipydoc:`optimize.curve_fit`, for example in that it uses
 :class:`~lmfit.parameter.Parameters`, but also offers several other
 important advantages.
 
