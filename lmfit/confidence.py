@@ -30,7 +30,7 @@ def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
 
 
 def copy_vals(params):
-    """Save the values and stderrs of params in temporay dict."""
+    """Save the values and stderrs of params in temporary dict."""
     tmp_params = {}
     for para_key in params:
         tmp_params[para_key] = (params[para_key].value,
@@ -39,7 +39,7 @@ def copy_vals(params):
 
 
 def restore_vals(tmp_params, params):
-    """Restore values and stderrs of params in temporay dict."""
+    """Restore values and stderrs of params from a temporary dict."""
     for para_key in params:
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
@@ -51,8 +51,8 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
     The parameter for which the ci is calculated will be varied, while
     the remaining parameters are re-optimized for minimizing chi-square.
     The resulting chi-square is used  to calculate the probability with
-    a given statistic e.g. F-statistic. This function uses a 1d-rootfinder
-    from scipy to find the values resulting in the searched confidence
+    a given statistic (e.g., F-test). This function uses a 1d-rootfinder
+    from SciPy to find the values resulting in the searched confidence
     region.
 
     Parameters
@@ -67,36 +67,35 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
     sigmas : list, optional
         The sigma-levels to find. Default is [1, 2, 3]. See Note below.
     trace : bool, optional
-        Defaults to False, if true, each result of a probability calculation
-        is saved along with the parameter. This can be used to plot so
-        called "profile traces".
-    maxiter : int
+        Defaults to False, if True, each result of a probability calculation
+        is saved along with the parameter. This can be used to plot so-called
+        "profile traces".
+    maxiter : int, optional
         Maximum of iteration to find an upper limit. Default is 200.
-    prob_func : ``None`` or callable
+    verbose: bool, optional
+        Print extra debuging information. Default is False.
+    prob_func : None or callable, optional
         Function to calculate the probability from the optimized chi-square.
-        Default (``None``) uses built-in f_compare (F test).
-    verbose: bool
-        Print extra debuging information. Default is ``False``.
-
+        Default is None and uses built-in f_compare (F-test).
 
     Returns
     -------
     output : dict
-        A dict, which contains a list of (sigma, vals)-tuples for each name.
-    trace_dict : dict
-        Only if trace is set true. Is a dict, the key is the parameter which
+        A dictionary that contains a list of (sigma, vals)-tuples for each name.
+    trace_dict : dict, optional
+        Only if trace is True. Is a dict, the key is the parameter which
         was fixed. The values are again a dict with the names as keys, but with
         an additional key 'prob'. Each contains an array of the corresponding
         values.
 
     Note
     -----
-    The values for `sigma` are taken as the number of standard deviations for a normal
-    distribution and converted to probabilities.   That is, the default sigma=(1, 2, 3)
-    will use probabilities of 0.6827, 0.9545, and 0.9973.    If any of the sigma values
-    is less than 1, that will be interpreted as a probability. That is, a value of 1 and
-    0.6827 will give the same results, within precision errors.
-
+    The values for `sigma` are taken as the number of standard deviations for
+    a normal distribution and converted to probabilities. That is, the default
+    ``sigma=(1, 2, 3)`` will use probabilities of 0.6827, 0.9545, and 0.9973.
+    If any of the sigma values is less than 1, that will be interpreted as a
+    probability. That is, a value of 1 and 0.6827 will give the same results,
+    within precision.
 
     See also
     --------
@@ -104,7 +103,6 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
 
     Examples
     --------
-
     >>> from lmfit.printfuncs import *
     >>> mini = minimize(some_func, params)
     >>> mini.leastsq()
@@ -122,7 +120,8 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
     >>> free = trace['para1']['not_para1']
     >>> prob = trace['para1']['prob']
 
-    This makes it possible to plot the dependence between free and fixed.
+    This makes it possible to plot the dependence between free and fixed
+    parameters.
 
     """
     ci = ConfidenceInterval(minimizer, result, p_names, prob_func, sigmas,
@@ -134,7 +133,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
 
 
 def map_trace_to_names(trace, params):
-    """Map trace to param names."""
+    """Map trace to parameter names."""
     out = {}
     allnames = list(params.keys()) + ['prob']
     for name in trace.keys():
@@ -331,7 +330,7 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
                     limits=None, prob_func=None):
     r"""Calculate confidence regions for two fixed parameters.
 
-    The method is explained in *conf_interval*: here we are fixing
+    The method itself is explained in *conf_interval*: here we are fixing
     two parameters.
 
     Parameters
@@ -340,38 +339,37 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
         The minimizer to use, holding objective function.
     result : MinimizerResult
         The result of running minimize().
-    x_name : string
+    x_name : str
         The name of the parameter which will be the x direction.
-    y_name : string
+    y_name : str
         The name of the parameter which will be the y direction.
-    nx, ny : ints, optional
-        Number of points.
-    limits : tuple: optional
+    nx : int, optional
+        Number of points in the x direction.
+    ny : int, optional
+        Number of points in the y direction.
+    limits : tuple, optional
         Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
         given, the default is 5 std-errs in each direction.
+    prob_func : None or callable, optional
+        Function to calculate the probability from the optimized chi-square.
+        Default is None and uses built-in f_compare (F-test).
 
     Returns
     -------
-    x : (nx)-array
-        x-coordinates
-    y : (ny)-array
-        y-coordinates
-    grid : (nx,ny)-array
-        Grid contains the calculated probabilities.
+    x : numpy.ndarray
+        X-coordinates (same shape as nx).
+    y : numpy.ndarray
+        Y-coordinates (same shape as ny).
+    grid : numpy.ndarray
+        Grid containing the calculated probabilities (with shape (nx, ny)).
 
     Examples
     --------
-
     >>> mini = Minimizer(some_func, params)
     >>> result = mini.leastsq()
     >>> x, y, gr = conf_interval2d(mini, result, 'para1','para2')
     >>> plt.contour(x,y,gr)
 
-    Other Parameters
-    ----------------
-    prob_func : ``None`` or callable
-        Function to calculate the probability from the optimized chi-square.
-        Default (``None``) uses built-in f_compare (F test).
     """
     # used to detect that .leastsq() has run!
     params = result.params

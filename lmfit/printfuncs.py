@@ -28,8 +28,8 @@ def getfloat_attr(obj, attr, fmt='%.3f'):
 def gformat(val, length=11):
     """Format a number with '%g'-like format.
 
-    The return will be length ``length`` (default=12) and have at least
-    length-6 significant digits.
+    The return will be length ``length`` (default is 12) and have at
+    least length-6 significant digits.
 
     """
     length = max(length, 7)
@@ -68,24 +68,24 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     Parameters
     ----------
     inpars  : Parameters
-       input Parameters from fit or MinimizerResult returned from a fit.
-    modelpars : optional
-       known Model Parameters
-    show_correl : bool, default ``True``
-       whether to show list of sorted correlations
-    min_correl : float, default 0.1
-       smallest correlation absolute value to show.
-    sort_pars : bool, default ``False``, or callable
-       whether to show parameter names sorted in alphanumerical order.  If
-       ``False``, then the parameters will be listed in the order they were
-       added to the Parameters dictionary. If callable, then this (one
+       Input Parameters from fit or MinimizerResult returned from a fit.
+    modelpars : Parameters, optional
+       Known Model Parameters.
+    show_correl : bool, optional
+       Whether to show list of sorted correlations (default is True).
+    min_correl : float, optional
+       Smallest correlation in absolute value to show (default is 0.1).
+    sort_pars : bool or callable, optional
+       Whether to show parameter names sorted in alphanumerical order. If
+       False (default), then the parameters will be listed in the order they
+       were added to the Parameters dictionary. If callable, then this (one
        argument) function is used to extract a comparison key from each
        list element.
 
     Returns
     -------
-    text : string
-       multi-line text of fit report
+    string
+       Multi-line text of fit report.
 
     """
     if isinstance(inpars, Parameters):
@@ -172,12 +172,12 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
 
 def report_errors(params, **kws):
-    """Print a report for fitted params:  see error_report()."""
+    """Print a report for fitted params: see error_report()."""
     print(fit_report(params, **kws))
 
 
 def report_fit(params, **kws):
-    """Print a report for fitted params:  see error_report()."""
+    """Print a report for fitted params: see error_report()."""
     print(fit_report(params, **kws))
 
 
@@ -186,13 +186,14 @@ def ci_report(ci, with_offset=True, ndigits=5):
 
     Parameters
     ----------
-    with_offset : bool (default `True`)
-        Whether to subtract best value from all other values.
-    ndigits : int (default 5)
-        Number of significant digits to show.
+    with_offset : bool, optional
+        Whether to subtract best value from all other values (default is True).
+    ndigits : int, optional
+        Number of significant digits to show (default is 5).
 
     Returns
     -------
+    str
        Text of formatted report on confidence intervals.
 
     """

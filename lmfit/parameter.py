@@ -21,25 +21,24 @@ def check_ast_errors(expr_eval):
 def isclose(x, y, rtol=1e-5, atol=1e-8):
     """Check whether two numbers are the same within a tolerance.
 
-    i.e., abs(`x` - `y`) <= (`atol` + `rtol` * absolute(`y`))
+    abs(`x` - `y`) <= (`atol` + `rtol` * abs(`y`))
 
     Parameters
     ----------
     x, y : float
-        Input values
-    rtol : float
-        The relative tolerance parameter (see Notes).
-    atol : float
-        The absolute tolerance parameter (see Notes).
+        Input values.
+    rtol : float, optional
+        The relative tolerance parameter.
+    atol : float, optional
+        The absolute tolerance parameter.
 
     Returns
     -------
-    y : bool
-        Are `x` and `x` are equal within tolerance?
+    bool
+        True if `x` and `y` are the same within tolerance, otherwise False.
 
     """
     def within_tol(x, y, atol, rtol):
-        """TODO: function docstring."""
         return abs(x - y) <= atol + rtol * abs(y)
 
     xfin = isfinite(x)
@@ -53,13 +52,14 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
     else:
         return False
 
+
 class Parameters(OrderedDict):
     """An ordered dictionary of all the Parameter objects required to
-    specify a fit model.  All minimization and Model fitting routines in
+    specify a fit model. All minimization and Model fitting routines in
     lmfit will use exactly one Parameters object, typically given as the
     first argument to the objective function.
 
-    All keys of a Parameters() instance must be strings, and valid Python
+    All keys of a Parameters() instance must be strings and valid Python
     symbol names, so that the name must match ``[a-z_][a-z0-9_]*`` and
     cannot be a Python reserved word.
 
@@ -70,15 +70,21 @@ class Parameters(OrderedDict):
 
     Parameters() support copying and pickling, and have methods to convert
     to and from serializations using json strings.
+
     """
 
     def __init__(self, asteval=None, *args, **kwds):
         """
         Arguments
-        ----------
-        asteval : ``None`` or instance of asteval.Interpreter
-            instance of Interpretr to use for constraint expressions.
-            If ``None``, a new interpreter will be created.
+        ---------
+        asteval : :class:`asteval.Interpreter`, optional
+            Instance of the asteval Interpreter to use for constraint
+            expressions. If None, a new interpreter will be created.
+        *args : optional
+            Arguments.
+        **kwds : optional
+            Keyword arguments.
+
         """
         super(Parameters, self).__init__(self)
         self._asteval = asteval
@@ -96,9 +102,8 @@ class Parameters(OrderedDict):
         self.__deepcopy__(memo)
 
     def __deepcopy__(self, memo):
-        """Parameters deepcopy needs to make sure that asteval is available and
-        that all individula parameter objects are copied.
-        """
+        """Parameters.deepcopy() needs to make sure that asteval is available
+        and that all individual Parameter objects are copied."""
         _pars = Parameters(asteval=None)
 
         # find the symbols that were added by users, not during construction
@@ -158,11 +163,11 @@ class Parameters(OrderedDict):
         return self
 
     def __array__(self):
-        """Parameters to array."""
+        """Convert Parameters to array."""
         return array([float(k) for k in self.values()])
 
     def __reduce__(self):
-        """Required to pickle a Parameters instance."""
+        """Reduce Parameters instance such that it can be pickled."""
         # make a list of all the parameters
         params = [self[k] for k in self]
 
@@ -208,8 +213,8 @@ class Parameters(OrderedDict):
         def _update_param(name):
             """Update a parameter value, including setting bounds.
 
-            For a constrained parameter (one with an expr defined), this
-            first updates (recursively) all parameters on which the
+            For a constrained parameter (one with an `expr` defined),
+            this first updates (recursively) all parameters on which the
             parameter depends (using the 'deps' field).
 
             """
@@ -226,7 +231,20 @@ class Parameters(OrderedDict):
             _update_param(name)
 
     def pretty_repr(self, oneline=False):
-        """TODO: add method docstring."""
+        """Return a pretty representation of a Parameters class.
+
+        Parameters
+        ----------
+        oneline : bool, optional
+            If True prints a one-line parameters representation (default is
+            False).
+
+        Returns
+        -------
+        s: str
+           Parameters representation.
+
+        """
         if oneline:
             return super(Parameters, self).__repr__()
         s = "Parameters({\n"
@@ -238,22 +256,22 @@ class Parameters(OrderedDict):
     def pretty_print(self, oneline=False, colwidth=8, precision=4, fmt='g',
                      columns=['value', 'min', 'max', 'stderr', 'vary', 'expr',
                               'brute_step']):
-        """Pretty-print parameters data.
+        """Pretty-print of parameters data.
 
         Parameters
         ----------
-        oneline : boolean
-            If True prints a one-line parameters representation. Default False.
-        colwidth : int
-            Column width for all except the first (i.e. name) column.
-        precision : int
+        oneline : bool, optional
+            If True prints a one-line parameters representation (default is
+            False).
+        colwidth : int, optional
+            Column width for all columns specified in :attr:`columns`.
+        precision : int, optional
             Number of digits to be printed after floating point.
-        fmt : string
-            Single-char numeric formatter. Valid values: 'f' floating point,
-            'g' floating point and exponential, 'e' exponential.
-        columns : list of strings
-            List of columns names to print. All values must be valid
-            :class:`Parameter` attributes.
+        fmt : {'g', 'e', 'f'}, optional
+            Single-character numeric formatter. Valid values are: 'f' floating
+            point, 'g' floating point and exponential, or 'e' exponential.
+        columns : :obj:`list` of :obj:`str`, optional
+            List of :class:`Parameter` attribute names to print.
 
         """
         if oneline:
@@ -286,23 +304,23 @@ class Parameters(OrderedDict):
             brute_step=None):
         """Add a Parameter.
 
-        Arguments
-        ---------
-        name : string
-            name of parameter.  Must match ``[a-z_][a-z0-9_]*`` and
-            cannot be a Python reserved word.
-        value : ``None`` or float
-            floating point value for parameter, typically the *initial value*.
-        vary : bool (default ``True``)
-            whether the parameter should be varied in the fit.
-        min : float (default ``-np.inf``)
-            lower bound for parameter value.
-        max : float (default ``np.inf``)
-            upper bound for parameter value.
-        expr : ``None`` or string
-            expression in terms of other parameter names to constrain value.
-        brute_step : ``None``
-            size of step to take when using the `brute()` method.
+        Parameters
+        ----------
+        name : str
+            Name of parameter.  Must match ``[a-z_][a-z0-9_]*`` and cannot be
+            a Python reserved word.
+        value : float, optional
+            Numerical Parameter value, typically the *initial value*.
+        vary : bool, optional
+            Whether the Parameter is varied during a fit (default is True).
+        min : float, optional
+            Lower bound for value (default is `-numpy.inf`, no lower bound).
+        max : float, optional
+            Upper bound for value (default is `numpy.inf`, no upper bound).
+        expr : str, optional
+            Mathematical expression used to constrain the value during the fit.
+        brute_step : float, optional
+            Step size for grid points in the `brute` method.
 
         Examples
         --------
@@ -327,12 +345,13 @@ class Parameters(OrderedDict):
     def add_many(self, *parlist):
         """Add many parameters, using a sequence of tuples.
 
-        Arguments
+        Parameters
         ----------
-        parlist : sequence of tuples
-            A sequence of tuples, or a sequence of `Parameter` instances. If it
-            is a sequence of tuples, then each tuple must contain at least the
-            name. The order in each tuple must be `(name, value, vary, min, max, expr, brute_step)`
+        parlist : :obj:`sequence` of :obj:`tuple` or :class:`Parameter`
+            A sequence of tuples, or a sequence of `Parameter` instances. If
+            it is a sequence of tuples, then each tuple must contain at least
+            the name. The order in each tuple must be `(name, value, vary,
+            min, max, expr, brute_step)`.
 
         Examples
         --------
@@ -346,6 +365,7 @@ class Parameters(OrderedDict):
         >>> f = Parameter('par_f', 100)
         >>> g = Parameter('par_g',  2.)
         >>> params.add_many(f, g)
+
         """
         for para in parlist:
             if isinstance(para, Parameter):
@@ -359,29 +379,31 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        vals : ordered dict
-           An ordered dictionary of name:value pairs for each Parameter.
-           This is distinct from the Parameters itself, as it has values of
-           the Parameter *values*, not the full Parameter object.
+        OrderedDict
+           An ordered dictionary of :attr:`name`::attr:`value` pairs for each
+           Parameter.
+
         """
         return OrderedDict(((p.name, p.value) for p in self.values()))
 
     def dumps(self, **kws):
         """Represent Parameters as a JSON string.
 
-        all keyword arguments are passed to `json.dumps()`
+        Parameters
+        ----------
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
 
         Returns
         -------
-        s : string
-           json string representation of Parameters
+        str
+           JSON string representation of Parameters.
 
         See Also
         --------
         dump(), loads(), load(), json.dumps()
 
         """
-
         params = [p.__getstate__() for p in self.values()]
         sym_unique = self._asteval.user_defined_symbols()
         unique_symbols = {key: deepcopy(self._asteval.symtable[key])
@@ -389,18 +411,23 @@ class Parameters(OrderedDict):
         return json.dumps({'unique_symbols': unique_symbols,
                            'params': params}, **kws)
 
-
     def loads(self, s, **kws):
         """Load Parameters from a JSON string.
 
-        current Parameters will be cleared before loading.
-
-        all keyword arguments are passed to `json.loads()`
+        Parameters
+        ----------
+        **kws : optional
+            Keyword arguments that are passed to `json.loads()`.
 
         Returns
         -------
-        ``None``
-           Parameters are updated as a side-effect
+        :class:`Parameters`
+           Updated Parameters from the JSON string.
+
+        Notes
+        -----
+        Current Parameters will be cleared before loading the data from the
+        JSON string.
 
         See Also
         --------
@@ -420,18 +447,20 @@ class Parameters(OrderedDict):
         return self
 
     def dump(self, fp, **kws):
-        """Write JSON representation of Parameters to a file or file-like
-        object (must have a `write()` method).
+        """Write JSON representation of Parameters to a file-like object.
 
-        Arguments
-        ---------
-        fp         open file-like object with `write()` method.
-
-        all keyword arguments are passed to `dumps()`
+        Parameters
+        ----------
+        fp : file-like object
+            An open and ``.write()``-supporting file-like object.
+        **kws : optional
+            Keyword arguments that are passed to `dumps()`.
 
         Returns
         -------
-        return value from `fp.write()`
+        None or int
+            Return value from `fp.write()`. None for Python 2.7 and the
+            number of characters written in Python 3.
 
         See Also
         --------
@@ -441,19 +470,19 @@ class Parameters(OrderedDict):
         return fp.write(self.dumps(**kws))
 
     def load(self, fp, **kws):
-        """Load JSON representation of Parameters from a file or file-like
-        object (must have a `read()` method).
+        """Load JSON representation of Parameters from a file-like object.
 
-        Arguments
-        ---------
-        fp         open file-like object with `read()` method.
-
-        all keyword arguments are passed to `loads()`
+        Parameters
+        ----------
+        fp : file-like object
+            An open and ``.read()``-supporting file-like object.
+        **kws : optional
+            Keyword arguments that are passed to `loads()`.
 
         Returns
         -------
-        ``None``.
-           Parameters are updated as a side-effect
+        :class:`Parameters`
+           Updated Parameters loaded from `fp`.
 
         See Also
         --------
@@ -464,10 +493,9 @@ class Parameters(OrderedDict):
 
 
 class Parameter(object):
-
     """A Parameter is an object that can be varied in a fit, or one of the
     controlling variables in a model. It is a central component of lmfit,
-    and all minimization and modelling methods use Parameter objects.
+    and all minimization and modeling methods use Parameter objects.
 
     A Parameter has a `name` attribute, and a scalar floating point
     `value`.  It also has a `vary` attribute that describes whether the
@@ -475,8 +503,8 @@ class Parameter(object):
     placed on the Parameter's value by setting its `min` and/or `max`
     attributes.  A Parameter can also have its value determined by a
     mathematical expression of other Parameter values held in the `expr`
-    attrribute.  Addition attributes include `brute_step` used as the step
-    size to use in a brute-force minimization, and `user_data` reserved
+    attrribute.  Additional attributes include `brute_step` used as the step
+    size in a brute-force minimization, and `user_data` reserved
     exclusively for user's need.
 
     After a minimization, a Parameter may also gain other attributes,
@@ -485,41 +513,43 @@ class Parameter(object):
     with other Parameters used in the minimization.
 
     """
+
     def __init__(self, name=None, value=None, vary=True, min=-inf, max=inf,
                  expr=None, brute_step=None, user_data=None):
         """
         Parameters
         ----------
         name : str, optional
-            Name of the parameter.
+            Name of the Parameter.
         value : float, optional
             Numerical Parameter value.
         vary : bool, optional
-            Whether the Parameter is fixed during a fit.
+            Whether the Parameter is varied during a fit (default is True).
         min : float, optional
-            Lower bound for value (-inf means no lower bound).
+            Lower bound for value (default is `-numpy.inf`, no lower bound).
         max : float, optional
-            Upper bound for value (inf means no upper bound).
+            Upper bound for value (default is `numpy.inf`, no upper bound).
         expr : str, optional
             Mathematical expression used to constrain the value during the fit.
         brute_step : float, optional
-            Step size for grid points in brute force method (use `0` for no step size).
+            Step size for grid points in the `brute` method.
         user_data : optional
-            user-definable extra attribute used for a parameter.
+            User-definable extra attribute used for a Parameter.
 
         Attributes
         ----------
         stderr : float
             The estimated standard error for the best-fit value.
         correl : dict
-            A dictionary of the correlation with the other fitted Parameter
-            after a fit, of the form::
+            A dictionary of the correlation with the other fitted Parameters
+            of the form::
 
             `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
+
         """
         self.name = name
         self._val = value
-        self.user_data = None
+        self.user_data = user_data
         self.init_value = value
         self.min = min
         self.max = max
@@ -544,34 +574,35 @@ class Parameter(object):
         value : float, optional
             Numerical Parameter value.
         vary : bool, optional
-            Whether the Parameter is fixed during a fit.
+            Whether the Parameter is varied during a fit.
         min : float, optional
-            Lower bound for value. To remove a lower bound you must use -np.inf
+            Lower bound for value. To remove a lower bound you must use
+            `-numpy.inf`.
         max : float, optional
-            Upper bound for value. To remove an upper bound you must use np.inf
+            Upper bound for value. To remove an upper bound you must use
+            `numpy.inf`.
         expr : str, optional
             Mathematical expression used to constrain the value during the fit.
             To remove a constraint you must supply an empty string.
         brute_step : float, optional
-            Step size for grid points in brute force method. To remove the step
-            size you must supply 0 ("zero").
+            Step size for grid points in the `brute` method. To remove the
+            step size you must use ``0``.
 
         Notes
         -----
+        Each argument to `set()` has a default value of `None`, which will
+        leave the current value for the attribute unchanged.  Thus, to lift a
+        lower or upper bound, passing in `None` will not work.  Instead,
+        you must set these to `-numpy.inf` or `numpy.inf`, as with::
 
-        Each argument to `set()` has a default value of ``None``, which
-        will the current value for the attribute unchanged.  Thus, to lift
-        a lower or upper bound, passing in ``None`` will not work.  Instead,
-        you must set these to ``np.inf`` or ``-np.inf``, as with::
-
-            par.set(min=None)     # no, will leave lower bound unchanged
-            par.set(min=-np.inf)  # yes.
+            par.set(min=None)        # leaves lower bound unchanged
+            par.set(min=-numpy.inf)  # removes lower bound
 
         Similarly, to clear an expression, pass a blank string, (not
         ``None``!) as with::
 
-            par.set(expr=None)    # leaves expression unchanged.
-            par.set(expr='')      # removes expression
+            par.set(expr=None)  # leaves expression unchanged
+            par.set(expr='')    # removes expression
 
         Explicitly setting a value or setting `vary=True` will also
         clear the expression.
@@ -580,8 +611,8 @@ class Parameter(object):
 
             par.set(brute_step=None)  # leaves brute_step unchanged
             par.set(brute_step=0)     # removes brute_step
-        """
 
+        """
         if value is not None:
             self.value = value
             self.__set_expression('')
@@ -645,7 +676,7 @@ class Parameter(object):
         self._init_bounds()
 
     def __repr__(self):
-        """TODO: add magic method docstring."""
+        """Returns printable representation of a Parameter object."""
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)
@@ -668,7 +699,7 @@ class Parameter(object):
 
         As a side-effect, this also defines the self.from_internal method
         used to re-calculate self.value from the internal value, applying
-        the inverse Minuit-style transformation.  This method should be
+        the inverse Minuit-style transformation. This method should be
         called prior to passing a Parameter to the user-defined objective
         function.
 
@@ -676,9 +707,10 @@ class Parameter(object):
 
         Returns
         -------
-        The internal value for parameter from self.value (which holds
-        the external, user-expected value).   This internal value should
-        actually be used in a fit.
+        _val : float
+            The internal value for parameter from self.value (which holds
+            the external, user-expected value). This internal value should
+            actually be used in a fit.
 
         """
         if self.min is None:
@@ -703,10 +735,16 @@ class Parameter(object):
     def scale_gradient(self, val):
         """Return scaling factor for gradient.
 
+        Parameters
+        ----------
+        val: float
+            Numerical Parameter value.
+
         Returns
         -------
-        scaling factor for gradient the according to Minuit-style
-        transformation.
+        float
+            Scaling factor for gradient the according to Minuit-style
+            transformation.
 
         """
         if self.min == -inf and self.max == inf:
@@ -720,7 +758,6 @@ class Parameter(object):
 
     def _getval(self):
         """Get value, with bounds applied."""
-
         # Note assignment to self._val has been changed to self.value
         # The self.value property setter makes sure that the
         # _expr_eval.symtable is kept updated.
@@ -760,7 +797,7 @@ class Parameter(object):
 
     @property
     def value(self):
-        """The numerical value of the Parameter, with bounds applied."""
+        """Return the numerical value of the Parameter, with bounds applied."""
         return self._getval()
 
     @value.setter
@@ -774,14 +811,14 @@ class Parameter(object):
 
     @property
     def expr(self):
-        """The mathematical expression used to constrain the value during the
-        fit."""
+        """Return the mathematical expression used to constrain the value
+        during the fit."""
         return self._expr
 
     @expr.setter
     def expr(self, val):
-        """The mathematical expression used to constrain the value during the
-        fit.
+        """Set the mathematical expression used to constrain the value during
+        the fit.
 
         To remove a constraint you must supply an empty string.
 
@@ -804,39 +841,39 @@ class Parameter(object):
             self._expr_deps = get_ast_names(self._expr_ast)
 
     def __array__(self):
-        """array."""
+        """array"""
         return array(float(self._getval()))
 
     def __str__(self):
-        """string."""
+        """string"""
         return self.__repr__()
 
     def __abs__(self):
-        """abs."""
+        """abs"""
         return abs(self._getval())
 
     def __neg__(self):
-        """neg."""
+        """neg"""
         return -self._getval()
 
     def __pos__(self):
-        """positive."""
+        """positive"""
         return +self._getval()
 
     def __nonzero__(self):
-        """not zero."""
+        """not zero"""
         return self._getval() != 0
 
     def __int__(self):
-        """int."""
+        """int"""
         return int(self._getval())
 
     def __float__(self):
-        """float."""
+        """float"""
         return float(self._getval())
 
     def __trunc__(self):
-        """trunc."""
+        """trunc"""
         return self._getval().__trunc__()
 
     def __add__(self, other):

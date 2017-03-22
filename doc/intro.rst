@@ -8,7 +8,7 @@ The lmfit package is designed to provide simple tools to help you build
 complex fitting models for non-linear least-squares problems and apply
 these models to real data.  This section gives an overview of the concepts
 and describes how to set up and perform simple fits.  Some basic knowledge
-of Python, numpy, and modeling data are assumed -- this is not a tutorial
+of Python, NumPy, and modeling data are assumed -- this is not a tutorial
 on why or how to perform a minimization or fit data, but is rather aimed at
 explaining how to use lmfit to do these things.
 
@@ -54,7 +54,7 @@ To perform the minimization with :mod:`scipy.optimize`, one would do::
     vars = [10.0, 0.2, 3.0, 0.007]
     out = leastsq(residual, vars, args=(x, data, eps_data))
 
-Though it is wonderful to be able to use python for such optimization
+Though it is wonderful to be able to use Python for such optimization
 problems, and the scipy library is robust and easy to use, the approach
 here is not terribly different from how one would do the same fit in C or
 Fortran.  There are several practical challenges to using this approach,
@@ -73,14 +73,14 @@ including:
 
   c) There is no simple, robust way to put bounds on values for the
      variables, or enforce mathematical relationships between the
-     variables.  In fact, those optimization methods that do provide
+     variables.  In fact, the optimization methods that do provide
      bounds, require bounds to be set for all variables with separate
      arrays that are in the same arbitrary order as variable values.
      Again, this is acceptable for small or one-off cases, but becomes
      painful if the fitting model needs to change.
 
 These shortcomings are really solely due to the use of traditional arrays of
-variables, as matches closely the implementation of the Fortran code.  The
+variables, and matches closely the implementation of the Fortran code.  The
 lmfit module overcomes these shortcomings by using objects -- a core reason for working with
 Python.  The key concept for lmfit is to use :class:`Parameter`
 objects instead of plain floating point numbers as the variables for the
@@ -130,7 +130,7 @@ be fixed or bounded.  This can be done during definition::
     params.add('frequency', value=3.0, max=10)
 
 where ``vary=False`` will prevent the value from changing in the fit, and
-``min=0.0`` will set a lower bound on that parameters value). It can also be done
+``min=0.0`` will set a lower bound on that parameters value. It can also be done
 later by setting the corresponding attributes after they have been
 created::
 
@@ -148,5 +148,5 @@ objective function.
 
 Finally, in addition to the :class:`Parameters` approach to fitting data,
 lmfit allows switching optimization methods without changing
-the objective function, provides tools for writing fitting reports, and
-provides better determination of Parameters confidence levels.
+the objective function, provides tools for generating fitting reports, and
+provides a better determination of Parameters confidence levels.

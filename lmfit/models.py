@@ -11,20 +11,24 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          skewed_voigt, step, students_t, voigt)
 from .model import Model
 
+
 class DimensionalError(Exception):
     """TODO: class docstring."""
     pass
+
 
 def _validate_1d(independent_vars):
     if len(independent_vars) != 1:
         raise DimensionalError(
             "This model requires exactly one independent variable.")
 
+
 def index_of(arr, val):
     """Return index of array nearest to a value."""
     if val < min(arr):
         return 0
     return np.abs(arr-val).argmin()
+
 
 def fwhm_expr(model):
     """Return constraint expression for fwhm."""
@@ -78,51 +82,58 @@ COMMON_INIT_DOC = """
     Parameters
     ----------
     independent_vars: ['x']
-        arguments to func that are independent variables
-    prefix: string or ``None``
-       string to prepend to paramter names, needed to add two Models that
+        Arguments to func that are independent variables.
+    prefix: string, optional
+       String to prepend to parameter names, needed to add two Models that
        have parameter names in common.
-    missing:  string or ``None``
-        how to handle `nan` and missing values in data. One of:
+    missing:  str or None, optional
+        How to handle NaN and missing values in data. One of:
 
-        - 'none' or ``None``: Do not check for null or missing values (default)
+        - 'none' or None: Do not check for null or missing values (default).
 
         - 'drop': Drop null or missing observations in data. if pandas is
           installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
 
-        - 'raise': Raise a (more helpful) exception when data contains nullz
+        - 'raise': Raise a (more helpful) exception when data contains null
           or missing values.
-    kwargs : optional
-        keyword arguments to pass to :class:`Model`.
-"""
+    **kwargs : optional
+        Keyword arguments to pass to :class:`Model`.
+
+    """
 
 COMMON_GUESS_DOC = """Guess starting values for the parameters of a model.
 
     Parameters
     ----------
-    data : array-like
-        array of data to use to guess parameter values.
-    kws : additional keyword arguments, passed to model function.
+    data : array_like
+        Array of data to use to guess parameter values.
+    **kws : optional
+        Additional keyword arguments, passed to model function.
 
     Returns
     -------
-    params  : Parameters
-"""
+    params : Parameters
+
+    """
 
 COMMON_DOC = COMMON_INIT_DOC
 
+
 class ConstantModel(Model):
-    """Constant model, with a single Parameter: ``c``
+    """Constant model, with a single Parameter: ``c``.
 
     Note that this is 'constant' in the sense of having no dependence on
-    the independent variable ``x``, not in the sense of being non-varying.
-    To be clear, ``c`` will be a Parameter that will be varied in the
-    fit (by default, of course).
+    the independent variable ``x``, not in the sense of being non-
+    varying. To be clear, ``c`` will be a Parameter that will be varied
+    in the fit (by default, of course).
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
+
         def constant(x, c):
             return c
         super(ConstantModel, self).__init__(constant, **kwargs)
@@ -133,21 +144,24 @@ class ConstantModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class ComplexConstantModel(Model):
-    """Complex constant model, with wo Parameters:
-    ``re``, and ``im``.
+    """Complex constant model, with wo Parameters: ``re``, and ``im``.
 
     Note that ``re`` and ``im`` are 'constant' in the sense of having no
     dependence on the independent variable ``x``, not in the sense of
     being non-varying. To be clear, ``re`` and ``im`` will be Parameters
     that will be varied in the fit (by default, of course).
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
+
         def constant(x, re, im):
             return re + 1j*im
         super(ComplexConstantModel, self).__init__(constant, **kwargs)
@@ -159,18 +173,22 @@ class ComplexConstantModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class LinearModel(Model):
-    """Linear model, with two Parameters
-    ``intercept`` and ``slope``, defined as
+    """Linear model, with two Parameters ``intercept`` and ``slope``.
+
+    Defined as:
 
     .. math::
 
         f(x; m, b) = m x + b
 
     with  ``slope`` for :math:`m` and  ``intercept`` for :math:`b`.
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -185,17 +203,20 @@ class LinearModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class QuadraticModel(Model):
-    """A quadratic model, with three Parameters
-    ``a``, ``b``, and ``c``, defined as
+    """A quadratic model, with three Parameters ``a``, ``b``, and ``c``.
+
+    Defined as:
 
     .. math::
 
         f(x; a, b, c) = a x^2 + b x + c
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -210,13 +231,14 @@ class QuadraticModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 ParabolicModel = QuadraticModel
 
 
 class PolynomialModel(Model):
-    """A polynomial model with up to 7 Parameters, specfied by ``degree``.
+    r"""A polynomial model with up to 7 Parameters, specfied by ``degree``.
 
     .. math::
 
@@ -225,9 +247,12 @@ class PolynomialModel(Model):
     with parameters ``c0``, ``c1``, ..., ``c7``.  The supplied ``degree``
     will specify how many of these are actual variable parameters.  This
     uses :numpydoc:`polyval` for its calculation of the polynomial.
+
     """
+
     MAX_DEGREE = 7
     DEGREE_ERR = "degree must be an integer less than %d."
+
     def __init__(self, degree, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -253,10 +278,11 @@ class PolynomialModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class GaussianModel(Model):
-    r"""A model based on a Gaussian or normal distribution lineshape
+    r"""A model based on a Gaussian or normal distribution lineshape.
     (see http://en.wikipedia.org/wiki/Normal_distribution), with three Parameters:
     ``amplitude``, ``center``, and ``sigma``.
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
@@ -270,9 +296,12 @@ class GaussianModel(Model):
     :math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
     half maximum is :math:`2\sigma\sqrt{2\ln{2}}`, approximately
     :math:`2.3548\sigma`.
+
     """
+
     fwhm_factor = 2.354820
     height_factor = 1./np.sqrt(2*np.pi)
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -287,7 +316,8 @@ class GaussianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class LorentzianModel(Model):
     r"""A model based on a Lorentzian or Cauchy-Lorentz distribution function
@@ -303,9 +333,12 @@ class LorentzianModel(Model):
     where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
     :math:`\mu`, and ``sigma`` to :math:`\sigma`.  The full width at
     half maximum is :math:`2\sigma`.
+
     """
+
     fwhm_factor = 2.0
     height_factor = 1./np.pi
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -320,7 +353,7 @@ class LorentzianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class VoigtModel(Model):
@@ -355,8 +388,10 @@ class VoigtModel(Model):
     the full width at half maximum is approximately :math:`3.6013\sigma`.
 
     """
+
     fwhm_factor = 3.60131
     height_factor = 1./np.sqrt(2*np.pi)
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -373,7 +408,7 @@ class VoigtModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class PseudoVoigtModel(Model):
@@ -395,6 +430,7 @@ class PseudoVoigtModel(Model):
     where :math:`\sigma_g = {\sigma}/{\sqrt{2\ln{2}}}` so that the full width
     at half maximum of each component and of the sum is :math:`2\sigma`. The
     :meth:`guess` function always sets the starting value for ``fraction`` at 0.5.
+
     """
 
     fwhm_factor = 2.0
@@ -414,7 +450,7 @@ class PseudoVoigtModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class MoffatModel(Model):
@@ -428,9 +464,10 @@ class MoffatModel(Model):
         f(x; A, \mu, \sigma, \beta) = A \big[(\frac{x-\mu}{\sigma})^2+1\big]^{-\beta}
 
     the full width have maximum is :math:`2\sigma\sqrt{2^{1/\beta}-1}`.
-    :meth:`guess` function always sets the starting value for ``beta`` to 1.
+    The :meth:`guess` function always sets the starting value for ``beta`` to 1.
 
     Note that for (:math:`\beta=1`) the Moffat has a Lorentzian shape.
+
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
@@ -447,7 +484,7 @@ class MoffatModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class Pearson7Model(Model):
@@ -463,7 +500,9 @@ class Pearson7Model(Model):
     where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
     :mod:`scipy.special`).  The :meth:`guess` function always
     gives a starting value for ``exponent`` of 1.5.
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -477,7 +516,7 @@ class Pearson7Model(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class StudentsTModel(Model):
@@ -491,7 +530,9 @@ class StudentsTModel(Model):
 
 
     where :math:`\Gamma(x)` is the gamma function.
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -503,7 +544,7 @@ class StudentsTModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class BreitWignerModel(Model):
@@ -515,7 +556,9 @@ class BreitWignerModel(Model):
     .. math::
 
         f(x; A, \mu, \sigma, q) = \frac{A (q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -528,7 +571,7 @@ class BreitWignerModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class LognormalModel(Model):
@@ -542,6 +585,7 @@ class LognormalModel(Model):
         f(x; A, \mu, \sigma) = \frac{A e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}
 
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -554,7 +598,7 @@ class LognormalModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class DampedOscillatorModel(Model):
@@ -568,6 +612,7 @@ class DampedOscillatorModel(Model):
         f(x; A, \mu, \sigma) = \frac{A}{\sqrt{ [1 - (x/\mu)^2]^2 + (2\sigma x/\mu)^2}}
 
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -580,7 +625,7 @@ class DampedOscillatorModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class DampedHarmonicOscillatorModel(Model):
@@ -594,7 +639,9 @@ class DampedHarmonicOscillatorModel(Model):
 
         f(x; A, \mu, \sigma, \gamma) = \frac{A\sigma}{\pi [1 - \exp(-x/\gamma)]}
                 \Big[ \frac{1}{(x-\mu)^2 + \sigma^2} - \frac{1}{(x+\mu)^2 + \sigma^2} \Big]
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -608,7 +655,7 @@ class DampedHarmonicOscillatorModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class ExponentialGaussianModel(Model):
@@ -627,6 +674,7 @@ class ExponentialGaussianModel(Model):
     where :func:`erfc` is the complimentary error function.
 
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -638,7 +686,7 @@ class ExponentialGaussianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class SkewedGaussianModel(Model):
@@ -655,10 +703,12 @@ class SkewedGaussianModel(Model):
        \frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
        \bigr] \Bigr\}
 
-
     where :func:`erf` is the error function.
+
     """
+
     fwhm_factor = 2.354820
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -671,7 +721,7 @@ class SkewedGaussianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class DonaichModel(Model):
@@ -685,7 +735,9 @@ class DonaichModel(Model):
 
         f(x; A, \mu, \sigma, \gamma) = A\frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
         \arctan{(x - \mu)}/\sigma\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -697,7 +749,8 @@ class DonaichModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class PowerLawModel(Model):
     r"""A model based on a Power Law (see http://en.wikipedia.org/wiki/Power_law>),
@@ -706,7 +759,9 @@ class PowerLawModel(Model):
     .. math::
 
         f(x; A, k) = A x^k
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -723,7 +778,7 @@ class PowerLawModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class ExponentialModel(Model):
@@ -734,7 +789,9 @@ class ExponentialModel(Model):
     .. math::
 
         f(x; A, \tau) = A e^{-x/\tau}
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -751,7 +808,7 @@ class ExponentialModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class StepModel(Model):
@@ -782,7 +839,9 @@ class StepModel(Model):
         \end{eqnarray*}
 
     where :math:`\alpha  = (x - \mu)/{\sigma}`.
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -800,7 +859,8 @@ class StepModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class RectangleModel(Model):
     r"""A model based on a Step-up and Step-down function, with five
@@ -836,7 +896,9 @@ class RectangleModel(Model):
 
     where :math:`\alpha_1  = (x - \mu_1)/{\sigma_1}` and
     :math:`\alpha_2  = -(x - \mu_2)/{\sigma_2}`.
+
     """
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
@@ -862,7 +924,7 @@ class RectangleModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class ExpressionModel(Model):
@@ -877,25 +939,25 @@ class ExpressionModel(Model):
 
         Parameters
         ----------
-        expr:    string
-            mathematical expression for model.
-        independent_vars: list of strings or ``None``
-            variable names to use as independent variables
-        init_script: string or ``None``
-            initial script to run in asteval interpreter
-        missing:  string or ``None``
-            how to handle `nan` and missing values in data. One of:
+        expr : str
+            Mathematical expression for model.
+        independent_vars : list of strings or None, optional
+            Variable names to use as independent variables.
+        init_script : string or None, optional
+            Initial script to run in asteval interpreter.
+        missing : str or None, optional
+            How to handle NaN and missing values in data. One of:
 
-            - 'none' or ``None``: Do not check for null or missing values (default)
+            - 'none' or None: Do not check for null or missing values (default).
 
             - 'drop': Drop null or missing observations in data. if pandas is
               installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
 
-            - 'raise': Raise a (more helpful) exception when data contains nullz
+            - 'raise': Raise a (more helpful) exception when data contains null
               or missing values.
 
-        kwargs : optional
-            keyword arguments to pass to :class:`Model`.
+        **kws : optional
+            Keyword arguments to pass to :class:`Model`.
 
         Notes
         -----

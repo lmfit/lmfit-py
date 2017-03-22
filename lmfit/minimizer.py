@@ -10,6 +10,7 @@ Original copyright:
    Copyright (c) 2011 Matthew Newville, The University of Chicago
 
 See LICENSE for more complete authorship information and license.
+
 """
 
 from collections import namedtuple
@@ -25,6 +26,7 @@ from numpy.linalg import LinAlgError
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
+from scipy.optimize import differential_evolution
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 import six
@@ -40,9 +42,6 @@ from .parameter import Parameter, Parameters
 #    OptimizeResult        0.13
 #    diff_evolution        0.15
 #    least_squares         0.17
-
-
-from scipy.optimize import differential_evolution
 
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
@@ -94,13 +93,12 @@ wrap_ueval = uncertainties.wrap(asteval_with_uncertainties)
 def eval_stderr(obj, uvars, _names, _pars):
     """Evaluate uncertainty and set .stderr for a parameter `obj`.
 
-    Given the uncertain values `uvars` (a list of uncertainties.ufloats), a list of
-    parameter names that matches uvars, and a dict of param objects, keyed by
-    name.
+    Given the uncertain values `uvars` (a list of uncertainties.ufloats), a
+    list of parameter names that matches uvars, and a dict of param objects,
+    keyed by name.
 
     This uses the uncertainties package wrapped function to evaluate the
-    uncertainty for an arbitrary expression (in obj._expr_ast) of
-    parameters.
+    uncertainty for an arbitrary expression (in obj._expr_ast) of parameters.
 
     """
     if not isinstance(obj, Parameter) or getattr(obj, '_expr_ast', None) is None:
@@ -116,12 +114,10 @@ class MinimizerException(Exception):
     """General Purpose Exception."""
 
     def __init__(self, msg):
-        """TODO: add public method docstring."""
         Exception.__init__(self)
         self.msg = msg
 
     def __str__(self):
-        """TODO: add magic method docstring."""
         return "\n%s" % self.msg
 
 
@@ -141,29 +137,69 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
 
 
 def reduce_chisquare(r):
-    """Reduce residual array r to scalar as chi-square (r*r).sum()."""
+    """Reduce residual array to scalar (chi-square).
+
+    Calculate the chi-square value from the residual array `r`: (r*r).sum()
+
+    Parameters
+    ----------
+    r : numpy.ndarray
+        Residual array.
+
+    Returns
+    -------
+    float
+        Chi-square calculated from the residual array
+
+    """
     return (r*r).sum()
 
 
 def reduce_negentropy(r):
-    """Reduce residual array r to scalar using negative entropy and the normal
-    (Gaussian) probability distribution of r as pdf:
+    """Reduce residual array to scalar (negentropy).
+
+    Reduce residual array `r` to scalar using negative entropy and the normal
+    (Gaussian) probability distribution of `r` as pdf:
 
        (norm.pdf(r)*norm.logpdf(r)).sum()
+
     since pdf(r) = exp(-r*r/2)/sqrt(2*pi), this is
        ((r*r/2 - log(sqrt(2*pi))) * exp(-r*r/2)).sum()
+
+    Parameters
+    ----------
+    r : numpy.ndarray
+        Residual array.
+
+    Returns
+    -------
+    float
+        Negative entropy value calculated from the residual array
 
     """
     return (norm_dist.pdf(r)*norm_dist.logpdf(r)).sum()
 
 
 def reduce_cauchylogpdf(r):
-    """Reduce residual array r to scalar using negative log-likelihood and a
-    Cauchy (Lorentzian) distribution of r:
+    """Reduce residual array to scalar (cauchylogpdf).
+
+    Reduce residual array `r` to scalar using negative log-likelihood and a
+    Cauchy (Lorentzian) distribution of `r`:
 
        -scipy.stats.cauchy.logpdf(r)
+
     (where the Cauchy pdf = 1/(pi*(1+r*r))). This gives greater
     suppression of outliers compared to normal sum-of-squares.
+
+    Parameters
+    ----------
+    r : numpy.ndarray
+        Residual array.
+
+    Returns
+    -------
+    float
+        Negative entropy value calculated from the residual array
 
     """
     return -cauchy_dist.logpdf(r).sum()
@@ -175,13 +211,13 @@ class MinimizerResult(object):
 
     Minimization results include data such as status and error messages,
     fit statistics, and the updated (i.e., best-fit) parameters themselves
-    :attr:`params`.
+    in the :attr:`params` attribute.
 
-    The list of (possible) `MinimizerResult` attributes follows.
+    The list of (possible) `MinimizerResult` attributes is given below:
 
     Attributes
     ----------
-    params : :class:`lmfit.parameter.Parameters`
+    params : :class:`~lmfit.parameter.Parameters`
         The best-fit parameters resulting from the fit.
     status : int
         Termination status of the optimizer. Its value depends on the
@@ -200,46 +236,46 @@ class MinimizerResult(object):
     nfev : int
         Number of function evaluations.
     success : bool
-        Boolean (``True``/``False``) for whether fit succeeded.
+        True if the fit succeeded, otherwise False.
     errorbars : bool
-        Boolean (``True``/``False``) for whether uncertainties were estimated.
-    message : string
+        True if uncertainties were estimated, otherwise False.
+    message : str
         Message about fit success.
     ier : int
         Integer error value from :scipydoc:`optimize.leastsq` (`leastsq` only).
-    lmdif_message : string
+    lmdif_message : str
         Message from :scipydoc:`optimize.leastsq` (`leastsq` only).
     nvarys : int
-        Number of variables in fit :math:`N_{\\rm varys}`.
+        Number of variables in fit: :math:`N_{\rm varys}`.
     ndata : int
-        Number of data points:  :math:`N`.
+        Number of data points: :math:`N`.
     nfree : int
-        Degrees of freedom in fit:  :math:`N - N_{\\rm varys}`.
+        Degrees of freedom in fit: :math:`N - N_{\rm varys}`.
     residual : numpy.ndarray
-        Residual array :math:`{\\rm Resid_i}`. Return value of the objective
+        Residual array :math:`{\rm Resid_i}`. Return value of the objective
         function when using the best-fit values of the parameters.
     chisqr : float
-        Chi-square: :math:`\chi^2 = \sum_i^N [{\\rm Resid}_i]^2`.
+        Chi-square: :math:`\chi^2 = \sum_i^N [{\rm Resid}_i]^2`.
     redchi : float
         Reduced chi-square:
-        :math:`\chi^2_{\\nu}= {\chi^2} / {(N - N_{\\rm varys})}`.
+        :math:`\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}`.
     aic : float
-        Akaike Information Criterion statistic.
-        :math:`N \ln(\chi^2/N) + 2 N_{\\rm varys}`
+        Akaike Information Criterion statistic:
+        :math:`N \ln(\chi^2/N) + 2 N_{\rm varys}`.
     bic : float
-        Bayesian Information Criterion statistic.
-        :math:`N \ln(\chi^2/N) + \ln(N) N_{\\rm varys}`
+        Bayesian Information Criterion statistic:
+        :math:`N \ln(\chi^2/N) + \ln(N) N_{\rm varys}`.
     flatchain : pandas.DataFrame
-        a flatchain view of the sampling chain from the `emcee` method.
+        A flatchain view of the sampling chain from the `emcee` method.
 
     Methods
-    ----------
-    show_candidates:  pretty_print() representaiton of candidates from
-       `brute` method.
+    -------
+    show_candidates
+        Pretty_print() representation of candidates from the `brute` method.
+
     """
 
     def __init__(self, **kws):
-        """TODO: add public method docstring."""
         for key, val in kws.items():
             setattr(self, key, val)
 
@@ -249,7 +285,7 @@ class MinimizerResult(object):
         if hasattr(self, 'chain'):
             if HAS_PANDAS:
                 if len(self.chain.shape) == 4:
-                    return pd.DataFrame(self.chain[0,...].reshape((-1, self.nvarys)),
+                    return pd.DataFrame(self.chain[0, ...].reshape((-1, self.nvarys)),
                                         columns=self.var_names)
                 elif len(self.chain.shape) == 3:
                     return pd.DataFrame(self.chain.reshape((-1, self.nvarys)),
@@ -263,8 +299,13 @@ class MinimizerResult(object):
     def show_candidates(self, candidate_nmb='all'):
         """A pretty_print() representation of the candidates.
 
-        Showing all candidates (default) or the specified candidate-#
-        from the brute force method.
+        Showing candidates (default is 'all') or the specified candidate-#
+        from the `brute` method.
+
+        Parameters
+        ----------
+        candidate_nmb : int or 'all'
+            The candidate-number to show using the :meth:`pretty_print` method.
 
         """
         if hasattr(self, 'candidates'):
@@ -281,9 +322,7 @@ class MinimizerResult(object):
 
 
 class Minimizer(object):
-    """
-    A general minimizer for curve fitting and optimization.
-    """
+    """A general minimizer for curve fitting and optimization."""
 
     _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
                      "of Parameters()")
@@ -299,12 +338,12 @@ class Minimizer(object):
         ----------
         userfcn : callable
             Objective function that returns the residual (difference between
-            model and data) to be minimized in a least squares sense.  The
+            model and data) to be minimized in a least-squares sense.  This
             function must have the signature::
 
                 userfcn(params, *fcn_args, **fcn_kws)
 
-        params : :class:`lmfit.parameter.Parameters` object.
+        params : :class:`~lmfit.parameter.Parameters`
             Contains the Parameters for the model.
         fcn_args : tuple, optional
             Positional arguments to pass to `userfcn`.
@@ -318,49 +357,49 @@ class Minimizer(object):
 
             where `params` will have the current parameter values, `iter`
             the iteration, `resid` the current residual array, and `*fcn_args`
-            and `**fcn_kws` as passed to the objective function.
+            and `**fcn_kws` are passed to the objective function.
         scale_covar : bool, optional
-            Whether to automatically scale the covariance matrix (leastsq only).
+            Whether to automatically scale the covariance matrix (`leastsq` only).
         nan_policy : str, optional
-            Specifies action if `userfcn` (or a Jacobian) returns nan
+            Specifies action if `userfcn` (or a Jacobian) returns NaN
             values. One of:
 
             - 'raise' : a `ValueError` is raised
             - 'propagate' : the values returned from `userfcn` are un-altered
-            - 'omit' : non-finite values are filtered.
+            - 'omit' : non-finite values are filtered
 
         reduce_fcn : str or callable, optional
             Function to convert a residual array to a scalar value for the scalar
             minimizers. Optional values are (where `r` is the residual array):
 
-            - None       : sum of squares of residual [default]
+            - None : sum of squares of residual [default]
 
                = (r*r).sum()
 
             - 'negentropy' : neg entropy, using normal distribution
 
-               = rho*log(rho)).sum()` for rho=exp(-r*r/2)/(sqrt(2*pi))
+               = rho*log(rho).sum()`, where  rho = exp(-r*r/2)/(sqrt(2*pi))
 
             - 'neglogcauchy': neg log likelihood, using Cauchy distribution
 
                = -log(1/(pi*(1+r*r))).sum()
 
-            - callable   : must take 1 argument (r) and return a float.
+            - callable : must take one argument (`r`) and return a float.
 
-        kws : dict, optional
+        **kws : dict, optional
             Options to pass to the minimizer being used.
 
         Notes
         -----
-        The objective function should return the value to be minimized. For the
-        Levenberg-Marquardt algorithm from :meth:`leastsq` or
-        :meth:`least_squares`, this returned value must
-        be an array, with a length greater than or equal to the number of
-        fitting variables in the model. For the other methods, the return value
-        can either be a scalar or an array. If an array is returned, the sum of
-        squares of the array will be sent to the underlying fitting method,
-        effectively doing a least-squares optimization of the return values. If
-        the objective function returns non-finite values then a `ValueError`
+        The objective function should return the value to be minimized. For
+        the Levenberg-Marquardt algorithm from :meth:`leastsq` or
+        :meth:`least_squares`, this returned value must be an array, with a
+        length greater than or equal to the number of fitting variables in
+        the model. For the other methods, the return value can either be a
+        scalar or an array. If an array is returned, the sum of squares of
+        the array will be sent to the underlying fitting method, effectively
+        doing a least-squares optimization of the return values. If the
+        objective function returns non-finite values then a `ValueError`
         will be raised because the underlying solvers cannot deal with them.
 
         A common use for the `fcn_args` and `fcn_kws` would be to pass in
@@ -406,24 +445,24 @@ class Minimizer(object):
     def __residual(self, fvars, apply_bounds_transformation=True):
         """Residual function used for least-squares fit.
 
-        With the new, candidate values of fvars (the fitting variables),
+        With the new, candidate values of `fvars` (the fitting variables),
         this evaluates all parameters, including setting bounds and
         evaluating constraints, and then passes those to the user-supplied
         function to calculate the residual.
 
         Parameters
         ----------
-        fvars : np.ndarray
+        fvars : numpy.ndarray
             Array of new parameter values suggested by the minimizer.
-        apply_bounds_transformation : bool, optional, default=`True`
-            whether to apply lmfits parameter transformation to constrain
-            parameters. This is needed for solvers without inbuilt support for
-            bounds.
+        apply_bounds_transformation : bool, optional
+            Whether to apply lmfits parameter transformation to constrain
+            parameters (default is True). This is needed for solvers without
+            inbuilt support for bounds.
 
         Returns
         -------
-        residual : np.ndarray
-             The evaluated function values for given fvars.
+        residual : numpy.ndarray
+             The evaluated function values for given `fvars`.
 
         """
         # set parameter values
@@ -490,12 +529,12 @@ class Minimizer(object):
         Parameters
         ----------
         fvars : numpy.ndarray
-            Array of values for the variable parameters
+            Array of values for the variable parameters.
 
         Returns
         -------
         r : float
-            The user evaluated user-supplied objective function.
+            The evaluated user-supplied objective function.
 
             If the objective function is an array of size greater than 1,
             use the scalar returned by `self.reduce_fcn`.  This defaults
@@ -520,9 +559,11 @@ class Minimizer(object):
         Returns
         -------
         r : float
-            The user evaluated user-supplied objective function. If the
-            objective function is an array of size greater than 1, return the
-            array sum-of-squares
+            The  evaluated user-supplied objective function.
+
+            If the objective function is an array of size greater than 1,
+            use the scalar returned by `self.reduce_fcn`.  This defaults
+            to sum-of-squares, but can be replaced by other options.
 
         """
         r = self.__residual(fvars, apply_bounds_transformation=False)
@@ -531,7 +572,7 @@ class Minimizer(object):
         return r
 
     def prepare_fit(self, params=None):
-        """Prepare parameters for fitting, return array of initial values.
+        """Prepare parameters for fitting.
 
         Prepares and initializes model and Parameters for subsequent
         fitting. This routine prepares the conversion of :class:`Parameters`
@@ -540,6 +581,18 @@ class Minimizer(object):
         a new instance of a :class:`MinimizerResult` object that contains the
         copy of the Parameters that will actually be varied in the fit.
 
+        Parameters
+        ----------
+        params : :class:`~lmfit.parameter.Parameters`, optional
+            Contains the Parameters for the model; if None, then the
+            Parameters used to initialize the Minimizer object are used.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+
+        Notes
+        -----
         This method is called directly by the fitting methods, and it is
         generally not necessary to call this function explicitly.
 
@@ -605,9 +658,10 @@ class Minimizer(object):
         return result
 
     def unprepare_fit(self):
-        """Clean fit state, so thatt subsequent fits will need to call prepare_fit().
+        """Clean fit state, so that subsequent fits need to call prepare_fit().
 
         removes AST compilations of constraint expressions.
+
         """
         pass
 
@@ -632,8 +686,7 @@ class Minimizer(object):
         Parameters
         ----------
         method : str, optional
-            Name of the fitting method to use.
-            One of:
+            Name of the fitting method to use. One of:
 
             - 'Nelder-Mead' (default)
             - 'L-BFGS-B'
@@ -647,16 +700,16 @@ class Minimizer(object):
             - 'SLSQP'
             - 'differential_evolution'
 
-        params : Parameters, optional
-           Parameters to use as starting points.
-        kws : dict, optional
+        params : :class:`~lmfit.parameter.Parameters`, optional
+           Parameters to use as starting point.
+        **kws : dict, optional
             Minimizer options pass to :scipydoc:`optimize.minimize`.
 
         Returns
         -------
         :class:`MinimizerResult`
-            Object containing the optimized parameter
-            and several goodness-of-fit statistics.
+            Object containing the optimized parameter and several
+            goodness-of-fit statistics.
 
 
         .. versionchanged:: 0.9.0
@@ -664,7 +717,7 @@ class Minimizer(object):
 
         Notes
         -----
-        If the objective function returns a numpy array instead
+        If the objective function returns a NumPy array instead
         of the expected scalar, the sum of squares of the array
         will be used.
 
@@ -703,7 +756,7 @@ class Minimizer(object):
         if method == 'differential_evolution':
             for par in params.values():
                 if (par.vary and
-                    not (np.isfinite(par.min) and np.isfinite(par.max))):
+                        not (np.isfinite(par.min) and np.isfinite(par.max))):
                     raise ValueError('differential_evolution requires finite '
                                      'bound for all varying parameters')
 
@@ -751,7 +804,7 @@ class Minimizer(object):
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
               float_behavior='posterior', is_weighted=True, seed=None):
         r"""
-        Bayesian sampling of the posterior distribution using the `emcee`.
+        Bayesian sampling of the posterior distribution using `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
@@ -760,7 +813,7 @@ class Minimizer(object):
 
         Parameters
         ----------
-        params : :class:`lmfit.parameter.Parameters`, optional
+        params : :class:`~lmfit.parameter.Parameters`, optional
             Parameters to use as starting point. If this is not specified
             then the Parameters used to initialize the Minimizer object are
             used.
@@ -780,7 +833,7 @@ class Minimizer(object):
             Only accept 1 in every `thin` samples.
         ntemps : int, optional
             If `ntemps > 1` perform a Parallel Tempering.
-        pos : np.ndarray, optional
+        pos : numpy.ndarray, optional
             Specify the initial positions for the sampler.  If `ntemps == 1`
             then `pos.shape` should be `(nwalkers, nvarys)`. Otherwise,
             `(ntemps, nwalkers, nvarys)`. You can also initialise using a
@@ -792,7 +845,7 @@ class Minimizer(object):
             If you have already run `emcee` on a given `Minimizer` object then
             it possesses an internal ``sampler`` attribute. You can continue to
             draw from the same sampler (retaining the chain history) if you set
-            this option to `True`. Otherwise a new sampler is created. The
+            this option to True. Otherwise a new sampler is created. The
             `nwalkers`, `ntemps`, `pos`, and `params` keywords are ignored with
             this option.
             **Important**: the Parameters used to create the sampler must not
@@ -818,7 +871,7 @@ class Minimizer(object):
 
             - 'posterior' - objective function returns a log-posterior
               probability
-            - 'chi2' - objective function returns :math:`\chi^2`.
+            - 'chi2' - objective function returns :math:`\chi^2`
 
             See Notes for further details.
         is_weighted : bool, optional
@@ -835,11 +888,11 @@ class Minimizer(object):
             **Important** this parameter only has any effect if your objective
             function returns an array. If your objective function returns a
             float, then this parameter is ignored. See Notes for more details.
-        seed : int or `np.random.RandomState`, optional
-            If `seed` is an int, a new `np.random.RandomState` instance is used,
-            seeded with `seed`.
-            If `seed` is already a `np.random.RandomState` instance, then that
-            `np.random.RandomState` instance is used.
+        seed : int or `numpy.random.RandomState`, optional
+            If `seed` is an int, a new `numpy.random.RandomState` instance is
+            used, seeded with `seed`.
+            If `seed` is already a `numpy.random.RandomState` instance, then
+            that `numpy.random.RandomState` instance is used.
             Specify `seed` for repeatable minimizations.
 
         Returns
@@ -879,8 +932,8 @@ class Minimizer(object):
         where :math:`\ln p(D | F_{true})` is the 'log-likelihood' and
         :math:`\ln p(F_{true})` is the 'log-prior'. The default log-prior
         encodes prior information already known about the model. This method
-        assumes that the log-prior probability is `-np.inf` (impossible) if the
-        one of the parameters is outside its limits. The log-prior probability
+        assumes that the log-prior probability is `-numpy.inf` (impossible) if
+        the one of the parameters is outside its limits. The log-prior probability
         term is zero if all the parameters are inside their bounds (known as a
         uniform prior). The log-likelihood function is given by [1]_:
 
@@ -913,7 +966,7 @@ class Minimizer(object):
         to be correctly weighted by the standard deviation (measurement
         uncertainty) of the data points (`res = (data - model) / sigma`) and
         the log-likelihood (and log-posterior probability) is calculated as:
-        `-0.5 * np.sum(res**2)`.
+        `-0.5 * numpy.sum(res**2)`.
         This ignores the second summand in the square brackets. Consequently,
         in order to calculate a fully correct log-posterior probability value
         your objective function should return a single value. If
@@ -927,6 +980,7 @@ class Minimizer(object):
         References
         ----------
         .. [1] http://dan.iel.fm/emcee/current/user/line/
+
         """
         if not HAS_EMCEE:
             raise NotImplementedError('You must have emcee to use'
@@ -1111,7 +1165,7 @@ class Minimizer(object):
         return result
 
     def least_squares(self, params=None, **kws):
-        """Use the ``least_squares`` (new in scipy 0.17) to perform a fit.
+        """Use the `least_squares` (new in scipy 0.17) to perform a fit.
 
         It assumes that the input Parameters have been initialized, and
         a function to minimize has been properly set up.
@@ -1123,17 +1177,16 @@ class Minimizer(object):
 
         Parameters
         ----------
-        params : Parameters, optional
-           Parameters to use as starting points.
-        kws : dict, optional
-            Minimizer options to pass to
-            :scipydoc:`optimize.least_squares`.
+        params : :class:`~lmfit.parameter.Parameters`, optional
+           Parameters to use as starting point.
+        **kws : dict, optional
+            Minimizer options to pass to :scipydoc:`optimize.least_squares`.
 
         Returns
         -------
         :class:`MinimizerResult`
-            Object containing the optimized parameter
-            and several goodness-of-fit statistics.
+            Object containing the optimized parameter and several
+            goodness-of-fit statistics.
 
 
         .. versionchanged:: 0.9.0
@@ -1141,7 +1194,7 @@ class Minimizer(object):
 
         """
         if not HAS_LEAST_SQUARES:
-            raise NotImplementedError("Scipy with a version higher than 0.17 "
+            raise NotImplementedError("SciPy with a version higher than 0.17 "
                                       "is needed for this method.")
 
         result = self.prepare_fit(params)
@@ -1199,14 +1252,14 @@ class Minimizer(object):
         +------------------+----------------+------------------------------------------------------------+
         |   maxfev         | 2000*(nvar+1)  | Maximum number of function calls (nvar= # of variables)    |
         +------------------+----------------+------------------------------------------------------------+
-        |   Dfun           | ``None``       | Function to call for Jacobian calculation                  |
+        |   Dfun           | None           | Function to call for Jacobian calculation                  |
         +------------------+----------------+------------------------------------------------------------+
 
         Parameters
         ----------
-        params : :class:`lmfit.parameter.Parameters`, optional
+        params : :class:`~lmfit.parameter.Parameters`, optional
            Parameters to use as starting point.
-        kws : dict, optional
+        **kws : dict, optional
             Minimizer options to pass to :scipydoc:`optimize.leastsq`.
 
         Returns
@@ -1381,8 +1434,8 @@ class Minimizer(object):
 
         Parameters
         ----------
-        params : :class:`lmfit.parameter.Parameters` object, optional
-            Contains the Parameters for the model; if None, then the
+        params : :class:`~lmfit.parameter.Parameters` object, optional
+            Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
         Ns : int, optional
             Number of grid points along the axes, if not otherwise specified
@@ -1427,11 +1480,12 @@ class Minimizer(object):
         scenarios given below with their respective slice-object:
 
             - lower bound (:attr:`min`) and :attr:`brute_step` are specified:
-                range = (min, min + Ns*brute_step, brute_step).
+                range = (`min`, `min` + `Ns` * `brute_step`, `brute_step`).
             - upper bound (:attr:`max`) and :attr:`brute_step` are specified:
-                range = (max - Ns*brute_step, max, brute_step).
+                range = (`max` - `Ns` * `brute_step`, `max`, `brute_step`).
             - numerical value (:attr:`value`) and :attr:`brute_step` are specified:
-                range = (value - (Ns//2)*brute_step, value + (Ns//2)*brute_step, brute_step).
+                range = (`value` - (`Ns`//2) * `brute_step`, `value` +
+                (`Ns`//2) * `brute_step`, `brute_step`).
 
         """
         result = self.prepare_fit(params=params)
@@ -1517,10 +1571,10 @@ class Minimizer(object):
         method : str, optional
             Name of the fitting method to use. Valid values are:
 
-            - `'leastsq'`: Levenberg-Marquardt (default).
-            - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default.
+            - `'leastsq'`: Levenberg-Marquardt (default)
+            - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
             - `'differential_evolution'`: differential evolution
-            - `'brute'`: brute force method.
+            - `'brute'`: brute force method
             - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
             - `'powell'`: Powell
@@ -1532,28 +1586,28 @@ class Minimizer(object):
             - `'dogleg'`: Dogleg
             - `'slsqp'`: Sequential Linear Squares Programming
 
-            In most cases, these methods wrap and use the method of the
-            same name from `scipy.optimize`, or uses
+            In most cases, these methods wrap and use the method with the
+            same name from `scipy.optimize`, or use
             `scipy.optimize.minimize` with the same `method` argument.
             Thus '`leastsq`' will use `scipy.optimize.leastsq`, while
             '`powell`' will use `scipy.optimize.minimizer(....,
             method='powell')`
 
             For more details on the fitting methods please refer to the
-            `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
+            `SciPy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
 
-        params : :class:`lmfit.parameter.Parameters` object.
+        params : :class:`~lmfit.parameter.Parameters`, optional
             Parameters of the model to use as starting values.
 
-        **kwargs
+        **kws : optional
             Additional arguments are passed to the underlying minimization
             method.
 
         Returns
         -------
         :class:`MinimizerResult`
-            Object containing the optimized parameter
-            and several goodness-of-fit statistics.
+            Object containing the optimized parameter and several
+            goodness-of-fit statistics.
 
 
         .. versionchanged:: 0.9.0
@@ -1576,7 +1630,7 @@ class Minimizer(object):
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
                 if (key.lower().startswith(user_method) or
-                    val.lower().startswith(user_method)):
+                        val.lower().startswith(user_method)):
                     kwargs['method'] = val
         return function(**kwargs)
 
@@ -1587,7 +1641,7 @@ def _lnprior(theta, bounds):
     Parameters
     ----------
     theta : sequence
-        Float parameter values (only those being varied)
+        Float parameter values (only those being varied).
     bounds : np.ndarray
         Lower and upper bounds of parameters that are varying.
         Has shape (nvarys, 2).
@@ -1595,7 +1649,7 @@ def _lnprior(theta, bounds):
     Returns
     -------
     lnprob : float
-        Log prior probability
+        Log prior probability.
 
     """
     if np.any(theta > bounds[:, 1]) or np.any(theta < bounds[:, 0]):
@@ -1614,42 +1668,41 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
     Parameters
     ----------
     theta : sequence
-        Float parameter values (only those being varied)
+        Float parameter values (only those being varied).
     userfcn : callable
-        User objective function
-    params : lmfit.Parameters
-        The entire set of Parameters
+        User objective function.
+    params : :class:`~lmfit.parameters.Parameters`
+        The entire set of Parameters.
     var_names : list
-        The names of the parameters that are varying
-    bounds : np.ndarray
+        The names of the parameters that are varying.
+    bounds : numpy.ndarray
         Lower and upper bounds of parameters. Has shape (nvarys, 2).
     userargs : tuple, optional
-        Extra positional arguments required for user objective function
+        Extra positional arguments required for user objective function.
     userkws : dict, optional
-        Extra keyword arguments required for user objective function
+        Extra keyword arguments required for user objective function.
     float_behavior : str, optional
         Specifies meaning of objective when it returns a float. One of:
 
         'posterior' - objective function returnins a log-posterior
-                      probability.
-        'chi2' - objective function returns a chi2 value.
+                      probability
+        'chi2' - objective function returns a chi2 value
 
     is_weighted : bool
         If `userfcn` returns a vector of residuals then `is_weighted`
         specifies if the residuals have been weighted by data uncertainties.
     nan_policy : str, optional
-        Specifies action if `userfcn` returns nan
-        values. One of:
+        Specifies action if `userfcn` returns NaN values. One of:
 
             'raise' - a `ValueError` is raised
             'propagate' - the values returned from `userfcn` are un-altered
-            'omit' - the non-finite values are filtered.
+            'omit' - the non-finite values are filtered
 
 
     Returns
     -------
     lnprob : float
-        Log posterior probability
+        Log posterior probability.
 
     """
     # the comparison has to be done on theta and bounds. DO NOT inject theta
@@ -1698,12 +1751,12 @@ def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
 
 
 def _make_random_gen(seed):
-    """Turn seed into a np.random.RandomState instance.
+    """Turn seed into a numpy.random.RandomState instance.
 
-    If seed is None, return the RandomState singleton used by np.random.
-    If seed is an int, return a new RandomState instance seeded with
-    seed. If seed is already a RandomState instance, return it.
-    Otherwise raise ValueError.
+    If seed is None, return the RandomState singleton used by
+    numpy.random. If seed is an int, return a new RandomState instance
+    seeded with seed. If seed is already a RandomState instance, return
+    it. Otherwise raise ValueError.
 
     """
     if seed is None or seed is np.random:
@@ -1717,20 +1770,20 @@ def _make_random_gen(seed):
 
 
 def _nan_policy(a, nan_policy='raise', handle_inf=True):
-    """Specify behaviour when an array contains np.nan or np.inf.
+    """Specify behaviour when an array contains numpy.nan or numpy.inf.
 
     Parameters
     ----------
     a : array_like
-        Input array to consider
+        Input array to consider.
     nan_policy : str, optional
         One of:
 
-        'raise' - raise a `ValueError` if `a` contains NaN.
+        'raise' - raise a `ValueError` if `a` contains NaN
         'propagate' - propagate NaN
         'omit' - filter NaN from input array
     handle_inf : bool, optional
-        As well as nan consider +/- inf
+        As well as NaN consider +/- inf.
 
     Returns
     -------
@@ -1785,7 +1838,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     cost) function using one one of the several available methods.
 
     The minimize function takes a objective function to be minimized,
-    a dictionary (:class:`lmfit.parameter.Parameters`) containing the model
+    a dictionary (:class:`~lmfit.parameter.Parameters`) containing the model
     parameters, and several optional arguments.
 
     Parameters
@@ -1794,19 +1847,19 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         Objective function to be minimized. When method is `leastsq` or
         `least_squares`, the objective function should return an array
         of residuals (difference between model and data) to be minimized
-        in a least squares sense. With the scalar methods the objective
+        in a least-squares sense. With the scalar methods the objective
         function can either return the residuals array or a single scalar
         value. The function must have the signature:
         `fcn(params, *args, **kws)`
-    params : :class:`lmfit.parameter.Parameters` object
+    params : :class:`~lmfit.parameter.Parameters`
         Contains the Parameters for the model.
     method : str, optional
         Name of the fitting method to use. Valid values are:
 
-        - `'leastsq'`: Levenberg-Marquardt (default).
-        - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default.
-        - `'differential_evolution'`: differential evolution.
-        - `'brute'`: brute force method.
+        - `'leastsq'`: Levenberg-Marquardt (default)
+        - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
+        - `'differential_evolution'`: differential evolution
+        - `'brute'`: brute force method
         - '`nelder`': Nelder-Mead
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
@@ -1819,13 +1872,13 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'slsqp'`: Sequential Linear Squares Programming
 
         In most cases, these methods wrap and use the method of the same
-        name from `scipy.optimize`, or uses `scipy.optimize.minimize` with
+        name from `scipy.optimize`, or use `scipy.optimize.minimize` with
         the same `method` argument.  Thus '`leastsq`' will use
         `scipy.optimize.leastsq`, while '`powell`' will use
         `scipy.optimize.minimizer(...., method='powell')`
 
         For more details on the fitting methods please refer to the
-        `scipy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
+        `SciPy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
 
     args : tuple, optional
         Positional arguments to pass to `fcn`.
@@ -1838,18 +1891,18 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         the iteration, `resid` the current residual array, and `*args`
         and `**kws` as passed to the objective function.
     scale_covar : bool, optional
-        Whether to automatically scale the covariance matrix (leastsq only).
+        Whether to automatically scale the covariance matrix (`leastsq` only).
     reduce_fcn : str or callable, optional
         Function to convert a residual array to a scalar value for the scalar
         minimizers. See notes in `Minimizer`.
-    fit_kws : dict, optional
+    **fit_kws : dict, optional
         Options to pass to the minimizer being used.
 
     Returns
     -------
     :class:`MinimizerResult`
-        Object containing the optimized parameter
-        and several goodness-of-fit statistics.
+        Object containing the optimized parameter and several
+        goodness-of-fit statistics.
 
 
     .. versionchanged:: 0.9.0

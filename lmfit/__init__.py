@@ -1,5 +1,5 @@
 """Lmfit provides a high-level interface to non-linear optimization and
-curve fitting problems for Python.
+curve-fitting problems for Python.
 
 Lmfit builds on the Levenberg-Marquardt algorithm of
 scipy.optimize.leastsq(), but also supports most of the optimization
