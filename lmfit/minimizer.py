@@ -26,6 +26,7 @@ from numpy.linalg import LinAlgError
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
+from scipy.optimize import differential_evolution
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 import six
@@ -41,9 +42,6 @@ from .parameter import Parameter, Parameters
 #    OptimizeResult        0.13
 #    diff_evolution        0.15
 #    least_squares         0.17
-
-
-from scipy.optimize import differential_evolution
 
 # check for scipy.opitimize.least_squares
 HAS_LEAST_SQUARES = False
@@ -287,7 +285,7 @@ class MinimizerResult(object):
         if hasattr(self, 'chain'):
             if HAS_PANDAS:
                 if len(self.chain.shape) == 4:
-                    return pd.DataFrame(self.chain[0,...].reshape((-1, self.nvarys)),
+                    return pd.DataFrame(self.chain[0, ...].reshape((-1, self.nvarys)),
                                         columns=self.var_names)
                 elif len(self.chain.shape) == 3:
                     return pd.DataFrame(self.chain.reshape((-1, self.nvarys)),
@@ -758,7 +756,7 @@ class Minimizer(object):
         if method == 'differential_evolution':
             for par in params.values():
                 if (par.vary and
-                    not (np.isfinite(par.min) and np.isfinite(par.max))):
+                        not (np.isfinite(par.min) and np.isfinite(par.max))):
                     raise ValueError('differential_evolution requires finite '
                                      'bound for all varying parameters')
 
@@ -1632,7 +1630,7 @@ class Minimizer(object):
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
                 if (key.lower().startswith(user_method) or
-                    val.lower().startswith(user_method)):
+                        val.lower().startswith(user_method)):
                     kwargs['method'] = val
         return function(**kwargs)
 

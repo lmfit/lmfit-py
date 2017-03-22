@@ -52,6 +52,7 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
     else:
         return False
 
+
 class Parameters(OrderedDict):
     """An ordered dictionary of all the Parameter objects required to
     specify a fit model. All minimization and Model fitting routines in
@@ -409,7 +410,6 @@ class Parameters(OrderedDict):
                           for key in sym_unique}
         return json.dumps({'unique_symbols': unique_symbols,
                            'params': params}, **kws)
-
 
     def loads(self, s, **kws):
         """Load Parameters from a JSON string.

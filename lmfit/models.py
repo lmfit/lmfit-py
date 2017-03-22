@@ -11,20 +11,24 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          skewed_voigt, step, students_t, voigt)
 from .model import Model
 
+
 class DimensionalError(Exception):
     """TODO: class docstring."""
     pass
+
 
 def _validate_1d(independent_vars):
     if len(independent_vars) != 1:
         raise DimensionalError(
             "This model requires exactly one independent variable.")
 
+
 def index_of(arr, val):
     """Return index of array nearest to a value."""
     if val < min(arr):
         return 0
     return np.abs(arr-val).argmin()
+
 
 def fwhm_expr(model):
     """Return constraint expression for fwhm."""
@@ -114,6 +118,7 @@ COMMON_GUESS_DOC = """Guess starting values for the parameters of a model.
 
 COMMON_DOC = COMMON_INIT_DOC
 
+
 class ConstantModel(Model):
     """Constant model, with a single Parameter: ``c``.
 
@@ -128,6 +133,7 @@ class ConstantModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
+
         def constant(x, c):
             return c
         super(ConstantModel, self).__init__(constant, **kwargs)
@@ -138,7 +144,8 @@ class ConstantModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class ComplexConstantModel(Model):
     """Complex constant model, with wo Parameters: ``re``, and ``im``.
@@ -154,6 +161,7 @@ class ComplexConstantModel(Model):
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
+
         def constant(x, re, im):
             return re + 1j*im
         super(ComplexConstantModel, self).__init__(constant, **kwargs)
@@ -165,7 +173,8 @@ class ComplexConstantModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class LinearModel(Model):
     """Linear model, with two Parameters ``intercept`` and ``slope``.
@@ -194,7 +203,7 @@ class LinearModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class QuadraticModel(Model):
@@ -222,7 +231,8 @@ class QuadraticModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 ParabolicModel = QuadraticModel
 
@@ -268,7 +278,8 @@ class PolynomialModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class GaussianModel(Model):
     r"""A model based on a Gaussian or normal distribution lineshape.
@@ -305,7 +316,8 @@ class GaussianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class LorentzianModel(Model):
     r"""A model based on a Lorentzian or Cauchy-Lorentz distribution function
@@ -341,7 +353,7 @@ class LorentzianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class VoigtModel(Model):
@@ -396,7 +408,7 @@ class VoigtModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class PseudoVoigtModel(Model):
@@ -438,7 +450,7 @@ class PseudoVoigtModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class MoffatModel(Model):
@@ -472,7 +484,7 @@ class MoffatModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class Pearson7Model(Model):
@@ -504,7 +516,7 @@ class Pearson7Model(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class StudentsTModel(Model):
@@ -532,7 +544,7 @@ class StudentsTModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class BreitWignerModel(Model):
@@ -559,7 +571,7 @@ class BreitWignerModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class LognormalModel(Model):
@@ -586,7 +598,7 @@ class LognormalModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class DampedOscillatorModel(Model):
@@ -613,7 +625,7 @@ class DampedOscillatorModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class DampedHarmonicOscillatorModel(Model):
@@ -643,7 +655,7 @@ class DampedHarmonicOscillatorModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class ExponentialGaussianModel(Model):
@@ -674,7 +686,7 @@ class ExponentialGaussianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class SkewedGaussianModel(Model):
@@ -709,7 +721,7 @@ class SkewedGaussianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class DonaichModel(Model):
@@ -737,7 +749,8 @@ class DonaichModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class PowerLawModel(Model):
     r"""A model based on a Power Law (see http://en.wikipedia.org/wiki/Power_law>),
@@ -765,7 +778,7 @@ class PowerLawModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class ExponentialModel(Model):
@@ -795,7 +808,7 @@ class ExponentialModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class StepModel(Model):
@@ -846,7 +859,8 @@ class StepModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
 
 class RectangleModel(Model):
     r"""A model based on a Step-up and Step-down function, with five
@@ -910,7 +924,7 @@ class RectangleModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
-    guess.__doc__    = COMMON_GUESS_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
 
 
 class ExpressionModel(Model):

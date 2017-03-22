@@ -53,6 +53,7 @@ def _ensureMatplotlib(function):
 
         return no_op
 
+
 class Model(object):
     """Create a model from a user-supplied model function.
 
@@ -865,6 +866,7 @@ class CompositeModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
+
 class ModelResult(Minimizer):
     """Result from the Model fit.
 
@@ -1148,7 +1150,6 @@ class ModelResult(Minimizer):
                             min_correl=min_correl, sort_pars=sort_pars)
         modname = self.model._reprstring(long=True)
         return '[[Model]]\n    %s\n%s\n' % (modname, report)
-
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
