@@ -4,23 +4,23 @@
 Getting started with Non-Linear Least-Squares Fitting
 ===========================================================
 
-The lmfit package is designed to provide simple tools to help you build
-complex fitting models for non-linear least-squares problems and apply
-these models to real data.  This section gives an overview of the concepts
-and describes how to set up and perform simple fits.  Some basic knowledge
-of Python, NumPy, and modeling data are assumed -- this is not a tutorial
-on why or how to perform a minimization or fit data, but is rather aimed at
-explaining how to use lmfit to do these things.
+The lmfit package provides simple tools to help you build complex fitting
+models for non-linear least-squares problems and apply these models to real
+data.  This section gives an overview of the concepts and describes how to
+set up and perform simple fits.  Some basic knowledge of Python, NumPy, and
+modeling data are assumed -- this is not a tutorial on why or how to
+perform a minimization or fit data, but is rather aimed at explaining how
+to use lmfit to do these things.
 
-In order to do a non-linear least-squares fit of a model to data or for a
-variety of other optimization problems, the main task is to write an
-*objective function* that takes the values of the fitting variables and
-calculates either a scalar value to be minimized or an array of values that
-are to be minimized in the least-squares sense.  For many data fitting
-processes, the least-squares approach is used, and the objective function
-should return an array of (data-model), perhaps scaled by some weighting
-factor such as the inverse of the uncertainty in the data.  For such a
-problem, the chi-square (:math:`\chi^2`) statistic is often defined as:
+In order to do a non-linear least-squares fit of a model to data or for any
+other optimization problem, the main task is to write an *objective
+function* that takes the values of the fitting variables and calculates
+either a scalar value to be minimized or an array of values that are to be
+minimized, typically in the least-squares sense.  For many data fitting
+processes, the latter approach is used, and the objective function should
+return an array of (data-model), perhaps scaled by some weighting factor
+such as the inverse of the uncertainty in the data.  For such a problem,
+the chi-square (:math:`\chi^2`) statistic is often defined as:
 
 .. math::
 
@@ -31,12 +31,14 @@ model}({\bf{v}})` is the model calculation, :math:`{\bf{v}}` is the set of
 variables in the model to be optimized in the fit, and :math:`\epsilon_i`
 is the estimated uncertainty in the data.
 
-In a traditional non-linear fit, one writes an objective function that takes the
-variable values and calculates the residual :math:`y^{\rm meas}_i -
-y_i^{\rm model}({\bf{v}})`, or the residual scaled by the data
-uncertainties, :math:`[y^{\rm meas}_i - y_i^{\rm
-model}({\bf{v}})]/{\epsilon_i}`, or some other weighting factor.  As a
-simple example, one might write an objective function like this::
+In a traditional non-linear fit, one writes an objective function that
+takes the variable values and calculates the residual array :math:`y^{\rm
+meas}_i - y_i^{\rm model}({\bf{v}})`, or the residual array scaled by the
+data uncertainties, :math:`[y^{\rm meas}_i - y_i^{\rm
+model}({\bf{v}})]/{\epsilon_i}`, or some other weighting factor.
+
+As a simple concrete example, one might want to model data with a decaying
+sine wave, and so write an objective function like this::
 
     def residual(vars, x, data, eps_data):
         amp = vars[0]
@@ -48,7 +50,7 @@ simple example, one might write an objective function like this::
 
         return (data-model)/eps_data
 
-To perform the minimization with :mod:`scipy.optimize`, one would do::
+To perform the minimization with :mod:`scipy.optimize`, one would do this::
 
     from scipy.optimize import leastsq
     vars = [10.0, 0.2, 3.0, 0.007]
@@ -79,22 +81,24 @@ including:
      Again, this is acceptable for small or one-off cases, but becomes
      painful if the fitting model needs to change.
 
-These shortcomings are really solely due to the use of traditional arrays of
-variables, and matches closely the implementation of the Fortran code.  The
-lmfit module overcomes these shortcomings by using objects -- a core reason for working with
-Python.  The key concept for lmfit is to use :class:`Parameter`
-objects instead of plain floating point numbers as the variables for the
-fit.  By using :class:`Parameter` objects (or the closely related
-:class:`Parameters` -- a dictionary of :class:`Parameter` objects), one can:
+These shortcomings are due to the use of traditional arrays to hold the
+variables, which matches closely the implementation of the underlying
+Fortran code, but does not fit very well with Python's rich selection of
+objects and data structures.  The key concept in lmfit is to define and use
+:class:`Parameter` objects instead of plain floating point numbers as the
+variables for the fit.  Using :class:`Parameter` objects (or the closely
+related :class:`Parameters` -- a dictionary of :class:`Parameter` objects),
+allows one to:
 
    a) forget about the order of variables and refer to Parameters
       by meaningful names.
-   b) place bounds on Parameters as attributes, without worrying about order.
+   b) place bounds on Parameters as attributes, without worrying about
+      preserving the order of arrays for variables and boundaries.
    c) fix Parameters, without having to rewrite the objective function.
    d) place algebraic constraints on Parameters.
 
 To illustrate the value of this approach, we can rewrite the above example
-as::
+for the decaying sine wave as::
 
     from lmfit import minimize, Parameters
 
@@ -130,20 +134,24 @@ be fixed or bounded.  This can be done during definition::
     params.add('frequency', value=3.0, max=10)
 
 where ``vary=False`` will prevent the value from changing in the fit, and
-``min=0.0`` will set a lower bound on that parameters value. It can also be done
+``min=0.0`` will set a lower bound on that parameter's value. It can also be done
 later by setting the corresponding attributes after they have been
 created::
 
     params['amp'].vary = False
     params['decay'].min = 0.10
 
-Importantly, our objective function remains unchanged.
+Importantly, our objective function remains unchanged. This means the
+objective function can simply express the parameterized phenomenon to be
+modeled, and is separate from the choice of parameters to be varied in the
+fit.
+
 
 The `params` object can be copied and modified to make many user-level
 changes to the model and fitting process.  Of course, most of the
 information about how your data is modeled goes into the objective
-function, but the approach here allows some external control; that is, control by
-the **user** performing the fit, instead of by the author of the
+function, but the approach here allows some external control; that is,
+control by the **user** performing the fit, instead of by the author of the
 objective function.
 
 Finally, in addition to the :class:`Parameters` approach to fitting data,
