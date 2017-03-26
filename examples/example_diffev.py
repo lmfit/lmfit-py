@@ -41,7 +41,7 @@ params = lmfit.Parameters()
 params.add('offset', 2.0, min=0, max=10.0)
 params.add('omega',  3.3, min=0, max=10.0)
 params.add('amp',    2.5, min=0, max=10.0)
-params.add('decay',  1.0, min=0), max=10.0)
+params.add('decay',  1.0, min=0, max=10.0)
 
 o1 = lmfit.minimize(resid, params, args=(x, yn), method='leastsq')
 print("# Fit using leastsq:")
@@ -54,7 +54,7 @@ lmfit.report_fit(o2)
 if HAS_PYLAB:
     plt.plot(x, yn,  'ko', lw=2)
     plt.plot(x, yn+o1.residual, 'r-', lw=2)
-    plt.plot(x, yn+o2.residual, 'b-', lw=2)
+    plt.plot(x, yn+o2.residual, 'b--', lw=2)
     plt.legend(['data', 'leastsq', 'diffev'],
                 loc='upper left')
     plt.show()
