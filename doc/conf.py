@@ -32,9 +32,9 @@ ssoextensions = ['sphinx.ext.extlinks',
 
 autoclass_content = 'both'
 
-intersphinx_mapping = {'py': ('http://docs.python.org/2', None),
-                       'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-                       'scipy': ('http://docs.scipy.org/doc/scipy/reference/', None),
+intersphinx_mapping = {'py': ('https://docs.python.org/2', None),
+                       'numpy': ('https://docs.scipy.org/doc/numpy/', None),
+                       'scipy': ('https://docs.scipy.org/doc/scipy/reference/', None),
                        }
 
 ## intersphinx_cache_limit = 10
