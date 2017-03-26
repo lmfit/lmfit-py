@@ -41,8 +41,8 @@ but it must look like this:
 
    :param params: Parameters.
    :type  params: :class:`~lmfit.parameter.Parameters`
-   :param *args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`.
-   :param **kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`.
+   :param args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`.
+   :param kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`.
    :return: Residual array (generally data-model) to be minimized in the least-squares sense.
    :rtype: numpy.ndarray.  The length of this array cannot change between calls.
 
@@ -327,8 +327,8 @@ used to abort a fit.
    :type  iter:   int
    :param resid:  Residual array.
    :type  resid:  numpy.ndarray
-   :param *args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`
-   :param **kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`
+   :param args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`
+   :param kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`
    :return:      Residual array (generally data-model) to be minimized in the least-squares sense.
    :rtype:    None for normal behavior, any value like True to abort the fit.
 
