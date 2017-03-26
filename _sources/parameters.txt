@@ -6,14 +6,14 @@
 :class:`Parameter`  and :class:`Parameters`
 ================================================
 
-This chapter describes :class:`Parameter` objects which is a key concept of
+This chapter describes the :class:`Parameter` object, which is a key concept of
 lmfit.
 
 A :class:`Parameter` is the quantity to be optimized in all minimization
 problems, replacing the plain floating point number used in the
 optimization routines from :mod:`scipy.optimize`.  A :class:`Parameter` has
 a value that can either be varied in the fit or held at a fixed value, and
-can have upper and/or lower bounds placd on the value.  It can even have a
+can have upper and/or lower bounds placed on the value.  It can even have a
 value that is constrained by an algebraic expression of other Parameter
 values.  Since :class:`Parameter` objects live outside the core
 optimization routines, they can be used in **all** optimization routines
@@ -25,11 +25,11 @@ that describe the phenomenon and gives the user more flexibility in using
 and testing variations of that model.
 
 Whereas a :class:`Parameter` expands on an individual floating point
-variable, the optimization methods still actually need an ordered group of
+variable, the optimization methods actually still need an ordered group of
 floating point variables.  In the :mod:`scipy.optimize` routines this is
-required to be a 1-dimensional numpy ndarray.  In lmfit, this 1-dimensional
+required to be a one-dimensional :numpydoc:`ndarray`.  In lmfit, this one-dimensional
 array is replaced by a :class:`Parameters` object, which works as an
-ordered dictionary of :class:`Parameter` objects, with a few additional
+ordered dictionary of :class:`Parameter` objects with a few additional
 features and methods.  That is, while the concept of a :class:`Parameter`
 is central to lmfit, one normally creates and interacts with a
 :class:`Parameters` instance that contains many :class:`Parameter` objects.
@@ -82,8 +82,9 @@ The :class:`Parameters` class
 Simple Example
 ==================
 
-Using :class:`~lmfit.parameter.Parameters` and :func:`~lmfit.minimizer.minimize`
-function (discussed in the next chapter) might look like this:
+A basic example making use of :class:`~lmfit.parameter.Parameters` and the
+:func:`~lmfit.minimizer.minimize` function (discussed in the next chapter)
+might look like this:
 
 .. literalinclude:: ../examples/doc_basic.py
 

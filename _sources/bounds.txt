@@ -59,7 +59,7 @@ With these mappings, the value for the bounded Parameter cannot exceed the
 specified bounds, though the internally varied value can be freely varied.
 
 It bears repeating that code from `leastsqbound`_ was adopted to implement
-the transformation described above.  The challenging part (Thanks again to
+the transformation described above.  The challenging part (thanks again to
 Jonathan J. Helmus!) here is to re-transform the covariance matrix so that
 the uncertainties can be estimated for bounded Parameters.  This is
 included by using the derivate :math:`dP_{\rm internal}/dP_{\rm bounded}`

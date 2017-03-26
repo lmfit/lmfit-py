@@ -14,11 +14,10 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6rc1',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -27,6 +26,7 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Getting Help" href="support.html" />
     <link rel="prev" title="Getting started with Non-Linear Least-Squares Fitting" href="intro.html" />
   <script type="text/x-mathjax-config">
@@ -81,7 +81,7 @@
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -114,7 +114,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/installation.rst.txt"
+      <li><a href="_sources/installation.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -140,24 +140,24 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The lmfit package requires Python, Numpy, and Scipy.</p>
-<p>Lmfit works with Python 2.7, 3.3, 3.4, 3.5, and 3.6. Support for Python 2.6
+<p>The lmfit package requires <a class="reference external" href="http://python.org">Python</a>, <a class="reference external" href="http://numpy.org/">NumPy</a>, and <a class="reference external" href="http://scipy.org/scipylib/index.html">SciPy</a>.</p>
+<p>Lmfit works with Python versions 2.7, 3.3, 3.4, 3.5, and 3.6. Support for Python 2.6
 ended with lmfit version 0.9.4.  Scipy version 0.15 or higher is required,
 with 0.17 or higher recommended to be able to use the latest optimization
-features from scipy.  Numpy version 1.5 or higher is required.</p>
+features.  NumPy version 1.5.1 or higher is required.</p>
 <p>In order to run the test suite, either the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> or <a class="reference external" href="http://pytest.org/">pytest</a> package is
 required.  Some functionality of lmfit requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> package, some
 functionality will make use of the <a class="reference external" href="http://pandas.pydata.org/">pandas</a>, <a class="reference external" href="http://jupyter.org/">Jupyter</a> or <a class="reference external" href="http://matplotlib.org/">matplotlib</a>
-packages if these are available.  We highly recommend each of these
+packages if available.  We highly recommend each of these
 packages.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is 0.9.6rc1 is available from <a class="reference external" href="http://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+<p>The latest stable version of lmfit is 0.9.6 is available from <a class="reference external" href="http://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>With pip now widely avaliable, you can install lmfit with:</p>
+<p>With <code class="docutils literal"><span class="pre">pip</span></code> now widely avaliable, you can install lmfit with:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lmfit</span>
 </pre></div>
 </div>
@@ -165,7 +165,7 @@ packages.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
-<p>For Anaconda Python, lmfit is not an official packages, but several
+<p>For Anaconda Python, lmfit is not an official package, but several
 Anaconda channels provide it, allowing installation with (for example):</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">lmfit</span>
 </pre></div>
@@ -330,7 +330,7 @@ examples assume <a class="reference external" href="http://matplotlib.org/">matp
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -339,7 +339,7 @@ examples assume <a class="reference external" href="http://matplotlib.org/">matp
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

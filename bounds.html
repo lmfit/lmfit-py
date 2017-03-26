@@ -14,11 +14,10 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6rc1',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -27,6 +26,7 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Using Mathematical Constraints" href="constraints.html" />
     <link rel="prev" title="Calculation of confidence intervals" href="confidence.html" />
   <script type="text/x-mathjax-config">
@@ -81,7 +81,7 @@
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="#">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -100,7 +100,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/bounds.rst.txt"
+      <li><a href="_sources/bounds.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -158,7 +158,7 @@ mapping is:</p>
 \end{eqnarray*}</div><p>With these mappings, the value for the bounded Parameter cannot exceed the
 specified bounds, though the internally varied value can be freely varied.</p>
 <p>It bears repeating that code from <a class="reference external" href="https://github.com/jjhelmus/leastsqbound-scipy">leastsqbound</a> was adopted to implement
-the transformation described above.  The challenging part (Thanks again to
+the transformation described above.  The challenging part (thanks again to
 Jonathan J. Helmus!) here is to re-transform the covariance matrix so that
 the uncertainties can be estimated for bounded Parameters.  This is
 included by using the derivate <span class="math">\(dP_{\rm internal}/dP_{\rm bounded}\)</span>
@@ -198,7 +198,7 @@ clearly outlandish bounds does not greatly affect performance or results.</p>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="#">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -207,7 +207,7 @@ clearly outlandish bounds does not greatly affect performance or results.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

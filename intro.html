@@ -14,11 +14,10 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6rc1',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -27,8 +26,9 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Downloading and Installation" href="installation.html" />
-    <link rel="prev" title="Non-Linear Least-Square Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="prev" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
         "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
@@ -75,13 +75,13 @@
           <a href="installation.html" title="Downloading and Installation"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Non-Linear Least-Square Minimization and Curve-Fitting for Python"
+          <a href="index.html" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python"
              accesskey="P">previous</a> |</li>
    <li>[<a href="#">intro</a>|</li>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -93,14 +93,14 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Non-Linear Least-Square Minimization and Curve-Fitting for Python</a></p>
+                        title="previous chapter">Non-Linear Least-Squares Minimization and Curve-Fitting for Python</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="installation.html"
                         title="next chapter">Downloading and Installation</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/intro.rst.txt"
+      <li><a href="_sources/intro.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -124,34 +124,35 @@
             
   <div class="section" id="getting-started-with-non-linear-least-squares-fitting">
 <span id="intro-chapter"></span><h1>Getting started with Non-Linear Least-Squares Fitting<a class="headerlink" href="#getting-started-with-non-linear-least-squares-fitting" title="Permalink to this headline">¶</a></h1>
-<p>The lmfit package is designed to provide simple tools to help you build
-complex fitting models for non-linear least-squares problems and apply
-these models to real data.  This section gives an overview of the concepts
-and describes how to set up and perform simple fits.  Some basic knowledge
-of Python, numpy, and modeling data are assumed &#8211; this is not a tutorial
-on why or how to perform a minimization or fit data, but is rather aimed at
-explaining how to use lmfit to do these things.</p>
-<p>In order to do a non-linear least-squares fit of a model to data or for a
-variety of other optimization problems, the main task is to write an
-<em>objective function</em> that takes the values of the fitting variables and
-calculates either a scalar value to be minimized or an array of values that
-are to be minimized in the least-squares sense.  For many data fitting
-processes, the least-squares approach is used, and the objective function
-should return an array of (data-model), perhaps scaled by some weighting
-factor such as the inverse of the uncertainty in the data.  For such a
-problem, the chi-square (<span class="math">\(\chi^2\)</span>) statistic is often defined as:</p>
+<p>The lmfit package provides simple tools to help you build complex fitting
+models for non-linear least-squares problems and apply these models to real
+data.  This section gives an overview of the concepts and describes how to
+set up and perform simple fits.  Some basic knowledge of Python, NumPy, and
+modeling data are assumed &#8211; this is not a tutorial on why or how to
+perform a minimization or fit data, but is rather aimed at explaining how
+to use lmfit to do these things.</p>
+<p>In order to do a non-linear least-squares fit of a model to data or for any
+other optimization problem, the main task is to write an <em>objective
+function</em> that takes the values of the fitting variables and calculates
+either a scalar value to be minimized or an array of values that are to be
+minimized, typically in the least-squares sense.  For many data fitting
+processes, the latter approach is used, and the objective function should
+return an array of (data-model), perhaps scaled by some weighting factor
+such as the inverse of the uncertainty in the data.  For such a problem,
+the chi-square (<span class="math">\(\chi^2\)</span>) statistic is often defined as:</p>
 <div class="math">
 \[\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}\]</div>
 <p>where <span class="math">\(y_i^{\rm meas}\)</span> is the set of measured data, <span class="math">\(y_i^{\rm
 model}({\bf{v}})\)</span> is the model calculation, <span class="math">\({\bf{v}}\)</span> is the set of
 variables in the model to be optimized in the fit, and <span class="math">\(\epsilon_i\)</span>
 is the estimated uncertainty in the data.</p>
-<p>In a traditional non-linear fit, one writes an objective function that takes the
-variable values and calculates the residual <span class="math">\(y^{\rm meas}_i -
-y_i^{\rm model}({\bf{v}})\)</span>, or the residual scaled by the data
-uncertainties, <span class="math">\([y^{\rm meas}_i - y_i^{\rm
-model}({\bf{v}})]/{\epsilon_i}\)</span>, or some other weighting factor.  As a
-simple example, one might write an objective function like this:</p>
+<p>In a traditional non-linear fit, one writes an objective function that
+takes the variable values and calculates the residual array <span class="math">\(y^{\rm
+meas}_i - y_i^{\rm model}({\bf{v}})\)</span>, or the residual array scaled by the
+data uncertainties, <span class="math">\([y^{\rm meas}_i - y_i^{\rm
+model}({\bf{v}})]/{\epsilon_i}\)</span>, or some other weighting factor.</p>
+<p>As a simple concrete example, one might want to model data with a decaying
+sine wave, and so write an objective function like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">):</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">phaseshift</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -163,13 +164,13 @@ simple example, one might write an objective function like this:</p>
     <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span><span class="o">/</span><span class="n">eps_data</span>
 </pre></div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.19.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>, one would do:</p>
+<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.19.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">leastsq</span>
 <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Though it is wonderful to be able to use python for such optimization
+<p>Though it is wonderful to be able to use Python for such optimization
 problems, and the scipy library is robust and easy to use, the approach
 here is not terribly different from how one would do the same fit in C or
 Fortran.  There are several practical challenges to using this approach,
@@ -187,31 +188,33 @@ work for more complex models, and greatly complicates modeling for
 people not intimately familiar with the details of the fitting code.</li>
 <li>There is no simple, robust way to put bounds on values for the
 variables, or enforce mathematical relationships between the
-variables.  In fact, those optimization methods that do provide
+variables.  In fact, the optimization methods that do provide
 bounds, require bounds to be set for all variables with separate
 arrays that are in the same arbitrary order as variable values.
 Again, this is acceptable for small or one-off cases, but becomes
 painful if the fitting model needs to change.</li>
 </ol>
 </div></blockquote>
-<p>These shortcomings are really solely due to the use of traditional arrays of
-variables, as matches closely the implementation of the Fortran code.  The
-lmfit module overcomes these shortcomings by using objects &#8211; a core reason for working with
-Python.  The key concept for lmfit is to use <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code>
-objects instead of plain floating point numbers as the variables for the
-fit.  By using <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects (or the closely related
-<code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> &#8211; a dictionary of <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects), one can:</p>
+<p>These shortcomings are due to the use of traditional arrays to hold the
+variables, which matches closely the implementation of the underlying
+Fortran code, but does not fit very well with Python&#8217;s rich selection of
+objects and data structures.  The key concept in lmfit is to define and use
+<code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects instead of plain floating point numbers as the
+variables for the fit.  Using <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects (or the closely
+related <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> &#8211; a dictionary of <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects),
+allows one to:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
 <li>forget about the order of variables and refer to Parameters
 by meaningful names.</li>
-<li>place bounds on Parameters as attributes, without worrying about order.</li>
+<li>place bounds on Parameters as attributes, without worrying about
+preserving the order of arrays for variables and boundaries.</li>
 <li>fix Parameters, without having to rewrite the objective function.</li>
 <li>place algebraic constraints on Parameters.</li>
 </ol>
 </div></blockquote>
 <p>To illustrate the value of this approach, we can rewrite the above example
-as:</p>
+for the decaying sine wave as:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
 
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">):</span>
@@ -246,24 +249,27 @@ be fixed or bounded.  This can be done during definition:</p>
 </pre></div>
 </div>
 <p>where <code class="docutils literal"><span class="pre">vary=False</span></code> will prevent the value from changing in the fit, and
-<code class="docutils literal"><span class="pre">min=0.0</span></code> will set a lower bound on that parameters value). It can also be done
+<code class="docutils literal"><span class="pre">min=0.0</span></code> will set a lower bound on that parameter&#8217;s value. It can also be done
 later by setting the corresponding attributes after they have been
 created:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mf">0.10</span>
 </pre></div>
 </div>
-<p>Importantly, our objective function remains unchanged.</p>
+<p>Importantly, our objective function remains unchanged. This means the
+objective function can simply express the parameterized phenomenon to be
+modeled, and is separate from the choice of parameters to be varied in the
+fit.</p>
 <p>The <cite>params</cite> object can be copied and modified to make many user-level
 changes to the model and fitting process.  Of course, most of the
 information about how your data is modeled goes into the objective
-function, but the approach here allows some external control; that is, control by
-the <strong>user</strong> performing the fit, instead of by the author of the
+function, but the approach here allows some external control; that is,
+control by the <strong>user</strong> performing the fit, instead of by the author of the
 objective function.</p>
 <p>Finally, in addition to the <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> approach to fitting data,
 lmfit allows switching optimization methods without changing
-the objective function, provides tools for writing fitting reports, and
-provides better determination of Parameters confidence levels.</p>
+the objective function, provides tools for generating fitting reports, and
+provides a better determination of Parameters confidence levels.</p>
 </div>
 
 
@@ -282,13 +288,13 @@ provides better determination of Parameters confidence levels.</p>
           <a href="installation.html" title="Downloading and Installation"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Non-Linear Least-Square Minimization and Curve-Fitting for Python"
+          <a href="index.html" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python"
              >previous</a> |</li>
    <li>[<a href="#">intro</a>|</li>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -297,7 +303,7 @@ provides better determination of Parameters confidence levels.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

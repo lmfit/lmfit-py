@@ -14,11 +14,10 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6rc1',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -27,7 +26,8 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Performing Fits, Analyzing Outputs" href="fitting.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
+    <link rel="next" title="Performing Fits and Analyzing Outputs" href="fitting.html" />
     <link rel="prev" title="Frequently Asked Questions" href="faq.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
@@ -72,7 +72,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
+          <a href="fitting.html" title="Performing Fits and Analyzing Outputs"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="faq.html" title="Frequently Asked Questions"
@@ -81,7 +81,7 @@
    <li><a href="#">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -106,11 +106,11 @@
                         title="previous chapter">Frequently Asked Questions</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="fitting.html"
-                        title="next chapter">Performing Fits, Analyzing Outputs</a></p>
+                        title="next chapter">Performing Fits and Analyzing Outputs</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/parameters.rst.txt"
+      <li><a href="_sources/parameters.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -134,13 +134,13 @@
             
   <span class="target" id="module-lmfit.parameter"><span id="parameters-chapter"></span></span><div class="section" id="parameter-and-parameters">
 <h1><a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>  and <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a><a class="headerlink" href="#parameter-and-parameters" title="Permalink to this headline">¶</a></h1>
-<p>This chapter describes <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects which is a key concept of
+<p>This chapter describes the <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> object, which is a key concept of
 lmfit.</p>
 <p>A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> is the quantity to be optimized in all minimization
 problems, replacing the plain floating point number used in the
 optimization routines from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.19.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>.  A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> has
 a value that can either be varied in the fit or held at a fixed value, and
-can have upper and/or lower bounds placd on the value.  It can even have a
+can have upper and/or lower bounds placed on the value.  It can even have a
 value that is constrained by an algebraic expression of other Parameter
 values.  Since <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects live outside the core
 optimization routines, they can be used in <strong>all</strong> optimization routines
@@ -151,11 +151,11 @@ applied.  This simplifies the writing of models, allowing general models
 that describe the phenomenon and gives the user more flexibility in using
 and testing variations of that model.</p>
 <p>Whereas a <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> expands on an individual floating point
-variable, the optimization methods still actually need an ordered group of
+variable, the optimization methods actually still need an ordered group of
 floating point variables.  In the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.19.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a> routines this is
-required to be a 1-dimensional numpy ndarray.  In lmfit, this 1-dimensional
+required to be a one-dimensional <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html">numpy.ndarray</a>.  In lmfit, this one-dimensional
 array is replaced by a <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> object, which works as an
-ordered dictionary of <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects, with a few additional
+ordered dictionary of <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects with a few additional
 features and methods.  That is, while the concept of a <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>
 is central to lmfit, one normally creates and interacts with a
 <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> instance that contains many <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> objects.
@@ -170,15 +170,15 @@ parameter values, bounds and other attributes can be printed using
 <em class="property">class </em><code class="descname">Parameter</code><span class="sig-paren">(</span><em>name=None</em>, <em>value=None</em>, <em>vary=True</em>, <em>min=-inf</em>, <em>max=inf</em>, <em>expr=None</em>, <em>brute_step=None</em>, <em>user_data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Parameter is an object that can be varied in a fit, or one of the
 controlling variables in a model. It is a central component of lmfit,
-and all minimization and modelling methods use Parameter objects.</p>
+and all minimization and modeling methods use Parameter objects.</p>
 <p>A Parameter has a <cite>name</cite> attribute, and a scalar floating point
 <cite>value</cite>.  It also has a <cite>vary</cite> attribute that describes whether the
 value should be varied during the minimization.  Finite bounds can be
 placed on the Parameter&#8217;s value by setting its <cite>min</cite> and/or <cite>max</cite>
 attributes.  A Parameter can also have its value determined by a
 mathematical expression of other Parameter values held in the <cite>expr</cite>
-attrribute.  Addition attributes include <cite>brute_step</cite> used as the step
-size to use in a brute-force minimization, and <cite>user_data</cite> reserved
+attrribute.  Additional attributes include <cite>brute_step</cite> used as the step
+size in a brute-force minimization, and <cite>user_data</cite> reserved
 exclusively for user&#8217;s need.</p>
 <p>After a minimization, a Parameter may also gain other attributes,
 including <cite>stderr</cite> holding the estimated standard error in the
@@ -189,14 +189,14 @@ with other Parameters used in the minimization.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Name of the parameter.</li>
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Numerical Parameter value.</li>
-<li><strong>vary</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether the Parameter is fixed during a fit.</li>
-<li><strong>min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Lower bound for value (-inf means no lower bound).</li>
-<li><strong>max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Upper bound for value (inf means no upper bound).</li>
-<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.</li>
-<li><strong>brute_step</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Step size for grid points in brute force method (use <cite>0</cite> for no step size).</li>
-<li><strong>user_data</strong> (<em>optional</em>) &#8211; user-definable extra attribute used for a parameter.</li>
+<li><strong>name</strong> (<em>str, optional</em>) &#8211; Name of the Parameter.</li>
+<li><strong>value</strong> (<em>float, optional</em>) &#8211; Numerical Parameter value.</li>
+<li><strong>vary</strong> (<em>bool, optional</em>) &#8211; Whether the Parameter is varied during a fit (default is True).</li>
+<li><strong>min</strong> (<em>float, optional</em>) &#8211; Lower bound for value (default is <cite>-numpy.inf</cite>, no lower bound).</li>
+<li><strong>max</strong> (<em>float, optional</em>) &#8211; Upper bound for value (default is <cite>numpy.inf</cite>, no upper bound).</li>
+<li><strong>expr</strong> (<em>str, optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.</li>
+<li><strong>brute_step</strong> (<em>float, optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method.</li>
+<li><strong>user_data</strong> (<em>optional</em>) &#8211; User-definable extra attribute used for a Parameter.</li>
 </ul>
 </td>
 </tr>
@@ -211,8 +211,8 @@ with other Parameters used in the minimization.</p>
 <dl class="attribute">
 <dt id="lmfit.parameter.Parameter.correl">
 <code class="descname">correl</code><a class="headerlink" href="#lmfit.parameter.Parameter.correl" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> &#8211; A dictionary of the correlation with the other fitted Parameter
-after a fit, of the form:</p>
+<dd><p><em>dict</em> &#8211; A dictionary of the correlation with the other fitted Parameters
+of the form:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span>`{&#39;decay&#39;: 0.404, &#39;phase&#39;: -0.020, &#39;frequency&#39;: 0.102}`
 </pre></div>
 </div>
@@ -233,32 +233,34 @@ feature.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Numerical Parameter value.</li>
-<li><strong>vary</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether the Parameter is fixed during a fit.</li>
-<li><strong>min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Lower bound for value. To remove a lower bound you must use -np.inf</li>
-<li><strong>max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Upper bound for value. To remove an upper bound you must use np.inf</li>
-<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.
+<li><strong>value</strong> (<em>float, optional</em>) &#8211; Numerical Parameter value.</li>
+<li><strong>vary</strong> (<em>bool, optional</em>) &#8211; Whether the Parameter is varied during a fit.</li>
+<li><strong>min</strong> (<em>float, optional</em>) &#8211; Lower bound for value. To remove a lower bound you must use
+<cite>-numpy.inf</cite>.</li>
+<li><strong>max</strong> (<em>float, optional</em>) &#8211; Upper bound for value. To remove an upper bound you must use
+<cite>numpy.inf</cite>.</li>
+<li><strong>expr</strong> (<em>str, optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.
 To remove a constraint you must supply an empty string.</li>
-<li><strong>brute_step</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Step size for grid points in brute force method. To remove the step
-size you must supply 0 (&#8220;zero&#8221;).</li>
+<li><strong>brute_step</strong> (<em>float, optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method. To remove the
+step size you must use <code class="docutils literal"><span class="pre">0</span></code>.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>Each argument to <cite>set()</cite> has a default value of <code class="docutils literal"><span class="pre">None</span></code>, which
-will the current value for the attribute unchanged.  Thus, to lift
-a lower or upper bound, passing in <code class="docutils literal"><span class="pre">None</span></code> will not work.  Instead,
-you must set these to <code class="docutils literal"><span class="pre">np.inf</span></code> or <code class="docutils literal"><span class="pre">-np.inf</span></code>, as with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">par</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>     <span class="c1"># no, will leave lower bound unchanged</span>
-<span class="n">par</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>  <span class="c1"># yes.</span>
+<p>Each argument to <cite>set()</cite> has a default value of <cite>None</cite>, which will
+leave the current value for the attribute unchanged.  Thus, to lift a
+lower or upper bound, passing in <cite>None</cite> will not work.  Instead,
+you must set these to <cite>-numpy.inf</cite> or <cite>numpy.inf</cite>, as with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">par</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>        <span class="c1"># leaves lower bound unchanged</span>
+<span class="n">par</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=-</span><span class="n">numpy</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span>  <span class="c1"># removes lower bound</span>
 </pre></div>
 </div>
 <p>Similarly, to clear an expression, pass a blank string, (not
 <code class="docutils literal"><span class="pre">None</span></code>!) as with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">par</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>    <span class="c1"># leaves expression unchanged.</span>
-<span class="n">par</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>      <span class="c1"># removes expression</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">par</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>  <span class="c1"># leaves expression unchanged</span>
+<span class="n">par</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">expr</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>    <span class="c1"># removes expression</span>
 </pre></div>
 </div>
 <p>Explicitly setting a value or setting <cite>vary=True</cite> will also
@@ -279,10 +281,10 @@ clear the expression.</p>
 <dt id="lmfit.parameter.Parameters">
 <em class="property">class </em><code class="descname">Parameters</code><span class="sig-paren">(</span><em>asteval=None</em>, <em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>An ordered dictionary of all the Parameter objects required to
-specify a fit model.  All minimization and Model fitting routines in
+specify a fit model. All minimization and Model fitting routines in
 lmfit will use exactly one Parameters object, typically given as the
 first argument to the objective function.</p>
-<p>All keys of a Parameters() instance must be strings, and valid Python
+<p>All keys of a Parameters() instance must be strings and valid Python
 symbol names, so that the name must match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code> and
 cannot be a Python reserved word.</p>
 <p>All values of a Parameters() instance must be Parameter objects.</p>
@@ -294,8 +296,13 @@ to and from serializations using json strings.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>asteval</strong> (<code class="docutils literal"><span class="pre">None</span></code> or instance of asteval.Interpreter) &#8211; instance of Interpretr to use for constraint expressions.
-If <code class="docutils literal"><span class="pre">None</span></code>, a new interpreter will be created.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>asteval</strong> (<code class="xref py py-class docutils literal"><span class="pre">asteval.Interpreter</span></code>, optional) &#8211; Instance of the asteval Interpreter to use for constraint
+expressions. If None, a new interpreter will be created.</li>
+<li><strong>*args</strong> (<em>optional</em>) &#8211; Arguments.</li>
+<li><strong>**kwds</strong> (<em>optional</em>) &#8211; Keyword arguments.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -308,14 +315,14 @@ If <code class="docutils literal"><span class="pre">None</span></code>, a new in
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; name of parameter.  Must match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code> and
-cannot be a Python reserved word.</li>
-<li><strong>value</strong> (<code class="docutils literal"><span class="pre">None</span></code> or float) &#8211; floating point value for parameter, typically the <em>initial value</em>.</li>
-<li><strong>vary</strong> (bool (default <code class="docutils literal"><span class="pre">True</span></code>)) &#8211; whether the parameter should be varied in the fit.</li>
-<li><strong>min</strong> (float (default <code class="docutils literal"><span class="pre">-np.inf</span></code>)) &#8211; lower bound for parameter value.</li>
-<li><strong>max</strong> (float (default <code class="docutils literal"><span class="pre">np.inf</span></code>)) &#8211; upper bound for parameter value.</li>
-<li><strong>expr</strong> (<code class="docutils literal"><span class="pre">None</span></code> or string) &#8211; expression in terms of other parameter names to constrain value.</li>
-<li><strong>brute_step</strong> (<code class="docutils literal"><span class="pre">None</span></code>) &#8211; size of step to take when using the <cite>brute()</cite> method.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of parameter.  Must match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code> and cannot be
+a Python reserved word.</li>
+<li><strong>value</strong> (<em>float, optional</em>) &#8211; Numerical Parameter value, typically the <em>initial value</em>.</li>
+<li><strong>vary</strong> (<em>bool, optional</em>) &#8211; Whether the Parameter is varied during a fit (default is True).</li>
+<li><strong>min</strong> (<em>float, optional</em>) &#8211; Lower bound for value (default is <cite>-numpy.inf</cite>, no lower bound).</li>
+<li><strong>max</strong> (<em>float, optional</em>) &#8211; Upper bound for value (default is <cite>numpy.inf</cite>, no upper bound).</li>
+<li><strong>expr</strong> (<em>str, optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.</li>
+<li><strong>brute_step</strong> (<em>float, optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method.</li>
 </ul>
 </td>
 </tr>
@@ -343,9 +350,10 @@ cannot be a Python reserved word.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parlist</strong> (<em>sequence of tuples</em>) &#8211; A sequence of tuples, or a sequence of <cite>Parameter</cite> instances. If it
-is a sequence of tuples, then each tuple must contain at least the
-name. The order in each tuple must be <cite>(name, value, vary, min, max, expr, brute_step)</cite></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parlist</strong> (<code class="xref py py-obj docutils literal"><span class="pre">sequence</span></code> of <a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">tuple</span></code></a> or <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a>) &#8211; A sequence of tuples, or a sequence of <cite>Parameter</cite> instances. If
+it is a sequence of tuples, then each tuple must contain at least
+the name. The order in each tuple must be <cite>(name, value, vary,
+min, max, expr, brute_step)</cite>.</td>
 </tr>
 </tbody>
 </table>
@@ -367,19 +375,19 @@ name. The order in each tuple must be <cite>(name, value, vary, min, max, expr, 
 <dl class="method">
 <dt id="lmfit.parameter.Parameters.pretty_print">
 <code class="descname">pretty_print</code><span class="sig-paren">(</span><em>oneline=False, colwidth=8, precision=4, fmt='g', columns=['value', 'min', 'max', 'stderr', 'vary', 'expr', 'brute_step']</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.pretty_print" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pretty-print parameters data.</p>
+<dd><p>Pretty-print of parameters data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>oneline</strong> (<em>boolean</em>) &#8211; If True prints a one-line parameters representation. Default False.</li>
-<li><strong>colwidth</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Column width for all except the first (i.e. name) column.</li>
-<li><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Number of digits to be printed after floating point.</li>
-<li><strong>fmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; Single-char numeric formatter. Valid values: &#8216;f&#8217; floating point,
-&#8216;g&#8217; floating point and exponential, &#8216;e&#8217; exponential.</li>
-<li><strong>columns</strong> (<em>list of strings</em>) &#8211; List of columns names to print. All values must be valid
-<a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> attributes.</li>
+<li><strong>oneline</strong> (<em>bool, optional</em>) &#8211; If True prints a one-line parameters representation (default is
+False).</li>
+<li><strong>colwidth</strong> (<em>int, optional</em>) &#8211; Column width for all columns specified in <code class="xref py py-attr docutils literal"><span class="pre">columns</span></code>.</li>
+<li><strong>precision</strong> (<em>int, optional</em>) &#8211; Number of digits to be printed after floating point.</li>
+<li><strong>fmt</strong> (<em>{'g', 'e', 'f'}, optional</em>) &#8211; Single-character numeric formatter. Valid values are: &#8216;f&#8217; floating
+point, &#8216;g&#8217; floating point and exponential, or &#8216;e&#8217; exponential.</li>
+<li><strong>columns</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a>, optional) &#8211; List of <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> attribute names to print.</li>
 </ul>
 </td>
 </tr>
@@ -395,11 +403,10 @@ name. The order in each tuple must be <cite>(name, value, vary, min, max, expr, 
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>vals</strong> &#8211; An ordered dictionary of name:value pairs for each Parameter.
-This is distinct from the Parameters itself, as it has values of
-the Parameter <em>values</em>, not the full Parameter object.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ordered dictionary of <code class="xref py py-attr docutils literal"><span class="pre">name</span></code>:<code class="xref py py-attr docutils literal"><span class="pre">value</span></code> pairs for each
+Parameter.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">ordered dict</td>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">OrderedDict</td>
 </tr>
 </tbody>
 </table>
@@ -409,14 +416,15 @@ the Parameter <em>values</em>, not the full Parameter object.</td>
 <dt id="lmfit.parameter.Parameters.dumps">
 <code class="descname">dumps</code><span class="sig-paren">(</span><em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.dumps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent Parameters as a JSON string.</p>
-<p>all keyword arguments are passed to <cite>json.dumps()</cite></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>s</strong> &#8211; json string representation of Parameters</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**kws</strong> (<em>optional</em>) &#8211; Keyword arguments that are passed to <cite>json.dumps()</cite>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)">string</a></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">JSON string representation of Parameters.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)">str</a></td>
 </tr>
 </tbody>
 </table>
@@ -429,22 +437,22 @@ the Parameter <em>values</em>, not the full Parameter object.</td>
 <dl class="method">
 <dt id="lmfit.parameter.Parameters.dump">
 <code class="descname">dump</code><span class="sig-paren">(</span><em>fp</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.dump" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write JSON representation of Parameters to a file or file-like
-object (must have a <cite>write()</cite> method).</p>
+<dd><p>Write JSON representation of Parameters to a file-like object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>open file-like object with write</strong><strong>(</strong><strong></strong><strong>) </strong><strong>method.</strong> (<em>fp</em>) &#8211; </li>
-<li><strong>keyword arguments are passed to dumps</strong><strong>(</strong><strong></strong><strong>)</strong><strong></strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#all" title="(in Python v2.7)"><em>all</em></a>) &#8211; </li>
+<li><strong>fp</strong> (<em>file-like object</em>) &#8211; An open and <code class="docutils literal"><span class="pre">.write()</span></code>-supporting file-like object.</li>
+<li><strong>**kws</strong> (<em>optional</em>) &#8211; Keyword arguments that are passed to <cite>dumps()</cite>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Return value from <cite>fp.write()</cite>. None for Python 2.7 and the
+number of characters written in Python 3.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">return value from <cite>fp.write()</cite></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None or int</p>
 </td>
 </tr>
 </tbody>
@@ -459,18 +467,21 @@ object (must have a <cite>write()</cite> method).</p>
 <dt id="lmfit.parameter.Parameters.loads">
 <code class="descname">loads</code><span class="sig-paren">(</span><em>s</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.loads" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load Parameters from a JSON string.</p>
-<p>current Parameters will be cleared before loading.</p>
-<p>all keyword arguments are passed to <cite>json.loads()</cite></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Parameters are updated as a side-effect</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**kws</strong> (<em>optional</em>) &#8211; Keyword arguments that are passed to <cite>json.loads()</cite>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">None</span></code></td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Updated Parameters from the JSON string.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a></td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>Current Parameters will be cleared before loading the data from the
+JSON string.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <p class="last"><a class="reference internal" href="#lmfit.parameter.Parameters.dump" title="lmfit.parameter.Parameters.dump"><code class="xref py py-meth docutils literal"><span class="pre">dump()</span></code></a>, <a class="reference internal" href="#lmfit.parameter.Parameters.dumps" title="lmfit.parameter.Parameters.dumps"><code class="xref py py-meth docutils literal"><span class="pre">dumps()</span></code></a>, <a class="reference internal" href="#lmfit.parameter.Parameters.load" title="lmfit.parameter.Parameters.load"><code class="xref py py-meth docutils literal"><span class="pre">load()</span></code></a>, <code class="xref py py-meth docutils literal"><span class="pre">json.loads()</span></code></p>
@@ -480,22 +491,21 @@ object (must have a <cite>write()</cite> method).</p>
 <dl class="method">
 <dt id="lmfit.parameter.Parameters.load">
 <code class="descname">load</code><span class="sig-paren">(</span><em>fp</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load JSON representation of Parameters from a file or file-like
-object (must have a <cite>read()</cite> method).</p>
+<dd><p>Load JSON representation of Parameters from a file-like object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>open file-like object with read</strong><strong>(</strong><strong></strong><strong>) </strong><strong>method.</strong> (<em>fp</em>) &#8211; </li>
-<li><strong>keyword arguments are passed to loads</strong><strong>(</strong><strong></strong><strong>)</strong><strong></strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#all" title="(in Python v2.7)"><em>all</em></a>) &#8211; </li>
+<li><strong>fp</strong> (<em>file-like object</em>) &#8211; An open and <code class="docutils literal"><span class="pre">.read()</span></code>-supporting file-like object.</li>
+<li><strong>**kws</strong> (<em>optional</em>) &#8211; Keyword arguments that are passed to <cite>loads()</cite>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Parameters are updated as a side-effect</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Updated Parameters loaded from <cite>fp</cite>.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">None</span></code>.</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a></p>
 </td>
 </tr>
 </tbody>
@@ -511,8 +521,9 @@ object (must have a <cite>read()</cite> method).</p>
 </div>
 <div class="section" id="simple-example">
 <h2>Simple Example<a class="headerlink" href="#simple-example" title="Permalink to this headline">¶</a></h2>
-<p>Using <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> and <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a>
-function (discussed in the next chapter) might look like this:</p>
+<p>A basic example making use of <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> and the
+<a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> function (discussed in the next chapter)
+might look like this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1">#&lt;examples/doc_basic.py&gt;</span>
 <span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">report_fit</span>
@@ -591,7 +602,7 @@ which would make the objective function <code class="docutils literal"><span cla
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="fitting.html" title="Performing Fits, Analyzing Outputs"
+          <a href="fitting.html" title="Performing Fits and Analyzing Outputs"
              >next</a> |</li>
         <li class="right" >
           <a href="faq.html" title="Frequently Asked Questions"
@@ -600,7 +611,7 @@ which would make the objective function <code class="docutils literal"><span cla
    <li><a href="#">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -609,7 +620,7 @@ which would make the objective function <code class="docutils literal"><span cla
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

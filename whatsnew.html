@@ -14,11 +14,10 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6rc1',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -27,6 +26,7 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="prev" title="Using Mathematical Constraints" href="constraints.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
@@ -77,7 +77,7 @@
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -110,7 +110,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/whatsnew.rst.txt"
+      <li><a href="_sources/whatsnew.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -134,31 +134,31 @@
             
   <div class="section" id="release-notes">
 <span id="whatsnew-chapter"></span><h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
-<p>This section discusses changes between versions, especially significant
-changes to the use and behavior of the library.  This is not meant to be a
-comprehensive list of changes.  For such a complete record, consult the
-<a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
+<p>This section discusses changes between versions, especially changes
+significant to the use and behavior of the library.  This is not meant
+to be a comprehensive list of changes.  For such a complete record,
+consult the <a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
 <div class="section" id="version-0-9-6-release-notes">
 <span id="whatsnew-096-label"></span><h2>Version 0.9.6 Release Notes<a class="headerlink" href="#version-0-9-6-release-notes" title="Permalink to this headline">¶</a></h2>
-<p>Support for scipy 0.14 has been dropped: scipy 0.15 is not required.  This
+<p>Support for SciPy 0.14 has been dropped: SciPy 0.15 is now required.  This
 is especially important for lmfit maintenance, as it means we can now rely
-on scipy having code for differential evolution and do not need to keep a
+on SciPy having code for differential evolution and do not need to keep a
 local copy.</p>
 <p>A brute force method was added, which can be used either with
 <code class="xref py py-meth docutils literal"><span class="pre">Minimizer.brute()</span></code> or using the <cite>method=&#8217;brute&#8217;</cite> option to
-<code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code>.   This method requires that finite bounds be
-placed on each variable parameter, and that the parameter has a finite
+<code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code>.  This method requires finite bounds on
+all varying parameters, or that parameters have a finite
 <cite>brute_step</cite> attribute set to specify the step size.</p>
 <p>Custom cost functions can now be used for the scalar minimizers using the
 <cite>reduce_fcn</cite> option.</p>
 <p>Many improvements to documentation and docstrings in the code were made.
-As part of that effort, all API documentation in this main sphinx
+As part of that effort, all API documentation in this main Sphinx
 documentation now derives from the docstrings.</p>
 <p>Uncertainties in the resulting best-fit for a model can now be calculated
 from the uncertainties in the model parameters.</p>
-<p>Parameters now have two new attributes: <cite>brute_step</cite> to specify the step
-size to take with the <cite>brute</cite> method, and <cite>user_data</cite> which is unused but
-can be used to hold additional information the user may desire.   This will
+<p>Parameters have two new attributes: <cite>brute_step</cite>, to specify the step
+size when using the <cite>brute</cite> method, and <cite>user_data</cite>, which is unused but
+can be used to hold additional information the user may desire.  This will
 be preserved on copy and pickling.</p>
 <p>Several bug fixes and cleanups.</p>
 <p>Versioneer was updated to 0.18.</p>
@@ -166,17 +166,17 @@ be preserved on copy and pickling.</p>
 </div>
 <div class="section" id="version-0-9-5-release-notes">
 <span id="whatsnew-095-label"></span><h2>Version 0.9.5 Release Notes<a class="headerlink" href="#version-0-9-5-release-notes" title="Permalink to this headline">¶</a></h2>
-<p>Support for Python 2.6 and scipy 0.13 has been dropped.</p>
+<p>Support for Python 2.6 and SciPy 0.13 has been dropped.</p>
 </div>
 <div class="section" id="version-0-9-4-release-notes">
 <span id="whatsnew-094-label"></span><h2>Version 0.9.4 Release Notes<a class="headerlink" href="#version-0-9-4-release-notes" title="Permalink to this headline">¶</a></h2>
-<p>Some support for the new <cite>least_squares</cite> routine from scipy 0.17 has been
+<p>Some support for the new <cite>least_squares</cite> routine from SciPy 0.17 has been
 added.</p>
 <p>Parameters can now be used directly in floating point or array expressions,
 so that the Parameter value does not need <cite>sigma = params[&#8216;sigma&#8217;].value</cite>.
 The older, explicit usage still works, but the docs, samples, and tests
 have been updated to use the simpler usage.</p>
-<p>Support for Python 2.6 and scipy 0.13 is now explicitly deprecated and wil
+<p>Support for Python 2.6 and SciPy 0.13 is now explicitly deprecated and wil
 be dropped in version 0.9.5.</p>
 </div>
 <div class="section" id="version-0-9-3-release-notes">
@@ -280,7 +280,7 @@ track of changes made while adjusting parameters and re-running fits.</li>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -289,7 +289,7 @@ track of changes made while adjusting parameters and re-running fits.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

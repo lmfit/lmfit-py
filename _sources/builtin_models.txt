@@ -11,7 +11,7 @@ These pre-defined models each subclass from the :class:`model.Model` class of th
 previous chapter and wrap relatively well-known functional forms, such as
 Gaussians, Lorentzian, and Exponentials that are used in a wide range of
 scientific domains.  In fact, all the models are all based on simple, plain
-python functions defined in the :mod:`lineshapes` module.  In addition to
+Python functions defined in the :mod:`lineshapes` module.  In addition to
 wrapping a function into a :class:`model.Model`, these models also provide a
 :meth:`guess` method that is intended to give a reasonable
 set of starting values from a data array that closely approximates the
@@ -19,10 +19,10 @@ data to be fit.
 
 As shown in the previous chapter, a key feature of the :class:`mode.Model` class
 is that models can easily be combined to give a composite
-:class:`model.Model`. Thus while some of the models listed here may seem pretty
-trivial (notably, :class:`ConstantModel` and :class:`LinearModel`), the
-main point of having these is to be able to used in composite models.  For
-example,  a Lorentzian plus a linear background might be represented as::
+:class:`model.CompositeModel`. Thus, while some of the models listed here may
+seem pretty trivial (notably, :class:`ConstantModel` and :class:`LinearModel`),
+the main point of having these is to be able to use them in composite models. For
+example, a Lorentzian plus a linear background might be represented as::
 
     >>> from lmfit.models import LinearModel, LorentzianModel
     >>> peak = LorentzianModel()
@@ -197,13 +197,13 @@ User-defined Models
 .. _asteval: http://newville.github.io/asteval/
 
 As shown in the previous chapter (:ref:`model_chapter`), it is fairly
-straightforward to build fitting models from parametrized python functions.
+straightforward to build fitting models from parametrized Python functions.
 The number of model classes listed so far in the present chapter should
 make it clear that this process is not too difficult.  Still, it is
 sometimes desirable to build models from a user-supplied function.  This
 may be especially true if model-building is built-in to some larger library
 or application for fitting in which the user may not be able to easily
-build and use a new model from python code.
+build and use a new model from Python code.
 
 
 The :class:`ExpressionModel` allows a model to be built from a
@@ -221,11 +221,11 @@ supplied, the determination of what are the parameter names for the model
 happens when the model is created.  To do this, the expression is parsed,
 and all symbol names are found.  Names that are already known (there are
 over 500 function and value names in the asteval namespace, including most
-python builtins, more than 200 functions inherited from numpy, and more
+Python builtins, more than 200 functions inherited from NumPy, and more
 than 20 common lineshapes defined in the :mod:`lineshapes` module) are not
 converted to parameters.  Unrecognized name are expected to be names either
 of parameters or independent variables.  If `independent_vars` is the
-default value of ``None``, and if the expression contains a variable named
+default value of None, and if the expression contains a variable named
 `x`, that will be used as the independent variable.  Otherwise,
 `independent_vars` must be given.
 
@@ -247,7 +247,7 @@ To evaluate this model, you might do the following::
 
 While many custom models can be built with a single line expression
 (especially since the names of the lineshapes like `gaussian`, `lorentzian`
-and so on, as well as many numpy functions, are available), more complex
+and so on, as well as many NumPy functions, are available), more complex
 models will inevitably require multiple line functions.  You can include
 such Python code with the `init_script` argument.  The text of this script
 is evaluated when the model is initialized (and before the actual
@@ -282,9 +282,9 @@ Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles
 Here, we will fit data to three similar line shapes, in order to decide which
 might be the better model.  We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in :class:`GaussianModel` instead
-of writing one ourselves.  This is a slightly different version rom the
+of writing one ourselves.  This is a slightly different version from the
 one in previous example in that the parameter names are different, and have
-built-in default values.  We'll simply use::
+built-in default values.  We will simply use::
 
      from numpy import loadtxt
      from lmfit.models import GaussianModel
@@ -465,12 +465,12 @@ Akaike or Bayesian Information Criteria (see
 :ref:`information_criteria_label`) to assess how likely the model with
 variable ``gamma`` is to explain the data than the model with ``gamma``
 fixed to the value of ``sigma``.  According to theory,
-:math:`\exp(-(\rm{AIC1}-\rm{AIC0})/2)` gives the probably that a model with
-AIC` is more likely than a model with AIC0.  For the two models here, with
+:math:`\exp(-(\rm{AIC1}-\rm{AIC0})/2)` gives the probability that a model with
+AIC1 is more likely than a model with AIC0.  For the two models here, with
 AIC values of -1432 and -1321 (Note: if we had more carefully set the value
 for ``weights`` based on the noise in the data, these values might be
 positive, but there difference would be roughly the same), this says that
-the model with ``gamma`` fixed to ``sigma`` has a probably less than 1.e-25
+the model with ``gamma`` fixed to ``sigma`` has a probability less than 1.e-25
 of being the better model.
 
 

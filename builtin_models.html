@@ -14,11 +14,10 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6rc1',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -27,6 +26,7 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Calculation of confidence intervals" href="confidence.html" />
     <link rel="prev" title="Modeling Data and Curve Fitting" href="model.html" />
   <script type="text/x-mathjax-config">
@@ -81,7 +81,7 @@
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="#"> builtin models</a>|</li>
+   <li><a href="#"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -148,7 +148,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/builtin_models.rst.txt"
+      <li><a href="_sources/builtin_models.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -177,17 +177,17 @@ These pre-defined models each subclass from the <code class="xref py py-class do
 previous chapter and wrap relatively well-known functional forms, such as
 Gaussians, Lorentzian, and Exponentials that are used in a wide range of
 scientific domains.  In fact, all the models are all based on simple, plain
-python functions defined in the <code class="xref py py-mod docutils literal"><span class="pre">lineshapes</span></code> module.  In addition to
+Python functions defined in the <code class="xref py py-mod docutils literal"><span class="pre">lineshapes</span></code> module.  In addition to
 wrapping a function into a <code class="xref py py-class docutils literal"><span class="pre">model.Model</span></code>, these models also provide a
 <code class="xref py py-meth docutils literal"><span class="pre">guess()</span></code> method that is intended to give a reasonable
 set of starting values from a data array that closely approximates the
 data to be fit.</p>
 <p>As shown in the previous chapter, a key feature of the <code class="xref py py-class docutils literal"><span class="pre">mode.Model</span></code> class
 is that models can easily be combined to give a composite
-<code class="xref py py-class docutils literal"><span class="pre">model.Model</span></code>. Thus while some of the models listed here may seem pretty
-trivial (notably, <a class="reference internal" href="#lmfit.models.ConstantModel" title="lmfit.models.ConstantModel"><code class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></code></a> and <a class="reference internal" href="#lmfit.models.LinearModel" title="lmfit.models.LinearModel"><code class="xref py py-class docutils literal"><span class="pre">LinearModel</span></code></a>), the
-main point of having these is to be able to used in composite models.  For
-example,  a Lorentzian plus a linear background might be represented as:</p>
+<code class="xref py py-class docutils literal"><span class="pre">model.CompositeModel</span></code>. Thus, while some of the models listed here may
+seem pretty trivial (notably, <a class="reference internal" href="#lmfit.models.ConstantModel" title="lmfit.models.ConstantModel"><code class="xref py py-class docutils literal"><span class="pre">ConstantModel</span></code></a> and <a class="reference internal" href="#lmfit.models.LinearModel" title="lmfit.models.LinearModel"><code class="xref py py-class docutils literal"><span class="pre">LinearModel</span></code></a>),
+the main point of having these is to be able to use them in composite models. For
+example, a Lorentzian plus a linear background might be represented as:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="k">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">LorentzianModel</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">peak</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">background</span>  <span class="o">=</span> <span class="n">LinearModel</span><span class="p">()</span>
@@ -218,7 +218,7 @@ methods for all of these make a fairly crude guess for the value of
 <dl class="class">
 <dt id="lmfit.models.GaussianModel">
 <em class="property">class </em><code class="descname">GaussianModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', missing=None, name=None, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.GaussianModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>A model based on a Gaussian or normal distribution lineshape
+<dd><p>A model based on a Gaussian or normal distribution lineshape.
 (see <a class="reference external" href="http://en.wikipedia.org/wiki/Normal_distribution">http://en.wikipedia.org/wiki/Normal_distribution</a>), with three Parameters:
 <code class="docutils literal"><span class="pre">amplitude</span></code>, <code class="docutils literal"><span class="pre">center</span></code>, and <code class="docutils literal"><span class="pre">sigma</span></code>.
 In addition, parameters <code class="docutils literal"><span class="pre">fwhm</span></code> and <code class="docutils literal"><span class="pre">height</span></code> are included as constraints
@@ -234,19 +234,19 @@ half maximum is <span class="math">\(2\sigma\sqrt{2\ln{2}}\)</span>, approximate
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -275,19 +275,19 @@ half maximum is <span class="math">\(2\sigma\)</span>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -327,19 +327,19 @@ the full width at half maximum is approximately <span class="math">\(3.6013\sigm
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -373,19 +373,19 @@ at half maximum of each component and of the sum is <span class="math">\(2\sigma
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -406,26 +406,26 @@ or missing values.</li>
 <div class="math">
 \[f(x; A, \mu, \sigma, \beta) = A \big[(\frac{x-\mu}{\sigma})^2+1\big]^{-\beta}\]</div>
 <p>the full width have maximum is <span class="math">\(2\sigma\sqrt{2^{1/\beta}-1}\)</span>.
-<code class="xref py py-meth docutils literal"><span class="pre">guess()</span></code> function always sets the starting value for <code class="docutils literal"><span class="pre">beta</span></code> to 1.</p>
+The <code class="xref py py-meth docutils literal"><span class="pre">guess()</span></code> function always sets the starting value for <code class="docutils literal"><span class="pre">beta</span></code> to 1.</p>
 <p>Note that for (<span class="math">\(\beta=1\)</span>) the Moffat has a Lorentzian shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -453,19 +453,19 @@ gives a starting value for <code class="docutils literal"><span class="pre">expo
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -490,19 +490,19 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -527,19 +527,19 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -564,19 +564,19 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -601,19 +601,19 @@ three Parameters:  <code class="docutils literal"><span class="pre">amplitude</s
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -640,19 +640,19 @@ four Parameters: <code class="docutils literal"><span class="pre">amplitude</spa
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -680,19 +680,19 @@ four Parameters <code class="docutils literal"><span class="pre">amplitude</span
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -722,19 +722,19 @@ e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -761,19 +761,19 @@ photo-emission, with four Parameters <code class="docutils literal"><span class=
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -794,29 +794,29 @@ of many components of composite model.</p>
 <dl class="class">
 <dt id="lmfit.models.ConstantModel">
 <em class="property">class </em><code class="descname">ConstantModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', missing=None, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ConstantModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constant model, with a single Parameter: <code class="docutils literal"><span class="pre">c</span></code></p>
+<dd><p>Constant model, with a single Parameter: <code class="docutils literal"><span class="pre">c</span></code>.</p>
 <p>Note that this is &#8216;constant&#8217; in the sense of having no dependence on
-the independent variable <code class="docutils literal"><span class="pre">x</span></code>, not in the sense of being non-varying.
-To be clear, <code class="docutils literal"><span class="pre">c</span></code> will be a Parameter that will be varied in the
-fit (by default, of course).</p>
+the independent variable <code class="docutils literal"><span class="pre">x</span></code>, not in the sense of being non-
+varying. To be clear, <code class="docutils literal"><span class="pre">c</span></code> will be a Parameter that will be varied
+in the fit (by default, of course).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -830,8 +830,8 @@ or missing values.</li>
 <dl class="class">
 <dt id="lmfit.models.LinearModel">
 <em class="property">class </em><code class="descname">LinearModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', missing=None, name=None, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LinearModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Linear model, with two Parameters
-<code class="docutils literal"><span class="pre">intercept</span></code> and <code class="docutils literal"><span class="pre">slope</span></code>, defined as</p>
+<dd><p>Linear model, with two Parameters <code class="docutils literal"><span class="pre">intercept</span></code> and <code class="docutils literal"><span class="pre">slope</span></code>.</p>
+<p>Defined as:</p>
 <div class="math">
 \[f(x; m, b) = m x + b\]</div>
 <p>with  <code class="docutils literal"><span class="pre">slope</span></code> for <span class="math">\(m\)</span> and  <code class="docutils literal"><span class="pre">intercept</span></code> for <span class="math">\(b\)</span>.</p>
@@ -840,19 +840,19 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -866,8 +866,8 @@ or missing values.</li>
 <dl class="class">
 <dt id="lmfit.models.QuadraticModel">
 <em class="property">class </em><code class="descname">QuadraticModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', missing=None, name=None, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.QuadraticModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>A quadratic model, with three Parameters
-<code class="docutils literal"><span class="pre">a</span></code>, <code class="docutils literal"><span class="pre">b</span></code>, and <code class="docutils literal"><span class="pre">c</span></code>, defined as</p>
+<dd><p>A quadratic model, with three Parameters <code class="docutils literal"><span class="pre">a</span></code>, <code class="docutils literal"><span class="pre">b</span></code>, and <code class="docutils literal"><span class="pre">c</span></code>.</p>
+<p>Defined as:</p>
 <div class="math">
 \[f(x; a, b, c) = a x^2 + b x + c\]</div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -875,19 +875,19 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -903,8 +903,7 @@ or missing values.</li>
 <em class="property">class </em><code class="descname">PolynomialModel</code><span class="sig-paren">(</span><em>degree, independent_vars=['x'], prefix='', missing=None, name=None, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A polynomial model with up to 7 Parameters, specfied by <code class="docutils literal"><span class="pre">degree</span></code>.</p>
 <div class="math">
-\[\]</div>
-<p>f(x; c_0, c_1, ldots, c_7) = sum_{i=0, 7} c_i  x^i</p>
+\[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i\]</div>
 <p>with parameters <code class="docutils literal"><span class="pre">c0</span></code>, <code class="docutils literal"><span class="pre">c1</span></code>, ..., <code class="docutils literal"><span class="pre">c7</span></code>.  The supplied <code class="docutils literal"><span class="pre">degree</span></code>
 will specify how many of these are actual variable parameters.  This
 uses <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.polyval.html">numpy.polyval</a> for its calculation of the polynomial.</p>
@@ -913,19 +912,19 @@ uses <a class="reference external" href="http://docs.scipy.org/doc/numpy/referen
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -967,19 +966,19 @@ setting the characteristic width. The forms are</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -1022,19 +1021,19 @@ characteristic width. The forms are</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -1061,19 +1060,19 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -1096,19 +1095,19 @@ with two Parameters: <code class="docutils literal"><span class="pre">amplitude<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em></em><em>[</em><em>'x'</em><em>]</em><em></em>) &#8211; arguments to func that are independent variables</li>
-<li><strong>prefix</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; string to prepend to paramter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -1121,13 +1120,13 @@ or missing values.</li>
 <div class="section" id="user-defined-models">
 <h2>User-defined Models<a class="headerlink" href="#user-defined-models" title="Permalink to this headline">¶</a></h2>
 <p>As shown in the previous chapter (<a class="reference internal" href="model.html#model-chapter"><span class="std std-ref">Modeling Data and Curve Fitting</span></a>), it is fairly
-straightforward to build fitting models from parametrized python functions.
+straightforward to build fitting models from parametrized Python functions.
 The number of model classes listed so far in the present chapter should
 make it clear that this process is not too difficult.  Still, it is
 sometimes desirable to build models from a user-supplied function.  This
 may be especially true if model-building is built-in to some larger library
 or application for fitting in which the user may not be able to easily
-build and use a new model from python code.</p>
+build and use a new model from Python code.</p>
 <p>The <a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal"><span class="pre">ExpressionModel</span></code></a> allows a model to be built from a
 user-supplied expression.  This uses the <a class="reference external" href="http://newville.github.io/asteval/">asteval</a> module also used for
 mathematical constraints as discussed in <a class="reference internal" href="constraints.html#constraints-chapter"><span class="std std-ref">Using Mathematical Constraints</span></a>.</p>
@@ -1142,19 +1141,19 @@ mathematical constraints as discussed in <a class="reference internal" href="con
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a>) &#8211; mathematical expression for model.</li>
-<li><strong>independent_vars</strong> (list of strings or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; variable names to use as independent variables</li>
-<li><strong>init_script</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; initial script to run in asteval interpreter</li>
-<li><strong>missing</strong> (string or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; <p>how to handle <cite>nan</cite> and missing values in data. One of:</p>
+<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Mathematical expression for model.</li>
+<li><strong>independent_vars</strong> (<em>list of strings or None, optional</em>) &#8211; Variable names to use as independent variables.</li>
+<li><strong>init_script</strong> (<em>string or None, optional</em>) &#8211; Initial script to run in asteval interpreter.</li>
+<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
-<li>&#8216;none&#8217; or <code class="docutils literal"><span class="pre">None</span></code>: Do not check for null or missing values (default)</li>
+<li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
 installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite> is used.</li>
-<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains nullz
+<li>&#8216;raise&#8217;: Raise a (more helpful) exception when data contains null
 or missing values.</li>
 </ul>
 </li>
-<li><strong>kwargs</strong> (<em>optional</em>) &#8211; keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
+<li><strong>**kws</strong> (<em>optional</em>) &#8211; Keyword arguments to pass to <code class="xref py py-class docutils literal"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -1173,11 +1172,11 @@ supplied, the determination of what are the parameter names for the model
 happens when the model is created.  To do this, the expression is parsed,
 and all symbol names are found.  Names that are already known (there are
 over 500 function and value names in the asteval namespace, including most
-python builtins, more than 200 functions inherited from numpy, and more
+Python builtins, more than 200 functions inherited from NumPy, and more
 than 20 common lineshapes defined in the <code class="xref py py-mod docutils literal"><span class="pre">lineshapes</span></code> module) are not
 converted to parameters.  Unrecognized name are expected to be names either
 of parameters or independent variables.  If <cite>independent_vars</cite> is the
-default value of <code class="docutils literal"><span class="pre">None</span></code>, and if the expression contains a variable named
+default value of None, and if the expression contains a variable named
 <cite>x</cite>, that will be used as the independent variable.  Otherwise,
 <cite>independent_vars</cite> must be given.</p>
 <p>For example, if one creates an <a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal"><span class="pre">ExpressionModel</span></code></a> as:</p>
@@ -1197,7 +1196,7 @@ parameter hints for bounds, so this will have to be handled explicitly.</p>
 </div>
 <p>While many custom models can be built with a single line expression
 (especially since the names of the lineshapes like <cite>gaussian</cite>, <cite>lorentzian</cite>
-and so on, as well as many numpy functions, are available), more complex
+and so on, as well as many NumPy functions, are available), more complex
 models will inevitably require multiple line functions.  You can include
 such Python code with the <cite>init_script</cite> argument.  The text of this script
 is evaluated when the model is initialized (and before the actual
@@ -1229,9 +1228,9 @@ and <cite>wid</cite>, and build a model that can be used to fit data.</p>
 <p>Here, we will fit data to three similar line shapes, in order to decide which
 might be the better model.  We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in <a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></code></a> instead
-of writing one ourselves.  This is a slightly different version rom the
+of writing one ourselves.  This is a slightly different version from the
 one in previous example in that the parameter names are different, and have
-built-in default values.  We&#8217;ll simply use:</p>
+built-in default values.  We will simply use:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">loadtxt</span>
 <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="k">import</span> <span class="n">GaussianModel</span>
 
@@ -1393,12 +1392,12 @@ Akaike or Bayesian Information Criteria (see
 <a class="reference internal" href="fitting.html#information-criteria-label"><span class="std std-ref">Akaike and Bayesian Information Criteria</span></a>) to assess how likely the model with
 variable <code class="docutils literal"><span class="pre">gamma</span></code> is to explain the data than the model with <code class="docutils literal"><span class="pre">gamma</span></code>
 fixed to the value of <code class="docutils literal"><span class="pre">sigma</span></code>.  According to theory,
-<span class="math">\(\exp(-(\rm{AIC1}-\rm{AIC0})/2)\)</span> gives the probably that a model with
-AIC` is more likely than a model with AIC0.  For the two models here, with
+<span class="math">\(\exp(-(\rm{AIC1}-\rm{AIC0})/2)\)</span> gives the probability that a model with
+AIC1 is more likely than a model with AIC0.  For the two models here, with
 AIC values of -1432 and -1321 (Note: if we had more carefully set the value
 for <code class="docutils literal"><span class="pre">weights</span></code> based on the noise in the data, these values might be
 positive, but there difference would be roughly the same), this says that
-the model with <code class="docutils literal"><span class="pre">gamma</span></code> fixed to <code class="docutils literal"><span class="pre">sigma</span></code> has a probably less than 1.e-25
+the model with <code class="docutils literal"><span class="pre">gamma</span></code> fixed to <code class="docutils literal"><span class="pre">sigma</span></code> has a probability less than 1.e-25
 of being the better model.</p>
 </div>
 <div class="section" id="example-2-fit-data-to-a-composite-model-with-pre-defined-models">
@@ -1679,7 +1678,7 @@ estimate of the data.</p>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="#"> builtin models</a>|</li>
+   <li><a href="#"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -1688,7 +1687,7 @@ estimate of the data.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

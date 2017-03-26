@@ -14,11 +14,10 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6rc1',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -27,6 +26,7 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Parameter and Parameters" href="parameters.html" />
     <link rel="prev" title="Getting Help" href="support.html" />
   <script type="text/x-mathjax-config">
@@ -81,7 +81,7 @@
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -115,7 +115,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/faq.rst.txt"
+      <li><a href="_sources/faq.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -151,19 +151,19 @@
 <div class="section" id="i-get-import-errors-from-ipython">
 <h2>I get import errors from IPython<a class="headerlink" href="#i-get-import-errors-from-ipython" title="Permalink to this headline">¶</a></h2>
 <p>If you see something like:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="k">import</span> <span class="n">Dropdown</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="k">import</span> <span class="n">Dropdown</span>
 
 <span class="ne">ImportError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;widgets&#39;</span>
 </pre></div>
 </div>
-<p>then you need to install the ipywidgets package.   Try &#8216;pip install ipywidgets&#8217;.</p>
+<p>then you need to install the <code class="docutils literal"><span class="pre">ipywidgets</span></code> package, try:  <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ipywidgets</span></code>.</p>
 </div>
 <div class="section" id="how-can-i-fit-multi-dimensional-data">
 <h2>How can I fit multi-dimensional data?<a class="headerlink" href="#how-can-i-fit-multi-dimensional-data" title="Permalink to this headline">¶</a></h2>
-<p>The fitting routines accept data arrays that are 1 dimensional and double
+<p>The fitting routines accept data arrays that are one dimensional and double
 precision.  So you need to convert the data and model (or the value
 returned by the objective function) to be one dimensional.  A simple way to
-do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
+do this is to use <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_multidim_residual</span><span class="p">()</span>
@@ -173,28 +173,29 @@ do this is to use numpy&#8217;s <a class="reference external" href="http://docs.
 </div>
 <div class="section" id="how-can-i-fit-multiple-data-sets">
 <h2>How can I fit multiple data sets?<a class="headerlink" href="#how-can-i-fit-multiple-data-sets" title="Permalink to this headline">¶</a></h2>
-<p>As above, the fitting routines accept data arrays that are 1 dimensional
+<p>As above, the fitting routines accept data arrays that are one dimensional
 and double precision.  So you need to convert the sets of data and models
 (or the value returned by the objective function) to be one dimensional.  A
-simple way to do this is to use numpy&#8217;s <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>.  As an
+simple way to do this is to use <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>.  As an
 example, here is a residual function to simultaneously fit two lines to two
 different arrays.  As a bonus, the two lines share the &#8216;offset&#8217; parameter:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">fit_function</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">def</span> <span class="nf">fit_function</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">model1</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;slope1&#39;</span><span class="p">]</span>
     <span class="n">model2</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;slope2&#39;</span><span class="p">]</span>
 
     <span class="n">resid1</span> <span class="o">=</span> <span class="n">dat1</span> <span class="o">-</span> <span class="n">model1</span>
     <span class="n">resid2</span> <span class="o">=</span> <span class="n">dat2</span> <span class="o">-</span> <span class="n">model2</span>
-    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">resid1</span><span class="p">,</span> <span class="n">resid2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">resid1</span><span class="p">,</span> <span class="n">resid2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="how-can-i-fit-complex-data">
 <h2>How can I fit complex data?<a class="headerlink" href="#how-can-i-fit-complex-data" title="Permalink to this headline">¶</a></h2>
-<p>As with working with multidimensional data, you need to convert your data
+<p>As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
-precision floating point numbers. The simplest approach is to use numpy&#8217;s
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a> method, perhaps like:</p>
+precision floating point numbers. The simplest approach is to use
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
      <span class="o">....</span>
@@ -238,7 +239,7 @@ the value to be minimized.</p>
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -247,7 +248,7 @@ the value to be minimized.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>

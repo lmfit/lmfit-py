@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Non-Linear Least-Square Minimization and Curve-Fitting for Python &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <title>Non-Linear Least-Squares Minimization and Curve-Fitting for Python &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,11 +14,10 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6rc1',
+        VERSION:     '0.9.6',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -27,6 +26,7 @@
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="#" />
     <link rel="next" title="Getting started with Non-Linear Least-Squares Fitting" href="intro.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
@@ -77,7 +77,7 @@
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -87,10 +87,10 @@
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Getting LMFIT</h3>
-<p>Current version: <b>0.9.6rc1</b></p>
+<p>Current version: <b>0.9.6</b></p>
 <p>Install:  &nbsp; <tt>pip install lmfit</tt>
-<p>Download: &nbsp; <a href="http://pypi.python.org/pypi/lmfit/">PyPI (Python.org)</a>
-<p>Develop:  &nbsp; <a href="https://github.com/lmfit/lmfit-py/">github.com</a> <br>
+<p>Download: &nbsp; <a href="http://pypi.python.org/pypi/lmfit/">PyPI</a>
+<p>Develop:  &nbsp; <a href="https://github.com/lmfit/lmfit-py/">GitHub</a> <br>
 
 <h3>Questions?</h3>
 
@@ -124,11 +124,11 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="non-linear-least-square-minimization-and-curve-fitting-for-python">
-<h1>Non-Linear Least-Square Minimization and Curve-Fitting for Python<a class="headerlink" href="#non-linear-least-square-minimization-and-curve-fitting-for-python" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="non-linear-least-squares-minimization-and-curve-fitting-for-python">
+<h1>Non-Linear Least-Squares Minimization and Curve-Fitting for Python<a class="headerlink" href="#non-linear-least-squares-minimization-and-curve-fitting-for-python" title="Permalink to this headline">¶</a></h1>
 <p>Lmfit provides a high-level interface to non-linear optimization and curve
 fitting problems for Python. It builds on and extends many of the
-optimization methods of scipy <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a>.  Initially inspired by (and
+optimization methods of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/optimize.html">scipy.optimize</a>.  Initially inspired by (and
 named for) extending the <a class="reference external" href="http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm">Levenberg-Marquardt</a> method from
 <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>, lmfit now provides a number of useful
 enhancements to optimization and data fitting problems, including:</p>
@@ -147,14 +147,14 @@ without changing the objective function.</li>
 <li>Improved estimation of confidence intervals.  While
 <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> will automatically calculate
 uncertainties and correlations from the covariance matrix, the accuracy
-of these estimates are sometimes questionable.  To help address this,
-lmfit has functions to explicitly explore parameter space to determine
+of these estimates is sometimes questionable.  To help address this,
+lmfit has functions to explicitly explore parameter space and determine
 confidence levels even for the most difficult cases.</li>
 <li>Improved curve-fitting with the <a class="reference internal" href="model.html#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> class.  This
 extends the capabilities of <a class="reference external" href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, allowing
-you to turn a function that models for your data into a python class
+you to turn a function that models your data into a Python class
 that helps you parametrize and fit data with that model.</li>
-<li>Many <a class="reference internal" href="builtin_models.html#builtin-models-chapter"><span class="std std-ref">pre-built models</span></a> for common
+<li>Many <a class="reference internal" href="builtin_models.html#builtin-models-chapter"><span class="std std-ref">built-in models</span></a> for common
 lineshapes are included and ready to use.</li>
 </ul>
 </div></blockquote>
@@ -192,7 +192,7 @@ participating in this effort please use the <a class="reference external" href="
 <li class="toctree-l2"><a class="reference internal" href="parameters.html#simple-example">Simple Example</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="fitting.html">Performing Fits, Analyzing Outputs</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="fitting.html">Performing Fits and Analyzing Outputs</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#the-minimize-function">The <code class="docutils literal"><span class="pre">minimize()</span></code> function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#writing-a-fitting-function">Writing a Fitting Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#choosing-different-fitting-methods">Choosing Different Fitting Methods</a></li>
@@ -267,7 +267,7 @@ participating in this effort please use the <a class="reference external" href="
    <li><a href="parameters.html">parameters</a>|</li>
    <li><a href="fitting.html"> minimize</a>|</li>
    <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> builtin models</a>|</li>
+   <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>]</li>
@@ -276,7 +276,7 @@ participating in this effort please use the <a class="reference external" href="
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
     </div>
   </body>
 </html>
