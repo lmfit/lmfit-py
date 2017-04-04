@@ -1145,7 +1145,7 @@ class ModelResult(Minimizer):
         :func:`fit_report()`
 
         """
-        report = fit_report(self.params, modelpars=modelpars,
+        report = fit_report(self, modelpars=modelpars,
                             show_correl=show_correl,
                             min_correl=min_correl, sort_pars=sort_pars)
         modname = self.model._reprstring(long=True)
