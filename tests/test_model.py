@@ -135,6 +135,18 @@ class CommonTests(object):
         if hasattr(short_eval, '__len__'):
             self.assertEqual(len(short_eval), 3)
 
+    def test_result_report(self):
+        pars = self.model.make_params(**self.guess())
+        result = self.model.fit(self.data, pars, x=self.x)
+        report = result.fit_report()
+        assert("[[Model]]" in report)
+        assert("[[Variables]]" in report)
+        assert("[[Fit Statistics]]" in report)
+        assert(" # function evals   =" in report)
+        assert(" Akaike " in report)
+        assert(" chi-square " in report)
+
+
     def test_data_alignment(self):
         _skip_if_no_pandas()
         from pandas import Series
