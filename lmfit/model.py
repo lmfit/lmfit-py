@@ -203,9 +203,14 @@ class Model(object):
                 kw_args[name] = defval
             keywords_ = list(kw_args.keys())
         else:
-            argspec = inspect.getargspec(self.func)
-            pos_args = argspec.args[:]
-            keywords_ = argspec.keywords
+            try:  # PY3
+                argspec = inspect.getfullargspec(self.func)
+                keywords_ = argspec.varkw
+            except AttributeError:  # PY2
+                argspec = inspect.getargspec(self.func)
+                keywords_ = argspec.keywords
+
+            pos_args = argspec.args
             kw_args = {}
             if argspec.defaults is not None:
                 for val in reversed(argspec.defaults):
