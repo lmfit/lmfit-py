@@ -1,4 +1,5 @@
 from __future__ import print_function
+import pickle
 import numpy as np
 from numpy.testing import (assert_, decorators, assert_raises,
                            assert_almost_equal, assert_equal,
@@ -226,6 +227,9 @@ def test_brute():
     assert(len(resbrute_lmfit.candidates) == 10)
 
     assert(isinstance(resbrute_lmfit.candidates[0].params, lmfit.Parameters))
+
+    # TEST 5: make sure the MinimizerResult can be pickle'd
+    pkl = pickle.dumps(resbrute_lmfit)
 
 test_brute_lmfit_vs_scipy()
 test_brute()
