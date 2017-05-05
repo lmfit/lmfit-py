@@ -67,6 +67,8 @@ try:
 except ImportError:
     pass
 
+# define the namedtuple here so pickle will work with the MinimizerResult
+Candidate = namedtuple('Candidate', ['params', 'score'])
 
 def asteval_with_uncertainties(*vals, **kwargs):
     """Calculate object value, given values for variables.
@@ -1545,7 +1547,6 @@ class Minimizer(object):
         grid_result_sorted = grid_result[grid_result.argsort(order='score')]
 
         result.candidates = []
-        candidate = namedtuple('Candidate', ['params', 'score'])
 
         if keep == 'all':
             keep_candidates = len(grid_result_sorted)
@@ -1556,7 +1557,7 @@ class Minimizer(object):
             pars = deepcopy(self.params)
             for i, par in enumerate(result.var_names):
                 pars[par].value = data[0][i]
-            result.candidates.append(candidate(params=pars, score=data[1]))
+            result.candidates.append(Candidate(params=pars, score=data[1]))
 
         result.params = result.candidates[0].params
         result.chisqr = ret[1]
