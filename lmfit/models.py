@@ -134,18 +134,18 @@ class ConstantModel(Model):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
 
-        def constant(x, c):
+        def constant(x, c=0.0):
             return c
         super(ConstantModel, self).__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
         pars = self.make_params()
+
         pars['%sc' % self.prefix].set(value=data.mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
-
 
 class ComplexConstantModel(Model):
     """Complex constant model, with wo Parameters: ``re``, and ``im``.
@@ -162,7 +162,7 @@ class ComplexConstantModel(Model):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
 
-        def constant(x, re, im):
+        def constant(x, re=0., im=0.):
             return re + 1j*im
         super(ComplexConstantModel, self).__init__(constant, **kwargs)
 
