@@ -97,9 +97,9 @@ class Parameters(OrderedDict):
         """Parameters.copy() should always be a deepcopy."""
         return self.__deepcopy__(None)
 
-    def __copy__(self, memo):
+    def __copy__(self):
         """Parameters.copy() should always be a deepcopy."""
-        self.__deepcopy__(memo)
+        return self.__deepcopy__(None)
 
     def __deepcopy__(self, memo):
         """Parameters.deepcopy() needs to make sure that asteval is available

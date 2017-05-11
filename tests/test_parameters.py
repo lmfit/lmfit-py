@@ -3,7 +3,7 @@ from lmfit import Parameters, Parameter
 from lmfit.parameter import isclose
 from numpy.testing import assert_, assert_almost_equal, assert_equal
 import unittest
-from copy import deepcopy
+from copy import deepcopy, copy
 import numpy as np
 import pickle
 
@@ -40,6 +40,35 @@ class TestParameters(unittest.TestCase):
         assert(p2._asteval is not None)
         assert(p2._asteval.symtable is not None)
         assert((p2['y'].value > 20) and (p2['y'].value < 21))
+
+    def test_copy_function(self):
+        # check copy(Parameters) does not fail
+        p1 = Parameters()
+        p1.add('t', 2.0, min=0.0, max=5.0)
+        p1.add('x', 10.0)
+        p1.add('y', expr='x*t + sqrt(t)/3.0')
+
+        p2 = copy(p1)
+        assert(isinstance(p2, Parameters))
+
+        # change the 'x' value in the original
+        p1['x'].value = 4.0
+
+        assert(p2['x'].value > 9.8)
+        assert(p2['x'].value < 10.2)
+        assert(np.isinf(p2['x'].max) and p2['x'].max > 0)
+
+        assert('t' in p2)
+        assert('y' in p2)
+        assert(p2['t'].max < 6.0)
+
+        assert(np.isinf(p2['x'].min) and p2['x'].min < 0)
+        assert('sqrt(t)' in p2['y'].expr )
+        assert(p2._asteval is not None)
+        assert(p2._asteval.symtable is not None)
+        assert((p2['y'].value > 20) and (p2['y'].value < 21))
+
+        assert(p1['y'].value < 10)
 
 
     def test_deepcopy(self):
