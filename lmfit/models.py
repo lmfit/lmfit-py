@@ -992,7 +992,7 @@ class ExpressionModel(Model):
         for name in sym_names:
             if name in independent_vars:
                 idvar_found[independent_vars.index(name)] = True
-            elif name not in self.asteval.symtable:
+            elif name not in param_names and name not in self.asteval.symtable:
                 param_names.append(name)
 
         # make sure we have all independent parameters
@@ -1019,7 +1019,7 @@ class ExpressionModel(Model):
         # set in _parse_params(), which will be short-circuited.
         self.independent_vars = independent_vars
         self._func_allargs = independent_vars + param_names
-        self._param_names = set(param_names)
+        self._param_names = param_names
         self._func_haskeywords = True
         self.def_vals = {}
 
