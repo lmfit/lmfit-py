@@ -1013,6 +1013,8 @@ class ExpressionModel(Model):
                 self.asteval.symtable[name] = val
             return self.asteval.run(self.astcode)
 
+        kws["missing"] = missing
+
         super(ExpressionModel, self).__init__(_eval, **kws)
 
         # set param names here, and other things normally
