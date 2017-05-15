@@ -635,4 +635,33 @@ class TestComplexConstant(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(re=2,im=2)
         self.model_constructor = models.ComplexConstantModel
         super(TestComplexConstant, self).setUp()
+
+class TestExpression(CommonTests, unittest.TestCase):
+    def setUp(self):
+        self.true_values = lambda: dict(off_c=0.25, amp_c=1.0, x0=2.0)
+        self.guess = lambda: dict(off_c=0.20, amp_c=1.5, x0=2.5)
+        self.expression = "off_c + amp_c * exp(-x/x0)"
+        self.model_constructor = (
+            lambda *args, **kwargs: models.ExpressionModel(self.expression, *args, **kwargs))
+        super(TestExpression, self).setUp()
+
+    def test_composite_with_expression(self):
+        expression_model = models.ExpressionModel("exp(-x/x0)", name='exp')
+        amp_model = models.ConstantModel(prefix='amp_')
+        off_model = models.ConstantModel(prefix='off_', name="off")
+
+        comp_model = off_model + amp_model * expression_model
+
+        x = self.x
+        true_values = self.true_values()
+        data = comp_model.eval(x=x, **true_values) + self.noise
+        # data = 0.25 + 1 * np.exp(-x / 2.)
+
+        params = comp_model.make_params(**self.guess())
+
+        result = comp_model.fit(data, x=x, params=params)
+        assert_results_close(result.values, true_values, rtol=0.01, atol=0.01)
+
+        data_components = comp_model.eval_components(x=x)
+        self.assertIn('exp', data_components)
 #
