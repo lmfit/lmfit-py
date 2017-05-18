@@ -415,7 +415,7 @@ class PseudoVoigtModel(Model):
     r"""A model based on a pseudo-Voigt distribution function
     (see http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
     which is a weighted sum of a Gaussian and Lorentzian distribution functions
-    with that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
+    that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
     and full width at half maximum (and so have  constrained values of
     ``sigma`` (:math:`\sigma`).  A parameter ``fraction`` (:math:`\alpha`)
     controls the relative weight of the Gaussian and Lorentzian components,
