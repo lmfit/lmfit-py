@@ -233,6 +233,7 @@ import math
 from math import sqrt, log  # Optimization: no attribute look-up
 import copy
 import warnings
+import six
 
 # Numerical version:
 __version_info__ = (1, 9)
@@ -1628,7 +1629,7 @@ def ufloat(representation, tag=None):
     # thus does not have any overhead.
 
     #! Different, in Python 3:
-    if isinstance(representation, basestring):
+    if isinstance(representation, six.string_types):
         representation = str_to_number_with_uncert(representation)
 
     #! The tag is forced to be a string, so that the user does not
@@ -1637,9 +1638,8 @@ def ufloat(representation, tag=None):
     # from being considered as tags, here:
     if tag is not None:
         #! 'unicode' is removed in Python3:
-        assert isinstance(tag, (str, unicode)), "The tag can only be a string."
+        assert isinstance(tag, six.string_types), "The tag can only be a string."
 
     #! The special ** syntax is for Python 2.5 and before (Python 2.6+
     # understands tag=tag):
     return Variable(*representation, **{'tag': tag})
-
