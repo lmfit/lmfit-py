@@ -4,6 +4,7 @@ from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
 from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
                              MinimizerResult, _lnpost, _nan_policy)
 from lmfit.lineshapes import gaussian
+from lmfit import ufloat
 import numpy as np
 from numpy import pi
 from numpy.testing import (assert_, decorators, assert_raises,
@@ -347,6 +348,25 @@ def test_multidimensional_fit_GH205():
 
     mini = Minimizer(fcn2min, params, fcn_args=(xv, yv, data))
     res = mini.minimize()
+
+def test_ufloat():
+    """
+    test of ufloat from uncertainties
+    """
+    x = ufloat((1, 0.1))
+    assert_allclose(x.nominal_value, 1.0, rtol=1.e-7)
+    assert_allclose(x.std_dev(),     0.1, rtol=1.e-7)
+
+    y = x*x
+    assert_allclose(y.nominal_value, 1.0, rtol=1.e-7)
+    assert_allclose(y.std_dev(),     0.2, rtol=1.e-7)
+
+    y = x - x
+    assert_allclose(y.nominal_value, 0.0, rtol=1.e-7)
+    assert_allclose(y.std_dev(),     0.0, rtol=1.e-7)
+
+
+
 
 class CommonMinimizerTest(unittest.TestCase):
 
