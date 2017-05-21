@@ -782,14 +782,13 @@ class Parameter(object):
                     self.value = self._expr_eval(self._expr_ast)
                     check_ast_errors(self._expr_eval)
 
-        v = self.value = self._val
-        if v is not None:
-            if v > self.max:
-                v = self.max
-            if v < self.min:
-                v = self.min
-            self.value = self._val = v
-
+        if self._val is not None:
+            if self._val > self.max:
+                self._val = self.max
+            elif self._val < self.min:
+                self._val = self.min
+        if self._expr_eval is not None:
+            self._expr_eval.symtable[self.name] = self._val
         return self._val
 
     def set_expr_eval(self, evaluator):
