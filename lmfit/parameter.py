@@ -107,12 +107,8 @@ class Parameters(OrderedDict):
         _pars = Parameters(asteval=None)
 
         # find the symbols that were added by users, not during construction
-
-        unique_symbols = {k: v for k,v in self._asteval.symtable.items()
-                          if k not in self._asteval.no_deepcopy}
-        #sym_unique = self._asteval.user_defined_symbols()
-        #unique_symbols = {key: deepcopy(self._asteval.symtable[key], memo)
-        #                  for key in sym_unique}
+        unique_symbols = {key: self._asteval.symtable[key]
+                          for key in self._asteval.user_defined_symbols()}
         _pars._asteval.symtable.update(unique_symbols)
 
         # we're just about to add a lot of Parameter objects to the newly
