@@ -65,11 +65,12 @@ class Interpreter:
     supported_nodes = ('arg', 'assert', 'assign', 'attribute', 'augassign',
                        'binop', 'boolop', 'break', 'call', 'compare',
                        'continue', 'delete', 'dict', 'ellipsis',
-                       'excepthandler', 'expr', 'extslice', 'for',
-                       'functiondef', 'if', 'ifexp', 'index', 'interrupt',
-                       'list', 'listcomp', 'module', 'name', 'num', 'pass',
-                       'print', 'raise', 'repr', 'return', 'slice', 'str',
-                       'subscript', 'try', 'tuple', 'unaryop', 'while')
+                       'excepthandler', 'expr', 'expression', 'extslice',
+                       'for', 'functiondef', 'if', 'ifexp', 'index',
+                       'interrupt', 'list', 'listcomp', 'module', 'name',
+                       'nameconstant', 'num', 'pass', 'print', 'raise',
+                       'repr', 'return', 'slice', 'str', 'subscript',
+                       'try', 'tuple', 'unaryop', 'while')
 
     def __init__(self, symtable=None, writer=None, use_numpy=True):
         """TODO: docstring in public method."""
@@ -205,6 +206,7 @@ class Interpreter:
         try:
             handler = self.node_handlers[node.__class__.__name__.lower()]
         except KeyError:
+            print(" lmfit asteval node handler error ", node)
             return self.unimplemented(node)
 
         # run the handler:  this will likely generate
@@ -286,6 +288,10 @@ class Interpreter:
             out = self.run(tnode)
         return out
 
+    def on_expression(self, node):
+        "basic expression"
+        return self.on_module(node) # ():('body',)
+
     def on_pass(self, node):
         """Pass statement."""
         return None  # ()
@@ -334,6 +340,10 @@ class Interpreter:
     def on_str(self, node):   # ('s',)
         """Return string."""
         return node.s
+
+    def on_nameconstant(self, node):   # ('value',)
+        """named constant"""
+        return node.value
 
     def on_name(self, node):    # ('id', 'ctx')
         """Name node."""
