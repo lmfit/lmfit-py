@@ -1561,6 +1561,15 @@ class Minimizer(object):
 
         result.params = result.candidates[0].params
         result.chisqr = ret[1]
+        result.nvarys = len(result.var_names)
+        result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
+        result.ndata = len(result.residual)
+        result.nfree = result.ndata - result.nvarys
+        result.redchi = result.chisqr / result.nfree
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
 
         return result
 
