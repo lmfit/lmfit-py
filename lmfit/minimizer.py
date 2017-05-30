@@ -1195,6 +1195,7 @@ class Minimizer(object):
            Return value changed to :class:`MinimizerResult`.
 
         """
+
         if not HAS_LEAST_SQUARES:
             raise NotImplementedError("SciPy with a version higher than 0.17 "
                                       "is needed for this method.")
@@ -1207,8 +1208,7 @@ class Minimizer(object):
         lower_bounds = [replace_none(i.min, -1) for i in self.params.values()]
         start_vals = [i.value for i in self.params.values()]
 
-        ret = least_squares(self.__residual,
-                            start_vals,
+        ret = least_squares(self.__residual, start_vals,
                             bounds=(lower_bounds, upper_bounds),
                             kwargs=dict(apply_bounds_transformation=False),
                             **kws)
@@ -1218,7 +1218,7 @@ class Minimizer(object):
 
         result.x = np.atleast_1d(result.x)
         result.chisqr = result.residual = self.__residual(result.x, False)
-        result.nvarys = len(start_vals)
+        result.nvarys = len(result.var_names)
         result.ndata = 1
         result.nfree = 1
         if isinstance(result.residual, ndarray):
