@@ -1204,9 +1204,13 @@ class Minimizer(object):
         result.method = 'least_squares'
 
         replace_none = lambda x, sign: sign*np.inf if x is None else x
-        upper_bounds = [replace_none(i.max, 1) for i in self.params.values()]
-        lower_bounds = [replace_none(i.min, -1) for i in self.params.values()]
-        start_vals = [i.value for i in self.params.values()]
+
+        start_vals, lower_bounds, upper_bounds = [], [], []
+        for vname in result.var_names:
+            par = self.params[vname]
+            start_vals.append(par.value)
+            lower_bounds.append(replace_none(par.min, -1))
+            upper_bounds.append(replace_none(par.max, -1))
 
         ret = least_squares(self.__residual, start_vals,
                             bounds=(lower_bounds, upper_bounds),
