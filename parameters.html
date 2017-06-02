@@ -14,19 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6',
+        VERSION:     '0.9.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Performing Fits and Analyzing Outputs" href="fitting.html" />
     <link rel="prev" title="Frequently Asked Questions" href="faq.html" />
   <script type="text/x-mathjax-config">
@@ -110,7 +110,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/parameters.txt"
+      <li><a href="_sources/parameters.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -189,13 +189,13 @@ with other Parameters used in the minimization.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<em>str, optional</em>) &#8211; Name of the Parameter.</li>
-<li><strong>value</strong> (<em>float, optional</em>) &#8211; Numerical Parameter value.</li>
-<li><strong>vary</strong> (<em>bool, optional</em>) &#8211; Whether the Parameter is varied during a fit (default is True).</li>
-<li><strong>min</strong> (<em>float, optional</em>) &#8211; Lower bound for value (default is <cite>-numpy.inf</cite>, no lower bound).</li>
-<li><strong>max</strong> (<em>float, optional</em>) &#8211; Upper bound for value (default is <cite>numpy.inf</cite>, no upper bound).</li>
-<li><strong>expr</strong> (<em>str, optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.</li>
-<li><strong>brute_step</strong> (<em>float, optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Name of the Parameter.</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Numerical Parameter value.</li>
+<li><strong>vary</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether the Parameter is varied during a fit (default is True).</li>
+<li><strong>min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Lower bound for value (default is <cite>-numpy.inf</cite>, no lower bound).</li>
+<li><strong>max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Upper bound for value (default is <cite>numpy.inf</cite>, no upper bound).</li>
+<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.</li>
+<li><strong>brute_step</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method.</li>
 <li><strong>user_data</strong> (<em>optional</em>) &#8211; User-definable extra attribute used for a Parameter.</li>
 </ul>
 </td>
@@ -233,15 +233,15 @@ feature.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>value</strong> (<em>float, optional</em>) &#8211; Numerical Parameter value.</li>
-<li><strong>vary</strong> (<em>bool, optional</em>) &#8211; Whether the Parameter is varied during a fit.</li>
-<li><strong>min</strong> (<em>float, optional</em>) &#8211; Lower bound for value. To remove a lower bound you must use
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Numerical Parameter value.</li>
+<li><strong>vary</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether the Parameter is varied during a fit.</li>
+<li><strong>min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Lower bound for value. To remove a lower bound you must use
 <cite>-numpy.inf</cite>.</li>
-<li><strong>max</strong> (<em>float, optional</em>) &#8211; Upper bound for value. To remove an upper bound you must use
+<li><strong>max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Upper bound for value. To remove an upper bound you must use
 <cite>numpy.inf</cite>.</li>
-<li><strong>expr</strong> (<em>str, optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.
+<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.
 To remove a constraint you must supply an empty string.</li>
-<li><strong>brute_step</strong> (<em>float, optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method. To remove the
+<li><strong>brute_step</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method. To remove the
 step size you must use <code class="docutils literal"><span class="pre">0</span></code>.</li>
 </ul>
 </td>
@@ -317,12 +317,12 @@ expressions. If None, a new interpreter will be created.</li>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Name of parameter.  Must match <code class="docutils literal"><span class="pre">[a-z_][a-z0-9_]*</span></code> and cannot be
 a Python reserved word.</li>
-<li><strong>value</strong> (<em>float, optional</em>) &#8211; Numerical Parameter value, typically the <em>initial value</em>.</li>
-<li><strong>vary</strong> (<em>bool, optional</em>) &#8211; Whether the Parameter is varied during a fit (default is True).</li>
-<li><strong>min</strong> (<em>float, optional</em>) &#8211; Lower bound for value (default is <cite>-numpy.inf</cite>, no lower bound).</li>
-<li><strong>max</strong> (<em>float, optional</em>) &#8211; Upper bound for value (default is <cite>numpy.inf</cite>, no upper bound).</li>
-<li><strong>expr</strong> (<em>str, optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.</li>
-<li><strong>brute_step</strong> (<em>float, optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method.</li>
+<li><strong>value</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Numerical Parameter value, typically the <em>initial value</em>.</li>
+<li><strong>vary</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether the Parameter is varied during a fit (default is True).</li>
+<li><strong>min</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Lower bound for value (default is <cite>-numpy.inf</cite>, no lower bound).</li>
+<li><strong>max</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Upper bound for value (default is <cite>numpy.inf</cite>, no upper bound).</li>
+<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Mathematical expression used to constrain the value during the fit.</li>
+<li><strong>brute_step</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Step size for grid points in the <cite>brute</cite> method.</li>
 </ul>
 </td>
 </tr>
@@ -381,13 +381,13 @@ min, max, expr, brute_step)</cite>.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>oneline</strong> (<em>bool, optional</em>) &#8211; If True prints a one-line parameters representation (default is
+<li><strong>oneline</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; If True prints a one-line parameters representation (default is
 False).</li>
-<li><strong>colwidth</strong> (<em>int, optional</em>) &#8211; Column width for all columns specified in <code class="xref py py-attr docutils literal"><span class="pre">columns</span></code>.</li>
-<li><strong>precision</strong> (<em>int, optional</em>) &#8211; Number of digits to be printed after floating point.</li>
-<li><strong>fmt</strong> (<em>{'g', 'e', 'f'}, optional</em>) &#8211; Single-character numeric formatter. Valid values are: &#8216;f&#8217; floating
+<li><strong>colwidth</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; Column width for all columns specified in <code class="xref py py-attr docutils literal"><span class="pre">columns</span></code>.</li>
+<li><strong>precision</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; Number of digits to be printed after floating point.</li>
+<li><strong>fmt</strong> (<em>{'g'</em><em>, </em><em>'e'</em><em>, </em><em>'f'}</em><em>, </em><em>optional</em>) &#8211; Single-character numeric formatter. Valid values are: &#8216;f&#8217; floating
 point, &#8216;g&#8217; floating point and exponential, or &#8216;e&#8217; exponential.</li>
-<li><strong>columns</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#list" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a>, optional) &#8211; List of <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> attribute names to print.</li>
+<li><strong>columns</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></a>, optional) &#8211; List of <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code></a> attribute names to print.</li>
 </ul>
 </td>
 </tr>
@@ -452,7 +452,7 @@ Parameter.</td>
 number of characters written in Python 3.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None or int</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)">None</a> or <a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)">int</a></p>
 </td>
 </tr>
 </tbody>
@@ -620,7 +620,7 @@ which would make the objective function <code class="docutils literal"><span cla
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

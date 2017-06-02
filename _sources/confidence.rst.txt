@@ -7,10 +7,10 @@ Calculation of confidence intervals
 
 The lmfit :mod:`confidence` module allows you to explicitly calculate
 confidence intervals for variable parameters.  For most models, it is not
-necessary: the estimation of the standard error from the estimated
+necessary since the estimation of the standard error from the estimated
 covariance matrix is normally quite good.
 
-But for some models, e.g. a sum of two exponentials, the approximation
+But for some models, the sum of two exponentials for example, the approximation
 begins to fail. For this case, lmfit has the function :func:`conf_interval`
 to calculate confidence intervals directly.  This is substantially slower
 than using the errors estimated from the covariance matrix, but the results
@@ -30,7 +30,7 @@ within a certain confidence.
 
  F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}
 
-N is the number of data-points, P the number of parameter of the null model.
+`N` is the number of data points, `P` the number of parameters of the null model.
 :math:`P_{fix}` is the number of fixed parameters (or to be more clear, the
 difference of number of parameters between our null model and the alternate
 model).
@@ -120,14 +120,14 @@ which will report::
 
 
 Again we called :func:`conf_interval`, this time with tracing and only for
-1- and 2 :math:`\sigma`.  Comparing these two different estimates, we see
+1- and 2-:math:`\sigma`.  Comparing these two different estimates, we see
 that the estimate for `a1` is reasonably well approximated from the
 covariance matrix, but the estimates for `a2` and especially for `t1`, and
 `t2` are very asymmetric and that going from 1 :math:`\sigma` (68%
 confidence) to 2 :math:`\sigma` (95% confidence) is not very predictable.
 
 Let plots mad of the confidence region are shown the figure on the left
-below for ``a1`` and ``t2``, and for ``a2`` and ``t2`` on the right:
+below for `a1` and `t2`, and for `a2` and `t2` on the right:
 
 .. _figC1:
 
@@ -174,7 +174,7 @@ by using :meth:`Minimizer.emcee` on the same problem.
 
 Credible intervals (the Bayesian equivalent of the frequentist confidence
 interval) can be obtained with this method. MCMC can be used for model
-selection, to determine outliers, to marginalise over nuisance parameters, etc.
+selection, to determine outliers, to marginalise over nuisance parameters, etcetera.
 For example, you may have fractionally underestimated the uncertainties on a
 dataset. MCMC can be used to estimate the true level of uncertainty on each
 datapoint. A tutorial on the possibilities offered by MCMC can be found at [1]_.

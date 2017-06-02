@@ -14,19 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6',
+        VERSION:     '0.9.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Bounds Implementation" href="bounds.html" />
     <link rel="prev" title="Built-in Fitting Models in the models module" href="builtin_models.html" />
   <script type="text/x-mathjax-config">
@@ -111,7 +111,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/confidence.txt"
+      <li><a href="_sources/confidence.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -369,15 +369,15 @@ region.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) &#8211; The minimizer to use, holding objective function.</li>
 <li><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) &#8211; The result of running minimize().</li>
-<li><strong>p_names</strong> (<em>list, optional</em>) &#8211; Names of the parameters for which the ci is calculated. If None,
+<li><strong>p_names</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; Names of the parameters for which the ci is calculated. If None,
 the ci is calculated for every parameter.</li>
-<li><strong>sigmas</strong> (<em>list, optional</em>) &#8211; The sigma-levels to find. Default is [1, 2, 3]. See Note below.</li>
-<li><strong>trace</strong> (<em>bool, optional</em>) &#8211; Defaults to False, if True, each result of a probability calculation
+<li><strong>sigmas</strong> (<em>list</em><em>, </em><em>optional</em>) &#8211; The sigma-levels to find. Default is [1, 2, 3]. See Note below.</li>
+<li><strong>trace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Defaults to False, if True, each result of a probability calculation
 is saved along with the parameter. This can be used to plot so-called
 &#8220;profile traces&#8221;.</li>
-<li><strong>maxiter</strong> (<em>int, optional</em>) &#8211; Maximum of iteration to find an upper limit. Default is 200.</li>
-<li><strong>verbose</strong> (<em>bool, optional</em>) &#8211; Print extra debuging information. Default is False.</li>
-<li><strong>prob_func</strong> (<em>None or callable, optional</em>) &#8211; Function to calculate the probability from the optimized chi-square.
+<li><strong>maxiter</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; Maximum of iteration to find an upper limit. Default is 200.</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Print extra debuging information. Default is False.</li>
+<li><strong>prob_func</strong> (<a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a><em>, </em><em>optional</em>) &#8211; Function to calculate the probability from the optimized chi-square.
 Default is None and uses built-in f_compare (F-test).</li>
 </ul>
 </td>
@@ -445,11 +445,11 @@ two parameters.</p>
 <li><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) &#8211; The result of running minimize().</li>
 <li><strong>x_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the parameter which will be the x direction.</li>
 <li><strong>y_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; The name of the parameter which will be the y direction.</li>
-<li><strong>nx</strong> (<em>int, optional</em>) &#8211; Number of points in the x direction.</li>
-<li><strong>ny</strong> (<em>int, optional</em>) &#8211; Number of points in the y direction.</li>
-<li><strong>limits</strong> (<em>tuple, optional</em>) &#8211; Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
+<li><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; Number of points in the x direction.</li>
+<li><strong>ny</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; Number of points in the y direction.</li>
+<li><strong>limits</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#tuple" title="(in Python v2.7)"><em>tuple</em></a><em>, </em><em>optional</em>) &#8211; Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
 given, the default is 5 std-errs in each direction.</li>
-<li><strong>prob_func</strong> (<em>None or callable, optional</em>) &#8211; Function to calculate the probability from the optimized chi-square.
+<li><strong>prob_func</strong> (<a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a><em>, </em><em>optional</em>) &#8211; Function to calculate the probability from the optimized chi-square.
 Default is None and uses built-in f_compare (F-test).</li>
 </ul>
 </td>
@@ -482,8 +482,8 @@ Default is None and uses built-in f_compare (F-test).</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>with_offset</strong> (<em>bool, optional</em>) &#8211; Whether to subtract best value from all other values (default is True).</li>
-<li><strong>ndigits</strong> (<em>int, optional</em>) &#8211; Number of significant digits to show (default is 5).</li>
+<li><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether to subtract best value from all other values (default is True).</li>
+<li><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; Number of significant digits to show (default is 5).</li>
 </ul>
 </td>
 </tr>
@@ -531,7 +531,7 @@ Default is None and uses built-in f_compare (F-test).</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

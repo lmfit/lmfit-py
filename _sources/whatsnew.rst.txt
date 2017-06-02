@@ -6,40 +6,40 @@ Release Notes
 
 .. _lmfit github repository:   http://github.com/lmfit/lmfit-py
 
-This section discusses changes between versions, especially significant
-changes to the use and behavior of the library.  This is not meant to be a
-comprehensive list of changes.  For such a complete record, consult the
-`lmfit github repository`_.
+This section discusses changes between versions, especially changes
+significant to the use and behavior of the library.  This is not meant
+to be a comprehensive list of changes.  For such a complete record,
+consult the `lmfit github repository`_.
 
 .. _whatsnew_096_label:
 
 Version 0.9.6 Release Notes
 ==========================================
 
-Support for scipy 0.14 has been dropped: scipy 0.15 is not required.  This
+Support for SciPy 0.14 has been dropped: SciPy 0.15 is now required.  This
 is especially important for lmfit maintenance, as it means we can now rely
-on scipy having code for differential evolution and do not need to keep a
+on SciPy having code for differential evolution and do not need to keep a
 local copy.
 
 A brute force method was added, which can be used either with
 :meth:`Minimizer.brute` or using the `method='brute'` option to
-:meth:`Minimizer.minimize`.   This method requires that finite bounds be
-placed on each variable parameter, and that the parameter has a finite
+:meth:`Minimizer.minimize`.  This method requires finite bounds on
+all varying parameters, or that parameters have a finite
 `brute_step` attribute set to specify the step size.
 
 Custom cost functions can now be used for the scalar minimizers using the
 `reduce_fcn` option.
 
 Many improvements to documentation and docstrings in the code were made.
-As part of that effort, all API documentation in this main sphinx
+As part of that effort, all API documentation in this main Sphinx
 documentation now derives from the docstrings.
 
 Uncertainties in the resulting best-fit for a model can now be calculated
 from the uncertainties in the model parameters.
 
-Parameters now have two new attributes: `brute_step` to specify the step
-size to take with the `brute` method, and `user_data` which is unused but
-can be used to hold additional information the user may desire.   This will
+Parameters have two new attributes: `brute_step`, to specify the step
+size when using the `brute` method, and `user_data`, which is unused but
+can be used to hold additional information the user may desire.  This will
 be preserved on copy and pickling.
 
 Several bug fixes and cleanups.
@@ -54,14 +54,14 @@ Tests can now be run either with nose or pytest.
 Version 0.9.5 Release Notes
 ==========================================
 
-Support for Python 2.6 and scipy 0.13 has been dropped.
+Support for Python 2.6 and SciPy 0.13 has been dropped.
 
 .. _whatsnew_094_label:
 
 Version 0.9.4 Release Notes
 ==========================================
 
-Some support for the new `least_squares` routine from scipy 0.17 has been
+Some support for the new `least_squares` routine from SciPy 0.17 has been
 added.
 
 
@@ -70,7 +70,7 @@ so that the Parameter value does not need `sigma = params['sigma'].value`.
 The older, explicit usage still works, but the docs, samples, and tests
 have been updated to use the simpler usage.
 
-Support for Python 2.6 and scipy 0.13 is now explicitly deprecated and wil
+Support for Python 2.6 and SciPy 0.13 is now explicitly deprecated and wil
 be dropped in version 0.9.5.
 
 .. _whatsnew_093_label:

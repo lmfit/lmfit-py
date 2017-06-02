@@ -19,22 +19,22 @@ While it offers many benefits over :scipydoc:`optimize.leastsq`, using
 requires more effort than using :scipydoc:`optimize.curve_fit`.
 
 The :class:`Model` class in lmfit provides a simple and flexible approach
-to curve-fitting problems.  Like scipydoc:`optimize.curve_fit`, a
+to curve-fitting problems.  Like :scipydoc:`optimize.curve_fit`, a
 :class:`Model` uses a *model function* -- a function that is meant to
-calculate a model for some phenomenon -- and then` uses that to best match
+calculate a model for some phenomenon -- and then uses that to best match
 an array of supplied data.  Beyond that similarity, its interface is rather
-different from scipydoc:`optimize.curve_fit`, for example in that it uses
+different from :scipydoc:`optimize.curve_fit`, for example in that it uses
 :class:`~lmfit.parameter.Parameters`, but also offers several other
 important advantages.
 
-In addition to allowing you turn any model function into a curve-fitting
+In addition to allowing you to turn any model function into a curve-fitting
 method, lmfit also provides canonical definitions for many known line shapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
 used in many scientific domains.  These are available in the :mod:`models`
 module that will be discussed in more detail in the next chapter
 (:ref:`builtin_models_chapter`).  We mention it here as you may want to
 consult that list before writing your own model.  For now, we focus on
-turning python function into high-level fitting models with the
+turning Python functions into high-level fitting models with the
 :class:`Model` class, and using these to fit data.
 
 
@@ -46,19 +46,18 @@ peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
 can help do this, but here we'll build our own.  We start with a simple
 definition of the model function:
 
-    >>> from numpy import sqrt, pi, exp, linspace
+    >>> from numpy import sqrt, pi, exp, linspace, random
     >>>
     >>> def gaussian(x, amp, cen, wid):
     ...    return amp * exp(-(x-cen)**2 /wid)
-    ...
 
 We want to use this function to fit to data :math:`y(x)` represented by the
-arrays ``y`` and ``x``.  With :scipydoc:`optimize.curve_fit`, this would be::
+arrays `y` and `x`.  With :scipydoc:`optimize.curve_fit`, this would be::
 
     >>> from scipy.optimize import curve_fit
     >>>
     >>> x = linspace(-10,10, 101)
-    >>> y = y = gaussian(x, 2.33, 0.21, 1.51) + np.random.normal(0, 0.2, len(x))
+    >>> y = gaussian(x, 2.33, 0.21, 1.51) + random.normal(0, 0.2, len(x))
     >>>
     >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
@@ -71,8 +70,8 @@ initial guesses.  The results returned are the optimal values for the
 parameters and the covariance matrix.  It's simple and useful, but it
 misses the benefits of lmfit.
 
-With lmfit, we create a :class:`Model` that wraps the ``gaussian`` model
-function, which automatically generate the appropriate residual function,
+With lmfit, we create a :class:`Model` that wraps the `gaussian` model
+function, which automatically generates the appropriate residual function,
 and determines the corresponding parameter names from the function
 signature itself::
 
@@ -80,20 +79,21 @@ signature itself::
     >>> gmodel = Model(gaussian)
     >>> gmodel.param_names
     set(['amp', 'wid', 'cen'])
-    >>> gmodel.independent_vars)
+    >>> gmodel.independent_vars
     ['x']
 
-As you can see, the Model ``gmodel`` determined the names of the parameters
+As you can see, the Model `gmodel` determined the names of the parameters
 and the independent variables.  By default, the first argument of the
 function is taken as the independent variable, held in
 :attr:`independent_vars`, and the rest of the functions positional
 arguments (and, in certain cases, keyword arguments -- see below) are used
-for Parameter names.  Thus, for the ``gaussian`` function above, the
-independent variable is ``x``, and the parameters are named ``amp``,
-``cen``, and ``wid``, and -- all taken directly from the signature of the
-model function. As we will see below, you can modify these default
-determination of what is the independent variable is and which function
-arguments should be identified as parameter names.
+for Parameter names.  Thus, for the `gaussian` function above, the
+independent variable is `x`, and the parameters are named `amp`,
+`cen`, and `wid`, and -- all taken directly from the signature of the
+model function. As we will see below, you can modify the default
+assignment of independent variable / arguments and specify yourself what
+the independent variable is and which function arguments should be identified
+as parameter names.
 
 The Parameters are *not* created when the model is created. The model knows
 what the parameters should be named, but not anything about the scale and
@@ -112,7 +112,7 @@ arguments to :meth:`make_params`:
     >>> params = gmod.make_params(cen=5, amp=200, wid=1)
 
 or assign them (and other parameter properties) after the
-:class:`~lmfit.parameter.Parameters` has been created.
+:class:`~lmfit.parameter.Parameters` class has been created.
 
 A :class:`Model` has several methods associated with it.  For example, one
 can use the :meth:`eval` method to evaluate the model or the :meth:`fit`
@@ -129,7 +129,7 @@ or with::
     >>> y = gmod.eval(x=x, cen=6.5, amp=100, wid=2.0)
 
 Admittedly, this a slightly long-winded way to calculate a Gaussian
-function, given that you could have called your ``gaussian`` function
+function, given that you could have called your `gaussian` function
 directly.  But now that the model is set up, we can use its
 :meth:`fit` method to fit this model to data, as with::
 
@@ -144,7 +144,7 @@ Putting everything together,  (included in the
 
 .. literalinclude:: ../examples/doc_model1.py
 
-which is pretty compact and to the point.  The returned ``result`` will be
+which is pretty compact and to the point.  The returned `result` will be
 a :class:`ModelResult` object.  As we will see below, this has many
 components, including a :meth:`fit_report` method, which will show::
 
@@ -183,9 +183,9 @@ Note that the model fitting was really performed with::
     gmodel = Model(gaussian)
     result = gmodel.fit(y, params, x=x, amp=5, cen=5, wid=1)
 
-These lines clearly express that we want to turn the ``gaussian`` function
+These lines clearly express that we want to turn the `gaussian` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
-starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.  In
+starting with values of 5 for `amp`, 5 for `cen` and 1 for `wid`.  In
 addition, all the other features of lmfit are included:
 :class:`~lmfit.parameter.Parameters` can have bounds and constraints and
 the result is a rich object that can be reused to explore the model fit in
@@ -236,10 +236,10 @@ function as a fitting model.
 
    Describes what to do for missing values.  The choices are:
 
-    * ``None``: Do not check for null or missing values (default).
-    * ``'none'``: Do not check for null or missing values.
-    * ``'drop'``: Drop null or missing observations in data.  If pandas is installed, ``pandas.isnull`` is used, otherwise :attr:`numpy.isnan` is used.
-    * ``'raise'``: Raise a (more helpful) exception when data contains null or missing values.
+    * None: Do not check for null or missing values (default).
+    * 'none': Do not check for null or missing values.
+    * 'drop': Drop null or missing observations in data.  If pandas is installed, :func:`pandas.isnull` is used, otherwise :func:`numpy.isnan` is used.
+    * 'raise': Raise a (more helpful) exception when data contains null or missing values.
 
 .. attribute:: name
 
@@ -262,41 +262,42 @@ function as a fitting model.
 .. attribute:: prefix
 
    Prefix used for name-mangling of parameter names.  The default is ''.
-   If a particular :class:`Model` has arguments ``amplitude``,
-   ``center``, and ``sigma``, these would become the parameter names.
-   Using a prefix of ``g1_`` would convert these parameter names to
-   ``g1_amplitude``, ``g1_center``, and ``g1_sigma``.   This can be
+   If a particular :class:`Model` has arguments `amplitude`,
+   `center`, and `sigma`, these would become the parameter names.
+   Using a prefix of `'g1_'` would convert these parameter names to
+   `g1_amplitude`, `g1_center`, and `g1_sigma`.   This can be
    essential to avoid name collision in composite models.
 
 
 Determining parameter names and independent variables for a function
 -----------------------------------------------------------------------
 
-The :class:`Model` created from the supplied function ``func`` will create
+The :class:`Model` created from the supplied function `func` will create
 a :class:`~lmfit.parameter.Parameters` object, and names are inferred from the function
 arguments, and a residual function is automatically constructed.
 
 
 By default, the independent variable is take as the first argument to the
-function.  You can explicitly set this, of course, and will need to if the
-independent variable is not first in the list, or if there are actually more
-than one independent variables.
+function.  You can, of course, explicitly set this, and will need to do so
+if the independent variable is not first in the list, or if there are actually
+more than one independent variables.
 
 If not specified, Parameters are constructed from all positional arguments
 and all keyword arguments that have a default value that is numerical, except
 the independent variable, of course.   Importantly, the Parameters can be
-modified after creation.  In fact, you'll have to do this because none of the
-parameters have valid initial values.  You can place bounds and constraints
-on Parameters, or fix their values.
-
+modified after creation.  In fact, you will have to do this because none of the
+parameters have valid initial values. In addition, one can place bounds and
+constraints on Parameters, or fix their values.
 
 
 Explicitly specifying ``independent_vars``
 -------------------------------------------------
 
 As we saw for the Gaussian example above, creating a :class:`Model` from a
-function is fairly easy. Let's try another::
+function is fairly easy. Let's try another one::
 
+    >>> from lmfit import Model
+    >>> import numpy as np
     >>> def decay(t, tau, N):
     ...    return N*np.exp(-t/tau)
     ...
@@ -309,11 +310,11 @@ function is fairly easy. Let's try another::
     tau <Parameter 'tau', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
 
-Here, ``t`` is assumed to be the independent variable because it is the
+Here, `t` is assumed to be the independent variable because it is the
 first argument to the function.  The other function arguments are used to
 create parameters for the model.
 
-If you want ``tau`` to be the independent variable in the above example,
+If you want `tau` to be the independent variable in the above example,
 you can say so::
 
     >>> decay_model = Model(decay, independent_vars=['tau'])
@@ -332,7 +333,7 @@ variable* here is simple, and based on how it treats arguments of the
 function you are modeling:
 
 independent variable
-    a function argument that is not a parameter or otherwise part of the
+    A function argument that is not a parameter or otherwise part of the
     model, and that will be required to be explicitly provided as a
     keyword argument for each fit with :meth:`Model.fit` or evaluation
     with :meth:`Model.eval`.
@@ -346,7 +347,7 @@ Functions with keyword arguments
 
 If the model function had keyword parameters, these would be turned into
 Parameters if the supplied default value was a valid number (but not
-``None``, ``True``, or ``False``).
+None, True, or False).
 
     >>> def decay2(t, tau, N=10, check_positive=False):
     ...    if check_small:
@@ -362,17 +363,17 @@ Parameters if the supplied default value was a valid number (but not
     t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', 10, bounds=[None:None]>
 
-Here, even though ``N`` is a keyword argument to the function, it is turned
+Here, even though `N` is a keyword argument to the function, it is turned
 into a parameter, with the default numerical value as its initial value.
 By default, it is permitted to be varied in the fit -- the 10 is taken as
 an initial value, not a fixed value.  On the other hand, the
-``check_positive`` keyword argument, was not converted to a parameter
+`check_positive` keyword argument, was not converted to a parameter
 because it has a boolean default value.    In some sense,
-``check_positive`` becomes like an independent variable to the model.
+`check_positive` becomes like an independent variable to the model.
 However, because it has a default value it is not required to be given for
 each model evaluation or fit, as independent variables are.
 
-Defining a ``prefix`` for the Parameters
+Defining a `prefix` for the Parameters
 --------------------------------------------
 
 As we will see in the next chapter when combining models, it is sometimes
@@ -380,7 +381,7 @@ necessary to decorate the parameter names in the model, but still have them
 be correctly used in the underlying model function.  This would be
 necessary, for example, if two parameters in a composite model (see
 :ref:`composite_models_section` or examples in the next chapter) would have
-the same name.  To avoid this, we can add a ``prefix`` to the
+the same name.  To avoid this, we can add a `prefix` to the
 :class:`Model` which will automatically do this mapping for us.
 
     >>> def myfunc(x, amplitude=1, center=0, sigma=1):
@@ -394,15 +395,15 @@ the same name.  To avoid this, we can add a ``prefix`` to the
     f1_center <Parameter 'f1_center', None, bounds=[None:None]>
     f1_sigma <Parameter 'f1_sigma', None, bounds=[None:None]>
 
-You would refer to these parameters as ``f1_amplitude`` and so forth, and
-the model will know to map these to the ``amplitude`` argument of ``myfunc``.
+You would refer to these parameters as `f1_amplitude` and so forth, and
+the model will know to map these to the `amplitude` argument of `myfunc`.
 
 
 Initializing model parameters
 --------------------------------
 
 As mentioned above, the parameters created by :meth:`Model.make_params` are
-generally created with invalid initial values of ``None``.  These values
+generally created with invalid initial values of None.  These values
 **must** be initialized in order for the model to be evaluated or used in a
 fit.  There are four different ways to do this initialization that can be
 used in any combination:
@@ -524,11 +525,12 @@ The :class:`ModelResult` class
 
 A :class:`ModelResult` (which had been called `ModelFit` prior to version
 0.9) is the object returned by :meth:`Model.fit`.  It is a subclass of
-:class:`~lmfit.minimizer.Minimizer`, and so contains many of the fit results.  Of course, it
-knows the :class:`Model` and the set of :class:`~lmfit.parameter.Parameters` used in the
-fit, and it has methods to evaluate the model, to fit the data (or re-fit
-the data with changes to the parameters, or fit with different or modified
-data) and to print out a report for that fit.
+:class:`~lmfit.minimizer.Minimizer`, and so contains many of the fit results.
+Of course, it knows the :class:`Model` and the set of
+:class:`~lmfit.parameter.Parameters` used in the fit, and it has methods to
+evaluate the model, to fit the data (or re-fit the data with changes to
+the parameters, or fit with different or modified data) and to print out a
+report for that fit.
 
 While a :class:`Model` encapsulates your model function, it is fairly
 abstract and does not contain the parameters or data used in a particular
@@ -582,7 +584,7 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. attribute:: best_fit
 
-   ndarray result of model function, evaluated at provided
+   numpy.ndarray result of model function, evaluated at provided
    independent variables and with best-fit parameters.
 
 .. attribute:: best_values
@@ -599,16 +601,16 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. attribute:: ci_out
 
-   Confidence interval data (see :ref:`confidence_chapter`) or `None`  if
+   Confidence interval data (see :ref:`confidence_chapter`) or None if
    the confidence intervals have not been calculated.
 
 .. attribute:: covar
 
-   ndarray (square) covariance matrix returned from fit.
+   numpy.ndarray (square) covariance matrix returned from fit.
 
 .. attribute:: data
 
-   ndarray of data to compare to model.
+   numpy.ndarray of data to compare to model.
 
 .. attribute:: errorbars
 
@@ -620,7 +622,7 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. attribute:: init_fit
 
-   Ndarray result of model function, evaluated at provided
+   numpy.ndarray result of model function, evaluated at provided
    independent variables and with initial parameters.
 
 .. attribute:: init_params
@@ -629,19 +631,19 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. attribute:: init_values
 
-   Dictionary with  parameter names as keys, and initial values as values.
+   Dictionary with parameter names as keys, and initial values as values.
 
 .. attribute:: iter_cb
 
    Optional callable function, to be called at each fit iteration.  This
-   must take take arguments of ``params, iter, resid, *args, **kws``, where
-   ``params`` will have the current parameter values, ``iter`` the
-   iteration, ``resid`` the current residual array, and ``*args`` and
-   ``**kws`` as passed to the objective function.  See :ref:`fit-itercb-label`.
+   must take take arguments of ``(params, iter, resid, *args, **kws)``, where
+   `params` will have the current parameter values, `iter` the
+   iteration, `resid` the current residual array, and `*args` and
+   `**kws` as passed to the objective function.  See :ref:`fit-itercb-label`.
 
 .. attribute:: jacfcn
 
-   Optional callable function, to be called to calculate jacobian array.
+   Optional callable function, to be called to calculate Jacobian array.
 
 .. attribute::  lmdif_message
 
@@ -685,7 +687,7 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. attribute::  residual
 
-   ndarray for residual.
+   numpy.ndarray for residual.
 
 .. attribute::  scale_covar
 
@@ -697,8 +699,8 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
 
 .. attribute:: weights
 
-   ndarray (or ``None``) of weighting values to be used in fit.  If not
-   ``None``, it will be used as a multiplicative factor of the residual
+   numpy.ndarray (or None) of weighting values to be used in fit.  If not
+   None, it will be used as a multiplicative factor of the residual
    array, so that ``weights*(data - fit)`` is minimized in the
    least-squares sense.
 
@@ -825,13 +827,13 @@ Models :meth:`ModelResult.eval_components` method of the `result`::
 
 which returns a dictionary of the components, using keys of the model name
 (or `prefix` if that is set).  This will use the parameter values in
-``result.params`` and the independent variables (``x``) used during the
+`result.params` and the independent variables (`x`) used during the
 fit.  Note that while the :class:`ModelResult` held in `result` does store the
-best parameters and the best estimate of the model in ``result.best_fit``,
-the original model and parameters in ``pars`` are left unaltered.
+best parameters and the best estimate of the model in `result.best_fit`,
+the original model and parameters in `pars` are left unaltered.
 
 You can apply this composite model to other data sets, or evaluate the
-model at other values of ``x``.  You may want to do this to give a finer or
+model at other values of `x`.  You may want to do this to give a finer or
 coarser spacing of data point, or to extrapolate the model outside the
 fitting range.  This can be done with::
 
@@ -839,7 +841,7 @@ fitting range.  This can be done with::
     predicted = mod.eval(x=xwide)
 
 In this example, the argument names for the model functions do not overlap.
-If they had, the ``prefix`` argument to :class:`Model` would have allowed
+If they had, the `prefix` argument to :class:`Model` would have allowed
 us to identify which parameter went with which component model.  As we will
 see in the next chapter, using composite models with the built-in models
 provides a simple way to build up complex models.

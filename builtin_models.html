@@ -14,19 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6',
+        VERSION:     '0.9.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Calculation of confidence intervals" href="confidence.html" />
     <link rel="prev" title="Modeling Data and Curve Fitting" href="model.html" />
   <script type="text/x-mathjax-config">
@@ -148,7 +148,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/builtin_models.txt"
+      <li><a href="_sources/builtin_models.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -234,10 +234,10 @@ half maximum is <span class="math">\(2\sigma\sqrt{2\ln{2}}\)</span>, approximate
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -275,10 +275,10 @@ half maximum is <span class="math">\(2\sigma\)</span>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -327,10 +327,10 @@ the full width at half maximum is approximately <span class="math">\(3.6013\sigm
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -356,7 +356,7 @@ or missing values.</li>
 <dd><p>A model based on a pseudo-Voigt distribution function
 (see <a class="reference external" href="http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation">http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation</a>),
 which is a weighted sum of a Gaussian and Lorentzian distribution functions
-with that share values for <code class="docutils literal"><span class="pre">amplitude</span></code> (<span class="math">\(A\)</span>), <code class="docutils literal"><span class="pre">center</span></code> (<span class="math">\(\mu\)</span>)
+that share values for <code class="docutils literal"><span class="pre">amplitude</span></code> (<span class="math">\(A\)</span>), <code class="docutils literal"><span class="pre">center</span></code> (<span class="math">\(\mu\)</span>)
 and full width at half maximum (and so have  constrained values of
 <code class="docutils literal"><span class="pre">sigma</span></code> (<span class="math">\(\sigma\)</span>).  A parameter <code class="docutils literal"><span class="pre">fraction</span></code> (<span class="math">\(\alpha\)</span>)
 controls the relative weight of the Gaussian and Lorentzian components,
@@ -373,10 +373,10 @@ at half maximum of each component and of the sum is <span class="math">\(2\sigma
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -413,10 +413,10 @@ The <code class="xref py py-meth docutils literal"><span class="pre">guess()</sp
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -453,10 +453,10 @@ gives a starting value for <code class="docutils literal"><span class="pre">expo
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -490,10 +490,10 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -527,10 +527,10 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -564,10 +564,10 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -601,10 +601,10 @@ three Parameters:  <code class="docutils literal"><span class="pre">amplitude</s
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -640,10 +640,10 @@ four Parameters: <code class="docutils literal"><span class="pre">amplitude</spa
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -680,10 +680,10 @@ four Parameters <code class="docutils literal"><span class="pre">amplitude</span
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -722,10 +722,10 @@ e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -761,10 +761,10 @@ photo-emission, with four Parameters <code class="docutils literal"><span class=
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -804,10 +804,10 @@ in the fit (by default, of course).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -840,10 +840,10 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -875,10 +875,10 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -912,10 +912,10 @@ uses <a class="reference external" href="http://docs.scipy.org/doc/numpy/referen
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -966,10 +966,10 @@ setting the characteristic width. The forms are</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -1021,10 +1021,10 @@ characteristic width. The forms are</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -1060,10 +1060,10 @@ or missing values.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -1095,10 +1095,10 @@ with two Parameters: <code class="docutils literal"><span class="pre">amplitude<
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>independent_vars</strong> (<em>['x']</em>) &#8211; Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<em>string, optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) &#8211; Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em>, </em><em>optional</em>) &#8211; String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -1142,9 +1142,9 @@ mathematical constraints as discussed in <a class="reference internal" href="con
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; Mathematical expression for model.</li>
-<li><strong>independent_vars</strong> (<em>list of strings or None, optional</em>) &#8211; Variable names to use as independent variables.</li>
-<li><strong>init_script</strong> (<em>string or None, optional</em>) &#8211; Initial script to run in asteval interpreter.</li>
-<li><strong>missing</strong> (<em>str or None, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>independent_vars</strong> (<em>list of strings</em><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; Variable names to use as independent variables.</li>
+<li><strong>init_script</strong> (<a class="reference external" href="https://docs.python.org/2/library/string.html#module-string" title="(in Python v2.7)"><em>string</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; Initial script to run in asteval interpreter.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None: Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217;: Drop null or missing observations in data. if pandas is
@@ -1687,7 +1687,7 @@ estimate of the data.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

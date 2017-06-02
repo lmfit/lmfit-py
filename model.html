@@ -14,19 +14,19 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6',
+        VERSION:     '0.9.7',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="top" title="Non-Linear Least-Squares Minimization and Curve-Fitting for Python" href="index.html" />
     <link rel="next" title="Built-in Fitting Models in the models module" href="builtin_models.html" />
     <link rel="prev" title="Performing Fits and Analyzing Outputs" href="fitting.html" />
   <script type="text/x-mathjax-config">
@@ -132,7 +132,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/model.txt"
+      <li><a href="_sources/model.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -368,10 +368,10 @@ data to model some data as for a curve-fitting problem.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>func</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a>) &#8211; Function to be wrapped.</li>
-<li><strong>independent_vars</strong> (<em>list of str, optional</em>) &#8211; Arguments to func that are independent variables (default is None).</li>
-<li><strong>param_names</strong> (<em>list of str, optional</em>) &#8211; Names of arguments to func that are to be made into parameters
+<li><strong>independent_vars</strong> (<em>list of str</em><em>, </em><em>optional</em>) &#8211; Arguments to func that are independent variables (default is None).</li>
+<li><strong>param_names</strong> (<em>list of str</em><em>, </em><em>optional</em>) &#8211; Names of arguments to func that are to be made into parameters
 (default is None).</li>
-<li><strong>missing</strong> (<em>str, optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; <p>How to handle NaN and missing values in data. One of:</p>
 <ul>
 <li>&#8216;none&#8217; or None : Do not check for null or missing values (default).</li>
 <li>&#8216;drop&#8217; : Drop null or missing observations in data. If pandas is
@@ -380,10 +380,10 @@ installed, <cite>pandas.isnull</cite> is used, otherwise <cite>numpy.isnan</cite
 null or missing values.</li>
 </ul>
 </li>
-<li><strong>prefix</strong> (<em>str, optional</em>) &#8211; Prefix used for the model.</li>
-<li><strong>name</strong> (<em>str, optional</em>) &#8211; Name for the model. When None (default) the name is the same as
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Prefix used for the model.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Name for the model. When None (default) the name is the same as
 the model function (<cite>func</cite>).</li>
-<li><strong>**kws</strong> (<em>dict, optional</em>) &#8211; Additional keyword arguments to pass to model function.</li>
+<li><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Additional keyword arguments to pass to model function.</li>
 </ul>
 </td>
 </tr>
@@ -427,7 +427,7 @@ and parameters:</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>params</strong> (<em>Parameters, optional</em>) &#8211; Parameters to use in Model.</li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) &#8211; Parameters to use in Model.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Additional keyword arguments to pass to model function.</li>
 </ul>
 </td>
@@ -460,16 +460,16 @@ keyword arguments.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>data</strong> (<em>array_like</em>) &#8211; Array of data to be fit.</li>
-<li><strong>params</strong> (<em>Parameters, optional</em>) &#8211; Parameters to use in fit (default is None).</li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) &#8211; Parameters to use in fit (default is None).</li>
 <li><strong>weights</strong> (array_like of same size as <cite>data</cite>, optional) &#8211; Weights to use for the calculation of the fit residual (default
 is None).</li>
-<li><strong>method</strong> (<em>str, optional</em>) &#8211; Name of fitting method to use (default is <cite>&#8216;leastsq&#8217;</cite>).</li>
-<li><strong>iter_cb</strong> (<em>callable, optional</em>) &#8211; Callback function to call at each iteration (default is None).</li>
-<li><strong>scale_covar</strong> (<em>bool, optional</em>) &#8211; Whether to automatically scale the covariance matrix when
+<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Name of fitting method to use (default is <cite>&#8216;leastsq&#8217;</cite>).</li>
+<li><strong>iter_cb</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a><em>, </em><em>optional</em>) &#8211; Callback function to call at each iteration (default is None).</li>
+<li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether to automatically scale the covariance matrix when
 calculating uncertainties (default is True, <cite>leastsq</cite> method only).</li>
-<li><strong>verbose</strong> (<em>bool, optional</em>) &#8211; Whether to print a message when a new parameter is added because
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether to print a message when a new parameter is added because
 of a hint (default is True).</li>
-<li><strong>fit_kws</strong> (<em>dict, optional</em>) &#8211; Options to pass to the minimizer being used.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Options to pass to the minimizer being used.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Arguments to pass to the  model function, possibly overriding
 params.</li>
 </ul>
@@ -557,7 +557,7 @@ Parameters object.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>verbose</strong> (<em>bool, optional</em>) &#8211; Whether to print out messages (default is False).</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether to print out messages (default is False).</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Parameter names and initial values.</li>
 </ul>
 </td>
@@ -596,28 +596,28 @@ which will be used by make_params() when building default parameters.</p>
 Can be any of the following:</p>
 <ul>
 <li><dl class="first docutils">
-<dt>value</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span><dd>Numerical Parameter value.</dd>
+<dt>value <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd>Numerical Parameter value.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>vary</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span><dd>Whether the Parameter is varied during a fit (default is True).</dd>
+<dt>vary <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
+<dd>Whether the Parameter is varied during a fit (default is True).</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>min</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span><dd>Lower bound for value (default is <cite>-numpy.inf</cite>, no lower bound).</dd>
+<dt>min <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd>Lower bound for value (default is <cite>-numpy.inf</cite>, no lower bound).</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>max</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span><dd>Upper bound for value (default is <cite>numpy.inf</cite>, no upper bound).</dd>
+<dt>max <span class="classifier-delimiter">:</span> <span class="classifier">float, optional</span></dt>
+<dd>Upper bound for value (default is <cite>numpy.inf</cite>, no upper bound).</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>expr</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span><dd>Mathematical expression used to constrain the value during the fit.</dd>
+<dt>expr <span class="classifier-delimiter">:</span> <span class="classifier">str, optional</span></dt>
+<dd>Mathematical expression used to constrain the value during the fit.</dd>
 </dl>
 </li>
 </ul>
@@ -643,7 +643,7 @@ Can be any of the following:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colwidth</strong> (<em>int, optional</em>) &#8211; Width of each column, except for first and last columns.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colwidth</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; Width of each column, except for first and last columns.</td>
 </tr>
 </tbody>
 </table>
@@ -980,13 +980,13 @@ that it can be used to modify and re-run the fit for the Model.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>model</strong> (<a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><em>Model</em></a>) &#8211; Model to use.</li>
 <li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a>) &#8211; Parameters with initial values for model.</li>
-<li><strong>data</strong> (<em>array_like, optional</em>) &#8211; Data to be modeled.</li>
-<li><strong>weights</strong> (<em>array_like, optional</em>) &#8211; Weights to multiply (data-model) for fit residual.</li>
-<li><strong>method</strong> (<em>str, optional</em>) &#8211; Name of minimization method to use (default is <cite>&#8216;leastsq&#8217;</cite>).</li>
-<li><strong>fcn_args</strong> (<em>sequence, optional</em>) &#8211; Positional arguments to send to model function.</li>
-<li><strong>fcn_dict</strong> (<em>dict, optional</em>) &#8211; Keyword arguments to send to model function.</li>
-<li><strong>iter_cb</strong> (<em>callable, optional</em>) &#8211; Function to call on each iteration of fit.</li>
-<li><strong>scale_covar</strong> (<em>bool, optional</em>) &#8211; Whether to scale covariance matrix for uncertainty evaluation.</li>
+<li><strong>data</strong> (<em>array_like</em><em>, </em><em>optional</em>) &#8211; Data to be modeled.</li>
+<li><strong>weights</strong> (<em>array_like</em><em>, </em><em>optional</em>) &#8211; Weights to multiply (data-model) for fit residual.</li>
+<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Name of minimization method to use (default is <cite>&#8216;leastsq&#8217;</cite>).</li>
+<li><strong>fcn_args</strong> (<em>sequence</em><em>, </em><em>optional</em>) &#8211; Positional arguments to send to model function.</li>
+<li><strong>fcn_dict</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments to send to model function.</li>
+<li><strong>iter_cb</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a><em>, </em><em>optional</em>) &#8211; Function to call on each iteration of fit.</li>
+<li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether to scale covariance matrix for uncertainty evaluation.</li>
 <li><strong>**fit_kws</strong> (<em>optional</em>) &#8211; Keyword arguments to send to minimization routine.</li>
 </ul>
 </td>
@@ -1006,7 +1006,7 @@ that it can be used to modify and re-run the fit for the Model.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>params</strong> (<em>Parameters, optional</em>) &#8211; Parameters to use.</li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) &#8211; Parameters to use.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Options to send to Model.eval()</li>
 </ul>
 </td>
@@ -1030,7 +1030,7 @@ that it can be used to modify and re-run the fit for the Model.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>params</strong> (<em>Parameters, optional</em>) &#8211; Parameters, defaults to ModelResult.params</li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) &#8211; Parameters, defaults to ModelResult.params</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Leyword arguments to pass to model function.</li>
 </ul>
 </td>
@@ -1055,10 +1055,10 @@ the estimated model value for each component of the model.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>data</strong> (<em>array_like, optional</em>) &#8211; Data to be modeled.</li>
-<li><strong>params</strong> (<em>Parameters, optional</em>) &#8211; Parameters with initial values for model.</li>
-<li><strong>weights</strong> (<em>array_like, optional</em>) &#8211; Weights to multiply (data-model) for fit residual.</li>
-<li><strong>method</strong> (<em>str, optional</em>) &#8211; Name of minimization method to use (default is <cite>&#8216;leastsq&#8217;</cite>).</li>
+<li><strong>data</strong> (<em>array_like</em><em>, </em><em>optional</em>) &#8211; Data to be modeled.</li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) &#8211; Parameters with initial values for model.</li>
+<li><strong>weights</strong> (<em>array_like</em><em>, </em><em>optional</em>) &#8211; Weights to multiply (data-model) for fit residual.</li>
+<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Name of minimization method to use (default is <cite>&#8216;leastsq&#8217;</cite>).</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments to send to minimization routine.</li>
 </ul>
 </td>
@@ -1078,10 +1078,10 @@ uncertainties and correlations.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>modelpars</strong> (<em>Parameters, optional</em>) &#8211; Known Model Parameters.</li>
-<li><strong>show_correl</strong> (<em>bool, optional</em>) &#8211; Whether to show list of sorted correlations (default is True).</li>
-<li><strong>min_correl</strong> (<em>float, optional</em>) &#8211; Smallest correlation in absolute value to show (default is 0.1).</li>
-<li><strong>sort_pars</strong> (<em>callable, optional</em>) &#8211; Whether to show parameter names sorted in alphanumerical order
+<li><strong>modelpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) &#8211; Known Model Parameters.</li>
+<li><strong>show_correl</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether to show list of sorted correlations (default is True).</li>
+<li><strong>min_correl</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Smallest correlation in absolute value to show (default is 0.1).</li>
+<li><strong>sort_pars</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a><em>, </em><em>optional</em>) &#8211; Whether to show parameter names sorted in alphanumerical order
 (default is False). If False, then the parameters will be listed in
 the order as they were added to the Parameters dictionary. If callable,
 then this (one argument) function is used to extract a comparison key
@@ -1123,8 +1123,8 @@ accessed without recalculating them.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>with_offset</strong> (<em>bool, optional</em>) &#8211; Whether to subtract best value from all other values (default is True).</li>
-<li><strong>ndigits</strong> (<em>int, optional</em>) &#8211; Number of significant digits to show (default is 5).</li>
+<li><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) &#8211; Whether to subtract best value from all other values (default is True).</li>
+<li><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; Number of significant digits to show (default is 5).</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Keyword arguments that are passed to the <cite>conf_interval</cite> function.</li>
 </ul>
 </td>
@@ -1150,8 +1150,8 @@ confidence bands for the model.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>params</strong> (<em>Parameters, optional</em>) &#8211; Parameters, defaults to ModelResult.params.</li>
-<li><strong>sigma</strong> (<em>float, optional</em>) &#8211; Confidence level, i.e. how many sigma (default  is 1).</li>
+<li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) &#8211; Parameters, defaults to ModelResult.params.</li>
+<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) &#8211; Confidence level, i.e. how many sigma (default  is 1).</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) &#8211; Values of options, independent variables, etcetera.</li>
 </ul>
 </td>
@@ -1199,24 +1199,24 @@ errorbars will also be plotted.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>datafmt</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for data points.</li>
-<li><strong>fitfmt</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for fitted curve.</li>
-<li><strong>initfmt</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for initial conditions for the fit.</li>
-<li><strong>xlabel</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for labeling the x-axis.</li>
-<li><strong>ylabel</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for labeling the y-axis.</li>
-<li><strong>yerr</strong> (<em>numpy.ndarray, optional</em>) &#8211; Array of uncertainties for data array.</li>
-<li><strong>numpoints</strong> (<em>int, optional</em>) &#8211; If provided, the final and initial fit curves are evaluated not
+<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for data points.</li>
+<li><strong>fitfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for fitted curve.</li>
+<li><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for initial conditions for the fit.</li>
+<li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for labeling the x-axis.</li>
+<li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for labeling the y-axis.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.12)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) &#8211; Array of uncertainties for data array.</li>
+<li><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; If provided, the final and initial fit curves are evaluated not
 only at data points, but refined to contain <cite>numpoints</cite> points in
 total.</li>
-<li><strong>fig</strong> (<em>matplotlib.figure.Figure, optional</em>) &#8211; The figure to plot on. The default is None, which means use the
+<li><strong>fig</strong> (<em>matplotlib.figure.Figure</em><em>, </em><em>optional</em>) &#8211; The figure to plot on. The default is None, which means use the
 current pyplot figure or create one if there is none.</li>
-<li><strong>data_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments passed on to the plot function for data points.</li>
-<li><strong>fit_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments passed on to the plot function for fitted curve.</li>
-<li><strong>init_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments passed on to the plot function for the initial
+<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments passed on to the plot function for data points.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments passed on to the plot function for fitted curve.</li>
+<li><strong>init_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments passed on to the plot function for the initial
 conditions of the fit.</li>
-<li><strong>ax_res_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments for the axes for the residuals plot.</li>
-<li><strong>ax_fit_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments for the axes for the fit plot.</li>
-<li><strong>fig_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments for a new figure, if there is one being created.</li>
+<li><strong>ax_res_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments for the axes for the residuals plot.</li>
+<li><strong>ax_fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments for the axes for the fit plot.</li>
+<li><strong>fig_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments for a new figure, if there is one being created.</li>
 </ul>
 </td>
 </tr>
@@ -1258,22 +1258,22 @@ is specified, errorbars will also be plotted.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ax</strong> (<em>matplotlib.axes.Axes, optional</em>) &#8211; The axes to plot on. The default in None, which means use the
+<li><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em>, </em><em>optional</em>) &#8211; The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</li>
-<li><strong>datafmt</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for data points.</li>
-<li><strong>fitfmt</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for fitted curve.</li>
-<li><strong>initfmt</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for initial conditions for the fit.</li>
-<li><strong>xlabel</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for labeling the x-axis.</li>
-<li><strong>ylabel</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for labeling the y-axis.</li>
-<li><strong>yerr</strong> (<em>numpy.ndarray, optional</em>) &#8211; Array of uncertainties for data array.</li>
-<li><strong>numpoints</strong> (<em>int, optional</em>) &#8211; If provided, the final and initial fit curves are evaluated not
+<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for data points.</li>
+<li><strong>fitfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for fitted curve.</li>
+<li><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for initial conditions for the fit.</li>
+<li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for labeling the x-axis.</li>
+<li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for labeling the y-axis.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.12)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) &#8211; Array of uncertainties for data array.</li>
+<li><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) &#8211; If provided, the final and initial fit curves are evaluated not
 only at data points, but refined to contain <cite>numpoints</cite> points in
 total.</li>
-<li><strong>data_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments passed on to the plot function for data points.</li>
-<li><strong>fit_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments passed on to the plot function for fitted curve.</li>
-<li><strong>init_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments passed on to the plot function for the initial
+<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments passed on to the plot function for data points.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments passed on to the plot function for fitted curve.</li>
+<li><strong>init_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments passed on to the plot function for the initial
 conditions of the fit.</li>
-<li><strong>ax_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments for a new axis, if there is one being created.</li>
+<li><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments for a new axis, if there is one being created.</li>
 </ul>
 </td>
 </tr>
@@ -1314,13 +1314,13 @@ will also be plotted.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ax</strong> (<em>matplotlib.axes.Axes, optional</em>) &#8211; The axes to plot on. The default in None, which means use the
+<li><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em>, </em><em>optional</em>) &#8211; The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</li>
-<li><strong>datafmt</strong> (<em>str, optional</em>) &#8211; Matplotlib format string for data points.</li>
-<li><strong>yerr</strong> (<em>numpy.ndarray, optional</em>) &#8211; Array of uncertainties for data array.</li>
-<li><strong>data_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments passed on to the plot function for data points.</li>
-<li><strong>fit_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments passed on to the plot function for fitted curve.</li>
-<li><strong>ax_kws</strong> (<em>dict, optional</em>) &#8211; Keyword arguments for a new axis, if there is one being created.</li>
+<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) &#8211; Matplotlib format string for data points.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.12)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) &#8211; Array of uncertainties for data array.</li>
+<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments passed on to the plot function for data points.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments passed on to the plot function for fitted curve.</li>
+<li><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) &#8211; Keyword arguments for a new axis, if there is one being created.</li>
 </ul>
 </td>
 </tr>
@@ -1871,7 +1871,7 @@ build complex models from testable sub-components.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.8.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>
