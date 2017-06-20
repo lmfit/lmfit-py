@@ -354,13 +354,13 @@ class Parameters(OrderedDict):
 
         Examples
         --------
-        >>>  params = Parameters()
-        # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+        >>> params = Parameters()
+        >>> # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
         >>> params.add_many(('amp',   10, True, None, None, None, None),
         ...                 ('cen',   4, True,  0.0, None, None, None),
         ...                 ('wid',   1, False, None, None, None, None),
         ...                 ('frac', 0.5))
-        # add a sequence of Parameters
+        >>> # add a sequence of Parameters
         >>> f = Parameter('par_f', 100)
         >>> g = Parameter('par_g',  2.)
         >>> params.add_many(f, g)
