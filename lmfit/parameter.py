@@ -467,6 +467,61 @@ class Parameters(OrderedDict):
         """See :method:`set_values()`, default-value: None."""
         self._set_pattr('brute_step', attr_val, pnames, pvmap)
 
+    def _get_pattr(self, attr_name, pnames):
+        """The private workhorse of all ``get_XXXs()`` methods. """
+        try:
+            return OrderedDict((p.name, getattr(p, attr_name))
+                               for p in self.values()
+                               if not pnames or p.name in pnames)
+        except KeyError as ex:
+            raise KeyError("%s not in %s" % (ex, list(self.keys())))
+
+    def get_values(self, *pnames):
+        """
+        Like :method:`valuesdict()` optionally for a subset or parameter. 
+
+        Examples:
+        ---------
+
+        >>> params = Parameters()
+        >>> params.add_many(('amp',   10, True, None, None, None, None),
+        ...                 ('cen',   4, True,  0.0, None, None, None),
+        ...                 ('wid',   1, False, None, None, None, None),
+        ...                 ('frac', 0.5))
+        >>> params.get_values()
+        OrderedDict([('amp', 10), ('cen', 4), ('wid', 1), ('frac', 0.5)])
+
+        >>> params.get_varys('amp', 'wid') == {'amp': True, 'wid': False}
+        True
+
+        >>> params.get_mins('amp', 'cen') == {'amp': -inf, 'cen': 0.0}
+        True
+
+        >>> params.get_maxs()
+        OrderedDict([('amp', inf), ('cen', inf), ('wid', inf), ('frac', inf)])
+        """
+        return self._get_pattr('value', pnames)
+
+    def get_varys(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('vary', pnames)
+
+    def get_mins(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('min', pnames)
+
+    def get_maxs(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('max', pnames)
+
+    def get_exprs(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('expr', pnames)
+
+    def get_brute_steps(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('brute_step', pnames)
+
     def valuesdict(self):
         """Return an ordered dictionary of parameter values.
 
