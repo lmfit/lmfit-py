@@ -137,7 +137,7 @@ class Parameters(OrderedDict):
         if key not in self:
             if not valid_symbol_name(key):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
-        if par is not None and not isinstance(par, Parameter):
+        if not isinstance(par, Parameter):
             raise ValueError("'%s' is not a Parameter" % par)
         OrderedDict.__setitem__(self, key, par)
         par.name = key
