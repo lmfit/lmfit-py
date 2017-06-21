@@ -44,10 +44,11 @@ Motivation and simple example: Fit data to Gaussian profile
 Let's start with a simple and common example of fitting data to a Gaussian
 peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
 can help do this, but here we'll build our own.  We start with a simple
-definition of the model function:
+definition of the model function::
 
     >>> from numpy import sqrt, pi, exp, linspace, random
-    >>>
+    >>> random.seed(7)
+    
     >>> def gaussian(x, amp, cen, wid):
     ...    return amp * exp(-(x-cen)**2 /wid)
 
@@ -55,14 +56,14 @@ We want to use this function to fit to data :math:`y(x)` represented by the
 arrays `y` and `x`.  With :scipydoc:`optimize.curve_fit`, this would be::
 
     >>> from scipy.optimize import curve_fit
-    >>>
+
     >>> x = linspace(-10,10, 101)
     >>> y = gaussian(x, 2.33, 0.21, 1.51) + random.normal(0, 0.2, len(x))
-    >>>
+
     >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
-    >>> print best_vals
-
+    >>> print(best_vals)
+    [ 2.4510864   0.19050247  1.34065547]
 
 That is, we create data, make an initial guess of the model values, and run
 :scipydoc:`optimize.curve_fit` with the model function, data arrays, and
@@ -76,9 +77,10 @@ and determines the corresponding parameter names from the function
 signature itself::
 
     >>> from lmfit import Model
+
     >>> gmodel = Model(gaussian)
     >>> gmodel.param_names
-    set(['amp', 'wid', 'cen'])
+    ['amp', 'cen', 'wid']
     >>> gmodel.independent_vars
     ['x']
 
@@ -100,16 +102,16 @@ what the parameters should be named, but not anything about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initial values and other attributes.  To help you do this, each
 model has a :meth:`make_params` method that will generate parameters with
-the expected names:
+the expected names::
 
-    >>> params = gmod.make_params()
+    >>> params = gmodel.make_params()
 
 This creates the :class:`~lmfit.parameter.Parameters` but does not
-automaticaly give them initial values since it has no idea what the scale
+automatically give them initial values since it has no idea what the scale
 should be.  You can set initial values for parameters with keyword
-arguments to :meth:`make_params`:
+arguments to :meth:`make_params`::
 
-    >>> params = gmod.make_params(cen=5, amp=200, wid=1)
+    >>> params = gmodel.make_params(cen=5, amp=200, wid=1)
 
 or assign them (and other parameter properties) after the
 :class:`~lmfit.parameter.Parameters` class has been created.
@@ -122,22 +124,22 @@ For example, one could use :meth:`eval` to calculate the predicted
 function::
 
     >>> x = linspace(0, 10, 201)
-    >>> y = gmod.eval(params, x=x)
+    >>> y = gmodel.eval(params, x=x)
 
 or with::
 
-    >>> y = gmod.eval(x=x, cen=6.5, amp=100, wid=2.0)
+    >>> y = gmodel.eval(x=x, cen=6.5, amp=100, wid=2.0)
 
 Admittedly, this a slightly long-winded way to calculate a Gaussian
 function, given that you could have called your `gaussian` function
 directly.  But now that the model is set up, we can use its
 :meth:`fit` method to fit this model to data, as with::
 
-    >>> result = gmod.fit(y, params)
+    >>> result = gmodel.fit(y, params)
 
 or with::
 
-    >>> result = gmod.fit(y, cen=6.5, amp=100, wid=2.0)
+    >>> result = gmodel.fit(y, cen=6.5, amp=100, wid=2.0)
 
 Putting everything together,  (included in the
 ``examples`` folder with the source code) is:
@@ -302,13 +304,13 @@ function is fairly easy. Let's try another one::
     ...    return N*np.exp(-t/tau)
     ...
     >>> decay_model = Model(decay)
-    >>> print decay_model.independent_vars
+    >>> print(decay_model.independent_vars)
     ['t']
-    >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    >>> for pname, par in decay_model.make_params().items():
+    ...     print(pname, par)
     ...
-    tau <Parameter 'tau', None, bounds=[None:None]>
-    N <Parameter 'N', None, bounds=[None:None]>
+    tau <Parameter 'tau', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', -inf, bounds=[-inf:inf]>
 
 Here, `t` is assumed to be the independent variable because it is the
 first argument to the function.  The other function arguments are used to
@@ -318,13 +320,13 @@ If you want `tau` to be the independent variable in the above example,
 you can say so::
 
     >>> decay_model = Model(decay, independent_vars=['tau'])
-    >>> print decay_model.independent_vars
+    >>> print(decay_model.independent_vars)
     ['tau']
-    >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    >>> for pname, par in decay_model.make_params().items():
+    ...     print(pname, par)
     ...
-    t <Parameter 't', None, bounds=[None:None]>
-    N <Parameter 'N', None, bounds=[None:None]>
+    t <Parameter 't', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', -inf, bounds=[-inf:inf]>
 
 
 You can also supply multiple values for multi-dimensional functions with
@@ -347,7 +349,7 @@ Functions with keyword arguments
 
 If the model function had keyword parameters, these would be turned into
 Parameters if the supplied default value was a valid number (but not
-None, True, or False).
+None, True, or False)::
 
     >>> def decay2(t, tau, N=10, check_positive=False):
     ...    if check_small:
@@ -357,11 +359,11 @@ None, True, or False).
     ...    return N*np.exp(arg)
     ...
     >>> mod = Model(decay2)
-    >>> for pname, par in mod.params.items():
-    ...     print pname, par
+    >>> for pname, par in mod.make_params().items():
+    ...     print(pname, par)
     ...
-    t <Parameter 't', None, bounds=[None:None]>
-    N <Parameter 'N', 10, bounds=[None:None]>
+    tau <Parameter 'tau', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', 10, bounds=[-inf:inf]>
 
 Here, even though `N` is a keyword argument to the function, it is turned
 into a parameter, with the default numerical value as its initial value.
@@ -382,18 +384,18 @@ be correctly used in the underlying model function.  This would be
 necessary, for example, if two parameters in a composite model (see
 :ref:`composite_models_section` or examples in the next chapter) would have
 the same name.  To avoid this, we can add a `prefix` to the
-:class:`Model` which will automatically do this mapping for us.
+:class:`Model` which will automatically do this mapping for us::
 
     >>> def myfunc(x, amplitude=1, center=0, sigma=1):
-    ...
+    ...     ...
 
     >>> mod = Model(myfunc, prefix='f1_')
-    >>> for pname, par in mod.params.items():
-    ...     print pname, par
+    >>> for pname, par in mod.make_params().items():
+    ...     print(pname, par)
     ...
-    f1_amplitude <Parameter 'f1_amplitude', None, bounds=[None:None]>
-    f1_center <Parameter 'f1_center', None, bounds=[None:None]>
-    f1_sigma <Parameter 'f1_sigma', None, bounds=[None:None]>
+    f1_sigma <Parameter 'f1_sigma', 1, bounds=[-inf:inf]>
+    f1_center <Parameter 'f1_center', 0, bounds=[-inf:inf]>
+    f1_amplitude <Parameter 'f1_amplitude', 1, bounds=[-inf:inf]>
 
 You would refer to these parameters as `f1_amplitude` and so forth, and
 the model will know to map these to the `amplitude` argument of `myfunc`.
@@ -424,12 +426,12 @@ To supply initial values for parameters in the definition of the model
 function, you can simply supply a default value::
 
     >>> def myfunc(x, a=1, b=0):
-    >>>     ...
+    ...     ...
 
 instead of using::
 
     >>> def myfunc(x, a, b):
-    >>>     ...
+    ...     ...
 
 This has the advantage of working at the function level -- all parameters
 with keywords can be treated as options.  It also means that some default
@@ -475,7 +477,7 @@ as keyword arguments to either the :meth:`Model.eval` or :meth:`Model.fit` metho
 
    >>> y1 = mod.eval(x=x, a=7.0, b=-2.0)
 
-   >>> out = mod.fit(x=x, pars, a=3.0, b=-0.0)
+   >>> out = mod.fit(data=x, params=pars, a=3.0, b=-0.0)
 
 These approaches to initialization provide many opportunities for setting
 initial values for parameters.  The methods can be combined, so that you
@@ -503,8 +505,9 @@ as with::
 Parameter hints are stored in a model's :attr:`param_hints` attribute,
 which is simply a nested dictionary::
 
-    >>> print mod.param_hints
-    {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}}
+    >>> (mod.param_hints == 
+    ...     {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}})
+    True
 
 
 You can change this dictionary directly, or with the :meth:`Model.set_param_hint`

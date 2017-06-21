@@ -380,11 +380,11 @@ exponential decay. A small amount of Gaussian noise is also added in::
     >>> import numpy as np
     >>> import lmfit
     >>> import matplotlib.pyplot as plt
+    >>> np.random.seed(7)
     >>> x = np.linspace(1, 10, 250)
-    >>> np.random.seed(0)
     >>> y = 3.0 * np.exp(-x / 2) - 5.0 * np.exp(-(x - 0.1) / 10.) + 0.1 * np.random.randn(len(x))
-    >>> plt.plot(x, y)
-    >>> plt.show()
+    >>> plt.plot(x, y)  # doctest: +SKIP
+    >>> plt.show();
 
 .. image:: _images/emcee_dbl_exp.png
 
@@ -399,17 +399,18 @@ Create a Parameter set for the initial guesses::
 
 Solving with :func:`minimize` gives the Maximum Likelihood solution.::
 
-    >>> mi = lmfit.minimize(residual, p, method='Nelder')
+    >>> np.random.seed(7)
+    >>> mi = lmfit.minimize(residual, p, method='Nelder', 
+    ...         nan_policy='omit')  # Nelder complains with NaNs.
     >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
     [[Variables]]
-        a1:   2.98623688 (init= 4)
-        a2:  -4.33525596 (init= 4)
-        t1:   1.30993185 (init= 3)
-        t2:   11.8240752 (init= 3)
-    [[Correlations]] (unreported correlations are <  0.500)
-    >>> plt.plot(x, y)
-    >>> plt.plot(x, residual(mi.params) + y, 'r')
-    >>> plt.show()
+        a1:   2.94882081 (init= 4)
+        a2:  -4.96920505 (init= 4)
+        t1:   1.99554375 (init= 3)
+        t2:   10.0968157 (init= 3)
+    >>> plt.plot(x, y)  # doctest: +SKIP
+    >>> plt.plot(x, residual(mi.params) + y, 'r')  # doctest: +SKIP
+    >>> plt.show();
 
 .. image:: _images/emcee_dbl_exp2.png
 
@@ -437,14 +438,17 @@ if any of the parameters are outside their bounds.
 Now we have to set up the minimizer and do the sampling::
 
     >>> mini = lmfit.Minimizer(lnprob, mi.params)
-    >>> res = mini.emcee(burn=300, steps=600, thin=10, params=mi.params)
+    >>> res = mini.emcee(burn=300, steps=600, thin=10, params=mi.params, seed=7)
 
 Lets have a look at those posterior distributions for the parameters.  This requires
 installation of the `corner` package::
 
     >>> import corner
-    >>> corner.corner(res.flatchain, labels=res.var_names, truths=list(res.params.valuesdict().values()))
-
+    >>> corner.corner(res.flatchain, labels=res.var_names, 
+    ...     truths=list(res.params.valuesdict().values()));
+    <matplotlib.figure.Figure 
+    ...
+    
 .. image:: _images/emcee_triangle.png
 
 The values reported in the :class:`MinimizerResult` are the medians of the
@@ -453,24 +457,26 @@ difference between the 15.8 and 84.2 percentiles. The median value is not
 necessarily the same as the Maximum Likelihood Estimate. We'll get that as well.
 You can see that we recovered the right uncertainty level on the data.::
 
-    >>> print("median of posterior probability distribution")
-    >>> print('------------------------------------------')
+    >>> ## median of posterior probability distribution
+    >>> ## --------------------------------------------
     >>> lmfit.report_fit(res.params)
-    median of posterior probability distribution
-    ------------------------------------------
     [[Variables]]
-        a1:   3.00975345 +/- 0.151034 (5.02%) (init= 2.986237)
-        a2:  -4.35419204 +/- 0.127505 (2.93%) (init=-4.335256)
-        t1:   1.32726415 +/- 0.142995 (10.77%) (init= 1.309932)
-        t2:   11.7911935 +/- 0.495583 (4.20%) (init= 11.82408)
-        f:    0.09805494 +/- 0.004256 (4.34%) (init= 1)
+        a1:   2.85158859 +/- 1.398537 (49.04%) (init= 2.948821)
+        a2:  -4.83905996 +/- 0.785438 (16.23%) (init=-4.969205)
+        t1:   2.00673474 +/- 2.070905 (103.20%) (init= 1.995544)
+        t2:   10.3851908 +/- 4.606475 (44.36%) (init= 10.09682)
+        f:    0.09856150 +/- 0.028736 (29.16%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(a2, t2)                    =  0.981
-        C(a2, t1)                    = -0.927
-        C(t1, t2)                    = -0.880
-        C(a1, t1)                    = -0.519
-        C(a1, a2)                    =  0.195
-        C(a1, t2)                    =  0.146
+        C(t1, t2)                    =  1.000 
+        C(a1, a2)                    = -0.998 
+        C(a2, t2)                    =  0.994 
+        C(a2, t1)                    =  0.994 
+        C(a1, t1)                    = -0.989 
+        C(a1, t2)                    = -0.989 
+        C(a1, f)                     = -0.815 
+        C(a2, f)                     =  0.784 
+        C(t1, f)                     =  0.740 
+        C(t2, f)                     =  0.734 
 
     >>> # find the maximum likelihood solution
     >>> highest_prob = np.argmax(res.lnprob)
@@ -479,20 +485,18 @@ You can see that we recovered the right uncertainty level on the data.::
     >>> for i, par in enumerate(p):
     ...     p[par].value = mle_soln[i]
 
-    >>> print("\nMaximum likelihood Estimation")
-    >>> print('-----------------------------')
+    ## Maximum likelihood Estimation
+    ## -----------------------------
     >>> print(p)
-    Maximum likelihood Estimation
-    -----------------------------
-    Parameters([('a1', <Parameter 'a1', 2.9943337359308981, bounds=[-inf:inf]>),
-    ('a2', <Parameter 'a2', -4.3364489105166593, bounds=[-inf:inf]>),
-    ('t1', <Parameter 't1', 1.3124544105342462, bounds=[-inf:inf]>),
-    ('t2', <Parameter 't2', 11.80612160586597, bounds=[-inf:inf]>)])
+    Parameters([('a1', <Parameter 'a1', 3.0076530656073492, bounds=[-inf:inf]>), 
+    ('a2', <Parameter 'a2', -5.0606612028876672, bounds=[-inf:inf]>), 
+    ('t1', <Parameter 't1', 2.0807568667875125, bounds=[-inf:inf]>), 
+    ('t2', <Parameter 't2', 9.9334762291748575, bounds=[-inf:inf]>)])
 
     >>> # Finally lets work out a 1 and 2-sigma error estimate for 't1'
     >>> quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
-    >>> print("2 sigma spread", 0.5 * (quantiles[-1] - quantiles[0]))
-    2 sigma spread 0.298878202908
+    >>> print("2 sigma spread ", 0.5 * (quantiles[-1] - quantiles[0]))
+    2 sigma spread  34.9607649579
 
 Getting and Printing Fit Reports
 ===========================================

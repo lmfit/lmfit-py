@@ -44,6 +44,7 @@ First we create an example problem::
 
     >>> import lmfit
     >>> import numpy as np
+    >>> np.random.seed(7)
     >>> x = np.linspace(0.3,10,100)
     >>> y = 1/(0.1*x)+2+0.1*np.random.randn(x.size)
     >>> pars = lmfit.Parameters()
@@ -62,20 +63,20 @@ starting point::
     >>> mini = lmfit.Minimizer(residual, pars)
     >>> result = mini.minimize()
     >>> print(lmfit.fit_report(result.params))
-    [Variables]]
-        a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
-        b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
+    [[Variables]]
+        a:   0.09992658 +/- 0.000205 (0.21%) (init= 0.1)
+        b:   1.99844443 +/- 0.012865 (0.64%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(a, b)                      =  0.601
+        C(a, b)                      =  0.601 
 
 Now it is just a simple function call to calculate the confidence
 intervals::
 
     >>> ci = lmfit.conf_interval(mini, result)
     >>> lmfit.printfuncs.report_ci(ci)
-         99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%
-    a   0.09886   0.09905   0.09925   0.09944   0.09963   0.09982   0.10003
-    b   1.94751   1.96049   1.97274   1.97741   1.99680   2.00905   2.02203
+          99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
+     a:  -0.00063  -0.00041  -0.00021   0.09993  +0.00021  +0.00042  +0.00064
+     b:  -0.03963  -0.02608  -0.01293   1.99844  +0.01294  +0.02608  +0.03963
 
 This shows the best-fit values for the parameters in the `0.00%` column,
 and parameter values that are at the varying confidence levels given by
@@ -148,15 +149,15 @@ array of corresponding probabilities for the corresponding cumulative
 variables.  This can be used to show the dependence between two
 parameters::
 
-    >>> x, y, prob = trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
-    >>> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
-    >>> plt.scatter(x, y, c=prob ,s=30)
-    >>> plt.scatter(x2, y2, c=prob2, s=30)
-    >>> plt.gca().set_xlim((1, 5))
-    >>> plt.gca().set_ylim((5, 15))
-    >>> plt.xlabel('a1')
-    >>> plt.ylabel('t2')
-    >>> plt.show()
+    >> x, y, prob = trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
+    >> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
+    >> plt.scatter(x, y, c=prob ,s=30)
+    >> plt.scatter(x2, y2, c=prob2, s=30)
+    >> plt.gca().set_xlim((1, 5))
+    >> plt.gca().set_ylim((5, 15))
+    >> plt.xlabel('a1')
+    >> plt.ylabel('t2')
+    >> plt.show()
 
 
 which shows the trace of values:
