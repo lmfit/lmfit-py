@@ -130,7 +130,7 @@ class Model(object):
         and parameters:
 
         >>> print(gmodel.param_names, gmodel.independent_vars)
-        ['amp', 'cen', 'wid'], ['x']
+        ['amp', 'cen', 'wid'] ['x']
 
         """
         self.func = func
@@ -306,6 +306,7 @@ class Model(object):
         Example
         --------
 
+        >>> from lmfit.models import GaussianModel
         >>> model = GaussianModel()
         >>> model.set_param_hint('sigma', min=0)
 
@@ -766,6 +767,10 @@ class CompositeModel(Model):
     but can use normal Python operators `+`, '-', `*`, and `/` to combine
     components as in::
 
+    >>> fcn1 = lambda x, a: None
+    >>> fcn2 = lambda x, b: None
+    >>> fcn3 = lambda x, c: None
+
     >>> mod = Model(fcn1) + Model(fcn2) * Model(fcn3)
 
     """
@@ -1053,7 +1058,7 @@ class ModelResult(Minimizer):
         nvarys = self.nvarys
         ndata = self.ndata
         covar = self.covar / self.redchi
-        fjac = np.zeros(ndata*nvarys).reshape((nvarys, ndata))
+        fjac = np.zeros(ndata * nvarys).reshape((nvarys, ndata))
         df2 = np.zeros(ndata)
 
         # find derivative by hand!
@@ -1061,7 +1066,7 @@ class ModelResult(Minimizer):
             pname = self.var_names[i]
             pars = self.params
             val0 = pars[pname].value
-            dval = pars[pname].stderr/3.0
+            dval = pars[pname].stderr / 3.0
 
             pars[pname].value = val0 + dval
             res1 = self.model.eval(pars, **self.userkws)
@@ -1070,17 +1075,17 @@ class ModelResult(Minimizer):
             res2 = self.model.eval(pars, **self.userkws)
 
             pars[pname].value = val0
-            fjac[i] = (res1 - res2) / (2*dval)
+            fjac[i] = (res1 - res2) / (2 * dval)
 
         for i in range(nvarys):
             for j in range(nvarys):
-                df2 += fjac[i]*fjac[j]*covar[i, j]
+                df2 += fjac[i] * fjac[j] * covar[i, j]
 
         if sigma < 1.0:
             prob = sigma
         else:
-            prob = erf(sigma/np.sqrt(2))
-        return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, ndata-nvarys)
+            prob = erf(sigma / np.sqrt(2))
+        return np.sqrt(df2 * self.redchi) * t.ppf((prob + 1) / 2.0, ndata - nvarys)
 
     def conf_interval(self, **kwargs):
         """Calculate the confidence intervals for the variable parameters.
@@ -1257,7 +1262,7 @@ class ModelResult(Minimizer):
             fitfmt, label='best-fit', **fit_kws)
 
         if yerr is None and self.weights is not None:
-            yerr = 1.0/self.weights
+            yerr = 1.0 / self.weights
         if yerr is not None:
             ax.errorbar(x_array, self.data, yerr=yerr,
                         fmt=datafmt, label='data', **data_kws)
@@ -1343,7 +1348,7 @@ class ModelResult(Minimizer):
         ax.axhline(0, **fit_kws)
 
         if yerr is None and self.weights is not None:
-            yerr = 1.0/self.weights
+            yerr = 1.0 / self.weights
         if yerr is not None:
             ax.errorbar(x_array, self.eval() - self.data, yerr=yerr,
                         fmt=datafmt, label='residuals', **data_kws)

@@ -39,9 +39,19 @@ install:
     - if [[ $SCIPY_VERSION == 0.15 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy=$SCIPY_VERSION libgfortran=1 pandas matplotlib nose; fi
     - if [[ $SCIPY_VERSION != 0.15 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy=$SCIPY_VERSION pandas matplotlib nose; fi
     - source activate test_env
-    - pip install emcee
+    - pip install emcee corner
     - python setup.py install
 
 script:
-    - cd tests
-    - nosetests
+    -   nosetests tests
+    - |
+        if [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
+            nosetests lmfit/ README.rst doc/ \
+                -e .*ui.* \
+                -e lmfit.confidence \
+                -e .*uncertainties.* \
+                --with-doctest \
+                --doctest-options=+NORMALIZE_WHITESPACE,+ELLIPSIS,+REPORT_NDIFF,+IGNORE_EXCEPTION_DETAIL \
+                --doctest-extension=rst
+
+        fi

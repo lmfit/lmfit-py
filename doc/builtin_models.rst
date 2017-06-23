@@ -231,6 +231,7 @@ default value of None, and if the expression contains a variable named
 
 For example, if one creates an :class:`ExpressionModel` as::
 
+    >>> from lmfit.models import ExpressionModel
     >>> mod = ExpressionModel('off + amp * exp(-x/x0) * sin(x*phase)')
 
 The name `exp` will be recognized as the exponent function, so the model
@@ -241,7 +242,8 @@ parameter hints for bounds, so this will have to be handled explicitly.
 
 To evaluate this model, you might do the following::
 
-    >>> x = numpy.linspace(0, 10, 501)
+    >>> import numpy as np
+    >>> x = np.linspace(0, 10, 501)
     >>> params = mod.make_params(off=0.25, amp=1.0, x0=2.0, phase=0.04)
     >>> y = mod.eval(params, x=x)
 
@@ -259,17 +261,17 @@ a Gaussian function times the logarithm of a Lorentzian function you may
 could to define this in a script::
 
     >>> script = """
-    def mycurve(x, amp, cen, sig):
-        loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
-        gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)
-        return log(loren)*gradient(gauss)/gradient(x)
-    """
+    ... def mycurve(x, amp, cen, sig):
+    ...     loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
+    ...     gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)
+    ...     return log(loren)*gradient(gauss)/gradient(x)
+    ... """
 
 and then use this with :class:`ExpressionModel` as::
 
     >>> mod = ExpressionModel('mycurve(x, height, mid, wid)',
-                              init_script=script,
-                              independent_vars=['x'])
+    ...                       init_script=script,
+    ...                       independent_vars=['x'])
 
 As above, this will interpret the parameter names to be `height`, `mid`,
 and `wid`, and build a model that can be used to fit data.
