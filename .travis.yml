@@ -43,5 +43,16 @@ install:
     - python setup.py install
 
 script:
-    - cd tests
-    - nosetests
+    -   nosetests tests
+    - |
+        if [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
+            nosetests lmfit/ README.rst \
+                -e .*ui.* \
+                -e lmfit.model \
+                -e lmfit.confidence \
+                -e .*uncertainties.* \
+                --with-doctest \
+                --doctest-options=+NORMALIZE_WHITESPACE,+ELLIPSIS,+REPORT_NDIFF,+IGNORE_EXCEPTION_DETAIL \
+                --doctest-extension=rst
+
+        fi
