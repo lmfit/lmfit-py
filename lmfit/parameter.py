@@ -383,11 +383,12 @@ class Parameters(OrderedDict):
         else:
             pv = dict.fromkeys(self, attr_val)
 
-        try:
-            for pname, val in pv.items():
-                setattr(self[pname], attr_name, val)
-        except KeyError as ex:
-            raise KeyError("%s not in %s" % (ex, list(self.keys())))
+        bad_keys = set(pv) - set(self)
+        if bad_keys:
+            raise KeyError("%s not in %s" % (list(bad_keys), list(self)))
+
+        for pname, val in pv.items():
+            setattr(self[pname], attr_name, val)
 
     def set_values(self, attr_val=None, *pnames, **pvmap):
         """Utility method to modify subsets of parameters at once.
@@ -402,8 +403,9 @@ class Parameters(OrderedDict):
         pvmap : A mapping of parameter-names --> attr_values to set as "value"
             attribute.
 
-        :raise:
-            KeyError if `pnames` or `pvmap` specify non-existent parameters.
+        :raise KeyError:
+            if any `pvmap` key specify a non-existent parameter; does not
+            modify params in that case.
 
         If both `pnames` and `pvmap` are empty, set all parameters to
         `attr_val`.
