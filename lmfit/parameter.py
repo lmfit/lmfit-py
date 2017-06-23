@@ -373,43 +373,26 @@ class Parameters(OrderedDict):
                 param = Parameter(*para)
                 self.__setitem__(param.name, param)
 
-    def _set_pattr(self, attr_name, attr_val, pnames, pvmap):
+    def _set_pattr(self, attr_name, **pvmap):
         """The private workhorse of all ``set_XXXs()`` methods. """
-        if pnames:
-            pv = dict.fromkeys(pnames, attr_val)
-            pv.update(pvmap)
-        elif pvmap:
-            pv = pvmap
-        else:
-            pv = dict.fromkeys(self, attr_val)
-
-        bad_keys = set(pv) - set(self)
+        bad_keys = set(pvmap) - set(self)
         if bad_keys:
             raise KeyError("%s not in %s" % (list(bad_keys), list(self)))
 
-        for pname, val in pv.items():
+        for pname, val in pvmap.items():
             setattr(self[pname], attr_name, val)
 
-    def set_values(self, attr_val=None, *pnames, **pvmap):
+    def set_values(self, **pvmap):
         """Utility method to modify subsets of parameters at once.
 
         Parameters
         ----------
-        attr_val : set this value as "value" attribute on affected parameters;
-             if undefined, set them to default-value: None.
-             The affected parameters are `pnames` if not empty, or all, except
-             those contained in `pvmap`.  Non-existent names will scream as Inde
-        pnames : subset of parameter names to affect.
-        pvmap : A mapping of parameter-names --> attr_values to set as "value"
+        pvmap : A mapping of parameter-names --> attr_values to set their "value"
             attribute.
 
         :raise KeyError:
             if any `pvmap` key specify a non-existent parameter; does not
             modify params in that case.
-
-        If both `pnames` and `pvmap` are empty, set all parameters to
-        `attr_val`.
-        If both `pvmap` and `pvmap` specify a parameter, `pvmap` wins.
 
         Examples
         --------
@@ -417,57 +400,42 @@ class Parameters(OrderedDict):
         >>> list(params.keys())
         ['a', 'b', 'c', 'd']
 
-        ## Set a value to all:
-        >>> params.set_values(1)
+        ## Set all parameter values at once:
+        >>> params.set_values(**dict.fromkeys(params, 1))
         >>> params.valuesdict()
         OrderedDict([('a', 1), ('b', 1), ('c', 1), ('d', 1)])
 
         ## Specify a subset of parameters:
-        >>> params.set_values(2, 'b', 'c')
+        >>> params.set_values(b=2, c=3)
         >>> params.valuesdict()
-        OrderedDict([('a', 1), ('b', 2), ('c', 2), ('d', 1)])
-
-        ## Specify key-values on top of the subset:
-        >>> params.set_values(3, *'bc', c=4, d=4)
-        >>> params.valuesdict()
-        OrderedDict([('a', 1), ('b', 3), ('c', 4), ('d', 4)])
-
-        ## Assign to a single parameter:
-        >>> params.set_values(a=5)
-        >>> params.valuesdict()
-        OrderedDict([('a', 5), ('b', 3), ('c', 4), ('d', 4)])
-
-        ## Back to defaults for all:
-        >>> params.set_values()
-        >>> params.valuesdict()
-        OrderedDict([('a', None), ('b', None), ('c', None), ('d', None)])
+        OrderedDict([('a', 1), ('b', 2), ('c', 3), ('d', 1)])
 
         ## Unknown parameters, raise:
         >>> params.set_values(k=1)
         Traceback (most recent call last):
-        KeyError: "'l' not in ['a', 'b', 'c', 'd']"
+        KeyError: "['k'] not in ['a', 'b', 'c', 'd']"
         """
-        self._set_pattr('value', attr_val, pnames, pvmap)
+        self._set_pattr('value', **pvmap)
 
-    def set_varys(self, attr_val=True, *pnames, **pvmap):
-        """See :method:`set_values()`, default-value: True."""
-        self._set_pattr('vary', attr_val, pnames, pvmap)
+    def set_varys(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('vary', **pvmap)
 
-    def set_mins(self, attr_val=-inf, *pnames, **pvmap):
-        """See :method:`set_values()`, default-value: -inf."""
-        self._set_pattr('min', attr_val, pnames, pvmap)
+    def set_mins(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('min', **pvmap)
 
-    def set_maxs(self, attr_val=inf, *pnames, **pvmap):
-        """See :method:`set_values()`, default-value: inf."""
-        self._set_pattr('max', attr_val, pnames, pvmap)
+    def set_maxs(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('max', **pvmap)
 
-    def set_exprs(self, attr_val=None, *pnames, **pvmap):
-        """See :method:`set_values()`, default-value: None."""
-        self._set_pattr('expr', attr_val, pnames, pvmap)
+    def set_exprs(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('expr', **pvmap)
 
-    def set_brute_steps(self, attr_val=None, *pnames, **pvmap):
-        """See :method:`set_values()`, default-value: None."""
-        self._set_pattr('brute_step', attr_val, pnames, pvmap)
+    def set_brute_steps(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('brute_step', **pvmap)
 
     def _get_pattr(self, attr_name, pnames):
         """The private workhorse of all ``get_XXXs()`` methods. """
@@ -480,7 +448,7 @@ class Parameters(OrderedDict):
 
     def get_values(self, *pnames):
         """
-        Like :method:`valuesdict()` optionally for a subset or parameter. 
+        Like :method:`valuesdict()` optionally for a subset or parameter.
 
         Examples:
         ---------
