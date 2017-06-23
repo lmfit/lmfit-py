@@ -137,7 +137,7 @@ class Parameters(OrderedDict):
         if key not in self:
             if not valid_symbol_name(key):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
-        if par is not None and not isinstance(par, Parameter):
+        if not isinstance(par, Parameter):
             raise ValueError("'%s' is not a Parameter" % par)
         OrderedDict.__setitem__(self, key, par)
         par.name = key
@@ -354,13 +354,13 @@ class Parameters(OrderedDict):
 
         Examples
         --------
-        >>>  params = Parameters()
-        # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
+        >>> params = Parameters()
+        >>> # add with tuples: (NAME VALUE VARY MIN  MAX  EXPR  BRUTE_STEP)
         >>> params.add_many(('amp',   10, True, None, None, None, None),
         ...                 ('cen',   4, True,  0.0, None, None, None),
         ...                 ('wid',   1, False, None, None, None, None),
         ...                 ('frac', 0.5))
-        # add a sequence of Parameters
+        >>> # add a sequence of Parameters
         >>> f = Parameter('par_f', 100)
         >>> g = Parameter('par_g',  2.)
         >>> params.add_many(f, g)
@@ -372,6 +372,125 @@ class Parameters(OrderedDict):
             else:
                 param = Parameter(*para)
                 self.__setitem__(param.name, param)
+
+    def _set_pattr(self, attr_name, **pvmap):
+        """The private workhorse of all ``set_XXXs()`` methods. """
+        bad_keys = set(pvmap) - set(self)
+        if bad_keys:
+            raise KeyError("%s not in %s" % (list(bad_keys), list(self)))
+
+        for pname, val in pvmap.items():
+            setattr(self[pname], attr_name, val)
+
+    def set_values(self, **pvmap):
+        """Utility method to modify subsets of parameters at once.
+
+        Parameters
+        ----------
+        pvmap : A mapping of parameter-names --> attr_values to set their "value"
+            attribute.
+
+        :raise KeyError:
+            if any `pvmap` key specify a non-existent parameter; does not
+            modify params in that case.
+
+        Examples
+        --------
+        >>> params = Parameters(**{p: Parameter() for p in 'abcd'})
+        >>> list(params.keys())
+        ['a', 'b', 'c', 'd']
+
+        ## Set all parameter values at once:
+        >>> params.set_values(**dict.fromkeys(params, 1))
+        >>> params.valuesdict()
+        OrderedDict([('a', 1), ('b', 1), ('c', 1), ('d', 1)])
+
+        ## Specify a subset of parameters:
+        >>> params.set_values(b=2, c=3)
+        >>> params.valuesdict()
+        OrderedDict([('a', 1), ('b', 2), ('c', 3), ('d', 1)])
+
+        ## Unknown parameters, raise:
+        >>> params.set_values(k=1)
+        Traceback (most recent call last):
+        KeyError: "['k'] not in ['a', 'b', 'c', 'd']"
+        """
+        self._set_pattr('value', **pvmap)
+
+    def set_varys(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('vary', **pvmap)
+
+    def set_mins(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('min', **pvmap)
+
+    def set_maxs(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('max', **pvmap)
+
+    def set_exprs(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('expr', **pvmap)
+
+    def set_brute_steps(self, **pvmap):
+        """See :method:`set_values(). """
+        self._set_pattr('brute_step', **pvmap)
+
+    def _get_pattr(self, attr_name, pnames):
+        """The private workhorse of all ``get_XXXs()`` methods. """
+        try:
+            return OrderedDict((p.name, getattr(p, attr_name))
+                               for p in self.values()
+                               if not pnames or p.name in pnames)
+        except KeyError as ex:
+            raise KeyError("%s not in %s" % (ex, list(self.keys())))
+
+    def get_values(self, *pnames):
+        """
+        Like :method:`valuesdict()` optionally for a subset or parameter.
+
+        Examples:
+        ---------
+
+        >>> params = Parameters()
+        >>> params.add_many(('amp',   10, True, None, None, None, None),
+        ...                 ('cen',   4, True,  0.0, None, None, None),
+        ...                 ('wid',   1, False, None, None, None, None),
+        ...                 ('frac', 0.5))
+        >>> params.get_values()
+        OrderedDict([('amp', 10), ('cen', 4), ('wid', 1), ('frac', 0.5)])
+
+        >>> params.get_varys('amp', 'wid') == {'amp': True, 'wid': False}
+        True
+
+        >>> params.get_mins('amp', 'cen') == {'amp': -inf, 'cen': 0.0}
+        True
+
+        >>> params.get_maxs()
+        OrderedDict([('amp', inf), ('cen', inf), ('wid', inf), ('frac', inf)])
+        """
+        return self._get_pattr('value', pnames)
+
+    def get_varys(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('vary', pnames)
+
+    def get_mins(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('min', pnames)
+
+    def get_maxs(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('max', pnames)
+
+    def get_exprs(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('expr', pnames)
+
+    def get_brute_steps(self, *pnames):
+        """Like :method:`valuesdict()` optionally for a subset or parameter. """
+        return self._get_pattr('brute_step', pnames)
 
     def valuesdict(self):
         """Return an ordered dictionary of parameter values.
@@ -720,15 +839,17 @@ class Parameter(object):
             self.from_internal = lambda val: val
             _val = self._val
         elif self.max == inf:
-            self.from_internal = lambda val: self.min - 1.0 + sqrt(val*val + 1)
+            self.from_internal = lambda val: self.min - \
+                1.0 + sqrt(val * val + 1)
             _val = sqrt((self._val - self.min + 1.0)**2 - 1)
         elif self.min == -inf:
-            self.from_internal = lambda val: self.max + 1 - sqrt(val*val + 1)
+            self.from_internal = lambda val: self.max + 1 - sqrt(val * val + 1)
             _val = sqrt((self.max - self._val + 1.0)**2 - 1)
         else:
             self.from_internal = lambda val: self.min + (sin(val) + 1) * \
-                                 (self.max - self.min) / 2.0
-            _val = arcsin(2*(self._val - self.min)/(self.max - self.min) - 1)
+                (self.max - self.min) / 2.0
+            _val = arcsin(2 * (self._val - self.min) /
+                          (self.max - self.min) - 1)
         return _val
 
     def scale_gradient(self, val):
@@ -749,9 +870,9 @@ class Parameter(object):
         if self.min == -inf and self.max == inf:
             return 1.0
         elif self.max == inf:
-            return val / sqrt(val*val + 1)
+            return val / sqrt(val * val + 1)
         elif self.min == -inf:
-            return -val / sqrt(val*val + 1)
+            return -val / sqrt(val * val + 1)
         else:
             return cos(val) * (self.max - self.min) / 2.0
 

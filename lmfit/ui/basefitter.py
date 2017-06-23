@@ -22,28 +22,29 @@ _COMMON_EXAMPLES_DOC = """
 
     Examples
     --------
+    >>> from lmfit import Fitter
     >>> fitter = Fitter(data, model=SomeModel, x=x)
 
     >>> fitter.model
-    # This property can be changed, to try different models on the same
-    # data with the same independent vars.
-    # (This is especially handy in the notebook.)
+    >>> # This property can be changed, to try different models on the same
+    >>> # data with the same independent vars.
+    >>> # (This is especially handy in the notebook.)
 
     >>> fitter.current_params
-    # This copy of the model's Parameters is updated after each fit.
+    >>> # This copy of the model's Parameters is updated after each fit.
 
     >>> fitter.fit()
-    # Perform a fit using fitter.current_params as a guess.
-    # Optionally, pass a params argument or individual keyword arguments
-    # to override current_params.
+    >>> # Perform a fit using fitter.current_params as a guess.
+    >>> # Optionally, pass a params argument or individual keyword arguments
+    >>> # to override current_params.
 
     >>> fitter.current_result
-    # This is the result of the latest fit. It contain the usual
-    # copies of the Parameters, in the attributes params and init_params.
+    >>> # This is the result of the latest fit. It contain the usual
+    >>> # copies of the Parameters, in the attributes params and init_params.
 
     >>> fitter.data = new_data
-    # If this property is updated, the `current_params` are retained an used
-    # as an initial guess if fit() is called again.
+    >>> # If this property is updated, the `current_params` are retained an used
+    >>> # as an initial guess if fit() is called again.
     """
 
 
@@ -56,6 +57,7 @@ class BaseFitter(object):
     model : lmfit.Model
         optional initial Model to use, maybe be set or changed later
     """ + _COMMON_EXAMPLES_DOC
+
     def __init__(self, data, model=None, **kwargs):
         self._data = data
         self.kwargs = kwargs
@@ -167,7 +169,7 @@ class BaseFitter(object):
                 self.namefinder.generic_visit(par.ast)
                 for symname in self.namefinder.names:
                     if (symname in self.current_params and
-                        symname not in par.deps):
+                            symname not in par.deps):
                         par.deps.append(symname)
                 self.asteval.symtable[name] = par.value
                 if par.name is None:
@@ -224,8 +226,9 @@ class MPLFitter(BaseFitter):
         line
     **kwargs : independent variables or extra arguments, passed like `x=x`
         """ + _COMMON_EXAMPLES_DOC
+
     def __init__(self, data, model=None, axes_style={},
-                data_style={}, init_style={}, best_style={}, **kwargs):
+                 data_style={}, init_style={}, best_style={}, **kwargs):
         self.axes_style = axes_style
         self.data_style = data_style
         self.init_style = init_style
@@ -267,16 +270,16 @@ class MPLFitter(BaseFitter):
                               "that does not depend on matplotlib.")
 
         # Configure style
-        _axes_style= dict()  # none, but this is here for possible future use
+        _axes_style = dict()  # none, but this is here for possible future use
         _axes_style.update(self.axes_style)
         _axes_style.update(axes_style)
-        _data_style= dict(color='blue', marker='o', linestyle='none')
+        _data_style = dict(color='blue', marker='o', linestyle='none')
         _data_style.update(**_normalize_kwargs(self.data_style, 'line2d'))
         _data_style.update(**_normalize_kwargs(data_style, 'line2d'))
         _init_style = dict(color='gray')
         _init_style.update(**_normalize_kwargs(self.init_style, 'line2d'))
         _init_style.update(**_normalize_kwargs(init_style, 'line2d'))
-        _best_style= dict(color='red')
+        _best_style = dict(color='red')
         _best_style.update(**_normalize_kwargs(self.best_style, 'line2d'))
         _best_style.update(**_normalize_kwargs(best_style, 'line2d'))
 
