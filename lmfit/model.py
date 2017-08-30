@@ -1027,7 +1027,7 @@ class ModelResult(Minimizer):
         -------
 
         >>> out = model.fit(data, params, x=x)
-        >>> dely = out.eval_confidence_band(x=x)
+        >>> dely = out.eval_uncertainty(x=x)
         >>> plt.plot(x, data)
         >>> plt.plot(x, out.best_fit)
         >>> plt.fill_between(x, out.best_fit-dely,
