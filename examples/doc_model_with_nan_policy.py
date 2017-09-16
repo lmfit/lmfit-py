@@ -13,9 +13,13 @@ y = data[:, 1]
 y[44] = np.nan
 y[65] = np.nan
 
+# nan_policy = 'raise'
+# nan_policy = 'propagate'
+nan_policy = 'omit'
+
 gmodel = GaussianModel()
 result = gmodel.fit(y, x=x, amplitude=5, center=6, sigma=1,
-                    nan_policy='propagate') # 'omit')
+                    nan_policy=nan_policy)
 
 print(result.fit_report())
 
