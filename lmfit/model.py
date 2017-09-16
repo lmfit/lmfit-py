@@ -67,14 +67,14 @@ class Model(object):
     _forbidden_args = ('data', 'weights', 'params')
     _invalid_ivar = "Invalid independent variable name ('%s') for function %s"
     _invalid_par = "Invalid parameter name ('%s') for function %s"
-    _invalid_missing = "missing must be None, 'none', 'propagate', 'omit', 'drop', or 'raise'."
+    _invalid_missing = "missing must be 'propagate', 'omit', 'drop', or 'raise'."
     _valid_missing = (None, 'none', 'propagate', 'omit', 'drop', 'raise')
 
     _invalid_hint = "unknown parameter hint '%s' for param '%s'"
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 missing='none', prefix='', name=None, **kws):
+                 nan_policy='propagate', missing=None, prefix='', name=None, **kws):
         """
         Parameters
         ----------
@@ -85,16 +85,16 @@ class Model(object):
         param_names : list of str, optional
             Names of arguments to func that are to be made into parameters
             (default is None).
-        missing : str, optional
+        nan_policy : str, optional
             How to handle NaN and missing values in data. One of:
-
-            - 'propagate', 'none' or None : Do not check for null or missing values (default).
-
-            - 'omit' : (was 'drop') Drop null or missing observations in data. If pandas is
-              installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
-            - 'raise' : Raise a (more helpful) exception when data contains
-              null or missing values.
-
+            - 'raise' : Raise a ValueError exception when data contains
+              null or missing values (default)
+            - 'propagate : Do not check for null or missing values.
+            - 'omit' : (was 'drop') Drop null or missing observations in data.
+               If pandas is installed, `pandas.isnull` is used, otherwise
+               `numpy.isnan` is used.
+        missing : str, optional
+            Synonym for 'nan_policy'
         prefix : str, optional
             Prefix used for the model.
         name : str, optional
@@ -139,9 +139,12 @@ class Model(object):
         self.independent_vars = independent_vars
         self._func_allargs = []
         self._func_haskeywords = False
-        if missing not in self._valid_missing:
-            raise ValueError(self._invalid_missing)
-        self.missing = missing
+        self.nan_policy = nan_policy
+        if missing is not None and missing in self._valid_missing:
+            if missing == 'drop': missing = 'omit'
+            if missing == 'none': missing = 'propagate'
+            self.nan_policy = missing
+        # self.missing = missing
         self.opts = kws
         self.param_hints = OrderedDict()
         # the following has been changed from OrderedSet for the time being
@@ -497,10 +500,11 @@ class Model(object):
 
     def _handle_missing(self, data):
         """Handle missing data."""
-        if self.missing == 'raise':
+        print(" HANDLE MISSING ", self.nan_policy)
+        if self.nan_policy == 'raise':
             if np.any(isnull(data)):
                 raise ValueError("Data contains a null value.")
-        elif self.missing in ('omit', 'drop'):
+        elif self.nan_policy in ('omit', 'drop'):
             mask = ~isnull(data)
             if np.all(mask):
                 return None  # short-circuit this -- no missing values
@@ -602,7 +606,7 @@ class Model(object):
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
-            nan_policy='raise', **kwargs):
+            nan_policy=None, **kwargs):
         """Fit the model to the data using the supplied Parameters.
 
         Parameters
@@ -715,8 +719,11 @@ class Model(object):
                 kwargs[var] = np.asfarray(var_data)
 
         # Handle null/missing values.
+        if nan_policy is not None:
+            self.nan_policy = nan_policy
+
         mask = None
-        if self.missing not in (None, 'none'):
+        if self.nan_policy not in (None, 'none', 'propagate'):
             mask = self._handle_missing(data)  # This can raise.
             if mask is not None:
                 data = data[mask]
@@ -734,8 +741,8 @@ class Model(object):
 
         output = ModelResult(self, params, method=method, iter_cb=iter_cb,
                              scale_covar=scale_covar, fcn_kws=kwargs,
-                             **fit_kws)
-        output.fit(data=data, weights=weights, nan_policy=nan_policy)
+                             nan_policy=self.nan_policy, **fit_kws)
+        output.fit(data=data, weights=weights)
         output.components = self.components
         return output
 
@@ -819,8 +826,8 @@ class CompositeModel(Model):
         # we assume that all the sub-models have the same independent vars
         if 'independent_vars' not in kws:
             kws['independent_vars'] = self.left.independent_vars
-        if 'missing' not in kws:
-            kws['missing'] = self.left.missing
+        if 'nan_policy' not in kws:
+            kws['nan_policy'] = self.left.nan_policy
 
         def _tmp(self, *args, **kws):
             pass
@@ -917,15 +924,14 @@ class ModelResult(Minimizer):
         self.data = data
         self.weights = weights
         self.method = method
-        self.nan_policy = nan_policy
         self.ci_out = None
         self.init_params = deepcopy(params)
         Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
-                           fcn_kws=fcn_kws, iter_cb=iter_cb,
+                           fcn_kws=fcn_kws, iter_cb=iter_cb, nan_policy=nan_policy,
                            scale_covar=scale_covar, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None,
-            nan_policy='raise', **kwargs):
+            nan_policy=None, **kwargs):
         """Re-perform fit for a Model, given data and params.
 
         Parameters
@@ -959,7 +965,6 @@ class ModelResult(Minimizer):
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
         self.init_fit = self.model.eval(params=self.params, **self.userkws)
-
         _ret = self.minimize(method=self.method)
 
         for attr in dir(_ret):
