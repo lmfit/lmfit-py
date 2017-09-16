@@ -67,8 +67,8 @@ class Model(object):
     _forbidden_args = ('data', 'weights', 'params')
     _invalid_ivar = "Invalid independent variable name ('%s') for function %s"
     _invalid_par = "Invalid parameter name ('%s') for function %s"
-    _invalid_missing = "missing must be None, 'none', 'drop', or 'raise'."
-    _valid_missing = (None, 'none', 'drop', 'raise')
+    _invalid_missing = "missing must be None, 'none', 'propagate', 'omit', 'drop', or 'raise'."
+    _valid_missing = (None, 'none', 'propagate', 'omit', 'drop', 'raise')
 
     _invalid_hint = "unknown parameter hint '%s' for param '%s'"
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
@@ -88,9 +88,9 @@ class Model(object):
         missing : str, optional
             How to handle NaN and missing values in data. One of:
 
-            - 'none' or None : Do not check for null or missing values (default).
+            - 'propagate', 'none' or None : Do not check for null or missing values (default).
 
-            - 'drop' : Drop null or missing observations in data. If pandas is
+            - 'omit' : (was 'drop') Drop null or missing observations in data. If pandas is
               installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
             - 'raise' : Raise a (more helpful) exception when data contains
               null or missing values.
@@ -500,7 +500,7 @@ class Model(object):
         if self.missing == 'raise':
             if np.any(isnull(data)):
                 raise ValueError("Data contains a null value.")
-        elif self.missing == 'drop':
+        elif self.missing in ('omit', 'drop'):
             mask = ~isnull(data)
             if np.all(mask):
                 return None  # short-circuit this -- no missing values
@@ -624,6 +624,8 @@ class Model(object):
         verbose: bool, optional
              Whether to print a message when a new parameter is added because
              of a hint (default is True).
+        nan_policy : str, optional, one of 'raise' (default), 'propagate', or 'omit'.
+             What to do when encountering NaNs when fitting Model
         fit_kws: dict, optional
              Options to pass to the minimizer being used.
         **kwargs: optional
@@ -906,6 +908,8 @@ class ModelResult(Minimizer):
             Function to call on each iteration of fit.
         scale_covar : bool, optional
             Whether to scale covariance matrix for uncertainty evaluation.
+        nan_policy : str, optional, one of 'raise' (default), 'propagate', or 'omit'.
+            What to do when encountering NaNs when fitting Model
         **fit_kws : optional
             Keyword arguments to send to minimization routine.
         """
@@ -934,6 +938,8 @@ class ModelResult(Minimizer):
             Weights to multiply (data-model) for fit residual.
         method : str, optional
             Name of minimization method to use (default is `'leastsq'`).
+        nan_policy : str, optional, one of 'raise' (default), 'propagate', or 'omit'.
+            What to do when encountering NaNs when fitting Model
         **kwargs : optional
             Keyword arguments to send to minimization routine.
 
