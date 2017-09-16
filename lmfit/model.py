@@ -602,7 +602,7 @@ class Model(object):
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
-            **kwargs):
+            nan_policy='raise', **kwargs):
         """Fit the model to the data using the supplied Parameters.
 
         Parameters
@@ -733,7 +733,7 @@ class Model(object):
         output = ModelResult(self, params, method=method, iter_cb=iter_cb,
                              scale_covar=scale_covar, fcn_kws=kwargs,
                              **fit_kws)
-        output.fit(data=data, weights=weights)
+        output.fit(data=data, weights=weights, nan_policy=nan_policy)
         output.components = self.components
         return output
 
@@ -883,7 +883,8 @@ class ModelResult(Minimizer):
 
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
-                 iter_cb=None, scale_covar=True, **fit_kws):
+                 iter_cb=None, scale_covar=True, nan_policy='raise',
+                 **fit_kws):
         """
         Parameters
         ----------
@@ -912,13 +913,15 @@ class ModelResult(Minimizer):
         self.data = data
         self.weights = weights
         self.method = method
+        self.nan_policy = nan_policy
         self.ci_out = None
         self.init_params = deepcopy(params)
         Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
                            fcn_kws=fcn_kws, iter_cb=iter_cb,
                            scale_covar=scale_covar, **fit_kws)
 
-    def fit(self, data=None, params=None, weights=None, method=None, **kwargs):
+    def fit(self, data=None, params=None, weights=None, method=None,
+            nan_policy='raise', **kwargs):
         """Re-perform fit for a Model, given data and params.
 
         Parameters
@@ -943,6 +946,9 @@ class ModelResult(Minimizer):
             self.weights = weights
         if method is not None:
             self.method = method
+        if nan_policy is not None:
+            self.nan_policy = nan_policy
+
         self.ci_out = None
         self.userargs = (self.data, self.weights)
         self.userkws.update(kwargs)
