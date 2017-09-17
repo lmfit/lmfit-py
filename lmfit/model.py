@@ -13,6 +13,7 @@ from scipy.special import erf
 from scipy.stats import t
 
 from . import Minimizer, Parameter, Parameters
+from .minimizer import validate_nan_policy
 from .confidence import conf_interval
 from .printfuncs import ci_report, fit_report
 
@@ -53,29 +54,21 @@ def _ensureMatplotlib(function):
 
         return no_op
 
-
 class Model(object):
-    """Create a model from a user-supplied model function.
-
-    The model function will normally take an independent variable
-    (generally, the first argument) and a series of arguments that are
-    meant to be parameters for the model. It will return an array of
-    data to model some data as for a curve-fitting problem.
-
-    """
-
     _forbidden_args = ('data', 'weights', 'params')
     _invalid_ivar = "Invalid independent variable name ('%s') for function %s"
     _invalid_par = "Invalid parameter name ('%s') for function %s"
-    _invalid_missing = "missing must be 'propagate', 'omit', 'drop', or 'raise'."
-    _valid_missing = (None, 'none', 'propagate', 'omit', 'drop', 'raise')
-
     _invalid_hint = "unknown parameter hint '%s' for param '%s'"
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 nan_policy='propagate', missing=None, prefix='', name=None, **kws):
-        """
+                 nan_policy='raise', missing=None, prefix='', name=None, **kws):
+        """Create a model from a user-supplied model function.
+        The model function will normally take an independent variable
+        (generally, the first argument) and a series of arguments that are
+        meant to be parameters for the model. It will return an array of
+        data to model some data as for a curve-fitting problem.
+
         Parameters
         ----------
         func : callable
@@ -86,15 +79,10 @@ class Model(object):
             Names of arguments to func that are to be made into parameters
             (default is None).
         nan_policy : str, optional
-            How to handle NaN and missing values in data. One of:
-            - 'raise' : Raise a ValueError exception when data contains
-              null or missing values (default)
-            - 'propagate : Do not check for null or missing values.
-            - 'omit' : (was 'drop') Drop null or missing observations in data.
-               If pandas is installed, `pandas.isnull` is used, otherwise
-               `numpy.isnan` is used.
+            How to handle NaN and missing values in data. Must one of
+            'raise' (default), 'propagate', or 'omit'. See Note below.
         missing : str, optional
-            Synonym for 'nan_policy'
+            Synonym for 'nan_policy' for backward compatibility
         prefix : str, optional
             Prefix used for the model.
         name : str, optional
@@ -110,6 +98,16 @@ class Model(object):
 
         2. The model function must return an array that will be the same
         size as the data being modeled.
+
+        3. nan_policy sets what to do when a NaN or missing value is
+        seen in the data. Should be one of:
+
+           - 'raise' : Raise a ValueError (default)
+
+           - 'propagate' : do nothing.
+
+           -  'omit' : (was 'drop') drop missing data.
+
 
         Examples
         --------
@@ -139,12 +137,10 @@ class Model(object):
         self.independent_vars = independent_vars
         self._func_allargs = []
         self._func_haskeywords = False
-        self.nan_policy = nan_policy
-        if missing is not None and missing in self._valid_missing:
-            if missing == 'drop': missing = 'omit'
-            if missing == 'none': missing = 'propagate'
-            self.nan_policy = missing
-        # self.missing = missing
+        if missing is not None:
+            nan_policy = missing
+        self.nan_policy = validate_nan_policy(nan_policy)
+
         self.opts = kws
         self.param_hints = OrderedDict()
         # the following has been changed from OrderedSet for the time being
@@ -498,18 +494,6 @@ class Model(object):
             diff *= weights
         return np.asarray(diff).ravel()  # for compatibility with pandas.Series
 
-    def _handle_missing(self, data):
-        """Handle missing data."""
-        print(" HANDLE MISSING ", self.nan_policy)
-        if self.nan_policy == 'raise':
-            if np.any(isnull(data)):
-                raise ValueError("Data contains a null value.")
-        elif self.nan_policy in ('omit', 'drop'):
-            mask = ~isnull(data)
-            if np.all(mask):
-                return None  # short-circuit this -- no missing values
-            mask = np.asarray(mask)  # for compatibility with pandas.Series
-            return mask
 
     def _strip_prefix(self, name):
         npref = len(self._prefix)
@@ -621,20 +605,20 @@ class Model(object):
         method : str, optional
             Name of fitting method to use (default is `'leastsq'`).
         iter_cb : callable, optional
-             Callback function to call at each iteration (default is None).
+            Callback function to call at each iteration (default is None).
         scale_covar : bool, optional
-             Whether to automatically scale the covariance matrix when
-             calculating uncertainties (default is True, `leastsq` method only).
+            Whether to automatically scale the covariance matrix when
+            calculating uncertainties (default is True, `leastsq` method only).
         verbose: bool, optional
-             Whether to print a message when a new parameter is added because
-             of a hint (default is True).
+            Whether to print a message when a new parameter is added because
+            of a hint (default is True).
         nan_policy : str, optional, one of 'raise' (default), 'propagate', or 'omit'.
-             What to do when encountering NaNs when fitting Model
+            What to do when encountering NaNs when fitting Model
         fit_kws: dict, optional
-             Options to pass to the minimizer being used.
+            Options to pass to the minimizer being used.
         **kwargs: optional
-             Arguments to pass to the  model function, possibly overriding
-             params.
+            Arguments to pass to the  model function, possibly overriding
+            params.
 
         Returns
         -------
@@ -720,11 +704,11 @@ class Model(object):
 
         # Handle null/missing values.
         if nan_policy is not None:
-            self.nan_policy = nan_policy
+            self.nan_policy = validate_nan_policy(nan_policy)
 
         mask = None
-        if self.nan_policy not in (None, 'none', 'propagate'):
-            mask = self._handle_missing(data)  # This can raise.
+        if self.nan_policy == 'omit':
+            mask = ~isnull(data)
             if mask is not None:
                 data = data[mask]
             if weights is not None:
@@ -959,7 +943,7 @@ class ModelResult(Minimizer):
         if method is not None:
             self.method = method
         if nan_policy is not None:
-            self.nan_policy = nan_policy
+            self.nan_policy = validate_nan_policy(nan_policy)
 
         self.ci_out = None
         self.userargs = (self.data, self.weights)
