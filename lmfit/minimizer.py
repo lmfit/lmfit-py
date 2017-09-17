@@ -491,15 +491,17 @@ class Minimizer(object):
         self.result.nfev += 1
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
-        out = _nan_policy(out, nan_policy=self.nan_policy)
 
         if callable(self.iter_cb):
             abort = self.iter_cb(params, self.result.nfev, out,
                                  *self.userargs, **self.userkws)
             self._abort = self._abort or abort
         self._abort = self._abort and self.result.nfev > len(fvars)
+
         if not self._abort:
-            return np.asarray(out).ravel()
+            return _nan_policy(np.asarray(out).ravel(),
+                               nan_policy=self.nan_policy)
+
 
     def __jacobian(self, fvars):
         """Reuturn analytical jacobian to be used with Levenberg-Marquardt.
