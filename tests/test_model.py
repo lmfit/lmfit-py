@@ -231,11 +231,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     def test_lists_become_arrays(self):
         # smoke test
         self.model.fit([1, 2, 3], x=[1, 2, 3], **self.guess())
-        self.model.fit([1, 2, None, 3], x=[1, 2, 3, 4],  **self.guess())
         assert_raises(ValueError,
                       self.model.fit,
                       [1, 2, None, 3],
-                      x=[1, 2, 3, 4], nan_policy='raise',
+                      x=[1, 2, 3, 4],
                       **self.guess())
 
     def test_missing_param_raises_error(self):
