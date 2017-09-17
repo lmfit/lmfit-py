@@ -232,14 +232,16 @@ function as a fitting model.
 
    List of strings for names of the independent variables.
 
-.. attribute:: missing
+.. attribute:: nan_policy
 
-   Describes what to do for missing values.  The choices are:
+   Describes what to do for NaNs and missing values.  The choices are:
 
-    * None: Do not check for null or missing values (default).
-    * 'none': Do not check for null or missing values.
-    * 'drop': Drop null or missing observations in data.  If pandas is installed, :func:`pandas.isnull` is used, otherwise :func:`numpy.isnan` is used.
-    * 'raise': Raise a (more helpful) exception when data contains null or missing values.
+    * 'raise': Raise a ValueError (default)
+    * 'propagate': Do not check for NaNs or missing values. The fit will
+      try to ignore them.
+    * 'omit': Remove NaNs or missing observations in data. If pandas is
+      installed, :func:`pandas.isnull` is used, otherwise
+      :func:`numpy.isnan` is used.
 
 .. attribute:: name
 
