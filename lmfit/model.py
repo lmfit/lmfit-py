@@ -724,7 +724,7 @@ class Model(object):
 
         for var in self.independent_vars:
             if not np.isscalar(kwargs[var]):
-                print("Model fit align ind dep ", var, mask.sum())
+                # print("Model fit align ind dep ", var, mask.sum())
                 kwargs[var] = _align(kwargs[var], mask, data)
 
         if fit_kws is None:
