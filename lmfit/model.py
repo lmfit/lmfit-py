@@ -108,6 +108,10 @@ class Model(object):
 
            -  'omit' : (was 'drop') drop missing data.
 
+        4. The `missing` argument is deprecated in lmfit 0.9.8 and will be
+        removed in a later version. Use `nan_policy instead, as it is
+        consistent with the Minimizer class.
+
 
         Examples
         --------
@@ -130,9 +134,6 @@ class Model(object):
         >>> print(gmodel.param_names, gmodel.independent_vars)
         ['amp', 'cen', 'wid'], ['x']
 
-        .. note:: the `missing` argument is deprecated in lmfit 0.9.8 and will
-                  be removed in a later version. Use `nan_policy`, which is
-                  consistent with the Minimizer class, instead.
 
         """
         self.func = func
