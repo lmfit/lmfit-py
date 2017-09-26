@@ -1801,8 +1801,10 @@ def validate_nan_policy(policy):
         policy = 'propagate'
 
     policy = policy.lower()
-    if policy == 'drop':  policy = 'omit'
-    if policy == 'none':  policy = 'propagate'
+    if policy == 'drop':
+        policy = 'omit'
+    if policy == 'none':
+        policy = 'propagate'
     if policy not in VALID_NAN_POLICIES:
         raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
     return policy
