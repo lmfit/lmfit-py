@@ -23,8 +23,13 @@ result = gmodel.fit(y, x=x, amplitude=5, center=6, sigma=1,
 
 print(result.fit_report())
 
-plt.plot(x, y,         'bo')
-plt.plot(x, result.init_fit, 'k--')
-plt.plot(x, result.best_fit, 'r-')
+# make sure nans are removed for plotting:
+
+x_ = x[np.where(np.isfinite(y))]
+y_ = y[np.where(np.isfinite(y))]
+
+plt.plot(x_, y_,         'bo')
+plt.plot(x_, result.init_fit, 'k--')
+plt.plot(x_, result.best_fit, 'r-')
 plt.show()
 #<end examples/doc_model_with_nan_policy.py>
