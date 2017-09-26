@@ -79,7 +79,7 @@ class Model(object):
             Names of arguments to func that are to be made into parameters
             (default is None).
         nan_policy : str, optional
-            How to handle NaN and missing values in data. Must one of
+            How to handle NaN and missing values in data. Must be one of
             'raise' (default), 'propagate', or 'omit'. See Note below.
         missing : str, optional
             Synonym for 'nan_policy' for backward compatibility
@@ -129,6 +129,10 @@ class Model(object):
 
         >>> print(gmodel.param_names, gmodel.independent_vars)
         ['amp', 'cen', 'wid'], ['x']
+
+        .. note:: the `missing` argument is deprecated in lmfit 0.9.8 and will
+                  be removed in a later version. Use `nan_policy`, which is
+                  consistent with the Minimizer class, instead.
 
         """
         self.func = func
@@ -716,8 +720,10 @@ class Model(object):
 
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
+
         for var in self.independent_vars:
             if not np.isscalar(kwargs[var]):
+                print("Model fit align ind dep ", var, mask.sum())
                 kwargs[var] = _align(kwargs[var], mask, data)
 
         if fit_kws is None:
