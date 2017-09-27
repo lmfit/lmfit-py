@@ -563,6 +563,44 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(result.params['pos_delta'].value > 0)
 
 
+    def test_model_nan_policy(self):
+
+        x = np.linspace(0, 10, 201)
+        np.random.seed(0)
+        y  = gaussian(x, 10.0,  6.15, 0.8)
+        y += gaussian(x,  8.0,  6.35, 1.1)
+        y += gaussian(x,  0.25, 6.00, 7.5)
+        y += np.random.normal(size=len(x), scale=0.5)
+
+        y[55] = y[91] = np.nan
+        mod = PseudoVoigtModel()
+        params = mod.make_params(amplitude=20, center=5.5,
+                                  sigma=1, fraction=0.25)
+        params['fraction'].vary=False
+        # with raise, should get a ValueError
+        result = lambda: mod.fit(y, params, x=x, nan_policy='raise')
+        self.assertRaises(ValueError, result)
+
+        # with propagate, should get no error, but bad results
+        result = mod.fit(y, params, x=x, nan_policy='propagate')
+        self.assertTrue(result.success)
+        self.assertTrue(np.isnan(result.chisqr))
+        self.assertTrue(np.isnan(result.aic))
+        self.assertFalse(result.errorbars)
+        self.assertTrue(result.params['amplitude'].stderr==0)
+        self.assertTrue(abs(result.params['amplitude'].value - 20.0) < 0.001)
+
+        # with omit, should get good results
+        result = mod.fit(y, params, x=x, nan_policy='omit')
+        self.assertTrue(result.success)
+        self.assertTrue(result.chisqr > 2.0)
+        self.assertTrue(result.aic  < -100)
+        self.assertTrue(result.errorbars)
+        self.assertTrue(result.params['amplitude'].stderr > 0.1)
+        self.assertTrue(abs(result.params['amplitude'].value - 20.0) < 5.0)
+        self.assertTrue(abs(result.params['center'].value   - 6.0) < 0.5)
+
+
 class TestLinear(CommonTests, unittest.TestCase):
 
     def setUp(self):

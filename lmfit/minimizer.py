@@ -31,6 +31,11 @@ from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 import six
 
+try:
+    from pandas import isnull
+except ImportError:
+    isnull = np.isnan
+
 # use locally modified version of uncertainties package
 from . import uncertainties
 from .parameter import Parameter, Parameters
@@ -486,15 +491,17 @@ class Minimizer(object):
         self.result.nfev += 1
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
-        out = _nan_policy(out, nan_policy=self.nan_policy)
 
         if callable(self.iter_cb):
             abort = self.iter_cb(params, self.result.nfev, out,
                                  *self.userargs, **self.userkws)
             self._abort = self._abort or abort
         self._abort = self._abort and self.result.nfev > len(fvars)
+
         if not self._abort:
-            return np.asarray(out).ravel()
+            return _nan_policy(np.asarray(out).ravel(),
+                               nan_policy=self.nan_policy)
+
 
     def __jacobian(self, fvars):
         """Reuturn analytical jacobian to be used with Levenberg-Marquardt.
@@ -1783,17 +1790,36 @@ def _make_random_gen(seed):
                      ' instance' % seed)
 
 
-def _nan_policy(a, nan_policy='raise', handle_inf=True):
+VALID_NAN_POLICIES = ('propagate', 'omit', 'raise')
+def validate_nan_policy(policy):
+    """validate, rationalize nan_policy, for back compatibility
+    and compatibility with Pandas missing convention
+    """
+    if policy in VALID_NAN_POLICIES:
+        return policy
+    if policy is None:
+        policy = 'propagate'
+
+    policy = policy.lower()
+    if policy == 'drop':
+        policy = 'omit'
+    if policy == 'none':
+        policy = 'propagate'
+    if policy not in VALID_NAN_POLICIES:
+        raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
+    return policy
+
+def _nan_policy(arr, nan_policy='raise', handle_inf=True):
     """Specify behaviour when an array contains numpy.nan or numpy.inf.
 
     Parameters
     ----------
-    a : array_like
+    arr : array_like
         Input array to consider.
     nan_policy : str, optional
         One of:
 
-        'raise' - raise a `ValueError` if `a` contains NaN
+        'raise' - raise a `ValueError` if `arr` contains NaN (default)
         'propagate' - propagate NaN
         'omit' - filter NaN from input array
     handle_inf : bool, optional
@@ -1809,41 +1835,36 @@ def _nan_policy(a, nan_policy='raise', handle_inf=True):
     scipy/stats/stats.py/_contains_nan
 
     """
-    policies = ['propagate', 'raise', 'omit']
+    nan_policy = validate_nan_policy(nan_policy)
 
     if handle_inf:
-        handler_func = lambda a: ~np.isfinite(a)
+        handler_func = lambda x: ~np.isfinite(x)
     else:
-        handler_func = np.isnan
+        handler_func = isnull
 
-    if nan_policy == 'propagate':
-        # nan values are ignored.
-        return a
-    elif nan_policy == 'raise':
+    if nan_policy == 'omit':
+        # mask locates any values to remove
+        mask = ~handler_func(arr)
+        if not np.all(mask):  # there are some NaNs/infs/missing values
+            return arr[mask]
+    if nan_policy == 'raise':
         try:
             # Calling np.sum to avoid creating a huge array into memory
             # e.g. np.isnan(a).any()
             with np.errstate(invalid='ignore'):
-                contains_nan = handler_func(np.sum(a))
+                contains_nan = handler_func(np.sum(arr))
         except TypeError:
             # If the check cannot be properly performed we fallback to omiting
             # nan values and raising a warning. This can happen when attempting to
             # sum things that are not numbers (e.g. as in the function `mode`).
             contains_nan = False
-            warnings.warn("The input array could not be properly checked for nan "
-                          "values. nan values will be ignored.", RuntimeWarning)
+            warnings.warn("The input array could not be checked for NaNs. "
+                          "NaNs will be ignored.", RuntimeWarning)
 
         if contains_nan:
             raise ValueError("The input contains nan values")
-        return a
+    return arr
 
-    elif nan_policy == 'omit':
-        # nans are filtered
-        mask = handler_func(a)
-        return a[~mask]
-    else:
-        raise ValueError("nan_policy must be one of {%s}" %
-                         ', '.join("'%s'" % s for s in policies))
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
