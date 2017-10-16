@@ -1,7 +1,7 @@
 """Concise nonlinear curve fitting."""
 from __future__ import print_function
 
-from collections import OrderedDict
+from collections import OrderedDict, namedtuple
 from copy import deepcopy
 from functools import wraps
 import inspect
@@ -53,6 +53,10 @@ def _ensureMatplotlib(function):
             print('matplotlib module is required for plotting the results')
 
         return no_op
+
+modelstate = namedtuple('modelstate', ('fcn_name', 'name', 'prefix',
+                                       'indepdent_vars', 'par_names',
+                                       'par_hints', 'nan_policy', 'opts'))
 
 class Model(object):
     _forbidden_args = ('data', 'weights', 'params')
@@ -168,6 +172,15 @@ class Model(object):
         if len(opts) > 0:
             out = "%s, %s" % (out, ', '.join(opts))
         return "Model(%s)" % out
+
+    def __getstate__(self):
+        """
+        return state suitable for pickling or other save/restore mechanisms
+        """
+        state = modelstate(self.func.__name__, self._name, self._prefix,
+                           self.independent_vars, self._param_root_names,
+                           self.param_hints, self.nan_policy, self.opts)
+        return (state, None, None)
 
     @property
     def name(self):
@@ -865,12 +878,15 @@ class CompositeModel(Model):
         """Return components for composite model."""
         return self.left.components + self.right.components
 
+    def __getstate__(self):
+        return (self.left.__getstate__(),
+                self.right.__getstate__(), self.op.__name__)
+
     def _make_all_args(self, params=None, **kwargs):
         """Generate **all** function arguments for all functions."""
         out = self.right._make_all_args(params=params, **kwargs)
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
-
 
 class ModelResult(Minimizer):
     """Result from the Model fit.
