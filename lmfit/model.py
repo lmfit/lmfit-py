@@ -1,12 +1,13 @@
 """Concise nonlinear curve fitting."""
 from __future__ import print_function
 
-from collections import OrderedDict, namedtuple
+from collections import OrderedDict
 from copy import deepcopy
 from functools import wraps
 import inspect
 import operator
 import warnings
+import json
 
 import numpy as np
 from scipy.special import erf
@@ -16,6 +17,8 @@ from . import Minimizer, Parameter, Parameters
 from .minimizer import validate_nan_policy
 from .confidence import conf_interval
 from .printfuncs import ci_report, fit_report
+from .jsonutils import encode4js, decode4js, HAS_DILL
+from . import lineshapes
 
 # Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
@@ -24,7 +27,6 @@ try:
 except ImportError:
     isnull = np.isnan
     Series = type(NotImplemented)
-
 
 def _align(var, mask, data):
     """Align missing data, if pandas is available."""
@@ -53,10 +55,6 @@ def _ensureMatplotlib(function):
             print('matplotlib module is required for plotting the results')
 
         return no_op
-
-modelstate = namedtuple('modelstate', ('fcn_name', 'name', 'prefix',
-                                       'indepdent_vars', 'par_names',
-                                       'par_hints', 'nan_policy', 'opts'))
 
 class Model(object):
     _forbidden_args = ('data', 'weights', 'params')
@@ -173,14 +171,31 @@ class Model(object):
             out = "%s, %s" % (out, ', '.join(opts))
         return "Model(%s)" % out
 
-    def __getstate__(self):
+    def _get_state(self):
+        """save a model for serialization
+        Note: like the standard-ish '__getstate__' method
+        but not really useful with Pickle.
         """
-        return state suitable for pickling or other save/restore mechanisms
-        """
-        state = modelstate(self.func.__name__, self._name, self._prefix,
-                           self.independent_vars, self._param_root_names,
-                           self.param_hints, self.nan_policy, self.opts)
+        funcdef = None
+        if HAS_DILL:
+            funcdef = self.func
+        state = (self.func.__name__, funcdef, self._name, self._prefix,
+                 self.independent_vars, self._param_root_names,
+                 self.param_hints, self.nan_policy, self.opts)
         return (state, None, None)
+
+    def _set_state(self, state, funcdefs=None):
+        """restore model from serialization
+        Note: like the standard-ish '__setstate__' method
+        but not really useful with Pickle.
+
+        Arguments
+        ---------
+        state : serialized state from `_get_state`
+
+        """
+        return build_model(state, funcdefs=funcdefs)
+
 
     @property
     def name(self):
@@ -878,15 +893,57 @@ class CompositeModel(Model):
         """Return components for composite model."""
         return self.left.components + self.right.components
 
-    def __getstate__(self):
-        return (self.left.__getstate__(),
-                self.right.__getstate__(), self.op.__name__)
+    def _get_state(self):
+        return (self.left._get_state(),
+                self.right._get_state(), self.op.__name__)
+
+    def _set_state(self, state, funcdefs=None):
+        return build_model(state, funcdefs=funcdefs)
 
     def _make_all_args(self, params=None, **kwargs):
         """Generate **all** function arguments for all functions."""
         out = self.right._make_all_args(params=params, **kwargs)
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
+
+
+def build_model(state, funcdefs=None):
+    """build model from saved state
+    """
+    if len(state) != 3:
+        raise ValueError("Cannot restore Model")
+
+    known_funcs = {}
+    for fname in lineshapes.functions:
+        fcn = getattr(lineshapes, fname, None)
+        if callable(fcn):
+            known_funcs[fname] = fcn
+    if funcdefs is not None:
+        known_funcs.update(funcdefs)
+
+    left, right, op = state
+    if op is None and right is None:
+        (fname, fcndef, name, prefix, ivars, pnames,
+         phints, nan_policy, opts) = left
+
+        if fcndef is None and fname in known_funcs:
+            fcndef = known_funcs[fname]
+
+        if fcndef is None:
+            raise ValueError("Cannot restore Model: model function not found")
+
+        model = Model(fcndef, name=name, prefix=prefix,
+                      independent_vars=ivars, param_names=pnames,
+                      nan_policy=nan_policy, **opts)
+
+        for name, hint in phints.items():
+            model.set_param_hint(name, **hint)
+        return model
+    else:
+        lmodel = build_model(left, funcdefs=funcdefs)
+        rmodel = build_model(right, funcdefs=funcdefs)
+        return CompositeModel(lmodel, rmodel, getattr(operator, op))
+
 
 class ModelResult(Minimizer):
     """Result from the Model fit.
@@ -1179,6 +1236,99 @@ class ModelResult(Minimizer):
                             min_correl=min_correl, sort_pars=sort_pars)
         modname = self.model._reprstring(long=True)
         return '[[Model]]\n    %s\n%s\n' % (modname, report)
+
+    def dumps(self, **kws):
+        """Represent ModelResult as a JSON string
+
+        Parameters
+        ----------
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        str
+           JSON string representation of ModelResult.
+
+        See Also
+        --------
+        loads(), json.dumps()
+        """
+
+
+        out = {'__class__': 'lmfit.ModelResult', '__version__' : '1',
+               'model': self.model._get_state()}
+        pasteval = self.params._asteval
+        out['params'] = [p.__getstate__() for p in self.params.values()]
+        out['unique_symbols'] = {key: pasteval.symtable[key]
+                                  for key in pasteval.user_defined_symbols()}
+
+
+
+        for attr in ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
+                     'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
+                     'errorbars', 'fjac', 'flatchain', 'ier', 'init_fit',
+                     'init_values', 'kws', 'lmdif_message', 'message',
+                     'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
+                     'nvarys', 'redchi', 'residual', 'scale_covar', 'success',
+                     'userargs', 'userkws', 'values', 'var_names', 'weights'):
+            val = getattr(self, attr)
+            if isinstance(val, np.bool_):
+                val = bool(val)
+            out[attr] = encode4js(val)
+        return json.dumps(out)
+
+
+    def loads(self, s, funcs=None, **kws):
+        """Load ModelResult from a JSON string
+
+        Parameters
+        ----------
+        s : str
+            strig representation of ModelResult, as from `dumps()`.
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        :class:`ModelResult`
+           ModelResult instance from JSON string representation.
+
+        See Also
+        --------
+        loads(), json.dumps()
+        """
+
+        tmp = json.loads(s, **kws)
+        print( tmp.keys(), tmp['__class__'])
+        if 'modelresult' not in tmp['__class__'].lower():
+            raise AttributeError('ModelResult.loads() needs saved ModelResult')
+
+        modelstate = tmp['model']
+        print(modelstate)
+        self.params = Parameters()
+
+        state = {'unique_symbols': tmp['unique_symbols'], 'params': []}
+        for parstate in tmp['params']:
+            _par = Parameter()
+            _par.__setstate__(parstate)
+            state['params'].append(_par)
+        self.params.__setstate__(state)
+
+        for attr in ('aborted', 'aic', 'best_fit',
+                     'best_values', 'bic', 'chisqr', 'ci_out', 'col_deriv',
+                     'covar', 'data', 'errorbars', 'fjac', 'flatchain',
+                     'ier', 'init_fit', 'init_values', 'kws',
+                     'lmdif_message', 'message', 'method', 'nan_policy',
+                     'ndata', 'nfev', 'nfree', 'nvarys', 'redchi',
+                     'residual', 'scale_covar', 'success', 'userargs',
+                     'userkws', 'var_names', 'weights'):
+            print(attr,  tmp.get(attr, '?'))
+            setattr(self, attr, getattr(tmp, attr, None))
+
+        return self
+
+
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
