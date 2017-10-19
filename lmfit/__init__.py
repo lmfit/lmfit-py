@@ -48,7 +48,7 @@ from .printfuncs import (fit_report, ci_report,
 
 from .model import Model, CompositeModel
 from . import models
-
+from . import lineshapes
 from . import uncertainties
 from .uncertainties import ufloat, correlated_values
 
