@@ -443,6 +443,11 @@ class PseudoVoigtModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fraction', value=0.5)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
+        fmt = ("(((1-{prefix:s}fraction)*{prefix:s}amplitude)/"
+               "({prefix:s}sigma*sqrt(pi/log(2)))+"
+               "({prefix:s}fraction*{prefix:s}amplitude)/"
+               "({prefix:s}sigma))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
