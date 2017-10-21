@@ -55,7 +55,7 @@ FROM_MATH = ('acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh',
              'fabs', 'factorial', 'floor', 'fmod', 'frexp', 'fsum',
              'hypot', 'isinf', 'isnan', 'ldexp', 'log', 'log10', 'log1p',
              'modf', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',
-             'tanh', 'trunc')
+             'tanh', 'trunc', 'gamma')
 
 FROM_NUMPY = ('Inf', 'NAN', 'abs', 'add', 'alen', 'all', 'amax', 'amin',
               'angle', 'any', 'append', 'arange', 'arccos', 'arccosh',

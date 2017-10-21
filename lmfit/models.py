@@ -503,12 +503,19 @@ class Pearson7Model(Model):
 
     """
 
+    fwhm_factor = 1.0
+
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
         self.set_param_hint('expon', value=1.5)
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
+
+        fmt = ("{prefix:s}amplitude * gamma({prefix:s}expon)/"
+               "(gamma(0.5)*gamma({prefix:s}expon-0.5)*{prefix:s}sigma)")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
