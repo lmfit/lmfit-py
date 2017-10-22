@@ -513,8 +513,8 @@ class Pearson7Model(Model):
         self.set_param_hint('expon', value=1.5)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
-        fmt = ("{prefix:s}amplitude * gamma({prefix:s}expon)/"
-               "(gamma(0.5)*gamma({prefix:s}expon-0.5)*{prefix:s}sigma)")
+        fmt = ("{prefix:s}amplitude * gamfcn({prefix:s}expon)/"
+               "(gamfcn(0.5)*gamfcn({prefix:s}expon-0.5)*{prefix:s}sigma)")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
