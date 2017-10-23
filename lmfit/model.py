@@ -196,6 +196,97 @@ class Model(object):
         """
         return build_model(state, funcdefs=funcdefs)
 
+    def dumps(self, **kws):
+        """dump serialization of model as a JSON string
+
+        Parameters
+        ----------
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        str
+           JSON string representation of ModelResult.
+
+        See Also
+        --------
+        loads(), json.dumps()
+        """
+        return json.dumps(encode4js(self._get_state()), **kws)
+
+    def dump(self, fp, **kws):
+        """dump serialization of model to a file
+
+        Parameters
+        ----------
+        fp : file-like object
+            an open and ``.write()``-supporting file-like object.
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        None or int
+            Return value from `fp.write()`. None for Python 2.7 and the
+            number of characters written in Python 3.
+
+        See Also
+        --------
+        dumps(), load(), json.dump()
+        """
+        return fp.write(self.dumps(**kws))
+
+
+    def loads(self, s, funcdefs=None, **kws):
+        """Load Model from a JSON string.
+
+        Parameters
+        ----------
+        s  : str
+            input JSON string containing serialized Model
+        funcdefs : dict, optional
+            dict of function definitions to use to construct model.
+        **kws : optional
+            Keyword arguments that are passed to `json.loads()`.
+
+        Returns
+        -------
+        :class:`Model`
+           Model created from JSON string.
+
+        See Also
+        --------
+        dump(), dumps(), load(), json.loads()
+
+        """
+        tmp = decode4js(json.loads(s, **kws))
+        return self._set_state(tmp, funcdefs=funcdefs)
+
+
+    def load(self, fp, funcdefs=None, **kws):
+        """Load JSON representation of Model from a file-like object.
+
+        Parameters
+        ----------
+        fp : file-like object
+            An open and ``.read()``-supporting file-like object.
+        funcdefs : dict, optional
+            dict of function definitions to use to construct model.
+        **kws : optional
+            Keyword arguments that are passed to `loads()`.
+
+        Returns
+        -------
+        :class:`Model`
+           Model created from `fp`.
+
+        See Also
+        --------
+        dump(), loads(), json.load()
+
+        """
+        return self.loads(fp.read(), funcdefs=funcdefs, **kws)
 
     @property
     def name(self):
@@ -906,7 +997,6 @@ class CompositeModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
-
 def build_model(state, funcdefs=None):
     """build model from saved state
     """
@@ -926,11 +1016,13 @@ def build_model(state, funcdefs=None):
         (fname, fcndef, name, prefix, ivars, pnames,
          phints, nan_policy, opts) = left
 
-        if fcndef is None and fname in known_funcs:
+        if not callable(fcndef) and fname in known_funcs:
             fcndef = known_funcs[fname]
 
+        print(" ==>build<== ", fname, type(fcndef), fcndef)
         if fcndef is None:
             raise ValueError("Cannot restore Model: model function not found")
+
 
         model = Model(fcndef, name=name, prefix=prefix,
                       independent_vars=ivars, param_names=pnames,
@@ -1257,26 +1349,55 @@ class ModelResult(Minimizer):
 
 
         out = {'__class__': 'lmfit.ModelResult', '__version__' : '1',
-               'model': self.model._get_state()}
+               'model': encode4js(self.model._get_state())}
         pasteval = self.params._asteval
         out['params'] = [p.__getstate__() for p in self.params.values()]
         out['unique_symbols'] = {key: pasteval.symtable[key]
                                   for key in pasteval.user_defined_symbols()}
 
+        oattrs = ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
+                  'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
+                  'errorbars', 'fjac', 'flatchain', 'ier', 'init_fit',
+                  'init_values', 'kws', 'lmdif_message', 'message',
+                  'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
+                  'nvarys', 'redchi', 'residual', 'scale_covar', 'success',
+                  'userargs', 'userkws', 'values', 'var_names', 'weights')
 
-
-        for attr in ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
-                     'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
-                     'errorbars', 'fjac', 'flatchain', 'ier', 'init_fit',
-                     'init_values', 'kws', 'lmdif_message', 'message',
+        for attr in ('aborted', 'aic', 'best_values', 'bic',
+                     'chisqr', 'ci_out', 'col_deriv',
+                     'errorbars', 'flatchain', 'ier',
+                     'init_values', 'lmdif_message', 'message',
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
-                     'nvarys', 'redchi', 'residual', 'scale_covar', 'success',
+                     'nvarys', 'redchi', 'scale_covar', 'success',
                      'userargs', 'userkws', 'values', 'var_names', 'weights'):
             val = getattr(self, attr)
             if isinstance(val, np.bool_):
                 val = bool(val)
             out[attr] = encode4js(val)
         return json.dumps(out)
+
+
+    def dump(self, fp, **kws):
+        """dump serialization of ModelResult to a file
+
+        Parameters
+        ----------
+        fp : file-like object
+            an open and ``.write()``-supporting file-like object.
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        None or int
+            Return value from `fp.write()`. None for Python 2.7 and the
+            number of characters written in Python 3.
+
+        See Also
+        --------
+        dumps(), load(), json.dump()
+        """
+        return fp.write(self.dumps(**kws))
 
 
     def loads(self, s, funcs=None, **kws):
@@ -1296,7 +1417,7 @@ class ModelResult(Minimizer):
 
         See Also
         --------
-        loads(), json.dumps()
+        load(), dumps(), json.dumps()
         """
 
         tmp = json.loads(s, **kws)
@@ -1305,7 +1426,6 @@ class ModelResult(Minimizer):
             raise AttributeError('ModelResult.loads() needs saved ModelResult')
 
         modelstate = tmp['model']
-        print(modelstate)
         self.params = Parameters()
 
         state = {'unique_symbols': tmp['unique_symbols'], 'params': []}
@@ -1323,11 +1443,33 @@ class ModelResult(Minimizer):
                      'ndata', 'nfev', 'nfree', 'nvarys', 'redchi',
                      'residual', 'scale_covar', 'success', 'userargs',
                      'userkws', 'var_names', 'weights'):
-            print(attr,  tmp.get(attr, '?'))
             setattr(self, attr, getattr(tmp, attr, None))
-
         return self
 
+
+    def load(self, fp, funcdefs=None, **kws):
+        """Load JSON representation of ModelResult from a file-like object.
+
+        Parameters
+        ----------
+        fp : file-like object
+            An open and ``.read()``-supporting file-like object.
+        funcdefs : dict, optional
+            dict of function definitions to use to construct model.
+        **kws : optional
+            Keyword arguments that are passed to `loads()`.
+
+        Returns
+        -------
+        :class:`ModelResult`
+           ModelResult created from `fp`.
+
+        See Also
+        --------
+        dump(), loads(), json.load()
+
+        """
+        return self.loads(fp.read(), funcdefs=funcdefs, **kws)
 
 
     @_ensureMatplotlib
