@@ -2,6 +2,7 @@
 """
  json utilities for larch objects
 """
+import sys
 import six
 import json
 import numpy as np
@@ -58,9 +59,12 @@ def encode4js(obj):
         return out
     elif callable(obj):
         val = None
+        pyvers ="%d.%d" %(sys.version_info.major,
+                          sys.version_info.minor)
         if HAS_DILL:
             val = b64encode(dill.dumps(obj))
-        return dict(__class__='Callable', __name__=obj.__name__, value=val)
+        return dict(__class__='Callable', __name__=obj.__name__,
+                    pyversion=pyvers, value=val)
     return obj
 
 def decode4js(obj):
@@ -96,9 +100,16 @@ def decode4js(obj):
     elif classname == 'PSeries':
         out = Series(obj['value'])
     elif classname == 'Callable':
-        out = obj['__name__']
+        out = val =  obj['__name__']
+        pyvers ="%d.%d" %(sys.version_info.major,
+                          sys.version_info.minor)
+        if pyvers == obj['pyversion'] and HAS_DILL:
+            val = b64encode(dill.dumps(obj))
+        return dict(__class__='Callable', __name__=obj['__name__'],
+                    pyversion=pyvers, value=val)
+
         if HAS_DILL:
-            out = b64decode(dill.load(obj))
+            out = dill.loads(b64decode(obj['value']))
     elif classname in ('Dict', 'dict'):
         out = {}
         for key, val in obj.items():
