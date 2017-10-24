@@ -14,7 +14,7 @@ model = lmfit.models.GaussianModel()
 model.guess(y, x=x)
 fit = model.fit(y, x=x, weights=1/noise**2)
 
-fig = fit.plot()
+fig, gridspec = fit.plot()
 
 # customize plot post-factum
 ax_residuals, ax_fit = fig.get_axes()
