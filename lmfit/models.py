@@ -416,10 +416,10 @@ class PseudoVoigtModel(Model):
     (see http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
     which is a weighted sum of a Gaussian and Lorentzian distribution functions
     that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
-    and full width at half maximum (and so have  constrained values of
-    ``sigma`` (:math:`\sigma`).  A parameter ``fraction`` (:math:`\alpha`)
-    controls the relative weight of the Gaussian and Lorentzian components,
-    giving the full definition of
+    and full width at half maximum ``fwhm`` (and so have  constrained values of
+    ``sigma`` (:math:`\sigma`) and ``height`` (maximum peak height).
+    A parameter ``fraction`` (:math:`\alpha`) controls the relative weight of
+    the Gaussian and Lorentzian components, giving the full definition of
 
     .. math::
 
@@ -443,6 +443,11 @@ class PseudoVoigtModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fraction', value=0.5)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
+        fmt = ("(((1-{prefix:s}fraction)*{prefix:s}amplitude)/"
+               "({prefix:s}sigma*sqrt(pi/log(2)))+"
+               "({prefix:s}fraction*{prefix:s}amplitude)/"
+               "({prefix:s}sigma))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
@@ -490,7 +495,7 @@ class MoffatModel(Model):
 class Pearson7Model(Model):
     r"""A model based on a Pearson VII distribution (see
     http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution),
-    with four parameers: ``amplitude`` (:math:`A`), ``center``
+    with four parameters: ``amplitude`` (:math:`A`), ``center``
     (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`) in
 
     .. math::
@@ -499,16 +504,25 @@ class Pearson7Model(Model):
 
     where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
     :mod:`scipy.special`).  The :meth:`guess` function always
-    gives a starting value for ``exponent`` of 1.5.
+    gives a starting value for ``exponent`` of 1.5.  In addition, parameters
+    ``fwhm`` and ``height`` are included as constraints to report full width
+    at half maximum and maximum peak height, respectively.
 
     """
+
+    fwhm_factor = 1.0
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
-        self.set_param_hint('expon', value=1.5)
+        self.set_param_hint('expon', value=1.5, max=100)
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
+
+        fmt = ("{prefix:s}amplitude * gamfcn({prefix:s}expon)/"
+               "(gamfcn(0.5)*gamfcn({prefix:s}expon-0.5)*{prefix:s}sigma)")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
