@@ -416,10 +416,10 @@ class PseudoVoigtModel(Model):
     (see http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
     which is a weighted sum of a Gaussian and Lorentzian distribution functions
     that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
-    and full width at half maximum (and so have  constrained values of
-    ``sigma`` (:math:`\sigma`).  A parameter ``fraction`` (:math:`\alpha`)
-    controls the relative weight of the Gaussian and Lorentzian components,
-    giving the full definition of
+    and full width at half maximum ``fwhm`` (and so have  constrained values of
+    ``sigma`` (:math:`\sigma`) and ``height`` (maximum peak height).
+    A parameter ``fraction`` (:math:`\alpha`) controls the relative weight of
+    the Gaussian and Lorentzian components, giving the full definition of
 
     .. math::
 
@@ -443,6 +443,11 @@ class PseudoVoigtModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fraction', value=0.5)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
+        fmt = ("(((1-{prefix:s}fraction)*{prefix:s}amplitude)/"
+               "({prefix:s}sigma*sqrt(pi/log(2)))+"
+               "({prefix:s}fraction*{prefix:s}amplitude)/"
+               "({prefix:s}sigma))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
