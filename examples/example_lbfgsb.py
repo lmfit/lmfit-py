@@ -45,9 +45,9 @@ fit = residual(out.params, x)
 
 for name, par in out.params.items():
     nout = "%s:%s" % (name, ' '*(20-len(name)))
-    print "%s: %s (true=%s) " % (nout, par.value, p_true[name].value)
+    print("%s: %s (true=%s) " % (nout, par.value, p_true[name].value))
 
-#print out.chisqr, out.redchi, out.nfree
+#print(out.chisqr, out.redchi, out.nfree)
 #
 #report_fit(fit_params)
 

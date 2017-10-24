@@ -43,13 +43,13 @@ out = minimize(residual, fit_params, args=(x,), kws={'data':data})
 
 fit = residual(out.params, x)
 
-print '# N_func_evals, N_free = ', out.nfev, out.nfree
-print '# chi-square, reduced chi-square = % .7g, % .7g' % (out.chisqr, out.redchi)
+print('# N_func_evals, N_free = ', out.nfev, out.nfree)
+print('# chi-square, reduced chi-square = % .7g, % .7g' % (out.chisqr, out.redchi))
 
 report_fit(out.params, show_correl=True, modelpars=p_true)
 
-print 'Raw (unordered, unscaled) Covariance Matrix:'
-print out.covar
+print('Raw (unordered, unscaled) Covariance Matrix:')
+print(out.covar)
 
 if HASPYLAB:
     pylab.plot(x, data, 'ro')

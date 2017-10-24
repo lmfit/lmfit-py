@@ -49,7 +49,7 @@ min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data':data})
 out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
 fit2 = func(out2.params, x)
 
-print '''Comparison of fit to exponential decay
+print('''Comparison of fit to exponential decay
 with and without analytic derivatives, to
    model = a*exp(-b*x) + c
 for a = %.2f, b = %.2f, c = %.2f
@@ -67,7 +67,7 @@ Chi-square         |   %.4f    |   %.4f  |
         out1.chisqr, out2.chisqr,
         out1.params['a'], out2.params['a'],
         out1.params['b'], out2.params['b'],
-        out1.params['c'], out2.params['c'] )
+        out1.params['c'], out2.params['c'] ))
 
 
 if HASPYLAB:
