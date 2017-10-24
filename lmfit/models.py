@@ -490,7 +490,7 @@ class MoffatModel(Model):
 class Pearson7Model(Model):
     r"""A model based on a Pearson VII distribution (see
     http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution),
-    with four parameers: ``amplitude`` (:math:`A`), ``center``
+    with four parameters: ``amplitude`` (:math:`A`), ``center``
     (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`) in
 
     .. math::
@@ -499,7 +499,9 @@ class Pearson7Model(Model):
 
     where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
     :mod:`scipy.special`).  The :meth:`guess` function always
-    gives a starting value for ``exponent`` of 1.5.
+    gives a starting value for ``exponent`` of 1.5.  In addition, parameters
+    ``fwhm`` and ``height`` are included as constraints to report full width
+    at half maximum and maximum peak height, respectively.
 
     """
 
