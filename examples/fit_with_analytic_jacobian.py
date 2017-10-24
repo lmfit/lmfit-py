@@ -1,5 +1,4 @@
 import matplotlib
-matplotlib.use('Qt4Agg')
 import matplotlib.pyplot as plt
 from lmfit.models import *
 from lmfit.lineshapes import *
