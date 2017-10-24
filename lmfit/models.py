@@ -416,10 +416,10 @@ class PseudoVoigtModel(Model):
     (see http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
     which is a weighted sum of a Gaussian and Lorentzian distribution functions
     that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
-    and full width at half maximum (and so have  constrained values of
-    ``sigma`` (:math:`\sigma`).  A parameter ``fraction`` (:math:`\alpha`)
-    controls the relative weight of the Gaussian and Lorentzian components,
-    giving the full definition of
+    and full width at half maximum ``fwhm`` (and so have  constrained values of
+    ``sigma`` (:math:`\sigma`) and ``height`` (maximum peak height).
+    A parameter ``fraction`` (:math:`\alpha`) controls the relative weight of
+    the Gaussian and Lorentzian components, giving the full definition of
 
     .. math::
 
