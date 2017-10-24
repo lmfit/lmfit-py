@@ -512,7 +512,7 @@ class Pearson7Model(Model):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
-        self.set_param_hint('expon', value=1.5)
+        self.set_param_hint('expon', value=1.5, max=100)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
         fmt = ("{prefix:s}amplitude * gamfcn({prefix:s}expon)/"
