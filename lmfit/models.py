@@ -508,7 +508,7 @@ class Pearson7Model(Model):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
-        self.set_param_hint('expon', value=1.5)
+        self.set_param_hint('expon', value=1.5, max=100)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
