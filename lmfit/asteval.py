@@ -28,6 +28,12 @@ try:
 except ImportError:
     print("Warning: numpy not available... functionality will be limited.")
 
+HAS_SCIPY = False
+try:
+    import scipy.special
+    HAS_SCIPY = True
+except ImportError:
+    print("Warning: scipy not available... gamma function for pearson7 not available.")
 
 class Interpreter:
     """Mathematical expression compiler and interpreter.
@@ -86,6 +92,7 @@ class Interpreter:
         self.retval = None
         self.lineno = 0
         self.use_numpy = HAS_NUMPY and use_numpy
+        self.use_scipy = HAS_SCIPY
 
         symtable['print'] = self._printer
 
@@ -102,6 +109,11 @@ class Interpreter:
         math_symtable = dict((sym, getattr(math, sym)) for sym in FROM_MATH
                              if hasattr(math, sym))
         symtable.update(math_symtable)
+
+        # add scipy symbols
+        if self.use_scipy:
+            scipy_symtable = {"gamfcn": getattr(scipy.special, "gamma")}
+            symtable.update(scipy_symtable)
 
         # add numpy symbols
         if self.use_numpy:
