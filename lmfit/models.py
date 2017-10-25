@@ -390,7 +390,6 @@ class VoigtModel(Model):
     """
 
     fwhm_factor = 3.60131
-    height_factor = 1./np.sqrt(2*np.pi)
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
@@ -400,7 +399,10 @@ class VoigtModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
-        self.set_param_hint('height', expr=height_expr(self))
+
+        fmt = ("{prefix:s}amplitude*wofz((1j*{prefix:s}gamma)/"
+               "({prefix:s}sigma*sqrt(2))).real/({prefix:s}sigma*sqrt(2*pi))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,

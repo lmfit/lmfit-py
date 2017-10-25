@@ -113,6 +113,7 @@ class Interpreter:
         # add scipy symbols
         if self.use_scipy:
             scipy_symtable = {"gamfcn": getattr(scipy.special, "gamma")}
+            scipy_symtable.update({"wofz": getattr(scipy.special, "wofz")})
             symtable.update(scipy_symtable)
 
         # add numpy symbols
