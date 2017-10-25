@@ -448,7 +448,7 @@ class PseudoVoigtModel(Model):
         fmt = ("(((1-{prefix:s}fraction)*{prefix:s}amplitude)/"
                "({prefix:s}sigma*sqrt(pi/log(2)))+"
                "({prefix:s}fraction*{prefix:s}amplitude)/"
-               "({prefix:s}sigma))")
+               "(pi*{prefix:s}sigma))")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
