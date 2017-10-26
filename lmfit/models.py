@@ -520,8 +520,8 @@ class Pearson7Model(Model):
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
         self.set_param_hint('expon', value=1.5, max=100)
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
-
+        fmt = ("sqrt(2**(1/{prefix:s}expon)-1)*2*{prefix:s}sigma")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
         fmt = ("{prefix:s}amplitude * gamfcn({prefix:s}expon)/"
                "(gamfcn(0.5)*gamfcn({prefix:s}expon-0.5)*{prefix:s}sigma)")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
