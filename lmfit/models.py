@@ -512,8 +512,6 @@ class Pearson7Model(Model):
 
     """
 
-    fwhm_factor = 1.0
-
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
                  name=None,  **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
