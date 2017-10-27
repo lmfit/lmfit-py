@@ -133,11 +133,11 @@ function, given that you could have called your `gaussian` function
 directly.  But now that the model is set up, we can use its
 :meth:`fit` method to fit this model to data, as with::
 
-    >>> result = gmod.fit(y, params)
+    >>> result = gmod.fit(y, params, x=x)
 
 or with::
 
-    >>> result = gmod.fit(y, cen=6.5, amp=100, wid=2.0)
+    >>> result = gmod.fit(y, x=x, cen=6.5, amp=100, wid=2.0)
 
 Putting everything together,  (included in the
 ``examples`` folder with the source code) is:
@@ -306,8 +306,9 @@ function is fairly easy. Let's try another one::
     >>> decay_model = Model(decay)
     >>> print decay_model.independent_vars
     ['t']
-    >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    >>> params = decay_model.make_params()
+    >>> for pname in decay_model.param_names:
+    ...     print pname, params[pname]
     ...
     tau <Parameter 'tau', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
@@ -322,8 +323,9 @@ you can say so::
     >>> decay_model = Model(decay, independent_vars=['tau'])
     >>> print decay_model.independent_vars
     ['tau']
-    >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    >>> params = decay_model.make_params()
+    >>> for pname in decay_model.param_names:
+    ...     print pname, params[pname]
     ...
     t <Parameter 't', None, bounds=[None:None]>
     N <Parameter 'N', None, bounds=[None:None]>
