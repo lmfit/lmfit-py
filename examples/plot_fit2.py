@@ -15,11 +15,11 @@ model_gaussian.guess(y, x=x)
 fit_gaussian = model_gaussian.fit(y, x=x, weights=1/noise**2)
 
 # plot the with with customization
-fig = fit_gaussian.plot(fig_kws=dict(figsize=[8,7]),
-                        ax_fit_kws=dict(title='The gaussian fit'),
-                        initfmt='k:', datafmt='ks',
-                        fit_kws=dict(lw=2, color='red'),
-                        data_kws=dict(ms=8, markerfacecolor='white'))
+fig, gridspec = fit_gaussian.plot(fig_kws=dict(figsize=[8,7]),
+                                  ax_fit_kws=dict(title='The gaussian fit'),
+                                  initfmt='k:', datafmt='ks',
+                                  fit_kws=dict(lw=2, color='red'),
+                                  data_kws=dict(ms=8, markerfacecolor='white'))
 
 fig.set_tight_layout(True)
 plt.show()

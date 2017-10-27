@@ -31,12 +31,12 @@ def run_fit(nruns=100):
         params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
         params.add('omega', value= 1.0, min=-10.0, max=10.0)
         out = minimize(fcn2min, params, args=(x, data))
-        # print out.params['amp']
+        # print(out.params['amp'])
         assert out.params['amp'].value < 5.5
         assert out.params['amp'].value > 4.5
         assert out.params['omega'].value < 2.25
         assert out.params['omega'].value > 1.75
-        # print out.params['amp']
+        # print(out.params['amp'])
 
 def show_profile(filename):
     stats = pstats.Stats(filename)
