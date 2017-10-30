@@ -1,4 +1,4 @@
-"""TODO: module docstring."""
+"""Module containing built-in fitting models."""
 import numpy as np
 
 from . import lineshapes
@@ -123,8 +123,8 @@ class ConstantModel(Model):
     """Constant model, with a single Parameter: ``c``.
 
     Note that this is 'constant' in the sense of having no dependence on
-    the independent variable ``x``, not in the sense of being non-
-    varying. To be clear, ``c`` will be a Parameter that will be varied
+    the independent variable ``x``, not in the sense of being non-varying.
+    To be clear, ``c`` will be a Parameter that will be varied
     in the fit (by default, of course).
 
     """
@@ -282,8 +282,8 @@ class PolynomialModel(Model):
 
 
 class GaussianModel(Model):
-    r"""A model based on a Gaussian or normal distribution lineshape.
-    (see http://en.wikipedia.org/wiki/Normal_distribution), with three Parameters:
+    r"""A model based on a Gaussian or normal distribution lineshape (see
+    http://en.wikipedia.org/wiki/Normal_distribution), with three Parameters:
     ``amplitude``, ``center``, and ``sigma``.
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
     to report full width at half maximum and maximum peak height, respectively.
@@ -358,9 +358,9 @@ class LorentzianModel(Model):
 
 class VoigtModel(Model):
     r"""A model based on a Voigt distribution function (see
-    http://en.wikipedia.org/wiki/Voigt_profile>), with four Parameters:
+    http://en.wikipedia.org/wiki/Voigt_profile), with four Parameters:
     ``amplitude``, ``center``, ``sigma``, and ``gamma``.  By default,
-    ``gamma`` is constrained to have value equal to ``sigma``, though it
+    ``gamma`` is constrained to have a value equal to ``sigma``, though it
     can be varied independently.  In addition, parameters ``fwhm`` and
     ``height`` are included as constraints to report full width at half
     maximum and maximum peak height, respectively.  The definition for the
@@ -380,7 +380,7 @@ class VoigtModel(Model):
             w(z) &=& e^{-z^2}{\operatorname{erfc}}(-iz)
         \end{eqnarray*}
 
-    and :func:`erfc` is the complimentary error function.  As above,
+    and :func:`erfc` is the complementary error function.  As above,
     ``amplitude`` corresponds to :math:`A`, ``center`` to
     :math:`\mu`, and ``sigma`` to :math:`\sigma`. The parameter ``gamma``
     corresponds  to :math:`\gamma`.
@@ -416,7 +416,7 @@ class VoigtModel(Model):
 class PseudoVoigtModel(Model):
     r"""A model based on a pseudo-Voigt distribution function
     (see http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
-    which is a weighted sum of a Gaussian and Lorentzian distribution functions
+    which is a weighted sum of a Gaussian and Lorentzian distribution function
     that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
     and full width at half maximum ``fwhm`` (and so have  constrained values of
     ``sigma`` (:math:`\sigma`) and ``height`` (maximum peak height).
@@ -504,11 +504,11 @@ class Pearson7Model(Model):
 
         f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
 
-    where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
-    :mod:`scipy.special`).  The :meth:`guess` function always
-    gives a starting value for ``exponent`` of 1.5.  In addition, parameters
-    ``fwhm`` and ``height`` are included as constraints to report full width
-    at half maximum and maximum peak height, respectively.
+    where :math:`\beta` is the beta function (see :scipydoc:`special.beta`)
+    The :meth:`guess` function always gives a starting value for ``exponent``
+    of 1.5.  In addition, parameters ``fwhm`` and ``height`` are included as
+    constraints to report full width at half maximum and maximum peak height,
+    respectively.
 
     """
 
@@ -687,7 +687,7 @@ class ExponentialGaussianModel(Model):
         {\operatorname{erfc}}\Bigl(\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\Bigr)
 
 
-    where :func:`erfc` is the complimentary error function.
+    where :func:`erfc` is the complementary error function.
 
     """
 
@@ -769,7 +769,7 @@ class DonaichModel(Model):
 
 
 class PowerLawModel(Model):
-    r"""A model based on a Power Law (see http://en.wikipedia.org/wiki/Power_law>),
+    r"""A model based on a Power Law (see http://en.wikipedia.org/wiki/Power_law),
     with two Parameters: ``amplitude`` (:math:`A`), and ``exponent`` (:math:`k`), in:
 
     .. math::
@@ -951,7 +951,7 @@ class ExpressionModel(Model):
 
     def __init__(self, expr, independent_vars=None, init_script=None,
                  missing=None, **kws):
-        """Model from User-supplied expression.
+        """Generate a model from user-supplied expression.
 
         Parameters
         ----------

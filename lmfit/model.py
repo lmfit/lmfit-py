@@ -82,7 +82,7 @@ class Model(object):
             How to handle NaN and missing values in data. Must be one of
             'raise' (default), 'propagate', or 'omit'. See Note below.
         missing : str, optional
-            Synonym for 'nan_policy' for backward compatibility
+            Synonym for 'nan_policy' for backward compatibility.
         prefix : str, optional
             Prefix used for the model.
         name : str, optional
@@ -109,7 +109,7 @@ class Model(object):
            -  'omit' : (was 'drop') drop missing data.
 
         4. The `missing` argument is deprecated in lmfit 0.9.8 and will be
-        removed in a later version. Use `nan_policy instead, as it is
+        removed in a later version. Use `nan_policy` instead, as it is
         consistent with the Minimizer class.
 
 
@@ -618,7 +618,7 @@ class Model(object):
             Whether to print a message when a new parameter is added because
             of a hint (default is True).
         nan_policy : str, optional, one of 'raise' (default), 'propagate', or 'omit'.
-            What to do when encountering NaNs when fitting Model
+            What to do when encountering NaNs when fitting Model.
         fit_kws: dict, optional
             Options to pass to the minimizer being used.
         **kwargs: optional
@@ -907,7 +907,7 @@ class ModelResult(Minimizer):
         scale_covar : bool, optional
             Whether to scale covariance matrix for uncertainty evaluation.
         nan_policy : str, optional, one of 'raise' (default), 'propagate', or 'omit'.
-            What to do when encountering NaNs when fitting Model
+            What to do when encountering NaNs when fitting Model.
         **fit_kws : optional
             Keyword arguments to send to minimization routine.
         """
@@ -936,7 +936,7 @@ class ModelResult(Minimizer):
         method : str, optional
             Name of minimization method to use (default is `'leastsq'`).
         nan_policy : str, optional, one of 'raise' (default), 'propagate', or 'omit'.
-            What to do when encountering NaNs when fitting Model
+            What to do when encountering NaNs when fitting Model.
         **kwargs : optional
             Keyword arguments to send to minimization routine.
 
@@ -998,7 +998,7 @@ class ModelResult(Minimizer):
         params : Parameters, optional
             Parameters, defaults to ModelResult.params
         **kwargs : optional
-             Leyword arguments to pass to model function.
+             Keyword arguments to pass to model function.
 
         Returns
         -------
