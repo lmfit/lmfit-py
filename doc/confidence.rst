@@ -30,7 +30,7 @@ within a certain confidence.
 
  F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}
 
-`N` is the number of data points, `P` the number of parameters of the null model.
+`N` is the number of data points and `P` the number of parameters of the null model.
 :math:`P_{fix}` is the number of fixed parameters (or to be more clear, the
 difference of number of parameters between our null model and the alternate
 model).
@@ -62,9 +62,9 @@ starting point::
     >>> mini = lmfit.Minimizer(residual, pars)
     >>> result = mini.minimize()
     >>> print(lmfit.fit_report(result.params))
-    [Variables]]
-        a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
-        b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
+    [[Variables]]
+        a:   0.09963086 +/- 0.000216 (0.22%) (init= 0.1)
+        b:   1.97053799 +/- 0.013638 (0.69%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
         C(a, b)                      =  0.601
 
@@ -73,11 +73,11 @@ intervals::
 
     >>> ci = lmfit.conf_interval(mini, result)
     >>> lmfit.printfuncs.report_ci(ci)
-         99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%
-    a   0.09886   0.09905   0.09925   0.09944   0.09963   0.09982   0.10003
-    b   1.94751   1.96049   1.97274   1.97741   1.99680   2.00905   2.02203
+          99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
+     a:  -0.00066  -0.00044  -0.00022   0.09963  +0.00022  +0.00044  +0.00067
+     b:  -0.04200  -0.02764  -0.01371   1.97054  +0.01371  +0.02764  +0.04201
 
-This shows the best-fit values for the parameters in the `0.00%` column,
+This shows the best-fit values for the parameters in the `_BEST_` column,
 and parameter values that are at the varying confidence levels given by
 steps in :math:`\sigma`.  As we can see, the estimated error is almost the
 same, and the uncertainties are well behaved: Going from 1 :math:`\sigma`
@@ -112,12 +112,11 @@ which will report::
         C(a2, t1)                    = -0.925
         C(t1, t2)                    = -0.881
         C(a1, t1)                    = -0.599
-          95.00%    68.00%     0.00%    68.00%    95.00%
-    a1   2.71850   2.84525   2.98622   3.14874   3.34076
-    a2  -4.63180  -4.46663  -4.33526  -4.22883  -4.14178
-    t2  10.82699  11.33865  11.82404  12.28195  12.71094
-    t1   1.08014   1.18566   1.30994   1.45566   1.62579
-
+           95.45%    68.27%    _BEST_    68.27%    95.45%
+     a1:  -0.27286  -0.14165   2.98622  +0.16353  +0.36343
+     a2:  -0.30444  -0.13219  -4.33526  +0.10688  +0.19683
+     t1:  -0.23392  -0.12494   1.30994  +0.14660  +0.32369
+     t2:  -1.01943  -0.48820  11.82404  +0.46041  +0.90441
 
 Again we called :func:`conf_interval`, this time with tracing and only for
 1- and 2-:math:`\sigma`.  Comparing these two different estimates, we see
@@ -152,8 +151,8 @@ parameters::
     >>> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
     >>> plt.scatter(x, y, c=prob ,s=30)
     >>> plt.scatter(x2, y2, c=prob2, s=30)
-    >>> plt.gca().set_xlim((1, 5))
-    >>> plt.gca().set_ylim((5, 15))
+    >>> plt.gca().set_xlim((2.5, 3.5))
+    >>> plt.gca().set_ylim((11, 13))
     >>> plt.xlabel('a1')
     >>> plt.ylabel('t2')
     >>> plt.show()

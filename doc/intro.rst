@@ -57,7 +57,7 @@ To perform the minimization with :mod:`scipy.optimize`, one would do this::
     out = leastsq(residual, vars, args=(x, data, eps_data))
 
 Though it is wonderful to be able to use Python for such optimization
-problems, and the scipy library is robust and easy to use, the approach
+problems, and the SciPy library is robust and easy to use, the approach
 here is not terribly different from how one would do the same fit in C or
 Fortran.  There are several practical challenges to using this approach,
 including:
@@ -108,7 +108,7 @@ for the decaying sine wave as::
         freq = params['frequency']
         decay = params['decay']
 
-        model = amp * sin(x * freq  + pshift) * exp(-x*x*decay)
+        model = amp * sin(x * freq + pshift) * exp(-x*x*decay)
 
         return (data-model)/eps_data
 
