@@ -829,20 +829,18 @@ class ExponentialModel(Model):
 
 class StepModel(Model):
     r"""A model based on a Step function, with three Parameters:
-    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`)
-    and four choices for functional form:
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`).
+
+    There are four choices for ``form``:
 
     - ``linear`` (the default)
-
     - ``atan`` or ``arctan`` for an arc-tangent function
-
     - ``erf`` for an error function
-
-    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function).
+    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function)
 
     The step function starts with a value 0, and ends with a value of
     :math:`A` rising to :math:`A/2` at :math:`\mu`, with :math:`\sigma`
-    setting the characteristic width. The forms are
+    setting the characteristic width. The functional forms are defined as:
 
     .. math::
         :nowrap:
@@ -859,8 +857,8 @@ class StepModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+                 form='linear', name=None, **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing, 'form': form,
                        'independent_vars': independent_vars})
         super(StepModel, self).__init__(step, **kwargs)
 
@@ -882,22 +880,21 @@ class RectangleModel(Model):
     r"""A model based on a Step-up and Step-down function, with five
     Parameters: ``amplitude`` (:math:`A`), ``center1`` (:math:`\mu_1`),
     ``center2`` (:math:`\mu_2`), `sigma1`` (:math:`\sigma_1`) and
-    ``sigma2`` (:math:`\sigma_2`) and four choices for functional form
-    (which is used for both the Step up and the Step down:
+    ``sigma2`` (:math:`\sigma_2`).
+
+    There are four choices for ``form``, which is used for both the Step up
+    and the Step down:
 
     - ``linear`` (the default)
-
     - ``atan`` or ``arctan`` for an arc-tangent function
-
     - ``erf`` for an error function
-
-    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function).
+    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function)
 
     The function starts with a value 0, transitions to a value of
     :math:`A`, taking the value :math:`A/2` at :math:`\mu_1`, with :math:`\sigma_1`
     setting the characteristic width. The function then transitions again to
     the value :math:`A/2` at :math:`\mu_2`, with :math:`\sigma_2` setting the
-    characteristic width. The forms are
+    characteristic width. The functional forms are defined as:
 
     .. math::
         :nowrap:
@@ -916,8 +913,8 @@ class RectangleModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+                 form='linear', name=None, **kwargs):
+        kwargs.update({'prefix': prefix, 'missing': missing, 'form': form,
                        'independent_vars': independent_vars})
         super(RectangleModel, self).__init__(rectangle, **kwargs)
 
