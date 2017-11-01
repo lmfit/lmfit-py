@@ -330,6 +330,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             set_prefix_failed = None
         self.assertTrue(set_prefix_failed)
 
+    def test_model_name(self):
+        # test setting the name for built-in models
+        mod = models.GaussianModel(name='user_name')
+        self.assertEqual(mod.name, "Model(user_name)")
 
     def test_sum_of_two_gaussians(self):
         # two user-defined gaussians
