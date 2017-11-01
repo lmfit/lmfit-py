@@ -129,9 +129,9 @@ class ConstantModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
 
         def constant(x, c=0.0):
@@ -157,9 +157,9 @@ class ComplexConstantModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
 
         def constant(x, re=0., im=0.):
@@ -189,9 +189,9 @@ class LinearModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LinearModel, self).__init__(linear, **kwargs)
 
@@ -217,9 +217,9 @@ class QuadraticModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(QuadraticModel, self).__init__(parabolic, **kwargs)
 
@@ -254,8 +254,8 @@ class PolynomialModel(Model):
     DEGREE_ERR = "degree must be an integer less than %d."
 
     def __init__(self, degree, independent_vars=['x'], prefix='',
-                 missing=None, **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+                 nan_policy='raise', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
@@ -302,9 +302,9 @@ class GaussianModel(Model):
     fwhm_factor = 2.354820
     height_factor = 1./np.sqrt(2*np.pi)
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(GaussianModel, self).__init__(gaussian, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -339,9 +339,9 @@ class LorentzianModel(Model):
     fwhm_factor = 2.0
     height_factor = 1./np.pi
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LorentzianModel, self).__init__(lorentzian, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -391,9 +391,9 @@ class VoigtModel(Model):
 
     fwhm_factor = 3.60131
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(VoigtModel, self).__init__(voigt, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -437,9 +437,9 @@ class PseudoVoigtModel(Model):
 
     fwhm_factor = 2.0
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -477,9 +477,9 @@ class MoffatModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(MoffatModel, self).__init__(moffat, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -514,9 +514,9 @@ class Pearson7Model(Model):
 
     fwhm_factor = 1.0
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
         self.set_param_hint('expon', value=1.5, max=100)
@@ -549,9 +549,9 @@ class StudentsTModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(StudentsTModel, self).__init__(students_t, **kwargs)
 
@@ -575,9 +575,9 @@ class BreitWignerModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
 
@@ -602,9 +602,9 @@ class LognormalModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LognormalModel, self).__init__(lognormal, **kwargs)
 
@@ -629,9 +629,9 @@ class DampedOscillatorModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
 
@@ -658,9 +658,9 @@ class DampedHarmonicOscillatorModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedHarmonicOscillatorModel, self).__init__(dho,  **kwargs)
 
@@ -691,9 +691,9 @@ class ExponentialGaussianModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
 
@@ -725,9 +725,9 @@ class SkewedGaussianModel(Model):
 
     fwhm_factor = 2.354820
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(SkewedGaussianModel, self).__init__(skewed_gaussian,  **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -754,9 +754,9 @@ class DonaichModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DonaichModel, self).__init__(donaich,  **kwargs)
 
@@ -778,9 +778,9 @@ class PowerLawModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(PowerLawModel, self).__init__(powerlaw, **kwargs)
 
@@ -808,9 +808,9 @@ class ExponentialModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(ExponentialModel, self).__init__(exponential, **kwargs)
 
@@ -856,10 +856,10 @@ class StepModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='linear', **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing, 'form': form,
-                       'independent_vars': independent_vars})
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'form': form, 'independent_vars': independent_vars})
         super(StepModel, self).__init__(step, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
@@ -912,10 +912,10 @@ class RectangleModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='linear', **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing, 'form': form,
-                       'independent_vars': independent_vars})
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'form': form, 'independent_vars': independent_vars})
         super(RectangleModel, self).__init__(rectangle, **kwargs)
 
         self.set_param_hint('center1')
@@ -947,7 +947,7 @@ class ExpressionModel(Model):
     no_prefix = "ExpressionModel does not support `prefix` argument"
 
     def __init__(self, expr, independent_vars=None, init_script=None,
-                 missing=None, **kws):
+                 nan_policy='raise', **kws):
         """Generate a model from user-supplied expression.
 
         Parameters
@@ -1026,7 +1026,7 @@ class ExpressionModel(Model):
                 self.asteval.symtable[name] = val
             return self.asteval.run(self.astcode)
 
-        kws["missing"] = missing
+        kws["nan_policy"] = nan_policy
 
         super(ExpressionModel, self).__init__(_eval, **kws)
 
