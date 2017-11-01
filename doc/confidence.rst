@@ -125,8 +125,7 @@ covariance matrix, but the estimates for `a2` and especially for `t1`, and
 `t2` are very asymmetric and that going from 1 :math:`\sigma` (68%
 confidence) to 2 :math:`\sigma` (95% confidence) is not very predictable.
 
-Let plots mad of the confidence region are shown the figure on the left
-below for `a1` and `t2`, and for `a2` and `t2` on the right:
+Plots of the confidence region are shown in the figures below for `a1` and `t2` (left), and `a2` and `t2` (right):
 
 .. _figC1:
 

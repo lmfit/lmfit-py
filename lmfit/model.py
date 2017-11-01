@@ -64,6 +64,7 @@ class Model(object):
     def __init__(self, func, independent_vars=None, param_names=None,
                  nan_policy='raise', missing=None, prefix='', name=None, **kws):
         """Create a model from a user-supplied model function.
+
         The model function will normally take an independent variable
         (generally, the first argument) and a series of arguments that are
         meant to be parameters for the model. It will return an array of
@@ -104,9 +105,9 @@ class Model(object):
 
            - 'raise' : Raise a ValueError (default)
 
-           - 'propagate' : do nothing.
+           - 'propagate' : do nothing
 
-           -  'omit' : (was 'drop') drop missing data.
+           -  'omit' : (was 'drop') drop missing data
 
         4. The `missing` argument is deprecated in lmfit 0.9.8 and will be
         removed in a later version. Use `nan_policy` instead, as it is
@@ -189,7 +190,7 @@ class Model(object):
         return self._param_names
 
     def __repr__(self):
-        """ Return representation of Model."""
+        """Return representation of Model."""
         return "<lmfit.Model: %s>" % (self.name)
 
     def copy(self, **kwargs):
@@ -288,7 +289,7 @@ class Model(object):
 
         Parameters
         ----------
-        name : string
+        name : str
             Parameter name.
 
         **kwargs : optional

@@ -1203,7 +1203,6 @@ class Minimizer(object):
            Return value changed to :class:`MinimizerResult`.
 
         """
-
         if not HAS_LEAST_SQUARES:
             raise NotImplementedError("SciPy with a version higher than 0.17 "
                                       "is needed for this method.")
@@ -1794,7 +1793,7 @@ def _make_random_gen(seed):
 VALID_NAN_POLICIES = ('propagate', 'omit', 'raise')
 def validate_nan_policy(policy):
     """validate, rationalize nan_policy, for back compatibility
-    and compatibility with Pandas missing convention
+    and compatibility with Pandas missing convention.
     """
     if policy in VALID_NAN_POLICIES:
         return policy

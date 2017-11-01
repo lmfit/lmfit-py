@@ -565,7 +565,7 @@ class StudentsTModel(Model):
 
 class BreitWignerModel(Model):
     r"""A model based on a Breit-Wigner-Fano function (see
-    http://en.wikipedia.org/wiki/Fano_resonance>), with four Parameters:
+    http://en.wikipedia.org/wiki/Fano_resonance), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`) in
 
