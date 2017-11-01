@@ -190,7 +190,7 @@ class LinearModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(LinearModel, self).__init__(linear, **kwargs)
@@ -218,7 +218,7 @@ class QuadraticModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(QuadraticModel, self).__init__(parabolic, **kwargs)
@@ -253,8 +253,8 @@ class PolynomialModel(Model):
     MAX_DEGREE = 7
     DEGREE_ERR = "degree must be an integer less than %d."
 
-    def __init__(self, degree, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+    def __init__(self, degree, independent_vars=['x'], prefix='',
+                 missing=None, **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
@@ -303,7 +303,7 @@ class GaussianModel(Model):
     height_factor = 1./np.sqrt(2*np.pi)
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(GaussianModel, self).__init__(gaussian, **kwargs)
@@ -340,7 +340,7 @@ class LorentzianModel(Model):
     height_factor = 1./np.pi
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(LorentzianModel, self).__init__(lorentzian, **kwargs)
@@ -392,7 +392,7 @@ class VoigtModel(Model):
     fwhm_factor = 3.60131
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(VoigtModel, self).__init__(voigt, **kwargs)
@@ -438,7 +438,7 @@ class PseudoVoigtModel(Model):
     fwhm_factor = 2.0
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
@@ -478,7 +478,7 @@ class MoffatModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(MoffatModel, self).__init__(moffat, **kwargs)
@@ -515,7 +515,7 @@ class Pearson7Model(Model):
     fwhm_factor = 1.0
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
@@ -550,7 +550,7 @@ class StudentsTModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(StudentsTModel, self).__init__(students_t, **kwargs)
@@ -576,7 +576,7 @@ class BreitWignerModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
@@ -603,7 +603,7 @@ class LognormalModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(LognormalModel, self).__init__(lognormal, **kwargs)
@@ -630,7 +630,7 @@ class DampedOscillatorModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
@@ -659,7 +659,7 @@ class DampedHarmonicOscillatorModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(DampedHarmonicOscillatorModel, self).__init__(dho,  **kwargs)
@@ -692,7 +692,7 @@ class ExponentialGaussianModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
@@ -726,7 +726,7 @@ class SkewedGaussianModel(Model):
     fwhm_factor = 2.354820
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(SkewedGaussianModel, self).__init__(skewed_gaussian,  **kwargs)
@@ -755,7 +755,7 @@ class DonaichModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(DonaichModel, self).__init__(donaich,  **kwargs)
@@ -779,7 +779,7 @@ class PowerLawModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(PowerLawModel, self).__init__(powerlaw, **kwargs)
@@ -809,7 +809,7 @@ class ExponentialModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
+                 **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing,
                        'independent_vars': independent_vars})
         super(ExponentialModel, self).__init__(exponential, **kwargs)
@@ -857,7 +857,7 @@ class StepModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 form='linear', name=None, **kwargs):
+                 form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing, 'form': form,
                        'independent_vars': independent_vars})
         super(StepModel, self).__init__(step, **kwargs)
@@ -913,7 +913,7 @@ class RectangleModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 form='linear', name=None, **kwargs):
+                 form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'missing': missing, 'form': form,
                        'independent_vars': independent_vars})
         super(RectangleModel, self).__init__(rectangle, **kwargs)
