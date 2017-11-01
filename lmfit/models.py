@@ -81,23 +81,31 @@ def update_param_vals(pars, prefix, **kwargs):
 COMMON_INIT_DOC = """
     Parameters
     ----------
-    independent_vars: ['x']
+    independent_vars : ['x']
         Arguments to func that are independent variables.
-    prefix: string, optional
-       String to prepend to parameter names, needed to add two Models that
-       have parameter names in common.
-    missing:  str or None, optional
-        How to handle NaN and missing values in data. One of:
-
-        - 'none' or None: Do not check for null or missing values (default).
-
-        - 'drop': Drop null or missing observations in data. if pandas is
-          installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
-
-        - 'raise': Raise a (more helpful) exception when data contains null
-          or missing values.
+    prefix : str, optional
+        String to prepend to parameter names, needed to add two Models that
+        have parameter names in common.
+    nan_policy : str, optional
+        How to handle NaN and missing values in data. Must be one of:
+        'raise' (default), 'propagate', or 'omit'. See Notes below.
+    missing : str, optional
+        Synonym for 'nan_policy' for backward compatibility.
     **kwargs : optional
         Keyword arguments to pass to :class:`Model`.
+
+    Notes
+    -----
+    1. nan_policy sets what to do when a NaN or missing value is seen in the
+    data. Should be one of:
+
+        - 'raise' : Raise a ValueError (default)
+        - 'propagate' : do nothing
+        - 'omit' : (was 'drop') drop missing data
+
+    2. The `missing` argument is deprecated in lmfit 0.9.8 and will be
+    removed in a later version. Use `nan_policy` instead, as it is
+    consistent with the Minimizer class.
 
     """
 
@@ -954,21 +962,15 @@ class ExpressionModel(Model):
         ----------
         expr : str
             Mathematical expression for model.
-        independent_vars : list of strings or None, optional
+        independent_vars : list of str or None, optional
             Variable names to use as independent variables.
-        init_script : string or None, optional
+        init_script : str or None, optional
             Initial script to run in asteval interpreter.
-        missing : str or None, optional
-            How to handle NaN and missing values in data. One of:
-
-            - 'none' or None: Do not check for null or missing values (default).
-
-            - 'drop': Drop null or missing observations in data. if pandas is
-              installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
-
-            - 'raise': Raise a (more helpful) exception when data contains null
-              or missing values.
-
+        nan_policy : str, optional
+            How to handle NaN and missing values in data. Must be one of:
+            'raise' (default), 'propagate', or 'omit'. See Notes below.
+        missing : str, optional
+            Synonym for 'nan_policy' for backward compatibility.
         **kws : optional
             Keyword arguments to pass to :class:`Model`.
 
@@ -977,6 +979,15 @@ class ExpressionModel(Model):
         1. each instance of ExpressionModel will create and using its own
            version of an asteval interpreter.
         2. prefix is **not supported** for ExpressionModel
+        3. nan_policy sets what to do when a NaN or missing value is seen in
+        the data. Should be one of:
+
+            - 'raise' : Raise a ValueError (default)
+            - 'propagate' : do nothing
+            - 'omit' : (was 'drop') drop missing data
+
+        4. The `missing` argument is deprecated in lmfit 0.9.8 and will be
+        removed in a later version. Use `nan_policy` instead, as it is
 
         """
         # create ast evaluator, load custom functions
