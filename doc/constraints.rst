@@ -114,9 +114,9 @@ freely varying parameter `x`.  Next, define a parameter
 define parameter `y` as `delta - x`::
 
     pars = Parameters()
-    pars.add('x',     value = 5, vary=True)
-    pars.add('delta', value = 5, max=10, vary=True)
-    pars.add('y',     expr='delta-x')
+    pars.add('x', value=5, vary=True)
+    pars.add('delta', value=5, max=10, vary=True)
+    pars.add('y', expr='delta-x')
 
 The essential point is that an inequality still implies
 that a variable (here, `delta`) is needed to describe the
@@ -156,7 +156,7 @@ for the constraints::
 
     def mylorentzian(x, amp, cen, wid):
         "lorentzian function: wid = half-width at half-max"
-        return (amp  / (1 + ((x-cen)/wid)**2))
+        return (amp / (1 + ((x-cen)/wid)**2))
 
     fitter = Minimizer()
     fitter.asteval.symtable['lorentzian'] = mylorentzian

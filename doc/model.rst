@@ -49,19 +49,19 @@ definition of the model function:
     >>> from numpy import sqrt, pi, exp, linspace, random
     >>>
     >>> def gaussian(x, amp, cen, wid):
-    ...    return amp * exp(-(x-cen)**2 /wid)
+    ...    return amp * exp(-(x-cen)**2 / wid)
 
 We want to use this function to fit to data :math:`y(x)` represented by the
 arrays `y` and `x`.  With :scipydoc:`optimize.curve_fit`, this would be::
 
     >>> from scipy.optimize import curve_fit
     >>>
-    >>> x = linspace(-10,10, 101)
+    >>> x = linspace(-10, 10, 101)
     >>> y = gaussian(x, 2.33, 0.21, 1.51) + random.normal(0, 0.2, len(x))
     >>>
-    >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
+    >>> init_vals = [1, 0, 1]  # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
-    >>> print best_vals
+    >>> print(best_vals)
 
 
 That is, we create data, make an initial guess of the model values, and run
@@ -96,20 +96,20 @@ the independent variable is and which function arguments should be identified
 as parameter names.
 
 The Parameters are *not* created when the model is created. The model knows
-what the parameters should be named, but not anything about the scale and
+what the parameters should be named, but nothing about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initial values and other attributes.  To help you do this, each
 model has a :meth:`make_params` method that will generate parameters with
 the expected names:
 
-    >>> params = gmod.make_params()
+    >>> params = gmodel.make_params()
 
 This creates the :class:`~lmfit.parameter.Parameters` but does not
 automaticaly give them initial values since it has no idea what the scale
 should be.  You can set initial values for parameters with keyword
 arguments to :meth:`make_params`:
 
-    >>> params = gmod.make_params(cen=5, amp=200, wid=1)
+    >>> params = gmodel.make_params(cen=5, amp=200, wid=1)
 
 or assign them (and other parameter properties) after the
 :class:`~lmfit.parameter.Parameters` class has been created.
@@ -122,25 +122,25 @@ For example, one could use :meth:`eval` to calculate the predicted
 function::
 
     >>> x = linspace(0, 10, 201)
-    >>> y = gmod.eval(params, x=x)
+    >>> y = gmodel.eval(params, x=x)
 
 or with::
 
-    >>> y = gmod.eval(x=x, cen=6.5, amp=100, wid=2.0)
+    >>> y = gmodel.eval(x=x, cen=6.5, amp=100, wid=2.0)
 
 Admittedly, this a slightly long-winded way to calculate a Gaussian
 function, given that you could have called your `gaussian` function
 directly.  But now that the model is set up, we can use its
 :meth:`fit` method to fit this model to data, as with::
 
-    >>> result = gmod.fit(y, params)
+    >>> result = gmodel.fit(y, params, x=x)
 
 or with::
 
-    >>> result = gmod.fit(y, cen=6.5, amp=100, wid=2.0)
+    >>> result = gmodel.fit(y, x=x, cen=6.5, amp=100, wid=2.0)
 
-Putting everything together,  (included in the
-``examples`` folder with the source code) is:
+Putting everything together, included in the
+``examples`` folder with the source code, is:
 
 .. literalinclude:: ../examples/doc_model1.py
 
@@ -279,10 +279,10 @@ a :class:`~lmfit.parameter.Parameters` object, and names are inferred from the f
 arguments, and a residual function is automatically constructed.
 
 
-By default, the independent variable is take as the first argument to the
+By default, the independent variable is taken as the first argument to the
 function.  You can, of course, explicitly set this, and will need to do so
-if the independent variable is not first in the list, or if there are actually
-more than one independent variables.
+if the independent variable is not first in the list, or if there is actually
+more than one independent variable.
 
 If not specified, Parameters are constructed from all positional arguments
 and all keyword arguments that have a default value that is numerical, except
@@ -304,13 +304,14 @@ function is fairly easy. Let's try another one::
     ...    return N*np.exp(-t/tau)
     ...
     >>> decay_model = Model(decay)
-    >>> print decay_model.independent_vars
+    >>> print(decay_model.independent_vars)
     ['t']
-    >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    >>> params = decay_model.make_params()
+    >>> for pname, par in params.items():
+    ...     print(pname, par)
     ...
-    tau <Parameter 'tau', None, bounds=[None:None]>
-    N <Parameter 'N', None, bounds=[None:None]>
+    tau <Parameter 'tau', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', -inf, bounds=[-inf:inf]>
 
 Here, `t` is assumed to be the independent variable because it is the
 first argument to the function.  The other function arguments are used to
@@ -320,13 +321,14 @@ If you want `tau` to be the independent variable in the above example,
 you can say so::
 
     >>> decay_model = Model(decay, independent_vars=['tau'])
-    >>> print decay_model.independent_vars
+    >>> print(decay_model.independent_vars)
     ['tau']
-    >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    >>> params = decay_model.make_params()
+    >>> for pname, par in params.items():
+    ...     print(pname, par)
     ...
-    t <Parameter 't', None, bounds=[None:None]>
-    N <Parameter 'N', None, bounds=[None:None]>
+    t <Parameter 't', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', -inf, bounds=[-inf:inf]>
 
 
 You can also supply multiple values for multi-dimensional functions with
@@ -352,18 +354,19 @@ Parameters if the supplied default value was a valid number (but not
 None, True, or False).
 
     >>> def decay2(t, tau, N=10, check_positive=False):
-    ...    if check_small:
-    ...        arg = abs(t)/max(1.e-9, abs(tau))
-    ...    else:
-    ...        arg = t/tau
-    ...    return N*np.exp(arg)
+    ...     if check_small:
+    ...         arg = abs(t)/max(1.e-9, abs(tau))
+    ...     else:
+    ...         arg = t/tau
+    ...     return N*np.exp(arg)
     ...
     >>> mod = Model(decay2)
-    >>> for pname, par in mod.params.items():
-    ...     print pname, par
+    >>> params = mod.make_params()
+    >>> for pname, par in params.items():
+    ...     print(pname, par)
     ...
-    t <Parameter 't', None, bounds=[None:None]>
-    N <Parameter 'N', 10, bounds=[None:None]>
+    t <Parameter 't', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', 10, bounds=[-inf:inf]>
 
 Here, even though `N` is a keyword argument to the function, it is turned
 into a parameter, with the default numerical value as its initial value.
@@ -390,12 +393,13 @@ the same name.  To avoid this, we can add a `prefix` to the
     ...
 
     >>> mod = Model(myfunc, prefix='f1_')
-    >>> for pname, par in mod.params.items():
-    ...     print pname, par
+    >>> params = mod.make_params()
+    >>> for pname, par in params.items():
+    ...     print(pname, par)
     ...
-    f1_amplitude <Parameter 'f1_amplitude', None, bounds=[None:None]>
-    f1_center <Parameter 'f1_center', None, bounds=[None:None]>
-    f1_sigma <Parameter 'f1_sigma', None, bounds=[None:None]>
+    f1_amplitude <Parameter 'f1_amplitude', 1, bounds=[-inf:inf]>
+    f1_center <Parameter 'f1_center', 0, bounds=[-inf:inf]>
+    f1_sigma <Parameter 'f1_sigma', 1, bounds=[-inf:inf]>
 
 You would refer to these parameters as `f1_amplitude` and so forth, and
 the model will know to map these to the `amplitude` argument of `myfunc`.
@@ -476,7 +480,6 @@ is, as with :meth:`Model.make_params`, you can include values
 as keyword arguments to either the :meth:`Model.eval` or :meth:`Model.fit` methods::
 
    >>> y1 = mod.eval(x=x, a=7.0, b=-2.0)
-
    >>> out = mod.fit(x=x, pars, a=3.0, b=-0.0)
 
 These approaches to initialization provide many opportunities for setting
@@ -493,8 +496,6 @@ After a model has been created, you can give it hints for how to create
 parameters with :meth:`Model.make_params`.  This allows you to set not only a
 default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
-
-
 expression.   To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
@@ -505,7 +506,7 @@ as with::
 Parameter hints are stored in a model's :attr:`param_hints` attribute,
 which is simply a nested dictionary::
 
-    >>> print mod.param_hints
+    >>> print(mod.param_hints)
     {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}}
 
 
@@ -850,7 +851,7 @@ provides a simple way to build up complex models.
 
 .. autoclass::  CompositeModel(left, right, op[, **kws])
 
-Note that when using builtin Python binary operators, a
+Note that when using built-in Python binary operators, a
 :class:`CompositeModel` will automatically be constructed for you. That is,
 doing::
 

@@ -1,5 +1,4 @@
 import matplotlib
-matplotlib.use('Qt4Agg')
 import matplotlib.pyplot as plt
 from lmfit.models import *
 from lmfit.lineshapes import *
@@ -31,9 +30,9 @@ def dfunc_lorentzian(params, *ys, **xs):
 if __name__ == '__main__':
     xs = np.linspace(-4, 4, 100)
 
-    print '**********************************'
-    print '***** Test Gaussian **************'
-    print '**********************************'
+    print('**********************************')
+    print('***** Test Gaussian **************')
+    print('**********************************')
     ys = gaussian(xs, 2.5, 0, 0.5)
     yn = ys + 0.1*np.random.normal(size=len(xs))
 
@@ -41,19 +40,19 @@ if __name__ == '__main__':
     pars = mod.guess(yn, xs)
     out  = mod.fit(yn, pars, x=xs)
     out2 = mod.fit(yn, pars,  x=xs, fit_kws={'Dfun': dfunc_gaussian, 'col_deriv': 1})
-    print 'lmfit without dfunc **************'
-    print 'number of function calls: ', out.nfev
-    print 'params', out.best_values
-    print 'lmfit with dfunc *****************'
-    print 'number of function calls: ', out2.nfev
-    print 'params', out2.best_values
-    print '\n \n'
+    print('lmfit without dfunc **************')
+    print('number of function calls: ', out.nfev)
+    print('params', out.best_values)
+    print('lmfit with dfunc *****************')
+    print('number of function calls: ', out2.nfev)
+    print('params', out2.best_values)
+    print('\n \n')
     out2.plot(datafmt='.')
 
 
-    print '**********************************'
-    print '***** Test Lorentzian ************'
-    print '**********************************'
+    print('**********************************')
+    print('***** Test Lorentzian ************')
+    print('**********************************')
     ys = lorentzian(xs, 2.5, 0, 0.5)
     yn = ys + 0.1*np.random.normal(size=len(xs))
 
@@ -61,13 +60,13 @@ if __name__ == '__main__':
     pars = mod.guess(yn, xs)
     out  = mod.fit(yn, pars, x=xs )
     out2 = mod.fit(yn, pars,  x=xs, fit_kws={'Dfun': dfunc_lorentzian, 'col_deriv': 1})
-    print 'lmfit without dfunc **************'
-    print 'number of function calls: ', out.nfev
-    print 'params', out.best_values
-    print 'lmfit with dfunc *****************'
-    print 'number of function calls: ', out2.nfev
-    print 'params', out2.best_values
-    print '\n \n'
+    print('lmfit without dfunc **************')
+    print('number of function calls: ', out.nfev)
+    print('params', out.best_values)
+    print('lmfit with dfunc *****************')
+    print('number of function calls: ', out2.nfev)
+    print('params', out2.best_values)
+    print('\n \n')
     out2.plot(datafmt='.')
 
     plt.show()

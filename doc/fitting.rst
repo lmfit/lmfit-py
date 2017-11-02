@@ -20,7 +20,7 @@ The :func:`minimize` function is a wrapper around :class:`Minimizer` for
 running an optimization problem.  It takes an objective function (the
 function that calculates the array to be minimized), a :class:`Parameters`
 object, and several optional arguments.  See :ref:`fit-func-label` for
-details on writing the objective.
+details on writing the objective function.
 
 .. autofunction:: minimize
 
@@ -65,6 +65,7 @@ simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
 
 
     def residual(pars, x, data=None, eps=None):
+        from numpy import exp, sign, sin, pi
         # unpack parameters:
         #  extract .value attribute for each parameter
         parvals = pars.valuesdict()
@@ -91,7 +92,7 @@ In this example, `x` is a positional (required) argument, while the
 calculation if the data is neglected).  Also note that the model
 calculation will divide `x` by the value of the ``period`` Parameter.  It
 might be wise to ensure this parameter cannot be 0.  It would be possible
-to use the bounds on the :class:`Parameter` to do this::
+to use bounds on the :class:`Parameter` to do this::
 
     params['period'] = Parameter(value=2, min=1.e-10)
 
@@ -185,11 +186,11 @@ include several pieces of informational data such as status and error
 messages, fit statistics, and the updated parameters themselves.
 
 Importantly, the parameters passed in to :meth:`Minimizer.minimize`
-will be not be changed.  To to find the best-fit values, uncertainties
+will be not be changed.  To find the best-fit values, uncertainties
 and so on for each parameter, one must use the
 :attr:`MinimizerResult.params` attribute. For example, to print the
-fitted values, bounds and other parameters attributes in a
-well formatted text tables you can execute::
+fitted values, bounds and other parameter attributes in a
+well-formatted text tables you can execute::
 
     result.params.pretty_print()
 
@@ -243,7 +244,7 @@ that the returned residual function is scaled properly to the
 uncertainties in the data.  For these statistics to be meaningful, the
 person writing the function to be minimized **must** scale them properly.
 
-After a fit using using the :meth:`leastsq` method has completed
+After a fit using the :meth:`leastsq` method has completed
 successfully, standard errors for the fitted variables and correlations
 between pairs of fitted variables are automatically calculated from the
 covariance matrix.  The standard error (estimated :math:`1\sigma`
@@ -451,7 +452,7 @@ The values reported in the :class:`MinimizerResult` are the medians of the
 probability distributions and a 1 sigma quantile, estimated as half the
 difference between the 15.8 and 84.2 percentiles. The median value is not
 necessarily the same as the Maximum Likelihood Estimate. We'll get that as well.
-You can see that we recovered the right uncertainty level on the data.::
+You can see that we recovered the right uncertainty level on the data::
 
     >>> print("median of posterior probability distribution")
     >>> print('------------------------------------------')

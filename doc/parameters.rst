@@ -94,7 +94,7 @@ can be simplified using the :class:`Parameters` :meth:`valuesdict` method,
 which would make the objective function ``fcn2min`` above look like::
 
     def fcn2min(params, x, data):
-        """ model decaying sine wave, subtract data"""
+        """model decaying sine wave, subtract data"""
         v = params.valuesdict()
 
         model = v['amp'] * np.sin(x * v['omega'] + v['shift']) * np.exp(-x*x*v['decay'])
