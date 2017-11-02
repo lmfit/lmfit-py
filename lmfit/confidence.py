@@ -30,7 +30,7 @@ def f_compare(ndata, nparas, new_chi, best_chi, nfix=1.):
 
 
 def copy_vals(params):
-    """Save the values and stderrs of params in temporary dict."""
+    """Save the values and stderrs of params in a temporary dict."""
     tmp_params = {}
     for para_key in params:
         tmp_params[para_key] = (params[para_key].value,
@@ -49,8 +49,8 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
     """Calculate the confidence interval for parameters.
 
     The parameter for which the ci is calculated will be varied, while
-    the remaining parameters are re-optimized for minimizing chi-square.
-    The resulting chi-square is used  to calculate the probability with
+    the remaining parameters are re-optimized to minimize chi-square.
+    The resulting chi-square is used to calculate the probability with
     a given statistic (e.g., F-test). This function uses a 1d-rootfinder
     from SciPy to find the values resulting in the searched confidence
     region.
@@ -348,7 +348,7 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     ny : int, optional
         Number of points in the y direction.
     limits : tuple, optional
-        Should have the form ((x_upper, x_lower),(y_upper, y_lower)). If not
+        Should have the form ((x_upper, x_lower), (y_upper, y_lower)). If not
         given, the default is 5 std-errs in each direction.
     prob_func : None or callable, optional
         Function to calculate the probability from the optimized chi-square.

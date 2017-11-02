@@ -14,7 +14,7 @@ Overview
 LMfit-py provides a Least-Squares Minimization routine and class with a
 simple, flexible approach to parameterizing a model for fitting to data.
 
-LMfit is a pure python package, and so easy to install from source or with
+LMfit is a pure Python package, and so easy to install from source or with
 ``pip install lmfit``.
 
 For questions, comments, and suggestions, please use the LMfit mailing
@@ -61,7 +61,7 @@ and additional positional and keyword arguments as desired::
 
 For each call of this function, the values for the params may have changed,
 subject to the bounds and constraint settings for each Parameter.  The function
-should return the residual (ie, data-model) array to be minimized.
+should return the residual (i.e., data-model) array to be minimized.
 
 The advantage here is that the function to be minimized does not have to be
 changed if different bounds or constraints are placed on the fitting
@@ -76,10 +76,10 @@ To perform the fit, the user calls::
 
     result = minimize(myfunc, fit_params, args=(x, data), kws={'someflag':True}, ....)
 
-After the fit, each real variable in the ``fit_params`` dictionary is updated
-to have best-fit values, estimated standard deviations, and correlations
-with other variables in the fit, while the results dictionary holds fit
-statistics and information.
+After the fit, a ``MinimizerResult`` class is returned that holds the
+results the fit (e.g., fitting statistics, and optimized parameters). The
+dictionary ``result.params`` contains the best-fit values, estimated
+standard deviations, and correlations with other variables in the fit.
 
 By default, the underlying fit algorithm is the Levenberg-Marquart
 algorithm with numerically-calculated derivatives from MINPACK's lmdif

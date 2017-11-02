@@ -6,27 +6,27 @@ Built-in Fitting Models in the :mod:`models` module
 
 .. module:: lmfit.models
 
-Lmfit provides several builtin fitting models in the :mod:`models` module.
-These pre-defined models each subclass from the :class:`model.Model` class of the
+Lmfit provides several built-in fitting models in the :mod:`models` module.
+These pre-defined models each subclass from the :class:`~lmfit.model.Model` class of the
 previous chapter and wrap relatively well-known functional forms, such as
 Gaussians, Lorentzian, and Exponentials that are used in a wide range of
-scientific domains.  In fact, all the models are all based on simple, plain
-Python functions defined in the :mod:`lineshapes` module.  In addition to
-wrapping a function into a :class:`model.Model`, these models also provide a
-:meth:`guess` method that is intended to give a reasonable
+scientific domains.  In fact, all the models are based on simple, plain
+Python functions defined in the :mod:`~lmfit.lineshapes` module.  In addition to
+wrapping a function into a :class:`~lmfit.model.Model`, these models also provide a
+:meth:`~lmfit.model.Model.guess` method that is intended to give a reasonable
 set of starting values from a data array that closely approximates the
 data to be fit.
 
-As shown in the previous chapter, a key feature of the :class:`mode.Model` class
+As shown in the previous chapter, a key feature of the :class:`~lmfit.model.Model` class
 is that models can easily be combined to give a composite
-:class:`model.CompositeModel`. Thus, while some of the models listed here may
+:class:`~lmfit.model.CompositeModel`. Thus, while some of the models listed here may
 seem pretty trivial (notably, :class:`ConstantModel` and :class:`LinearModel`),
 the main point of having these is to be able to use them in composite models. For
 example, a Lorentzian plus a linear background might be represented as::
 
     >>> from lmfit.models import LinearModel, LorentzianModel
     >>> peak = LorentzianModel()
-    >>> background  = LinearModel()
+    >>> background = LinearModel()
     >>> model = peak + background
 
 All the models listed below are one dimensional, with an independent
@@ -41,7 +41,7 @@ width.  Many peak shapes also have a parameter ``fwhm`` (constrained by
 (constrained by ``sigma`` and ``amplitude``) to give the maximum peak
 height.
 
-After a list of builtin models, a few examples of their use is given.
+After a list of built-in models, a few examples of their use are given.
 
 Peak-like models
 -------------------
@@ -138,7 +138,7 @@ Linear and Polynomial Models
 These models correspond to polynomials of some degree.  Of course, lmfit is
 a very inefficient way to do linear regression (see :numpydoc:`polyfit`
 or :scipydoc:`stats.linregress`), but these models may be useful as one
-of many components of composite model.
+of many components of a composite model.
 
 :class:`ConstantModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -221,10 +221,10 @@ supplied, the determination of what are the parameter names for the model
 happens when the model is created.  To do this, the expression is parsed,
 and all symbol names are found.  Names that are already known (there are
 over 500 function and value names in the asteval namespace, including most
-Python builtins, more than 200 functions inherited from NumPy, and more
+Python built-ins, more than 200 functions inherited from NumPy, and more
 than 20 common lineshapes defined in the :mod:`lineshapes` module) are not
-converted to parameters.  Unrecognized name are expected to be names either
-of parameters or independent variables.  If `independent_vars` is the
+converted to parameters.  Unrecognized names are expected to be names of either
+parameters or independent variables.  If `independent_vars` is the
 default value of None, and if the expression contains a variable named
 `x`, that will be used as the independent variable.  Otherwise,
 `independent_vars` must be given.
@@ -276,7 +276,7 @@ and `wid`, and build a model that can be used to fit data.
 
 
 
-Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles
+Example 1: Fit Peak data to Gaussian, Lorentzian, and  Voigt profiles
 ------------------------------------------------------------------------
 
 Here, we will fit data to three similar line shapes, in order to decide which
@@ -296,7 +296,7 @@ built-in default values.  We will simply use::
      mod = GaussianModel()
 
      pars = mod.guess(y, x=x)
-     out  = mod.fit(y, pars, x=x)
+     out = mod.fit(y, pars, x=x)
      print(out.fit_report(min_correl=0.25))
 
 
@@ -339,7 +339,7 @@ good. A plot of the fit:
   Fit to peak with Gaussian (left) and Lorentzian (right) models.
 
 shows a decent match to the data -- the fit worked with no explicit setting
-of initial parameter values.  Looking more closing, the fit is not perfect,
+of initial parameter values.  Looking more closely, the fit is not perfect,
 especially in the tails of the peak, suggesting that a different peak
 shape, with longer tails, should be used.  Perhaps a Lorentzian would be
 better?  To do this, we simply replace ``GaussianModel`` with
@@ -478,7 +478,7 @@ Example 2: Fit data to a Composite Model with pre-defined models
 ------------------------------------------------------------------
 
 Here, we repeat the point made at the end of the last chapter that
-instances of :class:`model.Model` class can be added together to make a
+instances of :class:`~lmfit.model.Model` class can be added together to make a
 *composite model*.  By using the large number of built-in models available,
 it is therefore very simple to build models that contain multiple peaks and
 various backgrounds.  An example of a simple fit to a noisy step function
@@ -536,7 +536,7 @@ Example 3: Fitting Multiple Peaks -- and using Prefixes
 As shown above, many of the models have similar parameter names.  For
 composite models, this could lead to a problem of having parameters for
 different parts of the model having the same name.  To overcome this, each
-:class:`model.Model` can have a ``prefix`` attribute (normally set to a blank
+:class:`~lmfit.model.Model` can have a ``prefix`` attribute (normally set to a blank
 string) that will be put at the beginning of each parameter name.  To
 illustrate, we fit one of the classic datasets from the `NIST StRD`_ suite
 involving a decaying exponential and two gaussians.
@@ -615,11 +615,12 @@ this, and by defining an :func:`index_of` function to limit the data range.
 That is, with::
 
     def index_of(arrval, value):
-        "return index of array *at or below* value "
-        if value < min(arrval):  return 0
-        return max(np.where(arrval<=value)[0])
+        """Return index of array *at or below* value."""
+        if value < min(arrval):
+            return 0
+        return max(np.where(arrval <= value)[0])
 
-    ix1 = index_of(x,  75)
+    ix1 = index_of(x, 75)
     ix2 = index_of(x, 135)
     ix3 = index_of(x, 175)
 

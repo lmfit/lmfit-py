@@ -1,4 +1,4 @@
-"""TODO: module docstring."""
+"""Module containing built-in fitting models."""
 import numpy as np
 
 from . import lineshapes
@@ -81,23 +81,31 @@ def update_param_vals(pars, prefix, **kwargs):
 COMMON_INIT_DOC = """
     Parameters
     ----------
-    independent_vars: ['x']
+    independent_vars : ['x']
         Arguments to func that are independent variables.
-    prefix: string, optional
-       String to prepend to parameter names, needed to add two Models that
-       have parameter names in common.
-    missing:  str or None, optional
-        How to handle NaN and missing values in data. One of:
-
-        - 'none' or None: Do not check for null or missing values (default).
-
-        - 'drop': Drop null or missing observations in data. if pandas is
-          installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
-
-        - 'raise': Raise a (more helpful) exception when data contains null
-          or missing values.
+    prefix : str, optional
+        String to prepend to parameter names, needed to add two Models that
+        have parameter names in common.
+    nan_policy : str, optional
+        How to handle NaN and missing values in data. Must be one of:
+        'raise' (default), 'propagate', or 'omit'. See Notes below.
+    missing : str, optional
+        Synonym for 'nan_policy' for backward compatibility.
     **kwargs : optional
         Keyword arguments to pass to :class:`Model`.
+
+    Notes
+    -----
+    1. nan_policy sets what to do when a NaN or missing value is seen in the
+    data. Should be one of:
+
+        - 'raise' : Raise a ValueError (default)
+        - 'propagate' : do nothing
+        - 'omit' : (was 'drop') drop missing data
+
+    2. The `missing` argument is deprecated in lmfit 0.9.8 and will be
+    removed in a later version. Use `nan_policy` instead, as it is
+    consistent with the Minimizer class.
 
     """
 
@@ -123,15 +131,15 @@ class ConstantModel(Model):
     """Constant model, with a single Parameter: ``c``.
 
     Note that this is 'constant' in the sense of having no dependence on
-    the independent variable ``x``, not in the sense of being non-
-    varying. To be clear, ``c`` will be a Parameter that will be varied
+    the independent variable ``x``, not in the sense of being non-varying.
+    To be clear, ``c`` will be a Parameter that will be varied
     in the fit (by default, of course).
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
 
         def constant(x, c=0.0):
@@ -157,9 +165,9 @@ class ComplexConstantModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
 
         def constant(x, re=0., im=0.):
@@ -189,9 +197,9 @@ class LinearModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LinearModel, self).__init__(linear, **kwargs)
 
@@ -217,9 +225,9 @@ class QuadraticModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(QuadraticModel, self).__init__(parabolic, **kwargs)
 
@@ -253,9 +261,9 @@ class PolynomialModel(Model):
     MAX_DEGREE = 7
     DEGREE_ERR = "degree must be an integer less than %d."
 
-    def __init__(self, degree, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, degree, independent_vars=['x'], prefix='',
+                 nan_policy='raise', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
@@ -282,8 +290,8 @@ class PolynomialModel(Model):
 
 
 class GaussianModel(Model):
-    r"""A model based on a Gaussian or normal distribution lineshape.
-    (see http://en.wikipedia.org/wiki/Normal_distribution), with three Parameters:
+    r"""A model based on a Gaussian or normal distribution lineshape (see
+    http://en.wikipedia.org/wiki/Normal_distribution), with three Parameters:
     ``amplitude``, ``center``, and ``sigma``.
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
     to report full width at half maximum and maximum peak height, respectively.
@@ -302,9 +310,9 @@ class GaussianModel(Model):
     fwhm_factor = 2.354820
     height_factor = 1./np.sqrt(2*np.pi)
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(GaussianModel, self).__init__(gaussian, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -339,9 +347,9 @@ class LorentzianModel(Model):
     fwhm_factor = 2.0
     height_factor = 1./np.pi
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LorentzianModel, self).__init__(lorentzian, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -358,9 +366,9 @@ class LorentzianModel(Model):
 
 class VoigtModel(Model):
     r"""A model based on a Voigt distribution function (see
-    http://en.wikipedia.org/wiki/Voigt_profile>), with four Parameters:
+    http://en.wikipedia.org/wiki/Voigt_profile), with four Parameters:
     ``amplitude``, ``center``, ``sigma``, and ``gamma``.  By default,
-    ``gamma`` is constrained to have value equal to ``sigma``, though it
+    ``gamma`` is constrained to have a value equal to ``sigma``, though it
     can be varied independently.  In addition, parameters ``fwhm`` and
     ``height`` are included as constraints to report full width at half
     maximum and maximum peak height, respectively.  The definition for the
@@ -380,7 +388,7 @@ class VoigtModel(Model):
             w(z) &=& e^{-z^2}{\operatorname{erfc}}(-iz)
         \end{eqnarray*}
 
-    and :func:`erfc` is the complimentary error function.  As above,
+    and :func:`erfc` is the complementary error function.  As above,
     ``amplitude`` corresponds to :math:`A`, ``center`` to
     :math:`\mu`, and ``sigma`` to :math:`\sigma`. The parameter ``gamma``
     corresponds  to :math:`\gamma`.
@@ -391,9 +399,9 @@ class VoigtModel(Model):
 
     fwhm_factor = 3.60131
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(VoigtModel, self).__init__(voigt, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -416,7 +424,7 @@ class VoigtModel(Model):
 class PseudoVoigtModel(Model):
     r"""A model based on a pseudo-Voigt distribution function
     (see http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
-    which is a weighted sum of a Gaussian and Lorentzian distribution functions
+    which is a weighted sum of a Gaussian and Lorentzian distribution function
     that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
     and full width at half maximum ``fwhm`` (and so have  constrained values of
     ``sigma`` (:math:`\sigma`) and ``height`` (maximum peak height).
@@ -437,9 +445,9 @@ class PseudoVoigtModel(Model):
 
     fwhm_factor = 2.0
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -477,9 +485,9 @@ class MoffatModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(MoffatModel, self).__init__(moffat, **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -504,19 +512,19 @@ class Pearson7Model(Model):
 
         f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}
 
-    where :math:`\beta` is the beta function (see :scipydoc:`special.beta` in
-    :mod:`scipy.special`).  The :meth:`guess` function always
-    gives a starting value for ``exponent`` of 1.5.  In addition, parameters
-    ``fwhm`` and ``height`` are included as constraints to report full width
-    at half maximum and maximum peak height, respectively.
+    where :math:`\beta` is the beta function (see :scipydoc:`special.beta`)
+    The :meth:`guess` function always gives a starting value for ``exponent``
+    of 1.5.  In addition, parameters ``fwhm`` and ``height`` are included as
+    constraints to report full width at half maximum and maximum peak height,
+    respectively.
 
     """
 
     fwhm_factor = 1.0
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
         self.set_param_hint('expon', value=1.5, max=100)
@@ -549,9 +557,9 @@ class StudentsTModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(StudentsTModel, self).__init__(students_t, **kwargs)
 
@@ -565,7 +573,7 @@ class StudentsTModel(Model):
 
 class BreitWignerModel(Model):
     r"""A model based on a Breit-Wigner-Fano function (see
-    http://en.wikipedia.org/wiki/Fano_resonance>), with four Parameters:
+    http://en.wikipedia.org/wiki/Fano_resonance), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`) in
 
@@ -575,9 +583,9 @@ class BreitWignerModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
 
@@ -602,9 +610,9 @@ class LognormalModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LognormalModel, self).__init__(lognormal, **kwargs)
 
@@ -629,9 +637,9 @@ class DampedOscillatorModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
 
@@ -658,9 +666,9 @@ class DampedHarmonicOscillatorModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedHarmonicOscillatorModel, self).__init__(dho,  **kwargs)
 
@@ -687,13 +695,13 @@ class ExponentialGaussianModel(Model):
         {\operatorname{erfc}}\Bigl(\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\Bigr)
 
 
-    where :func:`erfc` is the complimentary error function.
+    where :func:`erfc` is the complementary error function.
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
 
@@ -725,9 +733,9 @@ class SkewedGaussianModel(Model):
 
     fwhm_factor = 2.354820
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(SkewedGaussianModel, self).__init__(skewed_gaussian,  **kwargs)
         self.set_param_hint('sigma', min=0)
@@ -754,9 +762,9 @@ class DonaichModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DonaichModel, self).__init__(donaich,  **kwargs)
 
@@ -769,7 +777,7 @@ class DonaichModel(Model):
 
 
 class PowerLawModel(Model):
-    r"""A model based on a Power Law (see http://en.wikipedia.org/wiki/Power_law>),
+    r"""A model based on a Power Law (see http://en.wikipedia.org/wiki/Power_law),
     with two Parameters: ``amplitude`` (:math:`A`), and ``exponent`` (:math:`k`), in:
 
     .. math::
@@ -778,9 +786,9 @@ class PowerLawModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(PowerLawModel, self).__init__(powerlaw, **kwargs)
 
@@ -808,9 +816,9 @@ class ExponentialModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(ExponentialModel, self).__init__(exponential, **kwargs)
 
@@ -829,20 +837,18 @@ class ExponentialModel(Model):
 
 class StepModel(Model):
     r"""A model based on a Step function, with three Parameters:
-    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`)
-    and four choices for functional form:
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`).
+
+    There are four choices for ``form``:
 
     - ``linear`` (the default)
-
     - ``atan`` or ``arctan`` for an arc-tangent function
-
     - ``erf`` for an error function
-
-    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function).
+    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function)
 
     The step function starts with a value 0, and ends with a value of
     :math:`A` rising to :math:`A/2` at :math:`\mu`, with :math:`\sigma`
-    setting the characteristic width. The forms are
+    setting the characteristic width. The functional forms are defined as:
 
     .. math::
         :nowrap:
@@ -858,10 +864,10 @@ class StepModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
-                       'independent_vars': independent_vars})
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 form='linear', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'form': form, 'independent_vars': independent_vars})
         super(StepModel, self).__init__(step, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
@@ -882,22 +888,21 @@ class RectangleModel(Model):
     r"""A model based on a Step-up and Step-down function, with five
     Parameters: ``amplitude`` (:math:`A`), ``center1`` (:math:`\mu_1`),
     ``center2`` (:math:`\mu_2`), `sigma1`` (:math:`\sigma_1`) and
-    ``sigma2`` (:math:`\sigma_2`) and four choices for functional form
-    (which is used for both the Step up and the Step down:
+    ``sigma2`` (:math:`\sigma_2`).
+
+    There are four choices for ``form``, which is used for both the Step up
+    and the Step down:
 
     - ``linear`` (the default)
-
     - ``atan`` or ``arctan`` for an arc-tangent function
-
     - ``erf`` for an error function
-
-    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function).
+    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function)
 
     The function starts with a value 0, transitions to a value of
     :math:`A`, taking the value :math:`A/2` at :math:`\mu_1`, with :math:`\sigma_1`
     setting the characteristic width. The function then transitions again to
     the value :math:`A/2` at :math:`\mu_2`, with :math:`\sigma_2` setting the
-    characteristic width. The forms are
+    characteristic width. The functional forms are defined as:
 
     .. math::
         :nowrap:
@@ -915,10 +920,10 @@ class RectangleModel(Model):
 
     """
 
-    def __init__(self, independent_vars=['x'], prefix='', missing=None,
-                 name=None,  **kwargs):
-        kwargs.update({'prefix': prefix, 'missing': missing,
-                       'independent_vars': independent_vars})
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 form='linear', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'form': form, 'independent_vars': independent_vars})
         super(RectangleModel, self).__init__(rectangle, **kwargs)
 
         self.set_param_hint('center1')
@@ -950,28 +955,22 @@ class ExpressionModel(Model):
     no_prefix = "ExpressionModel does not support `prefix` argument"
 
     def __init__(self, expr, independent_vars=None, init_script=None,
-                 missing=None, **kws):
-        """Model from User-supplied expression.
+                 nan_policy='raise', **kws):
+        """Generate a model from user-supplied expression.
 
         Parameters
         ----------
         expr : str
             Mathematical expression for model.
-        independent_vars : list of strings or None, optional
+        independent_vars : list of str or None, optional
             Variable names to use as independent variables.
-        init_script : string or None, optional
+        init_script : str or None, optional
             Initial script to run in asteval interpreter.
-        missing : str or None, optional
-            How to handle NaN and missing values in data. One of:
-
-            - 'none' or None: Do not check for null or missing values (default).
-
-            - 'drop': Drop null or missing observations in data. if pandas is
-              installed, `pandas.isnull` is used, otherwise `numpy.isnan` is used.
-
-            - 'raise': Raise a (more helpful) exception when data contains null
-              or missing values.
-
+        nan_policy : str, optional
+            How to handle NaN and missing values in data. Must be one of:
+            'raise' (default), 'propagate', or 'omit'. See Notes below.
+        missing : str, optional
+            Synonym for 'nan_policy' for backward compatibility.
         **kws : optional
             Keyword arguments to pass to :class:`Model`.
 
@@ -979,7 +978,19 @@ class ExpressionModel(Model):
         -----
         1. each instance of ExpressionModel will create and using its own
            version of an asteval interpreter.
-        2. prefix is **not supported** for ExpressionModel
+
+        2. prefix is **not supported** for ExpressionModel.
+
+        3. nan_policy sets what to do when a NaN or missing value is seen in
+        the data. Should be one of:
+
+            - 'raise' : Raise a ValueError (default)
+            - 'propagate' : do nothing
+            - 'omit' : (was 'drop') drop missing data
+
+        4. The `missing` argument is deprecated in lmfit 0.9.8 and will be
+        removed in a later version. Use `nan_policy` instead, as it is
+        consistent with the Minimizer class.
 
         """
         # create ast evaluator, load custom functions
@@ -1029,7 +1040,7 @@ class ExpressionModel(Model):
                 self.asteval.symtable[name] = val
             return self.asteval.run(self.astcode)
 
-        kws["missing"] = missing
+        kws["nan_policy"] = nan_policy
 
         super(ExpressionModel, self).__init__(_eval, **kws)
 
