@@ -44,14 +44,14 @@ First we create an example problem::
 
     >>> import lmfit
     >>> import numpy as np
-    >>> x = np.linspace(0.3,10,100)
-    >>> y = 1/(0.1*x)+2+0.1*np.random.randn(x.size)
+    >>> x = np.linspace(0.3, 10, 100)
+    >>> y = 1/(0.1*x) + 2 + 0.1*np.random.randn(x.size)
     >>> pars = lmfit.Parameters()
     >>> pars.add_many(('a', 0.1), ('b', 1))
     >>> def residual(p):
     ...    a = p['a'].value
     ...    b = p['b'].value
-    ...    return 1/(a*x)+b-y
+    ...    return 1/(a*x) + b - y
 
 
 before we can generate the confidence intervals, we have to run a fit, so
@@ -146,8 +146,8 @@ array of corresponding probabilities for the corresponding cumulative
 variables.  This can be used to show the dependence between two
 parameters::
 
-    >>> x, y, prob = trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
-    >>> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
+    >>> x, y, prob = trace['a1']['a1'], trace['a1']['t2'], trace['a1']['prob']
+    >>> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'], trace['t2']['prob']
     >>> plt.scatter(x, y, c=prob ,s=30)
     >>> plt.scatter(x2, y2, c=prob2, s=30)
     >>> plt.gca().set_xlim((2.5, 3.5))

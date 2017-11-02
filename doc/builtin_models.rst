@@ -26,7 +26,7 @@ example, a Lorentzian plus a linear background might be represented as::
 
     >>> from lmfit.models import LinearModel, LorentzianModel
     >>> peak = LorentzianModel()
-    >>> background  = LinearModel()
+    >>> background = LinearModel()
     >>> model = peak + background
 
 All the models listed below are one dimensional, with an independent
@@ -296,7 +296,7 @@ built-in default values.  We will simply use::
      mod = GaussianModel()
 
      pars = mod.guess(y, x=x)
-     out  = mod.fit(y, pars, x=x)
+     out = mod.fit(y, pars, x=x)
      print(out.fit_report(min_correl=0.25))
 
 
@@ -615,11 +615,12 @@ this, and by defining an :func:`index_of` function to limit the data range.
 That is, with::
 
     def index_of(arrval, value):
-        "return index of array *at or below* value "
-        if value < min(arrval):  return 0
-        return max(np.where(arrval<=value)[0])
+        """Return index of array *at or below* value."""
+        if value < min(arrval):
+            return 0
+        return max(np.where(arrval <= value)[0])
 
-    ix1 = index_of(x,  75)
+    ix1 = index_of(x, 75)
     ix2 = index_of(x, 135)
     ix3 = index_of(x, 175)
 

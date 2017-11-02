@@ -978,7 +978,9 @@ class ExpressionModel(Model):
         -----
         1. each instance of ExpressionModel will create and using its own
            version of an asteval interpreter.
-        2. prefix is **not supported** for ExpressionModel
+
+        2. prefix is **not supported** for ExpressionModel.
+
         3. nan_policy sets what to do when a NaN or missing value is seen in
         the data. Should be one of:
 
@@ -988,6 +990,7 @@ class ExpressionModel(Model):
 
         4. The `missing` argument is deprecated in lmfit 0.9.8 and will be
         removed in a later version. Use `nan_policy` instead, as it is
+        consistent with the Minimizer class.
 
         """
         # create ast evaluator, load custom functions

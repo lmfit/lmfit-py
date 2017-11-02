@@ -46,9 +46,9 @@ sine wave, and so write an objective function like this::
         freq = vars[2]
         decay = vars[3]
 
-        model = amp * sin(x * freq  + phaseshift) * exp(-x*x*decay)
+        model = amp * sin(x*freq + phaseshift) * exp(-x*x*decay)
 
-        return (data-model)/eps_data
+        return (data-model) / eps_data
 
 To perform the minimization with :mod:`scipy.optimize`, one would do this::
 
@@ -108,9 +108,9 @@ for the decaying sine wave as::
         freq = params['frequency']
         decay = params['decay']
 
-        model = amp * sin(x * freq + pshift) * exp(-x*x*decay)
+        model = amp * sin(x*freq + pshift) * exp(-x*x*decay)
 
-        return (data-model)/eps_data
+        return (data-model) / eps_data
 
     params = Parameters()
     params.add('amp', value=10)
