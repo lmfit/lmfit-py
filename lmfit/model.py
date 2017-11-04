@@ -1020,10 +1020,8 @@ def build_model(state, funcdefs=None):
         if not callable(fcndef) and fname in known_funcs:
             fcndef = known_funcs[fname]
 
-        print(" ==>build<== ", fname, type(fcndef), fcndef)
         if fcndef is None:
             raise ValueError("Cannot restore Model: model function not found")
-
 
         model = Model(fcndef, name=name, prefix=prefix,
                       independent_vars=ivars, param_names=pnames,
