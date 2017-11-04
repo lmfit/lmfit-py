@@ -16,7 +16,7 @@ def residual(p):
    return p['a1']*np.exp(-x/p['t1']) + p['a2']*np.exp(-(x-0.1)/p['t2'])-y
 
 # create Minimizer
-mini = lmfit.Minimizer(residual, p)
+mini = lmfit.Minimizer(residual, p, nan_policy='omit')
 
 # first solve with Nelder-Mead
 out1 = mini.minimize(method='Nelder')

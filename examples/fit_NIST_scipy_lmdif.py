@@ -20,8 +20,6 @@ from scipy.optimize import _minpack
 from NISTModels import Models, ReadNistData
 
 try:
-    import matplotlib
-    matplotlib.use('WXAgg')
     import pylab
     HASPYLAB = True
 except IOError:

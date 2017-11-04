@@ -71,7 +71,7 @@ Chi-square         |   %.4f    |   %.4f  |
 
 
 if HASPYLAB:
-	pylab.plot(x, data, 'ro')
-	pylab.plot(x, fit1, 'b')
-        pylab.plot(x, fit2, 'k')
-	pylab.show()
+    pylab.plot(x, data, 'ro')
+    pylab.plot(x, fit1, 'b')
+    pylab.plot(x, fit2, 'k')
+    pylab.show()

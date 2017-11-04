@@ -31,7 +31,7 @@ def create_lnliklihood(mini, sigma=None):
     def lnprob(vals, sigma=sigma):
         for v, p in zip(vals, [p for p in mini.params.values() if p.vary]):
             p.value = v
-        residuals = mini.userfcn(mini.params)
+        residuals = mini.residual
         if not sigma:
             #sigma is either the error estimate or it will
             #be part of the sampling.
@@ -92,11 +92,11 @@ def residuals(paras):
 
 #Fit the data with lmfit.
 mini = lmfit.Minimizer(residuals, params)
-mini.leastsq()
-lmfit.report_errors(params)
+result = mini.leastsq()
+lmfit.report_errors(result.params)
 
 #create lnfunc and starting distribution.
-lnfunc, guess = create_all(mini)
+lnfunc, guess = create_all(result)
 nwalkers, ndim = 30, len(guess)
 p0 = emcee.utils.sample_ball(guess, 0.1*np.array(guess), nwalkers)
 sampler = emcee.EnsembleSampler(nwalkers, ndim, lnfunc)
@@ -105,7 +105,7 @@ sampler.run_mcmc(p0, steps)
 
 if HASPYLAB:
     fig, axes = plt.subplots(5, 1, sharex=True, figsize=(8, 9))
-    for (i, name, rv) in zip(range(5), params.keys() + ['sigma'], [a, b, t1, t2, sigma]):
+    for (i, name, rv) in zip(range(5), list(params.keys()) + ['sigma'], [a, b, t1, t2, sigma]):
         axes[i].plot(sampler.chain[:, :, i].T, color="k", alpha=0.05)
         axes[i].yaxis.set_major_locator(plt.MaxNLocator(5))
         axes[i].axhline(rv, color="#888888", lw=2)
@@ -115,10 +115,10 @@ if HASPYLAB:
     plt.figure()
 
     try:
-        import triangle # use pip install triangle_plot
+        import corner # use pip install corner
         burnin = 100
         samples = sampler.chain[:, burnin:, :].reshape((-1, ndim))
-        triangle.corner(samples, labels=params.keys()+['sigma'],
+        corner.corner(samples, labels=list(result.params.keys())+['sigma'],
                       truths=[a, b, t1, t2, sigma])
     except ImportError:
-        print("Please install triangle_plot for a nice overview graphic")
+        print("Please install corner for a nice overview graphic")

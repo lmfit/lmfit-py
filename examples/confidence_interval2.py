@@ -46,7 +46,7 @@ out = mini.leastsq()
 
 ci, trace = conf_interval(mini, out, trace=True)
 
-names = out.params.keys()
+names = list(out.params.keys())
 
 if HASPYLAB:
     pylab.rcParams['font.size']=8
