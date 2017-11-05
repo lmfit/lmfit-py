@@ -23,8 +23,8 @@ y = (3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1) / 10.) +
      0.1*np.random.randn(len(x)))
 if HASPYLAB:
     plt.plot(x, y, 'b')
+    # plt.savefig('../doc/_images/emcee_dbl_exp.png')
     plt.show()
-    #plt.savefig('../doc/_images/emcee_dbl_exp.png')
 
 p = lmfit.Parameters()
 p.add_many(('a1', 4), ('a2', 4), ('t1', 3), ('t2', 3., True))
@@ -41,8 +41,8 @@ if HASPYLAB:
     plt.figure()
     plt.plot(x, y, 'b')
     plt.plot(x, residual(mi.params) + y, 'r')
+    # plt.savefig('../doc/_images/emcee_dbl_exp2.png')
     plt.show()
-    #plt.savefig('../doc/_images/emcee_dbl_exp2.png')
 
 # add a noise parameter
 mi.params.add('noise', value=1, min=0.001, max=2)
@@ -59,7 +59,7 @@ res = mini.emcee(burn=300, steps=1000, thin=20, params=mi.params)
 if HASPYLAB and HASCORNER:
     emcee_corner = corner.corner(res.flatchain, labels=res.var_names,
                                  truths=list(res.params.valuesdict().values()))
-    #emcee_corner.savefig('../doc/_images/emcee_corner.png')
+    # emcee_corner.savefig('../doc/_images/emcee_corner.png')
     plt.show()
 
 print("\nmedian of posterior probability distribution")
