@@ -195,7 +195,7 @@ class Model(object):
         state : serialized state from `_get_state`
 
         """
-        return build_model(state, funcdefs=funcdefs)
+        return _buildmodel(state, funcdefs=funcdefs)
 
     def dumps(self, **kws):
         """dump serialization of model as a JSON string
@@ -990,7 +990,7 @@ class CompositeModel(Model):
                 self.right._get_state(), self.op.__name__)
 
     def _set_state(self, state, funcdefs=None):
-        return build_model(state, funcdefs=funcdefs)
+        return _buildmodel(state, funcdefs=funcdefs)
 
     def _make_all_args(self, params=None, **kwargs):
         """Generate **all** function arguments for all functions."""
@@ -998,8 +998,46 @@ class CompositeModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
-def build_model(state, funcdefs=None):
+def save_model(model, fname):
+    """save a model to a file
+
+    Parameters
+    ----------
+    model : model instance
+        model to be saved
+    fname : str
+        name of file to save model to
+    """
+    with open(fname, 'w') as fout:
+        model.dump(fout)
+
+
+def load_model(fname, funcdefs=None):
+    """load a model from a saved file
+
+    Parameters
+    ----------
+    fname : str
+        name of file containing saved model
+    funcdefs : dict, optional
+        dictionay of custom function names an definitions.
+
+    Returns
+    -------
+      model
+    """
+    m = Model(lambda x:  x)
+    with open(fname) as fh:
+        model = m.load(fh)
+    return model
+
+
+
+def _buildmodel(state, funcdefs=None):
     """build model from saved state
+
+    intended for internal use only.
+
     """
     if len(state) != 3:
         raise ValueError("Cannot restore Model")
@@ -1031,8 +1069,8 @@ def build_model(state, funcdefs=None):
             model.set_param_hint(name, **hint)
         return model
     else:
-        lmodel = build_model(left, funcdefs=funcdefs)
-        rmodel = build_model(right, funcdefs=funcdefs)
+        lmodel = _buildmodel(left, funcdefs=funcdefs)
+        rmodel = _buildmodel(right, funcdefs=funcdefs)
         return CompositeModel(lmodel, rmodel, getattr(operator, op))
 
 
