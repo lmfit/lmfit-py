@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_withreport.py>
+# <examples/doc_fitting_withreport.py>
 from numpy import exp, linspace, pi, random, sign, sin
 
 from lmfit import Parameters, fit_report, minimize
@@ -46,4 +46,4 @@ fit_params.add('decay', value=0.02)
 out = minimize(residual, fit_params, args=(x,), kws={'data': data})
 
 print(fit_report(out))
-# <end of examples/doc_withreport.py>
+# <end of examples/doc_fitting_withreport.py>

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_model3.py>
+# <examples/doc_model_composite.py>
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -59,4 +59,4 @@ else:
     plt.plot(x, result.init_fit, 'k--')
     plt.plot(x, result.best_fit, 'r-')
 plt.show()
-# <end examples/doc_model3.py>
+# <end examples/doc_model_composite.py>

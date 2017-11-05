@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_confidence1.py>
+# <examples/doc_confidence_basic.py>
 import lmfit
 import numpy as np
 
@@ -22,4 +22,4 @@ print(lmfit.fit_report(result.params))
 
 ci = lmfit.conf_interval(mini, result)
 lmfit.printfuncs.report_ci(ci)
-# <end examples/doc_confidence1.py>
+# <end examples/doc_confidence_basic.py>

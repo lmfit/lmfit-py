@@ -143,7 +143,7 @@ or with::
 Putting everything together, included in the
 ``examples`` folder with the source code, is:
 
-.. literalinclude:: ../examples/doc_model1.py
+.. literalinclude:: ../examples/doc_model_gaussian.py
 
 which is pretty compact and to the point.  The returned `result` will be
 a :class:`ModelResult` object.  As we will see below, this has many
@@ -784,7 +784,7 @@ and build a composite model with just::
 
 This model has parameters for both component models, and can be used as:
 
-.. literalinclude:: ../examples/doc_model2.py
+.. literalinclude:: ../examples/doc_model_twocomponents.py
 
 which prints out the results::
 
@@ -894,7 +894,7 @@ function gives a valid result over the data range.  Because this function
 takes two array arguments and returns an array, it can be used as the
 binary operator.  A full script using this technique is here:
 
-.. literalinclude:: ../examples/doc_model3.py
+.. literalinclude:: ../examples/doc_model_composite.py
 
 which prints out the results::
 

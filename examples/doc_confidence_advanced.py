@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_confidence2.py>
+# <examples/doc_confidence_advanced.py>
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -66,4 +66,4 @@ elif plot_type == 3:
 
 if plot_type > 0:
     plt.show()
-# <end examples/doc_confidence2.py>
+# <end examples/doc_confidence_advanced.py>

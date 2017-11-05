@@ -97,7 +97,7 @@ Nelder-Mead  method, and *then* use Levenberg-Marquardt to estimate the
 uncertainties and correlations.
 
 
-.. literalinclude:: ../examples/doc_confidence2.py
+.. literalinclude:: ../examples/doc_confidence_advanced.py
 
 which will report::
 

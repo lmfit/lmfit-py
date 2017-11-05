@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_nistgauss.py>
+# <examples/doc_builtinmodels_nistgauss.py>
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -48,4 +48,4 @@ if plot_components:
     plt.plot(x, comps['exp_'], 'k--')
 
 plt.show()
-# <end examples/doc_nistgauss.py>
+# <end examples/doc_builtinmodels_nistgauss.py>

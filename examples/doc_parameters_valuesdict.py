@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_basic.py>
+# <examples/doc_parameters_valuesdict.py>
 import numpy as np
 
 from lmfit import Minimizer, Parameters, report_fit
@@ -14,11 +14,9 @@ data = (5. * np.sin(2*x - 0.1) * np.exp(-x*x*0.025) +
 # define objective function: returns the array to be minimized
 def fcn2min(params, x, data):
     """Model a decaying sine wave and subtract data."""
-    amp = params['amp']
-    shift = params['shift']
-    omega = params['omega']
-    decay = params['decay']
-    model = amp * np.sin(x*omega + shift) * np.exp(-x*x*decay)
+    v = params.valuesdict()
+
+    model = v['amp'] * np.sin(x * v['omega'] + v['shift']) * np.exp(-x*x*v['decay'])
     return model - data
 
 
@@ -47,4 +45,4 @@ try:
     plt.show()
 except ImportError:
     pass
-# <end of examples/doc_basic.py>
+# <end of examples/doc_parameters_valuesdict.py>

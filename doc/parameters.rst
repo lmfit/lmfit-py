@@ -86,7 +86,7 @@ A basic example making use of :class:`~lmfit.parameter.Parameters` and the
 :func:`~lmfit.minimizer.minimize` function (discussed in the next chapter)
 might look like this:
 
-.. literalinclude:: ../examples/doc_basic.py
+.. literalinclude:: ../examples/doc_parameters_basic.py
 
 
 Here, the objective function explicitly unpacks each Parameter value.  This

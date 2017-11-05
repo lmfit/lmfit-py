@@ -507,7 +507,7 @@ Getting and Printing Fit Reports
 
 An example using this to write out a fit report would be:
 
-.. literalinclude:: ../examples/doc_withreport.py
+.. literalinclude:: ../examples/doc_fitting_withreport.py
 
 which would write out::
 

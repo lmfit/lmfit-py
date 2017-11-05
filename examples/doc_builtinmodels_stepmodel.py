@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_stepmodel.py>
+# <examples/doc_builtinmodels_stepmodel.py>
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -27,4 +27,4 @@ plt.plot(x, y, 'b')
 plt.plot(x, out.init_fit, 'k--')
 plt.plot(x, out.best_fit, 'r-')
 plt.show()
-# <end examples/doc_stepmodel.py>
+# <end examples/doc_builtinmodels_stepmodel.py>

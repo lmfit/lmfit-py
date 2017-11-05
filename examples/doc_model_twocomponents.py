@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_model2.py>
+# <examples/doc_model_two_components.py>
 import matplotlib.pyplot as plt
 from numpy import exp, loadtxt, pi, sqrt
 
@@ -32,4 +32,4 @@ plt.plot(x, y, 'bo')
 plt.plot(x, result.init_fit, 'k--')
 plt.plot(x, result.best_fit, 'r-')
 plt.show()
-# <end examples/doc_model2.py>
+# <end examples/doc_model_two_components.py>

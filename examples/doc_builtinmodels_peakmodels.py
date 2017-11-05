@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# <examples/doc_peakmodels.py>
+# <examples/doc_builtinmodels_peakmodels.py>
 import matplotlib.pyplot as plt
 from numpy import loadtxt
 
@@ -42,4 +42,4 @@ plt.plot(x, y, 'b-')
 plt.plot(x, out.best_fit, 'r-')
 # plt.savefig(figname)
 plt.show()
-# <end examples/doc_peakmodels.py>
+# <end examples/doc_builtinmodels_peakmodels.py>

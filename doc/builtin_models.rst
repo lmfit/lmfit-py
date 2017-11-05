@@ -483,7 +483,7 @@ it is therefore very simple to build models that contain multiple peaks and
 various backgrounds.  An example of a simple fit to a noisy step function
 plus a constant:
 
-.. literalinclude:: ../examples/doc_stepmodel.py
+.. literalinclude:: ../examples/doc_builtinmodels_stepmodel.py
 
 After constructing step-like data, we first create a :class:`StepModel`
 telling it to use the ``erf`` form (see details above), and a
@@ -540,7 +540,7 @@ string) that will be put at the beginning of each parameter name.  To
 illustrate, we fit one of the classic datasets from the `NIST StRD`_ suite
 involving a decaying exponential and two gaussians.
 
-.. literalinclude:: ../examples/doc_nistgauss.py
+.. literalinclude:: ../examples/doc_builtinmodels_nistgauss.py
 
 where we give a separate prefix to each model (they all have an
 ``amplitude`` parameter).  The ``prefix`` values are attached transparently
@@ -666,6 +666,6 @@ but in few steps, and without any bounds on parameters at all::
         C(g1_center, g1_sigma)       =  0.507
         C(exp_decay, g1_amplitude)   = -0.507
 
-This script is in the file ``doc_nistgauss2.py`` in the examples folder,
+This script is in the file ``doc_builtinmodels_nistgauss2.py`` in the examples folder,
 and the fit result shown on the right above shows an improved initial
 estimate of the data.
