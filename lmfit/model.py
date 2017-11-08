@@ -1032,7 +1032,6 @@ def load_model(fname, funcdefs=None):
     return model
 
 
-
 def _buildmodel(state, funcdefs=None):
     """build model from saved state
 
@@ -1072,6 +1071,43 @@ def _buildmodel(state, funcdefs=None):
         lmodel = _buildmodel(left, funcdefs=funcdefs)
         rmodel = _buildmodel(right, funcdefs=funcdefs)
         return CompositeModel(lmodel, rmodel, getattr(operator, op))
+
+
+
+def save_modelresult(modelresult, fname):
+    """save a ModelResult to a file
+
+    Parameters
+    ----------
+    modelresult : ModelResult instance
+        ModelResult to be saved
+    fname : str
+        name of file to save model to
+    """
+    with open(fname, 'w') as fout:
+        modelresult.dump(fout)
+
+
+def load_modelresult(fname, funcdefs=None):
+    """load a ModelResult from a saved file
+
+    Parameters
+    ----------
+    fname : str
+        name of file containing saved model
+    funcdefs : dict, optional
+        dictionay of custom function names an definitions.
+
+    Returns
+    -------
+      ModelResult
+    """
+    f = lambda x: x
+    p = Parameters()
+    m = ModelResult(f, p)
+    with open(fname) as fh:
+        modelresult = m.load(fh)
+    return modelresult
 
 
 class ModelResult(Minimizer):
