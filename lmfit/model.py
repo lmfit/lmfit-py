@@ -1102,9 +1102,9 @@ def load_modelresult(fname, funcdefs=None):
     -------
       ModelResult
     """
-    f = lambda x: x
+
     p = Parameters()
-    m = ModelResult(f, p)
+    m = ModelResult(Model(lambda x: x, None), p)
     with open(fname) as fh:
         modelresult = m.load(fh)
     return modelresult
@@ -1473,7 +1473,7 @@ class ModelResult(Minimizer):
         return fp.write(self.dumps(**kws))
 
 
-    def loads(self, s, funcs=None, **kws):
+    def loads(self, s, funcdefs=None, **kws):
         """Load ModelResult from a JSON string
 
         Parameters
@@ -1493,11 +1493,12 @@ class ModelResult(Minimizer):
         load(), dumps(), json.dumps()
         """
 
-        tmp = json.loads(s, **kws)
-        print( tmp.keys(), tmp['__class__'])
-        if 'modelresult' not in tmp['__class__'].lower():
-            raise AttributeError('ModelResult.loads() needs saved ModelResult')
-
+        tmp = decode4js(json.loads(s, **kws))
+        print("LOADS ", type(tmp))
+        print(tmp.keys())
+        # print( tmp.keys(), tmp['__class__'])
+        # if 'modelresult' not in tmp['__class__'].lower():
+        #     raise AttributeError('ModelResult.loads() needs saved ModelResult')
         modelstate = tmp['model']
         self.params = Parameters()
 
@@ -1516,7 +1517,7 @@ class ModelResult(Minimizer):
                      'ndata', 'nfev', 'nfree', 'nvarys', 'redchi',
                      'residual', 'scale_covar', 'success', 'userargs',
                      'userkws', 'var_names', 'weights'):
-            setattr(self, attr, getattr(tmp, attr, None))
+            setattr(self, attr, tmp.get(attr, None))
         return self
 
 
