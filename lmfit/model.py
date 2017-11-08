@@ -1106,7 +1106,7 @@ def load_modelresult(fname, funcdefs=None):
     p = Parameters()
     m = ModelResult(Model(lambda x: x, None), p)
     with open(fname) as fh:
-        modelresult = m.load(fh)
+        modelresult = m.load(fh, funcdefs=funcdefs)
     return modelresult
 
 
@@ -1420,7 +1420,6 @@ class ModelResult(Minimizer):
         loads(), json.dumps()
         """
 
-
         out = {'__class__': 'lmfit.ModelResult', '__version__' : '1',
                'model': encode4js(self.model._get_state())}
         pasteval = self.params._asteval
@@ -1436,13 +1435,13 @@ class ModelResult(Minimizer):
                   'nvarys', 'redchi', 'residual', 'scale_covar', 'success',
                   'userargs', 'userkws', 'values', 'var_names', 'weights')
 
-        for attr in ('aborted', 'aic', 'best_values', 'bic',
-                     'chisqr', 'ci_out', 'col_deriv',
-                     'errorbars', 'flatchain', 'ier',
-                     'init_values', 'lmdif_message', 'message',
+        for attr in ('aborted', 'aic', 'best_values', 'bic', 'chisqr',
+                     'ci_out', 'col_deriv', 'errorbars', 'flatchain',
+                     'ier', 'init_values', 'lmdif_message', 'message',
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
                      'nvarys', 'redchi', 'scale_covar', 'success',
-                     'userargs', 'userkws', 'values', 'var_names', 'weights'):
+                     'userargs', 'userkws', 'values', 'var_names',
+                     'weights'):
             val = getattr(self, attr)
             if isinstance(val, np.bool_):
                 val = bool(val)
@@ -1493,31 +1492,37 @@ class ModelResult(Minimizer):
         load(), dumps(), json.dumps()
         """
 
-        tmp = decode4js(json.loads(s, **kws))
-        print("LOADS ", type(tmp))
-        print(tmp.keys())
-        # print( tmp.keys(), tmp['__class__'])
-        # if 'modelresult' not in tmp['__class__'].lower():
-        #     raise AttributeError('ModelResult.loads() needs saved ModelResult')
-        modelstate = tmp['model']
-        self.params = Parameters()
+        modres = json.loads(s, **kws)
+        if 'modelresult' not in modres['__class__'].lower():
+            raise AttributeError('ModelResult.loads() needs saved ModelResult')
 
-        state = {'unique_symbols': tmp['unique_symbols'], 'params': []}
-        for parstate in tmp['params']:
+        modres = decode4js(modres)
+        if 'model' not in modres or 'params' not in modres:
+            raise AttributeError('ModelResult.loads() needs valid ModelResult')
+
+        # model
+        self.model = _buildmodel(decode4js(modres['model']), funcdefs=funcdefs)
+
+        # params
+        self.params = Parameters()
+        state = {'unique_symbols': modres['unique_symbols'], 'params': []}
+        for parstate in modres['params']:
             _par = Parameter()
             _par.__setstate__(parstate)
             state['params'].append(_par)
         self.params.__setstate__(state)
 
-        for attr in ('aborted', 'aic', 'best_fit',
-                     'best_values', 'bic', 'chisqr', 'ci_out', 'col_deriv',
-                     'covar', 'data', 'errorbars', 'fjac', 'flatchain',
-                     'ier', 'init_fit', 'init_values', 'kws',
-                     'lmdif_message', 'message', 'method', 'nan_policy',
-                     'ndata', 'nfev', 'nfree', 'nvarys', 'redchi',
-                     'residual', 'scale_covar', 'success', 'userargs',
-                     'userkws', 'var_names', 'weights'):
-            setattr(self, attr, tmp.get(attr, None))
+        for attr in ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
+                     'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
+                     'errorbars', 'fjac', 'flatchain', 'ier', 'init_fit',
+                     'init_values', 'kws', 'lmdif_message', 'message',
+                     'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
+                     'nvarys', 'redchi', 'residual', 'scale_covar',
+                     'success', 'userargs', 'userkws', 'var_names',
+                     'weights'):
+            setattr(self, attr, decode4js(modres.get(attr, None)))
+
+        self.best_fit = self.model.eval(self.params, **self.userkws)
         return self
 
 
