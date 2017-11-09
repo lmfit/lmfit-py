@@ -1,25 +1,19 @@
-from __future__ import print_function
-import sys
 import math
-
 from optparse import OptionParser
 
+from lmfit import Parameters, minimize
+from NISTModels import Models, ReadNistData
+
 try:
-    import matplotlib
-    matplotlib.use('WXAgg')
-    import pylab
+    import matplotlib.pyplot as plt
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
 
 
-from lmfit import Parameters, minimize
-
-from NISTModels import Models, ReadNistData
-
 def ndig(a, b):
-    "precision for NIST values"
-    return round(-math.log10((abs(abs(a)-abs(b)) +1.e-15)/ abs(b)))
+    """Precision for NIST values."""
+    return round(-math.log10((abs(abs(a)-abs(b)) + 1.e-15) / abs(b)))
 
 
 def Compare_NIST_Results(DataSet, myfit, NISTdata):
@@ -35,15 +29,15 @@ def Compare_NIST_Results(DataSet, myfit, NISTdata):
         par = params[parname]
         thisval = par.value
         certval = NISTdata['cert_values'][i]
-        vdig    = ndig(thisval, certval)
-        pname   = (parname + ' value ' + ' '*14)[:14]
+        vdig = ndig(thisval, certval)
+        pname = (parname + ' value ' + ' '*14)[:14]
         print(' | %s | % -.7e | % -.7e   | %2i                |' % (pname, thisval, certval, vdig))
         val_dig_min = min(val_dig_min, vdig)
 
         thiserr = par.stderr
         certerr = NISTdata['cert_stderr'][i]
         if thiserr is not None and myfit.errorbars:
-            edig   = ndig(thiserr, certerr)
+            edig = ndig(thiserr, certerr)
             ename = (parname + ' stderr' + ' '*14)[:14]
             print(' | %s | % -.7e | % -.7e   | %2i                |' % (ename, thiserr, certerr, edig))
             err_dig_min = min(err_dig_min, edig)
@@ -66,6 +60,7 @@ def Compare_NIST_Results(DataSet, myfit, NISTdata):
         print(' Worst agreement: %i digits' % (val_dig_min))
     return val_dig_min
 
+
 def NIST_Test(DataSet, method='leastsq', start='start2', plot=True):
 
     NISTdata = ReadNistData(DataSet)
@@ -76,20 +71,19 @@ def NIST_Test(DataSet, method='leastsq', start='start2', plot=True):
     params = Parameters()
     for i in range(npar):
         pname = 'b%i' % (i+1)
-        cval  = NISTdata['cert_values'][i]
-        cerr  = NISTdata['cert_stderr'][i]
+        cval = NISTdata['cert_values'][i]
+        cerr = NISTdata['cert_stderr'][i]
         pval1 = NISTdata[start][i]
         params.add(pname, value=pval1)
 
-
-    myfit = minimize(resid, params, method=method, args=(x,), kws={'y':y})
+    myfit = minimize(resid, params, method=method, args=(x,), kws={'y': y})
     digs = Compare_NIST_Results(DataSet, myfit, NISTdata)
 
     if plot and HASPYLAB:
         fit = -resid(myfit.params, x)
-        pylab.plot(x, y, 'ro')
-        pylab.plot(x, fit, 'k+-')
-        pylab.show()
+        plt.plot(x, y, 'ro')
+        plt.plot(x, fit, 'k+-')
+        plt.show()
 
     return digs > 2
 
@@ -109,7 +103,7 @@ usage = """
 
 usage:
 ------
-    python fit_NIST.py [options] Model Start
+    python fit_NIST_lmfit.py [options] Model Start
 
 where Start is one of 'start1','start2' or 'cert', for different
 starting values, and Model is one of
@@ -154,7 +148,7 @@ if dset.lower() == 'all':
                 failures.append("   %s (starting at '%s')" % (dset, start))
 
     print('--------------------------------------')
-    print(' Fit Method: %s ' %  opts.method)
+    print(' Fit Method: %s ' % opts.method)
     print(' Final Results: %i pass, %i fail.' % (tpass, tfail))
     print(' Tests Failed for:\n %s' % '\n '.join(failures))
     print('--------------------------------------')

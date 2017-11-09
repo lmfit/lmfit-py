@@ -1,7 +1,10 @@
-import matplotlib
+#!/usr/bin/env python
+
 import matplotlib.pyplot as plt
-from lmfit.models import *
-from lmfit.lineshapes import *
+import numpy as np
+
+from lmfit.lineshapes import gaussian, lorentzian, s2pi
+from lmfit.models import GaussianModel, LorentzianModel
 
 
 def dfunc_gaussian(params, *ys, **xs):
@@ -15,15 +18,16 @@ def dfunc_gaussian(params, *ys, **xs):
     dmu = A * fac * (x-mu) / (s2pi*s**3)
     return np.array([ds, dmu, da])
 
+
 def dfunc_lorentzian(params, *ys, **xs):
     xx = xs['x']
     var = params.valuesdict()
     A, s, mu = var['amplitude'], var['sigma'], var['center']
     fac = ((xx-mu)**2+s**2)
 
-    ds = (A*((xx-mu)**2-s**2)) / (pi * fac**2)
-    da = s / (pi*fac)
-    dmu = (2. * A * (xx-mu)*s)/(pi * fac**2)
+    ds = (A*((xx-mu)**2-s**2)) / (np.pi * fac**2)
+    da = s / (np.pi*fac)
+    dmu = (2. * A * (xx-mu)*s)/(np.pi * fac**2)
     return np.array([ds, dmu, da])
 
 
@@ -38,7 +42,7 @@ if __name__ == '__main__':
 
     mod = GaussianModel()
     pars = mod.guess(yn, xs)
-    out  = mod.fit(yn, pars, x=xs)
+    out = mod.fit(yn, pars, x=xs)
     out2 = mod.fit(yn, pars,  x=xs, fit_kws={'Dfun': dfunc_gaussian, 'col_deriv': 1})
     print('lmfit without dfunc **************')
     print('number of function calls: ', out.nfev)
@@ -49,7 +53,6 @@ if __name__ == '__main__':
     print('\n \n')
     out2.plot(datafmt='.')
 
-
     print('**********************************')
     print('***** Test Lorentzian ************')
     print('**********************************')
@@ -58,8 +61,8 @@ if __name__ == '__main__':
 
     mod = LorentzianModel()
     pars = mod.guess(yn, xs)
-    out  = mod.fit(yn, pars, x=xs )
-    out2 = mod.fit(yn, pars,  x=xs, fit_kws={'Dfun': dfunc_lorentzian, 'col_deriv': 1})
+    out = mod.fit(yn, pars, x=xs)
+    out2 = mod.fit(yn, pars, x=xs, fit_kws={'Dfun': dfunc_lorentzian, 'col_deriv': 1})
     print('lmfit without dfunc **************')
     print('number of function calls: ', out.nfev)
     print('params', out.best_values)
