@@ -109,6 +109,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     add = buff.append
     if result is not None:
         add("[[Fit Statistics]]")
+        add("    # fitting method   = %s" % (result.method))
         add("    # function evals   = %s" % getfloat_attr(result, 'nfev'))
         add("    # data points      = %s" % getfloat_attr(result, 'ndata'))
         add("    # variables        = %s" % getfloat_attr(result, 'nvarys'))
@@ -167,7 +168,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             add(CORREL_HEAD % min_correl)
         for name, val in sort_correl:
             lspace = max(1, 25 - len(name))
-            add('    C(%s)%s = % .3f ' % (name, (' '*30)[:lspace], val))
+            add('    C(%s)%s = % .3f' % (name, (' '*30)[:lspace], val))
     return '\n'.join(buff)
 
 
