@@ -5,26 +5,14 @@ sudo: false
 
 python:
     - 2.7
-    - 3.3
     - 3.4
     - 3.5
     - 3.6
 
-# test minium required and current version of scipy
+# test minium required and latest versions of SciPy and NumPy
 env:
-    - SCIPY_VERSION=0.15
-    - SCIPY_VERSION=0.19
-
-matrix:
-    exclude:
-        -  python: 3.3
-           env: SCIPY_VERSION=0.19
-        -  python: 3.4
-           env: SCIPY_VERSION=0.19
-        -  python: 3.5
-           env: SCIPY_VERSION=0.15
-        -  python: 3.6
-           env: SCIPY_VERSION=0.15
+    - version=minimum  # SciPy>=0.17 NumPy>=1.10
+    - version=latest
 
 before_install:
     - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
@@ -36,12 +24,13 @@ before_install:
     - conda info -a
 
 install:
-    - if [[ $SCIPY_VERSION == 0.15 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy=$SCIPY_VERSION libgfortran=1 pandas matplotlib nose; fi
-    - if [[ $SCIPY_VERSION != 0.15 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy=$SCIPY_VERSION pandas matplotlib nose; fi
+    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION != 3.6 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.10 scipy=0.17 six=1.10 nose; fi
+    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION == 3.6 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.11 scipy=0.18 six=1.10 nose; fi
+    - if [[ $version == latest ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy six pandas matplotlib dill nose; fi
     - source activate test_env
-    - conda install dill pytest six
     - pip install emcee
     - python setup.py install
+    - conda list
 
 script:
     - cd tests
