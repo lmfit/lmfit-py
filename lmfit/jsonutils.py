@@ -104,12 +104,8 @@ def decode4js(obj):
         pyvers ="%d.%d" %(sys.version_info.major,
                           sys.version_info.minor)
         if pyvers == obj['pyversion'] and HAS_DILL:
-            val = b64encode(dill.dumps(obj))
-        return dict(__class__='Callable', __name__=obj['__name__'],
-                    pyversion=pyvers, value=val)
-
-        if HAS_DILL:
             out = dill.loads(b64decode(obj['value']))
+
     elif classname in ('Dict', 'dict'):
         out = {}
         for key, val in obj.items():
