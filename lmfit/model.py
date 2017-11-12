@@ -1024,7 +1024,7 @@ def load_model(fname, funcdefs=None):
 
     Returns
     -------
-      model
+      a Model
     """
     m = Model(lambda x:  x)
     with open(fname) as fh:

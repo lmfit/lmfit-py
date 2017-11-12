@@ -523,6 +523,46 @@ at half maximum of a Gaussian model, one could use a parameter hint of::
     >>> mod.set_param_hint('fwhm', expr='2.3548*sigma')
 
 
+Saving and Loading Models
+-----------------------------------
+
+.. versionadded:: 0.9.8
+
+It is sometimes desirable to save a :class:`Model` for later use outside of
+the code used to define the model. Lmfit provides a :func:`save_model`
+function that will save a :class:`Model` to a file. There is also a
+companion :func:`load_model` function that can read this file and
+reconstruct a :class:`Model` from it.
+
+Saving a model turns out to be somewhat challenging. The main issue is that
+Python is not normally able to *serialize* a function (such as the model
+function making up the heart of the Model) in a way that can be
+reconstructed into a callable Python object.  The `dill` package can
+sometimes serialize functions, but with the limitation that it can be used
+only in the same version of Python.  In addition, class methods used as
+model functions will not retain the rest of the class attributes and
+methods, and so may not be usable.  With all those warnings, it should be
+emphasized that if you are willing to save or reuse the definition of the
+model function as Python code, then saving the Parameters and rest of the
+components that make up a model presents no problem.
+
+If the `dill` package is installed, the model function will be saved using
+it.  But because saving the model function is not always reliable, saving a
+model will always save the *name* of the model function.  The
+:func:`load_model` takes an optional :attr:`funcdefs` argument that can
+contain a dictionary of function definitions with the function names as
+keys and function objects as values.  If one of the dictionary keys matches
+the saved name, the corresponding function object will be used as the model
+function. With this approach, if you save a model and can provide the code
+used for the model function, the model can be saved and reliably reloaded
+and used.
+
+.. autofunction:: save_model
+
+.. autofunction:: load_model
+
+
+
 The :class:`ModelResult` class
 =======================================
 
