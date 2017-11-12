@@ -2,24 +2,26 @@
 #<examples/doc_load_model.py>
 import numpy as np
 import matplotlib.pyplot as plt
+from lmfit.model import Model, save_model, load_model
 
-from lmfit.model import load_model
+def mysine(x, amp, freq, shift):
+    return amp * np.sin(x*freq + shift)
 
-data = np.loadtxt('model1d_gauss.dat')
+data = np.loadtxt('sinedata.dat')
 x = data[:, 0]
 y = data[:, 1]
 
+model = load_model('sinemodel.sav')
+params = model.make_params(amp=3, freq=0.52, shift=0)
+params['shift'].max = 1
+params['shift'].min = -1
+params['amp'].min = 0.0
 
-model = load_model('tmp_save_model.sav')
-
-result = model.fit(y, x=x, amplitude=5, center=5, sigma=1)
-
+result = model.fit(y,  params, x=x)
 print(result.fit_report())
-
 
 plt.plot(x, y,         'bo')
 plt.plot(x, result.best_fit, 'r-')
 plt.show()
-
 
 #<end examples/doc_load_model.py>

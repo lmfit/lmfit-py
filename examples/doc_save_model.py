@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 #<examples/doc_save_model.py>
-from lmfit.models import LorentzianModel
-from lmfit.model import save_model
 
-smodel = LorentzianModel()
+import numpy as np
+from lmfit.model import Model, save_model, load_model
 
-savefile = 'tmp_save_model.sav'
+def mysine(x, amp, freq, shift):
+    return amp * np.sin(x*freq + shift)
 
-save_model(smodel, savefile)
+sinemodel = Model(mysine)
+pars = sinemodel.make_params(amp=1, freq=0.25, shift=0)
 
-print("mode saved to '%s'" % savefile)
+save_model(sinemodel, 'sinemodel.sav')
 
 #<end examples/doc_save_model.py>
