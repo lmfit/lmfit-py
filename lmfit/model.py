@@ -1024,7 +1024,7 @@ def load_model(fname, funcdefs=None):
 
     Returns
     -------
-      a Model
+      Model
     """
     m = Model(lambda x:  x)
     with open(fname) as fh:
@@ -1040,7 +1040,6 @@ def _buildmodel(state, funcdefs=None):
     """
     if len(state) != 3:
         raise ValueError("Cannot restore Model")
-
     known_funcs = {}
     for fname in lineshapes.functions:
         fcn = getattr(lineshapes, fname, None)
