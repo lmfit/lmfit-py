@@ -1,24 +1,28 @@
 #!/usr/bin/env python
-#<examples/doc_nistgauss2.py>
-import numpy as np
-from lmfit.models import GaussianModel, ExponentialModel
 
+# <examples/doc_nistgauss2.py>
 import matplotlib.pyplot as plt
+import numpy as np
+
+from lmfit.models import ExponentialModel, GaussianModel
 
 dat = np.loadtxt('NIST_Gauss2.dat')
 x = dat[:, 1]
 y = dat[:, 0]
 
 exp_mod = ExponentialModel(prefix='exp_')
-gauss1  = GaussianModel(prefix='g1_')
-gauss2  = GaussianModel(prefix='g2_')
+gauss1 = GaussianModel(prefix='g1_')
+gauss2 = GaussianModel(prefix='g2_')
+
 
 def index_of(arrval, value):
-    "return index of array *at or below* value "
-    if value < min(arrval):  return 0
-    return max(np.where(arrval<=value)[0])
+    """return index of array *at or below* value """
+    if value < min(arrval):
+        return 0
+    return max(np.where(arrval <= value)[0])
 
-ix1 = index_of(x,  75)
+
+ix1 = index_of(x, 75)
 ix2 = index_of(x, 135)
 ix3 = index_of(x, 175)
 
@@ -33,8 +37,9 @@ out = mod.fit(y, pars, x=x)
 
 print(out.fit_report(min_correl=0.5))
 
-plt.plot(x, y)
+plt.plot(x, y, 'b')
 plt.plot(x, out.init_fit, 'k--')
 plt.plot(x, out.best_fit, 'r-')
+# plt.savefig('../doc/_images/models_nistgauss2.png')
 plt.show()
-#<end examples/doc_nistgauss2.py>
+# <end examples/doc_nistgauss2.py>

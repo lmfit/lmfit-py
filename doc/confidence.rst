@@ -45,13 +45,12 @@ First we create an example problem::
     >>> import lmfit
     >>> import numpy as np
     >>> x = np.linspace(0.3, 10, 100)
+    >>> np.random.seed(0)
     >>> y = 1/(0.1*x) + 2 + 0.1*np.random.randn(x.size)
     >>> pars = lmfit.Parameters()
     >>> pars.add_many(('a', 0.1), ('b', 1))
     >>> def residual(p):
-    ...    a = p['a'].value
-    ...    b = p['b'].value
-    ...    return 1/(a*x) + b - y
+    ...     return 1/(p['a']*x) + p['b'] - y
 
 
 before we can generate the confidence intervals, we have to run a fit, so
@@ -63,8 +62,8 @@ starting point::
     >>> result = mini.minimize()
     >>> print(lmfit.fit_report(result.params))
     [[Variables]]
-        a:   0.09963086 +/- 0.000216 (0.22%) (init= 0.1)
-        b:   1.97053799 +/- 0.013638 (0.69%) (init= 1)
+        a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
+        b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
         C(a, b)                      =  0.601
 
@@ -74,8 +73,8 @@ intervals::
     >>> ci = lmfit.conf_interval(mini, result)
     >>> lmfit.printfuncs.report_ci(ci)
           99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
-     a:  -0.00066  -0.00044  -0.00022   0.09963  +0.00022  +0.00044  +0.00067
-     b:  -0.04200  -0.02764  -0.01371   1.97054  +0.01371  +0.02764  +0.04201
+     a:  -0.00059  -0.00039  -0.00019   0.09944  +0.00019  +0.00039  +0.00060
+     b:  -0.03766  -0.02478  -0.01230   1.98477  +0.01230  +0.02478  +0.03761
 
 This shows the best-fit values for the parameters in the `_BEST_` column,
 and parameter values that are at the varying confidence levels given by
@@ -95,10 +94,10 @@ covariance can lead to misleading result -- two decaying exponentials.  In
 fact such a problem is particularly hard for the Levenberg-Marquardt
 method, so we first estimate the results using the slower but robust
 Nelder-Mead  method, and *then* use Levenberg-Marquardt to estimate the
-uncertainties and correlations
+uncertainties and correlations.
 
 
-.. literalinclude:: ../examples/doc_confidence2.py
+.. literalinclude:: ../examples/doc_confidence_advanced.py
 
 which will report::
 
@@ -151,7 +150,7 @@ parameters::
     >>> plt.scatter(x, y, c=prob ,s=30)
     >>> plt.scatter(x2, y2, c=prob2, s=30)
     >>> plt.gca().set_xlim((2.5, 3.5))
-    >>> plt.gca().set_ylim((11, 13))
+    >>> plt.gca().set_ylim((11.5, 12.5))
     >>> plt.xlabel('a1')
     >>> plt.ylabel('t2')
     >>> plt.show()
@@ -168,7 +167,7 @@ the posterior probability distribution. These distributions demonstrate the
 range of solutions that the data supports. The following image was obtained
 by using :meth:`Minimizer.emcee` on the same problem.
 
-.. image:: _images/emcee_triangle.png
+.. image:: _images/emcee_corner.png
 
 Credible intervals (the Bayesian equivalent of the frequentist confidence
 interval) can be obtained with this method. MCMC can be used for model

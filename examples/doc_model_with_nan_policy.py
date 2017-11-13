@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-#<examples/doc_model_with_nan_policy.py>
+
+# <examples/doc_model_with_nan_policy.py>
+import matplotlib.pyplot as plt
 import numpy as np
 
-from lmfit.models import  GaussianModel
-
-import matplotlib.pyplot as plt
+from lmfit.models import GaussianModel
 
 data = np.loadtxt('model1d_gauss.dat')
 x = data[:, 0]
@@ -24,12 +24,11 @@ result = gmodel.fit(y, x=x, amplitude=5, center=6, sigma=1,
 print(result.fit_report())
 
 # make sure nans are removed for plotting:
-
 x_ = x[np.where(np.isfinite(y))]
 y_ = y[np.where(np.isfinite(y))]
 
-plt.plot(x_, y_,         'bo')
+plt.plot(x_, y_, 'bo')
 plt.plot(x_, result.init_fit, 'k--')
 plt.plot(x_, result.best_fit, 'r-')
 plt.show()
-#<end examples/doc_model_with_nan_policy.py>
+# <end examples/doc_model_with_nan_policy.py>

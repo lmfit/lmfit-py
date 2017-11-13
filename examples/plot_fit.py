@@ -1,6 +1,9 @@
-import lmfit
-import numpy as np
+#!/usr/bin/env python
+
 from matplotlib import pyplot as plt
+import numpy as np
+
+import lmfit
 
 # construct data
 x = np.linspace(-4, 4)

@@ -46,10 +46,10 @@ peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
 can help do this, but here we'll build our own.  We start with a simple
 definition of the model function:
 
-    >>> from numpy import sqrt, pi, exp, linspace, random
+    >>> from numpy import exp, linspace, random
     >>>
     >>> def gaussian(x, amp, cen, wid):
-    ...    return amp * exp(-(x-cen)**2 / wid)
+    ...     return amp * exp(-(x-cen)**2 / wid)
 
 We want to use this function to fit to data :math:`y(x)` represented by the
 arrays `y` and `x`.  With :scipydoc:`optimize.curve_fit`, this would be::
@@ -62,6 +62,7 @@ arrays `y` and `x`.  With :scipydoc:`optimize.curve_fit`, this would be::
     >>> init_vals = [1, 0, 1]  # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
     >>> print(best_vals)
+    [ 2.39499424  0.19942179  1.50909389]
 
 
 That is, we create data, make an initial guess of the model values, and run
@@ -78,7 +79,7 @@ signature itself::
     >>> from lmfit import Model
     >>> gmodel = Model(gaussian)
     >>> gmodel.param_names
-    set(['amp', 'wid', 'cen'])
+    ['amp', 'cen', 'wid']
     >>> gmodel.independent_vars
     ['x']
 
@@ -142,7 +143,7 @@ or with::
 Putting everything together, included in the
 ``examples`` folder with the source code, is:
 
-.. literalinclude:: ../examples/doc_model1.py
+.. literalinclude:: ../examples/doc_model_gaussian.py
 
 which is pretty compact and to the point.  The returned `result` will be
 a :class:`ModelResult` object.  As we will see below, this has many
@@ -151,7 +152,7 @@ components, including a :meth:`fit_report` method, which will show::
     [[Model]]
         Model(gaussian)
     [[Fit Statistics]]
-        # function evals   = 31
+        # function evals   = 35
         # data points      = 101
         # variables        = 3
         chi-square         = 3.409
@@ -159,11 +160,11 @@ components, including a :meth:`fit_report` method, which will show::
         Akaike info crit   = -336.264
         Bayesian info crit = -328.418
     [[Variables]]
-        amp:   5.07800631 +/- 0.064957 (1.28%) (init= 5)
-        cen:   5.65866112 +/- 0.010304 (0.18%) (init= 5)
-        wid:   0.97344373 +/- 0.028756 (2.95%) (init= 1)
+        amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
+        cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
+        wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(amp, wid)                  = -0.577
+        C(amp, wid)                  =  0.577
 
 
 As the script shows, the result will also have :attr:`init_fit` for the fit
@@ -464,8 +465,8 @@ expression.  To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
     >>> mod = Model(myfunc)
-    >>> mod.set_param_hint('a', value = 1.0)
-    >>> mod.set_param_hint('b', value = 0.3, min=0, max=1.0)
+    >>> mod.set_param_hint('a', value=1.0)
+    >>> mod.set_param_hint('b', value=0.3, min=0, max=1.0)
     >>> pars = mod.make_params()
 
 Parameter hints are discussed in more detail in section
@@ -480,7 +481,7 @@ is, as with :meth:`Model.make_params`, you can include values
 as keyword arguments to either the :meth:`Model.eval` or :meth:`Model.fit` methods::
 
    >>> y1 = mod.eval(x=x, a=7.0, b=-2.0)
-   >>> out = mod.fit(x=x, pars, a=3.0, b=-0.0)
+   >>> out = mod.fit(x=x, pars, a=3.0, b=0.0)
 
 These approaches to initialization provide many opportunities for setting
 initial values for parameters.  The methods can be combined, so that you
@@ -500,8 +501,8 @@ expression.   To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
     >>> mod = Model(myfunc)
-    >>> mod.set_param_hint('a', value = 1.0)
-    >>> mod.set_param_hint('b', value = 0.3, min=0, max=1.0)
+    >>> mod.set_param_hint('a', value=1.0)
+    >>> mod.set_param_hint('b', value=0.3, min=0, max=1.0)
 
 Parameter hints are stored in a model's :attr:`param_hints` attribute,
 which is simply a nested dictionary::
@@ -716,7 +717,7 @@ uncertainties in the fitted parameters but for the range of values that
 those uncertainties mean for the model function itself.  We can use the
 :meth:`ModelResult.eval_uncertainty` method of the model result object to
 evaluate the uncertainty in the model with a specified level for
-:math:`sigma`.
+:math:`\sigma`.
 
 That is, adding::
 
@@ -724,7 +725,7 @@ That is, adding::
     plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB")
 
 to the example fit to the Gaussian at the beginning of this chapter will
-give :math:`3-sigma` bands for the best-fit Gaussian, and produce the
+give 3-:math:`\sigma` bands for the best-fit Gaussian, and produce the
 figure below.
 
 .. _figModel4:
@@ -755,10 +756,10 @@ to model a peak with a background. For such a simple problem, we could just
 build a model that included both components::
 
     def gaussian_plus_line(x, amp, cen, wid, slope, intercept):
-        "line + 1-d gaussian"
+        """line + 1-d gaussian"""
 
-        gauss = (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
-        line = slope * x + intercept
+        gauss = (amp / (sqrt(2*pi) * wid)) * exp(-(x-cen)**2 / (2*wid**2))
+        line = slope*x + intercept
         return gauss + line
 
 and use that with::
@@ -774,8 +775,8 @@ As an alternative to including a linear background in our model function,
 we could define a linear function::
 
     def line(x, slope, intercept):
-        "a line"
-        return slope * x + intercept
+        """a line"""
+        return slope*x + intercept
 
 and build a composite model with just::
 
@@ -783,14 +784,14 @@ and build a composite model with just::
 
 This model has parameters for both component models, and can be used as:
 
-.. literalinclude:: ../examples/doc_model2.py
+.. literalinclude:: ../examples/doc_model_twocomponents.py
 
 which prints out the results::
 
     [[Model]]
         (Model(gaussian) + Model(line))
     [[Fit Statistics]]
-        # function evals   = 44
+        # function evals   = 46
         # data points      = 101
         # variables        = 5
         chi-square         = 2.579
@@ -800,12 +801,18 @@ which prints out the results::
     [[Variables]]
         amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
         cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
-        intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
-        slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
         wid:         0.67545523 +/- 0.009916 (1.47%) (init= 1)
+        slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
+        intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
+        C(slope, intercept)          = -0.795
         C(amp, wid)                  =  0.666
+        C(amp, intercept)            = -0.222
+        C(amp, slope)                = -0.169
+        C(cen, slope)                = -0.162
+        C(wid, intercept)            = -0.148
         C(cen, intercept)            =  0.129
+        C(wid, slope)                = -0.113
 
 and shows the plot on the left.
 
@@ -820,15 +827,19 @@ and shows the plot on the left.
 
 
 On the left, data is shown in blue dots, the total fit is shown in solid
-red line, and the initial fit is shown as a black dashed line.  In the
-figure on the right, the data is again shown in blue dots, and the Gaussian
-component shown as a black dashed line, and the linear component shown as a
-red dashed line.  These components were generated after the fit using the
-Models :meth:`ModelResult.eval_components` method of the `result`::
+red line, and the initial fit is shown as a black dashed line. The figure
+on the right shows again the data in blue dots, the Gaussian component as
+a black dashed line and the linear component as a red dashed line. It is
+created using the following code::
 
     comps = result.eval_components()
+    plt.plot(x, y, 'bo')
+    plt.plot(x, comps['gaussian'], 'k--')
+    plt.plot(x, comps['line'], 'r--')
 
-which returns a dictionary of the components, using keys of the model name
+The components were generated after the fit using the
+:meth:`ModelResult.eval_components` method of the `result`, which returns
+a dictionary of the components, using keys of the model name
 (or `prefix` if that is set).  This will use the parameter values in
 `result.params` and the independent variables (`x`) used during the
 fit.  Note that while the :class:`ModelResult` held in `result` does store the
@@ -868,13 +879,14 @@ operator.  For example, to convolve two models, you could define a simple
 convolution function, perhaps as::
 
     import numpy as np
+
     def convolve(dat, kernel):
-        # simple convolution
+        """simple convolution of two arrays"""
         npts = min(len(dat), len(kernel))
-        pad  = np.ones(npts)
-        tmp  = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
-        out  = np.convolve(tmp, kernel, mode='valid')
-        noff = int((len(out) - npts)/2)
+        pad = np.ones(npts)
+        tmp = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
+        out = np.convolve(tmp, kernel, mode='valid')
+        noff = int((len(out) - npts) / 2)
         return (out[noff:])[:npts]
 
 which extends the data in both directions so that the convolving kernel
@@ -882,7 +894,7 @@ function gives a valid result over the data range.  Because this function
 takes two array arguments and returns an array, it can be used as the
 binary operator.  A full script using this technique is here:
 
-.. literalinclude:: ../examples/doc_model3.py
+.. literalinclude:: ../examples/doc_model_composite.py
 
 which prints out the results::
 
