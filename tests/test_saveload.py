@@ -20,11 +20,11 @@ def get_data():
 def create_model_params(x, y):
     try:
         os.unlink(SAVE_MODELRESULT)
-    except FileNotFoundError:
+    except IOError:
         pass
     try:
         os.unlink(SAVE_MODEL)
-    except FileNotFoundError:
+    except IOError:
         pass
 
     exp_mod = ExponentialModel(prefix='exp_')
