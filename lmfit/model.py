@@ -1028,7 +1028,7 @@ def load_model(fname, funcdefs=None):
     """
     m = Model(lambda x:  x)
     with open(fname) as fh:
-        model = m.load(fh)
+        model = m.load(fh, funcdefs=funcdefs)
     return model
 
 
@@ -1052,7 +1052,6 @@ def _buildmodel(state, funcdefs=None):
     if op is None and right is None:
         (fname, fcndef, name, prefix, ivars, pnames,
          phints, nan_policy, opts) = left
-
         if not callable(fcndef) and fname in known_funcs:
             fcndef = known_funcs[fname]
 
@@ -1070,7 +1069,6 @@ def _buildmodel(state, funcdefs=None):
         lmodel = _buildmodel(left, funcdefs=funcdefs)
         rmodel = _buildmodel(right, funcdefs=funcdefs)
         return CompositeModel(lmodel, rmodel, getattr(operator, op))
-
 
 
 def save_modelresult(modelresult, fname):
