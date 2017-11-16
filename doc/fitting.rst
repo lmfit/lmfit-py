@@ -66,8 +66,7 @@ simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
 
     def residual(pars, x, data=None, eps=None):
         from numpy import exp, sign, sin, pi
-        # unpack parameters:
-        #  extract .value attribute for each parameter
+        # unpack parameters: extract .value attribute for each parameter
         parvals = pars.valuesdict()
         period = parvals['period']
         shift = parvals['shift']
@@ -84,8 +83,8 @@ simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
         if data is None:
             return model
         if eps is None:
-            return (model - data)
-        return (model - data)/eps
+            return model - data
+        return (model-data) / eps
 
 In this example, `x` is a positional (required) argument, while the
 `data` array is actually optional (so that the function returns the model
@@ -388,6 +387,8 @@ exponential decay. A small amount of Gaussian noise is also added in::
     >>> plt.show()
 
 .. image:: _images/emcee_dbl_exp.png
+   :target: _images/emcee_dbl_exp.png
+   :width: 50%
 
 Create a Parameter set for the initial guesses::
 
@@ -398,21 +399,23 @@ Create a Parameter set for the initial guesses::
     ...     v = p.valuesdict()
     ...     return v['a1'] * np.exp(-x / v['t1']) + v['a2'] * np.exp(-(x - 0.1) / v['t2']) - y
 
-Solving with :func:`minimize` gives the Maximum Likelihood solution.::
+Solving with :func:`minimize` gives the Maximum Likelihood solution::
 
-    >>> mi = lmfit.minimize(residual, p, method='Nelder')
+    >>> mi = lmfit.minimize(residual, p, method='Nelder', nan_policy='omit')
     >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
     [[Variables]]
         a1:   2.98623688 (init= 4)
         a2:  -4.33525596 (init= 4)
         t1:   1.30993185 (init= 3)
         t2:   11.8240752 (init= 3)
-    [[Correlations]] (unreported correlations are <  0.500)
+
     >>> plt.plot(x, y)
     >>> plt.plot(x, residual(mi.params) + y, 'r')
     >>> plt.show()
 
 .. image:: _images/emcee_dbl_exp2.png
+   :target: _images/emcee_dbl_exp2.png
+   :width: 50%
 
 However, this doesn't give a probability distribution for the parameters.
 Furthermore, we wish to deal with the data uncertainty. This is called
@@ -423,22 +426,18 @@ assumed to be zero if all the parameters are within their bounds and ``-np.inf``
 if any of the parameters are outside their bounds.
 
     >>> # add a noise parameter
-    >>> mi.params.add('f', value=1, min=0.001, max=2)
+    >>> mi.params.add('noise', value=1, min=0.001, max=2)
 
     >>> # This is the log-likelihood probability for the sampling. We're going to estimate the
     >>> # size of the uncertainties on the data as well.
     >>> def lnprob(p):
-    ...    resid = residual(p)
-    ...    s = p['f']
-    ...    resid *= 1 / s
-    ...    resid *= resid
-    ...    resid += np.log(2 * np.pi * s**2)
-    ...    return -0.5 * np.sum(resid)
+    ...    noise = p['noise']
+    ...    return -0.5 * np.sum((residual(p) / noise)**2 + np.log(2 * np.pi * noise**2))
 
 Now we have to set up the minimizer and do the sampling::
 
     >>> mini = lmfit.Minimizer(lnprob, mi.params)
-    >>> res = mini.emcee(burn=300, steps=600, thin=10, params=mi.params)
+    >>> res = mini.emcee(burn=300, steps=1000, thin=20, params=mi.params)
 
 Lets have a look at those posterior distributions for the parameters.  This requires
 installation of the `corner` package::
@@ -446,32 +445,34 @@ installation of the `corner` package::
     >>> import corner
     >>> corner.corner(res.flatchain, labels=res.var_names, truths=list(res.params.valuesdict().values()))
 
-.. image:: _images/emcee_triangle.png
+.. image:: _images/emcee_corner.png
+   :target: _images/emcee_corner.png
+   :width: 75%
 
 The values reported in the :class:`MinimizerResult` are the medians of the
-probability distributions and a 1 sigma quantile, estimated as half the
+probability distributions and a 1 :math:`\sigma` quantile, estimated as half the
 difference between the 15.8 and 84.2 percentiles. The median value is not
 necessarily the same as the Maximum Likelihood Estimate. We'll get that as well.
 You can see that we recovered the right uncertainty level on the data::
 
     >>> print("median of posterior probability distribution")
-    >>> print('------------------------------------------')
+    >>> print('--------------------------------------------')
     >>> lmfit.report_fit(res.params)
     median of posterior probability distribution
-    ------------------------------------------
+    --------------------------------------------
     [[Variables]]
-        a1:   3.00975345 +/- 0.151034 (5.02%) (init= 2.986237)
-        a2:  -4.35419204 +/- 0.127505 (2.93%) (init=-4.335256)
-        t1:   1.32726415 +/- 0.142995 (10.77%) (init= 1.309932)
-        t2:   11.7911935 +/- 0.495583 (4.20%) (init= 11.82408)
-        f:    0.09805494 +/- 0.004256 (4.34%) (init= 1)
+        a1:      3.00395737 +/- 0.148140 (4.93%) (init= 2.986237)
+        a2:     -4.34880797 +/- 0.129770 (2.98%) (init=-4.335256)
+        t1:      1.32070726 +/- 0.145682 (11.03%) (init= 1.309932)
+        t2:      11.7701458 +/- 0.505031 (4.29%) (init= 11.82408)
+        noise:   0.09774012 +/- 0.004329 (4.43%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(a2, t2)                    =  0.981
-        C(a2, t1)                    = -0.927
-        C(t1, t2)                    = -0.880
-        C(a1, t1)                    = -0.519
-        C(a1, a2)                    =  0.195
-        C(a1, t2)                    =  0.146
+        C(a2, t2)                    =  0.982
+        C(a2, t1)                    = -0.935
+        C(t1, t2)                    = -0.892
+        C(a1, t1)                    = -0.507
+        C(a1, a2)                    =  0.203
+        C(a1, t2)                    =  0.163
 
     >>> # find the maximum likelihood solution
     >>> highest_prob = np.argmax(res.lnprob)
@@ -485,15 +486,17 @@ You can see that we recovered the right uncertainty level on the data::
     >>> print(p)
     Maximum likelihood Estimation
     -----------------------------
-    Parameters([('a1', <Parameter 'a1', 2.9943337359308981, bounds=[-inf:inf]>),
-    ('a2', <Parameter 'a2', -4.3364489105166593, bounds=[-inf:inf]>),
-    ('t1', <Parameter 't1', 1.3124544105342462, bounds=[-inf:inf]>),
-    ('t2', <Parameter 't2', 11.80612160586597, bounds=[-inf:inf]>)])
+    Parameters([('a1', <Parameter 'a1', 2.9838386218794306, bounds=[-inf:inf]>),
+    ('a2', <Parameter 'a2', -4.3360301800977243, bounds=[-inf:inf]>),
+    ('t1', <Parameter 't1', 1.3099319599456074, bounds=[-inf:inf]>),
+    ('t2', <Parameter 't2', 11.813711030433806, bounds=[-inf:inf]>)])
 
     >>> # Finally lets work out a 1 and 2-sigma error estimate for 't1'
     >>> quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
-    >>> print("2 sigma spread", 0.5 * (quantiles[-1] - quantiles[0]))
-    2 sigma spread 0.298878202908
+    >>> print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
+    >>> print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
+    1 sigma spread 0.145719626384
+    2 sigma spread 0.292199907106
 
 Getting and Printing Fit Reports
 ===========================================
@@ -504,7 +507,7 @@ Getting and Printing Fit Reports
 
 An example using this to write out a fit report would be:
 
-.. literalinclude:: ../examples/doc_withreport.py
+.. literalinclude:: ../examples/doc_fitting_withreport.py
 
 which would write out::
 

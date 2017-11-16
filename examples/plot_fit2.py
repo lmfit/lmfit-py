@@ -1,6 +1,9 @@
-import lmfit
-import numpy as np
+#!/usr/bin/env python
+
 from matplotlib import pyplot as plt
+import numpy as np
+
+import lmfit
 
 # construct data
 x = np.linspace(-4, 4)
@@ -15,7 +18,7 @@ model_gaussian.guess(y, x=x)
 fit_gaussian = model_gaussian.fit(y, x=x, weights=1/noise**2)
 
 # plot the with with customization
-fig, gridspec = fit_gaussian.plot(fig_kws=dict(figsize=[8,7]),
+fig, gridspec = fit_gaussian.plot(fig_kws=dict(figsize=[8, 7]),
                                   ax_fit_kws=dict(title='The gaussian fit'),
                                   initfmt='k:', datafmt='ks',
                                   fit_kws=dict(lw=2, color='red'),

@@ -156,7 +156,7 @@ for the constraints::
 
     def mylorentzian(x, amp, cen, wid):
         "lorentzian function: wid = half-width at half-max"
-        return (amp / (1 + ((x-cen)/wid)**2))
+        return (amp / (1 + ((x-cen) / wid)**2))
 
     fitter = Minimizer()
     fitter.asteval.symtable['lorentzian'] = mylorentzian

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 """This runs the same fits for the NIST StRD models but using
 plain old scipy.optimize and relying on no code from lmfit.
 In fact, it goes right down to using
@@ -6,33 +7,27 @@ In fact, it goes right down to using
 
 The tests only check best-fit value, not estimated uncertainties.
 Currently, not all tests pass.
-
-
 """
 
-from __future__ import print_function
-import sys
 import math
-import numpy as np
+import sys
 
 from scipy.optimize import _minpack
 
 from NISTModels import Models, ReadNistData
 
 try:
-    import matplotlib
-    matplotlib.use('WXAgg')
-    import pylab
+    import matplotlib.pyplot as plt
     HASPYLAB = True
 except IOError:
     HASPYLAB = False
 
 
 def ndig(a, b):
-    return int(0.5-math.log10(abs(abs(a)-abs(b))/abs(b)))
+    return int(0.5 - math.log10(abs(abs(a)-abs(b)) / abs(b)))
+
 
 def Compare_NIST_Results(DataSet, vals, NISTdata):
-    #print(' ======================================')
     print(' %s: ' % DataSet)
     print(' | Parameter Name |  Value Found   |  Certified Value | # Matching Digits |')
     print(' |----------------+----------------+------------------+-------------------|')
@@ -44,7 +39,7 @@ def Compare_NIST_Results(DataSet, vals, NISTdata):
         thisval = vals[i]
         certval = NISTdata['cert_values'][i]
 
-        vdig   = ndig(thisval, certval)
+        vdig = ndig(thisval, certval)
 
         pname = (parname + ' value ' + ' '*14)[:14]
         print(' | %s | % -.7e | % -.7e   | %2i                |' % (pname, thisval, certval, vdig))
@@ -53,6 +48,7 @@ def Compare_NIST_Results(DataSet, vals, NISTdata):
     print(' |----------------+----------------+------------------+-------------------|')
     print(' Worst agreement: %i digits for value ' % (val_dig_min))
     return val_dig_min
+
 
 def NIST_Test(DataSet, start='start2', plot=True):
 
@@ -64,18 +60,18 @@ def NIST_Test(DataSet, start='start2', plot=True):
     vals = []
     for i in range(npar):
         pname = 'b%i' % (i+1)
-        cval  = NISTdata['cert_values'][i]
-        cerr  = NISTdata['cert_stderr'][i]
+        cval = NISTdata['cert_values'][i]
+        cerr = NISTdata['cert_stderr'][i]
         pval1 = NISTdata[start][i]
         vals.append(pval1)
 
     maxfev = 2500 * (npar + 1)
-    factor  = 100
+    factor = 100
     xtol = 1.e-14
     ftol = 1.e-14
-    epsfcn  = 1.e-13
+    epsfcn = 1.e-13
     gtol = 1.e-14
-    diag =  None
+    diag = None
     print(" Fit with: ", factor, xtol, ftol, gtol, epsfcn, diag)
 
     _best, out, ier = _minpack._lmdif(resid, vals, (x, y), 1,
@@ -86,11 +82,12 @@ def NIST_Test(DataSet, start='start2', plot=True):
 
     if plot and HASPYLAB:
         fit = -resid(_best, x, )
-        pylab.plot(x, y, 'ro')
-        pylab.plot(x, fit, 'k+-')
-        pylab.show()
+        plt.plot(x, y, 'ro')
+        plt.plot(x, fit, 'k+-')
+        plt.show()
 
     return digs > 2
+
 
 msg1 = """
 ----- NIST StRD Models -----
@@ -100,12 +97,12 @@ and a starting point of 'start1' or 'start2'
 
 msg2 = """
 That is, use
-    python fit_NIST.py Bennett5 start1
+    python fit_NIST_scipy_lmdif.py Bennett5 start1
 or go through all models and starting points with:
-    python fit_NIST.py all
+    python fit_NIST_scipy_lmdif.py all
 """
 
-if __name__  == '__main__':
+if __name__ == '__main__':
     dset = 'Bennett5'
     start = 'start2'
     if len(sys.argv) < 2:
@@ -114,7 +111,7 @@ if __name__  == '__main__':
         for d in sorted(Models.keys()):
             out = out + ' %s ' % d
             if len(out) > 55:
-                print( out)
+                print(out)
                 out = ''
         print(out)
         print(msg2)
@@ -144,4 +141,3 @@ if __name__  == '__main__':
         print('--------------------------------------')
     else:
         NIST_Test(dset, start=start, plot=True)
-

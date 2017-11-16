@@ -1276,7 +1276,7 @@ class ModelResult(Minimizer):
         >>> plt.plot(x, data)
         >>> plt.plot(x, out.best_fit)
         >>> plt.fill_between(x, out.best_fit-dely,
-        ...                 out.best_fit+dely, color='#888888')
+        ...                  out.best_fit+dely, color='#888888')
 
         Notes
         -----
