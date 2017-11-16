@@ -11,7 +11,7 @@ data = np.loadtxt('sinedata.dat')
 x = data[:, 0]
 y = data[:, 1]
 
-model = load_model('sinemodel.sav')
+model = load_model('sinemodel.sav', funcdefs={'mysine': mysine})
 params = model.make_params(amp=3, freq=0.52, shift=0)
 params['shift'].max = 1
 params['shift'].min = -1
