@@ -74,7 +74,7 @@ def wait_for_file(fname, timeout=10):
         if os.path.exists(fname):
             return True
         time.sleep(0.05)
-    return return False
+    return False
 
 def test_save_model():
     x, y = get_data()
