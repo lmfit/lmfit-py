@@ -20,11 +20,11 @@ def get_data():
 def create_model_params(x, y):
     try:
         os.unlink(SAVE_MODELRESULT)
-    except IOError:
+    except OSError:
         pass
     try:
         os.unlink(SAVE_MODEL)
-    except IOError:
+    except OSError:
         pass
 
     exp_mod = ExponentialModel(prefix='exp_')
@@ -78,7 +78,7 @@ def test_save_model():
     text = ''
     with open(SAVE_MODEL, 'r') as fh:
         text = fh.read()
-    assert_between(len(text), 1000, 1500)
+    assert_between(len(text), 1000, 2500)
 
 def test_load_model():
     x, y = get_data()
@@ -110,7 +110,7 @@ def test_save_modelresult():
     text = ''
     with open(SAVE_MODELRESULT, 'r') as fh:
         text = fh.read()
-    assert_between(len(text), 8000, 15000)
+    assert_between(len(text), 8000, 25000)
 
 def test_save_modelresult():
     x, y = get_data()
