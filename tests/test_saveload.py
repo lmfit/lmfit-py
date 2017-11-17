@@ -1,32 +1,29 @@
 import os
 import time
 import numpy as np
-from lmfit import fit_report
 from lmfit_testutils import assert_between, assert_param_between
 
 from lmfit.model import (save_modelresult, save_model,
                          load_modelresult, load_model)
 from lmfit.models import ExponentialModel, GaussianModel
 
+dat = np.loadtxt(os.path.join('..', 'examples', 'NIST_Gauss2.dat'))
+XDAT = dat[:, 1]
+YDAT = dat[:, 0]
+
 SAVE_MODEL       = 'model_1.sav'
 SAVE_MODELRESULT = 'modelresult_1.sav'
 
-def get_data():
-    dat = np.loadtxt(os.path.join('..', 'examples', 'NIST_Gauss2.dat'))
-    x = dat[:, 1]
-    y = dat[:, 0]
-    return x, y
+try:
+    os.unlink(SAVE_MODELRESULT)
+except OSError:
+    pass
+try:
+    os.unlink(SAVE_MODEL)
+except OSError:
+    pass
 
 def create_model_params(x, y):
-    try:
-        os.unlink(SAVE_MODELRESULT)
-    except OSError:
-        pass
-    try:
-        os.unlink(SAVE_MODEL)
-    except OSError:
-        pass
-
     exp_mod = ExponentialModel(prefix='exp_')
     params  = exp_mod.guess(y, x=x)
 
@@ -77,7 +74,7 @@ def wait_for_file(fname, timeout=10):
     return False
 
 def test_save_model():
-    x, y = get_data()
+    x, y = XDAT, YDAT
     model, params = create_model_params(x, y)
 
     save_model(model, SAVE_MODEL)
@@ -90,7 +87,7 @@ def test_save_model():
     assert_between(len(text), 1000, 2500)
 
 def test_load_model():
-    x, y = get_data()
+    x, y = XDAT, YDAT
     model = load_model(SAVE_MODEL)
     params = model.make_params()
 
@@ -108,7 +105,7 @@ def test_load_model():
     check_fit_results(result)
 
 def test_save_modelresult():
-    x, y = get_data()
+    x, y = XDAT, YDAT
     model, params = create_model_params(x, y)
 
     result = model.fit(y, params, x=x)
