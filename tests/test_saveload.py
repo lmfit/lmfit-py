@@ -68,12 +68,21 @@ def check_fit_results(result):
     assert_param_between(pars['g2_fwhm'], 30, 34)
     assert_param_between(pars['g2_height'], 70, 75)
 
+def wait_for_file(fname, timeout=10):
+    end_time = time.time() + timeout
+    while time.time() < end_time:
+        if os.path.exists(fname):
+            return True
+        time.sleep(0.05)
+    return return False
+
 def test_save_model():
     x, y = get_data()
     model, params = create_model_params(x, y)
 
     save_model(model, SAVE_MODEL)
-    time.sleep(1.0)
+    file_exists = wait_for_file(SAVE_MODEL, timeout=10)
+    assert(file_exists)
 
     text = ''
     with open(SAVE_MODEL, 'r') as fh:
@@ -98,32 +107,19 @@ def test_load_model():
     result = model.fit(y,  params, x=x)
     check_fit_results(result)
 
-
 def test_save_modelresult():
     x, y = get_data()
     model, params = create_model_params(x, y)
 
     result = model.fit(y, params, x=x)
     save_modelresult(result, SAVE_MODELRESULT)
-    time.sleep(1.0)
+    file_exists = wait_for_file(SAVE_MODELRESULT, timeout=10)
+    assert(file_exists)
 
     text = ''
     with open(SAVE_MODELRESULT, 'r') as fh:
         text = fh.read()
     assert_between(len(text), 8000, 25000)
-
-def test_save_modelresult():
-    x, y = get_data()
-    model, params = create_model_params(x, y)
-
-    result = model.fit(y, params, x=x)
-    save_modelresult(result, SAVE_MODELRESULT)
-    time.sleep(1.0)
-
-    text = ''
-    with open(SAVE_MODELRESULT, 'r') as fh:
-        text = fh.read()
-    assert(len(text) > 5000)
 
 def test_load_modelresult():
     result = load_modelresult(SAVE_MODELRESULT)
