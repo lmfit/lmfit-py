@@ -17,7 +17,7 @@ except ImportError:
 try:
     from pandas import DataFrame, Series, read_json
 except ImportError:
-    DataFrame = Series, type(NotImplemented)
+    DataFrame = Series = type(NotImplemented)
     read_json = None
 
 def encode4js(obj):
@@ -35,7 +35,7 @@ def encode4js(obj):
         if 'complex' in obj.dtype.name:
             val = [(obj.real).tolist(), (obj.imag).tolist()]
         elif obj.dtype.name == 'object':
-            val = [encode4js(item) for item in out['value']]
+            val = [encode4js(item) for item in obj['value']]
         else:
             val = obj.flatten().tolist()
         return dict(__class__='NDArray', __shape__=obj.shape,
@@ -59,8 +59,8 @@ def encode4js(obj):
         return out
     elif callable(obj):
         val = None
-        pyvers ="%d.%d" %(sys.version_info.major,
-                          sys.version_info.minor)
+        pyvers = "%d.%d" %(sys.version_info.major,
+                           sys.version_info.minor)
         if HAS_DILL:
             val = b64encode(dill.dumps(obj))
         return dict(__class__='Callable', __name__=obj.__name__,
@@ -96,13 +96,13 @@ def decode4js(obj):
             out = np.fromiter(obj['value'], dtype=obj['__dtype__'])
         out.shape = obj['__shape__']
     elif classname == 'PDataFrame' and read_json is not None:
-        out = read_json(jsond.dumps(obj['value']))
+        out = read_json(json.dumps(obj['value']))
     elif classname == 'PSeries':
         out = Series(obj['value'])
     elif classname == 'Callable':
-        out = val =  obj['__name__']
-        pyvers ="%d.%d" %(sys.version_info.major,
-                          sys.version_info.minor)
+        out = val = obj['__name__']
+        pyvers = "%d.%d" %(sys.version_info.major,
+                           sys.version_info.minor)
         if pyvers == obj['pyversion'] and HAS_DILL:
             out = dill.loads(b64decode(obj['value']))
 
