@@ -999,26 +999,26 @@ class CompositeModel(Model):
         return out
 
 def save_model(model, fname):
-    """save a model to a file
+    """save a Model to a file
 
     Parameters
     ----------
     model : model instance
         model to be saved
     fname : str
-        name of file to save model to
+        name of file for saved Model
     """
     with open(fname, 'w') as fout:
         model.dump(fout)
 
 
 def load_model(fname, funcdefs=None):
-    """load a model from a saved file
+    """load a saved Model from a file
 
     Parameters
     ----------
     fname : str
-        name of file containing saved model
+        name of file containing saved Model
     funcdefs : dict, optional
         dictionay of custom function names an definitions.
 
@@ -1079,19 +1079,19 @@ def save_modelresult(modelresult, fname):
     modelresult : ModelResult instance
         ModelResult to be saved
     fname : str
-        name of file to save model to
+        name of file for saved ModelResult
     """
     with open(fname, 'w') as fout:
         modelresult.dump(fout)
 
 
 def load_modelresult(fname, funcdefs=None):
-    """load a ModelResult from a saved file
+    """load a saved ModelResult from a file
 
     Parameters
     ----------
     fname : str
-        name of file containing saved model
+        name of file containing saved ModelResult
     funcdefs : dict, optional
         dictionay of custom function names an definitions.
 
@@ -1424,19 +1424,12 @@ class ModelResult(Minimizer):
         out['unique_symbols'] = {key: pasteval.symtable[key]
                                   for key in pasteval.user_defined_symbols()}
 
-        oattrs = ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
-                  'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
-                  'errorbars', 'fjac', 'flatchain', 'ier', 'init_fit',
-                  'init_values', 'kws', 'lmdif_message', 'message',
-                  'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
-                  'nvarys', 'redchi', 'residual', 'scale_covar', 'success',
-                  'userargs', 'userkws', 'values', 'var_names', 'weights')
 
         for attr in ('aborted', 'aic', 'best_values', 'bic', 'chisqr',
-                     'ci_out', 'col_deriv', 'errorbars', 'flatchain',
-                     'ier', 'init_values', 'lmdif_message', 'message',
-                     'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
-                     'nvarys', 'redchi', 'scale_covar', 'success',
+                     'ci_out', 'col_deriv', 'covar', 'errorbars',
+                     'flatchain', 'ier', 'init_values', 'lmdif_message',
+                     'message', 'method', 'nan_policy', 'ndata', 'nfev',
+                     'nfree', 'nvarys', 'redchi', 'scale_covar', 'success',
                      'userargs', 'userkws', 'values', 'var_names',
                      'weights'):
             val = getattr(self, attr)
