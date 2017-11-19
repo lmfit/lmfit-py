@@ -167,7 +167,7 @@ class ComplexConstantModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
-                 name=None,  **kwargs):
+                 name=None, **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
 
@@ -671,7 +671,7 @@ class DampedHarmonicOscillatorModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DampedHarmonicOscillatorModel, self).__init__(dho,  **kwargs)
+        super(DampedHarmonicOscillatorModel, self).__init__(dho, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
@@ -738,7 +738,7 @@ class SkewedGaussianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(SkewedGaussianModel, self).__init__(skewed_gaussian,  **kwargs)
+        super(SkewedGaussianModel, self).__init__(skewed_gaussian, **kwargs)
         self.set_param_hint('sigma', min=0)
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -767,7 +767,7 @@ class DonaichModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DonaichModel, self).__init__(donaich,  **kwargs)
+        super(DonaichModel, self).__init__(donaich, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5)

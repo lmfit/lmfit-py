@@ -1026,7 +1026,7 @@ def load_model(fname, funcdefs=None):
     -------
       Model
     """
-    m = Model(lambda x:  x)
+    m = Model(lambda x: x)
     with open(fname) as fh:
         model = m.load(fh, funcdefs=funcdefs)
     return model
@@ -1417,7 +1417,7 @@ class ModelResult(Minimizer):
         loads(), json.dumps()
         """
 
-        out = {'__class__': 'lmfit.ModelResult', '__version__' : '1',
+        out = {'__class__': 'lmfit.ModelResult', '__version__': '1',
                'model': encode4js(self.model._get_state())}
         pasteval = self.params._asteval
         out['params'] = [p.__getstate__() for p in self.params.values()]

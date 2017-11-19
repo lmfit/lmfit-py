@@ -76,8 +76,8 @@ def encode4js(obj):
         return out
     elif callable(obj):
         val = None
-        pyvers = "%d.%d" %(sys.version_info.major,
-                           sys.version_info.minor)
+        pyvers = "%d.%d" % (sys.version_info.major,
+                            sys.version_info.minor)
         if HAS_DILL:
             val = binencode(dill.dumps(obj))
         return dict(__class__='Callable', __name__=obj.__name__,
@@ -109,7 +109,7 @@ def decode4js(obj):
             out = re + 1j*im
         elif obj['__dtype__'].startswith('object'):
             val = [decode4js(v) for v in obj['value']]
-            out = np.array(val,  dtype=obj['__dtype__'])
+            out = np.array(val, dtype=obj['__dtype__'])
         else:
             out = np.fromiter(obj['value'], dtype=obj['__dtype__'])
         out.shape = obj['__shape__']
@@ -119,8 +119,8 @@ def decode4js(obj):
         out = Series(obj['value'])
     elif classname == 'Callable':
         out = val = obj['__name__']
-        pyvers = "%d.%d" %(sys.version_info.major,
-                           sys.version_info.minor)
+        pyvers = "%d.%d" % (sys.version_info.major,
+                            sys.version_info.minor)
         if pyvers == obj['pyversion'] and HAS_DILL:
             out = dill.loads(bindecode(obj['value']))
 
