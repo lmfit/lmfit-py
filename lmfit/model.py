@@ -1422,7 +1422,7 @@ class ModelResult(Minimizer):
         pasteval = self.params._asteval
         out['params'] = [p.__getstate__() for p in self.params.values()]
         out['unique_symbols'] = {key: pasteval.symtable[key]
-                                  for key in pasteval.user_defined_symbols()}
+                                 for key in pasteval.user_defined_symbols()}
 
         for attr in ('aborted', 'aic', 'best_values', 'bic', 'chisqr',
                      'ci_out', 'col_deriv', 'covar', 'errorbars',
