@@ -5,10 +5,10 @@ from . import lineshapes
 from .asteval import Interpreter
 from .astutils import get_ast_names
 from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
-                         expgaussian, exponential, gaussian, linear, logistic,
-                         lognormal, lorentzian, moffat, parabolic, pearson7,
-                         powerlaw, pvoigt, rectangle, skewed_gaussian,
-                         skewed_voigt, step, students_t, voigt)
+                         expgaussian, exponential, gaussian, linear, lognormal,
+                         lorentzian, moffat, parabolic, pearson7, powerlaw,
+                         pvoigt, rectangle, skewed_gaussian, step, students_t,
+                         voigt)
 from .model import Model
 
 

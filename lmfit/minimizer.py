@@ -24,18 +24,12 @@ from numpy import dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 from scipy.optimize import brute as scipy_brute
+from scipy.optimize import differential_evolution, least_squares
 from scipy.optimize import leastsq as scipy_leastsq
-from scipy.optimize import least_squares
 from scipy.optimize import minimize as scipy_minimize
-from scipy.optimize import differential_evolution
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 import six
-
-try:
-    from pandas import isnull
-except ImportError:
-    isnull = np.isnan
 
 # use locally modified version of uncertainties package
 from . import uncertainties
@@ -50,20 +44,20 @@ from .parameter import Parameter, Parameters
 #    least_squares         0.17
 
 # check for EMCEE
-HAS_EMCEE = False
 try:
     import emcee as emcee
     HAS_EMCEE = True
 except ImportError:
-    pass
+    HAS_EMCEE = False
 
 # check for pandas
-HAS_PANDAS = False
 try:
     import pandas as pd
+    from pandas import isnull
     HAS_PANDAS = True
 except ImportError:
-    pass
+    HAS_PANDAS = False
+    isnull = np.isnan
 
 # define the namedtuple here so pickle will work with the MinimizerResult
 Candidate = namedtuple('Candidate', ['params', 'score'])

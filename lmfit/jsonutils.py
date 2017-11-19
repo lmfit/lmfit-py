@@ -2,11 +2,12 @@
 """
  json utilities for larch objects
 """
-import sys
-import six
+from base64 import b64decode, b64encode
 import json
+import sys
+
 import numpy as np
-from base64 import b64encode, b64decode
+import six
 
 try:
     import dill

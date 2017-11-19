@@ -1,7 +1,7 @@
 """Basic model line shapes and distribution functions."""
 from __future__ import division
 
-from numpy import arctan, sin, cos, exp, log, pi, sqrt, where
+from numpy import arctan, cos, exp, log, pi, sin, sqrt, where
 from numpy.testing import assert_allclose
 from scipy.special import erf, erfc, gammaln, wofz
 from scipy.special import gamma as gamfcn

@@ -5,20 +5,19 @@ from collections import OrderedDict
 from copy import deepcopy
 from functools import wraps
 import inspect
+import json
 import operator
 import warnings
-import json
 
 import numpy as np
 from scipy.special import erf
 from scipy.stats import t
 
-from . import Minimizer, Parameter, Parameters
-from .minimizer import validate_nan_policy
+from . import Minimizer, Parameter, Parameters, lineshapes
 from .confidence import conf_interval
+from .jsonutils import HAS_DILL, decode4js, encode4js
+from .minimizer import validate_nan_policy
 from .printfuncs import ci_report, fit_report
-from .jsonutils import encode4js, decode4js, HAS_DILL
-from . import lineshapes
 
 # Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
