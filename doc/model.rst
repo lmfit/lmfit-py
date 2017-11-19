@@ -792,10 +792,10 @@ Saving and Loading Model Results
 .. versionadded:: 0.9.8
 
 As with saving models (see section :ref:`model_saveload_sec`), it is
-sometimes desirable to save a :class:`ModelResult`, either to reuse for
-later use or to organize and compare different fit results.  Lmfit provides
-a :func:`save_modelresult` function that will save a :class:`ModelResult`
-to a file. There is also a companion :func:`load_modelresult` function that
+sometimes desirable to save a :class:`ModelResult`, either for later use or
+to organize and compare different fit results.  Lmfit provides a
+:func:`save_modelresult` function that will save a :class:`ModelResult` to
+a file. There is also a companion :func:`load_modelresult` function that
 can read this file and reconstruct a :class:`ModelResult` from it.
 
 As discussed in section :ref:`model_saveload_sec`, there are challenges to
