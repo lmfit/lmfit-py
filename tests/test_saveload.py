@@ -6,6 +6,13 @@ from lmfit_testutils import assert_between, assert_param_between
 from lmfit.model import (save_modelresult, save_model,
                          load_modelresult, load_model)
 from lmfit.models import ExponentialModel, GaussianModel
+import lmfit.jsonutils
+
+try:
+    import dill
+    DILL_AVAILABLE = True
+except ImportError:
+    DILL_AVAILABLE = False
 
 dat = np.loadtxt(os.path.join('..', 'examples', 'NIST_Gauss2.dat'))
 XDAT = dat[:, 1]
@@ -14,14 +21,12 @@ YDAT = dat[:, 0]
 SAVE_MODEL       = 'model_1.sav'
 SAVE_MODELRESULT = 'modelresult_1.sav'
 
-try:
-    os.unlink(SAVE_MODELRESULT)
-except OSError:
-    pass
-try:
-    os.unlink(SAVE_MODEL)
-except OSError:
-    pass
+def clear_savefile(fname):
+    """remove save files so that tests are fresh"""
+    try:
+        os.unlink(fname)
+    except OSError:
+        pass
 
 def create_model_params(x, y):
     exp_mod = ExponentialModel(prefix='exp_')
@@ -73,8 +78,14 @@ def wait_for_file(fname, timeout=10):
         time.sleep(0.05)
     return False
 
-def test_save_model():
+def do_save_model(with_dill=True):
     x, y = XDAT, YDAT
+    if DILL_AVAILABLE and with_dill:
+        lmfit.jsonutils.HAS_DILL = True
+    else:
+        lmfit.jsonutils.HAS_DILL = False
+
+
     model, params = create_model_params(x, y)
 
     save_model(model, SAVE_MODEL)
@@ -86,7 +97,7 @@ def test_save_model():
         text = fh.read()
     assert_between(len(text), 1000, 2500)
 
-def test_load_model():
+def do_load_model():
     x, y = XDAT, YDAT
     model = load_model(SAVE_MODEL)
     params = model.make_params()
@@ -104,8 +115,13 @@ def test_load_model():
     result = model.fit(y,  params, x=x)
     check_fit_results(result)
 
-def test_save_modelresult():
+def do_save_modelresult(with_dill=True):
     x, y = XDAT, YDAT
+    if DILL_AVAILABLE and with_dill:
+        lmfit.jsonutils.HAS_DILL = True
+    else:
+        lmfit.jsonutils.HAS_DILL = False
+
     model, params = create_model_params(x, y)
 
     result = model.fit(y, params, x=x)
@@ -118,12 +134,33 @@ def test_save_modelresult():
         text = fh.read()
     assert_between(len(text), 8000, 25000)
 
-def test_load_modelresult():
+def do_load_modelresult():
     result = load_modelresult(SAVE_MODELRESULT)
     check_fit_results(result)
 
+def test_saveload_model_withdill():
+    clear_savefile(SAVE_MODEL)
+    do_save_model(with_dill=True)
+    do_load_model()
+
+def test_saveload_model_nodill():
+    clear_savefile(SAVE_MODEL)
+    do_save_model(with_dill=False)
+    do_load_model()
+
+def test_saveload_modelresult_withdill():
+    clear_savefile(SAVE_MODELRESULT)
+    do_save_modelresult(with_dill=True)
+    do_load_modelresult()
+
+def test_saveload_modelresult_nodill():
+    clear_savefile(SAVE_MODELRESULT)
+    do_save_modelresult(with_dill=False)
+    do_load_modelresult()
+
 if __name__ == '__main__':
-    test_save_model()
-    test_load_model()
-    test_save_modelresult()
-    test_load_modelresult()
+    test_saveload_model_nodill()
+    test_saveload_model_withdill()
+
+    test_saveload_modelresult_nodill()
+    test_saveload_modelresult_withdill()
