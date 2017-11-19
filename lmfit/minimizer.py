@@ -734,11 +734,11 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = method
-        vars = result.init_vals
+        variables = result.init_vals
         params = result.params
 
         fmin_kws = dict(method=method,
-                        options={'maxiter': 1000 * (len(vars) + 1)})
+                        options={'maxiter': 1000 * (len(variables) + 1)})
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
 
@@ -764,7 +764,7 @@ class Minimizer(object):
                     raise ValueError('differential_evolution requires finite '
                                      'bound for all varying parameters')
 
-            _bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
+            _bounds = [(-np.pi / 2., np.pi / 2.)] * len(variables)
             kwargs = dict(args=(), strategy='best1bin', maxiter=None,
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
@@ -775,7 +775,7 @@ class Minimizer(object):
                     kwargs[k] = v
             ret = differential_evolution(self.penalty, _bounds, **kwargs)
         else:
-            ret = scipy_minimize(self.penalty, vars, **fmin_kws)
+            ret = scipy_minimize(self.penalty, variables, **fmin_kws)
 
         result.aborted = self._abort
         self._abort = False
@@ -789,7 +789,7 @@ class Minimizer(object):
 
         result.x = np.atleast_1d(result.x)
         result.chisqr = result.residual = self.__residual(result.x)
-        result.nvarys = len(vars)
+        result.nvarys = len(variables)
         result.ndata = 1
         result.nfree = 1
         if isinstance(result.residual, ndarray):
@@ -1278,8 +1278,8 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'leastsq'
-        vars = result.init_vals
-        nvars = len(vars)
+        variables = result.init_vals
+        nvars = len(variables)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
                      gtol=1.e-7, maxfev=2000*(nvars+1), Dfun=None)
 
@@ -1296,7 +1296,7 @@ class Minimizer(object):
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
 
-        lsout = scipy_leastsq(self.__residual, vars, **lskws)
+        lsout = scipy_leastsq(self.__residual, variables, **lskws)
         _best, _cov, infodict, errmsg, ier = lsout
         result.aborted = self._abort
         self._abort = False
