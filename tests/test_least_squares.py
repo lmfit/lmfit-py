@@ -1,13 +1,10 @@
 from lmfit import Parameters, minimize, fit_report, Minimizer
-from lmfit.minimizer import HAS_LEAST_SQUARES
 from lmfit_testutils import assert_paramval, assert_paramattr
 
 from numpy import linspace, zeros, sin, exp, random, pi, sign
 import nose
 
 def test_bounds():
-    if not HAS_LEAST_SQUARES:
-        raise nose.SkipTest
     p_true = Parameters()
     p_true.add('amp', value=14.0)
     p_true.add('period', value=5.4321)
