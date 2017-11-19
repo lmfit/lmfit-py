@@ -28,6 +28,7 @@ except ImportError:
     isnull = np.isnan
     Series = type(NotImplemented)
 
+
 def _align(var, mask, data):
     """Align missing data, if pandas is available."""
     if isinstance(data, Series) and isinstance(var, Series):
@@ -55,6 +56,7 @@ def _ensureMatplotlib(function):
             print('matplotlib module is required for plotting the results')
 
         return no_op
+
 
 class Model(object):
     _forbidden_args = ('data', 'weights', 'params')
@@ -238,7 +240,6 @@ class Model(object):
         """
         return fp.write(self.dumps(**kws))
 
-
     def loads(self, s, funcdefs=None, **kws):
         """Load Model from a JSON string.
 
@@ -263,7 +264,6 @@ class Model(object):
         """
         tmp = decode4js(json.loads(s, **kws))
         return self._set_state(tmp, funcdefs=funcdefs)
-
 
     def load(self, fp, funcdefs=None, **kws):
         """Load JSON representation of Model from a file-like object.
@@ -618,7 +618,6 @@ class Model(object):
         if weights is not None:
             diff *= weights
         return np.asarray(diff).ravel()  # for compatibility with pandas.Series
-
 
     def _strip_prefix(self, name):
         npref = len(self._prefix)
@@ -997,6 +996,7 @@ class CompositeModel(Model):
         out = self.right._make_all_args(params=params, **kwargs)
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
+
 
 def save_model(model, fname):
     """save a Model to a file
@@ -1424,7 +1424,6 @@ class ModelResult(Minimizer):
         out['unique_symbols'] = {key: pasteval.symtable[key]
                                   for key in pasteval.user_defined_symbols()}
 
-
         for attr in ('aborted', 'aic', 'best_values', 'bic', 'chisqr',
                      'ci_out', 'col_deriv', 'covar', 'errorbars',
                      'flatchain', 'ier', 'init_values', 'lmdif_message',
@@ -1437,7 +1436,6 @@ class ModelResult(Minimizer):
                 val = bool(val)
             out[attr] = encode4js(val)
         return json.dumps(out)
-
 
     def dump(self, fp, **kws):
         """dump serialization of ModelResult to a file
@@ -1460,7 +1458,6 @@ class ModelResult(Minimizer):
         dumps(), load(), json.dump()
         """
         return fp.write(self.dumps(**kws))
-
 
     def loads(self, s, funcdefs=None, **kws):
         """Load ModelResult from a JSON string
@@ -1515,7 +1512,6 @@ class ModelResult(Minimizer):
         self.best_fit = self.model.eval(self.params, **self.userkws)
         return self
 
-
     def load(self, fp, funcdefs=None, **kws):
         """Load JSON representation of ModelResult from a file-like object.
 
@@ -1539,7 +1535,6 @@ class ModelResult(Minimizer):
 
         """
         return self.loads(fp.read(), funcdefs=funcdefs, **kws)
-
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',

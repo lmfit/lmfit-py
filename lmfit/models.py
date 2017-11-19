@@ -155,6 +155,7 @@ class ConstantModel(Model):
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
 
+
 class ComplexConstantModel(Model):
     """Complex constant model, with wo Parameters: ``re``, and ``im``.
 
@@ -823,7 +824,6 @@ class ExponentialModel(Model):
         super(ExponentialModel, self).__init__(exponential, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
-
         try:
             sval, oval = np.polyfit(x, np.log(abs(data)+1.e-15), 1)
         except:

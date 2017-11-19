@@ -68,6 +68,7 @@ except ImportError:
 # define the namedtuple here so pickle will work with the MinimizerResult
 Candidate = namedtuple('Candidate', ['params', 'score'])
 
+
 def asteval_with_uncertainties(*vals, **kwargs):
     """Calculate object value, given values for variables.
 
@@ -495,7 +496,6 @@ class Minimizer(object):
         if not self._abort:
             return _nan_policy(np.asarray(out).ravel(),
                                nan_policy=self.nan_policy)
-
 
     def __jacobian(self, fvars):
         """Reuturn analytical jacobian to be used with Levenberg-Marquardt.
@@ -1780,6 +1780,8 @@ def _make_random_gen(seed):
 
 
 VALID_NAN_POLICIES = ('propagate', 'omit', 'raise')
+
+
 def validate_nan_policy(policy):
     """validate, rationalize nan_policy, for back compatibility
     and compatibility with Pandas missing convention.
@@ -1797,6 +1799,7 @@ def validate_nan_policy(policy):
     if policy not in VALID_NAN_POLICIES:
         raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
     return policy
+
 
 def _nan_policy(arr, nan_policy='raise', handle_inf=True):
     """Specify behaviour when an array contains numpy.nan or numpy.inf.
@@ -1853,7 +1856,6 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
         if contains_nan:
             raise ValueError("The input contains nan values")
     return arr
-
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,

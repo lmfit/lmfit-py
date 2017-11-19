@@ -254,6 +254,7 @@ def sine(x, amplitude=1.0, frequency=1.0, shift=0.0):
     """
     return amplitude*sin(x*frequency + shift)
 
+
 def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
     """Return an exponentially decaying sinusoidal function
 
@@ -261,6 +262,7 @@ def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
        = amplitude * sin(x*frequency + shift) * exp(-x*decay)
     """
     return amplitude*sin(x*frequency + shift) * exp(-x*decay)
+
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """Return a step function.
