@@ -194,7 +194,7 @@ Exponential and Power law models
 User-defined Models
 ----------------------------
 
-.. _asteval: http://newville.github.io/asteval/
+.. _asteval: https://newville.github.io/asteval/
 
 As shown in the previous chapter (:ref:`model_chapter`), it is fairly
 straightforward to build fitting models from parametrized Python functions.
@@ -530,7 +530,7 @@ with a plot of
 Example 3: Fitting Multiple Peaks -- and using Prefixes
 ------------------------------------------------------------------
 
-.. _NIST StRD: http://itl.nist.gov/div898/strd/nls/nls_main.shtml
+.. _NIST StRD: https://itl.nist.gov/div898/strd/nls/nls_main.shtml
 
 As shown above, many of the models have similar parameter names.  For
 composite models, this could lead to a problem of having parameters for

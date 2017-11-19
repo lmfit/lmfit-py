@@ -2,16 +2,16 @@
 Downloading and Installation
 ====================================
 
-.. _lmfit github repository:   http://github.com/lmfit/lmfit-py
-.. _python:  http://python.org
-.. _scipy:  http://scipy.org/scipylib/index.html
+.. _lmfit github repository:   https://github.com/lmfit/lmfit-py
+.. _python:  https://python.org
+.. _scipy:  https://scipy.org/scipylib/index.html
 .. _numpy:  http://numpy.org/
-.. _nose:   http://nose.readthedocs.org/
-.. _pytest: http://pytest.org/
+.. _nose:   https://nose.readthedocs.org/
+.. _pytest: https://pytest.org/
 .. _emcee:  http://dan.iel.fm/emcee/
-.. _pandas:  http://pandas.pydata.org/
-.. _jupyter:  http://jupyter.org/
-.. _matplotlib:  http://matplotlib.org/
+.. _pandas:  https://pandas.pydata.org/
+.. _jupyter:  https://jupyter.org/
+.. _matplotlib:  https://matplotlib.org/
 .. _dill:  https://github.com/uqfoundation/dill
 
 Prerequisites
@@ -34,8 +34,13 @@ packages.
 Downloads
 ~~~~~~~~~~~~~
 
+<<<<<<< HEAD
 The latest stable version of lmfit is |release| and is available from `PyPi
 <http://pypi.python.org/pypi/lmfit/>`_.
+=======
+The latest stable version of lmfit is |release| is available from `PyPi
+<https://pypi.python.org/pypi/lmfit/>`_.
+>>>>>>> DOC: change (where possible) url links to use https.
 
 Installation
 ~~~~~~~~~~~~~~~~~
@@ -58,7 +63,7 @@ Development Version
 
 To get the latest development version, use::
 
-   git clone http://github.com/lmfit/lmfit-py.git
+   git clone https://github.com/lmfit/lmfit-py.git
 
 and install using::
 

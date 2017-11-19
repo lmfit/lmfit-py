@@ -291,7 +291,7 @@ class PolynomialModel(Model):
 
 class GaussianModel(Model):
     r"""A model based on a Gaussian or normal distribution lineshape (see
-    http://en.wikipedia.org/wiki/Normal_distribution), with three Parameters:
+    https://en.wikipedia.org/wiki/Normal_distribution), with three Parameters:
     ``amplitude``, ``center``, and ``sigma``.
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
     to report full width at half maximum and maximum peak height, respectively.
@@ -329,7 +329,7 @@ class GaussianModel(Model):
 
 class LorentzianModel(Model):
     r"""A model based on a Lorentzian or Cauchy-Lorentz distribution function
-    (see http://en.wikipedia.org/wiki/Cauchy_distribution), with three Parameters:
+    (see https://en.wikipedia.org/wiki/Cauchy_distribution), with three Parameters:
     ``amplitude``, ``center``, and ``sigma``.
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
     to report full width at half maximum and maximum peak height, respectively.
@@ -366,7 +366,7 @@ class LorentzianModel(Model):
 
 class VoigtModel(Model):
     r"""A model based on a Voigt distribution function (see
-    http://en.wikipedia.org/wiki/Voigt_profile), with four Parameters:
+    https://en.wikipedia.org/wiki/Voigt_profile), with four Parameters:
     ``amplitude``, ``center``, ``sigma``, and ``gamma``.  By default,
     ``gamma`` is constrained to have a value equal to ``sigma``, though it
     can be varied independently.  In addition, parameters ``fwhm`` and
@@ -423,7 +423,7 @@ class VoigtModel(Model):
 
 class PseudoVoigtModel(Model):
     r"""A model based on a pseudo-Voigt distribution function
-    (see http://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
+    (see https://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation),
     which is a weighted sum of a Gaussian and Lorentzian distribution function
     that share values for ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`)
     and full width at half maximum ``fwhm`` (and so have  constrained values of
@@ -504,7 +504,7 @@ class MoffatModel(Model):
 
 class Pearson7Model(Model):
     r"""A model based on a Pearson VII distribution (see
-    http://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution),
+    https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution),
     with four parameters: ``amplitude`` (:math:`A`), ``center``
     (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`) in
 
@@ -545,7 +545,7 @@ class Pearson7Model(Model):
 
 class StudentsTModel(Model):
     r"""A model based on a Student's t distribution function (see
-    http://en.wikipedia.org/wiki/Student%27s_t-distribution), with three Parameters:
+    https://en.wikipedia.org/wiki/Student%27s_t-distribution), with three Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`) in
 
     .. math::
@@ -573,7 +573,7 @@ class StudentsTModel(Model):
 
 class BreitWignerModel(Model):
     r"""A model based on a Breit-Wigner-Fano function (see
-    http://en.wikipedia.org/wiki/Fano_resonance), with four Parameters:
+    https://en.wikipedia.org/wiki/Fano_resonance), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`) in
 
@@ -600,7 +600,7 @@ class BreitWignerModel(Model):
 
 class LognormalModel(Model):
     r"""A model based on the Log-normal distribution function
-    (see http://en.wikipedia.org/wiki/Lognormal), with three Parameters
+    (see https://en.wikipedia.org/wiki/Lognormal), with three Parameters
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma``
     (:math:`\sigma`) in
 
@@ -627,7 +627,7 @@ class LognormalModel(Model):
 
 class DampedOscillatorModel(Model):
     r"""A model based on the Damped Harmonic Oscillator Amplitude
-    (see http://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part), with
+    (see https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part), with
     three Parameters:  ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
     ``sigma`` (:math:`\sigma`) in
 
@@ -654,7 +654,7 @@ class DampedOscillatorModel(Model):
 
 class DampedHarmonicOscillatorModel(Model):
     r"""A model based on a variation of the Damped Harmonic Oscillator (see
-    http://en.wikipedia.org/wiki/Harmonic_oscillator), following the
+    https://en.wikipedia.org/wiki/Harmonic_oscillator), following the
     definition given in DAVE/PAN (see https://www.ncnr.nist.gov/dave/) with
     four Parameters: ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and ``gamma`` (:math:`\gamma`) in
@@ -684,7 +684,7 @@ class DampedHarmonicOscillatorModel(Model):
 
 class ExponentialGaussianModel(Model):
     r"""A model of an Exponentially modified Gaussian distribution
-    (see http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution) with
+    (see https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution) with
     four Parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and  ``gamma`` (:math:`\gamma`) in
 
@@ -715,7 +715,7 @@ class ExponentialGaussianModel(Model):
 
 class SkewedGaussianModel(Model):
     r"""A variation of the Exponential Gaussian, this uses a skewed normal distribution
-    (see http://en.wikipedia.org/wiki/Skew_normal_distribution), with Parameters
+    (see https://en.wikipedia.org/wiki/Skew_normal_distribution), with Parameters
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),  ``sigma`` (:math:`\sigma`),
     and ``gamma`` (:math:`\gamma`) in
 
@@ -750,7 +750,7 @@ class SkewedGaussianModel(Model):
 
 class DonaichModel(Model):
     r"""A model of an Doniach Sunjic asymmetric lineshape
-    (see http://www.casaxps.com/help_manual/line_shapes.htm), used in
+    (see https://www.casaxps.com/help_manual/line_shapes.htm), used in
     photo-emission, with four Parameters ``amplitude`` (:math:`A`),
     ``center`` (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``gamma``
     (:math:`\gamma`) in
@@ -777,7 +777,7 @@ class DonaichModel(Model):
 
 
 class PowerLawModel(Model):
-    r"""A model based on a Power Law (see http://en.wikipedia.org/wiki/Power_law),
+    r"""A model based on a Power Law (see https://en.wikipedia.org/wiki/Power_law),
     with two Parameters: ``amplitude`` (:math:`A`), and ``exponent`` (:math:`k`), in:
 
     .. math::
@@ -807,7 +807,7 @@ class PowerLawModel(Model):
 
 class ExponentialModel(Model):
     r"""A model based on an exponential decay function
-    (see http://en.wikipedia.org/wiki/Exponential_decay) with two Parameters:
+    (see https://en.wikipedia.org/wiki/Exponential_decay) with two Parameters:
     ``amplitude`` (:math:`A`), and ``decay`` (:math:`\tau`), in:
 
     .. math::
@@ -844,7 +844,7 @@ class StepModel(Model):
     - ``linear`` (the default)
     - ``atan`` or ``arctan`` for an arc-tangent function
     - ``erf`` for an error function
-    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function)
+    - ``logistic`` for a logistic function (see https://en.wikipedia.org/wiki/Logistic_function)
 
     The step function starts with a value 0, and ends with a value of
     :math:`A` rising to :math:`A/2` at :math:`\mu`, with :math:`\sigma`
@@ -896,7 +896,7 @@ class RectangleModel(Model):
     - ``linear`` (the default)
     - ``atan`` or ``arctan`` for an arc-tangent function
     - ``erf`` for an error function
-    - ``logistic`` for a logistic function (see http://en.wikipedia.org/wiki/Logistic_function)
+    - ``logistic`` for a logistic function (see https://en.wikipedia.org/wiki/Logistic_function)
 
     The function starts with a value 0, transitions to a value of
     :math:`A`, taking the value :math:`A/2` at :math:`\mu_1`, with :math:`\sigma_1`

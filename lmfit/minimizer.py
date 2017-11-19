@@ -1604,7 +1604,7 @@ class Minimizer(object):
             method='powell')`
 
             For more details on the fitting methods please refer to the
-            `SciPy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
+            `SciPy docs <https://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
 
         params : :class:`~lmfit.parameter.Parameters`, optional
             Parameters of the model to use as starting values.
@@ -1902,7 +1902,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         `scipy.optimize.minimizer(..., method='powell')`
 
         For more details on the fitting methods please refer to the
-        `SciPy docs <http://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
+        `SciPy docs <https://docs.scipy.org/doc/scipy/reference/optimize.html>`__.
 
     args : tuple, optional
         Positional arguments to pass to `fcn`.
