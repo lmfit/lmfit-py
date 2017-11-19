@@ -6,11 +6,11 @@ To install the lmfit python module, use::
    python setup.py build
    python setup.py install
 
-For lmfit 0.9.7, the following versions are required:
-  Python: 2.7, 3.3, 3.4, 3.5, or 3.6
-  NumPy: 1.9.1 or higher
-  SciPy: 0.15 or higher
+For lmfit 0.9.8, the following versions are required:
+  Python: 2.7, 3.4, 3.5, or 3.6
+  NumPy: 1.10 or higher
+  SciPy: 0.17 or higher
   six: 1.10 or higher
 
 Matt Newville <newville@cars.uchicago.edu>
-Last Update:  2017-October-30
+Last Update: 2017-November-19

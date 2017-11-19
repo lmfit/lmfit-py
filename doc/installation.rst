@@ -12,28 +12,29 @@ Downloading and Installation
 .. _pandas:  http://pandas.pydata.org/
 .. _jupyter:  http://jupyter.org/
 .. _matplotlib:  http://matplotlib.org/
+.. _dill:  https://github.com/uqfoundation/dill
 
 Prerequisites
 ~~~~~~~~~~~~~~~
 
 The lmfit package requires `Python`_, `NumPy`_, and `SciPy`_.
 
-Lmfit works with Python versions 2.7, 3.3, 3.4, 3.5, and 3.6. Support for Python 2.6
-ended with lmfit version 0.9.4.  Scipy version 0.15 or higher is required,
-with 0.17 or higher recommended to be able to use the latest optimization
-features.  NumPy version 1.9.1 or higher is required.
+Lmfit works with Python versions 2.7, 3.4, 3.5, and 3.6. Support for Python 2.6
+and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version
+0.17 or higher, NumPy version 1.10 or higher, and six version 1.10 or higher are
+required.
 
 In order to run the test suite, either the `nose`_ or `pytest`_ package is
-required.  Some functionality of lmfit requires the `emcee`_ package, some
-functionality will make use of the `pandas`_, `Jupyter`_ or `matplotlib`_
-packages if available.  We highly recommend each of these
+required. Some functionality of lmfit requires the `emcee`_ package, some
+functionality will make use of the `pandas`_, `Jupyter`_, `matplotlib`_,
+or `dill`_ packages if available.  We highly recommend each of these
 packages.
 
 
 Downloads
 ~~~~~~~~~~~~~
 
-The latest stable version of lmfit is |release| is available from `PyPi
+The latest stable version of lmfit is |release| and is available from `PyPi
 <http://pypi.python.org/pypi/lmfit/>`_.
 
 Installation
