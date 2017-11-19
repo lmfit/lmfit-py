@@ -45,4 +45,4 @@ install:
 
 script:
     - cd tests
-    - pytest
+    - nosetests
