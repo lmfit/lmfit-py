@@ -796,7 +796,7 @@ class PowerLawModel(Model):
     def guess(self, data, x=None, **kwargs):
         try:
             expon, amp = np.polyfit(np.log(x+1.e-14), np.log(data+1.e-14), 1)
-        except:
+        except TypeError:
             expon, amp = 1, np.log(abs(max(data)+1.e-9))
 
         pars = self.make_params(amplitude=np.exp(amp), exponent=expon)
@@ -826,7 +826,7 @@ class ExponentialModel(Model):
     def guess(self, data, x=None, **kwargs):
         try:
             sval, oval = np.polyfit(x, np.log(abs(data)+1.e-15), 1)
-        except:
+        except TypeError:
             sval, oval = 1., np.log(abs(max(data)+1.e-9))
         pars = self.make_params(amplitude=np.exp(oval), decay=-1.0/sval)
         return update_param_vals(pars, self.prefix, **kwargs)

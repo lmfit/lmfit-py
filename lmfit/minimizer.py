@@ -107,6 +107,7 @@ def eval_stderr(obj, uvars, _names, _pars):
     uval = wrap_ueval(*uvars, _obj=obj, _names=_names, _pars=_pars)
     try:
         obj.stderr = uval.std_dev()
+    # TODO: do not use bare except
     except:
         obj.stderr = 0
 
@@ -315,7 +316,7 @@ class MinimizerResult(object):
                 print("\nCandidate #{}, chisqr = "
                       "{:.3f}".format(candidate_nmb, candidate.score))
                 candidate.params.pretty_print()
-            except:
+            except IndexError:
                 for i, candidate in enumerate(self.candidates):
                     print("\nCandidate #{}, chisqr = "
                           "{:.3f}".format(i, candidate.score))
@@ -1386,6 +1387,7 @@ class Minimizer(object):
                             par.correl[varn2] = (
                                 result.covar[ivar, jvar] /
                                 (par.stderr * sqrt(result.covar[jvar, jvar])))
+                # TODO: do not use bare except
                 except:
                     result.errorbars = False
 
