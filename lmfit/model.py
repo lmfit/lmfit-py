@@ -7,6 +7,7 @@ from functools import wraps
 import inspect
 import operator
 import warnings
+import json
 
 import numpy as np
 from scipy.special import erf
@@ -16,6 +17,8 @@ from . import Minimizer, Parameter, Parameters
 from .minimizer import validate_nan_policy
 from .confidence import conf_interval
 from .printfuncs import ci_report, fit_report
+from .jsonutils import encode4js, decode4js, HAS_DILL
+from . import lineshapes
 
 # Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
@@ -24,7 +27,6 @@ try:
 except ImportError:
     isnull = np.isnan
     Series = type(NotImplemented)
-
 
 def _align(var, mask, data):
     """Align missing data, if pandas is available."""
@@ -169,6 +171,123 @@ class Model(object):
         if len(opts) > 0:
             out = "%s, %s" % (out, ', '.join(opts))
         return "Model(%s)" % out
+
+    def _get_state(self):
+        """save a model for serialization
+        Note: like the standard-ish '__getstate__' method
+        but not really useful with Pickle.
+        """
+        funcdef = None
+        if HAS_DILL:
+            funcdef = self.func
+        state = (self.func.__name__, funcdef, self._name, self._prefix,
+                 self.independent_vars, self._param_root_names,
+                 self.param_hints, self.nan_policy, self.opts)
+        return (state, None, None)
+
+    def _set_state(self, state, funcdefs=None):
+        """restore model from serialization
+        Note: like the standard-ish '__setstate__' method
+        but not really useful with Pickle.
+
+        Arguments
+        ---------
+        state : serialized state from `_get_state`
+
+        """
+        return _buildmodel(state, funcdefs=funcdefs)
+
+    def dumps(self, **kws):
+        """dump serialization of model as a JSON string
+
+        Parameters
+        ----------
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        str
+           JSON string representation of ModelResult.
+
+        See Also
+        --------
+        loads(), json.dumps()
+        """
+        return json.dumps(encode4js(self._get_state()), **kws)
+
+    def dump(self, fp, **kws):
+        """dump serialization of model to a file
+
+        Parameters
+        ----------
+        fp : file-like object
+            an open and ``.write()``-supporting file-like object.
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        None or int
+            Return value from `fp.write()`. None for Python 2.7 and the
+            number of characters written in Python 3.
+
+        See Also
+        --------
+        dumps(), load(), json.dump()
+        """
+        return fp.write(self.dumps(**kws))
+
+
+    def loads(self, s, funcdefs=None, **kws):
+        """Load Model from a JSON string.
+
+        Parameters
+        ----------
+        s  : str
+            input JSON string containing serialized Model
+        funcdefs : dict, optional
+            dict of function definitions to use to construct model.
+        **kws : optional
+            Keyword arguments that are passed to `json.loads()`.
+
+        Returns
+        -------
+        :class:`Model`
+           Model created from JSON string.
+
+        See Also
+        --------
+        dump(), dumps(), load(), json.loads()
+
+        """
+        tmp = decode4js(json.loads(s, **kws))
+        return self._set_state(tmp, funcdefs=funcdefs)
+
+
+    def load(self, fp, funcdefs=None, **kws):
+        """Load JSON representation of Model from a file-like object.
+
+        Parameters
+        ----------
+        fp : file-like object
+            An open and ``.read()``-supporting file-like object.
+        funcdefs : dict, optional
+            dict of function definitions to use to construct model.
+        **kws : optional
+            Keyword arguments that are passed to `loads()`.
+
+        Returns
+        -------
+        :class:`Model`
+           Model created from `fp`.
+
+        See Also
+        --------
+        dump(), loads(), json.load()
+
+        """
+        return self.loads(fp.read(), funcdefs=funcdefs, **kws)
 
     @property
     def name(self):
@@ -866,11 +985,126 @@ class CompositeModel(Model):
         """Return components for composite model."""
         return self.left.components + self.right.components
 
+    def _get_state(self):
+        return (self.left._get_state(),
+                self.right._get_state(), self.op.__name__)
+
+    def _set_state(self, state, funcdefs=None):
+        return _buildmodel(state, funcdefs=funcdefs)
+
     def _make_all_args(self, params=None, **kwargs):
         """Generate **all** function arguments for all functions."""
         out = self.right._make_all_args(params=params, **kwargs)
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
+
+def save_model(model, fname):
+    """save a Model to a file
+
+    Parameters
+    ----------
+    model : model instance
+        model to be saved
+    fname : str
+        name of file for saved Model
+    """
+    with open(fname, 'w') as fout:
+        model.dump(fout)
+
+
+def load_model(fname, funcdefs=None):
+    """load a saved Model from a file
+
+    Parameters
+    ----------
+    fname : str
+        name of file containing saved Model
+    funcdefs : dict, optional
+        dictionay of custom function names an definitions.
+
+    Returns
+    -------
+      Model
+    """
+    m = Model(lambda x:  x)
+    with open(fname) as fh:
+        model = m.load(fh, funcdefs=funcdefs)
+    return model
+
+
+def _buildmodel(state, funcdefs=None):
+    """build model from saved state
+
+    intended for internal use only.
+
+    """
+    if len(state) != 3:
+        raise ValueError("Cannot restore Model")
+    known_funcs = {}
+    for fname in lineshapes.functions:
+        fcn = getattr(lineshapes, fname, None)
+        if callable(fcn):
+            known_funcs[fname] = fcn
+    if funcdefs is not None:
+        known_funcs.update(funcdefs)
+
+    left, right, op = state
+    if op is None and right is None:
+        (fname, fcndef, name, prefix, ivars, pnames,
+         phints, nan_policy, opts) = left
+        if not callable(fcndef) and fname in known_funcs:
+            fcndef = known_funcs[fname]
+
+        if fcndef is None:
+            raise ValueError("Cannot restore Model: model function not found")
+
+        model = Model(fcndef, name=name, prefix=prefix,
+                      independent_vars=ivars, param_names=pnames,
+                      nan_policy=nan_policy, **opts)
+
+        for name, hint in phints.items():
+            model.set_param_hint(name, **hint)
+        return model
+    else:
+        lmodel = _buildmodel(left, funcdefs=funcdefs)
+        rmodel = _buildmodel(right, funcdefs=funcdefs)
+        return CompositeModel(lmodel, rmodel, getattr(operator, op))
+
+
+def save_modelresult(modelresult, fname):
+    """save a ModelResult to a file
+
+    Parameters
+    ----------
+    modelresult : ModelResult instance
+        ModelResult to be saved
+    fname : str
+        name of file for saved ModelResult
+    """
+    with open(fname, 'w') as fout:
+        modelresult.dump(fout)
+
+
+def load_modelresult(fname, funcdefs=None):
+    """load a saved ModelResult from a file
+
+    Parameters
+    ----------
+    fname : str
+        name of file containing saved ModelResult
+    funcdefs : dict, optional
+        dictionay of custom function names an definitions.
+
+    Returns
+    -------
+      ModelResult
+    """
+
+    p = Parameters()
+    m = ModelResult(Model(lambda x: x, None), p)
+    with open(fname) as fh:
+        modelresult = m.load(fh, funcdefs=funcdefs)
+    return modelresult
 
 
 class ModelResult(Minimizer):
@@ -1164,6 +1398,148 @@ class ModelResult(Minimizer):
                             min_correl=min_correl, sort_pars=sort_pars)
         modname = self.model._reprstring(long=True)
         return '[[Model]]\n    %s\n%s\n' % (modname, report)
+
+    def dumps(self, **kws):
+        """Represent ModelResult as a JSON string
+
+        Parameters
+        ----------
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        str
+           JSON string representation of ModelResult.
+
+        See Also
+        --------
+        loads(), json.dumps()
+        """
+
+        out = {'__class__': 'lmfit.ModelResult', '__version__' : '1',
+               'model': encode4js(self.model._get_state())}
+        pasteval = self.params._asteval
+        out['params'] = [p.__getstate__() for p in self.params.values()]
+        out['unique_symbols'] = {key: pasteval.symtable[key]
+                                  for key in pasteval.user_defined_symbols()}
+
+
+        for attr in ('aborted', 'aic', 'best_values', 'bic', 'chisqr',
+                     'ci_out', 'col_deriv', 'covar', 'errorbars',
+                     'flatchain', 'ier', 'init_values', 'lmdif_message',
+                     'message', 'method', 'nan_policy', 'ndata', 'nfev',
+                     'nfree', 'nvarys', 'redchi', 'scale_covar', 'success',
+                     'userargs', 'userkws', 'values', 'var_names',
+                     'weights'):
+            val = getattr(self, attr)
+            if isinstance(val, np.bool_):
+                val = bool(val)
+            out[attr] = encode4js(val)
+        return json.dumps(out)
+
+
+    def dump(self, fp, **kws):
+        """dump serialization of ModelResult to a file
+
+        Parameters
+        ----------
+        fp : file-like object
+            an open and ``.write()``-supporting file-like object.
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        None or int
+            Return value from `fp.write()`. None for Python 2.7 and the
+            number of characters written in Python 3.
+
+        See Also
+        --------
+        dumps(), load(), json.dump()
+        """
+        return fp.write(self.dumps(**kws))
+
+
+    def loads(self, s, funcdefs=None, **kws):
+        """Load ModelResult from a JSON string
+
+        Parameters
+        ----------
+        s : str
+            strig representation of ModelResult, as from `dumps()`.
+        **kws : optional
+            Keyword arguments that are passed to `json.dumps()`.
+
+        Returns
+        -------
+        :class:`ModelResult`
+           ModelResult instance from JSON string representation.
+
+        See Also
+        --------
+        load(), dumps(), json.dumps()
+        """
+
+        modres = json.loads(s, **kws)
+        if 'modelresult' not in modres['__class__'].lower():
+            raise AttributeError('ModelResult.loads() needs saved ModelResult')
+
+        modres = decode4js(modres)
+        if 'model' not in modres or 'params' not in modres:
+            raise AttributeError('ModelResult.loads() needs valid ModelResult')
+
+        # model
+        self.model = _buildmodel(decode4js(modres['model']), funcdefs=funcdefs)
+
+        # params
+        self.params = Parameters()
+        state = {'unique_symbols': modres['unique_symbols'], 'params': []}
+        for parstate in modres['params']:
+            _par = Parameter()
+            _par.__setstate__(parstate)
+            state['params'].append(_par)
+        self.params.__setstate__(state)
+
+        for attr in ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
+                     'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
+                     'errorbars', 'fjac', 'flatchain', 'ier', 'init_fit',
+                     'init_values', 'kws', 'lmdif_message', 'message',
+                     'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
+                     'nvarys', 'redchi', 'residual', 'scale_covar',
+                     'success', 'userargs', 'userkws', 'var_names',
+                     'weights'):
+            setattr(self, attr, decode4js(modres.get(attr, None)))
+
+        self.best_fit = self.model.eval(self.params, **self.userkws)
+        return self
+
+
+    def load(self, fp, funcdefs=None, **kws):
+        """Load JSON representation of ModelResult from a file-like object.
+
+        Parameters
+        ----------
+        fp : file-like object
+            An open and ``.read()``-supporting file-like object.
+        funcdefs : dict, optional
+            dict of function definitions to use to construct model.
+        **kws : optional
+            Keyword arguments that are passed to `loads()`.
+
+        Returns
+        -------
+        :class:`ModelResult`
+           ModelResult created from `fp`.
+
+        See Also
+        --------
+        dump(), loads(), json.load()
+
+        """
+        return self.loads(fp.read(), funcdefs=funcdefs, **kws)
+
 
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',

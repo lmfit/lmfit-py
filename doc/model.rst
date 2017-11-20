@@ -524,6 +524,56 @@ at half maximum of a Gaussian model, one could use a parameter hint of::
     >>> mod.set_param_hint('fwhm', expr='2.3548*sigma')
 
 
+.. _model_saveload_sec:
+
+Saving and Loading Models
+-----------------------------------
+
+.. versionadded:: 0.9.8
+
+It is sometimes desirable to save a :class:`Model` for later use outside of
+the code used to define the model. Lmfit provides a :func:`save_model`
+function that will save a :class:`Model` to a file. There is also a
+companion :func:`load_model` function that can read this file and
+reconstruct a :class:`Model` from it.
+
+Saving a model turns out to be somewhat challenging. The main issue is that
+Python is not normally able to *serialize* a function (such as the model
+function making up the heart of the Model) in a way that can be
+reconstructed into a callable Python object.  The `dill` package can
+sometimes serialize functions, but with the limitation that it can be used
+only in the same version of Python.  In addition, class methods used as
+model functions will not retain the rest of the class attributes and
+methods, and so may not be usable.  With all those warnings, it should be
+emphasized that if you are willing to save or reuse the definition of the
+model function as Python code, then saving the Parameters and rest of the
+components that make up a model presents no problem.
+
+If the `dill` package is installed, the model function will be saved using
+it.  But because saving the model function is not always reliable, saving a
+model will always save the *name* of the model function.  The
+:func:`load_model` takes an optional :attr:`funcdefs` argument that can
+contain a dictionary of function definitions with the function names as
+keys and function objects as values.  If one of the dictionary keys matches
+the saved name, the corresponding function object will be used as the model
+function. With this approach, if you save a model and can provide the code
+used for the model function, the model can be saved and reliably reloaded
+and used.
+
+.. autofunction:: save_model
+
+.. autofunction:: load_model
+
+As a simple example, one can save a model as:
+
+.. literalinclude:: ../examples/doc_save_model.py
+
+To load that later, one might do:
+
+.. literalinclude:: ../examples/doc_load_model.py
+
+See also :ref:`modelresult_saveload_sec`.
+
 The :class:`ModelResult` class
 =======================================
 
@@ -708,7 +758,6 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
    array, so that ``weights*(data - fit)`` is minimized in the
    least-squares sense.
 
-
 Calculating uncertainties in the model function
 -------------------------------------------------
 
@@ -735,11 +784,43 @@ figure below.
      :width: 50%
 
 
+.. _modelresult_saveload_sec:
+
+Saving and Loading Model Results
+--------------------------------------
+
+.. versionadded:: 0.9.8
+
+As with saving models (see section :ref:`model_saveload_sec`), it is
+sometimes desirable to save a :class:`ModelResult`, either for later use or
+to organize and compare different fit results.  Lmfit provides a
+:func:`save_modelresult` function that will save a :class:`ModelResult` to
+a file. There is also a companion :func:`load_modelresult` function that
+can read this file and reconstruct a :class:`ModelResult` from it.
+
+As discussed in section :ref:`model_saveload_sec`, there are challenges to
+saving model functions that may make it difficult to restore a saved a
+:class:`ModelResult` in a way that can be used to perform a fit.
+Use of the optional :attr:`funcdefs` argument is generally the most
+reliable way to ensure that a loaded :class:`ModelResult` can be used to
+evaluate the model function or redo the fit.
+
+.. autofunction:: save_modelresult
+
+.. autofunction:: load_modelresult
+
+An example of saving a :class:`ModelResult` is:
+
+.. literalinclude:: ../examples/doc_save_modelresult.py
+
+To load that later, one might do:
+
+.. literalinclude:: ../examples/doc_load_modelresult.py
+
 
 .. index:: Composite models
 
 .. _composite_models_section:
-
 
 Composite Models : adding (or multiplying) Models
 ==============================================================
