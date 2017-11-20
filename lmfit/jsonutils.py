@@ -27,15 +27,14 @@ def bindecode(val):
     return b64decode(six.b(val))
 
 
-def binencode(val):
-    "b64encode wrapper, python 2 version"
-    return str(b64encode(val))
-
-
 if six.PY3:
     def binencode(val):
         "b64encode wrapper, python 3 version"
         return str(b64encode(val), 'utf-8')  # b64encode results is /always/ UTF-8
+else:
+    def binencode(val):
+        "b64encode wrapper, python 2 version"
+        return str(b64encode(val))
 
 
 def encode4js(obj):
