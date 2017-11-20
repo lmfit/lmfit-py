@@ -34,13 +34,8 @@ packages.
 Downloads
 ~~~~~~~~~~~~~
 
-<<<<<<< HEAD
 The latest stable version of lmfit is |release| and is available from `PyPi
-<http://pypi.python.org/pypi/lmfit/>`_.
-=======
-The latest stable version of lmfit is |release| is available from `PyPi
 <https://pypi.python.org/pypi/lmfit/>`_.
->>>>>>> DOC: change (where possible) url links to use https.
 
 Installation
 ~~~~~~~~~~~~~~~~~

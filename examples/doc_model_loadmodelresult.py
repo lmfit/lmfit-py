@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#<examples/doc_load_modelresult.py>
+
+# <examples/doc_model_loadmodelresult.py>
 import numpy as np
 from lmfit.model import load_modelresult
 import matplotlib.pyplot as plt
@@ -17,4 +18,4 @@ plt.plot(x, y,         'bo')
 # plt.plot(x, result.init_fit, 'k--')
 plt.plot(x, result.best_fit, 'r-')
 plt.show()
-#<end examples/doc_load_modelresult.py>
+# <end examples/doc_model_loadmodelresult.py>

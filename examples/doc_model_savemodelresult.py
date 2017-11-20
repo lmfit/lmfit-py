@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#<examples/doc_save_modelresult.py>
+
+# <examples/doc_model_savemodelresult.py>
 import numpy as np
 from lmfit.models import GaussianModel
 from lmfit.model import save_modelresult
@@ -22,4 +23,4 @@ plt.plot(x, y,         'bo')
 plt.plot(x, result.init_fit, 'k--')
 plt.plot(x, result.best_fit, 'r-')
 plt.show()
-#<end examples/doc_save_modelresult.py>
+# <end examples/doc_model_savemodelresult.py>

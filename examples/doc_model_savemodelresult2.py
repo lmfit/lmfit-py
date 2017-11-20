@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-#<examples/doc_save_modelresult2.py>
+
+# <examples/doc_model_savemodelresult2.py>
 import numpy as np
 from lmfit.model import save_modelresult
 from lmfit.models import ExponentialModel, GaussianModel
@@ -35,4 +36,4 @@ result = mod.fit(y, pars, x=x)
 save_modelresult(result, 'nistgauss_modelresult.sav')
 
 print(result.fit_report())
-#<end examples/doc_save_modelresult2.py>
+# <end examples/doc_model_savemodelresult2.py>
