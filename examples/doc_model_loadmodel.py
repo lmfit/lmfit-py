@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#<examples/doc_load_model.py>
+#<examples/doc_model_loadmodel.py>
 import numpy as np
 import matplotlib.pyplot as plt
 from lmfit.model import Model, save_model, load_model
@@ -24,4 +24,4 @@ plt.plot(x, y,         'bo')
 plt.plot(x, result.best_fit, 'r-')
 plt.show()
 
-#<end examples/doc_load_model.py>
+#<end examples/doc_model_loadmodel.py>

@@ -566,11 +566,11 @@ and used.
 
 As a simple example, one can save a model as:
 
-.. literalinclude:: ../examples/doc_save_model.py
+.. literalinclude:: ../examples/doc_model_savemodel.py
 
 To load that later, one might do:
 
-.. literalinclude:: ../examples/doc_load_model.py
+.. literalinclude:: ../examples/doc_model_loadmodel.py
 
 See also :ref:`modelresult_saveload_sec`.
 
@@ -811,11 +811,11 @@ evaluate the model function or redo the fit.
 
 An example of saving a :class:`ModelResult` is:
 
-.. literalinclude:: ../examples/doc_save_modelresult.py
+.. literalinclude:: ../examples/doc_model_savemodelresult.py
 
 To load that later, one might do:
 
-.. literalinclude:: ../examples/doc_load_modelresult.py
+.. literalinclude:: ../examples/doc_model_loadmodelresult.py
 
 
 .. index:: Composite models

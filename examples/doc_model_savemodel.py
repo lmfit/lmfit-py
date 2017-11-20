@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#<examples/doc_save_model.py>
+#<examples/doc_mode_savemodel.py>
 
 import numpy as np
 from lmfit.model import Model, save_model, load_model
@@ -12,4 +12,4 @@ pars = sinemodel.make_params(amp=1, freq=0.25, shift=0)
 
 save_model(sinemodel, 'sinemodel.sav')
 
-#<end examples/doc_save_model.py>
+#<end examples/doc_model_savemodel.py>
