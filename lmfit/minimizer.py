@@ -25,6 +25,7 @@ from numpy.dual import inv
 from numpy.linalg import LinAlgError
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import leastsq as scipy_leastsq
+from scipy.optimize import least_squares
 from scipy.optimize import minimize as scipy_minimize
 from scipy.optimize import differential_evolution
 from scipy.stats import cauchy as cauchy_dist
@@ -41,20 +42,12 @@ from . import uncertainties
 from .parameter import Parameter, Parameters
 
 #  scipy version notes:
-#  currently scipy 0.15 is required.
+#  currently scipy 0.17 is required.
 #  feature           scipy version added
 #    minimize              0.11
 #    OptimizeResult        0.13
 #    diff_evolution        0.15
 #    least_squares         0.17
-
-# check for scipy.opitimize.least_squares
-HAS_LEAST_SQUARES = False
-try:
-    from scipy.optimize import least_squares
-    HAS_LEAST_SQUARES = True
-except ImportError:
-    pass
 
 # check for EMCEE
 HAS_EMCEE = False
@@ -1203,10 +1196,6 @@ class Minimizer(object):
            Return value changed to :class:`MinimizerResult`.
 
         """
-        if not HAS_LEAST_SQUARES:
-            raise NotImplementedError("SciPy with a version higher than 0.17 "
-                                      "is needed for this method.")
-
         result = self.prepare_fit(params)
         result.method = 'least_squares'
 
