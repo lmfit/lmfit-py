@@ -45,7 +45,7 @@ def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
     voigt(x, amplitude, center, sigma, gamma) =
         amplitude*wofz(z).real / (sigma*s2pi)
 
-    see http://en.wikipedia.org/wiki/Voigt_profile
+    see https://en.wikipedia.org/wiki/Voigt_profile
 
     """
     if gamma is None:
@@ -185,7 +185,7 @@ def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
         = (gamma/2) exp[center*gamma + (gamma*sigma)**2/2 - gamma*x] *
           erfc[(center + gamma*sigma**2 - x)/(sqrt(2)*sigma)]
 
-    http://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution
+    https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution
 
     """
     gss = gamma*sigma*sigma
@@ -220,7 +220,7 @@ def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):
     with  gamma < 0:  tail to low value of centroid
           gamma > 0:  tail to high value of centroid
 
-    see http://en.wikipedia.org/wiki/Skew_normal_distribution
+    see https://en.wikipedia.org/wiki/Skew_normal_distribution
 
     """
     asym = 1 + erf(gamma*(x-center)/(s2*sigma))
@@ -238,7 +238,7 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     skew < 0:  tail to low value of centroid
     skew > 0:  tail to high value of centroid
 
-    see http://en.wikipedia.org/wiki/Skew_normal_distribution
+    see https://en.wikipedia.org/wiki/Skew_normal_distribution
 
     """
     beta = skew/(s2*sigma)

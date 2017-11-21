@@ -1544,12 +1544,14 @@ class ModelResult(Minimizer):
     @_ensureMatplotlib
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
                  xlabel=None, ylabel=None, yerr=None, numpoints=None,
-                 data_kws=None, fit_kws=None, init_kws=None, ax_kws=None):
+                 data_kws=None, fit_kws=None, init_kws=None, ax_kws=None,
+                 show_init=False):
         """Plot the fit results using matplotlib, if available.
 
-        The plot will include the data points, the initial fit curve, and
-        the best-fit curve. If the fit  model included weights or if `yerr`
-        is specified, errorbars will also be plotted.
+        The plot will include the data points, the initial fit curve (optional,
+        with `show_init=True`), and the best-fit curve. If the fit model
+        included weights or if `yerr` is specified, errorbars will also be
+        plotted.
 
 
         Parameters
@@ -1582,6 +1584,8 @@ class ModelResult(Minimizer):
             conditions of the fit.
         ax_kws : dict, optional
             Keyword arguments for a new axis, if there is one being created.
+        show_init : bool, optional
+            Whether to show the initial conditions for the fit (default is False).
 
         Returns
         -------
@@ -1631,11 +1635,13 @@ class ModelResult(Minimizer):
         else:
             x_array_dense = x_array
 
-        ax.plot(
-            x_array_dense,
-            self.model.eval(self.init_params,
-                            **{independent_var: x_array_dense}),
-            initfmt, label='init', **init_kws)
+        if show_init:
+            ax.plot(
+                x_array_dense,
+                self.model.eval(self.init_params,
+                                **{independent_var: x_array_dense}),
+                initfmt, label='init', **init_kws)
+
         ax.plot(
             x_array_dense,
             self.model.eval(self.params, **{independent_var: x_array_dense}),
@@ -1745,12 +1751,13 @@ class ModelResult(Minimizer):
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None,
              ylabel=None, yerr=None, numpoints=None, fig=None, data_kws=None,
              fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None,
-             fig_kws=None):
+             fig_kws=None, show_init=False):
         """Plot the fit results and residuals using matplotlib, if available.
 
         The method will produce a matplotlib figure with both results of the
         fit and the residuals plotted. If the fit model included weights,
-        errorbars will also be plotted.
+        errorbars will also be plotted. To show the initial conditions for the
+        fit, pass the argument `show_init=True`.
 
         Parameters
         ----------
@@ -1786,6 +1793,8 @@ class ModelResult(Minimizer):
             Keyword arguments for the axes for the fit plot.
         fig_kws : dict, optional
             Keyword arguments for a new figure, if there is one being created.
+        sinitial conditions for the fithow_init : bool, optional
+            Whether to show the initial conditions for the fit (default is False).
 
         Returns
         -------
@@ -1839,7 +1848,8 @@ class ModelResult(Minimizer):
         self.plot_fit(ax=ax_fit, datafmt=datafmt, fitfmt=fitfmt, yerr=yerr,
                       initfmt=initfmt, xlabel=xlabel, ylabel=ylabel,
                       numpoints=numpoints, data_kws=data_kws,
-                      fit_kws=fit_kws, init_kws=init_kws, ax_kws=ax_fit_kws)
+                      fit_kws=fit_kws, init_kws=init_kws, ax_kws=ax_fit_kws,
+                      show_init=show_init)
         self.plot_residuals(ax=ax_res, datafmt=datafmt, yerr=yerr,
                             data_kws=data_kws, fit_kws=fit_kws,
                             ax_kws=ax_res_kws)

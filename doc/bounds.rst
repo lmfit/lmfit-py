@@ -4,8 +4,8 @@
 Bounds Implementation
 =================================
 
-.. _MINPACK-1: http://en.wikipedia.org/wiki/MINPACK
-.. _MINUIT: http://en.wikipedia.org/wiki/MINUIT
+.. _MINPACK-1: https://en.wikipedia.org/wiki/MINPACK
+.. _MINUIT: https://en.wikipedia.org/wiki/MINUIT
 .. _leastsqbound: https://github.com/jjhelmus/leastsqbound-scipy
 
 This section describes the implementation of :class:`Parameter` bounds.
