@@ -50,11 +50,10 @@ def _ensureMatplotlib(function):
         def wrapper(*args, **kws):
             return function(*args, **kws)
         return wrapper
-    else:
-        def no_op(*args, **kwargs):
-            print('matplotlib module is required for plotting the results')
 
-        return no_op
+    def no_op(*args, **kwargs):
+        print('matplotlib module is required for plotting the results')
+    return no_op
 
 
 class Model(object):

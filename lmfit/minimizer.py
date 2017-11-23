@@ -1660,8 +1660,7 @@ def _lnprior(theta, bounds):
     """
     if np.any(theta > bounds[:, 1]) or np.any(theta < bounds[:, 0]):
         return -np.inf
-    else:
-        return 0
+    return 0
 
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),

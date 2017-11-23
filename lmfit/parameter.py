@@ -49,8 +49,7 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
         return within_tol(x, y, atol, rtol)
     elif x == y:
         return True
-    else:
-        return False
+    return False
 
 
 class Parameters(OrderedDict):
@@ -752,8 +751,7 @@ class Parameter(object):
             return val / sqrt(val*val + 1)
         elif self.min == -inf:
             return -val / sqrt(val*val + 1)
-        else:
-            return cos(val) * (self.max - self.min) / 2.0
+        return cos(val) * (self.max - self.min) / 2.0
 
     def _getval(self):
         """Get value, with bounds applied."""
