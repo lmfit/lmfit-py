@@ -493,6 +493,7 @@ class MoffatModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('beta')
         self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/%sbeta)-1)" % (self.prefix, self.prefix))
+        self.set_param_hint('height', expr="%samplitude" % self.prefix)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5, sigscale=1.)
