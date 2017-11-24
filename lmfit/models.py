@@ -563,6 +563,13 @@ class StudentsTModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(StudentsTModel, self).__init__(students_t, **kwargs)
+        self.set_param_hint('sigma', min=0.0, max=100)
+        fmt = ("{prefix:s}amplitude*gamfcn(({prefix:s}sigma+1)/2)/"
+               "(sqrt({prefix:s}sigma*pi)*gamfcn({prefix:s}sigma/2))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        fmt = ("2*sqrt(2**(2/({prefix:s}sigma+1))*"
+               "{prefix:s}sigma-{prefix:s}sigma)")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
