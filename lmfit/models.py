@@ -596,6 +596,14 @@ class BreitWignerModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
+        # self.set_param_hint('sigma', min=0.0, max=100)
+        fmt = ("{prefix:s}amplitude*{prefix:s}q**2")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        fmt = ("-{prefix:s}q*{prefix:s}sigma+2*sqrt("
+               "{prefix:s}q**2*{prefix:s}sigma**2-(1-{prefix:s}q/2)*"
+               "({prefix:s}q**2*{prefix:s}sigma**2/2))/"
+               "(2*(1-{prefix:s}q/2))")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
