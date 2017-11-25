@@ -247,7 +247,7 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
 
 
 def sine(x, amplitude=1.0, frequency=1.0, shift=0.0):
-    """Return a sinusoidal function
+    """Return a sinusoidal function.
 
     sine(x, amplitude, frequency, shift):
        = amplitude * sin(x*frequency + shift)
@@ -256,7 +256,7 @@ def sine(x, amplitude=1.0, frequency=1.0, shift=0.0):
 
 
 def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
-    """Return an exponentially decaying sinusoidal function
+    """Return an exponentially decaying sinusoidal function.
 
     expsine(x, amplitude, frequency, shift,  decay):
        = amplitude * sin(x*frequency + shift) * exp(-x*decay)

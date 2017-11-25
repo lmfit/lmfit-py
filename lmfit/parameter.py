@@ -892,7 +892,7 @@ class Parameter(object):
         return self._getval() // other
 
     def __divmod__(self, other):
-        """divmod."""
+        """divmod"""
         return divmod(self._getval(), other)
 
     def __mod__(self, other):

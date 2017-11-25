@@ -12,7 +12,6 @@ Original copyright:
 See LICENSE for more complete authorship information and license.
 
 """
-
 from collections import namedtuple
 from copy import deepcopy
 import multiprocessing
@@ -202,8 +201,7 @@ def reduce_cauchylogpdf(r):
 
 
 class MinimizerResult(object):
-    r"""
-    The results of a minimization.
+    r"""The results of a minimization.
 
     Minimization results include data such as status and error messages,
     fit statistics, and the updated (i.e., best-fit) parameters themselves
@@ -801,8 +799,7 @@ class Minimizer(object):
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
               float_behavior='posterior', is_weighted=True, seed=None):
-        r"""
-        Bayesian sampling of the posterior distribution using `emcee`.
+        r"""Bayesian sampling of the posterior distribution using `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
@@ -1778,7 +1775,7 @@ VALID_NAN_POLICIES = ('propagate', 'omit', 'raise')
 
 
 def validate_nan_policy(policy):
-    """validate, rationalize nan_policy, for back compatibility
+    """Validate, rationalize nan_policy, for backward compatibility
     and compatibility with Pandas missing convention.
     """
     if policy in VALID_NAN_POLICIES:

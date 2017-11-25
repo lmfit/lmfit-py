@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""
- json utilities for larch objects
-"""
+"""JSON utilities for larch objects."""
 from base64 import b64decode, b64encode
 import json
 import sys
@@ -23,26 +21,28 @@ except ImportError:
 
 
 def bindecode(val):
-    "b64decode wrapper, python 2 and 3 version"
+    """b64decode wrapper, Python 2 and 3 version."""
     return b64decode(six.b(val))
 
 
 if six.PY3:
     def binencode(val):
-        "b64encode wrapper, python 3 version"
+        """b64encode wrapper, Python 3 version."""
         return str(b64encode(val), 'utf-8')  # b64encode results is /always/ UTF-8
 else:
     def binencode(val):
-        "b64encode wrapper, python 2 version"
+        """b64encode wrapper, Python 2 version."""
         return str(b64encode(val))
 
 
 def encode4js(obj):
-    """prepare an object for json encoding.
-    has special handling for many Python types
+    """Prepare an object for json encoding.
+
+    It has special handling for many Python types, including:
     - pandas dataframes and series
     - numpy ndarrays
     - complex numbers
+
     """
     if isinstance(obj, DataFrame):
         return dict(__class__='PDataFrame', value=json.loads(obj.to_json()))
@@ -86,7 +86,7 @@ def encode4js(obj):
 
 
 def decode4js(obj):
-    """return decoded Python object from encoded object."""
+    """Return decoded Python object from encoded object."""
     if not isinstance(obj, dict):
         return obj
     out = obj
