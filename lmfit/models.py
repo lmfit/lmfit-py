@@ -622,7 +622,7 @@ class LognormalModel(Model):
 
     .. math::
 
-        f(x; A, \mu, \sigma) = \frac{A e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}
+        f(x; A, \mu, \sigma) = \frac{A e^{-(\log(x) - \mu)/ 2\sigma^2}}{x}
 
     """
 
@@ -631,6 +631,16 @@ class LognormalModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LognormalModel, self).__init__(lognormal, **kwargs)
+        self.set_param_hint('center', value=10, min=1.e-19)
+        self.set_param_hint('sigma', min=0)
+
+        fmt = ("{prefix:s}amplitude//{prefix:s}center"
+               "*exp(-(log({prefix:s}center)-{prefix:s}center)/"
+               "(2*{prefix:s}sigma**2))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        fmt = ("exp((2*{prefix:s}center-(1+2*{prefix:s}sigma**2)*"
+               "log({prefix:s}center))/(1+2*{prefix:s}sigma**2))")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = self.make_params(amplitude=1.0, center=0.0, sigma=0.25)
