@@ -156,10 +156,15 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
     """Return a log-normal function.
 
     lognormal(x, amplitude, center, sigma)
-        = (amplitude/x) * exp(-(ln(x) - center)/ (2* sigma**2))
+        = (amplitude/(x*sigma*s2pi)) * exp(-(ln(x) - center)**2/ (2* sigma**2))
 
     """
-    x[where(x <= 1.e-19)] = 1.e-19
+    if isinstance(x, (int, float)):
+        if x <= 1.e-19:
+            x = 1.e-19
+    else:
+        x[where(x <= 1.e-19)] = 1.e-19
+
     return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2 / (2*sigma**2))
 
 
