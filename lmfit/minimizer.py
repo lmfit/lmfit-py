@@ -1775,9 +1775,8 @@ VALID_NAN_POLICIES = ('propagate', 'omit', 'raise')
 
 
 def validate_nan_policy(policy):
-    """Validate, rationalize nan_policy, for backward compatibility
-    and compatibility with Pandas missing convention.
-    """
+    """Validate, rationalize nan_policy, for backward compatibility and
+    compatibility with Pandas missing convention."""
     if policy in VALID_NAN_POLICIES:
         return policy
     if policy is None:

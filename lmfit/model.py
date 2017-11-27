@@ -1019,7 +1019,7 @@ def save_model(model, fname):
 
 
 def load_model(fname, funcdefs=None):
-    """load a saved Model from a file
+    """Load a saved Model from a file.
 
     Parameters
     ----------

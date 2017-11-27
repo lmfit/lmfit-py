@@ -251,6 +251,7 @@ def sine(x, amplitude=1.0, frequency=1.0, shift=0.0):
 
     sine(x, amplitude, frequency, shift):
        = amplitude * sin(x*frequency + shift)
+
     """
     return amplitude*sin(x*frequency + shift)
 
@@ -260,6 +261,7 @@ def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
 
     expsine(x, amplitude, frequency, shift,  decay):
        = amplitude * sin(x*frequency + shift) * exp(-x*decay)
+
     """
     return amplitude*sin(x*frequency + shift) * exp(-x*decay)
 
