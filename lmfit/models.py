@@ -662,11 +662,15 @@ class DampedOscillatorModel(Model):
 
     """
 
+    height_factor = 0.5
+
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
+
+        self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
