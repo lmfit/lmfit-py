@@ -1,7 +1,7 @@
 """Basic model line shapes and distribution functions."""
 from __future__ import division
 
-from numpy import arctan, sin, cos, exp, log, pi, sqrt, where
+from numpy import arctan, cos, exp, log, pi, sin, sqrt, where
 from numpy.testing import assert_allclose
 from scipy.special import erf, erfc, gammaln, wofz
 from scipy.special import gamma as gamfcn
@@ -247,20 +247,24 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
 
 
 def sine(x, amplitude=1.0, frequency=1.0, shift=0.0):
-    """Return a sinusoidal function
+    """Return a sinusoidal function.
 
     sine(x, amplitude, frequency, shift):
        = amplitude * sin(x*frequency + shift)
+
     """
     return amplitude*sin(x*frequency + shift)
 
+
 def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
-    """Return an exponentially decaying sinusoidal function
+    """Return an exponentially decaying sinusoidal function.
 
     expsine(x, amplitude, frequency, shift,  decay):
        = amplitude * sin(x*frequency + shift) * exp(-x*decay)
+
     """
     return amplitude*sin(x*frequency + shift) * exp(-x*decay)
+
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """Return a step function.

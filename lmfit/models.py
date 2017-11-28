@@ -5,10 +5,10 @@ from . import lineshapes
 from .asteval import Interpreter
 from .astutils import get_ast_names
 from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
-                         expgaussian, exponential, gaussian, linear, logistic,
-                         lognormal, lorentzian, moffat, parabolic, pearson7,
-                         powerlaw, pvoigt, rectangle, skewed_gaussian,
-                         skewed_voigt, step, students_t, voigt)
+                         expgaussian, exponential, gaussian, linear, lognormal,
+                         lorentzian, moffat, parabolic, pearson7, powerlaw,
+                         pvoigt, rectangle, skewed_gaussian, step, students_t,
+                         voigt)
 from .model import Model
 
 
@@ -155,6 +155,7 @@ class ConstantModel(Model):
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
 
+
 class ComplexConstantModel(Model):
     """Complex constant model, with wo Parameters: ``re``, and ``im``.
 
@@ -166,7 +167,7 @@ class ComplexConstantModel(Model):
     """
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
-                 name=None,  **kwargs):
+                 name=None, **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
 
@@ -670,7 +671,7 @@ class DampedHarmonicOscillatorModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DampedHarmonicOscillatorModel, self).__init__(dho,  **kwargs)
+        super(DampedHarmonicOscillatorModel, self).__init__(dho, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
@@ -737,7 +738,7 @@ class SkewedGaussianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(SkewedGaussianModel, self).__init__(skewed_gaussian,  **kwargs)
+        super(SkewedGaussianModel, self).__init__(skewed_gaussian, **kwargs)
         self.set_param_hint('sigma', min=0)
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -766,7 +767,7 @@ class DonaichModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DonaichModel, self).__init__(donaich,  **kwargs)
+        super(DonaichModel, self).__init__(donaich, **kwargs)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5)
@@ -795,7 +796,7 @@ class PowerLawModel(Model):
     def guess(self, data, x=None, **kwargs):
         try:
             expon, amp = np.polyfit(np.log(x+1.e-14), np.log(data+1.e-14), 1)
-        except:
+        except TypeError:
             expon, amp = 1, np.log(abs(max(data)+1.e-9))
 
         pars = self.make_params(amplitude=np.exp(amp), exponent=expon)
@@ -823,10 +824,9 @@ class ExponentialModel(Model):
         super(ExponentialModel, self).__init__(exponential, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
-
         try:
             sval, oval = np.polyfit(x, np.log(abs(data)+1.e-15), 1)
-        except:
+        except TypeError:
             sval, oval = 1., np.log(abs(max(data)+1.e-9))
         pars = self.make_params(amplitude=np.exp(oval), decay=-1.0/sval)
         return update_param_vals(pars, self.prefix, **kwargs)
