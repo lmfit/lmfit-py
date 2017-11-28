@@ -702,13 +702,25 @@ class DampedHarmonicOscillatorModel(Model):
         f(x; A, \mu, \sigma, \gamma) = \frac{A\sigma}{\pi [1 - \exp(-x/\gamma)]}
                 \Big[ \frac{1}{(x-\mu)^2 + \sigma^2} - \frac{1}{(x+\mu)^2 + \sigma^2} \Big]
 
+    where :math:`\gamma=kT` k is the Boltzmann constant in :math:`evK^-1`
+    and T is the temperature in :math:`K`.
+
     """
+
+    fwhm_factor = 2.0
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedHarmonicOscillatorModel, self).__init__(dho,  **kwargs)
+
+        fmt = ("({prefix:s}amplitude*{prefix:s}sigma)/"
+               "(pi*(1-exp(-{prefix:s}center/{prefix:s}gamma)))*("
+               "1/{prefix:s}sigma**2-1/(4*{prefix:s}center**2+"
+               "{prefix:s}sigma**2))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,

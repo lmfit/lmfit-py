@@ -139,7 +139,7 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
     bose = 1.0/(1.0 - exp(-x/gamma))
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)
-    return amplitude*sigma*pi*bose*(lm - lp)
+    return amplitude*sigma/pi*bose*(lm - lp)
 
 
 def logistic(x, amplitude=1., center=0., sigma=1.):
