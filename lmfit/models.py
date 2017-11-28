@@ -791,6 +791,7 @@ class SkewedGaussianModel(Model):
     """
 
     fwhm_factor = 2.354820
+    height_factor = 1./np.sqrt(2*np.pi)
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
@@ -798,6 +799,8 @@ class SkewedGaussianModel(Model):
                        'independent_vars': independent_vars})
         super(SkewedGaussianModel, self).__init__(skewed_gaussian,  **kwargs)
         self.set_param_hint('sigma', min=0)
+        self.set_param_hint('height', expr=height_expr(self))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
