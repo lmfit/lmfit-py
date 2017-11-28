@@ -671,6 +671,15 @@ class DampedOscillatorModel(Model):
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
 
         self.set_param_hint('height', expr=height_expr(self))
+        fmt = ("sqrt({prefix:s}center**2*(1-2*{prefix:s}sigma**2)+"
+               "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
+               "({prefix:s}sigma**2+3))))-"
+               "sqrt({prefix:s}center**2*(1-2*{prefix:s}sigma**2)-"
+               "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
+               "({prefix:s}sigma**2+3))))")
+
+
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
