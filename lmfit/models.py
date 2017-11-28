@@ -749,11 +749,20 @@ class ExponentialGaussianModel(Model):
 
     """
 
+    fwhm_factor = 2*np.sqrt(2*np.log(2))
+
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('gamma', min=0, max=20)
+        fmt = ("{prefix:s}amplitude*{prefix:s}gamma/2*"
+               "exp({prefix:s}gamma**2*{prefix:s}sigma**2/2)*"
+               "erfc({prefix:s}gamma*{prefix:s}sigma/sqrt(2))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
