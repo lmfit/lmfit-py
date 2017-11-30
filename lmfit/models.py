@@ -677,8 +677,6 @@ class DampedOscillatorModel(Model):
                "sqrt({prefix:s}center**2*(1-2*{prefix:s}sigma**2)-"
                "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
                "({prefix:s}sigma**2+3))))")
-
-
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -819,8 +817,9 @@ class DonaichModel(Model):
 
     .. math::
 
-        f(x; A, \mu, \sigma, \gamma) = A\frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
-        \arctan{(x - \mu)}/\sigma\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
+        f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma^{1-\gamma}}
+        \frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
+        \arctan{((x - \mu)}/\sigma)\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
 
     """
 
@@ -829,6 +828,9 @@ class DonaichModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DonaichModel, self).__init__(donaich,  **kwargs)
+        fmt = ("{prefix:s}amplitude/({prefix:s}sigma**(1-{prefix:s}gamma))"
+               "*cos(pi*{prefix:s}gamma/2)")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5)

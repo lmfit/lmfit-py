@@ -203,7 +203,8 @@ def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     """Return a Doniach Sunjic asymmetric lineshape, used for photo-emission.
 
     donaich(x, amplitude, center, sigma, gamma) =
-        amplitude* cos(pi*gamma/2 + (1-gamma) arctan((x-center)/sigma) /
+        amplitude / sigma^(1-gamma) *
+        cos(pi*gamma/2 + (1-gamma) arctan((x-center)/sigma) /
         (sigma**2 + (x-center)**2)**[(1-gamma)/2]
 
     see http://www.casaxps.com/help_manual/line_shapes.htm
