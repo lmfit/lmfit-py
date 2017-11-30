@@ -12,7 +12,6 @@ Original copyright:
 See LICENSE for more complete authorship information and license.
 
 """
-
 from collections import namedtuple
 from copy import deepcopy
 import multiprocessing
@@ -24,18 +23,12 @@ from numpy import dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 from scipy.optimize import brute as scipy_brute
+from scipy.optimize import differential_evolution, least_squares
 from scipy.optimize import leastsq as scipy_leastsq
-from scipy.optimize import least_squares
 from scipy.optimize import minimize as scipy_minimize
-from scipy.optimize import differential_evolution
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 import six
-
-try:
-    from pandas import isnull
-except ImportError:
-    isnull = np.isnan
 
 # use locally modified version of uncertainties package
 from . import uncertainties
@@ -50,23 +43,24 @@ from .parameter import Parameter, Parameters
 #    least_squares         0.17
 
 # check for EMCEE
-HAS_EMCEE = False
 try:
     import emcee as emcee
     HAS_EMCEE = True
 except ImportError:
-    pass
+    HAS_EMCEE = False
 
 # check for pandas
-HAS_PANDAS = False
 try:
     import pandas as pd
+    from pandas import isnull
     HAS_PANDAS = True
 except ImportError:
-    pass
+    HAS_PANDAS = False
+    isnull = np.isnan
 
 # define the namedtuple here so pickle will work with the MinimizerResult
 Candidate = namedtuple('Candidate', ['params', 'score'])
+
 
 def asteval_with_uncertainties(*vals, **kwargs):
     """Calculate object value, given values for variables.
@@ -106,6 +100,7 @@ def eval_stderr(obj, uvars, _names, _pars):
     uval = wrap_ueval(*uvars, _obj=obj, _names=_names, _pars=_pars)
     try:
         obj.stderr = uval.std_dev()
+    # TODO: do not use bare except
     except:
         obj.stderr = 0
 
@@ -206,8 +201,7 @@ def reduce_cauchylogpdf(r):
 
 
 class MinimizerResult(object):
-    r"""
-    The results of a minimization.
+    r"""The results of a minimization.
 
     Minimization results include data such as status and error messages,
     fit statistics, and the updated (i.e., best-fit) parameters themselves
@@ -314,7 +308,7 @@ class MinimizerResult(object):
                 print("\nCandidate #{}, chisqr = "
                       "{:.3f}".format(candidate_nmb, candidate.score))
                 candidate.params.pretty_print()
-            except:
+            except IndexError:
                 for i, candidate in enumerate(self.candidates):
                     print("\nCandidate #{}, chisqr = "
                           "{:.3f}".format(i, candidate.score))
@@ -495,7 +489,6 @@ class Minimizer(object):
         if not self._abort:
             return _nan_policy(np.asarray(out).ravel(),
                                nan_policy=self.nan_policy)
-
 
     def __jacobian(self, fvars):
         """Reuturn analytical jacobian to be used with Levenberg-Marquardt.
@@ -733,11 +726,11 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = method
-        vars = result.init_vals
+        variables = result.init_vals
         params = result.params
 
         fmin_kws = dict(method=method,
-                        options={'maxiter': 1000 * (len(vars) + 1)})
+                        options={'maxiter': 1000 * (len(variables) + 1)})
         fmin_kws.update(self.kws)
         fmin_kws.update(kws)
 
@@ -763,7 +756,7 @@ class Minimizer(object):
                     raise ValueError('differential_evolution requires finite '
                                      'bound for all varying parameters')
 
-            _bounds = [(-np.pi / 2., np.pi / 2.)] * len(vars)
+            _bounds = [(-np.pi / 2., np.pi / 2.)] * len(variables)
             kwargs = dict(args=(), strategy='best1bin', maxiter=None,
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
@@ -774,7 +767,7 @@ class Minimizer(object):
                     kwargs[k] = v
             ret = differential_evolution(self.penalty, _bounds, **kwargs)
         else:
-            ret = scipy_minimize(self.penalty, vars, **fmin_kws)
+            ret = scipy_minimize(self.penalty, variables, **fmin_kws)
 
         result.aborted = self._abort
         self._abort = False
@@ -788,7 +781,7 @@ class Minimizer(object):
 
         result.x = np.atleast_1d(result.x)
         result.chisqr = result.residual = self.__residual(result.x)
-        result.nvarys = len(vars)
+        result.nvarys = len(variables)
         result.ndata = 1
         result.nfree = 1
         if isinstance(result.residual, ndarray):
@@ -806,8 +799,7 @@ class Minimizer(object):
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
               float_behavior='posterior', is_weighted=True, seed=None):
-        r"""
-        Bayesian sampling of the posterior distribution using `emcee`.
+        r"""Bayesian sampling of the posterior distribution using `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
         using the `emcee` Markov Chain Monte Carlo package. The method assumes
@@ -1277,8 +1269,8 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'leastsq'
-        vars = result.init_vals
-        nvars = len(vars)
+        variables = result.init_vals
+        nvars = len(variables)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
                      gtol=1.e-7, maxfev=2000*(nvars+1), Dfun=None)
 
@@ -1295,7 +1287,7 @@ class Minimizer(object):
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
 
-        lsout = scipy_leastsq(self.__residual, vars, **lskws)
+        lsout = scipy_leastsq(self.__residual, variables, **lskws)
         _best, _cov, infodict, errmsg, ier = lsout
         result.aborted = self._abort
         self._abort = False
@@ -1386,6 +1378,7 @@ class Minimizer(object):
                             par.correl[varn2] = (
                                 result.covar[ivar, jvar] /
                                 (par.stderr * sqrt(result.covar[jvar, jvar])))
+                # TODO: do not use bare except
                 except:
                     result.errorbars = False
 
@@ -1664,8 +1657,7 @@ def _lnprior(theta, bounds):
     """
     if np.any(theta > bounds[:, 1]) or np.any(theta < bounds[:, 0]):
         return -np.inf
-    else:
-        return 0
+    return 0
 
 
 def _lnpost(theta, userfcn, params, var_names, bounds, userargs=(),
@@ -1780,10 +1772,11 @@ def _make_random_gen(seed):
 
 
 VALID_NAN_POLICIES = ('propagate', 'omit', 'raise')
+
+
 def validate_nan_policy(policy):
-    """validate, rationalize nan_policy, for back compatibility
-    and compatibility with Pandas missing convention.
-    """
+    """Validate, rationalize nan_policy, for backward compatibility and
+    compatibility with Pandas missing convention."""
     if policy in VALID_NAN_POLICIES:
         return policy
     if policy is None:
@@ -1797,6 +1790,7 @@ def validate_nan_policy(policy):
     if policy not in VALID_NAN_POLICIES:
         raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
     return policy
+
 
 def _nan_policy(arr, nan_policy='raise', handle_inf=True):
     """Specify behaviour when an array contains numpy.nan or numpy.inf.
@@ -1853,7 +1847,6 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
         if contains_nan:
             raise ValueError("The input contains nan values")
     return arr
-
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,

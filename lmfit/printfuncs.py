@@ -17,12 +17,11 @@ def getfloat_attr(obj, attr, fmt='%.3f'):
     val = getattr(obj, attr, None)
     if val is None:
         return 'unknown'
-    if isinstance(val, int):
+    elif isinstance(val, int):
         return '%d' % val
-    if isinstance(val, float):
+    elif isinstance(val, float):
         return fmt % val
-    else:
-        return repr(val)
+    return repr(val)
 
 
 def gformat(val, length=11):

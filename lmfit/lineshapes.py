@@ -1,7 +1,7 @@
 """Basic model line shapes and distribution functions."""
 from __future__ import division
 
-from numpy import arctan, sin, cos, exp, log, pi, sqrt, where
+from numpy import arctan, cos, exp, log, pi, sin, sqrt, where
 from numpy.testing import assert_allclose
 from scipy.special import erf, erfc, gammaln, wofz
 from scipy.special import gamma as gamfcn
@@ -10,6 +10,7 @@ log2 = log(2)
 s2pi = sqrt(2*pi)
 spi = sqrt(pi)
 s2 = sqrt(2.0)
+tiny = 1.e-13
 
 functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'breit_wigner', 'damped_oscillator', 'dho', 'logistic', 'lognormal',
@@ -119,7 +120,7 @@ def damped_oscillator(x, amplitude=1.0, center=1., sigma=0.1):
         amplitude/sqrt( (1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2))
 
     """
-    center = max(1.e-9, abs(center))
+    center = max(tiny, abs(center))
     return amplitude/sqrt((1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2)
 
 
@@ -128,24 +129,21 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
 
     Similar to version from PAN
     dho(x, amplitude, center, sigma, gamma) =
-        (amplitude*sigma*(bose/pi)* (lm - lp)
+        amplitude*sigma*pi * (lm - lp) / (1.0 - exp(-x/gamma))
 
     where
-        bose(x, gamma) =  1.0/ (1.0 - exp(-x/gamma))
         lm(x, center, sigma) = 1.0 / ((x-center)**2 + sigma**2)
         lp(x, center, sigma) = 1.0 / ((x+center)**2 + sigma**2)
 
     """
-    if isinstance(x, (int, float)):
-        if x <= 1.e-13:
-            x = 1.e-13
+    bose = (1.0 - exp(-x/gamma))
+    if isinstance(bose, (int, float)):
+        bose = max(tiny, bose)
     else:
-        x[where(x <= 1.e-13)] = 1.e-13
-
-    bose = 1.0/(1.0 - exp(-x/gamma))
+        bose[where(bose <= tiny)] = tiny
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)
-    return amplitude*sigma/pi*bose*(lm - lp)
+    return amplitude*sigma/pi*(lm - lp)/bose
 
 
 def logistic(x, amplitude=1., center=0., sigma=1.):
@@ -166,11 +164,9 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
 
     """
     if isinstance(x, (int, float)):
-        if x <= 1.e-19:
-            x = 1.e-19
+        x = max(tiny, x)
     else:
-        x[where(x <= 1.e-19)] = 1.e-19
-
+        x[where(x <= tiny)] = tiny
     return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2 / (2*sigma**2))
 
 
@@ -259,20 +255,24 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
 
 
 def sine(x, amplitude=1.0, frequency=1.0, shift=0.0):
-    """Return a sinusoidal function
+    """Return a sinusoidal function.
 
     sine(x, amplitude, frequency, shift):
        = amplitude * sin(x*frequency + shift)
+
     """
     return amplitude*sin(x*frequency + shift)
 
+
 def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
-    """Return an exponentially decaying sinusoidal function
+    """Return an exponentially decaying sinusoidal function.
 
     expsine(x, amplitude, frequency, shift,  decay):
        = amplitude * sin(x*frequency + shift) * exp(-x*decay)
+
     """
     return amplitude*sin(x*frequency + shift) * exp(-x*decay)
+
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """Return a step function.
@@ -287,8 +287,8 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     where arg = (x - center)/sigma
 
     """
-    if abs(sigma) < 1.e-13:
-        sigma = 1.e-13
+    if abs(sigma) < tiny:
+        sigma = tiny
 
     out = (x - center)/sigma
     if form == 'erf':
@@ -319,10 +319,10 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
     and   arg2 = -(x - center2)/sigma2
 
     """
-    if abs(sigma1) < 1.e-13:
-        sigma1 = 1.e-13
-    if abs(sigma2) < 1.e-13:
-        sigma2 = 1.e-13
+    if abs(sigma1) < tiny:
+        sigma1 = tiny
+    if abs(sigma2) < tiny:
+        sigma2 = tiny
 
     arg1 = (x - center1)/sigma1
     arg2 = (center2 - x)/sigma2

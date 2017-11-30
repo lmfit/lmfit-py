@@ -35,6 +35,7 @@ try:
 except ImportError:
     print("Warning: scipy not available... gamma, wofz, and erfc functions not available.")
 
+
 class Interpreter:
     """Mathematical expression compiler and interpreter.
 

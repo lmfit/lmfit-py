@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-"""
- json utilities for larch objects
-"""
-import sys
-import six
+"""JSON utilities for larch objects."""
+from base64 import b64decode, b64encode
 import json
+import sys
+
 import numpy as np
-from base64 import b64encode, b64decode
+import six
 
 try:
     import dill
@@ -20,25 +19,30 @@ except ImportError:
     DataFrame = Series = type(NotImplemented)
     read_json = None
 
+
 def bindecode(val):
-    "b64decode wrapper, python 2 and 3 version"
+    """b64decode wrapper, Python 2 and 3 version."""
     return b64decode(six.b(val))
 
-def binencode(val):
-    "b64encode wrapper, python 2 version"
-    return str(b64encode(val))
 
 if six.PY3:
     def binencode(val):
-        "b64encode wrapper, python 3 version"
+        """b64encode wrapper, Python 3 version."""
         return str(b64encode(val), 'utf-8')  # b64encode results is /always/ UTF-8
+else:
+    def binencode(val):
+        """b64encode wrapper, Python 2 version."""
+        return str(b64encode(val))
+
 
 def encode4js(obj):
-    """prepare an object for json encoding.
-    has special handling for many Python types
+    """Prepare an object for json encoding.
+
+    It has special handling for many Python types, including:
     - pandas dataframes and series
     - numpy ndarrays
     - complex numbers
+
     """
     if isinstance(obj, DataFrame):
         return dict(__class__='PDataFrame', value=json.loads(obj.to_json()))
@@ -72,16 +76,17 @@ def encode4js(obj):
         return out
     elif callable(obj):
         val = None
-        pyvers = "%d.%d" %(sys.version_info.major,
-                           sys.version_info.minor)
+        pyvers = "%d.%d" % (sys.version_info.major,
+                            sys.version_info.minor)
         if HAS_DILL:
             val = binencode(dill.dumps(obj))
         return dict(__class__='Callable', __name__=obj.__name__,
                     pyversion=pyvers, value=val)
     return obj
 
+
 def decode4js(obj):
-    """return decoded Python object from encoded object."""
+    """Return decoded Python object from encoded object."""
     if not isinstance(obj, dict):
         return obj
     out = obj
@@ -104,7 +109,7 @@ def decode4js(obj):
             out = re + 1j*im
         elif obj['__dtype__'].startswith('object'):
             val = [decode4js(v) for v in obj['value']]
-            out = np.array(val,  dtype=obj['__dtype__'])
+            out = np.array(val, dtype=obj['__dtype__'])
         else:
             out = np.fromiter(obj['value'], dtype=obj['__dtype__'])
         out.shape = obj['__shape__']
@@ -114,8 +119,8 @@ def decode4js(obj):
         out = Series(obj['value'])
     elif classname == 'Callable':
         out = val = obj['__name__']
-        pyvers = "%d.%d" %(sys.version_info.major,
-                           sys.version_info.minor)
+        pyvers = "%d.%d" % (sys.version_info.major,
+                            sys.version_info.minor)
         if pyvers == obj['pyversion'] and HAS_DILL:
             out = dill.loads(bindecode(obj['value']))
 
