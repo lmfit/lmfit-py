@@ -473,6 +473,8 @@ class MoffatModel(Model):
     (see https://en.wikipedia.org/wiki/Moffat_distribution), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`), a width parameter
     ``sigma`` (:math:`\sigma`) and an exponent ``beta`` (:math:`\beta`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -507,7 +509,9 @@ class Pearson7Model(Model):
     r"""A model based on a Pearson VII distribution (see
     https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution),
     with four parameters: ``amplitude`` (:math:`A`), ``center``
-    (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`) in
+    (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -547,7 +551,9 @@ class Pearson7Model(Model):
 class StudentsTModel(Model):
     r"""A model based on a Student's t distribution function (see
     https://en.wikipedia.org/wiki/Student%27s_t-distribution), with three Parameters:
-    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`) in
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -583,7 +589,9 @@ class BreitWignerModel(Model):
     r"""A model based on a Breit-Wigner-Fano function (see
     https://en.wikipedia.org/wiki/Fano_resonance), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
-    ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`) in
+    ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -616,7 +624,9 @@ class LognormalModel(Model):
     r"""A model based on the Log-normal distribution function
     (see https://en.wikipedia.org/wiki/Lognormal), with three Parameters
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma``
-    (:math:`\sigma`) in
+    (:math:`\sigma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -654,7 +664,9 @@ class DampedOscillatorModel(Model):
     r"""A model based on the Damped Harmonic Oscillator Amplitude
     (see https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part), with
     three Parameters:  ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-    ``sigma`` (:math:`\sigma`) in
+    ``sigma`` (:math:`\sigma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -693,7 +705,9 @@ class DampedHarmonicOscillatorModel(Model):
     https://en.wikipedia.org/wiki/Harmonic_oscillator), following the
     definition given in DAVE/PAN (see https://www.ncnr.nist.gov/dave/) with
     four Parameters: ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
-    ``sigma`` (:math:`\sigma`), and ``gamma`` (:math:`\gamma`) in
+    ``sigma`` (:math:`\sigma`), and ``gamma`` (:math:`\gamma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -734,7 +748,9 @@ class ExponentialGaussianModel(Model):
     r"""A model of an Exponentially modified Gaussian distribution
     (see https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution) with
     four Parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
-    ``sigma`` (:math:`\sigma`), and  ``gamma`` (:math:`\gamma`) in
+    ``sigma`` (:math:`\sigma`), and  ``gamma`` (:math:`\gamma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -774,7 +790,9 @@ class SkewedGaussianModel(Model):
     r"""A variation of the Exponential Gaussian, this uses a skewed normal distribution
     (see https://en.wikipedia.org/wiki/Skew_normal_distribution), with Parameters
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),  ``sigma`` (:math:`\sigma`),
-    and ``gamma`` (:math:`\gamma`) in
+    and ``gamma`` (:math:`\gamma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -813,7 +831,8 @@ class DonaichModel(Model):
     (see https://www.casaxps.com/help_manual/line_shapes.htm), used in
     photo-emission, with four Parameters ``amplitude`` (:math:`A`),
     ``center`` (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``gamma``
-    (:math:`\gamma`) in
+    (:math:`\gamma`).
+    In addition, parameter ``height`` is included as a constraint.
 
     .. math::
 
