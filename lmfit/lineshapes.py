@@ -1,7 +1,7 @@
 """Basic model line shapes and distribution functions."""
 from __future__ import division
 
-from numpy import arctan, sin, cos, exp, log, pi, sqrt, where
+from numpy import arctan, sin, cos, exp, log, pi, sqrt, where, absolute
 from numpy.testing import assert_allclose
 from scipy.special import erf, erfc, gammaln, wofz
 from scipy.special import gamma as gamfcn
@@ -136,6 +136,12 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
         lp(x, center, sigma) = 1.0 / ((x+center)**2 + sigma**2)
 
     """
+    if isinstance(x, (int, float)):
+        if abs(x) <= 1.e-13:
+            x = 1.e-13
+    else:
+        x[where(absolute(x) <= 1.e-13)] = 1.e-13
+
     bose = 1.0/(1.0 - exp(-x/gamma))
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)

@@ -681,14 +681,14 @@ class DampedOscillatorModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
-
+        self.set_param_hint('sigma', min=0)
         self.set_param_hint('height', expr=height_expr(self))
-        fmt = ("sqrt({prefix:s}center**2*(1-2*{prefix:s}sigma**2)+"
+        fmt = ("sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)+"
                "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
-               "({prefix:s}sigma**2+3))))-"
-               "sqrt({prefix:s}center**2*(1-2*{prefix:s}sigma**2)-"
+               "({prefix:s}sigma**2+3)))))-"
+               "sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)-"
                "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
-               "({prefix:s}sigma**2+3))))")
+               "({prefix:s}sigma**2+3)))))")
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -726,7 +726,8 @@ class DampedHarmonicOscillatorModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedHarmonicOscillatorModel, self).__init__(dho,  **kwargs)
-
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('gamma', min=1.e-19)
         fmt = ("({prefix:s}amplitude*{prefix:s}sigma)/"
                "(pi*(1-exp(-{prefix:s}center/{prefix:s}gamma)))*("
                "1/{prefix:s}sigma**2-1/(4*{prefix:s}center**2+"
