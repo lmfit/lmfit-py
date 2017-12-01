@@ -176,7 +176,7 @@ For example, you may have fractionally underestimated the uncertainties on a
 dataset. MCMC can be used to estimate the true level of uncertainty on each
 datapoint. A tutorial on the possibilities offered by MCMC can be found at [1]_.
 
-.. [1] http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/
+.. [1] https://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/
 
 
 

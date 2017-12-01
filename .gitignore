@@ -12,3 +12,4 @@ sandbox/
 .DS_Store
 .ipynb_checkpoints/
 doc/html
+*.sav

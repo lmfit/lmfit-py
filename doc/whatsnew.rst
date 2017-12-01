@@ -4,7 +4,7 @@
 Release Notes
 =====================
 
-.. _lmfit github repository:   http://github.com/lmfit/lmfit-py
+.. _lmfit github repository:   https://github.com/lmfit/lmfit-py
 
 This section discusses changes between versions, especially changes
 significant to the use and behavior of the library.  This is not meant

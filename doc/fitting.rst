@@ -109,7 +109,7 @@ Choosing Different Fitting Methods
 ===========================================
 
 By default, the `Levenberg-Marquardt
-<http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm>`_ algorithm is
+<https://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm>`_ algorithm is
 used for fitting.  While often criticized, including the fact it finds a
 *local* minima, this approach has some distinct advantages.  These include
 being fast, and well-behaved for most curve-fitting needs, and making it
@@ -283,9 +283,9 @@ where :math:`r` is the residual array returned by the objective function
 varys}` is number of variable parameters.
 
 Also included are the `Akaike Information Criterion
-<http://en.wikipedia.org/wiki/Akaike_information_criterion>`_, and
+<https://en.wikipedia.org/wiki/Akaike_information_criterion>`_, and
 `Bayesian Information Criterion
-<http://en.wikipedia.org/wiki/Bayesian_information_criterion>`_ statistics,
+<https://en.wikipedia.org/wiki/Bayesian_information_criterion>`_ statistics,
 held in the ``aic`` and ``bic`` attributes, respectively.  These give slightly
 different measures of the relative quality for a fit, trying to balance
 quality of fit with the number of variable parameters used in the fit.

@@ -38,8 +38,6 @@ Authors: Matthew Newville, The University of Chicago
          Antonino Ingargiola, University of California, Los Angeles
 
 """
-import sys
-
 from .confidence import conf_interval, conf_interval2d
 from .minimizer import Minimizer, MinimizerException, minimize
 from .parameter import Parameter, Parameters

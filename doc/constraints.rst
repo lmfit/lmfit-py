@@ -4,7 +4,7 @@
 Using Mathematical Constraints
 =================================
 
-.. _asteval: http://newville.github.io/asteval/
+.. _asteval: https://newville.github.io/asteval/
 
 Being able to fix variables to a constant value or place upper and lower
 bounds on their values can greatly simplify modeling real data.  These
@@ -130,7 +130,7 @@ Advanced usage of Expressions in lmfit
 
 The expression used in a constraint is converted to a
 Python `Abstract Syntax Tree
-<http://docs.python.org/library/ast.html>`_, which is an
+<https://docs.python.org/library/ast.html>`_, which is an
 intermediate version of the expression -- a syntax-checked,
 partially compiled expression.  Among other things, this
 means that Python's own parser is used to parse and convert

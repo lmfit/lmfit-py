@@ -786,7 +786,7 @@ figure below.
 
 .. _modelresult_saveload_sec:
 
-Saving and Loading Model Results
+Saving and Loading ModelResults
 --------------------------------------
 
 .. versionadded:: 0.9.8
