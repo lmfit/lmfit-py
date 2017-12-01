@@ -137,10 +137,13 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
 
     """
     bose = (1.0 - exp(-x/gamma))
-    bose[where(bose<tiny)] = tiny
+    if isinstance(bose, (int, float)):
+        bose = max(tiny, bose)
+    else:
+        bose[where(bose <= tiny)] = tiny
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)
-    return amplitude*sigma*pi*(lm - lp)/bose
+    return amplitude*sigma/pi*(lm - lp)/bose
 
 
 def logistic(x, amplitude=1., center=0., sigma=1.):
@@ -157,10 +160,13 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
     """Return a log-normal function.
 
     lognormal(x, amplitude, center, sigma)
-        = (amplitude/x) * exp(-(ln(x) - center)/ (2* sigma**2))
+        = (amplitude/(x*sigma*s2pi)) * exp(-(ln(x) - center)**2/ (2* sigma**2))
 
     """
-    x[where(x <= tiny)] = tiny
+    if isinstance(x, (int, float)):
+        x = max(tiny, x)
+    else:
+        x[where(x <= tiny)] = tiny
     return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2 / (2*sigma**2))
 
 
@@ -199,7 +205,8 @@ def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     """Return a Doniach Sunjic asymmetric lineshape, used for photo-emission.
 
     donaich(x, amplitude, center, sigma, gamma) =
-        amplitude* cos(pi*gamma/2 + (1-gamma) arctan((x-center)/sigma) /
+        amplitude / sigma^(1-gamma) *
+        cos(pi*gamma/2 + (1-gamma) arctan((x-center)/sigma) /
         (sigma**2 + (x-center)**2)**[(1-gamma)/2]
 
     see http://www.casaxps.com/help_manual/line_shapes.htm
