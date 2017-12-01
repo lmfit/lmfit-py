@@ -474,6 +474,8 @@ class MoffatModel(Model):
     (see https://en.wikipedia.org/wiki/Moffat_distribution), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`), a width parameter
     ``sigma`` (:math:`\sigma`) and an exponent ``beta`` (:math:`\beta`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -494,6 +496,7 @@ class MoffatModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('beta')
         self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/%sbeta)-1)" % (self.prefix, self.prefix))
+        self.set_param_hint('height', expr="%samplitude" % self.prefix)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5, sigscale=1.)
@@ -507,7 +510,9 @@ class Pearson7Model(Model):
     r"""A model based on a Pearson VII distribution (see
     https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution),
     with four parameters: ``amplitude`` (:math:`A`), ``center``
-    (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`) in
+    (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -529,8 +534,8 @@ class Pearson7Model(Model):
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
         self.set_param_hint('expon', value=1.5, max=100)
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
-
+        fmt = ("sqrt(2**(1/{prefix:s}expon)-1)*2*{prefix:s}sigma")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
         fmt = ("{prefix:s}amplitude * gamfcn({prefix:s}expon)/"
                "(gamfcn(0.5)*gamfcn({prefix:s}expon-0.5)*{prefix:s}sigma)")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
@@ -547,7 +552,9 @@ class Pearson7Model(Model):
 class StudentsTModel(Model):
     r"""A model based on a Student's t distribution function (see
     https://en.wikipedia.org/wiki/Student%27s_t-distribution), with three Parameters:
-    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`) in
+    ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma`` (:math:`\sigma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -563,6 +570,13 @@ class StudentsTModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(StudentsTModel, self).__init__(students_t, **kwargs)
+        self.set_param_hint('sigma', min=0.0, max=100)
+        fmt = ("{prefix:s}amplitude*gamfcn(({prefix:s}sigma+1)/2)/"
+               "(sqrt({prefix:s}sigma*pi)*gamfcn({prefix:s}sigma/2))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        fmt = ("2*sqrt(2**(2/({prefix:s}sigma+1))*"
+               "{prefix:s}sigma-{prefix:s}sigma)")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -576,7 +590,9 @@ class BreitWignerModel(Model):
     r"""A model based on a Breit-Wigner-Fano function (see
     https://en.wikipedia.org/wiki/Fano_resonance), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
-    ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`) in
+    ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -589,6 +605,12 @@ class BreitWignerModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
+        self.set_param_hint('sigma', min=0.0)
+        fmt = ("{prefix:s}amplitude*{prefix:s}q**2")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        fmt = ("2*(sqrt({prefix:s}q**2*{prefix:s}sigma**2*({prefix:s}q**2+2))/"
+               "(2*({prefix:s}q**2)-2))")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -603,11 +625,13 @@ class LognormalModel(Model):
     r"""A model based on the Log-normal distribution function
     (see https://en.wikipedia.org/wiki/Lognormal), with three Parameters
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma``
-    (:math:`\sigma`) in
+    (:math:`\sigma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
-        f(x; A, \mu, \sigma) = \frac{A e^{-(\ln(x) - \mu)/ 2\sigma^2}}{x}
+        f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}}\frac{e^{-(\ln(x) - \mu)^2/ 2\sigma^2}}{x}
 
     """
 
@@ -616,6 +640,17 @@ class LognormalModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LognormalModel, self).__init__(lognormal, **kwargs)
+        self.set_param_hint('center', min=1.e-19)
+        self.set_param_hint('sigma', min=0)
+
+        fmt = ("{prefix:s}amplitude/({prefix:s}sigma*sqrt(2*pi))"
+               "*exp({prefix:s}sigma**2/2-{prefix:s}center)")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        fmt = ("exp({prefix:s}center-{prefix:s}sigma**2+{prefix:s}sigma*sqrt("
+               "2*log(2)))-"
+               "exp({prefix:s}center-{prefix:s}sigma**2-{prefix:s}sigma*sqrt("
+               "2*log(2)))")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = self.make_params(amplitude=1.0, center=0.0, sigma=0.25)
@@ -630,7 +665,9 @@ class DampedOscillatorModel(Model):
     r"""A model based on the Damped Harmonic Oscillator Amplitude
     (see https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part), with
     three Parameters:  ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
-    ``sigma`` (:math:`\sigma`) in
+    ``sigma`` (:math:`\sigma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -638,11 +675,22 @@ class DampedOscillatorModel(Model):
 
     """
 
+    height_factor = 0.5
+
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('height', expr=height_expr(self))
+        fmt = ("sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)+"
+               "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
+               "({prefix:s}sigma**2+3)))))-"
+               "sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)-"
+               "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
+               "({prefix:s}sigma**2+3)))))")
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
@@ -658,20 +706,35 @@ class DampedHarmonicOscillatorModel(Model):
     https://en.wikipedia.org/wiki/Harmonic_oscillator), following the
     definition given in DAVE/PAN (see https://www.ncnr.nist.gov/dave/) with
     four Parameters: ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
-    ``sigma`` (:math:`\sigma`), and ``gamma`` (:math:`\gamma`) in
+    ``sigma`` (:math:`\sigma`), and ``gamma`` (:math:`\gamma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
         f(x; A, \mu, \sigma, \gamma) = \frac{A\sigma}{\pi [1 - \exp(-x/\gamma)]}
                 \Big[ \frac{1}{(x-\mu)^2 + \sigma^2} - \frac{1}{(x+\mu)^2 + \sigma^2} \Big]
 
+    where :math:`\gamma=kT` k is the Boltzmann constant in :math:`evK^-1`
+    and T is the temperature in :math:`K`.
+
     """
+
+    fwhm_factor = 2.0
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedHarmonicOscillatorModel, self).__init__(dho, **kwargs)
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('gamma', min=1.e-19)
+        fmt = ("({prefix:s}amplitude*{prefix:s}sigma)/"
+               "(pi*(1-exp(-{prefix:s}center/{prefix:s}gamma)))*("
+               "1/{prefix:s}sigma**2-1/(4*{prefix:s}center**2+"
+               "{prefix:s}sigma**2))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
@@ -687,7 +750,9 @@ class ExponentialGaussianModel(Model):
     r"""A model of an Exponentially modified Gaussian distribution
     (see https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution) with
     four Parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
-    ``sigma`` (:math:`\sigma`), and  ``gamma`` (:math:`\gamma`) in
+    ``sigma`` (:math:`\sigma`), and  ``gamma`` (:math:`\gamma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -700,11 +765,20 @@ class ExponentialGaussianModel(Model):
 
     """
 
+    fwhm_factor = 2*np.sqrt(2*np.log(2))
+
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('gamma', min=0, max=20)
+        fmt = ("{prefix:s}amplitude*{prefix:s}gamma/2*"
+               "exp({prefix:s}gamma**2*{prefix:s}sigma**2/2)*"
+               "erfc({prefix:s}gamma*{prefix:s}sigma/sqrt(2))")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -718,7 +792,9 @@ class SkewedGaussianModel(Model):
     r"""A variation of the Exponential Gaussian, this uses a skewed normal distribution
     (see https://en.wikipedia.org/wiki/Skew_normal_distribution), with Parameters
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),  ``sigma`` (:math:`\sigma`),
-    and ``gamma`` (:math:`\gamma`) in
+    and ``gamma`` (:math:`\gamma`).
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -733,6 +809,7 @@ class SkewedGaussianModel(Model):
     """
 
     fwhm_factor = 2.354820
+    height_factor = 1./np.sqrt(2*np.pi)
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
@@ -740,6 +817,8 @@ class SkewedGaussianModel(Model):
                        'independent_vars': independent_vars})
         super(SkewedGaussianModel, self).__init__(skewed_gaussian, **kwargs)
         self.set_param_hint('sigma', min=0)
+        self.set_param_hint('height', expr=height_expr(self))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative)
@@ -754,12 +833,14 @@ class DonaichModel(Model):
     (see https://www.casaxps.com/help_manual/line_shapes.htm), used in
     photo-emission, with four Parameters ``amplitude`` (:math:`A`),
     ``center`` (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``gamma``
-    (:math:`\gamma`) in
+    (:math:`\gamma`).
+    In addition, parameter ``height`` is included as a constraint.
 
     .. math::
 
-        f(x; A, \mu, \sigma, \gamma) = A\frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
-        \arctan{(x - \mu)}/\sigma\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
+        f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma^{1-\gamma}}
+        \frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
+        \arctan{((x - \mu)}/\sigma)\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}
 
     """
 
@@ -768,6 +849,9 @@ class DonaichModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DonaichModel, self).__init__(donaich, **kwargs)
+        fmt = ("{prefix:s}amplitude/({prefix:s}sigma**(1-{prefix:s}gamma))"
+               "*cos(pi*{prefix:s}gamma/2)")
+        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5)

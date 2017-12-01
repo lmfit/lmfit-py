@@ -33,7 +33,7 @@ try:
     import scipy.special
     HAS_SCIPY = True
 except ImportError:
-    print("Warning: scipy not available... gamma function for pearson7 not available.")
+    print("Warning: scipy not available... gamma, wofz, and erfc functions not available.")
 
 
 class Interpreter:
@@ -115,6 +115,7 @@ class Interpreter:
         if self.use_scipy:
             scipy_symtable = {"gamfcn": getattr(scipy.special, "gamma")}
             scipy_symtable.update({"wofz": getattr(scipy.special, "wofz")})
+            scipy_symtable.update({"erfc": getattr(scipy.special, "erfc")})
             symtable.update(scipy_symtable)
 
         # add numpy symbols
