@@ -2,8 +2,6 @@
 #<examples/doc_model_loadmodelresult.py>
 import numpy as np
 import matplotlib.pyplot as plt
-
-
 from lmfit.model import load_modelresult
 
 data = np.loadtxt('model1d_gauss.dat')

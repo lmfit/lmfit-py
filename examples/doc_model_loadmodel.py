@@ -2,7 +2,6 @@
 #<examples/doc_model_loadmodel.py>
 import numpy as np
 import matplotlib.pyplot as plt
-
 from lmfit.model import load_model
 
 def mysine(x, amp, freq, shift):
