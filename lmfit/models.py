@@ -609,7 +609,7 @@ class BreitWignerModel(Model):
         fmt = ("{prefix:s}amplitude*{prefix:s}q**2")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
         fmt = ("2*(sqrt({prefix:s}q**2*{prefix:s}sigma**2*({prefix:s}q**2+2))/"
-               "(2*({prefix:s}q**2)-2))")
+               "max(1.e-15, 2*({prefix:s}q**2)-2))")
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
