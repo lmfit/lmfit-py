@@ -1,8 +1,11 @@
 #!/usr/bin/env python
-#<examples/doc_model_loadmodel.py>
-import numpy as np
+
+# <examples/doc_model_loadmodel.py>
 import matplotlib.pyplot as plt
+import numpy as np
+
 from lmfit.model import load_model
+
 
 def mysine(x, amp, freq, shift):
     return amp * np.sin(x*freq + shift)
@@ -24,5 +27,4 @@ print(result.fit_report())
 plt.plot(x, y, 'bo')
 plt.plot(x, result.best_fit, 'r-')
 plt.show()
-
-#<end examples/doc_model_loadmodel.py>
+# <end examples/doc_model_loadmodel.py>

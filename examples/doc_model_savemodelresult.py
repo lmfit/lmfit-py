@@ -1,9 +1,11 @@
 #!/usr/bin/env python
-#<examples/doc_model_savemodelresult.py>
-import numpy as np
+
+# <examples/doc_model_savemodelresult.py>
 import matplotlib.pyplot as plt
-from lmfit.models import GaussianModel
+import numpy as np
+
 from lmfit.model import save_modelresult
+from lmfit.models import GaussianModel
 
 data = np.loadtxt('model1d_gauss.dat')
 x = data[:, 0]
@@ -20,4 +22,4 @@ plt.plot(x, y, 'bo')
 plt.plot(x, result.init_fit, 'k--')
 plt.plot(x, result.best_fit, 'r-')
 plt.show()
-#<end examples/doc_model_savemodelresult.py>
+# <end examples/doc_model_savemodelresult.py>
