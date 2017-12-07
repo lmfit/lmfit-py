@@ -1649,11 +1649,6 @@ class ModelResult(Minimizer):
                                 **{independent_var: x_array_dense}),
                 initfmt, label='init', **init_kws)
 
-        ax.plot(
-            x_array_dense,
-            self.model.eval(self.params, **{independent_var: x_array_dense}),
-            fitfmt, label='best-fit', **fit_kws)
-
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
         if yerr is not None:
@@ -1661,6 +1656,11 @@ class ModelResult(Minimizer):
                         fmt=datafmt, label='data', **data_kws)
         else:
             ax.plot(x_array, self.data, datafmt, label='data', **data_kws)
+
+        ax.plot(
+            x_array_dense,
+            self.model.eval(self.params, **{independent_var: x_array_dense}),
+            fitfmt, label='best-fit', **fit_kws)
 
         ax.set_title(self.model.name)
         if xlabel is None:
