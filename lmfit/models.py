@@ -308,7 +308,7 @@ class GaussianModel(Model):
 
     """
 
-    fwhm_factor = 2.354820
+    fwhm_factor = 2*np.sqrt(2*np.log(2))
     height_factor = 1./np.sqrt(2*np.pi)
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
@@ -525,8 +525,6 @@ class Pearson7Model(Model):
     respectively.
 
     """
-
-    fwhm_factor = 1.0
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
@@ -808,7 +806,7 @@ class SkewedGaussianModel(Model):
 
     """
 
-    fwhm_factor = 2.354820
+    fwhm_factor = 2*np.sqrt(2*np.log(2))
     height_factor = 1./np.sqrt(2*np.pi)
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
