@@ -904,7 +904,7 @@ class ExponentialModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(ExponentialModel, self).__init__(exponential, **kwargs)
-        self.set_param_hint('decay', min=-15)
+        self.set_param_hint('decay', min=0)
 
     def guess(self, data, x=None, **kwargs):
         try:
