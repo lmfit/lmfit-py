@@ -1306,7 +1306,7 @@ class ModelResult(Minimizer):
         nvarys = self.nvarys
         # ensure fjac and df2 are correct size if independent var updated by kwargs
         ndata = self.model.eval(self.params, **userkws).size
-        covar = self.covar / self.redchi
+        covar = self.covar
         fjac = np.zeros((nvarys, ndata))
         df2 = np.zeros(ndata)
 
@@ -1334,7 +1334,7 @@ class ModelResult(Minimizer):
             prob = sigma
         else:
             prob = erf(sigma/np.sqrt(2))
-        return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, self.ndata-nvarys)
+        return np.sqrt(df2) * t.ppf((prob+1)/2.0, self.ndata-nvarys)
 
     def conf_interval(self, **kwargs):
         """Calculate the confidence intervals for the variable parameters.
