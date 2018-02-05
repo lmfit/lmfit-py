@@ -1305,9 +1305,9 @@ class ModelResult(Minimizer):
 
         nvarys = self.nvarys
         # ensure fjac and df2 are correct size if independent var updated by kwargs
-        ndata = userkws[self.model.independent_vars[0]].size
+        ndata = self.model.eval(self.params, **userkws).size
         covar = self.covar / self.redchi
-        fjac = np.zeros(ndata*nvarys).reshape((nvarys, ndata))
+        fjac = np.zeros((nvarys, ndata))
         df2 = np.zeros(ndata)
 
         # find derivative by hand!
