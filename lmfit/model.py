@@ -1298,28 +1298,30 @@ class ModelResult(Minimizer):
            give the same results, within precision errors.
 
         """
-        self.userkws.update(kwargs)
+        userkws = self.userkws.copy()
+        userkws.update(kwargs)
         if params is None:
             params = self.params
 
         nvarys = self.nvarys
-        ndata = self.ndata
-        covar = self.covar / self.redchi
-        fjac = np.zeros(ndata*nvarys).reshape((nvarys, ndata))
+        # ensure fjac and df2 are correct size if independent var updated by kwargs
+        ndata = self.model.eval(self.params, **userkws).size
+        covar = self.covar
+        fjac = np.zeros((nvarys, ndata))
         df2 = np.zeros(ndata)
 
         # find derivative by hand!
+        pars = self.params.copy()
         for i in range(nvarys):
             pname = self.var_names[i]
-            pars = self.params
             val0 = pars[pname].value
             dval = pars[pname].stderr/3.0
 
             pars[pname].value = val0 + dval
-            res1 = self.model.eval(pars, **self.userkws)
+            res1 = self.model.eval(pars, **userkws)
 
             pars[pname].value = val0 - dval
-            res2 = self.model.eval(pars, **self.userkws)
+            res2 = self.model.eval(pars, **userkws)
 
             pars[pname].value = val0
             fjac[i] = (res1 - res2) / (2*dval)
@@ -1332,7 +1334,7 @@ class ModelResult(Minimizer):
             prob = sigma
         else:
             prob = erf(sigma/np.sqrt(2))
-        return np.sqrt(df2*self.redchi) * t.ppf((prob+1)/2.0, ndata-nvarys)
+        return np.sqrt(df2) * t.ppf((prob+1)/2.0, self.ndata-nvarys)
 
     def conf_interval(self, **kwargs):
         """Calculate the confidence intervals for the variable parameters.
