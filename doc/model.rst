@@ -155,10 +155,10 @@ components, including a :meth:`fit_report` method, which will show::
         # function evals   = 35
         # data points      = 101
         # variables        = 3
-        chi-square         = 3.409
-        reduced chi-square = 0.035
-        Akaike info crit   = -336.264
-        Bayesian info crit = -328.418
+	chi-square         = 3.40884
+        reduced chi-square = 0.03478
+        Akaike info crit   = -336.26371
+        Bayesian info crit = -328.41835
     [[Variables]]
         amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
         cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
@@ -817,7 +817,6 @@ To load that later, one might do:
 
 .. literalinclude:: ../examples/doc_model_loadmodelresult.py
 
-
 .. index:: Composite models
 
 .. _composite_models_section:
@@ -875,10 +874,10 @@ which prints out the results::
         # function evals   = 46
         # data points      = 101
         # variables        = 5
-        chi-square         = 2.579
-        reduced chi-square = 0.027
-        Akaike info crit   = -360.457
-        Bayesian info crit = -347.381
+        chi-square         = 2.57856
+        reduced chi-square = 0.02686
+        Akaike info crit   = -360.45702
+        Bayesian info crit = -347.38142
     [[Variables]]
         amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
         cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
@@ -980,23 +979,25 @@ binary operator.  A full script using this technique is here:
 which prints out the results::
 
     [[Model]]
-        (Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
+        (Model(jump) <function convolve at 0x112ef1320> Model(gaussian))
     [[Fit Statistics]]
+        # fitting method   = leastsq
         # function evals   = 27
         # data points      = 201
         # variables        = 3
-        chi-square         = 22.091
-        reduced chi-square = 0.112
-        Akaike info crit   = -437.837
-        Bayesian info crit = -427.927
+        chi-square         = 21.48845
+        reduced chi-square = 0.10853
+        Akaike info crit   = -443.39364
+        Bayesian info crit = -433.48373
     [[Variables]]
         mid:         5 (fixed)
-        sigma:       0.64118585 +/- 0.013233 (2.06%) (init= 1.5)
-        center:      4.51633608 +/- 0.009567 (0.21%) (init= 3.5)
-        amplitude:   0.62654849 +/- 0.001813 (0.29%) (init= 1)
+        sigma:       0.62393255 +/- 0.012818 (2.05%) (init= 1.5)
+        center:      4.52795480 +/- 0.009261 (0.20%) (init= 3.5)
+        amplitude:   0.62852927 +/- 0.001783 (0.28%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(center, amplitude)         =  0.344
-        C(sigma, amplitude)          =  0.280
+        C(center, amplitude)         =  0.339
+        C(sigma, amplitude)          =  0.276
+
 
 
 and shows the plots:

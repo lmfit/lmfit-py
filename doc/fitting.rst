@@ -515,10 +515,10 @@ which would write out::
         # function evals   = 85
         # data points      = 1001
         # variables        = 4
-        chi-square         = 498.812
-        reduced chi-square = 0.500
-        Akaike info crit   = -689.223
-        Bayesian info crit = -669.587
+        chi-square         = 498.81176
+        reduced chi-square = 0.50031
+        Akaike info crit   = -689.22252
+        Bayesian info crit = -669.58750
     [[Variables]]
         amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
         period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
