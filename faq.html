@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.7',
+        VERSION:     '0.9.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Parameter and Parameters" href="parameters.html" />
@@ -36,7 +33,7 @@
   });</script>
 
   </head>
-  <body role="document">
+  <body>
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
@@ -94,7 +91,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
-<li><a class="reference internal" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What&#8217;s the best way to ask for help or submit a bug report?</a></li>
+<li><a class="reference internal" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What’s the best way to ask for help or submit a bug report?</a></li>
 <li><a class="reference internal" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?</a></li>
 <li><a class="reference internal" href="#i-get-import-errors-from-ipython">I get import errors from IPython</a></li>
 <li><a class="reference internal" href="#how-can-i-fit-multi-dimensional-data">How can I fit multi-dimensional data?</a></li>
@@ -141,7 +138,7 @@
 <span id="faq-chapter"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
 <p>A list of common questions.</p>
 <div class="section" id="what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">
-<h2>What&#8217;s the best way to ask for help or submit a bug report?<a class="headerlink" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report" title="Permalink to this headline">¶</a></h2>
+<h2>What’s the best way to ask for help or submit a bug report?<a class="headerlink" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report" title="Permalink to this headline">¶</a></h2>
 <p>See <a class="reference internal" href="support.html#support-chapter"><span class="std std-ref">Getting Help</span></a>.</p>
 </div>
 <div class="section" id="why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">
@@ -163,7 +160,7 @@
 <p>The fitting routines accept data arrays that are one dimensional and double
 precision.  So you need to convert the data and model (or the value
 returned by the objective function) to be one dimensional.  A simple way to
-do this is to use <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
+do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_multidim_residual</span><span class="p">()</span>
@@ -176,9 +173,9 @@ do this is to use <a class="reference external" href="http://docs.scipy.org/doc/
 <p>As above, the fitting routines accept data arrays that are one dimensional
 and double precision.  So you need to convert the sets of data and models
 (or the value returned by the objective function) to be one dimensional.  A
-simple way to do this is to use <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>.  As an
+simple way to do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>.  As an
 example, here is a residual function to simultaneously fit two lines to two
-different arrays.  As a bonus, the two lines share the &#8216;offset&#8217; parameter:</p>
+different arrays.  As a bonus, the two lines share the ‘offset’ parameter:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="k">def</span> <span class="nf">fit_function</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">model1</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;slope1&#39;</span><span class="p">]</span>
@@ -195,12 +192,12 @@ different arrays.  As a bonus, the two lines share the &#8216;offset&#8217; para
 <p>As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
 precision floating point numbers. The simplest approach is to use
-<a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
+<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-     <span class="o">....</span>
-     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_complex_residual</span><span class="p">()</span>
-     <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="o">....</span>
+    <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_complex_residual</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -213,7 +210,7 @@ the value to be minimized.</p>
 </div>
 <div class="section" id="how-should-i-cite-lmfit">
 <h2>How should I cite LMFIT?<a class="headerlink" href="#how-should-i-cite-lmfit" title="Permalink to this headline">¶</a></h2>
-<p>See <a class="reference external" href="http://dx.doi.org/10.5281/zenodo.11813">http://dx.doi.org/10.5281/zenodo.11813</a></p>
+<p>See <a class="reference external" href="https://dx.doi.org/10.5281/zenodo.11813">https://dx.doi.org/10.5281/zenodo.11813</a></p>
 </div>
 </div>
 
@@ -248,7 +245,7 @@ the value to be minimized.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
   </body>
 </html>

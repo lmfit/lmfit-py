@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Release Notes &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.7',
+        VERSION:     '0.9.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Using Mathematical Constraints" href="constraints.html" />
@@ -35,7 +32,7 @@
   });</script>
 
   </head>
-  <body role="document">
+  <body>
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
@@ -137,7 +134,7 @@
 <p>This section discusses changes between versions, especially changes
 significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
-consult the <a class="reference external" href="http://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
+consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
 <div class="section" id="version-0-9-6-release-notes">
 <span id="whatsnew-096-label"></span><h2>Version 0.9.6 Release Notes<a class="headerlink" href="#version-0-9-6-release-notes" title="Permalink to this headline">¶</a></h2>
 <p>Support for SciPy 0.14 has been dropped: SciPy 0.15 is now required.  This
@@ -145,7 +142,7 @@ is especially important for lmfit maintenance, as it means we can now rely
 on SciPy having code for differential evolution and do not need to keep a
 local copy.</p>
 <p>A brute force method was added, which can be used either with
-<code class="xref py py-meth docutils literal"><span class="pre">Minimizer.brute()</span></code> or using the <cite>method=&#8217;brute&#8217;</cite> option to
+<code class="xref py py-meth docutils literal"><span class="pre">Minimizer.brute()</span></code> or using the <cite>method=’brute’</cite> option to
 <code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code>.  This method requires finite bounds on
 all varying parameters, or that parameters have a finite
 <cite>brute_step</cite> attribute set to specify the step size.</p>
@@ -173,7 +170,7 @@ be preserved on copy and pickling.</p>
 <p>Some support for the new <cite>least_squares</cite> routine from SciPy 0.17 has been
 added.</p>
 <p>Parameters can now be used directly in floating point or array expressions,
-so that the Parameter value does not need <cite>sigma = params[&#8216;sigma&#8217;].value</cite>.
+so that the Parameter value does not need <cite>sigma = params[‘sigma’].value</cite>.
 The older, explicit usage still works, but the docs, samples, and tests
 have been updated to use the simpler usage.</p>
 <p>Support for Python 2.6 and SciPy 0.13 is now explicitly deprecated and wil
@@ -198,7 +195,7 @@ is easy, but needs to be done.</p>
 <div class="section" id="summary">
 <h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
 <p>The upgrade from 0.8.3 to 0.9.0 introduced the <code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code>
-class (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult &#8211; the optimization result</span></a>) which is now used to hold the return
+class (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>) which is now used to hold the return
 value from <code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code> and <code class="xref py py-meth docutils literal"><span class="pre">Minimizer.minimize()</span></code>.  This returned
 object contains many goodness of fit statistics, and holds the optimized
 parameters from the fit.  Importantly, the parameters passed into
@@ -245,16 +242,16 @@ about a fit.  By having the return value be an instance of the
 <code class="xref py py-class docutils literal"><span class="pre">MinimizerResult</span></code> class, it can hold an arbitrary amount of
 information that is easily accessed by attribute name, and even
 be given methods.  Using objects is good!</li>
-<li>To limit or even eliminate the amount of &#8220;state information&#8221; a
+<li>To limit or even eliminate the amount of “state information” a
 <code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code> holds.  By state information, we mean how much of
 the previous fit is remembered after a fit is done.  Keeping (and
 especially using) such information about a previous fit means that
 a <code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code> might give different results even for the same
-problem if run a second time.  While it&#8217;s desirable to be able to
+problem if run a second time.  While it’s desirable to be able to
 adjust a set of <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> re-run a fit to get an improved
 result, doing this by changing an internal attribute
 (<code class="xref py py-attr docutils literal"><span class="pre">Minimizer.params</span></code>) has the undesirable side-effect of not
-being able to &#8220;go back&#8221;, and makes it somewhat cumbersome to keep
+being able to “go back”, and makes it somewhat cumbersome to keep
 track of changes made while adjusting parameters and re-running fits.</li>
 </ol>
 </div>
@@ -289,7 +286,7 @@ track of changes made while adjusting parameters and re-running fits.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
   </body>
 </html>

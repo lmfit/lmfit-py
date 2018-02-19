@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Downloading and Installation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.7',
+        VERSION:     '0.9.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Help" href="support.html" />
@@ -36,7 +33,7 @@
   });</script>
 
   </head>
-  <body role="document">
+  <body>
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
@@ -140,20 +137,20 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The lmfit package requires <a class="reference external" href="http://python.org">Python</a>, <a class="reference external" href="http://numpy.org/">NumPy</a>, and <a class="reference external" href="http://scipy.org/scipylib/index.html">SciPy</a>.</p>
-<p>Lmfit works with Python versions 2.7, 3.3, 3.4, 3.5, and 3.6. Support for Python 2.6
-ended with lmfit version 0.9.4.  Scipy version 0.15 or higher is required,
-with 0.17 or higher recommended to be able to use the latest optimization
-features.  NumPy version 1.5.1 or higher is required.</p>
-<p>In order to run the test suite, either the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> or <a class="reference external" href="http://pytest.org/">pytest</a> package is
-required.  Some functionality of lmfit requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> package, some
-functionality will make use of the <a class="reference external" href="http://pandas.pydata.org/">pandas</a>, <a class="reference external" href="http://jupyter.org/">Jupyter</a> or <a class="reference external" href="http://matplotlib.org/">matplotlib</a>
-packages if available.  We highly recommend each of these
+<p>The lmfit package requires <a class="reference external" href="https://python.org">Python</a>, <a class="reference external" href="http://numpy.org/">NumPy</a>, and <a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a>.</p>
+<p>Lmfit works with Python versions 2.7, 3.4, 3.5, and 3.6. Support for Python 2.6
+and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version
+0.17 or higher, NumPy version 1.10 or higher, and six version 1.10 or higher are
+required.</p>
+<p>In order to run the test suite, either the <a class="reference external" href="https://nose.readthedocs.org/">nose</a> or <a class="reference external" href="https://pytest.org/">pytest</a> package is
+required. Some functionality of lmfit requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> package, some
+functionality will make use of the <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>,
+or <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a> packages if available.  We highly recommend each of these
 packages.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is 0.9.7 is available from <a class="reference external" href="http://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+<p>The latest stable version of lmfit is 0.9.8 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -174,7 +171,7 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 <div class="section" id="development-version">
 <h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
 <p>To get the latest development version, use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lmfit</span><span class="o">/</span><span class="n">lmfit</span><span class="o">-</span><span class="n">py</span><span class="o">.</span><span class="n">git</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lmfit</span><span class="o">/</span><span class="n">lmfit</span><span class="o">-</span><span class="n">py</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 <p>and install using:</p>
@@ -184,15 +181,15 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
-<p>A battery of tests scripts that can be run with either the <a class="reference external" href="http://nose.readthedocs.org/">nose</a> or
-<a class="reference external" href="http://pytest.org/">pytest</a> testing framework is distributed with lmfit in the <code class="docutils literal"><span class="pre">tests</span></code>
+<p>A battery of tests scripts that can be run with either the <a class="reference external" href="https://nose.readthedocs.org/">nose</a> or
+<a class="reference external" href="https://pytest.org/">pytest</a> testing framework is distributed with lmfit in the <code class="docutils literal"><span class="pre">tests</span></code>
 folder.  These are automatically run as part of the development process.
 For any release or any master branch from the git repository, running
 <code class="docutils literal"><span class="pre">pytest</span></code> or <code class="docutils literal"><span class="pre">nosetests</span></code> should run all of these tests to completion
 without errors or failures.</p>
 <p>Many of the examples in this documentation are distributed with lmfit in
 the <code class="docutils literal"><span class="pre">examples</span></code> folder, and should also run for you.  Some of these
-examples assume <a class="reference external" href="http://matplotlib.org/">matplotlib</a> has been installed and is working correctly.</p>
+examples assume <a class="reference external" href="https://matplotlib.org/">matplotlib</a> has been installed and is working correctly.</p>
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
@@ -339,7 +336,7 @@ examples assume <a class="reference external" href="http://matplotlib.org/">matp
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
   </body>
 </html>

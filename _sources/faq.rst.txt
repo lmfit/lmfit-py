@@ -76,9 +76,9 @@ precision floating point numbers. The simplest approach is to use
 
    import numpy as np
    def residual(params, x, data=None):
-        ....
-        resid = calculate_complex_residual()
-        return resid.view(np.float)
+       ....
+       resid = calculate_complex_residual()
+       return resid.view(np.float)
 
 
 Can I constrain values to have integer values?
@@ -93,4 +93,4 @@ the value to be minimized.
 How should I cite LMFIT?
 ==================================
 
-See http://dx.doi.org/10.5281/zenodo.11813
+See https://dx.doi.org/10.5281/zenodo.11813

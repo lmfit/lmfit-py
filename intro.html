@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Getting started with Non-Linear Least-Squares Fitting &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.7',
+        VERSION:     '0.9.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Downloading and Installation" href="installation.html" />
@@ -36,7 +33,7 @@
   });</script>
 
   </head>
-  <body role="document">
+  <body>
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
@@ -128,7 +125,7 @@
 models for non-linear least-squares problems and apply these models to real
 data.  This section gives an overview of the concepts and describes how to
 set up and perform simple fits.  Some basic knowledge of Python, NumPy, and
-modeling data are assumed &#8211; this is not a tutorial on why or how to
+modeling data are assumed – this is not a tutorial on why or how to
 perform a minimization or fit data, but is rather aimed at explaining how
 to use lmfit to do these things.</p>
 <p>In order to do a non-linear least-squares fit of a model to data or for any
@@ -153,32 +150,36 @@ data uncertainties, <span class="math">\([y^{\rm meas}_i - y_i^{\rm
 model}({\bf{v}})]/{\epsilon_i}\)</span>, or some other weighting factor.</p>
 <p>As a simple concrete example, one might want to model data with a decaying
 sine wave, and so write an objective function like this:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">):</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
+
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">):</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">phaseshift</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="n">decay</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">freq</span>  <span class="o">+</span> <span class="n">phaseshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">phaseshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span><span class="o">/</span><span class="n">eps_data</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span> <span class="o">/</span> <span class="n">eps_data</span>
 </pre></div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v0.19.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
+<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.0.0)"><code class="xref py py-mod docutils literal"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">leastsq</span>
+
 <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">leastsq</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Though it is wonderful to be able to use Python for such optimization
-problems, and the scipy library is robust and easy to use, the approach
+problems, and the SciPy library is robust and easy to use, the approach
 here is not terribly different from how one would do the same fit in C or
 Fortran.  There are several practical challenges to using this approach,
 including:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
 <li>The user has to keep track of the order of the variables, and their
-meaning &#8211; vars[0] is the amplitude, vars[2] is the frequency, and so
+meaning – vars[0] is the amplitude, vars[2] is the frequency, and so
 on, although there is no intrinsic meaning to this order.</li>
 <li>If the user wants to fix a particular variable (<em>not</em> vary it in the
 fit), the residual function has to be altered to have fewer variables,
@@ -197,11 +198,11 @@ painful if the fitting model needs to change.</li>
 </div></blockquote>
 <p>These shortcomings are due to the use of traditional arrays to hold the
 variables, which matches closely the implementation of the underlying
-Fortran code, but does not fit very well with Python&#8217;s rich selection of
+Fortran code, but does not fit very well with Python’s rich selection of
 objects and data structures.  The key concept in lmfit is to define and use
 <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects instead of plain floating point numbers as the
 variables for the fit.  Using <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects (or the closely
-related <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> &#8211; a dictionary of <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects),
+related <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> – a dictionary of <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> objects),
 allows one to:</p>
 <blockquote>
 <div><ol class="loweralpha simple">
@@ -215,17 +216,21 @@ preserving the order of arrays for variables and boundaries.</li>
 </div></blockquote>
 <p>To illustrate the value of this approach, we can rewrite the above example
 for the decaying sine wave as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sin</span>
+
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">minimize</span><span class="p">,</span> <span class="n">Parameters</span>
+
 
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">eps_data</span><span class="p">):</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
-    <span class="n">pshift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span>
+    <span class="n">phaseshift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;phase&#39;</span><span class="p">]</span>
     <span class="n">freq</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">]</span>
     <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span>
 
-    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">freq</span>  <span class="o">+</span> <span class="n">pshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">phaseshift</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span><span class="o">/</span><span class="n">eps_data</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span> <span class="o">/</span> <span class="n">eps_data</span>
+
 
 <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -237,7 +242,7 @@ for the decaying sine wave as:</p>
 </pre></div>
 </div>
 <p>At first look, we simply replaced a list of values with a dictionary,
-accessed by name &#8211; not a huge improvement.  But each of the named
+accessed by name – not a huge improvement.  But each of the named
 <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> in the <code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code> object holds additional
 attributes to modify the value during the fit.  For example, Parameters can
 be fixed or bounded.  This can be done during definition:</p>
@@ -249,7 +254,7 @@ be fixed or bounded.  This can be done during definition:</p>
 </pre></div>
 </div>
 <p>where <code class="docutils literal"><span class="pre">vary=False</span></code> will prevent the value from changing in the fit, and
-<code class="docutils literal"><span class="pre">min=0.0</span></code> will set a lower bound on that parameter&#8217;s value. It can also be done
+<code class="docutils literal"><span class="pre">min=0.0</span></code> will set a lower bound on that parameter’s value. It can also be done
 later by setting the corresponding attributes after they have been
 created:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vary</span> <span class="o">=</span> <span class="kc">False</span>
@@ -303,7 +308,7 @@ provides a better determination of Parameters confidence levels.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
   </body>
 </html>

@@ -30,7 +30,7 @@ within a certain confidence.
 
  F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}
 
-`N` is the number of data points, `P` the number of parameters of the null model.
+`N` is the number of data points and `P` the number of parameters of the null model.
 :math:`P_{fix}` is the number of fixed parameters (or to be more clear, the
 difference of number of parameters between our null model and the alternate
 model).
@@ -44,14 +44,13 @@ First we create an example problem::
 
     >>> import lmfit
     >>> import numpy as np
-    >>> x = np.linspace(0.3,10,100)
-    >>> y = 1/(0.1*x)+2+0.1*np.random.randn(x.size)
+    >>> x = np.linspace(0.3, 10, 100)
+    >>> np.random.seed(0)
+    >>> y = 1/(0.1*x) + 2 + 0.1*np.random.randn(x.size)
     >>> pars = lmfit.Parameters()
     >>> pars.add_many(('a', 0.1), ('b', 1))
     >>> def residual(p):
-    ...    a = p['a'].value
-    ...    b = p['b'].value
-    ...    return 1/(a*x)+b-y
+    ...     return 1/(p['a']*x) + p['b'] - y
 
 
 before we can generate the confidence intervals, we have to run a fit, so
@@ -62,7 +61,7 @@ starting point::
     >>> mini = lmfit.Minimizer(residual, pars)
     >>> result = mini.minimize()
     >>> print(lmfit.fit_report(result.params))
-    [Variables]]
+    [[Variables]]
         a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
         b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
@@ -73,11 +72,11 @@ intervals::
 
     >>> ci = lmfit.conf_interval(mini, result)
     >>> lmfit.printfuncs.report_ci(ci)
-         99.70%    95.00%    67.40%     0.00%    67.40%    95.00%    99.70%
-    a   0.09886   0.09905   0.09925   0.09944   0.09963   0.09982   0.10003
-    b   1.94751   1.96049   1.97274   1.97741   1.99680   2.00905   2.02203
+          99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
+     a:  -0.00059  -0.00039  -0.00019   0.09944  +0.00019  +0.00039  +0.00060
+     b:  -0.03766  -0.02478  -0.01230   1.98477  +0.01230  +0.02478  +0.03761
 
-This shows the best-fit values for the parameters in the `0.00%` column,
+This shows the best-fit values for the parameters in the `_BEST_` column,
 and parameter values that are at the varying confidence levels given by
 steps in :math:`\sigma`.  As we can see, the estimated error is almost the
 same, and the uncertainties are well behaved: Going from 1 :math:`\sigma`
@@ -95,10 +94,10 @@ covariance can lead to misleading result -- two decaying exponentials.  In
 fact such a problem is particularly hard for the Levenberg-Marquardt
 method, so we first estimate the results using the slower but robust
 Nelder-Mead  method, and *then* use Levenberg-Marquardt to estimate the
-uncertainties and correlations
+uncertainties and correlations.
 
 
-.. literalinclude:: ../examples/doc_confidence2.py
+.. literalinclude:: ../examples/doc_confidence_advanced.py
 
 which will report::
 
@@ -112,12 +111,11 @@ which will report::
         C(a2, t1)                    = -0.925
         C(t1, t2)                    = -0.881
         C(a1, t1)                    = -0.599
-          95.00%    68.00%     0.00%    68.00%    95.00%
-    a1   2.71850   2.84525   2.98622   3.14874   3.34076
-    a2  -4.63180  -4.46663  -4.33526  -4.22883  -4.14178
-    t2  10.82699  11.33865  11.82404  12.28195  12.71094
-    t1   1.08014   1.18566   1.30994   1.45566   1.62579
-
+           95.45%    68.27%    _BEST_    68.27%    95.45%
+     a1:  -0.27286  -0.14165   2.98622  +0.16353  +0.36343
+     a2:  -0.30444  -0.13219  -4.33526  +0.10688  +0.19683
+     t1:  -0.23392  -0.12494   1.30994  +0.14660  +0.32369
+     t2:  -1.01943  -0.48820  11.82404  +0.46041  +0.90441
 
 Again we called :func:`conf_interval`, this time with tracing and only for
 1- and 2-:math:`\sigma`.  Comparing these two different estimates, we see
@@ -126,8 +124,7 @@ covariance matrix, but the estimates for `a2` and especially for `t1`, and
 `t2` are very asymmetric and that going from 1 :math:`\sigma` (68%
 confidence) to 2 :math:`\sigma` (95% confidence) is not very predictable.
 
-Let plots mad of the confidence region are shown the figure on the left
-below for `a1` and `t2`, and for `a2` and `t2` on the right:
+Plots of the confidence region are shown in the figures below for `a1` and `t2` (left), and `a2` and `t2` (right):
 
 .. _figC1:
 
@@ -148,12 +145,12 @@ array of corresponding probabilities for the corresponding cumulative
 variables.  This can be used to show the dependence between two
 parameters::
 
-    >>> x, y, prob = trace['a1']['a1'], trace['a1']['t2'],trace['a1']['prob']
-    >>> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'],trace['t2']['prob']
+    >>> x, y, prob = trace['a1']['a1'], trace['a1']['t2'], trace['a1']['prob']
+    >>> x2, y2, prob2 = trace['t2']['t2'], trace['t2']['a1'], trace['t2']['prob']
     >>> plt.scatter(x, y, c=prob ,s=30)
     >>> plt.scatter(x2, y2, c=prob2, s=30)
-    >>> plt.gca().set_xlim((1, 5))
-    >>> plt.gca().set_ylim((5, 15))
+    >>> plt.gca().set_xlim((2.5, 3.5))
+    >>> plt.gca().set_ylim((11.5, 12.5))
     >>> plt.xlabel('a1')
     >>> plt.ylabel('t2')
     >>> plt.show()
@@ -170,7 +167,7 @@ the posterior probability distribution. These distributions demonstrate the
 range of solutions that the data supports. The following image was obtained
 by using :meth:`Minimizer.emcee` on the same problem.
 
-.. image:: _images/emcee_triangle.png
+.. image:: _images/emcee_corner.png
 
 Credible intervals (the Bayesian equivalent of the frequentist confidence
 interval) can be obtained with this method. MCMC can be used for model
@@ -179,7 +176,7 @@ For example, you may have fractionally underestimated the uncertainties on a
 dataset. MCMC can be used to estimate the true level of uncertainty on each
 datapoint. A tutorial on the possibilities offered by MCMC can be found at [1]_.
 
-.. [1] http://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/
+.. [1] https://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/
 
 
 

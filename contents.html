@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>Contents &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.7',
+        VERSION:     '0.9.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -24,7 +21,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   <script type="text/x-mathjax-config">
@@ -34,7 +31,7 @@
   });</script>
 
   </head>
-  <body role="document">
+  <body>
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
@@ -138,7 +135,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="support.html">Getting Help</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What&#8217;s the best way to ask for help or submit a bug report?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What’s the best way to ask for help or submit a bug report?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-get-import-errors-from-ipython">I get import errors from IPython</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-multi-dimensional-data">How can I fit multi-dimensional data?</a></li>
@@ -158,7 +155,7 @@
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#the-minimize-function">The <code class="docutils literal"><span class="pre">minimize()</span></code> function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#writing-a-fitting-function">Writing a Fitting Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#choosing-different-fitting-methods">Choosing Different Fitting Methods</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fitting.html#minimizerresult-the-optimization-result"><code class="docutils literal"><span class="pre">MinimizerResult</span></code> &#8211; the optimization result</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#minimizerresult-the-optimization-result"><code class="docutils literal"><span class="pre">MinimizerResult</span></code> – the optimization result</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="fitting.html#goodness-of-fit-statistics">Goodness-of-Fit Statistics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fitting.html#akaike-and-bayesian-information-criteria">Akaike and Bayesian Information Criteria</a></li>
 </ul>
@@ -180,12 +177,14 @@
 <li class="toctree-l3"><a class="reference internal" href="model.html#defining-a-prefix-for-the-parameters">Defining a <cite>prefix</cite> for the Parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#initializing-model-parameters">Initializing model parameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#using-parameter-hints">Using parameter hints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#saving-and-loading-models">Saving and Loading Models</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="model.html#the-modelresult-class">The <code class="docutils literal"><span class="pre">ModelResult</span></code> class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="model.html#modelresult-methods"><code class="docutils literal"><span class="pre">ModelResult</span></code> methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#modelresult-attributes"><code class="docutils literal"><span class="pre">ModelResult</span></code> attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#calculating-uncertainties-in-the-model-function">Calculating uncertainties in the model function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="model.html#saving-and-loading-modelresults">Saving and Loading ModelResults</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="model.html#composite-models-adding-or-multiplying-models">Composite Models : adding (or multiplying) Models</a></li>
@@ -230,9 +229,9 @@
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#expressionmodel"><code class="docutils literal"><span class="pre">ExpressionModel</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-1-fit-peaked-data-to-gaussian-lorentzian-and-voigt-profiles">Example 1: Fit Peaked data to Gaussian, Lorentzian, and  Voigt profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-1-fit-peak-data-to-gaussian-lorentzian-and-voigt-profiles">Example 1: Fit Peak data to Gaussian, Lorentzian, and  Voigt profiles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-2-fit-data-to-a-composite-model-with-pre-defined-models">Example 2: Fit data to a Composite Model with pre-defined models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-3-fitting-multiple-peaks-and-using-prefixes">Example 3: Fitting Multiple Peaks &#8211; and using Prefixes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-3-fitting-multiple-peaks-and-using-prefixes">Example 3: Fitting Multiple Peaks – and using Prefixes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="confidence.html">Calculation of confidence intervals</a><ul>
@@ -279,7 +278,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
     </div>
   </body>
 </html>

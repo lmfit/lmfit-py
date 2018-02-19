@@ -86,7 +86,7 @@ A basic example making use of :class:`~lmfit.parameter.Parameters` and the
 :func:`~lmfit.minimizer.minimize` function (discussed in the next chapter)
 might look like this:
 
-.. literalinclude:: ../examples/doc_basic.py
+.. literalinclude:: ../examples/doc_parameters_basic.py
 
 
 Here, the objective function explicitly unpacks each Parameter value.  This
@@ -94,10 +94,10 @@ can be simplified using the :class:`Parameters` :meth:`valuesdict` method,
 which would make the objective function ``fcn2min`` above look like::
 
     def fcn2min(params, x, data):
-        """ model decaying sine wave, subtract data"""
+        """Model a decaying sine wave and subtract data."""
         v = params.valuesdict()
 
-        model = v['amp'] * np.sin(x * v['omega'] + v['shift']) * np.exp(-x*x*v['decay'])
+        model = v['amp'] * np.sin(x*v['omega'] + v['shift']) * np.exp(-x*x*v['decay'])
         return model - data
 
 The results are identical, and the difference is a stylistic choice.

@@ -4,7 +4,7 @@
 Using Mathematical Constraints
 =================================
 
-.. _asteval: http://newville.github.io/asteval/
+.. _asteval: https://newville.github.io/asteval/
 
 Being able to fix variables to a constant value or place upper and lower
 bounds on their values can greatly simplify modeling real data.  These
@@ -114,9 +114,9 @@ freely varying parameter `x`.  Next, define a parameter
 define parameter `y` as `delta - x`::
 
     pars = Parameters()
-    pars.add('x',     value = 5, vary=True)
-    pars.add('delta', value = 5, max=10, vary=True)
-    pars.add('y',     expr='delta-x')
+    pars.add('x', value=5, vary=True)
+    pars.add('delta', value=5, max=10, vary=True)
+    pars.add('y', expr='delta-x')
 
 The essential point is that an inequality still implies
 that a variable (here, `delta`) is needed to describe the
@@ -130,7 +130,7 @@ Advanced usage of Expressions in lmfit
 
 The expression used in a constraint is converted to a
 Python `Abstract Syntax Tree
-<http://docs.python.org/library/ast.html>`_, which is an
+<https://docs.python.org/library/ast.html>`_, which is an
 intermediate version of the expression -- a syntax-checked,
 partially compiled expression.  Among other things, this
 means that Python's own parser is used to parse and convert
@@ -156,7 +156,7 @@ for the constraints::
 
     def mylorentzian(x, amp, cen, wid):
         "lorentzian function: wid = half-width at half-max"
-        return (amp  / (1 + ((x-cen)/wid)**2))
+        return (amp / (1 + ((x-cen) / wid)**2))
 
     fitter = Minimizer()
     fitter.asteval.symtable['lorentzian'] = mylorentzian

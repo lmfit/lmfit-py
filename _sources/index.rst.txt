@@ -3,10 +3,10 @@
 Non-Linear Least-Squares Minimization and Curve-Fitting for Python
 ===========================================================================
 
-.. _Levenberg-Marquardt:     http://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
-.. _MINPACK-1:               http://en.wikipedia.org/wiki/MINPACK
-.. _scipy.optimize:      http://docs.scipy.org/doc/scipy/reference/optimize.html
-.. _lmfit github repository:   http://github.com/lmfit/lmfit-py
+.. _Levenberg-Marquardt:     https://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
+.. _MINPACK-1:               https://en.wikipedia.org/wiki/MINPACK
+.. _scipy.optimize:      https://docs.scipy.org/doc/scipy/reference/optimize.html
+.. _lmfit GitHub repository:   https://github.com/lmfit/lmfit-py
 
 Lmfit provides a high-level interface to non-linear optimization and curve
 fitting problems for Python. It builds on and extends many of the
@@ -44,7 +44,7 @@ enhancements to optimization and data fitting problems, including:
 
 The lmfit package is Free software, using an Open Source license.  The
 software and this document are works in progress.  If you are interested in
-participating in this effort please use the `lmfit github repository`_.
+participating in this effort please use the `lmfit GitHub repository`_.
 
 
 .. toctree::

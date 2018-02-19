@@ -46,22 +46,23 @@ peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
 can help do this, but here we'll build our own.  We start with a simple
 definition of the model function:
 
-    >>> from numpy import sqrt, pi, exp, linspace, random
+    >>> from numpy import exp, linspace, random
     >>>
     >>> def gaussian(x, amp, cen, wid):
-    ...    return amp * exp(-(x-cen)**2 /wid)
+    ...     return amp * exp(-(x-cen)**2 / wid)
 
 We want to use this function to fit to data :math:`y(x)` represented by the
 arrays `y` and `x`.  With :scipydoc:`optimize.curve_fit`, this would be::
 
     >>> from scipy.optimize import curve_fit
     >>>
-    >>> x = linspace(-10,10, 101)
+    >>> x = linspace(-10, 10, 101)
     >>> y = gaussian(x, 2.33, 0.21, 1.51) + random.normal(0, 0.2, len(x))
     >>>
-    >>> init_vals = [1, 0, 1]     # for [amp, cen, wid]
+    >>> init_vals = [1, 0, 1]  # for [amp, cen, wid]
     >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
-    >>> print best_vals
+    >>> print(best_vals)
+    [ 2.39499424  0.19942179  1.50909389]
 
 
 That is, we create data, make an initial guess of the model values, and run
@@ -78,7 +79,7 @@ signature itself::
     >>> from lmfit import Model
     >>> gmodel = Model(gaussian)
     >>> gmodel.param_names
-    set(['amp', 'wid', 'cen'])
+    ['amp', 'cen', 'wid']
     >>> gmodel.independent_vars
     ['x']
 
@@ -96,20 +97,20 @@ the independent variable is and which function arguments should be identified
 as parameter names.
 
 The Parameters are *not* created when the model is created. The model knows
-what the parameters should be named, but not anything about the scale and
+what the parameters should be named, but nothing about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initial values and other attributes.  To help you do this, each
 model has a :meth:`make_params` method that will generate parameters with
 the expected names:
 
-    >>> params = gmod.make_params()
+    >>> params = gmodel.make_params()
 
 This creates the :class:`~lmfit.parameter.Parameters` but does not
 automaticaly give them initial values since it has no idea what the scale
 should be.  You can set initial values for parameters with keyword
 arguments to :meth:`make_params`:
 
-    >>> params = gmod.make_params(cen=5, amp=200, wid=1)
+    >>> params = gmodel.make_params(cen=5, amp=200, wid=1)
 
 or assign them (and other parameter properties) after the
 :class:`~lmfit.parameter.Parameters` class has been created.
@@ -122,27 +123,27 @@ For example, one could use :meth:`eval` to calculate the predicted
 function::
 
     >>> x = linspace(0, 10, 201)
-    >>> y = gmod.eval(params, x=x)
+    >>> y = gmodel.eval(params, x=x)
 
 or with::
 
-    >>> y = gmod.eval(x=x, cen=6.5, amp=100, wid=2.0)
+    >>> y = gmodel.eval(x=x, cen=6.5, amp=100, wid=2.0)
 
 Admittedly, this a slightly long-winded way to calculate a Gaussian
 function, given that you could have called your `gaussian` function
 directly.  But now that the model is set up, we can use its
 :meth:`fit` method to fit this model to data, as with::
 
-    >>> result = gmod.fit(y, params)
+    >>> result = gmodel.fit(y, params, x=x)
 
 or with::
 
-    >>> result = gmod.fit(y, cen=6.5, amp=100, wid=2.0)
+    >>> result = gmodel.fit(y, x=x, cen=6.5, amp=100, wid=2.0)
 
-Putting everything together,  (included in the
-``examples`` folder with the source code) is:
+Putting everything together, included in the
+``examples`` folder with the source code, is:
 
-.. literalinclude:: ../examples/doc_model1.py
+.. literalinclude:: ../examples/doc_model_gaussian.py
 
 which is pretty compact and to the point.  The returned `result` will be
 a :class:`ModelResult` object.  As we will see below, this has many
@@ -151,19 +152,19 @@ components, including a :meth:`fit_report` method, which will show::
     [[Model]]
         Model(gaussian)
     [[Fit Statistics]]
-        # function evals   = 31
+        # function evals   = 35
         # data points      = 101
         # variables        = 3
-        chi-square         = 3.409
-        reduced chi-square = 0.035
-        Akaike info crit   = -336.264
-        Bayesian info crit = -328.418
+	chi-square         = 3.40884
+        reduced chi-square = 0.03478
+        Akaike info crit   = -336.26371
+        Bayesian info crit = -328.41835
     [[Variables]]
-        amp:   5.07800631 +/- 0.064957 (1.28%) (init= 5)
-        cen:   5.65866112 +/- 0.010304 (0.18%) (init= 5)
-        wid:   0.97344373 +/- 0.028756 (2.95%) (init= 1)
+        amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
+        cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
+        wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(amp, wid)                  = -0.577
+        C(amp, wid)                  =  0.577
 
 
 As the script shows, the result will also have :attr:`init_fit` for the fit
@@ -232,14 +233,16 @@ function as a fitting model.
 
    List of strings for names of the independent variables.
 
-.. attribute:: missing
+.. attribute:: nan_policy
 
-   Describes what to do for missing values.  The choices are:
+   Describes what to do for NaNs and missing values.  The choices are:
 
-    * None: Do not check for null or missing values (default).
-    * 'none': Do not check for null or missing values.
-    * 'drop': Drop null or missing observations in data.  If pandas is installed, :func:`pandas.isnull` is used, otherwise :func:`numpy.isnan` is used.
-    * 'raise': Raise a (more helpful) exception when data contains null or missing values.
+    * 'raise': Raise a ValueError (default)
+    * 'propagate': Do not check for NaNs or missing values. The fit will
+      try to ignore them.
+    * 'omit': Remove NaNs or missing observations in data. If pandas is
+      installed, :func:`pandas.isnull` is used, otherwise
+      :func:`numpy.isnan` is used.
 
 .. attribute:: name
 
@@ -277,10 +280,10 @@ a :class:`~lmfit.parameter.Parameters` object, and names are inferred from the f
 arguments, and a residual function is automatically constructed.
 
 
-By default, the independent variable is take as the first argument to the
+By default, the independent variable is taken as the first argument to the
 function.  You can, of course, explicitly set this, and will need to do so
-if the independent variable is not first in the list, or if there are actually
-more than one independent variables.
+if the independent variable is not first in the list, or if there is actually
+more than one independent variable.
 
 If not specified, Parameters are constructed from all positional arguments
 and all keyword arguments that have a default value that is numerical, except
@@ -302,13 +305,14 @@ function is fairly easy. Let's try another one::
     ...    return N*np.exp(-t/tau)
     ...
     >>> decay_model = Model(decay)
-    >>> print decay_model.independent_vars
+    >>> print(decay_model.independent_vars)
     ['t']
-    >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    >>> params = decay_model.make_params()
+    >>> for pname, par in params.items():
+    ...     print(pname, par)
     ...
-    tau <Parameter 'tau', None, bounds=[None:None]>
-    N <Parameter 'N', None, bounds=[None:None]>
+    tau <Parameter 'tau', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', -inf, bounds=[-inf:inf]>
 
 Here, `t` is assumed to be the independent variable because it is the
 first argument to the function.  The other function arguments are used to
@@ -318,13 +322,14 @@ If you want `tau` to be the independent variable in the above example,
 you can say so::
 
     >>> decay_model = Model(decay, independent_vars=['tau'])
-    >>> print decay_model.independent_vars
+    >>> print(decay_model.independent_vars)
     ['tau']
-    >>> for pname, par in decay_model.params.items():
-    ...     print pname, par
+    >>> params = decay_model.make_params()
+    >>> for pname, par in params.items():
+    ...     print(pname, par)
     ...
-    t <Parameter 't', None, bounds=[None:None]>
-    N <Parameter 'N', None, bounds=[None:None]>
+    t <Parameter 't', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', -inf, bounds=[-inf:inf]>
 
 
 You can also supply multiple values for multi-dimensional functions with
@@ -350,18 +355,19 @@ Parameters if the supplied default value was a valid number (but not
 None, True, or False).
 
     >>> def decay2(t, tau, N=10, check_positive=False):
-    ...    if check_small:
-    ...        arg = abs(t)/max(1.e-9, abs(tau))
-    ...    else:
-    ...        arg = t/tau
-    ...    return N*np.exp(arg)
+    ...     if check_small:
+    ...         arg = abs(t)/max(1.e-9, abs(tau))
+    ...     else:
+    ...         arg = t/tau
+    ...     return N*np.exp(arg)
     ...
     >>> mod = Model(decay2)
-    >>> for pname, par in mod.params.items():
-    ...     print pname, par
+    >>> params = mod.make_params()
+    >>> for pname, par in params.items():
+    ...     print(pname, par)
     ...
-    t <Parameter 't', None, bounds=[None:None]>
-    N <Parameter 'N', 10, bounds=[None:None]>
+    t <Parameter 't', -inf, bounds=[-inf:inf]>
+    N <Parameter 'N', 10, bounds=[-inf:inf]>
 
 Here, even though `N` is a keyword argument to the function, it is turned
 into a parameter, with the default numerical value as its initial value.
@@ -388,12 +394,13 @@ the same name.  To avoid this, we can add a `prefix` to the
     ...
 
     >>> mod = Model(myfunc, prefix='f1_')
-    >>> for pname, par in mod.params.items():
-    ...     print pname, par
+    >>> params = mod.make_params()
+    >>> for pname, par in params.items():
+    ...     print(pname, par)
     ...
-    f1_amplitude <Parameter 'f1_amplitude', None, bounds=[None:None]>
-    f1_center <Parameter 'f1_center', None, bounds=[None:None]>
-    f1_sigma <Parameter 'f1_sigma', None, bounds=[None:None]>
+    f1_amplitude <Parameter 'f1_amplitude', 1, bounds=[-inf:inf]>
+    f1_center <Parameter 'f1_center', 0, bounds=[-inf:inf]>
+    f1_sigma <Parameter 'f1_sigma', 1, bounds=[-inf:inf]>
 
 You would refer to these parameters as `f1_amplitude` and so forth, and
 the model will know to map these to the `amplitude` argument of `myfunc`.
@@ -458,8 +465,8 @@ expression.  To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
     >>> mod = Model(myfunc)
-    >>> mod.set_param_hint('a', value = 1.0)
-    >>> mod.set_param_hint('b', value = 0.3, min=0, max=1.0)
+    >>> mod.set_param_hint('a', value=1.0)
+    >>> mod.set_param_hint('b', value=0.3, min=0, max=1.0)
     >>> pars = mod.make_params()
 
 Parameter hints are discussed in more detail in section
@@ -474,8 +481,7 @@ is, as with :meth:`Model.make_params`, you can include values
 as keyword arguments to either the :meth:`Model.eval` or :meth:`Model.fit` methods::
 
    >>> y1 = mod.eval(x=x, a=7.0, b=-2.0)
-
-   >>> out = mod.fit(x=x, pars, a=3.0, b=-0.0)
+   >>> out = mod.fit(x=x, pars, a=3.0, b=0.0)
 
 These approaches to initialization provide many opportunities for setting
 initial values for parameters.  The methods can be combined, so that you
@@ -491,19 +497,17 @@ After a model has been created, you can give it hints for how to create
 parameters with :meth:`Model.make_params`.  This allows you to set not only a
 default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
-
-
 expression.   To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
     >>> mod = Model(myfunc)
-    >>> mod.set_param_hint('a', value = 1.0)
-    >>> mod.set_param_hint('b', value = 0.3, min=0, max=1.0)
+    >>> mod.set_param_hint('a', value=1.0)
+    >>> mod.set_param_hint('b', value=0.3, min=0, max=1.0)
 
 Parameter hints are stored in a model's :attr:`param_hints` attribute,
 which is simply a nested dictionary::
 
-    >>> print mod.param_hints
+    >>> print(mod.param_hints)
     {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}}
 
 
@@ -519,6 +523,56 @@ at half maximum of a Gaussian model, one could use a parameter hint of::
     >>> mod = Model(gaussian)
     >>> mod.set_param_hint('fwhm', expr='2.3548*sigma')
 
+
+.. _model_saveload_sec:
+
+Saving and Loading Models
+-----------------------------------
+
+.. versionadded:: 0.9.8
+
+It is sometimes desirable to save a :class:`Model` for later use outside of
+the code used to define the model. Lmfit provides a :func:`save_model`
+function that will save a :class:`Model` to a file. There is also a
+companion :func:`load_model` function that can read this file and
+reconstruct a :class:`Model` from it.
+
+Saving a model turns out to be somewhat challenging. The main issue is that
+Python is not normally able to *serialize* a function (such as the model
+function making up the heart of the Model) in a way that can be
+reconstructed into a callable Python object.  The `dill` package can
+sometimes serialize functions, but with the limitation that it can be used
+only in the same version of Python.  In addition, class methods used as
+model functions will not retain the rest of the class attributes and
+methods, and so may not be usable.  With all those warnings, it should be
+emphasized that if you are willing to save or reuse the definition of the
+model function as Python code, then saving the Parameters and rest of the
+components that make up a model presents no problem.
+
+If the `dill` package is installed, the model function will be saved using
+it.  But because saving the model function is not always reliable, saving a
+model will always save the *name* of the model function.  The
+:func:`load_model` takes an optional :attr:`funcdefs` argument that can
+contain a dictionary of function definitions with the function names as
+keys and function objects as values.  If one of the dictionary keys matches
+the saved name, the corresponding function object will be used as the model
+function. With this approach, if you save a model and can provide the code
+used for the model function, the model can be saved and reliably reloaded
+and used.
+
+.. autofunction:: save_model
+
+.. autofunction:: load_model
+
+As a simple example, one can save a model as:
+
+.. literalinclude:: ../examples/doc_model_savemodel.py
+
+To load that later, one might do:
+
+.. literalinclude:: ../examples/doc_model_loadmodel.py
+
+See also :ref:`modelresult_saveload_sec`.
 
 The :class:`ModelResult` class
 =======================================
@@ -704,7 +758,6 @@ comparing different models, including `chisqr`, `redchi`, `aic`, and `bic`.
    array, so that ``weights*(data - fit)`` is minimized in the
    least-squares sense.
 
-
 Calculating uncertainties in the model function
 -------------------------------------------------
 
@@ -713,7 +766,7 @@ uncertainties in the fitted parameters but for the range of values that
 those uncertainties mean for the model function itself.  We can use the
 :meth:`ModelResult.eval_uncertainty` method of the model result object to
 evaluate the uncertainty in the model with a specified level for
-:math:`sigma`.
+:math:`\sigma`.
 
 That is, adding::
 
@@ -721,7 +774,7 @@ That is, adding::
     plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB")
 
 to the example fit to the Gaussian at the beginning of this chapter will
-give :math:`3-sigma` bands for the best-fit Gaussian, and produce the
+give 3-:math:`\sigma` bands for the best-fit Gaussian, and produce the
 figure below.
 
 .. _figModel4:
@@ -731,11 +784,42 @@ figure below.
      :width: 50%
 
 
+.. _modelresult_saveload_sec:
+
+Saving and Loading ModelResults
+--------------------------------------
+
+.. versionadded:: 0.9.8
+
+As with saving models (see section :ref:`model_saveload_sec`), it is
+sometimes desirable to save a :class:`ModelResult`, either for later use or
+to organize and compare different fit results.  Lmfit provides a
+:func:`save_modelresult` function that will save a :class:`ModelResult` to
+a file. There is also a companion :func:`load_modelresult` function that
+can read this file and reconstruct a :class:`ModelResult` from it.
+
+As discussed in section :ref:`model_saveload_sec`, there are challenges to
+saving model functions that may make it difficult to restore a saved a
+:class:`ModelResult` in a way that can be used to perform a fit.
+Use of the optional :attr:`funcdefs` argument is generally the most
+reliable way to ensure that a loaded :class:`ModelResult` can be used to
+evaluate the model function or redo the fit.
+
+.. autofunction:: save_modelresult
+
+.. autofunction:: load_modelresult
+
+An example of saving a :class:`ModelResult` is:
+
+.. literalinclude:: ../examples/doc_model_savemodelresult.py
+
+To load that later, one might do:
+
+.. literalinclude:: ../examples/doc_model_loadmodelresult.py
 
 .. index:: Composite models
 
 .. _composite_models_section:
-
 
 Composite Models : adding (or multiplying) Models
 ==============================================================
@@ -752,10 +836,10 @@ to model a peak with a background. For such a simple problem, we could just
 build a model that included both components::
 
     def gaussian_plus_line(x, amp, cen, wid, slope, intercept):
-        "line + 1-d gaussian"
+        """line + 1-d gaussian"""
 
-        gauss = (amp/(sqrt(2*pi)*wid)) * exp(-(x-cen)**2 /(2*wid**2))
-        line = slope * x + intercept
+        gauss = (amp / (sqrt(2*pi) * wid)) * exp(-(x-cen)**2 / (2*wid**2))
+        line = slope*x + intercept
         return gauss + line
 
 and use that with::
@@ -771,8 +855,8 @@ As an alternative to including a linear background in our model function,
 we could define a linear function::
 
     def line(x, slope, intercept):
-        "a line"
-        return slope * x + intercept
+        """a line"""
+        return slope*x + intercept
 
 and build a composite model with just::
 
@@ -780,29 +864,35 @@ and build a composite model with just::
 
 This model has parameters for both component models, and can be used as:
 
-.. literalinclude:: ../examples/doc_model2.py
+.. literalinclude:: ../examples/doc_model_twocomponents.py
 
 which prints out the results::
 
     [[Model]]
         (Model(gaussian) + Model(line))
     [[Fit Statistics]]
-        # function evals   = 44
+        # function evals   = 46
         # data points      = 101
         # variables        = 5
-        chi-square         = 2.579
-        reduced chi-square = 0.027
-        Akaike info crit   = -360.457
-        Bayesian info crit = -347.381
+        chi-square         = 2.57856
+        reduced chi-square = 0.02686
+        Akaike info crit   = -360.45702
+        Bayesian info crit = -347.38142
     [[Variables]]
         amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
         cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
-        intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
-        slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
         wid:         0.67545523 +/- 0.009916 (1.47%) (init= 1)
+        slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
+        intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
+        C(slope, intercept)          = -0.795
         C(amp, wid)                  =  0.666
+        C(amp, intercept)            = -0.222
+        C(amp, slope)                = -0.169
+        C(cen, slope)                = -0.162
+        C(wid, intercept)            = -0.148
         C(cen, intercept)            =  0.129
+        C(wid, slope)                = -0.113
 
 and shows the plot on the left.
 
@@ -817,15 +907,19 @@ and shows the plot on the left.
 
 
 On the left, data is shown in blue dots, the total fit is shown in solid
-red line, and the initial fit is shown as a black dashed line.  In the
-figure on the right, the data is again shown in blue dots, and the Gaussian
-component shown as a black dashed line, and the linear component shown as a
-red dashed line.  These components were generated after the fit using the
-Models :meth:`ModelResult.eval_components` method of the `result`::
+red line, and the initial fit is shown as a black dashed line. The figure
+on the right shows again the data in blue dots, the Gaussian component as
+a black dashed line and the linear component as a red dashed line. It is
+created using the following code::
 
     comps = result.eval_components()
+    plt.plot(x, y, 'bo')
+    plt.plot(x, comps['gaussian'], 'k--')
+    plt.plot(x, comps['line'], 'r--')
 
-which returns a dictionary of the components, using keys of the model name
+The components were generated after the fit using the
+:meth:`ModelResult.eval_components` method of the `result`, which returns
+a dictionary of the components, using keys of the model name
 (or `prefix` if that is set).  This will use the parameter values in
 `result.params` and the independent variables (`x`) used during the
 fit.  Note that while the :class:`ModelResult` held in `result` does store the
@@ -848,7 +942,7 @@ provides a simple way to build up complex models.
 
 .. autoclass::  CompositeModel(left, right, op[, **kws])
 
-Note that when using builtin Python binary operators, a
+Note that when using built-in Python binary operators, a
 :class:`CompositeModel` will automatically be constructed for you. That is,
 doing::
 
@@ -865,13 +959,14 @@ operator.  For example, to convolve two models, you could define a simple
 convolution function, perhaps as::
 
     import numpy as np
+
     def convolve(dat, kernel):
-        # simple convolution
+        """simple convolution of two arrays"""
         npts = min(len(dat), len(kernel))
-        pad  = np.ones(npts)
-        tmp  = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
-        out  = np.convolve(tmp, kernel, mode='valid')
-        noff = int((len(out) - npts)/2)
+        pad = np.ones(npts)
+        tmp = np.concatenate((pad*dat[0], dat, pad*dat[-1]))
+        out = np.convolve(tmp, kernel, mode='valid')
+        noff = int((len(out) - npts) / 2)
         return (out[noff:])[:npts]
 
 which extends the data in both directions so that the convolving kernel
@@ -879,28 +974,30 @@ function gives a valid result over the data range.  Because this function
 takes two array arguments and returns an array, it can be used as the
 binary operator.  A full script using this technique is here:
 
-.. literalinclude:: ../examples/doc_model3.py
+.. literalinclude:: ../examples/doc_model_composite.py
 
 which prints out the results::
 
     [[Model]]
-        (Model(jump) <function convolve at 0x109ee4488> Model(gaussian))
+        (Model(jump) <function convolve at 0x112ef1320> Model(gaussian))
     [[Fit Statistics]]
+        # fitting method   = leastsq
         # function evals   = 27
         # data points      = 201
         # variables        = 3
-        chi-square         = 22.091
-        reduced chi-square = 0.112
-        Akaike info crit   = -437.837
-        Bayesian info crit = -427.927
+        chi-square         = 21.48845
+        reduced chi-square = 0.10853
+        Akaike info crit   = -443.39364
+        Bayesian info crit = -433.48373
     [[Variables]]
         mid:         5 (fixed)
-        sigma:       0.64118585 +/- 0.013233 (2.06%) (init= 1.5)
-        center:      4.51633608 +/- 0.009567 (0.21%) (init= 3.5)
-        amplitude:   0.62654849 +/- 0.001813 (0.29%) (init= 1)
+        sigma:       0.62393255 +/- 0.012818 (2.05%) (init= 1.5)
+        center:      4.52795480 +/- 0.009261 (0.20%) (init= 3.5)
+        amplitude:   0.62852927 +/- 0.001783 (0.28%) (init= 1)
     [[Correlations]] (unreported correlations are <  0.100)
-        C(center, amplitude)         =  0.344
-        C(sigma, amplitude)          =  0.280
+        C(center, amplitude)         =  0.339
+        C(sigma, amplitude)          =  0.276
+
 
 
 and shows the plots:

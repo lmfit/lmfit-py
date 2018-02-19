@@ -40,24 +40,28 @@ model}({\bf{v}})]/{\epsilon_i}`, or some other weighting factor.
 As a simple concrete example, one might want to model data with a decaying
 sine wave, and so write an objective function like this::
 
+    from numpy import exp, sin
+
+
     def residual(vars, x, data, eps_data):
         amp = vars[0]
         phaseshift = vars[1]
         freq = vars[2]
         decay = vars[3]
 
-        model = amp * sin(x * freq  + phaseshift) * exp(-x*x*decay)
+        model = amp * sin(x*freq + phaseshift) * exp(-x*x*decay)
 
-        return (data-model)/eps_data
+        return (data-model) / eps_data
 
 To perform the minimization with :mod:`scipy.optimize`, one would do this::
 
     from scipy.optimize import leastsq
+
     vars = [10.0, 0.2, 3.0, 0.007]
     out = leastsq(residual, vars, args=(x, data, eps_data))
 
 Though it is wonderful to be able to use Python for such optimization
-problems, and the scipy library is robust and easy to use, the approach
+problems, and the SciPy library is robust and easy to use, the approach
 here is not terribly different from how one would do the same fit in C or
 Fortran.  There are several practical challenges to using this approach,
 including:
@@ -100,17 +104,21 @@ allows one to:
 To illustrate the value of this approach, we can rewrite the above example
 for the decaying sine wave as::
 
+    from numpy import exp, sin
+
     from lmfit import minimize, Parameters
+
 
     def residual(params, x, data, eps_data):
         amp = params['amp']
-        pshift = params['phase']
+        phaseshift = params['phase']
         freq = params['frequency']
         decay = params['decay']
 
-        model = amp * sin(x * freq  + pshift) * exp(-x*x*decay)
+        model = amp * sin(x*freq + phaseshift) * exp(-x*x*decay)
 
-        return (data-model)/eps_data
+        return (data-model) / eps_data
+
 
     params = Parameters()
     params.add('amp', value=10)

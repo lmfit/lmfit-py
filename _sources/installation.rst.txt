@@ -2,39 +2,40 @@
 Downloading and Installation
 ====================================
 
-.. _lmfit github repository:   http://github.com/lmfit/lmfit-py
-.. _python:  http://python.org
-.. _scipy:  http://scipy.org/scipylib/index.html
+.. _lmfit github repository:   https://github.com/lmfit/lmfit-py
+.. _python:  https://python.org
+.. _scipy:  https://scipy.org/scipylib/index.html
 .. _numpy:  http://numpy.org/
-.. _nose:   http://nose.readthedocs.org/
-.. _pytest: http://pytest.org/
+.. _nose:   https://nose.readthedocs.org/
+.. _pytest: https://pytest.org/
 .. _emcee:  http://dan.iel.fm/emcee/
-.. _pandas:  http://pandas.pydata.org/
-.. _jupyter:  http://jupyter.org/
-.. _matplotlib:  http://matplotlib.org/
+.. _pandas:  https://pandas.pydata.org/
+.. _jupyter:  https://jupyter.org/
+.. _matplotlib:  https://matplotlib.org/
+.. _dill:  https://github.com/uqfoundation/dill
 
 Prerequisites
 ~~~~~~~~~~~~~~~
 
 The lmfit package requires `Python`_, `NumPy`_, and `SciPy`_.
 
-Lmfit works with Python versions 2.7, 3.3, 3.4, 3.5, and 3.6. Support for Python 2.6
-ended with lmfit version 0.9.4.  Scipy version 0.15 or higher is required,
-with 0.17 or higher recommended to be able to use the latest optimization
-features.  NumPy version 1.5.1 or higher is required.
+Lmfit works with Python versions 2.7, 3.4, 3.5, and 3.6. Support for Python 2.6
+and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version
+0.17 or higher, NumPy version 1.10 or higher, and six version 1.10 or higher are
+required.
 
 In order to run the test suite, either the `nose`_ or `pytest`_ package is
-required.  Some functionality of lmfit requires the `emcee`_ package, some
-functionality will make use of the `pandas`_, `Jupyter`_ or `matplotlib`_
-packages if available.  We highly recommend each of these
+required. Some functionality of lmfit requires the `emcee`_ package, some
+functionality will make use of the `pandas`_, `Jupyter`_, `matplotlib`_,
+or `dill`_ packages if available.  We highly recommend each of these
 packages.
 
 
 Downloads
 ~~~~~~~~~~~~~
 
-The latest stable version of lmfit is |release| is available from `PyPi
-<http://pypi.python.org/pypi/lmfit/>`_.
+The latest stable version of lmfit is |release| and is available from `PyPi
+<https://pypi.python.org/pypi/lmfit/>`_.
 
 Installation
 ~~~~~~~~~~~~~~~~~
@@ -57,7 +58,7 @@ Development Version
 
 To get the latest development version, use::
 
-   git clone http://github.com/lmfit/lmfit-py.git
+   git clone https://github.com/lmfit/lmfit-py.git
 
 and install using::
 
