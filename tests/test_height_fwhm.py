@@ -8,6 +8,7 @@ from scipy.stats import norm
 from scipy.optimize import fsolve
 import sys
 
+import os
 
 # Turn off plotting if run by nosetests.
 WITHPLOT = True
@@ -76,7 +77,7 @@ def test_peak_like():
     # sigma = np.sqrt(variance)
     # x = np.linspace(mu - 20*sigma, mu + 20*sigma, 100.0)
     # y = norm.pdf(x, mu, 1)
-    data = np.loadtxt('../examples/test_peak.dat')
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples', 'test_peak.dat'))
     x = data[:, 0]
     y = data[:, 1]
     check_height_fwhm(x, y, lineshapes.voigt, models.VoigtModel())

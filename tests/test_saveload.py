@@ -14,7 +14,7 @@ try:
 except ImportError:
     DILL_AVAILABLE = False
 
-dat = np.loadtxt(os.path.join('..', 'examples', 'NIST_Gauss2.dat'))
+dat = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples', 'NIST_Gauss2.dat'))
 XDAT = dat[:, 1]
 YDAT = dat[:, 0]
 
