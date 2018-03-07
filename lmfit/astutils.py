@@ -1,13 +1,26 @@
-"""Utility functions for asteval.
+"""
+utility functions for asteval
 
-Matthew Newville <newville@cars.uchicago.edu>, The University of Chicago
-
+   Matthew Newville <newville@cars.uchicago.edu>,
+   The University of Chicago
 """
 from __future__ import division, print_function
-
-import ast
 import re
+import ast
+import math
 from sys import exc_info
+
+HAS_NUMPY = False
+try:
+    import numpy
+    HAS_NUMPY = True
+except ImportError:
+    pass
+
+MAX_EXPONENT = 10000
+MAX_STR_LEN = 2 << 17  # 256KiB
+MAX_SHIFT = 1000
+MAX_OPEN_BUFFER = 2 << 17
 
 RESERVED_WORDS = ('and', 'as', 'assert', 'break', 'class', 'continue',
                   'def', 'del', 'elif', 'else', 'except', 'exec',
@@ -25,7 +38,7 @@ UNSAFE_ATTRS = ('__subclasses__', '__bases__', '__globals__', '__code__',
                 '__getattribute__', '__subclasshook__', '__new__',
                 '__init__', 'func_globals', 'func_code', 'func_closure',
                 'im_class', 'im_func', 'im_self', 'gi_code', 'gi_frame',
-                '__asteval__')
+                '__asteval__', 'f_locals', '__mro__')
 
 # inherit these from python's __builtins__
 FROM_PY = ('ArithmeticError', 'AssertionError', 'AttributeError',
@@ -47,7 +60,7 @@ FROM_PY = ('ArithmeticError', 'AssertionError', 'AttributeError',
            'hash', 'hex', 'id', 'int', 'isinstance', 'len', 'list', 'map',
            'max', 'min', 'oct', 'ord', 'pow', 'range', 'repr',
            'reversed', 'round', 'set', 'slice', 'sorted', 'str', 'sum',
-           'tuple', 'type', 'zip')
+           'tuple', 'zip')
 
 # inherit these from python's math
 FROM_MATH = ('acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh',
@@ -131,7 +144,8 @@ FROM_NUMPY = ('Inf', 'NAN', 'abs', 'add', 'alen', 'all', 'amax', 'amin',
               'uint64', 'uint8', 'uintc', 'uintp', 'ulonglong', 'union1d',
               'unique', 'unravel_index', 'unsignedinteger', 'unwrap',
               'ushort', 'vander', 'var', 'vdot', 'vectorize', 'vsplit',
-              'vstack', 'where', 'who', 'zeros', 'zeros_like')
+              'vstack', 'where', 'who', 'zeros', 'zeros_like',
+              'fft', 'linalg', 'polynomial', 'random')
 
 NUMPY_RENAMES = {'ln': 'log', 'asin': 'arcsin', 'acos': 'arccos',
                  'atan': 'arctan', 'atan2': 'arctan2', 'atanh':
@@ -139,29 +153,61 @@ NUMPY_RENAMES = {'ln': 'log', 'asin': 'arcsin', 'acos': 'arccos',
 
 
 def _open(filename, mode='r', buffering=0):
-    """Read-only version of open()."""
-    umode = 'r'
-    if mode == 'rb':
-        umode = 'rb'
-    return open(filename, umode, buffering)
+    """read only version of open()"""
+    if mode not in ('r', 'rb', 'rU'):
+        raise RuntimeError("Invalid open file mode, must be 'r', 'rb', or 'rU'")
+    if buffering > MAX_OPEN_BUFFER:
+        raise RuntimeError("Invalid buffering value, max buffer size is {}".format(MAX_OPEN_BUFFER))
+    return open(filename, mode, buffering)
+
+def _type(obj, *varargs, **varkws):
+    """type that prevents varargs and varkws"""
+    return type(obj).__name__
 
 
-LOCALFUNCS = {'open': _open}
+LOCALFUNCS = {'open': _open, 'type': _type}
+
+
+# Safe versions of functions to prevent denial of service issues
+
+def safe_pow(base, exp):
+    if exp > MAX_EXPONENT:
+        raise RuntimeError("Invalid exponent, max exponent is {}".format(MAX_EXPONENT))
+    return base ** exp
+
+
+def safe_mult(a, b):
+    if isinstance(a, str) and isinstance(b, int) and len(a) * b > MAX_STR_LEN:
+        raise RuntimeError("String length exceeded, max string length is {}".format(MAX_STR_LEN))
+    return a * b
+
+
+def safe_add(a, b):
+    if isinstance(a, str) and isinstance(b, str) and len(a) + len(b) > MAX_STR_LEN:
+        raise RuntimeError("String length exceeded, max string length is {}".format(MAX_STR_LEN))
+    return a + b
+
+
+def safe_lshift(a, b):
+    if b > MAX_SHIFT:
+        raise RuntimeError("Invalid left shift, max left shift is {}".format(MAX_SHIFT))
+    return a << b
+
 
 OPERATORS = {ast.Is: lambda a, b: a is b,
              ast.IsNot: lambda a, b: a is not b,
              ast.In: lambda a, b: a in b,
              ast.NotIn: lambda a, b: a not in b,
-             ast.Add: lambda a, b: a + b,
+             ast.Add: safe_add,
              ast.BitAnd: lambda a, b: a & b,
              ast.BitOr: lambda a, b: a | b,
              ast.BitXor: lambda a, b: a ^ b,
              ast.Div: lambda a, b: a / b,
              ast.FloorDiv: lambda a, b: a // b,
-             ast.LShift: lambda a, b: a << b,
+             ast.LShift: safe_lshift,
              ast.RShift: lambda a, b: a >> b,
-             ast.Mult: lambda a, b: a * b,
-             ast.Pow: lambda a, b: a ** b,
+             ast.Mult: safe_mult,
+             ast.Pow: safe_pow,
              ast.Sub: lambda a, b: a - b,
              ast.Mod: lambda a, b: a % b,
              ast.And: lambda a, b: a and b,
@@ -181,9 +227,18 @@ OPERATORS = {ast.Is: lambda a, b: a is b,
 def valid_symbol_name(name):
     """Determine whether the input symbol name is a valid name.
 
-    This checks for reserved words, and that the name matches the
-    regular expression ``[a-zA-Z_][a-zA-Z0-9_]``
+    Arguments
+    ---------
+      name  : str
+         name to check for validity.
 
+    Returns
+    --------
+      valid :  bool
+        whether name is a a valid symbol name
+
+    This checks for Python reserved words and that the name matches
+    the regular expression ``[a-zA-Z_][a-zA-Z0-9_]``
     """
     if name in RESERVED_WORDS:
         return False
@@ -263,9 +318,52 @@ class NameFinder(ast.NodeVisitor):
                 self.names.append(node.id)
         ast.NodeVisitor.generic_visit(self, node)
 
+builtins = __builtins__
+if not isinstance(builtins, dict):
+    builtins = builtins.__dict__
 
 def get_ast_names(astnode):
     """Return symbol Names from an AST node."""
     finder = NameFinder()
     finder.generic_visit(astnode)
     return finder.names
+
+
+def make_symbol_table(use_numpy=True, **kws):
+    """Create a default symboltable, taking dict of user-defined symbols.
+
+    Arguments
+    ---------
+    numpy : bool, optional
+       whether to include symbols from numpy
+    kws :  optional
+       additional symbol name, value pairs to include in symbol table
+
+    Returns
+    --------
+    symbol_table : dict
+       a symbol table that can be used in `asteval.Interpereter`
+
+    """
+    symtable = {}
+
+    for sym in FROM_PY:
+        if sym in builtins:
+            symtable[sym] = builtins[sym]
+
+    for sym in FROM_MATH:
+        if hasattr(math, sym):
+            symtable[sym] = getattr(math, sym)
+
+    if HAS_NUMPY and use_numpy:
+        for sym in FROM_NUMPY:
+            if hasattr(numpy, sym):
+                symtable[sym] = getattr(numpy, sym)
+        for name, sym in NUMPY_RENAMES.items():
+            if hasattr(numpy, sym):
+                symtable[name] = getattr(numpy, sym)
+
+    symtable.update(LOCALFUNCS)
+    symtable.update(kws)
+
+    return symtable
