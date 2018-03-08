@@ -11,8 +11,10 @@ import math
 from sys import exc_info
 
 HAS_NUMPY = False
+ndarray = NotImplementedError
 try:
     import numpy
+    from numpy import ndarray
     HAS_NUMPY = True
 except ImportError:
     pass
