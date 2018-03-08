@@ -6,15 +6,14 @@ from copy import deepcopy
 import json
 
 from numpy import arcsin, array, cos, inf, isfinite, nan, sin, sqrt
-
-from scipy import special
+import scipy.special
 
 from . import uncertainties
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name
 
-SCIPY_FUNCTIONS = {}
-for name in ('gamfcn', 'erf', 'erfc', 'wofz'):
+SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
+for name in ('erf', 'erfc', 'wofz'):
     SCIPY_FUNCTIONS[name] = getattr(scipy.special, name)
 
 
@@ -95,7 +94,7 @@ class Parameters(OrderedDict):
         self._asteval = asteval
 
         if asteval is None:
-            self._asteval = Interpreter(usersyms=EXTRA_FUNCTIONS)
+            self._asteval = Interpreter(usersyms=SCIPY_FUNCTIONS)
         self.update(*args, **kwds)
 
     def copy(self):
