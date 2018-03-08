@@ -7,9 +7,15 @@ import json
 
 from numpy import arcsin, array, cos, inf, isfinite, nan, sin, sqrt
 
+from scipy import special
+
 from . import uncertainties
 from .asteval import Interpreter
 from .astutils import get_ast_names, valid_symbol_name
+
+SCIPY_FUNCTIONS = {}
+for name in ('gamfcn', 'erf', 'erfc', 'wofz'):
+    SCIPY_FUNCTIONS[name] = getattr(scipy.special, name)
 
 
 def check_ast_errors(expr_eval):
@@ -89,7 +95,7 @@ class Parameters(OrderedDict):
         self._asteval = asteval
 
         if asteval is None:
-            self._asteval = Interpreter()
+            self._asteval = Interpreter(usersyms=EXTRA_FUNCTIONS)
         self.update(*args, **kwds)
 
     def copy(self):
