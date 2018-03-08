@@ -13,6 +13,8 @@ later, using the current values in the symboltable.
 from __future__ import division, print_function
 
 import ast
+import time
+import inspect
 import six
 from sys import exc_info, stdout, stderr, version_info
 
@@ -32,7 +34,6 @@ ALL_NODES = ['arg', 'assert', 'assign', 'attribute', 'augassign', 'binop',
              'pass', 'print', 'raise', 'repr', 'return', 'slice', 'str',
              'subscript', 'try', 'tuple', 'unaryop', 'while']
 
-# noinspection PyIncorrectDocstring
 class Interpreter(object):
     """Mathematical expression compiler and interpreter.
 
@@ -114,13 +115,13 @@ class Interpreter(object):
         no_print : bool
             whether to support `print`.
         max_time : float
-            deprecated.  no longer used (see Note 2)
+            deprecated.  max run time in seconds (see Note 2) [30.0]
 
         Notes
         -----
         1. setting `minimal=True` is equivalent to setting all
            `no_***` options to `True`.
-        2. max_time is no longer supported.
+        2. max_time is not reliable and support may be dropped soon.
         """
         self.writer = writer or stdout
         self.err_writer = err_writer or stderr
@@ -139,6 +140,8 @@ class Interpreter(object):
         self.expr = None
         self.retval = None
         self.lineno = 0
+        self.start_time = time.time()
+        self.max_time = max_time
         self.use_numpy = HAS_NUMPY and use_numpy
 
         nodes = ALL_NODES[:]
@@ -167,7 +170,8 @@ class Interpreter(object):
 
         self.no_deepcopy = [key for key, val in symtable.items()
                             if (callable(val)
-                                or 'numpy.lib.index_tricks' in repr(val))]
+                                or 'numpy.lib.index_tricks' in repr(val)
+                                or inspect.ismodule(val))]
 
     def remove_nodehandler(self, node):
         """remove support for a node
@@ -180,6 +184,7 @@ class Interpreter(object):
     def set_nodehandler(self, node, handler):
         """set node handler"""
         self.node_handlers[node] = handler
+
 
     def user_defined_symbols(self):
         """Return a set of symbols that have been added to symtable after
@@ -246,6 +251,8 @@ class Interpreter(object):
         """Execute parsed Ast representation for an expression."""
         # Note: keep the 'node is None' test: internal code here may run
         #    run(None) and expect a None in return.
+        if time.time() - self.start_time > self.max_time:
+            raise RuntimeError("Execution exceeded time limit, max runtime is {}s".format(self.max_time))
         if len(self.error) > 0:
             return
         if node is None:
@@ -283,6 +290,7 @@ class Interpreter(object):
         """Evaluate a single statement."""
         self.lineno = lineno
         self.error = []
+        self.start_time = time.time()
         try:
             node = self.parse(expr)
         except:
@@ -467,20 +475,18 @@ class Interpreter(object):
             return delattr(sym, node.attr)
 
         # ctx is ast.Load
-        errfmt = "'%s' object has not attribute '%s'"
+        fmt = "cannnot access attribute '%s' for %s"
+        if node.attr not in UNSAFE_ATTRS:
+            fmt = "no attribute '%s' for %s"
+            try:
+                return getattr(sym, node.attr)
+            except AttributeError:
+                pass
 
-        if (node.attr in UNSAFE_ATTRS or
-            (isinstance(sym, six.string_types) and 'format' in node.attr) or
-            (isinstance(sym, Procedure) and node.attr not in dir(sym))):
-            self.raise_exception(node, exc=AttributeError,
-                                 msg=errfmt % (sym, node.attr))
-
-        try:
-            return getattr(sym, node.attr)
-        except AttributeError:
-            self.raise_exception(node, exc=AttributeError,
-                                 msg=errfmt % (sym, node.attr))
-
+        # AttributeError or accessed unsafe attribute
+        obj = self.run(node.value)
+        msg = fmt % (node.attr, obj)
+        self.raise_exception(node, exc=AttributeError, msg=msg)
 
     def on_assign(self, node):    # ('targets', 'value')
         """Simple assignment."""
@@ -725,10 +731,7 @@ class Interpreter(object):
             if not isinstance(key, ast.keyword):
                 msg = "keyword error in function call '%s'" % (func)
                 self.raise_exception(node, msg=msg)
-            if key.arg is None:   # Py3 **kwargs !
-                keywords.update(self.run(key.value))
-            else:
-                keywords[key.arg] = self.run(key.value)
+            keywords[key.arg] = self.run(key.value)
 
         kwargs = getattr(node, 'kwargs', None)
         if kwargs is not None:
@@ -780,7 +783,7 @@ class Interpreter(object):
                                              args=args, kwargs=kwargs,
                                              vararg=vararg, varkws=varkws)
         if node.name in self.no_deepcopy:
-            self.no_deepcopy.pop(node.name)
+            self.no_deepcopy.remove(node.name)
 
 
 class Procedure(object):
