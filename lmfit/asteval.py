@@ -1,42 +1,39 @@
-"""Safe(ish) evaluator of python expressions, using ast module.
+"""
+Safe(ish) evaluator of python expressions, using ast module.
+The emphasis here is on mathematical expressions, and so
+numpy functions are imported if available and used.
 
-The emphasis here is on mathematical expressions, and so numpy functions
-are imported if available and used.
+Symbols are held in the Interpreter symtable -- a simple
+dictionary supporting a simple, flat namespace.
 
-Symbols are held in the Interpreter symtable -- a simple dictionary
-supporting a simple, flat namespace.
-
-Expressions can be compiled into ast node and then evaluated later, using
-the current values in the ???.
-
+Expressions can be compiled into ast node and then evaluated
+later, using the current values in the symboltable.
 """
 
 from __future__ import division, print_function
 
 import ast
-import math
-from sys import exc_info, stdout, version_info
+import six
+from sys import exc_info, stdout, stderr, version_info
 
-from .astutils import (FROM_MATH, FROM_NUMPY, FROM_PY, LOCALFUNCS,
-                       NUMPY_RENAMES, UNSAFE_ATTRS, ExceptionHolder,
-                       ReturnedNone, op2func, valid_symbol_name)
+from .astutils import (UNSAFE_ATTRS, HAS_NUMPY, make_symbol_table, ndarray,
+                       op2func, ExceptionHolder, ReturnedNone,
+                       valid_symbol_name)
 
-HAS_NUMPY = False
-try:
-    import numpy
-    HAS_NUMPY = True
-except ImportError:
-    print("Warning: numpy not available... functionality will be limited.")
+builtins = __builtins__
+if not isinstance(builtins, dict):
+    builtins = builtins.__dict__
 
-HAS_SCIPY = False
-try:
-    import scipy.special
-    HAS_SCIPY = True
-except ImportError:
-    print("Warning: scipy not available... gamma, wofz, and erfc functions not available.")
+ALL_NODES = ['arg', 'assert', 'assign', 'attribute', 'augassign', 'binop',
+             'boolop', 'break', 'call', 'compare', 'continue', 'delete',
+             'dict', 'ellipsis', 'excepthandler', 'expr', 'extslice',
+             'for', 'functiondef', 'if', 'ifexp', 'index', 'interrupt',
+             'list', 'listcomp', 'module', 'name', 'nameconstant', 'num',
+             'pass', 'print', 'raise', 'repr', 'return', 'slice', 'str',
+             'subscript', 'try', 'tuple', 'unaryop', 'while']
 
-
-class Interpreter:
+# noinspection PyIncorrectDocstring
+class Interpreter(object):
     """Mathematical expression compiler and interpreter.
 
     This module compiles expressions and statements to AST representation,
@@ -66,25 +63,75 @@ class Interpreter:
     example) that can be considered unsafe.
 
     If numpy is installed, many numpy functions are also imported.
-
     """
+    def __init__(self, symtable=None, usersyms=None, writer=None,
+                 err_writer=None, use_numpy=True, minimal=False,
+                 no_if=False, no_for=False, no_while=False,
+                 no_try=False, no_functiondef=False, no_ifexp=False,
+                 no_listcomp=False, no_augassign=False,
+                 no_assert=False, no_delete=False, no_raise=False,
+                 no_print=False, max_time=30):
 
-    supported_nodes = ('arg', 'assert', 'assign', 'attribute', 'augassign',
-                       'binop', 'boolop', 'break', 'call', 'compare',
-                       'continue', 'delete', 'dict', 'ellipsis',
-                       'excepthandler', 'expr', 'expression', 'extslice',
-                       'for', 'functiondef', 'if', 'ifexp', 'index',
-                       'interrupt', 'list', 'listcomp', 'module', 'name',
-                       'nameconstant', 'num', 'pass', 'print', 'raise',
-                       'repr', 'return', 'slice', 'str', 'subscript',
-                       'try', 'tuple', 'unaryop', 'while')
+        """create an asteval Interpreter: a restricted, simplified interpreter
+        of mathematical expressions using Python syntax.
 
-    def __init__(self, symtable=None, writer=None, use_numpy=True):
-        """TODO: docstring in public method."""
+        Parameters
+        ----------
+        symtable : dict or `None`
+            dictionary to use as symbol table (if `None`, one will be created).
+        usersyms : dict or `None`
+            dictionary of user-defined symbols to add to symbol table.
+        writer : file-like or `None`
+            callable file-like object where standard output will be sent.
+        err_writer : file-like or `None`
+            callable file-like object where standard error will be sent.
+        use_numpy : bool
+            whether to use functions from numpy.
+        minimal : bool
+            create a minimal interpreter: disable all options (see Note 1).
+        no_if : bool
+            whether to support `if` blocks
+        no_for : bool
+            whether to support `for` blocks.
+        no_while : bool
+            whether to support `while` blocks.
+        no_try : bool
+            whether to support `try` blocks.
+        no_functiondef : bool
+            whether to support user-defined functions.
+        no_ifexp : bool
+            whether to support if expressions.
+        no_listcomp : bool
+            whether to support list comprehension.
+        no_augassign : bool
+            whether to support augemented assigments (`a += 1`, etc).
+        no_assert : bool
+            whether to support `assert`.
+        no_delete : bool
+            whether to support `del`.
+        no_raise : bool
+            whether to support `raise`.
+        no_print : bool
+            whether to support `print`.
+        max_time : float
+            deprecated.  no longer used (see Note 2)
+
+        Notes
+        -----
+        1. setting `minimal=True` is equivalent to setting all
+           `no_***` options to `True`.
+        2. max_time is no longer supported.
+        """
         self.writer = writer or stdout
+        self.err_writer = err_writer or stderr
 
         if symtable is None:
-            symtable = {}
+            if usersyms is None:
+                usersyms = {}
+            symtable = make_symbol_table(use_numpy=use_numpy, **usersyms)
+
+        symtable['print'] = self._printer
+
         self.symtable = symtable
         self._interrupt = None
         self.error = []
@@ -93,52 +140,46 @@ class Interpreter:
         self.retval = None
         self.lineno = 0
         self.use_numpy = HAS_NUMPY and use_numpy
-        self.use_scipy = HAS_SCIPY
 
-        symtable['print'] = self._printer
+        nodes = ALL_NODES[:]
 
-        # add python symbols
-        py_symtable = dict((sym, __builtins__[sym]) for sym in FROM_PY
-                           if sym in __builtins__)
-        symtable.update(py_symtable)
+        if minimal or no_if:           nodes.remove('if')
+        if minimal or no_for:          nodes.remove('for')
+        if minimal or no_while:        nodes.remove('while')
+        if minimal or no_try:          nodes.remove('try')
+        if minimal or no_functiondef:  nodes.remove('functiondef')
+        if minimal or no_ifexp:        nodes.remove('ifexp')
+        if minimal or no_assert:       nodes.remove('assert')
+        if minimal or no_delete:       nodes.remove('delete')
+        if minimal or no_raise:        nodes.remove('raise')
+        if minimal or no_print:        nodes.remove('print')
+        if minimal or no_listcomp:     nodes.remove('listcomp')
+        if minimal or no_augassign:    nodes.remove('augassign')
 
-        # add local symbols
-        local_symtable = dict((sym, obj) for (sym, obj) in LOCALFUNCS.items())
-        symtable.update(local_symtable)
-
-        # add math symbols
-        math_symtable = dict((sym, getattr(math, sym)) for sym in FROM_MATH
-                             if hasattr(math, sym))
-        symtable.update(math_symtable)
-
-        # add scipy symbols
-        if self.use_scipy:
-            scipy_symtable = {"gamfcn": getattr(scipy.special, "gamma")}
-            scipy_symtable.update({"wofz": getattr(scipy.special, "wofz")})
-            scipy_symtable.update({"erfc": getattr(scipy.special, "erfc")})
-            symtable.update(scipy_symtable)
-
-        # add numpy symbols
-        if self.use_numpy:
-            numpy_symtable = dict((sym, getattr(numpy, sym)) for sym in FROM_NUMPY
-                                  if hasattr(numpy, sym))
-            symtable.update(numpy_symtable)
-
-            npy_rename_symtable = dict((name, getattr(numpy, sym)) for name, sym
-                                       in NUMPY_RENAMES.items()
-                                       if hasattr(numpy, sym))
-            symtable.update(npy_rename_symtable)
-
-        self.node_handlers = dict(((node, getattr(self, "on_%s" % node))
-                                   for node in self.supported_nodes))
+        self.node_handlers = {}
+        for node in nodes:
+            self.node_handlers[node] = getattr(self, "on_%s" % node)
 
         # to rationalize try/except try/finally for Python2.6 through Python3.3
-        self.node_handlers['tryexcept'] = self.node_handlers['try']
-        self.node_handlers['tryfinally'] = self.node_handlers['try']
+        if 'try' in self.node_handlers:
+            self.node_handlers['tryexcept'] = self.node_handlers['try']
+            self.node_handlers['tryfinally'] = self.node_handlers['try']
 
         self.no_deepcopy = [key for key, val in symtable.items()
                             if (callable(val)
                                 or 'numpy.lib.index_tricks' in repr(val))]
+
+    def remove_nodehandler(self, node):
+        """remove support for a node
+        returns current node handler, so that it
+        might be re-added with add_nodehandler()
+        """
+        if node in self.node_handlers:
+            return self.node_handlers.pop(node)
+
+    def set_nodehandler(self, node, handler):
+        """set node handler"""
+        self.node_handlers[node] = handler
 
     def user_defined_symbols(self):
         """Return a set of symbols that have been added to symtable after
@@ -208,7 +249,7 @@ class Interpreter:
         if len(self.error) > 0:
             return
         if node is None:
-            return None
+            return
         if isinstance(node, str):
             node = self.parse(node)
         if lineno is not None:
@@ -221,7 +262,6 @@ class Interpreter:
         try:
             handler = self.node_handlers[node.__class__.__name__.lower()]
         except KeyError:
-            print(" lmfit asteval node handler error ", node)
             return self.unimplemented(node)
 
         # run the handler:  this will likely generate
@@ -236,7 +276,7 @@ class Interpreter:
                 self.raise_exception(node, expr=expr)
 
     def __call__(self, expr, **kw):
-        """TODO: docstring in public method."""
+        """Call class instance as function."""
         return self.eval(expr, **kw)
 
     def eval(self, expr, lineno=0, show_errors=True):
@@ -255,7 +295,7 @@ class Interpreter:
                 except:
                     exc = RuntimeError
                 raise exc(errmsg)
-            print(errmsg, file=self.writer)
+            print(errmsg, file=self.err_writer)
             return
         try:
             return self.run(node, expr=expr, lineno=lineno)
@@ -269,10 +309,11 @@ class Interpreter:
                 except:
                     exc = RuntimeError
                 raise exc(errmsg)
-            print(errmsg, file=self.writer)
+            print(errmsg, file=self.err_writer)
             return
 
-    def dump(self, node, **kw):
+    @staticmethod
+    def dump(node, **kw):
         """Simple ast dumper."""
         return ast.dump(node, **kw)
 
@@ -372,6 +413,10 @@ class Interpreter:
                 msg = "name '%s' is not defined" % node.id
                 self.raise_exception(node, exc=NameError, msg=msg)
 
+    def on_nameconstant(self, node):
+        """ True, False, None in python >= 3.4 """
+        return node.value
+
     def node_assign(self, node, val):
         """Assign a value (not the node.value object) to a node.
 
@@ -383,9 +428,9 @@ class Interpreter:
             if not valid_symbol_name(node.id):
                 errmsg = "invalid symbol name (reserved word?) %s" % node.id
                 self.raise_exception(node, exc=NameError, msg=errmsg)
-            sym = self.symtable[node.id] = val
+            self.symtable[node.id] = val
             if node.id in self.no_deepcopy:
-                self.no_deepcopy.pop(node.id)
+                self.no_deepcopy.pop(node.id)  # or .remove(node.id)???
 
         elif node.__class__ == ast.Attribute:
             if node.ctx.__class__ == ast.Load:
@@ -402,7 +447,7 @@ class Interpreter:
             elif isinstance(node.slice, ast.Slice):
                 sym[slice(xslice.start, xslice.stop)] = val
             elif isinstance(node.slice, ast.ExtSlice):
-                sym[(xslice)] = val
+                sym[xslice] = val
         elif node.__class__ in (ast.Tuple, ast.List):
             if len(val) == len(node.elts):
                 for telem, tval in zip(node.elts, val):
@@ -468,7 +513,7 @@ class Interpreter:
             if isinstance(node.slice, (ast.Index, ast.Slice, ast.Ellipsis)):
                 return val.__getitem__(nslice)
             elif isinstance(node.slice, ast.ExtSlice):
-                return val[(nslice)]
+                return val[nslice]
         else:
             msg = "subscript with unknown context"
             self.raise_exception(node, msg=msg)
@@ -505,21 +550,21 @@ class Interpreter:
         val = self.run(node.values[0])
         is_and = ast.And == node.op.__class__
         if (is_and and val) or (not is_and and not val):
-            for n in node.values:
+            for n in node.values[1:]:
                 val = op2func(node.op)(val, self.run(n))
                 if (is_and and not val) or (not is_and and val):
                     break
         return val
 
-    def on_compare(self, node):    # ('left', 'ops', 'comparators')
-        """Comparison operators."""
+    def on_compare(self, node):  # ('left', 'ops', 'comparators')
+        """comparison operators"""
         lval = self.run(node.left)
         out = True
         for op, rnode in zip(node.ops, node.comparators):
             rval = self.run(rnode)
             out = op2func(op)(lval, rval)
             lval = rval
-            if self.use_numpy and isinstance(out, numpy.ndarray) and out.any():
+            if self.use_numpy and isinstance(out, ndarray) and out.any():
                 break
             elif not out:
                 break
@@ -626,7 +671,7 @@ class Interpreter:
                 for hnd in node.handlers:
                     htype = None
                     if hnd.type is not None:
-                        htype = __builtins__.get(hnd.type.id, None)
+                        htype = builtins.get(hnd.type.id, None)
                     if htype is None or isinstance(e_type(), htype):
                         self.error = []
                         if hnd.name is not None:
@@ -671,6 +716,9 @@ class Interpreter:
             args = args + self.run(starargs)
 
         keywords = {}
+        if six.PY3 and func == print:
+            keywords['file'] = self.writer
+
         for key in node.keywords:
             if not isinstance(key, ast.keyword):
                 msg = "keyword error in function call '%s'" % (func)
@@ -688,13 +736,12 @@ class Interpreter:
 
     def on_arg(self, node):    # ('test', 'msg')
         """Arg for function definitions."""
-        # print(" ON ARG ! ", node, node.arg)
         return node.arg
 
     def on_functiondef(self, node):
         """Define procedures."""
         # ('name', 'args', 'body', 'decorator_list')
-        if node.decorator_list != []:
+        if node.decorator_list:
             raise Warning("decorated procedures not supported!")
         kwargs = []
 
@@ -714,12 +761,19 @@ class Interpreter:
         if isinstance(nb0, ast.Expr) and isinstance(nb0.value, ast.Str):
             doc = nb0.value.s
 
+        varkws = node.args.kwarg
+        vararg = node.args.vararg
+        if version_info[0] == 3:
+            if isinstance(vararg, ast.arg):
+                vararg = vararg.arg
+            if isinstance(varkws, ast.arg):
+                varkws = varkws.arg
+
         self.symtable[node.name] = Procedure(node.name, self, doc=doc,
                                              lineno=self.lineno,
                                              body=node.body,
                                              args=args, kwargs=kwargs,
-                                             vararg=node.args.vararg,
-                                             varkws=node.args.kwarg)
+                                             vararg=vararg, varkws=varkws)
         if node.name in self.no_deepcopy:
             self.no_deepcopy.pop(node.name)
 
@@ -736,6 +790,7 @@ class Procedure(object):
                  body=None, args=None, kwargs=None,
                  vararg=None, varkws=None):
         """TODO: docstring in public method."""
+        self.__ininit__ = True
         self.name = name
         self.__asteval__ = interp
         self.raise_exc = self.__asteval__.raise_exception
@@ -746,6 +801,16 @@ class Procedure(object):
         self.vararg = vararg
         self.varkws = varkws
         self.lineno = lineno
+        self.__ininit__ = False
+
+    def __setattr__(self, attr, val):
+        if not getattr(self, '__ininit__', True):
+            self.raise_exc(None, exc=TypeError,
+                           msg= "procedure is read-only")
+        self.__dict__[attr] = val
+
+    def __dir__(self):
+        return ['name']
 
     def __repr__(self):
         """TODO: docstring in magic method."""
@@ -771,19 +836,22 @@ class Procedure(object):
         """TODO: docstring in public method."""
         symlocals = {}
         args = list(args)
-        n_args = len(args)
-        n_names = len(self.argnames)
-        n_kws = len(kwargs)
-
-        # may need to move kwargs to args if names align!
-        if (n_args < n_names) and n_kws > 0:
-            for name in self.argnames[n_args:]:
+        nargs = len(args)
+        nkws = len(kwargs)
+        nargs_expected = len(self.argnames)
+        # check for too few arguments, but the correct keyword given
+        if (nargs < nargs_expected) and nkws > 0:
+            for name in self.argnames[nargs:]:
                 if name in kwargs:
                     args.append(kwargs.pop(name))
-            n_args = len(args)
-            n_names = len(self.argnames)
-            n_kws = len(kwargs)
-
+            nargs = len(args)
+            nargs_expected = len(self.argnames)
+            nkws = len(kwargs)
+        if nargs < nargs_expected:
+            msg = "%s() takes at least %i arguments, got %i"
+            self.raise_exc(None, exc=TypeError,
+                           msg=msg % (self.name, nargs_expected, nargs))
+        # check for multiple values for named argument
         if len(self.argnames) > 0 and kwargs is not None:
             msg = "multiple values for keyword argument '%s' in Procedure %s"
             for targ in self.argnames:
@@ -792,12 +860,24 @@ class Procedure(object):
                                    msg=msg % (targ, self.name),
                                    lineno=self.lineno)
 
-        if n_args != n_names:
+        # check more args given than expected, varargs not given
+        if nargs != nargs_expected:
             msg = None
-            if n_args < n_names:
+            if nargs < nargs_expected:
                 msg = 'not enough arguments for Procedure %s()' % self.name
-                msg = '%s (expected %i, got %i)' % (msg, n_names, n_args)
+                msg = '%s (expected %i, got %i)' % (msg, nargs_expected, nargs)
                 self.raise_exc(None, exc=TypeError, msg=msg)
+
+        if nargs > nargs_expected and self.vararg is None:
+            if nargs - nargs_expected > len(self.kwargs):
+                msg = 'too many arguments for %s() expected at most %i, got %i'
+                msg = msg % (self.name, len(self.kwargs)+nargs_expected, nargs)
+                self.raise_exc(None, exc=TypeError, msg=msg)
+
+            for i, xarg in enumerate(args[nargs_expected:]):
+                kw_name = self.kwargs[i][0]
+                if kw_name not in kwargs:
+                    kwargs[kw_name] = xarg
 
         for argname in self.argnames:
             symlocals[argname] = args.pop(0)
@@ -837,6 +917,7 @@ class Procedure(object):
                 break
             if self.__asteval__.retval is not None:
                 retval = self.__asteval__.retval
+                self.__asteval__.retval = None
                 if retval is ReturnedNone:
                     retval = None
                 break
