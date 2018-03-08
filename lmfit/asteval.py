@@ -430,7 +430,7 @@ class Interpreter(object):
                 self.raise_exception(node, exc=NameError, msg=errmsg)
             self.symtable[node.id] = val
             if node.id in self.no_deepcopy:
-                self.no_deepcopy.pop(node.id)  # or .remove(node.id)???
+                self.no_deepcopy.remove(node.id)
 
         elif node.__class__ == ast.Attribute:
             if node.ctx.__class__ == ast.Load:
@@ -467,18 +467,20 @@ class Interpreter(object):
             return delattr(sym, node.attr)
 
         # ctx is ast.Load
-        fmt = "cannnot access attribute '%s' for %s"
-        if node.attr not in UNSAFE_ATTRS:
-            fmt = "no attribute '%s' for %s"
-            try:
-                return getattr(sym, node.attr)
-            except AttributeError:
-                pass
+        errfmt = "'%s' object has not attribute '%s'"
 
-        # AttributeError or accessed unsafe attribute
-        obj = self.run(node.value)
-        msg = fmt % (node.attr, obj)
-        self.raise_exception(node, exc=AttributeError, msg=msg)
+        if (node.attr in UNSAFE_ATTRS or
+            (isinstance(sym, six.string_types) and 'format' in node.attr) or
+            (isinstance(sym, Procedure) and node.attr not in dir(sym))):
+            self.raise_exception(node, exc=AttributeError,
+                                 msg=errfmt % (sym, node.attr))
+
+        try:
+            return getattr(sym, node.attr)
+        except AttributeError:
+            self.raise_exception(node, exc=AttributeError,
+                                 msg=errfmt % (sym, node.attr))
+
 
     def on_assign(self, node):    # ('targets', 'value')
         """Simple assignment."""
@@ -723,7 +725,10 @@ class Interpreter(object):
             if not isinstance(key, ast.keyword):
                 msg = "keyword error in function call '%s'" % (func)
                 self.raise_exception(node, msg=msg)
-            keywords[key.arg] = self.run(key.value)
+            if key.arg is None:   # Py3 **kwargs !
+                keywords.update(self.run(key.value))
+            else:
+                keywords[key.arg] = self.run(key.value)
 
         kwargs = getattr(node, 'kwargs', None)
         if kwargs is not None:
