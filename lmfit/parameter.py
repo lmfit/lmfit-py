@@ -8,9 +8,9 @@ import json
 from numpy import arcsin, array, cos, inf, isfinite, nan, sin, sqrt
 import scipy.special
 
+from asteval import Interpreter, get_ast_names, valid_symbol_name
+
 from . import uncertainties
-from .asteval import Interpreter
-from .astutils import get_ast_names, valid_symbol_name
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
 for name in ('erf', 'erfc', 'wofz'):
