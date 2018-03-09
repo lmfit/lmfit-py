@@ -38,6 +38,7 @@ Authors: Matthew Newville, The University of Chicago
          Antonino Ingargiola, University of California, Los Angeles
 
 """
+from asteval import Interpreter
 from .confidence import conf_interval, conf_interval2d
 from .minimizer import Minimizer, MinimizerException, minimize
 from .parameter import Parameter, Parameters
