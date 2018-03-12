@@ -308,6 +308,19 @@ class Model(object):
         """Return Model prefix."""
         return self._prefix
 
+    @prefix.setter
+    def prefix(self, value):
+        """Change Model prefix."""
+        self._prefix = value
+        self._set_paramhints_prefix()
+        self._param_names = []
+        self._parse_params()
+
+    def _set_paramhints_prefix(self):
+        """Reset parameter hints for prefix:
+        intended to be overwritten"""
+        pass
+
     @property
     def param_names(self):
         """Return the parameters of the Model."""
@@ -1160,6 +1173,7 @@ class ModelResult(Minimizer):
         self.weights = weights
         self.method = method
         self.ci_out = None
+        self.user_options = None
         self.init_params = deepcopy(params)
         Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
                            fcn_kws=fcn_kws, iter_cb=iter_cb, nan_policy=nan_policy,
@@ -1441,7 +1455,7 @@ class ModelResult(Minimizer):
                      'message', 'method', 'nan_policy', 'ndata', 'nfev',
                      'nfree', 'nvarys', 'redchi', 'scale_covar', 'success',
                      'userargs', 'userkws', 'values', 'var_names',
-                     'weights'):
+                     'weights', 'user_options'):
             val = getattr(self, attr)
             if isinstance(val, np.bool_):
                 val = bool(val)
@@ -1520,7 +1534,7 @@ class ModelResult(Minimizer):
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
                      'nvarys', 'redchi', 'residual', 'scale_covar',
                      'success', 'userargs', 'userkws', 'var_names',
-                     'weights'):
+                     'weights', 'user_options'):
             setattr(self, attr, decode4js(modres.get(attr, None)))
 
         self.best_fit = self.model.eval(self.params, **self.userkws)
