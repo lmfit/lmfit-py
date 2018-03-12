@@ -308,6 +308,19 @@ class Model(object):
         """Return Model prefix."""
         return self._prefix
 
+    @prefix.setter
+    def prefix(self, value):
+        """Change Model prefix."""
+        self._prefix = value
+        self._set_paramhints_prefix()
+        self._param_names = []
+        self._parse_params()
+
+    def _set_paramhints_prefix(self):
+        """Reset parameter hints for prefix:
+        intended to be overwritten"""
+        pass
+
     @property
     def param_names(self):
         """Return the parameters of the Model."""
