@@ -316,6 +316,9 @@ class GaussianModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(GaussianModel, self).__init__(gaussian, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
@@ -353,6 +356,9 @@ class LorentzianModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LorentzianModel, self).__init__(lorentzian, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         self.set_param_hint('height', expr=height_expr(self))
@@ -405,6 +411,9 @@ class VoigtModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(VoigtModel, self).__init__(voigt, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
@@ -451,6 +460,9 @@ class PseudoVoigtModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('fraction', value=0.5, min=0.0, max=1.0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
@@ -493,6 +505,9 @@ class MoffatModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(MoffatModel, self).__init__(moffat, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('beta')
         self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/%sbeta)-1)" % (self.prefix, self.prefix))
@@ -531,6 +546,9 @@ class Pearson7Model(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(Pearson7Model, self).__init__(pearson7, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('expon', value=1.5, max=100)
         fmt = ("sqrt(2**(1/{prefix:s}expon)-1)*2*{prefix:s}sigma")
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
@@ -568,6 +586,9 @@ class StudentsTModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(StudentsTModel, self).__init__(students_t, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0.0, max=100)
         fmt = ("{prefix:s}amplitude*gamfcn(({prefix:s}sigma+1)/2)/"
                "(sqrt({prefix:s}sigma*pi)*gamfcn({prefix:s}sigma/2))")
@@ -603,6 +624,9 @@ class BreitWignerModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0.0)
         fmt = ("{prefix:s}amplitude*{prefix:s}q**2")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
@@ -638,6 +662,9 @@ class LognormalModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(LognormalModel, self).__init__(lognormal, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('center', min=1.e-19)
         self.set_param_hint('sigma', min=0)
 
@@ -680,6 +707,9 @@ class DampedOscillatorModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('height', expr=height_expr(self))
         fmt = ("sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)+"
@@ -725,6 +755,9 @@ class DampedHarmonicOscillatorModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DampedHarmonicOscillatorModel, self).__init__(dho, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', min=1.e-19)
         fmt = ("({prefix:s}amplitude*{prefix:s}sigma)/"
@@ -770,6 +803,9 @@ class ExponentialGaussianModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', min=0, max=20)
         fmt = ("{prefix:s}amplitude*{prefix:s}gamma/2*"
@@ -814,6 +850,9 @@ class SkewedGaussianModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(SkewedGaussianModel, self).__init__(skewed_gaussian, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('height', expr=height_expr(self))
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
@@ -847,6 +886,9 @@ class DonaichModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super(DonaichModel, self).__init__(donaich, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         fmt = ("{prefix:s}amplitude/({prefix:s}sigma**(1-{prefix:s}gamma))"
                "*cos(pi*{prefix:s}gamma/2)")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
@@ -1008,6 +1050,9 @@ class RectangleModel(Model):
                        'form': form, 'independent_vars': independent_vars})
         super(RectangleModel, self).__init__(rectangle, **kwargs)
 
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
         self.set_param_hint('center1')
         self.set_param_hint('center2')
         self.set_param_hint('midpoint',
