@@ -25,9 +25,10 @@ before_install:
 
 install:
     - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION != 3.6 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.10 scipy=0.17 six=1.10 nose; fi
-    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION == 3.6 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.11 scipy=0.18 six=1.10 nose; fi
+    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION == 3.6 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.12 scipy=0.18 six=1.10 nose; fi
     - if [[ $version == latest ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy six pandas matplotlib dill nose; fi
     - source activate test_env
+    - pip install asteval
     - pip install emcee
     - python setup.py install
     - conda list

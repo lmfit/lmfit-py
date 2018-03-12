@@ -1,9 +1,9 @@
 """Module containing built-in fitting models."""
 import numpy as np
 
+from asteval import Interpreter, get_ast_names
+
 from . import lineshapes
-from .asteval import Interpreter
-from .astutils import get_ast_names
 from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
