@@ -1816,7 +1816,7 @@ class ModelResult(Minimizer):
             Keyword arguments for the axes for the fit plot.
         fig_kws : dict, optional
             Keyword arguments for a new figure, if there is one being created.
-        sinitial conditions for the fithow_init : bool, optional
+        show_init : bool, optional
             Whether to show the initial conditions for the fit (default is False).
 
         Returns
