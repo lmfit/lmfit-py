@@ -13,16 +13,18 @@ Downloading and Installation
 .. _jupyter:  https://jupyter.org/
 .. _matplotlib:  https://matplotlib.org/
 .. _dill:  https://github.com/uqfoundation/dill
+.. _asteval:  https://github.com/newville/asteval
+.. _six:  https://github.com/benjaminp/six
 
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The lmfit package requires `Python`_, `NumPy`_, and `SciPy`_.
+The lmfit package requires `Python`_, `NumPy`_, `SciPy`_, `asteval`_, and `six`_.
 
 Lmfit works with Python versions 2.7, 3.4, 3.5, and 3.6. Support for Python 2.6
 and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version
-0.17 or higher, NumPy version 1.10 or higher, and six version 1.10 or higher are
-required.
+0.17 or higher, NumPy version 1.10 or higher, asteval version 0.9.12 or higher,
+and six version 1.10 or higher are required.
 
 In order to run the test suite, either the `nose`_ or `pytest`_ package is
 required. Some functionality of lmfit requires the `emcee`_ package, some
