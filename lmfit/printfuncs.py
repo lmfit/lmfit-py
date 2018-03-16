@@ -46,8 +46,8 @@ def gformat(val, length=11):
                 out = out[:ie] + '.' + out[ie:]
             out = out.replace('e', '0'*(length-len(out))+'e')
         else:
-            fmt = '{0: .%ig}' % (length-1)
-            out = fmt.format(val)[:length]
+            fmt = '{0: .%ig}' % (length-5)
+            out = fmt.format(val)
             if len(out) < length:
                 pad = '0' if '.' in out else ' '
                 out += pad*(length-len(out))
