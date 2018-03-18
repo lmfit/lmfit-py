@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import re
-
+from math import log10
 from .parameter import Parameters
 
 
@@ -144,7 +144,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             sval = 'Non Numeric Value?'
 
         if par.stderr is not None:
-            serr = gformat(par.stderr, length=9)
+            serr = gformat(par.stderr)
 
             try:
                 spercent = '({0:.2%})'.format(abs(par.stderr/par.value))
