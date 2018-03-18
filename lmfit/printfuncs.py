@@ -11,6 +11,7 @@ def alphanumeric_sort(s, _nsre=re.compile('([0-9]+)')):
     return [int(text) if text.isdigit() else text.lower()
             for text in re.split(_nsre, s)]
 
+
 def getfloat_attr(obj, attr, fmt='%.5f'):
     """Format an attribute of an object for printing."""
     val = getattr(obj, attr, None)
@@ -21,6 +22,7 @@ def getfloat_attr(obj, attr, fmt='%.5f'):
     elif isinstance(val, float):
         return fmt % val
     return repr(val)
+
 
 def gformat(val, length=11):
     """Format a number with '%g'-like format, except that
@@ -48,12 +50,12 @@ def gformat(val, length=11):
     """
     try:
         expon = int(log10(abs(val)))
-    except:
+    except (OverflowError, ValueError):
         expon = 0
     length = max(length, 7)
     form = 'e'
     prec = length - 7
-    if abs(expon)> 99:
+    if abs(expon) > 99:
         prec -= 1
     elif ((expon > 0 and expon < (prec+4)) or
           (expon <= 0 and -expon < (prec-1))):
