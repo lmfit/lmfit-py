@@ -55,7 +55,8 @@ def gformat(val, length=11):
     prec = length - 7
     if abs(expon)> 99:
         prec -= 1
-    elif abs(expon) < (prec-1):
+    elif ((expon > 0 and expon < (prec+4)) or
+          (expon <= 0 and -expon < (prec-1))):
         form = 'f'
         prec += 4
         if expon > 0:
