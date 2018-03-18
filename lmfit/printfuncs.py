@@ -67,7 +67,7 @@ def gformat(val, length=11):
     return fmt.format(val)
 
 
-CORREL_HEAD = '[[Correlations]] (unreported correlations are < % .3f)'
+CORREL_HEAD = '[[Correlations]] (unreported correlations are < %.3f)'
 
 
 def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
@@ -134,13 +134,13 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     add("[[Variables]]")
     for name in parnames:
         par = params[name]
-        space = ' '*(namelen+1-len(name))
+        space = ' '*(namelen-len(name))
         nout = "%s:%s" % (name, space)
-        inval = '(init= ?)'
+        inval = '(init = ?)'
         if par.init_value is not None:
-            inval = '(init=% .7g)' % par.init_value
+            inval = '(init = %.7g)' % par.init_value
         if modelpars is not None and name in modelpars:
-            inval = '%s, model_value =% .7g' % (inval, modelpars[name].value)
+            inval = '%s, model_value = %.7g' % (inval, modelpars[name].value)
         try:
             sval = gformat(par.value)
         except (TypeError, ValueError):
@@ -158,7 +158,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         if par.vary:
             add("    %s %s %s" % (nout, sval, inval))
         elif par.expr is not None:
-            add("    %s %s  == '%s'" % (nout, sval, par.expr))
+            add("    %s %s == '%s'" % (nout, sval, par.expr))
         else:
             add("    %s % .7g (fixed)" % (nout, par.value))
 
@@ -178,8 +178,9 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         sort_correl.reverse()
         if len(sort_correl) > 0:
             add(CORREL_HEAD % min_correl)
+            maxlen = max([len(k) for k in list(correls.keys())])
         for name, val in sort_correl:
-            lspace = max(1, 25 - len(name))
+            lspace = max(0, maxlen - len(name))
             add('    C(%s)%s = % .3f' % (name, (' '*30)[:lspace], val))
     return '\n'.join(buff)
 
