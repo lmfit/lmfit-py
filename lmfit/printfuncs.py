@@ -12,7 +12,7 @@ def alphanumeric_sort(s, _nsre=re.compile('([0-9]+)')):
             for text in re.split(_nsre, s)]
 
 
-def getfloat_attr(obj, attr, fmt='%.5f'):
+def getfloat_attr(obj, attr, length=11):
     """Format an attribute of an object for printing."""
     val = getattr(obj, attr, None)
     if val is None:
@@ -20,7 +20,7 @@ def getfloat_attr(obj, attr, fmt='%.5f'):
     elif isinstance(val, int):
         return '%d' % val
     elif isinstance(val, float):
-        return fmt % val
+        return gformat(val, length=length).strip()
     return repr(val)
 
 
