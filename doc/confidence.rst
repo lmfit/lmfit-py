@@ -62,10 +62,10 @@ starting point::
     >>> result = mini.minimize()
     >>> print(lmfit.fit_report(result.params))
     [[Variables]]
-        a:   0.09943895 +/- 0.000193 (0.19%) (init= 0.1)
-        b:   1.98476945 +/- 0.012226 (0.62%) (init= 1)
-    [[Correlations]] (unreported correlations are <  0.100)
-        C(a, b)                      =  0.601
+        a:  0.09943896 +/- 1.9322e-04 (0.19%) (init = 0.1)
+        b:  1.98476945 +/- 0.01222678 (0.62%) (init = 1)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(a, b) =  0.601
 
 Now it is just a simple function call to calculate the confidence
 intervals::
@@ -102,15 +102,15 @@ uncertainties and correlations.
 which will report::
 
     [[Variables]]
-        a1:   2.98622120 +/- 0.148671 (4.98%) (init= 2.986237)
-        a2:  -4.33526327 +/- 0.115275 (2.66%) (init=-4.335256)
-        t1:   1.30994233 +/- 0.131211 (10.02%) (init= 1.309932)
-        t2:   11.8240350 +/- 0.463164 (3.92%) (init= 11.82408)
-    [[Correlations]] (unreported correlations are <  0.500)
-        C(a2, t2)                    =  0.987
-        C(a2, t1)                    = -0.925
-        C(t1, t2)                    = -0.881
-        C(a1, t1)                    = -0.599
+        a1:  2.98622120 +/- 0.14867187 (4.98%) (init = 2.986237)
+        a2: -4.33526327 +/- 0.11527506 (2.66%) (init = -4.335256)
+        t1:  1.30994233 +/- 0.13121177 (10.02%) (init = 1.309932)
+        t2:  11.8240351 +/- 0.46316470 (3.92%) (init = 11.82408)
+    [[Correlations]] (unreported correlations are < 0.500)
+        C(a2, t2) =  0.987
+        C(a2, t1) = -0.925
+        C(t1, t2) = -0.881
+        C(a1, t1) = -0.599
            95.45%    68.27%    _BEST_    68.27%    95.45%
      a1:  -0.27286  -0.14165   2.98622  +0.16353  +0.36343
      a2:  -0.30444  -0.13219  -4.33526  +0.10688  +0.19683
