@@ -55,9 +55,10 @@ Anaconda channels provide it, allowing installation with (for example)::
 
    conda install -c GSECARS lmfit
 
-or perhaps::
+or::
 
    conda install -c conda-forge lmfit
+
 
 Development Version
 ~~~~~~~~~~~~~~~~~~~~~~~~
