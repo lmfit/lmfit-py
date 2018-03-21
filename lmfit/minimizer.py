@@ -35,6 +35,8 @@ import uncertainties
 
 from .parameter import Parameter, Parameters
 
+from ._ampgo import AMPGO as ampgo
+
 #  scipy version notes:
 #  currently scipy 0.17 is required.
 #  feature           scipy version added
@@ -1500,7 +1502,7 @@ class Minimizer(object):
 
         Parameters
         ----------
-        params : :class:`~lmfit.parameter.Parameters` object, optional
+        params : :class:`~lmfit.parameter.Parameters`, optional
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
         Ns : int, optional
@@ -1646,6 +1648,127 @@ class Minimizer(object):
 
         return result
 
+    def ampgo(self, params=None, **kws):
+        """Finds the global minimum of a multivariate function using the AMPGO
+        (Adaptive Memory Programming for Global Optimization) algorithm.
+
+        Parameters
+        ----------
+        params : :class:`~lmfit.parameter.Parameters`, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+        **kws : dict, optional
+            Minimizer options to pass to the ampgo algorithm, the options are
+            listed below::
+
+                local: str (default is 'L-BFGS-B')
+                    Name of the local minimization method. Valid options are:
+                    - 'L-BFGS-B'
+                    - 'Nelder-Mead'
+                    - 'Powell'
+                    - 'TNC'
+                    - 'SLSQP'
+                local_opts: dict (default is None)
+                    Options to pass to the local minimizer.
+                maxfunevals: int (default is None)
+                    Maximum number of function evaluations. If None, it will be max(10*npars, 100).
+                totaliter: int (default is 20)
+                    Maximum number of global iterations.
+                maxiter: int (default is 5)
+                    Maximum number of `Tabu Tunneling` iterations during each global iteration.
+                glbtol: float (default is 1e-5)
+                    The optimization will stop if the absolute difference between the current
+                    minimum objective function value and the provided global optimum (`fmin`)
+                    is less than `glbtol`.
+                eps1: float (default is 0.02)
+                    Constant used to define an aspiration value for the objective function during
+                    the Tunneling phase.
+                eps2: float (default is 0.1)
+                    Perturbation factor used to move away from the latest local minimum at the
+                    start of a Tunneling phase.
+                tabulistsize: int (default is 5)
+                    Size of the (circular) tabu search list.
+                tabustrategy: str (default is 'farthest')
+                    Strategy to use when the size of the tabu list exceeds `tabulistsize`. It
+                    can be 'oldest' to drop the oldest point from the tabu list or 'farthest'
+                    to drop the element farthest from the last local minimum found.
+                fmin: float (default is -numpy.inf)
+                    Objective function's global optimum value (if known).
+                disp: bool (default is False)
+                    Set to True to print convergence messages.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the parameters from the ampgo method, with fit
+            parameters, statistics and such. The return values (`x0`, `fval`,
+            `eval`, `msg`, `tunnel`) are stored as `ampgo_<parname>` attributes.
+
+
+        .. versionadded:: 0.9.10
+
+
+        Notes
+        ----
+        The Python implementation was written by Andrea Gavana in 2014
+        (http://infinity77.net/global_optimization/index.html).
+
+        The details of the AMPGO algorithm are described in the paper
+        "Adaptive Memory Programming for Constrained Global Optimization"
+        located here:
+
+        http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf
+
+        """
+        result = self.prepare_fit(params=params)
+
+        ampgo_kws = dict(local='L-BFGS-B', local_opts=None,
+                         maxfunevals=None, totaliter=20,
+                         maxiter=5, glbtol=1e-5, eps1=0.02, eps2=0.1,
+                         tabulistsize=5, tabustrategy='farthest',
+                         fmin=-np.inf, disp=False)
+        ampgo_kws.update(self.kws)
+        ampgo_kws.update(kws)
+
+        varying = np.asarray([par.vary for par in self.params.values()])
+        replace_none = lambda x, sign: sign*np.inf if x is None else x
+        lower_bounds = np.asarray([replace_none(i.min, -1) for i in
+                                   self.params.values()])[varying]
+        upper_bounds = np.asarray([replace_none(i.max, 1) for i in
+                                   self.params.values()])[varying]
+        values = np.asarray([i.value for i in self.params.values()])[varying]
+
+        bounds = [(lb, up) for lb, up in zip(lower_bounds, upper_bounds)]
+
+        ampgo_kws['bounds'] = bounds
+        result.method = "ampgo, with {} as local solver".format(ampgo_kws['local'])
+
+        ret = ampgo(self.penalty, values, **ampgo_kws)
+
+        result.ampgo_x0 = ret[0]
+        result.ampgo_fval = ret[1]
+        result.ampgo_eval = ret[2]
+        result.ampgo_msg = ret[3]
+        result.ampgo_tunnel = ret[4]
+
+        for i, par in enumerate(result.var_names):
+            result.params[par].value = result.ampgo_x0[i]
+
+        result.chisqr = ret[1]
+        result.nvarys = len(result.var_names)
+        result.residual = self.__residual(result.ampgo_x0,
+                                          apply_bounds_transformation=False)
+        result.nfev -= 1
+        result.ndata = len(result.residual)
+        result.nfree = result.ndata - result.nvarys
+        result.redchi = result.chisqr / result.nfree
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+
+        return result
+
     def minimize(self, method='leastsq', params=None, **kws):
         """Perform the minimization.
 
@@ -1658,6 +1781,7 @@ class Minimizer(object):
             - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
             - `'differential_evolution'`: differential evolution
             - `'brute'`: brute force method
+            - `'ampgo'`: Adaptive Memory Programming for Global Optimization
             - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
             - `'powell'`: Powell
@@ -1711,6 +1835,8 @@ class Minimizer(object):
             function = self.brute
         elif user_method == 'basinhopping':
             function = self.basinhopping
+        elif user_method == 'ampgo':
+            function = self.ampgo
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -1960,6 +2086,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'differential_evolution'`: differential evolution
         - `'brute'`: brute force method
         - `'basinhopping'`: basinhopping
+        - `'ampgo'`: Adaptive Memory Programming for Global Optimization
         - '`nelder`': Nelder-Mead
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
