@@ -11,6 +11,17 @@ significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the `lmfit github repository`_.
 
+
+.. _whatsnew_099_label:
+
+Version 0.9.9 Release Notes
+==========================================
+Lmfit now uses the asteval (https://github.com/newville/asteval) package
+instead of distributing its own copy. The minimum required asteval version
+is 0.9.12, which is available on PyPi. If you see import errors related to
+asteval, please make sure that you actually have the latest version installed.
+
+
 .. _whatsnew_096_label:
 
 Version 0.9.6 Release Notes

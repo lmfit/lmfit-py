@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Downloading and Installation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.9.8',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -32,8 +24,7 @@
         "HTML-CSS": {scale: 90}
   });</script>
 
-  </head>
-  <body>
+  </head><body>
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
@@ -117,12 +108,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -137,11 +130,11 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The lmfit package requires <a class="reference external" href="https://python.org">Python</a>, <a class="reference external" href="http://numpy.org/">NumPy</a>, and <a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a>.</p>
+<p>The lmfit package requires <a class="reference external" href="https://python.org">Python</a>, <a class="reference external" href="http://numpy.org/">NumPy</a>, <a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a>, <a class="reference external" href="https://github.com/newville/asteval">asteval</a>, and <a class="reference external" href="https://github.com/benjaminp/six">six</a>.</p>
 <p>Lmfit works with Python versions 2.7, 3.4, 3.5, and 3.6. Support for Python 2.6
 and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version
-0.17 or higher, NumPy version 1.10 or higher, and six version 1.10 or higher are
-required.</p>
+0.17 or higher, NumPy version 1.10 or higher, asteval version 0.9.12 or higher,
+and six version 1.10 or higher are required.</p>
 <p>In order to run the test suite, either the <a class="reference external" href="https://nose.readthedocs.org/">nose</a> or <a class="reference external" href="https://pytest.org/">pytest</a> package is
 required. Some functionality of lmfit requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> package, some
 functionality will make use of the <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>,
@@ -150,50 +143,54 @@ packages.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is 0.9.8 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+<p>The latest stable version of lmfit is 0.9.9+1.g1e90b69.dirty and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>With <code class="docutils literal"><span class="pre">pip</span></code> now widely avaliable, you can install lmfit with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lmfit</span>
+<p>With <code class="docutils literal notranslate"><span class="pre">pip</span></code> now widely avaliable, you can install lmfit with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lmfit</span>
 </pre></div>
 </div>
 <p>Alternatively, you can download the source kit, unpack it and install with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>For Anaconda Python, lmfit is not an official package, but several
 Anaconda channels provide it, allowing installation with (for example):</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">lmfit</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">GSECARS</span> <span class="n">lmfit</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">lmfit</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="development-version">
 <h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
 <p>To get the latest development version, use:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lmfit</span><span class="o">/</span><span class="n">lmfit</span><span class="o">-</span><span class="n">py</span><span class="o">.</span><span class="n">git</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lmfit</span><span class="o">/</span><span class="n">lmfit</span><span class="o">-</span><span class="n">py</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 <p>and install using:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
 <p>A battery of tests scripts that can be run with either the <a class="reference external" href="https://nose.readthedocs.org/">nose</a> or
-<a class="reference external" href="https://pytest.org/">pytest</a> testing framework is distributed with lmfit in the <code class="docutils literal"><span class="pre">tests</span></code>
+<a class="reference external" href="https://pytest.org/">pytest</a> testing framework is distributed with lmfit in the <code class="docutils literal notranslate"><span class="pre">tests</span></code>
 folder.  These are automatically run as part of the development process.
 For any release or any master branch from the git repository, running
-<code class="docutils literal"><span class="pre">pytest</span></code> or <code class="docutils literal"><span class="pre">nosetests</span></code> should run all of these tests to completion
+<code class="docutils literal notranslate"><span class="pre">pytest</span></code> or <code class="docutils literal notranslate"><span class="pre">nosetests</span></code> should run all of these tests to completion
 without errors or failures.</p>
 <p>Many of the examples in this documentation are distributed with lmfit in
-the <code class="docutils literal"><span class="pre">examples</span></code> folder, and should also run for you.  Some of these
+the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder, and should also run for you.  Some of these
 examples assume <a class="reference external" href="https://matplotlib.org/">matplotlib</a> has been installed and is working correctly.</p>
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Many</span> <span class="n">people</span> <span class="n">have</span> <span class="n">contributed</span> <span class="n">to</span> <span class="n">lmfit</span><span class="o">.</span>  <span class="n">The</span> <span class="n">attribution</span> <span class="n">of</span> <span class="n">credit</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">project</span> <span class="n">such</span> <span class="k">as</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Many</span> <span class="n">people</span> <span class="n">have</span> <span class="n">contributed</span> <span class="n">to</span> <span class="n">lmfit</span><span class="o">.</span>  <span class="n">The</span> <span class="n">attribution</span> <span class="n">of</span> <span class="n">credit</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">project</span> <span class="n">such</span> <span class="k">as</span>
 <span class="n">this</span> <span class="ow">is</span> <span class="n">very</span> <span class="n">difficult</span> <span class="n">to</span> <span class="n">get</span> <span class="n">perfect</span><span class="p">,</span> <span class="ow">and</span> <span class="n">there</span> <span class="n">are</span> <span class="n">no</span> <span class="n">doubt</span> <span class="n">important</span> <span class="n">contributions</span>
 <span class="n">missing</span> <span class="ow">or</span> <span class="n">under</span><span class="o">-</span><span class="n">represented</span> <span class="n">here</span><span class="o">.</span>  <span class="n">Please</span> <span class="n">consider</span> <span class="n">this</span> <span class="n">file</span> <span class="k">as</span> <span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">documentation</span>
 <span class="n">that</span> <span class="n">may</span> <span class="n">have</span> <span class="n">bugs</span> <span class="n">that</span> <span class="n">need</span> <span class="n">fixing</span><span class="o">.</span>
@@ -239,7 +236,7 @@ examples assume <a class="reference external" href="https://matplotlib.org/">mat
 <div class="section" id="license">
 <h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
 <p>The LMFIT-py code is distribution under the following license:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Copyright</span><span class="p">,</span> <span class="n">Licensing</span><span class="p">,</span> <span class="ow">and</span> <span class="n">Re</span><span class="o">-</span><span class="n">distribution</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span><span class="p">,</span> <span class="n">Licensing</span><span class="p">,</span> <span class="ow">and</span> <span class="n">Re</span><span class="o">-</span><span class="n">distribution</span>
 <span class="o">-----------------------------------------</span>
 
 <span class="n">The</span> <span class="n">LMFIT</span><span class="o">-</span><span class="n">py</span> <span class="n">code</span> <span class="ow">is</span> <span class="n">distribution</span> <span class="n">under</span> <span class="n">the</span> <span class="n">following</span> <span class="n">license</span><span class="p">:</span>
@@ -336,7 +333,7 @@ examples assume <a class="reference external" href="https://matplotlib.org/">mat
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

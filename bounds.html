@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Bounds Implementation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.9.8',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -32,8 +24,7 @@
         "HTML-CSS": {scale: 90}
   });</script>
 
-  </head>
-  <body>
+  </head><body>
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
@@ -103,12 +94,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -121,7 +114,7 @@
             
   <div class="section" id="bounds-implementation">
 <span id="bounds-chapter"></span><h1>Bounds Implementation<a class="headerlink" href="#bounds-implementation" title="Permalink to this headline">¶</a></h1>
-<p>This section describes the implementation of <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> bounds.
+<p>This section describes the implementation of <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> bounds.
 The <a class="reference external" href="https://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> implementation used in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> for
 the Levenberg-Marquardt algorithm does not explicitly support bounds on
 parameters, and expects to be able to fully explore the available range of
@@ -133,22 +126,22 @@ results.</p>
 mathematically transformed using the formulation devised (and documented)
 for <a class="reference external" href="https://en.wikipedia.org/wiki/MINUIT">MINUIT</a>.  This is implemented following (and borrowing heavily from)
 the <a class="reference external" href="https://github.com/jjhelmus/leastsqbound-scipy">leastsqbound</a> from J. J. Helmus.   Parameter values are mapped from
-internally used, freely variable values <span class="math">\(P_{\rm internal}\)</span> to bounded
-parameters <span class="math">\(P_{\rm bounded}\)</span>.   When both <code class="docutils literal"><span class="pre">min</span></code> and <code class="docutils literal"><span class="pre">max</span></code> bounds
+internally used, freely variable values <span class="math notranslate">\(P_{\rm internal}\)</span> to bounded
+parameters <span class="math notranslate">\(P_{\rm bounded}\)</span>.   When both <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> bounds
 are specified, the mapping is:</p>
-<div class="math">
+<div class="math notranslate">
 \begin{eqnarray*}
      P_{\rm internal} &amp;=&amp; \arcsin\big(\frac{2 (P_{\rm bounded} - {\rm min})}{({\rm max} - {\rm min})} - 1\big) \\
      P_{\rm bounded}  &amp;=&amp; {\rm min} + \big(\sin(P_{\rm internal}) + 1\big) \frac{({\rm max} - {\rm min})}{2}
- \end{eqnarray*}</div><p>With only an upper limit <code class="docutils literal"><span class="pre">max</span></code> supplied, but <code class="docutils literal"><span class="pre">min</span></code> left unbounded, the
+ \end{eqnarray*}</div><p>With only an upper limit <code class="docutils literal notranslate"><span class="pre">max</span></code> supplied, but <code class="docutils literal notranslate"><span class="pre">min</span></code> left unbounded, the
 mapping is:</p>
-<div class="math">
+<div class="math notranslate">
 \begin{eqnarray*}
      P_{\rm internal} &amp;=&amp; \sqrt{({\rm max} - P_{\rm bounded} + 1)^2 - 1} \\
      P_{\rm bounded}  &amp;=&amp; {\rm max} + 1 - \sqrt{P_{\rm internal}^2 + 1}
- \end{eqnarray*}</div><p>With only a lower limit <code class="docutils literal"><span class="pre">min</span></code> supplied, but <code class="docutils literal"><span class="pre">max</span></code> left unbounded, the
+ \end{eqnarray*}</div><p>With only a lower limit <code class="docutils literal notranslate"><span class="pre">min</span></code> supplied, but <code class="docutils literal notranslate"><span class="pre">max</span></code> left unbounded, the
 mapping is:</p>
-<div class="math">
+<div class="math notranslate">
 \begin{eqnarray*}
      P_{\rm internal} &amp;=&amp; \sqrt{(P_{\rm bounded} - {\rm min} + 1)^2 - 1} \\
      P_{\rm bounded}  &amp;=&amp; {\rm min} - 1 + \sqrt{P_{\rm internal}^2 + 1}
@@ -158,7 +151,7 @@ specified bounds, though the internally varied value can be freely varied.</p>
 the transformation described above.  The challenging part (thanks again to
 Jonathan J. Helmus!) here is to re-transform the covariance matrix so that
 the uncertainties can be estimated for bounded Parameters.  This is
-included by using the derivate <span class="math">\(dP_{\rm internal}/dP_{\rm bounded}\)</span>
+included by using the derivate <span class="math notranslate">\(dP_{\rm internal}/dP_{\rm bounded}\)</span>
 from the equations above to re-scale the Jacobin matrix before
 constructing the covariance matrix from it.  Tests show that this
 re-scaling of the covariance matrix works quite well, and that
@@ -169,7 +162,7 @@ uncertainty and correlations for that parameter may not be reliable.</p>
 bounds can certainly increase the number of function evaluations (and so
 computation time), and in some cases may cause some instabilities, as the
 range of acceptable parameter values is not fully explored.  On the other
-hand, preliminary tests suggest that using <code class="docutils literal"><span class="pre">max</span></code> and <code class="docutils literal"><span class="pre">min</span></code> to set
+hand, preliminary tests suggest that using <code class="docutils literal notranslate"><span class="pre">max</span></code> and <code class="docutils literal notranslate"><span class="pre">min</span></code> to set
 clearly outlandish bounds does not greatly affect performance or results.</p>
 </div>
 
@@ -204,7 +197,7 @@ clearly outlandish bounds does not greatly affect performance or results.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>

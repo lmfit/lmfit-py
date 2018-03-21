@@ -4,20 +4,12 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Modeling Data and Curve Fitting &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.9.8',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    <script type="text/javascript" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
@@ -32,8 +24,7 @@
         "HTML-CSS": {scale: 90}
   });</script>
 
-  </head>
-  <body>
+  </head><body>
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
@@ -92,16 +83,16 @@
   <ul>
 <li><a class="reference internal" href="#">Modeling Data and Curve Fitting</a><ul>
 <li><a class="reference internal" href="#motivation-and-simple-example-fit-data-to-gaussian-profile">Motivation and simple example: Fit data to Gaussian profile</a></li>
-<li><a class="reference internal" href="#the-model-class">The <code class="docutils literal"><span class="pre">Model</span></code> class</a><ul>
-<li><a class="reference internal" href="#model-class-methods"><code class="docutils literal"><span class="pre">Model</span></code> class Methods</a></li>
-<li><a class="reference internal" href="#model-class-attributes"><code class="docutils literal"><span class="pre">Model</span></code> class Attributes</a></li>
+<li><a class="reference internal" href="#the-model-class">The <code class="docutils literal notranslate"><span class="pre">Model</span></code> class</a><ul>
+<li><a class="reference internal" href="#model-class-methods"><code class="docutils literal notranslate"><span class="pre">Model</span></code> class Methods</a></li>
+<li><a class="reference internal" href="#model-class-attributes"><code class="docutils literal notranslate"><span class="pre">Model</span></code> class Attributes</a></li>
 <li><a class="reference internal" href="#determining-parameter-names-and-independent-variables-for-a-function">Determining parameter names and independent variables for a function</a></li>
-<li><a class="reference internal" href="#explicitly-specifying-independent-vars">Explicitly specifying <code class="docutils literal"><span class="pre">independent_vars</span></code></a></li>
+<li><a class="reference internal" href="#explicitly-specifying-independent-vars">Explicitly specifying <code class="docutils literal notranslate"><span class="pre">independent_vars</span></code></a></li>
 <li><a class="reference internal" href="#functions-with-keyword-arguments">Functions with keyword arguments</a></li>
 <li><a class="reference internal" href="#defining-a-prefix-for-the-parameters">Defining a <cite>prefix</cite> for the Parameters</a></li>
 <li><a class="reference internal" href="#initializing-model-parameters">Initializing model parameters</a><ul>
 <li><a class="reference internal" href="#initializing-values-in-the-function-definition">Initializing values in the function definition</a></li>
-<li><a class="reference internal" href="#initializing-values-with-model-make-params">Initializing values with <code class="docutils literal"><span class="pre">Model.make_params()</span></code></a></li>
+<li><a class="reference internal" href="#initializing-values-with-model-make-params">Initializing values with <code class="docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a></li>
 <li><a class="reference internal" href="#initializing-values-by-setting-parameter-hints">Initializing values by setting parameter hints</a></li>
 <li><a class="reference internal" href="#initializing-values-when-using-a-model">Initializing values when using a model</a></li>
 </ul>
@@ -110,9 +101,9 @@
 <li><a class="reference internal" href="#saving-and-loading-models">Saving and Loading Models</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#the-modelresult-class">The <code class="docutils literal"><span class="pre">ModelResult</span></code> class</a><ul>
-<li><a class="reference internal" href="#modelresult-methods"><code class="docutils literal"><span class="pre">ModelResult</span></code> methods</a></li>
-<li><a class="reference internal" href="#modelresult-attributes"><code class="docutils literal"><span class="pre">ModelResult</span></code> attributes</a></li>
+<li><a class="reference internal" href="#the-modelresult-class">The <code class="docutils literal notranslate"><span class="pre">ModelResult</span></code> class</a><ul>
+<li><a class="reference internal" href="#modelresult-methods"><code class="docutils literal notranslate"><span class="pre">ModelResult</span></code> methods</a></li>
+<li><a class="reference internal" href="#modelresult-attributes"><code class="docutils literal notranslate"><span class="pre">ModelResult</span></code> attributes</a></li>
 <li><a class="reference internal" href="#calculating-uncertainties-in-the-model-function">Calculating uncertainties in the model function</a></li>
 <li><a class="reference internal" href="#saving-and-loading-modelresults">Saving and Loading ModelResults</a></li>
 </ul>
@@ -127,7 +118,7 @@
                         title="previous chapter">Performing Fits and Analyzing Outputs</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="builtin_models.html"
-                        title="next chapter">Built-in Fitting Models in the <code class="docutils literal"><span class="pre">models</span></code> module</a></p>
+                        title="next chapter">Built-in Fitting Models in the <code class="docutils literal notranslate"><span class="pre">models</span></code> module</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -137,12 +128,14 @@
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -158,46 +151,46 @@
 <p>A common use of least-squares minimization is <em>curve fitting</em>, where one
 has a parametrized model function meant to explain some phenomena and wants
 to adjust the numerical values for the model so that it most closely
-matches some data.  With <code class="xref py py-mod docutils literal"><span class="pre">scipy</span></code>, such problems are typically solved
+matches some data.  With <code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy</span></code>, such problems are typically solved
 with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, which is a wrapper around
 <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.  Since lmfit’s
-<a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> is also a high-level wrapper around
+<a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a> is also a high-level wrapper around
 <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> it can be used for curve-fitting problems.
 While it offers many benefits over <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>, using
-<a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a> for many curve-fitting problems still
+<a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a> for many curve-fitting problems still
 requires more effort than using <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>.</p>
-<p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> class in lmfit provides a simple and flexible approach
+<p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class in lmfit provides a simple and flexible approach
 to curve-fitting problems.  Like <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, a
-<a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> uses a <em>model function</em> – a function that is meant to
+<a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> uses a <em>model function</em> – a function that is meant to
 calculate a model for some phenomenon – and then uses that to best match
 an array of supplied data.  Beyond that similarity, its interface is rather
 different from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, for example in that it uses
-<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a>, but also offers several other
+<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, but also offers several other
 important advantages.</p>
 <p>In addition to allowing you to turn any model function into a curve-fitting
 method, lmfit also provides canonical definitions for many known line shapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
-used in many scientific domains.  These are available in the <code class="xref py py-mod docutils literal"><span class="pre">models</span></code>
+used in many scientific domains.  These are available in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code>
 module that will be discussed in more detail in the next chapter
 (<a class="reference internal" href="builtin_models.html#builtin-models-chapter"><span class="std std-ref">Built-in Fitting Models in the models module</span></a>).  We mention it here as you may want to
 consult that list before writing your own model.  For now, we focus on
 turning Python functions into high-level fitting models with the
-<a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> class, and using these to fit data.</p>
+<a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class, and using these to fit data.</p>
 <div class="section" id="motivation-and-simple-example-fit-data-to-gaussian-profile">
 <h2>Motivation and simple example: Fit data to Gaussian profile<a class="headerlink" href="#motivation-and-simple-example-fit-data-to-gaussian-profile" title="Permalink to this headline">¶</a></h2>
 <p>Let’s start with a simple and common example of fitting data to a Gaussian
-peak.  As we will see, there is a buit-in <code class="xref py py-class docutils literal"><span class="pre">GaussianModel</span></code> class that
+peak.  As we will see, there is a buit-in <code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code> class that
 can help do this, but here we’ll build our own.  We start with a simple
 definition of the model function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">wid</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We want to use this function to fit to data <span class="math">\(y(x)\)</span> represented by the
+<p>We want to use this function to fit to data <span class="math notranslate">\(y(x)\)</span> represented by the
 arrays <cite>y</cite> and <cite>x</cite>.  With <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, this would be:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">2.33</span><span class="p">,</span> <span class="mf">0.21</span><span class="p">,</span> <span class="mf">1.51</span><span class="p">)</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
@@ -213,11 +206,11 @@ arrays <cite>y</cite> and <cite>x</cite>.  With <a class="reference external" hr
 initial guesses.  The results returned are the optimal values for the
 parameters and the covariance matrix.  It’s simple and useful, but it
 misses the benefits of lmfit.</p>
-<p>With lmfit, we create a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> that wraps the <cite>gaussian</cite> model
+<p>With lmfit, we create a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> that wraps the <cite>gaussian</cite> model
 function, which automatically generates the appropriate residual function,
 and determines the corresponding parameter names from the function
 signature itself:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Model</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Model</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gmodel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gmodel</span><span class="o">.</span><span class="n">param_names</span>
 <span class="go">[&#39;amp&#39;, &#39;cen&#39;, &#39;wid&#39;]</span>
@@ -228,7 +221,7 @@ signature itself:</p>
 <p>As you can see, the Model <cite>gmodel</cite> determined the names of the parameters
 and the independent variables.  By default, the first argument of the
 function is taken as the independent variable, held in
-<a class="reference internal" href="#lmfit.model.independent_vars" title="lmfit.model.independent_vars"><code class="xref py py-attr docutils literal"><span class="pre">independent_vars</span></code></a>, and the rest of the functions positional
+<a class="reference internal" href="#lmfit.model.independent_vars" title="lmfit.model.independent_vars"><code class="xref py py-attr docutils literal notranslate"><span class="pre">independent_vars</span></code></a>, and the rest of the functions positional
 arguments (and, in certain cases, keyword arguments – see below) are used
 for Parameter names.  Thus, for the <cite>gaussian</cite> function above, the
 independent variable is <cite>x</cite>, and the parameters are named <cite>amp</cite>,
@@ -241,48 +234,48 @@ as parameter names.</p>
 what the parameters should be named, but nothing about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initial values and other attributes.  To help you do this, each
-model has a <code class="xref py py-meth docutils literal"><span class="pre">make_params()</span></code> method that will generate parameters with
+model has a <code class="xref py py-meth docutils literal notranslate"><span class="pre">make_params()</span></code> method that will generate parameters with
 the expected names:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>This creates the <a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> but does not
+<p>This creates the <a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> but does not
 automaticaly give them initial values since it has no idea what the scale
 should be.  You can set initial values for parameters with keyword
-arguments to <code class="xref py py-meth docutils literal"><span class="pre">make_params()</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">cen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+arguments to <code class="xref py py-meth docutils literal notranslate"><span class="pre">make_params()</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">cen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or assign them (and other parameter properties) after the
-<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> class has been created.</p>
-<p>A <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> has several methods associated with it.  For example, one
-can use the <code class="xref py py-meth docutils literal"><span class="pre">eval()</span></code> method to evaluate the model or the <code class="xref py py-meth docutils literal"><span class="pre">fit()</span></code>
-method to fit data to this model with a <code class="xref py py-class docutils literal"><span class="pre">Parameter</span></code> object.  Both of
+<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> class has been created.</p>
+<p>A <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> has several methods associated with it.  For example, one
+can use the <code class="xref py py-meth docutils literal notranslate"><span class="pre">eval()</span></code> method to evaluate the model or the <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code>
+method to fit data to this model with a <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> object.  Both of
 these methods can take explicit keyword arguments for the parameter values.
-For example, one could use <code class="xref py py-meth docutils literal"><span class="pre">eval()</span></code> to calculate the predicted
+For example, one could use <code class="xref py py-meth docutils literal notranslate"><span class="pre">eval()</span></code> to calculate the predicted
 function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">cen</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">cen</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Admittedly, this a slightly long-winded way to calculate a Gaussian
 function, given that you could have called your <cite>gaussian</cite> function
 directly.  But now that the model is set up, we can use its
-<code class="xref py py-meth docutils literal"><span class="pre">fit()</span></code> method to fit this model to data, as with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method to fit this model to data, as with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">cen</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">cen</span><span class="o">=</span><span class="mf">6.5</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Putting everything together, included in the
-<code class="docutils literal"><span class="pre">examples</span></code> folder with the source code, is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<code class="docutils literal notranslate"><span class="pre">examples</span></code> folder with the source code, is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="c1"># &lt;examples/doc_model_gaussian.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -313,49 +306,50 @@ directly.  But now that the model is set up, we can use its
 </pre></div>
 </div>
 <p>which is pretty compact and to the point.  The returned <cite>result</cite> will be
-a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> object.  As we will see below, this has many
-components, including a <code class="xref py py-meth docutils literal"><span class="pre">fit_report()</span></code> method, which will show:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Model</span><span class="p">]]</span>
+a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> object.  As we will see below, this has many
+components, including a <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit_report()</span></code> method, which will show:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Model</span><span class="p">]]</span>
     <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
 <span class="p">[[</span><span class="n">Fit</span> <span class="n">Statistics</span><span class="p">]]</span>
+    <span class="c1"># fitting method   = leastsq</span>
     <span class="c1"># function evals   = 35</span>
     <span class="c1"># data points      = 101</span>
     <span class="c1"># variables        = 3</span>
-    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">3.40884</span>
-    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.03478</span>
-    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">336.26371</span>
-    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">328.41835</span>
+    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">3.40883599</span>
+    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.03478404</span>
+    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">336.263713</span>
+    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">328.418352</span>
 <span class="p">[[</span><span class="n">Variables</span><span class="p">]]</span>
-    <span class="n">amp</span><span class="p">:</span>   <span class="mf">8.88021829</span> <span class="o">+/-</span> <span class="mf">0.113594</span> <span class="p">(</span><span class="mf">1.28</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="n">cen</span><span class="p">:</span>   <span class="mf">5.65866102</span> <span class="o">+/-</span> <span class="mf">0.010304</span> <span class="p">(</span><span class="mf">0.18</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="n">wid</span><span class="p">:</span>   <span class="mf">0.69765468</span> <span class="o">+/-</span> <span class="mf">0.010304</span> <span class="p">(</span><span class="mf">1.48</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span>  <span class="mf">0.100</span><span class="p">)</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>                  <span class="o">=</span>  <span class="mf">0.577</span>
+    <span class="n">amp</span><span class="p">:</span>  <span class="mf">8.88021830</span> <span class="o">+/-</span> <span class="mf">0.11359492</span> <span class="p">(</span><span class="mf">1.28</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">cen</span><span class="p">:</span>  <span class="mf">5.65866102</span> <span class="o">+/-</span> <span class="mf">0.01030495</span> <span class="p">(</span><span class="mf">0.18</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">wid</span><span class="p">:</span>  <span class="mf">0.69765468</span> <span class="o">+/-</span> <span class="mf">0.01030495</span> <span class="p">(</span><span class="mf">1.48</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span> <span class="mf">0.100</span><span class="p">)</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.577</span>
 </pre></div>
 </div>
-<p>As the script shows, the result will also have <a class="reference internal" href="#lmfit.model.init_fit" title="lmfit.model.init_fit"><code class="xref py py-attr docutils literal"><span class="pre">init_fit</span></code></a> for the fit
-with the initial parameter values and a <a class="reference internal" href="#lmfit.model.best_fit" title="lmfit.model.best_fit"><code class="xref py py-attr docutils literal"><span class="pre">best_fit</span></code></a> for the fit with
+<p>As the script shows, the result will also have <a class="reference internal" href="#lmfit.model.init_fit" title="lmfit.model.init_fit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">init_fit</span></code></a> for the fit
+with the initial parameter values and a <a class="reference internal" href="#lmfit.model.best_fit" title="lmfit.model.best_fit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">best_fit</span></code></a> for the fit with
 the best fit parameter values.  These can be used to generate the following
 plot:</p>
 <a class="reference external image-reference" href="_images/model_fit1.png"><img alt="_images/model_fit1.png" src="_images/model_fit1.png" style="width: 50%;" /></a>
 <p>which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit as a dashed black line.</p>
 <p>Note that the model fitting was really performed with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">gmodel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gmodel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>These lines clearly express that we want to turn the <cite>gaussian</cite> function
-into a fitting model, and then fit the <span class="math">\(y(x)\)</span> data to this model,
+into a fitting model, and then fit the <span class="math notranslate">\(y(x)\)</span> data to this model,
 starting with values of 5 for <cite>amp</cite>, 5 for <cite>cen</cite> and 1 for <cite>wid</cite>.  In
 addition, all the other features of lmfit are included:
-<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> can have bounds and constraints and
+<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> can have bounds and constraints and
 the result is a rich object that can be reused to explore the model fit in
 detail.</p>
 </div>
 <div class="section" id="the-model-class">
-<h2>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> class<a class="headerlink" href="#the-model-class" title="Permalink to this headline">¶</a></h2>
-<p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> class provides a general way to wrap a pre-defined
+<h2>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class<a class="headerlink" href="#the-model-class" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class provides a general way to wrap a pre-defined
 function as a fitting model.</p>
 <dl class="class">
 <dt id="lmfit.model.Model">
@@ -370,7 +364,7 @@ data to model some data as for a curve-fitting problem.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>func</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a>) – Function to be wrapped.</li>
+<li><strong>func</strong> (<em>callable</em>) – Function to be wrapped.</li>
 <li><strong>independent_vars</strong> (<em>list of str</em><em>, </em><em>optional</em>) – Arguments to func that are independent variables (default is None).</li>
 <li><strong>param_names</strong> (<em>list of str</em><em>, </em><em>optional</em>) – Names of arguments to func that are to be made into parameters
 (default is None).</li>
@@ -408,25 +402,25 @@ consistent with the Minimizer class.</p>
 the first argument) and a series of arguments that are meant to be
 parameters for the model.  Thus, a simple peak using a Gaussian
 defined as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">wid</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>can be turned into a Model with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gmodel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gmodel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>this will automatically discover the names of the independent variables
 and parameters:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gmodel</span><span class="o">.</span><span class="n">param_names</span><span class="p">,</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">independent_vars</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gmodel</span><span class="o">.</span><span class="n">param_names</span><span class="p">,</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">independent_vars</span><span class="p">)</span>
 <span class="go">[&#39;amp&#39;, &#39;cen&#39;, &#39;wid&#39;], [&#39;x&#39;]</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <div class="section" id="model-class-methods">
-<h3><a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> class Methods<a class="headerlink" href="#model-class-methods" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class Methods<a class="headerlink" href="#model-class-methods" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="lmfit.model.Model.eval">
 <code class="descclassname">Model.</code><code class="descname">eval</code><span class="sig-paren">(</span><em>params=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.eval" title="Permalink to this definition">¶</a></dt>
@@ -473,7 +467,7 @@ keyword arguments.</p>
 <li><strong>weights</strong> (array_like of same size as <cite>data</cite>, optional) – Weights to use for the calculation of the fit residual (default
 is None).</li>
 <li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of fitting method to use (default is <cite>‘leastsq’</cite>).</li>
-<li><strong>iter_cb</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a><em>, </em><em>optional</em>) – Callback function to call at each iteration (default is None).</li>
+<li><strong>iter_cb</strong> (<em>callable</em><em>, </em><em>optional</em>) – Callback function to call at each iteration (default is None).</li>
 <li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to automatically scale the covariance matrix when
 calculating uncertainties (default is True, <cite>leastsq</cite> method only).</li>
 <li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to print a message when a new parameter is added because
@@ -496,15 +490,15 @@ params.</li>
 <p class="rubric">Examples</p>
 <p>Take <cite>t</cite> to be the independent variable and data to be the curve we
 will fit. Use keyword arguments to set initial guesses:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Or, for more control, pass a Parameters object.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Keyword arguments override Parameters.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Notes</p>
@@ -552,7 +546,7 @@ Parameters object.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal"><span class="pre">NotImplementedError</span></code></td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -594,7 +588,7 @@ been set.</p>
 the named parameter.</p>
 <p>This is especially convenient for setting initial values. The <cite>name</cite>
 can include the models <cite>prefix</cite> or not. The hint given can also
-include optional bounds and constraints <code class="docutils literal"><span class="pre">(value,</span> <span class="pre">vary,</span> <span class="pre">min,</span> <span class="pre">max,</span> <span class="pre">expr)</span></code>,
+include optional bounds and constraints <code class="docutils literal notranslate"><span class="pre">(value,</span> <span class="pre">vary,</span> <span class="pre">min,</span> <span class="pre">max,</span> <span class="pre">expr)</span></code>,
 which will be used by make_params() when building default parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -638,7 +632,7 @@ Can be any of the following:</p>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -661,7 +655,7 @@ Can be any of the following:</p>
 
 </div>
 <div class="section" id="model-class-attributes">
-<h3><a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> class Attributes<a class="headerlink" href="#model-class-attributes" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class Attributes<a class="headerlink" href="#model-class-attributes" title="Permalink to this headline">¶</a></h3>
 <dl class="attribute">
 <dt id="lmfit.model.func">
 <code class="descname">func</code><a class="headerlink" href="#lmfit.model.func" title="Permalink to this definition">¶</a></dt>
@@ -684,8 +678,8 @@ Can be any of the following:</p>
 <li>‘propagate’: Do not check for NaNs or missing values. The fit will
 try to ignore them.</li>
 <li>‘omit’: Remove NaNs or missing observations in data. If pandas is
-installed, <code class="xref py py-func docutils literal"><span class="pre">pandas.isnull()</span></code> is used, otherwise
-<code class="xref py py-func docutils literal"><span class="pre">numpy.isnan()</span></code> is used.</li>
+installed, <code class="xref py py-func docutils literal notranslate"><span class="pre">pandas.isnull()</span></code> is used, otherwise
+<code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.isnan()</span></code> is used.</li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -720,7 +714,7 @@ be determined internally and should not be changed.</p>
 <dt id="lmfit.model.prefix">
 <code class="descname">prefix</code><a class="headerlink" href="#lmfit.model.prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prefix used for name-mangling of parameter names.  The default is ‘’.
-If a particular <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> has arguments <cite>amplitude</cite>,
+If a particular <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> has arguments <cite>amplitude</cite>,
 <cite>center</cite>, and <cite>sigma</cite>, these would become the parameter names.
 Using a prefix of <cite>‘g1_’</cite> would convert these parameter names to
 <cite>g1_amplitude</cite>, <cite>g1_center</cite>, and <cite>g1_sigma</cite>.   This can be
@@ -730,8 +724,8 @@ essential to avoid name collision in composite models.</p>
 </div>
 <div class="section" id="determining-parameter-names-and-independent-variables-for-a-function">
 <h3>Determining parameter names and independent variables for a function<a class="headerlink" href="#determining-parameter-names-and-independent-variables-for-a-function" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> created from the supplied function <cite>func</cite> will create
-a <a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> object, and names are inferred from the function
+<p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> created from the supplied function <cite>func</cite> will create
+a <a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> object, and names are inferred from the function
 arguments, and a residual function is automatically constructed.</p>
 <p>By default, the independent variable is taken as the first argument to the
 function.  You can, of course, explicitly set this, and will need to do so
@@ -745,10 +739,10 @@ parameters have valid initial values. In addition, one can place bounds and
 constraints on Parameters, or fix their values.</p>
 </div>
 <div class="section" id="explicitly-specifying-independent-vars">
-<h3>Explicitly specifying <code class="docutils literal"><span class="pre">independent_vars</span></code><a class="headerlink" href="#explicitly-specifying-independent-vars" title="Permalink to this headline">¶</a></h3>
-<p>As we saw for the Gaussian example above, creating a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> from a
+<h3>Explicitly specifying <code class="docutils literal notranslate"><span class="pre">independent_vars</span></code><a class="headerlink" href="#explicitly-specifying-independent-vars" title="Permalink to this headline">¶</a></h3>
+<p>As we saw for the Gaussian example above, creating a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> from a
 function is fairly easy. Let’s try another one:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Model</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Model</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">decay</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">N</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="o">/</span><span class="n">tau</span><span class="p">)</span>
@@ -769,7 +763,7 @@ first argument to the function.  The other function arguments are used to
 create parameters for the model.</p>
 <p>If you want <cite>tau</cite> to be the independent variable in the above example,
 you can say so:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">decay_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">decay</span><span class="p">,</span> <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">decay_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">decay</span><span class="p">,</span> <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">decay_model</span><span class="o">.</span><span class="n">independent_vars</span><span class="p">)</span>
 <span class="go">[&#39;tau&#39;]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">decay_model</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
@@ -788,8 +782,8 @@ function you are modeling:</p>
 <dt>independent variable</dt>
 <dd>A function argument that is not a parameter or otherwise part of the
 model, and that will be required to be explicitly provided as a
-keyword argument for each fit with <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal"><span class="pre">Model.fit()</span></code></a> or evaluation
-with <a class="reference internal" href="#lmfit.model.Model.eval" title="lmfit.model.Model.eval"><code class="xref py py-meth docutils literal"><span class="pre">Model.eval()</span></code></a>.</dd>
+keyword argument for each fit with <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a> or evaluation
+with <a class="reference internal" href="#lmfit.model.Model.eval" title="lmfit.model.Model.eval"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.eval()</span></code></a>.</dd>
 </dl>
 <p>Note that independent variables are not required to be arrays, or even
 floating point numbers.</p>
@@ -799,7 +793,7 @@ floating point numbers.</p>
 <p>If the model function had keyword parameters, these would be turned into
 Parameters if the supplied default value was a valid number (but not
 None, True, or False).</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">decay2</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">check_positive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">decay2</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">check_positive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="k">if</span> <span class="n">check_small</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="n">arg</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="mf">1.e-9</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">tau</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="k">else</span><span class="p">:</span>
@@ -833,12 +827,12 @@ be correctly used in the underlying model function.  This would be
 necessary, for example, if two parameters in a composite model (see
 <a class="reference internal" href="#composite-models-section"><span class="std std-ref">Composite Models : adding (or multiplying) Models</span></a> or examples in the next chapter) would have
 the same name.  To avoid this, we can add a <cite>prefix</cite> to the
-<a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> which will automatically do this mapping for us.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> which will automatically do this mapping for us.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="gp">...</span>
 </pre></div>
 </div>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;f1_&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;f1_&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">params</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">pname</span><span class="p">,</span> <span class="n">par</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">pname</span><span class="p">,</span> <span class="n">par</span><span class="p">)</span>
@@ -853,7 +847,7 @@ the model will know to map these to the <cite>amplitude</cite> argument of <cite
 </div>
 <div class="section" id="initializing-model-parameters">
 <h3>Initializing model parameters<a class="headerlink" href="#initializing-model-parameters" title="Permalink to this headline">¶</a></h3>
-<p>As mentioned above, the parameters created by <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal"><span class="pre">Model.make_params()</span></code></a> are
+<p>As mentioned above, the parameters created by <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a> are
 generally created with invalid initial values of None.  These values
 <strong>must</strong> be initialized in order for the model to be evaluated or used in a
 fit.  There are four different ways to do this initialization that can be
@@ -861,10 +855,10 @@ used in any combination:</p>
 <blockquote>
 <div><ol class="arabic simple">
 <li>You can supply initial values in the definition of the model function.</li>
-<li>You can initialize the parameters when creating parameters with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal"><span class="pre">Model.make_params()</span></code></a>.</li>
-<li>You can give parameter hints with <a class="reference internal" href="#lmfit.model.Model.set_param_hint" title="lmfit.model.Model.set_param_hint"><code class="xref py py-meth docutils literal"><span class="pre">Model.set_param_hint()</span></code></a>.</li>
+<li>You can initialize the parameters when creating parameters with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a>.</li>
+<li>You can give parameter hints with <a class="reference internal" href="#lmfit.model.Model.set_param_hint" title="lmfit.model.Model.set_param_hint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.set_param_hint()</span></code></a>.</li>
 <li>You can supply initial values for the parameters when you use the
-<a class="reference internal" href="#lmfit.model.Model.eval" title="lmfit.model.Model.eval"><code class="xref py py-meth docutils literal"><span class="pre">Model.eval()</span></code></a> or <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal"><span class="pre">Model.fit()</span></code></a> methods.</li>
+<a class="reference internal" href="#lmfit.model.Model.eval" title="lmfit.model.Model.eval"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.eval()</span></code></a> or <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a> methods.</li>
 </ol>
 </div></blockquote>
 <p>Of course these methods can be mixed, allowing you to overwrite initial
@@ -873,12 +867,12 @@ values at any point in the process of defining and using the model.</p>
 <h4>Initializing values in the function definition<a class="headerlink" href="#initializing-values-in-the-function-definition" title="Permalink to this headline">¶</a></h4>
 <p>To supply initial values for parameters in the definition of the model
 function, you can simply supply a default value:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="o">...</span>
 </pre></div>
 </div>
 <p>instead of using:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="o">...</span>
 </pre></div>
 </div>
@@ -887,11 +881,11 @@ with keywords can be treated as options.  It also means that some default
 initial value will always be available for the parameter.</p>
 </div>
 <div class="section" id="initializing-values-with-model-make-params">
-<h4>Initializing values with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal"><span class="pre">Model.make_params()</span></code></a><a class="headerlink" href="#initializing-values-with-model-make-params" title="Permalink to this headline">¶</a></h4>
-<p>When creating parameters with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal"><span class="pre">Model.make_params()</span></code></a> you can specify initial
+<h4>Initializing values with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a><a class="headerlink" href="#initializing-values-with-model-make-params" title="Permalink to this headline">¶</a></h4>
+<p>When creating parameters with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a> you can specify initial
 values.  To do this, use keyword arguments for the parameter names and
 initial values:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -899,12 +893,12 @@ initial values:</p>
 <div class="section" id="initializing-values-by-setting-parameter-hints">
 <h4>Initializing values by setting parameter hints<a class="headerlink" href="#initializing-values-by-setting-parameter-hints" title="Permalink to this headline">¶</a></h4>
 <p>After a model has been created, but prior to creating parameters with
-<a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal"><span class="pre">Model.make_params()</span></code></a>, you can set parameter hints.  These allows you to set
+<a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a>, you can set parameter hints.  These allows you to set
 not only a default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
-expression.  To set a parameter hint, you can use <a class="reference internal" href="#lmfit.model.Model.set_param_hint" title="lmfit.model.Model.set_param_hint"><code class="xref py py-meth docutils literal"><span class="pre">Model.set_param_hint()</span></code></a>,
+expression.  To set a parameter hint, you can use <a class="reference internal" href="#lmfit.model.Model.set_param_hint" title="lmfit.model.Model.set_param_hint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.set_param_hint()</span></code></a>,
 as with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
@@ -916,45 +910,45 @@ as with:</p>
 <div class="section" id="initializing-values-when-using-a-model">
 <h4>Initializing values when using a model<a class="headerlink" href="#initializing-values-when-using-a-model" title="Permalink to this headline">¶</a></h4>
 <p>Finally, you can explicitly supply initial values when using a model.  That
-is, as with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal"><span class="pre">Model.make_params()</span></code></a>, you can include values
-as keyword arguments to either the <a class="reference internal" href="#lmfit.model.Model.eval" title="lmfit.model.Model.eval"><code class="xref py py-meth docutils literal"><span class="pre">Model.eval()</span></code></a> or <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal"><span class="pre">Model.fit()</span></code></a> methods:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">7.0</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">)</span>
+is, as with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a>, you can include values
+as keyword arguments to either the <a class="reference internal" href="#lmfit.model.Model.eval" title="lmfit.model.Model.eval"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.eval()</span></code></a> or <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a> methods:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">y1</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">7.0</span><span class="p">,</span> <span class="n">b</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>These approaches to initialization provide many opportunities for setting
 initial values for parameters.  The methods can be combined, so that you
 can set parameter hints but then change the initial value explicitly with
-<a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal"><span class="pre">Model.fit()</span></code></a>.</p>
+<a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>.</p>
 </div>
 </div>
 <div class="section" id="using-parameter-hints">
 <span id="model-param-hints-section"></span><h3>Using parameter hints<a class="headerlink" href="#using-parameter-hints" title="Permalink to this headline">¶</a></h3>
 <p>After a model has been created, you can give it hints for how to create
-parameters with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal"><span class="pre">Model.make_params()</span></code></a>.  This allows you to set not only a
+parameters with <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a>.  This allows you to set not only a
 default initial value but also to set other parameter attributes
 controlling bounds, whether it is varied in the fit, or a constraint
-expression.   To set a parameter hint, you can use <a class="reference internal" href="#lmfit.model.Model.set_param_hint" title="lmfit.model.Model.set_param_hint"><code class="xref py py-meth docutils literal"><span class="pre">Model.set_param_hint()</span></code></a>,
+expression.   To set a parameter hint, you can use <a class="reference internal" href="#lmfit.model.Model.set_param_hint" title="lmfit.model.Model.set_param_hint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.set_param_hint()</span></code></a>,
 as with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">myfunc</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Parameter hints are stored in a model’s <a class="reference internal" href="#lmfit.model.param_hints" title="lmfit.model.param_hints"><code class="xref py py-attr docutils literal"><span class="pre">param_hints</span></code></a> attribute,
+<p>Parameter hints are stored in a model’s <a class="reference internal" href="#lmfit.model.param_hints" title="lmfit.model.param_hints"><code class="xref py py-attr docutils literal notranslate"><span class="pre">param_hints</span></code></a> attribute,
 which is simply a nested dictionary:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">param_hints</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">mod</span><span class="o">.</span><span class="n">param_hints</span><span class="p">)</span>
 <span class="go">{&#39;a&#39;: {&#39;value&#39;: 1}, &#39;b&#39;: {&#39;max&#39;: 1.0, &#39;value&#39;: 0.3, &#39;min&#39;: 0}}</span>
 </pre></div>
 </div>
-<p>You can change this dictionary directly, or with the <a class="reference internal" href="#lmfit.model.Model.set_param_hint" title="lmfit.model.Model.set_param_hint"><code class="xref py py-meth docutils literal"><span class="pre">Model.set_param_hint()</span></code></a>
-method.  Either way, these parameter hints are used by <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal"><span class="pre">Model.make_params()</span></code></a>
+<p>You can change this dictionary directly, or with the <a class="reference internal" href="#lmfit.model.Model.set_param_hint" title="lmfit.model.Model.set_param_hint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.set_param_hint()</span></code></a>
+method.  Either way, these parameter hints are used by <a class="reference internal" href="#lmfit.model.Model.make_params" title="lmfit.model.Model.make_params"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a>
 when making parameters.</p>
 <p>An important feature of parameter hints is that you can force the creation
 of new parameters with parameter hints.  This can be useful to make derived
 parameters with constraint expressions.  For example to get the full-width
 at half maximum of a Gaussian model, one could use a parameter hint of:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s1">&#39;fwhm&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;2.3548*sigma&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -964,11 +958,11 @@ at half maximum of a Gaussian model, one could use a parameter hint of:</p>
 <div class="versionadded">
 <p><span class="versionmodified">New in version 0.9.8.</span></p>
 </div>
-<p>It is sometimes desirable to save a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> for later use outside of
-the code used to define the model. Lmfit provides a <a class="reference internal" href="#lmfit.model.save_model" title="lmfit.model.save_model"><code class="xref py py-func docutils literal"><span class="pre">save_model()</span></code></a>
-function that will save a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> to a file. There is also a
-companion <a class="reference internal" href="#lmfit.model.load_model" title="lmfit.model.load_model"><code class="xref py py-func docutils literal"><span class="pre">load_model()</span></code></a> function that can read this file and
-reconstruct a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> from it.</p>
+<p>It is sometimes desirable to save a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> for later use outside of
+the code used to define the model. Lmfit provides a <a class="reference internal" href="#lmfit.model.save_model" title="lmfit.model.save_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_model()</span></code></a>
+function that will save a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> to a file. There is also a
+companion <a class="reference internal" href="#lmfit.model.load_model" title="lmfit.model.load_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_model()</span></code></a> function that can read this file and
+reconstruct a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> from it.</p>
 <p>Saving a model turns out to be somewhat challenging. The main issue is that
 Python is not normally able to <em>serialize</em> a function (such as the model
 function making up the heart of the Model) in a way that can be
@@ -983,7 +977,7 @@ components that make up a model presents no problem.</p>
 <p>If the <cite>dill</cite> package is installed, the model function will be saved using
 it.  But because saving the model function is not always reliable, saving a
 model will always save the <em>name</em> of the model function.  The
-<a class="reference internal" href="#lmfit.model.load_model" title="lmfit.model.load_model"><code class="xref py py-func docutils literal"><span class="pre">load_model()</span></code></a> takes an optional <code class="xref py py-attr docutils literal"><span class="pre">funcdefs</span></code> argument that can
+<a class="reference internal" href="#lmfit.model.load_model" title="lmfit.model.load_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_model()</span></code></a> takes an optional <code class="xref py py-attr docutils literal notranslate"><span class="pre">funcdefs</span></code> argument that can
 contain a dictionary of function definitions with the function names as
 keys and function objects as values.  If one of the dictionary keys matches
 the saved name, the corresponding function object will be used as the model
@@ -1033,7 +1027,7 @@ and used.</p>
 </dd></dl>
 
 <p>As a simple example, one can save a model as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="c1"># &lt;examples/doc_mode_savemodel.py&gt;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1053,7 +1047,7 @@ and used.</p>
 </pre></div>
 </div>
 <p>To load that later, one might do:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="c1"># &lt;examples/doc_model_loadmodel.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1089,25 +1083,25 @@ and used.</p>
 </div>
 </div>
 <div class="section" id="the-modelresult-class">
-<h2>The <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> class<a class="headerlink" href="#the-modelresult-class" title="Permalink to this headline">¶</a></h2>
-<p>A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> (which had been called <cite>ModelFit</cite> prior to version
-0.9) is the object returned by <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal"><span class="pre">Model.fit()</span></code></a>.  It is a subclass of
-<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a>, and so contains many of the fit results.
-Of course, it knows the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> and the set of
-<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal"><span class="pre">Parameters</span></code></a> used in the fit, and it has methods to
+<h2>The <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> class<a class="headerlink" href="#the-modelresult-class" title="Permalink to this headline">¶</a></h2>
+<p>A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> (which had been called <cite>ModelFit</cite> prior to version
+0.9) is the object returned by <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>.  It is a subclass of
+<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code></a>, and so contains many of the fit results.
+Of course, it knows the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> and the set of
+<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> used in the fit, and it has methods to
 evaluate the model, to fit the data (or re-fit the data with changes to
 the parameters, or fit with different or modified data) and to print out a
 report for that fit.</p>
-<p>While a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> encapsulates your model function, it is fairly
+<p>While a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> encapsulates your model function, it is fairly
 abstract and does not contain the parameters or data used in a particular
-fit.  A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> <em>does</em> contain parameters and data as well as
-methods to alter and re-do fits.  Thus the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> is the idealized
-model while the <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> is the messier, more complex (but perhaps
+fit.  A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> <em>does</em> contain parameters and data as well as
+methods to alter and re-do fits.  Thus the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> is the idealized
+model while the <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> is the messier, more complex (but perhaps
 more useful) object that represents a fit with a set of parameters to data
 with a model.</p>
-<p>A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> has several attributes holding values for fit
+<p>A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> has several attributes holding values for fit
 results, and several methods for working with fits.  These include
-statistics inherited from <a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><code class="xref py py-class docutils literal"><span class="pre">Minimizer</span></code></a> useful for
+statistics inherited from <a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code></a> useful for
 comparing different models, including <cite>chisqr</cite>, <cite>redchi</cite>, <cite>aic</cite>, and <cite>bic</cite>.</p>
 <dl class="class">
 <dt id="lmfit.model.ModelResult">
@@ -1128,7 +1122,7 @@ that it can be used to modify and re-run the fit for the Model.</p>
 <li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of minimization method to use (default is <cite>‘leastsq’</cite>).</li>
 <li><strong>fcn_args</strong> (<em>sequence</em><em>, </em><em>optional</em>) – Positional arguments to send to model function.</li>
 <li><strong>fcn_dict</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments to send to model function.</li>
-<li><strong>iter_cb</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a><em>, </em><em>optional</em>) – Function to call on each iteration of fit.</li>
+<li><strong>iter_cb</strong> (<em>callable</em><em>, </em><em>optional</em>) – Function to call on each iteration of fit.</li>
 <li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to scale covariance matrix for uncertainty evaluation.</li>
 <li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
 <li><strong>**fit_kws</strong> (<em>optional</em>) – Keyword arguments to send to minimization routine.</li>
@@ -1140,7 +1134,7 @@ that it can be used to modify and re-run the fit for the Model.</p>
 </dd></dl>
 
 <div class="section" id="modelresult-methods">
-<h3><a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> methods<a class="headerlink" href="#modelresult-methods" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> methods<a class="headerlink" href="#modelresult-methods" title="Permalink to this headline">¶</a></h3>
 <dl class="method">
 <dt id="lmfit.model.ModelResult.eval">
 <code class="descclassname">ModelResult.</code><code class="descname">eval</code><span class="sig-paren">(</span><em>params=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.eval" title="Permalink to this definition">¶</a></dt>
@@ -1226,7 +1220,7 @@ uncertainties and correlations.</p>
 <li><strong>modelpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Known Model Parameters.</li>
 <li><strong>show_correl</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show list of sorted correlations (default is True).</li>
 <li><strong>min_correl</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) – Smallest correlation in absolute value to show (default is 0.1).</li>
-<li><strong>sort_pars</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#callable" title="(in Python v2.7)"><em>callable</em></a><em>, </em><em>optional</em>) – Whether to show parameter names sorted in alphanumerical order
+<li><strong>sort_pars</strong> (<em>callable</em><em>, </em><em>optional</em>) – Whether to show parameter names sorted in alphanumerical order
 (default is False). If False, then the parameters will be listed in
 the order as they were added to the Parameters dictionary. If callable,
 then this (one argument) function is used to extract a comparison key
@@ -1244,7 +1238,7 @@ from each list element.</li>
 </table>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last"><a class="reference internal" href="#lmfit.model.ModelResult.fit_report" title="lmfit.model.ModelResult.fit_report"><code class="xref py py-func docutils literal"><span class="pre">fit_report()</span></code></a></p>
+<p class="last"><a class="reference internal" href="#lmfit.model.ModelResult.fit_report" title="lmfit.model.ModelResult.fit_report"><code class="xref py py-func docutils literal notranslate"><span class="pre">fit_report()</span></code></a></p>
 </div>
 </dd></dl>
 
@@ -1253,9 +1247,9 @@ from each list element.</li>
 <code class="descclassname">ModelResult.</code><code class="descname">conf_interval</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.conf_interval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the confidence intervals for the variable parameters.</p>
 <p>Confidence intervals are calculated using the
-<code class="xref py py-func docutils literal"><span class="pre">confidence.conf_interval()</span></code> function and keyword
+<code class="xref py py-func docutils literal notranslate"><span class="pre">confidence.conf_interval()</span></code> function and keyword
 arguments (<cite>**kwargs</cite>) are passed to that function. The result
-is stored in the <a class="reference internal" href="#lmfit.model.ci_out" title="lmfit.model.ci_out"><code class="xref py py-attr docutils literal"><span class="pre">ci_out</span></code></a> attribute so that it can be
+is stored in the <a class="reference internal" href="#lmfit.model.ci_out" title="lmfit.model.ci_out"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ci_out</span></code></a> attribute so that it can be
 accessed without recalculating them.</p>
 </dd></dl>
 
@@ -1310,7 +1304,7 @@ confidence bands for the model.</p>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dely</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">eval_uncertainty</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">best_fit</span><span class="p">)</span>
@@ -1334,7 +1328,7 @@ give the same results, within precision errors.</li>
 
 <dl class="method">
 <dt id="lmfit.model.ModelResult.plot">
-<code class="descclassname">ModelResult.</code><code class="descname">plot</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ModelResult.</code><code class="descname">plot</code><span class="sig-paren">(</span><em>datafmt='o'</em>, <em>fitfmt='-'</em>, <em>initfmt='--'</em>, <em>xlabel=None</em>, <em>ylabel=None</em>, <em>yerr=None</em>, <em>numpoints=None</em>, <em>fig=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>init_kws=None</em>, <em>ax_res_kws=None</em>, <em>ax_fit_kws=None</em>, <em>fig_kws=None</em>, <em>show_init=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit results and residuals using matplotlib, if available.</p>
 <p>The method will produce a matplotlib figure with both results of the
 fit and the residuals plotted. If the fit model included weights,
@@ -1363,7 +1357,7 @@ conditions of the fit.</li>
 <li><strong>ax_res_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for the axes for the residuals plot.</li>
 <li><strong>ax_fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for the axes for the fit plot.</li>
 <li><strong>fig_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new figure, if there is one being created.</li>
-<li><strong>conditions for the fithow_init</strong> (<em>sinitial</em>) – Whether to show the initial conditions for the fit (default is False).</li>
+<li><strong>show_init</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show the initial conditions for the fit (default is False).</li>
 </ul>
 </td>
 </tr>
@@ -1385,9 +1379,9 @@ otherwise <cite>fig_kws</cite> is ignored.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit" title="lmfit.model.ModelResult.plot_fit"><code class="xref py py-meth docutils literal"><span class="pre">ModelResult.plot_fit()</span></code></a></dt>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit" title="lmfit.model.ModelResult.plot_fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot_fit()</span></code></a></dt>
 <dd>Plot the fit results using matplotlib.</dd>
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals" title="lmfit.model.ModelResult.plot_residuals"><code class="xref py py-meth docutils literal"><span class="pre">ModelResult.plot_residuals()</span></code></a></dt>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals" title="lmfit.model.ModelResult.plot_residuals"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot_residuals()</span></code></a></dt>
 <dd>Plot the fit residuals using matplotlib.</dd>
 </dl>
 </div>
@@ -1395,7 +1389,7 @@ otherwise <cite>fig_kws</cite> is ignored.</p>
 
 <dl class="method">
 <dt id="lmfit.model.ModelResult.plot_fit">
-<code class="descclassname">ModelResult.</code><code class="descname">plot_fit</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ModelResult.</code><code class="descname">plot_fit</code><span class="sig-paren">(</span><em>ax=None</em>, <em>datafmt='o'</em>, <em>fitfmt='-'</em>, <em>initfmt='--'</em>, <em>xlabel=None</em>, <em>ylabel=None</em>, <em>yerr=None</em>, <em>numpoints=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>init_kws=None</em>, <em>ax_kws=None</em>, <em>show_init=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit results using matplotlib, if available.</p>
 <p>The plot will include the data points, the initial fit curve (optional,
 with <cite>show_init=True</cite>), and the best-fit curve. If the fit model
@@ -1444,9 +1438,9 @@ not specified and the fit includes weights, <cite>yerr</cite> set to 1/self.weig
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals" title="lmfit.model.ModelResult.plot_residuals"><code class="xref py py-meth docutils literal"><span class="pre">ModelResult.plot_residuals()</span></code></a></dt>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals" title="lmfit.model.ModelResult.plot_residuals"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot_residuals()</span></code></a></dt>
 <dd>Plot the fit residuals using matplotlib.</dd>
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot" title="lmfit.model.ModelResult.plot"><code class="xref py py-meth docutils literal"><span class="pre">ModelResult.plot()</span></code></a></dt>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot" title="lmfit.model.ModelResult.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot()</span></code></a></dt>
 <dd>Plot the fit results and residuals using matplotlib.</dd>
 </dl>
 </div>
@@ -1454,7 +1448,7 @@ not specified and the fit includes weights, <cite>yerr</cite> set to 1/self.weig
 
 <dl class="method">
 <dt id="lmfit.model.ModelResult.plot_residuals">
-<code class="descclassname">ModelResult.</code><code class="descname">plot_residuals</code><span class="sig-paren">(</span><em>*args</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_residuals" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ModelResult.</code><code class="descname">plot_residuals</code><span class="sig-paren">(</span><em>ax=None</em>, <em>datafmt='o'</em>, <em>yerr=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>ax_kws=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_residuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit residuals using matplotlib, if available.</p>
 <p>If <cite>yerr</cite> is supplied or if the model included weights, errorbars
 will also be plotted.</p>
@@ -1491,9 +1485,9 @@ not specified and the fit includes weights, <cite>yerr</cite> set to 1/self.weig
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit" title="lmfit.model.ModelResult.plot_fit"><code class="xref py py-meth docutils literal"><span class="pre">ModelResult.plot_fit()</span></code></a></dt>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit" title="lmfit.model.ModelResult.plot_fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot_fit()</span></code></a></dt>
 <dd>Plot the fit results using matplotlib.</dd>
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot" title="lmfit.model.ModelResult.plot"><code class="xref py py-meth docutils literal"><span class="pre">ModelResult.plot()</span></code></a></dt>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot" title="lmfit.model.ModelResult.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot()</span></code></a></dt>
 <dd>Plot the fit results and residuals using matplotlib.</dd>
 </dl>
 </div>
@@ -1501,7 +1495,7 @@ not specified and the fit includes weights, <cite>yerr</cite> set to 1/self.weig
 
 </div>
 <div class="section" id="modelresult-attributes">
-<h3><a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> attributes<a class="headerlink" href="#modelresult-attributes" title="Permalink to this headline">¶</a></h3>
+<h3><a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> attributes<a class="headerlink" href="#modelresult-attributes" title="Permalink to this headline">¶</a></h3>
 <dl class="attribute">
 <dt id="lmfit.model.aic">
 <code class="descname">aic</code><a class="headerlink" href="#lmfit.model.aic" title="Permalink to this definition">¶</a></dt>
@@ -1587,7 +1581,7 @@ independent variables and with initial parameters.</p>
 <dt id="lmfit.model.iter_cb">
 <code class="descname">iter_cb</code><a class="headerlink" href="#lmfit.model.iter_cb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional callable function, to be called at each fit iteration.  This
-must take take arguments of <code class="docutils literal"><span class="pre">(params,</span> <span class="pre">iter,</span> <span class="pre">resid,</span> <span class="pre">*args,</span> <span class="pre">**kws)</span></code>, where
+must take take arguments of <code class="docutils literal notranslate"><span class="pre">(params,</span> <span class="pre">iter,</span> <span class="pre">resid,</span> <span class="pre">*args,</span> <span class="pre">**kws)</span></code>, where
 <cite>params</cite> will have the current parameter values, <cite>iter</cite> the
 iteration, <cite>resid</cite> the current residual array, and <cite>*args</cite> and
 <cite>**kws</cite> as passed to the objective function.  See <a class="reference internal" href="fitting.html#fit-itercb-label"><span class="std std-ref">Using a Iteration Callback Function</span></a>.</p>
@@ -1608,19 +1602,19 @@ iteration, <cite>resid</cite> the current residual array, and <cite>*args</cite>
 <dl class="attribute">
 <dt id="lmfit.model.message">
 <code class="descname">message</code><a class="headerlink" href="#lmfit.model.message" title="Permalink to this definition">¶</a></dt>
-<dd><p>String message returned from <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a>.</p>
+<dd><p>String message returned from <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lmfit.model.method">
 <code class="descname">method</code><a class="headerlink" href="#lmfit.model.method" title="Permalink to this definition">¶</a></dt>
-<dd><p>String naming fitting method for <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal"><span class="pre">minimize()</span></code></a>.</p>
+<dd><p>String naming fitting method for <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lmfit.model.model">
 <code class="descname">model</code><a class="headerlink" href="#lmfit.model.model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Instance of <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> used for model.</p>
+<dd><p>Instance of <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> used for model.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1682,7 +1676,7 @@ iteration, <cite>resid</cite> the current residual array, and <cite>*args</cite>
 <code class="descname">weights</code><a class="headerlink" href="#lmfit.model.weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>numpy.ndarray (or None) of weighting values to be used in fit.  If not
 None, it will be used as a multiplicative factor of the residual
-array, so that <code class="docutils literal"><span class="pre">weights*(data</span> <span class="pre">-</span> <span class="pre">fit)</span></code> is minimized in the
+array, so that <code class="docutils literal notranslate"><span class="pre">weights*(data</span> <span class="pre">-</span> <span class="pre">fit)</span></code> is minimized in the
 least-squares sense.</p>
 </dd></dl>
 
@@ -1692,16 +1686,16 @@ least-squares sense.</p>
 <p>We return to the first example above and ask not only for the
 uncertainties in the fitted parameters but for the range of values that
 those uncertainties mean for the model function itself.  We can use the
-<a class="reference internal" href="#lmfit.model.ModelResult.eval_uncertainty" title="lmfit.model.ModelResult.eval_uncertainty"><code class="xref py py-meth docutils literal"><span class="pre">ModelResult.eval_uncertainty()</span></code></a> method of the model result object to
+<a class="reference internal" href="#lmfit.model.ModelResult.eval_uncertainty" title="lmfit.model.ModelResult.eval_uncertainty"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.eval_uncertainty()</span></code></a> method of the model result object to
 evaluate the uncertainty in the model with a specified level for
-<span class="math">\(\sigma\)</span>.</p>
+<span class="math notranslate">\(\sigma\)</span>.</p>
 <p>That is, adding:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dely</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">eval_uncertainty</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dely</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">eval_uncertainty</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">best_fit</span><span class="o">-</span><span class="n">dely</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">best_fit</span><span class="o">+</span><span class="n">dely</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ABABAB&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>to the example fit to the Gaussian at the beginning of this chapter will
-give 3-<span class="math">\(\sigma\)</span> bands for the best-fit Gaussian, and produce the
+give 3-<span class="math notranslate">\(\sigma\)</span> bands for the best-fit Gaussian, and produce the
 figure below.</p>
 <blockquote id="figmodel4">
 <div><a class="reference external image-reference" href="_images/model_fit4.png"><img alt="_images/model_fit4.png" src="_images/model_fit4.png" style="width: 50%;" /></a>
@@ -1713,16 +1707,16 @@ figure below.</p>
 <p><span class="versionmodified">New in version 0.9.8.</span></p>
 </div>
 <p>As with saving models (see section <a class="reference internal" href="#model-saveload-sec"><span class="std std-ref">Saving and Loading Models</span></a>), it is
-sometimes desirable to save a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a>, either for later use or
+sometimes desirable to save a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a>, either for later use or
 to organize and compare different fit results.  Lmfit provides a
-<a class="reference internal" href="#lmfit.model.save_modelresult" title="lmfit.model.save_modelresult"><code class="xref py py-func docutils literal"><span class="pre">save_modelresult()</span></code></a> function that will save a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> to
-a file. There is also a companion <a class="reference internal" href="#lmfit.model.load_modelresult" title="lmfit.model.load_modelresult"><code class="xref py py-func docutils literal"><span class="pre">load_modelresult()</span></code></a> function that
-can read this file and reconstruct a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> from it.</p>
+<a class="reference internal" href="#lmfit.model.save_modelresult" title="lmfit.model.save_modelresult"><code class="xref py py-func docutils literal notranslate"><span class="pre">save_modelresult()</span></code></a> function that will save a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> to
+a file. There is also a companion <a class="reference internal" href="#lmfit.model.load_modelresult" title="lmfit.model.load_modelresult"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_modelresult()</span></code></a> function that
+can read this file and reconstruct a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> from it.</p>
 <p>As discussed in section <a class="reference internal" href="#model-saveload-sec"><span class="std std-ref">Saving and Loading Models</span></a>, there are challenges to
 saving model functions that may make it difficult to restore a saved a
-<a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> in a way that can be used to perform a fit.
-Use of the optional <code class="xref py py-attr docutils literal"><span class="pre">funcdefs</span></code> argument is generally the most
-reliable way to ensure that a loaded <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> can be used to
+<a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> in a way that can be used to perform a fit.
+Use of the optional <code class="xref py py-attr docutils literal notranslate"><span class="pre">funcdefs</span></code> argument is generally the most
+reliable way to ensure that a loaded <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> can be used to
 evaluate the model function or redo the fit.</p>
 <dl class="function">
 <dt id="lmfit.model.save_modelresult">
@@ -1766,8 +1760,8 @@ evaluate the model function or redo the fit.</p>
 </table>
 </dd></dl>
 
-<p>An example of saving a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> is:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<p>An example of saving a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="c1"># &lt;examples/doc_model_savemodelresult.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1795,7 +1789,7 @@ evaluate the model function or redo the fit.</p>
 </pre></div>
 </div>
 <p>To load that later, one might do:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="c1"># &lt;examples/doc_model_loadmodelresult.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1820,17 +1814,17 @@ evaluate the model function or redo the fit.</p>
 </div>
 <div class="section" id="composite-models-adding-or-multiplying-models">
 <span id="composite-models-section"></span><span id="index-0"></span><h2>Composite Models : adding (or multiplying) Models<a class="headerlink" href="#composite-models-adding-or-multiplying-models" title="Permalink to this headline">¶</a></h2>
-<p>One of the more interesting features of the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> class is that
+<p>One of the more interesting features of the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class is that
 Models can be added together or combined with basic algebraic operations
 (add, subtract, multiply, and divide) to give a composite model.  The
 composite model will have parameters from each of the component models,
 with all parameters being available to influence the whole model.  This
 ability to combine models will become even more useful in the next chapter,
-when pre-built subclasses of <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> are discussed.  For now, we’ll
+when pre-built subclasses of <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> are discussed.  For now, we’ll
 consider a simple example, and build a model of a Gaussian plus a line, as
 to model a peak with a background. For such a simple problem, we could just
 build a model that included both components:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gaussian_plus_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gaussian_plus_line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">wid</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;line + 1-d gaussian&quot;&quot;&quot;</span>
 
     <span class="n">gauss</span> <span class="o">=</span> <span class="p">(</span><span class="n">amp</span> <span class="o">/</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">wid</span><span class="p">))</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">wid</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
@@ -1839,26 +1833,26 @@ build a model that included both components:</p>
 </pre></div>
 </div>
 <p>and use that with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian_plus_line</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian_plus_line</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>But we already had a function for a gaussian function, and maybe we’ll
 discover that a linear background isn’t sufficient which would mean the
 model function would have to be changed.</p>
-<p>Instead, lmfit allows models to be combined into a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal"><span class="pre">CompositeModel</span></code></a>.
+<p>Instead, lmfit allows models to be combined into a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompositeModel</span></code></a>.
 As an alternative to including a linear background in our model function,
 we could define a linear function:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">line</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;a line&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">slope</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="n">intercept</span>
 </pre></div>
 </div>
 <p>and build a composite model with just:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This model has parameters for both component models, and can be used as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="c1"># &lt;examples/doc_model_two_components.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -1896,31 +1890,32 @@ we could define a linear function:</p>
 </pre></div>
 </div>
 <p>which prints out the results:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Model</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Model</span><span class="p">]]</span>
     <span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
 <span class="p">[[</span><span class="n">Fit</span> <span class="n">Statistics</span><span class="p">]]</span>
+    <span class="c1"># fitting method   = leastsq</span>
     <span class="c1"># function evals   = 46</span>
     <span class="c1"># data points      = 101</span>
     <span class="c1"># variables        = 5</span>
-    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">2.57856</span>
-    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.02686</span>
-    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">360.45702</span>
-    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">347.38142</span>
+    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">2.57855517</span>
+    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.02685995</span>
+    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">360.457020</span>
+    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">347.381417</span>
 <span class="p">[[</span><span class="n">Variables</span><span class="p">]]</span>
-    <span class="n">amp</span><span class="p">:</span>         <span class="mf">8.45931061</span> <span class="o">+/-</span> <span class="mf">0.124145</span> <span class="p">(</span><span class="mf">1.47</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="n">cen</span><span class="p">:</span>         <span class="mf">5.65547872</span> <span class="o">+/-</span> <span class="mf">0.009176</span> <span class="p">(</span><span class="mf">0.16</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
-    <span class="n">wid</span><span class="p">:</span>         <span class="mf">0.67545523</span> <span class="o">+/-</span> <span class="mf">0.009916</span> <span class="p">(</span><span class="mf">1.47</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">slope</span><span class="p">:</span>       <span class="mf">0.26484403</span> <span class="o">+/-</span> <span class="mf">0.005748</span> <span class="p">(</span><span class="mf">2.17</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">intercept</span><span class="p">:</span>  <span class="o">-</span><span class="mf">0.96860201</span> <span class="o">+/-</span> <span class="mf">0.033522</span> <span class="p">(</span><span class="mf">3.46</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span>  <span class="mf">0.100</span><span class="p">)</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">)</span>          <span class="o">=</span> <span class="o">-</span><span class="mf">0.795</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>                  <span class="o">=</span>  <span class="mf">0.666</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">intercept</span><span class="p">)</span>            <span class="o">=</span> <span class="o">-</span><span class="mf">0.222</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span>                <span class="o">=</span> <span class="o">-</span><span class="mf">0.169</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">cen</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span>                <span class="o">=</span> <span class="o">-</span><span class="mf">0.162</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">intercept</span><span class="p">)</span>            <span class="o">=</span> <span class="o">-</span><span class="mf">0.148</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">cen</span><span class="p">,</span> <span class="n">intercept</span><span class="p">)</span>            <span class="o">=</span>  <span class="mf">0.129</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span>                <span class="o">=</span> <span class="o">-</span><span class="mf">0.113</span>
+    <span class="n">amp</span><span class="p">:</span>        <span class="mf">8.45931062</span> <span class="o">+/-</span> <span class="mf">0.12414515</span> <span class="p">(</span><span class="mf">1.47</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">cen</span><span class="p">:</span>        <span class="mf">5.65547873</span> <span class="o">+/-</span> <span class="mf">0.00917678</span> <span class="p">(</span><span class="mf">0.16</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">wid</span><span class="p">:</span>        <span class="mf">0.67545524</span> <span class="o">+/-</span> <span class="mf">0.00991686</span> <span class="p">(</span><span class="mf">1.47</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">slope</span><span class="p">:</span>      <span class="mf">0.26484404</span> <span class="o">+/-</span> <span class="mf">0.00574892</span> <span class="p">(</span><span class="mf">2.17</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">intercept</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.96860202</span> <span class="o">+/-</span> <span class="mf">0.03352202</span> <span class="p">(</span><span class="mf">3.46</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span> <span class="mf">0.100</span><span class="p">)</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">slope</span><span class="p">,</span> <span class="n">intercept</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.795</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">wid</span><span class="p">)</span>         <span class="o">=</span>  <span class="mf">0.666</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">intercept</span><span class="p">)</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">0.222</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span>       <span class="o">=</span> <span class="o">-</span><span class="mf">0.169</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">cen</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span>       <span class="o">=</span> <span class="o">-</span><span class="mf">0.162</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">intercept</span><span class="p">)</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">0.148</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">cen</span><span class="p">,</span> <span class="n">intercept</span><span class="p">)</span>   <span class="o">=</span>  <span class="mf">0.129</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">wid</span><span class="p">,</span> <span class="n">slope</span><span class="p">)</span>       <span class="o">=</span> <span class="o">-</span><span class="mf">0.113</span>
 </pre></div>
 </div>
 <p>and shows the plot on the left.</p>
@@ -1933,30 +1928,30 @@ red line, and the initial fit is shown as a black dashed line. The figure
 on the right shows again the data in blue dots, the Gaussian component as
 a black dashed line and the linear component as a red dashed line. It is
 created using the following code:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">comps</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">eval_components</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">comps</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">eval_components</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">comps</span><span class="p">[</span><span class="s1">&#39;gaussian&#39;</span><span class="p">],</span> <span class="s1">&#39;k--&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">comps</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">],</span> <span class="s1">&#39;r--&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The components were generated after the fit using the
-<a class="reference internal" href="#lmfit.model.ModelResult.eval_components" title="lmfit.model.ModelResult.eval_components"><code class="xref py py-meth docutils literal"><span class="pre">ModelResult.eval_components()</span></code></a> method of the <cite>result</cite>, which returns
+<a class="reference internal" href="#lmfit.model.ModelResult.eval_components" title="lmfit.model.ModelResult.eval_components"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.eval_components()</span></code></a> method of the <cite>result</cite>, which returns
 a dictionary of the components, using keys of the model name
 (or <cite>prefix</cite> if that is set).  This will use the parameter values in
 <cite>result.params</cite> and the independent variables (<cite>x</cite>) used during the
-fit.  Note that while the <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal"><span class="pre">ModelResult</span></code></a> held in <cite>result</cite> does store the
+fit.  Note that while the <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> held in <cite>result</cite> does store the
 best parameters and the best estimate of the model in <cite>result.best_fit</cite>,
 the original model and parameters in <cite>pars</cite> are left unaltered.</p>
 <p>You can apply this composite model to other data sets, or evaluate the
 model at other values of <cite>x</cite>.  You may want to do this to give a finer or
 coarser spacing of data point, or to extrapolate the model outside the
 fitting range.  This can be done with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">xwide</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">3001</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xwide</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">3001</span><span class="p">)</span>
 <span class="n">predicted</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xwide</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>In this example, the argument names for the model functions do not overlap.
-If they had, the <cite>prefix</cite> argument to <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal"><span class="pre">Model</span></code></a> would have allowed
+If they had, the <cite>prefix</cite> argument to <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> would have allowed
 us to identify which parameter went with which component model.  As we will
 see in the next chapter, using composite models with the built-in models
 provides a simple way to build up complex models.</p>
@@ -1968,7 +1963,7 @@ into a CompositeModel.</p>
 <p>Normally, one does not have to explicitly create a <cite>CompositeModel</cite>,
 but can use normal Python operators <cite>+</cite>, ‘-‘, <cite>*</cite>, and <cite>/</cite> to combine
 components as in:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn1</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn3</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn1</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn3</span><span class="p">)</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1993,20 +1988,20 @@ new model.</li>
 </dd></dl>
 
 <p>Note that when using built-in Python binary operators, a
-<a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal"><span class="pre">CompositeModel</span></code></a> will automatically be constructed for you. That is,
+<a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompositeModel</span></code></a> will automatically be constructed for you. That is,
 doing:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn1</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn3</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn1</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>will create a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal"><span class="pre">CompositeModel</span></code></a>.  Here, <cite>left</cite> will be <cite>Model(fcn1)</cite>,
-<cite>op</cite> will be <code class="xref py py-meth docutils literal"><span class="pre">operator.add()</span></code>, and <cite>right</cite> will be another
+<p>will create a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompositeModel</span></code></a>.  Here, <cite>left</cite> will be <cite>Model(fcn1)</cite>,
+<cite>op</cite> will be <code class="xref py py-meth docutils literal notranslate"><span class="pre">operator.add()</span></code>, and <cite>right</cite> will be another
 CompositeModel that has a <cite>left</cite> attribute of <cite>Model(fcn2)</cite>, an <cite>op</cite> of
-<code class="xref py py-meth docutils literal"><span class="pre">operator.mul()</span></code>, and a <cite>right</cite> of <cite>Model(fcn3)</cite>.</p>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">operator.mul()</span></code>, and a <cite>right</cite> of <cite>Model(fcn3)</cite>.</p>
 <p>To use a binary operator other than ‘+’, ‘-‘, ‘*’, or ‘/’ you can
-explicitly create a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal"><span class="pre">CompositeModel</span></code></a> with the appropriate binary
+explicitly create a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompositeModel</span></code></a> with the appropriate binary
 operator.  For example, to convolve two models, you could define a simple
 convolution function, perhaps as:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="k">def</span> <span class="nf">convolve</span><span class="p">(</span><span class="n">dat</span><span class="p">,</span> <span class="n">kernel</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;simple convolution of two arrays&quot;&quot;&quot;</span>
@@ -2022,7 +2017,7 @@ convolution function, perhaps as:</p>
 function gives a valid result over the data range.  Because this function
 takes two array arguments and returns an array, it can be used as the
 binary operator.  A full script using this technique is here:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
 
 <span class="c1"># &lt;examples/doc_model_composite.py&gt;</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -2087,25 +2082,25 @@ binary operator.  A full script using this technique is here:</p>
 </pre></div>
 </div>
 <p>which prints out the results:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Model</span><span class="p">]]</span>
-    <span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">jump</span><span class="p">)</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">convolve</span> <span class="n">at</span> <span class="mh">0x112ef1320</span><span class="o">&gt;</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Model</span><span class="p">]]</span>
+    <span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">jump</span><span class="p">)</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">convolve</span> <span class="n">at</span> <span class="mh">0x10480e598</span><span class="o">&gt;</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">))</span>
 <span class="p">[[</span><span class="n">Fit</span> <span class="n">Statistics</span><span class="p">]]</span>
     <span class="c1"># fitting method   = leastsq</span>
-    <span class="c1"># function evals   = 27</span>
+    <span class="c1"># function evals   = 23</span>
     <span class="c1"># data points      = 201</span>
     <span class="c1"># variables        = 3</span>
-    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">21.48845</span>
-    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.10853</span>
-    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">443.39364</span>
-    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">433.48373</span>
+    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">21.6932855</span>
+    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.10956205</span>
+    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">441.486726</span>
+    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">431.576811</span>
 <span class="p">[[</span><span class="n">Variables</span><span class="p">]]</span>
-    <span class="n">mid</span><span class="p">:</span>         <span class="mi">5</span> <span class="p">(</span><span class="n">fixed</span><span class="p">)</span>
-    <span class="n">sigma</span><span class="p">:</span>       <span class="mf">0.62393255</span> <span class="o">+/-</span> <span class="mf">0.012818</span> <span class="p">(</span><span class="mf">2.05</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mf">1.5</span><span class="p">)</span>
-    <span class="n">center</span><span class="p">:</span>      <span class="mf">4.52795480</span> <span class="o">+/-</span> <span class="mf">0.009261</span> <span class="p">(</span><span class="mf">0.20</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mf">3.5</span><span class="p">)</span>
-    <span class="n">amplitude</span><span class="p">:</span>   <span class="mf">0.62852927</span> <span class="o">+/-</span> <span class="mf">0.001783</span> <span class="p">(</span><span class="mf">0.28</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span><span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span>  <span class="mf">0.100</span><span class="p">)</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span>         <span class="o">=</span>  <span class="mf">0.339</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span>          <span class="o">=</span>  <span class="mf">0.276</span>
+    <span class="n">mid</span><span class="p">:</span>        <span class="mi">5</span> <span class="p">(</span><span class="n">fixed</span><span class="p">)</span>
+    <span class="n">center</span><span class="p">:</span>     <span class="mf">4.52495463</span> <span class="o">+/-</span> <span class="mf">0.00937255</span> <span class="p">(</span><span class="mf">0.21</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">3.5</span><span class="p">)</span>
+    <span class="n">sigma</span><span class="p">:</span>      <span class="mf">0.62328669</span> <span class="o">+/-</span> <span class="mf">0.01297258</span> <span class="p">(</span><span class="mf">2.08</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">amplitude</span><span class="p">:</span>  <span class="mf">0.62362920</span> <span class="o">+/-</span> <span class="mf">0.00179096</span> <span class="p">(</span><span class="mf">0.29</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span> <span class="mf">0.100</span><span class="p">)</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.338</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span>  <span class="o">=</span>  <span class="mf">0.276</span>
 </pre></div>
 </div>
 <p>and shows the plots:</p>
@@ -2149,7 +2144,7 @@ build complex models from testable sub-components.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
     </div>
   </body>
 </html>
