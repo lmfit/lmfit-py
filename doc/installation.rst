@@ -53,6 +53,10 @@ Alternatively, you can download the source kit, unpack it and install with::
 For Anaconda Python, lmfit is not an official package, but several
 Anaconda channels provide it, allowing installation with (for example)::
 
+   conda install -c GSECARS lmfit
+
+or perhaps::
+
    conda install -c conda-forge lmfit
 
 Development Version
