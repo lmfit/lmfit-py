@@ -64,7 +64,7 @@ copyright = u'2017, Matthew Newville, The University of Chicago, Till Stensitzki
 # |version| and |release|, also used in various other places throughout the
 
 import lmfit
-release = lmfit.__version__
+release = lmfit.__version__.split('+', 1)[0]
 
 # List of directories, relative to source directory, that shouldn't be searched
 # for source files.
