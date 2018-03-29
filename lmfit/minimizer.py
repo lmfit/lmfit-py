@@ -1198,7 +1198,7 @@ class Minimizer(object):
             par = self.params[vname]
             start_vals.append(par.value)
             lower_bounds.append(replace_none(par.min, -1))
-            upper_bounds.append(replace_none(par.max, -1))
+            upper_bounds.append(replace_none(par.max, 1))
 
         ret = least_squares(self.__residual, start_vals,
                             bounds=(lower_bounds, upper_bounds),
