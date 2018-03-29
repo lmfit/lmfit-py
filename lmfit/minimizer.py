@@ -1209,7 +1209,7 @@ class Minimizer(object):
             setattr(result, attr, ret[attr])
 
         result.x = np.atleast_1d(result.x)
-        result.chisqr = result.residual = self.__residual(result.x, False)
+        result.chisqr = result.residual = ret.fun
         result.nvarys = len(result.var_names)
         result.ndata = 1
         result.nfree = 1
