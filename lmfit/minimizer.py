@@ -491,7 +491,7 @@ class Minimizer(object):
                                nan_policy=self.nan_policy)
 
     def __jacobian(self, fvars):
-        """Reuturn analytical jacobian to be used with Levenberg-Marquardt.
+        """Return analytical jacobian to be used with Levenberg-Marquardt.
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         modified 06-29-2015 M Newville to apply gradient scaling for
