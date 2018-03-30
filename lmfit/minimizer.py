@@ -505,7 +505,6 @@ class Minimizer(object):
             pars[name].value = pars[name].from_internal(val)
             grad_scale[ivar] = pars[name].scale_gradient(val)
 
-        self.result.nfev += 1
         pars.update_constraints()
 
         # compute the jacobian for "internal" unbounded variables,
