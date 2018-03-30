@@ -616,7 +616,6 @@ class Minimizer(object):
 
         # determine which parameters are actually variables
         # and which are defined expressions.
-
         result.var_names = []  # note that this *does* belong to self...
         result.init_vals = []
         result.params.update_constraints()
@@ -781,6 +780,7 @@ class Minimizer(object):
 
         result.x = np.atleast_1d(result.x)
         result.chisqr = result.residual = self.__residual(result.x)
+        result.nfev -= 1
         result.nvarys = len(variables)
         result.ndata = 1
         result.nfree = 1
@@ -1269,6 +1269,7 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'leastsq'
+        result.nfev -= 2  # correct for "pre-fit" initialization/checks
         variables = result.init_vals
         nvars = len(variables)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
@@ -1485,6 +1486,7 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'brute'
+        result.nfev -= 1  # correct for "pre-fit" initialization/checks
 
         brute_kws = dict(full_output=1, finish=None, disp=False)
 
@@ -1556,6 +1558,7 @@ class Minimizer(object):
         result.chisqr = ret[1]
         result.nvarys = len(result.var_names)
         result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
+        result.nfev -= 1
         result.ndata = len(result.residual)
         result.nfree = result.ndata - result.nvarys
         result.redchi = result.chisqr / result.nfree
