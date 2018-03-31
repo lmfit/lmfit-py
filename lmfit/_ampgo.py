@@ -441,7 +441,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
                 up[i] = u
 
     if maxfunevals is None:
-        maxfunevals = max(100, 10*len(x0))
+        maxfunevals = max(100, 10*n)
 
     if tabulistsize < 1:
         raise Exception('Invalid tabulistsize specified: {:d}. It should be '
