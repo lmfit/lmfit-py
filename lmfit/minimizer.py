@@ -35,7 +35,7 @@ import uncertainties
 
 from .parameter import Parameter, Parameters
 
-from ._ampgo import AMPGO as ampgo
+from ._ampgo import ampgo
 
 #  scipy version notes:
 #  currently scipy 0.17 is required.
