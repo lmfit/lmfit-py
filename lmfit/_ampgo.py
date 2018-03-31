@@ -424,21 +424,10 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
     if len(bounds) != n:
         raise ValueError('length of x0 != length of bounds')
 
-    low = [0]*n
-    up = [0]*n
-    for i in range(n):
-        if bounds[i] is None:
-            l, u = -numpy.inf, numpy.inf
-        else:
-            l, u = bounds[i]
-            if l is None:
-                low[i] = -numpy.inf
-            else:
-                low[i] = l
-            if u is None:
-                up[i] = numpy.inf
-            else:
-                up[i] = u
+    bounds = [b if b is not None else (None, None) for b in bounds]
+    _bounds = [(-numpy.inf if l is None else l, numpy.inf if u is None else u)
+               for l, u in bounds]
+    low, up = numpy.array(_bounds).T
 
     if maxfunevals is None:
         maxfunevals = max(100, 10*n)
@@ -449,9 +438,6 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
     if tabustrategy not in ['oldest', 'farthest']:
         raise Exception('Invalid tabustrategy specified: {:s}. It must be one '
                         'of "oldest" or "farthest".'.format(tabustrategy))
-
-    low = numpy.asarray(low)
-    up = numpy.asarray(up)
 
     tabulist = []
     best_f = numpy.inf
