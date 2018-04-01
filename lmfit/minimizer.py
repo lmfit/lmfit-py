@@ -491,7 +491,7 @@ class Minimizer(object):
                                nan_policy=self.nan_policy)
 
     def __jacobian(self, fvars):
-        """Reuturn analytical jacobian to be used with Levenberg-Marquardt.
+        """Return analytical jacobian to be used with Levenberg-Marquardt.
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         modified 06-29-2015 M Newville to apply gradient scaling for
@@ -505,7 +505,6 @@ class Minimizer(object):
             pars[name].value = pars[name].from_internal(val)
             grad_scale[ivar] = pars[name].scale_gradient(val)
 
-        self.result.nfev += 1
         pars.update_constraints()
 
         # compute the jacobian for "internal" unbounded variables,
@@ -616,7 +615,6 @@ class Minimizer(object):
 
         # determine which parameters are actually variables
         # and which are defined expressions.
-
         result.var_names = []  # note that this *does* belong to self...
         result.init_vals = []
         result.params.update_constraints()
@@ -781,6 +779,7 @@ class Minimizer(object):
 
         result.x = np.atleast_1d(result.x)
         result.chisqr = result.residual = self.__residual(result.x)
+        result.nfev -= 1
         result.nvarys = len(variables)
         result.ndata = 1
         result.nfree = 1
@@ -1198,7 +1197,7 @@ class Minimizer(object):
             par = self.params[vname]
             start_vals.append(par.value)
             lower_bounds.append(replace_none(par.min, -1))
-            upper_bounds.append(replace_none(par.max, -1))
+            upper_bounds.append(replace_none(par.max, 1))
 
         ret = least_squares(self.__residual, start_vals,
                             bounds=(lower_bounds, upper_bounds),
@@ -1209,7 +1208,7 @@ class Minimizer(object):
             setattr(result, attr, ret[attr])
 
         result.x = np.atleast_1d(result.x)
-        result.chisqr = result.residual = self.__residual(result.x, False)
+        result.chisqr = result.residual = ret.fun
         result.nvarys = len(result.var_names)
         result.ndata = 1
         result.nfree = 1
@@ -1269,6 +1268,7 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'leastsq'
+        result.nfev -= 2  # correct for "pre-fit" initialization/checks
         variables = result.init_vals
         nvars = len(variables)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
@@ -1485,6 +1485,7 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'brute'
+        result.nfev -= 1  # correct for "pre-fit" initialization/checks
 
         brute_kws = dict(full_output=1, finish=None, disp=False)
 
@@ -1556,6 +1557,7 @@ class Minimizer(object):
         result.chisqr = ret[1]
         result.nvarys = len(result.var_names)
         result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
+        result.nfev -= 1
         result.ndata = len(result.residual)
         result.nfree = result.ndata - result.nvarys
         result.redchi = result.chisqr / result.nfree
