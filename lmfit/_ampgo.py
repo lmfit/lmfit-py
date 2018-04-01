@@ -447,10 +447,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
     all_tunnel = success_tunnel = 0
     evaluations = 0
 
-    if glbtol < 1e-8:
-        local_tol = glbtol
-    else:
-        local_tol = 1e-8
+    local_tol = min(1e-8, glbtol)
 
     while 1:
 
