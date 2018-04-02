@@ -11,7 +11,7 @@ Implementation details can be found in this paper:
 
 from __future__ import print_function
 
-import numpy
+import numpy as np
 from scipy.optimize import minimize
 
 SCIPY_LOCAL_SOLVERS   = ['Nelder-Mead', 'Powell', 'L-BFGS-B', 'TNC', 'SLSQP']
@@ -19,7 +19,7 @@ SCIPY_LOCAL_SOLVERS   = ['Nelder-Mead', 'Powell', 'L-BFGS-B', 'TNC', 'SLSQP']
 
 def AMPGO(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None, maxfunevals=None,
           totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02, eps2=0.1, tabulistsize=5,
-          tabustrategy='farthest', fmin=-numpy.inf, disp=None):
+          tabustrategy='farthest', fmin=-np.inf, disp=None):
     """
     Finds the global minimum of a function using the AMPGO (Adaptive Memory Programming for
     Global Optimization) algorithm.
@@ -287,8 +287,8 @@ def drop_tabu_points(xf, tabulist, tabulistsize, tabustrategy):
     if tabustrategy == 'oldest':
         tabulist.pop(0)
     else:
-        distance = numpy.sqrt(numpy.sum((tabulist-xf)**2, axis=1))
-        index = numpy.argmax(distance)
+        distance = np.sqrt(np.sum((tabulist-xf)**2, axis=1))
+        index = np.argmax(distance)
         tabulist.pop(index)
 
     return tabulist
@@ -312,7 +312,7 @@ def tunnel(x0, *args):
     denominator = 1.0
 
     for tabu in tabulist:
-        denominator = denominator*numpy.sqrt(numpy.sum((x0 - tabu)**2))
+        denominator = denominator*np.sqrt(np.sum((x0 - tabu)**2))
 
     ytf = numerator/denominator
 
@@ -324,17 +324,17 @@ def inverse_tunnel(xtf, ytf, aspiration, tabulist):
     denominator = 1.0
 
     for tabu in tabulist:
-        denominator = denominator*numpy.sqrt(numpy.sum((xtf - tabu)**2))
+        denominator = denominator*np.sqrt(np.sum((xtf - tabu)**2))
 
     numerator = ytf*denominator
 
-    yf = aspiration + numpy.sqrt(ytf*denominator)
+    yf = aspiration + np.sqrt(ytf*denominator)
     return yf
 
 
 def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
           maxfunevals=None, totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
-          eps2=0.1, tabulistsize=5, tabustrategy='farthest', fmin=-numpy.inf,
+          eps2=0.1, tabulistsize=5, tabustrategy='farthest', fmin=-np.inf,
           disp=False):
     """Find the global minimum of a multivariate function using the AMPGO
     (Adaptive Memory Programming for Global Optimization) algorithm.
@@ -416,7 +416,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
     if local not in SCIPY_LOCAL_SOLVERS:
         raise Exception('Invalid local solver selected: {}'.format(local))
 
-    x0 = numpy.atleast_1d(x0)
+    x0 = np.atleast_1d(x0)
     n = len(x0)
 
     if bounds is None:
@@ -425,9 +425,9 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         raise ValueError('length of x0 != length of bounds')
 
     bounds = [b if b is not None else (None, None) for b in bounds]
-    _bounds = [(-numpy.inf if l is None else l, numpy.inf if u is None else u)
+    _bounds = [(-np.inf if l is None else l, np.inf if u is None else u)
                for l, u in bounds]
-    low, up = numpy.array(_bounds).T
+    low, up = np.array(_bounds).T
 
     if maxfunevals is None:
         maxfunevals = max(100, 10*n)
@@ -440,7 +440,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
                         'of "oldest" or "farthest".'.format(tabustrategy))
 
     tabulist = []
-    best_f = numpy.inf
+    best_f = np.inf
     best_x = x0
 
     global_iter = 0
@@ -499,20 +499,20 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
             all_tunnel += 1
 
             # generate a new starting point away from current best solution
-            r = numpy.random.uniform(-1.0, 1.0, size=(n, ))
-            beta = eps2*numpy.linalg.norm(xf)/numpy.linalg.norm(r)
+            r = np.random.uniform(-1.0, 1.0, size=(n, ))
+            beta = eps2*np.linalg.norm(xf)/np.linalg.norm(r)
 
-            if numpy.abs(beta) < 1e-8:
+            if np.abs(beta) < 1e-8:
                 beta = eps2
 
             x0 = xf + beta*r
 
             # make sure that the new starting point is within the bounds
-            x0 = numpy.where(x0 < low, low, x0)
-            x0 = numpy.where(x0 > up, up, x0)
+            x0 = np.where(x0 < low, low, x0)
+            x0 = np.where(x0 > up, up, x0)
 
             # aspired value of the objective function for the tunneling loop
-            aspiration = best_f - eps1*(1.0 + numpy.abs(best_f))
+            aspiration = best_f - eps1*(1.0 + np.abs(best_f))
 
             tunnel_args = tuple([objfun, aspiration, tabulist] + list(args))
 
