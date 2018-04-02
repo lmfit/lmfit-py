@@ -327,8 +327,8 @@ def inverse_tunnel(xtf, ytf, aspiration, tabulist):
         denominator = denominator*np.sqrt(np.sum((xtf - tabu)**2))
 
     numerator = ytf*denominator
+    yf = aspiration + np.sqrt(numerator)
 
-    yf = aspiration + np.sqrt(ytf*denominator)
     return yf
 
 
