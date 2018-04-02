@@ -14,7 +14,7 @@ from __future__ import print_function
 import numpy as np
 from scipy.optimize import minimize
 
-SCIPY_LOCAL_SOLVERS   = ['Nelder-Mead', 'Powell', 'L-BFGS-B', 'TNC', 'SLSQP']
+SCIPY_LOCAL_SOLVERS = ['Nelder-Mead', 'Powell', 'L-BFGS-B', 'TNC', 'SLSQP']
 
 
 def AMPGO(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None, maxfunevals=None,
@@ -287,7 +287,7 @@ def drop_tabu_points(xf, tabulist, tabulistsize, tabustrategy):
     if tabustrategy == 'oldest':
         tabulist.pop(0)
     else:
-        distance = np.sqrt(np.sum((tabulist-xf)**2, axis=1))
+        distance = np.sqrt(np.sum((tabulist - xf)**2, axis=1))
         index = np.argmax(distance)
         tabulist.pop(index)
 
@@ -312,7 +312,7 @@ def tunnel(x0, *args):
     denominator = 1.0
 
     for tabu in tabulist:
-        denominator = denominator*np.sqrt(np.sum((x0 - tabu)**2))
+        denominator = denominator * np.sqrt(np.sum((x0 - tabu)**2))
 
     ytf = numerator/denominator
 
@@ -324,7 +324,7 @@ def inverse_tunnel(xtf, ytf, aspiration, tabulist):
     denominator = 1.0
 
     for tabu in tabulist:
-        denominator = denominator*np.sqrt(np.sum((xtf - tabu)**2))
+        denominator = denominator * np.sqrt(np.sum((xtf - tabu)**2))
 
     numerator = ytf*denominator
     yf = aspiration + np.sqrt(numerator)
@@ -477,14 +477,18 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         if best_f < fmin + glbtol:
             if disp:
                 print('='*72)
-            return best_x, best_f, evaluations, 'Optimization terminated successfully', (all_tunnel, success_tunnel)
+            return (best_x, best_f, evaluations,
+                    'Optimization terminated successfully',
+                    (all_tunnel, success_tunnel))
         if maxfunevals <= 0:
             if disp:
                 print('='*72)
-            return best_x, best_f, evaluations, 'Maximum number of function evaluations exceeded', (all_tunnel, success_tunnel)
+            return (best_x, best_f, evaluations,
+                    'Maximum number of function evaluations exceeded',
+                    (all_tunnel, success_tunnel))
 
         # if needed, drop a value from the tabu tunneling list and add the
-        # current best solution
+        # current solution
         tabulist = drop_tabu_points(xf, tabulist, tabulistsize, tabustrategy)
         tabulist.append(xf)
 
@@ -498,16 +502,16 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
 
             all_tunnel += 1
 
-            # generate a new starting point away from current best solution
+            # generate a new starting point away from the current solution
             r = np.random.uniform(-1.0, 1.0, size=(n, ))
-            beta = eps2*np.linalg.norm(xf)/np.linalg.norm(r)
+            beta = eps2*np.linalg.norm(xf) / np.linalg.norm(r)
 
             if np.abs(beta) < 1e-8:
                 beta = eps2
 
             x0 = xf + beta*r
 
-            # make sure that the new starting point is within the bounds
+            # make sure that the new starting point is within bounds
             x0 = np.where(x0 < low, low, x0)
             x0 = np.where(x0 > up, up, x0)
 
@@ -541,12 +545,16 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
                           'local minimum: {:.5g} < {:.5g}\n'.format(yf, oldf))
 
             if best_f < fmin + glbtol:
-                return best_x, best_f, evaluations, 'Optimization terminated successfully', (all_tunnel, success_tunnel)
+                return (best_x, best_f, evaluations,
+                        'Optimization terminated successfully',
+                        (all_tunnel, success_tunnel))
 
             i += 1
 
             if maxfunevals <= 0:
-                return best_x, best_f, evaluations, 'Maximum number of function evaluations exceeded', (all_tunnel, success_tunnel)
+                return (best_x, best_f, evaluations,
+                        'Maximum number of function evaluations exceeded',
+                        (all_tunnel, success_tunnel))
 
             tabulist = drop_tabu_points(xf, tabulist, tabulistsize, tabustrategy)
             tabulist.append(xf)
@@ -558,7 +566,11 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         x0 = xf.copy()
 
         if global_iter >= totaliter:
-            return best_x, best_f, evaluations, 'Maximum number of global iterations exceeded', (all_tunnel, success_tunnel)
+            return (best_x, best_f, evaluations,
+                    'Maximum number of global iterations exceeded',
+                    (all_tunnel, success_tunnel))
 
         if best_f < fmin + glbtol:
-            return best_x, best_f, evaluations, 'Optimization terminated successfully', (all_tunnel, success_tunnel)
+            return (best_x, best_f, evaluations,
+                    'Optimization terminated successfully',
+                    (all_tunnel, success_tunnel))
