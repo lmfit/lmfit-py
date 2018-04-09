@@ -1677,9 +1677,7 @@ class Minimizer(object):
                 maxiter: int (default is 5)
                     Maximum number of `Tabu Tunneling` iterations during each global iteration.
                 glbtol: float (default is 1e-5)
-                    The optimization will stop if the absolute difference between the current
-                    minimum objective function value and the provided global optimum (`fmin`)
-                    is less than `glbtol`.
+                    Tolerance whether or not to accept a solution after a tunneling phase.
                 eps1: float (default is 0.02)
                     Constant used to define an aspiration value for the objective function during
                     the Tunneling phase.
@@ -1692,8 +1690,6 @@ class Minimizer(object):
                     Strategy to use when the size of the tabu list exceeds `tabulistsize`. It
                     can be 'oldest' to drop the oldest point from the tabu list or 'farthest'
                     to drop the element farthest from the last local minimum found.
-                fmin: float (default is -numpy.inf)
-                    Objective function's global optimum value (if known).
                 disp: bool (default is False)
                     Set to True to print convergence messages.
 
@@ -1722,11 +1718,10 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
 
-        ampgo_kws = dict(local='L-BFGS-B', local_opts=None,
-                         maxfunevals=None, totaliter=20,
-                         maxiter=5, glbtol=1e-5, eps1=0.02, eps2=0.1,
-                         tabulistsize=5, tabustrategy='farthest',
-                         fmin=-np.inf, disp=False)
+        ampgo_kws = dict(local='L-BFGS-B', local_opts=None, maxfunevals=None,
+                         totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
+                         eps2=0.1, tabulistsize=5, tabustrategy='farthest',
+                         disp=False)
         ampgo_kws.update(self.kws)
         ampgo_kws.update(kws)
 

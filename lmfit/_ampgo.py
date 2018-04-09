@@ -19,8 +19,7 @@ SCIPY_LOCAL_SOLVERS = ['Nelder-Mead', 'Powell', 'L-BFGS-B', 'TNC', 'SLSQP']
 
 def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
           maxfunevals=None, totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
-          eps2=0.1, tabulistsize=5, tabustrategy='farthest', fmin=-np.inf,
-          disp=False):
+          eps2=0.1, tabulistsize=5, tabustrategy='farthest', disp=False):
     """Find the global minimum of a multivariate function using the AMPGO
     (Adaptive Memory Programming for Global Optimization) algorithm.
 
@@ -55,9 +54,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         Maximum number of `Tabu Tunneling` iterations during each global
         iteration.
     glbtol: float, optional
-        The optimization will stop if the absolute difference between the
-        current minimum objective function value and the provided global
-        optimum (`fmin`) is less than `glbtol`.
+        Tolerance whether or not to accept a solution after a tunneling phase.
     eps1: float, optional
         Constant used to define an aspiration value for the objective function
         during the Tunneling phase.
@@ -71,9 +68,6 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         It can be 'oldest' to drop the oldest point from the tabu list or
         'farthest' to drop the element farthest from the last local minimum
         found.
-    fmin: float, optional
-       Objective function's global optimum value (if known, the default
-       is -numpy.inf).
     disp: bool, optional
         Set to True to print convergence messages.
 
@@ -159,12 +153,6 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         if disp:
             print('\n\n ==> Reached local minimum: {:.5g}\n'.format(yf))
 
-        if best_f < fmin + glbtol:
-            if disp:
-                print('='*72)
-            return (best_x, best_f, evaluations,
-                    'Optimization terminated successfully',
-                    (all_tunnel, success_tunnel))
         if maxfunevals <= 0:
             if disp:
                 print('='*72)
@@ -229,11 +217,6 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
                     print('\n\n ==> Successful tunnelling phase. Reached new '
                           'local minimum: {:.5g} < {:.5g}\n'.format(yf, oldf))
 
-            if best_f < fmin + glbtol:
-                return (best_x, best_f, evaluations,
-                        'Optimization terminated successfully',
-                        (all_tunnel, success_tunnel))
-
             i += 1
 
             if maxfunevals <= 0:
@@ -253,11 +236,6 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         if global_iter >= totaliter:
             return (best_x, best_f, evaluations,
                     'Maximum number of global iterations exceeded',
-                    (all_tunnel, success_tunnel))
-
-        if best_f < fmin + glbtol:
-            return (best_x, best_f, evaluations,
-                    'Optimization terminated successfully',
                     (all_tunnel, success_tunnel))
 
 
