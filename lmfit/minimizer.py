@@ -113,7 +113,12 @@ class MinimizerException(Exception):
         self.msg = msg
 
     def __str__(self):
-        return "\n%s" % self.msg
+        return "{}".format(self.msg)
+
+
+class AbortFitException(MinimizerException):
+    """Raised when a fit is aborted by the user."""
+    pass
 
 
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
@@ -460,9 +465,6 @@ class Minimizer(object):
              The evaluated function values for given `fvars`.
 
         """
-        # set parameter values
-        if self._abort:
-            return None
         params = self.result.params
 
         if fvars.shape == ():
@@ -484,9 +486,14 @@ class Minimizer(object):
             abort = self.iter_cb(params, self.result.nfev, out,
                                  *self.userargs, **self.userkws)
             self._abort = self._abort or abort
-        self._abort = self._abort and self.result.nfev > len(fvars)
 
-        if not self._abort:
+        if self._abort:
+            self.result.residual = out
+            self.result.aborted = True
+            self.result.message = "Fit aborted by user callback. Could not estimate error-bars."
+            self.result.success = False
+            raise AbortFitException("fit aborted by user.")
+        else:
             return _nan_policy(np.asarray(out).ravel(),
                                nan_policy=self.nan_policy)
 
@@ -1287,19 +1294,32 @@ class Minimizer(object):
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
 
-        lsout = scipy_leastsq(self.__residual, variables, **lskws)
-        _best, _cov, infodict, errmsg, ier = lsout
-        result.aborted = self._abort
-        self._abort = False
+        try:
+            lsout = scipy_leastsq(self.__residual, variables, **lskws)
+            _best, _cov, infodict, errmsg, ier = lsout
+            result.residual = infodict['fvec']
+        except AbortFitException:
+            pass
 
-        result.residual = resid = infodict['fvec']
+        result.ndata = len(result.residual)
+        result.chisqr = (result.residual**2).sum()
+        result.nfree = (result.ndata - nvars)
+        result.redchi = result.chisqr / result.nfree
+        result.nvarys = nvars
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+
+        params = result.params
+
+        if result.aborted:
+            return result
+
         result.ier = ier
         result.lmdif_message = errmsg
         result.success = ier in [1, 2, 3, 4]
-        if result.aborted:
-            result.message = 'Fit aborted by user callback.'
-            result.success = False
-        elif ier in {1, 2, 3}:
+        if ier in {1, 2, 3}:
             result.message = 'Fit succeeded.'
         elif ier == 0:
             result.message = ('Invalid Input Parameters. I.e. more variables '
@@ -1311,19 +1331,6 @@ class Minimizer(object):
             result.message = self._err_maxfev % lskws['maxfev']
         else:
             result.message = 'Tolerance seems to be too small.'
-
-        result.ndata = len(resid)
-
-        result.chisqr = (resid**2).sum()
-        result.nfree = (result.ndata - nvars)
-        result.redchi = result.chisqr / result.nfree
-        result.nvarys = nvars
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
-
-        params = result.params
 
         # need to map _best values to params, then calculate the
         # grad for the variable parameters
@@ -1362,8 +1369,6 @@ class Minimizer(object):
 
         # self.errorbars = error bars were successfully estimated
         result.errorbars = (result.covar is not None)
-        if result.aborted:
-            result.errorbars = False
         if result.errorbars:
             if self.scale_covar:
                 result.covar *= result.redchi
