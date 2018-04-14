@@ -770,23 +770,31 @@ class Minimizer(object):
             for k, v in fmin_kws.items():
                 if k in kwargs:
                     kwargs[k] = v
-            ret = differential_evolution(self.penalty, _bounds, **kwargs)
+            try:
+                ret = differential_evolution(self.penalty, _bounds, **kwargs)
+            except AbortFitException:
+                pass
         else:
-            ret = scipy_minimize(self.penalty, variables, **fmin_kws)
+            try:
+                ret = scipy_minimize(self.penalty, variables, **fmin_kws)
+            except AbortFitException:
+                pass
 
-        result.aborted = self._abort
-        self._abort = False
-        if isinstance(ret, dict):
-            for attr, value in ret.items():
-                setattr(result, attr, value)
+        if not result.aborted:
+            if isinstance(ret, dict):
+                for attr, value in ret.items():
+                    setattr(result, attr, value)
+            else:
+                for attr in dir(ret):
+                    if not attr.startswith('_'):
+                        setattr(result, attr, getattr(ret, attr))
+
+            result.x = np.atleast_1d(result.x)
+            result.chisqr = result.residual = self.__residual(result.x)
+            result.nfev -= 1
         else:
-            for attr in dir(ret):
-                if not attr.startswith('_'):
-                    setattr(result, attr, getattr(ret, attr))
+            result.chisqr = result.residual
 
-        result.x = np.atleast_1d(result.x)
-        result.chisqr = result.residual = self.__residual(result.x)
-        result.nfev -= 1
         result.nvarys = len(variables)
         result.ndata = 1
         result.nfree = 1
