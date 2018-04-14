@@ -1541,43 +1541,50 @@ class Minimizer(object):
                                  'parameter "{}".'.format(result.var_names[i]))
             ranges.append(par_range)
 
-        ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)
+        try:
+            ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)
+        except AbortFitException:
+            pass
 
-        result.brute_x0 = ret[0]
-        result.brute_fval = ret[1]
-        result.brute_grid = ret[2]
-        result.brute_Jout = ret[3]
+        if not result.aborted:
+            result.brute_x0 = ret[0]
+            result.brute_fval = ret[1]
+            result.brute_grid = ret[2]
+            result.brute_Jout = ret[3]
 
-        # sort the results of brute and populate .candidates attribute
-        grid_score = ret[3].ravel()  # chisqr
-        grid_points = [par.ravel() for par in ret[2]]
+            # sort the results of brute and populate .candidates attribute
+            grid_score = ret[3].ravel()  # chisqr
+            grid_points = [par.ravel() for par in ret[2]]
 
-        if len(result.var_names) == 1:
-            grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
-                                   dtype=[('par', 'O'), ('score', 'float64')])
+            if len(result.var_names) == 1:
+                grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
+                                       dtype=[('par', 'O'), ('score', 'float64')])
+            else:
+                grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
+                                       dtype=[('par', 'O'), ('score', 'float64')])
+            grid_result_sorted = grid_result[grid_result.argsort(order='score')]
+
+            result.candidates = []
+
+            if keep == 'all':
+                keep_candidates = len(grid_result_sorted)
+            else:
+                keep_candidates = min(len(grid_result_sorted), keep)
+
+            for data in grid_result_sorted[:keep_candidates]:
+                pars = deepcopy(self.params)
+                for i, par in enumerate(result.var_names):
+                    pars[par].value = data[0][i]
+                result.candidates.append(Candidate(params=pars, score=data[1]))
+
+            result.params = result.candidates[0].params
+            result.chisqr = ret[1]
+            result.nvarys = len(result.var_names)
+            result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
+            result.nfev -= 1
         else:
-            grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
-                                   dtype=[('par', 'O'), ('score', 'float64')])
-        grid_result_sorted = grid_result[grid_result.argsort(order='score')]
+            result.chisqr = (result.residual**2).sum()
 
-        result.candidates = []
-
-        if keep == 'all':
-            keep_candidates = len(grid_result_sorted)
-        else:
-            keep_candidates = min(len(grid_result_sorted), keep)
-
-        for data in grid_result_sorted[:keep_candidates]:
-            pars = deepcopy(self.params)
-            for i, par in enumerate(result.var_names):
-                pars[par].value = data[0][i]
-            result.candidates.append(Candidate(params=pars, score=data[1]))
-
-        result.params = result.candidates[0].params
-        result.chisqr = ret[1]
-        result.nvarys = len(result.var_names)
-        result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
-        result.nfev -= 1
         result.ndata = len(result.residual)
         result.nfree = result.ndata - result.nvarys
         result.redchi = result.chisqr / result.nfree
