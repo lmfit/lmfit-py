@@ -1214,16 +1214,23 @@ class Minimizer(object):
             lower_bounds.append(replace_none(par.min, -1))
             upper_bounds.append(replace_none(par.max, 1))
 
-        ret = least_squares(self.__residual, start_vals,
-                            bounds=(lower_bounds, upper_bounds),
-                            kwargs=dict(apply_bounds_transformation=False),
-                            **kws)
+        try:
+            ret = least_squares(self.__residual, start_vals,
+                                bounds=(lower_bounds, upper_bounds),
+                                kwargs=dict(apply_bounds_transformation=False),
+                                **kws)
+        except AbortFitException:
+            pass
 
-        for attr in ret:
-            setattr(result, attr, ret[attr])
+        if not result.aborted:
+            for attr in ret:
+                setattr(result, attr, ret[attr])
 
-        result.x = np.atleast_1d(result.x)
-        result.chisqr = result.residual = ret.fun
+            result.x = np.atleast_1d(result.x)
+            result.chisqr = result.residual = ret.fun
+        else:
+            result.chisqr = result.residual
+
         result.nvarys = len(result.var_names)
         result.ndata = 1
         result.nfree = 1
