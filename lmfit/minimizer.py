@@ -22,6 +22,7 @@ import numpy as np
 from numpy import dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
+from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import differential_evolution, least_squares
 from scipy.optimize import leastsq as scipy_leastsq
@@ -1425,6 +1426,99 @@ class Minimizer(object):
         np.seterr(**orig_warn_settings)
         return result
 
+    def _basinhopping_accept_test(self, f_new, x_new, f_old, x_old):
+        """Check whether or not to accept the new solution (i.e., within bounds?).
+
+        Returns
+        -------
+        accept_test : bool
+            The candidate vector lies within the bounds.
+
+        """
+        low, up = np.asarray(self._bounds).T
+
+        if np.any(x_new < low):
+            return False
+        if np.any(x_new > up):
+            return False
+        return True
+
+    def basinhopping(self, params=None, **kws):
+        """Use the `basinhopping` algorithm to find the global minimum of a function.
+
+        This method calls :scipydoc:`optimize.basinhopping` using the default
+        arguments (exceptions are given below).
+
+        Bounds are supplied through `minimizer_kwargs` and, therefore,
+        'L-BFGS-B' will be used as the default local optimizer
+        (see :scipydoc:`optimize.minimize`).
+        In addition, the `accept_test` callable is used to make sure that the
+        solution obtained after taking a step is within the specified bounds.
+
+        Parameters
+        ----------
+        params : :class:`~lmfit.parameter.Parameters` object, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the optimization results from the basinhopping
+            algorithm.
+
+
+        .. versionadded:: 0.9.10
+
+        """
+        result = self.prepare_fit(params=params)
+        result.method = 'basinhopping'
+
+        basinhopping_kws = dict(niter=100, T=1.0, stepsize=0.5,
+                                minimizer_kwargs={}, take_step=None,
+                                accept_test=self._basinhopping_accept_test,
+                                callback=None, interval=50, disp=False,
+                                niter_success=None, seed=None)
+
+        basinhopping_kws.update(self.kws)
+        basinhopping_kws.update(kws)
+
+        varying = np.asarray([par.vary for par in self.params.values()])
+        replace_none = lambda x, sign: sign*np.inf if x is None else x
+        lower_bounds = np.asarray([replace_none(i.min, -1) for i in
+                                   self.params.values()])[varying]
+        upper_bounds = np.asarray([replace_none(i.max, 1) for i in
+                                   self.params.values()])[varying]
+        bounds = [(lb, up) for (lb, up) in zip(lower_bounds, upper_bounds)]
+        basinhopping_kws['minimizer_kwargs'].update({'bounds': bounds})
+        self._bounds = bounds
+        x0 = np.asarray([i.value for i in self.params.values()])[varying]
+
+        try:
+            ret = scipy_basinhopping(self.penalty_brute, x0,
+                                     **basinhopping_kws)
+        except AbortFitException:
+            pass
+
+        if not result.aborted:
+            result.message = ret.message
+            result.chisqr = ret.fun
+            result.residual = self.__residual(ret.x, apply_bounds_transformation=False)
+            result.nfev -= 1
+        else:
+            result.chisqr = (result.residual**2).sum()
+
+        result.nvarys = len(result.var_names)
+        result.ndata = len(result.residual)
+        result.nfree = result.ndata - result.nvarys
+        result.redchi = result.chisqr / result.nfree
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+
+        return result
+
     def brute(self, params=None, Ns=20, keep=50):
         """Use the `brute` method to find the global minimum of a function.
 
@@ -1656,8 +1750,10 @@ class Minimizer(object):
             function = self.leastsq
         elif user_method.startswith('least_s'):
             function = self.least_squares
-        elif user_method.startswith('brute'):
+        elif user_method == 'brute':
             function = self.brute
+        elif user_method == 'basinhopping':
+            function = self.basinhopping
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -1906,6 +2002,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
         - `'differential_evolution'`: differential evolution
         - `'brute'`: brute force method
+        - `'basinhopping'`: basinhopping
         - '`nelder`': Nelder-Mead
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell

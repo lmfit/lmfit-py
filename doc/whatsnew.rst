@@ -4,12 +4,21 @@
 Release Notes
 =====================
 
-.. _lmfit github repository:   https://github.com/lmfit/lmfit-py
+.. _lmfit GitHub repository:   https://github.com/lmfit/lmfit-py
 
 This section discusses changes between versions, especially changes
 significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
-consult the `lmfit github repository`_.
+consult the `lmfit GitHub repository`_.
+
+
+.. _whatsnew_0910_label:
+
+Version 0.9.10 Release Notes
+==========================================
+Basinhopping was added as a global optimization algorithm - see
+:func:`~lmfit.minimizer.Minimizer.basinhopping` and :scipydoc:`optimize.basinhopping` for
+more information.
 
 
 .. _whatsnew_099_label:
