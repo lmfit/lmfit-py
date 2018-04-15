@@ -364,7 +364,7 @@ The Minimizer object has a few public methods:
 
 .. automethod:: Minimizer.brute
 
-For more information, check the examples in ``examples/lmfit_brute.py``.
+For more information, check the examples in ``examples/lmfit_brute_example.ipynb``.
 
 .. automethod:: Minimizer.emcee
 
