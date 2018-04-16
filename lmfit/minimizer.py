@@ -29,6 +29,7 @@ from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
+from scipy.version import version as scipy_version
 import six
 
 # use locally modified version of uncertainties package
@@ -1464,6 +1465,13 @@ class Minimizer(object):
 
         basinhopping_kws.update(self.kws)
         basinhopping_kws.update(kws)
+
+        # FIXME - remove after requirement for scipy >= 0.19
+        major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
+        if major < 1 and minor < 19:
+            _ = basinhopping_kws.pop('seed')
+            print("Warning: basinhopping doesn't support argument 'seed' for "
+                  "scipy versions below 0.19!")
 
         varying = np.asarray([par.vary for par in self.params.values()])
         replace_none = lambda x, sign: sign*np.inf if x is None else x
