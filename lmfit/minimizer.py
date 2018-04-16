@@ -544,34 +544,16 @@ class Minimizer(object):
             to sum-of-squares, but can be replaced by other options.
 
         """
-        r = self.__residual(fvars)
+        if self.result.method in ['basinhopping', 'brute']:
+            apply_bounds_transformation = False
+        else:
+            apply_bounds_transformation = True
+
+        r = self.__residual(fvars, apply_bounds_transformation)
         if isinstance(r, ndarray) and r.size > 1:
             r = self.reduce_fcn(r)
             if isinstance(r, ndarray) and r.size > 1:
                 r = r.sum()
-        return r
-
-    def penalty_brute(self, fvars):
-        """Penalty function for brute force method.
-
-        Parameters
-        ----------
-        fvars : numpy.ndarray
-            Array of values for the variable parameters
-
-        Returns
-        -------
-        r : float
-            The  evaluated user-supplied objective function.
-
-            If the objective function is an array of size greater than 1,
-            use the scalar returned by `self.reduce_fcn`.  This defaults
-            to sum-of-squares, but can be replaced by other options.
-
-        """
-        r = self.__residual(fvars, apply_bounds_transformation=False)
-        if isinstance(r, ndarray) and r.size > 1:
-            r = (r*r).sum()
         return r
 
     def prepare_fit(self, params=None):
@@ -1495,8 +1477,7 @@ class Minimizer(object):
         x0 = np.asarray([i.value for i in self.params.values()])[varying]
 
         try:
-            ret = scipy_basinhopping(self.penalty_brute, x0,
-                                     **basinhopping_kws)
+            ret = scipy_basinhopping(self.penalty, x0, **basinhopping_kws)
         except AbortFitException:
             pass
 
@@ -1636,7 +1617,7 @@ class Minimizer(object):
             ranges.append(par_range)
 
         try:
-            ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)
+            ret = scipy_brute(self.penalty, tuple(ranges), Ns=Ns, **brute_kws)
         except AbortFitException:
             pass
 
