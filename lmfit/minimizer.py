@@ -113,7 +113,12 @@ class MinimizerException(Exception):
         self.msg = msg
 
     def __str__(self):
-        return "\n%s" % self.msg
+        return "{}".format(self.msg)
+
+
+class AbortFitException(MinimizerException):
+    """Raised when a fit is aborted by the user."""
+    pass
 
 
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
@@ -460,9 +465,6 @@ class Minimizer(object):
              The evaluated function values for given `fvars`.
 
         """
-        # set parameter values
-        if self._abort:
-            return None
         params = self.result.params
 
         if fvars.shape == ():
@@ -484,9 +486,14 @@ class Minimizer(object):
             abort = self.iter_cb(params, self.result.nfev, out,
                                  *self.userargs, **self.userkws)
             self._abort = self._abort or abort
-        self._abort = self._abort and self.result.nfev > len(fvars)
 
-        if not self._abort:
+        if self._abort:
+            self.result.residual = out
+            self.result.aborted = True
+            self.result.message = "Fit aborted by user callback. Could not estimate error-bars."
+            self.result.success = False
+            raise AbortFitException("fit aborted by user.")
+        else:
             return _nan_policy(np.asarray(out).ravel(),
                                nan_policy=self.nan_policy)
 
@@ -763,23 +770,31 @@ class Minimizer(object):
             for k, v in fmin_kws.items():
                 if k in kwargs:
                     kwargs[k] = v
-            ret = differential_evolution(self.penalty, _bounds, **kwargs)
+            try:
+                ret = differential_evolution(self.penalty, _bounds, **kwargs)
+            except AbortFitException:
+                pass
         else:
-            ret = scipy_minimize(self.penalty, variables, **fmin_kws)
+            try:
+                ret = scipy_minimize(self.penalty, variables, **fmin_kws)
+            except AbortFitException:
+                pass
 
-        result.aborted = self._abort
-        self._abort = False
-        if isinstance(ret, dict):
-            for attr, value in ret.items():
-                setattr(result, attr, value)
+        if not result.aborted:
+            if isinstance(ret, dict):
+                for attr, value in ret.items():
+                    setattr(result, attr, value)
+            else:
+                for attr in dir(ret):
+                    if not attr.startswith('_'):
+                        setattr(result, attr, getattr(ret, attr))
+
+            result.x = np.atleast_1d(result.x)
+            result.chisqr = result.residual = self.__residual(result.x)
+            result.nfev -= 1
         else:
-            for attr in dir(ret):
-                if not attr.startswith('_'):
-                    setattr(result, attr, getattr(ret, attr))
+            result.chisqr = result.residual
 
-        result.x = np.atleast_1d(result.x)
-        result.chisqr = result.residual = self.__residual(result.x)
-        result.nfev -= 1
         result.nvarys = len(variables)
         result.ndata = 1
         result.nfree = 1
@@ -1199,16 +1214,23 @@ class Minimizer(object):
             lower_bounds.append(replace_none(par.min, -1))
             upper_bounds.append(replace_none(par.max, 1))
 
-        ret = least_squares(self.__residual, start_vals,
-                            bounds=(lower_bounds, upper_bounds),
-                            kwargs=dict(apply_bounds_transformation=False),
-                            **kws)
+        try:
+            ret = least_squares(self.__residual, start_vals,
+                                bounds=(lower_bounds, upper_bounds),
+                                kwargs=dict(apply_bounds_transformation=False),
+                                **kws)
+        except AbortFitException:
+            pass
 
-        for attr in ret:
-            setattr(result, attr, ret[attr])
+        if not result.aborted:
+            for attr in ret:
+                setattr(result, attr, ret[attr])
 
-        result.x = np.atleast_1d(result.x)
-        result.chisqr = result.residual = ret.fun
+            result.x = np.atleast_1d(result.x)
+            result.chisqr = result.residual = ret.fun
+        else:
+            result.chisqr = result.residual
+
         result.nvarys = len(result.var_names)
         result.ndata = 1
         result.nfree = 1
@@ -1287,19 +1309,32 @@ class Minimizer(object):
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
 
-        lsout = scipy_leastsq(self.__residual, variables, **lskws)
-        _best, _cov, infodict, errmsg, ier = lsout
-        result.aborted = self._abort
-        self._abort = False
+        try:
+            lsout = scipy_leastsq(self.__residual, variables, **lskws)
+            _best, _cov, infodict, errmsg, ier = lsout
+            result.residual = infodict['fvec']
+        except AbortFitException:
+            pass
 
-        result.residual = resid = infodict['fvec']
+        result.ndata = len(result.residual)
+        result.chisqr = (result.residual**2).sum()
+        result.nfree = (result.ndata - nvars)
+        result.redchi = result.chisqr / result.nfree
+        result.nvarys = nvars
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+
+        params = result.params
+
+        if result.aborted:
+            return result
+
         result.ier = ier
         result.lmdif_message = errmsg
         result.success = ier in [1, 2, 3, 4]
-        if result.aborted:
-            result.message = 'Fit aborted by user callback.'
-            result.success = False
-        elif ier in {1, 2, 3}:
+        if ier in {1, 2, 3}:
             result.message = 'Fit succeeded.'
         elif ier == 0:
             result.message = ('Invalid Input Parameters. I.e. more variables '
@@ -1311,19 +1346,6 @@ class Minimizer(object):
             result.message = self._err_maxfev % lskws['maxfev']
         else:
             result.message = 'Tolerance seems to be too small.'
-
-        result.ndata = len(resid)
-
-        result.chisqr = (resid**2).sum()
-        result.nfree = (result.ndata - nvars)
-        result.redchi = result.chisqr / result.nfree
-        result.nvarys = nvars
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
-
-        params = result.params
 
         # need to map _best values to params, then calculate the
         # grad for the variable parameters
@@ -1362,8 +1384,6 @@ class Minimizer(object):
 
         # self.errorbars = error bars were successfully estimated
         result.errorbars = (result.covar is not None)
-        if result.aborted:
-            result.errorbars = False
         if result.errorbars:
             if self.scale_covar:
                 result.covar *= result.redchi
@@ -1521,43 +1541,50 @@ class Minimizer(object):
                                  'parameter "{}".'.format(result.var_names[i]))
             ranges.append(par_range)
 
-        ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)
+        try:
+            ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)
+        except AbortFitException:
+            pass
 
-        result.brute_x0 = ret[0]
-        result.brute_fval = ret[1]
-        result.brute_grid = ret[2]
-        result.brute_Jout = ret[3]
+        if not result.aborted:
+            result.brute_x0 = ret[0]
+            result.brute_fval = ret[1]
+            result.brute_grid = ret[2]
+            result.brute_Jout = ret[3]
 
-        # sort the results of brute and populate .candidates attribute
-        grid_score = ret[3].ravel()  # chisqr
-        grid_points = [par.ravel() for par in ret[2]]
+            # sort the results of brute and populate .candidates attribute
+            grid_score = ret[3].ravel()  # chisqr
+            grid_points = [par.ravel() for par in ret[2]]
 
-        if len(result.var_names) == 1:
-            grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
-                                   dtype=[('par', 'O'), ('score', 'float64')])
+            if len(result.var_names) == 1:
+                grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
+                                       dtype=[('par', 'O'), ('score', 'float64')])
+            else:
+                grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
+                                       dtype=[('par', 'O'), ('score', 'float64')])
+            grid_result_sorted = grid_result[grid_result.argsort(order='score')]
+
+            result.candidates = []
+
+            if keep == 'all':
+                keep_candidates = len(grid_result_sorted)
+            else:
+                keep_candidates = min(len(grid_result_sorted), keep)
+
+            for data in grid_result_sorted[:keep_candidates]:
+                pars = deepcopy(self.params)
+                for i, par in enumerate(result.var_names):
+                    pars[par].value = data[0][i]
+                result.candidates.append(Candidate(params=pars, score=data[1]))
+
+            result.params = result.candidates[0].params
+            result.chisqr = ret[1]
+            result.nvarys = len(result.var_names)
+            result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
+            result.nfev -= 1
         else:
-            grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
-                                   dtype=[('par', 'O'), ('score', 'float64')])
-        grid_result_sorted = grid_result[grid_result.argsort(order='score')]
+            result.chisqr = (result.residual**2).sum()
 
-        result.candidates = []
-
-        if keep == 'all':
-            keep_candidates = len(grid_result_sorted)
-        else:
-            keep_candidates = min(len(grid_result_sorted), keep)
-
-        for data in grid_result_sorted[:keep_candidates]:
-            pars = deepcopy(self.params)
-            for i, par in enumerate(result.var_names):
-                pars[par].value = data[0][i]
-            result.candidates.append(Candidate(params=pars, score=data[1]))
-
-        result.params = result.candidates[0].params
-        result.chisqr = ret[1]
-        result.nvarys = len(result.var_names)
-        result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
-        result.nfev -= 1
         result.ndata = len(result.residual)
         result.nfree = result.ndata - result.nvarys
         result.redchi = result.chisqr / result.nfree
