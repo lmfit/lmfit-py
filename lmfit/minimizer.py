@@ -31,9 +31,8 @@ from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 from scipy.version import version as scipy_version
 import six
+import uncertainties
 
-# use locally modified version of uncertainties package
-from . import uncertainties
 from .parameter import Parameter, Parameters
 
 #  scipy version notes:

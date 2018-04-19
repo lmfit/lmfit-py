@@ -30,6 +30,7 @@ install:
     - source activate test_env
     - pip install asteval
     - pip install emcee
+    - pip install uncertainties
     - python setup.py install
     - conda list
 
