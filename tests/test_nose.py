@@ -353,17 +353,17 @@ def test_ufloat():
     """
     test of ufloat from uncertainties
     """
-    x = ufloat((1, 0.1))
+    x = ufloat(1, 0.1)
     assert_allclose(x.nominal_value, 1.0, rtol=1.e-7)
-    assert_allclose(x.std_dev(),     0.1, rtol=1.e-7)
+    assert_allclose(x.std_dev, 0.1, rtol=1.e-7)
 
     y = x*x
     assert_allclose(y.nominal_value, 1.0, rtol=1.e-7)
-    assert_allclose(y.std_dev(),     0.2, rtol=1.e-7)
+    assert_allclose(y.std_dev, 0.2, rtol=1.e-7)
 
     y = x - x
     assert_allclose(y.nominal_value, 0.0, rtol=1.e-7)
-    assert_allclose(y.std_dev(),     0.0, rtol=1.e-7)
+    assert_allclose(y.std_dev, 0.0, rtol=1.e-7)
 
 
 
