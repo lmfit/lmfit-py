@@ -545,7 +545,7 @@ class Minimizer(object):
             to sum-of-squares, but can be replaced by other options.
 
         """
-        if self.result.method in ['basinhopping', 'brute']:
+        if self.result.method == 'brute':
             apply_bounds_transformation = False
         else:
             apply_bounds_transformation = True
@@ -1409,34 +1409,13 @@ class Minimizer(object):
         np.seterr(**orig_warn_settings)
         return result
 
-    def _basinhopping_accept_test(self, f_new, x_new, f_old, x_old):
-        """Check whether or not to accept the new solution (i.e., within bounds?).
-
-        Returns
-        -------
-        accept_test : bool
-            The candidate vector lies within the bounds.
-
-        """
-        low, up = np.asarray(self._bounds).T
-
-        if np.any(x_new < low):
-            return False
-        if np.any(x_new > up):
-            return False
-        return True
-
     def basinhopping(self, params=None, **kws):
         """Use the `basinhopping` algorithm to find the global minimum of a function.
 
         This method calls :scipydoc:`optimize.basinhopping` using the default
-        arguments (exceptions are given below).
-
-        Bounds are supplied through `minimizer_kwargs` and, therefore,
-        'L-BFGS-B' will be used as the default local optimizer
-        (see :scipydoc:`optimize.minimize`).
-        In addition, the `accept_test` callable is used to make sure that the
-        solution obtained after taking a step is within the specified bounds.
+        arguments. The default minimizer is `BFGS`, but since lmfit supports
+        parameter bounds for all minimizers, the user can choose any of the
+        solvers present in :scipydoc:`optimize.minimize`.
 
         Parameters
         ----------
@@ -1459,9 +1438,8 @@ class Minimizer(object):
 
         basinhopping_kws = dict(niter=100, T=1.0, stepsize=0.5,
                                 minimizer_kwargs={}, take_step=None,
-                                accept_test=self._basinhopping_accept_test,
-                                callback=None, interval=50, disp=False,
-                                niter_success=None, seed=None)
+                                accept_test=None, callback=None, interval=50,
+                                disp=False, niter_success=None, seed=None)
 
         basinhopping_kws.update(self.kws)
         basinhopping_kws.update(kws)
@@ -1473,16 +1451,7 @@ class Minimizer(object):
             print("Warning: basinhopping doesn't support argument 'seed' for "
                   "scipy versions below 0.19!")
 
-        varying = np.asarray([par.vary for par in self.params.values()])
-        replace_none = lambda x, sign: sign*np.inf if x is None else x
-        lower_bounds = np.asarray([replace_none(i.min, -1) for i in
-                                   self.params.values()])[varying]
-        upper_bounds = np.asarray([replace_none(i.max, 1) for i in
-                                   self.params.values()])[varying]
-        bounds = [(lb, up) for (lb, up) in zip(lower_bounds, upper_bounds)]
-        basinhopping_kws['minimizer_kwargs'].update({'bounds': bounds})
-        self._bounds = bounds
-        x0 = np.asarray([i.value for i in self.params.values()])[varying]
+        x0 = result.init_vals
 
         try:
             ret = scipy_basinhopping(self.penalty, x0, **basinhopping_kws)
@@ -1492,7 +1461,7 @@ class Minimizer(object):
         if not result.aborted:
             result.message = ret.message
             result.chisqr = ret.fun
-            result.residual = self.__residual(ret.x, apply_bounds_transformation=False)
+            result.residual = self.__residual(ret.x)
             result.nfev -= 1
         else:
             result.chisqr = (result.residual**2).sum()
@@ -1500,7 +1469,7 @@ class Minimizer(object):
         result.nvarys = len(result.var_names)
         result.ndata = len(result.residual)
         result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
+        result.redchi = result.chisqr / max(1, result.nfree)
         # this is -2*loglikelihood
         _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
         result.aic = _neg2_log_likel + 2 * result.nvarys
