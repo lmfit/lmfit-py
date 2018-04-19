@@ -47,5 +47,5 @@ setup(name='lmfit',
       # test_suite='nose.collector',
       # test_requires=['Nose'],
       package_dir={'lmfit': 'lmfit'},
-      packages=['lmfit', 'lmfit.ui', 'lmfit.uncertainties'],
+      packages=['lmfit', 'lmfit.ui'],
      )
