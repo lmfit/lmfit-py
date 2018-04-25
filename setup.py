@@ -33,6 +33,8 @@ provided for exploring minmization problems where the approximation of
 estimating Parameter uncertainties from the covariance matrix is
 questionable. """
 
+with open('requirements.txt', 'r') as f:
+    install_reqs = f.read().splitlines()
 
 setup(name='lmfit',
       version=versioneer.get_version(),
@@ -41,7 +43,7 @@ setup(name='lmfit',
       author_email='matt.newville@gmail.com',
       url='https://lmfit.github.io/lmfit-py/',
       download_url='https://lmfit.github.io//lmfit-py/',
-      install_requires=['numpy', 'scipy', 'six', 'asteval'],
+      install_requires=install_reqs,
       license='BSD',
       description="Least-Squares Minimization with Bounds and Constraints",
       long_description=long_desc,
