@@ -154,6 +154,8 @@ class as listed in the :ref:`Table of Supported Fitting Methods
  +-----------------------+------------------------------------------------------------------+
  | Brute force method    |  ``brute``                                                       |
  +-----------------------+------------------------------------------------------------------+
+ | Basinhopping          |  ``basinhopping``                                                |
+ +-----------------------+------------------------------------------------------------------+
 
 
 .. note::
@@ -364,7 +366,9 @@ The Minimizer object has a few public methods:
 
 .. automethod:: Minimizer.brute
 
-For more information, check the examples in ``examples/lmfit_brute.py``.
+For more information, check the examples in ``examples/lmfit_brute_example.ipynb``.
+
+.. automethod:: Minimizer.basinhopping
 
 .. automethod:: Minimizer.emcee
 

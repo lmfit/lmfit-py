@@ -22,12 +22,14 @@ import numpy as np
 from numpy import dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
+from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import differential_evolution, least_squares
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
+from scipy.version import version as scipy_version
 import six
 
 # use locally modified version of uncertainties package
@@ -543,34 +545,16 @@ class Minimizer(object):
             to sum-of-squares, but can be replaced by other options.
 
         """
-        r = self.__residual(fvars)
+        if self.result.method == 'brute':
+            apply_bounds_transformation = False
+        else:
+            apply_bounds_transformation = True
+
+        r = self.__residual(fvars, apply_bounds_transformation)
         if isinstance(r, ndarray) and r.size > 1:
             r = self.reduce_fcn(r)
             if isinstance(r, ndarray) and r.size > 1:
                 r = r.sum()
-        return r
-
-    def penalty_brute(self, fvars):
-        """Penalty function for brute force method.
-
-        Parameters
-        ----------
-        fvars : numpy.ndarray
-            Array of values for the variable parameters
-
-        Returns
-        -------
-        r : float
-            The  evaluated user-supplied objective function.
-
-            If the objective function is an array of size greater than 1,
-            use the scalar returned by `self.reduce_fcn`.  This defaults
-            to sum-of-squares, but can be replaced by other options.
-
-        """
-        r = self.__residual(fvars, apply_bounds_transformation=False)
-        if isinstance(r, ndarray) and r.size > 1:
-            r = (r*r).sum()
         return r
 
     def prepare_fit(self, params=None):
@@ -1425,6 +1409,74 @@ class Minimizer(object):
         np.seterr(**orig_warn_settings)
         return result
 
+    def basinhopping(self, params=None, **kws):
+        """Use the `basinhopping` algorithm to find the global minimum of a function.
+
+        This method calls :scipydoc:`optimize.basinhopping` using the default
+        arguments. The default minimizer is `BFGS`, but since lmfit supports
+        parameter bounds for all minimizers, the user can choose any of the
+        solvers present in :scipydoc:`optimize.minimize`.
+
+        Parameters
+        ----------
+        params : :class:`~lmfit.parameter.Parameters` object, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the optimization results from the basinhopping
+            algorithm.
+
+
+        .. versionadded:: 0.9.10
+
+        """
+        result = self.prepare_fit(params=params)
+        result.method = 'basinhopping'
+
+        basinhopping_kws = dict(niter=100, T=1.0, stepsize=0.5,
+                                minimizer_kwargs={}, take_step=None,
+                                accept_test=None, callback=None, interval=50,
+                                disp=False, niter_success=None, seed=None)
+
+        basinhopping_kws.update(self.kws)
+        basinhopping_kws.update(kws)
+
+        # FIXME - remove after requirement for scipy >= 0.19
+        major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
+        if major < 1 and minor < 19:
+            _ = basinhopping_kws.pop('seed')
+            print("Warning: basinhopping doesn't support argument 'seed' for "
+                  "scipy versions below 0.19!")
+
+        x0 = result.init_vals
+
+        try:
+            ret = scipy_basinhopping(self.penalty, x0, **basinhopping_kws)
+        except AbortFitException:
+            pass
+
+        if not result.aborted:
+            result.message = ret.message
+            result.chisqr = ret.fun
+            result.residual = self.__residual(ret.x)
+            result.nfev -= 1
+        else:
+            result.chisqr = (result.residual**2).sum()
+
+        result.nvarys = len(result.var_names)
+        result.ndata = len(result.residual)
+        result.nfree = result.ndata - result.nvarys
+        result.redchi = result.chisqr / max(1, result.nfree)
+        # this is -2*loglikelihood
+        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
+        result.aic = _neg2_log_likel + 2 * result.nvarys
+        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+
+        return result
+
     def brute(self, params=None, Ns=20, keep=50):
         """Use the `brute` method to find the global minimum of a function.
 
@@ -1542,7 +1594,7 @@ class Minimizer(object):
             ranges.append(par_range)
 
         try:
-            ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)
+            ret = scipy_brute(self.penalty, tuple(ranges), Ns=Ns, **brute_kws)
         except AbortFitException:
             pass
 
@@ -1656,8 +1708,10 @@ class Minimizer(object):
             function = self.leastsq
         elif user_method.startswith('least_s'):
             function = self.least_squares
-        elif user_method.startswith('brute'):
+        elif user_method == 'brute':
             function = self.brute
+        elif user_method == 'basinhopping':
+            function = self.basinhopping
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -1906,6 +1960,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
         - `'differential_evolution'`: differential evolution
         - `'brute'`: brute force method
+        - `'basinhopping'`: basinhopping
         - '`nelder`': Nelder-Mead
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
