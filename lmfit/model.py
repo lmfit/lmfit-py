@@ -40,7 +40,7 @@ def _align(var, mask, data):
 try:
     from matplotlib import pyplot as plt
     _HAS_MATPLOTLIB = True
-except ImportError:
+except Exception:
     _HAS_MATPLOTLIB = False
 
 
