@@ -142,6 +142,8 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         res = minimize(objfun, x0, args=args, method=local, bounds=bounds,
                        tol=local_tol, options=options)
         xf, yf, num_fun = res['x'], res['fun'], res['nfev']
+        if isinstance(yf, np.ndarray):
+            yf = yf[0]
 
         maxfunevals -= num_fun
         evaluations += num_fun
@@ -200,6 +202,8 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
             res = minimize(tunnel, x0, args=tunnel_args, method=local,
                            bounds=bounds, tol=local_tol, options=options)
             xf, yf, num_fun = res['x'], res['fun'], res['nfev']
+            if isinstance(yf, np.ndarray):
+                yf = yf[0]
 
             maxfunevals -= num_fun
             evaluations += num_fun
