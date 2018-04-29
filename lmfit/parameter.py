@@ -5,12 +5,10 @@ from collections import OrderedDict
 from copy import deepcopy
 import json
 
+from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isfinite, nan, sin, sqrt
 import scipy.special
-
-from asteval import Interpreter, get_ast_names, valid_symbol_name
-
-from . import uncertainties
+import uncertainties
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
 for name in ('erf', 'erfc', 'wofz'):
@@ -766,7 +764,7 @@ class Parameter(object):
         # If you just assign to self._val then
         # _expr_eval.symtable[self.name]
         # becomes stale if parameter.expr is not None.
-        if (isinstance(self._val, uncertainties.Variable) and
+        if (isinstance(self._val, uncertainties.core.Variable) and
                 self._val is not nan):
 
             try:

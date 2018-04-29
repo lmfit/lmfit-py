@@ -31,9 +31,8 @@ from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 from scipy.version import version as scipy_version
 import six
+import uncertainties
 
-# use locally modified version of uncertainties package
-from . import uncertainties
 from .parameter import Parameter, Parameters
 
 #  scipy version notes:
@@ -101,7 +100,7 @@ def eval_stderr(obj, uvars, _names, _pars):
         return
     uval = wrap_ueval(*uvars, _obj=obj, _names=_names, _pars=_pars)
     try:
-        obj.stderr = uval.std_dev()
+        obj.stderr = uval.std_dev
     # TODO: do not use bare except
     except:
         obj.stderr = 0

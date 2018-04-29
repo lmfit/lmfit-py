@@ -17,8 +17,10 @@ consult the `lmfit GitHub repository`_.
 Version 0.9.10 Release Notes
 ==========================================
 Basinhopping was added as a global optimization algorithm - see
-:func:`~lmfit.minimizer.Minimizer.basinhopping` and :scipydoc:`optimize.basinhopping` for
-more information.
+:func:`~lmfit.minimizer.Minimizer.basinhopping` and :scipydoc:`optimize.basinhopping`
+for more information.
+Lmfit now uses the uncertainties (https://github.com/lebigot/uncertainties)
+package instead of distributing its own fork.
 
 
 .. _whatsnew_099_label:
