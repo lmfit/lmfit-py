@@ -1671,7 +1671,8 @@ class Minimizer(object):
                 local_opts: dict (default is None)
                     Options to pass to the local minimizer.
                 maxfunevals: int (default is None)
-                    Maximum number of function evaluations. If None, it will be max(10*npars, 100).
+                    Maximum number of function evaluations. If None, the optimization will stop
+                    after `totaliter` number of iterations.
                 totaliter: int (default is 20)
                     Maximum number of global iterations.
                 maxiter: int (default is 5)

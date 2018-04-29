@@ -47,7 +47,8 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         List of tuples specifying the lower and upper bound for each
         independent variable [(`xl0`, `xu0`), (`xl1`, `xu1`), ...].
     maxfunevals: int, optional
-        Maximum number of function evaluations.
+        Maximum number of function evaluations. If None, the optimization will
+        stop after `totaliter` number of iterations.
     totaliter: int, optional
         Maximum number of global iterations.
     maxiter: int, optional
@@ -109,7 +110,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
     low, up = np.array(_bounds).T
 
     if maxfunevals is None:
-        maxfunevals = max(100, 10*n)
+        maxfunevals = np.inf
 
     if tabulistsize < 1:
         raise Exception('Invalid tabulistsize specified: {:d}. It should be '
