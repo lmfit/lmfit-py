@@ -1725,17 +1725,7 @@ class Minimizer(object):
         ampgo_kws.update(self.kws)
         ampgo_kws.update(kws)
 
-        varying = np.asarray([par.vary for par in self.params.values()])
-        replace_none = lambda x, sign: sign*np.inf if x is None else x
-        lower_bounds = np.asarray([replace_none(i.min, -1) for i in
-                                   self.params.values()])[varying]
-        upper_bounds = np.asarray([replace_none(i.max, 1) for i in
-                                   self.params.values()])[varying]
-        values = np.asarray([i.value for i in self.params.values()])[varying]
-
-        bounds = [(lb, up) for lb, up in zip(lower_bounds, upper_bounds)]
-
-        ampgo_kws['bounds'] = bounds
+        values = result.init_vals
         result.method = "ampgo, with {} as local solver".format(ampgo_kws['local'])
 
         ret = ampgo(self.penalty, values, **ampgo_kws)
@@ -1751,8 +1741,7 @@ class Minimizer(object):
 
         result.chisqr = ret[1]
         result.nvarys = len(result.var_names)
-        result.residual = self.__residual(result.ampgo_x0,
-                                          apply_bounds_transformation=False)
+        result.residual = self.__residual(result.ampgo_x0)
         result.nfev -= 1
         result.ndata = len(result.residual)
         result.nfree = result.ndata - result.nvarys
