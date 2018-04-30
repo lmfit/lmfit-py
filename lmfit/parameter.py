@@ -6,7 +6,7 @@ from copy import deepcopy
 import json
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
-from numpy import arcsin, array, cos, inf, isfinite, nan, sin, sqrt
+from numpy import arcsin, array, cos, inf, nan, sin, sqrt
 import scipy.special
 import uncertainties
 
@@ -41,18 +41,9 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
         True if `x` and `y` are the same within tolerance, otherwise False.
 
     """
-    def within_tol(x, y, atol, rtol):
-        return abs(x - y) <= atol + rtol * abs(y)
-
-    xfin = isfinite(x)
-    yfin = isfinite(y)
-
-    # both are finite
-    if xfin and yfin:
-        return within_tol(x, y, atol, rtol)
-    elif x == y:
-        return True
-    return False
+    if x in (-inf, inf, nan) or y in (-inf, inf, nan):
+        return (x == y)
+    return (abs(x - y) <= atol + rtol * abs(y))
 
 
 class Parameters(OrderedDict):
