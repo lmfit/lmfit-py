@@ -1728,21 +1728,28 @@ class Minimizer(object):
         values = result.init_vals
         result.method = "ampgo, with {} as local solver".format(ampgo_kws['local'])
 
-        ret = ampgo(self.penalty, values, **ampgo_kws)
+        try:
+            ret = ampgo(self.penalty, values, **ampgo_kws)
+        except AbortFitException:
+            pass
 
-        result.ampgo_x0 = ret[0]
-        result.ampgo_fval = ret[1]
-        result.ampgo_eval = ret[2]
-        result.ampgo_msg = ret[3]
-        result.ampgo_tunnel = ret[4]
+        if not result.aborted:
+            result.ampgo_x0 = ret[0]
+            result.ampgo_fval = ret[1]
+            result.ampgo_eval = ret[2]
+            result.ampgo_msg = ret[3]
+            result.ampgo_tunnel = ret[4]
 
-        for i, par in enumerate(result.var_names):
-            result.params[par].value = result.ampgo_x0[i]
+            for i, par in enumerate(result.var_names):
+                result.params[par].value = result.ampgo_x0[i]
 
-        result.chisqr = ret[1]
+            result.chisqr = ret[1]
+            result.residual = self.__residual(result.ampgo_x0)
+            result.nfev -= 1
+        else:
+            result.chisqr = (result.residual**2).sum()
+
         result.nvarys = len(result.var_names)
-        result.residual = self.__residual(result.ampgo_x0)
-        result.nfev -= 1
         result.ndata = len(result.residual)
         result.nfree = result.ndata - result.nvarys
         result.redchi = result.chisqr / result.nfree
