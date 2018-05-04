@@ -35,7 +35,7 @@ def test_basinhopping():
     mini = lmfit.Minimizer(residual, pars)
     out = mini.minimize(method='basinhopping', **kws)
 
-    assert_allclose(out.chisqr, ret.fun)
+    assert_allclose(out.residual, ret.fun)
     assert_allclose(out.params['x'].value, ret.x)
 
 
@@ -69,7 +69,7 @@ def test_basinhopping_2d():
     kws = {'minimizer_kwargs': {'method': 'L-BFGS-B'}, 'seed': 7}
     out = mini.minimize(method='basinhopping', **kws)
 
-    assert_allclose(out.chisqr, ret.fun)
+    assert_allclose(out.residual, ret.fun)
     assert_allclose(out.params['x0'].value, ret.x[0])
     assert_allclose(out.params['x1'].value, ret.x[1], rtol=1e-5)
 
@@ -130,10 +130,10 @@ def test_basinhopping_Alpine02():
     out = mini.minimize(method='basinhopping', **kws)
     out_x = np.array([out.params['x0'].value, out.params['x1'].value])
 
-    assert_allclose(out.chisqr, fglob, rtol=1e-5)
+    assert_allclose(out.residual, fglob, rtol=1e-5)
     assert_allclose(min(out_x), min(global_optimum))
     assert_allclose(max(out_x), max(global_optimum))
-    assert(out.chisqr <= ret.fun)
+    assert(out.residual <= ret.fun)
 
 
 if __name__ == '__main__':

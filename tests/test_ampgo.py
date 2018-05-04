@@ -24,7 +24,7 @@ def test_ampgo_Alpine02():
     out = mini.minimize(method='ampgo')
     out_x = np.array([out.params['x0'].value, out.params['x1'].value])
 
-    assert_allclose(out.chisqr, fglob, rtol=1e-5)
+    assert_allclose(out.residual, fglob, rtol=1e-5)
     assert_allclose(min(out_x), min(global_optimum), rtol=1e-3)
     assert_allclose(max(out_x), max(global_optimum), rtol=1e-3)
     assert('global' in out.ampgo_msg)
