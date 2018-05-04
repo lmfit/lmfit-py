@@ -322,6 +322,24 @@ class MinimizerResult(object):
                           "{:.3f}".format(i, candidate.score))
                     candidate.params.pretty_print()
 
+    def _calculate_statistics(self):
+        """Calculate the fitting statistics."""
+
+        self.nvarys = len(self.init_vals)
+        if isinstance(self.residual, ndarray):
+            self.chisqr = (self.residual**2).sum()
+            self.ndata = len(self.residual)
+            self.nfree = self.ndata - self.nvarys
+        else:
+            self.chisqr = self.residual
+            self.ndata = 1
+            self.nfree = 1
+        self.redchi = self.chisqr / self.nfree
+        # this is -2*loglikelihood
+        _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
+        self.aic = _neg2_log_likel + 2 * self.nvarys
+        self.bic = _neg2_log_likel + np.log(self.ndata) * self.nvarys
+
 
 class Minimizer(object):
     """A general minimizer for curve fitting and optimization."""
@@ -775,23 +793,12 @@ class Minimizer(object):
                         setattr(result, attr, getattr(ret, attr))
 
             result.x = np.atleast_1d(result.x)
-            result.chisqr = result.residual = self.__residual(result.x)
+            result.residual = self.__residual(result.x)
             result.nfev -= 1
         else:
-            result.chisqr = result.residual
+            pass
 
-        result.nvarys = len(variables)
-        result.ndata = 1
-        result.nfree = 1
-        if isinstance(result.residual, ndarray):
-            result.chisqr = (result.chisqr**2).sum()
-            result.ndata = len(result.residual)
-            result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / max(1, result.nfree)
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+        result._calculate_statistics()
 
         return result
 
@@ -1212,22 +1219,12 @@ class Minimizer(object):
                 setattr(result, attr, ret[attr])
 
             result.x = np.atleast_1d(result.x)
-            result.chisqr = result.residual = ret.fun
+            result.residual = ret.fun
         else:
-            result.chisqr = result.residual
+            pass
 
-        result.nvarys = len(result.var_names)
-        result.ndata = 1
-        result.nfree = 1
-        if isinstance(result.residual, ndarray):
-            result.chisqr = (result.chisqr**2).sum()
-            result.ndata = len(result.residual)
-            result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+        result._calculate_statistics()
+
         return result
 
     def leastsq(self, params=None, **kws):
@@ -1301,16 +1298,7 @@ class Minimizer(object):
         except AbortFitException:
             pass
 
-        result.ndata = len(result.residual)
-        result.chisqr = (result.residual**2).sum()
-        result.nfree = (result.ndata - nvars)
-        result.redchi = result.chisqr / result.nfree
-        result.nvarys = nvars
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
-
+        result._calculate_statistics()
         params = result.params
 
         if result.aborted:
@@ -1461,20 +1449,12 @@ class Minimizer(object):
 
         if not result.aborted:
             result.message = ret.message
-            result.chisqr = ret.fun
             result.residual = self.__residual(ret.x)
             result.nfev -= 1
         else:
-            result.chisqr = (result.residual**2).sum()
+            pass
 
-        result.nvarys = len(result.var_names)
-        result.ndata = len(result.residual)
-        result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / max(1, result.nfree)
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+        result._calculate_statistics()
 
         return result
 
@@ -1631,20 +1611,12 @@ class Minimizer(object):
                 result.candidates.append(Candidate(params=pars, score=data[1]))
 
             result.params = result.candidates[0].params
-            result.chisqr = ret[1]
-            result.nvarys = len(result.var_names)
             result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
             result.nfev -= 1
         else:
-            result.chisqr = (result.residual**2).sum()
+            pass
 
-        result.ndata = len(result.residual)
-        result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+        result._calculate_statistics()
 
         return result
 
@@ -1744,20 +1716,12 @@ class Minimizer(object):
             for i, par in enumerate(result.var_names):
                 result.params[par].value = result.ampgo_x0[i]
 
-            result.chisqr = ret[1]
             result.residual = self.__residual(result.ampgo_x0)
             result.nfev -= 1
         else:
-            result.chisqr = (result.residual**2).sum()
+            pass
 
-        result.nvarys = len(result.var_names)
-        result.ndata = len(result.residual)
-        result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+        result._calculate_statistics()
 
         return result
 
