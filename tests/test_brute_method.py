@@ -96,7 +96,7 @@ def test_brute_lmfit_vs_scipy():
     assert_equal(resbrute[0][1], resbrute_lmfit.brute_x0[1], verbose=True) # best fit y value identical
     assert_equal(resbrute[0][1], resbrute_lmfit.params['y'].value, verbose=True) # best fit y value stored correctly
     assert_equal(resbrute[1], resbrute_lmfit.brute_fval, verbose=True) # best fit function value identical
-    assert_equal(resbrute[1], resbrute_lmfit.chisqr, verbose=True) # best fit function value stored correctly
+    assert_equal(resbrute[1], resbrute_lmfit.residual, verbose=True) # best fit function value stored correctly
 
     # TEST 2: using bounds, setting Ns=40 and no stepsize specified
     assert(not params_lmfit['x'].brute_step)  # brute_step for x == None
@@ -112,7 +112,7 @@ def test_brute_lmfit_vs_scipy():
     assert_equal(resbrute[3], resbrute_lmfit.brute_Jout, verbose=True) # function values on grid identical
     assert_equal(resbrute[0][0], resbrute_lmfit.params['x'].value, verbose=True) # best fit x value identical
     assert_equal(resbrute[0][1], resbrute_lmfit.params['y'].value, verbose=True) # best fit y value identical
-    assert_equal(resbrute[1], resbrute_lmfit.chisqr, verbose=True) # best fit function value identical
+    assert_equal(resbrute[1], resbrute_lmfit.residual, verbose=True) # best fit function value identical
 
     # TEST 3: using bounds and specifing stepsize for both parameters
     params_lmfit['x'].set(brute_step=0.25)
@@ -130,7 +130,7 @@ def test_brute_lmfit_vs_scipy():
     assert_equal(resbrute[3], resbrute_lmfit.brute_Jout, verbose=True) # function values on grid identical
     assert_equal(resbrute[0][0], resbrute_lmfit.params['x'].value, verbose=True) # best fit x value identical
     assert_equal(resbrute[0][1], resbrute_lmfit.params['y'].value, verbose=True) # best fit y value identical
-    assert_equal(resbrute[1], resbrute_lmfit.chisqr, verbose=True) # best fit function value identical
+    assert_equal(resbrute[1], resbrute_lmfit.residual, verbose=True) # best fit function value identical
 
     # TEST 4: using bounds, Ns=10, adn specifing stepsize for parameter 'x'
     params_lmfit['x'].set(brute_step=0.15)
@@ -148,7 +148,7 @@ def test_brute_lmfit_vs_scipy():
     assert_equal(resbrute[3], resbrute_lmfit.brute_Jout, verbose=True) # function values on grid identical
     assert_equal(resbrute[0][0], resbrute_lmfit.params['x'].value, verbose=True) # best fit x value identical
     assert_equal(resbrute[0][1], resbrute_lmfit.params['y'].value, verbose=True) # best fit y value identical
-    assert_equal(resbrute[1], resbrute_lmfit.chisqr, verbose=True) # best fit function value identical
+    assert_equal(resbrute[1], resbrute_lmfit.residual, verbose=True) # best fit function value identical
 
 
 def test_brute():
