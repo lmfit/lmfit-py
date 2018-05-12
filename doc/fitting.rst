@@ -522,22 +522,23 @@ An example using this to write out a fit report would be:
 which would write out::
 
     [[Fit Statistics]]
-        # function evals   = 85
+        # fitting method   = leastsq
+        # function evals   = 83
         # data points      = 1001
         # variables        = 4
-        chi-square         = 498.81176
-        reduced chi-square = 0.50031
-        Akaike info crit   = -689.22252
-        Bayesian info crit = -669.58750
+        chi-square         = 498.811759
+        reduced chi-square = 0.50031270
+        Akaike info crit   = -689.222517
+        Bayesian info crit = -669.587497
     [[Variables]]
-        amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
-        period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
-        shift:    0.16203676 +/- 0.014056 (8.67%) (init= 0)
-        decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
-    [[Correlations]] (unreported correlations are <  0.100)
-        C(period, shift)             =  0.797
-        C(amp, decay)                =  0.582
-        C(amp, shift)                = -0.297
-        C(amp, period)               = -0.243
-        C(shift, decay)              = -0.182
-        C(period, decay)             = -0.150
+        amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
+        period:  5.48507045 +/- 0.02666492 (0.49%) (init = 2)
+        shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
+        decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(period, shift) =  0.797
+        C(amp, decay)    =  0.582
+        C(amp, shift)    = -0.297
+        C(amp, period)   = -0.243
+        C(shift, decay)  = -0.182
+        C(period, decay) = -0.150
