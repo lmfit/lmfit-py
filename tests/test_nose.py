@@ -426,7 +426,8 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_scalar_minimizers(self):
         # test all the scalar minimizers
         for method in SCALAR_METHODS:
-            if method in ['newton', 'dogleg', 'trust-ncg', 'cg']:
+            if method in ['newton', 'dogleg', 'trust-ncg', 'cg', 'trust-exact',
+                          'trust-krylov', 'trust-constr']:
                 continue
             self.minimizer = SCALAR_METHODS[method]
             if method == 'Nelder-Mead':
