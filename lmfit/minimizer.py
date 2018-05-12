@@ -37,14 +37,6 @@ from .parameter import Parameter, Parameters
 
 from ._ampgo import ampgo
 
-#  scipy version notes:
-#  currently scipy 0.17 is required.
-#  feature           scipy version added
-#    minimize              0.11
-#    OptimizeResult        0.13
-#    diff_evolution        0.15
-#    least_squares         0.17
-
 # check for EMCEE
 try:
     import emcee as emcee
@@ -137,6 +129,14 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'dogleg': 'dogleg',
                   'trust-ncg': 'trust-ncg',
                   'differential_evolution': 'differential_evolution'}
+
+# FIXME: update this when incresing the minimum scipy version
+major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
+if (major >= 1 and minor >= 1):
+    SCALAR_METHODS.update({'trust-constr': 'trust-constr'})
+if major >= 1:
+    SCALAR_METHODS.update({'trust-exact': 'trust-exact',
+                           'trust-krylov': 'trust-krylov'})
 
 
 def reduce_chisquare(r):
