@@ -698,8 +698,12 @@ class Minimizer(object):
             - 'CG'
             - 'Newton-CG'
             - 'COBYLA'
+            - 'BFGS'
             - 'TNC'
             - 'trust-ncg'
+            - 'trust-exact' (SciPy >= 1.0)
+            - 'trust-krylov' (SciPy >= 1.0)
+            - 'trust-constr' (SciPy >= 1.1)
             - 'dogleg'
             - 'SLSQP'
             - 'differential_evolution'
@@ -1737,6 +1741,7 @@ class Minimizer(object):
             - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
             - `'differential_evolution'`: differential evolution
             - `'brute'`: brute force method
+            - `'basinhopping'`: basinhopping
             - `'ampgo'`: Adaptive Memory Programming for Global Optimization
             - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
@@ -1744,9 +1749,13 @@ class Minimizer(object):
             - `'cg'`: Conjugate-Gradient
             - `'newton'`: Newton-CG
             - `'cobyla'`: Cobyla
-            - `'tnc'`: Truncate Newton
-            - `'trust-ncg'`: Trust Newton-CGn
-            - `'dogleg'`: Dogleg
+            - `'bfgs'`: BFGS
+            - `'tnc'`: Truncated Newton
+            - `'trust-ncg'`: Newton-CG trust-region
+            - `'trust-exact'`: nearly exact trust-region (SciPy >= 1.0)
+            - `'trust-krylov'`: Newton GLTR trust-region (SciPy >= 1.0)
+            - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
+            - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
 
             In most cases, these methods wrap and use the method with the
@@ -2047,11 +2056,15 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
         - `'cg'`: Conjugate-Gradient
-        - `'newton'`: Newton-Congugate-Gradient
+        - `'newton'`: Newton-CG
         - `'cobyla'`: Cobyla
-        - `'tnc'`: Truncate Newton
-        - `'trust-ncg'`: Trust Newton-Congugate-Gradient
-        - `'dogleg'`: Dogleg
+        - `'bfgs'`: BFGS
+        - `'tnc'`: Truncated Newton
+        - `'trust-ncg'`: Newton-CG trust-region
+        - `'trust-exact'`: nearly exact trust-region (SciPy >= 1.0)
+        - `'trust-krylov'`: Newton GLTR trust-region (SciPy >= 1.0)
+        - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
+        - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
 
         In most cases, these methods wrap and use the method of the same
