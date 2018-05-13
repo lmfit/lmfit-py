@@ -1170,15 +1170,12 @@ class Minimizer(object):
         return result
 
     def least_squares(self, params=None, **kws):
-        """Use the `least_squares` (new in scipy 0.17) to perform a fit.
+        """Least-squares minimization using :scipydoc:`optimize.least_squares`.
 
-        It assumes that the input Parameters have been initialized, and
-        a function to minimize has been properly set up.
-        When possible, this calculates the estimated uncertainties and
-        variable correlations from the covariance matrix.
-
-        This method wraps :scipydoc:`optimize.least_squares`, which
-        has inbuilt support for bounds and robust loss functions.
+        This method wraps :scipydoc:`optimize.least_squares`, which has inbuilt
+        support for bounds and robust loss functions. By default it uses the
+        Trust Region Reflective algorithm with a linear loss function (i.e.,
+        the standard least-squares problem).
 
         Parameters
         ----------
