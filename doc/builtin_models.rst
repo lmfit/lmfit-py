@@ -502,29 +502,29 @@ results, which gives::
         (Model(step, prefix='step_', form='erf') + Model(linear, prefix='line_'))
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 51
+        # function evals   = 49
         # data points      = 201
         # variables        = 5
-        chi-square         = 526.476967
-        reduced chi-square = 2.68610698
-        Akaike info crit   = 203.543438
-        Bayesian info crit = 220.059962
+        chi-square         = 593.709622
+        reduced chi-square = 3.02913072
+        Akaike info crit   = 227.700173
+        Bayesian info crit = 244.216698
     [[Variables]]
-        line_intercept:  11.6336538 +/- 0.25986140 (2.23%) (init = 11.41635)
-        line_slope:      2.06801103 +/- 0.08730814 (4.22%) (init = 0)
-        step_sigma:      0.66708191 +/- 0.01028666 (1.54%) (init = 1.428571)
-        step_amplitude:  111.878321 +/- 0.61242795 (0.55%) (init = 133.7451)
-        step_center:     3.12524684 +/- 0.00487627 (0.16%) (init = 2.5)
+        line_intercept:  12.0964833 +/- 0.27606235 (2.28%) (init = 11.58574)
+        line_slope:      1.87164655 +/- 0.09318714 (4.98%) (init = 0)
+        step_sigma:      0.67392841 +/- 0.01091168 (1.62%) (init = 1.428571)
+        step_center:     3.13494792 +/- 0.00516615 (0.16%) (init = 2.5)
+        step_amplitude:  112.858376 +/- 0.65392949 (0.58%) (init = 134.7378)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(line_slope, step_amplitude)     = -0.878
-        C(step_sigma, step_amplitude)     =  0.561
-        C(line_slope, step_sigma)         = -0.454
-        C(line_intercept, step_center)    =  0.425
-        C(line_intercept, line_slope)     = -0.308
-        C(line_slope, step_center)        = -0.233
-        C(line_intercept, step_sigma)     = -0.138
-        C(line_intercept, step_amplitude) = -0.121
-        C(step_amplitude, step_center)    =  0.108
+        C(line_slope, step_amplitude)     = -0.879
+        C(step_sigma, step_amplitude)     =  0.564
+        C(line_slope, step_sigma)         = -0.457
+        C(line_intercept, step_center)    =  0.427
+        C(line_intercept, line_slope)     = -0.309
+        C(line_slope, step_center)        = -0.234
+        C(line_intercept, step_sigma)     = -0.137
+        C(line_intercept, step_amplitude) = -0.117
+        C(step_center, step_amplitude)    =  0.109
 
 with a plot of
 

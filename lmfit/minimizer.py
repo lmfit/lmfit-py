@@ -37,14 +37,6 @@ from .parameter import Parameter, Parameters
 
 from ._ampgo import ampgo
 
-#  scipy version notes:
-#  currently scipy 0.17 is required.
-#  feature           scipy version added
-#    minimize              0.11
-#    OptimizeResult        0.13
-#    diff_evolution        0.15
-#    least_squares         0.17
-
 # check for EMCEE
 try:
     import emcee as emcee
@@ -137,6 +129,14 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'dogleg': 'dogleg',
                   'trust-ncg': 'trust-ncg',
                   'differential_evolution': 'differential_evolution'}
+
+# FIXME: update this when incresing the minimum scipy version
+major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
+if (major >= 1 and minor >= 1):
+    SCALAR_METHODS.update({'trust-constr': 'trust-constr'})
+if major >= 1:
+    SCALAR_METHODS.update({'trust-exact': 'trust-exact',
+                           'trust-krylov': 'trust-krylov'})
 
 
 def reduce_chisquare(r):
@@ -698,8 +698,12 @@ class Minimizer(object):
             - 'CG'
             - 'Newton-CG'
             - 'COBYLA'
+            - 'BFGS'
             - 'TNC'
             - 'trust-ncg'
+            - 'trust-exact' (SciPy >= 1.0)
+            - 'trust-krylov' (SciPy >= 1.0)
+            - 'trust-constr' (SciPy >= 1.1)
             - 'dogleg'
             - 'SLSQP'
             - 'differential_evolution'
@@ -1166,15 +1170,12 @@ class Minimizer(object):
         return result
 
     def least_squares(self, params=None, **kws):
-        """Use the `least_squares` (new in scipy 0.17) to perform a fit.
+        """Least-squares minimization using :scipydoc:`optimize.least_squares`.
 
-        It assumes that the input Parameters have been initialized, and
-        a function to minimize has been properly set up.
-        When possible, this calculates the estimated uncertainties and
-        variable correlations from the covariance matrix.
-
-        This method wraps :scipydoc:`optimize.least_squares`, which
-        has inbuilt support for bounds and robust loss functions.
+        This method wraps :scipydoc:`optimize.least_squares`, which has inbuilt
+        support for bounds and robust loss functions. By default it uses the
+        Trust Region Reflective algorithm with a linear loss function (i.e.,
+        the standard least-squares problem).
 
         Parameters
         ----------
@@ -1737,6 +1738,7 @@ class Minimizer(object):
             - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
             - `'differential_evolution'`: differential evolution
             - `'brute'`: brute force method
+            - `'basinhopping'`: basinhopping
             - `'ampgo'`: Adaptive Memory Programming for Global Optimization
             - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
@@ -1744,9 +1746,13 @@ class Minimizer(object):
             - `'cg'`: Conjugate-Gradient
             - `'newton'`: Newton-CG
             - `'cobyla'`: Cobyla
-            - `'tnc'`: Truncate Newton
-            - `'trust-ncg'`: Trust Newton-CGn
-            - `'dogleg'`: Dogleg
+            - `'bfgs'`: BFGS
+            - `'tnc'`: Truncated Newton
+            - `'trust-ncg'`: Newton-CG trust-region
+            - `'trust-exact'`: nearly exact trust-region (SciPy >= 1.0)
+            - `'trust-krylov'`: Newton GLTR trust-region (SciPy >= 1.0)
+            - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
+            - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
 
             In most cases, these methods wrap and use the method with the
@@ -2047,11 +2053,15 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
         - `'cg'`: Conjugate-Gradient
-        - `'newton'`: Newton-Congugate-Gradient
+        - `'newton'`: Newton-CG
         - `'cobyla'`: Cobyla
-        - `'tnc'`: Truncate Newton
-        - `'trust-ncg'`: Trust Newton-Congugate-Gradient
-        - `'dogleg'`: Dogleg
+        - `'bfgs'`: BFGS
+        - `'tnc'`: Truncated Newton
+        - `'trust-ncg'`: Newton-CG trust-region
+        - `'trust-exact'`: nearly exact trust-region (SciPy >= 1.0)
+        - `'trust-krylov'`: Newton GLTR trust-region (SciPy >= 1.0)
+        - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
+        - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
 
         In most cases, these methods wrap and use the method of the same
