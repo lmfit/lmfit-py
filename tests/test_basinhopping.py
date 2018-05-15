@@ -133,7 +133,6 @@ def test_basinhopping_Alpine02():
     assert_allclose(out.residual, fglob, rtol=1e-5)
     assert_allclose(min(out_x), min(global_optimum))
     assert_allclose(max(out_x), max(global_optimum))
-    assert(out.residual <= ret.fun)
 
 
 if __name__ == '__main__':
