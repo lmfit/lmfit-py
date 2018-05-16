@@ -10,31 +10,13 @@ import sys
 
 import os
 
-# Turn off plotting if run by nosetests.
-WITHPLOT = True
-for arg in sys.argv:
-    if 'nose' in arg or 'pytest' in arg:
-        WITHPLOT = False
 
-if WITHPLOT:
-    try:
-        import matplotlib
-        import pylab
-    except ImportError:
-        WITHPLOT = False
-
-
-def check_height_fwhm(x, y, lineshape, model, with_plot=True, report=False):
+def check_height_fwhm(x, y, lineshape, model, with_plot=False, report=False):
     """Check height and fwhm parameters"""
-    with_plot = with_plot and WITHPLOT
     pars = model.guess(y, x=x)
     out = model.fit(y, pars, x=x)
     if report:
         print(out.fit_report())
-    if with_plot:
-        fig = pylab.figure()
-        out.plot(fig=fig)
-        pylab.show()
 
     # account for functions whose centers are not mu
     mu = out.params['center'].value

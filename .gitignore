@@ -13,3 +13,4 @@ sandbox/
 .ipynb_checkpoints/
 doc/html
 *.sav
+.pytest*
