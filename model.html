@@ -188,7 +188,7 @@ definition of the model function:</p>
 <span class="gp">... </span>    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">cen</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="n">wid</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>We want to use this function to fit to data <span class="math notranslate">\(y(x)\)</span> represented by the
+<p>We want to use this function to fit to data <span class="math notranslate nohighlight">\(y(x)\)</span> represented by the
 arrays <cite>y</cite> and <cite>x</cite>.  With <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, this would be:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span>
 <span class="go">&gt;&gt;&gt;</span>
@@ -340,7 +340,7 @@ the initial fit as a dashed black line.</p>
 </pre></div>
 </div>
 <p>These lines clearly express that we want to turn the <cite>gaussian</cite> function
-into a fitting model, and then fit the <span class="math notranslate">\(y(x)\)</span> data to this model,
+into a fitting model, and then fit the <span class="math notranslate nohighlight">\(y(x)\)</span> data to this model,
 starting with values of 5 for <cite>amp</cite>, 5 for <cite>cen</cite> and 1 for <cite>wid</cite>.  In
 addition, all the other features of lmfit are included:
 <a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> can have bounds and constraints and
@@ -1688,14 +1688,14 @@ uncertainties in the fitted parameters but for the range of values that
 those uncertainties mean for the model function itself.  We can use the
 <a class="reference internal" href="#lmfit.model.ModelResult.eval_uncertainty" title="lmfit.model.ModelResult.eval_uncertainty"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.eval_uncertainty()</span></code></a> method of the model result object to
 evaluate the uncertainty in the model with a specified level for
-<span class="math notranslate">\(\sigma\)</span>.</p>
+<span class="math notranslate nohighlight">\(\sigma\)</span>.</p>
 <p>That is, adding:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dely</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">eval_uncertainty</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">best_fit</span><span class="o">-</span><span class="n">dely</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">best_fit</span><span class="o">+</span><span class="n">dely</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#ABABAB&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>to the example fit to the Gaussian at the beginning of this chapter will
-give 3-<span class="math notranslate">\(\sigma\)</span> bands for the best-fit Gaussian, and produce the
+give 3-<span class="math notranslate nohighlight">\(\sigma\)</span> bands for the best-fit Gaussian, and produce the
 figure below.</p>
 <blockquote id="figmodel4">
 <div><a class="reference external image-reference" href="_images/model_fit4.png"><img alt="_images/model_fit4.png" src="_images/model_fit4.png" style="width: 50%;" /></a>
@@ -2030,6 +2030,7 @@ binary operator.  A full script using this technique is here:</p>
 <span class="n">npts</span> <span class="o">=</span> <span class="mi">201</span>
 <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">step</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">12.5</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.88</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="s1">&#39;erf&#39;</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">npts</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
 
 
@@ -2083,24 +2084,24 @@ binary operator.  A full script using this technique is here:</p>
 </div>
 <p>which prints out the results:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Model</span><span class="p">]]</span>
-    <span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">jump</span><span class="p">)</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">convolve</span> <span class="n">at</span> <span class="mh">0x10480e598</span><span class="o">&gt;</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">))</span>
+    <span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">jump</span><span class="p">)</span> <span class="o">&lt;</span><span class="n">function</span> <span class="n">convolve</span> <span class="n">at</span> <span class="mh">0x114e6e1e0</span><span class="o">&gt;</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">))</span>
 <span class="p">[[</span><span class="n">Fit</span> <span class="n">Statistics</span><span class="p">]]</span>
     <span class="c1"># fitting method   = leastsq</span>
-    <span class="c1"># function evals   = 23</span>
+    <span class="c1"># function evals   = 25</span>
     <span class="c1"># data points      = 201</span>
     <span class="c1"># variables        = 3</span>
-    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">21.6932855</span>
-    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.10956205</span>
-    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">441.486726</span>
-    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">431.576811</span>
+    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">24.7562335</span>
+    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.12503148</span>
+    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">414.939746</span>
+    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">405.029832</span>
 <span class="p">[[</span><span class="n">Variables</span><span class="p">]]</span>
     <span class="n">mid</span><span class="p">:</span>        <span class="mi">5</span> <span class="p">(</span><span class="n">fixed</span><span class="p">)</span>
-    <span class="n">center</span><span class="p">:</span>     <span class="mf">4.52495463</span> <span class="o">+/-</span> <span class="mf">0.00937255</span> <span class="p">(</span><span class="mf">0.21</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">3.5</span><span class="p">)</span>
-    <span class="n">sigma</span><span class="p">:</span>      <span class="mf">0.62328669</span> <span class="o">+/-</span> <span class="mf">0.01297258</span> <span class="p">(</span><span class="mf">2.08</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">)</span>
-    <span class="n">amplitude</span><span class="p">:</span>  <span class="mf">0.62362920</span> <span class="o">+/-</span> <span class="mf">0.00179096</span> <span class="p">(</span><span class="mf">0.29</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">sigma</span><span class="p">:</span>      <span class="mf">0.59576118</span> <span class="o">+/-</span> <span class="mf">0.01348582</span> <span class="p">(</span><span class="mf">2.26</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">center</span><span class="p">:</span>     <span class="mf">4.50853671</span> <span class="o">+/-</span> <span class="mf">0.00973231</span> <span class="p">(</span><span class="mf">0.22</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">3.5</span><span class="p">)</span>
+    <span class="n">amplitude</span><span class="p">:</span>  <span class="mf">0.62508459</span> <span class="o">+/-</span> <span class="mf">0.00189732</span> <span class="p">(</span><span class="mf">0.30</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span> <span class="mf">0.100</span><span class="p">)</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.338</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span>  <span class="o">=</span>  <span class="mf">0.276</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.329</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span>  <span class="o">=</span>  <span class="mf">0.268</span>
 </pre></div>
 </div>
 <p>and shows the plots:</p>
@@ -2144,7 +2145,7 @@ build complex models from testable sub-components.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>

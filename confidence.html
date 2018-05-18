@@ -138,13 +138,13 @@ are more robust.</p>
 <h2>Method used for calculating confidence intervals<a class="headerlink" href="#method-used-for-calculating-confidence-intervals" title="Permalink to this headline">¶</a></h2>
 <p>The F-test is used to compare our null model, which is the best fit we have
 found, with an alternate model, where one of the parameters is fixed to a
-specific value. The value is changed until the difference between <span class="math notranslate">\(\chi^2_0\)</span>
-and <span class="math notranslate">\(\chi^2_{f}\)</span> can’t be explained by the loss of a degree of freedom
+specific value. The value is changed until the difference between <span class="math notranslate nohighlight">\(\chi^2_0\)</span>
+and <span class="math notranslate nohighlight">\(\chi^2_{f}\)</span> can’t be explained by the loss of a degree of freedom
 within a certain confidence.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}\]</div>
 <p><cite>N</cite> is the number of data points and <cite>P</cite> the number of parameters of the null model.
-<span class="math notranslate">\(P_{fix}\)</span> is the number of fixed parameters (or to be more clear, the
+<span class="math notranslate nohighlight">\(P_{fix}\)</span> is the number of fixed parameters (or to be more clear, the
 difference of number of parameters between our null model and the alternate
 model).</p>
 <p>Adding a log-likelihood method is under consideration.</p>
@@ -187,9 +187,9 @@ intervals:</p>
 </div>
 <p>This shows the best-fit values for the parameters in the <cite>_BEST_</cite> column,
 and parameter values that are at the varying confidence levels given by
-steps in <span class="math notranslate">\(\sigma\)</span>.  As we can see, the estimated error is almost the
-same, and the uncertainties are well behaved: Going from 1 <span class="math notranslate">\(\sigma\)</span>
-(68% confidence) to 3 <span class="math notranslate">\(\sigma\)</span> (99.7% confidence) uncertainties is
+steps in <span class="math notranslate nohighlight">\(\sigma\)</span>.  As we can see, the estimated error is almost the
+same, and the uncertainties are well behaved: Going from 1 <span class="math notranslate nohighlight">\(\sigma\)</span>
+(68% confidence) to 3 <span class="math notranslate nohighlight">\(\sigma\)</span> (99.7% confidence) uncertainties is
 fairly linear.  It can also be seen that the errors are fairy symmetric
 around the best fit value.  For this problem, it is not necessary to
 calculate confidence intervals, and the estimates of the uncertainties from
@@ -293,11 +293,11 @@ uncertainties and correlations.</p>
 </pre></div>
 </div>
 <p>Again we called <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>, this time with tracing and only for
-1- and 2-<span class="math notranslate">\(\sigma\)</span>.  Comparing these two different estimates, we see
+1- and 2-<span class="math notranslate nohighlight">\(\sigma\)</span>.  Comparing these two different estimates, we see
 that the estimate for <cite>a1</cite> is reasonably well approximated from the
 covariance matrix, but the estimates for <cite>a2</cite> and especially for <cite>t1</cite>, and
-<cite>t2</cite> are very asymmetric and that going from 1 <span class="math notranslate">\(\sigma\)</span> (68%
-confidence) to 2 <span class="math notranslate">\(\sigma\)</span> (95% confidence) is not very predictable.</p>
+<cite>t2</cite> are very asymmetric and that going from 1 <span class="math notranslate nohighlight">\(\sigma\)</span> (68%
+confidence) to 2 <span class="math notranslate nohighlight">\(\sigma\)</span> (95% confidence) is not very predictable.</p>
 <p>Plots of the confidence region are shown in the figures below for <cite>a1</cite> and <cite>t2</cite> (left), and <cite>a2</cite> and <cite>t2</cite> (right):</p>
 <blockquote id="figc1">
 <div><a class="reference external image-reference" href="_images/conf_interval1.png"><img alt="_images/conf_interval1.png" src="_images/conf_interval1.png" style="width: 48%;" /></a>
@@ -523,7 +523,7 @@ Default is None and uses built-in f_compare (F-test).</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>

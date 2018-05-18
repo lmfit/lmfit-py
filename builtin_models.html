@@ -213,12 +213,12 @@ methods for all of these make a fairly crude guess for the value of
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}\]</div>
-<p>where the parameter <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> corresponds to <span class="math notranslate">\(A\)</span>, <code class="docutils literal notranslate"><span class="pre">center</span></code> to
-<span class="math notranslate">\(\mu\)</span>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> to <span class="math notranslate">\(\sigma\)</span>.  The full width at
-half maximum is <span class="math notranslate">\(2\sigma\sqrt{2\ln{2}}\)</span>, approximately
-<span class="math notranslate">\(2.3548\sigma\)</span>.</p>
+<p>where the parameter <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> corresponds to <span class="math notranslate nohighlight">\(A\)</span>, <code class="docutils literal notranslate"><span class="pre">center</span></code> to
+<span class="math notranslate nohighlight">\(\mu\)</span>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> to <span class="math notranslate nohighlight">\(\sigma\)</span>.  The full width at
+half maximum is <span class="math notranslate nohighlight">\(2\sigma\sqrt{2\ln{2}}\)</span>, approximately
+<span class="math notranslate nohighlight">\(2.3548\sigma\)</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -262,11 +262,11 @@ consistent with the Minimizer class.</p>
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma) = \frac{A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]\]</div>
-<p>where the parameter <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> corresponds to <span class="math notranslate">\(A\)</span>, <code class="docutils literal notranslate"><span class="pre">center</span></code> to
-<span class="math notranslate">\(\mu\)</span>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> to <span class="math notranslate">\(\sigma\)</span>.  The full width at
-half maximum is <span class="math notranslate">\(2\sigma\)</span>.</p>
+<p>where the parameter <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> corresponds to <span class="math notranslate nohighlight">\(A\)</span>, <code class="docutils literal notranslate"><span class="pre">center</span></code> to
+<span class="math notranslate nohighlight">\(\mu\)</span>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> to <span class="math notranslate nohighlight">\(\sigma\)</span>.  The full width at
+half maximum is <span class="math notranslate nohighlight">\(2\sigma\)</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -313,19 +313,19 @@ can be varied independently.  In addition, parameters <code class="docutils lite
 <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints to report full width at half
 maximum and maximum peak height, respectively.  The definition for the
 Voigt function used here is</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A \textrm{Re}[w(z)]}{\sigma\sqrt{2 \pi}}\]</div>
 <p>where</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \begin{eqnarray*}
     z &amp;=&amp; \frac{x-\mu +i\gamma}{\sigma\sqrt{2}} \\
     w(z) &amp;=&amp; e^{-z^2}{\operatorname{erfc}}(-iz)
 \end{eqnarray*}</div><p>and <code class="xref py py-func docutils literal notranslate"><span class="pre">erfc()</span></code> is the complementary error function.  As above,
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> corresponds to <span class="math notranslate">\(A\)</span>, <code class="docutils literal notranslate"><span class="pre">center</span></code> to
-<span class="math notranslate">\(\mu\)</span>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> to <span class="math notranslate">\(\sigma\)</span>. The parameter <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
-corresponds  to <span class="math notranslate">\(\gamma\)</span>.
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> corresponds to <span class="math notranslate nohighlight">\(A\)</span>, <code class="docutils literal notranslate"><span class="pre">center</span></code> to
+<span class="math notranslate nohighlight">\(\mu\)</span>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> to <span class="math notranslate nohighlight">\(\sigma\)</span>. The parameter <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
+corresponds  to <span class="math notranslate nohighlight">\(\gamma\)</span>.
 If <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is kept at the default value (constrained to <code class="docutils literal notranslate"><span class="pre">sigma</span></code>),
-the full width at half maximum is approximately <span class="math notranslate">\(3.6013\sigma\)</span>.</p>
+the full width at half maximum is approximately <span class="math notranslate nohighlight">\(3.6013\sigma\)</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -367,17 +367,17 @@ consistent with the Minimizer class.</p>
 <dd><p>A model based on a pseudo-Voigt distribution function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation">https://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation</a>),
 which is a weighted sum of a Gaussian and Lorentzian distribution function
-that share values for <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>)
+that share values for <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>)
 and full width at half maximum <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> (and so have  constrained values of
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>) and <code class="docutils literal notranslate"><span class="pre">height</span></code> (maximum peak height).
-A parameter <code class="docutils literal notranslate"><span class="pre">fraction</span></code> (<span class="math notranslate">\(\alpha\)</span>) controls the relative weight of
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>) and <code class="docutils literal notranslate"><span class="pre">height</span></code> (maximum peak height).
+A parameter <code class="docutils literal notranslate"><span class="pre">fraction</span></code> (<span class="math notranslate nohighlight">\(\alpha\)</span>) controls the relative weight of
 the Gaussian and Lorentzian components, giving the full definition of</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \alpha) = \frac{(1-\alpha)A}{\sigma_g\sqrt{2\pi}}
 e^{[{-{(x-\mu)^2}/{{2\sigma_g}^2}}]}
 + \frac{\alpha A}{\pi} \big[\frac{\sigma}{(x - \mu)^2 + \sigma^2}\big]\]</div>
-<p>where <span class="math notranslate">\(\sigma_g = {\sigma}/{\sqrt{2\ln{2}}}\)</span> so that the full width
-at half maximum of each component and of the sum is <span class="math notranslate">\(2\sigma\)</span>. The
+<p>where <span class="math notranslate nohighlight">\(\sigma_g = {\sigma}/{\sqrt{2\ln{2}}}\)</span> so that the full width
+at half maximum of each component and of the sum is <span class="math notranslate nohighlight">\(2\sigma\)</span>. The
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> function always sets the starting value for <code class="docutils literal notranslate"><span class="pre">fraction</span></code> at 0.5.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -419,15 +419,15 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">MoffatModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.MoffatModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on the Moffat distribution function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Moffat_distribution">https://en.wikipedia.org/wiki/Moffat_distribution</a>), with four Parameters:
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>), a width parameter
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>) and an exponent <code class="docutils literal notranslate"><span class="pre">beta</span></code> (<span class="math notranslate">\(\beta\)</span>).
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>), a width parameter
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>) and an exponent <code class="docutils literal notranslate"><span class="pre">beta</span></code> (<span class="math notranslate nohighlight">\(\beta\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \beta) = A \big[(\frac{x-\mu}{\sigma})^2+1\big]^{-\beta}\]</div>
-<p>the full width have maximum is <span class="math notranslate">\(2\sigma\sqrt{2^{1/\beta}-1}\)</span>.
+<p>the full width have maximum is <span class="math notranslate nohighlight">\(2\sigma\sqrt{2^{1/\beta}-1}\)</span>.
 The <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> function always sets the starting value for <code class="docutils literal notranslate"><span class="pre">beta</span></code> to 1.</p>
-<p>Note that for (<span class="math notranslate">\(\beta=1\)</span>) the Moffat has a Lorentzian shape.</p>
+<p>Note that for (<span class="math notranslate nohighlight">\(\beta=1\)</span>) the Moffat has a Lorentzian shape.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -468,13 +468,13 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">Pearson7Model</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Pearson7Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Pearson VII distribution (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution">https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution</a>),
-with four parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code>
-(<span class="math notranslate">\(\mu\)</span>), <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">exponent</span></code> (<span class="math notranslate">\(m\)</span>).
+with four parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code>
+(<span class="math notranslate nohighlight">\(\mu\)</span>), <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">exponent</span></code> (<span class="math notranslate nohighlight">\(m\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}\]</div>
-<p>where <span class="math notranslate">\(\beta\)</span> is the beta function (see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>)
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>)
 The <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> function always gives a starting value for <code class="docutils literal notranslate"><span class="pre">exponent</span></code>
 of 1.5.  In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as
 constraints to report full width at half maximum and maximum peak height,
@@ -519,12 +519,12 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">StudentsTModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StudentsTModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Student’s t distribution function (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">https://en.wikipedia.org/wiki/Student%27s_t-distribution</a>), with three Parameters:
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>).
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma) = \frac{A \Gamma(\frac{\sigma+1}{2})} {\sqrt{\sigma\pi}\,\Gamma(\frac{\sigma}{2})} \Bigl[1+\frac{(x-\mu)^2}{\sigma}\Bigr]^{-\frac{\sigma+1}{2}}\]</div>
-<p>where <span class="math notranslate">\(\Gamma(x)\)</span> is the gamma function.</p>
+<p>where <span class="math notranslate nohighlight">\(\Gamma(x)\)</span> is the gamma function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -565,11 +565,11 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">BreitWignerModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.BreitWignerModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Breit-Wigner-Fano function (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Fano_resonance">https://en.wikipedia.org/wiki/Fano_resonance</a>), with four Parameters:
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>),
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">q</span></code> (<span class="math notranslate">\(q\)</span>).
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">q</span></code> (<span class="math notranslate nohighlight">\(q\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, q) = \frac{A (q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -611,11 +611,11 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">LognormalModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LognormalModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on the Log-normal distribution function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Lognormal">https://en.wikipedia.org/wiki/Lognormal</a>), with three Parameters
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>
-(<span class="math notranslate">\(\sigma\)</span>).
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>
+(<span class="math notranslate nohighlight">\(\sigma\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}}\frac{e^{-(\ln(x) - \mu)^2/ 2\sigma^2}}{x}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -657,11 +657,11 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">DampedOscillatorModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedOscillatorModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on the Damped Harmonic Oscillator Amplitude
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part">https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part</a>), with
-three Parameters:  <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>) and
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>).
+three Parameters:  <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma) = \frac{A}{\sqrt{ [1 - (x/\mu)^2]^2 + (2\sigma x/\mu)^2}}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -704,15 +704,15 @@ consistent with the Minimizer class.</p>
 <dd><p>A model based on a variation of the Damped Harmonic Oscillator (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Harmonic_oscillator">https://en.wikipedia.org/wiki/Harmonic_oscillator</a>), following the
 definition given in DAVE/PAN (see <a class="reference external" href="https://www.ncnr.nist.gov/dave/">https://www.ncnr.nist.gov/dave/</a>) with
-four Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>),
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate">\(\gamma\)</span>).
+four Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A\sigma}{\pi [1 - \exp(-x/\gamma)]}
         \Big[ \frac{1}{(x-\mu)^2 + \sigma^2} - \frac{1}{(x+\mu)^2 + \sigma^2} \Big]\]</div>
-<p>where <span class="math notranslate">\(\gamma=kT\)</span> k is the Boltzmann constant in <span class="math notranslate">\(evK^-1\)</span>
-and T is the temperature in <span class="math notranslate">\(K\)</span>.</p>
+<p>where <span class="math notranslate nohighlight">\(\gamma=kT\)</span> k is the Boltzmann constant in <span class="math notranslate nohighlight">\(evK^-1\)</span>
+and T is the temperature in <span class="math notranslate nohighlight">\(K\)</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -753,11 +753,11 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">ExponentialGaussianModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialGaussianModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model of an Exponentially modified Gaussian distribution
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution">https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution</a>) with
-four Parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>),
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>), and  <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate">\(\gamma\)</span>).
+four Parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and  <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
 \exp\bigl[\gamma({\mu - x  + \gamma\sigma^2/2})\bigr]
 {\operatorname{erfc}}\Bigl(\frac{\mu + \gamma\sigma^2 - x}{\sqrt{2}\sigma}\Bigr)\]</div>
@@ -802,11 +802,11 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">SkewedGaussianModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedGaussianModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A variation of the Exponential Gaussian, this uses a skewed normal distribution
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Skew_normal_distribution">https://en.wikipedia.org/wiki/Skew_normal_distribution</a>), with Parameters
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>),  <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>),
-and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate">\(\gamma\)</span>).
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),  <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>),
+and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
 to report full width at half maximum and maximum peak height, respectively.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
 e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
 {\operatorname{erf}}\bigl[
@@ -853,11 +853,11 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">DonaichModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DonaichModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model of an Doniach Sunjic asymmetric lineshape
 (see <a class="reference external" href="https://www.casaxps.com/help_manual/line_shapes.htm">https://www.casaxps.com/help_manual/line_shapes.htm</a>), used in
-photo-emission, with four Parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>),
-<code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>), <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
-(<span class="math notranslate">\(\gamma\)</span>).
+photo-emission, with four Parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>),
+<code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>), <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
+(<span class="math notranslate nohighlight">\(\gamma\)</span>).
 In addition, parameter <code class="docutils literal notranslate"><span class="pre">height</span></code> is included as a constraint.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma^{1-\gamma}}
 \frac{\cos\bigl[\pi\gamma/2 + (1-\gamma)
 \arctan{((x - \mu)}/\sigma)\bigr]} {\bigr[1 + (x-\mu)/\sigma\bigl]^{(1-\gamma)/2}}\]</div>
@@ -951,9 +951,9 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">LinearModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LinearModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear model, with two Parameters <code class="docutils literal notranslate"><span class="pre">intercept</span></code> and <code class="docutils literal notranslate"><span class="pre">slope</span></code>.</p>
 <p>Defined as:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; m, b) = m x + b\]</div>
-<p>with  <code class="docutils literal notranslate"><span class="pre">slope</span></code> for <span class="math notranslate">\(m\)</span> and  <code class="docutils literal notranslate"><span class="pre">intercept</span></code> for <span class="math notranslate">\(b\)</span>.</p>
+<p>with  <code class="docutils literal notranslate"><span class="pre">slope</span></code> for <span class="math notranslate nohighlight">\(m\)</span> and  <code class="docutils literal notranslate"><span class="pre">intercept</span></code> for <span class="math notranslate nohighlight">\(b\)</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -994,7 +994,7 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">QuadraticModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.QuadraticModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A quadratic model, with three Parameters <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, and <code class="docutils literal notranslate"><span class="pre">c</span></code>.</p>
 <p>Defined as:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; a, b, c) = a x^2 + b x + c\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1035,7 +1035,7 @@ consistent with the Minimizer class.</p>
 <dt id="lmfit.models.PolynomialModel">
 <em class="property">class </em><code class="descname">PolynomialModel</code><span class="sig-paren">(</span><em>degree, independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A polynomial model with up to 7 Parameters, specfied by <code class="docutils literal notranslate"><span class="pre">degree</span></code>.</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i\]</div>
 <p>with parameters <code class="docutils literal notranslate"><span class="pre">c0</span></code>, <code class="docutils literal notranslate"><span class="pre">c1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">c7</span></code>.  The supplied <code class="docutils literal notranslate"><span class="pre">degree</span></code>
 will specify how many of these are actual variable parameters.  This
@@ -1083,7 +1083,7 @@ consistent with the Minimizer class.</p>
 <dt id="lmfit.models.StepModel">
 <em class="property">class </em><code class="descname">StepModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', form='linear', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StepModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Step function, with three Parameters:
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate">\(\sigma\)</span>).</p>
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>).</p>
 <p>There are four choices for <code class="docutils literal notranslate"><span class="pre">form</span></code>:</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">linear</span></code> (the default)</li>
@@ -1092,15 +1092,15 @@ consistent with the Minimizer class.</p>
 <li><code class="docutils literal notranslate"><span class="pre">logistic</span></code> for a logistic function (see <a class="reference external" href="https://en.wikipedia.org/wiki/Logistic_function">https://en.wikipedia.org/wiki/Logistic_function</a>)</li>
 </ul>
 <p>The step function starts with a value 0, and ends with a value of
-<span class="math notranslate">\(A\)</span> rising to <span class="math notranslate">\(A/2\)</span> at <span class="math notranslate">\(\mu\)</span>, with <span class="math notranslate">\(\sigma\)</span>
+<span class="math notranslate nohighlight">\(A\)</span> rising to <span class="math notranslate nohighlight">\(A/2\)</span> at <span class="math notranslate nohighlight">\(\mu\)</span>, with <span class="math notranslate nohighlight">\(\sigma\)</span>
 setting the characteristic width. The functional forms are defined as:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \begin{eqnarray*}
 &amp; f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})  &amp; = A \min{[1, \max{(0,  \alpha)}]} \\
 &amp; f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})  &amp; = A [1/2 + \arctan{(\alpha)}/{\pi}] \\
 &amp; f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})     &amp; = A [1 + {\operatorname{erf}}(\alpha)]/2 \\
 &amp; f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}})&amp; = A [1 - \frac{1}{1 +  e^{\alpha}} ]
-\end{eqnarray*}</div><p>where <span class="math notranslate">\(\alpha  = (x - \mu)/{\sigma}\)</span>.</p>
+\end{eqnarray*}</div><p>where <span class="math notranslate nohighlight">\(\alpha  = (x - \mu)/{\sigma}\)</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1140,9 +1140,9 @@ consistent with the Minimizer class.</p>
 <dt id="lmfit.models.RectangleModel">
 <em class="property">class </em><code class="descname">RectangleModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', form='linear', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.RectangleModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Step-up and Step-down function, with five
-Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center1</span></code> (<span class="math notranslate">\(\mu_1\)</span>),
-<code class="docutils literal notranslate"><span class="pre">center2</span></code> (<span class="math notranslate">\(\mu_2\)</span>), <cite>sigma1`</cite> (<span class="math notranslate">\(\sigma_1\)</span>) and
-<code class="docutils literal notranslate"><span class="pre">sigma2</span></code> (<span class="math notranslate">\(\sigma_2\)</span>).</p>
+Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center1</span></code> (<span class="math notranslate nohighlight">\(\mu_1\)</span>),
+<code class="docutils literal notranslate"><span class="pre">center2</span></code> (<span class="math notranslate nohighlight">\(\mu_2\)</span>), <cite>sigma1`</cite> (<span class="math notranslate nohighlight">\(\sigma_1\)</span>) and
+<code class="docutils literal notranslate"><span class="pre">sigma2</span></code> (<span class="math notranslate nohighlight">\(\sigma_2\)</span>).</p>
 <p>There are four choices for <code class="docutils literal notranslate"><span class="pre">form</span></code>, which is used for both the Step up
 and the Step down:</p>
 <ul class="simple">
@@ -1152,18 +1152,18 @@ and the Step down:</p>
 <li><code class="docutils literal notranslate"><span class="pre">logistic</span></code> for a logistic function (see <a class="reference external" href="https://en.wikipedia.org/wiki/Logistic_function">https://en.wikipedia.org/wiki/Logistic_function</a>)</li>
 </ul>
 <p>The function starts with a value 0, transitions to a value of
-<span class="math notranslate">\(A\)</span>, taking the value <span class="math notranslate">\(A/2\)</span> at <span class="math notranslate">\(\mu_1\)</span>, with <span class="math notranslate">\(\sigma_1\)</span>
+<span class="math notranslate nohighlight">\(A\)</span>, taking the value <span class="math notranslate nohighlight">\(A/2\)</span> at <span class="math notranslate nohighlight">\(\mu_1\)</span>, with <span class="math notranslate nohighlight">\(\sigma_1\)</span>
 setting the characteristic width. The function then transitions again to
-the value <span class="math notranslate">\(A/2\)</span> at <span class="math notranslate">\(\mu_2\)</span>, with <span class="math notranslate">\(\sigma_2\)</span> setting the
+the value <span class="math notranslate nohighlight">\(A/2\)</span> at <span class="math notranslate nohighlight">\(\mu_2\)</span>, with <span class="math notranslate nohighlight">\(\sigma_2\)</span> setting the
 characteristic width. The functional forms are defined as:</p>
-<div class="math notranslate">
+<div class="math notranslate nohighlight">
 \begin{eqnarray*}
 &amp;f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})   &amp;= A \{ \min{[1, \max{(0, \alpha_1)}]} + \min{[-1, \max{(0,  \alpha_2)}]} \} \\
 &amp;f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})   &amp;= A [\arctan{(\alpha_1)} + \arctan{(\alpha_2)}]/{\pi} \\
 &amp;f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})      &amp;= A [{\operatorname{erf}}(\alpha_1) + {\operatorname{erf}}(\alpha_2)]/2 \\
 &amp;f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}}) &amp;= A [1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 +  e^{\alpha_2}} ]
-\end{eqnarray*}</div><p>where <span class="math notranslate">\(\alpha_1  = (x - \mu_1)/{\sigma_1}\)</span> and
-<span class="math notranslate">\(\alpha_2  = -(x - \mu_2)/{\sigma_2}\)</span>.</p>
+\end{eqnarray*}</div><p>where <span class="math notranslate nohighlight">\(\alpha_1  = (x - \mu_1)/{\sigma_1}\)</span> and
+<span class="math notranslate nohighlight">\(\alpha_2  = -(x - \mu_2)/{\sigma_2}\)</span>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1207,8 +1207,8 @@ consistent with the Minimizer class.</p>
 <em class="property">class </em><code class="descname">ExponentialModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on an exponential decay function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Exponential_decay">https://en.wikipedia.org/wiki/Exponential_decay</a>) with two Parameters:
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), and <code class="docutils literal notranslate"><span class="pre">decay</span></code> (<span class="math notranslate">\(\tau\)</span>), in:</p>
-<div class="math notranslate">
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), and <code class="docutils literal notranslate"><span class="pre">decay</span></code> (<span class="math notranslate nohighlight">\(\tau\)</span>), in:</p>
+<div class="math notranslate nohighlight">
 \[f(x; A, \tau) = A e^{-x/\tau}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1249,8 +1249,8 @@ consistent with the Minimizer class.</p>
 <dt id="lmfit.models.PowerLawModel">
 <em class="property">class </em><code class="descname">PowerLawModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PowerLawModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Power Law (see <a class="reference external" href="https://en.wikipedia.org/wiki/Power_law">https://en.wikipedia.org/wiki/Power_law</a>),
-with two Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate">\(A\)</span>), and <code class="docutils literal notranslate"><span class="pre">exponent</span></code> (<span class="math notranslate">\(k\)</span>), in:</p>
-<div class="math notranslate">
+with two Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), and <code class="docutils literal notranslate"><span class="pre">exponent</span></code> (<span class="math notranslate nohighlight">\(k\)</span>), in:</p>
+<div class="math notranslate nohighlight">
 \[f(x; A, k) = A x^k\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1487,7 +1487,7 @@ we try gives results that are worse:</p>
 </pre></div>
 </div>
 <p>with the plot shown on the right in the figure above.  The tails are now
-too big, and the value for <span class="math notranslate">\(\chi^2\)</span> almost doubled.  A Voigt model
+too big, and the value for <span class="math notranslate nohighlight">\(\chi^2\)</span> almost doubled.  A Voigt model
 does a better job.  Using <a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a>, this is as simple as using:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="k">import</span> <span class="n">VoigtModel</span>
 <span class="n">mod</span> <span class="o">=</span> <span class="n">VoigtModel</span><span class="p">()</span>
@@ -1516,7 +1516,7 @@ does a better job.  Using <a class="reference internal" href="#lmfit.models.Voig
     <span class="n">C</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.651</span>
 </pre></div>
 </div>
-<p>which has a much better value for <span class="math notranslate">\(\chi^2\)</span> and the other
+<p>which has a much better value for <span class="math notranslate nohighlight">\(\chi^2\)</span> and the other
 goodness-of-fit measures, and an obviously better match to the data as seen
 in the figure below (left).</p>
 <blockquote id="figa2">
@@ -1525,7 +1525,7 @@ in the figure below (left).</p>
 <p>Fit to peak with Voigt model (left) and Voigt model with <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
 varying independently of <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (right).</p>
 </div></blockquote>
-<p>Can we do better? The Voigt function has a <span class="math notranslate">\(\gamma\)</span> parameter
+<p>Can we do better? The Voigt function has a <span class="math notranslate nohighlight">\(\gamma\)</span> parameter
 (<code class="docutils literal notranslate"><span class="pre">gamma</span></code>) that can be distinct from <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.  The default behavior used
 above constrains <code class="docutils literal notranslate"><span class="pre">gamma</span></code> to have exactly the same value as <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.  If
 we allow these to vary separately, does the fit improve?  To do this, we
@@ -1562,18 +1562,18 @@ give it a starting value using something like:</p>
 </pre></div>
 </div>
 <p>and the fit shown on the right above.</p>
-<p>Comparing the two fits with the Voigt function, we see that <span class="math notranslate">\(\chi^2\)</span>
+<p>Comparing the two fits with the Voigt function, we see that <span class="math notranslate nohighlight">\(\chi^2\)</span>
 is definitely improved with a separately varying <code class="docutils literal notranslate"><span class="pre">gamma</span></code> parameter.  In
 addition, the two values for <code class="docutils literal notranslate"><span class="pre">gamma</span></code> and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> differ significantly
 – well outside the estimated uncertainties.  More compelling, reduced
-<span class="math notranslate">\(\chi^2\)</span> is improved even though a fourth variable has been added to
+<span class="math notranslate nohighlight">\(\chi^2\)</span> is improved even though a fourth variable has been added to
 the fit.  In the simplest statistical sense, this suggests that <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
 is a significant variable in the model.  In addition, we can use both the
 Akaike or Bayesian Information Criteria (see
 <a class="reference internal" href="fitting.html#information-criteria-label"><span class="std std-ref">Akaike and Bayesian Information Criteria</span></a>) to assess how likely the model with
 variable <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is to explain the data than the model with <code class="docutils literal notranslate"><span class="pre">gamma</span></code>
 fixed to the value of <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.  According to theory,
-<span class="math notranslate">\(\exp(-(\rm{AIC1}-\rm{AIC0})/2)\)</span> gives the probability that a model with
+<span class="math notranslate nohighlight">\(\exp(-(\rm{AIC1}-\rm{AIC0})/2)\)</span> gives the probability that a model with
 AIC1 is more likely than a model with AIC0.  For the two models here, with
 AIC values of -1436 and -1324 (Note: if we had more carefully set the value
 for <code class="docutils literal notranslate"><span class="pre">weights</span></code> based on the noise in the data, these values might be
@@ -1601,6 +1601,7 @@ plus a constant:</p>
 <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="n">y</span><span class="p">[:</span><span class="mi">48</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="n">y</span><span class="p">[</span><span class="mi">48</span><span class="p">:</span><span class="mi">77</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">77</span><span class="o">-</span><span class="mi">48</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">77.0</span><span class="o">-</span><span class="mi">48</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">y</span> <span class="o">=</span> <span class="mf">110.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mf">9e-3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span> <span class="o">+</span> <span class="mf">12.0</span> <span class="o">+</span> <span class="mf">2.22</span><span class="o">*</span><span class="n">x</span>
 
 <span class="n">step_mod</span> <span class="o">=</span> <span class="n">StepModel</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="s1">&#39;erf&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;step_&#39;</span><span class="p">)</span>
@@ -1632,29 +1633,29 @@ results, which gives:</p>
     <span class="p">(</span><span class="n">Model</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;step_&#39;</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="s1">&#39;erf&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;line_&#39;</span><span class="p">))</span>
 <span class="p">[[</span><span class="n">Fit</span> <span class="n">Statistics</span><span class="p">]]</span>
     <span class="c1"># fitting method   = leastsq</span>
-    <span class="c1"># function evals   = 51</span>
+    <span class="c1"># function evals   = 49</span>
     <span class="c1"># data points      = 201</span>
     <span class="c1"># variables        = 5</span>
-    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">526.476967</span>
-    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">2.68610698</span>
-    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="mf">203.543438</span>
-    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="mf">220.059962</span>
+    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">593.709622</span>
+    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">3.02913072</span>
+    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="mf">227.700173</span>
+    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="mf">244.216698</span>
 <span class="p">[[</span><span class="n">Variables</span><span class="p">]]</span>
-    <span class="n">line_intercept</span><span class="p">:</span>  <span class="mf">11.6336538</span> <span class="o">+/-</span> <span class="mf">0.25986140</span> <span class="p">(</span><span class="mf">2.23</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">11.41635</span><span class="p">)</span>
-    <span class="n">line_slope</span><span class="p">:</span>      <span class="mf">2.06801103</span> <span class="o">+/-</span> <span class="mf">0.08730814</span> <span class="p">(</span><span class="mf">4.22</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">step_sigma</span><span class="p">:</span>      <span class="mf">0.66708191</span> <span class="o">+/-</span> <span class="mf">0.01028666</span> <span class="p">(</span><span class="mf">1.54</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">1.428571</span><span class="p">)</span>
-    <span class="n">step_amplitude</span><span class="p">:</span>  <span class="mf">111.878321</span> <span class="o">+/-</span> <span class="mf">0.61242795</span> <span class="p">(</span><span class="mf">0.55</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">133.7451</span><span class="p">)</span>
-    <span class="n">step_center</span><span class="p">:</span>     <span class="mf">3.12524684</span> <span class="o">+/-</span> <span class="mf">0.00487627</span> <span class="p">(</span><span class="mf">0.16</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">line_intercept</span><span class="p">:</span>  <span class="mf">12.0964833</span> <span class="o">+/-</span> <span class="mf">0.27606235</span> <span class="p">(</span><span class="mf">2.28</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">11.58574</span><span class="p">)</span>
+    <span class="n">line_slope</span><span class="p">:</span>      <span class="mf">1.87164655</span> <span class="o">+/-</span> <span class="mf">0.09318714</span> <span class="p">(</span><span class="mf">4.98</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">step_sigma</span><span class="p">:</span>      <span class="mf">0.67392841</span> <span class="o">+/-</span> <span class="mf">0.01091168</span> <span class="p">(</span><span class="mf">1.62</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">1.428571</span><span class="p">)</span>
+    <span class="n">step_center</span><span class="p">:</span>     <span class="mf">3.13494792</span> <span class="o">+/-</span> <span class="mf">0.00516615</span> <span class="p">(</span><span class="mf">0.16</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">2.5</span><span class="p">)</span>
+    <span class="n">step_amplitude</span><span class="p">:</span>  <span class="mf">112.858376</span> <span class="o">+/-</span> <span class="mf">0.65392949</span> <span class="p">(</span><span class="mf">0.58</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">134.7378</span><span class="p">)</span>
 <span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span> <span class="mf">0.100</span><span class="p">)</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">line_slope</span><span class="p">,</span> <span class="n">step_amplitude</span><span class="p">)</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">0.878</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">step_sigma</span><span class="p">,</span> <span class="n">step_amplitude</span><span class="p">)</span>     <span class="o">=</span>  <span class="mf">0.561</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">line_slope</span><span class="p">,</span> <span class="n">step_sigma</span><span class="p">)</span>         <span class="o">=</span> <span class="o">-</span><span class="mf">0.454</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">line_intercept</span><span class="p">,</span> <span class="n">step_center</span><span class="p">)</span>    <span class="o">=</span>  <span class="mf">0.425</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">line_intercept</span><span class="p">,</span> <span class="n">line_slope</span><span class="p">)</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">0.308</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">line_slope</span><span class="p">,</span> <span class="n">step_center</span><span class="p">)</span>        <span class="o">=</span> <span class="o">-</span><span class="mf">0.233</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">line_intercept</span><span class="p">,</span> <span class="n">step_sigma</span><span class="p">)</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">0.138</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">line_intercept</span><span class="p">,</span> <span class="n">step_amplitude</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.121</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">step_amplitude</span><span class="p">,</span> <span class="n">step_center</span><span class="p">)</span>    <span class="o">=</span>  <span class="mf">0.108</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">line_slope</span><span class="p">,</span> <span class="n">step_amplitude</span><span class="p">)</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">0.879</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">step_sigma</span><span class="p">,</span> <span class="n">step_amplitude</span><span class="p">)</span>     <span class="o">=</span>  <span class="mf">0.564</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">line_slope</span><span class="p">,</span> <span class="n">step_sigma</span><span class="p">)</span>         <span class="o">=</span> <span class="o">-</span><span class="mf">0.457</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">line_intercept</span><span class="p">,</span> <span class="n">step_center</span><span class="p">)</span>    <span class="o">=</span>  <span class="mf">0.427</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">line_intercept</span><span class="p">,</span> <span class="n">line_slope</span><span class="p">)</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">0.309</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">line_slope</span><span class="p">,</span> <span class="n">step_center</span><span class="p">)</span>        <span class="o">=</span> <span class="o">-</span><span class="mf">0.234</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">line_intercept</span><span class="p">,</span> <span class="n">step_sigma</span><span class="p">)</span>     <span class="o">=</span> <span class="o">-</span><span class="mf">0.137</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">line_intercept</span><span class="p">,</span> <span class="n">step_amplitude</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.117</span>
+    <span class="n">C</span><span class="p">(</span><span class="n">step_center</span><span class="p">,</span> <span class="n">step_amplitude</span><span class="p">)</span>    <span class="o">=</span>  <span class="mf">0.109</span>
 </pre></div>
 </div>
 <p>with a plot of</p>
@@ -1875,7 +1876,7 @@ estimate of the data.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>

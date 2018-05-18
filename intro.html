@@ -129,17 +129,17 @@ minimized, typically in the least-squares sense.  For many data fitting
 processes, the latter approach is used, and the objective function should
 return an array of (data-model), perhaps scaled by some weighting factor
 such as the inverse of the uncertainty in the data.  For such a problem,
-the chi-square (<span class="math notranslate">\(\chi^2\)</span>) statistic is often defined as:</p>
-<div class="math notranslate">
+the chi-square (<span class="math notranslate nohighlight">\(\chi^2\)</span>) statistic is often defined as:</p>
+<div class="math notranslate nohighlight">
 \[\chi^2 =  \sum_i^{N} \frac{[y^{\rm meas}_i - y_i^{\rm model}({\bf{v}})]^2}{\epsilon_i^2}\]</div>
-<p>where <span class="math notranslate">\(y_i^{\rm meas}\)</span> is the set of measured data, <span class="math notranslate">\(y_i^{\rm
-model}({\bf{v}})\)</span> is the model calculation, <span class="math notranslate">\({\bf{v}}\)</span> is the set of
-variables in the model to be optimized in the fit, and <span class="math notranslate">\(\epsilon_i\)</span>
+<p>where <span class="math notranslate nohighlight">\(y_i^{\rm meas}\)</span> is the set of measured data, <span class="math notranslate nohighlight">\(y_i^{\rm
+model}({\bf{v}})\)</span> is the model calculation, <span class="math notranslate nohighlight">\({\bf{v}}\)</span> is the set of
+variables in the model to be optimized in the fit, and <span class="math notranslate nohighlight">\(\epsilon_i\)</span>
 is the estimated uncertainty in the data.</p>
 <p>In a traditional non-linear fit, one writes an objective function that
-takes the variable values and calculates the residual array <span class="math notranslate">\(y^{\rm
+takes the variable values and calculates the residual array <span class="math notranslate nohighlight">\(y^{\rm
 meas}_i - y_i^{\rm model}({\bf{v}})\)</span>, or the residual array scaled by the
-data uncertainties, <span class="math notranslate">\([y^{\rm meas}_i - y_i^{\rm
+data uncertainties, <span class="math notranslate nohighlight">\([y^{\rm meas}_i - y_i^{\rm
 model}({\bf{v}})]/{\epsilon_i}\)</span>, or some other weighting factor.</p>
 <p>As a simple concrete example, one might want to model data with a decaying
 sine wave, and so write an objective function like this:</p>
@@ -157,7 +157,7 @@ sine wave, and so write an objective function like this:</p>
     <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span> <span class="o">/</span> <span class="n">eps_data</span>
 </pre></div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.0.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
+<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">leastsq</span>
 
 <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
@@ -301,7 +301,7 @@ provides a better determination of Parameters confidence levels.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>

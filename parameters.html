@@ -128,13 +128,13 @@
 lmfit.</p>
 <p>A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> is the quantity to be optimized in all minimization
 problems, replacing the plain floating point number used in the
-optimization routines from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.0.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>.  A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> has
+optimization routines from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>.  A <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> has
 a value that can either be varied in the fit or held at a fixed value, and
 can have upper and/or lower bounds placed on the value.  It can even have a
 value that is constrained by an algebraic expression of other Parameter
 values.  Since <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects live outside the core
 optimization routines, they can be used in <strong>all</strong> optimization routines
-from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.0.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>.  By using <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects instead of
+from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>.  By using <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects instead of
 plain variables, the objective function does not have to be modified to
 reflect every change of what is varied in the fit, or whether bounds can be
 applied.  This simplifies the writing of models, allowing general models
@@ -142,7 +142,7 @@ that describe the phenomenon and gives the user more flexibility in using
 and testing variations of that model.</p>
 <p>Whereas a <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> expands on an individual floating point
 variable, the optimization methods actually still need an ordered group of
-floating point variables.  In the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.0.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> routines this is
+floating point variables.  In the <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a> routines this is
 required to be a one-dimensional <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html">numpy.ndarray</a>.  In lmfit, this one-dimensional
 array is replaced by a <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> object, which works as an
 ordered dictionary of <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> objects with a few additional
@@ -612,7 +612,7 @@ which would make the objective function <code class="docutils literal notranslat
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>

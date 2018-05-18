@@ -980,24 +980,24 @@ binary operator.  A full script using this technique is here:
 which prints out the results::
 
     [[Model]]
-        (Model(jump) <function convolve at 0x10480e598> Model(gaussian))
+        (Model(jump) <function convolve at 0x114e6e1e0> Model(gaussian))
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 23
+        # function evals   = 25
         # data points      = 201
         # variables        = 3
-        chi-square         = 21.6932855
-        reduced chi-square = 0.10956205
-        Akaike info crit   = -441.486726
-        Bayesian info crit = -431.576811
+        chi-square         = 24.7562335
+        reduced chi-square = 0.12503148
+        Akaike info crit   = -414.939746
+        Bayesian info crit = -405.029832
     [[Variables]]
         mid:        5 (fixed)
-        center:     4.52495463 +/- 0.00937255 (0.21%) (init = 3.5)
-        sigma:      0.62328669 +/- 0.01297258 (2.08%) (init = 1.5)
-        amplitude:  0.62362920 +/- 0.00179096 (0.29%) (init = 1)
+        sigma:      0.59576118 +/- 0.01348582 (2.26%) (init = 1.5)
+        center:     4.50853671 +/- 0.00973231 (0.22%) (init = 3.5)
+        amplitude:  0.62508459 +/- 0.00189732 (0.30%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(center, amplitude) =  0.338
-        C(sigma, amplitude)  =  0.276
+        C(center, amplitude) =  0.329
+        C(sigma, amplitude)  =  0.268
 
 
 and shows the plots:

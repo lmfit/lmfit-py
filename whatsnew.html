@@ -78,6 +78,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-0-9-10-release-notes">Version 0.9.10 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-9-release-notes">Version 0.9.9 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-6-release-notes">Version 0.9.6 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-5-release-notes">Version 0.9.5 Release Notes</a></li>
@@ -128,12 +129,32 @@
 <p>This section discusses changes between versions, especially changes
 significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
-consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit github repository</a>.</p>
+consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>.</p>
+<div class="section" id="version-0-9-10-release-notes">
+<h2>Version 0.9.10 Release Notes<a class="headerlink" href="#version-0-9-10-release-notes" title="Permalink to this headline">¶</a></h2>
+<p>Two new global algorithms were added: basinhopping and AMPGO.
+Basinhopping wraps the method present in <cite>scipy</cite>, and more information
+can be found in the documentation (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.basinhopping" title="lmfit.minimizer.Minimizer.basinhopping"><code class="xref py py-func docutils literal notranslate"><span class="pre">basinhopping()</span></code></a>
+and <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.basinhopping.html">scipy.optimize.basinhopping</a>).
+The Adaptive Memory Programming for Global Optimization (AMPGO) algorithm
+was adapted from Python code written by <a class="reference external" href="http://infinity77.net/global_optimization/index.html">Andrea Gavana</a>. A more detailed
+explanation of the algorithm is available in the <a class="reference external" href="http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf">AMPGO paper</a> and specifics
+for lmfit can be found in the <a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.ampgo" title="lmfit.minimizer.Minimizer.ampgo"><code class="xref py py-func docutils literal notranslate"><span class="pre">ampgo()</span></code></a> function.</p>
+<p>Lmfit uses the external uncertainties (<a class="reference external" href="https://github.com/lebigot/uncertainties">https://github.com/lebigot/uncertainties</a>)
+package (available on PyPI), instead of distributing its own fork.</p>
+<p>An <cite>AbortFitException</cite> is now raised when the fit is aborted by the user (i.e., by
+using <cite>iter_cb</cite>).</p>
+<p>Bugfixes:</p>
+<ul class="simple">
+<li>all exceptions are allowed when trying to import matplotlib</li>
+<li>simplify and fix corner-case errors when testing closeness of large integers</li>
+</ul>
+</div>
 <div class="section" id="version-0-9-9-release-notes">
 <span id="whatsnew-099-label"></span><h2>Version 0.9.9 Release Notes<a class="headerlink" href="#version-0-9-9-release-notes" title="Permalink to this headline">¶</a></h2>
 <p>Lmfit now uses the asteval (<a class="reference external" href="https://github.com/newville/asteval">https://github.com/newville/asteval</a>) package
 instead of distributing its own copy. The minimum required asteval version
-is 0.9.12, which is available on PyPi. If you see import errors related to
+is 0.9.12, which is available on PyPI. If you see import errors related to
 asteval, please make sure that you actually have the latest version installed.</p>
 </div>
 <div class="section" id="version-0-9-6-release-notes">
@@ -287,7 +308,7 @@ track of changes made while adjusting parameters and re-running fits.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
     </div>
   </body>
 </html>
