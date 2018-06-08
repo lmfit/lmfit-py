@@ -19,8 +19,7 @@ import numbers
 import warnings
 
 import numpy as np
-from numpy import dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
-from numpy.dual import inv
+from numpy import ndarray, ones_like, sqrt
 from numpy.linalg import LinAlgError
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
@@ -1351,7 +1350,6 @@ class Minimizer(object):
 
         # need to map _best values to params, then calculate the
         # grad for the variable parameters
-        grad = ones_like(_best)
         vbest = ones_like(_best)
 
         # ensure that _best, vbest, and grad are not
@@ -1360,24 +1358,9 @@ class Minimizer(object):
             _best = np.array([_best])
         if len(np.shape(vbest)) == 0:
             vbest = np.array([vbest])
-        if len(np.shape(grad)) == 0:
-            grad = np.array([grad])
 
         for ivar, name in enumerate(result.var_names):
-            grad[ivar] = params[name].scale_gradient(_best[ivar])
             vbest[ivar] = params[name].value
-
-        # modified from JJ Helmus' leastsqbound.py
-        infodict['fjac'] = transpose(transpose(infodict['fjac']) /
-                                     take(grad, infodict['ipvt'] - 1))
-        rvec = dot(triu(transpose(infodict['fjac'])[:nvars, :]),
-                   take(eye(nvars), infodict['ipvt'] - 1, 0))
-        try:
-            result.covar = inv(dot(transpose(rvec), rvec))
-        except (LinAlgError, ValueError):
-            result.covar = None
-
-        result.fjac = infodict['fjac']
 
         has_expr = False
         for par in params.values():
@@ -1385,10 +1368,15 @@ class Minimizer(object):
             has_expr = has_expr or par.expr is not None
 
         # self.errorbars = error bars were successfully estimated
-        result.errorbars = (result.covar is not None)
+        result.errorbars = (_cov is not None)
         if result.errorbars:
             if self.scale_covar:
-                result.covar *= result.redchi
+                result.cov_int = _cov * result.redchi
+            else:
+                result.cov_int = _cov
+            # transform the covariance matrix to "external" parameter space
+            result.covar = self._int2ext_cov_x(result.cov_int, _best)
+
             for ivar, name in enumerate(result.var_names):
                 par = params[name]
                 par.stderr = sqrt(result.covar[ivar, ivar])
@@ -1425,15 +1413,6 @@ class Minimizer(object):
             result.message = '%s Could not estimate error-bars.' % result.message
 
         np.seterr(**orig_warn_settings)
-
-        # transform the covariance matrix to "external" parameter space
-        if _cov is not None:
-            if self.scale_covar:
-                result.cov_int = _cov * result.redchi
-            else:
-                result.cov_int = _cov
-            result.covar_ = self._int2ext_cov_x(result.cov_int, _best)
-            assert(np.allclose(result.covar, result.covar_))
 
         return result
 
