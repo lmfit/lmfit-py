@@ -323,7 +323,6 @@ class MinimizerResult(object):
 
     def _calculate_statistics(self):
         """Calculate the fitting statistics."""
-
         self.nvarys = len(self.init_vals)
         if isinstance(self.residual, ndarray):
             self.chisqr = (self.residual**2).sum()
@@ -695,6 +694,48 @@ class Minimizer(object):
 
         cov_ext = cov_int * grad
         return cov_ext
+
+    def _calculate_uncertainties_correlations(self):
+        """Calculate parameter uncertainties and correlations."""
+        if self.scale_covar:
+            self.result.covar *= self.result.redchi
+
+        vbest = np.atleast_1d([self.result.params[name].value for i, name in
+                               enumerate(self.result.var_names)])
+
+        has_expr = False
+        for par in self.result.params.values():
+            par.stderr, par.correl = 0, None
+            has_expr = has_expr or par.expr is not None
+
+        for ivar, name in enumerate(self.result.var_names):
+            par = self.result.params[name]
+            par.stderr = sqrt(self.result.covar[ivar, ivar])
+            par.correl = {}
+            try:
+                self.result.errorbars = self.result.errorbars and (par.stderr > 0.0)
+                for jvar, varn2 in enumerate(self.result.var_names):
+                    if jvar != ivar:
+                        par.correl[varn2] = (self.result.covar[ivar, jvar] /
+                                             (par.stderr * sqrt(self.result.covar[jvar, jvar])))
+            except ZeroDivisionError:
+                self.result.errorbars = False
+
+        if has_expr:
+            try:
+                uvars = uncertainties.correlated_values(vbest, self.result.covar)
+            except (LinAlgError, ValueError):
+                uvars = None
+
+            # for uncertainties on constrained parameters, use the calculated
+            # "correlated_values", evaluate the uncertainties on the constrained
+            # parameters and reset the Parameters to best-fit value
+            if uvars is not None:
+                for par in self.result.params.values():
+                    eval_stderr(par, uvars, self.result.var_names, self.result.params)
+                # restore nominal values
+                for v, nam in zip(uvars, self.result.var_names):
+                    self.result.params[nam].value = v.nominal_value
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """Scalar minimization using :scipydoc:`optimize.minimize`.
@@ -1327,7 +1368,6 @@ class Minimizer(object):
             pass
 
         result._calculate_statistics()
-        params = result.params
 
         if result.aborted:
             return result
@@ -1348,68 +1388,14 @@ class Minimizer(object):
         else:
             result.message = 'Tolerance seems to be too small.'
 
-        # need to map _best values to params, then calculate the
-        # grad for the variable parameters
-        vbest = ones_like(_best)
-
-        # ensure that _best, vbest, and grad are not
-        # broken 1-element ndarrays.
-        if len(np.shape(_best)) == 0:
-            _best = np.array([_best])
-        if len(np.shape(vbest)) == 0:
-            vbest = np.array([vbest])
-
-        for ivar, name in enumerate(result.var_names):
-            vbest[ivar] = params[name].value
-
-        has_expr = False
-        for par in params.values():
-            par.stderr, par.correl = 0, None
-            has_expr = has_expr or par.expr is not None
-
         # self.errorbars = error bars were successfully estimated
         result.errorbars = (_cov is not None)
         if result.errorbars:
-            if self.scale_covar:
-                result.cov_int = _cov * result.redchi
-            else:
-                result.cov_int = _cov
             # transform the covariance matrix to "external" parameter space
-            result.covar = self._int2ext_cov_x(result.cov_int, _best)
-
-            for ivar, name in enumerate(result.var_names):
-                par = params[name]
-                par.stderr = sqrt(result.covar[ivar, ivar])
-                par.correl = {}
-                try:
-                    result.errorbars = result.errorbars and (par.stderr > 0.0)
-                    for jvar, varn2 in enumerate(result.var_names):
-                        if jvar != ivar:
-                            par.correl[varn2] = (
-                                result.covar[ivar, jvar] /
-                                (par.stderr * sqrt(result.covar[jvar, jvar])))
-                # TODO: do not use bare except
-                except:
-                    result.errorbars = False
-
-            if has_expr:
-                # uncertainties on constrained parameters:
-                #   get values with uncertainties (including correlations),
-                #   temporarily set Parameter values to these,
-                #   re-evaluate contrained parameters to extract stderr
-                #   and then set Parameters back to best-fit value
-                try:
-                    uvars = uncertainties.correlated_values(vbest, result.covar)
-                except (LinAlgError, ValueError):
-                    uvars = None
-                if uvars is not None:
-                    for par in params.values():
-                        eval_stderr(par, uvars, result.var_names, params)
-                    # restore nominal values
-                    for v, nam in zip(uvars, result.var_names):
-                        params[nam].value = v.nominal_value
-
-        if not result.errorbars:
+            result.covar = self._int2ext_cov_x(_cov, _best)
+            # calculate parameter uncertainties and correlations
+            self._calculate_uncertainties_correlations()
+        else:
             result.message = '%s Could not estimate error-bars.' % result.message
 
         np.seterr(**orig_warn_settings)
