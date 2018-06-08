@@ -669,6 +669,34 @@ class Minimizer(object):
         """
         pass
 
+    def _int2ext_cov_x(self, cov_int, fvars):
+        """Transform covariance matrix to external parameter space.
+
+        It makes use of the gradient scaling according to the MINUIT recipe:
+
+            cov_ext = np.dot(grad.T, grad) * cov_int
+
+        Parameters
+        ----------
+        cov_int : numpy.ndarray
+            Covariance matrix in the internal parameter space.
+        fvars : numpy.ndarray
+            Array of the optimal internal, freely variable, parameter values.
+
+        Returns
+        -------
+        cov_ext : numpy.ndarray
+            Covariance matrix, transformed to external parameter space.
+
+        """
+        g = [self.result.params[name].scale_gradient(fvars[i]) for i, name in
+             enumerate(self.result.var_names)]
+        grad2d = np.atleast_2d(g)
+        grad = np.dot(grad2d.T, grad2d)
+
+        cov_ext = cov_int * grad
+        return cov_ext
+
     def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """Scalar minimization using :scipydoc:`optimize.minimize`.
 
@@ -1397,6 +1425,16 @@ class Minimizer(object):
             result.message = '%s Could not estimate error-bars.' % result.message
 
         np.seterr(**orig_warn_settings)
+
+        # transform the covariance matrix to "external" parameter space
+        if _cov is not None:
+            if self.scale_covar:
+                result.cov_int = _cov * result.redchi
+            else:
+                result.cov_int = _cov
+            result.covar_ = self._int2ext_cov_x(result.cov_int, _best)
+            assert(np.allclose(result.covar, result.covar_))
+
         return result
 
     def basinhopping(self, params=None, **kws):
