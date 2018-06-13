@@ -20,6 +20,7 @@ import warnings
 
 import numpy as np
 from numpy import ndarray, ones_like, sqrt
+from numpy.dual import inv
 from numpy.linalg import LinAlgError
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
@@ -52,6 +53,13 @@ try:
 except ImportError:
     HAS_PANDAS = False
     isnull = np.isnan
+
+# check for numdifftools
+try:
+    import numdifftools as ndt
+    HAS_NUMDIFFTOOLS = True
+except ImportError:
+    HAS_NUMDIFFTOOLS = False
 
 # define the namedtuple here so pickle will work with the MinimizerResult
 Candidate = namedtuple('Candidate', ['params', 'score'])
@@ -229,8 +237,8 @@ class MinimizerResult(object):
         useful for understanding the values in :attr:`init_vals` and
         :attr:`covar`.
     covar : numpy.ndarray
-        Covariance matrix from minimization (`leastsq` only), with
-        rows and columns corresponding to  :attr:`var_names`.
+        Covariance matrix from minimization, with rows and columns
+        corresponding to :attr:`var_names`.
     init_vals : list
         List of initial values for variable parameters using :attr:`var_names`.
     init_values : dict
@@ -351,7 +359,7 @@ class Minimizer(object):
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
-                 reduce_fcn=None, **kws):
+                 reduce_fcn=None, calc_covar=True, **kws):
         """
         Parameters
         ----------
@@ -378,8 +386,7 @@ class Minimizer(object):
             the iteration number, `resid` the current residual array, and `*fcn_args`
             and `**fcn_kws` are passed to the objective function.
         scale_covar : bool, optional
-            Whether to automatically scale the covariance matrix (default is True,
-            `leastsq` only).
+            Whether to automatically scale the covariance matrix (default is True).
         nan_policy : str, optional
             Specifies action if `userfcn` (or a Jacobian) returns NaN
             values. One of:
@@ -406,6 +413,10 @@ class Minimizer(object):
 
             - callable : must take one argument (`r`) and return a float.
 
+        calc_covar : bool, optional
+            Whether to calculate the covariance matrix (default is True) for
+            solvers other than `leastsq` and `least_squares`. Requires the
+            `numdifftools` package to be installed.
         **kws : dict, optional
             Options to pass to the minimizer being used.
 
@@ -438,6 +449,7 @@ class Minimizer(object):
             self.userkws = {}
         self.kws = kws
         self.iter_cb = iter_cb
+        self.calc_covar = calc_covar
         self.scale_covar = scale_covar
         self.nfev = 0
         self.nfree = 0
@@ -667,6 +679,43 @@ class Minimizer(object):
 
         """
         pass
+
+    def _calculate_covariance_matrix(self, fvars):
+        """Calculate the covariance matrix.
+
+        The `numdiftoools` package is used to estimate the Hessian matrix, and
+        the covariance matrix is calculated as:
+
+        .. math::
+
+            cov_x = inverse(Hessian) * 2.0
+
+        Parameters
+        ----------
+        fvars : numpy.ndarray
+            Array of the optimal internal, freely variable parameters.
+
+        Returns
+        -------
+        cov_x : numpy.ndarray or None
+            Covariance matrix if successful, otherwise None.
+
+        """
+        import warnings
+        warnings.filterwarnings(action="ignore", module="scipy",
+                                message="^internal gelsd")
+
+        nfev = deepcopy(self.result.nfev)
+        try:
+            Hfun = ndt.Hessian(self.penalty, full_output=True)
+            hessian_ndt, info = Hfun(fvars)
+            cov_x = inv(hessian_ndt) * 2.0
+        except LinAlgError:
+            return None
+        finally:
+            self.result.nfev = nfev
+
+        return cov_x
 
     def _int2ext_cov_x(self, cov_int, fvars):
         """Transform covariance matrix to external parameter space.
@@ -1202,10 +1251,10 @@ class Minimizer(object):
         if EMCEE_VERSION >= 3:
             output = self.sampler.run_mcmc(p0, steps, progress=progress)
             self._lastpos = output.coords
-        else: 
+        else:
             output = self.sampler.run_mcmc(p0, steps)
             self._lastpos = output[0]
-        
+
         # discard the burn samples and thin
         chain = self.sampler.chain[..., burn::thin, :]
         lnprobability = self.sampler.lnprobability[..., burn::thin]
@@ -2038,7 +2087,8 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
 
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None,
-             scale_covar=True, iter_cb=None, reduce_fcn=None, **fit_kws):
+             scale_covar=True, iter_cb=None, reduce_fcn=None, calc_covar=True,
+             **fit_kws):
     """Perform a fit of a set of parameters by minimizing an objective (or
     cost) function using one of the several available methods.
 
@@ -2102,11 +2152,14 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         the iteration number, `resid` the current residual array, and `*args`
         and `**kws` as passed to the objective function.
     scale_covar : bool, optional
-        Whether to automatically scale the covariance matrix (default is True,
-        `leastsq` only).
+        Whether to automatically scale the covariance matrix (default is True).
     reduce_fcn : str or callable, optional
         Function to convert a residual array to a scalar value for the scalar
         minimizers. See notes in `Minimizer`.
+    calc_covar : bool, optional
+        Whether to calculate the covariance matrix (default is True) for
+        solvers other than `leastsq` and `least_squares`. Requires the
+        `numdifftools` package to be installed.
     **fit_kws : dict, optional
         Options to pass to the minimizer being used.
 
@@ -2144,11 +2197,14 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
     and is equivalent to::
 
         fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
-                           iter_cb=iter_cb, scale_covar=scale_covar, **fit_kws)
+                           iter_cb=iter_cb, scale_covar=scale_covar,
+                           reduce_fcn=reduce_fcn, calc_covar=calc_covar,
+                           **fit_kws)
         fitter.minimize(method=method)
 
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar,
-                       reduce_fcn=reduce_fcn, **fit_kws)
+                       reduce_fcn=reduce_fcn, calc_covar=calc_covar,
+                       **fit_kws)
     return fitter.minimize(method=method)
