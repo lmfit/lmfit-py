@@ -595,7 +595,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(np.isnan(result.chisqr))
         self.assertTrue(np.isnan(result.aic))
         self.assertFalse(result.errorbars)
-        self.assertTrue(result.params['amplitude'].stderr==0)
+        self.assertTrue(result.params['amplitude'].stderr is None)
         self.assertTrue(abs(result.params['amplitude'].value - 20.0) < 0.001)
 
         # with omit, should get good results
