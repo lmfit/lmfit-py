@@ -201,6 +201,17 @@ class TestParameters(unittest.TestCase):
         assert_(isclose(np.inf, np.inf))
         assert_(not isclose(np.nan, np.nan))
 
+    def test_expr_with_bounds(self):
+        "test an expression with bounds, without value"
+        pars = Parameters()
+        pars.add('c1', value=0.2)
+        pars.add('c2', value=0.2)
+        pars.add('c3', value=0.2)
+        pars.add('csum', value=0.8)
+        # this should not raise TypeError:
+        pars.add('c4', expr='csum-c1-c2-c3', min=0, max=1)
+        assert_(isclose(pars['c4'].value, 0.2))
+
 
 if __name__ == '__main__':
     unittest.main()
