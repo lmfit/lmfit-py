@@ -6,7 +6,7 @@ from copy import deepcopy
 import json
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
-from numpy import arcsin, array, cos, inf, nan, sin, sqrt, isfinite
+from numpy import arcsin, array, cos, inf, nan, sin, sqrt
 import scipy.special
 import uncertainties
 
@@ -703,8 +703,6 @@ class Parameter(object):
             actually be used in a fit.
 
         """
-        # print("setup bounds ", self.min, self.max, self._val)
-
         if self.min is None:
             self.min = -inf
         if self.max is None:
