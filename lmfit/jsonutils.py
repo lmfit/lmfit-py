@@ -62,7 +62,7 @@ def encode4js(obj):
     elif isinstance(obj, six.string_types):
         try:
             return str(obj)
-        except:
+        except UnicodeError:
             return obj
     elif isinstance(obj, np.complex):
         return dict(__class__='Complex', value=(obj.real, obj.imag))
