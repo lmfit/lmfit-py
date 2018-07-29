@@ -826,6 +826,8 @@ class Parameter(object):
         if val is None:
             self._expr_ast = None
         if val is not None and self._expr_eval is not None:
+            self._expr_eval.error = []
+            self._expr_eval.error_msg = None
             self._expr_ast = self._expr_eval.parse(val)
             check_ast_errors(self._expr_eval)
             self._expr_deps = get_ast_names(self._expr_ast)
