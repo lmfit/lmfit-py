@@ -212,6 +212,23 @@ class TestParameters(unittest.TestCase):
         pars.add('c4', expr='csum-c1-c2-c3', min=0, max=1)
         assert_(isclose(pars['c4'].value, 0.2))
 
+    def test_invalid_expr_exceptions(self):
+        "test if an exception is raised for invalid expressions (GH486)"""
+        p1 = Parameters()
+        p1.add('t', 2.0, min=0.0, max=5.0)
+        p1.add('x', 10.0)
+        with self.assertRaises(SyntaxError):
+            p1.add('y', expr='x*t + sqrt(t)/')
+        assert(len(p1['y']._expr_eval.error) > 0)
+        p1.add('y', expr='x*t + sqrt(t)/3.0')
+        p1['y'].set(expr='x*3.0 + t**2')
+        assert('x*3' in p1['y'].expr)
+        assert(len(p1['y']._expr_eval.error) == 0)
+        with self.assertRaises(SyntaxError):
+            p1['y'].set(expr='t+')
+        assert(len(p1['y']._expr_eval.error) > 0)
+        assert_almost_equal(p1['y'].value, 34.0)
+
 
 if __name__ == '__main__':
     unittest.main()
