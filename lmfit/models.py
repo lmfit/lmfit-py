@@ -1,4 +1,5 @@
 """Module containing built-in fitting models."""
+import time
 import numpy as np
 
 from asteval import Interpreter, get_ast_names
@@ -1121,7 +1122,7 @@ class ExpressionModel(Model):
 
         """
         # create ast evaluator, load custom functions
-        self.asteval = Interpreter()
+        self.asteval = Interpreter(max_time=3600.0)
         for name in lineshapes.functions:
             self.asteval.symtable[name] = getattr(lineshapes, name, None)
         if init_script is not None:
@@ -1165,6 +1166,7 @@ class ExpressionModel(Model):
         def _eval(**kwargs):
             for name, val in kwargs.items():
                 self.asteval.symtable[name] = val
+            self.asteval.start_time = time.time()
             return self.asteval.run(self.astcode)
 
         kws["nan_policy"] = nan_policy
