@@ -19,28 +19,22 @@ import numbers
 import warnings
 
 import numpy as np
-from numpy import dot, eye, ndarray, ones_like, sqrt, take, transpose, triu
-from numpy.dual import inv
+from numpy import ndarray, ones_like, sqrt
 from numpy.linalg import LinAlgError
+from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import differential_evolution, least_squares
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
+from scipy.version import version as scipy_version
 import six
+import uncertainties
 
-# use locally modified version of uncertainties package
-from . import uncertainties
 from .parameter import Parameter, Parameters
 
-#  scipy version notes:
-#  currently scipy 0.17 is required.
-#  feature           scipy version added
-#    minimize              0.11
-#    OptimizeResult        0.13
-#    diff_evolution        0.15
-#    least_squares         0.17
+from ._ampgo import ampgo
 
 # check for EMCEE
 try:
@@ -99,7 +93,7 @@ def eval_stderr(obj, uvars, _names, _pars):
         return
     uval = wrap_ueval(*uvars, _obj=obj, _names=_names, _pars=_pars)
     try:
-        obj.stderr = uval.std_dev()
+        obj.stderr = uval.std_dev
     # TODO: do not use bare except
     except:
         obj.stderr = 0
@@ -113,7 +107,12 @@ class MinimizerException(Exception):
         self.msg = msg
 
     def __str__(self):
-        return "\n%s" % self.msg
+        return "{}".format(self.msg)
+
+
+class AbortFitException(MinimizerException):
+    """Raised when a fit is aborted by the user."""
+    pass
 
 
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
@@ -129,6 +128,14 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'dogleg': 'dogleg',
                   'trust-ncg': 'trust-ncg',
                   'differential_evolution': 'differential_evolution'}
+
+# FIXME: update this when incresing the minimum scipy version
+major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
+if (major >= 1 and minor >= 1):
+    SCALAR_METHODS.update({'trust-constr': 'trust-constr'})
+if major >= 1:
+    SCALAR_METHODS.update({'trust-exact': 'trust-exact',
+                           'trust-krylov': 'trust-krylov'})
 
 
 def reduce_chisquare(r):
@@ -314,6 +321,23 @@ class MinimizerResult(object):
                           "{:.3f}".format(i, candidate.score))
                     candidate.params.pretty_print()
 
+    def _calculate_statistics(self):
+        """Calculate the fitting statistics."""
+        self.nvarys = len(self.init_vals)
+        if isinstance(self.residual, ndarray):
+            self.chisqr = (self.residual**2).sum()
+            self.ndata = len(self.residual)
+            self.nfree = self.ndata - self.nvarys
+        else:
+            self.chisqr = self.residual
+            self.ndata = 1
+            self.nfree = 1
+        self.redchi = self.chisqr / self.nfree
+        # this is -2*loglikelihood
+        _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
+        self.aic = _neg2_log_likel + 2 * self.nvarys
+        self.bic = _neg2_log_likel + np.log(self.ndata) * self.nvarys
+
 
 class Minimizer(object):
     """A general minimizer for curve fitting and optimization."""
@@ -460,9 +484,6 @@ class Minimizer(object):
              The evaluated function values for given `fvars`.
 
         """
-        # set parameter values
-        if self._abort:
-            return None
         params = self.result.params
 
         if fvars.shape == ():
@@ -484,14 +505,19 @@ class Minimizer(object):
             abort = self.iter_cb(params, self.result.nfev, out,
                                  *self.userargs, **self.userkws)
             self._abort = self._abort or abort
-        self._abort = self._abort and self.result.nfev > len(fvars)
 
-        if not self._abort:
+        if self._abort:
+            self.result.residual = out
+            self.result.aborted = True
+            self.result.message = "Fit aborted by user callback. Could not estimate error-bars."
+            self.result.success = False
+            raise AbortFitException("fit aborted by user.")
+        else:
             return _nan_policy(np.asarray(out).ravel(),
                                nan_policy=self.nan_policy)
 
     def __jacobian(self, fvars):
-        """Reuturn analytical jacobian to be used with Levenberg-Marquardt.
+        """Return analytical jacobian to be used with Levenberg-Marquardt.
 
         modified 02-01-2012 by Glenn Jones, Aberystwyth University
         modified 06-29-2015 M Newville to apply gradient scaling for
@@ -505,7 +531,6 @@ class Minimizer(object):
             pars[name].value = pars[name].from_internal(val)
             grad_scale[ivar] = pars[name].scale_gradient(val)
 
-        self.result.nfev += 1
         pars.update_constraints()
 
         # compute the jacobian for "internal" unbounded variables,
@@ -537,34 +562,16 @@ class Minimizer(object):
             to sum-of-squares, but can be replaced by other options.
 
         """
-        r = self.__residual(fvars)
+        if self.result.method == 'brute':
+            apply_bounds_transformation = False
+        else:
+            apply_bounds_transformation = True
+
+        r = self.__residual(fvars, apply_bounds_transformation)
         if isinstance(r, ndarray) and r.size > 1:
             r = self.reduce_fcn(r)
             if isinstance(r, ndarray) and r.size > 1:
                 r = r.sum()
-        return r
-
-    def penalty_brute(self, fvars):
-        """Penalty function for brute force method.
-
-        Parameters
-        ----------
-        fvars : numpy.ndarray
-            Array of values for the variable parameters
-
-        Returns
-        -------
-        r : float
-            The  evaluated user-supplied objective function.
-
-            If the objective function is an array of size greater than 1,
-            use the scalar returned by `self.reduce_fcn`.  This defaults
-            to sum-of-squares, but can be replaced by other options.
-
-        """
-        r = self.__residual(fvars, apply_bounds_transformation=False)
-        if isinstance(r, ndarray) and r.size > 1:
-            r = (r*r).sum()
         return r
 
     def prepare_fit(self, params=None):
@@ -616,7 +623,6 @@ class Minimizer(object):
 
         # determine which parameters are actually variables
         # and which are defined expressions.
-
         result.var_names = []  # note that this *does* belong to self...
         result.init_vals = []
         result.params.update_constraints()
@@ -661,6 +667,76 @@ class Minimizer(object):
         """
         pass
 
+    def _int2ext_cov_x(self, cov_int, fvars):
+        """Transform covariance matrix to external parameter space.
+
+        It makes use of the gradient scaling according to the MINUIT recipe:
+
+            cov_ext = np.dot(grad.T, grad) * cov_int
+
+        Parameters
+        ----------
+        cov_int : numpy.ndarray
+            Covariance matrix in the internal parameter space.
+        fvars : numpy.ndarray
+            Array of the optimal internal, freely variable, parameter values.
+
+        Returns
+        -------
+        cov_ext : numpy.ndarray
+            Covariance matrix, transformed to external parameter space.
+
+        """
+        g = [self.result.params[name].scale_gradient(fvars[i]) for i, name in
+             enumerate(self.result.var_names)]
+        grad2d = np.atleast_2d(g)
+        grad = np.dot(grad2d.T, grad2d)
+
+        cov_ext = cov_int * grad
+        return cov_ext
+
+    def _calculate_uncertainties_correlations(self):
+        """Calculate parameter uncertainties and correlations."""
+        if self.scale_covar:
+            self.result.covar *= self.result.redchi
+
+        vbest = np.atleast_1d([self.result.params[name].value for i, name in
+                               enumerate(self.result.var_names)])
+
+        has_expr = False
+        for par in self.result.params.values():
+            par.stderr, par.correl = 0, None
+            has_expr = has_expr or par.expr is not None
+
+        for ivar, name in enumerate(self.result.var_names):
+            par = self.result.params[name]
+            par.stderr = sqrt(self.result.covar[ivar, ivar])
+            par.correl = {}
+            try:
+                self.result.errorbars = self.result.errorbars and (par.stderr > 0.0)
+                for jvar, varn2 in enumerate(self.result.var_names):
+                    if jvar != ivar:
+                        par.correl[varn2] = (self.result.covar[ivar, jvar] /
+                                             (par.stderr * sqrt(self.result.covar[jvar, jvar])))
+            except ZeroDivisionError:
+                self.result.errorbars = False
+
+        if has_expr:
+            try:
+                uvars = uncertainties.correlated_values(vbest, self.result.covar)
+            except (LinAlgError, ValueError):
+                uvars = None
+
+            # for uncertainties on constrained parameters, use the calculated
+            # "correlated_values", evaluate the uncertainties on the constrained
+            # parameters and reset the Parameters to best-fit value
+            if uvars is not None:
+                for par in self.result.params.values():
+                    eval_stderr(par, uvars, self.result.var_names, self.result.params)
+                # restore nominal values
+                for v, nam in zip(uvars, self.result.var_names):
+                    self.result.params[nam].value = v.nominal_value
+
     def scalar_minimize(self, method='Nelder-Mead', params=None, **kws):
         """Scalar minimization using :scipydoc:`optimize.minimize`.
 
@@ -690,8 +766,12 @@ class Minimizer(object):
             - 'CG'
             - 'Newton-CG'
             - 'COBYLA'
+            - 'BFGS'
             - 'TNC'
             - 'trust-ncg'
+            - 'trust-exact' (SciPy >= 1.0)
+            - 'trust-krylov' (SciPy >= 1.0)
+            - 'trust-constr' (SciPy >= 1.1)
             - 'dogleg'
             - 'SLSQP'
             - 'differential_evolution'
@@ -765,34 +845,32 @@ class Minimizer(object):
             for k, v in fmin_kws.items():
                 if k in kwargs:
                     kwargs[k] = v
-            ret = differential_evolution(self.penalty, _bounds, **kwargs)
+            try:
+                ret = differential_evolution(self.penalty, _bounds, **kwargs)
+            except AbortFitException:
+                pass
         else:
-            ret = scipy_minimize(self.penalty, variables, **fmin_kws)
+            try:
+                ret = scipy_minimize(self.penalty, variables, **fmin_kws)
+            except AbortFitException:
+                pass
 
-        result.aborted = self._abort
-        self._abort = False
-        if isinstance(ret, dict):
-            for attr, value in ret.items():
-                setattr(result, attr, value)
+        if not result.aborted:
+            if isinstance(ret, dict):
+                for attr, value in ret.items():
+                    setattr(result, attr, value)
+            else:
+                for attr in dir(ret):
+                    if not attr.startswith('_'):
+                        setattr(result, attr, getattr(ret, attr))
+
+            result.x = np.atleast_1d(result.x)
+            result.residual = self.__residual(result.x)
+            result.nfev -= 1
         else:
-            for attr in dir(ret):
-                if not attr.startswith('_'):
-                    setattr(result, attr, getattr(ret, attr))
+            pass
 
-        result.x = np.atleast_1d(result.x)
-        result.chisqr = result.residual = self.__residual(result.x)
-        result.nvarys = len(variables)
-        result.ndata = 1
-        result.nfree = 1
-        if isinstance(result.residual, ndarray):
-            result.chisqr = (result.chisqr**2).sum()
-            result.ndata = len(result.residual)
-            result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / max(1, result.nfree)
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+        result._calculate_statistics()
 
         return result
 
@@ -1160,15 +1238,12 @@ class Minimizer(object):
         return result
 
     def least_squares(self, params=None, **kws):
-        """Use the `least_squares` (new in scipy 0.17) to perform a fit.
+        """Least-squares minimization using :scipydoc:`optimize.least_squares`.
 
-        It assumes that the input Parameters have been initialized, and
-        a function to minimize has been properly set up.
-        When possible, this calculates the estimated uncertainties and
-        variable correlations from the covariance matrix.
-
-        This method wraps :scipydoc:`optimize.least_squares`, which
-        has inbuilt support for bounds and robust loss functions.
+        This method wraps :scipydoc:`optimize.least_squares`, which has inbuilt
+        support for bounds and robust loss functions. By default it uses the
+        Trust Region Reflective algorithm with a linear loss function (i.e.,
+        the standard least-squares problem).
 
         Parameters
         ----------
@@ -1198,30 +1273,27 @@ class Minimizer(object):
             par = self.params[vname]
             start_vals.append(par.value)
             lower_bounds.append(replace_none(par.min, -1))
-            upper_bounds.append(replace_none(par.max, -1))
+            upper_bounds.append(replace_none(par.max, 1))
 
-        ret = least_squares(self.__residual, start_vals,
-                            bounds=(lower_bounds, upper_bounds),
-                            kwargs=dict(apply_bounds_transformation=False),
-                            **kws)
+        try:
+            ret = least_squares(self.__residual, start_vals,
+                                bounds=(lower_bounds, upper_bounds),
+                                kwargs=dict(apply_bounds_transformation=False),
+                                **kws)
+        except AbortFitException:
+            pass
 
-        for attr in ret:
-            setattr(result, attr, ret[attr])
+        if not result.aborted:
+            for attr in ret:
+                setattr(result, attr, ret[attr])
 
-        result.x = np.atleast_1d(result.x)
-        result.chisqr = result.residual = self.__residual(result.x, False)
-        result.nvarys = len(result.var_names)
-        result.ndata = 1
-        result.nfree = 1
-        if isinstance(result.residual, ndarray):
-            result.chisqr = (result.chisqr**2).sum()
-            result.ndata = len(result.residual)
-            result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+            result.x = np.atleast_1d(result.x)
+            result.residual = ret.fun
+        else:
+            pass
+
+        result._calculate_statistics()
+
         return result
 
     def leastsq(self, params=None, **kws):
@@ -1269,6 +1341,7 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'leastsq'
+        result.nfev -= 2  # correct for "pre-fit" initialization/checks
         variables = result.init_vals
         nvars = len(variables)
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
@@ -1287,19 +1360,22 @@ class Minimizer(object):
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
 
-        lsout = scipy_leastsq(self.__residual, variables, **lskws)
-        _best, _cov, infodict, errmsg, ier = lsout
-        result.aborted = self._abort
-        self._abort = False
+        try:
+            lsout = scipy_leastsq(self.__residual, variables, **lskws)
+            _best, _cov, infodict, errmsg, ier = lsout
+            result.residual = infodict['fvec']
+        except AbortFitException:
+            pass
 
-        result.residual = resid = infodict['fvec']
+        result._calculate_statistics()
+
+        if result.aborted:
+            return result
+
         result.ier = ier
         result.lmdif_message = errmsg
         result.success = ier in [1, 2, 3, 4]
-        if result.aborted:
-            result.message = 'Fit aborted by user callback.'
-            result.success = False
-        elif ier in {1, 2, 3}:
+        if ier in {1, 2, 3}:
             result.message = 'Fit succeeded.'
         elif ier == 0:
             result.message = ('Invalid Input Parameters. I.e. more variables '
@@ -1312,97 +1388,78 @@ class Minimizer(object):
         else:
             result.message = 'Tolerance seems to be too small.'
 
-        result.ndata = len(resid)
-
-        result.chisqr = (resid**2).sum()
-        result.nfree = (result.ndata - nvars)
-        result.redchi = result.chisqr / result.nfree
-        result.nvarys = nvars
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
-
-        params = result.params
-
-        # need to map _best values to params, then calculate the
-        # grad for the variable parameters
-        grad = ones_like(_best)
-        vbest = ones_like(_best)
-
-        # ensure that _best, vbest, and grad are not
-        # broken 1-element ndarrays.
-        if len(np.shape(_best)) == 0:
-            _best = np.array([_best])
-        if len(np.shape(vbest)) == 0:
-            vbest = np.array([vbest])
-        if len(np.shape(grad)) == 0:
-            grad = np.array([grad])
-
-        for ivar, name in enumerate(result.var_names):
-            grad[ivar] = params[name].scale_gradient(_best[ivar])
-            vbest[ivar] = params[name].value
-
-        # modified from JJ Helmus' leastsqbound.py
-        infodict['fjac'] = transpose(transpose(infodict['fjac']) /
-                                     take(grad, infodict['ipvt'] - 1))
-        rvec = dot(triu(transpose(infodict['fjac'])[:nvars, :]),
-                   take(eye(nvars), infodict['ipvt'] - 1, 0))
-        try:
-            result.covar = inv(dot(transpose(rvec), rvec))
-        except (LinAlgError, ValueError):
-            result.covar = None
-
-        result.fjac = infodict['fjac']
-
-        has_expr = False
-        for par in params.values():
-            par.stderr, par.correl = 0, None
-            has_expr = has_expr or par.expr is not None
-
         # self.errorbars = error bars were successfully estimated
-        result.errorbars = (result.covar is not None)
-        if result.aborted:
-            result.errorbars = False
+        result.errorbars = (_cov is not None)
         if result.errorbars:
-            if self.scale_covar:
-                result.covar *= result.redchi
-            for ivar, name in enumerate(result.var_names):
-                par = params[name]
-                par.stderr = sqrt(result.covar[ivar, ivar])
-                par.correl = {}
-                try:
-                    result.errorbars = result.errorbars and (par.stderr > 0.0)
-                    for jvar, varn2 in enumerate(result.var_names):
-                        if jvar != ivar:
-                            par.correl[varn2] = (
-                                result.covar[ivar, jvar] /
-                                (par.stderr * sqrt(result.covar[jvar, jvar])))
-                # TODO: do not use bare except
-                except:
-                    result.errorbars = False
-
-            if has_expr:
-                # uncertainties on constrained parameters:
-                #   get values with uncertainties (including correlations),
-                #   temporarily set Parameter values to these,
-                #   re-evaluate contrained parameters to extract stderr
-                #   and then set Parameters back to best-fit value
-                try:
-                    uvars = uncertainties.correlated_values(vbest, result.covar)
-                except (LinAlgError, ValueError):
-                    uvars = None
-                if uvars is not None:
-                    for par in params.values():
-                        eval_stderr(par, uvars, result.var_names, params)
-                    # restore nominal values
-                    for v, nam in zip(uvars, result.var_names):
-                        params[nam].value = v.nominal_value
-
-        if not result.errorbars:
+            # transform the covariance matrix to "external" parameter space
+            result.covar = self._int2ext_cov_x(_cov, _best)
+            # calculate parameter uncertainties and correlations
+            self._calculate_uncertainties_correlations()
+        else:
             result.message = '%s Could not estimate error-bars.' % result.message
 
         np.seterr(**orig_warn_settings)
+
+        return result
+
+    def basinhopping(self, params=None, **kws):
+        """Use the `basinhopping` algorithm to find the global minimum of a function.
+
+        This method calls :scipydoc:`optimize.basinhopping` using the default
+        arguments. The default minimizer is `BFGS`, but since lmfit supports
+        parameter bounds for all minimizers, the user can choose any of the
+        solvers present in :scipydoc:`optimize.minimize`.
+
+        Parameters
+        ----------
+        params : :class:`~lmfit.parameter.Parameters` object, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the optimization results from the basinhopping
+            algorithm.
+
+
+        .. versionadded:: 0.9.10
+
+        """
+        result = self.prepare_fit(params=params)
+        result.method = 'basinhopping'
+
+        basinhopping_kws = dict(niter=100, T=1.0, stepsize=0.5,
+                                minimizer_kwargs={}, take_step=None,
+                                accept_test=None, callback=None, interval=50,
+                                disp=False, niter_success=None, seed=None)
+
+        basinhopping_kws.update(self.kws)
+        basinhopping_kws.update(kws)
+
+        # FIXME - remove after requirement for scipy >= 0.19
+        major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
+        if major < 1 and minor < 19:
+            _ = basinhopping_kws.pop('seed')
+            print("Warning: basinhopping doesn't support argument 'seed' for "
+                  "scipy versions below 0.19!")
+
+        x0 = result.init_vals
+
+        try:
+            ret = scipy_basinhopping(self.penalty, x0, **basinhopping_kws)
+        except AbortFitException:
+            pass
+
+        if not result.aborted:
+            result.message = ret.message
+            result.residual = self.__residual(ret.x)
+            result.nfev -= 1
+        else:
+            pass
+
+        result._calculate_statistics()
+
         return result
 
     def brute(self, params=None, Ns=20, keep=50):
@@ -1429,7 +1486,7 @@ class Minimizer(object):
 
         Parameters
         ----------
-        params : :class:`~lmfit.parameter.Parameters` object, optional
+        params : :class:`~lmfit.parameter.Parameters`, optional
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
         Ns : int, optional
@@ -1485,6 +1542,7 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'brute'
+        result.nfev -= 1  # correct for "pre-fit" initialization/checks
 
         brute_kws = dict(full_output=1, finish=None, disp=False)
 
@@ -1520,49 +1578,154 @@ class Minimizer(object):
                                  'parameter "{}".'.format(result.var_names[i]))
             ranges.append(par_range)
 
-        ret = scipy_brute(self.penalty_brute, tuple(ranges), Ns=Ns, **brute_kws)
+        try:
+            ret = scipy_brute(self.penalty, tuple(ranges), Ns=Ns, **brute_kws)
+        except AbortFitException:
+            pass
 
-        result.brute_x0 = ret[0]
-        result.brute_fval = ret[1]
-        result.brute_grid = ret[2]
-        result.brute_Jout = ret[3]
+        if not result.aborted:
+            result.brute_x0 = ret[0]
+            result.brute_fval = ret[1]
+            result.brute_grid = ret[2]
+            result.brute_Jout = ret[3]
 
-        # sort the results of brute and populate .candidates attribute
-        grid_score = ret[3].ravel()  # chisqr
-        grid_points = [par.ravel() for par in ret[2]]
+            # sort the results of brute and populate .candidates attribute
+            grid_score = ret[3].ravel()  # chisqr
+            grid_points = [par.ravel() for par in ret[2]]
 
-        if len(result.var_names) == 1:
-            grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
-                                   dtype=[('par', 'O'), ('score', 'float64')])
+            if len(result.var_names) == 1:
+                grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
+                                       dtype=[('par', 'O'), ('score', 'float64')])
+            else:
+                grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
+                                       dtype=[('par', 'O'), ('score', 'float64')])
+            grid_result_sorted = grid_result[grid_result.argsort(order='score')]
+
+            result.candidates = []
+
+            if keep == 'all':
+                keep_candidates = len(grid_result_sorted)
+            else:
+                keep_candidates = min(len(grid_result_sorted), keep)
+
+            for data in grid_result_sorted[:keep_candidates]:
+                pars = deepcopy(self.params)
+                for i, par in enumerate(result.var_names):
+                    pars[par].value = data[0][i]
+                result.candidates.append(Candidate(params=pars, score=data[1]))
+
+            result.params = result.candidates[0].params
+            result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
+            result.nfev -= 1
         else:
-            grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
-                                   dtype=[('par', 'O'), ('score', 'float64')])
-        grid_result_sorted = grid_result[grid_result.argsort(order='score')]
+            pass
 
-        result.candidates = []
+        result._calculate_statistics()
 
-        if keep == 'all':
-            keep_candidates = len(grid_result_sorted)
-        else:
-            keep_candidates = min(len(grid_result_sorted), keep)
+        return result
 
-        for data in grid_result_sorted[:keep_candidates]:
-            pars = deepcopy(self.params)
+    def ampgo(self, params=None, **kws):
+        """Finds the global minimum of a multivariate function using the AMPGO
+        (Adaptive Memory Programming for Global Optimization) algorithm.
+
+        Parameters
+        ----------
+        params : :class:`~lmfit.parameter.Parameters`, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+        **kws : dict, optional
+            Minimizer options to pass to the ampgo algorithm, the options are
+            listed below::
+
+                local: str (default is 'L-BFGS-B')
+                    Name of the local minimization method. Valid options are:
+                    - 'L-BFGS-B'
+                    - 'Nelder-Mead'
+                    - 'Powell'
+                    - 'TNC'
+                    - 'SLSQP'
+                local_opts: dict (default is None)
+                    Options to pass to the local minimizer.
+                maxfunevals: int (default is None)
+                    Maximum number of function evaluations. If None, the optimization will stop
+                    after `totaliter` number of iterations.
+                totaliter: int (default is 20)
+                    Maximum number of global iterations.
+                maxiter: int (default is 5)
+                    Maximum number of `Tabu Tunneling` iterations during each global iteration.
+                glbtol: float (default is 1e-5)
+                    Tolerance whether or not to accept a solution after a tunneling phase.
+                eps1: float (default is 0.02)
+                    Constant used to define an aspiration value for the objective function during
+                    the Tunneling phase.
+                eps2: float (default is 0.1)
+                    Perturbation factor used to move away from the latest local minimum at the
+                    start of a Tunneling phase.
+                tabulistsize: int (default is 5)
+                    Size of the (circular) tabu search list.
+                tabustrategy: str (default is 'farthest')
+                    Strategy to use when the size of the tabu list exceeds `tabulistsize`. It
+                    can be 'oldest' to drop the oldest point from the tabu list or 'farthest'
+                    to drop the element farthest from the last local minimum found.
+                disp: bool (default is False)
+                    Set to True to print convergence messages.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the parameters from the ampgo method, with fit
+            parameters, statistics and such. The return values (`x0`, `fval`,
+            `eval`, `msg`, `tunnel`) are stored as `ampgo_<parname>` attributes.
+
+
+        .. versionadded:: 0.9.10
+
+
+        Notes
+        ----
+        The Python implementation was written by Andrea Gavana in 2014
+        (http://infinity77.net/global_optimization/index.html).
+
+        The details of the AMPGO algorithm are described in the paper
+        "Adaptive Memory Programming for Constrained Global Optimization"
+        located here:
+
+        http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf
+
+        """
+        result = self.prepare_fit(params=params)
+
+        ampgo_kws = dict(local='L-BFGS-B', local_opts=None, maxfunevals=None,
+                         totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
+                         eps2=0.1, tabulistsize=5, tabustrategy='farthest',
+                         disp=False)
+        ampgo_kws.update(self.kws)
+        ampgo_kws.update(kws)
+
+        values = result.init_vals
+        result.method = "ampgo, with {} as local solver".format(ampgo_kws['local'])
+
+        try:
+            ret = ampgo(self.penalty, values, **ampgo_kws)
+        except AbortFitException:
+            pass
+
+        if not result.aborted:
+            result.ampgo_x0 = ret[0]
+            result.ampgo_fval = ret[1]
+            result.ampgo_eval = ret[2]
+            result.ampgo_msg = ret[3]
+            result.ampgo_tunnel = ret[4]
+
             for i, par in enumerate(result.var_names):
-                pars[par].value = data[0][i]
-            result.candidates.append(Candidate(params=pars, score=data[1]))
+                result.params[par].value = result.ampgo_x0[i]
 
-        result.params = result.candidates[0].params
-        result.chisqr = ret[1]
-        result.nvarys = len(result.var_names)
-        result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
-        result.ndata = len(result.residual)
-        result.nfree = result.ndata - result.nvarys
-        result.redchi = result.chisqr / result.nfree
-        # this is -2*loglikelihood
-        _neg2_log_likel = result.ndata * np.log(result.chisqr / result.ndata)
-        result.aic = _neg2_log_likel + 2 * result.nvarys
-        result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
+            result.residual = self.__residual(result.ampgo_x0)
+            result.nfev -= 1
+        else:
+            pass
+
+        result._calculate_statistics()
 
         return result
 
@@ -1578,15 +1741,21 @@ class Minimizer(object):
             - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
             - `'differential_evolution'`: differential evolution
             - `'brute'`: brute force method
+            - `'basinhopping'`: basinhopping
+            - `'ampgo'`: Adaptive Memory Programming for Global Optimization
             - '`nelder`': Nelder-Mead
             - `'lbfgsb'`: L-BFGS-B
             - `'powell'`: Powell
             - `'cg'`: Conjugate-Gradient
             - `'newton'`: Newton-CG
             - `'cobyla'`: Cobyla
-            - `'tnc'`: Truncate Newton
-            - `'trust-ncg'`: Trust Newton-CGn
-            - `'dogleg'`: Dogleg
+            - `'bfgs'`: BFGS
+            - `'tnc'`: Truncated Newton
+            - `'trust-ncg'`: Newton-CG trust-region
+            - `'trust-exact'`: nearly exact trust-region (SciPy >= 1.0)
+            - `'trust-krylov'`: Newton GLTR trust-region (SciPy >= 1.0)
+            - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
+            - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
 
             In most cases, these methods wrap and use the method with the
@@ -1627,8 +1796,12 @@ class Minimizer(object):
             function = self.leastsq
         elif user_method.startswith('least_s'):
             function = self.least_squares
-        elif user_method.startswith('brute'):
+        elif user_method == 'brute':
             function = self.brute
+        elif user_method == 'basinhopping':
+            function = self.basinhopping
+        elif user_method == 'ampgo':
+            function = self.ampgo
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -1877,15 +2050,21 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
         - `'differential_evolution'`: differential evolution
         - `'brute'`: brute force method
+        - `'basinhopping'`: basinhopping
+        - `'ampgo'`: Adaptive Memory Programming for Global Optimization
         - '`nelder`': Nelder-Mead
         - `'lbfgsb'`: L-BFGS-B
         - `'powell'`: Powell
         - `'cg'`: Conjugate-Gradient
-        - `'newton'`: Newton-Congugate-Gradient
+        - `'newton'`: Newton-CG
         - `'cobyla'`: Cobyla
-        - `'tnc'`: Truncate Newton
-        - `'trust-ncg'`: Trust Newton-Congugate-Gradient
-        - `'dogleg'`: Dogleg
+        - `'bfgs'`: BFGS
+        - `'tnc'`: Truncated Newton
+        - `'trust-ncg'`: Newton-CG trust-region
+        - `'trust-exact'`: nearly exact trust-region (SciPy >= 1.0)
+        - `'trust-krylov'`: Newton GLTR trust-region (SciPy >= 1.0)
+        - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
+        - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
 
         In most cases, these methods wrap and use the method of the same

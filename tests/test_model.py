@@ -318,7 +318,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue('bsigma' in pars)
 
     def test_change_prefix(self):
-        "should fail"
+        "should pass!"
         mod = models.GaussianModel(prefix='b')
         set_prefix_failed = None
         try:
@@ -328,7 +328,11 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             set_prefix_failed = True
         except:
             set_prefix_failed = None
-        self.assertTrue(set_prefix_failed)
+        self.assertFalse(set_prefix_failed)
+
+        new_expr = mod.param_hints['fwhm']['expr']
+        self.assertTrue('csigma' in new_expr)
+        self.assertFalse('bsigma' in new_expr)
 
     def test_model_name(self):
         # test setting the name for built-in models
@@ -591,7 +595,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(np.isnan(result.chisqr))
         self.assertTrue(np.isnan(result.aic))
         self.assertFalse(result.errorbars)
-        self.assertTrue(result.params['amplitude'].stderr==0)
+        self.assertTrue(result.params['amplitude'].stderr is None)
         self.assertTrue(abs(result.params['amplitude'].value - 20.0) < 0.001)
 
         # with omit, should get good results

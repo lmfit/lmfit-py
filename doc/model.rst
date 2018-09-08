@@ -152,20 +152,20 @@ components, including a :meth:`fit_report` method, which will show::
     [[Model]]
         Model(gaussian)
     [[Fit Statistics]]
+        # fitting method   = leastsq
         # function evals   = 35
         # data points      = 101
         # variables        = 3
-	chi-square         = 3.40884
-        reduced chi-square = 0.03478
-        Akaike info crit   = -336.26371
-        Bayesian info crit = -328.41835
+        chi-square         = 3.40883599
+        reduced chi-square = 0.03478404
+        Akaike info crit   = -336.263713
+        Bayesian info crit = -328.418352
     [[Variables]]
-        amp:   8.88021829 +/- 0.113594 (1.28%) (init= 5)
-        cen:   5.65866102 +/- 0.010304 (0.18%) (init= 5)
-        wid:   0.69765468 +/- 0.010304 (1.48%) (init= 1)
-    [[Correlations]] (unreported correlations are <  0.100)
-        C(amp, wid)                  =  0.577
-
+        amp:  8.88021830 +/- 0.11359492 (1.28%) (init = 5)
+        cen:  5.65866102 +/- 0.01030495 (0.18%) (init = 5)
+        wid:  0.69765468 +/- 0.01030495 (1.48%) (init = 1)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(amp, wid) =  0.577
 
 As the script shows, the result will also have :attr:`init_fit` for the fit
 with the initial parameter values and a :attr:`best_fit` for the fit with
@@ -871,28 +871,29 @@ which prints out the results::
     [[Model]]
         (Model(gaussian) + Model(line))
     [[Fit Statistics]]
+        # fitting method   = leastsq
         # function evals   = 46
         # data points      = 101
         # variables        = 5
-        chi-square         = 2.57856
-        reduced chi-square = 0.02686
-        Akaike info crit   = -360.45702
-        Bayesian info crit = -347.38142
+        chi-square         = 2.57855517
+        reduced chi-square = 0.02685995
+        Akaike info crit   = -360.457020
+        Bayesian info crit = -347.381417
     [[Variables]]
-        amp:         8.45931061 +/- 0.124145 (1.47%) (init= 5)
-        cen:         5.65547872 +/- 0.009176 (0.16%) (init= 5)
-        wid:         0.67545523 +/- 0.009916 (1.47%) (init= 1)
-        slope:       0.26484403 +/- 0.005748 (2.17%) (init= 0)
-        intercept:  -0.96860201 +/- 0.033522 (3.46%) (init= 1)
-    [[Correlations]] (unreported correlations are <  0.100)
-        C(slope, intercept)          = -0.795
-        C(amp, wid)                  =  0.666
-        C(amp, intercept)            = -0.222
-        C(amp, slope)                = -0.169
-        C(cen, slope)                = -0.162
-        C(wid, intercept)            = -0.148
-        C(cen, intercept)            =  0.129
-        C(wid, slope)                = -0.113
+        amp:        8.45931062 +/- 0.12414515 (1.47%) (init = 5)
+        cen:        5.65547873 +/- 0.00917678 (0.16%) (init = 5)
+        wid:        0.67545524 +/- 0.00991686 (1.47%) (init = 1)
+        slope:      0.26484404 +/- 0.00574892 (2.17%) (init = 0)
+        intercept: -0.96860202 +/- 0.03352202 (3.46%) (init = 1)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(slope, intercept) = -0.795
+        C(amp, wid)         =  0.666
+        C(amp, intercept)   = -0.222
+        C(amp, slope)       = -0.169
+        C(cen, slope)       = -0.162
+        C(wid, intercept)   = -0.148
+        C(cen, intercept)   =  0.129
+        C(wid, slope)       = -0.113
 
 and shows the plot on the left.
 
@@ -979,25 +980,24 @@ binary operator.  A full script using this technique is here:
 which prints out the results::
 
     [[Model]]
-        (Model(jump) <function convolve at 0x112ef1320> Model(gaussian))
+        (Model(jump) <function convolve at 0x114e6e1e0> Model(gaussian))
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 27
+        # function evals   = 25
         # data points      = 201
         # variables        = 3
-        chi-square         = 21.48845
-        reduced chi-square = 0.10853
-        Akaike info crit   = -443.39364
-        Bayesian info crit = -433.48373
+        chi-square         = 24.7562335
+        reduced chi-square = 0.12503148
+        Akaike info crit   = -414.939746
+        Bayesian info crit = -405.029832
     [[Variables]]
-        mid:         5 (fixed)
-        sigma:       0.62393255 +/- 0.012818 (2.05%) (init= 1.5)
-        center:      4.52795480 +/- 0.009261 (0.20%) (init= 3.5)
-        amplitude:   0.62852927 +/- 0.001783 (0.28%) (init= 1)
-    [[Correlations]] (unreported correlations are <  0.100)
-        C(center, amplitude)         =  0.339
-        C(sigma, amplitude)          =  0.276
-
+        mid:        5 (fixed)
+        sigma:      0.59576118 +/- 0.01348582 (2.26%) (init = 1.5)
+        center:     4.50853671 +/- 0.00973231 (0.22%) (init = 3.5)
+        amplitude:  0.62508459 +/- 0.00189732 (0.30%) (init = 1)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(center, amplitude) =  0.329
+        C(sigma, amplitude)  =  0.268
 
 
 and shows the plots:

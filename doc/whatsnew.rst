@@ -4,12 +4,51 @@
 Release Notes
 =====================
 
-.. _lmfit github repository:   https://github.com/lmfit/lmfit-py
+.. _lmfit GitHub repository:   https://github.com/lmfit/lmfit-py
 
 This section discusses changes between versions, especially changes
 significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
-consult the `lmfit github repository`_.
+consult the `lmfit GitHub repository`_.
+
+
+.. _whatsnew_0910_label:
+
+.. _Andrea Gavana: http://infinity77.net/global_optimization/index.html
+.. _AMPGO paper: http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf
+
+Version 0.9.10 Release Notes
+==========================================
+Two new global algorithms were added: basinhopping and AMPGO.
+Basinhopping wraps the method present in `scipy`, and more information
+can be found in the documentation (:func:`~lmfit.minimizer.Minimizer.basinhopping`
+and :scipydoc:`optimize.basinhopping`).
+The Adaptive Memory Programming for Global Optimization (AMPGO) algorithm
+was adapted from Python code written by `Andrea Gavana`_. A more detailed
+explanation of the algorithm is available in the `AMPGO paper`_ and specifics
+for lmfit can be found in the :func:`~lmfit.minimizer.Minimizer.ampgo` function.
+
+Lmfit uses the external uncertainties (https://github.com/lebigot/uncertainties)
+package (available on PyPI), instead of distributing its own fork.
+
+An `AbortFitException` is now raised when the fit is aborted by the user (i.e., by
+using `iter_cb`).
+
+Bugfixes:
+
+- all exceptions are allowed when trying to import matplotlib
+- simplify and fix corner-case errors when testing closeness of large integers
+
+
+.. _whatsnew_099_label:
+
+Version 0.9.9 Release Notes
+==========================================
+Lmfit now uses the asteval (https://github.com/newville/asteval) package
+instead of distributing its own copy. The minimum required asteval version
+is 0.9.12, which is available on PyPI. If you see import errors related to
+asteval, please make sure that you actually have the latest version installed.
+
 
 .. _whatsnew_096_label:
 

@@ -353,17 +353,17 @@ def test_ufloat():
     """
     test of ufloat from uncertainties
     """
-    x = ufloat((1, 0.1))
+    x = ufloat(1, 0.1)
     assert_allclose(x.nominal_value, 1.0, rtol=1.e-7)
-    assert_allclose(x.std_dev(),     0.1, rtol=1.e-7)
+    assert_allclose(x.std_dev, 0.1, rtol=1.e-7)
 
     y = x*x
     assert_allclose(y.nominal_value, 1.0, rtol=1.e-7)
-    assert_allclose(y.std_dev(),     0.2, rtol=1.e-7)
+    assert_allclose(y.std_dev, 0.2, rtol=1.e-7)
 
     y = x - x
     assert_allclose(y.nominal_value, 0.0, rtol=1.e-7)
-    assert_allclose(y.std_dev(),     0.0, rtol=1.e-7)
+    assert_allclose(y.std_dev, 0.0, rtol=1.e-7)
 
 
 
@@ -426,7 +426,8 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_scalar_minimizers(self):
         # test all the scalar minimizers
         for method in SCALAR_METHODS:
-            if method in ['newton', 'dogleg', 'trust-ncg', 'cg']:
+            if method in ['newton', 'dogleg', 'trust-ncg', 'cg', 'trust-exact',
+                          'trust-krylov', 'trust-constr']:
                 continue
             self.minimizer = SCALAR_METHODS[method]
             if method == 'Nelder-Mead':

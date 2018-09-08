@@ -5,22 +5,7 @@ from lmfit.printfuncs import report_fit
 import sys
 
 
-# Turn off plotting if run by nosetests.
-WITHPLOT = True
-for arg in sys.argv:
-    if 'nose' in arg or 'pytest' in arg:
-        WITHPLOT = False
-
-if WITHPLOT:
-    try:
-        import matplotlib
-        import pylab
-    except ImportError:
-        WITHPLOT = False
-
-
-def test_constraints(with_plot=True):
-    with_plot = with_plot and WITHPLOT
+def test_constraints():
 
     def residual(pars, x, sigma=None, data=None):
         yg = gaussian(x, pars['amp_g'], pars['cen_g'], pars['wid_g'])
@@ -43,9 +28,6 @@ def test_constraints(with_plot=True):
             lorentzian(x, 10, 9.6, 2.4) +
             random.normal(scale=0.23,  size=n) +
             x*0.5)
-
-    if with_plot:
-        pylab.plot(x, data, 'r+')
 
     pfit = Parameters()
     pfit.add(name='amp_g',  value=10)
@@ -77,8 +59,6 @@ def test_constraints(with_plot=True):
     report_fit(result.params, min_correl=0.3)
 
     fit = residual(result.params, x)
-    if with_plot:
-        pylab.plot(x, fit, 'b-')
     assert(result.params['cen_l'].value == 1.5 + result.params['cen_g'].value)
     assert(result.params['amp_l'].value == result.params['amp_tot'].value - result.params['amp_g'].value)
     assert(result.params['wid_l'].value == 2 * result.params['wid_g'].value)
@@ -88,9 +68,6 @@ def test_constraints(with_plot=True):
     result = myfit.leastsq()
     report_fit(result.params, min_correl=0.4)
     fit2 = residual(result.params, x)
-    if with_plot:
-        pylab.plot(x, fit2, 'k')
-        pylab.show()
 
     assert(result.params['cen_l'].value == 1.5 + result.params['cen_g'].value)
     assert(result.params['amp_l'].value == result.params['amp_tot'].value - result.params['amp_g'].value)

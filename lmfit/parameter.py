@@ -5,11 +5,14 @@ from collections import OrderedDict
 from copy import deepcopy
 import json
 
-from numpy import arcsin, array, cos, inf, isfinite, nan, sin, sqrt
+from asteval import Interpreter, get_ast_names, valid_symbol_name
+from numpy import arcsin, array, cos, inf, nan, sin, sqrt
+import scipy.special
+import uncertainties
 
-from . import uncertainties
-from .asteval import Interpreter
-from .astutils import get_ast_names, valid_symbol_name
+SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
+for name in ('erf', 'erfc', 'wofz'):
+    SCIPY_FUNCTIONS[name] = getattr(scipy.special, name)
 
 
 def check_ast_errors(expr_eval):
@@ -38,18 +41,9 @@ def isclose(x, y, rtol=1e-5, atol=1e-8):
         True if `x` and `y` are the same within tolerance, otherwise False.
 
     """
-    def within_tol(x, y, atol, rtol):
-        return abs(x - y) <= atol + rtol * abs(y)
-
-    xfin = isfinite(x)
-    yfin = isfinite(y)
-
-    # both are finite
-    if xfin and yfin:
-        return within_tol(x, y, atol, rtol)
-    elif x == y:
-        return True
-    return False
+    if x in (-inf, inf, nan) or y in (-inf, inf, nan):
+        return (x == y)
+    return (abs(x - y) <= atol + rtol * abs(y))
 
 
 class Parameters(OrderedDict):
@@ -89,7 +83,7 @@ class Parameters(OrderedDict):
         self._asteval = asteval
 
         if asteval is None:
-            self._asteval = Interpreter()
+            self._asteval = Interpreter(usersyms=SCIPY_FUNCTIONS)
         self.update(*args, **kwds)
 
     def copy(self):
@@ -642,17 +636,15 @@ class Parameter(object):
             self.max = inf
         if self.min is None:
             self.min = -inf
-        if self._val is not None:
-            if self.min > self.max:
-                self.min, self.max = self.max, self.min
-            if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
-                raise ValueError("Parameter '%s' has min == max" % self.name)
-
-            if self._val > self.max:
-                self._val = self.max
-            if self._val < self.min:
-                self._val = self.min
-        elif self._expr is None:
+        if self._val is None:
+            self._val = -inf
+        if self.min > self.max:
+            self.min, self.max = self.max, self.min
+        if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
+            raise ValueError("Parameter '%s' has min == max" % self.name)
+        if self._val > self.max:
+            self._val = self.max
+        if self._val < self.min:
             self._val = self.min
         self.setup_bounds()
 
@@ -761,7 +753,7 @@ class Parameter(object):
         # If you just assign to self._val then
         # _expr_eval.symtable[self.name]
         # becomes stale if parameter.expr is not None.
-        if (isinstance(self._val, uncertainties.Variable) and
+        if (isinstance(self._val, uncertainties.core.Variable) and
                 self._val is not nan):
 
             try:
@@ -834,6 +826,8 @@ class Parameter(object):
         if val is None:
             self._expr_ast = None
         if val is not None and self._expr_eval is not None:
+            self._expr_eval.error = []
+            self._expr_eval.error_msg = None
             self._expr_ast = self._expr_eval.parse(val)
             check_ast_errors(self._expr_eval)
             self._expr_deps = get_ast_names(self._expr_ast)

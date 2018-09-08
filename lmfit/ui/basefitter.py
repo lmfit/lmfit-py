@@ -2,8 +2,8 @@ import warnings
 
 import numpy as np
 
-from ..asteval import Interpreter
-from ..astutils import NameFinder
+from asteval import Interpreter
+from asteval.astutils import NameFinder
 from ..model import Model
 from ..models import ExponentialModel  # arbitrary default
 from ..parameter import check_ast_errors

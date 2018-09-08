@@ -7,19 +7,6 @@ from lmfit import Parameters, minimize
 
 from NISTModels import Models, ReadNistData
 
-HASPYLAB = False
-for arg in sys.argv:
-    if 'nose' in arg or 'pytest' in arg:
-        HASPYLAB = False
-
-if HASPYLAB:
-    try:
-        import matplotlib
-        import pylab
-        HASPYLAB = True
-    except ImportError:
-        HASPYLAB = False
-
 def ndig(a, b):
     "precision for NIST values"
     return round(-math.log10((abs(abs(a)-abs(b)) +1.e-15)/ abs(b)))
@@ -72,7 +59,7 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
     return val_dig_min, '\n'.join(buff)
 
 def NIST_Dataset(DataSet, method='leastsq', start='start2',
-                 plot=True, verbose=False):
+                 plot=False, verbose=False):
 
     NISTdata = ReadNistData(DataSet)
     resid, npar, dimx = Models[DataSet]
@@ -91,11 +78,6 @@ def NIST_Dataset(DataSet, method='leastsq', start='start2',
     digs, buff = Compare_NIST_Results(DataSet, myfit, myfit.params, NISTdata)
     if verbose:
         print(buff)
-    if plot and HASPYLAB:
-        fit = -resid(myfit.params, x, )
-        pylab.plot(x, y, 'ro')
-        pylab.plot(x, fit, 'k+-')
-        pylab.show()
 
     return digs > 1
 
@@ -173,7 +155,7 @@ def run_interactive():
         print(usage)
     else:
         return NIST_Dataset(dset, method=opts.method,
-                            start=start, plot=True, verbose=True)
+                            start=start, plot=False, verbose=True)
 
 def RunNIST_Model(model):
     out1 = NIST_Dataset(model, start='start1', plot=False, verbose=False)

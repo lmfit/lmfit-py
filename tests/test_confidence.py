@@ -23,7 +23,7 @@ def test_confidence1():
     out = minimizer.leastsq()
     # lmfit.report_fit(out)
 
-    assert(out.nfev >   5)
+    assert(out.nfev > 5)
     assert(out.nfev < 500)
     assert(out.chisqr < 3.0)
     assert(out.nvarys == 2)
@@ -60,7 +60,7 @@ def test_confidence2():
     out = minimizer.minimize(method='leastsq', params=out.params)
     # lmfit.report_fit(out)
 
-    assert(out.nfev >   5)
+    assert(out.nfev > 3)
     assert(out.nfev < 500)
     assert(out.chisqr < 3.0)
     assert(out.nvarys == 2)

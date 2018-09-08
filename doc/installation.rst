@@ -13,16 +13,20 @@ Downloading and Installation
 .. _jupyter:  https://jupyter.org/
 .. _matplotlib:  https://matplotlib.org/
 .. _dill:  https://github.com/uqfoundation/dill
+.. _asteval:  https://github.com/newville/asteval
+.. _six:  https://github.com/benjaminp/six
+.. _uncertainties:  https://github.com/lebigot/uncertainties
 
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The lmfit package requires `Python`_, `NumPy`_, and `SciPy`_.
+The lmfit package requires `Python`_, `NumPy`_, `SciPy`_, `asteval`_, `six`_,
+and `uncertainties`_.
 
 Lmfit works with Python versions 2.7, 3.4, 3.5, and 3.6. Support for Python 2.6
 and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version
-0.17 or higher, NumPy version 1.10 or higher, and six version 1.10 or higher are
-required.
+0.17, NumPy version 1.10, asteval version 0.9.12, six version 1.10, and
+uncertainties version 3.0 are the minimum requirements.
 
 In order to run the test suite, either the `nose`_ or `pytest`_ package is
 required. Some functionality of lmfit requires the `emcee`_ package, some
@@ -51,7 +55,12 @@ Alternatively, you can download the source kit, unpack it and install with::
 For Anaconda Python, lmfit is not an official package, but several
 Anaconda channels provide it, allowing installation with (for example)::
 
+   conda install -c GSECARS lmfit
+
+or::
+
    conda install -c conda-forge lmfit
+
 
 Development Version
 ~~~~~~~~~~~~~~~~~~~~~~~~

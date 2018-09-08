@@ -38,6 +38,7 @@ Authors: Matthew Newville, The University of Chicago
          Antonino Ingargiola, University of California, Los Angeles
 
 """
+from asteval import Interpreter
 from .confidence import conf_interval, conf_interval2d
 from .minimizer import Minimizer, MinimizerException, minimize
 from .parameter import Parameter, Parameters
@@ -47,8 +48,9 @@ from .printfuncs import (fit_report, ci_report,
 from .model import Model, CompositeModel
 from . import models
 from . import lineshapes
-from . import uncertainties
-from .uncertainties import ufloat, correlated_values
+
+import uncertainties
+from uncertainties import ufloat, correlated_values
 
 # versioneer code
 from ._version import get_versions

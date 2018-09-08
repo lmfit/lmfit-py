@@ -11,6 +11,7 @@ from lmfit.lineshapes import gaussian, step
 npts = 201
 x = np.linspace(0, 10, npts)
 y = step(x, amplitude=12.5, center=4.5, sigma=0.88, form='erf')
+np.random.seed(0)
 y = y + np.random.normal(size=npts, scale=0.35)
 
 

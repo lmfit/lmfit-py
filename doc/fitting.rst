@@ -125,35 +125,51 @@ class as listed in the :ref:`Table of Supported Fitting Methods
 
  Table of Supported Fitting Methods:
 
- +-----------------------+------------------------------------------------------------------+
- | Fitting Method        | ``method`` arg to :func:`minimize` or :meth:`Minimizer.minimize` |
- +=======================+==================================================================+
- | Levenberg-Marquardt   |  ``leastsq`` or ``least_squares``                                |
- +-----------------------+------------------------------------------------------------------+
- | Nelder-Mead           |  ``nelder``                                                      |
- +-----------------------+------------------------------------------------------------------+
- | L-BFGS-B              |  ``lbfgsb``                                                      |
- +-----------------------+------------------------------------------------------------------+
- | Powell                |  ``powell``                                                      |
- +-----------------------+------------------------------------------------------------------+
- | Conjugate Gradient    |  ``cg``                                                          |
- +-----------------------+------------------------------------------------------------------+
- | Newton-CG             |  ``newton``                                                      |
- +-----------------------+------------------------------------------------------------------+
- | COBYLA                |  ``cobyla``                                                      |
- +-----------------------+------------------------------------------------------------------+
- | Truncated Newton      |  ``tnc``                                                         |
- +-----------------------+------------------------------------------------------------------+
- | Dogleg                |  ``dogleg``                                                      |
- +-----------------------+------------------------------------------------------------------+
- | Sequential Linear     |  ``slsqp``                                                       |
- | Squares Programming   |                                                                  |
- +-----------------------+------------------------------------------------------------------+
- | Differential          |  ``differential_evolution``                                      |
- | Evolution             |                                                                  |
- +-----------------------+------------------------------------------------------------------+
- | Brute force method    |  ``brute``                                                       |
- +-----------------------+------------------------------------------------------------------+
+ +--------------------------+------------------------------------------------------------------+
+ | Fitting Method           | ``method`` arg to :func:`minimize` or :meth:`Minimizer.minimize` |
+ +==========================+==================================================================+
+ | Levenberg-Marquardt      |  ``leastsq`` or ``least_squares``                                |
+ +--------------------------+------------------------------------------------------------------+
+ | Nelder-Mead              |  ``nelder``                                                      |
+ +--------------------------+------------------------------------------------------------------+
+ | L-BFGS-B                 |  ``lbfgsb``                                                      |
+ +--------------------------+------------------------------------------------------------------+
+ | Powell                   |  ``powell``                                                      |
+ +--------------------------+------------------------------------------------------------------+
+ | Conjugate Gradient       |  ``cg``                                                          |
+ +--------------------------+------------------------------------------------------------------+
+ | Newton-CG                |  ``newton``                                                      |
+ +--------------------------+------------------------------------------------------------------+
+ | COBYLA                   |  ``cobyla``                                                      |
+ +--------------------------+------------------------------------------------------------------+
+ | BFGS                     |  ``bfgsb``                                                       |
+ +--------------------------+------------------------------------------------------------------+
+ | Truncated Newton         |  ``tnc``                                                         |
+ +--------------------------+------------------------------------------------------------------+
+ | Newton CG trust-region   |  ``trust-ncg``                                                   |
+ +--------------------------+------------------------------------------------------------------+
+ | Exact trust-region       |  ``trust-exact`` (SciPy >= 1.0)                                  |
+ +--------------------------+------------------------------------------------------------------+
+ | Newton GLTR trust-region |  ``trust-krylov`` (SciPy >= 1.0)                                 |
+ +--------------------------+------------------------------------------------------------------+
+ | Constrained trust-region |  ``trust-constr`` (SciPy >= 1.1)                                 |
+ +--------------------------+------------------------------------------------------------------+
+ | Dogleg                   |  ``dogleg``                                                      |
+ +--------------------------+------------------------------------------------------------------+
+ | Sequential Linear        |  ``slsqp``                                                       |
+ | Squares Programming      |                                                                  |
+ +--------------------------+------------------------------------------------------------------+
+ | Differential             |  ``differential_evolution``                                      |
+ | Evolution                |                                                                  |
+ +--------------------------+------------------------------------------------------------------+
+ | Brute force method       |  ``brute``                                                       |
+ +--------------------------+------------------------------------------------------------------+
+ | Basinhopping             |  ``basinhopping``                                                |
+ +--------------------------+------------------------------------------------------------------+
+ | Adaptive Memory          |  ``ampgo``                                                       |
+ | Programming for Global   |                                                                  |
+ | Optimization             |                                                                  |
+ +--------------------------+------------------------------------------------------------------+
 
 
 .. note::
@@ -364,7 +380,11 @@ The Minimizer object has a few public methods:
 
 .. automethod:: Minimizer.brute
 
-For more information, check the examples in ``examples/lmfit_brute.py``.
+For more information, check the examples in ``examples/lmfit_brute_example.ipynb``.
+
+.. automethod:: Minimizer.basinhopping
+
+.. automethod:: Minimizer.ampgo
 
 .. automethod:: Minimizer.emcee
 
@@ -404,10 +424,10 @@ Solving with :func:`minimize` gives the Maximum Likelihood solution::
     >>> mi = lmfit.minimize(residual, p, method='Nelder', nan_policy='omit')
     >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
     [[Variables]]
-        a1:   2.98623688 (init= 4)
-        a2:  -4.33525596 (init= 4)
-        t1:   1.30993185 (init= 3)
-        t2:   11.8240752 (init= 3)
+    a1:  2.98623689 (init = 4)
+    a2: -4.33525597 (init = 4)
+    t1:  1.30993186 (init = 3)
+    t2:  11.8240752 (init = 3)
 
     >>> plt.plot(x, y)
     >>> plt.plot(x, residual(mi.params) + y, 'r')
@@ -461,18 +481,19 @@ You can see that we recovered the right uncertainty level on the data::
     median of posterior probability distribution
     --------------------------------------------
     [[Variables]]
-        a1:      3.00395737 +/- 0.148140 (4.93%) (init= 2.986237)
-        a2:     -4.34880797 +/- 0.129770 (2.98%) (init=-4.335256)
-        t1:      1.32070726 +/- 0.145682 (11.03%) (init= 1.309932)
-        t2:      11.7701458 +/- 0.505031 (4.29%) (init= 11.82408)
-        noise:   0.09774012 +/- 0.004329 (4.43%) (init= 1)
-    [[Correlations]] (unreported correlations are <  0.100)
-        C(a2, t2)                    =  0.982
-        C(a2, t1)                    = -0.935
-        C(t1, t2)                    = -0.892
-        C(a1, t1)                    = -0.507
-        C(a1, a2)                    =  0.203
-        C(a1, t2)                    =  0.163
+        a1:     2.99342394 +/- 0.15851315 (5.30%) (init = 2.986237)
+        a2:    -4.34384999 +/- 0.12454831 (2.87%) (init = -4.335256)
+        t1:     1.32338403 +/- 0.14120290 (10.67%) (init = 1.309932)
+        t2:     11.7962437 +/- 0.48632272 (4.12%) (init = 11.82408)
+        noise:  0.09761521 +/- 0.00431795 (4.42%) (init = 1)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(a2, t1)    = -0.965
+        C(a2, t2)    =  0.959
+        C(t1, t2)    = -0.927
+        C(a1, a2)    = -0.241
+        C(a1, t2)    = -0.168
+        C(a2, noise) = -0.116
+        C(t1, noise) =  0.107
 
     >>> # find the maximum likelihood solution
     >>> highest_prob = np.argmax(res.lnprob)
@@ -486,17 +507,16 @@ You can see that we recovered the right uncertainty level on the data::
     >>> print(p)
     Maximum likelihood Estimation
     -----------------------------
-    Parameters([('a1', <Parameter 'a1', 2.9838386218794306, bounds=[-inf:inf]>),
-    ('a2', <Parameter 'a2', -4.3360301800977243, bounds=[-inf:inf]>),
-    ('t1', <Parameter 't1', 1.3099319599456074, bounds=[-inf:inf]>),
-    ('t2', <Parameter 't2', 11.813711030433806, bounds=[-inf:inf]>)])
-
+    Parameters([('a1', <Parameter 'a1', 2.9684811738216754, bounds=[-inf:inf]>),
+    ('a2', <Parameter 'a2', -4.355238699173162, bounds=[-inf:inf]>),
+    ('t1', <Parameter 't1', 1.3337647386777762, bounds=[-inf:inf]>),
+    ('t2', <Parameter 't2', 11.758394302818514, bounds=[-inf:inf]>)])
     >>> # Finally lets work out a 1 and 2-sigma error estimate for 't1'
     >>> quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
     >>> print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
     >>> print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
-    1 sigma spread 0.145719626384
-    2 sigma spread 0.292199907106
+    1 sigma spread 0.1414604069179637
+    2 sigma spread 0.453234685099423
 
 Getting and Printing Fit Reports
 ===========================================
@@ -512,22 +532,23 @@ An example using this to write out a fit report would be:
 which would write out::
 
     [[Fit Statistics]]
-        # function evals   = 85
+        # fitting method   = leastsq
+        # function evals   = 83
         # data points      = 1001
         # variables        = 4
-        chi-square         = 498.81176
-        reduced chi-square = 0.50031
-        Akaike info crit   = -689.22252
-        Bayesian info crit = -669.58750
+        chi-square         = 498.811759
+        reduced chi-square = 0.50031270
+        Akaike info crit   = -689.222517
+        Bayesian info crit = -669.587497
     [[Variables]]
-        amp:      13.9121944 +/- 0.141202 (1.01%) (init= 13)
-        period:   5.48507044 +/- 0.026664 (0.49%) (init= 2)
-        shift:    0.16203676 +/- 0.014056 (8.67%) (init= 0)
-        decay:    0.03264538 +/- 0.000380 (1.16%) (init= 0.02)
-    [[Correlations]] (unreported correlations are <  0.100)
-        C(period, shift)             =  0.797
-        C(amp, decay)                =  0.582
-        C(amp, shift)                = -0.297
-        C(amp, period)               = -0.243
-        C(shift, decay)              = -0.182
-        C(period, decay)             = -0.150
+        amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
+        period:  5.48507045 +/- 0.02666492 (0.49%) (init = 2)
+        shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
+        decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(period, shift) =  0.797
+        C(amp, decay)    =  0.582
+        C(amp, shift)    = -0.297
+        C(amp, period)   = -0.243
+        C(shift, decay)  = -0.182
+        C(period, decay) = -0.150
