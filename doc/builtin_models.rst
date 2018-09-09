@@ -127,6 +127,13 @@ methods for all of these make a fairly crude guess for the value of
 .. autoclass:: SkewedGaussianModel
 
 
+
+:class:`SkewedVoigtModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: SkewedVoigtModel
+
+
 :class:`DonaichModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

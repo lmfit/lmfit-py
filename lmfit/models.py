@@ -6,10 +6,11 @@ from asteval import Interpreter, get_ast_names
 
 from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
-                         expgaussian, exponential, gaussian, linear, lognormal,
-                         lorentzian, moffat, parabolic, pearson7, powerlaw,
-                         pvoigt, rectangle, skewed_gaussian, step, students_t,
-                         voigt)
+                         expgaussian, exponential, gaussian, linear,
+                         lognormal, lorentzian, moffat, parabolic,
+                         pearson7, powerlaw, pvoigt, rectangle,
+                         skewed_gaussian, skewed_voigt, step,
+                         students_t, voigt)
 from .model import Model
 
 
@@ -836,7 +837,7 @@ class SkewedGaussianModel(Model):
        f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
        e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
        {\operatorname{erf}}\bigl[
-       \frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
+       \frac{{\gamma}(x-\mu)}{\sigma\sqrt{2}}
        \bigr] \Bigr\}
 
     where :func:`erf` is the error function.
@@ -855,6 +856,53 @@ class SkewedGaussianModel(Model):
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
+        self.set_param_hint('height', expr=height_expr(self))
+        self.set_param_hint('fwhm', expr=fwhm_expr(self))
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        pars = guess_from_peak(self, data, x, negative)
+        return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class SkewedVoigtModel(Model):
+    r"""A variation of the Skewed Gaussian, this applies the same skewing
+      to a Voigt distribution (see
+      https://en.wikipedia.org/wiki/Voigt_distribution).  It has Parameters
+      ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`), ``sigma``
+      (:math:`\sigma`), and ``gamma`` (:math:`\gamma`), as usual for a
+      Voigt distribution, and add a Parameter ``skew``.  In addition,
+      parameters ``fwhm`` and ``height`` are included as constraints to
+      report full width at half maximum and maximum peak height, of the
+      Voigt distribution, respectively.
+
+    .. math::
+
+
+       f(x; A, \mu, \sigma, \gamma, \rm{skew}) = {\rm{Voigt}}(x; A, \mu, \sigma, \gamma)
+       \Bigl\{ 1 +  {\operatorname{erf}}\bigl[
+       \frac{{\rm{skew}}(x-\mu)}{\sigma\sqrt{2}}
+       \bigr] \Bigr\}
+
+    where :func:`erf` is the error function.
+
+    """
+
+    fwhm_factor = 3.60131
+    height_factor = 1./np.sqrt(2*np.pi)
+
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(SkewedVoigtModel, self).__init__(skewed_voigt, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
         self.set_param_hint('height', expr=height_expr(self))
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
