@@ -158,9 +158,32 @@ def test_saveload_modelresult_nodill():
     do_save_modelresult(with_dill=False)
     do_load_modelresult()
 
+def test_savelod_modelresult_items():
+    clear_savefile(SAVE_MODELRESULT)
+    x, y = XDAT, YDAT
+    model, params = create_model_params(x, y)
+    result = model.fit(y, params, x=x)
+
+    save_modelresult(result, SAVE_MODELRESULT)
+
+    time.sleep(0.25)
+    file_exists = wait_for_file(SAVE_MODELRESULT, timeout=10)
+
+    assert(file_exists)
+    time.sleep(0.25)
+
+    loaded = load_modelresult(SAVE_MODELRESULT)
+    assert(len(result.data) == len(loaded.data))
+    assert(abs(max(result.data) - max(loaded.data)) < 0.001)
+
+    for pname in result.params.keys():
+        assert( abs(result.init_params[pname].value - loaded.init_params[pname].value) < 0.001)
+
+
 if __name__ == '__main__':
     test_saveload_model_nodill()
     test_saveload_model_withdill()
 
     test_saveload_modelresult_nodill()
     test_saveload_modelresult_withdill()
+    test_savelod_modelresult_items()
