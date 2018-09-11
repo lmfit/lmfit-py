@@ -1121,12 +1121,14 @@ def load_modelresult(fname, funcdefs=None):
     ModelResult
 
     """
-    p = Parameters()
-    m = ModelResult(Model(lambda x: x, None), p)
+    params = Parameters()
+    modres = ModelResult(Model(lambda x: x, None), params)
     with open(fname) as fh:
-        modelresult = m.load(fh, funcdefs=funcdefs)
-    return modelresult
-
+        mresult = modres.load(fh, funcdefs=funcdefs)
+        mresult.data = mresult.userargs[0]
+        mresult.weights = mresult.userargs[1]
+        mresult.init_params = mresult.model.make_params(**mresult.init_values)
+    return mresult
 
 class ModelResult(Minimizer):
     """Result from the Model fit.
