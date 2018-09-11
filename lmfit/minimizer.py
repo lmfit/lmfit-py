@@ -876,7 +876,7 @@ class Minimizer(object):
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              float_behavior='posterior', sampler_kwargs=None, is_weighted=True, seed=None):
+              float_behavior='posterior', progress=True, is_weighted=True, seed=None):
         r"""Bayesian sampling of the posterior distribution using `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
@@ -1119,7 +1119,8 @@ class Minimizer(object):
 
         # set up multiprocessing options for the samplers
         auto_pool = None
-        if sampler_kwargs is None: sampler_kwargs = {}
+        sampler_kwargs = {}
+        
         if isinstance(workers, int) and workers > 1:
             auto_pool = multiprocessing.Pool(workers)
             sampler_kwargs['pool'] = auto_pool
@@ -1196,7 +1197,7 @@ class Minimizer(object):
             self.sampler.random_state = rng.get_state()
 
         # now do a production run, sampling all the time
-        output = self.sampler.run_mcmc(p0, steps)
+        output = self.sampler.run_mcmc(p0, steps, progress=progress)
         self._lastpos = output[0]
 
         # discard the burn samples and thin
