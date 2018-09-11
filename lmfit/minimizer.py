@@ -1120,7 +1120,6 @@ class Minimizer(object):
         # set up multiprocessing options for the samplers
         auto_pool = None
         sampler_kwargs = {}
-        
         if isinstance(workers, int) and workers > 1:
             auto_pool = multiprocessing.Pool(workers)
             sampler_kwargs['pool'] = auto_pool
