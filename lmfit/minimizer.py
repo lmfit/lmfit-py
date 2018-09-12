@@ -40,6 +40,7 @@ from ._ampgo import ampgo
 try:
     import emcee as emcee
     HAS_EMCEE = True
+    EMCEE_MAJOR_VERSION_CHECK = int(emcee.__version__[0]) >= 3
 except ImportError:
     HAS_EMCEE = False
 
@@ -1196,7 +1197,11 @@ class Minimizer(object):
             self.sampler.random_state = rng.get_state()
 
         # now do a production run, sampling all the time
-        output = self.sampler.run_mcmc(p0, steps, progress=progress)
+        if EMCEE_MAJOR_VERSION_CHECK:
+            output = self.sampler.run_mcmc(p0, steps, progress=progress)
+        else: 
+            output = self.sampler.run_mcmc(p0, steps)
+        
         self._lastpos = output[0]
 
         # discard the burn samples and thin
