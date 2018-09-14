@@ -18,8 +18,8 @@ def test_basinhopping():
     x0 = [1.]
 
     # FIXME - remove after requirement for scipy >= 0.19
-    major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
-    if major < 1 and minor < 19:
+    major, minor, micro = scipy_version.split('.', 2)
+    if int(major) < 1 and int(minor) < 19:
         ret = basinhopping(func, x0, minimizer_kwargs=minimizer_kwargs)
     else:
         ret = basinhopping(func, x0, minimizer_kwargs=minimizer_kwargs, seed=7)
@@ -50,8 +50,8 @@ def test_basinhopping_2d():
     x0 = [1.0, 1.0]
 
     # FIXME - remove after requirement for scipy >= 0.19
-    major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
-    if major < 1 and minor < 19:
+    major, minor, micro = scipy_version.split('.', 2)
+    if int(major) < 1 and int(minor) < 19:
         ret = basinhopping(func2d, x0, minimizer_kwargs=minimizer_kwargs)
     else:
         ret = basinhopping(func2d, x0, minimizer_kwargs=minimizer_kwargs, seed=7)
@@ -106,8 +106,8 @@ def test_basinhopping_Alpine02():
     x0 = [1.0, 1.0]
 
     # FIXME - remove after requirement for scipy >= 0.19
-    major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
-    if major < 1 and minor < 19:
+    major, minor, micro = scipy_version.split('.', 2)
+    if int(major) < 1 and int(minor) < 19:
         ret = basinhopping(Alpine02, x0, minimizer_kwargs=minimizer_kwargs,
                            accept_test=basinhopping_accept)
     else:

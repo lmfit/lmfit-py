@@ -130,10 +130,10 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'differential_evolution': 'differential_evolution'}
 
 # FIXME: update this when incresing the minimum scipy version
-major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
-if (major >= 1 and minor >= 1):
+major, minor, micro = scipy_version.split('.', 2)
+if (int(major) >= 1 and int(minor) >= 1):
     SCALAR_METHODS.update({'trust-constr': 'trust-constr'})
-if major >= 1:
+if int(major) >= 1:
     SCALAR_METHODS.update({'trust-exact': 'trust-exact',
                            'trust-krylov': 'trust-krylov'})
 
@@ -1438,8 +1438,8 @@ class Minimizer(object):
         basinhopping_kws.update(kws)
 
         # FIXME - remove after requirement for scipy >= 0.19
-        major, minor, micro = np.array(scipy_version.split('.'), dtype='int')
-        if major < 1 and minor < 19:
+        major, minor, micro = scipy_version.split('.', 2)
+        if int(major) < 1 and int(minor) < 19:
             _ = basinhopping_kws.pop('seed')
             print("Warning: basinhopping doesn't support argument 'seed' for "
                   "scipy versions below 0.19!")
