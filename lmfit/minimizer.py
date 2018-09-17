@@ -924,6 +924,13 @@ class Minimizer(object):
 
         result._calculate_statistics()
 
+        # calculate the cov_x and estimate uncertanties/correlations
+        if self.calc_covar and HAS_NUMDIFFTOOLS:
+            _covar_ndt = self._calculate_covariance_matrix(result.x)
+            if _covar_ndt is not None:
+                result.covar = self._int2ext_cov_x(_covar_ndt, result.x)
+                self._calculate_uncertainties_correlations()
+
         return result
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
@@ -1524,6 +1531,13 @@ class Minimizer(object):
 
         result._calculate_statistics()
 
+        # calculate the cov_x and estimate uncertanties/correlations
+        if self.calc_covar and HAS_NUMDIFFTOOLS:
+            _covar_ndt = self._calculate_covariance_matrix(ret.x)
+            if _covar_ndt is not None:
+                result.covar = self._int2ext_cov_x(_covar_ndt, ret.x)
+                self._calculate_uncertainties_correlations()
+
         return result
 
     def brute(self, params=None, Ns=20, keep=50):
@@ -1790,6 +1804,13 @@ class Minimizer(object):
             pass
 
         result._calculate_statistics()
+
+        # calculate the cov_x and estimate uncertanties/correlations
+        if self.calc_covar and HAS_NUMDIFFTOOLS:
+            _covar_ndt = self._calculate_covariance_matrix(result.ampgo_x0)
+            if _covar_ndt is not None:
+                result.covar = self._int2ext_cov_x(_covar_ndt, result.ampgo_x0)
+                self._calculate_uncertainties_correlations()
 
         return result
 
