@@ -1202,8 +1202,11 @@ class Minimizer(object):
         else: 
             output = self.sampler.run_mcmc(p0, steps)
         
-        self._lastpos = output[0]
-
+        if EMCEE_MAJOR_VERSION_CHECK:
+            self._lastpos = output.coords
+        else:
+            self._lastpos = output[0]
+        
         # discard the burn samples and thin
         chain = self.sampler.chain[..., burn::thin, :]
         lnprobability = self.sampler.lnprobability[..., burn::thin]
