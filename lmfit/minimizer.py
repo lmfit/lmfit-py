@@ -1294,6 +1294,14 @@ class Minimizer(object):
 
         result._calculate_statistics()
 
+        # calculate the cov_x and estimate uncertainties/correlations
+        try:
+            hess = np.matmul(ret.jac.T, ret.jac)
+            result.covar = np.linalg.inv(hess)
+            self._calculate_uncertainties_correlations()
+        except LinAlgError:
+            pass
+
         return result
 
     def leastsq(self, params=None, **kws):
@@ -1738,7 +1746,7 @@ class Minimizer(object):
             Name of the fitting method to use. Valid values are:
 
             - `'leastsq'`: Levenberg-Marquardt (default)
-            - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
+            - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method
             - `'differential_evolution'`: differential evolution
             - `'brute'`: brute force method
             - `'basinhopping'`: basinhopping
@@ -2047,7 +2055,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         Name of the fitting method to use. Valid values are:
 
         - `'leastsq'`: Levenberg-Marquardt (default)
-        - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method by default
+        - `'least_squares'`: Least-Squares minimization, using Trust Region Reflective method
         - `'differential_evolution'`: differential evolution
         - `'brute'`: brute force method
         - `'basinhopping'`: basinhopping
