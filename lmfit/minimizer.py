@@ -697,6 +697,8 @@ class Minimizer(object):
 
     def _calculate_uncertainties_correlations(self):
         """Calculate parameter uncertainties and correlations."""
+        self.result.errorbars = True
+
         if self.scale_covar:
             self.result.covar *= self.result.redchi
 
