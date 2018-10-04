@@ -106,13 +106,16 @@ def propagate_err(z, dz, option):
                     # Standard error propagation for abs = sqrt(re**2 + im**2)
                     err = np.true_divide(np.sqrt((iz*idz)**2+(rz*rdz)**2),
                                          np.abs(z))
+
                 if option == 'angle':
                     # Standard error propagation for angle = arctan(im/re)
                     err = np.true_divide(np.sqrt((rz*idz)**2+(iz*rdz)**2),
                                          np.abs(z))
 
                 # Approximate, but easy way to fix divide by zero errors
-                err[err == np.inf] = np.abs(dz)[err == np.inf]
+                err[err == np.inf] = getattr(np, option)(dz)[err == np.inf]
+
+        
         else:
             # Should never make it here, but don't want things to break
             err = 0.0
