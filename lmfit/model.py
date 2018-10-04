@@ -56,6 +56,72 @@ def _ensureMatplotlib(function):
     return no_op
 
 
+def get_reducer(option):
+    """Factory function to build a parser for complex numbers.
+    `option` should be one of `['real', 'imag', 'abs', 'angle']`"""
+    assert option in ['real', 'imag', 'abs', 'angle'], "Unsupported option!"
+
+    def reducer(array):
+            """Convert a complex array to a real array based on the option passed
+            to parse_complex. Does nothing to a purely real array."""
+            if any(np.iscomplex(array)):
+                parsed_array = getattr(np, option)(array)
+            else:
+                parsed_array = array
+
+            return parsed_array
+    return reducer
+
+
+def propagate_err(z, dz, option):
+    """Perform error propagation on a vector of complex uncertainties to
+    get values for magnitude (abs) and phase (angle) uncertainty.
+    Uncertainties are 1/weights. If the weights provided are real, they are
+    assumed to apply equally to the real and imaginary parts. If the weights
+    are complex, the real part of the weights are applied to the real
+    part of the residual and the imaginary part is treated correspondingly."""
+
+    # Check the main vector for complex. Do nothing if real.
+    if any(np.iscomplex(z)):
+        # if uncertainties are real, apply them equally to
+        # real and imaginary parts
+        if not np.iscomplex(dz):
+            dz = dz+1j*dz
+
+        if option == 'real':
+            err = np.real(dz)
+        elif option == 'imag':
+            err = np.imag(dz)
+        elif option in ['abs', 'angle']:
+            rz = np.real(z)
+            iz = np.imag(z)
+
+            rdz = np.real(dz)
+            idz = np.imag(dz)
+
+            # Don't spit out warnings for divide by zero. Can fix these later.
+            with np.errstate(divide='ignore', invalid='ignore'):
+
+                if option == 'abs':
+                    # Standard error propagation for abs = sqrt(re**2 + im**2)
+                    err = np.true_divide(np.sqrt((iz*idz)**2+(rz*rdz)**2),
+                                         np.abs(z))
+                if option == 'angle':
+                    # Standard error propagation for angle = arctan(im/re)
+                    err = np.true_divide(np.sqrt((rz*idz)**2+(iz*rdz)**2),
+                                         np.abs(z))
+
+                # Approximate, but easy way to fix divide by zero errors
+                err[err == np.inf] = np.abs(dz)[err == np.inf]
+        else:
+            # Should never make it here, but don't want things to break
+            err = 0.0
+    else:
+        err = dz
+
+    return err
+
+
 class Model(object):
     _forbidden_args = ('data', 'weights', 'params')
     _invalid_ivar = "Invalid independent variable name ('%s') for function %s"
@@ -1570,7 +1636,7 @@ class ModelResult(Minimizer):
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
                  xlabel=None, ylabel=None, yerr=None, numpoints=None,
                  data_kws=None, fit_kws=None, init_kws=None, ax_kws=None,
-                 show_init=False):
+                 show_init=False, parse_complex='abs'):
         """Plot the fit results using matplotlib, if available.
 
         The plot will include the data points, the initial fit curve (optional,
@@ -1611,6 +1677,10 @@ class ModelResult(Minimizer):
             Keyword arguments for a new axis, if there is one being created.
         show_init : bool, optional
             Whether to show the initial conditions for the fit (default is False).
+        parse_complex : str, optional
+            How to reduce complex data for plotting.
+            Options are one of `['real', 'imag', 'abs', 'angle']`, which
+            correspond to the numpy functions of the same name.
 
         Returns
         -------
@@ -1624,6 +1694,9 @@ class ModelResult(Minimizer):
         If `yerr` is specified or if the fit model included weights, then
         matplotlib.axes.Axes.errorbar is used to plot the data.  If `yerr` is
         not specified and the fit includes weights, `yerr` set to 1/self.weights
+
+        If model returns complex data, `yerr` is treated the same way that
+        weights are in this case.
 
         If `ax` is None then `matplotlib.pyplot.gca(**ax_kws)` is called.
 
@@ -1641,6 +1714,11 @@ class ModelResult(Minimizer):
             init_kws = {}
         if ax_kws is None:
             ax_kws = {}
+
+        # The function reduce_complex will convert complex vectors into real vectors
+        assert parse_complex in ['real', 'imag', 'abs', 'angle'], \
+            "Unsupported option passed to parse_complex."
+        reduce_complex = get_reducer(parse_complex)
 
         if len(self.model.independent_vars) == 1:
             independent_var = self.model.independent_vars[0]
@@ -1663,21 +1741,25 @@ class ModelResult(Minimizer):
         if show_init:
             ax.plot(
                 x_array_dense,
-                self.model.eval(self.init_params,
-                                **{independent_var: x_array_dense}),
+                reduce_complex(self.model.eval(self.init_params,
+                               **{independent_var: x_array_dense})),
                 initfmt, label='init', **init_kws)
 
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
+
         if yerr is not None:
-            ax.errorbar(x_array, self.data, yerr=yerr,
+            ax.errorbar(x_array, reduce_complex(self.data),
+                        yerr=propagate_err(self.data, yerr, parse_complex),
                         fmt=datafmt, label='data', **data_kws)
         else:
-            ax.plot(x_array, self.data, datafmt, label='data', **data_kws)
+            ax.plot(x_array, reduce_complex(self.data),
+                    datafmt, label='data', **data_kws)
 
         ax.plot(
             x_array_dense,
-            self.model.eval(self.params, **{independent_var: x_array_dense}),
+            reduce_complex(self.model.eval(self.params,
+                                           **{independent_var: x_array_dense})),
             fitfmt, label='best-fit', **fit_kws)
 
         ax.set_title(self.model.name)
@@ -1694,7 +1776,7 @@ class ModelResult(Minimizer):
 
     @_ensureMatplotlib
     def plot_residuals(self, ax=None, datafmt='o', yerr=None, data_kws=None,
-                       fit_kws=None, ax_kws=None):
+                       fit_kws=None, ax_kws=None, parse_complex='abs'):
         """Plot the fit residuals using matplotlib, if available.
 
         If `yerr` is supplied or if the model included weights, errorbars
@@ -1715,6 +1797,10 @@ class ModelResult(Minimizer):
             Keyword arguments passed on to the plot function for fitted curve.
         ax_kws : dict, optional
             Keyword arguments for a new axis, if there is one being created.
+        parse_complex : str, optional
+            How to reduce complex data for plotting.
+            Options are one of `['real', 'imag', 'abs', 'angle']`, which
+            correspond to the numpy functions of the same name.
 
         Returns
         -------
@@ -1744,6 +1830,12 @@ class ModelResult(Minimizer):
         if ax_kws is None:
             ax_kws = {}
 
+        # The function reduce_complex will convert complex vectors into real vectors
+        assert parse_complex in ['real', 'imag', 'abs', 'angle'], \
+            "Unsupported option passed to parse_complex."
+
+        reduce_complex = get_reducer(parse_complex)
+
         if len(self.model.independent_vars) == 1:
             independent_var = self.model.independent_vars[0]
         else:
@@ -1761,10 +1853,11 @@ class ModelResult(Minimizer):
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
         if yerr is not None:
-            ax.errorbar(x_array, self.eval() - self.data, yerr=yerr,
+            ax.errorbar(x_array, reduce_complex(self.eval()) - reduce_complex(self.data),
+                        yerr=propagate_err(self.data, yerr, parse_complex),
                         fmt=datafmt, label='residuals', **data_kws)
         else:
-            ax.plot(x_array, self.eval() - self.data, datafmt,
+            ax.plot(x_array, reduce_complex(self.eval()) - reduce_complex(self.data), datafmt,
                     label='residuals', **data_kws)
 
         ax.set_title(self.model.name)
@@ -1776,7 +1869,7 @@ class ModelResult(Minimizer):
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None,
              ylabel=None, yerr=None, numpoints=None, fig=None, data_kws=None,
              fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None,
-             fig_kws=None, show_init=False):
+             fig_kws=None, show_init=False, parse_complex='abs'):
         """Plot the fit results and residuals using matplotlib, if available.
 
         The method will produce a matplotlib figure with both results of the
@@ -1820,6 +1913,11 @@ class ModelResult(Minimizer):
             Keyword arguments for a new figure, if there is one being created.
         show_init : bool, optional
             Whether to show the initial conditions for the fit (default is False).
+        parse_complex : str, optional
+            How to reduce complex data for plotting.
+            Options are one of `['real', 'imag', 'abs', 'angle']`, which
+            correspond to the numpy functions of the same name.
+
 
         Returns
         -------
@@ -1852,6 +1950,11 @@ class ModelResult(Minimizer):
             ax_res_kws = {}
         if ax_fit_kws is None:
             ax_fit_kws = {}
+
+        # The function reduce_complex will convert complex vectors into real vectors
+        assert parse_complex in ['real', 'imag', 'abs', 'angle'], \
+            "Unsupported option passed to parse_complex."
+
         # make a square figure with side equal to the default figure's x-size
         figxsize = plt.rcParams['figure.figsize'][0]
         fig_kws_ = dict(figsize=(figxsize, figxsize))
@@ -1874,10 +1977,10 @@ class ModelResult(Minimizer):
                       initfmt=initfmt, xlabel=xlabel, ylabel=ylabel,
                       numpoints=numpoints, data_kws=data_kws,
                       fit_kws=fit_kws, init_kws=init_kws, ax_kws=ax_fit_kws,
-                      show_init=show_init)
+                      show_init=show_init, parse_complex=parse_complex)
         self.plot_residuals(ax=ax_res, datafmt=datafmt, yerr=yerr,
                             data_kws=data_kws, fit_kws=fit_kws,
-                            ax_kws=ax_res_kws)
+                            ax_kws=ax_res_kws, parse_complex=parse_complex)
         plt.setp(ax_res.get_xticklabels(), visible=False)
         ax_fit.set_title('')
         return fig, gs
