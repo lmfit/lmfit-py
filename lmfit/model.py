@@ -1815,6 +1815,9 @@ class ModelResult(Minimizer):
         matplotlib.axes.Axes.errorbar is used to plot the data.  If `yerr` is
         not specified and the fit includes weights, `yerr` set to 1/self.weights
 
+        If model returns complex data, `yerr` is treated the same way that
+        weights are in this case.
+
         If `ax` is None then `matplotlib.pyplot.gca(**ax_kws)` is called.
 
         See Also
@@ -1930,6 +1933,9 @@ class ModelResult(Minimizer):
         If `yerr` is specified or if the fit model included weights, then
         matplotlib.axes.Axes.errorbar is used to plot the data.  If `yerr` is
         not specified and the fit includes weights, `yerr` set to 1/self.weights
+
+        If model returns complex data, `yerr` is treated the same way that
+        weights are in this case.
 
         If `fig` is None then `matplotlib.pyplot.figure(**fig_kws)` is called,
         otherwise `fig_kws` is ignored.
