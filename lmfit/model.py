@@ -99,7 +99,7 @@ def propagate_err(z, dz, option):
             rdz = np.real(dz)
             idz = np.imag(dz)
 
-            # Don't spit out warnings for divide by zero. Can fix these later.
+            # Don't spit out warnings for divide by zero. Will fix these later.
             with np.errstate(divide='ignore', invalid='ignore'):
 
                 if option == 'abs':
@@ -107,15 +107,20 @@ def propagate_err(z, dz, option):
                     err = np.true_divide(np.sqrt((iz*idz)**2+(rz*rdz)**2),
                                          np.abs(z))
 
+                    # For abs = 0, error is +/- abs(rdz + j idz)
+                    err[err == np.inf] = np.abs(dz)[err == np.inf]
+
                 if option == 'angle':
                     # Standard error propagation for angle = arctan(im/re)
                     err = np.true_divide(np.sqrt((rz*idz)**2+(iz*rdz)**2),
                                          np.abs(z))
 
-                # Approximate, but easy way to fix divide by zero errors
-                err[err == np.inf] = getattr(np, option)(dz)[err == np.inf]
+                    # For abs = 0, error is +/- pi (i.e. the whole circle)
+                    err[err == np.inf] = np.pi
 
-        
+                
+
+
         else:
             # Should never make it here, but don't want things to break
             err = 0.0
