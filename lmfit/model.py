@@ -85,7 +85,7 @@ def propagate_err(z, dz, option):
     if any(np.iscomplex(z)):
         # if uncertainties are real, apply them equally to
         # real and imaginary parts
-        if not np.iscomplex(dz):
+        if all(np.isreal(dz)):
             dz = dz+1j*dz
 
         if option == 'real':
@@ -117,9 +117,6 @@ def propagate_err(z, dz, option):
 
                     # For abs = 0, error is +/- pi (i.e. the whole circle)
                     err[err == np.inf] = np.pi
-
-                
-
 
         else:
             # Should never make it here, but don't want things to break
