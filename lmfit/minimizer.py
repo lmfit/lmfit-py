@@ -40,7 +40,7 @@ from ._ampgo import ampgo
 try:
     import emcee as emcee
     HAS_EMCEE = True
-    EMCEE_MAJOR_VERSION_CHECK = int(emcee.__version__[0]) >= 3
+    EMCEE_VERSION = int(emcee.__version__[0])
 except ImportError:
     HAS_EMCEE = False
 
@@ -877,7 +877,7 @@ class Minimizer(object):
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              float_behavior='posterior', progress=True, is_weighted=True, seed=None):
+              float_behavior='posterior', is_weighted=True, seed=None, progress=True):
         r"""Bayesian sampling of the posterior distribution using `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
@@ -1197,14 +1197,11 @@ class Minimizer(object):
             self.sampler.random_state = rng.get_state()
 
         # now do a production run, sampling all the time
-        if EMCEE_MAJOR_VERSION_CHECK:
+        if EMCEE_VERSION >= 3:
             output = self.sampler.run_mcmc(p0, steps, progress=progress)
+            self._lastpos = output.coords
         else: 
             output = self.sampler.run_mcmc(p0, steps)
-        
-        if EMCEE_MAJOR_VERSION_CHECK:
-            self._lastpos = output.coords
-        else:
             self._lastpos = output[0]
         
         # discard the burn samples and thin
