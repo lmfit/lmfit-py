@@ -1743,7 +1743,7 @@ class ModelResult(Minimizer):
         parse_complex : str, optional
             How to reduce complex data for plotting.
             Options are one of `['real', 'imag', 'abs', 'angle']`, which
-            correspond to the numpy functions of the same name. Default is 'abs'.
+            correspond to the numpy functions of the same name (default is 'abs').
 
         Returns
         -------
@@ -1861,7 +1861,7 @@ class ModelResult(Minimizer):
         parse_complex : str, optional
             How to reduce complex data for plotting.
             Options are one of `['real', 'imag', 'abs', 'angle']`, which
-            correspond to the numpy functions of the same name. Default is 'abs'.
+            correspond to the numpy functions of the same name (default is 'abs').
 
         Returns
         -------
@@ -1977,7 +1977,7 @@ class ModelResult(Minimizer):
         parse_complex : str, optional
             How to reduce complex data for plotting.
             Options are one of `['real', 'imag', 'abs', 'angle']`, which
-            correspond to the numpy functions of the same name. Default is 'abs'.
+            correspond to the numpy functions of the same name (default is 'abs').
 
 
         Returns
