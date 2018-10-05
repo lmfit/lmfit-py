@@ -58,28 +58,78 @@ def _ensureMatplotlib(function):
 
 def get_reducer(option):
     """Factory function to build a parser for complex numbers.
-    `option` should be one of `['real', 'imag', 'abs', 'angle']`"""
+
+    Parameters
+    ----------
+    option : str
+        Should be one of `['real', 'imag', 'abs', 'angle']`. Implements the
+        numpy function of the same name.
+
+    Returns
+    -------
+    callable
+        See docstring for `reducer` below."""
     assert option in ['real', 'imag', 'abs', 'angle'], "Unsupported option!"
 
     def reducer(array):
-            """Convert a complex array to a real array based on the option passed
-            to parse_complex. Does nothing to a purely real array."""
-            if any(np.iscomplex(array)):
-                parsed_array = getattr(np, option)(array)
-            else:
-                parsed_array = array
+        """Convert a complex array to a real array based on the option passed
+        to parse_complex. Does nothing to a purely real array.
 
-            return parsed_array
+        Parameters
+        ----------
+        array : array-like
+            Input array. If complex, will be converted to real array via numpy.%s
+
+        Returns
+        -------
+        numpy.array
+            Returned array will be purely real."""%(option)
+
+        if any(np.iscomplex(array)):
+            parsed_array = getattr(np, option)(array)
+        else:
+            parsed_array = array
+
+        return parsed_array
     return reducer
 
 
 def propagate_err(z, dz, option):
     """Perform error propagation on a vector of complex uncertainties to
     get values for magnitude (abs) and phase (angle) uncertainty.
+
+    Parameters
+    ----------
+    z : array-like
+        Array of complex or real numbers.
+
+    dz : array-like
+        Array of uncertainties corresponding to z. Must satisfy
+        `numpy.shape(dz) == np.shape(z)`.
+
+    option : str
+        Should be one of `['real', 'imag', 'abs', 'angle']`.
+
+    Returns
+    -------
+    numpy.array
+        Returned array will be purely real.
+
+    Notes
+    -----
     Uncertainties are 1/weights. If the weights provided are real, they are
     assumed to apply equally to the real and imaginary parts. If the weights
     are complex, the real part of the weights are applied to the real
-    part of the residual and the imaginary part is treated correspondingly."""
+    part of the residual and the imaginary part is treated correspondingly.
+
+    In the case where `option == 'angle'` and `numpy.abs(z) == 0` for any value
+    of `z` the phase angle uncertainty becomes the entire circle and so
+    a value of pi is returned.
+
+    In the case where `option == 'abs'` and `numpy.abs(z) == 0` for any value of
+    `z` the mangnitude uncertainty is approximated by `numpy.abs(dz)` for that
+    value."""
+    assert option in ['real', 'imag', 'abs', 'angle'], "Unsupported option!"
 
     # Check the main vector for complex. Do nothing if real.
     if any(np.iscomplex(z)):
@@ -120,7 +170,8 @@ def propagate_err(z, dz, option):
 
         else:
             # Should never make it here, but don't want things to break
-            err = 0.0
+            # in a weird way, so be safe and raise exception
+            raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'."%option)
     else:
         err = dz
 
@@ -1201,6 +1252,7 @@ def load_modelresult(fname, funcdefs=None):
         mresult.init_params = mresult.model.make_params(**mresult.init_values)
     return mresult
 
+
 class ModelResult(Minimizer):
     """Result from the Model fit.
 
@@ -1685,7 +1737,7 @@ class ModelResult(Minimizer):
         parse_complex : str, optional
             How to reduce complex data for plotting.
             Options are one of `['real', 'imag', 'abs', 'angle']`, which
-            correspond to the numpy functions of the same name.
+            correspond to the numpy functions of the same name. Default is 'abs'.
 
         Returns
         -------
@@ -1721,8 +1773,6 @@ class ModelResult(Minimizer):
             ax_kws = {}
 
         # The function reduce_complex will convert complex vectors into real vectors
-        assert parse_complex in ['real', 'imag', 'abs', 'angle'], \
-            "Unsupported option passed to parse_complex."
         reduce_complex = get_reducer(parse_complex)
 
         if len(self.model.independent_vars) == 1:
@@ -1805,7 +1855,7 @@ class ModelResult(Minimizer):
         parse_complex : str, optional
             How to reduce complex data for plotting.
             Options are one of `['real', 'imag', 'abs', 'angle']`, which
-            correspond to the numpy functions of the same name.
+            correspond to the numpy functions of the same name. Default is 'abs'.
 
         Returns
         -------
@@ -1839,9 +1889,6 @@ class ModelResult(Minimizer):
             ax_kws = {}
 
         # The function reduce_complex will convert complex vectors into real vectors
-        assert parse_complex in ['real', 'imag', 'abs', 'angle'], \
-            "Unsupported option passed to parse_complex."
-
         reduce_complex = get_reducer(parse_complex)
 
         if len(self.model.independent_vars) == 1:
@@ -1924,7 +1971,7 @@ class ModelResult(Minimizer):
         parse_complex : str, optional
             How to reduce complex data for plotting.
             Options are one of `['real', 'imag', 'abs', 'angle']`, which
-            correspond to the numpy functions of the same name.
+            correspond to the numpy functions of the same name. Default is 'abs'.
 
 
         Returns
@@ -1961,10 +2008,6 @@ class ModelResult(Minimizer):
             ax_res_kws = {}
         if ax_fit_kws is None:
             ax_fit_kws = {}
-
-        # The function reduce_complex will convert complex vectors into real vectors
-        assert parse_complex in ['real', 'imag', 'abs', 'angle'], \
-            "Unsupported option passed to parse_complex."
 
         # make a square figure with side equal to the default figure's x-size
         figxsize = plt.rcParams['figure.figsize'][0]
