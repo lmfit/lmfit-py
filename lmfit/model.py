@@ -69,7 +69,7 @@ def get_reducer(option):
     -------
     callable
         See docstring for `reducer` below.
-    
+
     """
     if option not in ['real', 'imag', 'abs', 'angle']:
         raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'."%option)
@@ -88,9 +88,8 @@ def get_reducer(option):
         -------
         numpy.array
             Returned array will be purely real.
-        
-        """
 
+        """
         if any(np.iscomplex(array)):
             parsed_array = getattr(np, option)(array)
         else:
@@ -135,9 +134,8 @@ def propagate_err(z, dz, option):
     In the case where `option == 'abs'` and `numpy.abs(z) == 0` for any value of
     `z` the mangnitude uncertainty is approximated by `numpy.abs(dz)` for that
     value.
-    
-    """
 
+    """
     if option not in ['real', 'imag', 'abs', 'angle']:
         raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'."%option)
 
