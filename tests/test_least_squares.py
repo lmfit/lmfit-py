@@ -1,8 +1,13 @@
-from lmfit import Parameters, minimize, fit_report, Minimizer
-from lmfit_testutils import assert_paramval, assert_paramattr
+import os
 
-from numpy import linspace, zeros, sin, exp, random, pi, sign
-import nose
+import numpy as np
+from numpy import linspace, sin, exp, random, pi, sign
+from numpy.testing import assert_allclose, assert_almost_equal
+
+from lmfit import Parameters, fit_report, Minimizer
+from lmfit.models import VoigtModel
+from lmfit_testutils import assert_paramval
+
 
 def test_bounds():
     p_true = Parameters()
@@ -30,8 +35,8 @@ def test_bounds():
     xmax = 250.0
     random.seed(0)
     noise = random.normal(scale=2.80, size=n)
-    x     = linspace(xmin, xmax, n)
-    data  = residual(p_true, x) + noise
+    x = linspace(xmin, xmax, n)
+    data = residual(p_true, x) + noise
 
     fit_params = Parameters()
     fit_params.add('amp', value=13.0, max=20, min=0.0)
@@ -42,7 +47,7 @@ def test_bounds():
     min = Minimizer(residual, fit_params, (x, data))
     out = min.least_squares()
 
-    assert(out.nfev  > 10)
+    assert(out.nfev > 10)
     assert(out.nfree > 50)
     assert(out.chisqr > 1.0)
 
@@ -50,5 +55,90 @@ def test_bounds():
     assert_paramval(out.params['decay'], 0.01, tol=1.e-2)
     assert_paramval(out.params['shift'], 0.123, tol=1.e-2)
 
+
+def test_cov_x_no_bounds():
+    # load data to be fitted
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
+                                   'test_peak.dat'))
+    x = data[:, 0]
+    y = data[:, 1]
+
+    # define the model and initialize parameters
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    params['sigma'].set(min=-np.inf)
+
+    # do fit, here with leastsq model
+    result = mod.fit(y, params, x=x, method='least_squares')
+    result_lsq = mod.fit(y, params, x=x, method='leastsq')
+
+    # assert that fit converged to the same result
+    vals = [result.params[p].value for p in result.params.valuesdict()]
+    vals_lsq = [result_lsq.params[p].value for p in result_lsq.params.valuesdict()]
+    assert_allclose(vals_lsq, vals, rtol=1e-5)
+    assert_allclose(result_lsq.chisqr, result.chisqr)
+
+    # assert that parameter uncertaintes obtained from the leastsq method and
+    # those from the covariance matrix estimated from the Jacbian matrix in
+    # least_squares are similar
+    stderr = [result.params[p].stderr for p in result.params.valuesdict()]
+    stderr_lsq = [result_lsq.params[p].stderr for p in result_lsq.params.valuesdict()]
+    assert_almost_equal(stderr_lsq, stderr, decimal=5)
+
+    # assert that parameter correlations obtained from the leastsq method and
+    # those from the covariance matrix estimated from the Jacbian matrix in
+    # least_squares are similar
+    for par1 in result.var_names:
+        cor = [result.params[par1].correl[par2] for par2 in
+               result.params[par1].correl.keys()]
+        cor_lsq = [result_lsq.params[par1].correl[par2] for par2 in
+                   result_lsq.params[par1].correl.keys()]
+        assert_almost_equal(cor_lsq, cor, decimal=5)
+
+
+def test_cov_x_with_bounds():
+    # load data to be fitted
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
+                                   'test_peak.dat'))
+    x = data[:, 0]
+    y = data[:, 1]
+
+    # define the model and initialize parameters
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    params['amplitude'].set(min=25, max=70)
+    params['sigma'].set(min=0, max=1)
+    params['center'].set(min=5, max=15)
+
+    # do fit, here with leastsq model
+    result = mod.fit(y, params, x=x, method='least_squares')
+    result_lsq = mod.fit(y, params, x=x, method='leastsq')
+
+    # assert that fit converged to the same result
+    vals = [result.params[p].value for p in result.params.valuesdict()]
+    vals_lsq = [result_lsq.params[p].value for p in result_lsq.params.valuesdict()]
+    assert_allclose(vals_lsq, vals, rtol=1e-5)
+    assert_allclose(result_lsq.chisqr, result.chisqr)
+
+    # assert that parameter uncertaintes obtained from the leastsq method and
+    # those from the covariance matrix estimated from the Jacbian matrix in
+    # least_squares are similar
+    stderr = [result.params[p].stderr for p in result.params.valuesdict()]
+    stderr_lsq = [result_lsq.params[p].stderr for p in result_lsq.params.valuesdict()]
+    assert_almost_equal(stderr_lsq, stderr, decimal=6)
+
+    # assert that parameter correlations obtained from the leastsq method and
+    # those from the covariance matrix estimated from the Jacbian matrix in
+    # least_squares are similar
+    for par1 in result.var_names:
+        cor = [result.params[par1].correl[par2] for par2 in
+               result.params[par1].correl.keys()]
+        cor_lsq = [result_lsq.params[par1].correl[par2] for par2 in
+                   result_lsq.params[par1].correl.keys()]
+        assert_almost_equal(cor_lsq, cor, decimal=6)
+
+
 if __name__ == '__main__':
     test_bounds()
+    test_cov_x_no_bounds()
+    test_cov_x_with_bounds()
