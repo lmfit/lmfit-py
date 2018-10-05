@@ -71,7 +71,8 @@ def get_reducer(option):
         See docstring for `reducer` below.
     
     """
-    assert option in ['real', 'imag', 'abs', 'angle'], "Unsupported option!"
+    if option not in ['real', 'imag', 'abs', 'angle']:
+        raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'."%option)
 
     def reducer(array):
         """Convert a complex array to a real array based on the option passed
@@ -137,6 +138,9 @@ def propagate_err(z, dz, option):
     
     """
 
+    if option not in ['real', 'imag', 'abs', 'angle']:
+        raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'."%option)
+
     # Check the main vector for complex. Do nothing if real.
     if any(np.iscomplex(z)):
         # if uncertainties are real, apply them equally to
@@ -173,11 +177,6 @@ def propagate_err(z, dz, option):
 
                     # For abs = 0, error is +/- pi (i.e. the whole circle)
                     err[err == np.inf] = np.pi
-
-        else:
-            # Should never make it here, but don't want things to break
-            # in a weird way, so be safe and raise exception
-            raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'."%option)
     else:
         err = dz
 
