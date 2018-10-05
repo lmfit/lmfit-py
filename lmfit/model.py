@@ -173,7 +173,7 @@ def propagate_err(z, dz, option):
                 if option == 'angle':
                     # Standard error propagation for angle = arctan(im/re)
                     err = np.true_divide(np.sqrt((rz*idz)**2+(iz*rdz)**2),
-                                         np.abs(z))
+                                         np.abs(z)**2)
 
                     # For abs = 0, error is +/- pi (i.e. the whole circle)
                     err[err == np.inf] = np.pi
