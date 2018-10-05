@@ -68,7 +68,9 @@ def get_reducer(option):
     Returns
     -------
     callable
-        See docstring for `reducer` below."""
+        See docstring for `reducer` below.
+    
+    """
     assert option in ['real', 'imag', 'abs', 'angle'], "Unsupported option!"
 
     def reducer(array):
@@ -78,12 +80,15 @@ def get_reducer(option):
         Parameters
         ----------
         array : array-like
-            Input array. If complex, will be converted to real array via numpy.%s
+            Input array. If complex, will be converted to real array via one
+            of the following numpy functions: `real`, `imag`, `abs`, or `angle`.
 
         Returns
         -------
         numpy.array
-            Returned array will be purely real."""%(option)
+            Returned array will be purely real.
+        
+        """
 
         if any(np.iscomplex(array)):
             parsed_array = getattr(np, option)(array)
@@ -128,7 +133,9 @@ def propagate_err(z, dz, option):
 
     In the case where `option == 'abs'` and `numpy.abs(z) == 0` for any value of
     `z` the mangnitude uncertainty is approximated by `numpy.abs(dz)` for that
-    value."""
+    value.
+    
+    """
     assert option in ['real', 'imag', 'abs', 'angle'], "Unsupported option!"
 
     # Check the main vector for complex. Do nothing if real.
