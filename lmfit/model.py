@@ -136,7 +136,6 @@ def propagate_err(z, dz, option):
     value.
     
     """
-    assert option in ['real', 'imag', 'abs', 'angle'], "Unsupported option!"
 
     # Check the main vector for complex. Do nothing if real.
     if any(np.iscomplex(z)):
