@@ -1246,7 +1246,7 @@ class ModelResult(Minimizer):
 
         """
         userkws = self.userkws.copy()
-        userkws.updata(kwargs)
+        userkws.update(kwargs)
         if params is None:
             params = self.params
         return self.model.eval(params=params, **userkws)
@@ -1269,7 +1269,7 @@ class ModelResult(Minimizer):
 
         """
         userkws = self.userkws.copy()
-        userkws.updata(kwargs)
+        userkws.update(kwargs)
         if params is None:
             params = self.params
         return self.model.eval_components(params=params, **userkws)
