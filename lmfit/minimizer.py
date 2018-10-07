@@ -710,7 +710,7 @@ class Minimizer(object):
             Hfun = ndt.Hessian(self.penalty, full_output=True)
             hessian_ndt, info = Hfun(fvars)
             cov_x = inv(hessian_ndt) * 2.0
-        except LinAlgError:
+        except (LinAlgError, ValueError):
             return None
         finally:
             self.result.nfev = nfev
