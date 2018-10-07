@@ -1,7 +1,7 @@
 import unittest
 import warnings
 import pytest
-from numpy.testing import assert_allclose, assert_raises
+from numpy.testing import assert_allclose
 import numpy as np
 
 from lmfit import Model, Parameter, models
@@ -230,7 +230,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     def test_lists_become_arrays(self):
         # smoke test
         self.model.fit([1, 2, 3], x=[1, 2, 3], **self.guess())
-        assert_raises(ValueError,
+        pytest.raises(ValueError,
                       self.model.fit,
                       [1, 2, None, 3],
                       x=[1, 2, 3, 4],
