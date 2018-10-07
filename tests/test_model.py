@@ -1,8 +1,7 @@
 import unittest
 import warnings
-import nose
+import pytest
 from numpy.testing import assert_allclose, assert_raises
-from numpy.testing.decorators import knownfailureif
 import numpy as np
 
 from lmfit import Model, Parameter, models
@@ -18,7 +17,7 @@ def _skip_if_no_pandas():
     try:
         import pandas
     except ImportError:
-        raise nose.SkipTest("Skipping tests that require pandas.")
+        raise pytest.skip("Skipping tests that require pandas.")
 
 
 class CommonTests(object):
@@ -657,7 +656,7 @@ class TestConstant(CommonTests, unittest.TestCase):
         super(TestConstant, self).setUp()
 
     def check_skip_independent_vars(self):
-        raise nose.SkipTest("ConstantModel has not independent_vars.")
+        raise pytest.skip("ConstantModel has not independent_vars.")
 
 class TestPowerlaw(CommonTests, unittest.TestCase):
     def setUp(self):

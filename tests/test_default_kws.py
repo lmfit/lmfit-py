@@ -1,8 +1,6 @@
 import numpy as np
-from nose.tools import assert_true
 from lmfit.lineshapes import gaussian
 from lmfit.models import GaussianModel
-
 
 def test_default_inputs_gauss():
 
@@ -20,5 +18,5 @@ def test_default_inputs_gauss():
     fit_option2 = {'maxfev': 5000, 'xtol': 1e-6}
     result2 = g.fit(y, x=x, amplitude=1, center=0, sigma=0.5, fit_kws=fit_option2)
 
-    assert_true(result1.values!=result2.values)
+    assert(result1.values!=result2.values)
     return
