@@ -841,7 +841,7 @@ class Model(object):
             data = np.asfarray(data)
         for var in self.independent_vars:
             var_data = kwargs[var]
-            if (not hasattr(var_data, '__array__')) and (not np.isscalar(var_data)):
+            if isinstance(var_data, (list, tuple)):
                 kwargs[var] = np.asfarray(var_data)
 
         # Handle null/missing values.
