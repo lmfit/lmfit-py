@@ -925,7 +925,8 @@ class Minimizer(object):
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertanties/correlations
-        if self.calc_covar and HAS_NUMDIFFTOOLS:
+        if (self.calc_covar and HAS_NUMDIFFTOOLS and
+                len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(result.x)
             if _covar_ndt is not None:
                 result.covar = self._int2ext_cov_x(_covar_ndt, result.x)
@@ -1532,7 +1533,8 @@ class Minimizer(object):
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertanties/correlations
-        if self.calc_covar and HAS_NUMDIFFTOOLS:
+        if (self.calc_covar and HAS_NUMDIFFTOOLS and
+                len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(ret.x)
             if _covar_ndt is not None:
                 result.covar = self._int2ext_cov_x(_covar_ndt, ret.x)
@@ -1806,7 +1808,8 @@ class Minimizer(object):
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertanties/correlations
-        if self.calc_covar and HAS_NUMDIFFTOOLS:
+        if (self.calc_covar and HAS_NUMDIFFTOOLS and
+                len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(result.ampgo_x0)
             if _covar_ndt is not None:
                 result.covar = self._int2ext_cov_x(_covar_ndt, result.ampgo_x0)
