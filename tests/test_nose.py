@@ -8,10 +8,10 @@ from lmfit import ufloat
 
 import numpy as np
 from numpy import pi
-from numpy.testing import (assert_, assert_raises, assert_almost_equal,
+from numpy.testing import (assert_, assert_almost_equal,
                            assert_equal, assert_allclose, dec)
 
-## from numpy.testing.decorators import slow
+import pytest
 
 import unittest
 
@@ -416,7 +416,7 @@ class CommonMinimizerTest(unittest.TestCase):
         self.fit_params['decay'].min = -np.inf
         self.fit_params['decay'].vary = True
         self.minimizer = 'differential_evolution'
-        np.testing.assert_raises(ValueError, self.scalar_minimizer)
+        pytest.raises(ValueError, self.scalar_minimizer)
 
         # but only if a parameter is not fixed
         self.fit_params['decay'].vary = False
@@ -457,11 +457,11 @@ class CommonMinimizerTest(unittest.TestCase):
         self.data[0] = np.nan
 
         for method in SCALAR_METHODS:
-            assert_raises(ValueError,
+            pytest.raises(ValueError,
                           self.mini.scalar_minimize,
                           SCALAR_METHODS[method])
 
-        assert_raises(ValueError, self.mini.minimize)
+        pytest.raises(ValueError, self.mini.minimize)
 
         # now check that the fit proceeds if nan_policy is 'omit'
         self.mini.nan_policy = 'omit'
@@ -474,12 +474,12 @@ class CommonMinimizerTest(unittest.TestCase):
 
     def test_nan_policy_function(self):
         a = np.array([0, 1, 2, 3, np.nan])
-        assert_raises(ValueError, _nan_policy, a)
+        pytest.raises(ValueError, _nan_policy, a)
         assert_(np.isnan(_nan_policy(a, nan_policy='propagate')[-1]))
         assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
 
         a[-1] = np.inf
-        assert_raises(ValueError, _nan_policy, a)
+        pytest.raises(ValueError, _nan_policy, a)
         assert_(np.isposinf(_nan_policy(a, nan_policy='propagate')[-1]))
         assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
         assert_equal(_nan_policy(a, handle_inf=False), a)
@@ -562,7 +562,7 @@ class CommonMinimizerTest(unittest.TestCase):
                                pos=out.chain[..., -1, :])
 
         # but you can't initialise if the shape is wrong.
-        assert_raises(ValueError,
+        pytest.raises(ValueError,
                       self.mini.emcee,
                       nwalkers=100,
                       steps=1,
@@ -584,7 +584,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # you shouldn't be able to reuse the sampler if nvarys has changed.
         self.mini.params['amp'].vary = False
-        assert_raises(ValueError, self.mini.emcee, reuse_sampler=True)
+        pytest.raises(ValueError, self.mini.emcee, reuse_sampler=True)
 
     def test_emcee_lnpost(self):
         # check ln likelihood is calculated correctly. It should be

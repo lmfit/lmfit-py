@@ -1,7 +1,7 @@
 from __future__ import print_function
 import pickle
 import numpy as np
-from numpy.testing import (assert_, assert_raises, assert_almost_equal,
+from numpy.testing import (assert_, assert_almost_equal,
                            assert_equal, assert_allclose)
 from scipy import optimize
 import lmfit
