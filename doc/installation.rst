@@ -16,6 +16,8 @@ Downloading and Installation
 .. _asteval:  https://github.com/newville/asteval
 .. _six:  https://github.com/benjaminp/six
 .. _uncertainties:  https://github.com/lebigot/uncertainties
+.. _numdifftools:  https://github.com/pbrod/numdifftools
+
 
 Prerequisites
 ~~~~~~~~~~~~~~~
@@ -31,8 +33,8 @@ uncertainties version 3.0 are the minimum requirements.
 In order to run the test suite, either the `nose`_ or `pytest`_ package is
 required. Some functionality of lmfit requires the `emcee`_ package, some
 functionality will make use of the `pandas`_, `Jupyter`_, `matplotlib`_,
-or `dill`_ packages if available.  We highly recommend each of these
-packages.
+`dill`_,  or `numdifftools`_ packages if available.  We highly recommend each of
+these packages.
 
 
 Downloads

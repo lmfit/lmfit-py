@@ -119,7 +119,9 @@ variables, as discussed in :ref:`fit-results-label`.
 Alternative algorithms can also be used by providing the ``method``
 keyword to the :func:`minimize` function or :meth:`Minimizer.minimize`
 class as listed in the :ref:`Table of Supported Fitting Methods
-<fit-methods-table>`.
+<fit-methods-table>`. If you have the `numdifftools` package installed, lmfit
+will try to estimate the covariance matrix and determine parameter
+uncertainties and correlations if `calc_covar` is True (default).
 
 .. _fit-methods-table:
 
@@ -181,10 +183,13 @@ class as listed in the :ref:`Table of Supported Fitting Methods
 
 .. warning::
 
-  Much of this documentation assumes that the Levenberg-Marquardt method is
-  used.  Many of the fit statistics and estimates for uncertainties in
-  parameters discussed in :ref:`fit-results-label` are done only for this
-  method.
+  Much of this documentation assumes that the Levenberg-Marquardt (`leastsq`)
+  method is used. Many of the fit statistics and estimates for uncertainties in
+  parameters discussed in :ref:`fit-results-label` are done only unconditionally
+  for this (and the `least_squares`) method. Lmfit versions newer than 0.9.11
+  provide the capability to use `numdifftools` to estimate the covariance matrix
+  and calculate parameter uncertainties and correlations for other methods as
+  well.
 
 ..  _fit-results-label:
 
@@ -259,14 +264,16 @@ that the returned residual function is scaled properly to the
 uncertainties in the data.  For these statistics to be meaningful, the
 person writing the function to be minimized **must** scale them properly.
 
-After a fit using the :meth:`leastsq` method has completed
-successfully, standard errors for the fitted variables and correlations
-between pairs of fitted variables are automatically calculated from the
-covariance matrix.  The standard error (estimated :math:`1\sigma`
-error-bar) goes into the :attr:`stderr` attribute of the Parameter.  The
-correlations with all other variables will be put into the
-:attr:`correl` attribute of the Parameter -- a dictionary with keys for
-all other Parameters and values of the corresponding correlation.
+After a fit using the :meth:`leastsq` or :meth:`least_squares` method has
+completed successfully, standard errors for the fitted variables and
+correlations between pairs of fitted variables are automatically calculated from
+the covariance matrix. For other methods, the `calc_covar` parameter (default is
+True) in the :class:`Minimizer` class determines whether or not to use the
+`numdifftools` package to estimate the covariance matrix. The standard error
+(estimated :math:`1\sigma` error-bar) goes into the :attr:`stderr` attribute of
+the Parameter. The correlations with all other variables will be put into the
+:attr:`correl` attribute of the Parameter -- a dictionary with keys for all
+other Parameters and values of the corresponding correlation.
 
 In some cases, it may not be possible to estimate the errors and
 correlations.  For example, if a variable actually has no practical effect
