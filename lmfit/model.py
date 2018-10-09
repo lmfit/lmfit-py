@@ -966,7 +966,7 @@ class Model(object):
             data = np.asfarray(data)
         for var in self.independent_vars:
             var_data = kwargs[var]
-            if (not hasattr(var_data, '__array__')) and (not np.isscalar(var_data)):
+            if isinstance(var_data, (list, tuple)):
                 kwargs[var] = np.asfarray(var_data)
 
         # Handle null/missing values.
@@ -1371,10 +1371,11 @@ class ModelResult(Minimizer):
            Array for evaluated model.
 
         """
-        self.userkws.update(kwargs)
+        userkws = self.userkws.copy()
+        userkws.update(kwargs)
         if params is None:
             params = self.params
-        return self.model.eval(params=params, **self.userkws)
+        return self.model.eval(params=params, **userkws)
 
     def eval_components(self, params=None, **kwargs):
         """Evaluate each component of a composite model function.
@@ -1393,10 +1394,11 @@ class ModelResult(Minimizer):
              the estimated model value for each component of the model.
 
         """
-        self.userkws.update(kwargs)
+        userkws = self.userkws.copy()
+        userkws.update(kwargs)
         if params is None:
             params = self.params
-        return self.model.eval_components(params=params, **self.userkws)
+        return self.model.eval_components(params=params, **userkws)
 
     def eval_uncertainty(self, params=None, sigma=1, **kwargs):
         """Evaluate the uncertainty of the *model function* from the

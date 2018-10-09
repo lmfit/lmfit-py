@@ -38,7 +38,7 @@ def check_height_fwhm(x, y, lineshape, model, with_plot=False, report=False):
         diff = height_act - height_pro
 
         assert abs(diff) < 0.001, fmt.format(model._name, 'Actual',
-                'program', 'Diffrence', 'Height', height_act, height_pro, diff)
+                'program', 'Difference', 'Height', height_act, height_pro, diff)
 
         if 'fwhm' in out.params:
             fwhm_pro = out.params['fwhm'].value
@@ -49,7 +49,7 @@ def check_height_fwhm(x, y, lineshape, model, with_plot=False, report=False):
             diff = fwhm_act - fwhm_pro
 
             assert abs(diff) < 0.5, fmt.format(model._name, 'Actual',
-                    'program', 'Diffrence', 'FWHM', fwhm_act, fwhm_pro, diff)
+                    'program', 'Difference', 'FWHM', fwhm_act, fwhm_pro, diff)
 
     print(model._name, 'OK')
 

@@ -2,7 +2,6 @@ from __future__ import print_function
 from lmfit import minimize, Parameters, conf_interval, report_ci, report_errors
 import numpy as np
 pi = np.pi
-import nose
 
 def test_ci():
     np.random.seed(1)
