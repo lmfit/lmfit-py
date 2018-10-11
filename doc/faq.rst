@@ -80,6 +80,12 @@ precision floating point numbers. The simplest approach is to use
        resid = calculate_complex_residual()
        return resid.view(np.float)
 
+Alternately, you can use the lmfit.Model class to wrap a fit function
+that returns a complex vector. It will automatically apply the above
+prescription when calculating the residual. The benefit to this method
+is that you also get access to the plot routines from the ModelResult
+class, which are also complex-aware.
+
 
 Can I constrain values to have integer values?
 ===============================================
