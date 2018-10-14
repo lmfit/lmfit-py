@@ -10,6 +10,8 @@ from numpy import arcsin, array, cos, inf, nan, sin, sqrt
 import scipy.special
 import uncertainties
 
+from .jsonutils import encode4js, decode4js
+
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
 for name in ('erf', 'erfc', 'wofz'):
     SCIPY_FUNCTIONS[name] = getattr(scipy.special, name)
@@ -66,13 +68,16 @@ class Parameters(OrderedDict):
 
     """
 
-    def __init__(self, asteval=None, *args, **kwds):
+    def __init__(self, asteval=None, usersyms=None, *args, **kwds):
         """
         Arguments
         ---------
         asteval : :class:`asteval.Interpreter`, optional
             Instance of the asteval Interpreter to use for constraint
             expressions. If None, a new interpreter will be created.
+            Warning: *deprecated, use usersyms if possible*
+        usersyms : dictionary of symbols to add to the
+            :class:`asteval.Interpreter`.
         *args : optional
             Arguments.
         **kwds : optional
@@ -80,10 +85,18 @@ class Parameters(OrderedDict):
 
         """
         super(Parameters, self).__init__(self)
-        self._asteval = asteval
 
-        if asteval is None:
-            self._asteval = Interpreter(usersyms=SCIPY_FUNCTIONS)
+        self._asteval = asteval
+        if self._asteval is None:
+            self._asteval = Interpreter()
+
+        _syms = {}
+        _syms.update(SCIPY_FUNCTIONS)
+        if usersyms is not None:
+            _syms.update(usersyms)
+        for key, val in _syms.items():
+            self._asteval.symtable[key] = val
+
         self.update(*args, **kwds)
 
     def copy(self):
@@ -398,7 +411,7 @@ class Parameters(OrderedDict):
         """
         params = [p.__getstate__() for p in self.values()]
         sym_unique = self._asteval.user_defined_symbols()
-        unique_symbols = {key: deepcopy(self._asteval.symtable[key])
+        unique_symbols = {key: encode4js(deepcopy(self._asteval.symtable[key]))
                           for key in sym_unique}
         return json.dumps({'unique_symbols': unique_symbols,
                            'params': params}, **kws)
@@ -428,7 +441,7 @@ class Parameters(OrderedDict):
         """
         self.clear()
 
-        tmp = json.loads(s, **kws)
+        tmp = decode4js(json.loads(s, **kws))
         state = {'unique_symbols': tmp['unique_symbols'],
                  'params': []}
         for parstate in tmp['params']:
