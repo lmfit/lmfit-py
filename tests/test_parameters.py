@@ -1,5 +1,5 @@
 from __future__ import print_function
-from lmfit import Parameters, Parameter
+from lmfit import Parameters, Parameter, Model
 from lmfit.parameter import isclose
 from numpy.testing import assert_, assert_almost_equal, assert_equal
 import unittest
@@ -167,6 +167,23 @@ class TestParameters(unittest.TestCase):
         pkl = pickle.dumps(p)
         q = pickle.loads(pkl)
 
+    def test_params_usersyms(self):
+        # test passing usersymes to Parameters()
+        def myfun(x):
+            return x**3
+
+        params = Parameters(usersyms={"myfun": myfun})
+        params.add("a", value=2.3)
+        params.add("b", expr="myfun(a)")
+
+        xx = np.linspace(0, 1, 10)
+        yy = 3 * xx + np.random.normal(scale=0.002, size=len(xx))
+
+        model = Model(lambda x, a: a * x)
+        result = model.fit(yy, params=params, x=xx)
+        assert_(isclose(result.params['a'].value, 3.0, rtol=0.025))
+        assert_(result.nfev > 3)
+        assert_(result.nfev < 300)
 
     def test_set_symtable(self):
         # test that we use Parameter.set(value=XXX) and have
