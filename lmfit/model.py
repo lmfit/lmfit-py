@@ -1576,7 +1576,7 @@ class ModelResult(Minimizer):
                'model': encode4js(self.model._get_state())}
         pasteval = self.params._asteval
         out['params'] = [p.__getstate__() for p in self.params.values()]
-        out['unique_symbols'] = {key: pasteval.symtable[key]
+        out['unique_symbols'] = {key: encode4js(pasteval.symtable[key])
                                  for key in pasteval.user_defined_symbols()}
 
         for attr in ('aborted', 'aic', 'best_values', 'bic', 'chisqr',
