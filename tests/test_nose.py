@@ -5,15 +5,15 @@ from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
                              MinimizerResult, _lnpost, _nan_policy)
 from lmfit.lineshapes import gaussian
 from lmfit import ufloat
+
 import numpy as np
 from numpy import pi
-from numpy.testing import (assert_, decorators, assert_raises,
-                           assert_almost_equal, assert_equal,
-                           assert_allclose)
-import unittest
-import nose
-from nose import SkipTest
+from numpy.testing import (assert_, assert_almost_equal,
+                           assert_equal, assert_allclose, dec)
 
+import pytest
+
+import unittest
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
@@ -416,7 +416,7 @@ class CommonMinimizerTest(unittest.TestCase):
         self.fit_params['decay'].min = -np.inf
         self.fit_params['decay'].vary = True
         self.minimizer = 'differential_evolution'
-        np.testing.assert_raises(ValueError, self.scalar_minimizer)
+        pytest.raises(ValueError, self.scalar_minimizer)
 
         # but only if a parameter is not fixed
         self.fit_params['decay'].vary = False
@@ -436,12 +436,9 @@ class CommonMinimizerTest(unittest.TestCase):
             self.scalar_minimizer(sig=sig)
 
     def scalar_minimizer(self, sig=0.15):
-        try:
-            from scipy.optimize import minimize as scipy_minimize
-        except ImportError:
-            raise SkipTest
+        from scipy.optimize import minimize as scipy_minimize
 
-        print(self.minimizer)
+        # print(self.minimizer)
         out = self.mini.scalar_minimize(method=self.minimizer)
 
         self.residual(out.params, self.x)
@@ -460,11 +457,11 @@ class CommonMinimizerTest(unittest.TestCase):
         self.data[0] = np.nan
 
         for method in SCALAR_METHODS:
-            assert_raises(ValueError,
+            pytest.raises(ValueError,
                           self.mini.scalar_minimize,
                           SCALAR_METHODS[method])
 
-        assert_raises(ValueError, self.mini.minimize)
+        pytest.raises(ValueError, self.mini.minimize)
 
         # now check that the fit proceeds if nan_policy is 'omit'
         self.mini.nan_policy = 'omit'
@@ -477,17 +474,17 @@ class CommonMinimizerTest(unittest.TestCase):
 
     def test_nan_policy_function(self):
         a = np.array([0, 1, 2, 3, np.nan])
-        assert_raises(ValueError, _nan_policy, a)
+        pytest.raises(ValueError, _nan_policy, a)
         assert_(np.isnan(_nan_policy(a, nan_policy='propagate')[-1]))
         assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
 
         a[-1] = np.inf
-        assert_raises(ValueError, _nan_policy, a)
+        pytest.raises(ValueError, _nan_policy, a)
         assert_(np.isposinf(_nan_policy(a, nan_policy='propagate')[-1]))
         assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
         assert_equal(_nan_policy(a, handle_inf=False), a)
 
-    @decorators.slow
+    @dec.slow
     def test_emcee(self):
         # test emcee
         if not HAS_EMCEE:
@@ -499,7 +496,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         check_paras(out.params, self.p_true, sig=3)
 
-    @decorators.slow
+    @dec.slow
     def test_emcee_PT(self):
         # test emcee with parallel tempering
         if not HAS_EMCEE:
@@ -512,7 +509,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         check_paras(out.params, self.p_true, sig=3)
 
-    @decorators.slow
+    @dec.slow
     def test_emcee_multiprocessing(self):
         # test multiprocessing runs
         if not HAS_EMCEE:
@@ -535,7 +532,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         out = self.mini.emcee(steps=10)
 
-    @decorators.slow
+    @dec.slow
     def test_emcee_partial_bounds(self):
         # mcmc with partial bounds
         if not HAS_EMCEE:
@@ -565,7 +562,7 @@ class CommonMinimizerTest(unittest.TestCase):
                                pos=out.chain[..., -1, :])
 
         # but you can't initialise if the shape is wrong.
-        assert_raises(ValueError,
+        pytest.raises(ValueError,
                       self.mini.emcee,
                       nwalkers=100,
                       steps=1,
@@ -587,7 +584,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # you shouldn't be able to reuse the sampler if nvarys has changed.
         self.mini.params['amp'].vary = False
-        assert_raises(ValueError, self.mini.emcee, reuse_sampler=True)
+        pytest.raises(ValueError, self.mini.emcee, reuse_sampler=True)
 
     def test_emcee_lnpost(self):
         # check ln likelihood is calculated correctly. It should be
@@ -670,7 +667,7 @@ class CommonMinimizerTest(unittest.TestCase):
         # Only the 0th temperature is returned
         assert_(out.flatchain.shape == (10*(20-5+1)/2, out.nvarys))
 
-    @decorators.slow
+    @dec.slow
     def test_emcee_float(self):
         # test that it works if the residuals returns a float, not a vector
         if not HAS_EMCEE:
@@ -695,7 +692,7 @@ class CommonMinimizerTest(unittest.TestCase):
                               burn=50, thin=10, float_behavior='chi2')
         check_paras(out.params, self.p_true, sig=3)
 
-    @decorators.slow
+    @dec.slow
     def test_emcee_seed(self):
         # test emcee seeding can reproduce a sampling run
         if not HAS_EMCEE:
@@ -725,7 +722,3 @@ def residual_for_multiprocessing(pars, x, data=None):
     if data is None:
         return model
     return (model - data)
-
-
-if __name__ == '__main__':
-    nose.main()
