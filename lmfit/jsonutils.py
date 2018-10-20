@@ -34,8 +34,9 @@ else:
         """b64encode wrapper, Python 2 version."""
         return str(b64encode(val))
 
+
 def find_importer(obj):
-    "find importer of an object"
+    """find importer of an object"""
     oname = obj.__name__
     for modname, module in sys.modules.items():
         if modname.startswith('__main__'):
@@ -45,13 +46,16 @@ def find_importer(obj):
             return modname
     return None
 
+
 def import_from(modulepath, objectname):
+    """wrapper for __import__ for nested objects"""
     path = modulepath.split('.')
     top = path.pop(0)
     parent = __import__(top)
     while len(path) > 0:
         parent = getattr(parent, path.pop(0))
     return getattr(parent, objectname)
+
 
 def encode4js(obj):
     """Prepare an object for json encoding.
@@ -148,7 +152,7 @@ def decode4js(obj):
         if pyvers == obj['pyversion'] and HAS_DILL:
             out = dill.loads(bindecode(obj['value']))
         elif obj['importer'] is not None:
-            out  = import_from(obj['importer'], val)
+            out = import_from(obj['importer'], val)
 
     elif classname in ('Dict', 'dict'):
         out = {}
