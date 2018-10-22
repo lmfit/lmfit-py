@@ -857,7 +857,7 @@ class Model(object):
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
-            nan_policy=None, **kwargs):
+            nan_policy=None, calc_covar=True, **kwargs):
         """Fit the model to the data using the supplied Parameters.
 
         Parameters
@@ -875,7 +875,7 @@ class Model(object):
             Callback function to call at each iteration (default is None).
         scale_covar : bool, optional
             Whether to automatically scale the covariance matrix when
-            calculating uncertainties (default is True, `leastsq` method only).
+            calculating uncertainties (default is True).
         verbose: bool, optional
             Whether to print a message when a new parameter is added because
             of a hint (default is True).
@@ -883,6 +883,10 @@ class Model(object):
             What to do when encountering NaNs when fitting Model.
         fit_kws: dict, optional
             Options to pass to the minimizer being used.
+        calc_covar : bool, optional
+            Whether to calculate the covariance matrix (default is True) for
+            solvers other than `leastsq` and `least_squares`. Requires the
+            `numdifftools` package to be installed.
         **kwargs: optional
             Arguments to pass to the  model function, possibly overriding
             params.
@@ -994,7 +998,8 @@ class Model(object):
 
         output = ModelResult(self, params, method=method, iter_cb=iter_cb,
                              scale_covar=scale_covar, fcn_kws=kwargs,
-                             nan_policy=self.nan_policy, **fit_kws)
+                             nan_policy=self.nan_policy, calc_covar=calc_covar,
+                             **fit_kws)
         output.fit(data=data, weights=weights)
         output.components = self.components
         return output
@@ -1268,7 +1273,7 @@ class ModelResult(Minimizer):
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
-                 **fit_kws):
+                 calc_covar=True, **fit_kws):
         """
         Parameters
         ----------
@@ -1292,6 +1297,10 @@ class ModelResult(Minimizer):
             Whether to scale covariance matrix for uncertainty evaluation.
         nan_policy : str, optional, one of 'raise' (default), 'propagate', or 'omit'.
             What to do when encountering NaNs when fitting Model.
+        calc_covar : bool, optional
+            Whether to calculate the covariance matrix (default is True) for
+            solvers other than `leastsq` and `least_squares`. Requires the
+            `numdifftools` package to be installed.
         **fit_kws : optional
             Keyword arguments to send to minimization routine.
 
@@ -1305,7 +1314,7 @@ class ModelResult(Minimizer):
         self.init_params = deepcopy(params)
         Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
                            fcn_kws=fcn_kws, iter_cb=iter_cb, nan_policy=nan_policy,
-                           scale_covar=scale_covar, **fit_kws)
+                           scale_covar=scale_covar, calc_covar=calc_covar, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None,
             nan_policy=None, **kwargs):
@@ -1583,8 +1592,8 @@ class ModelResult(Minimizer):
                      'ci_out', 'col_deriv', 'covar', 'errorbars',
                      'flatchain', 'ier', 'init_values', 'lmdif_message',
                      'message', 'method', 'nan_policy', 'ndata', 'nfev',
-                     'nfree', 'nvarys', 'redchi', 'scale_covar', 'success',
-                     'userargs', 'userkws', 'values', 'var_names',
+                     'nfree', 'nvarys', 'redchi', 'scale_covar', 'calc_covar',
+                     'success', 'userargs', 'userkws', 'values', 'var_names',
                      'weights', 'user_options'):
             val = getattr(self, attr)
             if isinstance(val, np.bool_):
@@ -1663,8 +1672,8 @@ class ModelResult(Minimizer):
                      'init_values', 'kws', 'lmdif_message', 'message',
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
                      'nvarys', 'redchi', 'residual', 'scale_covar',
-                     'success', 'userargs', 'userkws', 'var_names',
-                     'weights', 'user_options'):
+                     'calc_covar', 'success', 'userargs', 'userkws',
+                     'var_names', 'weights', 'user_options'):
             setattr(self, attr, decode4js(modres.get(attr, None)))
 
         self.best_fit = self.model.eval(self.params, **self.userkws)

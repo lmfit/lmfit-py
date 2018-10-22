@@ -1,28 +1,18 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
 import os
 
 import numpy as np
 from numpy import pi
 from numpy.testing import assert_allclose, assert_almost_equal
+import pytest
 
-from lmfit import minimize, Parameters
+from lmfit import Parameters, minimize
 from lmfit.models import VoigtModel
 
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
     assert(err < sig * para.stderr)
-
-
-def check_wo_stderr(para, real_val, sig=0.1):
-    err = abs(para.value - real_val)
-    assert(err < sig)
-
-
-def check_paras(para_fit, para_real, sig=3):
-    for i in para_fit:
-        check(para_fit[i], para_real[i].value, sig=sig)
 
 
 def test_bounded_parameters():
@@ -100,7 +90,6 @@ def test_bounds_expression():
 
     # do fit, here with leastsq model
     result = mod.fit(y, params, x=x)
-    print(result.fit_report())
 
     # assert that stderr and correlations are correct [cf. lmfit v0.9.10]
     assert_almost_equal(result.params['sigma'].stderr, 0.00368468, decimal=6)
@@ -118,6 +107,126 @@ def test_bounds_expression():
                         -4.390334984618851e-05, decimal=6)
 
 
+def test_numdifftools_no_bounds():
+    numdifftools = pytest.importorskip("numdifftools")
+    # load data to be fitted
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
+                                   'test_peak.dat'))
+    x = data[:, 0]
+    y = data[:, 1]
+
+    # define the model and initialize parameters
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    params['sigma'].set(min=-np.inf)
+
+    # do fit, here with leastsq model
+    result = mod.fit(y, params, x=x, method='leastsq')
+
+    for fit_method in ['nelder', 'basinhopping', 'ampgo']:
+        result_ndt = mod.fit(y, params, x=x, method=fit_method)
+
+        # assert that fit converged to the same result
+        vals = [result.params[p].value for p in result.params.valuesdict()]
+        vals_ndt = [result_ndt.params[p].value for p in result_ndt.params.valuesdict()]
+        assert_allclose(vals_ndt, vals, rtol=5e-3)
+        assert_allclose(result_ndt.chisqr, result.chisqr)
+
+        # assert that parameter uncertaintes from leastsq and calculated from
+        # the covariance matrix using numdifftools are very similar
+        stderr = [result.params[p].stderr for p in result.params.valuesdict()]
+        stderr_ndt = [result_ndt.params[p].stderr for p in result_ndt.params.valuesdict()]
+
+        perr = np.array(stderr) / np.array(vals)
+        perr_ndt = np.array(stderr_ndt) / np.array(vals_ndt)
+        assert_almost_equal(perr_ndt, perr, decimal=4)
+
+        # assert that parameter correlatations from leastsq and calculated from
+        # the covariance matrix using numdifftools are very similar
+        for par1 in result.var_names:
+            cor = [result.params[par1].correl[par2] for par2 in
+                   result.params[par1].correl.keys()]
+            cor_ndt = [result_ndt.params[par1].correl[par2] for par2 in
+                       result_ndt.params[par1].correl.keys()]
+            assert_almost_equal(cor_ndt, cor, decimal=2)
+
+
+def test_numdifftools_with_bounds():
+    numdifftools = pytest.importorskip("numdifftools")
+    # load data to be fitted
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
+                                   'test_peak.dat'))
+    x = data[:, 0]
+    y = data[:, 1]
+
+    # define the model and initialize parameters
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    params['amplitude'].set(min=25, max=70)
+    params['sigma'].set(min=0, max=1)
+    params['center'].set(min=5, max=15)
+
+    # do fit, here with leastsq model
+    result = mod.fit(y, params, x=x, method='leastsq')
+
+    for fit_method in ['nelder', 'basinhopping', 'ampgo']:
+        result_ndt = mod.fit(y, params, x=x, method=fit_method)
+
+        # assert that fit converged to the same result
+        vals = [result.params[p].value for p in result.params.valuesdict()]
+        vals_ndt = [result_ndt.params[p].value for p in result_ndt.params.valuesdict()]
+        assert_allclose(vals_ndt, vals, rtol=0.1)
+        assert_allclose(result_ndt.chisqr, result.chisqr, rtol=1e-5)
+
+        # assert that parameter uncertaintes from leastsq and calculated from
+        # the covariance matrix using numdifftools are very similar
+        stderr = [result.params[p].stderr for p in result.params.valuesdict()]
+        stderr_ndt = [result_ndt.params[p].stderr for p in result_ndt.params.valuesdict()]
+
+        perr = np.array(stderr) / np.array(vals)
+        perr_ndt = np.array(stderr_ndt) / np.array(vals_ndt)
+        assert_almost_equal(perr_ndt, perr, decimal=4)
+
+        # assert that parameter correlatations from leastsq and calculated from
+        # the covariance matrix using numdifftools are very similar
+        for par1 in result.var_names:
+            cor = [result.params[par1].correl[par2] for par2 in
+                   result.params[par1].correl.keys()]
+            cor_ndt = [result_ndt.params[par1].correl[par2] for par2 in
+                       result_ndt.params[par1].correl.keys()]
+            assert_almost_equal(cor_ndt, cor, decimal=2)
+
+
+def test_numdifftools_calc_covar_false():
+    numdifftools = pytest.importorskip("numdifftools")
+    # load data to be fitted
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
+                                   'test_peak.dat'))
+    x = data[:, 0]
+    y = data[:, 1]
+
+    # define the model and initialize parameters
+    mod = VoigtModel()
+    params = mod.guess(y, x=x)
+    params['sigma'].set(min=-np.inf)
+
+    # do fit, with leastsq and nelder
+    result = mod.fit(y, params, x=x, method='leastsq')
+    result_ndt = mod.fit(y, params, x=x, method='nelder', calc_covar=False)
+
+    # assert that fit converged to the same result
+    vals = [result.params[p].value for p in result.params.valuesdict()]
+    vals_ndt = [result_ndt.params[p].value for p in result_ndt.params.valuesdict()]
+    assert_allclose(vals_ndt, vals, rtol=5e-3)
+    assert_allclose(result_ndt.chisqr, result.chisqr)
+
+    assert result_ndt.covar is None
+    assert result_ndt.errorbars is False
+
+
 if __name__ == '__main__':
     test_bounded_parameters()
     test_bounds_expression()
+    test_numdifftools_no_bounds()
+    test_numdifftools_with_bounds()
+    test_numdifftools_calc_covar_false()
