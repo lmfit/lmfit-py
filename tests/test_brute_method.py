@@ -1,9 +1,10 @@
 import pickle
+
 import numpy as np
 from numpy.testing import assert_almost_equal, assert_equal
 from scipy import optimize
-import lmfit
 
+import lmfit
 
 # use example problem described in the scipy documentation:
 # https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html

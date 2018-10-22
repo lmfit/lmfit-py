@@ -1,5 +1,6 @@
 from numpy import linspace, random
-from lmfit import Parameters, Minimizer, Model
+
+from lmfit import Minimizer, Model, Parameters
 from lmfit.lineshapes import gaussian, lorentzian
 
 

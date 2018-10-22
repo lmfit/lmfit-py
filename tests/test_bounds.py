@@ -1,7 +1,7 @@
+from numpy import exp, linspace, pi, random, sign, sin
+
 from lmfit import Parameters, minimize
 from lmfit_testutils import assert_paramval
-
-from numpy import linspace, sin, exp, random, pi, sign
 
 
 def test_bounds():

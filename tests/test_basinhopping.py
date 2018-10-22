@@ -1,6 +1,5 @@
 import numpy as np
 from numpy.testing import assert_allclose
-
 from scipy.optimize import basinhopping
 from scipy.version import version as scipy_version
 

@@ -1,5 +1,6 @@
 import numpy as np
 from numpy.testing import assert_allclose
+
 from lmfit.lineshapes import gaussian
 from lmfit.models import VoigtModel
 

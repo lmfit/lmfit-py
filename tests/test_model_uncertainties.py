@@ -2,8 +2,9 @@
 
 import numpy as np
 from numpy.testing import assert_allclose
+
 from lmfit.lineshapes import gaussian
-from lmfit.models import LinearModel, GaussianModel
+from lmfit.models import GaussianModel, LinearModel
 
 
 def get_linearmodel(slope=0.8, intercept=0.5, noise=1.5):

@@ -1,12 +1,13 @@
 import os
 import time
-import numpy as np
-from lmfit_testutils import assert_between, assert_param_between
 
-from lmfit.model import (save_modelresult, save_model,
-                         load_modelresult, load_model)
-from lmfit.models import ExponentialModel, GaussianModel
+import numpy as np
+
 import lmfit.jsonutils
+from lmfit.model import (load_model, load_modelresult, save_model,
+                         save_modelresult)
+from lmfit.models import ExponentialModel, GaussianModel
+from lmfit_testutils import assert_between, assert_param_between
 
 try:
     import dill

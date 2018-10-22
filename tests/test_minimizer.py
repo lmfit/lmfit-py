@@ -1,4 +1,4 @@
-from lmfit import Parameters, Minimizer
+from lmfit import Minimizer, Parameters
 
 
 def test_scalar_minimize_neg_value():

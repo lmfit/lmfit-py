@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from setuptools import setup
+
 import versioneer
 
 long_desc = """A library for least-squares minimization and data fitting in

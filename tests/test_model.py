@@ -1,8 +1,9 @@
 import unittest
 import warnings
-import pytest
-from numpy.testing import assert_allclose
+
 import numpy as np
+from numpy.testing import assert_allclose
+import pytest
 
 from lmfit import Model, models
 from lmfit.lineshapes import gaussian

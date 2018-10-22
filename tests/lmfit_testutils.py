@@ -1,5 +1,6 @@
-from lmfit import Parameter
 from numpy.testing import assert_allclose
+
+from lmfit import Parameter
 
 
 def assert_paramval(param, val, tol=1.e-3):

@@ -1,8 +1,9 @@
 import math
 from optparse import OptionParser
 
-from lmfit import Parameters, minimize
 from NISTModels import Models, ReadNistData
+
+from lmfit import Parameters, minimize
 
 try:
     import matplotlib.pyplot as plt

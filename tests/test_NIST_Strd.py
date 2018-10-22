@@ -1,10 +1,11 @@
 from __future__ import print_function
+
 import math
 from optparse import OptionParser
 
-from lmfit import Parameters, minimize
-
 from NISTModels import Models, ReadNistData
+
+from lmfit import Parameters, minimize
 
 
 def ndig(a, b):

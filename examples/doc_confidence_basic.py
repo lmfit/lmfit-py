@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 # <examples/doc_confidence_basic.py>
-import lmfit
 import numpy as np
+
+import lmfit
 
 x = np.linspace(0.3, 10, 100)
 np.random.seed(0)

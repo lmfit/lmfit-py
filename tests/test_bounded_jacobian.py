@@ -1,7 +1,7 @@
+import numpy as np
+
 from lmfit import Parameters, minimize
 from lmfit_testutils import assert_paramval
-
-import numpy as np
 
 
 def test_bounded_jacobian():

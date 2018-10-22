@@ -1,5 +1,6 @@
 import numpy as np
-from lmfit import minimize, Parameters
+
+from lmfit import Parameters, minimize
 from lmfit_testutils import assert_paramval
 
 

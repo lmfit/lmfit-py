@@ -10,7 +10,7 @@ from numpy import arcsin, array, cos, inf, nan, sin, sqrt
 import scipy.special
 import uncertainties
 
-from .jsonutils import encode4js, decode4js
+from .jsonutils import decode4js, encode4js
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
 for name in ('erf', 'erfc', 'wofz'):

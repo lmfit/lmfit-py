@@ -1,10 +1,11 @@
-from lmfit import lineshapes, models
 import inspect
-import numpy as np
-from scipy.optimize import fsolve
+import os
 import sys
 
-import os
+import numpy as np
+from scipy.optimize import fsolve
+
+from lmfit import lineshapes, models
 
 if sys.version_info[0] == 2:
     inspect_args = inspect.getargspec

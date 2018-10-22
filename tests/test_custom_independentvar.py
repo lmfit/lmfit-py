@@ -1,6 +1,7 @@
 import numpy as np
-from lmfit.models import Model
+
 from lmfit.lineshapes import gaussian
+from lmfit.models import Model
 
 
 class Stepper(object):

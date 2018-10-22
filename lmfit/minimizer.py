@@ -33,9 +33,8 @@ from scipy.version import version as scipy_version
 import six
 import uncertainties
 
-from .parameter import Parameter, Parameters
-
 from ._ampgo import ampgo
+from .parameter import Parameter, Parameters
 
 # check for EMCEE
 try:

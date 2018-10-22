@@ -1,10 +1,10 @@
 import os
 
 import numpy as np
-from numpy import linspace, sin, exp, random, pi, sign
+from numpy import exp, linspace, pi, random, sign, sin
 from numpy.testing import assert_allclose, assert_almost_equal
 
-from lmfit import Parameters, Minimizer
+from lmfit import Minimizer, Parameters
 from lmfit.models import VoigtModel
 from lmfit_testutils import assert_paramval
 

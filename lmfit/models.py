@@ -1,16 +1,15 @@
 """Module containing built-in fitting models."""
 import time
-import numpy as np
 
 from asteval import Interpreter, get_ast_names
+import numpy as np
 
 from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
-                         expgaussian, exponential, gaussian, linear,
-                         lognormal, lorentzian, moffat, parabolic,
-                         pearson7, powerlaw, pvoigt, rectangle,
-                         skewed_gaussian, skewed_voigt, step,
-                         students_t, voigt)
+                         expgaussian, exponential, gaussian, linear, lognormal,
+                         lorentzian, moffat, parabolic, pearson7, powerlaw,
+                         pvoigt, rectangle, skewed_gaussian, skewed_voigt,
+                         step, students_t, voigt)
 from .model import Model
 
 

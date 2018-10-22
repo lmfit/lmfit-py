@@ -1,5 +1,6 @@
 import numpy as np
-from lmfit.models import StepModel, ConstantModel
+
+from lmfit.models import ConstantModel, StepModel
 
 
 def get_data():

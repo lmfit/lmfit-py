@@ -1,6 +1,9 @@
 import os
-from numpy import exp, log, sin, cos, arctan, array
+
+from numpy import arctan, array, cos, exp, log, sin
+
 from lmfit import Parameters
+
 thisdir, thisfile = os.path.split(__file__)
 NIST_DIR = os.path.join(thisdir, '..', 'NIST_STRD')
 

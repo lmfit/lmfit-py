@@ -1,12 +1,14 @@
 #
 # test speed of building complex model
 #
-import time
+from copy import deepcopy
 import sys
+import time
+
 import numpy as np
+
 from lmfit import Model
 from lmfit.lineshapes import gaussian
-from copy import deepcopy
 
 sys.setrecursionlimit(2000)
 

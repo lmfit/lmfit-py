@@ -1,17 +1,15 @@
-from lmfit import minimize, Parameters, Minimizer
-from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
-                             MinimizerResult, _lnpost, _nan_policy)
-from lmfit.lineshapes import gaussian
-from lmfit import ufloat
+import unittest
 
 import numpy as np
 from numpy import pi
-from numpy.testing import (assert_, assert_almost_equal,
-                           assert_equal, assert_allclose, dec)
-
+from numpy.testing import (assert_, assert_allclose, assert_almost_equal,
+                           assert_equal, dec)
 import pytest
 
-import unittest
+from lmfit import Minimizer, Parameters, minimize, ufloat
+from lmfit.lineshapes import gaussian
+from lmfit.minimizer import (HAS_EMCEE, SCALAR_METHODS, MinimizerResult,
+                             _lnpost, _nan_policy)
 
 
 def check(para, real_val, sig=3):

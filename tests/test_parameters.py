@@ -1,11 +1,14 @@
 from __future__ import print_function
-from lmfit import Parameters, Parameter, Model
-from lmfit.parameter import isclose
-from numpy.testing import assert_, assert_almost_equal, assert_equal
-import unittest
-from copy import deepcopy, copy
-import numpy as np
+
+from copy import copy, deepcopy
 import pickle
+import unittest
+
+import numpy as np
+from numpy.testing import assert_, assert_almost_equal, assert_equal
+
+from lmfit import Model, Parameter, Parameters
+from lmfit.parameter import isclose
 
 
 class TestParameters(unittest.TestCase):

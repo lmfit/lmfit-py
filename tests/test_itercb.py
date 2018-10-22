@@ -1,6 +1,7 @@
 import numpy as np
-from lmfit.models import LinearModel, GaussianModel
+
 from lmfit.lineshapes import gaussian
+from lmfit.models import GaussianModel, LinearModel
 
 
 def per_iteration(pars, iter, resid, *args, **kws):

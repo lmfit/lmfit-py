@@ -12,9 +12,8 @@ Currently, not all tests pass.
 import math
 import sys
 
-from scipy.optimize import _minpack
-
 from NISTModels import Models, ReadNistData
+from scipy.optimize import _minpack
 
 try:
     import matplotlib.pyplot as plt
