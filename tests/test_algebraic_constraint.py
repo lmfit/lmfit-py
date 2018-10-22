@@ -144,8 +144,3 @@ def test_constraints3():
     assert(result.params['A'].value < 2650.0)
     assert(result.params['D'].value > 7.0)
     assert(result.params['D'].value < 7.5)
-
-if __name__ == '__main__':
-    test_constraints1()
-    test_constraints2()
-    test_constraints3()

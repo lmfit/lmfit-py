@@ -133,9 +133,3 @@ def test_basinhopping_Alpine02():
     assert_allclose(out.residual, fglob, rtol=1e-5)
     assert_allclose(min(out_x), min(global_optimum))
     assert_allclose(max(out_x), max(global_optimum))
-
-
-if __name__ == '__main__':
-    test_basinhopping()
-    test_basinhopping_2d()
-    test_basinhopping_Alpine02()

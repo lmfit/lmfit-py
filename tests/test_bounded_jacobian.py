@@ -37,7 +37,3 @@ def test_bounded_jacobian():
     assert(jac_count > 5)
 
     print(fit_report(out1, show_correl=True))
-
-
-if __name__ == '__main__':
-    test_bounded_jacobian()

@@ -69,6 +69,3 @@ def test_multidatasets():
     #      y_fit = gauss_dataset(pars, i, x)
     #      plt.plot(x, data[i, :], 'o', x, y_fit, '-')
     #  plt.show()
-
-if __name__ == '__main__':
-    test_multidatasets()

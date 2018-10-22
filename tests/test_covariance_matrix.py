@@ -222,11 +222,3 @@ def test_numdifftools_calc_covar_false():
 
     assert result_ndt.covar is None
     assert result_ndt.errorbars is False
-
-
-if __name__ == '__main__':
-    test_bounded_parameters()
-    test_bounds_expression()
-    test_numdifftools_no_bounds()
-    test_numdifftools_with_bounds()
-    test_numdifftools_calc_covar_false()

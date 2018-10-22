@@ -89,9 +89,3 @@ def test_gauss_noiselevel():
     dely_hinoise = ret2.eval_uncertainty(sigma=1)
 
     assert_allclose(dely_hinoise.mean(), 10*dely_lonoise.mean(), rtol=1.e-2)
-
-if __name__ == '__main__':
-    test_linear_constant_intercept()
-    test_linear_constant_slope()
-    test_gauss_sigmalevel()
-    test_gauss_noiselevel()

@@ -27,11 +27,8 @@ def test_manypeaks_speed():
     cpars = deepcopy(pars)
     t3 = time.time()
 
-    # these are very conservative tests that 
+    # these are very conservative tests that
     # should be satisfied on nearly any machine
     assert((t3-t2) < 0.5)
     assert((t2-t1) < 0.5)
     assert((t1-t0) < 5.0)
-
-if __name__ == '__main__':
-    test_manypeaks_speed()

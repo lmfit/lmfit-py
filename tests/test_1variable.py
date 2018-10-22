@@ -48,6 +48,3 @@ def test_1var():
     assert(out.nvarys == 1)
     assert(out.chisqr > 0.01)
     assert(out.chisqr < 5.00)
-
-if __name__ == '__main__':
-    test_1var()

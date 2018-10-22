@@ -245,7 +245,3 @@ class TestParameters(unittest.TestCase):
             p1['y'].set(expr='t+')
         assert(len(p1['y']._expr_eval.error) > 0)
         assert_almost_equal(p1['y'].value, 34.0)
-
-
-if __name__ == '__main__':
-    unittest.main()

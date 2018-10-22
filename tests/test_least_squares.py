@@ -136,9 +136,3 @@ def test_cov_x_with_bounds():
         cor_lsq = [result_lsq.params[par1].correl[par2] for par2 in
                    result_lsq.params[par1].correl.keys()]
         assert_almost_equal(cor_lsq, cor, decimal=6)
-
-
-if __name__ == '__main__':
-    test_bounds()
-    test_cov_x_no_bounds()
-    test_cov_x_with_bounds()

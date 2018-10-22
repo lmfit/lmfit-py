@@ -178,12 +178,3 @@ def test_savelod_modelresult_items():
 
     for pname in result.params.keys():
         assert( abs(result.init_params[pname].value - loaded.init_params[pname].value) < 0.001)
-
-
-if __name__ == '__main__':
-    test_saveload_model_nodill()
-    test_saveload_model_withdill()
-
-    test_saveload_modelresult_nodill()
-    test_saveload_modelresult_withdill()
-    test_savelod_modelresult_items()

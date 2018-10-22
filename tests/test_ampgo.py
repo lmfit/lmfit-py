@@ -48,8 +48,3 @@ def test_ampgo_Alpine02_maxfunevals():
     kws = {'maxfunevals': 50}
     out = mini.minimize(method='ampgo', **kws)
     assert('function' in out.ampgo_msg)
-
-
-if __name__ == '__main__':
-    test_ampgo_Alpine02()
-    test_ampgo_Alpine02_maxfunevals()

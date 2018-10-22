@@ -80,6 +80,3 @@ def test_peak_like():
     check_height_fwhm(x, y, lineshapes.donaich, models.DonaichModel())
     x=x-9 # Lognormal will only fit peaks with centers < 1
     check_height_fwhm(x, y, lineshapes.lognormal, models.LognormalModel())
-
-if __name__ == '__main__':
-    test_peak_like()

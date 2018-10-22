@@ -52,7 +52,3 @@ def test_stepmodel_erf():
     assert(out.params['amplitude'].value > 50)
     assert(out.params['sigma'].value > 0.2)
     assert(out.params['sigma'].value < 1.5)
-
-if __name__ == '__main__':
-    # test_stepmodel_linear()
-    test_stepmodel_erf()

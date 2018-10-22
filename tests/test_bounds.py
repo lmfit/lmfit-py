@@ -49,6 +49,3 @@ def test_bounds():
     print(fit_report(out, show_correl=True, modelpars=p_true))
     assert_paramval(out.params['decay'], 0.01, tol=1.e-2)
     assert_paramval(out.params['shift'], 0.123, tol=1.e-2)
-
-if __name__ == '__main__':
-    test_bounds()

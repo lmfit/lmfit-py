@@ -48,6 +48,3 @@ def test_custom_independentvar():
     assert(out.params['amplitude'].value < 5)
 
     print(out.fit_report())
-
-if __name__ == '__main__':
-    test_custom_independentvar()
