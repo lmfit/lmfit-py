@@ -8,11 +8,11 @@ from lmfit import Model
 from lmfit.lineshapes import gaussian
 from copy import deepcopy
 
-
 sys.setrecursionlimit(2000)
 
+
 def test_manypeaks_speed():
-    x  = np.linspace( -5, 5, 251)
+    x = np.linspace(-5, 5, 251)
     model = None
     t0 = time.time()
     for i in np.arange(500):

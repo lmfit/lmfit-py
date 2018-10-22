@@ -30,7 +30,6 @@ def test_ampgo_Alpine02():
     assert('global' in out.ampgo_msg)
 
 
-
 def test_ampgo_Alpine02_maxfunevals():
     """Test AMPGO algorithm on Alpine02 function."""
 

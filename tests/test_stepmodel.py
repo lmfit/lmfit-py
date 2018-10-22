@@ -1,16 +1,16 @@
 import numpy as np
-from lmfit import fit_report
 from lmfit.models import StepModel, ConstantModel
-from lmfit_testutils import assert_paramval, assert_paramattr
+
 
 def get_data():
-    x  = np.linspace(0, 10, 201)
+    x = np.linspace(0, 10, 201)
     dat = np.ones_like(x)
     dat[:48] = 0.0
     dat[48:77] = np.arange(77-48)/(77.0-48)
-    dat = dat +  5e-2*np.random.randn(len(x))
+    dat = dat + 5e-2*np.random.randn(len(x))
     dat = 110.2 * dat + 12.0
     return x, dat
+
 
 def test_stepmodel_linear():
     x, y = get_data()

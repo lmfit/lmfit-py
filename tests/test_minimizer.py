@@ -14,7 +14,7 @@ def test_scalar_minimize_neg_value():
     params.add('x', value=2*x0)
 
     minr = Minimizer(objective, params)
-    result = minr.scalar_minimize(method='Nelder-Mead', options={'xatol': xtol,
-                                                                 'fatol': ftol})
+    result = minr.scalar_minimize(method='Nelder-Mead',
+                                  options={'xatol': xtol, 'fatol': ftol})
     assert abs(result.params['x'].value - x0) < xtol
     assert abs(result.fun - fmin) < ftol

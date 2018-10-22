@@ -36,7 +36,7 @@ class TestParameters(unittest.TestCase):
         assert(p2['t'].max < 6.0)
         assert(np.isinf(p2['x'].max) and p2['x'].max > 0)
         assert(np.isinf(p2['x'].min) and p2['x'].min < 0)
-        assert('sqrt(t)' in p2['y'].expr )
+        assert('sqrt(t)' in p2['y'].expr)
         assert(p2._asteval is not None)
         assert(p2._asteval.symtable is not None)
         assert((p2['y'].value > 20) and (p2['y'].value < 21))
@@ -63,13 +63,12 @@ class TestParameters(unittest.TestCase):
         assert(p2['t'].max < 6.0)
 
         assert(np.isinf(p2['x'].min) and p2['x'].min < 0)
-        assert('sqrt(t)' in p2['y'].expr )
+        assert('sqrt(t)' in p2['y'].expr)
         assert(p2._asteval is not None)
         assert(p2._asteval.symtable is not None)
         assert((p2['y'].value > 20) and (p2['y'].value < 21))
 
         assert(p1['y'].value < 10)
-
 
     def test_deepcopy(self):
         # check that a simple copy works
@@ -151,7 +150,7 @@ class TestParameters(unittest.TestCase):
 
         q.update_constraints()
         assert_(p == q)
-        assert_(not p is q)
+        assert_(p is not q)
 
         # now test if the asteval machinery survived
         assert_(q._asteval.symtable['abc'] == '2 * 3.142')

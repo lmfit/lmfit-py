@@ -1,10 +1,6 @@
-#!/usr/bin/env python
-from __future__ import (print_function)
-
 from lmfit import lineshapes, models
 import inspect
 import numpy as np
-from scipy.stats import norm
 from scipy.optimize import fsolve
 import sys
 
@@ -16,12 +12,10 @@ elif sys.version_info[0] == 3:
     inspect_args = inspect.getfullargspec
 
 
-def check_height_fwhm(x, y, lineshape, model, with_plot=False, report=False):
+def check_height_fwhm(x, y, lineshape, model):
     """Check height and fwhm parameters"""
     pars = model.guess(y, x=x)
     out = model.fit(y, pars, x=x)
-    if report:
-        print(out.fit_report())
 
     # account for functions whose centers are not mu
     mu = out.params['center'].value
@@ -42,21 +36,22 @@ def check_height_fwhm(x, y, lineshape, model, with_plot=False, report=False):
         height_act = lineshape(cen, **args)
         diff = height_act - height_pro
 
-        assert abs(diff) < 0.001, fmt.format(model._name, 'Actual',
-                'program', 'Difference', 'Height', height_act, height_pro, diff)
+        assert abs(diff) < 0.001, fmt.format(model._name, 'Actual', 'program',
+                                             'Difference', 'Height',
+                                             height_act, height_pro, diff)
 
         if 'fwhm' in out.params:
             fwhm_pro = out.params['fwhm'].value
-            func = lambda x:  lineshape(x, **args) - 0.5*height_act
+            func = lambda x: lineshape(x, **args) - 0.5*height_act
             ret = fsolve(func, [cen - fwhm_pro/4, cen + fwhm_pro/2])
-            # print(ret)
             fwhm_act = ret[1] - ret[0]
             diff = fwhm_act - fwhm_pro
 
             assert abs(diff) < 0.5, fmt.format(model._name, 'Actual',
-                    'program', 'Difference', 'FWHM', fwhm_act, fwhm_pro, diff)
+                                               'program', 'Difference',
+                                               'FWHM', fwhm_act, fwhm_pro,
+                                               diff)
 
-    print(model._name, 'OK')
 
 def test_peak_like():
     # mu = 0
@@ -64,7 +59,8 @@ def test_peak_like():
     # sigma = np.sqrt(variance)
     # x = np.linspace(mu - 20*sigma, mu + 20*sigma, 100.0)
     # y = norm.pdf(x, mu, 1)
-    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples', 'test_peak.dat'))
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
+                                   'examples', 'test_peak.dat'))
     x = data[:, 0]
     y = data[:, 1]
     check_height_fwhm(x, y, lineshapes.voigt, models.VoigtModel())
@@ -73,10 +69,14 @@ def test_peak_like():
     check_height_fwhm(x, y, lineshapes.moffat, models.MoffatModel())
     check_height_fwhm(x, y, lineshapes.students_t, models.StudentsTModel())
     check_height_fwhm(x, y, lineshapes.breit_wigner, models.BreitWignerModel())
-    check_height_fwhm(x, y, lineshapes.damped_oscillator, models.DampedOscillatorModel())
-    check_height_fwhm(x, y, lineshapes.dho, models.DampedHarmonicOscillatorModel())
-    check_height_fwhm(x, y, lineshapes.expgaussian, models.ExponentialGaussianModel())
-    check_height_fwhm(x, y, lineshapes.skewed_gaussian, models.SkewedGaussianModel())
+    check_height_fwhm(x, y, lineshapes.damped_oscillator,
+                      models.DampedOscillatorModel())
+    check_height_fwhm(x, y, lineshapes.dho,
+                      models.DampedHarmonicOscillatorModel())
+    check_height_fwhm(x, y, lineshapes.expgaussian,
+                      models.ExponentialGaussianModel())
+    check_height_fwhm(x, y, lineshapes.skewed_gaussian,
+                      models.SkewedGaussianModel())
     check_height_fwhm(x, y, lineshapes.donaich, models.DonaichModel())
-    x=x-9 # Lognormal will only fit peaks with centers < 1
+    x = x-9  # Lognormal will only fit peaks with centers < 1
     check_height_fwhm(x, y, lineshapes.lognormal, models.LognormalModel())

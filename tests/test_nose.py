@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-from __future__ import print_function
-from lmfit import minimize, Parameters, Parameter, report_fit, Minimizer
+from lmfit import minimize, Parameters, Minimizer
 from lmfit.minimizer import (SCALAR_METHODS, HAS_EMCEE,
                              MinimizerResult, _lnpost, _nan_policy)
 from lmfit.lineshapes import gaussian
@@ -15,19 +13,21 @@ import pytest
 
 import unittest
 
+
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
-    print('Check Param w/ stderr: ',  para.name, para.value, real_val, para.stderr)
     assert(err < sig * para.stderr)
+
 
 def check_wo_stderr(para, real_val, sig=0.1):
     err = abs(para.value - real_val)
-    print('Check Param w/o stderr: ', para.name, para.value, real_val, sig)
     assert(err < sig)
+
 
 def check_paras(para_fit, para_real, sig=3):
     for i in para_fit:
         check(para_fit[i], para_real[i].value, sig=sig)
+
 
 def test_simple():
     # create data to be fitted
@@ -38,7 +38,7 @@ def test_simple():
 
     # define objective function: returns the array to be minimized
     def fcn2min(params, x, data):
-        """ model decaying sine wave, subtract data"""
+        """model decaying sine wave, subtract data"""
         amp = params['amp']
         shift = params['shift']
         omega = params['omega']
@@ -49,27 +49,18 @@ def test_simple():
 
     # create a set of Parameters
     params = Parameters()
-    params.add('amp',   value= 10,  min=0)
-    params.add('decay', value= 0.1)
-    params.add('shift', value= 0.0, min=-pi / 2., max=pi / 2)
-    params.add('omega', value= 3.0)
+    params.add('amp', value=10, min=0)
+    params.add('decay', value=0.1)
+    params.add('shift', value=0.0, min=-pi/2., max=pi/2)
+    params.add('omega', value=3.0)
 
     # do fit, here with leastsq model
     result = minimize(fcn2min, params, args=(x, data))
 
-    # calculate final result
-    final = data + result.residual
-
-    # write error report
-    print(" --> SIMPLE --> ")
-    print(result.params)
-    report_fit(result.params)
-
-    #assert that the real parameters are found
-
+    # assert that the real parameters are found
     for para, val in zip(result.params.values(), [5, 0.025, -.1, 2]):
-
         check(para, val)
+
 
 def test_lbfgsb():
     p_true = Parameters()
@@ -95,31 +86,25 @@ def test_lbfgsb():
     xmin = 0.
     xmax = 250.0
     noise = np.random.normal(scale=0.7215, size=n)
-    x     = np.linspace(xmin, xmax, n)
-    data  = residual(p_true, x) + noise
+    x = np.linspace(xmin, xmax, n)
+    data = residual(p_true, x) + noise
 
     fit_params = Parameters()
     fit_params.add('amp', value=11.0, min=5, max=20)
     fit_params.add('period', value=5., min=1., max=7)
-    fit_params.add('shift', value=.10,  min=0.0, max=0.2)
+    fit_params.add('shift', value=.10, min=0.0, max=0.2)
     fit_params.add('decay', value=6.e-3, min=0, max=0.1)
 
-    init = residual(fit_params, x)
-
-    out = minimize(residual, fit_params, method='lbfgsb', args=(x,), kws={'data':data})
-
-    fit = residual(fit_params, x)
-
-    for name, par in out.params.items():
-        nout = "%s:%s" % (name, ' '*(20-len(name)))
-        print("%s: %s (%s) " % (nout, par.value, p_true[name].value))
+    out = minimize(residual, fit_params, method='lbfgsb', args=(x,),
+                   kws={'data': data})
 
     for para, true_para in zip(out.params.values(), p_true.values()):
         check_wo_stderr(para, true_para.value)
 
+
 def test_derive():
     def func(pars, x, data=None):
-        model= pars['a'] * np.exp(-pars['b'] * x) + pars['c']
+        model = pars['a'] * np.exp(-pars['b'] * x) + pars['c']
         if data is None:
             return model
         return model - data
@@ -129,7 +114,7 @@ def test_derive():
         return np.array([v, -pars['a']*x*v, np.ones(len(x))])
 
     def f(var, x):
-        return var[0]* np.exp(-var[1] * x)+var[2]
+        return var[0] * np.exp(-var[1] * x) + var[2]
 
     params1 = Parameters()
     params1.add('a', value=10)
@@ -142,43 +127,22 @@ def test_derive():
     params2.add('c', value=10)
 
     a, b, c = 2.5, 1.3, 0.8
-    x = np.linspace(0,4,50)
+    x = np.linspace(0, 4, 50)
     y = f([a, b, c], x)
     data = y + 0.15*np.random.normal(size=len(x))
 
     # fit without analytic derivative
-    min1 = Minimizer(func, params1, fcn_args=(x,), fcn_kws={'data':data})
+    min1 = Minimizer(func, params1, fcn_args=(x,), fcn_kws={'data': data})
     out1 = min1.leastsq()
-    fit1 = func(out1.params, x)
 
     # fit with analytic derivative
-    min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data':data})
+    min2 = Minimizer(func, params2, fcn_args=(x,), fcn_kws={'data': data})
     out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
-    fit2 = func(out2.params, x)
-
-    print ('''Comparison of fit to exponential decay
-    with and without analytic derivatives, to
-       model = a*exp(-b*x) + c
-    for a = %.2f, b = %.2f, c = %.2f
-    ==============================================
-    Statistic/Parameter|   Without   | With      |
-    ----------------------------------------------
-    N Function Calls   |   %3i       |   %3i     |
-    Chi-square         |   %.4f    |   %.4f  |
-       a               |   %.4f    |   %.4f  |
-       b               |   %.4f    |   %.4f  |
-       c               |   %.4f    |   %.4f  |
-    ----------------------------------------------
-    ''' %  (a, b, c,
-            out1.nfev,   out2.nfev,
-            out1.chisqr, out2.chisqr,
-            out1.params['a'].value, out2.params['a'].value,
-            out1.params['b'].value, out2.params['b'].value,
-            out1.params['c'].value, out2.params['c'].value ))
 
     check_wo_stderr(out1.params['a'], out2.params['a'].value, 0.00005)
     check_wo_stderr(out1.params['b'], out2.params['b'].value, 0.00005)
     check_wo_stderr(out1.params['c'], out2.params['c'].value, 0.00005)
+
 
 def test_peakfit():
     def residual(pars, x, data=None):
@@ -189,7 +153,7 @@ def test_peakfit():
             return model
         return (model - data)
 
-    n    = 601
+    n = 601
     xmin = 0.
     xmax = 15.0
     noise = np.random.normal(scale=.65, size=n)
@@ -197,40 +161,28 @@ def test_peakfit():
 
     org_params = Parameters()
     org_params.add_many(('a1', 12.0, True, None, None, None),
-                        ('c1',  5.3, True, None, None, None),
-                        ('w1',  1.0, True, None, None, None),
-                        ('a2',  9.1, True, None, None, None),
-                        ('c2',  8.1, True, None, None, None),
-                        ('w2',  2.5, True, None, None, None))
+                        ('c1', 5.3, True, None, None, None),
+                        ('w1', 1.0, True, None, None, None),
+                        ('a2', 9.1, True, None, None, None),
+                        ('c2', 8.1, True, None, None, None),
+                        ('w2', 2.5, True, None, None, None))
 
-    data  = residual(org_params, x) + noise
-
+    data = residual(org_params, x) + noise
 
     fit_params = Parameters()
-    fit_params.add_many(('a1',  8.0, True, None, 14., None),
-                        ('c1',  5.0, True, None, None, None),
-                        ('w1',  0.7, True, None, None, None),
-                        ('a2',  3.1, True, None, None, None),
-                        ('c2',  8.8, True, None, None, None))
+    fit_params.add_many(('a1', 8.0, True, None, 14., None),
+                        ('c1', 5.0, True, None, None, None),
+                        ('w1', 0.7, True, None, None, None),
+                        ('a2', 3.1, True, None, None, None),
+                        ('c2', 8.8, True, None, None, None))
 
     fit_params.add('w2', expr='2.5*w1')
 
-    myfit = Minimizer(residual, fit_params,
-                      fcn_args=(x,), fcn_kws={'data': data})
+    myfit = Minimizer(residual, fit_params, fcn_args=(x,),
+                      fcn_kws={'data': data})
 
     myfit.prepare_fit()
-
-    init = residual(fit_params, x)
-
-
     out = myfit.leastsq()
-
-    # print(' N fev = ', myfit.nfev)
-    # print(myfit.chisqr, myfit.redchi, myfit.nfree)
-
-    report_fit(out.params)
-
-    fit = residual(out.params, x)
     check_paras(out.params, org_params)
 
 
@@ -246,11 +198,11 @@ def test_scalar_minimize_has_no_uncertainties():
     np.random.seed(1)
     x = np.linspace(0, 15, 301)
     data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
-            np.random.normal(size=len(x), scale=0.2) )
+            np.random.normal(size=len(x), scale=0.2))
 
     # define objective function: returns the array to be minimized
     def fcn2min(params, x, data):
-        """ model decaying sine wave, subtract data"""
+        """model decaying sine wave, subtract data"""
         amp = params['amp']
         shift = params['shift']
         omega = params['omega']
@@ -261,15 +213,14 @@ def test_scalar_minimize_has_no_uncertainties():
 
     # create a set of Parameters
     params = Parameters()
-    params.add('amp',   value= 10,  min=0)
-    params.add('decay', value= 0.1)
-    params.add('shift', value= 0.0, min=-pi / 2., max=pi / 2)
-    params.add('omega', value= 3.0)
+    params.add('amp', value=10, min=0)
+    params.add('decay', value=0.1)
+    params.add('shift', value=0.0, min=-pi/2., max=pi/2)
+    params.add('omega', value=3.0)
 
     mini = Minimizer(fcn2min, params, fcn_args=(x, data))
     out = mini.minimize()
     assert_(np.isfinite(out.params['amp'].stderr))
-    print(out.errorbars)
     assert_(out.errorbars == True)
     out2 = mini.minimize(method='nelder-mead')
     assert_(out2.params['amp'].stderr is None)
@@ -298,25 +249,24 @@ def test_scalar_minimize_reduce_fcn():
     # define objective function: returns the array to be minimized
     def objfunc(pars, x, data):
         decay = pars['decay']
-        offset= pars['offset']
+        offset = pars['offset']
         omega = pars['omega']
-        amp   = pars['amp']
+        amp = pars['amp']
         model = offset + amp * np.sin(x*omega) * np.exp(-x/decay)
         return model - data
 
     # create a set of Parameters
     params = Parameters()
     params.add('offset', 2.0)
-    params.add('omega',  3.3)
-    params.add('amp',    2.5)
-    params.add('decay',  1.0)
+    params.add('omega', 3.3)
+    params.add('amp', 2.5)
+    params.add('decay', 1.0)
 
-    method='L-BFGS-B'
+    method = 'L-BFGS-B'
     out1 = minimize(objfunc, params, args=(x, y), method=method)
     out2 = minimize(objfunc, params, args=(x, y), method=method,
                     reduce_fcn='neglogcauchy')
 
-    #print assert all
     assert_allclose(out1.params['omega'].value, 4.0, rtol=0.01)
     assert_allclose(out1.params['decay'].value, 7.6, rtol=0.01)
 
@@ -329,14 +279,14 @@ def test_multidimensional_fit_GH205():
     # function. Tests regression for GH205.
     pos = np.linspace(0, 99, 100)
     xv, yv = np.meshgrid(pos, pos)
-    f = lambda xv, yv, lambda1, lambda2: (np.sin(xv * lambda1)
-                                             + np.cos(yv * lambda2))
+    f = lambda xv, yv, lambda1, lambda2: (np.sin(xv * lambda1) +
+                                          np.cos(yv * lambda2))
 
     data = f(xv, yv, 0.3, 3)
     assert_(data.ndim, 2)
 
     def fcn2min(params, xv, yv, data):
-        """ model decaying sine wave, subtract data"""
+        """model decaying sine wave, subtract data"""
         model = f(xv, yv, params['lambda1'], params['lambda2'])
         return model - data
 
@@ -348,10 +298,9 @@ def test_multidimensional_fit_GH205():
     mini = Minimizer(fcn2min, params, fcn_args=(xv, yv, data))
     res = mini.minimize()
 
+
 def test_ufloat():
-    """
-    test of ufloat from uncertainties
-    """
+    """Test of ufloat from uncertainties."""
     x = ufloat(1, 0.1)
     assert_allclose(x.nominal_value, 1.0, rtol=1.e-7)
     assert_allclose(x.std_dev, 0.1, rtol=1.e-7)
@@ -363,8 +312,6 @@ def test_ufloat():
     y = x - x
     assert_allclose(y.nominal_value, 0.0, rtol=1.e-7)
     assert_allclose(y.std_dev, 0.0, rtol=1.e-7)
-
-
 
 
 class CommonMinimizerTest(unittest.TestCase):
@@ -391,7 +338,7 @@ class CommonMinimizerTest(unittest.TestCase):
         fit_params = Parameters()
         fit_params.add('amp', value=11.0, min=5, max=20)
         fit_params.add('period', value=5., min=1., max=7)
-        fit_params.add('shift', value=.10,  min=0.0, max=0.2)
+        fit_params.add('shift', value=.10, min=0.0, max=0.2)
         fit_params.add('decay', value=6.e-3, min=0, max=0.1)
         self.fit_params = fit_params
 
@@ -436,19 +383,11 @@ class CommonMinimizerTest(unittest.TestCase):
             self.scalar_minimizer(sig=sig)
 
     def scalar_minimizer(self, sig=0.15):
-        from scipy.optimize import minimize as scipy_minimize
-
-        # print(self.minimizer)
         out = self.mini.scalar_minimize(method=self.minimizer)
 
         self.residual(out.params, self.x)
 
-        for name, par in out.params.items():
-            nout = "%s:%s" % (name, ' '*(20-len(name)))
-            print("%s: %s (%s) " % (nout, par.value, self.p_true[name].value))
-
-        for para, true_para in zip(out.params.values(),
-                                   self.p_true.values()):
+        for para, true_para in zip(out.params.values(), self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=sig)
 
     def test_nan_policy(self):
@@ -457,8 +396,7 @@ class CommonMinimizerTest(unittest.TestCase):
         self.data[0] = np.nan
 
         for method in SCALAR_METHODS:
-            pytest.raises(ValueError,
-                          self.mini.scalar_minimize,
+            pytest.raises(ValueError, self.mini.scalar_minimize,
                           SCALAR_METHODS[method])
 
         pytest.raises(ValueError, self.mini.minimize)
@@ -468,8 +406,7 @@ class CommonMinimizerTest(unittest.TestCase):
         res = self.mini.minimize()
         assert_equal(res.ndata, np.size(self.data, 0) - 1)
 
-        for para, true_para in zip(res.params.values(),
-                                   self.p_true.values()):
+        for para, true_para in zip(res.params.values(), self.p_true.values()):
             check_wo_stderr(para, true_para.value, sig=0.15)
 
     def test_nan_policy_function(self):
@@ -491,8 +428,7 @@ class CommonMinimizerTest(unittest.TestCase):
             return True
 
         np.random.seed(123456)
-        out = self.mini.emcee(nwalkers=100, steps=200,
-                                      burn=50, thin=10)
+        out = self.mini.emcee(nwalkers=100, steps=200, burn=50, thin=10)
 
         check_paras(out.params, self.p_true, sig=3)
 
@@ -526,9 +462,9 @@ class CommonMinimizerTest(unittest.TestCase):
         # if nvarys != nparams
         if not HAS_EMCEE:
             return True
-        self.mini.params['amp'].vary=False
-        self.mini.params['period'].vary=False
-        self.mini.params['shift'].vary=False
+        self.mini.params['amp'].vary = False
+        self.mini.params['period'].vary = False
+        self.mini.params['shift'].vary = False
 
         out = self.mini.emcee(steps=10)
 
@@ -542,8 +478,7 @@ class CommonMinimizerTest(unittest.TestCase):
         # test mcmc output vs lm, some parameters not bounded
         self.fit_params['amp'].max = np.inf
         # self.fit_params['amp'].min = -np.inf
-        out = self.mini.emcee(nwalkers=100, steps=300,
-                                      burn=100, thin=10)
+        out = self.mini.emcee(nwalkers=100, steps=300, burn=100, thin=10)
 
         check_paras(out.params, self.p_true, sig=3)
 
@@ -630,15 +565,15 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # check that we can access the chains via parameter name
         assert_(out.flatchain['amp'].shape[0] == 80)
-        assert_(out.errorbars is True)
+        assert_(out.errorbars == True)
         assert_(np.isfinite(out.params['amp'].correl['period']))
 
         # the lnprob array should be the same as the chain size
         assert_(np.size(out.chain)//out.nvarys == np.size(out.lnprob))
 
         # test chain output shapes
-        assert_(out.lnprob.shape == (10, (20-5+1)/2) )
-        assert_(out.chain.shape == (10, (20-5+1)/2, out.nvarys) )
+        assert_(out.lnprob.shape == (10, (20-5+1)/2))
+        assert_(out.chain.shape == (10, (20-5+1)/2, out.nvarys))
         assert_(out.flatchain.shape == (10*(20-5+1)/2, out.nvarys))
 
     def test_emcee_PT_output(self):
@@ -655,15 +590,15 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # check that we can access the chains via parameter name
         assert_(out.flatchain['amp'].shape[0] == 80)
-        assert_(out.errorbars is True)
+        assert_(out.errorbars == True)
         assert_(np.isfinite(out.params['amp'].correl['period']))
 
         # the lnprob array should be the same as the chain size
         assert_(np.size(out.chain)//out.nvarys == np.size(out.lnprob))
 
         # test chain output shapes
-        assert_(out.lnprob.shape == (6, 10, (20-5+1)/2) )
-        assert_(out.chain.shape == (6, 10, (20-5+1)/2, out.nvarys) )
+        assert_(out.lnprob.shape == (6, 10, (20-5+1)/2))
+        assert_(out.chain.shape == (6, 10, (20-5+1)/2, out.nvarys))
         # Only the 0th temperature is returned
         assert_(out.flatchain.shape == (10*(20-5+1)/2, out.nvarys))
 
@@ -682,8 +617,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         self.mini.userfcn = resid
         np.random.seed(123456)
-        out = self.mini.emcee(nwalkers=100, steps=200,
-                                      burn=50, thin=10)
+        out = self.mini.emcee(nwalkers=100, steps=200, burn=50, thin=10)
         check_paras(out.params, self.p_true, sig=3)
 
         self.mini.userfcn = resid2

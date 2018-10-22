@@ -1,6 +1,7 @@
 from lmfit import Parameter
 from numpy.testing import assert_allclose
 
+
 def assert_paramval(param, val, tol=1.e-3):
     """assert that a named parameter's value is close to expected value"""
 
@@ -8,7 +9,7 @@ def assert_paramval(param, val, tol=1.e-3):
     pval = param.value
 
     assert_allclose([pval], [val], rtol=tol, atol=tol,
-                    err_msg='',verbose=True)
+                    err_msg='', verbose=True)
 
 
 def assert_paramattr(param, attr, val):
@@ -22,6 +23,7 @@ def assert_between(val, minval, maxval):
     """assert that a value is between minval and maxval"""
     assert(val >= minval)
     assert(val <= maxval)
+
 
 def assert_param_between(param, minval, maxval):
     """assert that a named parameter's value is

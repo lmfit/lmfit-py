@@ -54,7 +54,8 @@ def test_basinhopping_2d():
     if int(major) < 1 and int(minor) < 19:
         ret = basinhopping(func2d, x0, minimizer_kwargs=minimizer_kwargs)
     else:
-        ret = basinhopping(func2d, x0, minimizer_kwargs=minimizer_kwargs, seed=7)
+        ret = basinhopping(func2d, x0, minimizer_kwargs=minimizer_kwargs,
+                           seed=7)
 
     # lmfit
     def residual_2d(params):

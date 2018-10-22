@@ -1,8 +1,8 @@
 import numpy as np
 from numpy.testing import assert_allclose
-from lmfit import Parameters, minimize, report_fit
 from lmfit.lineshapes import gaussian
 from lmfit.models import VoigtModel
+
 
 def test_param_set():
     np.random.seed(2015)
@@ -10,7 +10,7 @@ def test_param_set():
     y = gaussian(x, amplitude=15.43, center=4.5, sigma=2.13)
     y = y + 0.05 - 0.01*x + np.random.normal(scale=0.03, size=len(x))
 
-    model  = VoigtModel()
+    model = VoigtModel()
     params = model.guess(y, x=x)
 
     # test #1:  gamma is constrained to equal sigma
@@ -99,7 +99,7 @@ def test_param_set():
     assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
     assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
     assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
-    assert(params['amplitude'].vary == False)
+    assert(params['amplitude'].vary is False)
     assert(params['amplitude'].expr == amplitude_expr)
     assert(not params['amplitude'].brute_step)
 
@@ -109,7 +109,7 @@ def test_param_set():
     assert_allclose(params['amplitude'].value, 35.0, 1e-4, 1e-4, '', True)
     assert_allclose(params['amplitude'].min, 10.0, 1e-4, 1e-4, '', True)
     assert_allclose(params['amplitude'].max, 110.0, 1e-4, 1e-4, '', True)
-    assert(params['amplitude'].vary == False)
+    assert(params['amplitude'].vary is False)
     assert(params['amplitude'].expr == amplitude_expr)
     assert_allclose(params['amplitude'].brute_step, 0.1, 1e-4, 1e-4, '', True)
 
@@ -127,8 +127,8 @@ def test_param_set():
     assert_allclose(params['height'].value, height_value, 1e-4, 1e-4, '', True)
     assert_allclose(params['height'].min, height_min, 1e-4, 1e-4, '', True)
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
-    assert(params['height'].vary == True)
-    assert(params['height'].expr == None)
+    assert(params['height'].vary is True)
+    assert(params['height'].expr is None)
     assert(params['height'].brute_step == height_brute_step)
 
     # setting an expression should set vary=False
@@ -137,7 +137,7 @@ def test_param_set():
     assert_allclose(params['height'].value, height_value, 1e-4, 1e-4, '', True)
     assert_allclose(params['height'].min, height_min, 1e-4, 1e-4, '', True)
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
-    assert(params['height'].vary == False)
+    assert(params['height'].vary is False)
     assert(params['height'].expr == height_expr)
     assert(params['height'].brute_step == height_brute_step)
 
@@ -168,20 +168,18 @@ def test_param_set():
     assert_allclose(params['height'].value, 10.0, 1e-4, 1e-4, '', True)
     assert_allclose(params['height'].min, 0.0, 1e-4, 1e-4, '', True)
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
-    assert(params['height'].vary == False)
-    assert(params['height'].expr == None)
+    assert(params['height'].vary is False)
+    assert(params['height'].expr is None)
     assert(params['height'].brute_step == height_brute_step)
 
     # passing expr='' should only remove the expression
-    params['height'].set(expr=height_expr) # first restore the original expr
+    params['height'].set(expr=height_expr)  # first restore the original expr
     params.update_constraints()
     params['height'].set(expr='')
     params.update_constraints()
     assert_allclose(params['height'].value, height_value, 1e-4, 1e-4, '', True)
     assert_allclose(params['height'].min, 0.0, 1e-4, 1e-4, '', True)
     assert_allclose(params['height'].max, height_max, 1e-4, 1e-4, '', True)
-    assert(params['height'].vary == False)
-    assert(params['height'].expr == None)
+    assert(params['height'].vary is False)
+    assert(params['height'].expr is None)
     assert(params['height'].brute_step == height_brute_step)
-
-test_param_set()

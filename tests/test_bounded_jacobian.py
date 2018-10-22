@@ -1,5 +1,5 @@
-from lmfit import Parameters, minimize, fit_report
-from lmfit_testutils import assert_paramval, assert_paramattr
+from lmfit import Parameters, minimize
+from lmfit_testutils import assert_paramval
 
 import numpy as np
 
@@ -35,5 +35,3 @@ def test_bounded_jacobian():
     assert_paramval(out1.params['x0'], 1.2243, tol=0.02)
     assert_paramval(out1.params['x1'], 1.5000, tol=0.02)
     assert(jac_count > 5)
-
-    print(fit_report(out1, show_correl=True))
