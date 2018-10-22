@@ -35,6 +35,28 @@ else:
         return str(b64encode(val))
 
 
+def find_importer(obj):
+    """find importer of an object"""
+    oname = obj.__name__
+    for modname, module in sys.modules.items():
+        if modname.startswith('__main__'):
+            continue
+        t = getattr(module, oname, None)
+        if t is obj:
+            return modname
+    return None
+
+
+def import_from(modulepath, objectname):
+    """wrapper for __import__ for nested objects"""
+    path = modulepath.split('.')
+    top = path.pop(0)
+    parent = __import__(top)
+    while len(path) > 0:
+        parent = getattr(parent, path.pop(0))
+    return getattr(parent, objectname)
+
+
 def encode4js(obj):
     """Prepare an object for json encoding.
 
@@ -78,13 +100,16 @@ def encode4js(obj):
             out[encode4js(key)] = encode4js(val)
         return out
     elif callable(obj):
-        val = None
+        val, importer = None, None
         pyvers = "%d.%d" % (sys.version_info.major,
                             sys.version_info.minor)
         if HAS_DILL:
             val = binencode(dill.dumps(obj))
+        else:
+            val = None
+            importer = find_importer(obj)
         return dict(__class__='Callable', __name__=obj.__name__,
-                    pyversion=pyvers, value=val)
+                    pyversion=pyvers, value=val, importer=importer)
     return obj
 
 
@@ -126,6 +151,8 @@ def decode4js(obj):
                             sys.version_info.minor)
         if pyvers == obj['pyversion'] and HAS_DILL:
             out = dill.loads(bindecode(obj['value']))
+        elif obj['importer'] is not None:
+            out = import_from(obj['importer'], val)
 
     elif classname in ('Dict', 'dict'):
         out = {}
