@@ -10,6 +10,11 @@ import sys
 
 import os
 
+if sys.version_info[0] == 2:
+    inspect_args = inspect.getargspec
+elif sys.version_info[0] == 3:
+    inspect_args = inspect.getfullargspec
+
 
 def check_height_fwhm(x, y, lineshape, model, with_plot=False, report=False):
     """Check height and fwhm parameters"""
@@ -26,7 +31,7 @@ def check_height_fwhm(x, y, lineshape, model, with_plot=False, report=False):
         cen = mu
     # get arguments for lineshape
     args = {key: out.best_values[key] for key in
-            inspect.getargspec(lineshape)[0] if key is not 'x'}
+            inspect_args(lineshape)[0] if key is not 'x'}
     # output format for assertion errors
     fmt = ("Program calculated values and real values do not match!\n"
            "{:^20s}{:^20s}{:^20s}{:^20s}\n"
