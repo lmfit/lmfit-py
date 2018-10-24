@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 # <examples/doc_confidence_advanced.py>
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 import lmfit
 

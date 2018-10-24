@@ -1,11 +1,14 @@
 from __future__ import print_function
-from lmfit import Parameters, Parameter, Model
-from lmfit.parameter import isclose
-from numpy.testing import assert_, assert_almost_equal, assert_equal
-import unittest
-from copy import deepcopy, copy
-import numpy as np
+
+from copy import copy, deepcopy
 import pickle
+import unittest
+
+import numpy as np
+from numpy.testing import assert_, assert_almost_equal, assert_equal
+
+from lmfit import Model, Parameter, Parameters
+from lmfit.parameter import isclose
 
 
 class TestParameters(unittest.TestCase):
@@ -36,7 +39,7 @@ class TestParameters(unittest.TestCase):
         assert(p2['t'].max < 6.0)
         assert(np.isinf(p2['x'].max) and p2['x'].max > 0)
         assert(np.isinf(p2['x'].min) and p2['x'].min < 0)
-        assert('sqrt(t)' in p2['y'].expr )
+        assert('sqrt(t)' in p2['y'].expr)
         assert(p2._asteval is not None)
         assert(p2._asteval.symtable is not None)
         assert((p2['y'].value > 20) and (p2['y'].value < 21))
@@ -63,13 +66,12 @@ class TestParameters(unittest.TestCase):
         assert(p2['t'].max < 6.0)
 
         assert(np.isinf(p2['x'].min) and p2['x'].min < 0)
-        assert('sqrt(t)' in p2['y'].expr )
+        assert('sqrt(t)' in p2['y'].expr)
         assert(p2._asteval is not None)
         assert(p2._asteval.symtable is not None)
         assert((p2['y'].value > 20) and (p2['y'].value < 21))
 
         assert(p1['y'].value < 10)
-
 
     def test_deepcopy(self):
         # check that a simple copy works
@@ -151,7 +153,7 @@ class TestParameters(unittest.TestCase):
 
         q.update_constraints()
         assert_(p == q)
-        assert_(not p is q)
+        assert_(p is not q)
 
         # now test if the asteval machinery survived
         assert_(q._asteval.symtable['abc'] == '2 * 3.142')
@@ -245,7 +247,3 @@ class TestParameters(unittest.TestCase):
             p1['y'].set(expr='t+')
         assert(len(p1['y']._expr_eval.error) > 0)
         assert_almost_equal(p1['y'].value, 34.0)
-
-
-if __name__ == '__main__':
-    unittest.main()

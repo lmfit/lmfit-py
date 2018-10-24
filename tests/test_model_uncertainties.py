@@ -1,11 +1,11 @@
-"""
-tests of ModelResult.eval_uncertainty()
+"""Tests of ModelResult.eval_uncertainty()"""
 
-"""
 import numpy as np
 from numpy.testing import assert_allclose
+
 from lmfit.lineshapes import gaussian
-from lmfit.models import LinearModel, GaussianModel
+from lmfit.models import GaussianModel, LinearModel
+
 
 def get_linearmodel(slope=0.8, intercept=0.5, noise=1.5):
     # create data to be fitted
@@ -18,6 +18,7 @@ def get_linearmodel(slope=0.8, intercept=0.5, noise=1.5):
     params = model.make_params(intercept=intercept, slope=slope)
 
     return x, y, model, params
+
 
 def get_gaussianmodel(amplitude=1.0, center=5.0, sigma=1.0, noise=0.1):
     # create data to be fitted
@@ -32,6 +33,7 @@ def get_gaussianmodel(amplitude=1.0, center=5.0, sigma=1.0, noise=0.1):
                                sigma=sigma*2.0)
     return x, y, model, params
 
+
 def test_linear_constant_intercept():
     x, y, model, params = get_linearmodel(slope=4, intercept=-10)
 
@@ -44,7 +46,8 @@ def test_linear_constant_intercept():
 
     assert_allclose(dely.min(), 0, rtol=1.e-2)
     assert_allclose(dely.max(), slope_stderr*x.max(), rtol=1.e-2)
-    assert_allclose(dely.mean(),slope_stderr*x.mean(), rtol=1.e-2)
+    assert_allclose(dely.mean(), slope_stderr*x.mean(), rtol=1.e-2)
+
 
 def test_linear_constant_slope():
     x, y, model, params = get_linearmodel(slope=-4, intercept=2.3)
@@ -62,7 +65,7 @@ def test_linear_constant_slope():
 
 
 def test_gauss_sigmalevel():
-    """ test that dely increases as sigma increases"""
+    """Test that dely increases as sigma increases."""
     x, y, model, params = get_gaussianmodel(amplitude=50.0, center=4.5,
                                             sigma=0.78, noise=0.1)
     ret = model.fit(y, params, x=x)
@@ -74,8 +77,9 @@ def test_gauss_sigmalevel():
     assert(dely_sigma3.mean() > 1.5*dely_sigma2.mean())
     assert(dely_sigma2.mean() > 1.5*dely_sigma1.mean())
 
+
 def test_gauss_noiselevel():
-    """ test that dely increases as expected with changing noise level"""
+    """Test that dely increases as expected with changing noise level."""
     lonoise = 0.05
     hinoise = 10*lonoise
     x, y, model, params = get_gaussianmodel(amplitude=20.0, center=2.1,
@@ -89,9 +93,3 @@ def test_gauss_noiselevel():
     dely_hinoise = ret2.eval_uncertainty(sigma=1)
 
     assert_allclose(dely_hinoise.mean(), 10*dely_lonoise.mean(), rtol=1.e-2)
-
-if __name__ == '__main__':
-    test_linear_constant_intercept()
-    test_linear_constant_slope()
-    test_gauss_sigmalevel()
-    test_gauss_noiselevel()

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-import emcee
 import numpy as np
 
+import emcee
 import lmfit
 
 try:

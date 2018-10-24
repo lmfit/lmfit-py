@@ -1,12 +1,13 @@
 import os
 import time
-import numpy as np
-from lmfit_testutils import assert_between, assert_param_between
 
-from lmfit.model import (save_modelresult, save_model,
-                         load_modelresult, load_model)
-from lmfit.models import ExponentialModel, GaussianModel
+import numpy as np
+
 import lmfit.jsonutils
+from lmfit.model import (load_model, load_modelresult, save_model,
+                         save_modelresult)
+from lmfit.models import ExponentialModel, GaussianModel
+from lmfit_testutils import assert_between, assert_param_between
 
 try:
     import dill
@@ -14,12 +15,14 @@ try:
 except ImportError:
     DILL_AVAILABLE = False
 
-dat = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples', 'NIST_Gauss2.dat'))
+dat = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
+                              'NIST_Gauss2.dat'))
 XDAT = dat[:, 1]
 YDAT = dat[:, 0]
 
-SAVE_MODEL       = 'model_1.sav'
+SAVE_MODEL = 'model_1.sav'
 SAVE_MODELRESULT = 'modelresult_1.sav'
+
 
 def clear_savefile(fname):
     """remove save files so that tests are fresh"""
@@ -28,15 +31,15 @@ def clear_savefile(fname):
     except OSError:
         pass
 
+
 def create_model_params(x, y):
     exp_mod = ExponentialModel(prefix='exp_')
-    params  = exp_mod.guess(y, x=x)
+    params = exp_mod.guess(y, x=x)
 
     gauss1 = GaussianModel(prefix='g1_')
     params.update(gauss1.make_params())
 
     gauss2 = GaussianModel(prefix='g2_')
-
     params.update(gauss2.make_params())
 
     params['g1_center'].set(105, min=75, max=125)
@@ -50,10 +53,11 @@ def create_model_params(x, y):
     model = gauss1 + gauss2 + exp_mod
     return model, params
 
+
 def check_fit_results(result):
     assert(result.nvarys == 8)
-    assert_between(result.chisqr,  1000, 1500)
-    assert_between(result.aic,  400, 450)
+    assert_between(result.chisqr, 1000, 1500)
+    assert_between(result.aic, 400, 450)
 
     pars = result.params
     assert_param_between(pars['exp_decay'], 90, 92)
@@ -64,11 +68,12 @@ def check_fit_results(result):
     assert_param_between(pars['g1_fwhm'], 38, 42)
     assert_param_between(pars['g1_height'], 100, 103)
 
-    assert_param_between(pars['g2_sigma'],    10, 15)
-    assert_param_between(pars['g2_center'],  150, 160)
+    assert_param_between(pars['g2_sigma'], 10, 15)
+    assert_param_between(pars['g2_center'], 150, 160)
     assert_param_between(pars['g2_amplitude'], 2100, 2900)
     assert_param_between(pars['g2_fwhm'], 30, 34)
     assert_param_between(pars['g2_height'], 70, 75)
+
 
 def wait_for_file(fname, timeout=10):
     end_time = time.time() + timeout
@@ -78,13 +83,13 @@ def wait_for_file(fname, timeout=10):
         time.sleep(0.05)
     return False
 
+
 def do_save_model(with_dill=True):
     x, y = XDAT, YDAT
     if DILL_AVAILABLE and with_dill:
         lmfit.jsonutils.HAS_DILL = True
     else:
         lmfit.jsonutils.HAS_DILL = False
-
 
     model, params = create_model_params(x, y)
 
@@ -96,6 +101,7 @@ def do_save_model(with_dill=True):
     with open(SAVE_MODEL, 'r') as fh:
         text = fh.read()
     assert_between(len(text), 1000, 2500)
+
 
 def do_load_model():
     x, y = XDAT, YDAT
@@ -112,8 +118,9 @@ def do_load_model():
     params['g2_sigma'].set(15, min=3)
     params['g2_amplitude'].set(2000, min=10)
 
-    result = model.fit(y,  params, x=x)
+    result = model.fit(y, params, x=x)
     check_fit_results(result)
+
 
 def do_save_modelresult(with_dill=True):
     x, y = XDAT, YDAT
@@ -134,31 +141,37 @@ def do_save_modelresult(with_dill=True):
         text = fh.read()
     assert_between(len(text), 8000, 25000)
 
+
 def do_load_modelresult():
     result = load_modelresult(SAVE_MODELRESULT)
     check_fit_results(result)
+
 
 def test_saveload_model_withdill():
     clear_savefile(SAVE_MODEL)
     do_save_model(with_dill=True)
     do_load_model()
 
+
 def test_saveload_model_nodill():
     clear_savefile(SAVE_MODEL)
     do_save_model(with_dill=False)
     do_load_model()
+
 
 def test_saveload_modelresult_withdill():
     clear_savefile(SAVE_MODELRESULT)
     do_save_modelresult(with_dill=True)
     do_load_modelresult()
 
+
 def test_saveload_modelresult_nodill():
     clear_savefile(SAVE_MODELRESULT)
     do_save_modelresult(with_dill=False)
     do_load_modelresult()
 
-def test_savelod_modelresult_items():
+
+def test_saveload_modelresult_items():
     clear_savefile(SAVE_MODELRESULT)
     x, y = XDAT, YDAT
     model, params = create_model_params(x, y)
@@ -177,13 +190,5 @@ def test_savelod_modelresult_items():
     assert(abs(max(result.data) - max(loaded.data)) < 0.001)
 
     for pname in result.params.keys():
-        assert( abs(result.init_params[pname].value - loaded.init_params[pname].value) < 0.001)
-
-
-if __name__ == '__main__':
-    test_saveload_model_nodill()
-    test_saveload_model_withdill()
-
-    test_saveload_modelresult_nodill()
-    test_saveload_modelresult_withdill()
-    test_savelod_modelresult_items()
+        assert(abs(result.init_params[pname].value -
+                   loaded.init_params[pname].value) < 0.001)

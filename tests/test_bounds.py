@@ -1,7 +1,8 @@
-from lmfit import Parameters, minimize, fit_report
-from lmfit_testutils import assert_paramval, assert_paramattr
+from numpy import exp, linspace, pi, random, sign, sin
 
-from numpy import linspace, zeros, sin, exp, random, pi, sign
+from lmfit import Parameters, minimize
+from lmfit_testutils import assert_paramval
+
 
 def test_bounds():
     p_true = Parameters()
@@ -29,8 +30,8 @@ def test_bounds():
     xmax = 250.0
     random.seed(0)
     noise = random.normal(scale=2.80, size=n)
-    x     = linspace(xmin, xmax, n)
-    data  = residual(p_true, x) + noise
+    x = linspace(xmin, xmax, n)
+    data = residual(p_true, x) + noise
 
     fit_params = Parameters()
     fit_params.add('amp', value=13.0, max=20, min=0.0)
@@ -38,17 +39,11 @@ def test_bounds():
     fit_params.add('shift', value=0.0, max=pi/2., min=-pi/2.)
     fit_params.add('decay', value=0.02, max=0.10, min=0.00)
 
-    out = minimize(residual, fit_params, args=(x,), kws={'data':data})
+    out = minimize(residual, fit_params, args=(x,), kws={'data': data})
 
-    fit = residual(out.params, x)
-
-    assert(out.nfev  > 10)
+    assert(out.nfev > 10)
     assert(out.nfree > 50)
     assert(out.chisqr > 1.0)
 
-    print(fit_report(out, show_correl=True, modelpars=p_true))
     assert_paramval(out.params['decay'], 0.01, tol=1.e-2)
     assert_paramval(out.params['shift'], 0.123, tol=1.e-2)
-
-if __name__ == '__main__':
-    test_bounds()

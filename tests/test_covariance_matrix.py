@@ -94,7 +94,8 @@ def test_bounds_expression():
     # assert that stderr and correlations are correct [cf. lmfit v0.9.10]
     assert_almost_equal(result.params['sigma'].stderr, 0.00368468, decimal=6)
     assert_almost_equal(result.params['center'].stderr, 0.00505496, decimal=6)
-    assert_almost_equal(result.params['amplitude'].stderr, 0.13861506, decimal=6)
+    assert_almost_equal(result.params['amplitude'].stderr, 0.13861506,
+                        decimal=6)
     assert_almost_equal(result.params['gamma'].stderr, 0.00368468, decimal=6)
     assert_almost_equal(result.params['fwhm'].stderr, 0.01326968, decimal=6)
     assert_almost_equal(result.params['height'].stderr, 0.03009459, decimal=6)
@@ -222,11 +223,3 @@ def test_numdifftools_calc_covar_false():
 
     assert result_ndt.covar is None
     assert result_ndt.errorbars is False
-
-
-if __name__ == '__main__':
-    test_bounded_parameters()
-    test_bounds_expression()
-    test_numdifftools_no_bounds()
-    test_numdifftools_with_bounds()
-    test_numdifftools_calc_covar_false()

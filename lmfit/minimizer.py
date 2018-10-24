@@ -33,9 +33,8 @@ from scipy.version import version as scipy_version
 import six
 import uncertainties
 
-from .parameter import Parameter, Parameters
-
 from ._ampgo import ampgo
+from .parameter import Parameter, Parameters
 
 # check for EMCEE
 try:
@@ -2110,9 +2109,9 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
     return arr
 
 
-def minimize(fcn, params, method='leastsq', args=None, kws=None,
-             scale_covar=True, iter_cb=None, reduce_fcn=None, calc_covar=True,
-             **fit_kws):
+def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
+             scale_covar=True, nan_policy='raise', reduce_fcn=None,
+             calc_covar=True, **fit_kws):
     """Perform a fit of a set of parameters by minimizing an objective (or
     cost) function using one of the several available methods.
 
@@ -2177,6 +2176,14 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
         and `**kws` as passed to the objective function.
     scale_covar : bool, optional
         Whether to automatically scale the covariance matrix (default is True).
+    nan_policy : str, optional
+        Specifies action if `userfcn` (or a Jacobian) returns NaN
+        values. One of:
+
+        - 'raise' : a `ValueError` is raised
+        - 'propagate' : the values returned from `userfcn` are un-altered
+        - 'omit' : non-finite values are filtered
+
     reduce_fcn : str or callable, optional
         Function to convert a residual array to a scalar value for the scalar
         minimizers. See notes in `Minimizer`.
@@ -2222,13 +2229,13 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None,
 
         fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                            iter_cb=iter_cb, scale_covar=scale_covar,
-                           reduce_fcn=reduce_fcn, calc_covar=calc_covar,
-                           **fit_kws)
+                           nan_policy=nan_policy, reduce_fcn=reduce_fcn,
+                           calc_covar=calc_covar, **fit_kws)
         fitter.minimize(method=method)
 
     """
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar,
-                       reduce_fcn=reduce_fcn, calc_covar=calc_covar,
-                       **fit_kws)
+                       nan_policy=nan_policy, reduce_fcn=reduce_fcn,
+                       calc_covar=calc_covar, **fit_kws)
     return fitter.minimize(method=method)

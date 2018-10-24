@@ -6,7 +6,6 @@ Downloading and Installation
 .. _python:  https://python.org
 .. _scipy:  https://scipy.org/scipylib/index.html
 .. _numpy:  http://numpy.org/
-.. _nose:   https://nose.readthedocs.org/
 .. _pytest: https://pytest.org/
 .. _emcee:  http://dan.iel.fm/emcee/
 .. _pandas:  https://pandas.pydata.org/
@@ -25,16 +24,16 @@ Prerequisites
 The lmfit package requires `Python`_, `NumPy`_, `SciPy`_, `asteval`_, `six`_,
 and `uncertainties`_.
 
-Lmfit works with Python versions 2.7, 3.4, 3.5, and 3.6. Support for Python 2.6
-and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version
-0.17, NumPy version 1.10, asteval version 0.9.12, six version 1.10, and
-uncertainties version 3.0 are the minimum requirements.
+Lmfit works with Python versions 2.7 and 3.4 - 3.7. Support for Python 2.6 and
+3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version 0.17,
+NumPy version 1.10, asteval version 0.9.12, six version 1.10, and uncertainties
+version 3.0 are the minimum requirements.
 
-In order to run the test suite, either the `nose`_ or `pytest`_ package is
-required. Some functionality of lmfit requires the `emcee`_ package, some
-functionality will make use of the `pandas`_, `Jupyter`_, `matplotlib`_,
-`dill`_,  or `numdifftools`_ packages if available.  We highly recommend each of
-these packages.
+In order to run the test suite, either the `pytest`_ package is required. Some
+functionality of lmfit requires the `emcee`_ package, some functionality will
+make use of the `pandas`_, `Jupyter`_, `matplotlib`_, `dill`_, or
+`numdifftools`_ packages if available. We highly recommend each of these
+packages.
 
 
 Downloads
@@ -79,16 +78,15 @@ and install using::
 Testing
 ~~~~~~~~~~
 
-A battery of tests scripts that can be run with either the `nose`_ or
-`pytest`_ testing framework is distributed with lmfit in the ``tests``
-folder.  These are automatically run as part of the development process.
-For any release or any master branch from the git repository, running
-``pytest`` or ``nosetests`` should run all of these tests to completion
-without errors or failures.
+A battery of tests scripts that can be run with the `pytest`_ testing framework
+is distributed with lmfit in the ``tests`` folder. These are automatically run
+as part of the development process.
+For any release or any master branch from the git repository, running ``pytest``
+should run all of these tests to completion without errors or failures.
 
-Many of the examples in this documentation are distributed with lmfit in
-the ``examples`` folder, and should also run for you.  Some of these
-examples assume `matplotlib`_ has been installed and is working correctly.
+Many of the examples in this documentation are distributed with lmfit in the
+``examples`` folder, and should also run for you. Some of these examples assume
+that  `matplotlib`_ has been installed and is working correctly.
 
 Acknowledgements
 ~~~~~~~~~~~~~~~~~~

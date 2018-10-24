@@ -1,15 +1,15 @@
 # test of fitting one variable
 # From Nick Schurch
 
-import lmfit, numpy
+import numpy
 from numpy.testing import assert_allclose
 
+import lmfit
+
+
 def linear_chisq(params, x, data, errs=None):
-
-    ''' Calcs chi-squared residuals linear model (weighted by errors if given)
-    '''
-
-    if type(params) is not lmfit.parameter.Parameters:
+    """Calculates chi-squared residuals for linear model."""
+    if not isinstance(params, lmfit.parameter.Parameters):
         msg = "Params argument is not a lmfit parameter set"
         raise TypeError(msg)
 
@@ -28,13 +28,13 @@ def linear_chisq(params, x, data, errs=None):
 
     return(residuals)
 
+
 def test_1var():
     rands = [-0.21698284, 0.41900591, 0.02349374, -0.218552, -0.3513699,
              0.33418304, 0.04226855, 0.213303, 0.45948731, 0.33587736]
 
     x = numpy.arange(10)+1
     y = numpy.arange(10)+1+rands
-    y_errs = numpy.sqrt(y)/2
 
     params = lmfit.Parameters()
     params.add(name="m", value=1.0, vary=True)
@@ -42,12 +42,8 @@ def test_1var():
 
     out = lmfit.minimize(linear_chisq, params, args=(x, y))
 
-    lmfit.report_fit(out)
     assert_allclose(params['m'].value, 1.025, rtol=0.02, atol=0.02)
-    assert(len(params)==2)
+    assert(len(params) == 2)
     assert(out.nvarys == 1)
     assert(out.chisqr > 0.01)
     assert(out.chisqr < 5.00)
-
-if __name__ == '__main__':
-    test_1var()

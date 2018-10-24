@@ -3,7 +3,7 @@
 """Example fitting to multiple (simulated) data sets."""
 import numpy as np
 
-from lmfit import minimize, Parameters, report_fit
+from lmfit import Parameters, minimize, report_fit
 
 try:
     import matplotlib.pyplot as plt

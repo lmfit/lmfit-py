@@ -1,17 +1,21 @@
 import unittest
 import warnings
-import pytest
-from numpy.testing import assert_allclose
-import numpy as np
 
-from lmfit import Model, Parameter, models
+import numpy as np
+from numpy.testing import assert_allclose
+import pytest
+
+from lmfit import Model, models
 from lmfit.lineshapes import gaussian
 from lmfit.models import PseudoVoigtModel
 
-def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03,
-                         err_msg='', verbose=True):
+
+def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03, err_msg='',
+                         verbose=True):
     for param_name, value in desired.items():
-         assert_allclose(actual[param_name], value, rtol, atol, err_msg, verbose)
+        assert_allclose(actual[param_name], value, rtol, atol, err_msg,
+                        verbose)
+
 
 def _skip_if_no_pandas():
     try:
@@ -145,7 +149,6 @@ class CommonTests(object):
         assert(" Akaike " in report)
         assert(" chi-square " in report)
 
-
     def test_data_alignment(self):
         _skip_if_no_pandas()
         from pandas import Series
@@ -180,15 +183,14 @@ class CommonTests(object):
         params = model.make_params(**self.guess())
         result = model.fit(self.data, params, x=self.x)
         aic = result.aic
-        self.assertTrue(aic < 0) # aic must be negative
+        self.assertTrue(aic < 0)  # aic must be negative
 
         # Pass extra unused Parameter.
         params.add("unused_param", value=1.0, vary=True)
         result = model.fit(self.data, params, x=self.x)
         aic_extra = result.aic
-        self.assertTrue(aic_extra < 0)   # aic must be negative
-        self.assertTrue(aic < aic_extra) # the extra param should lower the aic
-
+        self.assertTrue(aic_extra < 0)  # aic must be negative
+        self.assertTrue(aic < aic_extra)  # extra param should lower the aic
 
     def test_bic(self):
         model = self.model
@@ -197,18 +199,18 @@ class CommonTests(object):
         params = model.make_params(**self.guess())
         result = model.fit(self.data, params, x=self.x)
         bic = result.bic
-        self.assertTrue(bic < 0) # aic must be negative
+        self.assertTrue(bic < 0)  # aic must be negative
 
         # Compare to AIC
         aic = result.aic
-        self.assertTrue(aic < bic) # aic should be lower than bic
+        self.assertTrue(aic < bic)  # aic should be lower than bic
 
         # Pass extra unused Parameter.
         params.add("unused_param", value=1.0, vary=True)
         result = model.fit(self.data, params, x=self.x)
         bic_extra = result.bic
-        self.assertTrue(bic_extra < 0)   # bic must be negative
-        self.assertTrue(bic < bic_extra) # the extra param should lower the bic
+        self.assertTrue(bic_extra < 0)  # bic must be negative
+        self.assertTrue(bic < bic_extra)  # extra param should lower the bic
 
 
 class TestUserDefiniedModel(CommonTests, unittest.TestCase):
@@ -237,7 +239,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
                       **self.guess())
 
     def test_missing_param_raises_error(self):
-
         # using keyword argument parameters
         guess_missing_sigma = self.guess()
         del guess_missing_sigma['sigma']
@@ -290,7 +291,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         data = self.data + 5.0
         model = self.model + models.ConstantModel()
         guess = self.guess()
-        pars = model.make_params(c= 10.1, **guess)
+        pars = model.make_params(c=10.1, **guess)
         true_values = self.true_values()
         true_values['c'] = 5.0
 
@@ -300,7 +301,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     def test_model_with_prefix(self):
         # model with prefix of 'a' and 'b'
         mod = models.GaussianModel(prefix='a')
-        vals = {'center': 2.45, 'sigma':0.8, 'amplitude':3.15}
+        vals = {'center': 2.45, 'sigma': 0.8, 'amplitude': 3.15}
         data = gaussian(x=self.x, **vals) + self.noise/3.0
         pars = mod.guess(data, x=self.x)
         self.assertTrue('aamplitude' in pars)
@@ -341,12 +342,14 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     def test_sum_of_two_gaussians(self):
         # two user-defined gaussians
         model1 = self.model
-        f2 = lambda x, amp, cen, sig: gaussian(x, amplitude=amp, center=cen, sigma=sig)
+        f2 = lambda x, amp, cen, sig: gaussian(x, amplitude=amp, center=cen,
+                                               sigma=sig)
         model2 = Model(f2)
         values1 = self.true_values()
-        values2 = {'cen': 2.45, 'sig':0.8, 'amp':3.15}
+        values2 = {'cen': 2.45, 'sig': 0.8, 'amp': 3.15}
 
-        data  = gaussian(x=self.x, **values1) + f2(x=self.x, **values2) + self.noise/3.0
+        data = (gaussian(x=self.x, **values1) + f2(x=self.x, **values2) +
+                self.noise/3.0)
         model = self.model + model2
         pars = model.make_params()
         pars['sigma'].set(value=2, min=0)
@@ -411,18 +414,17 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         for mod in [model1, model2, model3, model4]:
             self.assertTrue(mod in model_total3.components)
 
-
     def test_eval_components(self):
         model1 = models.GaussianModel(prefix='g1_')
         model2 = models.GaussianModel(prefix='g2_')
         model3 = models.ConstantModel(prefix='bkg_')
-        mod  = model1 + model2 + model3
+        mod = model1 + model2 + model3
         pars = mod.make_params()
 
         values1 = dict(amplitude=7.10, center=1.1, sigma=2.40)
         values2 = dict(amplitude=12.2, center=2.5, sigma=0.5)
-        data  = (1.01 + gaussian(x=self.x, **values1) +
-                 gaussian(x=self.x, **values2) + 0.05*self.noise)
+        data = (1.01 + gaussian(x=self.x, **values1) +
+                gaussian(x=self.x, **values2) + 0.05*self.noise)
 
         pars['g1_sigma'].set(2)
         pars['g1_center'].set(1, max=1.5)
@@ -434,11 +436,11 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
 
         result = mod.fit(data, params=pars, x=self.x)
 
-        self.assertTrue(abs(result.params['g1_amplitude'].value -  7.1) < 1.5)
+        self.assertTrue(abs(result.params['g1_amplitude'].value - 7.1) < 1.5)
         self.assertTrue(abs(result.params['g2_amplitude'].value - 12.2) < 1.5)
-        self.assertTrue(abs(result.params['g1_center'].value    -  1.1) < 0.2)
-        self.assertTrue(abs(result.params['g2_center'].value    -  2.5) < 0.2)
-        self.assertTrue(abs(result.params['bkg_c'].value    -  1.0) < 0.25)
+        self.assertTrue(abs(result.params['g1_center'].value - 1.1) < 0.2)
+        self.assertTrue(abs(result.params['g2_center'].value - 2.5) < 0.2)
+        self.assertTrue(abs(result.params['bkg_c'].value - 1.0) < 0.25)
 
         comps = mod.eval_components(x=self.x)
         assert('bkg_' in comps)
@@ -448,12 +450,13 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         model1 = models.GaussianModel(prefix='g1_')
         model2 = models.GaussianModel(prefix='g2_')
 
-        mod  = model1 + model2
+        mod = model1 + model2
         pars = mod.make_params()
 
         values1 = dict(amplitude=7.10, center=1.1, sigma=2.40)
         values2 = dict(amplitude=12.2, center=2.5, sigma=0.5)
-        data  = gaussian(x=self.x, **values1) + gaussian(x=self.x, **values2) + 0.1*self.noise
+        data = (gaussian(x=self.x, **values1) + gaussian(x=self.x, **values2)
+                + 0.1*self.noise)
 
         pars['g1_sigma'].set(2)
         pars['g1_center'].set(1, max=1.5)
@@ -466,11 +469,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
 
         self.assertTrue(len(result.best_values) == 6)
 
-        self.assertTrue(abs(result.params['g1_amplitude'].value -  7.1) < 0.5)
+        self.assertTrue(abs(result.params['g1_amplitude'].value - 7.1) < 0.5)
         self.assertTrue(abs(result.params['g2_amplitude'].value - 12.2) < 0.5)
-        self.assertTrue(abs(result.params['g1_center'].value    -  1.1) < 0.2)
-        self.assertTrue(abs(result.params['g2_center'].value    -  2.5) < 0.2)
-
+        self.assertTrue(abs(result.params['g1_center'].value - 1.1) < 0.2)
+        self.assertTrue(abs(result.params['g2_center'].value - 2.5) < 0.2)
 
     def test_hints_in_composite_models(self):
         # test propagation of hints from base models to composite model
@@ -493,10 +495,9 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         # test that height/fwhm do not cause asteval errors.
 
         x = np.linspace(-10, 10, 101)
-        y = np.sin(x / 3)  + x /100.
+        y = np.sin(x / 3) + x/100.
 
         m1 = models.LinearModel(prefix='m1_')
-
         params = m1.guess(y, x=x)
 
         m2 = models.GaussianModel(prefix='m2_')
@@ -532,9 +533,8 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         assert_allclose(params['fraction'].value, 0.77, rtol=0.01)
 
     def test_composite_model_with_expr_constrains(self):
-        """Smoke test for composite model fitting with expr constraints.
-        """
-        y = [  0,   0,   4,   2,   1,   8,  21,  21,  23,  35,  50,  54,  46,
+        """Smoke test for composite model fitting with expr constraints."""
+        y = [0,   0,   4,   2,   1,   8,  21,  21,  23,  35,  50,  54,  46,
              70,   77,  87,  98, 113, 148, 136, 185, 195, 194, 168, 170, 139,
              155, 115, 132, 109, 102,  85,  69,  81,  82,  80,  71,  64,  79,
              88,  111,  97,  97,  73,  72,  62,  41,  30,  13,   3,   9,   7,
@@ -547,7 +547,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         # Initial values
         p1_mu = 0.2
         p1_sigma = 0.1
-        #p2_mu = 0.8
         p2_sigma = 0.1
 
         peak1 = Model(gauss, prefix='p1_')
@@ -555,7 +554,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         model = peak1 + peak2
 
         model.set_param_hint('p1_mu', value=p1_mu, min=-1, max=2)
-        #model.set_param_hint('p2_mu', value=p2_mu, min=-1, max=2)
         model.set_param_hint('p1_sigma', value=p1_sigma, min=0.01, max=0.2)
         model.set_param_hint('p2_sigma', value=p2_sigma, min=0.01, max=0.2)
         model.set_param_hint('p1_A', value=100, min=0.01)
@@ -569,21 +567,19 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         result = model.fit(y, x=x)
         self.assertTrue(result.params['pos_delta'].value > 0)
 
-
     def test_model_nan_policy(self):
-
         x = np.linspace(0, 10, 201)
         np.random.seed(0)
-        y  = gaussian(x, 10.0,  6.15, 0.8)
-        y += gaussian(x,  8.0,  6.35, 1.1)
-        y += gaussian(x,  0.25, 6.00, 7.5)
+        y = gaussian(x, 10.0, 6.15, 0.8)
+        y += gaussian(x, 8.0, 6.35, 1.1)
+        y += gaussian(x, 0.25, 6.00, 7.5)
         y += np.random.normal(size=len(x), scale=0.5)
 
         y[55] = y[91] = np.nan
         mod = PseudoVoigtModel()
         params = mod.make_params(amplitude=20, center=5.5,
-                                  sigma=1, fraction=0.25)
-        params['fraction'].vary=False
+                                 sigma=1, fraction=0.25)
+        params['fraction'].vary = False
         # with raise, should get a ValueError
         result = lambda: mod.fit(y, params, x=x, nan_policy='raise')
         self.assertRaises(ValueError, result)
@@ -601,11 +597,11 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         result = mod.fit(y, params, x=x, nan_policy='omit')
         self.assertTrue(result.success)
         self.assertTrue(result.chisqr > 2.0)
-        self.assertTrue(result.aic  < -100)
+        self.assertTrue(result.aic < -100)
         self.assertTrue(result.errorbars)
         self.assertTrue(result.params['amplitude'].stderr > 0.1)
         self.assertTrue(abs(result.params['amplitude'].value - 20.0) < 5.0)
-        self.assertTrue(abs(result.params['center'].value   - 6.0) < 0.5)
+        self.assertTrue(abs(result.params['center'].value - 6.0) < 0.5)
 
 
 class TestLinear(CommonTests, unittest.TestCase):
@@ -627,8 +623,7 @@ class TestParabolic(CommonTests, unittest.TestCase):
 
 
 class TestPolynomialOrder2(CommonTests, unittest.TestCase):
-   # class Polynomial constructed with order=2
-
+    # class Polynomial constructed with order=2
     def setUp(self):
         self.true_values = lambda: dict(c2=5, c1=2, c0=8)
         self.guess = lambda: dict(c1=1, c2=6, c0=3)
@@ -638,8 +633,7 @@ class TestPolynomialOrder2(CommonTests, unittest.TestCase):
 
 
 class TestPolynomialOrder3(CommonTests, unittest.TestCase):
-   # class Polynomial constructed with order=3
-
+    # class Polynomial constructed with order=3
     def setUp(self):
         self.true_values = lambda: dict(c3=2, c2=5, c1=2, c0=8)
         self.guess = lambda: dict(c3=1, c1=1, c2=6, c0=3)
@@ -657,6 +651,7 @@ class TestConstant(CommonTests, unittest.TestCase):
 
     def check_skip_independent_vars(self):
         raise pytest.skip("ConstantModel has not independent_vars.")
+
 
 class TestPowerlaw(CommonTests, unittest.TestCase):
     def setUp(self):
@@ -676,10 +671,11 @@ class TestExponential(CommonTests, unittest.TestCase):
 
 class TestComplexConstant(CommonTests, unittest.TestCase):
     def setUp(self):
-        self.true_values = lambda: dict(re=5,im=5)
-        self.guess = lambda: dict(re=2,im=2)
+        self.true_values = lambda: dict(re=5, im=5)
+        self.guess = lambda: dict(re=2, im=2)
         self.model_constructor = models.ComplexConstantModel
         super(TestComplexConstant, self).setUp()
+
 
 class TestExpression(CommonTests, unittest.TestCase):
     def setUp(self):

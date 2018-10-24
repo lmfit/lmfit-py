@@ -1,10 +1,10 @@
 import os
 
 import numpy as np
-from numpy import linspace, sin, exp, random, pi, sign
+from numpy import exp, linspace, pi, random, sign, sin
 from numpy.testing import assert_allclose, assert_almost_equal
 
-from lmfit import Parameters, fit_report, Minimizer
+from lmfit import Minimizer, Parameters
 from lmfit.models import VoigtModel
 from lmfit_testutils import assert_paramval
 
@@ -51,7 +51,6 @@ def test_bounds():
     assert(out.nfree > 50)
     assert(out.chisqr > 1.0)
 
-    print(fit_report(out, show_correl=True, modelpars=p_true))
     assert_paramval(out.params['decay'], 0.01, tol=1.e-2)
     assert_paramval(out.params['shift'], 0.123, tol=1.e-2)
 
@@ -136,9 +135,3 @@ def test_cov_x_with_bounds():
         cor_lsq = [result_lsq.params[par1].correl[par2] for par2 in
                    result_lsq.params[par1].correl.keys()]
         assert_almost_equal(cor_lsq, cor, decimal=6)
-
-
-if __name__ == '__main__':
-    test_bounds()
-    test_cov_x_no_bounds()
-    test_cov_x_with_bounds()

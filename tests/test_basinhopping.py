@@ -1,6 +1,5 @@
 import numpy as np
 from numpy.testing import assert_allclose
-
 from scipy.optimize import basinhopping
 from scipy.version import version as scipy_version
 
@@ -54,7 +53,8 @@ def test_basinhopping_2d():
     if int(major) < 1 and int(minor) < 19:
         ret = basinhopping(func2d, x0, minimizer_kwargs=minimizer_kwargs)
     else:
-        ret = basinhopping(func2d, x0, minimizer_kwargs=minimizer_kwargs, seed=7)
+        ret = basinhopping(func2d, x0, minimizer_kwargs=minimizer_kwargs,
+                           seed=7)
 
     # lmfit
     def residual_2d(params):
@@ -133,9 +133,3 @@ def test_basinhopping_Alpine02():
     assert_allclose(out.residual, fglob, rtol=1e-5)
     assert_allclose(min(out_x), min(global_optimum))
     assert_allclose(max(out_x), max(global_optimum))
-
-
-if __name__ == '__main__':
-    test_basinhopping()
-    test_basinhopping_2d()
-    test_basinhopping_Alpine02()

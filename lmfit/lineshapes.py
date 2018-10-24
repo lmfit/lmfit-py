@@ -3,8 +3,9 @@ from __future__ import division
 
 from numpy import arctan, cos, exp, log, pi, sin, sqrt, where
 from numpy.testing import assert_allclose
-from scipy.special import erf, erfc, gammaln, wofz
+from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
+from scipy.special import gammaln, wofz
 
 log2 = log(2)
 s2pi = sqrt(2*pi)
