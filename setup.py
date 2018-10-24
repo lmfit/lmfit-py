@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# from distutils.core import setup
-from __future__ import print_function
 
 from setuptools import setup
 import versioneer
@@ -39,12 +37,19 @@ setup(name='lmfit',
       description="Least-Squares Minimization with Bounds and Constraints",
       long_description=long_desc,
       platforms=['Windows', 'Linux', 'Mac OS X'],
-      classifiers=['Intended Audience :: Science/Research',
+      classifiers=['Development Status :: 5 - Production/Stable',
+                   'Intended Audience :: Science/Research',
+                   'License :: OSI Approved :: BSD License',
                    'Operating System :: OS Independent',
-                   'Programming Language :: Python',
+                   'Programming Language :: Python :: 2.7',
+                   'Programming Language :: Python :: 3.4',
+                   'Programming Language :: Python :: 3.5',
+                   'Programming Language :: Python :: 3.6',
+                   'Programming Language :: Python :: 3.7',
                    'Topic :: Scientific/Engineering',
                   ],
-      test_requires=['pytest'],
+      keywords='curve-fitting, least-squares minimization',
+      tests_require=['pytest'],
       package_dir={'lmfit': 'lmfit'},
       packages=['lmfit', 'lmfit.ui'],
      )
