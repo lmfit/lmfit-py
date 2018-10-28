@@ -1844,6 +1844,7 @@ class Minimizer(object):
             - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
             - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
+            - `'emcee'`: Maximum liklihood via Monte-Carlo Markov Chain
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -1889,6 +1890,8 @@ class Minimizer(object):
             function = self.basinhopping
         elif user_method == 'ampgo':
             function = self.ampgo
+        elif user_method == 'emcee':
+            function = self.emcee
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -2154,6 +2157,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
         - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
+        - `'emcee'`: Maximum liklihood via Monte-Carlo Markov Chain
 
         In most cases, these methods wrap and use the method of the same
         name from `scipy.optimize`, or use `scipy.optimize.minimize` with
