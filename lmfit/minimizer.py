@@ -751,8 +751,8 @@ class Minimizer(object):
         if self.scale_covar:
             self.result.covar *= self.result.redchi
 
-        vbest = np.atleast_1d([self.result.params[name].value for i, name in
-                               enumerate(self.result.var_names)])
+        vbest = np.atleast_1d([self.result.params[name].value for name in
+                               self.result.var_names])
 
         has_expr = False
         for par in self.result.params.values():
