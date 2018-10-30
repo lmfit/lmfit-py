@@ -1844,7 +1844,7 @@ class Minimizer(object):
             - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
             - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
-            - `'emcee'`: Maximum liklihood via Monte-Carlo Markov Chain
+            - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -2157,7 +2157,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
         - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
-        - `'emcee'`: Maximum liklihood via Monte-Carlo Markov Chain
+        - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
 
         In most cases, these methods wrap and use the method of the same
         name from `scipy.optimize`, or use `scipy.optimize.minimize` with
