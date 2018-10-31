@@ -1,25 +1,27 @@
-Many people have contributed to lmfit.  The attribution of credit in a project
-such as this is very difficult to get perfect, and there are no doubt important
-contributions missing or under-represented here.  Please consider this file as
-part of the documentation that may have bugs that need fixing.
+Many people have contributed to lmfit.  The attribution of credit in a
+project such as this is difficult to get perfect, and there are no doubt
+important contributions that are missing or under-represented here.  Please
+consider this file as part of the code and documentation that may have bugs
+that need fixing.
 
-Some of the largest and most important contributions (approximately in order of
-contribution in size to the existing code) are from:
+Some of the largest and most important contributions (in approximate order
+of size of the contribution to the existing code) are from:
 
   Matthew Newville wrote the original version and maintains the project.
+
+  Renee Otten wrote the brute force method, implemented the basin-hopping
+  and AMPGO global solvers, implemented uncertainty calculations for scalar
+  minimizers and has greatly improved the code, testing, and documentation
+  and overall project.
 
   Till Stensitzki wrote the improved estimates of confidence intervals, and
   contributed many tests, bug fixes, and documentation.
 
-  Renee Otten wrote the brute force method, implemented basin-hopping and AMPGO
-  global solvers, and has greatly improved the code, testing, and documentation
-  and overall project.
+  A. R. J. Nelson added differential_evolution, emcee, and greatly improved
+  the code, docstrings, and overall project.
 
-  A. R. J. Nelson added differential_evolution, emcee, and greatly improved the
-  code, docstrings, and overall project.
-
-  Antonino Ingargiola wrote much of the high level Model code and has provided
-  many bug fixes and improvements.
+  Antonino Ingargiola wrote much of the high level Model code and has
+  provided many bug fixes and improvements.
 
   Daniel B. Allan wrote much of the original version of the high level Model
   code, and many improvements to the testing and documentation.
@@ -32,15 +34,14 @@ contribution in size to the existing code) are from:
   J. J. Helmus wrote the MINUT bounds for leastsq, originally in
   leastsqbounds.py, and ported to lmfit.
 
-  E. O. Le Bigot wrote the uncertainties package, a version of which was used
-  by lmfit for many years, and is now an external dependency.
+  E. O. Le Bigot wrote the uncertainties package, a version of which was
+  used by lmfit for many years, and is now an external dependency.
 
+Additional patches, bug fixes, and suggestions have come from Fausten
+Carter, Christoph Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau,
+nmearl, Gustavo Pasquevich, Clemens Prescher, LiCode, Ben Gamari, Yoav
+Roam, Alexander Stark, Alexandre Beelen, and many others.
 
-Additional patches, bug fixes, and suggestions have come from Christoph Deil,
-Francois Boulogne, Thomas Caswell, Colin Brosseau, nmearl, Gustavo Pasquevich,
-Clemens Prescher, LiCode, Ben Gamari, Yoav Roam, Alexander Stark, Alexandre
-Beelen, and many others.
-
-The lmfit code obviously depends on, and owes a very large debt to the code in
-scipy.optimize.  Several discussions on the scipy-user and lmfit mailing lists
-have also led to improvements in this code.
+The lmfit code obviously depends on, and owes a very large debt to the code
+in scipy.optimize.  Several discussions on the scipy-user and lmfit mailing
+lists have also led to improvements in this code.
