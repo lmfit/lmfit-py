@@ -17,74 +17,77 @@ try:
 except ImportError:
     HASCORNER = False
 
+# Set up a double exponential function
+def double_exp(x, a1, t1, a2, t2):
+    return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
+
+# Create a lmfit Model from it
+model = lmfit.Model(double_exp)
+
+# Generate some fake data from the model with added noise
+truths = (3.0, 2.0, -5.0, 10.0)
 x = np.linspace(1, 10, 250)
 np.random.seed(0)
-y = (3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1) / 10.) +
-     0.1*np.random.randn(len(x)))
+y = double_exp(x, *truths)+0.1*np.random.randn(len(x))
+
 if HASPYLAB:
     plt.plot(x, y, 'b')
     # plt.savefig('../doc/_images/emcee_dbl_exp.png')
     plt.show()
 
-p = lmfit.Parameters()
-p.add_many(('a1', 4), ('a2', 4), ('t1', 3), ('t2', 3., True))
+# Create model parameters and give them initial values
+p = model.make_params(a1=4, t1=3, a2=4, t2=3)
 
+# Fit the model and plot the results using a traditional minimizer
+result = model.fit(data = y, params = p, x = x, method='Nelder', nan_policy='omit')
 
-def residual(p):
-    v = p.valuesdict()
-    return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1) / v['t2']) - y
+lmfit.report_fit(result)
 
-
-mi = lmfit.minimize(residual, p, method='Nelder', nan_policy='omit')
-lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
 if HASPYLAB:
-    plt.figure()
-    plt.plot(x, y, 'b')
-    plt.plot(x, residual(mi.params) + y, 'r')
-    # plt.savefig('../doc/_images/emcee_dbl_exp2.png')
+    result.plot()
     plt.show()
 
-# add a noise parameter
-mi.params.add('noise', value=1, min=0.001, max=2)
+# Calculate parameter covariance using emcee
+# Start the walkers out at the best-fit values
+# Set is_weighted to False to estimate the noise weights
+emcee_kws = dict(steps=1000, burn=300, thin=20, is_weighted=False)
+emcee_params = result.params.copy()
 
+# Set some sensible priors on the uncertainty to keep the MCMC in check
+emcee_params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
+result_emcee = model.fit(data = y, x = x, params = emcee_params,
+                         method='emcee', nan_policy='omit',
+                         fit_kws=emcee_kws)
 
-def lnprob(p):
-    noise = p['noise']
-    return -0.5 * np.sum((residual(p) / noise)**2 + np.log(2 * np.pi * noise**2))
+lmfit.report_fit(result_emcee)
 
+# Plot the emcee result and compare it with best fit from Nelder method
+if HASPYLAB:
+    ax = plt.plot(x, model.eval(params = result.params, x=x), label='Nelder', zorder=100)
+    result_emcee.plot_fit(ax = ax, data_kws=dict(color='gray', markersize=2))
+    plt.show()
 
-mini = lmfit.Minimizer(lnprob, mi.params)
-res = mini.emcee(burn=300, steps=1000, thin=20, params=mi.params)
-
+# Plot the parameter covariances returned by emcee using corner
 if HASPYLAB and HASCORNER:
-    emcee_corner = corner.corner(res.flatchain, labels=res.var_names,
-                                 truths=list(res.params.valuesdict().values()))
-    # emcee_corner.savefig('../doc/_images/emcee_corner.png')
+    emcee_corner = corner.corner(result_emcee.flatchain, labels=result_emcee.var_names,
+                                 truths=result_emcee.params.valuesdict().values())
     plt.show()
+
 
 print("\nmedian of posterior probability distribution")
 print('--------------------------------------------')
-lmfit.report_fit(res.params)
+lmfit.report_fit(result_emcee.params)
 
 # find the maximum likelihood solution
-highest_prob = np.argmax(res.lnprob)
-hp_loc = np.unravel_index(highest_prob, res.lnprob.shape)
-mle_soln = res.chain[hp_loc]
-for i, par in enumerate(p):
-    p[par].value = mle_soln[i]
+highest_prob = np.argmax(result_emcee.lnprob)
+hp_loc = np.unravel_index(highest_prob, result_emcee.lnprob.shape)
+mle_soln = result_emcee.chain[hp_loc]
 print("\nMaximum likelihood Estimation")
 print('-----------------------------')
-print(p)
+for ix, param in enumerate(emcee_params):
+    print(param + ': ' + str(mle_soln[ix]))
 
-if HASPYLAB:
-    plt.figure()
-    plt.plot(x, y)
-    plt.plot(x, residual(mi.params) + y, 'r', label='Nelder-Mead')
-    plt.plot(x, residual(res.params) + y, 'black', label='emcee')
-    plt.legend()
-    plt.show()
-
-quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
+quantiles = np.percentile(result_emcee.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
 print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
 print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
 # <end of examples/doc_fitting_emcee.py>
