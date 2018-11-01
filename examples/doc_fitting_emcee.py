@@ -70,7 +70,7 @@ if HASPYLAB:
 # Plot the parameter covariances returned by emcee using corner
 if HASPYLAB and HASCORNER:
     emcee_corner = corner.corner(result_emcee.flatchain, labels=result_emcee.var_names,
-                                 truths=result_emcee.params.valuesdict().values())
+                                 truths=list(result_emcee.params.valuesdict().values()))
     plt.show()
 
 
