@@ -97,7 +97,7 @@ Acknowledgements
 
 
 Copyright, Licensing, and Re-distribution
------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The LMFIT-py code is distributed under the following license:
 
