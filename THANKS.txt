@@ -37,7 +37,7 @@ of size of the contribution to the existing code) are from:
   E. O. Le Bigot wrote the uncertainties package, a version of which was
   used by lmfit for many years, and is now an external dependency.
 
-Additional patches, bug fixes, and suggestions have come from Fausten
+Additional patches, bug fixes, and suggestions have come from Faustin
 Carter, Christoph Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau,
 nmearl, Gustavo Pasquevich, Clemens Prescher, LiCode, Ben Gamari, Yoav
 Roam, Alexander Stark, Alexandre Beelen, and many others.

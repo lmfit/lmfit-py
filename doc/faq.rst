@@ -1,4 +1,4 @@
-.. _faq_chapter:
+%\.. _faq_chapter:
 
 ====================================
 Frequently Asked Questions
@@ -101,64 +101,67 @@ How should I cite LMFIT?
 
 See https://dx.doi.org/10.5281/zenodo.11813
 
-I get errors from NaNs in my fit.  What can I do?
+I get errors from NaN in my fit.  What can I do?
 ======================================================
 
-The solvers used by `lmfit` use `NaN` values as signals that the
-calculation cannot continue.  If any value in the residual array (typically
-`(data-model)*weight`) is `NaN`, then calculations of chi-square or
+The solvers used by `lmfit` use NaN (see
+https://en.wikipedia.org/wiki/NaN) values as signals that the calculation
+cannot continue.  If any value in the residual array (typically
+`(data-model)*weight`) is NaN, then calculations of chi-square or
 comparisons with other residual arrays to try find a better fit will also
-give `NaN` and fail. There is no sensible way for `lmfit` or any of the
-optimization routines to know how to handle such `NaN` values.  They
+give NaN and fail. There is no sensible way for `lmfit` or any of the
+optimization routines to know how to handle such NaN values.  They
 indicate that numerical calculations are not sensible and must stop.
 
 This means that if your objective function (if using `minimize`) or model
-function (if using `Model`) generates a `NaN`, the fit will stop
-immediately. If your objective or model function generates a `NaN`, you
+function (if using `Model`) generates a NaN, the fit will stop
+immediately. If your objective or model function generates a NaN, you
 really must handle that.
 
 `nan_policy`
 ~~~~~~~~~~~~~~~~~~
 
-If you are using :class:`lmfit.Model` and the `NaN` values come from your
+If you are using :class:`lmfit.Model` and the NaN values come from your
 data array and are meant to indicate missing values, or if you using
 :func:`lmfit.minimize` with the same basic intention, then it might be
-possible to get a successful fit in spite of the `NaN` values. To do this,
+possible to get a successful fit in spite of the NaN values. To do this,
 you can add a `nan_policy='omit'` argument to :func:`lmfit.minimize`, or
 when creating a :class:`lmfit.Model`, or when running
 :meth:`lmfit.Model.fit`.
 
-In order for this to be effective, the number of `NaN` values cannot ever
-change during the fit.  If the `NaN` values come from the data and not the
+In order for this to be effective, the number of NaN values cannot ever
+change during the fit.  If the NaN values come from the data and not the
 calculated model, that should be the case.
 
 
-Common sources of `NaN`
+Common sources of NaN
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you are seeing erros due to `NaN` values, you will need to figure out
+If you are seeing erros due to NaN values, you will need to figure out
 where they are coming from and eliminate them.  It is sometimes difficult
-to tell what causes `NaN` values.  Keeep n mind that all values should be
+to tell what causes NaN values.  Keep in mind that all values should be
 assumed to be either scalar values or numpy arrays of double precision real
-numbers when fitting.  Some of the most likely causes of `NaN`s are:
+numbers when fitting.  Some of the most likely causes of NaNs are:
 
    * taking `sqrt(x)` or `log(x)` where `x` is negative.
 
-   * doing "x**y" where `x` is negative.  Since `y` is real, there will
+   * doing `x**y` where `x` is negative.  Since `y` is real, there will
      be a fractional component, and a negative number to a fractional
      exponent is not a real number.
 
-Note that all values should be assumed to be either scalar values or numpy
-arrays of double precision real numbers when fitting.  If you use these in
-your objective or model function, you should take caution for what values
-you are passing these functions and operators.  Many special functions have
-similar limitations and should be viewed with some suspicion if `NaN`s are
-being generated.
+   * doing `x/y` where both `x` and `y` are 0.
 
-A related problem is the generation of `Inf`, which generally comes from
-`exp(x)` where `x` has values greater than 700 or so, so that the resulting
-value is greater than 1.e308.  `Inf` is only slightly better than `NaN`. It
-will completely ruin the ability to do the fit.  But, it is also usually
-clear how to handle `Inf`, as you probably won't ever have values greater
-than 1.e308, you can just clip the argument to `exp()` to be smaller than
+If you use these very common constructs in your objective or model
+function, you should take some caution for what values you are passing
+these functions and operators.  Many special functions have similar
+limitations and should also be viewed with some suspicion if NaNs are being
+generated.
+
+A related problem is the generation of Inf (Infinity in floating point),
+which generally comes from `exp(x)` where `x` has values greater than 700
+or so, so that the resulting value is greater than 1.e308.  Inf is only
+slightly better than NaN. It will completely ruin the ability to do the
+fit.  However, unlike NaN, it is also usually clear how to handle Inf, as
+you probably won't ever have values greater than 1.e308 and can therefore
+(usually) safely clip the argument passed to `exp()` to be smaller than
 about 700.
