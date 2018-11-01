@@ -31,11 +31,22 @@ of size of the contribution to the existing code) are from:
 
   Michal Rawlik added plotting capabilities for Models.
 
-  J. J. Helmus wrote the MINUT bounds for leastsq, originally in
-  leastsqbounds.py, and ported to lmfit.
+
+  The method used for placing bounds on parameters was derived from the
+  clear description in the MINUIT documentation, and adapted from
+  J. J. Helmus's python implementation in leastsqbounds.py.
 
   E. O. Le Bigot wrote the uncertainties package, a version of which was
   used by lmfit for many years, and is now an external dependency.
+
+  The original AMPGO code came from Andrea Gavana and was adopted for
+  lmfit.
+
+  The propagation of parameter uncertainties to uncertainties in a Model
+  was adapted from the excellent description at
+  https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals,
+  which references the original work of: J. Wolberg,Data Analysis Using the
+  Method of Least Squares, 2006, Springer
 
 Additional patches, bug fixes, and suggestions have come from Faustin
 Carter, Christoph Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau,
