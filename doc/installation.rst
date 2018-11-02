@@ -21,19 +21,24 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-The lmfit package requires `Python`_, `NumPy`_, `SciPy`_, `asteval`_, `six`_,
-and `uncertainties`_.
+Lmfit works with Python versions 2.7 and 3.4 - 3.7. Support for Python 2.6
+and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively.  Support
+for 2.7 is expected to end in early 2019.
 
-Lmfit works with Python versions 2.7 and 3.4 - 3.7. Support for Python 2.6 and
-3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version 0.17,
-NumPy version 1.10, asteval version 0.9.12, six version 1.10, and uncertainties
-version 3.0 are the minimum requirements.
+Lmfit requires the following Python packages, with versions given:
+   * `six`_ version 1.10 or higher.
+   * `NumPy`_ version 1.10 or higher.
+   * `SciPy`_ version 0.17 or higher.
+   * `asteval`_ version 0.9.12 or higher.
+   * `uncertainties`_ version 3.0 or higher.
 
-In order to run the test suite, either the `pytest`_ package is required. Some
-functionality of lmfit requires the `emcee`_ package, some functionality will
-make use of the `pandas`_, `Jupyter`_, `matplotlib`_, `dill`_, or
-`numdifftools`_ packages if available. We highly recommend each of these
-packages.
+All of these are readily available on PyPI, and should be installed
+automatically if installing with `pip install lmfit`.
+
+In order to run the test suite, the `pytest`_ package is required.  Some
+functionality requires the `emcee`_, `pandas`_, `Jupyter`_, `matplotlib`_,
+`dill`_, or `numdifftools`_ packages.  These are not installed
+automatically, but we highly recommend each of these packages.
 
 
 Downloads
@@ -45,13 +50,9 @@ The latest stable version of lmfit is |release| and is available from `PyPi
 Installation
 ~~~~~~~~~~~~~~~~~
 
-With ``pip`` now widely avaliable, you can install lmfit with::
+The easiest way to install lmfit is with::
 
     pip install lmfit
-
-Alternatively, you can download the source kit, unpack it and install with::
-
-   python setup.py install
 
 For Anaconda Python, lmfit is not an official package, but several
 Anaconda channels provide it, allowing installation with (for example)::
@@ -92,11 +93,13 @@ Acknowledgements
 ~~~~~~~~~~~~~~~~~~
 
 .. literalinclude:: ../THANKS.txt
+  :language: none
 
 
-License
-~~~~~~~~~~~~~
+Copyright, Licensing, and Re-distribution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The LMFIT-py code is distribution under the following license:
+The LMFIT-py code is distributed under the following license:
 
 .. literalinclude:: ../LICENSE
+  :language: none
