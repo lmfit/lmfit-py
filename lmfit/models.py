@@ -404,9 +404,6 @@ class VoigtModel(Model):
     the full width at half maximum is approximately :math:`3.6013\sigma`.
 
     """
-
-    fwhm_factor = 3.60131
-
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
@@ -417,11 +414,15 @@ class VoigtModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
-        fmt = ("{prefix:s}amplitude*wofz((1j*{prefix:s}gamma)/"
-               "({prefix:s}sigma*sqrt(2))).real/({prefix:s}sigma*sqrt(2*pi))")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        fexpr = ("1.0692*{pre:s}gamma+" +
+                 "sqrt(0.8664*{pre:s}gamma**2+5.545083*{pre:s}sigma**2)")
+        hexpr = ("({pre:s}amplitude/({pre:s}sigma*sqrt(2*pi)))*"
+                 "wofz((1j*{pre:s}gamma)/({pre:s}sigma*sqrt(2))).real")
+
+        self.set_param_hint('fwhm', expr=fexpr.format(pre=self.prefix))
+        self.set_param_hint('height', expr=hexpr.format(pre=self.prefix))
+
 
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
