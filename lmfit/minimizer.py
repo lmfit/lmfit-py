@@ -329,7 +329,7 @@ class MinimizerResult(object):
                           "{:.3f}".format(i, candidate.score))
                     candidate.params.pretty_print()
 
-    def _calculate_statistics(self):
+    def _calculate_statistics(self, float_behavior = 'chi2'):
         """Calculate the fitting statistics."""
         self.nvarys = len(self.init_vals)
         if isinstance(self.residual, ndarray):
@@ -337,12 +337,18 @@ class MinimizerResult(object):
             self.ndata = len(self.residual)
             self.nfree = self.ndata - self.nvarys
         else:
-            self.chisqr = self.residual
+            if float_behavior = 'chi2':
+                self.chisqr = self.residual
+                # this is -2*loglikelihood
+                _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
+            elif float_behvaior = 'posterior':
+                self.chisqr = 'np.NAN'
+                # assuming prior prob = 1, this is true
+                _neg2_log_likel = -2*self.residual
             self.ndata = 1
             self.nfree = 1
+        
         self.redchi = self.chisqr / max(1, self.nfree)
-        # this is -2*loglikelihood
-        _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
         self.aic = _neg2_log_likel + 2 * self.nvarys
         self.bic = _neg2_log_likel + np.log(self.ndata) * self.nvarys
 
@@ -1294,6 +1300,20 @@ class Minimizer(object):
         result.lnprob = np.copy(lnprobability)
         result.errorbars = True
         result.nvarys = len(result.var_names)
+        result.nfev = ntemps*nwalkers*steps
+        
+        # Calculate the residul with the "best fit" parameters
+        out = self.userfcn(params, *self.userargs, **self.userkws)
+        result.residual = _nan_policy(out, nan_policy=self.nan_policy, handle_inf=False)
+
+        # If uncertainty was automatically estimated, weight the residual properly
+        if (is_weighted == False) and (result.residual.size > 1):
+            if '__lnsigma' in params:
+                result.residual = result.residual/np.exp(params['__lnsigma'].value)
+
+        
+        result._calculate_statistics(float_behavior)
+
 
         if auto_pool is not None:
             auto_pool.terminate()
