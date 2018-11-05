@@ -329,25 +329,28 @@ class MinimizerResult(object):
                           "{:.3f}".format(i, candidate.score))
                     candidate.params.pretty_print()
 
-    def _calculate_statistics(self, float_behavior = 'chi2'):
+    def _calculate_statistics(self, float_behavior='chi2'):
         """Calculate the fitting statistics."""
         self.nvarys = len(self.init_vals)
         if isinstance(self.residual, ndarray):
             self.chisqr = (self.residual**2).sum()
             self.ndata = len(self.residual)
-            self.nfree = self.ndata - self.nvarys
+                 
         else:
+            self.ndata = 1
+            self.nfree = 1
+            
             if float_behavior = 'chi2':
                 self.chisqr = self.residual
                 # this is -2*loglikelihood
                 _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
+            
             elif float_behvaior = 'posterior':
-                self.chisqr = 'np.NAN'
+                self.chisqr = np.NAN
                 # assuming prior prob = 1, this is true
                 _neg2_log_likel = -2*self.residual
-            self.ndata = 1
-            self.nfree = 1
-        
+            
+        self.nfree = self.ndata - self.nvarys
         self.redchi = self.chisqr / max(1, self.nfree)
         self.aic = _neg2_log_likel + 2 * self.nvarys
         self.bic = _neg2_log_likel + np.log(self.ndata) * self.nvarys
@@ -1307,7 +1310,7 @@ class Minimizer(object):
         result.residual = _nan_policy(out, nan_policy=self.nan_policy, handle_inf=False)
 
         # If uncertainty was automatically estimated, weight the residual properly
-        if (is_weighted == False) and (result.residual.size > 1):
+        if (not is_weighted) and (result.residual.size > 1):
             if '__lnsigma' in params:
                 result.residual = result.residual/np.exp(params['__lnsigma'].value)
 
