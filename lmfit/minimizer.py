@@ -335,17 +335,20 @@ class MinimizerResult(object):
         if isinstance(self.residual, ndarray):
             self.chisqr = (self.residual**2).sum()
             self.ndata = len(self.residual)
+
+            # this is -2*loglikelihood
+            _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
                  
         else:
             self.ndata = 1
             self.nfree = 1
             
-            if float_behavior = 'chi2':
+            if float_behavior == 'chi2':
                 self.chisqr = self.residual
                 # this is -2*loglikelihood
                 _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
             
-            elif float_behvaior = 'posterior':
+            elif float_behvaior == 'posterior':
                 self.chisqr = np.NAN
                 # assuming prior prob = 1, this is true
                 _neg2_log_likel = -2*self.residual
