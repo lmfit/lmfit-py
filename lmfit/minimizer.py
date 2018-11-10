@@ -700,7 +700,6 @@ class Minimizer(object):
             Covariance matrix if successful, otherwise None.
 
         """
-        import warnings
         warnings.filterwarnings(action="ignore", module="scipy",
                                 message="^internal gelsd")
 
