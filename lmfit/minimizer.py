@@ -38,7 +38,7 @@ from .parameter import Parameter, Parameters
 
 # check for EMCEE
 try:
-    import emcee as emcee
+    import emcee
     HAS_EMCEE = True
     EMCEE_VERSION = int(emcee.__version__[0])
 except ImportError:
