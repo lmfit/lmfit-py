@@ -1808,8 +1808,8 @@ class ModelResult(Minimizer):
         if show_init:
             ax.plot(
                 x_array_dense,
-                reduce_complex(self.model.eval(self.init_params,
-                               **{independent_var: x_array_dense})),
+                reduce_complex(self.model.eval(
+                    self.init_params, **{independent_var: x_array_dense})),
                 initfmt, label='init', **init_kws)
 
         if yerr is None and self.weights is not None:
