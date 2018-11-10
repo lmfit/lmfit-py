@@ -35,18 +35,14 @@ Copyright (c) 2018 Lmfit Developers ; BSD-3 license ; see LICENSE
 
 """
 from asteval import Interpreter
+
 from .confidence import conf_interval, conf_interval2d
 from .minimizer import Minimizer, MinimizerException, minimize
 from .parameter import Parameter, Parameters
-from .printfuncs import (fit_report, ci_report,
-                         report_fit, report_ci, report_errors)
-
+from .printfuncs import (ci_report, fit_report, report_ci, report_errors,
+                         report_fit)
 from .model import Model, CompositeModel
-from . import models
-from . import lineshapes
-
-import uncertainties
-from uncertainties import ufloat, correlated_values
+from . import lineshapes, models
 
 # versioneer code
 from ._version import get_versions

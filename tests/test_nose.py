@@ -5,8 +5,9 @@ from numpy import pi
 from numpy.testing import (assert_, assert_allclose, assert_almost_equal,
                            assert_equal, dec)
 import pytest
+from uncertainties import ufloat
 
-from lmfit import Minimizer, Parameters, minimize, ufloat
+from lmfit import Minimizer, Parameters, minimize
 from lmfit.lineshapes import gaussian
 from lmfit.minimizer import (HAS_EMCEE, SCALAR_METHODS, MinimizerResult,
                              _lnpost, _nan_policy)
