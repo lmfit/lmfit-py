@@ -1597,7 +1597,7 @@ class ModelResult(Minimizer):
             if isinstance(val, np.bool_):
                 val = bool(val)
             out[attr] = encode4js(val)
-        return json.dumps(out)
+        return json.dumps(out, **kws)
 
     def dump(self, fp, **kws):
         """Dump serialization of ModelResult to a file.
