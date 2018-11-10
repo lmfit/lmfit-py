@@ -1,6 +1,4 @@
 """Concise nonlinear curve fitting."""
-from __future__ import print_function
-
 from collections import OrderedDict
 from copy import deepcopy
 from functools import wraps

@@ -1,6 +1,4 @@
 """Functions to display fitting results and confidence intervals."""
-from __future__ import print_function
-
 from math import log10
 import re
 

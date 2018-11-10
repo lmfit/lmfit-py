@@ -9,8 +9,6 @@ Implementation details can be found in this paper:
     http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf
 """
 
-from __future__ import print_function
-
 import numpy as np
 from scipy.optimize import minimize
 
