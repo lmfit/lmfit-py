@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """JSON utilities for larch objects."""
 from base64 import b64decode, b64encode
 import json
