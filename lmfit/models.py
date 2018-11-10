@@ -423,7 +423,6 @@ class VoigtModel(Model):
         self.set_param_hint('fwhm', expr=fexpr.format(pre=self.prefix))
         self.set_param_hint('height', expr=hexpr.format(pre=self.prefix))
 
-
     def guess(self, data, x=None, negative=False, **kwargs):
         pars = guess_from_peak(self, data, x, negative,
                                ampscale=1.5, sigscale=0.65)
