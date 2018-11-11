@@ -1333,9 +1333,6 @@ class Minimizer(object):
                     # assumes that residual is properly weighted
                     min_res.chisqr = np.exp(_neg2_log_likel)
 
-                    # assuming prior prob = 1, this is true
-                    _neg2_log_likel = -2*min_res.residual
-
             min_res.nfree = min_res.ndata - min_res.nvarys
             min_res.redchi = min_res.chisqr / max(1, min_res.nfree)
             min_res.aic = _neg2_log_likel + 2 * min_res.nvarys
