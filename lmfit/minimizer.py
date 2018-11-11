@@ -1327,6 +1327,9 @@ class Minimizer(object):
                     _neg2_log_likel = min_res.ndata * np.log(min_res.chisqr / min_res.ndata)
 
                 elif float_behavior == 'posterior':
+                    # assuming prior prob = 1, this is true
+                    _neg2_log_likel = -2*min_res.residual
+
                     # assumes that residual is properly weighted
                     min_res.chisqr = np.exp(_neg2_log_likel)
 
