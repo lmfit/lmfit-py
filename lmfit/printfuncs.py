@@ -24,23 +24,27 @@ def getfloat_attr(obj, attr, length=11):
 
 
 def gformat(val, length=11):
-    """Format a number with '%g'-like format, except that
+    """Format a number with '%g'-like format.
 
-        a) the length of the output string will be the requested length.
+    Except that:
+        a) the length of the output string will be of the requested length.
         b) positive numbers will have a leading blank.
         b) the precision will be as high as possible.
         c) trailing zeros will not be trimmed.
 
     The precision will typically be length-7.
 
-    Arguments
-    ---------
-    val       value to be formatted
-    length    length of output string
+    Parameters
+    ----------
+    val : float
+       Value to be formatted.
+    length : int, optional
+       Length of output string (default is 11).
 
     Returns
     -------
-    string of specified length.
+    str
+        String of specified length.
 
     Notes
     ------

@@ -83,8 +83,12 @@ class Parameters(OrderedDict):
         return self.__deepcopy__(None)
 
     def __deepcopy__(self, memo):
-        """Parameters.deepcopy() needs to make sure that asteval is available
-        and that all individual Parameter objects are copied."""
+        """Implementation of Parameters.deepcopy().
+
+        The method needs to make sure that asteval is available and that all
+        individual Parameter objects are copied.
+
+        """
         _pars = Parameters(asteval=None)
 
         # find the symbols that were added by users, not during construction
@@ -654,7 +658,7 @@ class Parameter(object):
         self._init_bounds()
 
     def __repr__(self):
-        """Returns printable representation of a Parameter object."""
+        """Return printable representation of a Parameter object."""
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)

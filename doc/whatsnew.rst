@@ -12,6 +12,7 @@ to be a comprehensive list of changes.  For such a complete record,
 consult the `lmfit GitHub repository`_.
 
 .. _whatsnew_0912_label:
+
 Version 0.9.12 Release Notes
 ==========================================
 

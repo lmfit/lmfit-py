@@ -120,6 +120,7 @@ class MinimizerException(Exception):
 
 class AbortFitException(MinimizerException):
     """Raised when a fit is aborted by the user."""
+
     pass
 
 
@@ -290,7 +291,7 @@ class MinimizerResult(object):
 
     @property
     def flatchain(self):
-        """A flatchain view of the sampling chain from the `emcee` method."""
+        """Show flatchain view of the sampling chain from `emcee` method."""
         if hasattr(self, 'chain'):
             if HAS_PANDAS:
                 if len(self.chain.shape) == 4:
@@ -306,7 +307,7 @@ class MinimizerResult(object):
             return None
 
     def show_candidates(self, candidate_nmb='all'):
-        """A pretty_print() representation of the candidates.
+        """Show pretty_print() representation of candidates from `brute` method.
 
         Showing candidates (default is 'all') or the specified candidate-#
         from the `brute` method.
@@ -1703,8 +1704,10 @@ class Minimizer(object):
         return result
 
     def ampgo(self, params=None, **kws):
-        """Finds the global minimum of a multivariate function using the AMPGO
-        (Adaptive Memory Programming for Global Optimization) algorithm.
+        """Find the global minimum of a multivariate function using AMPGO.
+
+        AMPGO stands for 'Adaptive Memory Programming for Global Optimization'
+        and is an efficient algorithm to find the global minimum.
 
         Parameters
         ----------
@@ -2034,8 +2037,12 @@ VALID_NAN_POLICIES = ('propagate', 'omit', 'raise')
 
 
 def validate_nan_policy(policy):
-    """Validate, rationalize nan_policy, for backward compatibility and
-    compatibility with Pandas missing convention."""
+    """Validate and rationalize `nan_policy`.
+
+    This function ensures backwards compatibility and as well as compatibility
+    with Pandas `missing` convention.
+
+    """
     if policy in VALID_NAN_POLICIES:
         return policy
     if policy is None:

@@ -14,7 +14,8 @@ from .model import Model
 
 
 class DimensionalError(Exception):
-    """TODO: class docstring."""
+    """Raise exception when number of independent variables is not one."""
+
     pass
 
 
@@ -148,6 +149,7 @@ class ConstantModel(Model):
         super(ConstantModel, self).__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = self.make_params()
 
         pars['%sc' % self.prefix].set(value=data.mean())
@@ -177,6 +179,7 @@ class ComplexConstantModel(Model):
         super(ComplexConstantModel, self).__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = self.make_params()
         pars['%sre' % self.prefix].set(value=data.real.mean())
         pars['%sim' % self.prefix].set(value=data.imag.mean())
@@ -206,6 +209,7 @@ class LinearModel(Model):
         super(LinearModel, self).__init__(linear, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
+        """Estimate initial model parameter values from data."""
         sval, oval = 0., 0.
         if x is not None:
             sval, oval = np.polyfit(x, data, 1)
@@ -234,6 +238,7 @@ class QuadraticModel(Model):
         super(QuadraticModel, self).__init__(parabolic, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
+        """Estimate initial model parameter values from data."""
         a, b, c = 0., 0., 0.
         if x is not None:
             a, b, c = np.polyfit(x, data, 2)
@@ -280,6 +285,7 @@ class PolynomialModel(Model):
         super(PolynomialModel, self).__init__(polynomial, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = self.make_params()
         if x is not None:
             out = np.polyfit(x, data, self.poly_degree)
@@ -325,6 +331,7 @@ class GaussianModel(Model):
         self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -365,6 +372,7 @@ class LorentzianModel(Model):
         self.set_param_hint('height', expr=height_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -424,6 +432,7 @@ class VoigtModel(Model):
         self.set_param_hint('height', expr=hexpr.format(pre=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative,
                                ampscale=1.5, sigscale=0.65)
         return update_param_vals(pars, self.prefix, **kwargs)
@@ -474,6 +483,7 @@ class PseudoVoigtModel(Model):
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
         pars['%sfraction' % self.prefix].set(value=0.5, min=0.0, max=1.0)
         return update_param_vals(pars, self.prefix, **kwargs)
@@ -515,6 +525,7 @@ class MoffatModel(Model):
         self.set_param_hint('height', expr="%samplitude" % self.prefix)
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5, sigscale=1.)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -558,6 +569,7 @@ class Pearson7Model(Model):
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         pars['%sexpon' % self.prefix].set(value=1.5)
         return update_param_vals(pars, self.prefix, **kwargs)
@@ -599,6 +611,7 @@ class StudentsTModel(Model):
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -636,6 +649,7 @@ class BreitWignerModel(Model):
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         pars['%sq' % self.prefix].set(value=1.0)
         return update_param_vals(pars, self.prefix, **kwargs)
@@ -679,6 +693,7 @@ class LognormalModel(Model):
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = self.make_params(amplitude=1.0, center=0.0, sigma=0.25)
         pars['%ssigma' % self.prefix].set(min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
@@ -722,6 +737,7 @@ class DampedOscillatorModel(Model):
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative,
                                ampscale=0.1, sigscale=0.1)
         return update_param_vals(pars, self.prefix, **kwargs)
@@ -769,6 +785,7 @@ class DampedHarmonicOscillatorModel(Model):
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative,
                                ampscale=0.1, sigscale=0.1)
         pars['%sgamma' % self.prefix].set(value=1.0, min=0.0)
@@ -816,6 +833,7 @@ class ExponentialGaussianModel(Model):
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -859,6 +877,7 @@ class SkewedGaussianModel(Model):
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -906,6 +925,7 @@ class SkewedVoigtModel(Model):
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -942,6 +962,7 @@ class DonaichModel(Model):
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5)
         return update_param_vals(pars, self.prefix, **kwargs)
 
@@ -966,6 +987,7 @@ class PowerLawModel(Model):
         super(PowerLawModel, self).__init__(powerlaw, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
+        """Estimate initial model parameter values from data."""
         try:
             expon, amp = np.polyfit(np.log(x+1.e-14), np.log(data+1.e-14), 1)
         except TypeError:
@@ -996,6 +1018,7 @@ class ExponentialModel(Model):
         super(ExponentialModel, self).__init__(exponential, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
+        """Estimate initial model parameter values from data."""
         try:
             sval, oval = np.polyfit(x, np.log(abs(data)+1.e-15), 1)
         except TypeError:
@@ -1043,6 +1066,7 @@ class StepModel(Model):
         super(StepModel, self).__init__(step, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
+        """Estimate initial model parameter values from data."""
         if x is None:
             return
         ymin, ymax = min(data), max(data)
@@ -1108,6 +1132,7 @@ class RectangleModel(Model):
                                                                 self.prefix))
 
     def guess(self, data, x=None, **kwargs):
+        """Estimate initial model parameter values from data."""
         if x is None:
             return
         ymin, ymax = min(data), max(data)
