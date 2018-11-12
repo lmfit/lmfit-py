@@ -17,9 +17,11 @@ try:
 except ImportError:
     HASCORNER = False
 
+
 # Set up a double exponential function
 def double_exp(x, a1, t1, a2, t2):
     return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
+
 
 # Create a lmfit Model from it
 model = lmfit.Model(double_exp)
@@ -39,7 +41,7 @@ if HASPYLAB:
 p = model.make_params(a1=4, t1=3, a2=4, t2=3)
 
 # Fit the model and plot the results using a traditional minimizer
-result = model.fit(data = y, params = p, x = x, method='Nelder', nan_policy='omit')
+result = model.fit(data=y, params=p, x=x, method='Nelder', nan_policy='omit')
 
 lmfit.report_fit(result)
 
@@ -55,7 +57,7 @@ emcee_params = result.params.copy()
 
 # Set some sensible priors on the uncertainty to keep the MCMC in check
 emcee_params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
-result_emcee = model.fit(data = y, x = x, params = emcee_params,
+result_emcee = model.fit(data=y, x=x, params=emcee_params,
                          method='emcee', nan_policy='omit',
                          fit_kws=emcee_kws)
 
@@ -63,8 +65,8 @@ lmfit.report_fit(result_emcee)
 
 # Plot the emcee result and compare it with best fit from Nelder method
 if HASPYLAB:
-    ax = plt.plot(x, model.eval(params = result.params, x=x), label='Nelder', zorder=100)
-    result_emcee.plot_fit(ax = ax, data_kws=dict(color='gray', markersize=2))
+    ax = plt.plot(x, model.eval(params=result.params, x=x), label='Nelder', zorder=100)
+    result_emcee.plot_fit(ax=ax, data_kws=dict(color='gray', markersize=2))
     plt.show()
 
 # Plot the parameter covariances returned by emcee using corner
