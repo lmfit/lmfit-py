@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """JSON utilities for larch objects."""
 from base64 import b64decode, b64encode
 import json
@@ -36,7 +35,7 @@ else:
 
 
 def find_importer(obj):
-    """find importer of an object"""
+    """Find importer of an object."""
     oname = obj.__name__
     for modname, module in sys.modules.items():
         if modname.startswith('__main__'):
@@ -48,7 +47,7 @@ def find_importer(obj):
 
 
 def import_from(modulepath, objectname):
-    """wrapper for __import__ for nested objects"""
+    """Wrapper for __import__ for nested objects."""
     path = modulepath.split('.')
     top = path.pop(0)
     parent = __import__(top)

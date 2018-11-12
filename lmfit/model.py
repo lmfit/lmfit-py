@@ -1,6 +1,4 @@
-"""Concise nonlinear curve fitting."""
-from __future__ import print_function
-
+"""Implementation of the Model interface."""
 from collections import OrderedDict
 from copy import deepcopy
 from functools import wraps
@@ -72,11 +70,13 @@ def get_reducer(option):
 
     """
     if option not in ['real', 'imag', 'abs', 'angle']:
-        raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'."%option)
+        raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'." % option)
 
     def reducer(array):
-        """Convert a complex array to a real array based on the option passed
-        to parse_complex. Does nothing to a purely real array.
+        """Convert a complex array to a real array.
+
+        Several conversion methods are available and it does nothing to a
+        purely real array.
 
         Parameters
         ----------
@@ -137,7 +137,7 @@ def propagate_err(z, dz, option):
 
     """
     if option not in ['real', 'imag', 'abs', 'angle']:
-        raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'."%option)
+        raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'." % option)
 
     # Check the main vector for complex. Do nothing if real.
     if any(np.iscomplex(z)):
@@ -182,6 +182,8 @@ def propagate_err(z, dz, option):
 
 
 class Model(object):
+    """Model class."""
+
     _forbidden_args = ('data', 'weights', 'params')
     _invalid_ivar = "Invalid independent variable name ('%s') for function %s"
     _invalid_par = "Invalid parameter name ('%s') for function %s"
@@ -317,8 +319,8 @@ class Model(object):
         Note: like the standard-ish '__setstate__' method but not really
         useful with Pickle.
 
-        Arguments
-        ---------
+        Parameters
+        ----------
         state :
             Serialized state from `_get_state`.
         funcdefs : dict, optional
@@ -442,8 +444,7 @@ class Model(object):
         self._parse_params()
 
     def _set_paramhints_prefix(self):
-        """Reset parameter hints for prefix:
-        intended to be overwritten"""
+        """Reset parameter hints for prefix: intended to be overwritten."""
         pass
 
     @property
@@ -1410,16 +1411,17 @@ class ModelResult(Minimizer):
         return self.model.eval_components(params=params, **userkws)
 
     def eval_uncertainty(self, params=None, sigma=1, **kwargs):
-        """Evaluate the uncertainty of the *model function* from the
-        uncertainties for the best-fit parameters.  This can be used to give
-        confidence bands for the model.
+        """Evaluate the uncertainty of the *model function*.
+
+        This can be used to give confidence bands for the model from the
+        uncertainties in the best-fit parameters.
 
         Parameters
         ----------
         params : Parameters, optional
              Parameters, defaults to ModelResult.params.
         sigma : float, optional
-             Confidence level, i.e. how many sigma (default  is 1).
+             Confidence level, i.e. how many sigma (default is 1).
         **kwargs : optional
              Values of options, independent variables, etcetera.
 
@@ -1443,12 +1445,12 @@ class ModelResult(Minimizer):
         1. This is based on the excellent and clear example from
            https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals,
            which references the original work of:
-           J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer
-        2. The value of sigma is number of `sigma` values, and is converted to a
-           probability.  Values or 1, 2, or 3 give probalities of 0.6827, 0.9545,
-           and 0.9973, respectively. If the sigma value is < 1, it is interpreted
-           as the probability itself.  That is, `sigma=1` and `sigma=0.6827` will
-           give the same results, within precision errors.
+           J. Wolberg, Data Analysis Using the Method of Least Squares, 2006, Springer
+        2. The value of sigma is number of `sigma` values, and is converted to
+           a probability. Values of 1, 2, or 3 give probabilities of 0.6827,
+           0.9545, and 0.9973, respectively. If the sigma value is < 1, it is
+           interpreted as the probability itself. That is, `sigma=1` and
+           `sigma=0.6827` will give the same results, within precision errors.
 
         """
         userkws = self.userkws.copy()
@@ -1599,7 +1601,7 @@ class ModelResult(Minimizer):
             if isinstance(val, np.bool_):
                 val = bool(val)
             out[attr] = encode4js(val)
-        return json.dumps(out)
+        return json.dumps(out, **kws)
 
     def dump(self, fp, **kws):
         """Dump serialization of ModelResult to a file.
@@ -1810,8 +1812,8 @@ class ModelResult(Minimizer):
         if show_init:
             ax.plot(
                 x_array_dense,
-                reduce_complex(self.model.eval(self.init_params,
-                               **{independent_var: x_array_dense})),
+                reduce_complex(self.model.eval(
+                    self.init_params, **{independent_var: x_array_dense})),
                 initfmt, label='init', **init_kws)
 
         if yerr is None and self.weights is not None:

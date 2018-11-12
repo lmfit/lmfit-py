@@ -6,7 +6,7 @@ from copy import deepcopy
 import json
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
-from numpy import arcsin, array, cos, inf, nan, sin, sqrt
+from numpy import arcsin, array, cos, inf, isclose, nan, sin, sqrt
 import scipy.special
 import uncertainties
 
@@ -21,31 +21,6 @@ def check_ast_errors(expr_eval):
     """Check for errors derived from asteval."""
     if len(expr_eval.error) > 0:
         expr_eval.raise_exception(None)
-
-
-def isclose(x, y, rtol=1e-5, atol=1e-8):
-    """Check whether two numbers are the same within a tolerance.
-
-    abs(`x` - `y`) <= (`atol` + `rtol` * abs(`y`))
-
-    Parameters
-    ----------
-    x, y : float
-        Input values.
-    rtol : float, optional
-        The relative tolerance parameter.
-    atol : float, optional
-        The absolute tolerance parameter.
-
-    Returns
-    -------
-    bool
-        True if `x` and `y` are the same within tolerance, otherwise False.
-
-    """
-    if x in (-inf, inf, nan) or y in (-inf, inf, nan):
-        return (x == y)
-    return (abs(x - y) <= atol + rtol * abs(y))
 
 
 class Parameters(OrderedDict):
@@ -108,8 +83,12 @@ class Parameters(OrderedDict):
         return self.__deepcopy__(None)
 
     def __deepcopy__(self, memo):
-        """Parameters.deepcopy() needs to make sure that asteval is available
-        and that all individual Parameter objects are copied."""
+        """Implementation of Parameters.deepcopy().
+
+        The method needs to make sure that asteval is available and that all
+        individual Parameter objects are copied.
+
+        """
         _pars = Parameters(asteval=None)
 
         # find the symbols that were added by users, not during construction
@@ -679,7 +658,7 @@ class Parameter(object):
         self._init_bounds()
 
     def __repr__(self):
-        """Returns printable representation of a Parameter object."""
+        """Return printable representation of a Parameter object."""
         s = []
         if self.name is not None:
             s.append("'%s'" % self.name)

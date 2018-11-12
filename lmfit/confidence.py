@@ -1,6 +1,4 @@
 """Contains functions to calculate confidence intervals."""
-from __future__ import print_function
-
 from collections import OrderedDict
 from warnings import warn
 

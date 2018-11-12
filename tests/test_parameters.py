@@ -8,7 +8,6 @@ import numpy as np
 from numpy.testing import assert_, assert_almost_equal, assert_equal
 
 from lmfit import Model, Parameter, Parameters
-from lmfit.parameter import isclose
 
 
 class TestParameters(unittest.TestCase):
@@ -183,7 +182,7 @@ class TestParameters(unittest.TestCase):
 
         model = Model(lambda x, a: a * x)
         result = model.fit(yy, params=params, x=xx)
-        assert_(isclose(result.params['a'].value, 3.0, rtol=0.025))
+        assert_(np.isclose(result.params['a'].value, 3.0, rtol=0.025))
         assert_(result.nfev > 3)
         assert_(result.nfev < 300)
 
@@ -194,9 +193,9 @@ class TestParameters(unittest.TestCase):
         pars.add('x', value=1.0)
         pars.add('y', expr='x + 1')
 
-        assert_(isclose(pars['y'].value, 2.0))
+        assert_(np.isclose(pars['y'].value, 2.0))
         pars['x'].set(value=3.0)
-        assert_(isclose(pars['y'].value, 4.0))
+        assert_(np.isclose(pars['y'].value, 4.0))
 
     def test_dumps_loads_parameters(self):
         # test that we can dumps() and then loads() a Parameters
@@ -209,16 +208,16 @@ class TestParameters(unittest.TestCase):
 
         newpars = Parameters().loads(dumps)
         newpars['y'].value = 100.0
-        assert_(isclose(newpars['x'].value, 50.0))
+        assert_(np.isclose(newpars['x'].value, 50.0))
 
     def test_isclose(self):
-        assert_(isclose(1., 1+1e-5, atol=1e-4, rtol=0))
-        assert_(not isclose(1., 1+1e-5, atol=1e-6, rtol=0))
-        assert_(isclose(1e10, 1.00001e10, rtol=1e-5, atol=1e-8))
-        assert_(not isclose(0, np.inf))
-        assert_(not isclose(-np.inf, np.inf))
-        assert_(isclose(np.inf, np.inf))
-        assert_(not isclose(np.nan, np.nan))
+        assert_(np.isclose(1., 1+1e-5, atol=1e-4, rtol=0))
+        assert_(not np.isclose(1., 1+1e-5, atol=1e-6, rtol=0))
+        assert_(np.isclose(1e10, 1.00001e10, rtol=1e-5, atol=1e-8))
+        assert_(not np.isclose(0, np.inf))
+        assert_(not np.isclose(-np.inf, np.inf))
+        assert_(np.isclose(np.inf, np.inf))
+        assert_(not np.isclose(np.nan, np.nan))
 
     def test_expr_with_bounds(self):
         "test an expression with bounds, without value"
@@ -229,7 +228,7 @@ class TestParameters(unittest.TestCase):
         pars.add('csum', value=0.8)
         # this should not raise TypeError:
         pars.add('c4', expr='csum-c1-c2-c3', min=0, max=1)
-        assert_(isclose(pars['c4'].value, 0.2))
+        assert_(np.isclose(pars['c4'].value, 0.2))
 
     def test_invalid_expr_exceptions(self):
         "test if an exception is raised for invalid expressions (GH486)"""
