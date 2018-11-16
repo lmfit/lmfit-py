@@ -1296,7 +1296,7 @@ class Minimizer(object):
         result.nvarys = len(result.var_names)
         result.nfev = ntemps*nwalkers*steps
 
-        # Calculate the residul with the "best fit" parameters
+        # Calculate the residual with the "best fit" parameters
         out = self.userfcn(params, *self.userargs, **self.userkws)
         result.residual = _nan_policy(out, nan_policy=self.nan_policy, handle_inf=False)
 
@@ -1305,40 +1305,26 @@ class Minimizer(object):
             if '__lnsigma' in params:
                 result.residual = result.residual/np.exp(params['__lnsigma'].value)
 
-        # Redefine _calc_stats specifically for the case of emcee.
-        # This is slated eventually to be migrated into MinimizerResult._calculate_statistics
-        def _calculate_statistics(min_res, float_behavior='chi2'):
-            """Calculate the fitting statistics."""
-            min_res.nvarys = len(min_res.init_vals)
-            if isinstance(min_res.residual, ndarray):
-                min_res.chisqr = (min_res.residual**2).sum()
-                min_res.ndata = len(min_res.residual)
+        # Calculate statistics for the two standard cases:
+        if isinstance(result.residual, ndarray) or (float_behavior == 'chi2'):
+            result._calculate_statistics()
 
-                # this is -2*loglikelihood
-                _neg2_log_likel = min_res.ndata * np.log(min_res.chisqr / min_res.ndata)
+        # Handle special case unique to emcee:
+        # This should eventually be moved into result._calculate_statistics.
+        elif float_behavior == 'posterior':
+            result.nvarys = len(result.init_vals)
+            result.ndata = 1
+            result.nfree = 1
 
-            else:
-                min_res.ndata = 1
-                min_res.nfree = 1
+            # assuming prior prob = 1, this is true
+            _neg2_log_likel = -2*result.residual
 
-                if float_behavior == 'chi2':
-                    min_res.chisqr = min_res.residual
-                    # this is -2*loglikelihood
-                    _neg2_log_likel = min_res.ndata * np.log(min_res.chisqr / min_res.ndata)
+            # assumes that residual is properly weighted
+            result.chisqr = np.exp(_neg2_log_likel)
 
-                elif float_behavior == 'posterior':
-                    # assuming prior prob = 1, this is true
-                    _neg2_log_likel = -2*min_res.residual
-
-                    # assumes that residual is properly weighted
-                    min_res.chisqr = np.exp(_neg2_log_likel)
-
-            min_res.nfree = min_res.ndata - min_res.nvarys
-            min_res.redchi = min_res.chisqr / max(1, min_res.nfree)
-            min_res.aic = _neg2_log_likel + 2 * min_res.nvarys
-            min_res.bic = _neg2_log_likel + np.log(min_res.ndata) * min_res.nvarys
-
-        _calculate_statistics(result, float_behavior)
+            result.redchi = result.chisqr / result.nfree
+            result.aic = _neg2_log_likel + 2 * result.nvarys
+            result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
 
         if auto_pool is not None:
             auto_pool.terminate()
