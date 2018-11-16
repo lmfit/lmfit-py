@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-# <examples/doc_fitting_emcee.py>
 import numpy as np
 
 import lmfit
