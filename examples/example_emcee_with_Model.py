@@ -91,4 +91,3 @@ for ix, param in enumerate(emcee_params):
 quantiles = np.percentile(result_emcee.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
 print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
 print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
-# <end of examples/doc_fitting_emcee.py>
