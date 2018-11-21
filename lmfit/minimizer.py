@@ -341,7 +341,7 @@ class MinimizerResult(object):
             self.chisqr = self.residual
             self.ndata = 1
             self.nfree = 1
-        self.redchi = self.chisqr / max(1, self.nfree)
+        self.redchi = self.chisqr / self.nfree
         # this is -2*loglikelihood
         _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
         self.aic = _neg2_log_likel + 2 * self.nvarys
@@ -751,8 +751,8 @@ class Minimizer(object):
         if self.scale_covar:
             self.result.covar *= self.result.redchi
 
-        vbest = np.atleast_1d([self.result.params[name].value for i, name in
-                               enumerate(self.result.var_names)])
+        vbest = np.atleast_1d([self.result.params[name].value for name in
+                               self.result.var_names])
 
         has_expr = False
         for par in self.result.params.values():
@@ -1294,6 +1294,37 @@ class Minimizer(object):
         result.lnprob = np.copy(lnprobability)
         result.errorbars = True
         result.nvarys = len(result.var_names)
+        result.nfev = ntemps*nwalkers*steps
+
+        # Calculate the residual with the "best fit" parameters
+        out = self.userfcn(params, *self.userargs, **self.userkws)
+        result.residual = _nan_policy(out, nan_policy=self.nan_policy, handle_inf=False)
+
+        # If uncertainty was automatically estimated, weight the residual properly
+        if (not is_weighted) and (result.residual.size > 1):
+            if '__lnsigma' in params:
+                result.residual = result.residual/np.exp(params['__lnsigma'].value)
+
+        # Calculate statistics for the two standard cases:
+        if isinstance(result.residual, ndarray) or (float_behavior == 'chi2'):
+            result._calculate_statistics()
+
+        # Handle special case unique to emcee:
+        # This should eventually be moved into result._calculate_statistics.
+        elif float_behavior == 'posterior':
+            result.nvarys = len(result.init_vals)
+            result.ndata = 1
+            result.nfree = 1
+
+            # assuming prior prob = 1, this is true
+            _neg2_log_likel = -2*result.residual
+
+            # assumes that residual is properly weighted
+            result.chisqr = np.exp(_neg2_log_likel)
+
+            result.redchi = result.chisqr / result.nfree
+            result.aic = _neg2_log_likel + 2 * result.nvarys
+            result.bic = _neg2_log_likel + np.log(result.ndata) * result.nvarys
 
         if auto_pool is not None:
             auto_pool.terminate()
@@ -1846,6 +1877,7 @@ class Minimizer(object):
             - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
             - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
+            - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -1891,6 +1923,8 @@ class Minimizer(object):
             function = self.basinhopping
         elif user_method == 'ampgo':
             function = self.ampgo
+        elif user_method == 'emcee':
+            function = self.emcee
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -2160,6 +2194,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
         - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
+        - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
 
         In most cases, these methods wrap and use the method of the same
         name from `scipy.optimize`, or use `scipy.optimize.minimize` with

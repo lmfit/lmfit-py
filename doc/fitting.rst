@@ -172,13 +172,18 @@ uncertainties and correlations if `calc_covar` is True (default).
  | Programming for Global   |                                                                  |
  | Optimization             |                                                                  |
  +--------------------------+------------------------------------------------------------------+
+ | Maximum likelihood via   |  ``emcee``                                                       |
+ | Monte-Carlo Markov Chain |                                                                  |
+ +--------------------------+------------------------------------------------------------------+
 
 
 .. note::
 
    The objective function for the Levenberg-Marquardt method **must**
    return an array, with more elements than variables.  All other methods
-   can return either a scalar value or an array.
+   can return either a scalar value or an array. The Monte-Carlo Markov
+   Chain or ``emcee`` method has two different operating methods when the
+   objective function returns a scalar value. See the documentation for ``emcee``.
 
 
 .. warning::
