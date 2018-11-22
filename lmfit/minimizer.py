@@ -309,7 +309,7 @@ class MinimizerResult(object):
     def show_candidates(self, candidate_nmb='all'):
         """Show pretty_print() representation of candidates from `brute` method.
 
-        Showing candidates (default is 'all') or the specified candidate-#
+        Showing all stored candidates (default) or the specified candidate-#
         from the `brute` method.
 
         Parameters
@@ -319,16 +319,19 @@ class MinimizerResult(object):
 
         """
         if hasattr(self, 'candidates'):
-            try:
-                candidate = self.candidates[candidate_nmb]
+            if candidate_nmb == 'all':
+                for i, candidate in enumerate(self.candidates):
+                    print("\nCandidate #{}, chisqr = "
+                          "{:.3f}".format(i+1, candidate.score))
+                    candidate.params.pretty_print()
+            elif (candidate_nmb < 1 or candidate_nmb > len(self.candidates)):
+                raise ValueError("'candidate_nmb' should be between 1 and {}."
+                                 .format(len(self.candidates)))
+            else:
+                candidate = self.candidates[candidate_nmb-1]
                 print("\nCandidate #{}, chisqr = "
                       "{:.3f}".format(candidate_nmb, candidate.score))
                 candidate.params.pretty_print()
-            except IndexError:
-                for i, candidate in enumerate(self.candidates):
-                    print("\nCandidate #{}, chisqr = "
-                          "{:.3f}".format(i, candidate.score))
-                    candidate.params.pretty_print()
 
     def _calculate_statistics(self):
         """Calculate the fitting statistics."""
