@@ -341,7 +341,7 @@ class MinimizerResult(object):
             self.chisqr = self.residual
             self.ndata = 1
             self.nfree = 1
-        self.redchi = self.chisqr / self.nfree
+        self.redchi = self.chisqr / max(1, self.nfree)
         # this is -2*loglikelihood
         _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
         self.aic = _neg2_log_likel + 2 * self.nvarys
@@ -1312,7 +1312,6 @@ class Minimizer(object):
         # Handle special case unique to emcee:
         # This should eventually be moved into result._calculate_statistics.
         elif float_behavior == 'posterior':
-            result.nvarys = len(result.init_vals)
             result.ndata = 1
             result.nfree = 1
 

@@ -432,6 +432,20 @@ class CommonMinimizerTest(unittest.TestCase):
         check_paras(out.params, self.p_true, sig=3)
 
     @dec.slow
+    def test_emcee_method_kwarg(self):
+        # test with emcee as method keyword argument
+        if not HAS_EMCEE:
+            return True
+
+        np.random.seed(123456)
+        out = self.mini.minimize(method='emcee', nwalkers=100, steps=200,
+                                 burn=50, thin=10)
+        assert out.method == 'emcee'
+        assert out.nfev == 100*200
+
+        check_paras(out.params, self.p_true, sig=3)
+
+    @dec.slow
     def test_emcee_PT(self):
         # test emcee with parallel tempering
         if not HAS_EMCEE:

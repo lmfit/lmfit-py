@@ -22,7 +22,7 @@ np.random.seed(0)
 y = (3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1) / 10.) +
      0.1*np.random.randn(len(x)))
 if HASPYLAB:
-    plt.plot(x, y)
+    plt.plot(x, y, 'b')
     # plt.savefig('../doc/_images/emcee_dbl_exp.png')
     plt.show()
 
@@ -39,8 +39,8 @@ mi = lmfit.minimize(residual, p, method='Nelder', nan_policy='omit')
 lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
 if HASPYLAB:
     plt.figure()
-    plt.plot(x, y)
-    plt.plot(x, residual(mi.params) + y, 'k')
+    plt.plot(x, y, 'b')
+    plt.plot(x, residual(mi.params) + y, 'r')
     # plt.savefig('../doc/_images/emcee_dbl_exp2.png')
     plt.show()
 
@@ -73,7 +73,7 @@ print(p)
 
 if HASPYLAB:
     plt.figure()
-    plt.plot(x, y)
+    plt.plot(x, y, 'b')
     plt.plot(x, residual(mi.params) + y, 'r', label='Nelder-Mead')
     plt.plot(x, residual(res.params) + y, 'k--', label='emcee')
     plt.legend()
