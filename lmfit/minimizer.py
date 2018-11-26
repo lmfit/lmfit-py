@@ -921,13 +921,11 @@ class Minimizer(object):
             result.x = np.atleast_1d(result.x)
             result.residual = self.__residual(result.x)
             result.nfev -= 1
-        else:
-            pass
 
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertanties/correlations
-        if (self.calc_covar and HAS_NUMDIFFTOOLS and
+        if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(result.x)
             if _covar_ndt is not None:
@@ -1376,27 +1374,25 @@ class Minimizer(object):
                                 bounds=(lower_bounds, upper_bounds),
                                 kwargs=dict(apply_bounds_transformation=False),
                                 **kws)
+            result.residual = ret.fun
         except AbortFitException:
             pass
+
+        result._calculate_statistics()
 
         if not result.aborted:
             for attr in ret:
                 setattr(result, attr, ret[attr])
 
             result.x = np.atleast_1d(result.x)
-            result.residual = ret.fun
-        else:
-            pass
 
-        result._calculate_statistics()
-
-        # calculate the cov_x and estimate uncertainties/correlations
-        try:
-            hess = np.matmul(ret.jac.T, ret.jac)
-            result.covar = np.linalg.inv(hess)
-            self._calculate_uncertainties_correlations()
-        except LinAlgError:
-            pass
+            # calculate the cov_x and estimate uncertainties/correlations
+            try:
+                hess = np.matmul(ret.jac.T, ret.jac)
+                result.covar = np.linalg.inv(hess)
+                self._calculate_uncertainties_correlations()
+            except LinAlgError:
+                pass
 
         return result
 
@@ -1559,13 +1555,11 @@ class Minimizer(object):
             result.message = ret.message
             result.residual = self.__residual(ret.x)
             result.nfev -= 1
-        else:
-            pass
 
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertanties/correlations
-        if (self.calc_covar and HAS_NUMDIFFTOOLS and
+        if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(ret.x)
             if _covar_ndt is not None:
@@ -1729,8 +1723,6 @@ class Minimizer(object):
             result.params = result.candidates[0].params
             result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
             result.nfev -= 1
-        else:
-            pass
 
         result._calculate_statistics()
 
@@ -1836,13 +1828,11 @@ class Minimizer(object):
 
             result.residual = self.__residual(result.ampgo_x0)
             result.nfev -= 1
-        else:
-            pass
 
         result._calculate_statistics()
 
         # calculate the cov_x and estimate uncertanties/correlations
-        if (self.calc_covar and HAS_NUMDIFFTOOLS and
+        if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(result.ampgo_x0)
             if _covar_ndt is not None:
