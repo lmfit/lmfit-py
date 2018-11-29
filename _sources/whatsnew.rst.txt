@@ -11,6 +11,33 @@ significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_0912_label:
+
+Version 0.9.12 Release Notes
+==========================================
+
+Lmfit package is now licensed under BSD-3.
+
+New features:
+
+- SkewedVoigtModel was added as built-in model (Issue #493)
+- Parameter uncertainties and correlations are reported for least_squares
+- Plotting of complex-valued models is now handled in ModelResult class (PR #503)
+- A model's independent variable is allowed to be an object (Issue #492)
+- Added `usersyms` to Parameters() initialization to make it easier to add custom functions and symbols (Issue #507)
+- the `numdifftools` package can be used to calculate parameter uncertainties and correlations for all solvers that do not natively support this (PR #506)
+- `emcee` can now be used as method keyword-argument to Minimizer.minimize and minimize function, which allows for using `emcee` in the Model class (PR #512; see `examples/example_emcee_with_Model.py`)
+
+(Bug)fixes:
+
+- asteval errors are now flushed after raising (Issue #486)
+- max_time and evaluation time for ExpressionModel increased to 1 hour (Issue #489)
+- loading a saved ModelResult now restores all attributes (Issue #491)
+- development versions of scipy and emcee are now supported (Issue #497 and PR #496)
+- ModelResult.eval() do no longer overwrite the userkws dictionary (Issue #499)
+- running the test suite requires `pytest` only (Issue #504)
+- improved FWHM calculation for VoigtModel (PR #514)
+
 
 .. _whatsnew_0910_label:
 

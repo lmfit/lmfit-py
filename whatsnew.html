@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Using Mathematical Constraints" href="constraints.html" />
@@ -75,9 +75,10 @@
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-0-9-12-release-notes">Version 0.9.12 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-10-release-notes">Version 0.9.10 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-9-release-notes">Version 0.9.9 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-6-release-notes">Version 0.9.6 Release Notes</a></li>
@@ -130,6 +131,30 @@
 significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>.</p>
+<div class="section" id="version-0-9-12-release-notes">
+<span id="whatsnew-0912-label"></span><h2>Version 0.9.12 Release Notes<a class="headerlink" href="#version-0-9-12-release-notes" title="Permalink to this headline">¶</a></h2>
+<p>Lmfit package is now licensed under BSD-3.</p>
+<p>New features:</p>
+<ul class="simple">
+<li>SkewedVoigtModel was added as built-in model (Issue #493)</li>
+<li>Parameter uncertainties and correlations are reported for least_squares</li>
+<li>Plotting of complex-valued models is now handled in ModelResult class (PR #503)</li>
+<li>A model’s independent variable is allowed to be an object (Issue #492)</li>
+<li>Added <cite>usersyms</cite> to Parameters() initialization to make it easier to add custom functions and symbols (Issue #507)</li>
+<li>the <cite>numdifftools</cite> package can be used to calculate parameter uncertainties and correlations for all solvers that do not natively support this (PR #506)</li>
+<li><cite>emcee</cite> can now be used as method keyword-argument to Minimizer.minimize and minimize function, which allows for using <cite>emcee</cite> in the Model class (PR #512; see <cite>examples/example_emcee_with_Model.py</cite>)</li>
+</ul>
+<p>(Bug)fixes:</p>
+<ul class="simple">
+<li>asteval errors are now flushed after raising (Issue #486)</li>
+<li>max_time and evaluation time for ExpressionModel increased to 1 hour (Issue #489)</li>
+<li>loading a saved ModelResult now restores all attributes (Issue #491)</li>
+<li>development versions of scipy and emcee are now supported (Issue #497 and PR #496)</li>
+<li>ModelResult.eval() do no longer overwrite the userkws dictionary (Issue #499)</li>
+<li>running the test suite requires <cite>pytest</cite> only (Issue #504)</li>
+<li>improved FWHM calculation for VoigtModel (PR #514)</li>
+</ul>
+</div>
 <div class="section" id="version-0-9-10-release-notes">
 <h2>Version 0.9.10 Release Notes<a class="headerlink" href="#version-0-9-10-release-notes" title="Permalink to this headline">¶</a></h2>
 <p>Two new global algorithms were added: basinhopping and AMPGO.
@@ -308,7 +333,7 @@ track of changes made while adjusting parameters and re-running fits.</li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

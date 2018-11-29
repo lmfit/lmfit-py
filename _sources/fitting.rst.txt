@@ -119,7 +119,9 @@ variables, as discussed in :ref:`fit-results-label`.
 Alternative algorithms can also be used by providing the ``method``
 keyword to the :func:`minimize` function or :meth:`Minimizer.minimize`
 class as listed in the :ref:`Table of Supported Fitting Methods
-<fit-methods-table>`.
+<fit-methods-table>`. If you have the `numdifftools` package installed, lmfit
+will try to estimate the covariance matrix and determine parameter
+uncertainties and correlations if `calc_covar` is True (default).
 
 .. _fit-methods-table:
 
@@ -170,21 +172,29 @@ class as listed in the :ref:`Table of Supported Fitting Methods
  | Programming for Global   |                                                                  |
  | Optimization             |                                                                  |
  +--------------------------+------------------------------------------------------------------+
+ | Maximum likelihood via   |  ``emcee``                                                       |
+ | Monte-Carlo Markov Chain |                                                                  |
+ +--------------------------+------------------------------------------------------------------+
 
 
 .. note::
 
    The objective function for the Levenberg-Marquardt method **must**
    return an array, with more elements than variables.  All other methods
-   can return either a scalar value or an array.
+   can return either a scalar value or an array. The Monte-Carlo Markov
+   Chain or ``emcee`` method has two different operating methods when the
+   objective function returns a scalar value. See the documentation for ``emcee``.
 
 
 .. warning::
 
-  Much of this documentation assumes that the Levenberg-Marquardt method is
-  used.  Many of the fit statistics and estimates for uncertainties in
-  parameters discussed in :ref:`fit-results-label` are done only for this
-  method.
+  Much of this documentation assumes that the Levenberg-Marquardt (`leastsq`)
+  method is used. Many of the fit statistics and estimates for uncertainties in
+  parameters discussed in :ref:`fit-results-label` are done only unconditionally
+  for this (and the `least_squares`) method. Lmfit versions newer than 0.9.11
+  provide the capability to use `numdifftools` to estimate the covariance matrix
+  and calculate parameter uncertainties and correlations for other methods as
+  well.
 
 ..  _fit-results-label:
 
@@ -259,14 +269,16 @@ that the returned residual function is scaled properly to the
 uncertainties in the data.  For these statistics to be meaningful, the
 person writing the function to be minimized **must** scale them properly.
 
-After a fit using the :meth:`leastsq` method has completed
-successfully, standard errors for the fitted variables and correlations
-between pairs of fitted variables are automatically calculated from the
-covariance matrix.  The standard error (estimated :math:`1\sigma`
-error-bar) goes into the :attr:`stderr` attribute of the Parameter.  The
-correlations with all other variables will be put into the
-:attr:`correl` attribute of the Parameter -- a dictionary with keys for
-all other Parameters and values of the corresponding correlation.
+After a fit using the :meth:`leastsq` or :meth:`least_squares` method has
+completed successfully, standard errors for the fitted variables and
+correlations between pairs of fitted variables are automatically calculated from
+the covariance matrix. For other methods, the `calc_covar` parameter (default is
+True) in the :class:`Minimizer` class determines whether or not to use the
+`numdifftools` package to estimate the covariance matrix. The standard error
+(estimated :math:`1\sigma` error-bar) goes into the :attr:`stderr` attribute of
+the Parameter. The correlations with all other variables will be put into the
+:attr:`correl` attribute of the Parameter -- a dictionary with keys for all
+other Parameters and values of the corresponding correlation.
 
 In some cases, it may not be possible to estimate the errors and
 correlations.  For example, if a variable actually has no practical effect
@@ -403,7 +415,7 @@ exponential decay. A small amount of Gaussian noise is also added in::
     >>> x = np.linspace(1, 10, 250)
     >>> np.random.seed(0)
     >>> y = 3.0 * np.exp(-x / 2) - 5.0 * np.exp(-(x - 0.1) / 10.) + 0.1 * np.random.randn(len(x))
-    >>> plt.plot(x, y)
+    >>> plt.plot(x, y, 'b')
     >>> plt.show()
 
 .. image:: _images/emcee_dbl_exp.png
@@ -424,12 +436,12 @@ Solving with :func:`minimize` gives the Maximum Likelihood solution::
     >>> mi = lmfit.minimize(residual, p, method='Nelder', nan_policy='omit')
     >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
     [[Variables]]
-    a1:  2.98623689 (init = 4)
-    a2: -4.33525597 (init = 4)
-    t1:  1.30993186 (init = 3)
-    t2:  11.8240752 (init = 3)
+        a1:  2.98623689 (init = 4)
+        a2: -4.33525597 (init = 4)
+        t1:  1.30993186 (init = 3)
+        t2:  11.8240752 (init = 3)
 
-    >>> plt.plot(x, y)
+    >>> plt.plot(x, y, 'b')
     >>> plt.plot(x, residual(mi.params) + y, 'r')
     >>> plt.show()
 
@@ -445,21 +457,24 @@ log-prior probability and log-likelihood functions. The log-prior probability is
 assumed to be zero if all the parameters are within their bounds and ``-np.inf``
 if any of the parameters are outside their bounds.
 
-    >>> # add a noise parameter
-    >>> mi.params.add('noise', value=1, min=0.001, max=2)
+If the objective function returns an array of unweighted residuals (i.e.,
+``data-model``) as is the case here, you can use ``is_weighted=False`` as an
+argument for ``emcee``. In that case, ``emcee`` will automatically add/use the
+``__lnsigma`` parameter to estimate the true uncertainty in the data. To
+place boundaries on this parameter one can do::
 
-    >>> # This is the log-likelihood probability for the sampling. We're going to estimate the
-    >>> # size of the uncertainties on the data as well.
-    >>> def lnprob(p):
-    ...    noise = p['noise']
-    ...    return -0.5 * np.sum((residual(p) / noise)**2 + np.log(2 * np.pi * noise**2))
+    >>> mi.params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2))
 
 Now we have to set up the minimizer and do the sampling::
 
-    >>> mini = lmfit.Minimizer(lnprob, mi.params)
-    >>> res = mini.emcee(burn=300, steps=1000, thin=20, params=mi.params)
+    >>> res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300, steps=1000, thin=20,
+                             params=mi.params, is_weighted=False)
 
-Lets have a look at those posterior distributions for the parameters.  This requires
+Of note, the ``is_weighted`` argument will be ignored if your objective function
+returns a float instead of an array. See the Notes in :meth:`Minimizer.emcee` for
+more information.
+
+Lets have a look at those posterior distributions for the parameters. This requires
 installation of the `corner` package::
 
     >>> import corner
@@ -481,19 +496,18 @@ You can see that we recovered the right uncertainty level on the data::
     median of posterior probability distribution
     --------------------------------------------
     [[Variables]]
-        a1:     2.99342394 +/- 0.15851315 (5.30%) (init = 2.986237)
-        a2:    -4.34384999 +/- 0.12454831 (2.87%) (init = -4.335256)
-        t1:     1.32338403 +/- 0.14120290 (10.67%) (init = 1.309932)
-        t2:     11.7962437 +/- 0.48632272 (4.12%) (init = 11.82408)
-        noise:  0.09761521 +/- 0.00431795 (4.42%) (init = 1)
+        a1:         3.00096797 +/- 0.14231292 (4.74%) (init = 2.986237)
+        a2:        -4.34208406 +/- 0.12652899 (2.91%) (init = -4.335256)
+        t1:         1.31910309 +/- 0.14180921 (10.75%) (init = 1.309932)
+        t2:         11.7812397 +/- 0.49805858 (4.23%) (init = 11.82408)
+        __lnsigma: -2.32838725 +/- 0.04403968 (1.89%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t1)    = -0.965
-        C(a2, t2)    =  0.959
-        C(t1, t2)    = -0.927
-        C(a1, a2)    = -0.241
-        C(a1, t2)    = -0.168
-        C(a2, noise) = -0.116
-        C(t1, noise) =  0.107
+        C(a2, t2) =  0.982
+        C(a2, t1) = -0.940
+        C(t1, t2) = -0.897
+        C(a1, t1) = -0.504
+        C(a1, a2) =  0.214
+        C(a1, t2) =  0.174
 
     >>> # find the maximum likelihood solution
     >>> highest_prob = np.argmax(res.lnprob)
@@ -507,16 +521,17 @@ You can see that we recovered the right uncertainty level on the data::
     >>> print(p)
     Maximum likelihood Estimation
     -----------------------------
-    Parameters([('a1', <Parameter 'a1', 2.9684811738216754, bounds=[-inf:inf]>),
-    ('a2', <Parameter 'a2', -4.355238699173162, bounds=[-inf:inf]>),
-    ('t1', <Parameter 't1', 1.3337647386777762, bounds=[-inf:inf]>),
-    ('t2', <Parameter 't2', 11.758394302818514, bounds=[-inf:inf]>)])
+   Parameters([('a1', <Parameter 'a1', 3.003878755004621, bounds=[-inf:inf]>),
+   ('a2', <Parameter 'a2', -4.327965057455135, bounds=[-inf:inf]>),
+   ('t1', <Parameter 't1', 1.3006869431937975, bounds=[-inf:inf]>),
+   ('t2', <Parameter 't2', 11.848423244767798, bounds=[-inf:inf]>)])
+
     >>> # Finally lets work out a 1 and 2-sigma error estimate for 't1'
     >>> quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
     >>> print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
     >>> print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
-    1 sigma spread 0.1414604069179637
-    2 sigma spread 0.453234685099423
+    1 sigma spread 0.14235120263891188
+    2 sigma spread 0.2873717185860183
 
 Getting and Printing Fit Reports
 ===========================================

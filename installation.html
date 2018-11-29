@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Help" href="support.html" />
@@ -79,7 +79,7 @@
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Downloading and Installation</a><ul>
 <li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
@@ -88,7 +88,7 @@
 <li><a class="reference internal" href="#development-version">Development Version</a></li>
 <li><a class="reference internal" href="#testing">Testing</a></li>
 <li><a class="reference internal" href="#acknowledgements">Acknowledgements</a></li>
-<li><a class="reference internal" href="#license">License</a></li>
+<li><a class="reference internal" href="#copyright-licensing-and-re-distribution">Copyright, Licensing, and Re-distribution</a></li>
 </ul>
 </li>
 </ul>
@@ -130,30 +130,35 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>The lmfit package requires <a class="reference external" href="https://python.org">Python</a>, <a class="reference external" href="http://numpy.org/">NumPy</a>, <a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a>, <a class="reference external" href="https://github.com/newville/asteval">asteval</a>, <a class="reference external" href="https://github.com/benjaminp/six">six</a>,
-and <a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a>.</p>
-<p>Lmfit works with Python versions 2.7, 3.4, 3.5, and 3.6. Support for Python 2.6
-and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively. Scipy version
-0.17, NumPy version 1.10, asteval version 0.9.12, six version 1.10, and
-uncertainties version 3.0 are the minimum requirements.</p>
-<p>In order to run the test suite, either the <a class="reference external" href="https://nose.readthedocs.org/">nose</a> or <a class="reference external" href="https://pytest.org/">pytest</a> package is
-required. Some functionality of lmfit requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> package, some
-functionality will make use of the <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>,
-or <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a> packages if available.  We highly recommend each of these
-packages.</p>
+<p>Lmfit works with Python versions 2.7 and 3.4 - 3.7. Support for Python 2.6
+and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively.  Support
+for 2.7 is expected to end in early 2019.</p>
+<dl class="docutils">
+<dt>Lmfit requires the following Python packages, with versions given:</dt>
+<dd><ul class="first last simple">
+<li><a class="reference external" href="https://github.com/benjaminp/six">six</a> version 1.10 or higher.</li>
+<li><a class="reference external" href="http://numpy.org/">NumPy</a> version 1.10 or higher.</li>
+<li><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 0.17 or higher.</li>
+<li><a class="reference external" href="https://github.com/newville/asteval">asteval</a> version 0.9.12 or higher.</li>
+<li><a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a> version 3.0 or higher.</li>
+</ul>
+</dd>
+</dl>
+<p>All of these are readily available on PyPI, and should be installed
+automatically if installing with <cite>pip install lmfit</cite>.</p>
+<p>In order to run the test suite, the <a class="reference external" href="https://pytest.org/">pytest</a> package is required.  Some
+functionality requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a>, <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>,
+<a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>, or <a class="reference external" href="https://github.com/pbrod/numdifftools">numdifftools</a> packages.  These are not installed
+automatically, but we highly recommend each of these packages.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is 0.9.11 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+<p>The latest stable version of lmfit is 0.9.12 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>With <code class="docutils literal notranslate"><span class="pre">pip</span></code> now widely avaliable, you can install lmfit with:</p>
+<p>The easiest way to install lmfit is with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lmfit</span>
-</pre></div>
-</div>
-<p>Alternatively, you can download the source kit, unpack it and install with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>For Anaconda Python, lmfit is not an official package, but several
@@ -179,131 +184,153 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
-<p>A battery of tests scripts that can be run with either the <a class="reference external" href="https://nose.readthedocs.org/">nose</a> or
-<a class="reference external" href="https://pytest.org/">pytest</a> testing framework is distributed with lmfit in the <code class="docutils literal notranslate"><span class="pre">tests</span></code>
-folder.  These are automatically run as part of the development process.
-For any release or any master branch from the git repository, running
-<code class="docutils literal notranslate"><span class="pre">pytest</span></code> or <code class="docutils literal notranslate"><span class="pre">nosetests</span></code> should run all of these tests to completion
-without errors or failures.</p>
-<p>Many of the examples in this documentation are distributed with lmfit in
-the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder, and should also run for you.  Some of these
-examples assume <a class="reference external" href="https://matplotlib.org/">matplotlib</a> has been installed and is working correctly.</p>
+<p>A battery of tests scripts that can be run with the <a class="reference external" href="https://pytest.org/">pytest</a> testing framework
+is distributed with lmfit in the <code class="docutils literal notranslate"><span class="pre">tests</span></code> folder. These are automatically run
+as part of the development process.
+For any release or any master branch from the git repository, running <code class="docutils literal notranslate"><span class="pre">pytest</span></code>
+should run all of these tests to completion without errors or failures.</p>
+<p>Many of the examples in this documentation are distributed with lmfit in the
+<code class="docutils literal notranslate"><span class="pre">examples</span></code> folder, and should also run for you. Some of these examples assume
+that  <a class="reference external" href="https://matplotlib.org/">matplotlib</a> has been installed and is working correctly.</p>
 </div>
 <div class="section" id="acknowledgements">
 <h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Many</span> <span class="n">people</span> <span class="n">have</span> <span class="n">contributed</span> <span class="n">to</span> <span class="n">lmfit</span><span class="o">.</span>  <span class="n">The</span> <span class="n">attribution</span> <span class="n">of</span> <span class="n">credit</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">project</span>
-<span class="n">such</span> <span class="k">as</span> <span class="n">this</span> <span class="ow">is</span> <span class="n">very</span> <span class="n">difficult</span> <span class="n">to</span> <span class="n">get</span> <span class="n">perfect</span><span class="p">,</span> <span class="ow">and</span> <span class="n">there</span> <span class="n">are</span> <span class="n">no</span> <span class="n">doubt</span> <span class="n">important</span>
-<span class="n">contributions</span> <span class="n">missing</span> <span class="ow">or</span> <span class="n">under</span><span class="o">-</span><span class="n">represented</span> <span class="n">here</span><span class="o">.</span>  <span class="n">Please</span> <span class="n">consider</span> <span class="n">this</span> <span class="n">file</span> <span class="k">as</span>
-<span class="n">part</span> <span class="n">of</span> <span class="n">the</span> <span class="n">documentation</span> <span class="n">that</span> <span class="n">may</span> <span class="n">have</span> <span class="n">bugs</span> <span class="n">that</span> <span class="n">need</span> <span class="n">fixing</span><span class="o">.</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Many people have contributed to lmfit.  The attribution of credit in a
+project such as this is difficult to get perfect, and there are no doubt
+important contributions that are missing or under-represented here.  Please
+consider this file as part of the code and documentation that may have bugs
+that need fixing.
 
-<span class="n">Some</span> <span class="n">of</span> <span class="n">the</span> <span class="n">largest</span> <span class="ow">and</span> <span class="n">most</span> <span class="n">important</span> <span class="n">contributions</span> <span class="p">(</span><span class="n">approximately</span> <span class="ow">in</span> <span class="n">order</span> <span class="n">of</span>
-<span class="n">contribution</span> <span class="ow">in</span> <span class="n">size</span> <span class="n">to</span> <span class="n">the</span> <span class="n">existing</span> <span class="n">code</span><span class="p">)</span> <span class="n">are</span> <span class="n">from</span><span class="p">:</span>
+Some of the largest and most important contributions (in approximate order
+of size of the contribution to the existing code) are from:
 
-  <span class="n">Matthew</span> <span class="n">Newville</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">original</span> <span class="n">version</span> <span class="ow">and</span> <span class="n">maintains</span> <span class="n">the</span> <span class="n">project</span><span class="o">.</span>
+  Matthew Newville wrote the original version and maintains the project.
 
-  <span class="n">Till</span> <span class="n">Stensitzki</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">improved</span> <span class="n">estimates</span> <span class="n">of</span> <span class="n">confidence</span> <span class="n">intervals</span><span class="p">,</span> <span class="ow">and</span>
-  <span class="n">contributed</span> <span class="n">many</span> <span class="n">tests</span><span class="p">,</span> <span class="n">bug</span> <span class="n">fixes</span><span class="p">,</span> <span class="ow">and</span> <span class="n">documentation</span><span class="o">.</span>
+  Renee Otten wrote the brute force method, implemented the basin-hopping
+  and AMPGO global solvers, implemented uncertainty calculations for scalar
+  minimizers and has greatly improved the code, testing, and documentation
+  and overall project.
 
-  <span class="n">Renee</span> <span class="n">Otten</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">brute</span> <span class="n">force</span> <span class="n">method</span><span class="p">,</span> <span class="n">implemented</span> <span class="n">basin</span><span class="o">-</span><span class="n">hopping</span> <span class="ow">and</span> <span class="n">AMPGO</span>
-  <span class="k">global</span> <span class="n">solvers</span><span class="p">,</span> <span class="ow">and</span> <span class="n">has</span> <span class="n">greatly</span> <span class="n">improved</span> <span class="n">the</span> <span class="n">code</span><span class="p">,</span> <span class="n">testing</span><span class="p">,</span> <span class="ow">and</span> <span class="n">documentation</span>
-  <span class="ow">and</span> <span class="n">overall</span> <span class="n">project</span><span class="o">.</span>
+  Till Stensitzki wrote the improved estimates of confidence intervals, and
+  contributed many tests, bug fixes, and documentation.
 
-  <span class="n">A</span><span class="o">.</span> <span class="n">R</span><span class="o">.</span> <span class="n">J</span><span class="o">.</span> <span class="n">Nelson</span> <span class="n">added</span> <span class="n">differential_evolution</span><span class="p">,</span> <span class="n">emcee</span><span class="p">,</span> <span class="ow">and</span> <span class="n">greatly</span> <span class="n">improved</span> <span class="n">the</span>
-  <span class="n">code</span><span class="p">,</span> <span class="n">docstrings</span><span class="p">,</span> <span class="ow">and</span> <span class="n">overall</span> <span class="n">project</span><span class="o">.</span>
+  A. R. J. Nelson added differential_evolution, emcee, and greatly improved
+  the code, docstrings, and overall project.
 
-  <span class="n">Antonino</span> <span class="n">Ingargiola</span> <span class="n">wrote</span> <span class="n">much</span> <span class="n">of</span> <span class="n">the</span> <span class="n">high</span> <span class="n">level</span> <span class="n">Model</span> <span class="n">code</span> <span class="ow">and</span> <span class="n">has</span> <span class="n">provided</span>
-  <span class="n">many</span> <span class="n">bug</span> <span class="n">fixes</span> <span class="ow">and</span> <span class="n">improvements</span><span class="o">.</span>
+  Antonino Ingargiola wrote much of the high level Model code and has
+  provided many bug fixes and improvements.
 
-  <span class="n">Daniel</span> <span class="n">B</span><span class="o">.</span> <span class="n">Allan</span> <span class="n">wrote</span> <span class="n">much</span> <span class="n">of</span> <span class="n">the</span> <span class="n">original</span> <span class="n">version</span> <span class="n">of</span> <span class="n">the</span> <span class="n">high</span> <span class="n">level</span> <span class="n">Model</span>
-  <span class="n">code</span><span class="p">,</span> <span class="ow">and</span> <span class="n">many</span> <span class="n">improvements</span> <span class="n">to</span> <span class="n">the</span> <span class="n">testing</span> <span class="ow">and</span> <span class="n">documentation</span><span class="o">.</span>
+  Daniel B. Allan wrote much of the original version of the high level Model
+  code, and many improvements to the testing and documentation.
 
-  <span class="n">Austen</span> <span class="n">Fox</span> <span class="n">fixed</span> <span class="n">many</span> <span class="n">of</span> <span class="n">the</span> <span class="n">built</span><span class="o">-</span><span class="ow">in</span> <span class="n">model</span> <span class="n">functions</span> <span class="ow">and</span> <span class="n">improved</span> <span class="n">the</span>
-  <span class="n">testing</span> <span class="ow">and</span> <span class="n">documentation</span> <span class="n">of</span> <span class="n">these</span><span class="o">.</span>
+  Austen Fox fixed many of the built-in model functions and improved the
+  testing and documentation of these.
 
-  <span class="n">Michal</span> <span class="n">Rawlik</span> <span class="n">added</span> <span class="n">plotting</span> <span class="n">capabilities</span> <span class="k">for</span> <span class="n">Models</span><span class="o">.</span>
-
-  <span class="n">J</span><span class="o">.</span> <span class="n">J</span><span class="o">.</span> <span class="n">Helmus</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">MINUT</span> <span class="n">bounds</span> <span class="k">for</span> <span class="n">leastsq</span><span class="p">,</span> <span class="n">originally</span> <span class="ow">in</span>
-  <span class="n">leastsqbounds</span><span class="o">.</span><span class="n">py</span><span class="p">,</span> <span class="ow">and</span> <span class="n">ported</span> <span class="n">to</span> <span class="n">lmfit</span><span class="o">.</span>
-
-  <span class="n">E</span><span class="o">.</span> <span class="n">O</span><span class="o">.</span> <span class="n">Le</span> <span class="n">Bigot</span> <span class="n">wrote</span> <span class="n">the</span> <span class="n">uncertainties</span> <span class="n">package</span><span class="p">,</span> <span class="n">a</span> <span class="n">version</span> <span class="n">of</span> <span class="n">which</span> <span class="n">was</span> <span class="n">used</span>
-  <span class="n">by</span> <span class="n">lmfit</span> <span class="k">for</span> <span class="n">many</span> <span class="n">years</span><span class="p">,</span> <span class="ow">and</span> <span class="ow">is</span> <span class="n">now</span> <span class="n">an</span> <span class="n">external</span> <span class="n">dependency</span><span class="o">.</span>
+  Michal Rawlik added plotting capabilities for Models.
 
 
-<span class="n">Additional</span> <span class="n">patches</span><span class="p">,</span> <span class="n">bug</span> <span class="n">fixes</span><span class="p">,</span> <span class="ow">and</span> <span class="n">suggestions</span> <span class="n">have</span> <span class="n">come</span> <span class="kn">from</span> <span class="nn">Christoph</span> <span class="n">Deil</span><span class="p">,</span>
-<span class="n">Francois</span> <span class="n">Boulogne</span><span class="p">,</span> <span class="n">Thomas</span> <span class="n">Caswell</span><span class="p">,</span> <span class="n">Colin</span> <span class="n">Brosseau</span><span class="p">,</span> <span class="n">nmearl</span><span class="p">,</span> <span class="n">Gustavo</span> <span class="n">Pasquevich</span><span class="p">,</span>
-<span class="n">Clemens</span> <span class="n">Prescher</span><span class="p">,</span> <span class="n">LiCode</span><span class="p">,</span> <span class="n">Ben</span> <span class="n">Gamari</span><span class="p">,</span> <span class="n">Yoav</span> <span class="n">Roam</span><span class="p">,</span> <span class="n">Alexander</span> <span class="n">Stark</span><span class="p">,</span> <span class="n">Alexandre</span>
-<span class="n">Beelen</span><span class="p">,</span> <span class="ow">and</span> <span class="n">many</span> <span class="n">others</span><span class="o">.</span>
+  The method used for placing bounds on parameters was derived from the
+  clear description in the MINUIT documentation, and adapted from
+  J. J. Helmus&#39;s python implementation in leastsqbounds.py.
 
-<span class="n">The</span> <span class="n">lmfit</span> <span class="n">code</span> <span class="n">obviously</span> <span class="n">depends</span> <span class="n">on</span><span class="p">,</span> <span class="ow">and</span> <span class="n">owes</span> <span class="n">a</span> <span class="n">very</span> <span class="n">large</span> <span class="n">debt</span> <span class="n">to</span> <span class="n">the</span> <span class="n">code</span> <span class="ow">in</span>
-<span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span>  <span class="n">Several</span> <span class="n">discussions</span> <span class="n">on</span> <span class="n">the</span> <span class="n">scipy</span><span class="o">-</span><span class="n">user</span> <span class="ow">and</span> <span class="n">lmfit</span> <span class="n">mailing</span> <span class="n">lists</span>
-<span class="n">have</span> <span class="n">also</span> <span class="n">led</span> <span class="n">to</span> <span class="n">improvements</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">code</span><span class="o">.</span>
+  E. O. Le Bigot wrote the uncertainties package, a version of which was
+  used by lmfit for many years, and is now an external dependency.
+
+  The original AMPGO code came from Andrea Gavana and was adopted for
+  lmfit.
+
+  The propagation of parameter uncertainties to uncertainties in a Model
+  was adapted from the excellent description at
+  https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals,
+  which references the original work of: J. Wolberg,Data Analysis Using the
+  Method of Least Squares, 2006, Springer
+
+Additional patches, bug fixes, and suggestions have come from Faustin
+Carter, Christoph Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau,
+nmearl, Gustavo Pasquevich, Clemens Prescher, LiCode, Ben Gamari, Yoav
+Roam, Alexander Stark, Alexandre Beelen, and many others.
+
+The lmfit code obviously depends on, and owes a very large debt to the code
+in scipy.optimize.  Several discussions on the scipy-user and lmfit mailing
+lists have also led to improvements in this code.
 </pre></div>
 </div>
 </div>
-<div class="section" id="license">
-<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
-<p>The LMFIT-py code is distribution under the following license:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Copyright</span><span class="p">,</span> <span class="n">Licensing</span><span class="p">,</span> <span class="ow">and</span> <span class="n">Re</span><span class="o">-</span><span class="n">distribution</span>
-<span class="o">-----------------------------------------</span>
+<div class="section" id="copyright-licensing-and-re-distribution">
+<h2>Copyright, Licensing, and Re-distribution<a class="headerlink" href="#copyright-licensing-and-re-distribution" title="Permalink to this headline">¶</a></h2>
+<p>The LMFIT-py code is distributed under the following license:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BSD-3
 
-<span class="n">The</span> <span class="n">LMFIT</span><span class="o">-</span><span class="n">py</span> <span class="n">code</span> <span class="ow">is</span> <span class="n">distribution</span> <span class="n">under</span> <span class="n">the</span> <span class="n">following</span> <span class="n">license</span><span class="p">:</span>
+Copyright 2018 Matthew Newville, The University of Chicago
+	       Renee Otten, Brandeis University
+               Till Stensitzki, Freie Universitat Berlin
+               A. R. J. Nelson, Australian Nuclear Science and Technology Organisation
+               Antonino Ingargiola, University of California, Los Angeles
+               Daniel B. Allen, Johns Hopkins University
+               Michal Rawlik, Eidgenossische Technische Hochschule, Zurich
 
-  <span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">2014</span> <span class="n">Matthew</span> <span class="n">Newville</span><span class="p">,</span> <span class="n">The</span> <span class="n">University</span> <span class="n">of</span> <span class="n">Chicago</span>
-                     <span class="n">Till</span> <span class="n">Stensitzki</span><span class="p">,</span> <span class="n">Freie</span> <span class="n">Universitat</span> <span class="n">Berlin</span>
-                     <span class="n">Daniel</span> <span class="n">B</span><span class="o">.</span> <span class="n">Allen</span><span class="p">,</span> <span class="n">Johns</span> <span class="n">Hopkins</span> <span class="n">University</span>
-                     <span class="n">Michal</span> <span class="n">Rawlik</span><span class="p">,</span> <span class="n">Eidgenossische</span> <span class="n">Technische</span> <span class="n">Hochschule</span><span class="p">,</span> <span class="n">Zurich</span>
-                     <span class="n">Antonino</span> <span class="n">Ingargiola</span><span class="p">,</span> <span class="n">University</span> <span class="n">of</span> <span class="n">California</span><span class="p">,</span> <span class="n">Los</span> <span class="n">Angeles</span>
-                     <span class="n">A</span><span class="o">.</span> <span class="n">R</span><span class="o">.</span> <span class="n">J</span><span class="o">.</span> <span class="n">Nelson</span><span class="p">,</span> <span class="n">Australian</span> <span class="n">Nuclear</span> <span class="n">Science</span> <span class="ow">and</span> <span class="n">Technology</span> <span class="n">Organisation</span>
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-  <span class="n">Permission</span> <span class="n">to</span> <span class="n">use</span> <span class="ow">and</span> <span class="n">redistribute</span> <span class="n">the</span> <span class="n">source</span> <span class="n">code</span> <span class="ow">or</span> <span class="n">binary</span> <span class="n">forms</span> <span class="n">of</span> <span class="n">this</span>
-  <span class="n">software</span> <span class="ow">and</span> <span class="n">its</span> <span class="n">documentation</span><span class="p">,</span> <span class="k">with</span> <span class="ow">or</span> <span class="n">without</span> <span class="n">modification</span> <span class="ow">is</span> <span class="n">hereby</span>
-  <span class="n">granted</span> <span class="n">provided</span> <span class="n">that</span> <span class="n">the</span> <span class="n">above</span> <span class="n">notice</span> <span class="n">of</span> <span class="n">copyright</span><span class="p">,</span> <span class="n">these</span> <span class="n">terms</span> <span class="n">of</span> <span class="n">use</span><span class="p">,</span>
-  <span class="ow">and</span> <span class="n">the</span> <span class="n">disclaimer</span> <span class="n">of</span> <span class="n">warranty</span> <span class="n">below</span> <span class="n">appear</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">source</span> <span class="n">code</span> <span class="ow">and</span>
-  <span class="n">documentation</span><span class="p">,</span> <span class="ow">and</span> <span class="n">that</span> <span class="n">none</span> <span class="n">of</span> <span class="n">the</span> <span class="n">names</span> <span class="n">of</span> <span class="n">above</span> <span class="n">institutions</span> <span class="ow">or</span>
-  <span class="n">authors</span> <span class="n">appear</span> <span class="ow">in</span> <span class="n">advertising</span> <span class="ow">or</span> <span class="n">endorsement</span> <span class="n">of</span> <span class="n">works</span> <span class="n">derived</span> <span class="kn">from</span> <span class="nn">this</span>
-  <span class="n">software</span> <span class="n">without</span> <span class="n">specific</span> <span class="n">prior</span> <span class="n">written</span> <span class="n">permission</span> <span class="kn">from</span> <span class="nn">all</span> <span class="n">parties</span><span class="o">.</span>
+  1. Redistributions of source code must retain the above copyright notice,
+  this list of conditions and the following disclaimer.
 
-  <span class="n">THE</span> <span class="n">SOFTWARE</span> <span class="n">IS</span> <span class="n">PROVIDED</span> <span class="s2">&quot;AS IS&quot;</span><span class="p">,</span> <span class="n">WITHOUT</span> <span class="n">WARRANTY</span> <span class="n">OF</span> <span class="n">ANY</span> <span class="n">KIND</span><span class="p">,</span> <span class="n">EXPRESS</span> <span class="n">OR</span>
-  <span class="n">IMPLIED</span><span class="p">,</span> <span class="n">INCLUDING</span> <span class="n">BUT</span> <span class="n">NOT</span> <span class="n">LIMITED</span> <span class="n">TO</span> <span class="n">THE</span> <span class="n">WARRANTIES</span> <span class="n">OF</span> <span class="n">MERCHANTABILITY</span><span class="p">,</span>
-  <span class="n">FITNESS</span> <span class="n">FOR</span> <span class="n">A</span> <span class="n">PARTICULAR</span> <span class="n">PURPOSE</span> <span class="n">AND</span> <span class="n">NONINFRINGEMENT</span><span class="o">.</span>  <span class="n">IN</span> <span class="n">NO</span> <span class="n">EVENT</span> <span class="n">SHALL</span>
-  <span class="n">THE</span> <span class="n">AUTHORS</span> <span class="n">OR</span> <span class="n">COPYRIGHT</span> <span class="n">HOLDERS</span> <span class="n">BE</span> <span class="n">LIABLE</span> <span class="n">FOR</span> <span class="n">ANY</span> <span class="n">CLAIM</span><span class="p">,</span> <span class="n">DAMAGES</span> <span class="n">OR</span> <span class="n">OTHER</span>
-  <span class="n">LIABILITY</span><span class="p">,</span> <span class="n">WHETHER</span> <span class="n">IN</span> <span class="n">AN</span> <span class="n">ACTION</span> <span class="n">OF</span> <span class="n">CONTRACT</span><span class="p">,</span> <span class="n">TORT</span> <span class="n">OR</span> <span class="n">OTHERWISE</span><span class="p">,</span> <span class="n">ARISING</span>
-  <span class="n">FROM</span><span class="p">,</span> <span class="n">OUT</span> <span class="n">OF</span> <span class="n">OR</span> <span class="n">IN</span> <span class="n">CONNECTION</span> <span class="n">WITH</span> <span class="n">THE</span> <span class="n">SOFTWARE</span> <span class="n">OR</span> <span class="n">THE</span> <span class="n">USE</span> <span class="n">OR</span> <span class="n">OTHER</span>
-  <span class="n">DEALINGS</span> <span class="n">IN</span> <span class="n">THIS</span> <span class="n">SOFTWARE</span><span class="o">.</span>
+  2. Redistributions in binary form must reproduce the above copyright
+  notice, this list of conditions and the following disclaimer in the
+  documentation and/or other materials provided with the distribution.
 
-<span class="o">-----------------------------------------</span>
-<span class="n">Some</span> <span class="n">code</span> <span class="n">sections</span> <span class="n">have</span> <span class="n">been</span> <span class="n">taken</span> <span class="kn">from</span> <span class="nn">the</span> <span class="n">scipy</span> <span class="n">library</span> <span class="n">whose</span> <span class="n">licence</span> <span class="ow">is</span> <span class="n">below</span><span class="o">.</span>
+  3. Neither the name of the copyright holder nor the names of its
+  contributors may be used to endorse or promote products derived from this
+  software without specific prior written permission.
 
-<span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">2001</span><span class="p">,</span> <span class="mi">2002</span> <span class="n">Enthought</span><span class="p">,</span> <span class="n">Inc</span><span class="o">.</span>
-<span class="n">All</span> <span class="n">rights</span> <span class="n">reserved</span><span class="o">.</span>
-
-<span class="n">Copyright</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="mi">2003</span><span class="o">-</span><span class="mi">2016</span> <span class="n">SciPy</span> <span class="n">Developers</span><span class="o">.</span>
-<span class="n">All</span> <span class="n">rights</span> <span class="n">reserved</span><span class="o">.</span>
-
-<span class="n">Redistribution</span> <span class="ow">and</span> <span class="n">use</span> <span class="ow">in</span> <span class="n">source</span> <span class="ow">and</span> <span class="n">binary</span> <span class="n">forms</span><span class="p">,</span> <span class="k">with</span> <span class="ow">or</span> <span class="n">without</span>
-<span class="n">modification</span><span class="p">,</span> <span class="n">are</span> <span class="n">permitted</span> <span class="n">provided</span> <span class="n">that</span> <span class="n">the</span> <span class="n">following</span> <span class="n">conditions</span> <span class="n">are</span> <span class="n">met</span><span class="p">:</span>
-
-  <span class="n">a</span><span class="o">.</span> <span class="n">Redistributions</span> <span class="n">of</span> <span class="n">source</span> <span class="n">code</span> <span class="n">must</span> <span class="n">retain</span> <span class="n">the</span> <span class="n">above</span> <span class="n">copyright</span> <span class="n">notice</span><span class="p">,</span>
-     <span class="n">this</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">conditions</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">following</span> <span class="n">disclaimer</span><span class="o">.</span>
-  <span class="n">b</span><span class="o">.</span> <span class="n">Redistributions</span> <span class="ow">in</span> <span class="n">binary</span> <span class="n">form</span> <span class="n">must</span> <span class="n">reproduce</span> <span class="n">the</span> <span class="n">above</span> <span class="n">copyright</span>
-     <span class="n">notice</span><span class="p">,</span> <span class="n">this</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">conditions</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">following</span> <span class="n">disclaimer</span> <span class="ow">in</span> <span class="n">the</span>
-     <span class="n">documentation</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="n">other</span> <span class="n">materials</span> <span class="n">provided</span> <span class="k">with</span> <span class="n">the</span> <span class="n">distribution</span><span class="o">.</span>
-  <span class="n">c</span><span class="o">.</span> <span class="n">Neither</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">Enthought</span> <span class="n">nor</span> <span class="n">the</span> <span class="n">names</span> <span class="n">of</span> <span class="n">the</span> <span class="n">SciPy</span> <span class="n">Developers</span>
-     <span class="n">may</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">endorse</span> <span class="ow">or</span> <span class="n">promote</span> <span class="n">products</span> <span class="n">derived</span> <span class="kn">from</span> <span class="nn">this</span> <span class="n">software</span>
-     <span class="n">without</span> <span class="n">specific</span> <span class="n">prior</span> <span class="n">written</span> <span class="n">permission</span><span class="o">.</span>
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 
 
-<span class="n">THIS</span> <span class="n">SOFTWARE</span> <span class="n">IS</span> <span class="n">PROVIDED</span> <span class="n">BY</span> <span class="n">THE</span> <span class="n">COPYRIGHT</span> <span class="n">HOLDERS</span> <span class="n">AND</span> <span class="n">CONTRIBUTORS</span> <span class="s2">&quot;AS IS&quot;</span>
-<span class="n">AND</span> <span class="n">ANY</span> <span class="n">EXPRESS</span> <span class="n">OR</span> <span class="n">IMPLIED</span> <span class="n">WARRANTIES</span><span class="p">,</span> <span class="n">INCLUDING</span><span class="p">,</span> <span class="n">BUT</span> <span class="n">NOT</span> <span class="n">LIMITED</span> <span class="n">TO</span><span class="p">,</span> <span class="n">THE</span>
-<span class="n">IMPLIED</span> <span class="n">WARRANTIES</span> <span class="n">OF</span> <span class="n">MERCHANTABILITY</span> <span class="n">AND</span> <span class="n">FITNESS</span> <span class="n">FOR</span> <span class="n">A</span> <span class="n">PARTICULAR</span> <span class="n">PURPOSE</span>
-<span class="n">ARE</span> <span class="n">DISCLAIMED</span><span class="o">.</span> <span class="n">IN</span> <span class="n">NO</span> <span class="n">EVENT</span> <span class="n">SHALL</span> <span class="n">THE</span> <span class="n">COPYRIGHT</span> <span class="n">HOLDERS</span> <span class="n">OR</span> <span class="n">CONTRIBUTORS</span>
-<span class="n">BE</span> <span class="n">LIABLE</span> <span class="n">FOR</span> <span class="n">ANY</span> <span class="n">DIRECT</span><span class="p">,</span> <span class="n">INDIRECT</span><span class="p">,</span> <span class="n">INCIDENTAL</span><span class="p">,</span> <span class="n">SPECIAL</span><span class="p">,</span> <span class="n">EXEMPLARY</span><span class="p">,</span>
-<span class="n">OR</span> <span class="n">CONSEQUENTIAL</span> <span class="n">DAMAGES</span> <span class="p">(</span><span class="n">INCLUDING</span><span class="p">,</span> <span class="n">BUT</span> <span class="n">NOT</span> <span class="n">LIMITED</span> <span class="n">TO</span><span class="p">,</span> <span class="n">PROCUREMENT</span> <span class="n">OF</span>
-<span class="n">SUBSTITUTE</span> <span class="n">GOODS</span> <span class="n">OR</span> <span class="n">SERVICES</span><span class="p">;</span> <span class="n">LOSS</span> <span class="n">OF</span> <span class="n">USE</span><span class="p">,</span> <span class="n">DATA</span><span class="p">,</span> <span class="n">OR</span> <span class="n">PROFITS</span><span class="p">;</span> <span class="n">OR</span> <span class="n">BUSINESS</span>
-<span class="n">INTERRUPTION</span><span class="p">)</span> <span class="n">HOWEVER</span> <span class="n">CAUSED</span> <span class="n">AND</span> <span class="n">ON</span> <span class="n">ANY</span> <span class="n">THEORY</span> <span class="n">OF</span> <span class="n">LIABILITY</span><span class="p">,</span> <span class="n">WHETHER</span> <span class="n">IN</span>
-<span class="n">CONTRACT</span><span class="p">,</span> <span class="n">STRICT</span> <span class="n">LIABILITY</span><span class="p">,</span> <span class="n">OR</span> <span class="n">TORT</span> <span class="p">(</span><span class="n">INCLUDING</span> <span class="n">NEGLIGENCE</span> <span class="n">OR</span> <span class="n">OTHERWISE</span><span class="p">)</span>
-<span class="n">ARISING</span> <span class="n">IN</span> <span class="n">ANY</span> <span class="n">WAY</span> <span class="n">OUT</span> <span class="n">OF</span> <span class="n">THE</span> <span class="n">USE</span> <span class="n">OF</span> <span class="n">THIS</span> <span class="n">SOFTWARE</span><span class="p">,</span> <span class="n">EVEN</span> <span class="n">IF</span> <span class="n">ADVISED</span> <span class="n">OF</span>
-<span class="n">THE</span> <span class="n">POSSIBILITY</span> <span class="n">OF</span> <span class="n">SUCH</span> <span class="n">DAMAGE</span><span class="o">.</span>
+Some code has been taken from the scipy library whose licence is below.
+
+Copyright (c) 2001, 2002 Enthought, Inc.
+All rights reserved.
+
+Copyright (c) 2003-2016 SciPy Developers.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+  a. Redistributions of source code must retain the above copyright notice,
+     this list of conditions and the following disclaimer.
+  b. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in the
+     documentation and/or other materials provided with the distribution.
+  c. Neither the name of Enthought nor the names of the SciPy Developers
+     may be used to endorse or promote products derived from this software
+     without specific prior written permission.
+
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
+
+Some code has been taken from the AMPGO library of Andrea Gavana which was
+released under an MIT license.
 </pre></div>
 </div>
 </div>
@@ -340,7 +367,7 @@ examples assume <a class="reference external" href="https://matplotlib.org/">mat
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

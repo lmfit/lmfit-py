@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Performing Fits and Analyzing Outputs" href="fitting.html" />
@@ -79,7 +79,7 @@
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code>  and <code class="docutils literal notranslate"><span class="pre">Parameters</span></code></a><ul>
 <li><a class="reference internal" href="#the-parameter-class">The <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> class</a></li>
@@ -195,17 +195,33 @@ with other Parameters used in the minimization.</p>
 <dl class="attribute">
 <dt id="lmfit.parameter.Parameter.stderr">
 <code class="descname">stderr</code><a class="headerlink" href="#lmfit.parameter.Parameter.stderr" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>float</em> – The estimated standard error for the best-fit value.</p>
+<dd><p>The estimated standard error for the best-fit value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)">float</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="lmfit.parameter.Parameter.correl">
 <code class="descname">correl</code><a class="headerlink" href="#lmfit.parameter.Parameter.correl" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> – A dictionary of the correlation with the other fitted Parameters
+<dd><p>A dictionary of the correlation with the other fitted Parameters
 of the form:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`{&#39;decay&#39;: 0.404, &#39;phase&#39;: -0.020, &#39;frequency&#39;: 0.102}`
 </pre></div>
 </div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <p>See <a class="reference internal" href="bounds.html#bounds-chapter"><span class="std std-ref">Bounds Implementation</span></a> for details on the math used to implement the
@@ -269,7 +285,7 @@ clear the expression.</p>
 <h2>The <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> class<a class="headerlink" href="#the-parameters-class" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="lmfit.parameter.Parameters">
-<em class="property">class </em><code class="descname">Parameters</code><span class="sig-paren">(</span><em>asteval=None</em>, <em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">Parameters</code><span class="sig-paren">(</span><em>asteval=None</em>, <em>usersyms=None</em>, <em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>An ordered dictionary of all the Parameter objects required to
 specify a fit model. All minimization and Model fitting routines in
 lmfit will use exactly one Parameters object, typically given as the
@@ -288,7 +304,9 @@ to and from serializations using json strings.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>asteval</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">asteval.Interpreter</span></code>, optional) – Instance of the asteval Interpreter to use for constraint
-expressions. If None, a new interpreter will be created.</li>
+expressions. If None, a new interpreter will be created.
+Warning: <em>deprecated, use usersyms if possible</em></li>
+<li><strong>usersyms</strong> (<em>dictionary of symbols to add to the</em>) – <code class="xref py py-class docutils literal notranslate"><span class="pre">asteval.Interpreter</span></code>.</li>
 <li><strong>*args</strong> (<em>optional</em>) – Arguments.</li>
 <li><strong>**kwds</strong> (<em>optional</em>) – Keyword arguments.</li>
 </ul>
@@ -442,7 +460,7 @@ Parameter.</td>
 number of characters written in Python 3.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">None or <a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)">int</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)">None</a> or <a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)">int</a></p>
 </td>
 </tr>
 </tbody>
@@ -612,7 +630,7 @@ which would make the objective function <code class="docutils literal notranslat
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

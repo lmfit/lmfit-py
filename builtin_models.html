@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Calculation of confidence intervals" href="confidence.html" />
@@ -79,7 +79,7 @@
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Built-in Fitting Models in the <code class="docutils literal notranslate"><span class="pre">models</span></code> module</a><ul>
 <li><a class="reference internal" href="#peak-like-models">Peak-like models</a><ul>
@@ -96,6 +96,7 @@
 <li><a class="reference internal" href="#dampedharmonicocsillatormodel"><code class="docutils literal notranslate"><span class="pre">DampedHarmonicOcsillatorModel</span></code></a></li>
 <li><a class="reference internal" href="#exponentialgaussianmodel"><code class="docutils literal notranslate"><span class="pre">ExponentialGaussianModel</span></code></a></li>
 <li><a class="reference internal" href="#skewedgaussianmodel"><code class="docutils literal notranslate"><span class="pre">SkewedGaussianModel</span></code></a></li>
+<li><a class="reference internal" href="#skewedvoigtmodel"><code class="docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a></li>
 <li><a class="reference internal" href="#donaichmodel"><code class="docutils literal notranslate"><span class="pre">DonaichModel</span></code></a></li>
 </ul>
 </li>
@@ -810,7 +811,62 @@ to report full width at half maximum and maximum peak height, respectively.</p>
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
 e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
 {\operatorname{erf}}\bigl[
-\frac{\gamma(x-\mu)}{\sigma\sqrt{2}}
+\frac{{\gamma}(x-\mu)}{\sigma\sqrt{2}}
+\bigr] \Bigr\}\]</div>
+<p>where <code class="xref py py-func docutils literal notranslate"><span class="pre">erf()</span></code> is the error function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+have parameter names in common.</li>
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>1. nan_policy sets what to do when a NaN or missing value is seen in the
+data. Should be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li>‘raise’ : Raise a ValueError (default)</li>
+<li>‘propagate’ : do nothing</li>
+<li>‘omit’ : (was ‘drop’) drop missing data</li>
+</ul>
+</div></blockquote>
+<p>2. The <cite>missing</cite> argument is deprecated in lmfit 0.9.8 and will be
+removed in a later version. Use <cite>nan_policy</cite> instead, as it is
+consistent with the Minimizer class.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="skewedvoigtmodel">
+<h3><a class="reference internal" href="#lmfit.models.SkewedVoigtModel" title="lmfit.models.SkewedVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a><a class="headerlink" href="#skewedvoigtmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="lmfit.models.SkewedVoigtModel">
+<em class="property">class </em><code class="descname">SkewedVoigtModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedVoigtModel" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>A variation of the Skewed Gaussian, this applies the same skewing</dt>
+<dd>to a Voigt distribution (see
+<a class="reference external" href="https://en.wikipedia.org/wiki/Voigt_distribution">https://en.wikipedia.org/wiki/Voigt_distribution</a>).  It has Parameters
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>), <code class="docutils literal notranslate"><span class="pre">sigma</span></code>
+(<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>), as usual for a
+Voigt distribution, and add a Parameter <code class="docutils literal notranslate"><span class="pre">skew</span></code>.  In addition,
+parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints to
+report full width at half maximum and maximum peak height, of the
+Voigt distribution, respectively.</dd>
+</dl>
+<div class="math notranslate nohighlight">
+\[f(x; A, \mu, \sigma, \gamma, \rm{skew}) = {\rm{Voigt}}(x; A, \mu, \sigma, \gamma)
+\Bigl\{ 1 +  {\operatorname{erf}}\bigl[
+\frac{{\rm{skew}}(x-\mu)}{\sigma\sqrt{2}}
 \bigr] \Bigr\}\]</div>
 <p>where <code class="xref py py-func docutils literal notranslate"><span class="pre">erf()</span></code> is the error function.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1876,7 +1932,7 @@ estimate of the data.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

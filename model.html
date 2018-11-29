@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Built-in Fitting Models in the models module" href="builtin_models.html" />
@@ -79,7 +79,7 @@
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Modeling Data and Curve Fitting</a><ul>
 <li><a class="reference internal" href="#motivation-and-simple-example-fit-data-to-gaussian-profile">Motivation and simple example: Fit data to Gaussian profile</a></li>
@@ -354,7 +354,8 @@ function as a fitting model.</p>
 <dl class="class">
 <dt id="lmfit.model.Model">
 <em class="property">class </em><code class="descname">Model</code><span class="sig-paren">(</span><em>func</em>, <em>independent_vars=None</em>, <em>param_names=None</em>, <em>nan_policy='raise'</em>, <em>missing=None</em>, <em>prefix=''</em>, <em>name=None</em>, <em>**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a model from a user-supplied model function.</p>
+<dd><p>Model class.</p>
+<p>Create a model from a user-supplied model function.</p>
 <p>The model function will normally take an independent variable
 (generally, the first argument) and a series of arguments that are
 meant to be parameters for the model. It will return an array of
@@ -438,7 +439,7 @@ and parameters:</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Value of model given the parameters and other arguments.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)">numpy.ndarray</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)">numpy.ndarray</a></p>
 </td>
 </tr>
 </tbody>
@@ -455,7 +456,7 @@ keyword arguments.</p>
 
 <dl class="method">
 <dt id="lmfit.model.Model.fit">
-<code class="descclassname">Model.</code><code class="descname">fit</code><span class="sig-paren">(</span><em>data</em>, <em>params=None</em>, <em>weights=None</em>, <em>method='leastsq'</em>, <em>iter_cb=None</em>, <em>scale_covar=True</em>, <em>verbose=False</em>, <em>fit_kws=None</em>, <em>nan_policy=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.fit" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">Model.</code><code class="descname">fit</code><span class="sig-paren">(</span><em>data</em>, <em>params=None</em>, <em>weights=None</em>, <em>method='leastsq'</em>, <em>iter_cb=None</em>, <em>scale_covar=True</em>, <em>verbose=False</em>, <em>fit_kws=None</em>, <em>nan_policy=None</em>, <em>calc_covar=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model to the data using the supplied Parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -469,11 +470,14 @@ is None).</li>
 <li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of fitting method to use (default is <cite>‘leastsq’</cite>).</li>
 <li><strong>iter_cb</strong> (<em>callable</em><em>, </em><em>optional</em>) – Callback function to call at each iteration (default is None).</li>
 <li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to automatically scale the covariance matrix when
-calculating uncertainties (default is True, <cite>leastsq</cite> method only).</li>
+calculating uncertainties (default is True).</li>
 <li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to print a message when a new parameter is added because
 of a hint (default is True).</li>
 <li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
 <li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Options to pass to the minimizer being used.</li>
+<li><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
+solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires the
+<cite>numdifftools</cite> package to be installed.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Arguments to pass to the  model function, possibly overriding
 params.</li>
 </ul>
@@ -671,7 +675,8 @@ Can be any of the following:</p>
 <dl class="attribute">
 <dt id="lmfit.model.nan_policy">
 <code class="descname">nan_policy</code><a class="headerlink" href="#lmfit.model.nan_policy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Describes what to do for NaNs and missing values.  The choices are:</p>
+<dd><p>Describes what to do for NaNs that indicate missing values in the data.
+The choices are:</p>
 <blockquote>
 <div><ul class="simple">
 <li>‘raise’: Raise a ValueError (default)</li>
@@ -1105,7 +1110,7 @@ statistics inherited from <a class="reference internal" href="fitting.html#lmfit
 comparing different models, including <cite>chisqr</cite>, <cite>redchi</cite>, <cite>aic</cite>, and <cite>bic</cite>.</p>
 <dl class="class">
 <dt id="lmfit.model.ModelResult">
-<em class="property">class </em><code class="descname">ModelResult</code><span class="sig-paren">(</span><em>model</em>, <em>params</em>, <em>data=None</em>, <em>weights=None</em>, <em>method='leastsq'</em>, <em>fcn_args=None</em>, <em>fcn_kws=None</em>, <em>iter_cb=None</em>, <em>scale_covar=True</em>, <em>nan_policy='raise'</em>, <em>**fit_kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descname">ModelResult</code><span class="sig-paren">(</span><em>model</em>, <em>params</em>, <em>data=None</em>, <em>weights=None</em>, <em>method='leastsq'</em>, <em>fcn_args=None</em>, <em>fcn_kws=None</em>, <em>iter_cb=None</em>, <em>scale_covar=True</em>, <em>nan_policy='raise'</em>, <em>calc_covar=True</em>, <em>**fit_kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Result from the Model fit.</p>
 <p>This has many attributes and methods for viewing and working with
 the results of a fit using Model. It inherits from Minimizer, so
@@ -1125,6 +1130,9 @@ that it can be used to modify and re-run the fit for the Model.</p>
 <li><strong>iter_cb</strong> (<em>callable</em><em>, </em><em>optional</em>) – Function to call on each iteration of fit.</li>
 <li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to scale covariance matrix for uncertainty evaluation.</li>
 <li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
+<li><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
+solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires the
+<cite>numdifftools</cite> package to be installed.</li>
 <li><strong>**fit_kws</strong> (<em>optional</em>) – Keyword arguments to send to minimization routine.</li>
 </ul>
 </td>
@@ -1152,7 +1160,7 @@ that it can be used to modify and re-run the fit for the Model.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> – Array for evaluated model.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)">numpy.ndarray</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)">numpy.ndarray</a></p>
 </td>
 </tr>
 </tbody>
@@ -1281,16 +1289,16 @@ accessed without recalculating them.</p>
 <dl class="method">
 <dt id="lmfit.model.ModelResult.eval_uncertainty">
 <code class="descclassname">ModelResult.</code><code class="descname">eval_uncertainty</code><span class="sig-paren">(</span><em>params=None</em>, <em>sigma=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.eval_uncertainty" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the uncertainty of the <em>model function</em> from the
-uncertainties for the best-fit parameters.  This can be used to give
-confidence bands for the model.</p>
+<dd><p>Evaluate the uncertainty of the <em>model function</em>.</p>
+<p>This can be used to give confidence bands for the model from the
+uncertainties in the best-fit parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Parameters, defaults to ModelResult.params.</li>
-<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) – Confidence level, i.e. how many sigma (default  is 1).</li>
+<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) – Confidence level, i.e. how many sigma (default is 1).</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Values of options, independent variables, etcetera.</li>
 </ul>
 </td>
@@ -1298,7 +1306,7 @@ confidence bands for the model.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Uncertainty at each value of the model.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)">numpy.ndarray</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)">numpy.ndarray</a></p>
 </td>
 </tr>
 </tbody>
@@ -1317,18 +1325,18 @@ confidence bands for the model.</p>
 <li>This is based on the excellent and clear example from
 <a class="reference external" href="https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals">https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals</a>,
 which references the original work of:
-J. Wolberg,Data Analysis Using the Method of Least Squares, 2006, Springer</li>
-<li>The value of sigma is number of <cite>sigma</cite> values, and is converted to a
-probability.  Values or 1, 2, or 3 give probalities of 0.6827, 0.9545,
-and 0.9973, respectively. If the sigma value is &lt; 1, it is interpreted
-as the probability itself.  That is, <cite>sigma=1</cite> and <cite>sigma=0.6827</cite> will
-give the same results, within precision errors.</li>
+J. Wolberg, Data Analysis Using the Method of Least Squares, 2006, Springer</li>
+<li>The value of sigma is number of <cite>sigma</cite> values, and is converted to
+a probability. Values of 1, 2, or 3 give probabilities of 0.6827,
+0.9545, and 0.9973, respectively. If the sigma value is &lt; 1, it is
+interpreted as the probability itself. That is, <cite>sigma=1</cite> and
+<cite>sigma=0.6827</cite> will give the same results, within precision errors.</li>
 </ol>
 </dd></dl>
 
 <dl class="method">
 <dt id="lmfit.model.ModelResult.plot">
-<code class="descclassname">ModelResult.</code><code class="descname">plot</code><span class="sig-paren">(</span><em>datafmt='o'</em>, <em>fitfmt='-'</em>, <em>initfmt='--'</em>, <em>xlabel=None</em>, <em>ylabel=None</em>, <em>yerr=None</em>, <em>numpoints=None</em>, <em>fig=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>init_kws=None</em>, <em>ax_res_kws=None</em>, <em>ax_fit_kws=None</em>, <em>fig_kws=None</em>, <em>show_init=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ModelResult.</code><code class="descname">plot</code><span class="sig-paren">(</span><em>datafmt='o'</em>, <em>fitfmt='-'</em>, <em>initfmt='--'</em>, <em>xlabel=None</em>, <em>ylabel=None</em>, <em>yerr=None</em>, <em>numpoints=None</em>, <em>fig=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>init_kws=None</em>, <em>ax_res_kws=None</em>, <em>ax_fit_kws=None</em>, <em>fig_kws=None</em>, <em>show_init=False</em>, <em>parse_complex='abs'</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit results and residuals using matplotlib, if available.</p>
 <p>The method will produce a matplotlib figure with both results of the
 fit and the residuals plotted. If the fit model included weights,
@@ -1344,7 +1352,7 @@ fit, pass the argument <cite>show_init=True</cite>.</p>
 <li><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</li>
 <li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</li>
 <li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</li>
-<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
 <li><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated not
 only at data points, but refined to contain <cite>numpoints</cite> points in
 total.</li>
@@ -1358,6 +1366,9 @@ conditions of the fit.</li>
 <li><strong>ax_fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for the axes for the fit plot.</li>
 <li><strong>fig_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new figure, if there is one being created.</li>
 <li><strong>show_init</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show the initial conditions for the fit (default is False).</li>
+<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
+Options are one of <cite>[‘real’, ‘imag’, ‘abs’, ‘angle’]</cite>, which
+correspond to the numpy functions of the same name (default is ‘abs’).</li>
 </ul>
 </td>
 </tr>
@@ -1374,6 +1385,8 @@ conditions of the fit.</li>
 <p>If <cite>yerr</cite> is specified or if the fit model included weights, then
 matplotlib.axes.Axes.errorbar is used to plot the data.  If <cite>yerr</cite> is
 not specified and the fit includes weights, <cite>yerr</cite> set to 1/self.weights</p>
+<p>If model returns complex data, <cite>yerr</cite> is treated the same way that
+weights are in this case.</p>
 <p>If <cite>fig</cite> is None then <cite>matplotlib.pyplot.figure(**fig_kws)</cite> is called,
 otherwise <cite>fig_kws</cite> is ignored.</p>
 <div class="admonition seealso">
@@ -1389,7 +1402,7 @@ otherwise <cite>fig_kws</cite> is ignored.</p>
 
 <dl class="method">
 <dt id="lmfit.model.ModelResult.plot_fit">
-<code class="descclassname">ModelResult.</code><code class="descname">plot_fit</code><span class="sig-paren">(</span><em>ax=None</em>, <em>datafmt='o'</em>, <em>fitfmt='-'</em>, <em>initfmt='--'</em>, <em>xlabel=None</em>, <em>ylabel=None</em>, <em>yerr=None</em>, <em>numpoints=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>init_kws=None</em>, <em>ax_kws=None</em>, <em>show_init=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_fit" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ModelResult.</code><code class="descname">plot_fit</code><span class="sig-paren">(</span><em>ax=None</em>, <em>datafmt='o'</em>, <em>fitfmt='-'</em>, <em>initfmt='--'</em>, <em>xlabel=None</em>, <em>ylabel=None</em>, <em>yerr=None</em>, <em>numpoints=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>init_kws=None</em>, <em>ax_kws=None</em>, <em>show_init=False</em>, <em>parse_complex='abs'</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit results using matplotlib, if available.</p>
 <p>The plot will include the data points, the initial fit curve (optional,
 with <cite>show_init=True</cite>), and the best-fit curve. If the fit model
@@ -1407,7 +1420,7 @@ current pyplot axis or create one if there is none.</li>
 <li><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</li>
 <li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</li>
 <li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</li>
-<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
 <li><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated not
 only at data points, but refined to contain <cite>numpoints</cite> points in
 total.</li>
@@ -1417,6 +1430,9 @@ total.</li>
 conditions of the fit.</li>
 <li><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new axis, if there is one being created.</li>
 <li><strong>show_init</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show the initial conditions for the fit (default is False).</li>
+<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
+Options are one of <cite>[‘real’, ‘imag’, ‘abs’, ‘angle’]</cite>, which
+correspond to the numpy functions of the same name (default is ‘abs’).</li>
 </ul>
 </td>
 </tr>
@@ -1434,6 +1450,8 @@ documentation of matplotlib.axes.Axes.plot.</p>
 <p>If <cite>yerr</cite> is specified or if the fit model included weights, then
 matplotlib.axes.Axes.errorbar is used to plot the data.  If <cite>yerr</cite> is
 not specified and the fit includes weights, <cite>yerr</cite> set to 1/self.weights</p>
+<p>If model returns complex data, <cite>yerr</cite> is treated the same way that
+weights are in this case.</p>
 <p>If <cite>ax</cite> is None then <cite>matplotlib.pyplot.gca(**ax_kws)</cite> is called.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
@@ -1448,7 +1466,7 @@ not specified and the fit includes weights, <cite>yerr</cite> set to 1/self.weig
 
 <dl class="method">
 <dt id="lmfit.model.ModelResult.plot_residuals">
-<code class="descclassname">ModelResult.</code><code class="descname">plot_residuals</code><span class="sig-paren">(</span><em>ax=None</em>, <em>datafmt='o'</em>, <em>yerr=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>ax_kws=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_residuals" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ModelResult.</code><code class="descname">plot_residuals</code><span class="sig-paren">(</span><em>ax=None</em>, <em>datafmt='o'</em>, <em>yerr=None</em>, <em>data_kws=None</em>, <em>fit_kws=None</em>, <em>ax_kws=None</em>, <em>parse_complex='abs'</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_residuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit residuals using matplotlib, if available.</p>
 <p>If <cite>yerr</cite> is supplied or if the model included weights, errorbars
 will also be plotted.</p>
@@ -1460,10 +1478,13 @@ will also be plotted.</p>
 <li><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</li>
 <li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</li>
-<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.14)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
 <li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for data points.</li>
 <li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for fitted curve.</li>
 <li><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new axis, if there is one being created.</li>
+<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
+Options are one of <cite>[‘real’, ‘imag’, ‘abs’, ‘angle’]</cite>, which
+correspond to the numpy functions of the same name (default is ‘abs’).</li>
 </ul>
 </td>
 </tr>
@@ -1481,6 +1502,8 @@ documentation of matplotlib.axes.Axes.plot.</p>
 <p>If <cite>yerr</cite> is specified or if the fit model included weights, then
 matplotlib.axes.Axes.errorbar is used to plot the data.  If <cite>yerr</cite> is
 not specified and the fit includes weights, <cite>yerr</cite> set to 1/self.weights</p>
+<p>If model returns complex data, <cite>yerr</cite> is treated the same way that
+weights are in this case.</p>
 <p>If <cite>ax</cite> is None then <cite>matplotlib.pyplot.gca(**ax_kws)</cite> is called.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
@@ -2145,7 +2168,7 @@ build complex models from testable sub-components.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>

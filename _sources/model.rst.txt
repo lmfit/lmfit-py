@@ -235,7 +235,8 @@ function as a fitting model.
 
 .. attribute:: nan_policy
 
-   Describes what to do for NaNs and missing values.  The choices are:
+   Describes what to do for NaNs that indicate missing values in the data.
+   The choices are:
 
     * 'raise': Raise a ValueError (default)
     * 'propagate': Do not check for NaNs or missing values. The fit will

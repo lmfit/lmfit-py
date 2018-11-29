@@ -13,7 +13,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Parameter and Parameters" href="parameters.html" />
@@ -79,7 +79,7 @@
 
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
 <li><a class="reference internal" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What’s the best way to ask for help or submit a bug report?</a></li>
@@ -90,6 +90,11 @@
 <li><a class="reference internal" href="#how-can-i-fit-complex-data">How can I fit complex data?</a></li>
 <li><a class="reference internal" href="#can-i-constrain-values-to-have-integer-values">Can I constrain values to have integer values?</a></li>
 <li><a class="reference internal" href="#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
+<li><a class="reference internal" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do">I get errors from NaN in my fit.  What can I do?</a><ul>
+<li><a class="reference internal" href="#nan-policy"><cite>nan_policy</cite></a></li>
+<li><a class="reference internal" href="#common-sources-of-nan">Common sources of NaN</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -127,8 +132,9 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="frequently-asked-questions">
-<span id="faq-chapter"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+  <p>%.. _faq_chapter:</p>
+<div class="section" id="frequently-asked-questions">
+<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
 <p>A list of common questions.</p>
 <div class="section" id="what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">
 <h2>What’s the best way to ask for help or submit a bug report?<a class="headerlink" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report" title="Permalink to this headline">¶</a></h2>
@@ -193,6 +199,11 @@ precision floating point numbers. The simplest approach is to use
     <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Alternately, you can use the lmfit.Model class to wrap a fit function
+that returns a complex vector. It will automatically apply the above
+prescription when calculating the residual. The benefit to this method
+is that you also get access to the plot routines from the ModelResult
+class, which are also complex-aware.</p>
 </div>
 <div class="section" id="can-i-constrain-values-to-have-integer-values">
 <h2>Can I constrain values to have integer values?<a class="headerlink" href="#can-i-constrain-values-to-have-integer-values" title="Permalink to this headline">¶</a></h2>
@@ -204,6 +215,64 @@ the value to be minimized.</p>
 <div class="section" id="how-should-i-cite-lmfit">
 <h2>How should I cite LMFIT?<a class="headerlink" href="#how-should-i-cite-lmfit" title="Permalink to this headline">¶</a></h2>
 <p>See <a class="reference external" href="https://dx.doi.org/10.5281/zenodo.11813">https://dx.doi.org/10.5281/zenodo.11813</a></p>
+</div>
+<div class="section" id="i-get-errors-from-nan-in-my-fit-what-can-i-do">
+<h2>I get errors from NaN in my fit.  What can I do?<a class="headerlink" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do" title="Permalink to this headline">¶</a></h2>
+<p>The solvers used by <cite>lmfit</cite> use NaN (see
+<a class="reference external" href="https://en.wikipedia.org/wiki/NaN">https://en.wikipedia.org/wiki/NaN</a>) values as signals that the calculation
+cannot continue.  If any value in the residual array (typically
+<cite>(data-model)*weight</cite>) is NaN, then calculations of chi-square or
+comparisons with other residual arrays to try find a better fit will also
+give NaN and fail. There is no sensible way for <cite>lmfit</cite> or any of the
+optimization routines to know how to handle such NaN values.  They
+indicate that numerical calculations are not sensible and must stop.</p>
+<p>This means that if your objective function (if using <cite>minimize</cite>) or model
+function (if using <cite>Model</cite>) generates a NaN, the fit will stop
+immediately. If your objective or model function generates a NaN, you
+really must handle that.</p>
+<div class="section" id="nan-policy">
+<h3><cite>nan_policy</cite><a class="headerlink" href="#nan-policy" title="Permalink to this headline">¶</a></h3>
+<p>If you are using <code class="xref py py-class docutils literal notranslate"><span class="pre">lmfit.Model</span></code> and the NaN values come from your
+data array and are meant to indicate missing values, or if you using
+<code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code> with the same basic intention, then it might be
+possible to get a successful fit in spite of the NaN values. To do this,
+you can add a <cite>nan_policy=’omit’</cite> argument to <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code>, or
+when creating a <code class="xref py py-class docutils literal notranslate"><span class="pre">lmfit.Model</span></code>, or when running
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">lmfit.Model.fit()</span></code>.</p>
+<p>In order for this to be effective, the number of NaN values cannot ever
+change during the fit.  If the NaN values come from the data and not the
+calculated model, that should be the case.</p>
+</div>
+<div class="section" id="common-sources-of-nan">
+<h3>Common sources of NaN<a class="headerlink" href="#common-sources-of-nan" title="Permalink to this headline">¶</a></h3>
+<p>If you are seeing erros due to NaN values, you will need to figure out
+where they are coming from and eliminate them.  It is sometimes difficult
+to tell what causes NaN values.  Keep in mind that all values should be
+assumed to be either scalar values or numpy arrays of double precision real
+numbers when fitting.  Some of the most likely causes of NaNs are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>taking <cite>sqrt(x)</cite> or <cite>log(x)</cite> where <cite>x</cite> is negative.</li>
+<li>doing <cite>x**y</cite> where <cite>x</cite> is negative.  Since <cite>y</cite> is real, there will
+be a fractional component, and a negative number to a fractional
+exponent is not a real number.</li>
+<li>doing <cite>x/y</cite> where both <cite>x</cite> and <cite>y</cite> are 0.</li>
+</ul>
+</div></blockquote>
+<p>If you use these very common constructs in your objective or model
+function, you should take some caution for what values you are passing
+these functions and operators.  Many special functions have similar
+limitations and should also be viewed with some suspicion if NaNs are being
+generated.</p>
+<p>A related problem is the generation of Inf (Infinity in floating point),
+which generally comes from <cite>exp(x)</cite> where <cite>x</cite> has values greater than 700
+or so, so that the resulting value is greater than 1.e308.  Inf is only
+slightly better than NaN. It will completely ruin the ability to do the
+fit.  However, unlike NaN, it is also usually clear how to handle Inf, as
+you probably won’t ever have values greater than 1.e308 and can therefore
+(usually) safely clip the argument passed to <cite>exp()</cite> to be smaller than
+about 700.</p>
+</div>
 </div>
 </div>
 
@@ -238,7 +307,7 @@ the value to be minimized.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
 </html>
