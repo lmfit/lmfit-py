@@ -180,7 +180,7 @@ class ConfidenceInterval(object):
         if prob_func is None or not hasattr(prob_func, '__call__'):
             self.prob_func = f_compare
         if trace:
-            self.trace_dict = dict([(i, []) for i in self.p_names])
+            self.trace_dict = {i: [] for i in self.p_names}
 
         self.trace = trace
         self.maxiter = maxiter
@@ -288,16 +288,17 @@ class ConfidenceInterval(object):
 
             # Check convergence.
             if i > self.maxiter:
-                errmsg = "Warning, maxiter={0} reached".format(self.maxiter)
-                errmsg += ("and prob({0}={1}) = {2} < "
+                errmsg = "maxiter={} reached ".format(self.maxiter)
+                errmsg += ("and prob({}={}) = {} < "
                            "max(sigmas).".format(para.name, limit, new_prob))
                 warn(errmsg)
                 break
 
             if rel_change < self.min_rel_change:
-                errmsg = "Warning, rel_change={0} < 0.01 ".format(rel_change)
-                errmsg += (" at iteration {3} and prob({0}={1}) = {2} < max"
-                           "(sigmas).".format(para.name, limit, new_prob, i))
+                errmsg = "rel_change={} < {} ".format(rel_change,
+                                                      self.min_rel_change)
+                errmsg += ("at iteration {} and prob({}={}) = {} < max"
+                           "(sigmas).".format(i, para.name, limit, new_prob))
                 warn(errmsg)
                 break
 
