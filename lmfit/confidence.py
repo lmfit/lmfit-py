@@ -61,7 +61,7 @@ def restore_vals(tmp_params, params):
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
 
-def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
+def conf_interval(minimizer, result, p_names=None, sigmas=[1, 2, 3],
                   trace=False, maxiter=200, verbose=False, prob_func=None):
     """Calculate the confidence interval (ci) for parameters.
 
@@ -108,7 +108,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
     -----
     The values for `sigma` are taken as the number of standard deviations for
     a normal distribution and converted to probabilities. That is, the default
-    ``sigma=(1, 2, 3)`` will use probabilities of 0.6827, 0.9545, and 0.9973.
+    ``sigma=[1, 2, 3]`` will use probabilities of 0.6827, 0.9545, and 0.9973.
     If any of the sigma values is less than 1, that will be interpreted as a
     probability. That is, a value of 1 and 0.6827 will give the same results,
     within precision.
@@ -131,7 +131,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=(1, 2, 3),
 
     Now with quantiles for the sigmas and using the trace.
 
-    >>> ci, trace = conf_interval(mini, sigmas=(0.5, 1, 2, 3), trace=True)
+    >>> ci, trace = conf_interval(mini, sigmas=[0.5, 1, 2, 3], trace=True)
     >>> fixed = trace['para1']['para1']
     >>> free = trace['para1']['not_para1']
     >>> prob = trace['para1']['prob']
@@ -165,7 +165,7 @@ class ConfidenceInterval(object):
     """Class used to calculate the confidence interval."""
 
     def __init__(self, minimizer, result, p_names=None, prob_func=None,
-                 sigmas=(1, 2, 3), trace=False, verbose=False,
+                 sigmas=[1, 2, 3], trace=False, verbose=False,
                  maxiter=50):
         self.verbose = verbose
         self.minimizer = minimizer
