@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pytest
 
@@ -20,3 +22,11 @@ def minimizer_Alpine02():
 
     mini = lmfit.Minimizer(residual_Alpine02, pars)
     return mini
+
+
+@pytest.fixture
+def peakdata():
+    """Return the peak-like test data."""
+    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
+                                   'examples', 'test_peak.dat'))
+    return data.T

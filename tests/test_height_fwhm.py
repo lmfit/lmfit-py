@@ -1,5 +1,5 @@
+"""Tests for the calculation of FWHM/height for peak-like built-in models."""
 import inspect
-import os
 import sys
 
 import numpy as np
@@ -14,7 +14,7 @@ elif sys.version_info[0] == 3:
 
 
 def check_height_fwhm(x, y, lineshape, model):
-    """Check height and fwhm parameters"""
+    """Check height and fwhm parameters."""
     pars = model.guess(y, x=x)
     out = model.fit(y, pars, x=x)
 
@@ -54,16 +54,14 @@ def check_height_fwhm(x, y, lineshape, model):
                                                diff)
 
 
-def test_peak_like():
+def test_peak_like(peakdata):
     # mu = 0
     # variance = 1.0
     # sigma = np.sqrt(variance)
     # x = np.linspace(mu - 20*sigma, mu + 20*sigma, 100.0)
     # y = norm.pdf(x, mu, 1)
-    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
-                                   'examples', 'test_peak.dat'))
-    x = data[:, 0]
-    y = data[:, 1]
+    x = peakdata[0]
+    y = peakdata[1]
     check_height_fwhm(x, y, lineshapes.voigt, models.VoigtModel())
     check_height_fwhm(x, y, lineshapes.pvoigt, models.PseudoVoigtModel())
     check_height_fwhm(x, y, lineshapes.pearson7, models.Pearson7Model())
