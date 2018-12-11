@@ -18,7 +18,7 @@ functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'students_t', 'expgaussian', 'donaich', 'skewed_gaussian',
              'skewed_voigt', 'step', 'rectangle', 'erf', 'erfc', 'wofz',
              'gamma', 'gammaln', 'exponential', 'powerlaw', 'linear',
-             'parabolic', 'sine', 'expsine')
+             'parabolic', 'sine', 'expsine', 'double_lorentzian')
 
 
 def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
@@ -39,6 +39,29 @@ def lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0):
 
     """
     return (amplitude/(1 + ((1.0*x-center)/sigma)**2)) / (pi*sigma)
+
+
+def double_lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0, sigma_r=1.0):
+    """Return a 1-dimensional double-sided Lorentzian function.
+
+    Double-sided means that width of the function is different between
+    left and right slope of the function. The peak height is calculated
+    from the condition that the integral from -.inf to +.inf is equal
+    to amplitude.
+
+    double_lorentzian(x, amplitude, center, sigma, sigma_r) =
+        amplitude * 2 / pi / (sigma + sigma_r) * \
+        (1 / (1 + (dx / sigma)**2) * step(-dx)
+         + 1 / (1 + (dx / sigma_r)**2) * step(dx))
+
+    """
+    def step(x):
+        return 1.0 * (x >= 0)
+
+    dx = 1.0 * x - center
+    return amplitude * 2 / pi / (sigma + sigma_r) * \
+        (1 / (1 + (dx / sigma)**2) * step(-dx)
+         + 1 / (1 + (dx / sigma_r)**2) * step(dx))
 
 
 def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
