@@ -385,27 +385,27 @@ class DoubleLorentzianModel(Model):
     (see https://en.wikipedia.org/wiki/Cauchy_distribution), with four
     parameters: ``amplitude``, ``center``, ``sigma``, and ``sigma_r``.
 
-    'Double' means that the width of the distribution is different between
-    left and right slopes.
-
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
     to report full width at half maximum and maximum peak height, respectively.
 
+    'Double' means that the width of the distribution is different between
+    left and right slopes.
+
     .. math::
 
-        f(x; A, \mu, \sigma, \sigma_r) = \frac{2 A}{\pi (\sigma+\sigma_r)} \big[\frac{1}{(x - \mu)^2 + \sigma^2} * H(\mu-x, 1) + \frac{1}{(x - \mu)^2 + \sigma_r^2} * H(x-\mu, 0)\big]
+        f(x; A, \mu, \sigma, \sigma_r) = \frac{2 A}{\pi (\sigma+\sigma_r)} \big[\frac{1}{(x - \mu)^2 + \sigma^2} * H(\mu-x) + \frac{1}{(x - \mu)^2 + \sigma_r^2} * H(x-\mu)\big]
 
     where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
-    :math:`\mu`, ``sigma`` to :math:`\sigma`, and ``sigma_l`` to
+    :math:`\mu`, ``sigma`` to :math:`\sigma`, ``sigma_l`` to
     :math:`\sigma_l`, and :math:`H(x)` is a Heaviside step function:
 
     .. math::
 
-        H(x) = 0 | x < 0, 1 | x >= 0
+        H(x) = 0 | x < 0, 1 | x \geq 0
 
     The full width at half maximum is :math:`\sigma_l+\sigma_r`. Just as with
-    the Lorentzian model, integral of this function from -.inf to +.inf
-    equals to `amplitude`.
+    the Lorentzian model, integral of this function from ``-.inf`` to
+    ``+.inf`` equals to ``amplitude``.
     """
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):

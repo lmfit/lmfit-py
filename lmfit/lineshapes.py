@@ -46,8 +46,8 @@ def double_lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0, sigma_r=1.0):
 
     Double-sided means that width of the function is different between
     left and right slope of the function. The peak height is calculated
-    from the condition that the integral from -.inf to +.inf is equal
-    to amplitude.
+    from the condition that the integral from ``-.inf`` to ``+.inf`` is equal
+    to ``amplitude``.
 
     double_lorentzian(x, amplitude, center, sigma, sigma_r) =
         amplitude * 2 / pi / (sigma + sigma_r) * \
