@@ -62,6 +62,11 @@ methods for all of these make a fairly crude guess for the value of
 
 .. autoclass:: LorentzianModel
 
+:class:`DoubleLorentzianModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: DoubleLorentzianModel
+
 
 :class:`VoigtModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
