@@ -51,17 +51,17 @@ def double_lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0, sigma_r=1.0):
 
     double_lorentzian(x, amplitude, center, sigma, sigma_r) =
         amplitude * 2 / pi / (sigma + sigma_r) * \
-        (1 / (1 + (dx / sigma)**2) * step(-dx)
-         + 1 / (1 + (dx / sigma_r)**2) * step(dx))
+        (1 / (1 + (dx / sigma)**2) * heaviside_step(-dx)
+         + 1 / (1 + (dx / sigma_r)**2) * heaviside_step(dx))
 
     """
-    def step(x):
+    def heaviside_step(x):
         return 1.0 * (x >= 0)
 
     dx = 1.0 * x - center
     return amplitude * 2 / pi / (sigma + sigma_r) * \
-        (1 / (1 + (dx / sigma)**2) * step(-dx)
-         + 1 / (1 + (dx / sigma_r)**2) * step(dx))
+        (1 / (1 + (dx / sigma)**2) * heaviside_step(-dx)
+         + 1 / (1 + (dx / sigma_r)**2) * heaviside_step(dx))
 
 
 def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
