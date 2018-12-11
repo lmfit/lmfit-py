@@ -1,88 +1,97 @@
-import os
-
+"""Tests for the least_squares minimization algorithm."""
 import numpy as np
-from numpy import exp, linspace, pi, random, sign, sin
-from numpy.testing import assert_allclose, assert_almost_equal
+from numpy.testing import assert_allclose
+import pytest
 
-from lmfit import Minimizer, Parameters
+import lmfit
 from lmfit.models import VoigtModel
-from lmfit_testutils import assert_paramval
 
 
-def test_bounds():
-    p_true = Parameters()
+def test_least_squares_with_bounds():
+    """Test least_squares algorihhm with bounds."""
+    # define "true" parameters
+    p_true = lmfit.Parameters()
     p_true.add('amp', value=14.0)
     p_true.add('period', value=5.4321)
     p_true.add('shift', value=0.12345)
     p_true.add('decay', value=0.01000)
 
     def residual(pars, x, data=None):
+        """Objective function of decaying sine wave."""
         amp = pars['amp']
         per = pars['period']
         shift = pars['shift']
         decay = pars['decay']
 
-        if abs(shift) > pi/2:
-            shift = shift - sign(shift)*pi
+        if abs(shift) > np.pi/2:
+            shift = shift - np.sign(shift)*np.pi
 
-        model = amp*sin(shift + x/per) * exp(-x*x*decay*decay)
+        model = amp*np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
         if data is None:
             return model
-        return (model - data)
+        return model - data
 
-    n = 1500
-    xmin = 0.
-    xmax = 250.0
-    random.seed(0)
-    noise = random.normal(scale=2.80, size=n)
-    x = linspace(xmin, xmax, n)
+    # generate synthetic data
+    np.random.seed(0)
+    x = np.linspace(0.0, 250.0, 1500)
+    noise = np.random.normal(scale=2.80, size=x.size)
     data = residual(p_true, x) + noise
 
-    fit_params = Parameters()
-    fit_params.add('amp', value=13.0, max=20, min=0.0)
+    # create Parameters and set initial values and bounds
+    fit_params = lmfit.Parameters()
+    fit_params.add('amp', value=13.0, min=0.0, max=20)
     fit_params.add('period', value=2, max=10)
-    fit_params.add('shift', value=0.0, max=pi/2., min=-pi/2.)
-    fit_params.add('decay', value=0.02, max=0.10, min=0.00)
+    fit_params.add('shift', value=0.0, min=-np.pi/2., max=np.pi/2.)
+    fit_params.add('decay', value=0.02, min=0.0, max=0.10)
 
-    min = Minimizer(residual, fit_params, (x, data))
-    out = min.least_squares()
+    mini = lmfit.Minimizer(residual, fit_params, fcn_args=(x, data))
+    out = mini.minimize(method='least_squares')
 
-    assert(out.nfev > 10)
-    assert(out.nfree > 50)
-    assert(out.chisqr > 1.0)
+    assert out.method == 'least_squares'
+    assert out.nfev > 10
+    assert out.nfree > 50
+    assert out.chisqr > 1.0
+    assert out.errorbars
+    assert out.success
+    assert_allclose(out.params['decay'], p_true['decay'], rtol=1e-2)
+    assert_allclose(out.params['shift'], p_true['shift'], rtol=1e-2)
 
-    assert_paramval(out.params['decay'], 0.01, tol=1.e-2)
-    assert_paramval(out.params['shift'], 0.123, tol=1.e-2)
 
-
-def test_cov_x_no_bounds():
-    # load data to be fitted
-    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
-                                   'test_peak.dat'))
-    x = data[:, 0]
-    y = data[:, 1]
+@pytest.mark.parametrize("bounds", [False, True])
+def test_least_squares_cov_x(peakdata, bounds):
+    """Test calculation of cov. matrix from Jacobian, with/without bounds."""
+    x = peakdata[0]
+    y = peakdata[1]
 
     # define the model and initialize parameters
     mod = VoigtModel()
     params = mod.guess(y, x=x)
-    params['sigma'].set(min=-np.inf)
 
-    # do fit, here with leastsq model
+    if bounds:
+        params['amplitude'].set(min=25, max=70)
+        params['sigma'].set(min=0, max=1)
+        params['center'].set(min=5, max=15)
+    else:
+        params['sigma'].set(min=-np.inf)
+
+    # do fit with least_squares and leastsq algorithm
     result = mod.fit(y, params, x=x, method='least_squares')
     result_lsq = mod.fit(y, params, x=x, method='leastsq')
 
     # assert that fit converged to the same result
     vals = [result.params[p].value for p in result.params.valuesdict()]
-    vals_lsq = [result_lsq.params[p].value for p in result_lsq.params.valuesdict()]
-    assert_allclose(vals_lsq, vals, rtol=1e-5)
-    assert_allclose(result_lsq.chisqr, result.chisqr)
+    vals_lsq = [result_lsq.params[p].value for p in
+                result_lsq.params.valuesdict()]
+    assert_allclose(vals, vals_lsq, rtol=1e-5)
+    assert_allclose(result.chisqr, result_lsq.chisqr)
 
     # assert that parameter uncertaintes obtained from the leastsq method and
     # those from the covariance matrix estimated from the Jacbian matrix in
     # least_squares are similar
     stderr = [result.params[p].stderr for p in result.params.valuesdict()]
-    stderr_lsq = [result_lsq.params[p].stderr for p in result_lsq.params.valuesdict()]
-    assert_almost_equal(stderr_lsq, stderr, decimal=5)
+    stderr_lsq = [result_lsq.params[p].stderr for p in
+                  result_lsq.params.valuesdict()]
+    assert_allclose(stderr, stderr_lsq, rtol=1e-4)
 
     # assert that parameter correlations obtained from the leastsq method and
     # those from the covariance matrix estimated from the Jacbian matrix in
@@ -92,46 +101,18 @@ def test_cov_x_no_bounds():
                result.params[par1].correl.keys()]
         cor_lsq = [result_lsq.params[par1].correl[par2] for par2 in
                    result_lsq.params[par1].correl.keys()]
-        assert_almost_equal(cor_lsq, cor, decimal=5)
+        assert_allclose(cor, cor_lsq, rtol=1e-2)
 
 
-def test_cov_x_with_bounds():
-    # load data to be fitted
-    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
-                                   'test_peak.dat'))
-    x = data[:, 0]
-    y = data[:, 1]
-
-    # define the model and initialize parameters
+def test_least_squares_solver_options(peakdata, capsys):
+    """Test least_squares algorithm, pass options to solver."""
+    x = peakdata[0]
+    y = peakdata[1]
     mod = VoigtModel()
     params = mod.guess(y, x=x)
-    params['amplitude'].set(min=25, max=70)
-    params['sigma'].set(min=0, max=1)
-    params['center'].set(min=5, max=15)
+    solver_kws = {'verbose': 2}
+    mod.fit(y, params, x=x, method='least_squares', fit_kws=solver_kws)
+    captured = capsys.readouterr()
 
-    # do fit, here with leastsq model
-    result = mod.fit(y, params, x=x, method='least_squares')
-    result_lsq = mod.fit(y, params, x=x, method='leastsq')
-
-    # assert that fit converged to the same result
-    vals = [result.params[p].value for p in result.params.valuesdict()]
-    vals_lsq = [result_lsq.params[p].value for p in result_lsq.params.valuesdict()]
-    assert_allclose(vals_lsq, vals, rtol=1e-5)
-    assert_allclose(result_lsq.chisqr, result.chisqr)
-
-    # assert that parameter uncertaintes obtained from the leastsq method and
-    # those from the covariance matrix estimated from the Jacbian matrix in
-    # least_squares are similar
-    stderr = [result.params[p].stderr for p in result.params.valuesdict()]
-    stderr_lsq = [result_lsq.params[p].stderr for p in result_lsq.params.valuesdict()]
-    assert_almost_equal(stderr_lsq, stderr, decimal=6)
-
-    # assert that parameter correlations obtained from the leastsq method and
-    # those from the covariance matrix estimated from the Jacbian matrix in
-    # least_squares are similar
-    for par1 in result.var_names:
-        cor = [result.params[par1].correl[par2] for par2 in
-               result.params[par1].correl.keys()]
-        cor_lsq = [result_lsq.params[par1].correl[par2] for par2 in
-                   result_lsq.params[par1].correl.keys()]
-        assert_almost_equal(cor_lsq, cor, decimal=6)
+    assert 'Iteration' in captured.out
+    assert 'final cost' in captured.out
