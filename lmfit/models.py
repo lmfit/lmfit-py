@@ -9,7 +9,7 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
                          pvoigt, rectangle, skewed_gaussian, skewed_voigt,
-                         step, students_t, voigt)
+                         step, students_t, voigt, split_lorentzian)
 from .model import Model
 
 
@@ -374,6 +374,58 @@ class LorentzianModel(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
+        return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class SplitLorentzianModel(Model):
+    r"""A model based on a Lorentzian or Cauchy-Lorentz distribution function
+    (see https://en.wikipedia.org/wiki/Cauchy_distribution), with four
+    parameters: ``amplitude``, ``center``, ``sigma``, and ``sigma_r``.
+
+    In addition, parameters ``fwhm`` and ``height`` are included as constraints
+    to report full width at half maximum and maximum peak height, respectively.
+
+    'Split' means that the width of the distribution is different between
+    left and right slopes.
+
+    .. math::
+
+        f(x; A, \mu, \sigma, \sigma_r) = \frac{2 A}{\pi (\sigma+\sigma_r)} \big[\frac{1}{(x - \mu)^2 + \sigma^2} * H(\mu-x) + \frac{1}{(x - \mu)^2 + \sigma_r^2} * H(x-\mu)\big]
+
+    where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
+    :math:`\mu`, ``sigma`` to :math:`\sigma`, ``sigma_l`` to
+    :math:`\sigma_l`, and :math:`H(x)` is a Heaviside step function:
+
+    .. math::
+
+        H(x) = 0 | x < 0, 1 | x \geq 0
+
+    The full width at half maximum is :math:`\sigma_l+\sigma_r`. Just as with
+    the Lorentzian model, integral of this function from ``-.inf`` to
+    ``+.inf`` equals to ``amplitude``.
+    """
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super(SplitLorentzianModel, self).__init__(split_lorentzian, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
+        self.set_param_hint('sigma', min=0)
+        self.set_param_hint('sigma_r', min=0)
+        self.set_param_hint('fwhm', expr='sigma+sigma_r')
+        self.set_param_hint(
+            'height', expr='2*amplitude/{:.7f}/(sigma+sigma_r)'.format(np.pi))
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
+        sigma = pars['sigma']
+        pars['sigma_r'].set(value=sigma.value, min=sigma.min, max=sigma.max)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
