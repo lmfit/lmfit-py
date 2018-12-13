@@ -79,7 +79,7 @@ def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
     """Return a 1-dimensional pseudo-Voigt function.
 
     pvoigt(x, amplitude, center, sigma, fraction) =
-       amplitude*(1-fraction)*gaussion(x, center, sigma_g) +
+       amplitude*(1-fraction)*gaussian(x, center, sigma_g) +
        amplitude*fraction*lorentzian(x, center, sigma)
 
     where sigma_g (the sigma for the Gaussian component) is
