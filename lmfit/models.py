@@ -9,7 +9,7 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
                          pvoigt, rectangle, skewed_gaussian, skewed_voigt,
-                         step, students_t, voigt, double_lorentzian)
+                         step, students_t, voigt, split_lorentzian)
 from .model import Model
 
 
@@ -380,7 +380,7 @@ class LorentzianModel(Model):
     guess.__doc__ = COMMON_GUESS_DOC
 
 
-class DoubleLorentzianModel(Model):
+class SplitLorentzianModel(Model):
     r"""A model based on a Lorentzian or Cauchy-Lorentz distribution function
     (see https://en.wikipedia.org/wiki/Cauchy_distribution), with four
     parameters: ``amplitude``, ``center``, ``sigma``, and ``sigma_r``.
@@ -388,7 +388,7 @@ class DoubleLorentzianModel(Model):
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
     to report full width at half maximum and maximum peak height, respectively.
 
-    'Double' means that the width of the distribution is different between
+    'Split' means that the width of the distribution is different between
     left and right slopes.
 
     .. math::
@@ -411,7 +411,7 @@ class DoubleLorentzianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DoubleLorentzianModel, self).__init__(double_lorentzian, **kwargs)
+        super(SplitLorentzianModel, self).__init__(split_lorentzian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):

@@ -62,10 +62,10 @@ methods for all of these make a fairly crude guess for the value of
 
 .. autoclass:: LorentzianModel
 
-:class:`DoubleLorentzianModel`
+:class:`SplitLorentzianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: DoubleLorentzianModel
+.. autoclass:: SplitLorentzianModel
 
 
 :class:`VoigtModel`
