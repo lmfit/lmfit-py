@@ -284,6 +284,54 @@ class Parameters(OrderedDict):
             print(line.format(name_len=name_len, n=colwidth, p=precision,
                               f=fmt, **pvalues))
 
+    def html_repr(self):
+        """Returns a HTML representation of parameters data."""
+
+        # We omit certain columns if they would be empty.
+        any_err = any([p.stderr is not None for p in self.values()])
+        any_par_expr = any([p.expr is not None for p in self.values()])
+        # Helper functions for shorter code
+        html = []
+        add = html.append
+        cell = lambda x: add('<td>%s</td>' % x)
+        head = lambda x: add('<th>%s</th>' % x)
+
+        add('<table>')
+        # Header ----
+        add('<tr>')
+        headers = ['name', 'value', '(init)', 'min', 'max', 'vary']
+        if any_err:
+            headers = headers[:2] + ['', 'error', 'rel. error'] + headers[2:]
+        if any_par_expr:
+            headers.append('exrp.')
+        for h in headers:
+            head(h)
+        add('</tr>')
+        # Parameters ----------
+        for p in self.values():
+            add('<tr>')
+            cell(p.name)
+            cell('%f' % p.value)
+            if p.stderr is not None:
+                cell('+/-')
+                cell('%f' % p.stderr)
+                cell('%.2f%%' % (100 * p.stderr / p.value))
+            elif any_err:
+                cell('')
+                cell('')
+                cell('')
+            cell(p.user_value)
+            cell('%f' % p.min)
+            cell('%f' % p.max)
+            cell('%s' % p.vary)
+            if p.expr is not None:
+                cell('%s' % p.expr)
+            elif any_par_expr:
+                cell('')
+            add('</tr>')
+        add('</table>')
+        return ''.join(html)
+
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None,
             brute_step=None):
         """Add a Parameter.
