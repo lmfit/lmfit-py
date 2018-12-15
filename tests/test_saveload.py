@@ -1,7 +1,10 @@
+"""Tests for saving/loading Models and ModelResults."""
 import os
 import time
 
 import numpy as np
+from numpy.testing import assert_allclose
+import pytest
 
 import lmfit.jsonutils
 from lmfit.model import (load_model, load_modelresult, save_model,
@@ -9,30 +12,33 @@ from lmfit.model import (load_model, load_modelresult, save_model,
 from lmfit.models import ExponentialModel, GaussianModel
 from lmfit_testutils import assert_between, assert_param_between
 
-try:
-    import dill
-    DILL_AVAILABLE = True
-except ImportError:
-    DILL_AVAILABLE = False
-
-dat = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
-                              'NIST_Gauss2.dat'))
-XDAT = dat[:, 1]
-YDAT = dat[:, 0]
+y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
+                               'examples', 'NIST_Gauss2.dat')).T
 
 SAVE_MODEL = 'model_1.sav'
 SAVE_MODELRESULT = 'modelresult_1.sav'
 
 
 def clear_savefile(fname):
-    """remove save files so that tests are fresh"""
+    """Remove save files so that tests start fresh."""
     try:
         os.unlink(fname)
     except OSError:
         pass
 
 
+def wait_for_file(fname, timeout=10):
+    """Check whether file is created within certain amount of time."""
+    end_time = time.time() + timeout
+    while time.time() < end_time:
+        if os.path.exists(fname):
+            return True
+        time.sleep(0.05)
+    return False
+
+
 def create_model_params(x, y):
+    """Create the model and parameters."""
     exp_mod = ExponentialModel(prefix='exp_')
     params = exp_mod.guess(y, x=x)
 
@@ -42,26 +48,28 @@ def create_model_params(x, y):
     gauss2 = GaussianModel(prefix='g2_')
     params.update(gauss2.make_params())
 
-    params['g1_center'].set(105, min=75, max=125)
-    params['g1_sigma'].set(15, min=3)
-    params['g1_amplitude'].set(2000, min=10)
+    params['g1_center'].set(value=105, min=75, max=125)
+    params['g1_sigma'].set(value=15, min=3)
+    params['g1_amplitude'].set(value=2000, min=10)
 
-    params['g2_center'].set(155, min=125, max=175)
-    params['g2_sigma'].set(15, min=3)
-    params['g2_amplitude'].set(2000, min=10)
+    params['g2_center'].set(value=155, min=125, max=175)
+    params['g2_sigma'].set(value=15, min=3)
+    params['g2_amplitude'].set(value=2000, min=10)
 
     model = gauss1 + gauss2 + exp_mod
     return model, params
 
 
 def check_fit_results(result):
-    assert(result.nvarys == 8)
+    """Check the result of optimization."""
+    assert result.nvarys == 8
     assert_between(result.chisqr, 1000, 1500)
     assert_between(result.aic, 400, 450)
 
     pars = result.params
     assert_param_between(pars['exp_decay'], 90, 92)
     assert_param_between(pars['exp_amplitude'], 98, 101)
+
     assert_param_between(pars['g1_sigma'], 16, 17)
     assert_param_between(pars['g1_center'], 106, 109)
     assert_param_between(pars['g1_amplitude'], 4100, 4500)
@@ -75,38 +83,28 @@ def check_fit_results(result):
     assert_param_between(pars['g2_height'], 70, 75)
 
 
-def wait_for_file(fname, timeout=10):
-    end_time = time.time() + timeout
-    while time.time() < end_time:
-        if os.path.exists(fname):
-            return True
-        time.sleep(0.05)
-    return False
-
-
-def do_save_model(with_dill=True):
-    x, y = XDAT, YDAT
-    if DILL_AVAILABLE and with_dill:
-        lmfit.jsonutils.HAS_DILL = True
+@pytest.mark.parametrize("dill", [False, True])
+def test_save_load_model(dill):
+    """Save/load Model with/without dill."""
+    if dill:
+        pytest.importorskip("dill")
     else:
         lmfit.jsonutils.HAS_DILL = False
 
-    model, params = create_model_params(x, y)
-
+    # create/save Model and perform some tests
+    model, _pars = create_model_params(x, y)
     save_model(model, SAVE_MODEL)
-    file_exists = wait_for_file(SAVE_MODEL, timeout=10)
-    assert(file_exists)
 
-    text = ''
+    file_exists = wait_for_file(SAVE_MODEL, timeout=10)
+    assert file_exists
+
     with open(SAVE_MODEL, 'r') as fh:
         text = fh.read()
-    assert_between(len(text), 1000, 2500)
+    assert 1000 < len(text) < 2500
 
-
-def do_load_model():
-    x, y = XDAT, YDAT
-    model = load_model(SAVE_MODEL)
-    params = model.make_params()
+    # load the Model, perform fit and assert results
+    saved_model = load_model(SAVE_MODEL)
+    params = saved_model.make_params()
 
     params['exp_decay'].set(100)
     params['exp_amplitude'].set(100)
@@ -118,77 +116,68 @@ def do_load_model():
     params['g2_sigma'].set(15, min=3)
     params['g2_amplitude'].set(2000, min=10)
 
-    result = model.fit(y, params, x=x)
+    result = saved_model.fit(y, params, x=x)
     check_fit_results(result)
 
+    clear_savefile(SAVE_MODEL)
 
-def do_save_modelresult(with_dill=True):
-    x, y = XDAT, YDAT
-    if DILL_AVAILABLE and with_dill:
-        lmfit.jsonutils.HAS_DILL = True
+
+@pytest.mark.parametrize("dill", [False, True])
+def test_save_load_modelresult(dill):
+    """Save/load ModelResult with/without dill."""
+    if dill:
+        pytest.importorskip("dill")
     else:
         lmfit.jsonutils.HAS_DILL = False
 
+    # create model, perform fit, save ModelResult and perform some tests
     model, params = create_model_params(x, y)
-
     result = model.fit(y, params, x=x)
     save_modelresult(result, SAVE_MODELRESULT)
+
     file_exists = wait_for_file(SAVE_MODELRESULT, timeout=10)
-    assert(file_exists)
+    assert file_exists
 
     text = ''
     with open(SAVE_MODELRESULT, 'r') as fh:
         text = fh.read()
     assert_between(len(text), 8000, 25000)
 
+    # load the saved ModelResult from file and compare results
+    result_saved = load_modelresult(SAVE_MODELRESULT)
+    check_fit_results(result_saved)
 
-def do_load_modelresult():
-    result = load_modelresult(SAVE_MODELRESULT)
-    check_fit_results(result)
-
-
-def test_saveload_model_withdill():
     clear_savefile(SAVE_MODEL)
-    do_save_model(with_dill=True)
-    do_load_model()
 
 
-def test_saveload_model_nodill():
-    clear_savefile(SAVE_MODEL)
-    do_save_model(with_dill=False)
-    do_load_model()
-
-
-def test_saveload_modelresult_withdill():
-    clear_savefile(SAVE_MODELRESULT)
-    do_save_modelresult(with_dill=True)
-    do_load_modelresult()
-
-
-def test_saveload_modelresult_nodill():
-    clear_savefile(SAVE_MODELRESULT)
-    do_save_modelresult(with_dill=False)
-    do_load_modelresult()
-
-
-def test_saveload_modelresult_items():
-    clear_savefile(SAVE_MODELRESULT)
-    x, y = XDAT, YDAT
+def test_saveload_modelresult_attributes():
+    """Test for restoring all attributes of the ModelResult."""
     model, params = create_model_params(x, y)
     result = model.fit(y, params, x=x)
-
     save_modelresult(result, SAVE_MODELRESULT)
 
     time.sleep(0.25)
     file_exists = wait_for_file(SAVE_MODELRESULT, timeout=10)
-
-    assert(file_exists)
+    assert file_exists
     time.sleep(0.25)
 
     loaded = load_modelresult(SAVE_MODELRESULT)
-    assert(len(result.data) == len(loaded.data))
-    assert(abs(max(result.data) - max(loaded.data)) < 0.001)
+
+    assert len(result.data) == len(loaded.data)
+    assert_allclose(result.data, loaded.data)
 
     for pname in result.params.keys():
-        assert(abs(result.init_params[pname].value -
-                   loaded.init_params[pname].value) < 0.001)
+        assert_allclose(result.init_params[pname].value,
+                        loaded.init_params[pname].value)
+
+    clear_savefile(SAVE_MODELRESULT)
+
+
+def test_saveload_modelresult_exception():
+    """Make sure the proper exceptions are raised when needed."""
+    model, _pars = create_model_params(x, y)
+    save_model(model, SAVE_MODEL)
+
+    with pytest.raises(AttributeError, match=r'needs saved ModelResult'):
+        load_modelresult(SAVE_MODEL)
+    clear_savefile(SAVE_MODEL)
