@@ -5,6 +5,7 @@ from numpy import pi
 from numpy.testing import (assert_, assert_allclose, assert_almost_equal,
                            assert_equal, dec)
 import pytest
+from scipy.version import version as scipy_version
 from uncertainties import ufloat
 
 from lmfit import Minimizer, Parameters, minimize
@@ -394,9 +395,15 @@ class CommonMinimizerTest(unittest.TestCase):
         # the data returned by userfcn
         self.data[0] = np.nan
 
+        major, minor, _micro = scipy_version.split('.', 2)
         for method in SCALAR_METHODS:
-            pytest.raises(ValueError, self.mini.scalar_minimize,
-                          SCALAR_METHODS[method])
+            if (method == 'differential_evolution' and int(major) > 0 and
+                    int(minor) >= 2):
+                pytest.raises(RuntimeError, self.mini.scalar_minimize,
+                              SCALAR_METHODS[method])
+            else:
+                pytest.raises(ValueError, self.mini.scalar_minimize,
+                              SCALAR_METHODS[method])
 
         pytest.raises(ValueError, self.mini.minimize)
 
