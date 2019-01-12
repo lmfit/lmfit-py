@@ -1537,13 +1537,6 @@ class Minimizer(object):
         basinhopping_kws.update(self.kws)
         basinhopping_kws.update(kws)
 
-        # FIXME - remove after requirement for scipy >= 0.19
-        major, minor, micro = scipy_version.split('.', 2)
-        if int(major) < 1 and int(minor) < 19:
-            _ = basinhopping_kws.pop('seed')
-            print("Warning: basinhopping doesn't support argument 'seed' for "
-                  "scipy versions below 0.19!")
-
         x0 = result.init_vals
 
         try:
