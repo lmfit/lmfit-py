@@ -869,8 +869,9 @@ class Minimizer(object):
         fmin_kws.update(kws)
 
         # hess supported only in some methods
-        if 'hess' in fmin_kws and method not in ('Newton-CG',
-                                                 'dogleg', 'trust-ncg'):
+        if 'hess' in fmin_kws and method not in ('Newton-CG', 'dogleg',
+                                                 'trust-constr', 'trust-ncg',
+                                                 'trust-krylov', 'trust-exact'):
             fmin_kws.pop('hess')
 
         # jac supported only in some methods (and Dfun could be used...)
@@ -879,7 +880,9 @@ class Minimizer(object):
             fmin_kws['jac'] = self.__jacobian
 
         if 'jac' in fmin_kws and method not in ('CG', 'BFGS', 'Newton-CG',
-                                                'dogleg', 'trust-ncg'):
+                                                'L-BFGS-B', 'TNC', 'SLSQP',
+                                                'dogleg', 'trust-ncg',
+                                                'trust-krylov', 'trust-exact'):
             self.jacfcn = None
             fmin_kws.pop('jac')
 
