@@ -886,6 +886,11 @@ class Minimizer(object):
             self.jacfcn = None
             fmin_kws.pop('jac')
 
+        # workers / updating keywords only supported in differential_evolution
+        for kwd in ('workers', 'updating'):
+            if kwd in fmin_kws and method != 'differential_evolution':
+                fmin_kws.pop(kwd)
+
         if method == 'differential_evolution':
             for par in params.values():
                 if (par.vary and
@@ -898,15 +903,23 @@ class Minimizer(object):
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
                           disp=False, polish=True, init='latinhypercube',
-                          atol=0)
+                          atol=0, updating='immediate', workers=1)
 
             for k, v in fmin_kws.items():
                 if k in kwargs:
                     kwargs[k] = v
+
+            # keywords 'updating' and 'workers' are introduced in SciPy v1.2
+            # FIXME: remove after updating the requirement >= 1.2
+            if int(major) == 0 or (int(major) == 1 and int(minor) < 2):
+                kwargs.pop('updating')
+                kwargs.pop('workers')
+
             try:
                 ret = differential_evolution(self.penalty, _bounds, **kwargs)
             except AbortFitException:
                 pass
+
         else:
             try:
                 ret = scipy_minimize(self.penalty, variables, **fmin_kws)
