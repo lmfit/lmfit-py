@@ -894,7 +894,8 @@ class Minimizer(object):
             kwargs = dict(args=(), strategy='best1bin', maxiter=None,
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
-                          disp=False, polish=True, init='latinhypercube')
+                          disp=False, polish=True, init='latinhypercube',
+                          atol=0)
 
             for k, v in fmin_kws.items():
                 if k in kwargs:
