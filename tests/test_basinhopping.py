@@ -36,7 +36,7 @@ def test_basinhopping_lmfit_vs_scipy():
     out = mini.minimize(method='basinhopping', **kws)
 
     assert_allclose(out.residual, ret.fun)
-    assert_allclose(out.params['x'].value, ret.x)
+    assert_allclose(out.params['x'].value, ret.x, rtol=1e-5)
 
 
 def test_basinhopping_2d_lmfit_vs_scipy():
@@ -70,8 +70,8 @@ def test_basinhopping_2d_lmfit_vs_scipy():
     out = mini.minimize(method='basinhopping', **kws)
 
     assert_allclose(out.residual, ret.fun)
-    assert_allclose(out.params['x0'].value, ret.x[0])
-    assert_allclose(out.params['x1'].value, ret.x[1])
+    assert_allclose(out.params['x0'].value, ret.x[0], rtol=1e-5)
+    assert_allclose(out.params['x1'].value, ret.x[1], rtol=1e-5)
 
 
 def test_basinhopping_Alpine02(minimizer_Alpine02):

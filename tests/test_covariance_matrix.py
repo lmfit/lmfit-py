@@ -130,8 +130,8 @@ def test_numdifftools_no_bounds():
         # assert that fit converged to the same result
         vals = [result.params[p].value for p in result.params.valuesdict()]
         vals_ndt = [result_ndt.params[p].value for p in result_ndt.params.valuesdict()]
-        assert_allclose(vals_ndt, vals, rtol=5e-3)
-        assert_allclose(result_ndt.chisqr, result.chisqr)
+        assert_allclose(vals_ndt, vals, rtol=0.1)
+        assert_allclose(result_ndt.chisqr, result.chisqr, rtol=1e-5)
 
         # assert that parameter uncertaintes from leastsq and calculated from
         # the covariance matrix using numdifftools are very similar
