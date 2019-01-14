@@ -869,8 +869,9 @@ class Minimizer(object):
         fmin_kws.update(kws)
 
         # hess supported only in some methods
-        if 'hess' in fmin_kws and method not in ('Newton-CG',
-                                                 'dogleg', 'trust-ncg'):
+        if 'hess' in fmin_kws and method not in ('Newton-CG', 'dogleg',
+                                                 'trust-constr', 'trust-ncg',
+                                                 'trust-krylov', 'trust-exact'):
             fmin_kws.pop('hess')
 
         # jac supported only in some methods (and Dfun could be used...)
@@ -879,9 +880,16 @@ class Minimizer(object):
             fmin_kws['jac'] = self.__jacobian
 
         if 'jac' in fmin_kws and method not in ('CG', 'BFGS', 'Newton-CG',
-                                                'dogleg', 'trust-ncg'):
+                                                'L-BFGS-B', 'TNC', 'SLSQP',
+                                                'dogleg', 'trust-ncg',
+                                                'trust-krylov', 'trust-exact'):
             self.jacfcn = None
             fmin_kws.pop('jac')
+
+        # workers / updating keywords only supported in differential_evolution
+        for kwd in ('workers', 'updating'):
+            if kwd in fmin_kws and method != 'differential_evolution':
+                fmin_kws.pop(kwd)
 
         if method == 'differential_evolution':
             for par in params.values():
@@ -894,15 +902,24 @@ class Minimizer(object):
             kwargs = dict(args=(), strategy='best1bin', maxiter=None,
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
-                          disp=False, polish=True, init='latinhypercube')
+                          disp=False, polish=True, init='latinhypercube',
+                          atol=0, updating='immediate', workers=1)
 
             for k, v in fmin_kws.items():
                 if k in kwargs:
                     kwargs[k] = v
+
+            # keywords 'updating' and 'workers' are introduced in SciPy v1.2
+            # FIXME: remove after updating the requirement >= 1.2
+            if int(major) == 0 or (int(major) == 1 and int(minor) < 2):
+                kwargs.pop('updating')
+                kwargs.pop('workers')
+
             try:
                 ret = differential_evolution(self.penalty, _bounds, **kwargs)
             except AbortFitException:
                 pass
+
         else:
             try:
                 ret = scipy_minimize(self.penalty, variables, **fmin_kws)
@@ -1536,13 +1553,6 @@ class Minimizer(object):
 
         basinhopping_kws.update(self.kws)
         basinhopping_kws.update(kws)
-
-        # FIXME - remove after requirement for scipy >= 0.19
-        major, minor, micro = scipy_version.split('.', 2)
-        if int(major) < 1 and int(minor) < 19:
-            _ = basinhopping_kws.pop('seed')
-            print("Warning: basinhopping doesn't support argument 'seed' for "
-                  "scipy versions below 0.19!")
 
         x0 = result.init_vals
 

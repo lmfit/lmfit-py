@@ -28,7 +28,7 @@ for 2.7 is expected to end in early 2019.
 Lmfit requires the following Python packages, with versions given:
    * `six`_ version 1.10 or higher.
    * `NumPy`_ version 1.10 or higher.
-   * `SciPy`_ version 0.17 or higher.
+   * `SciPy`_ version 0.19 or higher.
    * `asteval`_ version 0.9.12 or higher.
    * `uncertainties`_ version 3.0 or higher.
 

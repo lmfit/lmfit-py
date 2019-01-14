@@ -11,7 +11,7 @@ python:
 
 # test minium required and latest versions of SciPy and NumPy
 env:
-    - version=minimum  # SciPy>=0.17 NumPy>=1.10
+    - version=minimum  # SciPy>=0.19 NumPy>=1.10
     - version=latest
 
 before_install:
@@ -25,8 +25,8 @@ before_install:
     - conda info -a
 
 install:
-    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION != 3.6 && $TRAVIS_PYTHON_VERSION != 3.7-dev ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.10 scipy=0.17 six=1.10; fi
-    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION == 3.6 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.11.2 scipy=0.18 six=1.10; fi
+    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION != 3.6 && $TRAVIS_PYTHON_VERSION != 3.7-dev ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.10 scipy=0.19 six=1.10; fi
+    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION == 3.6 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.11.2 scipy=0.19 six=1.10; fi
     - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then conda create -q -n test_env python=3.7 numpy=1.11.3 scipy=1.1 six=1.11; fi
     - if [[ $version == latest && $TRAVIS_PYTHON_VERSION != 3.7-dev ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy six pandas matplotlib dill; fi
     - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then conda create -q -n test_env python=3.7 numpy scipy six pandas matplotlib dill; fi
