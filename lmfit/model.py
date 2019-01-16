@@ -36,7 +36,7 @@ def _align(var, mask, data):
 
 
 try:
-    from matplotlib import pyplot as plt
+    import matplotlib
     _HAS_MATPLOTLIB = True
 except Exception:
     _HAS_MATPLOTLIB = False
@@ -1779,6 +1779,7 @@ class ModelResult(Minimizer):
         ModelResult.plot : Plot the fit results and residuals using matplotlib.
 
         """
+        from matplotlib import pyplot as plt
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:
@@ -1897,6 +1898,7 @@ class ModelResult(Minimizer):
         ModelResult.plot : Plot the fit results and residuals using matplotlib.
 
         """
+        from matplotlib import pyplot as plt
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:
@@ -2014,6 +2016,7 @@ class ModelResult(Minimizer):
         ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
 
         """
+        from matplotlib import pyplot as plt
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:
