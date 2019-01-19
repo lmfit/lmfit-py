@@ -1,8 +1,14 @@
 LMfit-py
 ========
 
-.. image:: https://travis-ci.org/lmfit/lmfit-py.png
+.. image:: https://travis-ci.org/lmfit/lmfit-py.svg
    :target: https://travis-ci.org/lmfit/lmfit-py
+
+.. image:: 	https://img.shields.io/pypi/v/lmfit.svg
+   :target: https://pypi.org/project/lmfit
+
+.. image:: https://img.shields.io/pypi/dm/lmfit.svg
+   :target: https://pypi.org/project/lmfit
 
 .. image:: https://zenodo.org/badge/4185/lmfit/lmfit-py.svg
    :target: https://zenodo.org/badge/latestdoi/4185/lmfit/lmfit-py
