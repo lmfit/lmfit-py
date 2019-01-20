@@ -41,6 +41,6 @@ Have you
 - [ ] squashed/minimized your commits and written descriptive commit messages?
 <!-- We value a clean history with useful commit messages. Ideally, you will take care of this
          before submitting a PR; otherwise you'll be asked to do so before merging. -->
-- [ ] added or updated exisiting tests to cover the changes?
+- [ ] added or updated existing tests to cover the changes?
 - [ ] updated the documentation?
 - [ ] added an example?
