@@ -3,6 +3,7 @@
 *#
 doc/_build
 doc/*.pdf
+doc/extensions.py
 build
 dist
 lmfit.egg-info
