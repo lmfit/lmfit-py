@@ -266,7 +266,7 @@ class MPLFitter(BaseFitter):
                               "that does not depend on matplotlib.")
 
         # Configure style
-        _axes_style= dict()  # none, but this is here for possible future use
+        _axes_style= {}  # none, but this is here for possible future use
         _axes_style.update(self.axes_style)
         _axes_style.update(axes_style)
         _data_style= dict(color='blue', marker='o', linestyle='none')
