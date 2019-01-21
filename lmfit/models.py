@@ -9,7 +9,7 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
                          pvoigt, rectangle, skewed_gaussian, skewed_voigt,
-                         step, students_t, voigt, split_lorentzian)
+                         split_lorentzian, step, students_t, voigt)
 from .model import Model
 
 

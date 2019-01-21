@@ -1,12 +1,15 @@
 # Benchmarking scripts for lmfit
 
-import numpy as np
-import time
-import cProfile, pstats
-from subprocess import Popen, PIPE
-from lmfit import (minimize, Parameters, Minimizer,  __version__,
-                   conf_interval, Parameter)
+import cProfile
 from copy import deepcopy
+import pstats
+from subprocess import PIPE, Popen
+import time
+
+import numpy as np
+
+from lmfit import (Minimizer, Parameter, Parameters, __version__,
+                   conf_interval, minimize)
 
 
 def obj_func(params, x, data):

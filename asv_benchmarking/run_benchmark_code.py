@@ -1,5 +1,4 @@
-from benchmarks.benchmarks import MinimizerClassSuite,  MinimizeSuite
-
+from benchmarks.benchmarks import MinimizerClassSuite, MinimizeSuite
 
 mtest = MinimizeSuite()
 mtest.setup()
