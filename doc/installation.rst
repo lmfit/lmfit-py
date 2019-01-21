@@ -16,6 +16,7 @@ Downloading and Installation
 .. _six:  https://github.com/benjaminp/six
 .. _uncertainties:  https://github.com/lebigot/uncertainties
 .. _numdifftools:  https://github.com/pbrod/numdifftools
+.. _contributing.md: https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md
 
 
 Prerequisites
@@ -75,6 +76,8 @@ and install using::
 
    python setup.py install
 
+We welcome all contributions to lmfit! If you cloned the repository for this
+purpose, please read `CONTRIBUTING.md`_ for more detailed instructions.
 
 Testing
 ~~~~~~~~~~

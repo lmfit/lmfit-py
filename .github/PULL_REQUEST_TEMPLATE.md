@@ -30,8 +30,6 @@ print('Python: {}\n\nlmfit: {}, scipy: {}, numpy: {}, asteval: {}, uncertainties
 ###### Verification <!-- (delete not applicable items) -->
 Have you
 <!--- Put an `x` in all the boxes that apply OR describe why you think this is unnecessary. -->
-- [ ] followed PEP 8 as closely as possible?
-<!-- Please use your favorite linter (e.g., pycodestyle/flake8/pylint) to check your code. -->
 - [ ] included docstrings that follow PEP 257?
 <!-- Please use your favorite linter (e.g., pydocstyle) to check your docstrings. -->
 - [ ] referenced existing Issue and/or provided relevant link to mailing list?
