@@ -8,11 +8,11 @@ File Format:   ASCII
 
 Procedure:     Nonlinear Least Squares Regression
 
-Description:   The data are two slightly-blended Gaussians on a 
-               decaying exponential baseline plus normally 
-               distributed zero-mean noise with variance = 6.25. 
+Description:   The data are two slightly-blended Gaussians on a
+               decaying exponential baseline plus normally
+               distributed zero-mean noise with variance = 6.25.
 
-Reference:     Rust, B., NIST (1996). 
+Reference:     Rust, B., NIST (1996).
 
 
 
@@ -31,7 +31,7 @@ Data:          1 Response  (y)
 Model:         Exponential Class
                8 Parameters (b1 to b8)
 
-               y = b1*exp( -b2*x ) + b3*exp( -(x-b4)**2 / b5**2 ) 
+               y = b1*exp( -b2*x ) + b3*exp( -(x-b4)**2 / b5**2 )
                                    + b6*exp( -(x-b7)**2 / b8**2 ) + e
 
 
@@ -56,7 +56,7 @@ Number of Observations:                           250
 
 
 
- 
+
 Data:   y          x
     97.58776    1.000000
     97.76344    2.000000

@@ -8,8 +8,8 @@ File Format:   ASCII
 
 Procedure:     Nonlinear Least Squares Regression
 
-Description:   The data are two well-separated Gaussians on a 
-               decaying exponential baseline plus normally 
+Description:   The data are two well-separated Gaussians on a
+               decaying exponential baseline plus normally
                distributed zero-mean noise with variance = 6.25.
 
 Reference:     Rust, B., NIST (1996).
@@ -27,16 +27,16 @@ Data:          1 Response  (y)
                250 Observations
                Lower Level of Difficulty
                Generated Data
- 
+
 Model:         Exponential Class
-               8 Parameters (b1 to b8) 
- 
+               8 Parameters (b1 to b8)
+
                y = b1*exp( -b2*x ) + b3*exp( -(x-b4)**2 / b5**2 )
                                    + b6*exp( -(x-b7)**2 / b8**2 ) + e
- 
- 
+
+
           Starting values                  Certified Values
- 
+
         Start 1     Start 2           Parameter     Standard Deviation
   b1 =    97.0        94.0         9.8778210871E+01  5.7527312730E-01
   b2 =     0.009       0.0105      1.0497276517E-02  1.1406289017E-04
@@ -55,7 +55,7 @@ Number of Observations:                           250
 
 
 
- 
+
 
 Data:   y          x
     97.62227    1.000000

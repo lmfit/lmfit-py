@@ -13,10 +13,10 @@ Description:   These data are the result of a NIST study regarding
                response variable is volume, and the predictor
                variable is pressure.
 
-Reference:     Misra, D., NIST (1978).  
+Reference:     Misra, D., NIST (1978).
                Dental Research Monomolecular Adsorption Study.
 
- 
+
 
 
 
@@ -34,9 +34,9 @@ Model:         Exponential Class
                y = b1*(1-exp[-b2*x])  +  e
 
 
- 
+
           Starting values                  Certified Values
- 
+
         Start 1     Start 2           Parameter     Standard Deviation
   b1 =   500         250           2.3894212918E+02  2.7070075241E+00
   b2 =     0.0001      0.0005      5.5015643181E-04  7.2668688436E-06

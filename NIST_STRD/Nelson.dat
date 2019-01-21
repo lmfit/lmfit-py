@@ -17,12 +17,12 @@ Description:   These data are the result of a study involving
                Celcius.
 
 
-Reference:     Nelson, W. (1981).  
-               Analysis of Performance-Degradation Data.  
+Reference:     Nelson, W. (1981).
+               Analysis of Performance-Degradation Data.
                IEEE Transactions on Reliability.
                Vol. 2, R-30, No. 2, pp. 149-155.
 
-Data:          1 Response   ( y = dialectric breakdown strength) 
+Data:          1 Response   ( y = dialectric breakdown strength)
                2 Predictors (x1 = time; x2 = temperature)
                128 Observations
                Average Level of Difficulty

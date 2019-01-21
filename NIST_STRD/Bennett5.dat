@@ -13,8 +13,8 @@ Description:   These data are the result of a NIST study involving
                response variable is magnetism, and the predictor
                variable is the log of time in minutes.
 
-Reference:     Bennett, L., L. Swartzendruber, and H. Brown, 
-               NIST (1994).  
+Reference:     Bennett, L., L. Swartzendruber, and H. Brown,
+               NIST (1994).
                Superconductivity Magnetization Modeling.
 
 
@@ -33,8 +33,8 @@ Model:         Miscellaneous Class
 
                y = b1 * (b2+x)**(-1/b3)  +  e
 
- 
- 
+
+
           Starting values                  Certified Values
 
         Start 1     Start 2           Parameter     Standard Deviation

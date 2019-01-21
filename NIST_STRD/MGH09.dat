@@ -8,18 +8,18 @@ File Format:   ASCII
 
 Procedure:     Nonlinear Least Squares Regression
 
-Description:   This problem was found to be difficult for some very 
+Description:   This problem was found to be difficult for some very
                good algorithms.  There is a local minimum at (+inf,
-               -14.07..., -inf, -inf) with final sum of squares 
+               -14.07..., -inf, -inf) with final sum of squares
                0.00102734....
 
-               See More, J. J., Garbow, B. S., and Hillstrom, K. E. 
+               See More, J. J., Garbow, B. S., and Hillstrom, K. E.
                (1981).  Testing unconstrained optimization software.
-               ACM Transactions on Mathematical Software. 7(1): 
+               ACM Transactions on Mathematical Software. 7(1):
                pp. 17-41.
 
-Reference:     Kowalik, J.S., and M. R. Osborne, (1978).  
-               Methods for Unconstrained Optimization Problems.  
+Reference:     Kowalik, J.S., and M. R. Osborne, (1978).
+               Methods for Unconstrained Optimization Problems.
                New York, NY:  Elsevier North-Holland.
 
 Data:          1 Response  (y)
@@ -27,14 +27,14 @@ Data:          1 Response  (y)
                11 Observations
                Higher Level of Difficulty
                Generated Data
- 
+
 Model:         Rational Class (linear/quadratic)
                4 Parameters (b1 to b4)
- 
-               y = b1*(x**2+x*b2) / (x**2+x*b3+b4)  +  e
- 
 
- 
+               y = b1*(x**2+x*b2) / (x**2+x*b3+b4)  +  e
+
+
+
           Starting values                  Certified Values
 
         Start 1     Start 2           Parameter     Standard Deviation
@@ -47,16 +47,16 @@ Residual Sum of Squares:                    3.0750560385E-04
 Residual Standard Deviation:                6.6279236551E-03
 Degrees of Freedom:                                7
 Number of Observations:                           11
- 
- 
 
 
 
 
 
- 
- 
- 
+
+
+
+
+
 Data:  y               x
        1.957000E-01    4.000000E+00
        1.947000E-01    2.000000E+00
