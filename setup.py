@@ -48,9 +48,9 @@ setup(name='lmfit',
                    'Programming Language :: Python :: 3.6',
                    'Programming Language :: Python :: 3.7',
                    'Topic :: Scientific/Engineering',
-                  ],
+                   ],
       keywords='curve-fitting, least-squares minimization',
       tests_require=['pytest'],
       package_dir={'lmfit': 'lmfit'},
       packages=['lmfit', 'lmfit.ui'],
-     )
+      )

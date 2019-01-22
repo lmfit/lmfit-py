@@ -38,7 +38,7 @@ data = residual(p_true, x) + noise
 fit_params = Parameters()
 fit_params.add('amp', value=11.0, min=5, max=20)
 fit_params.add('period', value=5., min=1., max=7)
-fit_params.add('shift', value=.10,  min=0.0, max=0.2)
+fit_params.add('shift', value=.10, min=0.0, max=0.2)
 fit_params.add('decay', value=6.e-3, min=0, max=0.1)
 
 init = residual(fit_params, x)

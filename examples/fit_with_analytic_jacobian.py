@@ -43,7 +43,8 @@ if __name__ == '__main__':
     mod = GaussianModel()
     pars = mod.guess(yn, xs)
     out = mod.fit(yn, pars, x=xs)
-    out2 = mod.fit(yn, pars,  x=xs, fit_kws={'Dfun': dfunc_gaussian, 'col_deriv': 1})
+    out2 = mod.fit(yn, pars, x=xs, fit_kws={'Dfun': dfunc_gaussian,
+                                            'col_deriv': 1})
     print('lmfit without dfunc **************')
     print('number of function calls: ', out.nfev)
     print('params', out.best_values)

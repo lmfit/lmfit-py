@@ -55,7 +55,7 @@ def profile_command(command, filename=None):
     gitversion = get_git_version()
     if filename is None:
         filename = '%s.prof' % gitversion
-    prof = cProfile.run(command, filename=filename)
+    cProfile.run(command, filename=filename)
     show_profile(filename)
 
 

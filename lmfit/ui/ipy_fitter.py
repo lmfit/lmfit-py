@@ -1,5 +1,3 @@
-import warnings
-
 import IPython
 from IPython.display import clear_output, display
 import numpy as np
@@ -20,10 +18,12 @@ if IPY2:
     from IPython.html.widgets import ContainerWidget
     from IPython.html.widgets import FloatTextWidget as FloatText
     from IPython.html.widgets import CheckboxWidget as Checkbox
+
     class HBox(ContainerWidget):
+
         def __init__(self, *args, **kwargs):
-           self.add_class('hbox')
-           super(self, ContainerWidget).__init__(*args, **kwargs)
+            self.add_class('hbox')
+            super(self, ContainerWidget).__init__(*args, **kwargs)
 elif IPY3:
     # as of IPython 3.x:
     from IPython.html.widgets import Dropdown
@@ -173,7 +173,7 @@ class ParameterWidgetGroup(object):
 
     @property
     def name(self):
-       return self.par.name
+        return self.par.name
 
 
 class NotebookFitter(MPLFitter):
@@ -210,8 +210,9 @@ class NotebookFitter(MPLFitter):
         line
     **kwargs : independent variables or extra arguments, passed like `x=x`
     """ + _COMMON_EXAMPLES_DOC
+
     def __init__(self, data, model=None, all_models=None, axes_style={},
-                data_style={}, init_style={}, best_style={}, **kwargs):
+                 data_style={}, init_style={}, best_style={}, **kwargs):
         # Dropdown menu of all subclasses of Model, incl. user-defined.
         self.models_menu = Dropdown()
         # Dropbox API is very different between IPy 2.x and 3.x.
@@ -223,8 +224,7 @@ class NotebookFitter(MPLFitter):
             if all_models is None:
                 all_models = [(m.__name__, m) for m in Model.__subclasses__()]
             self.models_menu.options = all_models
-        self.models_menu.on_trait_change(self._on_model_value_change,
-                                             'value')
+        self.models_menu.on_trait_change(self._on_model_value_change, 'value')
         # Button to trigger fitting.
         self.fit_button = Button(description='Fit')
         self.fit_button.on_click(self._on_fit_button_click)

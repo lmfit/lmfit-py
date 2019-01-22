@@ -221,7 +221,7 @@ def test_scalar_minimize_has_no_uncertainties():
     mini = Minimizer(fcn2min, params, fcn_args=(x, data))
     out = mini.minimize()
     assert_(np.isfinite(out.params['amp'].stderr))
-    assert_(out.errorbars == True)
+    assert out.errorbars
     out2 = mini.minimize(method='nelder-mead')
     assert_(out2.params['amp'].stderr is None)
     assert_(out2.params['decay'].stderr is None)
@@ -231,7 +231,7 @@ def test_scalar_minimize_has_no_uncertainties():
     assert_(out2.params['decay'].correl is None)
     assert_(out2.params['shift'].correl is None)
     assert_(out2.params['omega'].correl is None)
-    assert_(out2.errorbars == False)
+    assert not out2.errorbars
 
 
 def test_scalar_minimize_reduce_fcn():
@@ -296,7 +296,7 @@ def test_multidimensional_fit_GH205():
     params.add('lambda2', value=3.2)
 
     mini = Minimizer(fcn2min, params, fcn_args=(xv, yv, data))
-    res = mini.minimize()
+    mini.minimize()
 
 
 def test_ufloat():
@@ -473,7 +473,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         np.random.seed(123456)
         self.mini.userfcn = residual_for_multiprocessing
-        out = self.mini.emcee(steps=10, workers=4)
+        self.mini.emcee(steps=10, workers=4)
 
     def test_emcee_bounds_length(self):
         # the log-probability functions check if the parameters are
@@ -486,7 +486,7 @@ class CommonMinimizerTest(unittest.TestCase):
         self.mini.params['period'].vary = False
         self.mini.params['shift'].vary = False
 
-        out = self.mini.emcee(steps=10)
+        self.mini.emcee(steps=10)
 
     @dec.slow
     def test_emcee_partial_bounds(self):
@@ -509,12 +509,10 @@ class CommonMinimizerTest(unittest.TestCase):
 
         out = self.mini.emcee(nwalkers=100, steps=5)
         # can initialise with a chain
-        out2 = self.mini.emcee(nwalkers=100, steps=1, pos=out.chain)
+        self.mini.emcee(nwalkers=100, steps=1, pos=out.chain)
 
         # can initialise with a correct subset of a chain
-        out3 = self.mini.emcee(nwalkers=100,
-                               steps=1,
-                               pos=out.chain[..., -1, :])
+        self.mini.emcee(nwalkers=100, steps=1, pos=out.chain[..., -1, :])
 
         # but you can't initialise if the shape is wrong.
         pytest.raises(ValueError,
@@ -585,7 +583,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # check that we can access the chains via parameter name
         assert_(out.flatchain['amp'].shape[0] == 80)
-        assert_(out.errorbars == True)
+        assert out.errorbars
         assert_(np.isfinite(out.params['amp'].correl['period']))
 
         # the lnprob array should be the same as the chain size
@@ -610,7 +608,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # check that we can access the chains via parameter name
         assert_(out.flatchain['amp'].shape[0] == 80)
-        assert_(out.errorbars == True)
+        assert out.errorbars
         assert_(np.isfinite(out.params['amp'].correl['period']))
 
         # the lnprob array should be the same as the chain size

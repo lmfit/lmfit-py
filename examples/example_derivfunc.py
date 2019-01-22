@@ -20,7 +20,7 @@ def func(pars, x, data=None):
 
 
 def dfunc(pars, x, data=None):
-    a, b, c = pars['a'], pars['b'], pars['c']
+    a, b = pars['a'], pars['b']
     v = np.exp(-b*x)
     return np.array([v, -a*x*v, np.ones(len(x))])
 
