@@ -2,7 +2,7 @@
 
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.extlinks',
+              'sphinx.ext.imgmath',
               'sphinx.ext.intersphinx',
-              'sphinx.ext.mathjax',
               'sphinx.ext.napoleon',
               'sphinx.ext.todo']

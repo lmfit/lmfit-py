@@ -24,12 +24,11 @@ html:
 	@echo "html build finished: $(BUILDDIR)/html."
 
 htmlzip: html
-	cp sphinx/ext_pngmath.py extensions.py
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/lmfit_doc
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
 
 epub:
-	cp sphinx/ext_pngmath.py extensions.py
+	cp sphinx/ext_imgmath.py extensions.py
 	$(SPHINXBUILD) -b epub  $(ALLSPHINXOPTS) $(BUILDDIR)/epub
 	cp -pr $(BUILDDIR)/epub/*.epub $(BUILDDIR)/html/.
 
@@ -60,6 +59,7 @@ help:
 
 clean:
 	-rm -rf $(BUILDDIR)/*
+	-rm -f extensions.py
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
