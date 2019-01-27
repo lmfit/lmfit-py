@@ -12,3 +12,15 @@ repos:
     -   id: pyupgrade
         # for now don't force to change from %-operator to {}
         args: [--keep-percent-format]
+
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.1.0
+    hooks:
+    -   id: check-ast
+    -   id: check-builtin-literals
+    -   id: check-merge-conflict
+    -   id: debug-statements
+    -   id: end-of-file-fixer
+    -   id: mixed-line-ending
+    -   id: trailing-whitespace
+    -   id: requirements-txt-fixer
