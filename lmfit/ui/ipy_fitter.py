@@ -217,7 +217,7 @@ class NotebookFitter(MPLFitter):
         # Dropbox API is very different between IPy 2.x and 3.x.
         if IPY2:
             if all_models is None:
-                all_models = dict([(m.__name__, m) for m in Model.__subclasses__()])
+                all_models = {m.__name__: m for m in Model.__subclasses__()}
             self.models_menu.values = all_models
         else:
             if all_models is None:
