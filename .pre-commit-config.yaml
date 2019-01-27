@@ -24,3 +24,6 @@ repos:
     -   id: mixed-line-ending
     -   id: trailing-whitespace
     -   id: requirements-txt-fixer
+    -   id: flake8
+        exclude: 'lmfit/__init__.py|lmfit/ui/__init__.py'
+        args: ['--ignore=E121,E123,E126,E226,W503,W504,E501,E731']
