@@ -27,3 +27,12 @@ repos:
     -   id: flake8
         exclude: 'lmfit/__init__.py|lmfit/ui/__init__.py'
         args: ['--ignore=E121,E123,E126,E226,W503,W504,E501,E731']
+
+-   repo: local
+    hooks:
+    -   id: rstcheck
+        name: rstcheck
+        entry: rstcheck
+        files: '.rst'
+        language: python
+        additional_dependencies: [rstcheck, sphinx]
