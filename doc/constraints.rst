@@ -163,4 +163,3 @@ for the constraints::
 
 and this :meth:`lorentzian` function can now be used in constraint
 expressions.
-
