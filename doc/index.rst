@@ -4,7 +4,6 @@ Non-Linear Least-Squares Minimization and Curve-Fitting for Python
 ===========================================================================
 
 .. _Levenberg-Marquardt:     https://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm
-.. _MINPACK-1:               https://en.wikipedia.org/wiki/MINPACK
 .. _scipy.optimize:      https://docs.scipy.org/doc/scipy/reference/optimize.html
 .. _lmfit GitHub repository:   https://github.com/lmfit/lmfit-py
 
