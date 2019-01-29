@@ -155,7 +155,7 @@ modeled, and is separate from the choice of parameters to be varied in the
 fit.
 
 
-The `params` object can be copied and modified to make many user-level
+The ``params`` object can be copied and modified to make many user-level
 changes to the model and fitting process.  Of course, most of the
 information about how your data is modeled goes into the objective
 function, but the approach here allows some external control; that is,

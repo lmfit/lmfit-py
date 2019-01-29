@@ -236,18 +236,18 @@ over 500 function and value names in the asteval namespace, including most
 Python built-ins, more than 200 functions inherited from NumPy, and more
 than 20 common lineshapes defined in the :mod:`lineshapes` module) are not
 converted to parameters.  Unrecognized names are expected to be names of either
-parameters or independent variables.  If `independent_vars` is the
+parameters or independent variables.  If ``independent_vars`` is the
 default value of None, and if the expression contains a variable named
-`x`, that will be used as the independent variable.  Otherwise,
-`independent_vars` must be given.
+``x``, that will be used as the independent variable.  Otherwise,
+``independent_vars`` must be given.
 
 For example, if one creates an :class:`ExpressionModel` as::
 
     >>> mod = ExpressionModel('off + amp * exp(-x/x0) * sin(x*phase)')
 
-The name `exp` will be recognized as the exponent function, so the model
-will be interpreted to have parameters named `off`, `amp`, `x0` and
-`phase`. In addition, `x` will be assumed to be the sole independent variable.
+The name ``exp`` will be recognized as the exponent function, so the model
+will be interpreted to have parameters named ``off``, ``amp``, ``x0`` and
+``phase``. In addition, ``x`` will be assumed to be the sole independent variable.
 In general, there is no obvious way to set default parameter values or
 parameter hints for bounds, so this will have to be handled explicitly.
 
@@ -258,10 +258,10 @@ To evaluate this model, you might do the following::
     >>> y = mod.eval(params, x=x)
 
 While many custom models can be built with a single line expression
-(especially since the names of the lineshapes like `gaussian`, `lorentzian`
+(especially since the names of the lineshapes like ``gaussian``, ``lorentzian``
 and so on, as well as many NumPy functions, are available), more complex
 models will inevitably require multiple line functions.  You can include
-such Python code with the `init_script` argument.  The text of this script
+such Python code with the ``init_script`` argument.  The text of this script
 is evaluated when the model is initialized (and before the actual
 expression is parsed), so that you can define functions to be used
 in your expression.
@@ -283,8 +283,8 @@ and then use this with :class:`ExpressionModel` as::
                               init_script=script,
                               independent_vars=['x'])
 
-As above, this will interpret the parameter names to be `height`, `mid`,
-and `wid`, and build a model that can be used to fit data.
+As above, this will interpret the parameter names to be ``height``, ``mid``,
+and ``wid``, and build a model that can be used to fit data.
 
 
 

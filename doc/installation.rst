@@ -33,7 +33,7 @@ Lmfit requires the following Python packages, with versions given:
    * `uncertainties`_ version 3.0 or higher.
 
 All of these are readily available on PyPI, and should be installed
-automatically if installing with `pip install lmfit`.
+automatically if installing with ``pip install lmfit``.
 
 In order to run the test suite, the `pytest`_ package is required.  Some
 functionality requires the `emcee`_, `pandas`_, `Jupyter`_, `matplotlib`_,
