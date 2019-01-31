@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
+import pandas as pd
 
 from lmfit.models import LorentzianModel
-import pandas as pd
 
 dframe = pd.read_csv('peak.csv')
 

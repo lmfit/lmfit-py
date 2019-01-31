@@ -6,8 +6,27 @@ the Python coding style conventions (i.e., [PEP 8](https://www.python.org/dev/pe
 closely. Additionally, we really want comprehensive docstrings that follow
 [PEP 257](https://www.python.org/dev/peps/pep-0257/) using the
 [numpydoc style](https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard),
-usable offline documentation, and good unit tests for the pytest framework. A good
-contribution includes all of these.
+usable offline documentation, and good unit tests for the pytest framework. A
+good contribution includes all of these. To ensure compliance with our coding
+style, we make use of the [pre-commit](https://pre-commit.com/) framework to run
+several *hooks* when committing code. Please follow the instructions below if
+you intend to contribute to the lmfit repository:
+
+- clone the GitHub repository:
+  ``git clone https://github.com/lmfit/lmfit-py.git``
+- install all (optional) dependencies either using ``pip`` or ``conda``:
+  ``pip -r install requirements-dev.txt`` or
+  ``conda install <packages in requirements-dev.txt>``
+- initialize ``pre-commit`` running ``pre-commit install`` in the lmfit directory
+- create a new branch: ``git checkout -b <awesome_new_feature>``
+- start coding
+- make sure the test-suite passes locally: run ``pytest`` in the lmfit directory
+- push to your fork: ``git push origin``
+- open a Pull Request on https://github.com/lmfit/lmfit-py/pulls
+
+If you need any additional help, please send a message to the
+[mailing list](https://groups.google.com/group/lmfit-py)!
+
 
 ## Using the Mailing List versus GitHub Issues
 
@@ -19,7 +38,7 @@ If you find a ***bug with the code or documentation***, please use
 [GitHub Issues](https://github.com/lmfit/lmfit-py/issues) to submit a bug report.
 If you have an idea for how to solve the problem and are familiar with Python
 and GitHub, submitting a [Pull Request](https://github.com/lmfit/lmfit-py/pulls)
-would be greatly appreciated.
+would be greatly appreciated (see above).
 
 **If you are at all unsure whether to use the mailing list or open an Issue,
 please start a conversation on the mailing list.**
@@ -51,10 +70,12 @@ In addition, please include information on your operating system, Python
 version and installed dependencies. You can paste the code below in your
 Python shell to get this information:
 
-    import sys, lmfit, numpy, scipy, asteval, uncertainties, six
-    print('Python: {}\n\nlmfit: {}, scipy: {}, numpy: {}, asteval: {}, uncertainties: {}, six: {}'\
-          .format(sys.version, lmfit.__version__, scipy.__version__, numpy.__version__, \
-          asteval.__version__, uncertainties.__version__, six.__version__))
+```python
+import sys, lmfit, numpy, scipy, asteval, uncertainties, six
+print('Python: {}\n\nlmfit: {}, scipy: {}, numpy: {}, asteval: {}, uncertainties: {}, six: {}'\
+      .format(sys.version, lmfit.__version__, scipy.__version__, numpy.__version__, \
+      asteval.__version__, uncertainties.__version__, six.__version__))
+```
 
 ## Using IPython Notebooks to Show Examples
 

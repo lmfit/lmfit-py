@@ -32,7 +32,6 @@ def Compare_NIST_Results(DataSet, vals, NISTdata):
     print(' |----------------+----------------+------------------+-------------------|')
 
     val_dig_min = 1000
-    err_dig_min = 1000
     for i in range(NISTdata['nparams']):
         parname = 'b%i' % (i+1)
         thisval = vals[i]
@@ -58,9 +57,6 @@ def NIST_Test(DataSet, start='start2', plot=True):
 
     vals = []
     for i in range(npar):
-        pname = 'b%i' % (i+1)
-        cval = NISTdata['cert_values'][i]
-        cerr = NISTdata['cert_stderr'][i]
         pval1 = NISTdata[start][i]
         vals.append(pval1)
 

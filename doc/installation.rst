@@ -16,12 +16,13 @@ Downloading and Installation
 .. _six:  https://github.com/benjaminp/six
 .. _uncertainties:  https://github.com/lebigot/uncertainties
 .. _numdifftools:  https://github.com/pbrod/numdifftools
+.. _contributing.md: https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md
 
 
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-Lmfit works with Python versions 2.7 and 3.4 - 3.7. Support for Python 2.6
+Lmfit works with `Python`_ versions 2.7 and 3.4 - 3.7. Support for Python 2.6
 and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively.  Support
 for 2.7 is expected to end in early 2019.
 
@@ -33,7 +34,7 @@ Lmfit requires the following Python packages, with versions given:
    * `uncertainties`_ version 3.0 or higher.
 
 All of these are readily available on PyPI, and should be installed
-automatically if installing with `pip install lmfit`.
+automatically if installing with ``pip install lmfit``.
 
 In order to run the test suite, the `pytest`_ package is required.  Some
 functionality requires the `emcee`_, `pandas`_, `Jupyter`_, `matplotlib`_,
@@ -67,7 +68,7 @@ or::
 Development Version
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-To get the latest development version, use::
+To get the latest development version from the `lmfit GitHub repository`_, use::
 
    git clone https://github.com/lmfit/lmfit-py.git
 
@@ -75,6 +76,8 @@ and install using::
 
    python setup.py install
 
+We welcome all contributions to lmfit! If you cloned the repository for this
+purpose, please read `CONTRIBUTING.md`_ for more detailed instructions.
 
 Testing
 ~~~~~~~~~~

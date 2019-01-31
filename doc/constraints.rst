@@ -44,8 +44,8 @@ allowing one to place constraints like::
     pars.add('frac_curve1', value=0.5, min=0, max=1)
     pars.add('frac_curve2', expr='1-frac_curve1')
 
-as the value of the `frac_curve1` parameter is updated at each step in the
-fit, the value of `frac_curve2` will be updated so that the two values are
+as the value of the ``frac_curve1`` parameter is updated at each step in the
+fit, the value of ``frac_curve2`` will be updated so that the two values are
 constrained to add to 1.0.  Of course, such a constraint could be placed in
 the fitting function, but the use of such constraints allows the end-user
 to modify the model of a more general-purpose fitting function.
@@ -65,7 +65,7 @@ including Python's bit- and logical operators::
     ==, >, >=, <, <=, !=, ~, not, is, is not, in, not in
 
 
-The values for `e` (2.7182818...) and `pi` (3.1415926...) are available, as
+The values for ``e`` (2.7182818...) and ``pi`` (3.1415926...) are available, as
 are  several supported mathematical and trigonometric function::
 
   abs, acos, acosh, asin, asinh, atan, atan2, atanh, ceil,
@@ -109,9 +109,9 @@ that use an inequality, say, :math:`x + y \le 10`.  This
 can be done with algebraic constraints by recasting the
 problem, as :math:`x + y = \delta` and :math:`\delta \le
 10`.  That is, first, allow :math:`x` to be held by the
-freely varying parameter `x`.  Next, define a parameter
-`delta` to be variable with a maximum value of 10, and
-define parameter `y` as `delta - x`::
+freely varying parameter ``x``.  Next, define a parameter
+``delta`` to be variable with a maximum value of 10, and
+define parameter ```y`` as ``delta - x``::
 
     pars = Parameters()
     pars.add('x', value=5, vary=True)
@@ -119,7 +119,7 @@ define parameter `y` as `delta - x`::
     pars.add('y', expr='delta-x')
 
 The essential point is that an inequality still implies
-that a variable (here, `delta`) is needed to describe the
+that a variable (here, ``delta``) is needed to describe the
 constraint.  The secondary point is that upper and lower
 bounds can be used as part of the inequality to make the
 definitions more convenient.
@@ -163,4 +163,3 @@ for the constraints::
 
 and this :meth:`lorentzian` function can now be used in constraint
 expressions.
-

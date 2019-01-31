@@ -49,7 +49,7 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
         chi2 = myfit.chisqr
         buff.append(' | Sum of Squares | %.7e  | %.7e    |  %2i               |'
                     % (chi2, sumsq, ndig(chi2, sumsq)))
-    except:
+    except Exception:
         pass
     buff.append(ABAR)
     if not myfit.errorbars:
@@ -74,8 +74,6 @@ def NIST_Dataset(DataSet, method='leastsq', start='start2',
     params = Parameters()
     for i in range(npar):
         pname = 'b%i' % (i+1)
-        cval = NISTdata['cert_values'][i]
-        cerr = NISTdata['cert_stderr'][i]
         pval1 = NISTdata[start][i]
         params.add(pname, value=pval1)
 

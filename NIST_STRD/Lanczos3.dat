@@ -11,7 +11,7 @@ Procedure:     Nonlinear Least Squares Regression
 Description:   These data are taken from an example discussed in
                Lanczos (1956).  The data were generated to 5-digits
                of accuracy using
-               f(x) = 0.0951*exp(-x) + 0.8607*exp(-3*x) 
+               f(x) = 0.0951*exp(-x) + 0.8607*exp(-3*x)
                                      + 1.5576*exp(-5*x).
 
 
@@ -27,10 +27,10 @@ Data:          1 Response  (y)
                24 Observations
                Lower Level of Difficulty
                Generated Data
- 
+
 Model:         Exponential Class
                6 Parameters (b1 to b6)
- 
+
                y = b1*exp(-b2*x) + b3*exp(-b4*x) + b5*exp(-b6*x)  +  e
 
 

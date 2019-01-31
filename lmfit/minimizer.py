@@ -102,8 +102,7 @@ def eval_stderr(obj, uvars, _names, _pars):
     uval = wrap_ueval(*uvars, _obj=obj, _names=_names, _pars=_pars)
     try:
         obj.stderr = uval.std_dev
-    # TODO: do not use bare except
-    except:
+    except Exception:
         obj.stderr = 0
 
 

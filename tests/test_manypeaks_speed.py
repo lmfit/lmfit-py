@@ -14,7 +14,6 @@ sys.setrecursionlimit(2000)
 
 
 def test_manypeaks_speed():
-    x = np.linspace(-5, 5, 251)
     model = None
     t0 = time.time()
     for i in np.arange(500):
@@ -26,7 +25,7 @@ def test_manypeaks_speed():
     t1 = time.time()
     pars = model.make_params()
     t2 = time.time()
-    cpars = deepcopy(pars)
+    cpars = deepcopy(pars)  # noqa: F841
     t3 = time.time()
 
     # these are very conservative tests that

@@ -86,10 +86,10 @@ simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
             return model - data
         return (model-data) / eps
 
-In this example, `x` is a positional (required) argument, while the
-`data` array is actually optional (so that the function returns the model
+In this example, ``x`` is a positional (required) argument, while the
+``data`` array is actually optional (so that the function returns the model
 calculation if the data is neglected).  Also note that the model
-calculation will divide `x` by the value of the ``period`` Parameter.  It
+calculation will divide ``x`` by the value of the ``period`` Parameter.  It
 might be wise to ensure this parameter cannot be 0.  It would be possible
 to use bounds on the :class:`Parameter` to do this::
 
@@ -119,9 +119,9 @@ variables, as discussed in :ref:`fit-results-label`.
 Alternative algorithms can also be used by providing the ``method``
 keyword to the :func:`minimize` function or :meth:`Minimizer.minimize`
 class as listed in the :ref:`Table of Supported Fitting Methods
-<fit-methods-table>`. If you have the `numdifftools` package installed, lmfit
+<fit-methods-table>`. If you have the ``numdifftools`` package installed, lmfit
 will try to estimate the covariance matrix and determine parameter
-uncertainties and correlations if `calc_covar` is True (default).
+uncertainties and correlations if ``calc_covar`` is True (default).
 
 .. _fit-methods-table:
 
@@ -188,11 +188,11 @@ uncertainties and correlations if `calc_covar` is True (default).
 
 .. warning::
 
-  Much of this documentation assumes that the Levenberg-Marquardt (`leastsq`)
+  Much of this documentation assumes that the Levenberg-Marquardt (``leastsq``)
   method is used. Many of the fit statistics and estimates for uncertainties in
   parameters discussed in :ref:`fit-results-label` are done only unconditionally
-  for this (and the `least_squares`) method. Lmfit versions newer than 0.9.11
-  provide the capability to use `numdifftools` to estimate the covariance matrix
+  for this (and the ``least_squares``) method. Lmfit versions newer than 0.9.11
+  provide the capability to use ``numdifftools`` to estimate the covariance matrix
   and calculate parameter uncertainties and correlations for other methods as
   well.
 
@@ -219,7 +219,7 @@ well-formatted text tables you can execute::
 
     result.params.pretty_print()
 
-with `results` being a `MinimizerResult` object. Note that the method
+with ``results`` being a ``MinimizerResult`` object. Note that the method
 :meth:`~lmfit.parameter.Parameters.pretty_print` accepts several arguments
 for customizing the output (e.g., column width, numeric format, etcetera).
 
@@ -272,9 +272,9 @@ person writing the function to be minimized **must** scale them properly.
 After a fit using the :meth:`leastsq` or :meth:`least_squares` method has
 completed successfully, standard errors for the fitted variables and
 correlations between pairs of fitted variables are automatically calculated from
-the covariance matrix. For other methods, the `calc_covar` parameter (default is
+the covariance matrix. For other methods, the ``calc_covar`` parameter (default is
 True) in the :class:`Minimizer` class determines whether or not to use the
-`numdifftools` package to estimate the covariance matrix. The standard error
+```numdifftools`` package to estimate the covariance matrix. The standard error
 (estimated :math:`1\sigma` error-bar) goes into the :attr:`stderr` attribute of
 the Parameter. The correlations with all other variables will be put into the
 :attr:`correl` attribute of the Parameter -- a dictionary with keys for all
@@ -475,7 +475,7 @@ returns a float instead of an array. See the Notes in :meth:`Minimizer.emcee` fo
 more information.
 
 Lets have a look at those posterior distributions for the parameters. This requires
-installation of the `corner` package::
+installation of the ``corner`` package::
 
     >>> import corner
     >>> corner.corner(res.flatchain, labels=res.var_names, truths=list(res.params.valuesdict().values()))

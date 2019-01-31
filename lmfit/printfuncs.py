@@ -153,7 +153,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             serr = gformat(par.stderr)
 
             try:
-                spercent = '({0:.2%})'.format(abs(par.stderr/par.value))
+                spercent = '({:.2%})'.format(abs(par.stderr/par.value))
             except ZeroDivisionError:
                 spercent = ''
             sval = '%s +/-%s %s' % (sval, serr, spercent)

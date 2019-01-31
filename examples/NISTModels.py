@@ -138,33 +138,33 @@ def Thurber(b, x, y=0):
 
 
 #  Model name        fcn,    #fitting params, dim of x
-Models = {'Bennett5':  (Bennet5,  3, 1),
-          'BoxBOD':    (BoxBOD,   2, 1),
-          'Chwirut1':  (Chwirut,  3, 1),
-          'Chwirut2':  (Chwirut,  3, 1),
-          'DanWood':   (DanWood,  2, 1),
-          'ENSO':      (ENSO,     9, 1),
-          'Eckerle4':  (Eckerle4, 3, 1),
-          'Gauss1':    (Gauss,    8, 1),
-          'Gauss2':    (Gauss,    8, 1),
-          'Gauss3':    (Gauss,    8, 1),
-          'Hahn1':     (Hahn1,    7, 1),
-          'Kirby2':    (Kirby,    5, 1),
-          'Lanczos1':  (Lanczos,  6, 1),
-          'Lanczos2':  (Lanczos,  6, 1),
-          'Lanczos3':  (Lanczos,  6, 1),
-          'MGH09':     (MGH09,    4, 1),
-          'MGH10':     (MGH10,    3, 1),
-          'MGH17':     (MGH17,    5, 1),
-          'Misra1a':   (Misra1a,  2, 1),
-          'Misra1b':   (Misra1b,  2, 1),
-          'Misra1c':   (Misra1c,  2, 1),
-          'Misra1d':   (Misra1d,  2, 1),
-          'Nelson':    (Nelson,   3, 2),
-          'Rat42':     (Rat42,    3, 1),
-          'Rat43':     (Rat43,    4, 1),
-          'Roszman1':  (Roszman1, 4, 1),
-          'Thurber':   (Thurber,  7, 1)}
+Models = {'Bennett5': (Bennet5, 3, 1),
+          'BoxBOD': (BoxBOD, 2, 1),
+          'Chwirut1': (Chwirut, 3, 1),
+          'Chwirut2': (Chwirut, 3, 1),
+          'DanWood': (DanWood, 2, 1),
+          'ENSO': (ENSO, 9, 1),
+          'Eckerle4': (Eckerle4, 3, 1),
+          'Gauss1': (Gauss, 8, 1),
+          'Gauss2': (Gauss, 8, 1),
+          'Gauss3': (Gauss, 8, 1),
+          'Hahn1': (Hahn1, 7, 1),
+          'Kirby2': (Kirby, 5, 1),
+          'Lanczos1': (Lanczos, 6, 1),
+          'Lanczos2': (Lanczos, 6, 1),
+          'Lanczos3': (Lanczos, 6, 1),
+          'MGH09': (MGH09, 4, 1),
+          'MGH10': (MGH10, 3, 1),
+          'MGH17': (MGH17, 5, 1),
+          'Misra1a': (Misra1a, 2, 1),
+          'Misra1b': (Misra1b, 2, 1),
+          'Misra1c': (Misra1c, 2, 1),
+          'Misra1d': (Misra1d, 2, 1),
+          'Nelson': (Nelson, 3, 2),
+          'Rat42': (Rat42, 3, 1),
+          'Rat43': (Rat43, 4, 1),
+          'Roszman1': (Roszman1, 4, 1),
+          'Thurber': (Thurber, 7, 1)}
 
 
 def ReadNistData(dataset):
@@ -217,8 +217,8 @@ def ReadNistData(dataset):
 
     y = array(y)
     x = array(x)
-    out = {'y': y, 'x': x, 'nparams': nparams, 'ndata': ndata,
-           'nfree': nfree, 'start1': start1, 'start2': start2,
-           'sum_squares': sum_squares, 'std_dev': std_dev,
-           'cert': certval,  'cert_values': certval,  'cert_stderr': certerr}
+    out = {'y': y, 'x': x, 'nparams': nparams, 'ndata': ndata, 'nfree': nfree,
+           'start1': start1, 'start2': start2, 'sum_squares': sum_squares,
+           'std_dev': std_dev, 'cert': certval, 'cert_values': certval,
+           'cert_stderr': certerr}
     return out

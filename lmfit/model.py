@@ -36,7 +36,7 @@ def _align(var, mask, data):
 
 
 try:
-    import matplotlib
+    import matplotlib  # noqa: F401
     _HAS_MATPLOTLIB = True
 except Exception:
     _HAS_MATPLOTLIB = False

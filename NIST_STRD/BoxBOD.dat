@@ -15,7 +15,7 @@ Description:   These data are described in detail in Box, Hunter and
 
 
 Reference:     Box, G. P., W. G. Hunter, and J. S. Hunter (1978).
-               Statistics for Experimenters.  
+               Statistics for Experimenters.
                New York, NY: Wiley, pp. 483-487.
 
 
@@ -34,7 +34,7 @@ Model:         Exponential Class
                y = b1*(1-exp[-b2*x])  +  e
 
 
- 
+
           Starting values                  Certified Values
 
         Start 1     Start 2           Parameter     Standard Deviation
@@ -44,7 +44,7 @@ Model:         Exponential Class
 Residual Sum of Squares:                    1.1680088766E+03
 Residual Standard Deviation:                1.7088072423E+01
 Degrees of Freedom:                                4
-Number of Observations:                            6  
+Number of Observations:                            6
 
 
 

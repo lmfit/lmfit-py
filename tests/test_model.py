@@ -19,7 +19,7 @@ def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03, err_msg='',
 
 def _skip_if_no_pandas():
     try:
-        import pandas
+        import pandas  # noqa: F401
     except ImportError:
         raise pytest.skip("Skipping tests that require pandas.")
 
@@ -61,12 +61,12 @@ class CommonTests(object):
         assert_results_close(result.values, self.true_values())
 
         # Pass inidividual Parameter objects as kwargs.
-        kwargs = dict((name, p) for name, p in params.items())
+        kwargs = {name: p for name, p in params.items()}
         result = self.model.fit(self.data, x=self.x, **kwargs)
         assert_results_close(result.values, self.true_values())
 
         # Pass guess values (not Parameter objects) as kwargs.
-        kwargs = dict((name, p.value) for name, p in params.items())
+        kwargs = {name: p.value for name, p in params.items()}
         result = self.model.fit(self.data, x=self.x, **kwargs)
         assert_results_close(result.values, self.true_values())
 
@@ -249,7 +249,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         params = self.model.make_params()
         for param_name, value in guess_missing_sigma.items():
             params[param_name].value = value
-        f = lambda: self.model.fit(self.data, params, x=self.x)
+        self.model.fit(self.data, params, x=self.x)
 
     def test_extra_param_issues_warning(self):
         # The function accepts extra params, Model will warn but not raise.
@@ -326,7 +326,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             set_prefix_failed = False
         except AttributeError:
             set_prefix_failed = True
-        except:
+        except:  # noqa: E722
             set_prefix_failed = None
         self.assertFalse(set_prefix_failed)
 
@@ -487,7 +487,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
 
         mx = (m1 + m2)
         params = mx.make_params()
-        param_values = dict((name, p.value) for name, p in params.items())
+        param_values = {name: p.value for name, p in params.items()}
         self.assertEqual(param_values['p1_amplitude'], 1)
         self.assertEqual(param_values['p2_amplitude'], 2)
 
@@ -503,9 +503,9 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         m2 = models.GaussianModel(prefix='m2_')
         params.update(m2.make_params())
 
-        m = m1 + m2
+        m = m1 + m2  # noqa: F841
 
-        param_values = dict((name, p.value) for name, p in params.items())
+        param_values = {name: p.value for name, p in params.items()}
         self.assertTrue(param_values['m1_intercept'] < -0.0)
         self.assertEqual(param_values['m2_amplitude'], 1)
 
@@ -534,11 +534,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
 
     def test_composite_model_with_expr_constrains(self):
         """Smoke test for composite model fitting with expr constraints."""
-        y = [0,   0,   4,   2,   1,   8,  21,  21,  23,  35,  50,  54,  46,
-             70,   77,  87,  98, 113, 148, 136, 185, 195, 194, 168, 170, 139,
-             155, 115, 132, 109, 102,  85,  69,  81,  82,  80,  71,  64,  79,
-             88,  111,  97,  97,  73,  72,  62,  41,  30,  13,   3,   9,   7,
-             0,     0,   0]
+        y = [0, 0, 4, 2, 1, 8, 21, 21, 23, 35, 50, 54, 46, 70, 77, 87, 98,
+             113, 148, 136, 185, 195, 194, 168, 170, 139, 155, 115, 132, 109,
+             102, 85, 69, 81, 82, 80, 71, 64, 79, 88, 111, 97, 97, 73, 72, 62,
+             41, 30, 13, 3, 9, 7, 0, 0, 0]
         x = np.arange(-0.2, 1.2, 0.025)[:-1] + 0.5*0.025
 
         def gauss(x, sigma, mu, A):

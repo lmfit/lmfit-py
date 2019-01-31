@@ -6,7 +6,7 @@ from lmfit.lineshapes import gaussian
 from lmfit.models import GaussianModel, LinearModel
 
 try:
-    import numdifftools
+    import numdifftools  # noqa: F401
     calc_covar_options = [False, True]
 except ImportError:
     calc_covar_options = [False]
@@ -36,7 +36,7 @@ def per_iteration(pars, iter, resid, *args, **kws):
 
 @pytest.mark.parametrize("calc_covar", calc_covar_options)
 @pytest.mark.parametrize("method", ['ampgo', 'brute', 'basinhopping',
-                                    'differential_evolution','leastsq',
+                                    'differential_evolution', 'leastsq',
                                     'least_squares', 'nelder'])
 def test_itercb(method, calc_covar):
     """Test the iteration callback for all solvers."""

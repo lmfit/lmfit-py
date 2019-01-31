@@ -12,7 +12,7 @@ Description:   These data are the result of a NIST study involving
                scanning electron microscope line with standards.
 
 
-Reference:     Kirby, R., NIST (197?).  
+Reference:     Kirby, R., NIST (197?).
                Scanning electron microscope line width standards.
 
 
@@ -34,9 +34,9 @@ Model:         Rational Class (quadratic/quadratic)
                y = (b1 + b2*x + b3*x**2) /
                    (1 + b4*x + b5*x**2)  +  e
 
- 
+
           Starting values                  Certified Values
- 
+
         Start 1     Start 2           Parameter     Standard Deviation
   b1 =    2           1.5          1.6745063063E+00  8.7989634338E-02
   b2 =   -0.1        -0.15        -1.3927397867E-01  4.1182041386E-03

@@ -9,12 +9,12 @@ File Format:   ASCII
 Procedure:     Nonlinear Least Squares Regression
 
 Description:   These data are the result of a NIST study involving
-               semiconductor electron mobility.  The response 
-               variable is a measure of electron mobility, and the 
+               semiconductor electron mobility.  The response
+               variable is a measure of electron mobility, and the
                predictor variable is the natural log of the density.
 
 
-Reference:     Thurber, R., NIST (197?).  
+Reference:     Thurber, R., NIST (197?).
                Semiconductor electron mobility modeling.
 
 
@@ -31,7 +31,7 @@ Data:          1 Response Variable  (y = electron mobility)
 Model:         Rational Class (cubic/cubic)
                7 Parameters (b1 to b7)
 
-               y = (b1 + b2*x + b3*x**2 + b4*x**3) / 
+               y = (b1 + b2*x + b3*x**2 + b4*x**3) /
                    (1 + b5*x + b6*x**2 + b7*x**3)  +  e
 
 

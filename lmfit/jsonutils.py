@@ -27,7 +27,8 @@ def bindecode(val):
 if six.PY3:
     def binencode(val):
         """b64encode wrapper, Python 3 version."""
-        return str(b64encode(val), 'utf-8')  # b64encode results is /always/ UTF-8
+        # b64encode result is /always/ UTF-8
+        return str(b64encode(val), 'utf-8')
 else:
     def binencode(val):
         """b64encode wrapper, Python 2 version."""

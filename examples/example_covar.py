@@ -36,7 +36,7 @@ p_true.add('line_off', value=-1.023)
 p_true.add('line_slope', value=0.62)
 
 data = (gaussian(x, p_true['amp_g'], p_true['cen_g'], p_true['wid_g']) +
-        random.normal(scale=0.23,  size=n) +
+        random.normal(scale=0.23, size=n) +
         x*p_true['line_slope'] + p_true['line_off'])
 
 if HASPYLAB:

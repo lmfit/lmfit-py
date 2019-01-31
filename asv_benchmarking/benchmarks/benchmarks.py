@@ -1,12 +1,10 @@
 # Benchmarking scripts for lmfit
 
-import numpy as np
-import time
-import cProfile, pstats
-from subprocess import Popen, PIPE
-from lmfit import (minimize, Parameters, Minimizer,  __version__,
-                   conf_interval, Parameter)
 from copy import deepcopy
+
+import numpy as np
+
+from lmfit import Minimizer, Parameters, conf_interval, minimize
 
 
 def obj_func(params, x, data):
@@ -31,12 +29,12 @@ class MinimizeSuite:
         x = np.linspace(0, 15, 601)
 
         data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
-                np.random.normal(size=len(x), scale=0.3) )
+                np.random.normal(size=len(x), scale=0.3))
         params = Parameters()
-        params.add('amp',   value= 1,  min=0, max=100)
-        params.add('decay', value= 0.0, min=0, max=10)
-        params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
-        params.add('omega', value= 1.0, min=0, max=10)
+        params.add('amp', value=1, min=0, max=100)
+        params.add('decay', value=0.0, min=0, max=10)
+        params.add('shift', value=0.0, min=-np.pi/2., max=np.pi/2)
+        params.add('omega', value=1.0, min=0, max=10)
 
         return minimize(obj_func, params, args=(x, data))
 
@@ -46,32 +44,31 @@ class MinimizeSuite:
         x[53] = np.nan
 
         data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
-                np.random.normal(size=len(x), scale=0.3) )
+                np.random.normal(size=len(x), scale=0.3))
         params = Parameters()
-        params.add('amp',   value= 1,  min=0, max=100)
-        params.add('decay', value= 0.0, min=0, max=10)
-        params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
-        params.add('omega', value= 1.0, min=0, max=10)
+        params.add('amp', value=1, min=0, max=100)
+        params.add('decay', value=0.0, min=0, max=10)
+        params.add('shift', value=0.0, min=-np.pi/2., max=np.pi/2)
+        params.add('omega', value=1.0, min=0, max=10)
 
         return minimize(obj_func, params, args=(x, data), nan_policy='omit')
 
     def time_minimize_large(self):
         np.random.seed(201)
         x = np.linspace(0, 19, 70001)
-        data = (5. * np.sin(0.6* x - 0.1) * np.exp(-x*x*0.0165) +
-                np.random.normal(size=len(x), scale=0.3) )
+        data = (5. * np.sin(0.6*x - 0.1) * np.exp(-x*x*0.0165) +
+                np.random.normal(size=len(x), scale=0.3))
         params = Parameters()
-        params.add('amp',   value= 1,  min=0, max=100)
-        params.add('decay', value= 0.0, min=0, max=10)
-        params.add('shift', value= 0.0, min=-np.pi/2., max=np.pi/2)
-        params.add('omega', value= 0.40, min=0, max=10)
+        params.add('amp', value=1, min=0, max=100)
+        params.add('decay', value=0.0, min=0, max=10)
+        params.add('shift', value=0.0, min=-np.pi/2., max=np.pi/2)
+        params.add('omega', value=0.40, min=0, max=10)
 
         return minimize(obj_func, params, args=(x, data))
 
-
     def time_confinterval(self):
         np.random.seed(0)
-        x = np.linspace(0.3,10,100)
+        x = np.linspace(0.3, 10, 100)
         y = 1/(0.1*x)+2+0.1*np.random.randn(x.size)
 
         p = Parameters()
@@ -131,6 +128,7 @@ def Minimizer_Residual(p, x, y):
     return (v['a1'] * np.exp(-x / v['t1'])
             + v['a2'] * np.exp(-(x - 0.1) / v['t2'])
             - y)
+
 
 def Minimizer_lnprob(p, x, y):
     noise = p['noise'].value

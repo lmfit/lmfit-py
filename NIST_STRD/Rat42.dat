@@ -14,7 +14,7 @@ Description:   This model and data are an example of fitting
                predictor variable is growing time.
 
 
-Reference:     Ratkowsky, D.A. (1983).  
+Reference:     Ratkowsky, D.A. (1983).
                Nonlinear Regression Modeling.
                New York, NY:  Marcel Dekker, pp. 61 and 88.
 
@@ -45,7 +45,7 @@ Model:         Exponential Class
 Residual Sum of Squares:                    8.0565229338E+00
 Residual Standard Deviation:                1.1587725499E+00
 Degrees of Freedom:                                6
-Number of Observations:                            9 
+Number of Observations:                            9
 
 
 

@@ -8,8 +8,8 @@ File Format:   ASCII
 
 Procedure:     Nonlinear Least Squares Regression
 
-Description:   The data are two strongly-blended Gaussians on a 
-               decaying exponential baseline plus normally 
+Description:   The data are two strongly-blended Gaussians on a
+               decaying exponential baseline plus normally
                distributed zero-mean noise with variance = 6.25.
 
 Reference:     Rust, B., NIST (1996).
@@ -33,8 +33,8 @@ Model:         Exponential Class
 
                y = b1*exp( -b2*x ) + b3*exp( -(x-b4)**2 / b5**2 )
                                    + b6*exp( -(x-b7)**2 / b8**2 ) + e
- 
- 
+
+
           Starting values                  Certified Values
 
         Start 1     Start 2           Parameter     Standard Deviation
@@ -47,7 +47,7 @@ Model:         Exponential Class
   b7 =   140.0       139.0         1.4776164251E+02  4.0488183351E-01
   b8 =    20.0        25.0         1.9668221230E+01  3.7806634336E-01
 
-Residual Sum of Squares:                    1.2444846360E+03  
+Residual Sum of Squares:                    1.2444846360E+03
 Residual Standard Deviation:                2.2677077625E+00
 Degrees of Freedom:                               242
 Number of Observations:                           250

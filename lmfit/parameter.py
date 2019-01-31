@@ -190,8 +190,8 @@ class Parameters(OrderedDict):
     def update_constraints(self):
         """Update all constrained parameters, checking that dependencies are
         evaluated as needed."""
-        requires_update = set(name for name, par in self.items()
-                              if par._expr is not None)
+        requires_update = {name for name, par in self.items() if par._expr is
+                           not None}
         updated_tracker = set(requires_update)
 
         def _update_param(name):

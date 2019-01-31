@@ -16,12 +16,12 @@ Description:   This problem was found to be difficult for some very
                ACM Transactions on Mathematical Software. 7(1):
                pp. 17-41.
 
-Reference:     Osborne, M. R. (1972).  
-               Some aspects of nonlinear least squares 
-               calculations.  In Numerical Methods for Nonlinear 
-               Optimization, Lootsma (Ed).  
+Reference:     Osborne, M. R. (1972).
+               Some aspects of nonlinear least squares
+               calculations.  In Numerical Methods for Nonlinear
+               Optimization, Lootsma (Ed).
                New York, NY:  Academic Press, pp. 171-189.
- 
+
 Data:          1 Response  (y)
                1 Predictor (x)
                33 Observations

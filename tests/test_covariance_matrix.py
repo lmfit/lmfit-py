@@ -109,7 +109,7 @@ def test_bounds_expression():
 
 
 def test_numdifftools_no_bounds():
-    numdifftools = pytest.importorskip("numdifftools")
+    pytest.importorskip("numdifftools")
     # load data to be fitted
     data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
                                    'test_peak.dat'))
@@ -153,7 +153,7 @@ def test_numdifftools_no_bounds():
 
 
 def test_numdifftools_with_bounds():
-    numdifftools = pytest.importorskip("numdifftools")
+    pytest.importorskip("numdifftools")
     # load data to be fitted
     data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
                                    'test_peak.dat'))
@@ -199,7 +199,7 @@ def test_numdifftools_with_bounds():
 
 
 def test_numdifftools_calc_covar_false():
-    numdifftools = pytest.importorskip("numdifftools")
+    pytest.importorskip("numdifftools")
     # load data to be fitted
     data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
                                    'test_peak.dat'))

@@ -13,7 +13,7 @@ Description:   These data are the result of a NIST study regarding
                response variable is volume, and the predictor
                variable is pressure.
 
-Reference:     Misra, D., NIST (1978).  
+Reference:     Misra, D., NIST (1978).
                Dental Research Monomolecular Adsorption Study.
 
 
@@ -40,7 +40,7 @@ Model:         Miscellaneous Class
         Start 1     Start 2           Parameter     Standard Deviation
   b1 =   500         300           3.3799746163E+02  3.1643950207E+00
   b2 =     0.0001      0.0002      3.9039091287E-04  4.2547321834E-06
- 
+
 Residual Sum of Squares:                    7.5464681533E-02
 Residual Standard Deviation:                7.9301471998E-02
 Degrees of Freedom:                                12
@@ -55,8 +55,8 @@ Number of Observations:                            14
 
 
 
- 
- 
+
+
 Data:   y               x
       10.07E0      77.6E0
       14.73E0     114.9E0

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
+import emcee
 import numpy as np
 
-import emcee
 import lmfit
 
 try:
@@ -67,7 +67,7 @@ def create_all(mini, sigma=None):
     sigma will be assumed the same for all residuals and
     is added to the sampled parameters.
     """
-    sigma_given = not sigma is None
+    sigma_given = sigma is not None
     lnprior = create_prior(mini.params)
     lnprob = create_lnliklihood(mini, sigma=sigma)
     guess = starting_guess(mini, not sigma_given)

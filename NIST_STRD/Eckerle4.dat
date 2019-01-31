@@ -14,7 +14,7 @@ Description:   These data are the result of a NIST study involving
                is wavelength.
 
 
-Reference:     Eckerle, K., NIST (197?).  
+Reference:     Eckerle, K., NIST (197?).
                Circular Interference Transmittance Study.
 
 
@@ -36,7 +36,7 @@ Model:         Exponential Class
 
 
           Starting values                  Certified Values
- 
+
         Start 1     Start 2           Parameter     Standard Deviation
   b1 =     1           1.5         1.5543827178E+00  1.5408051163E-02
   b2 =    10           5           4.0888321754E+00  4.6803020753E-02
