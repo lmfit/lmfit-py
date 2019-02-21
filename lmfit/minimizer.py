@@ -1394,6 +1394,7 @@ class Minimizer(object):
         except AbortFitException:
             pass
 
+        result.residual = self.__residual(ret.x)
         result._calculate_statistics()
 
         if not result.aborted:
@@ -1479,10 +1480,11 @@ class Minimizer(object):
         try:
             lsout = scipy_leastsq(self.__residual, variables, **lskws)
             _best, _cov, infodict, errmsg, ier = lsout
-            result.residual = infodict['fvec']
+            # result.residual = infodict['fvec']
         except AbortFitException:
             pass
 
+        result.residual = self.__residual(_best)
         result._calculate_statistics()
 
         if result.aborted:
