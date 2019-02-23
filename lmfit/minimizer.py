@@ -1394,6 +1394,12 @@ class Minimizer(object):
         except AbortFitException:
             pass
 
+        # note: upstream least_squares is actually returning
+        # "last evaluation", not "best result", but we do this
+        # here for consistency, and assuming it will be fixed.
+        if not result.aborted:
+            result.residual = self.__residual(ret.x, False)
+            result.nfev -= 1
         result._calculate_statistics()
 
         if not result.aborted:
@@ -1478,11 +1484,13 @@ class Minimizer(object):
 
         try:
             lsout = scipy_leastsq(self.__residual, variables, **lskws)
-            _best, _cov, infodict, errmsg, ier = lsout
-            result.residual = infodict['fvec']
         except AbortFitException:
             pass
 
+        if not result.aborted:
+            _best, _cov, infodict, errmsg, ier = lsout
+            result.residual = self.__residual(_best)
+            result.nfev -= 1
         result._calculate_statistics()
 
         if result.aborted:
