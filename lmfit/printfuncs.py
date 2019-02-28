@@ -2,6 +2,8 @@
 from math import log10
 import re
 
+import numpy as np
+
 from .parameter import Parameters
 
 
@@ -122,6 +124,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
     buff = []
     add = buff.append
+    namelen = max([len(n) for n in parnames])
     if result is not None:
         add("[[Fit Statistics]]")
         add("    # fitting method   = %s" % (result.method))
@@ -132,6 +135,15 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         add("    reduced chi-square = %s" % getfloat_attr(result, 'redchi'))
         add("    Akaike info crit   = %s" % getfloat_attr(result, 'aic'))
         add("    Bayesian info crit = %s" % getfloat_attr(result, 'bic'))
+        if not result.errorbars:
+            add("### Warning: uncertainties could not be estimated: ###")
+            for name in parnames:
+                par = params[name]
+                space = ' '*(namelen-len(name))
+                if np.allclose(par.value, par.init_value):
+                    add('    %s:%s  at initial value' % (name, space))
+                if (np.allclose(par.value, par.min) or np.allclose(par.value, par.min)):
+                    add('    %s:%s  at boundary' % (name, space))
 
     namelen = max([len(n) for n in parnames])
     add("[[Variables]]")
