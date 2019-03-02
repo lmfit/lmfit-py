@@ -2,6 +2,8 @@
 # which BaseFitter subclass the Fitter will point to.
 import warnings
 
+from .basefitter import BaseFitter
+
 has_ipython, has_matplotlib = False, False
 
 try:
@@ -37,7 +39,6 @@ else:
     except Exception as e:
         warnings.warn(_ipy_msg2)
 
-from .basefitter import BaseFitter
 Fitter = BaseFitter
 if has_matplotlib:
     from .basefitter import MPLFitter
