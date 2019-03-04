@@ -27,7 +27,7 @@ y = offset + amp * np.sin(omega*x) * np.exp(-x/decay)
 
 yn = y + np.random.normal(size=len(y), scale=0.250)
 
-outliers = np.random.random_integers(int(len(x)/3.0), len(x)-1, int(len(x)/12))
+outliers = np.random.randint(int(len(x)/3.0), len(x), int(len(x)/12))
 yn[outliers] += 5*np.random.random(len(outliers))
 
 
