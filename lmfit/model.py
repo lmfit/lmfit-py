@@ -273,6 +273,9 @@ class Model(object):
         self._func_haskeywords = False
         if missing is not None:
             nan_policy = missing
+            warnings.warn("The keyword 'missing' is deprecated as of lmfit "
+                          "0.9.13 and will be removed in the next release. "
+                          "Use 'nan_policy' instead.", FutureWarning)
         self.nan_policy = validate_nan_policy(nan_policy)
 
         self.opts = kws
