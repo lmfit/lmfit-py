@@ -26,7 +26,7 @@ def check_height_fwhm(x, y, lineshape, model):
         cen = mu
     # get arguments for lineshape
     args = {key: out.best_values[key] for key in
-            inspect_args(lineshape)[0] if key is not 'x'}
+            inspect_args(lineshape)[0] if key != 'x'}
     # output format for assertion errors
     fmt = ("Program calculated values and real values do not match!\n"
            "{:^20s}{:^20s}{:^20s}{:^20s}\n"
