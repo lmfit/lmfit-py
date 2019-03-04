@@ -2094,6 +2094,9 @@ def validate_nan_policy(policy):
     policy = policy.lower()
     if policy == 'drop':
         policy = 'omit'
+        warnings.warn("The option 'drop' is deprecated as of lmfit 0.9.13 and "
+                      "will be removed in the next release. Use 'omit' "
+                      "instead.", FutureWarning)
     if policy == 'none':
         policy = 'propagate'
     if policy not in VALID_NAN_POLICIES:
