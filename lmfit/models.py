@@ -77,6 +77,7 @@ def update_param_vals(pars, prefix, **kwargs):
         pname = "%s%s" % (prefix, key)
         if pname in pars:
             pars[pname].value = val
+    pars.update_constraints()
     return pars
 
 
