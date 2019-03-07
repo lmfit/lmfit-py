@@ -1,6 +1,14 @@
 """Functions to display fitting results and confidence intervals."""
 from math import log10
 import re
+import numpy as np
+
+try:
+    import numdifftools
+    HAS_NUMDIFFTOOLS = True
+    flake8_is_wrong_but_easily_foold = numdifftools.Hessian
+except ImportError:
+    HAS_NUMDIFFTOOLS = False
 
 from .parameter import Parameters
 
@@ -122,6 +130,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
     buff = []
     add = buff.append
+    namelen = max([len(n) for n in parnames])
     if result is not None:
         add("[[Fit Statistics]]")
         add("    # fitting method   = %s" % (result.method))
@@ -132,6 +141,21 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         add("    reduced chi-square = %s" % getfloat_attr(result, 'redchi'))
         add("    Akaike info crit   = %s" % getfloat_attr(result, 'aic'))
         add("    Bayesian info crit = %s" % getfloat_attr(result, 'bic'))
+        if not result.errorbars:
+            add("##  Warning: uncertainties could not be estimated:")
+            if result.method in ('leastsq', 'least_squares') or HAS_NUMDIFFTOOLS:
+                for name in parnames:
+                    par = params[name]
+                    space = ' '*(namelen-len(name))
+                    if np.allclose(par.value, par.init_value):
+                        add('    %s:%s  at initial value' % (name, space))
+                    if (np.allclose(par.value, par.min) or np.allclose(par.value, par.min)):
+                        add('    %s:%s  at boundary' % (name, space))
+            else:
+                add("    this fitting method does not natively calculate uncertainties")
+                add("    and numdifftools is not installed for lmfit to do this.  Use")
+                add("    `pip install numdifftools` for lmfit to estimate uncertainties")
+                add("    with this fitting method.")
 
     namelen = max([len(n) for n in parnames])
     add("[[Variables]]")
@@ -148,10 +172,8 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             sval = gformat(par.value)
         except (TypeError, ValueError):
             sval = 'Non Numeric Value?'
-
         if par.stderr is not None:
             serr = gformat(par.stderr)
-
             try:
                 spercent = '({:.2%})'.format(abs(par.stderr/par.value))
             except ZeroDivisionError:
