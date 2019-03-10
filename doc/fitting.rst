@@ -172,6 +172,9 @@ uncertainties and correlations if ``calc_covar`` is True (default).
  | Programming for Global   |                                                                  |
  | Optimization             |                                                                  |
  +--------------------------+------------------------------------------------------------------+
+ | Simplicial Homology      |  ``shgo``                                                        |
+ | Global Ooptimization     |                                                                  |
+ +--------------------------+------------------------------------------------------------------+
  | Maximum likelihood via   |  ``emcee``                                                       |
  | Monte-Carlo Markov Chain |                                                                  |
  +--------------------------+------------------------------------------------------------------+
@@ -397,6 +400,8 @@ For more information, check the examples in ``examples/lmfit_brute_example.ipynb
 .. automethod:: Minimizer.basinhopping
 
 .. automethod:: Minimizer.ampgo
+
+.. automethod:: Minimizer.shgo
 
 .. automethod:: Minimizer.emcee
 
