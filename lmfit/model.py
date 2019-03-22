@@ -14,7 +14,7 @@ from scipy.stats import t
 from . import Minimizer, Parameter, Parameters, lineshapes
 from .confidence import conf_interval
 from .jsonutils import HAS_DILL, decode4js, encode4js
-from .minimizer import validate_nan_policy
+from .minimizer import validate_nan_policy, MinimizerResult
 from .printfuncs import ci_report, fit_report
 
 # Use pandas.isnull for aligning missing data if pandas is available.
@@ -1259,9 +1259,6 @@ def load_modelresult(fname, funcdefs=None):
     modres = ModelResult(Model(lambda x: x, None), params)
     with open(fname) as fh:
         mresult = modres.load(fh, funcdefs=funcdefs)
-        mresult.data = mresult.userargs[0]
-        mresult.weights = mresult.userargs[1]
-        mresult.init_params = mresult.model.make_params(**mresult.init_values)
     return mresult
 
 
@@ -1682,6 +1679,13 @@ class ModelResult(Minimizer):
             setattr(self, attr, decode4js(modres.get(attr, None)))
 
         self.best_fit = self.model.eval(self.params, **self.userkws)
+        if len(self.userargs) == 2:
+            self.data = self.userargs[0]
+            self.weights = self.userargs[1]
+        self.init_params = self.model.make_params(**self.init_values)
+        self.result = MinimizerResult()
+        self.result.params = self.params
+        self.init_vals = list(self.init_values.items())
         return self
 
     def load(self, fp, funcdefs=None, **kws):
