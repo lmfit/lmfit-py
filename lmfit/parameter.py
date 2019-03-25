@@ -284,9 +284,8 @@ class Parameters(OrderedDict):
             print(line.format(name_len=name_len, n=colwidth, p=precision,
                               f=fmt, **pvalues))
 
-    def html_repr(self):
+    def _repr_html_(self):
         """Returns a HTML representation of parameters data."""
-
         # We omit certain columns if they would be empty.
         any_err = any([p.stderr is not None for p in self.values()])
         any_par_expr = any([p.expr is not None for p in self.values()])
@@ -303,7 +302,7 @@ class Parameters(OrderedDict):
         if any_err:
             headers = headers[:2] + ['', 'error', 'rel. error'] + headers[2:]
         if any_par_expr:
-            headers.append('exrp.')
+            headers.append('expr.')
         for h in headers:
             head(h)
         add('</tr>')

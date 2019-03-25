@@ -350,6 +350,49 @@ class MinimizerResult(object):
         self.aic = _neg2_log_likel + 2 * self.nvarys
         self.bic = _neg2_log_likel + np.log(self.ndata) * self.nvarys
 
+    def _repr_html_(self, show_correl=True, min_correl=0.1):
+        """Returns a HTML representation of parameters data."""
+        # Helper functions for shorter code
+        html = []
+        add = html.append
+        stat_row = lambda name, val: add('<td>%s</td><td>%s</td>' % (name, val))
+        add('<h1>Fit Statistics</h1>')
+        add('<table>')
+        stat_row('fitting method', self.method)
+        stat_row('# function evals', self.nfev)
+        stat_row('# data points', self.ndata)
+        stat_row('# variables', self.nvarys)
+        stat_row('chi-square', self.chisqr)
+        stat_row('reduced chi-square', self.redchi)
+        stat_row('Akaike info crit.', self.aic)
+        stat_row('Bayesian info crit.', self.bic)
+        add('</table>')
+        add('<h1>Variables</h1>')
+        add(self.params._repr_html_())
+        if show_correl:
+            correls = {}
+            for i, name in enumerate(self.params):
+                par = self.params[name]
+                if not par.vary:
+                    continue
+                if hasattr(par, 'correl') and par.correl is not None:
+                    for name2 in self.params[i + 1:]:
+                        if (name != name2 and name2 in par.correl and
+                                abs(par.correl[name2]) > min_correl):
+                            correls["%s, %s" % (name, name2)] = par.correl[name2]
+
+            sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
+            sort_correl.reverse()
+            if len(sort_correl) > 0:
+                add('<h1>Correlations</h1>)')
+                add('unreported correlations are < %.3f)' % min_correl)
+                maxlen = max([len(k) for k in list(correls.keys())])
+            for name, val in sort_correl:
+                lspace = max(0, maxlen - len(name))
+                add('    C(%s)%s = % .3f' % (name, (' '*30)[:lspace], val))
+
+        return ''.join(html)
+
 
 class Minimizer(object):
     """A general minimizer for curve fitting and optimization."""
