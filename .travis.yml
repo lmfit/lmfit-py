@@ -32,6 +32,7 @@ install:
     - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then conda create -q -n test_env python=3.7 numpy scipy six pandas matplotlib dill sphinx; fi
     - source activate test_env
     - pip install pytest
+    - pip install codecov
     - pip install asteval
     - pip install uncertainties
     - if [[ $version == latest ]]; then pip install emcee numdifftools; fi
@@ -41,4 +42,10 @@ install:
 script:
     - cd tests
     - pytest
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then cd ../doc ; make ; fi  # test building the documentation
+    - coverage run --source=lmfit -m pytest
+    - coverage report -m
+    # test building the documentation
+    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then cd ../doc ; make ; fi
+
+after_success:
+    - codecov

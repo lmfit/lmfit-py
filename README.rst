@@ -4,6 +4,9 @@ LMfit-py
 .. image:: https://travis-ci.org/lmfit/lmfit-py.svg
    :target: https://travis-ci.org/lmfit/lmfit-py
 
+.. image:: https://codecov.io/gh/lmfit/lmfit-py/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/lmfit/lmfit-py
+
 .. image:: 	https://img.shields.io/pypi/v/lmfit.svg
    :target: https://pypi.org/project/lmfit
 

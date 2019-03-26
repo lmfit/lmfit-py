@@ -7,8 +7,9 @@ from numpy.testing import assert_allclose
 import pytest
 
 import lmfit.jsonutils
+from lmfit import Parameters
 from lmfit.model import (load_model, load_modelresult, save_model,
-                         save_modelresult)
+                         save_modelresult, Model, ModelResult)
 from lmfit.models import ExponentialModel, GaussianModel
 from lmfit_testutils import assert_between, assert_param_between
 
@@ -181,3 +182,29 @@ def test_saveload_modelresult_exception():
     with pytest.raises(AttributeError, match=r'needs saved ModelResult'):
         load_modelresult(SAVE_MODEL)
     clear_savefile(SAVE_MODEL)
+
+
+def test_saveload_modelresult_roundtrip():
+    """Test for modelresult.loads()/dumps() and repeating that"""
+    def mfunc(x, a, b):
+        return a * (x-b)
+
+    model = Model(mfunc)
+    params = model.make_params(a=0.0, b=3.0)
+
+    xx = np.linspace(-5, 5, 201)
+    yy = 0.5 * (xx - 0.22) + np.random.normal(scale=0.01, size=len(xx))
+
+    result1 = model.fit(yy, params, x=xx)
+
+    result2 = ModelResult(model, Parameters())
+    result2.loads(result1.dumps(), funcdefs={'mfunc': mfunc})
+
+    result3 = ModelResult(model, Parameters())
+    result3.loads(result2.dumps(), funcdefs={'mfunc': mfunc})
+
+    assert result3 is not None
+    assert_param_between(result2.params['a'], 0.48, 0.52)
+    assert_param_between(result2.params['b'], 0.20, 0.25)
+    assert_param_between(result3.params['a'], 0.48, 0.52)
+    assert_param_between(result3.params['b'], 0.20, 0.25)

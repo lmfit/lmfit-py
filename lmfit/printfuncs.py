@@ -75,7 +75,7 @@ def gformat(val, length=11):
         if expon > 0:
             prec -= expon
     fmt = '{0: %i.%i%s}' % (length, prec, form)
-    return fmt.format(val)
+    return fmt.format(val)[:length]
 
 
 CORREL_HEAD = '[[Correlations]] (unreported correlations are < %.3f)'
