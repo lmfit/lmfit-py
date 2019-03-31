@@ -15,7 +15,7 @@ from . import Minimizer, Parameter, Parameters, lineshapes
 from .confidence import conf_interval
 from .jsonutils import HAS_DILL, decode4js, encode4js
 from .minimizer import validate_nan_policy, MinimizerResult
-from .printfuncs import ci_report, fit_report
+from .printfuncs import ci_report, fit_report, fitreport_html_table
 
 # Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
@@ -1564,6 +1564,13 @@ class ModelResult(Minimizer):
                             min_correl=min_correl, sort_pars=sort_pars)
         modname = self.model._reprstring(long=True)
         return '[[Model]]\n    %s\n%s\n' % (modname, report)
+
+    def _repr_html_(self, show_correl=True, min_correl=0.1):
+        """Returns a HTML representation of parameters data."""
+        report = fitreport_html_table(self, show_correl=show_correl,
+                                      min_correl=min_correl)
+        modname = self.model._reprstring(long=True)
+        return "<h2> Model</h2> %s %s" % (modname, report)
 
     def dumps(self, **kws):
         """Represent ModelResult as a JSON string.
