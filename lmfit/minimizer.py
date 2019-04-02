@@ -35,6 +35,7 @@ import uncertainties
 
 from ._ampgo import ampgo
 from .parameter import Parameter, Parameters
+from .printfuncs import fitreport_html_table
 
 # check for EMCEE
 try:
@@ -348,6 +349,11 @@ class MinimizerResult(object):
         _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
         self.aic = _neg2_log_likel + 2 * self.nvarys
         self.bic = _neg2_log_likel + np.log(self.ndata) * self.nvarys
+
+    def _repr_html_(self, show_correl=True, min_correl=0.1):
+        """Returns a HTML representation of parameters data."""
+        return fitreport_html_table(self, show_correl=show_correl,
+                                    min_correl=min_correl)
 
 
 class Minimizer(object):

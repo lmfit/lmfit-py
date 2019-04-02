@@ -10,8 +10,6 @@ try:
 except ImportError:
     HAS_NUMDIFFTOOLS = False
 
-from .parameter import Parameters
-
 
 def alphanumeric_sort(s, _nsre=re.compile('([0-9]+)')):
     """Sort alphanumeric string."""
@@ -111,6 +109,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
        Multi-line text of fit report.
 
     """
+    from .parameter import Parameters
     if isinstance(inpars, Parameters):
         result, params = None, inpars
     if hasattr(inpars, 'params'):
@@ -208,6 +207,105 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
             lspace = max(0, maxlen - len(name))
             add('    C(%s)%s = % .3f' % (name, (' '*30)[:lspace], val))
     return '\n'.join(buff)
+
+
+def fitreport_html_table(result, show_correl=True, min_correl=0.1):
+    """Report minimizer result as an html table"""
+    html = []
+    add = html.append
+
+    def stat_row(label, val, val2=''):
+        add('<tr><td>%s</td><td>%s</td><td>%s</td></tr>' % (label, val, val2))
+    add('<h2>Fit Statistics</h2>')
+    add('<table>')
+    stat_row('fitting method', result.method)
+    stat_row('# function evals', result.nfev)
+    stat_row('# data points', result.ndata)
+    stat_row('# variables', result.nvarys)
+    stat_row('chi-square', gformat(result.chisqr))
+    stat_row('reduced chi-square', gformat(result.redchi))
+    stat_row('Akaike info crit.', gformat(result.aic))
+    stat_row('Bayesian info crit.', gformat(result.bic))
+    add('</table>')
+    add('<h2>Variables</h2>')
+    add(result.params._repr_html_())
+    if show_correl:
+        correls = []
+        parnames = list(result.params.keys())
+        for i, name in enumerate(result.params):
+            par = result.params[name]
+            if not par.vary:
+                continue
+            if hasattr(par, 'correl') and par.correl is not None:
+                for name2 in parnames[i+1:]:
+                    if (name != name2 and name2 in par.correl and
+                            abs(par.correl[name2]) > min_correl):
+                        correls.append((name, name2, par.correl[name2]))
+        if len(correls) > 0:
+            sort_correls = sorted(correls, key=lambda val: abs(val[2]))
+            sort_correls.reverse()
+            extra = '(unreported correlations are < %.3f)' % (min_correl)
+            add('<h2>Correlations %s</h2>' % extra)
+            add('<table>')
+            for name1, name2, val in sort_correls:
+                stat_row(name1, name2, "%.4f" % val)
+            add('</table>')
+    return ''.join(html)
+
+
+def params_html_table(params):
+    """Returns a HTML representation of parameters data."""
+    has_err = any([p.stderr is not None for p in params.values()])
+    has_expr = any([p.expr is not None for p in params.values()])
+    has_brute = any([p.brute_step is not None for p in params.values()])
+
+    html = []
+    add = html.append
+
+    def cell(x, cat='td'):
+        return add('<%s> %s </%s>' % (cat, x, cat))
+
+    add('<table><tr>')
+    headers = ['name', 'value']
+    if has_err:
+        headers.extend(['standard error', 'relative error'])
+    headers.extend(['initial value', 'min', 'max', 'vary'])
+    if has_expr:
+        headers.append('expression')
+    if has_brute:
+        headers.append('brute step')
+    for h in headers:
+        cell(h, cat='th')
+    add('</tr>')
+
+    for p in params.values():
+        rows = [p.name, gformat(p.value)]
+        if has_err:
+            serr, perr = '', ''
+            if p.stderr is not None:
+                serr = gformat(p.stderr)
+                perr = '%.2f%%' % (100 * p.stderr / p.value)
+            rows.extend([serr, perr])
+        rows.extend((p.init_value, gformat(p.min), gformat(p.max),
+                     '%s' % p.vary))
+        if has_expr:
+            expr = ''
+            if p.expr is not None:
+                expr = p.expr
+            rows.append(expr)
+
+        if has_brute:
+            brute_step = 'None'
+            if p.brute_step is not None:
+                brute_step = gformat(p.brute_step)
+            rows.append(brute_step)
+
+        add('<tr>')
+        for r in rows:
+            cell(r)
+        add('</tr>')
+    add('</table>')
+    return ''.join(html)
 
 
 def report_errors(params, **kws):

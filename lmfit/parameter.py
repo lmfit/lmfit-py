@@ -11,6 +11,7 @@ import scipy.special
 import uncertainties
 
 from .jsonutils import decode4js, encode4js
+from .printfuncs import params_html_table
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
 for name in ('erf', 'erfc', 'wofz'):
@@ -283,6 +284,10 @@ class Parameters(OrderedDict):
                     pvalues['brute_step'], n=colwidth, p=precision, f=fmt)
             print(line.format(name_len=name_len, n=colwidth, p=precision,
                               f=fmt, **pvalues))
+
+    def _repr_html_(self):
+        """Returns a HTML representation of parameters data."""
+        return params_html_table(self)
 
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None,
             brute_step=None):
