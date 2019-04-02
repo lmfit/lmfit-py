@@ -11,6 +11,34 @@ significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_0913_label:
+
+Version 0.9.13 Release Notes
+==========================================
+
+New features:
+
+- Clearer warning message in fit reports when uncertainties should but cannot be estimated, including guesses of which Parameters to examine (#521, #543)
+- SplitLorenztianModel and split_lorentzian function (#523)
+- HTML representations for Parameter, MinimizerResult, and Model so that they can be printed better with Jupyter (#524, #548)
+- support parallelization for differential evolution (#526)
+
+Bug fixes:
+
+- delay import of matplotlib (and so, the selection of its backend) as late as possible (#528, #529)
+- fix for saving, loading, and reloading ModelResults (#534)
+- fix to leastsq to report the best-fit values, not the values tried last  (#535, #536)
+- fix synchronization of all parameter values on Model.guess() (#539, #542)
+- improve deprecation warnings for outdated nan_policy keywords (#540)
+- fix for edge case in gformat() (#547)
+
+Project managements:
+
+- using pre-commit framework to improve and enforce coding style (#533)
+- added code coverage report to github main page
+- updated docs, github templates, added several tests.
+- dropped support and testing for Python 3.4.
+
 .. _whatsnew_0912_label:
 
 Version 0.9.12 Release Notes
