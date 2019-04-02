@@ -13,7 +13,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Calculation of confidence intervals" href="confidence.html" />
@@ -85,6 +86,7 @@
 <li><a class="reference internal" href="#peak-like-models">Peak-like models</a><ul>
 <li><a class="reference internal" href="#gaussianmodel"><code class="docutils literal notranslate"><span class="pre">GaussianModel</span></code></a></li>
 <li><a class="reference internal" href="#lorentzianmodel"><code class="docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a></li>
+<li><a class="reference internal" href="#splitlorentzianmodel"><code class="docutils literal notranslate"><span class="pre">SplitLorentzianModel</span></code></a></li>
 <li><a class="reference internal" href="#voigtmodel"><code class="docutils literal notranslate"><span class="pre">VoigtModel</span></code></a></li>
 <li><a class="reference internal" href="#pseudovoigtmodel"><code class="docutils literal notranslate"><span class="pre">PseudoVoigtModel</span></code></a></li>
 <li><a class="reference internal" href="#moffatmodel"><code class="docutils literal notranslate"><span class="pre">MoffatModel</span></code></a></li>
@@ -226,11 +228,11 @@ half maximum is <span class="math notranslate nohighlight">\(2\sigma\sqrt{2\ln{2
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -274,11 +276,66 @@ half maximum is <span class="math notranslate nohighlight">\(2\sigma\)</span>.</
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>1. nan_policy sets what to do when a NaN or missing value is seen in the
+data. Should be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li>‘raise’ : Raise a ValueError (default)</li>
+<li>‘propagate’ : do nothing</li>
+<li>‘omit’ : (was ‘drop’) drop missing data</li>
+</ul>
+</div></blockquote>
+<p>2. The <cite>missing</cite> argument is deprecated in lmfit 0.9.8 and will be
+removed in a later version. Use <cite>nan_policy</cite> instead, as it is
+consistent with the Minimizer class.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="splitlorentzianmodel">
+<h3><a class="reference internal" href="#lmfit.models.SplitLorentzianModel" title="lmfit.models.SplitLorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitLorentzianModel</span></code></a><a class="headerlink" href="#splitlorentzianmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="lmfit.models.SplitLorentzianModel">
+<em class="property">class </em><code class="descname">SplitLorentzianModel</code><span class="sig-paren">(</span><em>independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SplitLorentzianModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>A model based on a Lorentzian or Cauchy-Lorentz distribution function
+(see <a class="reference external" href="https://en.wikipedia.org/wiki/Cauchy_distribution">https://en.wikipedia.org/wiki/Cauchy_distribution</a>), with four
+parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">sigma</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma_r</span></code>.</p>
+<p>In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
+to report full width at half maximum and maximum peak height, respectively.</p>
+<p>‘Split’ means that the width of the distribution is different between
+left and right slopes.</p>
+<div class="math notranslate nohighlight">
+\[f(x; A, \mu, \sigma, \sigma_r) = \frac{2 A}{\pi (\sigma+\sigma_r)} \big[\frac{1}{(x - \mu)^2 + \sigma^2} * H(\mu-x) + \frac{1}{(x - \mu)^2 + \sigma_r^2} * H(x-\mu)\big]\]</div>
+<p>where the parameter <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> corresponds to <span class="math notranslate nohighlight">\(A\)</span>, <code class="docutils literal notranslate"><span class="pre">center</span></code> to
+<span class="math notranslate nohighlight">\(\mu\)</span>, <code class="docutils literal notranslate"><span class="pre">sigma</span></code> to <span class="math notranslate nohighlight">\(\sigma\)</span>, <code class="docutils literal notranslate"><span class="pre">sigma_l</span></code> to
+<span class="math notranslate nohighlight">\(\sigma_l\)</span>, and <span class="math notranslate nohighlight">\(H(x)\)</span> is a Heaviside step function:</p>
+<div class="math notranslate nohighlight">
+\[H(x) = 0 | x &lt; 0, 1 | x \geq 0\]</div>
+<p>The full width at half maximum is <span class="math notranslate nohighlight">\(\sigma_l+\sigma_r\)</span>. Just as with
+the Lorentzian model, integral of this function from <code class="docutils literal notranslate"><span class="pre">-.inf</span></code> to
+<code class="docutils literal notranslate"><span class="pre">+.inf</span></code> equals to <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+have parameter names in common.</li>
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -333,11 +390,11 @@ the full width at half maximum is approximately <span class="math notranslate no
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -386,11 +443,11 @@ at half maximum of each component and of the sum is <span class="math notranslat
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -435,11 +492,11 @@ The <code class="xref py py-meth docutils literal notranslate"><span class="pre"
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -486,11 +543,11 @@ respectively.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -532,11 +589,11 @@ to report full width at half maximum and maximum peak height, respectively.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -578,11 +635,11 @@ to report full width at half maximum and maximum peak height, respectively.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -624,11 +681,11 @@ to report full width at half maximum and maximum peak height, respectively.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -670,11 +727,11 @@ to report full width at half maximum and maximum peak height, respectively.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -720,11 +777,11 @@ and T is the temperature in <span class="math notranslate nohighlight">\(K\)</sp
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -769,11 +826,11 @@ to report full width at half maximum and maximum peak height, respectively.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -820,11 +877,11 @@ e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -875,11 +932,11 @@ Voigt distribution, respectively.</dd>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -923,11 +980,11 @@ In addition, parameter <code class="docutils literal notranslate"><span class="p
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -973,11 +1030,11 @@ in the fit (by default, of course).</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1016,11 +1073,11 @@ consistent with the Minimizer class.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1058,11 +1115,11 @@ consistent with the Minimizer class.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1102,11 +1159,11 @@ uses <a class="reference external" href="https://docs.scipy.org/doc/numpy/refere
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1163,11 +1220,11 @@ setting the characteristic width. The functional forms are defined as:</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1226,11 +1283,11 @@ characteristic width. The functional forms are defined as:</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1272,11 +1329,11 @@ consistent with the Minimizer class.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1314,11 +1371,11 @@ with two Parameters: <code class="docutils literal notranslate"><span class="pre
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
 have parameter names in common.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1366,12 +1423,12 @@ mathematical constraints as discussed in <a class="reference internal" href="con
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Mathematical expression for model.</li>
-<li><strong>independent_vars</strong> (<em>list of str</em><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) – Variable names to use as independent variables.</li>
-<li><strong>init_script</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em>, </em><em>optional</em>) – Initial script to run in asteval interpreter.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+<li><strong>expr</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Mathematical expression for model.</li>
+<li><strong>independent_vars</strong> (<em>list of str</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em>) – Variable names to use as independent variables.</li>
+<li><strong>init_script</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em>, </em><em>optional</em>) – Initial script to run in asteval interpreter.</li>
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
 <li><strong>**kws</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</li>
 </ul>
 </td>
@@ -1406,17 +1463,17 @@ over 500 function and value names in the asteval namespace, including most
 Python built-ins, more than 200 functions inherited from NumPy, and more
 than 20 common lineshapes defined in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">lineshapes</span></code> module) are not
 converted to parameters.  Unrecognized names are expected to be names of either
-parameters or independent variables.  If <cite>independent_vars</cite> is the
+parameters or independent variables.  If <code class="docutils literal notranslate"><span class="pre">independent_vars</span></code> is the
 default value of None, and if the expression contains a variable named
-<cite>x</cite>, that will be used as the independent variable.  Otherwise,
-<cite>independent_vars</cite> must be given.</p>
+<code class="docutils literal notranslate"><span class="pre">x</span></code>, that will be used as the independent variable.  Otherwise,
+<code class="docutils literal notranslate"><span class="pre">independent_vars</span></code> must be given.</p>
 <p>For example, if one creates an <a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a> as:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mod</span> <span class="o">=</span> <span class="n">ExpressionModel</span><span class="p">(</span><span class="s1">&#39;off + amp * exp(-x/x0) * sin(x*phase)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The name <cite>exp</cite> will be recognized as the exponent function, so the model
-will be interpreted to have parameters named <cite>off</cite>, <cite>amp</cite>, <cite>x0</cite> and
-<cite>phase</cite>. In addition, <cite>x</cite> will be assumed to be the sole independent variable.
+<p>The name <code class="docutils literal notranslate"><span class="pre">exp</span></code> will be recognized as the exponent function, so the model
+will be interpreted to have parameters named <code class="docutils literal notranslate"><span class="pre">off</span></code>, <code class="docutils literal notranslate"><span class="pre">amp</span></code>, <code class="docutils literal notranslate"><span class="pre">x0</span></code> and
+<code class="docutils literal notranslate"><span class="pre">phase</span></code>. In addition, <code class="docutils literal notranslate"><span class="pre">x</span></code> will be assumed to be the sole independent variable.
 In general, there is no obvious way to set default parameter values or
 parameter hints for bounds, so this will have to be handled explicitly.</p>
 <p>To evaluate this model, you might do the following:</p>
@@ -1426,10 +1483,10 @@ parameter hints for bounds, so this will have to be handled explicitly.</p>
 </pre></div>
 </div>
 <p>While many custom models can be built with a single line expression
-(especially since the names of the lineshapes like <cite>gaussian</cite>, <cite>lorentzian</cite>
+(especially since the names of the lineshapes like <code class="docutils literal notranslate"><span class="pre">gaussian</span></code>, <code class="docutils literal notranslate"><span class="pre">lorentzian</span></code>
 and so on, as well as many NumPy functions, are available), more complex
 models will inevitably require multiple line functions.  You can include
-such Python code with the <cite>init_script</cite> argument.  The text of this script
+such Python code with the <code class="docutils literal notranslate"><span class="pre">init_script</span></code> argument.  The text of this script
 is evaluated when the model is initialized (and before the actual
 expression is parsed), so that you can define functions to be used
 in your expression.</p>
@@ -1450,8 +1507,8 @@ could to define this in a script:</p>
 <span class="go">                          independent_vars=[&#39;x&#39;])</span>
 </pre></div>
 </div>
-<p>As above, this will interpret the parameter names to be <cite>height</cite>, <cite>mid</cite>,
-and <cite>wid</cite>, and build a model that can be used to fit data.</p>
+<p>As above, this will interpret the parameter names to be <code class="docutils literal notranslate"><span class="pre">height</span></code>, <code class="docutils literal notranslate"><span class="pre">mid</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">wid</span></code>, and build a model that can be used to fit data.</p>
 </div>
 </div>
 <div class="section" id="example-1-fit-peak-data-to-gaussian-lorentzian-and-voigt-profiles">
@@ -1931,8 +1988,8 @@ estimate of the data.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

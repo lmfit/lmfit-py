@@ -30,7 +30,7 @@ within a certain confidence.
 
  F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}
 
-`N` is the number of data points and `P` the number of parameters of the null model.
+``N`` is the number of data points and ``P`` the number of parameters of the null model.
 :math:`P_{fix}` is the number of fixed parameters (or to be more clear, the
 difference of number of parameters between our null model and the alternate
 model).
@@ -76,7 +76,7 @@ intervals::
      a:  -0.00059  -0.00039  -0.00019   0.09944  +0.00019  +0.00039  +0.00060
      b:  -0.03766  -0.02478  -0.01230   1.98477  +0.01230  +0.02478  +0.03761
 
-This shows the best-fit values for the parameters in the `_BEST_` column,
+This shows the best-fit values for the parameters in the ``_BEST_`` column,
 and parameter values that are at the varying confidence levels given by
 steps in :math:`\sigma`.  As we can see, the estimated error is almost the
 same, and the uncertainties are well behaved: Going from 1 :math:`\sigma`
@@ -119,12 +119,13 @@ which will report::
 
 Again we called :func:`conf_interval`, this time with tracing and only for
 1- and 2-:math:`\sigma`.  Comparing these two different estimates, we see
-that the estimate for `a1` is reasonably well approximated from the
-covariance matrix, but the estimates for `a2` and especially for `t1`, and
-`t2` are very asymmetric and that going from 1 :math:`\sigma` (68%
+that the estimate for ``a1`` is reasonably well approximated from the
+covariance matrix, but the estimates for ``a2`` and especially for ``t1``, and
+``t2`` are very asymmetric and that going from 1 :math:`\sigma` (68%
 confidence) to 2 :math:`\sigma` (95% confidence) is not very predictable.
 
-Plots of the confidence region are shown in the figures below for `a1` and `t2` (left), and `a2` and `t2` (right):
+Plots of the confidence region are shown in the figures below for ``a1`` and
+``t2`` (left), and ``a2`` and ``t2`` (right):
 
 .. _figC1:
 

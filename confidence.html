@@ -13,7 +13,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Bounds Implementation" href="bounds.html" />
@@ -143,7 +144,7 @@ and <span class="math notranslate nohighlight">\(\chi^2_{f}\)</span> can’t be 
 within a certain confidence.</p>
 <div class="math notranslate nohighlight">
 \[F(P_{fix},N-P) = \left(\frac{\chi^2_f}{\chi^2_{0}}-1\right)\frac{N-P}{P_{fix}}\]</div>
-<p><cite>N</cite> is the number of data points and <cite>P</cite> the number of parameters of the null model.
+<p><code class="docutils literal notranslate"><span class="pre">N</span></code> is the number of data points and <code class="docutils literal notranslate"><span class="pre">P</span></code> the number of parameters of the null model.
 <span class="math notranslate nohighlight">\(P_{fix}\)</span> is the number of fixed parameters (or to be more clear, the
 difference of number of parameters between our null model and the alternate
 model).</p>
@@ -185,7 +186,7 @@ intervals:</p>
 <span class="go"> b:  -0.03766  -0.02478  -0.01230   1.98477  +0.01230  +0.02478  +0.03761</span>
 </pre></div>
 </div>
-<p>This shows the best-fit values for the parameters in the <cite>_BEST_</cite> column,
+<p>This shows the best-fit values for the parameters in the <code class="docutils literal notranslate"><span class="pre">_BEST_</span></code> column,
 and parameter values that are at the varying confidence levels given by
 steps in <span class="math notranslate nohighlight">\(\sigma\)</span>.  As we can see, the estimated error is almost the
 same, and the uncertainties are well behaved: Going from 1 <span class="math notranslate nohighlight">\(\sigma\)</span>
@@ -294,11 +295,12 @@ uncertainties and correlations.</p>
 </div>
 <p>Again we called <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>, this time with tracing and only for
 1- and 2-<span class="math notranslate nohighlight">\(\sigma\)</span>.  Comparing these two different estimates, we see
-that the estimate for <cite>a1</cite> is reasonably well approximated from the
-covariance matrix, but the estimates for <cite>a2</cite> and especially for <cite>t1</cite>, and
-<cite>t2</cite> are very asymmetric and that going from 1 <span class="math notranslate nohighlight">\(\sigma\)</span> (68%
+that the estimate for <code class="docutils literal notranslate"><span class="pre">a1</span></code> is reasonably well approximated from the
+covariance matrix, but the estimates for <code class="docutils literal notranslate"><span class="pre">a2</span></code> and especially for <code class="docutils literal notranslate"><span class="pre">t1</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">t2</span></code> are very asymmetric and that going from 1 <span class="math notranslate nohighlight">\(\sigma\)</span> (68%
 confidence) to 2 <span class="math notranslate nohighlight">\(\sigma\)</span> (95% confidence) is not very predictable.</p>
-<p>Plots of the confidence region are shown in the figures below for <cite>a1</cite> and <cite>t2</cite> (left), and <cite>a2</cite> and <cite>t2</cite> (right):</p>
+<p>Plots of the confidence region are shown in the figures below for <code class="docutils literal notranslate"><span class="pre">a1</span></code> and
+<code class="docutils literal notranslate"><span class="pre">t2</span></code> (left), and <code class="docutils literal notranslate"><span class="pre">a2</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code> (right):</p>
 <blockquote id="figc1">
 <div><a class="reference external image-reference" href="_images/conf_interval1.png"><img alt="_images/conf_interval1.png" src="_images/conf_interval1.png" style="width: 48%;" /></a>
 <a class="reference external image-reference" href="_images/conf_interval1a.png"><img alt="_images/conf_interval1a.png" src="_images/conf_interval1a.png" style="width: 48%;" /></a>
@@ -346,14 +348,13 @@ datapoint. A tutorial on the possibilities offered by MCMC can be found at <a cl
 <h2>Confidence Interval Functions<a class="headerlink" href="#confidence-interval-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="lmfit.conf_interval">
-<code class="descname">conf_interval</code><span class="sig-paren">(</span><em>minimizer</em>, <em>result</em>, <em>p_names=None</em>, <em>sigmas=(1</em>, <em>2</em>, <em>3)</em>, <em>trace=False</em>, <em>maxiter=200</em>, <em>verbose=False</em>, <em>prob_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the confidence interval for parameters.</p>
-<p>The parameter for which the ci is calculated will be varied, while
-the remaining parameters are re-optimized to minimize chi-square.
-The resulting chi-square is used to calculate the probability with
-a given statistic (e.g., F-test). This function uses a 1d-rootfinder
-from SciPy to find the values resulting in the searched confidence
-region.</p>
+<code class="descname">conf_interval</code><span class="sig-paren">(</span><em>minimizer, result, p_names=None, sigmas=[1, 2, 3], trace=False, maxiter=200, verbose=False, prob_func=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.conf_interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the confidence interval (ci) for parameters.</p>
+<p>The parameter for which the ci is calculated will be varied, while the
+remaining parameters are re-optimized to minimize the chi-square. The
+resulting chi-square is used to calculate the probability with a given
+statistic (e.g., F-test). This function uses a 1d-rootfinder from SciPy to
+find the values resulting in the searched confidence region.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -361,22 +362,22 @@ region.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) – The minimizer to use, holding objective function.</li>
 <li><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) – The result of running minimize().</li>
-<li><strong>p_names</strong> (<em>list</em><em>, </em><em>optional</em>) – Names of the parameters for which the ci is calculated. If None,
-the ci is calculated for every parameter.</li>
-<li><strong>sigmas</strong> (<em>list</em><em>, </em><em>optional</em>) – The sigma-levels to find. Default is [1, 2, 3]. See Note below.</li>
-<li><strong>trace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Defaults to False, if True, each result of a probability calculation
+<li><strong>p_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – Names of the parameters for which the ci is calculated. If None
+(default), the ci is calculated for every parameter.</li>
+<li><strong>sigmas</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><em>list</em></a><em>, </em><em>optional</em>) – The sigma-levels to find (default is [1, 2, 3]). See Note below.</li>
+<li><strong>trace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Defaults to False; if True, each result of a probability calculation
 is saved along with the parameter. This can be used to plot so-called
 “profile traces”.</li>
-<li><strong>maxiter</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum of iteration to find an upper limit. Default is 200.</li>
-<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Print extra debuging information. Default is False.</li>
-<li><strong>prob_func</strong> (<a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
-Default is None and uses built-in f_compare (F-test).</li>
+<li><strong>maxiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum of iteration to find an upper limit (default is 200).</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Print extra debuging information (default is False).</li>
+<li><strong>prob_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
+Default is None and uses the built-in f_compare (i.e., F-test).</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
 <li><strong>output</strong> (<em>dict</em>) – A dictionary that contains a list of (sigma, vals)-tuples for each name.</li>
-<li><strong>trace_dict</strong> (<em>dict, optional</em>) – Only if trace is True. Is a dict, the key is the parameter which
+<li><strong>trace_dict</strong> (<em>dict, optional</em>) – Only if trace is True. Is a dictionary, the key is the parameter which
 was fixed. The values are again a dict with the names as keys, but with
 an additional key ‘prob’. Each contains an array of the corresponding
 values.</li>
@@ -390,7 +391,7 @@ values.</li>
 <p class="first admonition-title">Note</p>
 <p class="last">The values for <cite>sigma</cite> are taken as the number of standard deviations for
 a normal distribution and converted to probabilities. That is, the default
-<code class="docutils literal notranslate"><span class="pre">sigma=(1,</span> <span class="pre">2,</span> <span class="pre">3)</span></code> will use probabilities of 0.6827, 0.9545, and 0.9973.
+<code class="docutils literal notranslate"><span class="pre">sigma=[1,</span> <span class="pre">2,</span> <span class="pre">3]</span></code> will use probabilities of 0.6827, 0.9545, and 0.9973.
 If any of the sigma values is less than 1, that will be interpreted as a
 probability. That is, a value of 1 and 0.6827 will give the same results,
 within precision.</p>
@@ -412,7 +413,7 @@ within precision.</p>
 </pre></div>
 </div>
 <p>Now with quantiles for the sigmas and using the trace.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ci</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">conf_interval</span><span class="p">(</span><span class="n">mini</span><span class="p">,</span> <span class="n">sigmas</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">fixed</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;para1&#39;</span><span class="p">][</span><span class="s1">&#39;para1&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">free</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;para1&#39;</span><span class="p">][</span><span class="s1">&#39;not_para1&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prob</span> <span class="o">=</span> <span class="n">trace</span><span class="p">[</span><span class="s1">&#39;para1&#39;</span><span class="p">][</span><span class="s1">&#39;prob&#39;</span><span class="p">]</span>
@@ -435,14 +436,14 @@ two parameters.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) – The minimizer to use, holding objective function.</li>
 <li><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) – The result of running minimize().</li>
-<li><strong>x_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The name of the parameter which will be the x direction.</li>
-<li><strong>y_name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – The name of the parameter which will be the y direction.</li>
-<li><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the x direction.</li>
-<li><strong>ny</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the y direction.</li>
-<li><strong>limits</strong> (<em>tuple</em><em>, </em><em>optional</em>) – Should have the form ((x_upper, x_lower), (y_upper, y_lower)). If not
+<li><strong>x_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the parameter which will be the x direction.</li>
+<li><strong>y_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – The name of the parameter which will be the y direction.</li>
+<li><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the x direction.</li>
+<li><strong>ny</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the y direction.</li>
+<li><strong>limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, </em><em>optional</em>) – Should have the form ((x_upper, x_lower), (y_upper, y_lower)). If not
 given, the default is 5 std-errs in each direction.</li>
-<li><strong>prob_func</strong> (<a class="reference external" href="https://docs.python.org/2/library/constants.html#None" title="(in Python v2.7)"><em>None</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
-Default is None and uses built-in f_compare (F-test).</li>
+<li><strong>prob_func</strong> (<a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.7)"><em>None</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
+Default is None and uses built-in f_compare (i.e., F-test).</li>
 </ul>
 </td>
 </tr>
@@ -474,15 +475,15 @@ Default is None and uses built-in f_compare (F-test).</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is True).</li>
-<li><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</li>
+<li><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is True).</li>
+<li><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Text of formatted report on confidence intervals.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)">str</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </td>
 </tr>
 </tbody>
@@ -522,8 +523,8 @@ Default is None and uses built-in f_compare (F-test).</li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

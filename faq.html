@@ -13,7 +13,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Parameter and Parameters" href="parameters.html" />
@@ -218,16 +219,16 @@ the value to be minimized.</p>
 </div>
 <div class="section" id="i-get-errors-from-nan-in-my-fit-what-can-i-do">
 <h2>I get errors from NaN in my fit.  What can I do?<a class="headerlink" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do" title="Permalink to this headline">¶</a></h2>
-<p>The solvers used by <cite>lmfit</cite> use NaN (see
+<p>The solvers used by lmfit use NaN (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/NaN">https://en.wikipedia.org/wiki/NaN</a>) values as signals that the calculation
 cannot continue.  If any value in the residual array (typically
 <cite>(data-model)*weight</cite>) is NaN, then calculations of chi-square or
 comparisons with other residual arrays to try find a better fit will also
-give NaN and fail. There is no sensible way for <cite>lmfit</cite> or any of the
+give NaN and fail. There is no sensible way for lmfit or any of the
 optimization routines to know how to handle such NaN values.  They
 indicate that numerical calculations are not sensible and must stop.</p>
-<p>This means that if your objective function (if using <cite>minimize</cite>) or model
-function (if using <cite>Model</cite>) generates a NaN, the fit will stop
+<p>This means that if your objective function (if using <code class="docutils literal notranslate"><span class="pre">minimize</span></code>) or model
+function (if using <code class="docutils literal notranslate"><span class="pre">Model</span></code>) generates a NaN, the fit will stop
 immediately. If your objective or model function generates a NaN, you
 really must handle that.</p>
 <div class="section" id="nan-policy">
@@ -236,7 +237,7 @@ really must handle that.</p>
 data array and are meant to indicate missing values, or if you using
 <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code> with the same basic intention, then it might be
 possible to get a successful fit in spite of the NaN values. To do this,
-you can add a <cite>nan_policy=’omit’</cite> argument to <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code>, or
+you can add a <code class="docutils literal notranslate"><span class="pre">nan_policy='omit'`</span></code> argument to <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code>, or
 when creating a <code class="xref py py-class docutils literal notranslate"><span class="pre">lmfit.Model</span></code>, or when running
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">lmfit.Model.fit()</span></code>.</p>
 <p>In order for this to be effective, the number of NaN values cannot ever
@@ -252,11 +253,11 @@ assumed to be either scalar values or numpy arrays of double precision real
 numbers when fitting.  Some of the most likely causes of NaNs are:</p>
 <blockquote>
 <div><ul class="simple">
-<li>taking <cite>sqrt(x)</cite> or <cite>log(x)</cite> where <cite>x</cite> is negative.</li>
-<li>doing <cite>x**y</cite> where <cite>x</cite> is negative.  Since <cite>y</cite> is real, there will
+<li>taking <code class="docutils literal notranslate"><span class="pre">sqrt(x)</span></code> or <code class="docutils literal notranslate"><span class="pre">log(x)</span></code> where <code class="docutils literal notranslate"><span class="pre">x</span></code> is negative.</li>
+<li>doing <code class="docutils literal notranslate"><span class="pre">x**y</span></code> where <code class="docutils literal notranslate"><span class="pre">`x</span></code> is negative.  Since <code class="docutils literal notranslate"><span class="pre">y</span></code> is real, there will
 be a fractional component, and a negative number to a fractional
 exponent is not a real number.</li>
-<li>doing <cite>x/y</cite> where both <cite>x</cite> and <cite>y</cite> are 0.</li>
+<li>doing <code class="docutils literal notranslate"><span class="pre">x/y</span></code> where both <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are 0.</li>
 </ul>
 </div></blockquote>
 <p>If you use these very common constructs in your objective or model
@@ -265,12 +266,12 @@ these functions and operators.  Many special functions have similar
 limitations and should also be viewed with some suspicion if NaNs are being
 generated.</p>
 <p>A related problem is the generation of Inf (Infinity in floating point),
-which generally comes from <cite>exp(x)</cite> where <cite>x</cite> has values greater than 700
+which generally comes from <code class="docutils literal notranslate"><span class="pre">exp(x)</span></code> where <code class="docutils literal notranslate"><span class="pre">x</span></code> has values greater than 700
 or so, so that the resulting value is greater than 1.e308.  Inf is only
 slightly better than NaN. It will completely ruin the ability to do the
 fit.  However, unlike NaN, it is also usually clear how to handle Inf, as
 you probably won’t ever have values greater than 1.e308 and can therefore
-(usually) safely clip the argument passed to <cite>exp()</cite> to be smaller than
+(usually) safely clip the argument passed to <code class="docutils literal notranslate"><span class="pre">exp()</span></code> to be smaller than
 about 700.</p>
 </div>
 </div>
@@ -306,8 +307,8 @@ about 700.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

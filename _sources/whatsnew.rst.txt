@@ -24,9 +24,9 @@ New features:
 - Parameter uncertainties and correlations are reported for least_squares
 - Plotting of complex-valued models is now handled in ModelResult class (PR #503)
 - A model's independent variable is allowed to be an object (Issue #492)
-- Added `usersyms` to Parameters() initialization to make it easier to add custom functions and symbols (Issue #507)
-- the `numdifftools` package can be used to calculate parameter uncertainties and correlations for all solvers that do not natively support this (PR #506)
-- `emcee` can now be used as method keyword-argument to Minimizer.minimize and minimize function, which allows for using `emcee` in the Model class (PR #512; see `examples/example_emcee_with_Model.py`)
+- Added ``usersyms`` to Parameters() initialization to make it easier to add custom functions and symbols (Issue #507)
+- the ``numdifftools`` package can be used to calculate parameter uncertainties and correlations for all solvers that do not natively support this (PR #506)
+- ``emcee`` can now be used as method keyword-argument to Minimizer.minimize and minimize function, which allows for using ``emcee`` in the Model class (PR #512; see ``examples/example_emcee_with_Model.py``)
 
 (Bug)fixes:
 
@@ -35,7 +35,7 @@ New features:
 - loading a saved ModelResult now restores all attributes (Issue #491)
 - development versions of scipy and emcee are now supported (Issue #497 and PR #496)
 - ModelResult.eval() do no longer overwrite the userkws dictionary (Issue #499)
-- running the test suite requires `pytest` only (Issue #504)
+- running the test suite requires ``pytest`` only (Issue #504)
 - improved FWHM calculation for VoigtModel (PR #514)
 
 
@@ -47,7 +47,7 @@ New features:
 Version 0.9.10 Release Notes
 ==========================================
 Two new global algorithms were added: basinhopping and AMPGO.
-Basinhopping wraps the method present in `scipy`, and more information
+Basinhopping wraps the method present in ``scipy``, and more information
 can be found in the documentation (:func:`~lmfit.minimizer.Minimizer.basinhopping`
 and :scipydoc:`optimize.basinhopping`).
 The Adaptive Memory Programming for Global Optimization (AMPGO) algorithm
@@ -58,8 +58,8 @@ for lmfit can be found in the :func:`~lmfit.minimizer.Minimizer.ampgo` function.
 Lmfit uses the external uncertainties (https://github.com/lebigot/uncertainties)
 package (available on PyPI), instead of distributing its own fork.
 
-An `AbortFitException` is now raised when the fit is aborted by the user (i.e., by
-using `iter_cb`).
+An ``AbortFitException`` is now raised when the fit is aborted by the user (i.e., by
+using ``iter_cb``).
 
 Bugfixes:
 
@@ -88,13 +88,13 @@ on SciPy having code for differential evolution and do not need to keep a
 local copy.
 
 A brute force method was added, which can be used either with
-:meth:`Minimizer.brute` or using the `method='brute'` option to
+:meth:`Minimizer.brute` or using the ``method='brute'``` option to
 :meth:`Minimizer.minimize`.  This method requires finite bounds on
 all varying parameters, or that parameters have a finite
-`brute_step` attribute set to specify the step size.
+``brute_step`` attribute set to specify the step size.
 
 Custom cost functions can now be used for the scalar minimizers using the
-`reduce_fcn` option.
+``reduce_fcn`` option.
 
 Many improvements to documentation and docstrings in the code were made.
 As part of that effort, all API documentation in this main Sphinx
@@ -103,8 +103,8 @@ documentation now derives from the docstrings.
 Uncertainties in the resulting best-fit for a model can now be calculated
 from the uncertainties in the model parameters.
 
-Parameters have two new attributes: `brute_step`, to specify the step
-size when using the `brute` method, and `user_data`, which is unused but
+Parameters have two new attributes: ``brute_step``, to specify the step
+size when using the ``brute`` method, and ``user_data``, which is unused but
 can be used to hold additional information the user may desire.  This will
 be preserved on copy and pickling.
 
@@ -127,12 +127,12 @@ Support for Python 2.6 and SciPy 0.13 has been dropped.
 Version 0.9.4 Release Notes
 ==========================================
 
-Some support for the new `least_squares` routine from SciPy 0.17 has been
+Some support for the new ``least_squares`` routine from SciPy 0.17 has been
 added.
 
 
 Parameters can now be used directly in floating point or array expressions,
-so that the Parameter value does not need `sigma = params['sigma'].value`.
+so that the Parameter value does not need ``sigma = params['sigma'].value``.
 The older, explicit usage still works, but the docs, samples, and tests
 have been updated to use the simpler usage.
 
@@ -146,7 +146,7 @@ Version 0.9.3 Release Notes
 
 Models involving complex numbers have been improved.
 
-The `emcee` module can now be used for uncertainty estimation.
+The ``emcee`` module can now be used for uncertainty estimation.
 
 Many bug fixes, and an important fix for performance slowdown on getting
 parameter values.

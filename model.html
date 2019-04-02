@@ -13,7 +13,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Built-in Fitting Models in the models module" href="builtin_models.html" />
@@ -89,7 +90,7 @@
 <li><a class="reference internal" href="#determining-parameter-names-and-independent-variables-for-a-function">Determining parameter names and independent variables for a function</a></li>
 <li><a class="reference internal" href="#explicitly-specifying-independent-vars">Explicitly specifying <code class="docutils literal notranslate"><span class="pre">independent_vars</span></code></a></li>
 <li><a class="reference internal" href="#functions-with-keyword-arguments">Functions with keyword arguments</a></li>
-<li><a class="reference internal" href="#defining-a-prefix-for-the-parameters">Defining a <cite>prefix</cite> for the Parameters</a></li>
+<li><a class="reference internal" href="#defining-a-prefix-for-the-parameters">Defining a <code class="docutils literal notranslate"><span class="pre">prefix</span></code> for the Parameters</a></li>
 <li><a class="reference internal" href="#initializing-model-parameters">Initializing model parameters</a><ul>
 <li><a class="reference internal" href="#initializing-values-in-the-function-definition">Initializing values in the function definition</a></li>
 <li><a class="reference internal" href="#initializing-values-with-model-make-params">Initializing values with <code class="docutils literal notranslate"><span class="pre">Model.make_params()</span></code></a></li>
@@ -189,7 +190,7 @@ definition of the model function:</p>
 </pre></div>
 </div>
 <p>We want to use this function to fit to data <span class="math notranslate nohighlight">\(y(x)\)</span> represented by the
-arrays <cite>y</cite> and <cite>x</cite>.  With <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, this would be:</p>
+arrays <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">x</span></code>.  With <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html">scipy.optimize.curve_fit</a>, this would be:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">curve_fit</span>
 <span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
@@ -206,7 +207,7 @@ arrays <cite>y</cite> and <cite>x</cite>.  With <a class="reference external" hr
 initial guesses.  The results returned are the optimal values for the
 parameters and the covariance matrix.  It’s simple and useful, but it
 misses the benefits of lmfit.</p>
-<p>With lmfit, we create a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> that wraps the <cite>gaussian</cite> model
+<p>With lmfit, we create a <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> that wraps the <code class="docutils literal notranslate"><span class="pre">gaussian</span></code> model
 function, which automatically generates the appropriate residual function,
 and determines the corresponding parameter names from the function
 signature itself:</p>
@@ -218,14 +219,14 @@ signature itself:</p>
 <span class="go">[&#39;x&#39;]</span>
 </pre></div>
 </div>
-<p>As you can see, the Model <cite>gmodel</cite> determined the names of the parameters
+<p>As you can see, the Model <code class="docutils literal notranslate"><span class="pre">gmodel</span></code> determined the names of the parameters
 and the independent variables.  By default, the first argument of the
 function is taken as the independent variable, held in
 <a class="reference internal" href="#lmfit.model.independent_vars" title="lmfit.model.independent_vars"><code class="xref py py-attr docutils literal notranslate"><span class="pre">independent_vars</span></code></a>, and the rest of the functions positional
 arguments (and, in certain cases, keyword arguments – see below) are used
-for Parameter names.  Thus, for the <cite>gaussian</cite> function above, the
-independent variable is <cite>x</cite>, and the parameters are named <cite>amp</cite>,
-<cite>cen</cite>, and <cite>wid</cite>, and – all taken directly from the signature of the
+for Parameter names.  Thus, for the <code class="docutils literal notranslate"><span class="pre">gaussian</span></code> function above, the
+independent variable is <code class="docutils literal notranslate"><span class="pre">x</span></code>, and the parameters are named <code class="docutils literal notranslate"><span class="pre">amp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cen</span></code>, and <code class="docutils literal notranslate"><span class="pre">wid</span></code>, and – all taken directly from the signature of the
 model function. As we will see below, you can modify the default
 assignment of independent variable / arguments and specify yourself what
 the independent variable is and which function arguments should be identified
@@ -263,7 +264,7 @@ function:</p>
 </pre></div>
 </div>
 <p>Admittedly, this a slightly long-winded way to calculate a Gaussian
-function, given that you could have called your <cite>gaussian</cite> function
+function, given that you could have called your <code class="docutils literal notranslate"><span class="pre">gaussian</span></code> function
 directly.  But now that the model is set up, we can use its
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> method to fit this model to data, as with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
@@ -305,7 +306,7 @@ directly.  But now that the model is set up, we can use its
 <span class="c1"># &lt;end examples/doc_model_gaussian.py&gt;</span>
 </pre></div>
 </div>
-<p>which is pretty compact and to the point.  The returned <cite>result</cite> will be
+<p>which is pretty compact and to the point.  The returned <code class="docutils literal notranslate"><span class="pre">result</span></code> will be
 a <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> object.  As we will see below, this has many
 components, including a <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit_report()</span></code> method, which will show:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Model</span><span class="p">]]</span>
@@ -339,9 +340,9 @@ the initial fit as a dashed black line.</p>
 <span class="n">result</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">cen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>These lines clearly express that we want to turn the <cite>gaussian</cite> function
+<p>These lines clearly express that we want to turn the <code class="docutils literal notranslate"><span class="pre">`gaussian</span></code> function
 into a fitting model, and then fit the <span class="math notranslate nohighlight">\(y(x)\)</span> data to this model,
-starting with values of 5 for <cite>amp</cite>, 5 for <cite>cen</cite> and 1 for <cite>wid</cite>.  In
+starting with values of 5 for <code class="docutils literal notranslate"><span class="pre">amp</span></code>, 5 for <code class="docutils literal notranslate"><span class="pre">cen</span></code> and 1 for <code class="docutils literal notranslate"><span class="pre">wid</span></code>.  In
 addition, all the other features of lmfit are included:
 <a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> can have bounds and constraints and
 the result is a rich object that can be reused to explore the model fit in
@@ -369,13 +370,13 @@ data to model some data as for a curve-fitting problem.</p>
 <li><strong>independent_vars</strong> (<em>list of str</em><em>, </em><em>optional</em>) – Arguments to func that are independent variables (default is None).</li>
 <li><strong>param_names</strong> (<em>list of str</em><em>, </em><em>optional</em>) – Names of arguments to func that are to be made into parameters
 (default is None).</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of
 ‘raise’ (default), ‘propagate’, or ‘omit’. See Note below.</li>
-<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
-<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Prefix used for the model.</li>
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name for the model. When None (default) the name is the same as
+<li><strong>missing</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Synonym for ‘nan_policy’ for backward compatibility.</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Prefix used for the model.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name for the model. When None (default) the name is the same as
 the model function (<cite>func</cite>).</li>
-<li><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments to pass to model function.</li>
+<li><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Additional keyword arguments to pass to model function.</li>
 </ul>
 </td>
 </tr>
@@ -439,7 +440,7 @@ and parameters:</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Value of model given the parameters and other arguments.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)">numpy.ndarray</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)">numpy.ndarray</a></p>
 </td>
 </tr>
 </tbody>
@@ -467,15 +468,15 @@ keyword arguments.</p>
 <li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Parameters to use in fit (default is None).</li>
 <li><strong>weights</strong> (array_like of same size as <cite>data</cite>, optional) – Weights to use for the calculation of the fit residual (default
 is None).</li>
-<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of fitting method to use (default is <cite>‘leastsq’</cite>).</li>
+<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of fitting method to use (default is <cite>‘leastsq’</cite>).</li>
 <li><strong>iter_cb</strong> (<em>callable</em><em>, </em><em>optional</em>) – Callback function to call at each iteration (default is None).</li>
-<li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to automatically scale the covariance matrix when
+<li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to automatically scale the covariance matrix when
 calculating uncertainties (default is True).</li>
-<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to print a message when a new parameter is added because
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to print a message when a new parameter is added because
 of a hint (default is True).</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
-<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Options to pass to the minimizer being used.</li>
-<li><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Options to pass to the minimizer being used.</li>
+<li><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
 solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires the
 <cite>numdifftools</cite> package to be installed.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Arguments to pass to the  model function, possibly overriding
@@ -550,7 +551,7 @@ Parameters object.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></td>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a></td>
 </tr>
 </tbody>
 </table>
@@ -565,7 +566,7 @@ Parameters object.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to print out messages (default is False).</li>
+<li><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to print out messages (default is False).</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Parameter names and initial values.</li>
 </ul>
 </td>
@@ -599,7 +600,7 @@ which will be used by make_params() when building default parameters.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Parameter name.</li>
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Parameter name.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – <p>Arbitrary keyword arguments, needs to be a Parameter attribute.
 Can be any of the following:</p>
 <ul>
@@ -651,7 +652,7 @@ Can be any of the following:</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colwidth</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – Width of each column, except for first and last columns.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>colwidth</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Width of each column, except for first and last columns.</td>
 </tr>
 </tbody>
 </table>
@@ -719,17 +720,17 @@ be determined internally and should not be changed.</p>
 <dt id="lmfit.model.prefix">
 <code class="descname">prefix</code><a class="headerlink" href="#lmfit.model.prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prefix used for name-mangling of parameter names.  The default is ‘’.
-If a particular <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> has arguments <cite>amplitude</cite>,
-<cite>center</cite>, and <cite>sigma</cite>, these would become the parameter names.
-Using a prefix of <cite>‘g1_’</cite> would convert these parameter names to
-<cite>g1_amplitude</cite>, <cite>g1_center</cite>, and <cite>g1_sigma</cite>.   This can be
+If a particular <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> has arguments <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>,
+<code class="docutils literal notranslate"><span class="pre">center</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>, these would become the parameter names.
+Using a prefix of <code class="docutils literal notranslate"><span class="pre">'g1_'`</span></code> would convert these parameter names to
+<code class="docutils literal notranslate"><span class="pre">g1_amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">g1_center</span></code>, and <code class="docutils literal notranslate"><span class="pre">g1_sigma</span></code>.   This can be
 essential to avoid name collision in composite models.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="determining-parameter-names-and-independent-variables-for-a-function">
 <h3>Determining parameter names and independent variables for a function<a class="headerlink" href="#determining-parameter-names-and-independent-variables-for-a-function" title="Permalink to this headline">¶</a></h3>
-<p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> created from the supplied function <cite>func</cite> will create
+<p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> created from the supplied function <code class="docutils literal notranslate"><span class="pre">func</span></code> will create
 a <a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> object, and names are inferred from the function
 arguments, and a residual function is automatically constructed.</p>
 <p>By default, the independent variable is taken as the first argument to the
@@ -763,10 +764,10 @@ function is fairly easy. Let’s try another one:</p>
 <span class="go">N &lt;Parameter &#39;N&#39;, -inf, bounds=[-inf:inf]&gt;</span>
 </pre></div>
 </div>
-<p>Here, <cite>t</cite> is assumed to be the independent variable because it is the
+<p>Here, <code class="docutils literal notranslate"><span class="pre">t</span></code> is assumed to be the independent variable because it is the
 first argument to the function.  The other function arguments are used to
 create parameters for the model.</p>
-<p>If you want <cite>tau</cite> to be the independent variable in the above example,
+<p>If you want <code class="docutils literal notranslate"><span class="pre">tau</span></code> to be the independent variable in the above example,
 you can say so:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">decay_model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">decay</span><span class="p">,</span> <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">decay_model</span><span class="o">.</span><span class="n">independent_vars</span><span class="p">)</span>
@@ -814,24 +815,24 @@ None, True, or False).</p>
 <span class="go">N &lt;Parameter &#39;N&#39;, 10, bounds=[-inf:inf]&gt;</span>
 </pre></div>
 </div>
-<p>Here, even though <cite>N</cite> is a keyword argument to the function, it is turned
+<p>Here, even though <code class="docutils literal notranslate"><span class="pre">N</span></code> is a keyword argument to the function, it is turned
 into a parameter, with the default numerical value as its initial value.
 By default, it is permitted to be varied in the fit – the 10 is taken as
 an initial value, not a fixed value.  On the other hand, the
-<cite>check_positive</cite> keyword argument, was not converted to a parameter
+<code class="docutils literal notranslate"><span class="pre">check_positive</span></code> keyword argument, was not converted to a parameter
 because it has a boolean default value.    In some sense,
-<cite>check_positive</cite> becomes like an independent variable to the model.
+<code class="docutils literal notranslate"><span class="pre">check_positive</span></code> becomes like an independent variable to the model.
 However, because it has a default value it is not required to be given for
 each model evaluation or fit, as independent variables are.</p>
 </div>
 <div class="section" id="defining-a-prefix-for-the-parameters">
-<h3>Defining a <cite>prefix</cite> for the Parameters<a class="headerlink" href="#defining-a-prefix-for-the-parameters" title="Permalink to this headline">¶</a></h3>
+<h3>Defining a <code class="docutils literal notranslate"><span class="pre">prefix</span></code> for the Parameters<a class="headerlink" href="#defining-a-prefix-for-the-parameters" title="Permalink to this headline">¶</a></h3>
 <p>As we will see in the next chapter when combining models, it is sometimes
 necessary to decorate the parameter names in the model, but still have them
 be correctly used in the underlying model function.  This would be
 necessary, for example, if two parameters in a composite model (see
 <a class="reference internal" href="#composite-models-section"><span class="std std-ref">Composite Models : adding (or multiplying) Models</span></a> or examples in the next chapter) would have
-the same name.  To avoid this, we can add a <cite>prefix</cite> to the
+the same name.  To avoid this, we can add a <code class="docutils literal notranslate"><span class="pre">prefix</span></code> to the
 <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> which will automatically do this mapping for us.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">myfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="gp">...</span>
@@ -847,8 +848,8 @@ the same name.  To avoid this, we can add a <cite>prefix</cite> to the
 <span class="go">f1_sigma &lt;Parameter &#39;f1_sigma&#39;, 1, bounds=[-inf:inf]&gt;</span>
 </pre></div>
 </div>
-<p>You would refer to these parameters as <cite>f1_amplitude</cite> and so forth, and
-the model will know to map these to the <cite>amplitude</cite> argument of <cite>myfunc</cite>.</p>
+<p>You would refer to these parameters as <code class="docutils literal notranslate"><span class="pre">f1_amplitude</span></code> and so forth, and
+the model will know to map these to the <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> argument of <code class="docutils literal notranslate"><span class="pre">myfunc</span></code>.</p>
 </div>
 <div class="section" id="initializing-model-parameters">
 <h3>Initializing model parameters<a class="headerlink" href="#initializing-model-parameters" title="Permalink to this headline">¶</a></h3>
@@ -971,7 +972,7 @@ reconstruct a <a class="reference internal" href="#lmfit.model.Model" title="lmf
 <p>Saving a model turns out to be somewhat challenging. The main issue is that
 Python is not normally able to <em>serialize</em> a function (such as the model
 function making up the heart of the Model) in a way that can be
-reconstructed into a callable Python object.  The <cite>dill</cite> package can
+reconstructed into a callable Python object.  The <code class="docutils literal notranslate"><span class="pre">dill</span></code> package can
 sometimes serialize functions, but with the limitation that it can be used
 only in the same version of Python.  In addition, class methods used as
 model functions will not retain the rest of the class attributes and
@@ -979,7 +980,7 @@ methods, and so may not be usable.  With all those warnings, it should be
 emphasized that if you are willing to save or reuse the definition of the
 model function as Python code, then saving the Parameters and rest of the
 components that make up a model presents no problem.</p>
-<p>If the <cite>dill</cite> package is installed, the model function will be saved using
+<p>If the <code class="docutils literal notranslate"><span class="pre">dill</span></code> package is installed, the model function will be saved using
 it.  But because saving the model function is not always reliable, saving a
 model will always save the <em>name</em> of the model function.  The
 <a class="reference internal" href="#lmfit.model.load_model" title="lmfit.model.load_model"><code class="xref py py-func docutils literal notranslate"><span class="pre">load_model()</span></code></a> takes an optional <code class="xref py py-attr docutils literal notranslate"><span class="pre">funcdefs</span></code> argument that can
@@ -999,7 +1000,7 @@ and used.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>model</strong> (<em>model instance</em>) – Model to be saved.</li>
-<li><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Name of file for saved Model.</li>
+<li><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Name of file for saved Model.</li>
 </ul>
 </td>
 </tr>
@@ -1016,8 +1017,8 @@ and used.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Name of file containing saved Model.</li>
-<li><strong>funcdefs</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary of custom function names and definitions.</li>
+<li><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Name of file containing saved Model.</li>
+<li><strong>funcdefs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary of custom function names and definitions.</li>
 </ul>
 </td>
 </tr>
@@ -1089,7 +1090,7 @@ and used.</p>
 </div>
 <div class="section" id="the-modelresult-class">
 <h2>The <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> class<a class="headerlink" href="#the-modelresult-class" title="Permalink to this headline">¶</a></h2>
-<p>A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> (which had been called <cite>ModelFit</cite> prior to version
+<p>A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> (which had been called <code class="docutils literal notranslate"><span class="pre">ModelFit</span></code> prior to version
 0.9) is the object returned by <a class="reference internal" href="#lmfit.model.Model.fit" title="lmfit.model.Model.fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Model.fit()</span></code></a>.  It is a subclass of
 <a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code></a>, and so contains many of the fit results.
 Of course, it knows the <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> and the set of
@@ -1107,7 +1108,7 @@ with a model.</p>
 <p>A <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> has several attributes holding values for fit
 results, and several methods for working with fits.  These include
 statistics inherited from <a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code></a> useful for
-comparing different models, including <cite>chisqr</cite>, <cite>redchi</cite>, <cite>aic</cite>, and <cite>bic</cite>.</p>
+comparing different models, including <code class="docutils literal notranslate"><span class="pre">chisqr</span></code>, <code class="docutils literal notranslate"><span class="pre">redchi</span></code>, <code class="docutils literal notranslate"><span class="pre">aic</span></code>, and <code class="docutils literal notranslate"><span class="pre">bic</span></code>.</p>
 <dl class="class">
 <dt id="lmfit.model.ModelResult">
 <em class="property">class </em><code class="descname">ModelResult</code><span class="sig-paren">(</span><em>model</em>, <em>params</em>, <em>data=None</em>, <em>weights=None</em>, <em>method='leastsq'</em>, <em>fcn_args=None</em>, <em>fcn_kws=None</em>, <em>iter_cb=None</em>, <em>scale_covar=True</em>, <em>nan_policy='raise'</em>, <em>calc_covar=True</em>, <em>**fit_kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult" title="Permalink to this definition">¶</a></dt>
@@ -1124,13 +1125,13 @@ that it can be used to modify and re-run the fit for the Model.</p>
 <li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a>) – Parameters with initial values for model.</li>
 <li><strong>data</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Data to be modeled.</li>
 <li><strong>weights</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Weights to multiply (data-model) for fit residual.</li>
-<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of minimization method to use (default is <cite>‘leastsq’</cite>).</li>
+<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of minimization method to use (default is <cite>‘leastsq’</cite>).</li>
 <li><strong>fcn_args</strong> (<em>sequence</em><em>, </em><em>optional</em>) – Positional arguments to send to model function.</li>
-<li><strong>fcn_dict</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments to send to model function.</li>
+<li><strong>fcn_dict</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments to send to model function.</li>
 <li><strong>iter_cb</strong> (<em>callable</em><em>, </em><em>optional</em>) – Function to call on each iteration of fit.</li>
-<li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to scale covariance matrix for uncertainty evaluation.</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
-<li><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
+<li><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to scale covariance matrix for uncertainty evaluation.</li>
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
+<li><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
 solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires the
 <cite>numdifftools</cite> package to be installed.</li>
 <li><strong>**fit_kws</strong> (<em>optional</em>) – Keyword arguments to send to minimization routine.</li>
@@ -1160,7 +1161,7 @@ solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> – Array for evaluated model.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)">numpy.ndarray</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)">numpy.ndarray</a></p>
 </td>
 </tr>
 </tbody>
@@ -1204,8 +1205,8 @@ the estimated model value for each component of the model.</p>
 <li><strong>data</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Data to be modeled.</li>
 <li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Parameters with initial values for model.</li>
 <li><strong>weights</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Weights to multiply (data-model) for fit residual.</li>
-<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of minimization method to use (default is <cite>‘leastsq’</cite>).</li>
-<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
+<li><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Name of minimization method to use (default is <cite>‘leastsq’</cite>).</li>
+<li><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em><em>, </em><em>one of 'raise'</em><em> (</em><em>default</em><em>)</em><em>, </em><em>'propagate'</em><em>, or </em><em>'omit'.</em>) – What to do when encountering NaNs when fitting Model.</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to send to minimization routine.</li>
 </ul>
 </td>
@@ -1226,8 +1227,8 @@ uncertainties and correlations.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>modelpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Known Model Parameters.</li>
-<li><strong>show_correl</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show list of sorted correlations (default is True).</li>
-<li><strong>min_correl</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) – Smallest correlation in absolute value to show (default is 0.1).</li>
+<li><strong>show_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show list of sorted correlations (default is True).</li>
+<li><strong>min_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Smallest correlation in absolute value to show (default is 0.1).</li>
 <li><strong>sort_pars</strong> (<em>callable</em><em>, </em><em>optional</em>) – Whether to show parameter names sorted in alphanumerical order
 (default is False). If False, then the parameters will be listed in
 the order as they were added to the Parameters dictionary. If callable,
@@ -1239,7 +1240,7 @@ from each list element.</li>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>text</strong> – Multi-line text of fit report.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)">str</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </td>
 </tr>
 </tbody>
@@ -1270,8 +1271,8 @@ accessed without recalculating them.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is True).</li>
-<li><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</li>
+<li><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is True).</li>
+<li><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments that are passed to the <cite>conf_interval</cite> function.</li>
 </ul>
 </td>
@@ -1279,7 +1280,7 @@ accessed without recalculating them.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Text of formatted report on confidence intervals.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)">str</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
 </td>
 </tr>
 </tbody>
@@ -1298,7 +1299,7 @@ uncertainties in the best-fit parameters.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Parameters, defaults to ModelResult.params.</li>
-<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) – Confidence level, i.e. how many sigma (default is 1).</li>
+<li><strong>sigma</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Confidence level, i.e. how many sigma (default is 1).</li>
 <li><strong>**kwargs</strong> (<em>optional</em>) – Values of options, independent variables, etcetera.</li>
 </ul>
 </td>
@@ -1306,7 +1307,7 @@ uncertainties in the best-fit parameters.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Uncertainty at each value of the model.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)">numpy.ndarray</a></p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)">numpy.ndarray</a></p>
 </td>
 </tr>
 </tbody>
@@ -1347,26 +1348,26 @@ fit, pass the argument <cite>show_init=True</cite>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</li>
-<li><strong>fitfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for fitted curve.</li>
-<li><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</li>
-<li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</li>
-<li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</li>
-<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
-<li><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated not
+<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</li>
+<li><strong>fitfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for fitted curve.</li>
+<li><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</li>
+<li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</li>
+<li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
+<li><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated not
 only at data points, but refined to contain <cite>numpoints</cite> points in
 total.</li>
 <li><strong>fig</strong> (<em>matplotlib.figure.Figure</em><em>, </em><em>optional</em>) – The figure to plot on. The default is None, which means use the
 current pyplot figure or create one if there is none.</li>
-<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for data points.</li>
-<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for fitted curve.</li>
-<li><strong>init_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for the initial
+<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for data points.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for fitted curve.</li>
+<li><strong>init_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for the initial
 conditions of the fit.</li>
-<li><strong>ax_res_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for the axes for the residuals plot.</li>
-<li><strong>ax_fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for the axes for the fit plot.</li>
-<li><strong>fig_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new figure, if there is one being created.</li>
-<li><strong>show_init</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show the initial conditions for the fit (default is False).</li>
-<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
+<li><strong>ax_res_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for the axes for the residuals plot.</li>
+<li><strong>ax_fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for the axes for the fit plot.</li>
+<li><strong>fig_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new figure, if there is one being created.</li>
+<li><strong>show_init</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show the initial conditions for the fit (default is False).</li>
+<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
 Options are one of <cite>[‘real’, ‘imag’, ‘abs’, ‘angle’]</cite>, which
 correspond to the numpy functions of the same name (default is ‘abs’).</li>
 </ul>
@@ -1415,22 +1416,22 @@ plotted.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</li>
-<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</li>
-<li><strong>fitfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for fitted curve.</li>
-<li><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</li>
-<li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</li>
-<li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</li>
-<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
-<li><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated not
+<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</li>
+<li><strong>fitfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for fitted curve.</li>
+<li><strong>initfmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for initial conditions for the fit.</li>
+<li><strong>xlabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the x-axis.</li>
+<li><strong>ylabel</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for labeling the y-axis.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
+<li><strong>numpoints</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – If provided, the final and initial fit curves are evaluated not
 only at data points, but refined to contain <cite>numpoints</cite> points in
 total.</li>
-<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for data points.</li>
-<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for fitted curve.</li>
-<li><strong>init_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for the initial
+<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for data points.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for fitted curve.</li>
+<li><strong>init_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for the initial
 conditions of the fit.</li>
-<li><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new axis, if there is one being created.</li>
-<li><strong>show_init</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show the initial conditions for the fit (default is False).</li>
-<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
+<li><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new axis, if there is one being created.</li>
+<li><strong>show_init</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show the initial conditions for the fit (default is False).</li>
+<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
 Options are one of <cite>[‘real’, ‘imag’, ‘abs’, ‘angle’]</cite>, which
 correspond to the numpy functions of the same name (default is ‘abs’).</li>
 </ul>
@@ -1477,12 +1478,12 @@ will also be plotted.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>ax</strong> (<em>matplotlib.axes.Axes</em><em>, </em><em>optional</em>) – The axes to plot on. The default in None, which means use the
 current pyplot axis or create one if there is none.</li>
-<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</li>
-<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.15)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
-<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for data points.</li>
-<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for fitted curve.</li>
-<li><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new axis, if there is one being created.</li>
-<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
+<li><strong>datafmt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – Matplotlib format string for data points.</li>
+<li><strong>yerr</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.16)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Array of uncertainties for data array.</li>
+<li><strong>data_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for data points.</li>
+<li><strong>fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments passed on to the plot function for fitted curve.</li>
+<li><strong>ax_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments for a new axis, if there is one being created.</li>
+<li><strong>parse_complex</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – How to reduce complex data for plotting.
 Options are one of <cite>[‘real’, ‘imag’, ‘abs’, ‘angle’]</cite>, which
 correspond to the numpy functions of the same name (default is ‘abs’).</li>
 </ul>
@@ -1605,9 +1606,9 @@ independent variables and with initial parameters.</p>
 <code class="descname">iter_cb</code><a class="headerlink" href="#lmfit.model.iter_cb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional callable function, to be called at each fit iteration.  This
 must take take arguments of <code class="docutils literal notranslate"><span class="pre">(params,</span> <span class="pre">iter,</span> <span class="pre">resid,</span> <span class="pre">*args,</span> <span class="pre">**kws)</span></code>, where
-<cite>params</cite> will have the current parameter values, <cite>iter</cite> the
-iteration, <cite>resid</cite> the current residual array, and <cite>*args</cite> and
-<cite>**kws</cite> as passed to the objective function.  See <a class="reference internal" href="fitting.html#fit-itercb-label"><span class="std std-ref">Using a Iteration Callback Function</span></a>.</p>
+<code class="docutils literal notranslate"><span class="pre">params</span></code> will have the current parameter values, <code class="docutils literal notranslate"><span class="pre">iter</span></code> the
+iteration, <code class="docutils literal notranslate"><span class="pre">resid</span></code> the current residual array, and <code class="docutils literal notranslate"><span class="pre">*args</span></code> and
+<code class="docutils literal notranslate"><span class="pre">**kws</span></code> as passed to the objective function.  See <a class="reference internal" href="fitting.html#fit-itercb-label"><span class="std std-ref">Using a Iteration Callback Function</span></a>.</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -1751,7 +1752,7 @@ evaluate the model function or redo the fit.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>modelresult</strong> (<em>ModelResult instance</em>) – ModelResult to be saved.</li>
-<li><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Name of file for saved ModelResult.</li>
+<li><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Name of file for saved ModelResult.</li>
 </ul>
 </td>
 </tr>
@@ -1768,8 +1769,8 @@ evaluate the model function or redo the fit.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Name of file containing saved ModelResult.</li>
-<li><strong>funcdefs</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary of custom function names and definitions.</li>
+<li><strong>fname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a>) – Name of file containing saved ModelResult.</li>
+<li><strong>funcdefs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Dictionary of custom function names and definitions.</li>
 </ul>
 </td>
 </tr>
@@ -1958,15 +1959,15 @@ created using the following code:</p>
 </pre></div>
 </div>
 <p>The components were generated after the fit using the
-<a class="reference internal" href="#lmfit.model.ModelResult.eval_components" title="lmfit.model.ModelResult.eval_components"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.eval_components()</span></code></a> method of the <cite>result</cite>, which returns
+<a class="reference internal" href="#lmfit.model.ModelResult.eval_components" title="lmfit.model.ModelResult.eval_components"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.eval_components()</span></code></a> method of the <code class="docutils literal notranslate"><span class="pre">result</span></code>, which returns
 a dictionary of the components, using keys of the model name
-(or <cite>prefix</cite> if that is set).  This will use the parameter values in
-<cite>result.params</cite> and the independent variables (<cite>x</cite>) used during the
-fit.  Note that while the <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> held in <cite>result</cite> does store the
-best parameters and the best estimate of the model in <cite>result.best_fit</cite>,
-the original model and parameters in <cite>pars</cite> are left unaltered.</p>
+(or <code class="docutils literal notranslate"><span class="pre">prefix</span></code> if that is set).  This will use the parameter values in
+<cite>result.params</cite> and the independent variables (<code class="docutils literal notranslate"><span class="pre">x</span></code>) used during the
+fit.  Note that while the <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> held in <code class="docutils literal notranslate"><span class="pre">result</span></code> does store the
+best parameters and the best estimate of the model in <code class="docutils literal notranslate"><span class="pre">result.best_fit</span></code>,
+the original model and parameters in <code class="docutils literal notranslate"><span class="pre">pars</span></code> are left unaltered.</p>
 <p>You can apply this composite model to other data sets, or evaluate the
-model at other values of <cite>x</cite>.  You may want to do this to give a finer or
+model at other values of <code class="docutils literal notranslate"><span class="pre">x</span></code>.  You may want to do this to give a finer or
 coarser spacing of data point, or to extrapolate the model outside the
 fitting range.  This can be done with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">xwide</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">3001</span><span class="p">)</span>
@@ -1974,7 +1975,7 @@ fitting range.  This can be done with:</p>
 </pre></div>
 </div>
 <p>In this example, the argument names for the model functions do not overlap.
-If they had, the <cite>prefix</cite> argument to <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> would have allowed
+If they had, the <code class="docutils literal notranslate"><span class="pre">prefix</span></code> argument to <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> would have allowed
 us to identify which parameter went with which component model.  As we will
 see in the next chapter, using composite models with the built-in models
 provides a simple way to build up complex models.</p>
@@ -2016,10 +2017,10 @@ doing:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mod</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn1</span><span class="p">)</span> <span class="o">+</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn2</span><span class="p">)</span> <span class="o">*</span> <span class="n">Model</span><span class="p">(</span><span class="n">fcn3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>will create a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompositeModel</span></code></a>.  Here, <cite>left</cite> will be <cite>Model(fcn1)</cite>,
-<cite>op</cite> will be <code class="xref py py-meth docutils literal notranslate"><span class="pre">operator.add()</span></code>, and <cite>right</cite> will be another
-CompositeModel that has a <cite>left</cite> attribute of <cite>Model(fcn2)</cite>, an <cite>op</cite> of
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">operator.mul()</span></code>, and a <cite>right</cite> of <cite>Model(fcn3)</cite>.</p>
+<p>will create a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompositeModel</span></code></a>.  Here, <code class="docutils literal notranslate"><span class="pre">left</span></code> will be <code class="docutils literal notranslate"><span class="pre">Model(fcn1)</span></code>,
+<code class="docutils literal notranslate"><span class="pre">op</span></code> will be <code class="xref py py-meth docutils literal notranslate"><span class="pre">operator.add()</span></code>, and <code class="docutils literal notranslate"><span class="pre">right</span></code> will be another
+CompositeModel that has a <code class="docutils literal notranslate"><span class="pre">left</span></code> attribute of <code class="docutils literal notranslate"><span class="pre">Model(fcn2)</span></code>, an <code class="docutils literal notranslate"><span class="pre">op</span></code> of
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">operator.mul()</span></code>, and a <code class="docutils literal notranslate"><span class="pre">right</span></code> of <code class="docutils literal notranslate"><span class="pre">Model(fcn3)</span></code>.</p>
 <p>To use a binary operator other than ‘+’, ‘-‘, ‘*’, or ‘/’ you can
 explicitly create a <a class="reference internal" href="#lmfit.model.CompositeModel" title="lmfit.model.CompositeModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">CompositeModel</span></code></a> with the appropriate binary
 operator.  For example, to convolve two models, you could define a simple
@@ -2167,8 +2168,8 @@ build complex models from testable sub-components.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

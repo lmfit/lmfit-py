@@ -13,7 +13,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Downloading and Installation" href="installation.html" />
@@ -157,7 +158,7 @@ sine wave, and so write an objective function like this:</p>
     <span class="k">return</span> <span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">model</span><span class="p">)</span> <span class="o">/</span> <span class="n">eps_data</span>
 </pre></div>
 </div>
-<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.1.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
+<p>To perform the minimization with <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html#module-scipy.optimize" title="(in SciPy v1.2.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scipy.optimize</span></code></a>, one would do this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="k">import</span> <span class="n">leastsq</span>
 
 <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.007</span><span class="p">]</span>
@@ -258,7 +259,7 @@ created:</p>
 objective function can simply express the parameterized phenomenon to be
 modeled, and is separate from the choice of parameters to be varied in the
 fit.</p>
-<p>The <cite>params</cite> object can be copied and modified to make many user-level
+<p>The <code class="docutils literal notranslate"><span class="pre">params</span></code> object can be copied and modified to make many user-level
 changes to the model and fitting process.  Of course, most of the
 information about how your data is modeled goes into the objective
 function, but the approach here allows some external control; that is,
@@ -300,8 +301,8 @@ provides a better determination of Parameters confidence levels.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

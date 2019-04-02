@@ -13,7 +13,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Help" href="support.html" />
@@ -130,7 +131,7 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>Lmfit works with Python versions 2.7 and 3.4 - 3.7. Support for Python 2.6
+<p>Lmfit works with <a class="reference external" href="https://python.org">Python</a> versions 2.7 and 3.4 - 3.7. Support for Python 2.6
 and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively.  Support
 for 2.7 is expected to end in early 2019.</p>
 <dl class="docutils">
@@ -138,14 +139,14 @@ for 2.7 is expected to end in early 2019.</p>
 <dd><ul class="first last simple">
 <li><a class="reference external" href="https://github.com/benjaminp/six">six</a> version 1.10 or higher.</li>
 <li><a class="reference external" href="http://numpy.org/">NumPy</a> version 1.10 or higher.</li>
-<li><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 0.17 or higher.</li>
+<li><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 0.19 or higher.</li>
 <li><a class="reference external" href="https://github.com/newville/asteval">asteval</a> version 0.9.12 or higher.</li>
 <li><a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a> version 3.0 or higher.</li>
 </ul>
 </dd>
 </dl>
 <p>All of these are readily available on PyPI, and should be installed
-automatically if installing with <cite>pip install lmfit</cite>.</p>
+automatically if installing with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lmfit</span></code>.</p>
 <p>In order to run the test suite, the <a class="reference external" href="https://pytest.org/">pytest</a> package is required.  Some
 functionality requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a>, <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>,
 <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>, or <a class="reference external" href="https://github.com/pbrod/numdifftools">numdifftools</a> packages.  These are not installed
@@ -153,7 +154,7 @@ automatically, but we highly recommend each of these packages.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is 0.9.12 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+<p>The latest stable version of lmfit is 0.9.13 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -173,7 +174,7 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 </div>
 <div class="section" id="development-version">
 <h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
-<p>To get the latest development version, use:</p>
+<p>To get the latest development version from the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>, use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lmfit</span><span class="o">/</span><span class="n">lmfit</span><span class="o">-</span><span class="n">py</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
@@ -181,6 +182,8 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
+<p>We welcome all contributions to lmfit! If you cloned the repository for this
+purpose, please read <a class="reference external" href="https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md">CONTRIBUTING.md</a> for more detailed instructions.</p>
 </div>
 <div class="section" id="testing">
 <h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
@@ -261,8 +264,8 @@ lists have also led to improvements in this code.
 <p>The LMFIT-py code is distributed under the following license:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BSD-3
 
-Copyright 2018 Matthew Newville, The University of Chicago
-	       Renee Otten, Brandeis University
+Copyright 2019 Matthew Newville, The University of Chicago
+               Renee Otten, Brandeis University
                Till Stensitzki, Freie Universitat Berlin
                A. R. J. Nelson, Australian Nuclear Science and Technology Organisation
                Antonino Ingargiola, University of California, Los Angeles
@@ -301,7 +304,7 @@ Some code has been taken from the scipy library whose licence is below.
 Copyright (c) 2001, 2002 Enthought, Inc.
 All rights reserved.
 
-Copyright (c) 2003-2016 SciPy Developers.
+Copyright (c) 2003-2019 SciPy Developers.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -329,8 +332,8 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
 
-Some code has been taken from the AMPGO library of Andrea Gavana which was
-released under an MIT license.
+Some code has been taken from the AMPGO library of Andrea Gavana, which was
+released under a MIT license.
 </pre></div>
 </div>
 </div>
@@ -366,8 +369,8 @@ released under an MIT license.
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>

@@ -13,7 +13,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Release Notes" href="whatsnew.html" />
@@ -158,8 +159,8 @@ allowing one to place constraints like:</p>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;frac_curve2&#39;</span><span class="p">,</span> <span class="n">expr</span><span class="o">=</span><span class="s1">&#39;1-frac_curve1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>as the value of the <cite>frac_curve1</cite> parameter is updated at each step in the
-fit, the value of <cite>frac_curve2</cite> will be updated so that the two values are
+<p>as the value of the <code class="docutils literal notranslate"><span class="pre">frac_curve1</span></code> parameter is updated at each step in the
+fit, the value of <code class="docutils literal notranslate"><span class="pre">frac_curve2</span></code> will be updated so that the two values are
 constrained to add to 1.0.  Of course, such a constraint could be placed in
 the fitting function, but the use of such constraints allows the end-user
 to modify the model of a more general-purpose fitting function.</p>
@@ -176,7 +177,7 @@ including Python’s bit- and logical operators:</p>
 <span class="o">==</span><span class="p">,</span> <span class="o">&gt;</span><span class="p">,</span> <span class="o">&gt;=</span><span class="p">,</span> <span class="o">&lt;</span><span class="p">,</span> <span class="o">&lt;=</span><span class="p">,</span> <span class="o">!=</span><span class="p">,</span> <span class="o">~</span><span class="p">,</span> <span class="ow">not</span><span class="p">,</span> <span class="ow">is</span><span class="p">,</span> <span class="ow">is</span> <span class="ow">not</span><span class="p">,</span> <span class="ow">in</span><span class="p">,</span> <span class="ow">not</span> <span class="ow">in</span>
 </pre></div>
 </div>
-<p>The values for <cite>e</cite> (2.7182818…) and <cite>pi</cite> (3.1415926…) are available, as
+<p>The values for <code class="docutils literal notranslate"><span class="pre">e</span></code> (2.7182818…) and <code class="docutils literal notranslate"><span class="pre">pi</span></code> (3.1415926…) are available, as
 are  several supported mathematical and trigonometric function:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">abs</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">acosh</span><span class="p">,</span> <span class="n">asin</span><span class="p">,</span> <span class="n">asinh</span><span class="p">,</span> <span class="n">atan</span><span class="p">,</span> <span class="n">atan2</span><span class="p">,</span> <span class="n">atanh</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span>
 <span class="n">copysign</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">cosh</span><span class="p">,</span> <span class="n">degrees</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">fabs</span><span class="p">,</span> <span class="n">factorial</span><span class="p">,</span>
@@ -219,9 +220,9 @@ that use an inequality, say, <span class="math notranslate nohighlight">\(x + y 
 can be done with algebraic constraints by recasting the
 problem, as <span class="math notranslate nohighlight">\(x + y = \delta\)</span> and <span class="math notranslate nohighlight">\(\delta \le
 10\)</span>.  That is, first, allow <span class="math notranslate nohighlight">\(x\)</span> to be held by the
-freely varying parameter <cite>x</cite>.  Next, define a parameter
-<cite>delta</cite> to be variable with a maximum value of 10, and
-define parameter <cite>y</cite> as <cite>delta - x</cite>:</p>
+freely varying parameter <code class="docutils literal notranslate"><span class="pre">x</span></code>.  Next, define a parameter
+<code class="docutils literal notranslate"><span class="pre">delta</span></code> to be variable with a maximum value of 10, and
+define parameter <code class="docutils literal notranslate"><span class="pre">`y</span></code> as <code class="docutils literal notranslate"><span class="pre">delta</span> <span class="pre">-</span> <span class="pre">x</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -229,7 +230,7 @@ define parameter <cite>y</cite> as <cite>delta - x</cite>:</p>
 </pre></div>
 </div>
 <p>The essential point is that an inequality still implies
-that a variable (here, <cite>delta</cite>) is needed to describe the
+that a variable (here, <code class="docutils literal notranslate"><span class="pre">delta</span></code>) is needed to describe the
 constraint.  The secondary point is that upper and lower
 bounds can be used as part of the inequality to make the
 definitions more convenient.</p>
@@ -301,8 +302,8 @@ expressions.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Matthew Newville, The University of Chicago, Till Stensitzki, Freie Universitat Berlin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
     </div>
   </body>
 </html>
