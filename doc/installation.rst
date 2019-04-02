@@ -22,9 +22,8 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-Lmfit works with `Python`_ versions 2.7 and 3.4 - 3.7. Support for Python 2.6
-and 3.3 ended with lmfit versions 0.9.4 and 0.9.8, respectively.  Support
-for 2.7 is expected to end in early 2019.
+Lmfit works with `Python`_ versions 2.7 and 3.5, 3.6, or 3.7. Support for
+2.7 is expected to end in late 2019.
 
 Lmfit requires the following Python packages, with versions given:
    * `six`_ version 1.10 or higher.
