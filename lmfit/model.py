@@ -949,8 +949,8 @@ class Model(object):
         # All remaining kwargs should correspond to independent variables.
         for name in kwargs:
             if name not in self.independent_vars:
-                warnings.warn("The keyword argument %s does not" % name +
-                              "match any arguments of the model function." +
+                warnings.warn("The keyword argument %s does not " % name +
+                              "match any arguments of the model function. " +
                               "It will be ignored.", UserWarning)
 
         # If any parameter is not initialized raise a more helpful error.

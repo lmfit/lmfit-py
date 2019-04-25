@@ -143,7 +143,9 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         if not result.errorbars:
             add("##  Warning: uncertainties could not be estimated:")
             if result.method in ('leastsq', 'least_squares') or HAS_NUMDIFFTOOLS:
-                for name in parnames:
+                parnames_varying = [par for par in result.params
+                                    if result.params[par].vary]
+                for name in parnames_varying:
                     par = params[name]
                     space = ' '*(namelen-len(name))
                     if np.allclose(par.value, par.init_value):

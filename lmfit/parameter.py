@@ -373,7 +373,7 @@ class Parameters(OrderedDict):
            Parameter.
 
         """
-        return OrderedDict(((p.name, p.value) for p in self.values()))
+        return OrderedDict((p.name, p.value) for p in self.values())
 
     def dumps(self, **kws):
         """Represent Parameters as a JSON string.
