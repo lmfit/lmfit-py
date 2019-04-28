@@ -1,8 +1,10 @@
-"""Tests for the calculation of FWHM/height for peak-like built-in models."""
+"""Tests for lineshape functions and built-in models."""
+
 import inspect
 import sys
 
 import numpy as np
+import pytest
 from scipy.optimize import fsolve
 
 from lmfit import lineshapes, models
@@ -24,9 +26,11 @@ def check_height_fwhm(x, y, lineshape, model):
         cen = np.exp(mu - out.params['sigma']**2)
     else:
         cen = mu
+
     # get arguments for lineshape
     args = {key: out.best_values[key] for key in
             inspect_args(lineshape)[0] if key != 'x'}
+
     # output format for assertion errors
     fmt = ("Program calculated values and real values do not match!\n"
            "{:^20s}{:^20s}{:^20s}{:^20s}\n"
@@ -54,7 +58,8 @@ def check_height_fwhm(x, y, lineshape, model):
                                                diff)
 
 
-def test_peak_like(peakdata):
+def test_height_fwhm_calculation(peakdata):
+    """Test for correctness of height and FWHM calculation."""
     # mu = 0
     # variance = 1.0
     # sigma = np.sqrt(variance)
@@ -79,3 +84,33 @@ def test_peak_like(peakdata):
     check_height_fwhm(x, y, lineshapes.donaich, models.DonaichModel())
     x = x-9  # Lognormal will only fit peaks with centers < 1
     check_height_fwhm(x, y, lineshapes.lognormal, models.LognormalModel())
+
+
+@pytest.mark.parametrize("lineshape", lineshapes.functions)
+def test_finite_output_lineshape(lineshape):
+    """Test for finite output of lineshape functions."""
+    x = np.linspace(0, 100)
+
+    # no need to test the lineshapes below
+    if lineshape in ['linear', 'exponential', 'sine', 'expsine', 'powerlaw',
+                     'parabolic', 'erf', 'erfc', 'wofz', 'gamma', 'gammaln']:
+        return None
+
+    elif lineshape in ['gaussian', 'lorentzian', 'damped_oscillator',
+                       'logistic', 'lognormal', 'students_t']:
+        func_args = (x, 1.0, x.size/2.0, 0.0)
+    elif lineshape in ['split_lorentzian', 'voigt', 'pvoigt', 'dho',
+                       'expgaussian', 'donaich', 'skewed_gaussian']:
+        func_args = (x, 1.0, x.size/2.0, 0.0, 0.0)
+    elif lineshape in ['moffat', 'pearson7', 'breit_wigner']:
+        func_args = (x, 1.0, x.size/2.0, 0.0, 1.0)
+    elif lineshape in ['skewed_voigt']:
+        func_args = (x, 1.0, x.size/2.0, 0.0, 0.0, 0.0)
+    elif lineshape == 'step':
+        func_args = (x, 1.0, x.size/2.0, 0.0, 'linear')
+    elif lineshape == 'rectangle':
+        func_args = (x, 1.0, x.size/2.0, 0.0, x.size/2.0, 0.0, 'linear')
+
+    ls = getattr(lineshapes, lineshape)
+    out = ls(*func_args)
+    assert np.all(np.isfinite(out))
