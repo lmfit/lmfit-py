@@ -246,3 +246,13 @@ class TestParameters(unittest.TestCase):
             p1['y'].set(expr='t+')
         assert(len(p1['y']._expr_eval.error) > 0)
         assert_almost_equal(p1['y'].value, 34.0)
+
+    def test_eval(self):
+        # check that eval() works with usersyms and parameter values
+        def myfun(x):
+            return 2.0 * x
+        p = Parameters(usersyms={"myfun": myfun})
+        p.add("a", value=4.0)
+        p.add("b", value=3.0)
+        assert_almost_equal(p.eval("myfun(2.0) * a"), 16)
+        assert_almost_equal(p.eval("b / myfun(3.0)"), 0.5)
