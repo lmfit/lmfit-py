@@ -12,6 +12,8 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          split_lorentzian, step, students_t, voigt)
 from .model import Model
 
+tiny = np.finfo(np.float).eps
+
 
 class DimensionalError(Exception):
     """Raise exception when number of independent variables is not one."""
@@ -40,8 +42,8 @@ def fwhm_expr(model):
 
 def height_expr(model):
     """Return constraint expression for maximum peak height."""
-    fmt = "{factor:.7f}*{prefix:s}amplitude/max(1.e-15, {prefix:s}sigma)"
-    return fmt.format(factor=model.height_factor, prefix=model.prefix)
+    fmt = "{factor:.7f}*{prefix:s}amplitude/max({}, {prefix:s}sigma)"
+    return fmt.format(tiny, factor=model.height_factor, prefix=model.prefix)
 
 
 def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
@@ -420,7 +422,7 @@ class SplitLorentzianModel(Model):
         self.set_param_hint('sigma_r', min=0)
         self.set_param_hint('fwhm', expr='sigma+sigma_r')
         self.set_param_hint(
-            'height', expr='2*amplitude/{:.7f}/(sigma+sigma_r)'.format(np.pi))
+            'height', expr='2*amplitude/{:.7f}/max({}, (sigma+sigma_r))'.format(np.pi, tiny))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -478,11 +480,11 @@ class VoigtModel(Model):
 
         fexpr = ("1.0692*{pre:s}gamma+" +
                  "sqrt(0.8664*{pre:s}gamma**2+5.545083*{pre:s}sigma**2)")
-        hexpr = ("({pre:s}amplitude/({pre:s}sigma*sqrt(2*pi)))*"
-                 "wofz((1j*{pre:s}gamma)/({pre:s}sigma*sqrt(2))).real")
+        hexpr = ("({pre:s}amplitude/(max({0}, {pre:s}sigma*sqrt(2*pi))))*"
+                 "wofz((1j*{pre:s}gamma)/(max({0}, {pre:s}sigma*sqrt(2)))).real")
 
         self.set_param_hint('fwhm', expr=fexpr.format(pre=self.prefix))
-        self.set_param_hint('height', expr=hexpr.format(pre=self.prefix))
+        self.set_param_hint('height', expr=hexpr.format(tiny, pre=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -530,10 +532,10 @@ class PseudoVoigtModel(Model):
         self.set_param_hint('fraction', value=0.5, min=0.0, max=1.0)
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
         fmt = ("(((1-{prefix:s}fraction)*{prefix:s}amplitude)/"
-               "({prefix:s}sigma*sqrt(pi/log(2)))+"
+               "max({0}, ({prefix:s}sigma*sqrt(pi/log(2))))+"
                "({prefix:s}fraction*{prefix:s}amplitude)/"
-               "(pi*{prefix:s}sigma))")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+               "max({0}, (pi*{prefix:s}sigma)))")
+        self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -574,7 +576,7 @@ class MoffatModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('beta')
-        self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/%sbeta)-1)" % (self.prefix, self.prefix))
+        self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/max(1e-3, %sbeta))-1)" % (self.prefix, self.prefix))
         self.set_param_hint('height', expr="%samplitude" % self.prefix)
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -618,8 +620,8 @@ class Pearson7Model(Model):
         fmt = ("sqrt(2**(1/{prefix:s}expon)-1)*2*{prefix:s}sigma")
         self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
         fmt = ("{prefix:s}amplitude * gamfcn({prefix:s}expon)/"
-               "(gamfcn(0.5)*gamfcn({prefix:s}expon-0.5)*{prefix:s}sigma)")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+               "max({0}, (gamfcn(0.5)*gamfcn({prefix:s}expon-0.5)*{prefix:s}sigma))")
+        self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -698,8 +700,8 @@ class BreitWignerModel(Model):
         fmt = ("{prefix:s}amplitude*{prefix:s}q**2")
         self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
         fmt = ("2*(sqrt({prefix:s}q**2*{prefix:s}sigma**2*({prefix:s}q**2+2))/"
-               "max(1.e-15, 2*({prefix:s}q**2)-2))")
-        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
+               "max({0}, 2*({prefix:s}q**2)-2))")
+        self.set_param_hint('fwhm', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -736,9 +738,9 @@ class LognormalModel(Model):
         self.set_param_hint('center', min=1.e-19)
         self.set_param_hint('sigma', min=0)
 
-        fmt = ("{prefix:s}amplitude/({prefix:s}sigma*sqrt(2*pi))"
+        fmt = ("{prefix:s}amplitude/max({0}, ({prefix:s}sigma*sqrt(2*pi)))"
                "*exp({prefix:s}sigma**2/2-{prefix:s}center)")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
         fmt = ("exp({prefix:s}center-{prefix:s}sigma**2+{prefix:s}sigma*sqrt("
                "2*log(2)))-"
                "exp({prefix:s}center-{prefix:s}sigma**2-{prefix:s}sigma*sqrt("
@@ -831,10 +833,10 @@ class DampedHarmonicOscillatorModel(Model):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', min=1.e-19)
         fmt = ("({prefix:s}amplitude*{prefix:s}sigma)/"
-               "(pi*(1-exp(-{prefix:s}center/{prefix:s}gamma)))*("
-               "1/{prefix:s}sigma**2-1/(4*{prefix:s}center**2+"
-               "{prefix:s}sigma**2))")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+               "max({0}, (pi*(1-exp(-{prefix:s}center/max({0}, {prefix:s}gamma)))))*"
+               "(1/max({0}, {prefix:s}sigma**2)-1/"
+               "max({0}, (4*{prefix:s}center**2+{prefix:s}sigma**2)))")
+        self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
         self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
@@ -1010,9 +1012,9 @@ class DonaichModel(Model):
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
-        fmt = ("{prefix:s}amplitude/({prefix:s}sigma**(1-{prefix:s}gamma))"
+        fmt = ("{prefix:s}amplitude/max({0}, ({prefix:s}sigma**(1-{prefix:s}gamma)))"
                "*cos(pi*{prefix:s}gamma/2)")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
+        self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
