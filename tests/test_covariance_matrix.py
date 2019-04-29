@@ -7,7 +7,8 @@ from numpy.testing import assert_allclose, assert_almost_equal
 import pytest
 
 from lmfit import Parameters, minimize
-from lmfit.models import VoigtModel
+from lmfit.lineshapes import exponential
+from lmfit.models import ExponentialModel, VoigtModel
 
 
 def check(para, real_val, sig=3):
@@ -108,19 +109,17 @@ def test_bounds_expression():
                         -4.390334984618851e-05, decimal=6)
 
 
-@pytest.mark.parametrize("fit_method", ['nelder', 'basinhopping', 'ampgo'])
+@pytest.mark.parametrize("fit_method", ['nelder', 'lbfgs'])
 def test_numdifftools_no_bounds(fit_method):
     pytest.importorskip("numdifftools")
-    # load data to be fitted
-    data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',
-                                   'test_peak.dat'))
-    x = data[:, 0]
-    y = data[:, 1]
 
-    # define the model and initialize parameters
-    mod = VoigtModel()
+    np.random.seed(7)
+    x = np.linspace(0, 100, num=50)
+    noise = np.random.normal(scale=0.25, size=x.size)
+    y = exponential(x, amplitude=5, decay=15) + noise
+
+    mod = ExponentialModel()
     params = mod.guess(y, x=x)
-    params['sigma'].set(min=-np.inf)
 
     # do fit, here with leastsq model
     result = mod.fit(y, params, x=x, method='leastsq')
@@ -140,7 +139,7 @@ def test_numdifftools_no_bounds(fit_method):
 
     perr = np.array(stderr) / np.array(vals)
     perr_ndt = np.array(stderr_ndt) / np.array(vals_ndt)
-    assert_almost_equal(perr_ndt, perr, decimal=4)
+    assert_almost_equal(perr_ndt, perr, decimal=3)
 
     # assert that parameter correlatations from leastsq and calculated from
     # the covariance matrix using numdifftools are very similar
@@ -190,7 +189,7 @@ def test_numdifftools_with_bounds(fit_method):
 
     perr = np.array(stderr) / np.array(vals)
     perr_ndt = np.array(stderr_ndt) / np.array(vals_ndt)
-    assert_almost_equal(perr_ndt, perr, decimal=4)
+    assert_almost_equal(perr_ndt, perr, decimal=3)
 
     # assert that parameter correlatations from leastsq and calculated from
     # the covariance matrix using numdifftools are very similar
