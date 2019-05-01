@@ -1,7 +1,7 @@
 """Basic model line shapes and distribution functions."""
 from __future__ import division
 
-from numpy import arctan, cos, exp, log, pi, sin, sqrt, where
+from numpy import arctan, cos, exp, finfo, float64, isnan, log, pi, sin, sqrt, where
 from numpy.testing import assert_allclose
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
@@ -11,7 +11,7 @@ log2 = log(2)
 s2pi = sqrt(2*pi)
 spi = sqrt(pi)
 s2 = sqrt(2.0)
-tiny = 1.e-13
+tiny = finfo(float64).eps
 
 functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'breit_wigner', 'damped_oscillator', 'dho', 'logistic', 'lognormal',
@@ -28,7 +28,8 @@ def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
         (amplitude/(s2pi*sigma)) * exp(-(1.0*x-center)**2 / (2*sigma**2))
 
     """
-    return (amplitude/(s2pi*sigma)) * exp(-(1.0*x-center)**2 / (2*sigma**2))
+    return ((amplitude/(max(tiny, s2pi*sigma)))
+            * exp(-(1.0*x-center)**2 / max(tiny, (2*sigma**2))))
 
 
 def lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0):
@@ -38,7 +39,8 @@ def lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0):
         (amplitude/(1 + ((1.0*x-center)/sigma)**2)) / (pi*sigma)
 
     """
-    return (amplitude/(1 + ((1.0*x-center)/sigma)**2)) / (pi*sigma)
+    return ((amplitude/(1 + ((1.0*x-center)/max(tiny, sigma))**2))
+            / max(tiny, (pi*sigma)))
 
 
 def split_lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0, sigma_r=1.0):
@@ -55,9 +57,9 @@ def split_lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0, sigma_r=1.0):
          + 1 / (1 + ((x - center) / sigma_r)**2) * (x >= center))
 
     """
-    return amplitude * 2 / pi / (sigma + sigma_r) * \
-        (1 / (1 + ((x - center) / sigma)**2) * (x < center)
-         + 1 / (1 + ((x - center) / sigma_r)**2) * (x >= center))
+    return amplitude * 2 / pi / max(tiny, (sigma + sigma_r)) * \
+        (1 / (1 + ((x - center) / max(tiny, sigma))**2) * (x < center)
+         + 1 / (1 + ((x - center) / max(tiny, sigma_r))**2) * (x >= center))
 
 
 def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
@@ -71,8 +73,8 @@ def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
     """
     if gamma is None:
         gamma = sigma
-    z = (x-center + 1j*gamma) / (sigma*s2)
-    return amplitude*wofz(z).real / (sigma*s2pi)
+    z = (x-center + 1j*gamma) / max(tiny, (sigma*s2))
+    return amplitude*wofz(z).real / max(tiny, (sigma*s2pi))
 
 
 def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
@@ -102,7 +104,7 @@ def moffat(x, amplitude=1, center=0., sigma=1, beta=1.):
         amplitude / (((x - center)/sigma)**2 + 1)**beta
 
     """
-    return amplitude / (((x - center)/sigma)**2 + 1)**beta
+    return amplitude / (((x - center)/max(tiny, sigma))**2 + 1)**beta
 
 
 def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
@@ -116,9 +118,9 @@ def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
     and beta() is the beta function.
 
     """
-    arg = (x-center)/sigma
+    arg = (x-center)/max(tiny, sigma)
     scale = amplitude * gamfcn(expon)/(gamfcn(0.5)*gamfcn(expon-0.5))
-    return scale*(1+arg**2)**(-expon)/sigma
+    return scale*(1+arg**2)**(-expon)/max(tiny, sigma)
 
 
 def breit_wigner(x, amplitude=1.0, center=0.0, sigma=1.0, q=1.0):
@@ -156,11 +158,13 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
         lp(x, center, sigma) = 1.0 / ((x+center)**2 + sigma**2)
 
     """
-    bose = (1.0 - exp(-x/gamma))
+    bose = (1.0 - exp(-x/max(tiny, gamma)))
     if isinstance(bose, (int, float)):
         bose = max(tiny, bose)
     else:
+        bose[where(isnan(bose))] = tiny
         bose[where(bose <= tiny)] = tiny
+
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)
     return amplitude*sigma/pi*(lm - lp)/bose
@@ -187,7 +191,8 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
         x = max(tiny, x)
     else:
         x[where(x <= tiny)] = tiny
-    return (amplitude/(x*sigma*s2pi)) * exp(-(log(x)-center)**2 / (2*sigma**2))
+    return ((amplitude/(x*max(tiny, sigma*s2pi))) * exp(-(log(x)-center)**2
+            / max(tiny, (2*sigma**2))))
 
 
 def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
@@ -201,8 +206,8 @@ def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
 
     """
     s1 = (sigma+1)/2.0
-    denom = (sqrt(sigma*pi)*gamfcn(sigma/2))
-    return amplitude*(1 + (x-center)**2/sigma)**(-s1) * gamfcn(s1) / denom
+    denom = max(tiny, (sqrt(sigma*pi)*gamfcn(max(tiny, sigma/2))))
+    return amplitude*(1 + (x-center)**2/max(tiny, sigma))**(-s1) * gamfcn(s1) / denom
 
 
 def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
@@ -217,7 +222,7 @@ def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
     """
     gss = gamma*sigma*sigma
     arg1 = gamma*(center + gss/2.0 - x)
-    arg2 = (center + gss - x)/(s2*sigma)
+    arg2 = (center + gss - x)/max(tiny, (s2*sigma))
     return amplitude*(gamma/2) * exp(arg1) * erfc(arg2)
 
 
@@ -232,9 +237,9 @@ def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     see http://www.casaxps.com/help_manual/line_shapes.htm
 
     """
-    arg = (x-center)/sigma
+    arg = (x-center)/max(tiny, sigma)
     gm1 = (1.0 - gamma)
-    scale = amplitude/(sigma**gm1)
+    scale = amplitude/max(tiny, (sigma**gm1))
     return scale*cos(pi*gamma/2 + gm1*arctan(arg))/(1 + arg**2)**(gm1/2)
 
 
@@ -251,7 +256,7 @@ def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):
     see https://en.wikipedia.org/wiki/Skew_normal_distribution
 
     """
-    asym = 1 + erf(gamma*(x-center)/(s2*sigma))
+    asym = 1 + erf(gamma*(x-center)/max(tiny, (s2*sigma)))
     return asym * gaussian(x, amplitude, center, sigma)
 
 
@@ -269,7 +274,7 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     see https://en.wikipedia.org/wiki/Skew_normal_distribution
 
     """
-    beta = skew/(s2*sigma)
+    beta = skew/max(tiny, (s2*sigma))
     asym = 1 + erf(beta*(x-center))
     return asym * voigt(x, amplitude, center, sigma, gamma=gamma)
 
@@ -307,10 +312,8 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     where arg = (x - center)/sigma
 
     """
-    if abs(sigma) < tiny:
-        sigma = tiny
+    out = (x - center)/max(tiny, sigma)
 
-    out = (x - center)/sigma
     if form == 'erf':
         out = 0.5*(1 + erf(out))
     elif form.startswith('logi'):
@@ -339,13 +342,9 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
     and   arg2 = -(x - center2)/sigma2
 
     """
-    if abs(sigma1) < tiny:
-        sigma1 = tiny
-    if abs(sigma2) < tiny:
-        sigma2 = tiny
+    arg1 = (x - center1)/max(tiny, sigma1)
+    arg2 = (center2 - x)/max(tiny, sigma2)
 
-    arg1 = (x - center1)/sigma1
-    arg2 = (center2 - x)/sigma2
     if form == 'erf':
         out = 0.5*(erf(arg1) + erf(arg2))
     elif form.startswith('logi'):

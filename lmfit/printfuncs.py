@@ -4,9 +4,8 @@ import re
 import numpy as np
 
 try:
-    import numdifftools
+    import numdifftools  # noqa: F401
     HAS_NUMDIFFTOOLS = True
-    flake8_is_wrong_but_easily_foold = numdifftools.Hessian
 except ImportError:
     HAS_NUMDIFFTOOLS = False
 
@@ -154,11 +153,10 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
                         add('    %s:%s  at boundary' % (name, space))
             else:
                 add("    this fitting method does not natively calculate uncertainties")
-                add("    and numdifftools is not installed for lmfit to do this.  Use")
+                add("    and numdifftools is not installed for lmfit to do this. Use")
                 add("    `pip install numdifftools` for lmfit to estimate uncertainties")
                 add("    with this fitting method.")
 
-    namelen = max([len(n) for n in parnames])
     add("[[Variables]]")
     for name in parnames:
         par = params[name]

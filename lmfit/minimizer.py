@@ -37,6 +37,13 @@ from ._ampgo import ampgo
 from .parameter import Parameter, Parameters
 from .printfuncs import fitreport_html_table
 
+# check for SHGO algorithm
+try:
+    from scipy.optimize import shgo as scipy_shgo
+    HAS_SHGO = True
+except ImportError:
+    HAS_SHGO = False
+
 # check for EMCEE
 try:
     import emcee
@@ -583,7 +590,7 @@ class Minimizer(object):
             to sum-of-squares, but can be replaced by other options.
 
         """
-        if self.result.method == 'brute':
+        if self.result.method in ['brute', 'shgo']:
             apply_bounds_transformation = False
         else:
             apply_bounds_transformation = True
@@ -1864,6 +1871,76 @@ class Minimizer(object):
 
         return result
 
+    def shgo(self, params=None, **kws):
+        """Use the `SHGO` algorithm to find the global minimum.
+
+        SHGO stands for "simplicial homology global optimization" and calls
+        :scipydoc:`optimize.shgo` using its default arguments.
+
+        Parameters
+        ----------
+        params : :class:`~lmfit.parameter.Parameters`, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+        **kws : dict, optional
+            Minimizer options to pass to the SHGO algorithm.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the parameters from the SHGO method.
+            The return values specific to :scipydoc:`optimize.shgo` (`x`,
+            `xl`, `fun`, `funl`, `nfev`, `nit`, `nlfev`, `nlhev`, and
+            `nljev`) are stored as `shgo_<parname>` attributes.
+
+
+        .. versionadded:: 0.9.14
+
+        """
+        if not HAS_SHGO:
+            raise NotImplementedError('You must have SciPy >= 1.2 to use the '
+                                      'shgo method.')
+
+        result = self.prepare_fit(params=params)
+        result.method = 'shgo'
+
+        shgo_kws = dict(constraints=None, n=100, iters=1, callback=None,
+                        minimizer_kwargs=None, options=None,
+                        sampling_method='simplicial')
+
+        shgo_kws.update(self.kws)
+        shgo_kws.update(kws)
+
+        varying = np.asarray([par.vary for par in self.params.values()])
+        bounds = np.asarray([(par.min, par.max) for par in
+                             self.params.values()])[varying]
+
+        try:
+            ret = scipy_shgo(self.penalty, bounds, **shgo_kws)
+        except AbortFitException:
+            pass
+
+        if not result.aborted:
+            for attr, value in ret.items():
+                if attr in ['success', 'message']:
+                    setattr(result, attr, value)
+                else:
+                    setattr(result, 'shgo_{}'.format(attr), value)
+
+            result.residual = self.__residual(result.shgo_x, False)
+            result.nfev -= 1
+
+        result._calculate_statistics()
+
+        # calculate the cov_x and estimate uncertanties/correlations
+        if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
+                len(result.residual) > len(result.var_names)):
+            result.covar = self._calculate_covariance_matrix(result.shgo_x)
+            if result.covar is not None:
+                self._calculate_uncertainties_correlations()
+
+        return result
+
     def minimize(self, method='leastsq', params=None, **kws):
         """Perform the minimization.
 
@@ -1893,6 +1970,7 @@ class Minimizer(object):
             - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
             - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
+            - `'shgo'`: Simplicial Homology Global Optimization
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -1940,6 +2018,8 @@ class Minimizer(object):
             function = self.ampgo
         elif user_method == 'emcee':
             function = self.emcee
+        elif user_method == 'shgo':
+            function = self.shgo
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -2213,6 +2293,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
         - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
+        - `'shgo'`: Simplicial Homology Global Optimization
 
         In most cases, these methods wrap and use the method of the same
         name from `scipy.optimize`, or use `scipy.optimize.minimize` with
