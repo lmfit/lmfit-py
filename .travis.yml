@@ -41,7 +41,6 @@ install:
 
 script:
     - cd tests
-    - pytest
     - coverage run --source=lmfit -m pytest
     - coverage report -m
     # test building the documentation
