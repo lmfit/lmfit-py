@@ -188,6 +188,22 @@ class Parameters(OrderedDict):
         # then add all the parameters
         self.add_many(*state['params'])
 
+    def eval(self, expr):
+        """Evaluate a statement using the asteval Interpreter.
+
+        Parameters
+        ----------
+        expr : string
+            An expression containing parameter names and other symbols
+            recognizable by the asteval Interpreter.
+
+        Returns
+        -------
+           The result of the expression.
+
+        """
+        return self._asteval.eval(expr)
+
     def update_constraints(self):
         """Update all constrained parameters, checking that dependencies are
         evaluated as needed."""

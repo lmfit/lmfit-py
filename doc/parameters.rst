@@ -74,6 +74,8 @@ The :class:`Parameters` class
 
     .. automethod:: dump
 
+    .. automethod:: eval
+
     .. automethod:: loads
 
     .. automethod:: load
