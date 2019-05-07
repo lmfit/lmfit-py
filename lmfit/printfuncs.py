@@ -284,7 +284,7 @@ def params_html_table(params):
             serr, perr = '', ''
             if p.stderr is not None:
                 serr = gformat(p.stderr)
-            if p.value != 0.0:
+            if not p.value == 0.:
                 perr = '%.2f%%' % (100 * p.stderr / p.value)
             rows.extend([serr, perr])
         rows.extend((p.init_value, gformat(p.min), gformat(p.max),
