@@ -9,6 +9,8 @@ from numpy.testing import assert_, assert_almost_equal, assert_equal
 
 from lmfit import Model, Parameter, Parameters
 
+from lmfit.printfuncs import params_html_table
+
 
 class TestParameters(unittest.TestCase):
 
@@ -256,3 +258,12 @@ class TestParameters(unittest.TestCase):
         p.add("b", value=3.0)
         assert_almost_equal(p.eval("myfun(2.0) * a"), 16)
         assert_almost_equal(p.eval("b / myfun(3.0)"), 0.5)
+
+    def test_params_html_table(self):
+        p1 = Parameters()
+        p1.add('t', 2.0, min=0.0, max=5.0)
+        p1.add('x', 0.0, )
+        
+        html = params_html_table(p1)
+        self.assertIsInstance(html, str)
+
