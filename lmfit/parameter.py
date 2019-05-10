@@ -4,6 +4,7 @@ from __future__ import division
 from collections import OrderedDict
 from copy import deepcopy
 import json
+import importlib
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, nan, sin, sqrt
@@ -183,8 +184,22 @@ class Parameters(OrderedDict):
         # an Error. Another way of doing this would be to remove all the expr
         # from the Parameter instances before they get added, then to restore
         # them.
-        self._asteval.symtable.update(state['unique_symbols'])
+        # self._asteval.symtable.update(state['unique_symbols'])
 
+        symtab = self._asteval.symtable
+        for key, val in state['unique_symbols'].items():
+            if key not in symtab:
+                if isinstance(val, dict):
+                    value = val.get('__name__', None)
+                    symname = val.get('__name__', None)
+                    importer = val.get('importer', None)
+                    if value is None and symname is not None and importer is not None:
+                        _mod = importlib.import_module(importer)
+                        value = getattr(_mod, symname, None)
+                    if value is not None:
+                        symtab[key] = value
+                else:
+                    symtab[key] = val
         # then add all the parameters
         self.add_many(*state['params'])
 
