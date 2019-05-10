@@ -230,11 +230,11 @@ def test_saveload_usersyms():
 
     assert_param_between(result.params['sigma'], 0.7, 2.1)
     assert_param_between(result.params['center'], 8.4, 8.6)
-    assert_param_between(result.params['height'], 8.2, 1.0)
+    assert_param_between(result.params['height'], 0.2, 1.0)
 
     time.sleep(0.25)
     result2 = load_modelresult(savefile)
 
     assert_param_between(result2.params['sigma'], 0.7, 2.1)
     assert_param_between(result2.params['center'], 8.4, 8.6)
-    assert_param_between(result2.params['height'], 8.2, 1.0)
+    assert_param_between(result2.params['height'], 0.2, 1.0)
