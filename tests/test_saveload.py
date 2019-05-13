@@ -10,7 +10,9 @@ import lmfit.jsonutils
 from lmfit import Parameters
 from lmfit.model import (load_model, load_modelresult, save_model,
                          save_modelresult, Model, ModelResult)
-from lmfit.models import ExponentialModel, GaussianModel
+from lmfit.models import ExponentialModel, GaussianModel, VoigtModel
+from lmfit.lineshapes import gaussian, lorentzian
+
 from lmfit_testutils import assert_between, assert_param_between
 
 y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
@@ -208,3 +210,31 @@ def test_saveload_modelresult_roundtrip():
     assert_param_between(result2.params['b'], 0.20, 0.25)
     assert_param_between(result3.params['a'], 0.48, 0.52)
     assert_param_between(result3.params['b'], 0.20, 0.25)
+
+
+def test_saveload_usersyms():
+    """Test save/load of modelresult with non-trivial user symbols,
+    this example uses a VoigtModel, wheree `wofz()` is used in a
+    constraint expression"""
+    x = np.linspace(0, 20, 501)
+    y = gaussian(x, 1.1, 8.5, 2) + lorentzian(x, 1.7, 8.5, 1.5)
+    np.random.seed(20)
+    y = y + np.random.normal(size=len(x), scale=0.025)
+
+    model = VoigtModel()
+    pars = model.guess(y, x=x)
+    result = model.fit(y, pars, x=x)
+
+    savefile = 'tmpvoigt_modelresult.sav'
+    save_modelresult(result, savefile)
+
+    assert_param_between(result.params['sigma'], 0.7, 2.1)
+    assert_param_between(result.params['center'], 8.4, 8.6)
+    assert_param_between(result.params['height'], 0.2, 1.0)
+
+    time.sleep(0.25)
+    result2 = load_modelresult(savefile)
+
+    assert_param_between(result2.params['sigma'], 0.7, 2.1)
+    assert_param_between(result2.params['center'], 8.4, 8.6)
+    assert_param_between(result2.params['height'], 0.2, 1.0)
