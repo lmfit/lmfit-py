@@ -175,6 +175,8 @@ uncertainties and correlations if ``calc_covar`` is True (default).
  | Simplicial Homology      |  ``shgo``                                                        |
  | Global Ooptimization     |                                                                  |
  +--------------------------+------------------------------------------------------------------+
+ | Dual Annealing           |  ``dual_annealing``                                              |
+ +--------------------------+------------------------------------------------------------------+
  | Maximum likelihood via   |  ``emcee``                                                       |
  | Monte-Carlo Markov Chain |                                                                  |
  +--------------------------+------------------------------------------------------------------+
@@ -402,6 +404,8 @@ For more information, check the examples in ``examples/lmfit_brute_example.ipynb
 .. automethod:: Minimizer.ampgo
 
 .. automethod:: Minimizer.shgo
+
+.. automethod:: Minimizer.dual_annealing
 
 .. automethod:: Minimizer.emcee
 
