@@ -37,12 +37,15 @@ from ._ampgo import ampgo
 from .parameter import Parameter, Parameters
 from .printfuncs import fitreport_html_table
 
-# check for SHGO algorithm
+# check for SHGO and dual_annealing algorithms
 try:
     from scipy.optimize import shgo as scipy_shgo
+    from scipy.optimize import dual_annealing as scipy_dual_annealing
     HAS_SHGO = True
+    HAS_DUAL_ANNEALING = True
 except ImportError:
     HAS_SHGO = False
+    HAS_DUAL_ANNEALING = False
 
 # check for EMCEE
 try:
@@ -590,7 +593,7 @@ class Minimizer(object):
             to sum-of-squares, but can be replaced by other options.
 
         """
-        if self.result.method in ['brute', 'shgo']:
+        if self.result.method in ['brute', 'shgo', 'dual_annealing']:
             apply_bounds_transformation = False
         else:
             apply_bounds_transformation = True
@@ -1941,6 +1944,81 @@ class Minimizer(object):
 
         return result
 
+    def dual_annealing(self, params=None, **kws):
+        """Use the `dual_annealing` algorithm to find the global minimum.
+
+        This method calls :scipydoc:`optimize.dual_annealing` using its
+        default arguments.
+
+        Parameters
+        ----------
+        params : :class:`~lmfit.parameter.Parameters`, optional
+            Contains the Parameters for the model. If None, then the
+            Parameters used to initialize the Minimizer object are used.
+        **kws : dict, optional
+            Minimizer options to pass to the dual_annealing algorithm.
+
+        Returns
+        -------
+        :class:`MinimizerResult`
+            Object containing the parameters from the dual_annealing method.
+            The return values specific to :scipydoc:`optimize.dual_annealing`
+            (`x`, `fun`, `nfev`, `nhev`, `njev`, and `nit`) are stored as
+            `da_<parname>` attributes.
+
+
+        .. versionadded:: 0.9.14
+
+        """
+        if not HAS_DUAL_ANNEALING:
+            raise NotImplementedError('You must have SciPy >= 1.2 to use the'
+                                      ' dual_annealing method')
+
+        result = self.prepare_fit(params=params)
+        result.method = 'dual_annealing'
+
+        da_kws = dict(maxiter=1000, local_search_options={},
+                      initial_temp=5230.0, restart_temp_ratio=2e-05,
+                      visit=2.62, accept=-5.0, maxfun=10000000.0, seed=None,
+                      no_local_search=False, callback=None, x0=None)
+
+        da_kws.update(self.kws)
+        da_kws.update(kws)
+
+        varying = np.asarray([par.vary for par in self.params.values()])
+        bounds = np.asarray([(par.min, par.max) for par in
+                             self.params.values()])[varying]
+
+        if not np.all(np.isfinite(bounds)):
+            raise ValueError('dual_annealing requires finite bounds for all'
+                             ' varying parameters')
+
+        try:
+            ret = scipy_dual_annealing(self.penalty, bounds, **da_kws)
+        except AbortFitException:
+            pass
+
+        if not result.aborted:
+            for attr, value in ret.items():
+                if attr in ['success', 'message']:
+                    setattr(result, attr, value)
+                else:
+                    setattr(result, 'da_{}'.format(attr), value)
+
+            result.residual = self.__residual(result.da_x, False)
+            result.nfev -= 1
+
+        result._calculate_statistics()
+
+        # calculate the cov_x and estimate uncertanties/correlations
+        if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
+                len(result.residual) > len(result.var_names)):
+            result.covar = self._calculate_covariance_matrix(result.da_x)
+            if result.covar is not None:
+                self._calculate_uncertainties_correlations()
+
+        return result
+
     def minimize(self, method='leastsq', params=None, **kws):
         """Perform the minimization.
 
@@ -1970,7 +2048,8 @@ class Minimizer(object):
             - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
             - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
-            - `'shgo'`: Simplicial Homology Global Optimization
+            - `'shgo'`: Simplicial Homology Global Optimization (SciPy >= 1.2)
+            - `'dual_annealing'`: Dual Annealing optimization (SciPy >= 1.2)
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -2020,6 +2099,8 @@ class Minimizer(object):
             function = self.emcee
         elif user_method == 'shgo':
             function = self.shgo
+        elif user_method == 'dual_annealing':
+            function = self.dual_annealing
         else:
             function = self.scalar_minimize
             for key, val in SCALAR_METHODS.items():
@@ -2293,7 +2374,8 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
         - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
-        - `'shgo'`: Simplicial Homology Global Optimization
+        - `'shgo'`: Simplicial Homology Global Optimization (SciPy >= 1.2)
+        - `'dual_annealing'`: Dual Annealing optimization (SciPy >= 1.2)
 
         In most cases, these methods wrap and use the method of the same
         name from `scipy.optimize`, or use `scipy.optimize.minimize` with
