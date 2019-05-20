@@ -285,7 +285,7 @@ def params_html_table(params):
             if p.stderr is not None:
                 serr = gformat(p.stderr)
             try:
-                perr = '%.2f%%' % (100 * p.stderr / p.value)
+                perr = '({.2%})'.format(p.stderr / p.value)
             except ZeroDivisionError:
                 perr = ''
             rows.extend([serr, perr])
