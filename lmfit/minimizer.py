@@ -1681,7 +1681,9 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'brute'
-        result.nfev -= 1  # correct for "pre-fit" initialization/checks
+        # FIXME: remove after requirement for scipy >= 1.3
+        if int(major) == 0 or (int(major) == 1 and int(minor) < 3):
+            result.nfev -= 1  # correct for "pre-fit" initialization/checks
 
         brute_kws = dict(full_output=1, finish=None, disp=False)
 
