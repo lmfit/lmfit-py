@@ -152,10 +152,10 @@ def test_numdifftools_no_bounds(fit_method):
 
 
 @pytest.mark.parametrize("fit_method", ['nelder', 'basinhopping', 'ampgo',
-                                        'shgo'])
+                                        'shgo', 'dual_annealing'])
 def test_numdifftools_with_bounds(fit_method):
     pytest.importorskip("numdifftools")
-    if fit_method == 'shgo':
+    if fit_method in ['shgo', 'dual_annealing']:
         pytest.importorskip("scipy", minversion="1.2")
 
     # load data to be fitted
