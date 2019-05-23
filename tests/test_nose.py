@@ -452,6 +452,9 @@ class CommonMinimizerTest(unittest.TestCase):
 
         check_paras(out.params, self.p_true, sig=3)
 
+        out_unweighted = self.mini.minimize(method='emcee', is_weighted=False)
+        assert out_unweighted.method == 'emcee'
+
     @dec.slow
     def test_emcee_PT(self):
         # test emcee with parallel tempering

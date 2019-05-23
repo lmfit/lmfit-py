@@ -1166,7 +1166,6 @@ class Minimizer(object):
             tparams = None
 
         result = self.prepare_fit(params=tparams)
-        result.method = 'emcee'
         params = result.params
 
         # check if the userfcn returns a vector of residuals
@@ -1181,6 +1180,8 @@ class Minimizer(object):
                 # have to re-prepare the fit
                 result = self.prepare_fit(params)
                 params = result.params
+
+        result.method = 'emcee'
 
         # Removing internal parameter scaling. We could possibly keep it,
         # but I don't know how this affects the emcee sampling.
