@@ -278,29 +278,29 @@ def params_html_table(params):
         cell(h, cat='th')
     add('</tr>')
 
-    for p in params.values():
-        rows = [p.name, gformat(p.value)]
+    for par in params.values():
+        rows = [par.name, gformat(par.value)]
         if has_err:
-            serr, perr = '', ''
-            if p.stderr is not None:
-                serr = gformat(p.stderr)
+            serr = ''
+            if par.stderr is not None:
+                serr = gformat(par.stderr)
             try:
-                perr = '({.2%})'.format(p.stderr / p.value)
+                spercent = '({:.2%})'.format(abs(par.stderr/par.value))
             except ZeroDivisionError:
-                perr = ''
-            rows.extend([serr, perr])
-        rows.extend((p.init_value, gformat(p.min), gformat(p.max),
-                     '%s' % p.vary))
+                spercent = ''
+            rows.extend([serr, spercent])
+        rows.extend((par.init_value, gformat(par.min),
+                     gformat(par.max), '%s' % par.vary))
         if has_expr:
             expr = ''
-            if p.expr is not None:
-                expr = p.expr
+            if par.expr is not None:
+                expr = par.expr
             rows.append(expr)
 
         if has_brute:
             brute_step = 'None'
-            if p.brute_step is not None:
-                brute_step = gformat(p.brute_step)
+            if par.brute_step is not None:
+                brute_step = gformat(par.brute_step)
             rows.append(brute_step)
 
         add('<tr>')
