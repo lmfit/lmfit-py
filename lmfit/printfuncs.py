@@ -284,10 +284,10 @@ def params_html_table(params):
             serr = ''
             if par.stderr is not None:
                 serr = gformat(par.stderr)
-            try:
-                spercent = '({:.2%})'.format(abs(par.stderr/par.value))
-            except ZeroDivisionError:
-                spercent = ''
+                try:
+                    spercent = '({:.2%})'.format(abs(par.stderr/par.value))
+                except ZeroDivisionError:
+                    spercent = ''
             rows.extend([serr, spercent])
         rows.extend((par.init_value, gformat(par.min),
                      gformat(par.max), '%s' % par.vary))
