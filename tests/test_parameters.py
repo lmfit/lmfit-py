@@ -263,7 +263,19 @@ class TestParameters(unittest.TestCase):
         p1 = Parameters()
         p1.add('t', 2.0, min=0.0, max=5.0)
         p1.add('x', 0.0, )
-        
+
         html = params_html_table(p1)
         self.assertIsInstance(html, str)
 
+    def test_add_params_expr_outoforder(self):
+        params1 = Parameters()
+        params1.add("a", value=1.0)
+
+        params2 = Parameters()
+        params2.add("b", value=1.0)
+        params2.add("c", value=2.0)
+        params2['b'].expr = 'c/2'
+
+        params = params1 + params2
+        assert('b' in params)
+        assert_almost_equal(params['b'].value, 1.0)
