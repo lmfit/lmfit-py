@@ -387,34 +387,16 @@ class Parameters(OrderedDict):
         >>> params.add_many(f, g)
 
         """
-        def _addpar(para):
-            if isinstance(para, Parameter):
-                self.__setitem__(para.name, para)
-            else:
-                param = Parameter(*para)
-                self.__setitem__(param.name, param)
-
-        missing = []
+        __params = []
         for par in parlist:
-            try:
-                _addpar(par)
-            except NameError:
-                missing.append(par)
-                if par.name in self.keys():
-                    self.pop(par.name)
+            if not isinstance(par, Parameter):
+                par = Parameter(*par)
+            __params.append(par)
+            par._delay_asteval = True
+            self.__setitem__(par.name, par)
 
-        nmissing = len(missing)
-        count = 0
-        while len(missing) > 0 and count < 2 + nmissing**2:
-            for par in missing:
-                try:
-                    _addpar(par)
-                    missing.remove(par)
-                except NameError:
-                    pass
-                count += 1
-        if len(missing) > 0:
-            raise ValueError("error setting parameters: %s" % missing)
+        for para in __params:
+            para._delay_asteval = False
 
     def valuesdict(self):
         """Return an ordered dictionary of parameter values.
