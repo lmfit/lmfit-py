@@ -1602,7 +1602,7 @@ class Minimizer(object):
 
         return result
 
-    def brute(self, params=None, Ns=20, keep=50):
+    def brute(self, params=None, Ns=20, keep=50, workers=1):
         """Use the `brute` method to find the global minimum of a function.
 
         The following parameters are passed to :scipydoc:`optimize.brute`
@@ -1636,6 +1636,9 @@ class Minimizer(object):
             Number of best candidates from the brute force method that are
             stored in the :attr:`candidates` attribute. If 'all', then all grid
             points from :scipydoc:`optimize.brute` are stored as candidates.
+        workers : int or map-like callable, optional
+            For parallel evaluation of the grid, added in SciPy v1.3 (see
+            :scipydoc:`optimize.brute` for more details).
 
         Returns
         -------
@@ -1682,11 +1685,16 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'brute'
+
         # FIXME: remove after requirement for scipy >= 1.3
         if int(major) == 0 or (int(major) == 1 and int(minor) < 3):
             result.nfev -= 1  # correct for "pre-fit" initialization/checks
 
         brute_kws = dict(full_output=1, finish=None, disp=False)
+        # keyword 'workers' is introduced in SciPy v1.3
+        # FIXME: remove this check after updating the requirement >= 1.3
+        if int(major) == 1 and int(minor) >= 3:
+            brute_kws.update({'workers': workers})
 
         varying = np.asarray([par.vary for par in self.params.values()])
         replace_none = lambda x, sign: sign*np.inf if x is None else x
