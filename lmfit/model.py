@@ -14,7 +14,7 @@ from scipy.stats import t
 from . import Minimizer, Parameter, Parameters, lineshapes
 from .confidence import conf_interval
 from .jsonutils import HAS_DILL, decode4js, encode4js
-from .minimizer import validate_nan_policy, MinimizerResult
+from .minimizer import MinimizerResult
 from .printfuncs import ci_report, fit_report, fitreport_html_table
 
 # Use pandas.isnull for aligning missing data if pandas is available.
@@ -191,7 +191,7 @@ class Model(object):
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 nan_policy='raise', missing=None, prefix='', name=None, **kws):
+                 nan_policy='raise', prefix='', name=None, **kws):
         """Create a model from a user-supplied model function.
 
         The model function will normally take an independent variable
@@ -211,8 +211,6 @@ class Model(object):
         nan_policy : str, optional
             How to handle NaN and missing values in data. Must be one of
             'raise' (default), 'propagate', or 'omit'. See Note below.
-        missing : str, optional
-            Synonym for 'nan_policy' for backward compatibility.
         prefix : str, optional
             Prefix used for the model.
         name : str, optional
@@ -236,12 +234,7 @@ class Model(object):
 
            - 'propagate' : do nothing
 
-           -  'omit' : (was 'drop') drop missing data
-
-        4. The `missing` argument is deprecated in lmfit 0.9.8 and will be
-        removed in a later version. Use `nan_policy` instead, as it is
-        consistent with the Minimizer class.
-
+           -  'omit' : drop missing data
 
         Examples
         --------
@@ -271,12 +264,7 @@ class Model(object):
         self.independent_vars = independent_vars
         self._func_allargs = []
         self._func_haskeywords = False
-        if missing is not None:
-            nan_policy = missing
-            warnings.warn("The keyword 'missing' is deprecated as of lmfit "
-                          "0.9.13 and will be removed in the next release. "
-                          "Use 'nan_policy' instead.", FutureWarning)
-        self.nan_policy = validate_nan_policy(nan_policy)
+        self.nan_policy = nan_policy
 
         self.opts = kws
         self.param_hints = OrderedDict()
@@ -979,7 +967,7 @@ class Model(object):
 
         # Handle null/missing values.
         if nan_policy is not None:
-            self.nan_policy = validate_nan_policy(nan_policy)
+            self.nan_policy = nan_policy
 
         mask = None
         if self.nan_policy == 'omit':
@@ -1346,7 +1334,7 @@ class ModelResult(Minimizer):
         if method is not None:
             self.method = method
         if nan_policy is not None:
-            self.nan_policy = validate_nan_policy(nan_policy)
+            self.nan_policy = nan_policy
 
         self.ci_out = None
         self.userargs = (self.data, self.weights)

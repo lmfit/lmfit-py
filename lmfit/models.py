@@ -94,8 +94,6 @@ COMMON_INIT_DOC = """
     nan_policy : str, optional
         How to handle NaN and missing values in data. Must be one of:
         'raise' (default), 'propagate', or 'omit'. See Notes below.
-    missing : str, optional
-        Synonym for 'nan_policy' for backward compatibility.
     **kwargs : optional
         Keyword arguments to pass to :class:`Model`.
 
@@ -106,11 +104,7 @@ COMMON_INIT_DOC = """
 
         - 'raise' : Raise a ValueError (default)
         - 'propagate' : do nothing
-        - 'omit' : (was 'drop') drop missing data
-
-    2. The `missing` argument is deprecated in lmfit 0.9.8 and will be
-    removed in a later version. Use `nan_policy` instead, as it is
-    consistent with the Minimizer class.
+        - 'omit' : drop missing data
 
     """
 
@@ -1224,8 +1218,6 @@ class ExpressionModel(Model):
         nan_policy : str, optional
             How to handle NaN and missing values in data. Must be one of:
             'raise' (default), 'propagate', or 'omit'. See Notes below.
-        missing : str, optional
-            Synonym for 'nan_policy' for backward compatibility.
         **kws : optional
             Keyword arguments to pass to :class:`Model`.
 
@@ -1241,11 +1233,7 @@ class ExpressionModel(Model):
 
             - 'raise' : Raise a ValueError (default)
             - 'propagate' : do nothing
-            - 'omit' : (was 'drop') drop missing data
-
-        4. The `missing` argument is deprecated in lmfit 0.9.8 and will be
-        removed in a later version. Use `nan_policy` instead, as it is
-        consistent with the Minimizer class.
+            - 'omit' : drop missing data
 
         """
         # create ast evaluator, load custom functions
