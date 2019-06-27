@@ -22,9 +22,6 @@ provided for exploring minmization problems where the approximation of
 estimating Parameter uncertainties from the covariance matrix is
 questionable. """
 
-with open('requirements.txt', 'r') as f:
-    install_reqs = f.read().splitlines()
-
 setup(name='lmfit',
       version=versioneer.get_version(),
       cmdclass=versioneer.get_cmdclass(),
@@ -32,7 +29,11 @@ setup(name='lmfit',
       author_email='matt.newville@gmail.com',
       url='https://lmfit.github.io/lmfit-py/',
       download_url='https://lmfit.github.io//lmfit-py/',
-      install_requires=install_reqs,
+      install_requires=['asteval>=0.9.12',
+                        'numpy>=1.10',
+                        'scipy>=0.19',
+                        'six>1.10',
+                        'uncertainties>=3.0'],
       python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
       license='BSD-3',
       description="Least-Squares Minimization with Bounds and Constraints",
