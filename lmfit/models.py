@@ -427,8 +427,8 @@ class SplitLorentzianModel(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
-        sigma = pars['sigma']
-        pars['sigma_r'].set(value=sigma.value, min=sigma.min, max=sigma.max)
+        sigma = pars['%ssigma' % self.prefix]
+        pars['%ssigma_r' % self.prefix].set(value=sigma.value, min=sigma.min, max=sigma.max)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
