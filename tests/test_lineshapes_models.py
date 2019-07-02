@@ -119,73 +119,73 @@ def test_finite_output_lineshape(lineshape):
 def test_height_and_fwhm_expression_evalution_in_builtin_models():
     """Assert models do not throw an ZeroDivisionError."""
     mod = models.GaussianModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9)
     params.update_constraints()
 
     mod = models.LorentzianModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9)
     params.update_constraints()
 
     mod = models.SplitLorentzianModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, sigma_r=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigma_r=1.0)
     params.update_constraints()
 
     mod = models.VoigtModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, gamma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, gamma=1.0)
     params.update_constraints()
 
     mod = models.PseudoVoigtModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, fraction=0.5)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, fraction=0.5)
     params.update_constraints()
 
     mod = models.MoffatModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, beta=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, beta=0.0)
     params.update_constraints()
 
     mod = models.Pearson7Model()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, expon=1.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, expon=1.0)
     params.update_constraints()
 
     mod = models.StudentsTModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9)
     params.update_constraints()
 
     mod = models.BreitWignerModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, q=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, q=0.0)
     params.update_constraints()
 
     mod = models.LognormalModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9)
     params.update_constraints()
 
     mod = models.DampedOscillatorModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9)
     params.update_constraints()
 
     mod = models.DampedHarmonicOscillatorModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, gamma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, gamma=0.0)
     params.update_constraints()
 
     mod = models.ExponentialGaussianModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, gamma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, gamma=0.0)
     params.update_constraints()
 
     mod = models.SkewedGaussianModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, gamma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, gamma=0.0)
     params.update_constraints()
 
     mod = models.SkewedVoigtModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, gamma=0.0,
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, gamma=0.0,
                              skew=0.0)
     params.update_constraints()
 
     mod = models.DonaichModel()
-    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, gamma=0.0)
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, gamma=0.0)
     params.update_constraints()
 
     mod = models.StepModel()
     for f in ('linear', 'arctan', 'erf', 'logistic'):
-        params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.0, form=f)
+        params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, form=f)
         params.update_constraints()
 
     mod = models.RectangleModel()
@@ -193,3 +193,13 @@ def test_height_and_fwhm_expression_evalution_in_builtin_models():
         params = mod.make_params(amplitude=1.0, center1=0.0, sigma1=0.0,
                                  center2=0.0, sigma2=0.0, form=f)
         params.update_constraints()
+
+
+def test_splitlorentzian_prefix():
+    mod1 = models.SplitLorentzianModel()
+    par1 = mod1.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigma_r=1.3)
+    par1.update_constraints()
+
+    mod2 = models.SplitLorentzianModel(prefix='prefix_')
+    par2 = mod2.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigma_r=1.3)
+    par2.update_constraints()

@@ -418,11 +418,12 @@ class SplitLorentzianModel(Model):
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
+        fwhm_expr = '{pre:s}sigma+{pre:s}sigma_r'
+        height_expr = '2*{pre:s}amplitude/{0:.7f}/max({1:.7f}, ({pre:s}sigma+{pre:s}sigma_r))'
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('sigma_r', min=0)
-        self.set_param_hint('fwhm', expr='sigma+sigma_r')
-        self.set_param_hint(
-            'height', expr='2*amplitude/{:.7f}/max({}, (sigma+sigma_r))'.format(np.pi, tiny))
+        self.set_param_hint('fwhm', expr=fwhm_expr.format(pre=self.prefix))
+        self.set_param_hint('height', expr=height_expr.format(np.pi, tiny, pre=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
