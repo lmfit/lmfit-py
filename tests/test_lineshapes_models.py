@@ -197,9 +197,9 @@ def test_height_and_fwhm_expression_evalution_in_builtin_models():
 
 def test_splitlorentzian_prefix():
     mod1 = models.SplitLorentzianModel()
-    par1 = mod1.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigmar=1.3)
+    par1 = mod1.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigma_r=1.3)
     par1.update_constraints()
 
     mod2 = models.SplitLorentzianModel(prefix='prefix_')
-    par2 = mod2.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigmar=1.3)
+    par2 = mod2.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigmai_r=1.3)
     par2.update_constraints()
