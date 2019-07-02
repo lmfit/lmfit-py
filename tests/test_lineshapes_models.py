@@ -201,5 +201,5 @@ def test_splitlorentzian_prefix():
     par1.update_constraints()
 
     mod2 = models.SplitLorentzianModel(prefix='prefix_')
-    par2 = mod2.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigmai_r=1.3)
+    par2 = mod2.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigma_r=1.3)
     par2.update_constraints()
