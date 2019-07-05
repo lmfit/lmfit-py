@@ -54,7 +54,7 @@ def gformat(val, length=11):
 
     Notes
     ------
-     Positive values will have leading blank.
+    Positive values will have leading blank.
 
     """
     try:
@@ -88,7 +88,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
     Parameters
     ----------
-    inpars  : Parameters
+    inpars : Parameters
        Input Parameters from fit or MinimizerResult returned from a fit.
     modelpars : Parameters, optional
        Known Model Parameters.
@@ -211,12 +211,13 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
 
 def fitreport_html_table(result, show_correl=True, min_correl=0.1):
-    """Report minimizer result as an html table"""
+    """Generate a report of the fitting result as an HTML table."""
     html = []
     add = html.append
 
     def stat_row(label, val, val2=''):
         add('<tr><td>%s</td><td>%s</td><td>%s</td></tr>' % (label, val, val2))
+
     add('<h2>Fit Statistics</h2>')
     add('<table>')
     stat_row('fitting method', result.method)
@@ -255,7 +256,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
 
 
 def params_html_table(params):
-    """Returns a HTML representation of parameters data."""
+    """Return an HTML representation of Parameters."""
     has_err = any([p.stderr is not None for p in params.values()])
     has_expr = any([p.expr is not None for p in params.values()])
     has_brute = any([p.brute_step is not None for p in params.values()])
@@ -321,7 +322,7 @@ def report_errors(params, **kws):
 
 
 def report_fit(params, **kws):
-    """Print a report for fitted params: see error_report()."""
+    """Print a report of the fitting results."""
     print(fit_report(params, **kws))
 
 
@@ -346,7 +347,7 @@ def ci_report(ci, with_offset=True, ndigits=5):
     add = buff.append
 
     def convp(x):
-        """TODO: function docstring."""
+        """Convert probabilities into header for CI report."""
         if abs(x[0]) < 1.e-2:
             return "_BEST_"
         return "%.2f%%" % (x[0]*100)
