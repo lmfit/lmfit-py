@@ -1,6 +1,7 @@
 """Functions to display fitting results and confidence intervals."""
 from math import log10
 import re
+import warnings
 import numpy as np
 
 try:
@@ -313,6 +314,9 @@ def params_html_table(params):
 
 def report_errors(params, **kws):
     """Print a report for fitted params: see error_report()."""
+    warnings.warn("The function 'report_errors' is deprecated as of lmfit "
+                  "0.9.14 and will be removed in the next release. Please "
+                  "use 'report_fit' instead.", DeprecationWarning)
     print(fit_report(params, **kws))
 
 
