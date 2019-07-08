@@ -35,14 +35,14 @@ class CommonTests(object):
             args = self.args
         except AttributeError:
             self.model = self.model_constructor()
-            self.model_drop = self.model_constructor(missing='drop')
-            self.model_raise = self.model_constructor(missing='raise')
+            self.model_omit = self.model_constructor(nan_policy='omit')
+            self.model_raise = self.model_constructor(nan_policy='raise')
             self.model_explicit_var = self.model_constructor(['x'])
             func = self.model.func
         else:
             self.model = self.model_constructor(*args)
-            self.model_drop = self.model_constructor(*args, missing='drop')
-            self.model_raise = self.model_constructor(*args, missing='raise')
+            self.model_omit = self.model_constructor(*args, nan_policy='omit')
+            self.model_raise = self.model_constructor(*args, nan_policy='raise')
             self.model_explicit_var = self.model_constructor(
                 *args, independent_vars=['x'])
             func = self.model.func
@@ -165,7 +165,7 @@ class CommonTests(object):
 
         # Skip over missing (NaN) values, aligning via pandas index.
         data.iloc[500:510] = np.nan
-        result = self.model_drop.fit(data, params, x=x)
+        result = self.model_omit.fit(data, params, x=x)
         assert_results_close(result.values, self.true_values())
 
         # Raise if any NaN values are present.
@@ -579,6 +579,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         params = mod.make_params(amplitude=20, center=5.5,
                                  sigma=1, fraction=0.25)
         params['fraction'].vary = False
+
         # with raise, should get a ValueError
         result = lambda: mod.fit(y, params, x=x, nan_policy='raise')
         self.assertRaises(ValueError, result)
@@ -601,6 +602,11 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(result.params['amplitude'].stderr > 0.1)
         self.assertTrue(abs(result.params['amplitude'].value - 20.0) < 5.0)
         self.assertTrue(abs(result.params['center'].value - 6.0) < 0.5)
+
+        # with 'wrong_argument', should get a ValueError
+        err_msg = r"nan_policy must be 'propagate', 'omit', or 'raise'."
+        with pytest.raises(ValueError, match=err_msg):
+            mod.fit(y, params, x=x, nan_policy='wrong_argument')
 
 
 class TestLinear(CommonTests, unittest.TestCase):

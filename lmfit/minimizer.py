@@ -2254,34 +2254,6 @@ def _make_random_gen(seed):
                      ' instance' % seed)
 
 
-VALID_NAN_POLICIES = ('propagate', 'omit', 'raise')
-
-
-def validate_nan_policy(policy):
-    """Validate and rationalize `nan_policy`.
-
-    This function ensures backwards compatibility and as well as compatibility
-    with Pandas `missing` convention.
-
-    """
-    if policy in VALID_NAN_POLICIES:
-        return policy
-    if policy is None:
-        policy = 'propagate'
-
-    policy = policy.lower()
-    if policy == 'drop':
-        policy = 'omit'
-        warnings.warn("The option 'drop' is deprecated as of lmfit 0.9.13 and "
-                      "will be removed in the next release. Use 'omit' "
-                      "instead.", FutureWarning)
-    if policy == 'none':
-        policy = 'propagate'
-    if policy not in VALID_NAN_POLICIES:
-        raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
-    return policy
-
-
 def _nan_policy(arr, nan_policy='raise', handle_inf=True):
     """Specify behaviour when an array contains numpy.nan or numpy.inf.
 
@@ -2308,7 +2280,8 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
     scipy/stats/stats.py/_contains_nan
 
     """
-    nan_policy = validate_nan_policy(nan_policy)
+    if nan_policy not in ('propagate', 'omit', 'raise'):
+        raise ValueError("nan_policy must be 'propagate', 'omit', or 'raise'.")
 
     if handle_inf:
         handler_func = lambda x: ~np.isfinite(x)
@@ -2320,6 +2293,7 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
         mask = ~handler_func(arr)
         if not np.all(mask):  # there are some NaNs/infs/missing values
             return arr[mask]
+
     if nan_policy == 'raise':
         try:
             # Calling np.sum to avoid creating a huge array into memory
