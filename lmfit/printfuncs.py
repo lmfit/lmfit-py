@@ -150,7 +150,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
                     space = ' '*(namelen-len(name))
                     if np.allclose(par.value, par.init_value):
                         add('    %s:%s  at initial value' % (name, space))
-                    if (np.allclose(par.value, par.min) or np.allclose(par.value, par.min)):
+                    if (np.allclose(par.value, par.min) or np.allclose(par.value, par.max)):
                         add('    %s:%s  at boundary' % (name, space))
             else:
                 add("    this fitting method does not natively calculate uncertainties")
