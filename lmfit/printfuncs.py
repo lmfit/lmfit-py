@@ -171,7 +171,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         try:
             sval = gformat(par.value)
         except (TypeError, ValueError):
-            sval = 'Non Numeric Value?'
+            sval = ' Non Numeric Value?'
         if par.stderr is not None:
             serr = gformat(par.stderr)
             try:
