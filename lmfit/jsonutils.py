@@ -1,4 +1,4 @@
-"""JSON utilities for larch objects."""
+"""JSON utilities."""
 from base64 import b64decode, b64encode
 import json
 import sys
@@ -58,11 +58,11 @@ def import_from(modulepath, objectname):
 
 
 def encode4js(obj):
-    """Prepare an object for json encoding.
+    """Prepare an object for JSON encoding.
 
     It has special handling for many Python types, including:
-    - pandas dataframes and series
-    - numpy ndarrays
+    - pandas DataFrames and Series
+    - NumPy ndarrays
     - complex numbers
 
     """
