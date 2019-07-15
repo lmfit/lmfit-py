@@ -27,14 +27,15 @@
    <li><a href="{{ pathto('builtin_models') }}"> built-in models</a>|</li>
    <li><a href="{{ pathto('confidence') }}">confidence intervals</a>|</li>
    <li><a href="{{ pathto('bounds') }}">bounds</a>|</li>
-   <li><a href="{{ pathto('constraints') }}">constraints</a>]</li>
+   <li><a href="{{ pathto('constraints') }}">constraints</a>|</li>
+   <li><a href="{{ pathto('examples/index') }}">examples</a>]</li>
 {% endblock %}
 
 {% block relbar1 %}
 <div>
 <table border=0>
   <tr><td></td><td width=85% padding=5 align=left>
-       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+          <a href="{{ pathto('index') }}" style="color: #157"> <font size=+3>LMFIT</font></a>
      </td>
      <td width=7% align=left>
          <a href="contents.html" style="color: #882222">

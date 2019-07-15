@@ -12,4 +12,5 @@ pytest
 scipy>=0.19
 six>1.10
 Sphinx
+sphinx-gallery
 uncertainties>=3.0

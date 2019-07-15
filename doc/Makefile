@@ -21,6 +21,7 @@ html:
 	cp sphinx/ext_mathjax.py extensions.py
 	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
+	cp -r examples $(BUILDDIR)/html
 	@echo
 	@echo "html build finished: $(BUILDDIR)/html."
 	rm -f *.dat *.sav
@@ -29,6 +30,7 @@ htmlzip: html
 	cp sphinx/ext_mathjax.py extensions.py
 	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/lmfit_doc
+	cp -r examples $(BUILDDIR)/html
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
 	rm -f *.dat *.sav
 
@@ -71,6 +73,7 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 	-rm -f extensions.py
 	-rm -f *.dat *.sav
+	-rm -rf examples
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml

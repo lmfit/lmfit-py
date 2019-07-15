@@ -159,3 +159,11 @@ package_path = os.path.abspath('../..')
 os.environ['PYTHONPATH'] = ':'.join((package_path, os.environ.get('PYTHONPATH', '')))
 
 image_converter_args=["-density", "300"]
+
+# Sphinx-gallery configuration
+sphinx_gallery_conf = {
+    'examples_dirs': '../examples',
+    'gallery_dirs': 'examples',
+    'filename_pattern': '/',
+    'ignore_pattern': '/doc_',
+}
