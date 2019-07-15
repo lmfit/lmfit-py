@@ -2,7 +2,7 @@ exclude: 'versioneer.py|lmfit/_version|doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v1.19.0
+    rev: v1.21.0
     hooks:
     -   id: pyupgrade
         # for now don't force to change from %-operator to {}
@@ -21,7 +21,7 @@ repos:
     -   id: requirements-txt-fixer
 
 -   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.7
+    rev: 3.7.8
     hooks:
     -   id: flake8
         exclude: 'lmfit/__init__.py|lmfit/ui/__init__.py'

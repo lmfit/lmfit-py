@@ -1,6 +1,7 @@
 """Functions to display fitting results and confidence intervals."""
 from math import log10
 import re
+import warnings
 import numpy as np
 
 try:
@@ -53,7 +54,7 @@ def gformat(val, length=11):
 
     Notes
     ------
-     Positive values will have leading blank.
+    Positive values will have leading blank.
 
     """
     try:
@@ -87,7 +88,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
     Parameters
     ----------
-    inpars  : Parameters
+    inpars : Parameters
        Input Parameters from fit or MinimizerResult returned from a fit.
     modelpars : Parameters, optional
        Known Model Parameters.
@@ -149,7 +150,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
                     space = ' '*(namelen-len(name))
                     if np.allclose(par.value, par.init_value):
                         add('    %s:%s  at initial value' % (name, space))
-                    if (np.allclose(par.value, par.min) or np.allclose(par.value, par.min)):
+                    if (np.allclose(par.value, par.min) or np.allclose(par.value, par.max)):
                         add('    %s:%s  at boundary' % (name, space))
             else:
                 add("    this fitting method does not natively calculate uncertainties")
@@ -170,7 +171,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         try:
             sval = gformat(par.value)
         except (TypeError, ValueError):
-            sval = 'Non Numeric Value?'
+            sval = ' Non Numeric Value?'
         if par.stderr is not None:
             serr = gformat(par.stderr)
             try:
@@ -210,12 +211,13 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
 
 def fitreport_html_table(result, show_correl=True, min_correl=0.1):
-    """Report minimizer result as an html table"""
+    """Generate a report of the fitting result as an HTML table."""
     html = []
     add = html.append
 
     def stat_row(label, val, val2=''):
         add('<tr><td>%s</td><td>%s</td><td>%s</td></tr>' % (label, val, val2))
+
     add('<h2>Fit Statistics</h2>')
     add('<table>')
     stat_row('fitting method', result.method)
@@ -254,7 +256,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
 
 
 def params_html_table(params):
-    """Returns a HTML representation of parameters data."""
+    """Return an HTML representation of Parameters."""
     has_err = any([p.stderr is not None for p in params.values()])
     has_expr = any([p.expr is not None for p in params.values()])
     has_brute = any([p.brute_step is not None for p in params.values()])
@@ -313,11 +315,14 @@ def params_html_table(params):
 
 def report_errors(params, **kws):
     """Print a report for fitted params: see error_report()."""
+    warnings.warn("The function 'report_errors' is deprecated as of lmfit "
+                  "0.9.14 and will be removed in the next release. Please "
+                  "use 'report_fit' instead.", DeprecationWarning)
     print(fit_report(params, **kws))
 
 
 def report_fit(params, **kws):
-    """Print a report for fitted params: see error_report()."""
+    """Print a report of the fitting results."""
     print(fit_report(params, **kws))
 
 
@@ -342,7 +347,7 @@ def ci_report(ci, with_offset=True, ndigits=5):
     add = buff.append
 
     def convp(x):
-        """TODO: function docstring."""
+        """Convert probabilities into header for CI report."""
         if abs(x[0]) < 1.e-2:
             return "_BEST_"
         return "%.2f%%" % (x[0]*100)
