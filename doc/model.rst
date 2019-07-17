@@ -46,24 +46,34 @@ peak.  As we will see, there is a buit-in :class:`GaussianModel` class that
 can help do this, but here we'll build our own.  We start with a simple
 definition of the model function:
 
-    >>> from numpy import exp, linspace, random
-    >>>
-    >>> def gaussian(x, amp, cen, wid):
-    ...     return amp * exp(-(x-cen)**2 / wid)
+.. jupyter-execute::
+    :hide-code:
+
+    import matplotlib as mpl
+    mpl.rcParams['figure.dpi'] = 150
+    %matplotlib inline
+    %config InlineBackend.figure_format = 'svg'
+
+.. jupyter-execute::
+
+    from numpy import exp, linspace, random
+
+    def gaussian(x, amp, cen, wid):
+        return amp * exp(-(x-cen)**2 / wid)
 
 We want to use this function to fit to data :math:`y(x)` represented by the
-arrays ``y`` and ``x``.  With :scipydoc:`optimize.curve_fit`, this would be::
+arrays ``y`` and ``x``.  With :scipydoc:`optimize.curve_fit`, this would be:
 
-    >>> from scipy.optimize import curve_fit
-    >>>
-    >>> x = linspace(-10, 10, 101)
-    >>> y = gaussian(x, 2.33, 0.21, 1.51) + random.normal(0, 0.2, len(x))
-    >>>
-    >>> init_vals = [1, 0, 1]  # for [amp, cen, wid]
-    >>> best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
-    >>> print(best_vals)
-    [ 2.39499424  0.19942179  1.50909389]
+.. jupyter-execute::
 
+    from scipy.optimize import curve_fit
+
+    x = linspace(-10, 10, 101)
+    y = gaussian(x, 2.33, 0.21, 1.51) + random.normal(0, 0.2, x.size)
+
+    init_vals = [1, 0, 1]  # for [amp, cen, wid]
+    best_vals, covar = curve_fit(gaussian, x, y, p0=init_vals)
+    print('best_vals: {}'.format(best_vals))
 
 That is, we create data, make an initial guess of the model values, and run
 :scipydoc:`optimize.curve_fit` with the model function, data arrays, and
@@ -74,14 +84,15 @@ misses the benefits of lmfit.
 With lmfit, we create a :class:`Model` that wraps the ``gaussian`` model
 function, which automatically generates the appropriate residual function,
 and determines the corresponding parameter names from the function
-signature itself::
+signature itself:
 
-    >>> from lmfit import Model
-    >>> gmodel = Model(gaussian)
-    >>> gmodel.param_names
-    ['amp', 'cen', 'wid']
-    >>> gmodel.independent_vars
-    ['x']
+.. jupyter-execute::
+
+    from lmfit import Model
+
+    gmodel = Model(gaussian)
+    print('parameter names: {}'.format(gmodel.param_names))
+    print('independent variables: {}'.format(gmodel.independent_vars))
 
 As you can see, the Model ``gmodel`` determined the names of the parameters
 and the independent variables.  By default, the first argument of the
@@ -101,16 +112,16 @@ what the parameters should be named, but nothing about the scale and
 range of your data.  You will normally have to make these parameters and
 assign initial values and other attributes.  To help you do this, each
 model has a :meth:`make_params` method that will generate parameters with
-the expected names:
+the expected names::
 
-    >>> params = gmodel.make_params()
+    params = gmodel.make_params()
 
 This creates the :class:`~lmfit.parameter.Parameters` but does not
 automaticaly give them initial values since it has no idea what the scale
 should be.  You can set initial values for parameters with keyword
-arguments to :meth:`make_params`:
+arguments to :meth:`make_params`::
 
-    >>> params = gmodel.make_params(cen=5, amp=200, wid=1)
+    params = gmodel.make_params(cen=5, amp=200, wid=1)
 
 or assign them (and other parameter properties) after the
 :class:`~lmfit.parameter.Parameters` class has been created.
@@ -122,59 +133,52 @@ these methods can take explicit keyword arguments for the parameter values.
 For example, one could use :meth:`eval` to calculate the predicted
 function::
 
-    >>> x = linspace(0, 10, 201)
-    >>> y = gmodel.eval(params, x=x)
+    x_eval = linspace(0, 10, 201)
+    y_eval = gmodel.eval(params, x=x_eval)
 
 or with::
 
-    >>> y = gmodel.eval(x=x, cen=6.5, amp=100, wid=2.0)
+    y_eval = gmodel.eval(x=x_eval, cen=6.5, amp=100, wid=2.0)
 
 Admittedly, this a slightly long-winded way to calculate a Gaussian
 function, given that you could have called your ``gaussian`` function
 directly.  But now that the model is set up, we can use its
 :meth:`fit` method to fit this model to data, as with::
 
-    >>> result = gmodel.fit(y, params, x=x)
+    result = gmodel.fit(y, params, x=x)
 
 or with::
 
-    >>> result = gmodel.fit(y, x=x, cen=6.5, amp=100, wid=2.0)
+    result = gmodel.fit(y, x=x, cen=6.5, amp=100, wid=2.0)
 
 Putting everything together, included in the
 ``examples`` folder with the source code, is:
 
-.. literalinclude:: ../examples/doc_model_gaussian.py
+.. jupyter-execute:: ../examples/doc_model_gaussian.py
+    :hide-output:
 
 which is pretty compact and to the point.  The returned ``result`` will be
 a :class:`ModelResult` object.  As we will see below, this has many
-components, including a :meth:`fit_report` method, which will show::
+components, including a :meth:`fit_report` method, which will show:
 
-    [[Model]]
-        Model(gaussian)
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 35
-        # data points      = 101
-        # variables        = 3
-        chi-square         = 3.40883599
-        reduced chi-square = 0.03478404
-        Akaike info crit   = -336.263713
-        Bayesian info crit = -328.418352
-    [[Variables]]
-        amp:  8.88021830 +/- 0.11359492 (1.28%) (init = 5)
-        cen:  5.65866102 +/- 0.01030495 (0.18%) (init = 5)
-        wid:  0.69765468 +/- 0.01030495 (1.48%) (init = 1)
-    [[Correlations]] (unreported correlations are < 0.100)
-        C(amp, wid) =  0.577
+.. jupyter-execute::
+    :hide-code:
+
+    print(result.fit_report())
 
 As the script shows, the result will also have :attr:`init_fit` for the fit
 with the initial parameter values and a :attr:`best_fit` for the fit with
 the best fit parameter values.  These can be used to generate the following
 plot:
 
-.. image:: _images/model_fit1.png
-   :target: _images/model_fit1.png
-   :width: 50%
+.. jupyter-execute::
+    :hide-code:
+
+    plt.plot(x, y, 'bo')
+    plt.plot(x, result.init_fit, 'k--', label='initial fit')
+    plt.plot(x, result.best_fit, 'r-', label='best fit')
+    plt.legend(loc='best')
+    plt.show()
 
 which shows the data in blue dots, the best fit as a solid red line, and
 the initial fit as a dashed black line.
@@ -298,40 +302,42 @@ Explicitly specifying ``independent_vars``
 -------------------------------------------------
 
 As we saw for the Gaussian example above, creating a :class:`Model` from a
-function is fairly easy. Let's try another one::
+function is fairly easy. Let's try another one:
 
-    >>> from lmfit import Model
-    >>> import numpy as np
-    >>> def decay(t, tau, N):
-    ...    return N*np.exp(-t/tau)
-    ...
-    >>> decay_model = Model(decay)
-    >>> print(decay_model.independent_vars)
-    ['t']
-    >>> params = decay_model.make_params()
-    >>> for pname, par in params.items():
-    ...     print(pname, par)
-    ...
-    tau <Parameter 'tau', -inf, bounds=[-inf:inf]>
-    N <Parameter 'N', -inf, bounds=[-inf:inf]>
+.. jupyter-execute::
+
+    import numpy as np
+    from lmfit import Model
+
+
+    def decay(t, tau, N):
+       return N*np.exp(-t/tau)
+
+
+    decay_model = Model(decay)
+    print('independent variables: {}'.format(decay_model.independent_vars))
+
+    params = decay_model.make_params()
+    print('\nParameters:')
+    for pname, par in params.items():
+        print(pname, par)
 
 Here, ``t`` is assumed to be the independent variable because it is the
 first argument to the function.  The other function arguments are used to
 create parameters for the model.
 
 If you want ``tau`` to be the independent variable in the above example,
-you can say so::
+you can say so:
 
-    >>> decay_model = Model(decay, independent_vars=['tau'])
-    >>> print(decay_model.independent_vars)
-    ['tau']
-    >>> params = decay_model.make_params()
-    >>> for pname, par in params.items():
-    ...     print(pname, par)
-    ...
-    t <Parameter 't', -inf, bounds=[-inf:inf]>
-    N <Parameter 'N', -inf, bounds=[-inf:inf]>
+.. jupyter-execute::
 
+    decay_model = Model(decay, independent_vars=['tau'])
+    print('independent variables: {}'.format(decay_model.independent_vars))
+
+    params = decay_model.make_params()
+    print('\nParameters:')
+    for pname, par in params.items():
+        print(pname, par)
 
 You can also supply multiple values for multi-dimensional functions with
 multiple independent variables.  In fact, the meaning of *independent
@@ -355,20 +361,20 @@ If the model function had keyword parameters, these would be turned into
 Parameters if the supplied default value was a valid number (but not
 None, True, or False).
 
-    >>> def decay2(t, tau, N=10, check_positive=False):
-    ...     if check_small:
-    ...         arg = abs(t)/max(1.e-9, abs(tau))
-    ...     else:
-    ...         arg = t/tau
-    ...     return N*np.exp(arg)
-    ...
-    >>> mod = Model(decay2)
-    >>> params = mod.make_params()
-    >>> for pname, par in params.items():
-    ...     print(pname, par)
-    ...
-    t <Parameter 't', -inf, bounds=[-inf:inf]>
-    N <Parameter 'N', 10, bounds=[-inf:inf]>
+.. jupyter-execute::
+
+    def decay2(t, tau, N=10, check_positive=False):
+        if check_small:
+            arg = abs(t)/max(1.e-9, abs(tau))
+        else:
+            arg = t/tau
+        return N*np.exp(arg)
+
+    mod = Model(decay2)
+    params = mod.make_params()
+    print('Parameters:')
+    for pname, par in params.items():
+        print(pname, par)
 
 Here, even though ``N`` is a keyword argument to the function, it is turned
 into a parameter, with the default numerical value as its initial value.
@@ -391,17 +397,18 @@ necessary, for example, if two parameters in a composite model (see
 the same name.  To avoid this, we can add a ``prefix`` to the
 :class:`Model` which will automatically do this mapping for us.
 
-    >>> def myfunc(x, amplitude=1, center=0, sigma=1):
-    ...
+.. jupyter-execute::
 
-    >>> mod = Model(myfunc, prefix='f1_')
-    >>> params = mod.make_params()
-    >>> for pname, par in params.items():
-    ...     print(pname, par)
-    ...
-    f1_amplitude <Parameter 'f1_amplitude', 1, bounds=[-inf:inf]>
-    f1_center <Parameter 'f1_center', 0, bounds=[-inf:inf]>
-    f1_sigma <Parameter 'f1_sigma', 1, bounds=[-inf:inf]>
+    def myfunc(x, amplitude=1, center=0, sigma=1):
+        # function definition, for now just ``pass``
+        pass
+
+
+    mod = Model(myfunc, prefix='f1_')
+    params = mod.make_params()
+    print('Parameters:')
+    for pname, par in params.items():
+        print(pname, par)
 
 You would refer to these parameters as ``f1_amplitude`` and so forth, and
 the model will know to map these to the ``amplitude`` argument of ``myfunc``.
@@ -431,13 +438,13 @@ Initializing values in the function definition
 To supply initial values for parameters in the definition of the model
 function, you can simply supply a default value::
 
-    >>> def myfunc(x, a=1, b=0):
-    >>>     ...
+    def myfunc(x, a=1, b=0):
+        ...
 
 instead of using::
 
-    >>> def myfunc(x, a, b):
-    >>>     ...
+    def myfunc(x, a, b):
+        ...
 
 This has the advantage of working at the function level -- all parameters
 with keywords can be treated as options.  It also means that some default
@@ -451,8 +458,8 @@ When creating parameters with :meth:`Model.make_params` you can specify initial
 values.  To do this, use keyword arguments for the parameter names and
 initial values::
 
-    >>> mod = Model(myfunc)
-    >>> pars = mod.make_params(a=3, b=0.5)
+    mod = Model(myfunc)
+    pars = mod.make_params(a=3, b=0.5)
 
 
 Initializing values by setting parameter hints
@@ -465,10 +472,10 @@ controlling bounds, whether it is varied in the fit, or a constraint
 expression.  To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
-    >>> mod = Model(myfunc)
-    >>> mod.set_param_hint('a', value=1.0)
-    >>> mod.set_param_hint('b', value=0.3, min=0, max=1.0)
-    >>> pars = mod.make_params()
+    mod = Model(myfunc)
+    mod.set_param_hint('a', value=1.0)
+    mod.set_param_hint('b', value=0.3, min=0, max=1.0)
+    pars = mod.make_params()
 
 Parameter hints are discussed in more detail in section
 :ref:`model_param_hints_section`.
@@ -481,8 +488,8 @@ Finally, you can explicitly supply initial values when using a model.  That
 is, as with :meth:`Model.make_params`, you can include values
 as keyword arguments to either the :meth:`Model.eval` or :meth:`Model.fit` methods::
 
-   >>> y1 = mod.eval(x=x, a=7.0, b=-2.0)
-   >>> out = mod.fit(x=x, pars, a=3.0, b=0.0)
+    y1 = mod.eval(x=x, a=7.0, b=-2.0)
+    out = mod.fit(x=x, pars, a=3.0, b=0.0)
 
 These approaches to initialization provide many opportunities for setting
 initial values for parameters.  The methods can be combined, so that you
@@ -501,16 +508,22 @@ controlling bounds, whether it is varied in the fit, or a constraint
 expression.   To set a parameter hint, you can use :meth:`Model.set_param_hint`,
 as with::
 
-    >>> mod = Model(myfunc)
-    >>> mod.set_param_hint('a', value=1.0)
-    >>> mod.set_param_hint('b', value=0.3, min=0, max=1.0)
+    mod = Model(myfunc)
+    mod.set_param_hint('a', value=1.0)
+    mod.set_param_hint('b', value=0.3, min=0, max=1.0)
 
 Parameter hints are stored in a model's :attr:`param_hints` attribute,
 which is simply a nested dictionary::
 
-    >>> print(mod.param_hints)
-    {'a': {'value': 1}, 'b': {'max': 1.0, 'value': 0.3, 'min': 0}}
+    print('Parameter hints:')
+    for pname, par in mod.param_hints.items():
+        print(pname, par)
 
+::
+
+    Parameter hints:
+    a OrderedDict([('value', 1.0)])
+    b OrderedDict([('value', 0.3), ('min', 0), ('max', 1.0)])
 
 You can change this dictionary directly, or with the :meth:`Model.set_param_hint`
 method.  Either way, these parameter hints are used by :meth:`Model.make_params`
@@ -521,8 +534,8 @@ of new parameters with parameter hints.  This can be useful to make derived
 parameters with constraint expressions.  For example to get the full-width
 at half maximum of a Gaussian model, one could use a parameter hint of::
 
-    >>> mod = Model(gaussian)
-    >>> mod.set_param_hint('fwhm', expr='2.3548*sigma')
+    mod = Model(gaussian)
+    mod.set_param_hint('fwhm', expr='2.3548*sigma')
 
 
 .. _model_saveload_sec:
@@ -567,11 +580,12 @@ and used.
 
 As a simple example, one can save a model as:
 
-.. literalinclude:: ../examples/doc_model_savemodel.py
+.. jupyter-execute:: ../examples/doc_model_savemodel.py
 
 To load that later, one might do:
 
-.. literalinclude:: ../examples/doc_model_loadmodel.py
+.. jupyter-execute:: ../examples/doc_model_loadmodel.py
+    :hide-output:
 
 See also :ref:`modelresult_saveload_sec`.
 
@@ -769,20 +783,33 @@ those uncertainties mean for the model function itself.  We can use the
 evaluate the uncertainty in the model with a specified level for
 :math:`\sigma`.
 
-That is, adding::
+That is, adding:
+
+.. jupyter-execute:: ../examples/doc_model_gaussian.py
+    :hide-output:
+    :hide-code:
+
+.. jupyter-execute::
+    :hide-output:
 
     dely = result.eval_uncertainty(sigma=3)
-    plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB")
+    plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB",
+                     label='3-$\sigma$ uncertainty band')
 
 to the example fit to the Gaussian at the beginning of this chapter will
 give 3-:math:`\sigma` bands for the best-fit Gaussian, and produce the
 figure below.
 
-.. _figModel4:
+.. jupyter-execute::
+    :hide-code:
 
-  .. image:: _images/model_fit4.png
-     :target: _images/model_fit4.png
-     :width: 50%
+    plt.plot(x, y, 'bo')
+    plt.plot(x, result.init_fit, 'k--', label='initial fit')
+    plt.plot(x, result.best_fit, 'r-', label='best fit')
+    plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB",
+                     label='3-$\sigma$ uncertainty band')
+    plt.legend(loc='best')
+    plt.show()
 
 
 .. _modelresult_saveload_sec:
@@ -812,11 +839,13 @@ evaluate the model function or redo the fit.
 
 An example of saving a :class:`ModelResult` is:
 
-.. literalinclude:: ../examples/doc_model_savemodelresult.py
+.. jupyter-execute:: ../examples/doc_model_savemodelresult.py
+    :hide-output:
 
 To load that later, one might do:
 
-.. literalinclude:: ../examples/doc_model_loadmodelresult.py
+.. jupyter-execute:: ../examples/doc_model_loadmodelresult.py
+    :hide-output:
 
 .. index:: Composite models
 
@@ -865,47 +894,34 @@ and build a composite model with just::
 
 This model has parameters for both component models, and can be used as:
 
-.. literalinclude:: ../examples/doc_model_twocomponents.py
+.. jupyter-execute:: ../examples/doc_model_two_components.py
+    :hide-output:
 
-which prints out the results::
+which prints out the results:
 
-    [[Model]]
-        (Model(gaussian) + Model(line))
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 46
-        # data points      = 101
-        # variables        = 5
-        chi-square         = 2.57855517
-        reduced chi-square = 0.02685995
-        Akaike info crit   = -360.457020
-        Bayesian info crit = -347.381417
-    [[Variables]]
-        amp:        8.45931062 +/- 0.12414515 (1.47%) (init = 5)
-        cen:        5.65547873 +/- 0.00917678 (0.16%) (init = 5)
-        wid:        0.67545524 +/- 0.00991686 (1.47%) (init = 1)
-        slope:      0.26484404 +/- 0.00574892 (2.17%) (init = 0)
-        intercept: -0.96860202 +/- 0.03352202 (3.46%) (init = 1)
-    [[Correlations]] (unreported correlations are < 0.100)
-        C(slope, intercept) = -0.795
-        C(amp, wid)         =  0.666
-        C(amp, intercept)   = -0.222
-        C(amp, slope)       = -0.169
-        C(cen, slope)       = -0.162
-        C(wid, intercept)   = -0.148
-        C(cen, intercept)   =  0.129
-        C(wid, slope)       = -0.113
+.. jupyter-execute::
+    :hide-code:
+
+     print(result.fit_report())
 
 and shows the plot on the left.
 
-.. _figModel2:
 
-  .. image:: _images/model_fit2.png
-     :target: _images/model_fit2.png
-     :width: 48%
-  .. image:: _images/model_fit2a.png
-     :target: _images/model_fit2a.png
-     :width: 48%
+.. jupyter-execute::
+    :hide-code:
+
+    fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
+    axes[0].plot(x, y, 'bo')
+    axes[0].plot(x, result.init_fit, 'k--', label='initial fit')
+    axes[0].plot(x, result.best_fit, 'r-', label='best fit')
+    axes[0].legend(loc='best')
+
+    comps = result.eval_components()
+    axes[1].plot(x, y, 'bo')
+    axes[1].plot(x, comps['gaussian'], 'k--', label='Gaussian component')
+    axes[1].plot(x, comps['line'], 'r--', label='Line component')
+    axes[1].legend(loc='best')
+    plt.show()
 
 
 On the left, data is shown in blue dots, the total fit is shown in solid
@@ -916,8 +932,8 @@ created using the following code::
 
     comps = result.eval_components()
     plt.plot(x, y, 'bo')
-    plt.plot(x, comps['gaussian'], 'k--')
-    plt.plot(x, comps['line'], 'r--')
+    plt.plot(x, comps['gaussian'], 'k--', label='Gaussian component')
+    plt.plot(x, comps['line'], 'r--', label='Line component')
 
 The components were generated after the fit using the
 :meth:`ModelResult.eval_components` method of the ``result``, which returns
@@ -976,41 +992,31 @@ function gives a valid result over the data range.  Because this function
 takes two array arguments and returns an array, it can be used as the
 binary operator.  A full script using this technique is here:
 
-.. literalinclude:: ../examples/doc_model_composite.py
+.. jupyter-execute:: ../examples/doc_model_composite.py
+    :hide-output:
 
-which prints out the results::
+which prints out the results:
 
-    [[Model]]
-        (Model(jump) <function convolve at 0x114e6e1e0> Model(gaussian))
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 25
-        # data points      = 201
-        # variables        = 3
-        chi-square         = 24.7562335
-        reduced chi-square = 0.12503148
-        Akaike info crit   = -414.939746
-        Bayesian info crit = -405.029832
-    [[Variables]]
-        mid:        5 (fixed)
-        sigma:      0.59576118 +/- 0.01348582 (2.26%) (init = 1.5)
-        center:     4.50853671 +/- 0.00973231 (0.22%) (init = 3.5)
-        amplitude:  0.62508459 +/- 0.00189732 (0.30%) (init = 1)
-    [[Correlations]] (unreported correlations are < 0.100)
-        C(center, amplitude) =  0.329
-        C(sigma, amplitude)  =  0.268
+.. jupyter-execute::
+    :hide-code:
 
+     print(result.fit_report())
 
 and shows the plots:
 
-.. _figModel3:
+.. jupyter-execute::
+    :hide-code:
 
-  .. image:: _images/model_fit3a.png
-     :target: _images/model_fit3a.png
-     :width: 48%
-  .. image:: _images/model_fit3b.png
-     :target: _images/model_fit3b.png
-     :width: 48%
+    fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
+    axes[0].plot(x, y, 'bo')
+    axes[0].plot(x, result.init_fit, 'k--', label='initial fit')
+    axes[0].plot(x, result.best_fit, 'r-', label='best fit')
+    axes[0].legend(loc='best')
+    axes[1].plot(x, y, 'bo')
+    axes[1].plot(x, 10*comps['jump'], 'k--', label='Jump component')
+    axes[1].plot(x, 10*comps['gaussian'], 'r-', label='Gaussian component')
+    axes[1].legend(loc='best')
+    plt.show()
 
 Using composite models with built-in or custom operators allows you to
 build complex models from testable sub-components.

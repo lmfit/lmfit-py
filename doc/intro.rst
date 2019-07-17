@@ -44,6 +44,7 @@ sine wave, and so write an objective function like this::
 
 
     def residual(vars, x, data, eps_data):
+        """Model a decaying sine wave and subtract data."""
         amp = vars[0]
         phaseshift = vars[1]
         freq = vars[2]
