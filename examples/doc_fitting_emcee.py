@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_fitting_emcee.py>
 import numpy as np
 
@@ -20,10 +18,9 @@ except ImportError:
 x = np.linspace(1, 10, 250)
 np.random.seed(0)
 y = (3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1) / 10.) +
-     0.1*np.random.randn(len(x)))
+     0.1*np.random.randn(x.size))
 if HASPYLAB:
     plt.plot(x, y, 'b')
-    # plt.savefig('../doc/_images/emcee_dbl_exp.png')
     plt.show()
 
 p = lmfit.Parameters()
@@ -35,13 +32,13 @@ def residual(p):
     return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1) / v['t2']) - y
 
 
-mi = lmfit.minimize(residual, p, method='Nelder', nan_policy='omit')
+mi = lmfit.minimize(residual, p, method='nelder', nan_policy='omit')
 lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
 if HASPYLAB:
     plt.figure()
     plt.plot(x, y, 'b')
-    plt.plot(x, residual(mi.params) + y, 'r')
-    # plt.savefig('../doc/_images/emcee_dbl_exp2.png')
+    plt.plot(x, residual(mi.params) + y, 'r', label='best fit')
+    plt.legend(loc='best')
     plt.show()
 
 # Place bounds on the ln(sigma) parameter that emcee will automatically add
@@ -54,7 +51,6 @@ res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300,
 if HASPYLAB and HASCORNER:
     emcee_corner = corner.corner(res.flatchain, labels=res.var_names,
                                  truths=list(res.params.valuesdict().values()))
-    # emcee_corner.savefig('../doc/_images/emcee_corner.png')
     plt.show()
 
 print("\nmedian of posterior probability distribution")
@@ -69,7 +65,8 @@ for i, par in enumerate(p):
     p[par].value = mle_soln[i]
 print("\nMaximum likelihood Estimation")
 print('-----------------------------')
-print(p)
+for _, vals in p.items():
+    print(vals)
 
 if HASPYLAB:
     plt.figure()

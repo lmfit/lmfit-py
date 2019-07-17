@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_builtinmodels_peakmodels.py>
 import matplotlib.pyplot as plt
 from numpy import loadtxt
@@ -10,36 +8,52 @@ data = loadtxt('test_peak.dat')
 x = data[:, 0]
 y = data[:, 1]
 
-gamma_free = False
 
-MODEL = 'gauss'
-# MODEL = 'loren'
-# MODEL = 'voigt'
-# gamma_free = True
-
-if MODEL.lower().startswith('g'):
-    mod = GaussianModel()
-    gamma_free = False
-    figname = '../doc/_images/models_peak1.png'
-elif MODEL.lower().startswith('l'):
-    mod = LorentzianModel()
-    gamma_free = False
-    figname = '../doc/_images/models_peak2.png'
-elif MODEL.lower().startswith('v'):
-    mod = VoigtModel()
-    figname = '../doc/_images/models_peak3.png'
-
+# Gaussian model
+mod = GaussianModel()
 pars = mod.guess(y, x=x)
-
-if gamma_free:
-    pars['gamma'].set(value=0.7, vary=True, expr='')
-    figname = '../doc/_images/models_peak4.png'
-
 out = mod.fit(y, pars, x=x)
+
 print(out.fit_report(min_correl=0.25))
 
 plt.plot(x, y, 'b-')
-plt.plot(x, out.best_fit, 'r-')
-# plt.savefig(figname)
+plt.plot(x, out.best_fit, 'r-', label='Gaussian Model')
+plt.legend(loc='best')
+plt.show()
+
+
+# Lorentzian model
+mod = LorentzianModel()
+pars = mod.guess(y, x=x)
+out = mod.fit(y, pars, x=x)
+
+print(out.fit_report(min_correl=0.25))
+
+plt.plot(x, y, 'b-')
+plt.plot(x, out.best_fit, 'r-', label='Lorentzian Model')
+plt.legend(loc='best')
+plt.show()
+
+
+# Voigt model
+mod = VoigtModel()
+pars = mod.guess(y, x=x)
+out = mod.fit(y, pars, x=x)
+
+print(out.fit_report(min_correl=0.25))
+
+fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
+
+axes[0].plot(x, y, 'b-')
+axes[0].plot(x, out.best_fit, 'r-', label='Voigt Model\ngamma constrained')
+axes[0].legend(loc='best')
+
+# free gamma parameter
+pars['gamma'].set(value=0.7, vary=True, expr='')
+out_gamma = mod.fit(y, pars, x=x)
+axes[1].plot(x, y, 'b-')
+axes[1].plot(x, out_gamma.best_fit, 'r-', label='Voigt Model\ngamma unconstrained')
+axes[1].legend(loc='best')
+
 plt.show()
 # <end examples/doc_builtinmodels_peakmodels.py>

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_nistgauss2.py>
 import matplotlib.pyplot as plt
 import numpy as np
@@ -38,8 +36,8 @@ out = mod.fit(y, pars, x=x)
 print(out.fit_report(min_correl=0.5))
 
 plt.plot(x, y, 'b')
-plt.plot(x, out.init_fit, 'k--')
-plt.plot(x, out.best_fit, 'r-')
-# plt.savefig('../doc/_images/models_nistgauss2.png')
+plt.plot(x, out.init_fit, 'k--', label='initial fit')
+plt.plot(x, out.best_fit, 'r-', label='best fit')
+plt.legend(loc='best')
 plt.show()
 # <end examples/doc_nistgauss2.py>

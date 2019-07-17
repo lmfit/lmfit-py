@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-# <examples/doc_mode_savemodel.py>
+# <examples/doc_model_savemodel.py>
 import numpy as np
 
 from lmfit.model import Model, save_model

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_confidence_basic.py>
 import numpy as np
 
@@ -19,6 +17,7 @@ def residual(p):
 
 mini = lmfit.Minimizer(residual, pars)
 result = mini.minimize()
+
 print(lmfit.fit_report(result.params))
 
 ci = lmfit.conf_interval(mini, result)

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_model_with_nan_policy.py>
 import matplotlib.pyplot as plt
 import numpy as np
@@ -28,7 +26,8 @@ x_ = x[np.where(np.isfinite(y))]
 y_ = y[np.where(np.isfinite(y))]
 
 plt.plot(x_, y_, 'bo')
-plt.plot(x_, result.init_fit, 'k--')
-plt.plot(x_, result.best_fit, 'r-')
+plt.plot(x_, result.init_fit, 'k--', label='initial fit')
+plt.plot(x_, result.best_fit, 'r-', label='best fit')
+plt.legend(loc='best')
 plt.show()
 # <end examples/doc_model_with_nan_policy.py>

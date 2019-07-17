@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_fitting_withreport.py>
 from numpy import exp, linspace, pi, random, sign, sin
 
@@ -13,6 +11,7 @@ p_true.add('decay', value=0.032)
 
 
 def residual(pars, x, data=None):
+    """Model a decaying sine wave and subtract data."""
     vals = pars.valuesdict()
     amp = vals['amp']
     per = vals['period']
@@ -27,14 +26,9 @@ def residual(pars, x, data=None):
     return model - data
 
 
-n = 1001
-xmin = 0.
-xmax = 250.0
-
 random.seed(0)
-
-noise = random.normal(scale=0.7215, size=n)
-x = linspace(xmin, xmax, n)
+x = linspace(0.0, 250., 1001)
+noise = random.normal(scale=0.7215, size=x.size)
 data = residual(p_true, x) + noise
 
 fit_params = Parameters()
@@ -46,4 +40,4 @@ fit_params.add('decay', value=0.02)
 out = minimize(residual, fit_params, args=(x,), kws={'data': data})
 
 print(fit_report(out))
-# <end of examples/doc_fitting_withreport.py>
+# <end examples/doc_fitting_withreport.py>

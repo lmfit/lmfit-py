@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_model_savemodelresult2.py>
 import numpy as np
 

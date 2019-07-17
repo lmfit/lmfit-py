@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_model_loadmodelresult.py>
 import matplotlib.pyplot as plt
 import numpy as np

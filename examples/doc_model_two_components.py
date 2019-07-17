@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_model_two_components.py>
 import matplotlib.pyplot as plt
 from numpy import exp, loadtxt, pi, sqrt
@@ -29,7 +27,8 @@ result = mod.fit(y, pars, x=x)
 print(result.fit_report())
 
 plt.plot(x, y, 'bo')
-plt.plot(x, result.init_fit, 'k--')
-plt.plot(x, result.best_fit, 'r-')
+plt.plot(x, result.init_fit, 'k--', label='initial fit')
+plt.plot(x, result.best_fit, 'r-', label='best fit')
+plt.legend(loc='best')
 plt.show()
 # <end examples/doc_model_two_components.py>
