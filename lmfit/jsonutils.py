@@ -1,6 +1,5 @@
-"""JSON utilities for larch objects."""
+"""JSON utilities."""
 from base64 import b64decode, b64encode
-import json
 import sys
 
 import numpy as np
@@ -58,18 +57,18 @@ def import_from(modulepath, objectname):
 
 
 def encode4js(obj):
-    """Prepare an object for json encoding.
+    """Prepare an object for JSON encoding.
 
     It has special handling for many Python types, including:
-    - pandas dataframes and series
-    - numpy ndarrays
+    - pandas DataFrames and Series
+    - NumPy ndarrays
     - complex numbers
 
     """
     if isinstance(obj, DataFrame):
-        return dict(__class__='PDataFrame', value=json.loads(obj.to_json()))
-    elif isinstance(obj, DataFrame):
-        return dict(__class__='PSeries', value=encode4js(obj.to_dict()))
+        return dict(__class__='PDataFrame', value=obj.to_json())
+    elif isinstance(obj, Series):
+        return dict(__class__='PSeries', value=obj.to_json())
     elif isinstance(obj, np.ndarray):
         if 'complex' in obj.dtype.name:
             val = [(obj.real).tolist(), (obj.imag).tolist()]
@@ -142,9 +141,9 @@ def decode4js(obj):
             out = np.fromiter(obj['value'], dtype=obj['__dtype__'])
         out.shape = obj['__shape__']
     elif classname == 'PDataFrame' and read_json is not None:
-        out = read_json(json.dumps(obj['value']))
-    elif classname == 'PSeries':
-        out = Series(obj['value'])
+        out = read_json(obj['value'])
+    elif classname == 'PSeries' and read_json is not None:
+        out = read_json(obj['value'], typ='series')
     elif classname == 'Callable':
         out = val = obj['__name__']
         pyvers = "%d.%d" % (sys.version_info.major,
