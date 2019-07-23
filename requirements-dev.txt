@@ -1,6 +1,8 @@
 asteval>=0.9.12
+corner
 dill
 emcee
+jupyter_sphinx
 matplotlib
 numdifftools
 numpy>=1.10
