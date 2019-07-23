@@ -20,7 +20,7 @@ please start a conversation on the `mailing list`_.  That is, the problem
 you're having may or may not be due to a bug.  If it is due to a bug,
 creating an Issue from the conversation is easy.  If it is not a bug, the
 problem will be discussed and then the Issue will be closed.  While one
-*can* search through closed Issues on github, these are not so easily
+*can* search through closed Issues on GitHub, these are not so easily
 searched, and the conversation is not easily useful to others later.
 Starting the conversation on the mailing list with "How do I do this?" or
 "Why didn't this work?" instead of "This should work and doesn't" is

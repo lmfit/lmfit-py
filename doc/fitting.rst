@@ -280,7 +280,7 @@ completed successfully, standard errors for the fitted variables and
 correlations between pairs of fitted variables are automatically calculated from
 the covariance matrix. For other methods, the ``calc_covar`` parameter (default is
 True) in the :class:`Minimizer` class determines whether or not to use the
-```numdifftools`` package to estimate the covariance matrix. The standard error
+``numdifftools`` package to estimate the covariance matrix. The standard error
 (estimated :math:`1\sigma` error-bar) goes into the :attr:`stderr` attribute of
 the Parameter. The correlations with all other variables will be put into the
 :attr:`correl` attribute of the Parameter -- a dictionary with keys for all

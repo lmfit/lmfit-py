@@ -30,7 +30,7 @@ example, a Lorentzian plus a linear background might be represented as::
     background = LinearModel()
     model = peak + background
 
-All the models listed below are one dimensional, with an independent
+All the models listed below are one-dimensional, with an independent
 variable named ``x``.  Many of these models represent a function with a
 distinct peak, and so share common features.  To maintain uniformity,
 common parameter names are used whenever possible.  Thus, most models have

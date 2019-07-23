@@ -188,7 +188,7 @@ Note that the model fitting was really performed with::
     gmodel = Model(gaussian)
     result = gmodel.fit(y, params, x=x, amp=5, cen=5, wid=1)
 
-These lines clearly express that we want to turn the ```gaussian`` function
+These lines clearly express that we want to turn the ``gaussian`` function
 into a fitting model, and then fit the :math:`y(x)` data to this model,
 starting with values of 5 for ``amp``, 5 for ``cen`` and 1 for ``wid``.  In
 addition, all the other features of lmfit are included:
@@ -272,7 +272,7 @@ function as a fitting model.
    Prefix used for name-mangling of parameter names.  The default is ''.
    If a particular :class:`Model` has arguments ``amplitude``,
    ``center``, and ``sigma``, these would become the parameter names.
-   Using a prefix of ``'g1_'``` would convert these parameter names to
+   Using a prefix of ``'g1_'`` would convert these parameter names to
    ``g1_amplitude``, ``g1_center``, and ``g1_sigma``.   This can be
    essential to avoid name collision in composite models.
 
