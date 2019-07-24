@@ -153,3 +153,7 @@ latex_documents = [
    'Non-Linear Least-Squares Minimization and Curve-Fitting for Python',
    'Matthew Newville, Till Stensitzki, and others', 'manual'),
 ]
+
+# configuration for jupyter_sphinx
+package_path = os.path.abspath('../..')
+os.environ['PYTHONPATH'] = ':'.join((package_path, os.environ.get('PYTHONPATH', '')))

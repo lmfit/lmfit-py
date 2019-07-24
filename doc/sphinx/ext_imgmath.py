@@ -5,4 +5,6 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.imgmath',
               'sphinx.ext.intersphinx',
               'sphinx.ext.napoleon',
-              'sphinx.ext.todo']
+              'sphinx.ext.todo',
+              'IPython.sphinxext.ipython_console_highlighting',
+              'jupyter_sphinx.execute']

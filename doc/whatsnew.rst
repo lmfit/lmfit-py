@@ -116,7 +116,7 @@ on SciPy having code for differential evolution and do not need to keep a
 local copy.
 
 A brute force method was added, which can be used either with
-:meth:`Minimizer.brute` or using the ``method='brute'``` option to
+:meth:`Minimizer.brute` or using the ``method='brute'`` option to
 :meth:`Minimizer.minimize`.  This method requires finite bounds on
 all varying parameters, or that parameters have a finite
 ``brute_step`` attribute set to specify the step size.

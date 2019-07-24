@@ -1551,7 +1551,7 @@ class ModelResult(Minimizer):
                             show_correl=show_correl,
                             min_correl=min_correl, sort_pars=sort_pars)
         modname = self.model._reprstring(long=True)
-        return '[[Model]]\n    %s\n%s\n' % (modname, report)
+        return '[[Model]]\n    %s\n%s' % (modname, report)
 
     def _repr_html_(self, show_correl=True, min_correl=0.1):
         """Returns a HTML representation of parameters data."""

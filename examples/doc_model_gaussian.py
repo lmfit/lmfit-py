@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # <examples/doc_model_gaussian.py>
 import matplotlib.pyplot as plt
 from numpy import exp, loadtxt, pi, sqrt
@@ -22,7 +20,8 @@ result = gmodel.fit(y, x=x, amp=5, cen=5, wid=1)
 print(result.fit_report())
 
 plt.plot(x, y, 'bo')
-plt.plot(x, result.init_fit, 'k--')
-plt.plot(x, result.best_fit, 'r-')
+plt.plot(x, result.init_fit, 'k--', label='initial fit')
+plt.plot(x, result.best_fit, 'r-', label='best fit')
+plt.legend(loc='best')
 plt.show()
 # <end examples/doc_model_gaussian.py>

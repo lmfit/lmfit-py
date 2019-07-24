@@ -17,6 +17,7 @@ Downloading and Installation
 .. _uncertainties:  https://github.com/lebigot/uncertainties
 .. _numdifftools:  https://github.com/pbrod/numdifftools
 .. _contributing.md: https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md
+.. _corner:  https://github.com/dfm/corner.py
 
 
 Prerequisites
@@ -36,8 +37,8 @@ All of these are readily available on PyPI, and should be installed
 automatically if installing with ``pip install lmfit``.
 
 In order to run the test suite, the `pytest`_ package is required.  Some
-functionality requires the `emcee`_, `pandas`_, `Jupyter`_, `matplotlib`_,
-`dill`_, or `numdifftools`_ packages.  These are not installed
+functionality requires the `emcee`_, `corner`_, `pandas`_, `Jupyter`_,
+`matplotlib`_, `dill`_, or `numdifftools`_ packages.  These are not installed
 automatically, but we highly recommend each of these packages.
 
 

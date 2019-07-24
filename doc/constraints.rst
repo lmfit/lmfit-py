@@ -96,10 +96,10 @@ is that Python's 1-line *if expression* is supported::
 
 which is equivalent to the more familiar::
 
-   if test_val/2. > 100:
-       bounded = param_a
-   else:
-       bounded = param_b
+    if test_val/2. > 100:
+        bounded = param_a
+    else:
+        bounded = param_b
 
 Using Inequality Constraints
 ==============================
@@ -111,7 +111,7 @@ problem, as :math:`x + y = \delta` and :math:`\delta \le
 10`.  That is, first, allow :math:`x` to be held by the
 freely varying parameter ``x``.  Next, define a parameter
 ``delta`` to be variable with a maximum value of 10, and
-define parameter ```y`` as ``delta - x``::
+define parameter ``y`` as ``delta - x``::
 
     pars = Parameters()
     pars.add('x', value=5, vary=True)

@@ -24,12 +24,13 @@ seem pretty trivial (notably, :class:`ConstantModel` and :class:`LinearModel`),
 the main point of having these is to be able to use them in composite models. For
 example, a Lorentzian plus a linear background might be represented as::
 
-    >>> from lmfit.models import LinearModel, LorentzianModel
-    >>> peak = LorentzianModel()
-    >>> background = LinearModel()
-    >>> model = peak + background
+    from lmfit.models import LinearModel, LorentzianModel
 
-All the models listed below are one dimensional, with an independent
+    peak = LorentzianModel()
+    background = LinearModel()
+    model = peak + background
+
+All the models listed below are one-dimensional, with an independent
 variable named ``x``.  Many of these models represent a function with a
 distinct peak, and so share common features.  To maintain uniformity,
 common parameter names are used whenever possible.  Thus, most models have
@@ -67,24 +68,20 @@ methods for all of these make a fairly crude guess for the value of
 
 .. autoclass:: SplitLorentzianModel
 
-
 :class:`VoigtModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: VoigtModel
-
 
 :class:`PseudoVoigtModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: PseudoVoigtModel
 
-
 :class:`MoffatModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: MoffatModel
-
 
 :class:`Pearson7Model`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -96,18 +93,15 @@ methods for all of these make a fairly crude guess for the value of
 
 .. autoclass:: StudentsTModel
 
-
 :class:`BreitWignerModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: BreitWignerModel
 
-
 :class:`LognormalModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: LognormalModel
-
 
 :class:`DampedOcsillatorModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,30 +113,26 @@ methods for all of these make a fairly crude guess for the value of
 
 .. autoclass:: DampedHarmonicOscillatorModel
 
-
 :class:`ExponentialGaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: ExponentialGaussianModel
-
 
 :class:`SkewedGaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SkewedGaussianModel
 
-
-
 :class:`SkewedVoigtModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SkewedVoigtModel
 
-
 :class:`DonaichModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: DonaichModel
+
 
 Linear and Polynomial Models
 ------------------------------------
@@ -183,7 +173,6 @@ Two models represent step-like functions, and share many characteristics.
 
 .. autoclass:: StepModel
 
-
 :class:`RectangleModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -202,6 +191,7 @@ Exponential and Power law models
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: PowerLawModel
+
 
 User-defined Models
 ----------------------------
@@ -243,7 +233,7 @@ default value of None, and if the expression contains a variable named
 
 For example, if one creates an :class:`ExpressionModel` as::
 
-    >>> mod = ExpressionModel('off + amp * exp(-x/x0) * sin(x*phase)')
+    mod = ExpressionModel('off + amp * exp(-x/x0) * sin(x*phase)')
 
 The name ``exp`` will be recognized as the exponent function, so the model
 will be interpreted to have parameters named ``off``, ``amp``, ``x0`` and
@@ -253,9 +243,9 @@ parameter hints for bounds, so this will have to be handled explicitly.
 
 To evaluate this model, you might do the following::
 
-    >>> x = numpy.linspace(0, 10, 501)
-    >>> params = mod.make_params(off=0.25, amp=1.0, x0=2.0, phase=0.04)
-    >>> y = mod.eval(params, x=x)
+    x = numpy.linspace(0, 10, 501)
+    params = mod.make_params(off=0.25, amp=1.0, x0=2.0, phase=0.04)
+    y = mod.eval(params, x=x)
 
 While many custom models can be built with a single line expression
 (especially since the names of the lineshapes like ``gaussian``, ``lorentzian``
@@ -270,7 +260,7 @@ As a probably unphysical example, to make a model that is the derivative of
 a Gaussian function times the logarithm of a Lorentzian function you may
 could to define this in a script::
 
-    >>> script = """
+    script = """
     def mycurve(x, amp, cen, sig):
         loren = lorentzian(x, amplitude=amp, center=cen, sigma=sig)
         gauss = gaussian(x, amplitude=amp, center=cen, sigma=sig)
@@ -279,9 +269,8 @@ could to define this in a script::
 
 and then use this with :class:`ExpressionModel` as::
 
-    >>> mod = ExpressionModel('mycurve(x, height, mid, wid)',
-                              init_script=script,
-                              independent_vars=['x'])
+    mod = ExpressionModel('mycurve(x, height, mid, wid)', init_script=script,
+                          independent_vars=['x'])
 
 As above, this will interpret the parameter names to be ``height``, ``mid``,
 and ``wid``, and build a model that can be used to fit data.
@@ -296,140 +285,123 @@ might be the better model.  We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in :class:`GaussianModel` instead
 of writing one ourselves.  This is a slightly different version from the
 one in previous example in that the parameter names are different, and have
-built-in default values.  We will simply use::
+built-in default values.  We will simply use:
 
-     from numpy import loadtxt
+.. jupyter-execute::
+    :hide-output:
 
-     from lmfit.models import GaussianModel
+    from numpy import loadtxt
 
-     data = loadtxt('test_peak.dat')
-     x = data[:, 0]
-     y = data[:, 1]
+    from lmfit.models import GaussianModel
 
-     mod = GaussianModel()
+    data = loadtxt('test_peak.dat')
+    x = data[:, 0]
+    y = data[:, 1]
 
-     pars = mod.guess(y, x=x)
-     out = mod.fit(y, pars, x=x)
-     print(out.fit_report(min_correl=0.25))
+    mod = GaussianModel()
 
+    pars = mod.guess(y, x=x)
+    out = mod.fit(y, pars, x=x)
 
-which prints out the results::
+    print(out.fit_report(min_correl=0.25))
 
-    [[Model]]
-        Model(gaussian)
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 27
-        # data points      = 401
-        # variables        = 3
-        chi-square         = 29.9943157
-        reduced chi-square = 0.07536260
-        Akaike info crit   = -1033.77437
-        Bayesian info crit = -1021.79248
-    [[Variables]]
-        sigma:      1.23218359 +/- 0.00737496 (0.60%) (init = 1.35)
-        amplitude:  30.3135620 +/- 0.15712686 (0.52%) (init = 43.62238)
-        center:     9.24277047 +/- 0.00737496 (0.08%) (init = 9.25)
-        fwhm:       2.90157056 +/- 0.01736670 (0.60%) == '2.3548200*sigma'
-        height:     9.81457817 +/- 0.05087283 (0.52%) == '0.3989423*amplitude/max(1.e-15, sigma)'
-    [[Correlations]] (unreported correlations are < 0.250)
-        C(sigma, amplitude) =  0.577
+which prints out the results:
+
+.. jupyter-execute::
+    :hide-code:
+
+    print(out.fit_report(min_correl=0.25))
 
 We see a few interesting differences from the results of the previous
 chapter. First, the parameter names are longer. Second, there are ``fwhm``
-and ``height`` parameters, to give the full width at half maximum and
-maximum peak height.  And third, the automated initial guesses are pretty
-good. A plot of the fit:
+and ``height`` parameters, to give the full-width-at-half-maximum and
+maximum peak height, respectively. And third, the automated initial guesses
+are pretty good. A plot of the fit:
 
-.. _figA1:
+.. jupyter-execute::
+    :hide-code:
 
-  .. image::  _images/models_peak1.png
-     :target: _images/models_peak1.png
-     :width: 48 %
-  .. image::  _images/models_peak2.png
-     :target: _images/models_peak2.png
-     :width: 48 %
+    import matplotlib as mpl
+    mpl.rcParams['figure.dpi'] = 150
+    %matplotlib inline
+    %config InlineBackend.figure_format = 'svg'
 
-  Fit to peak with Gaussian (left) and Lorentzian (right) models.
+    import matplotlib.pyplot as plt
+    plt.plot(x, y, 'b-')
+    plt.plot(x, out.best_fit, 'r-', label='Gaussian Model')
+    plt.legend(loc='best')
+    plt.show()
 
 shows a decent match to the data -- the fit worked with no explicit setting
 of initial parameter values.  Looking more closely, the fit is not perfect,
 especially in the tails of the peak, suggesting that a different peak
 shape, with longer tails, should be used.  Perhaps a Lorentzian would be
 better?  To do this, we simply replace ``GaussianModel`` with
-``LorentzianModel`` to get a :class:`LorentzianModel`::
+``LorentzianModel`` to get a :class:`LorentzianModel`:
+
+.. jupyter-execute::
 
     from lmfit.models import LorentzianModel
     mod = LorentzianModel()
 
 with the rest of the script as above.  Perhaps predictably, the first thing
-we try gives results that are worse::
+we try gives results that are worse by comaparing the fit statistics:
 
-    [[Model]]
-        Model(lorentzian)
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 23
-        # data points      = 401
-        # variables        = 3
-        chi-square         = 53.7535387
-        reduced chi-square = 0.13505914
-        Akaike info crit   = -799.830322
-        Bayesian info crit = -787.848438
-    [[Variables]]
-        sigma:      1.15483925 +/- 0.01315659 (1.14%) (init = 1.35)
-        center:     9.24438944 +/- 0.00927619 (0.10%) (init = 9.25)
-        amplitude:  38.9727645 +/- 0.31386183 (0.81%) (init = 54.52798)
-        fwhm:       2.30967850 +/- 0.02631318 (1.14%) == '2.0000000*sigma'
-        height:     10.7421156 +/- 0.08633945 (0.80%) == '0.3183099*amplitude/max(1.e-15, sigma)'
-    [[Correlations]] (unreported correlations are < 0.250)
-        C(sigma, amplitude) =  0.709
+.. jupyter-execute::
+    :hide-code:
 
-with the plot shown on the right in the figure above.  The tails are now
-too big, and the value for :math:`\chi^2` almost doubled.  A Voigt model
-does a better job.  Using :class:`VoigtModel`, this is as simple as using::
+    pars = mod.guess(y, x=x)
+    out = mod.fit(y, pars, x=x)
+    print(out.fit_report(min_correl=0.25))
+
+and also by visual inspection of the fit to the data (figure below).
+
+.. jupyter-execute::
+    :hide-code:
+
+     plt.plot(x, y, 'b-')
+     plt.plot(x, out.best_fit, 'r-', label='Lorentzian Model')
+     plt.legend(loc='best')
+     plt.show()
+
+The tails are now too big, and the value for :math:`\chi^2` almost doubled.
+A Voigt model does a better job. Using :class:`VoigtModel`, this is as simple as using:
+
+.. jupyter-execute::
 
     from lmfit.models import VoigtModel
     mod = VoigtModel()
 
-with all the rest of the script as above.  This gives::
+with all the rest of the script as above.  This gives:
 
-    [[Model]]
-        Model(voigt)
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 23
-        # data points      = 401
-        # variables        = 3
-        chi-square         = 14.5448627
-        reduced chi-square = 0.03654488
-        Akaike info crit   = -1324.00615
-        Bayesian info crit = -1312.02427
-    [[Variables]]
-        center:     9.24411150 +/- 0.00505482 (0.05%) (init = 9.25)
-        sigma:      0.73015627 +/- 0.00368460 (0.50%) (init = 0.8775)
-        amplitude:  35.7554146 +/- 0.13861321 (0.39%) (init = 65.43358)
-        gamma:      0.73015627 +/- 0.00368460 (0.50%) == 'sigma'
-        fwhm:       2.62951907 +/- 0.01326940 (0.50%) == '3.6013100*sigma'
-        height:     10.2203969 +/- 0.03009415 (0.29%) == 'amplitude*wofz((1j*gamma)/(sigma*sqrt(2))).real/(sigma*sqrt(2*pi))'
-    [[Correlations]] (unreported correlations are < 0.250)
-        C(sigma, amplitude) =  0.651
+.. jupyter-execute::
+    :hide-code:
+
+    pars = mod.guess(y, x=x)
+    out = mod.fit(y, pars, x=x)
+    print(out.fit_report(min_correl=0.25))
 
 which has a much better value for :math:`\chi^2` and the other
 goodness-of-fit measures, and an obviously better match to the data as seen
 in the figure below (left).
 
-.. _figA2:
+.. jupyter-execute::
+    :hide-code:
 
-  .. image::  _images/models_peak3.png
-     :target: _images/models_peak3.png
-     :width: 48 %
-  .. image::  _images/models_peak4.png
-     :target: _images/models_peak4.png
-     :width: 48 %
+    fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
+    axes[0].plot(x, y, 'b-')
+    axes[0].plot(x, out.best_fit, 'r-', label='Voigt Model\ngamma constrained')
+    axes[0].legend(loc='best')
+    # free gamma parameter
+    pars['gamma'].set(value=0.7, vary=True, expr='')
+    out_gamma = mod.fit(y, pars, x=x)
+    axes[1].plot(x, y, 'b-')
+    axes[1].plot(x, out_gamma.best_fit, 'r-', label='Voigt Model\ngamma unconstrained')
+    axes[1].legend(loc='best')
+    plt.show()
 
-  Fit to peak with Voigt model (left) and Voigt model with ``gamma``
-  varying independently of ``sigma`` (right).
+Fit to peak with Voigt model (left) and Voigt model with ``gamma``
+varying independently of ``sigma`` (right).
 
 Can we do better? The Voigt function has a :math:`\gamma` parameter
 (``gamma``) that can be distinct from ``sigma``.  The default behavior used
@@ -442,31 +414,12 @@ give it a starting value using something like::
    pars = mod.guess(y, x=x)
    pars['gamma'].set(value=0.7, vary=True, expr='')
 
+which gives:
 
-which gives::
+.. jupyter-execute::
+    :hide-code:
 
-    [[Model]]
-        Model(voigt)
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 23
-        # data points      = 401
-        # variables        = 4
-        chi-square         = 10.9301767
-        reduced chi-square = 0.02753193
-        Akaike info crit   = -1436.57602
-        Bayesian info crit = -1420.60017
-    [[Variables]]
-        sigma:      0.89518909 +/- 0.01415450 (1.58%) (init = 0.8775)
-        amplitude:  34.1914737 +/- 0.17946860 (0.52%) (init = 65.43358)
-        center:     9.24374847 +/- 0.00441903 (0.05%) (init = 9.25)
-        gamma:      0.52540199 +/- 0.01857955 (3.54%) (init = 0.7)
-        fwhm:       3.22385342 +/- 0.05097475 (1.58%) == '3.6013100*sigma'
-        height:     10.0872204 +/- 0.03482129 (0.35%) == 'amplitude*wofz((1j*gamma)/(sigma*sqrt(2))).real/(sigma*sqrt(2*pi))'
-    [[Correlations]] (unreported correlations are < 0.250)
-        C(sigma, gamma)     = -0.928
-        C(amplitude, gamma) =  0.821
-        C(sigma, amplitude) = -0.651
+    print(out_gamma.fit_report(min_correl=0.25))
 
 and the fit shown on the right above.
 
@@ -500,7 +453,8 @@ it is therefore very simple to build models that contain multiple peaks and
 various backgrounds.  An example of a simple fit to a noisy step function
 plus a constant:
 
-.. literalinclude:: ../examples/doc_builtinmodels_stepmodel.py
+.. jupyter-execute:: ../examples/doc_builtinmodels_stepmodel.py
+    :hide-output:
 
 After constructing step-like data, we first create a :class:`StepModel`
 telling it to use the ``erf`` form (see details above), and a
@@ -508,41 +462,23 @@ telling it to use the ``erf`` form (see details above), and a
 and :meth:`guess` method for the initial step function paramaters, and
 :meth:`make_params` arguments for the linear component.
 After making a composite model, we run :meth:`fit` and report the
-results, which gives::
+results, which gives:
 
-    [[Model]]
-        (Model(step, prefix='step_', form='erf') + Model(linear, prefix='line_'))
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 49
-        # data points      = 201
-        # variables        = 5
-        chi-square         = 593.709622
-        reduced chi-square = 3.02913072
-        Akaike info crit   = 227.700173
-        Bayesian info crit = 244.216698
-    [[Variables]]
-        line_intercept:  12.0964833 +/- 0.27606235 (2.28%) (init = 11.58574)
-        line_slope:      1.87164655 +/- 0.09318714 (4.98%) (init = 0)
-        step_sigma:      0.67392841 +/- 0.01091168 (1.62%) (init = 1.428571)
-        step_center:     3.13494792 +/- 0.00516615 (0.16%) (init = 2.5)
-        step_amplitude:  112.858376 +/- 0.65392949 (0.58%) (init = 134.7378)
-    [[Correlations]] (unreported correlations are < 0.100)
-        C(line_slope, step_amplitude)     = -0.879
-        C(step_sigma, step_amplitude)     =  0.564
-        C(line_slope, step_sigma)         = -0.457
-        C(line_intercept, step_center)    =  0.427
-        C(line_intercept, line_slope)     = -0.309
-        C(line_slope, step_center)        = -0.234
-        C(line_intercept, step_sigma)     = -0.137
-        C(line_intercept, step_amplitude) = -0.117
-        C(step_center, step_amplitude)    =  0.109
+.. jupyter-execute::
+    :hide-code:
+
+    print(out.fit_report())
 
 with a plot of
 
-.. image::  _images/models_stepfit.png
-   :target: _images/models_stepfit.png
-   :width: 50 %
+.. jupyter-execute::
+    :hide-code:
+
+    plt.plot(x, y, 'b')
+    plt.plot(x, out.init_fit, 'k--', label='initial fit')
+    plt.plot(x, out.best_fit, 'r-', label='best fit')
+    plt.legend(loc='best')
+    plt.show()
 
 
 Example 3: Fitting Multiple Peaks -- and using Prefixes
@@ -558,7 +494,8 @@ string) that will be put at the beginning of each parameter name.  To
 illustrate, we fit one of the classic datasets from the `NIST StRD`_ suite
 involving a decaying exponential and two gaussians.
 
-.. literalinclude:: ../examples/doc_builtinmodels_nistgauss.py
+.. jupyter-execute:: ../examples/doc_builtinmodels_nistgauss.py
+    :hide-output:
 
 where we give a separate prefix to each model (they all have an
 ``amplitude`` parameter).  The ``prefix`` values are attached transparently
@@ -571,58 +508,36 @@ individual model ``gauss1`` and ``gauss2``, there was no need.
 Note also in the example here that we explicitly set bounds on many of the
 parameter values.
 
-The fit results printed out are::
+The fit results printed out are:
 
-    [[Model]]
-        ((Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')) + Model(exponential, prefix='exp_'))
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 48
-        # data points      = 250
-        # variables        = 8
-        chi-square         = 1247.52821
-        reduced chi-square = 5.15507524
-        Akaike info crit   = 417.864631
-        Bayesian info crit = 446.036318
-    [[Variables]]
-        exp_decay:      90.9508860 +/- 1.10310509 (1.21%) (init = 93.24905)
-        exp_amplitude:  99.0183283 +/- 0.53748735 (0.54%) (init = 162.2102)
-        g1_center:      107.030954 +/- 0.15006786 (0.14%) (init = 105)
-        g1_sigma:       16.6725753 +/- 0.16048161 (0.96%) (init = 15)
-        g1_amplitude:   4257.77319 +/- 42.3833645 (1.00%) (init = 2000)
-        g1_fwhm:        39.2609138 +/- 0.37790530 (0.96%) == '2.3548200*g1_sigma'
-        g1_height:      101.880231 +/- 0.59217100 (0.58%) == '0.3989423*g1_amplitude/max(1.e-15, g1_sigma)'
-        g2_center:      153.270101 +/- 0.19466743 (0.13%) (init = 155)
-        g2_sigma:       13.8069484 +/- 0.18679415 (1.35%) (init = 15)
-        g2_amplitude:   2493.41771 +/- 36.1694731 (1.45%) (init = 2000)
-        g2_fwhm:        32.5128783 +/- 0.43986659 (1.35%) == '2.3548200*g2_sigma'
-        g2_height:      72.0455934 +/- 0.61722094 (0.86%) == '0.3989423*g2_amplitude/max(1.e-15, g2_sigma)'
-    [[Correlations]] (unreported correlations are < 0.500)
-        C(g1_sigma, g1_amplitude)   =  0.824
-        C(g2_sigma, g2_amplitude)   =  0.815
-        C(exp_decay, exp_amplitude) = -0.695
-        C(g1_sigma, g2_center)      =  0.684
-        C(g1_center, g2_amplitude)  = -0.669
-        C(g1_center, g2_sigma)      = -0.652
-        C(g1_amplitude, g2_center)  =  0.648
-        C(g1_center, g2_center)     =  0.621
-        C(g1_center, g1_sigma)      =  0.507
-        C(exp_decay, g1_amplitude)  = -0.507
+.. jupyter-execute::
+    :hide-code:
+
+    print(out.fit_report())
 
 We get a very good fit to this problem (described at the NIST site as of
 average difficulty, but the tests there are generally deliberately challenging) by
 applying reasonable initial guesses and putting modest but explicit bounds
-on the parameter values.  This fit is shown on the left:
+on the parameter values.  The overall fit is shown on the left, with its individual
+components displayed on the right:
 
-.. _figA3:
+.. jupyter-execute::
+    :hide-code:
 
-  .. image::  _images/models_nistgauss.png
-     :target: _images/models_nistgauss.png
-     :width: 48 %
-  .. image::  _images/models_nistgauss2.png
-     :target: _images/models_nistgauss2.png
-     :width: 48 %
+    fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
+    axes[0].plot(x, y, 'b')
+    axes[0].plot(x, init, 'k--', label='initial fit')
+    axes[0].plot(x, out.best_fit, 'r-', label='best fit')
+    axes[0].legend(loc='best')
 
+    comps = out.eval_components(x=x)
+    axes[1].plot(x, y, 'b')
+    axes[1].plot(x, comps['g1_'], 'g--', label='Gaussian component 1')
+    axes[1].plot(x, comps['g2_'], 'm--', label='Gaussian component 2')
+    axes[1].plot(x, comps['exp_'], 'k--', label='Exponential component')
+    axes[1].legend(loc='best')
+
+    plt.show()
 
 One final point on setting initial values.  From looking at the data
 itself, we can see the two Gaussian peaks are reasonably well separated but
@@ -646,46 +561,31 @@ That is, with::
     gauss1.guess(y[ix1:ix2], x=x[ix1:ix2])
     gauss2.guess(y[ix2:ix3], x=x[ix2:ix3])
 
-we can get a better initial estimate.  The fit converges to the same answer,
-giving to identical values (to the precision printed out in the report),
-but in few steps, and without any bounds on parameters at all::
 
-    [[Model]]
-        ((Model(gaussian, prefix='g1_') + Model(gaussian, prefix='g2_')) + Model(exponential, prefix='exp_'))
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 39
-        # data points      = 250
-        # variables        = 8
-        chi-square         = 1247.52821
-        reduced chi-square = 5.15507524
-        Akaike info crit   = 417.864631
-        Bayesian info crit = 446.036318
-    [[Variables]]
-        exp_decay:      90.9508890 +/- 1.10310483 (1.21%) (init = 111.1985)
-        exp_amplitude:  99.0183270 +/- 0.53748905 (0.54%) (init = 94.53724)
-        g1_sigma:       16.6725765 +/- 0.16048227 (0.96%) (init = 14.5)
-        g1_amplitude:   4257.77343 +/- 42.3836432 (1.00%) (init = 3189.648)
-        g1_center:      107.030956 +/- 0.15006873 (0.14%) (init = 106.5)
-        g1_fwhm:        39.2609166 +/- 0.37790686 (0.96%) == '2.3548200*g1_sigma'
-        g1_height:      101.880230 +/- 0.59217233 (0.58%) == '0.3989423*g1_amplitude/max(1.e-15, g1_sigma)'
-        g2_sigma:       13.8069461 +/- 0.18679534 (1.35%) (init = 15)
-        g2_amplitude:   2493.41733 +/- 36.1696911 (1.45%) (init = 2818.337)
-        g2_center:      153.270101 +/- 0.19466905 (0.13%) (init = 150)
-        g2_fwhm:        32.5128728 +/- 0.43986940 (1.35%) == '2.3548200*g2_sigma'
-        g2_height:      72.0455948 +/- 0.61722329 (0.86%) == '0.3989423*g2_amplitude/max(1.e-15, g2_sigma)'
-    [[Correlations]] (unreported correlations are < 0.500)
-        C(g1_sigma, g1_amplitude)   =  0.824
-        C(g2_sigma, g2_amplitude)   =  0.815
-        C(exp_decay, exp_amplitude) = -0.695
-        C(g1_sigma, g2_center)      =  0.684
-        C(g1_center, g2_amplitude)  = -0.669
-        C(g1_center, g2_sigma)      = -0.652
-        C(g1_amplitude, g2_center)  =  0.648
-        C(g1_center, g2_center)     =  0.621
-        C(g1_sigma, g1_center)      =  0.507
-        C(exp_decay, g1_amplitude)  = -0.507
+.. jupyter-execute:: ../examples/doc_builtinmodels_nistgauss2.py
+    :hide-code:
+    :hide-output:
+
+we can get a better initial estimate (see below).
+
+.. jupyter-execute::
+    :hide-code:
+
+    plt.plot(x, y, 'b')
+    plt.plot(x, out.init_fit, 'k--', label='initial fit')
+    plt.plot(x, out.best_fit, 'r-', label='best fit')
+    plt.legend(loc='best')
+
+    plt.show()
+
+The fit converges to the same answer, giving to identical values
+(to the precision printed out in the report), but in fewer steps,
+and without any bounds on parameters at all:
+
+.. jupyter-execute::
+    :hide-code:
+
+    print(out.fit_report())
 
 This script is in the file ``doc_builtinmodels_nistgauss2.py`` in the examples folder,
-and the fit result shown on the right above shows an improved initial
-estimate of the data.
+and the figure above shows an improved initial estimate of the data.

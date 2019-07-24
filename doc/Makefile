@@ -19,22 +19,32 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 html:
 	cp sphinx/ext_mathjax.py extensions.py
+	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "html build finished: $(BUILDDIR)/html."
+	rm -f *.dat *.sav
 
 htmlzip: html
+	cp sphinx/ext_mathjax.py extensions.py
+	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/lmfit_doc
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
+	rm -f *.dat *.sav
 
 epub:
 	cp sphinx/ext_imgmath.py extensions.py
+	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b epub  $(ALLSPHINXOPTS) $(BUILDDIR)/epub
 	cp -pr $(BUILDDIR)/epub/*.epub $(BUILDDIR)/html/.
+	rm -f *.dat *.sav
 
 pdf: latex
+	cp sphinx/ext_imgmath.py extensions.py
+	cp ../examples/*.dat .
 	cd $(BUILDDIR)/latex && make all-pdf
 	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(BUILDDIR)/html/.
+	rm -f *.dat *.sav
 
 all: html htmlzip epub pdf
 

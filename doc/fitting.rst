@@ -63,9 +63,10 @@ Since the function will be passed in a dictionary of :class:`Parameters`, it is 
 to unpack these to get numerical values at the top of the function.  A
 simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
 
+    from numpy import exp, sign, sin, pi
+
 
     def residual(pars, x, data=None, eps=None):
-        from numpy import exp, sign, sin, pi
         # unpack parameters: extract .value attribute for each parameter
         parvals = pars.valuesdict()
         period = parvals['period']
@@ -279,7 +280,7 @@ completed successfully, standard errors for the fitted variables and
 correlations between pairs of fitted variables are automatically calculated from
 the covariance matrix. For other methods, the ``calc_covar`` parameter (default is
 True) in the :class:`Minimizer` class determines whether or not to use the
-```numdifftools`` package to estimate the covariance matrix. The standard error
+``numdifftools`` package to estimate the covariance matrix. The standard error
 (estimated :math:`1\sigma` error-bar) goes into the :attr:`stderr` attribute of
 the Parameter. The correlations with all other variables will be put into the
 :attr:`correl` attribute of the Parameter -- a dictionary with keys for all
@@ -416,47 +417,60 @@ For more information, check the examples in ``examples/lmfit_brute_example.ipynb
 
 :meth:`Minimizer.emcee` can be used to obtain the posterior probability distribution of
 parameters, given a set of experimental data. An example problem is a double
-exponential decay. A small amount of Gaussian noise is also added in::
+exponential decay. A small amount of Gaussian noise is also added in:
 
-    >>> import numpy as np
-    >>> import lmfit
-    >>> import matplotlib.pyplot as plt
-    >>> x = np.linspace(1, 10, 250)
-    >>> np.random.seed(0)
-    >>> y = 3.0 * np.exp(-x / 2) - 5.0 * np.exp(-(x - 0.1) / 10.) + 0.1 * np.random.randn(len(x))
-    >>> plt.plot(x, y, 'b')
-    >>> plt.show()
+.. jupyter-execute::
+    :hide-code:
 
-.. image:: _images/emcee_dbl_exp.png
-   :target: _images/emcee_dbl_exp.png
-   :width: 50%
+    import warnings
+    warnings.filterwarnings(action="ignore")
 
-Create a Parameter set for the initial guesses::
+    import matplotlib as mpl
+    import matplotlib.pyplot as plt
+    mpl.rcParams['figure.dpi'] = 150
+    %matplotlib inline
+    %config InlineBackend.figure_format = 'svg'
 
-    >>> p = lmfit.Parameters()
-    >>> p.add_many(('a1', 4.), ('a2', 4.), ('t1', 3.), ('t2', 3., True))
 
-    >>> def residual(p):
-    ...     v = p.valuesdict()
-    ...     return v['a1'] * np.exp(-x / v['t1']) + v['a2'] * np.exp(-(x - 0.1) / v['t2']) - y
+.. jupyter-execute::
 
-Solving with :func:`minimize` gives the Maximum Likelihood solution::
+    import matplotlib.pyplot as plt
+    import numpy as np
 
-    >>> mi = lmfit.minimize(residual, p, method='Nelder', nan_policy='omit')
-    >>> lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
-    [[Variables]]
-        a1:  2.98623689 (init = 4)
-        a2: -4.33525597 (init = 4)
-        t1:  1.30993186 (init = 3)
-        t2:  11.8240752 (init = 3)
+    import lmfit
 
-    >>> plt.plot(x, y, 'b')
-    >>> plt.plot(x, residual(mi.params) + y, 'r')
-    >>> plt.show()
+    x = np.linspace(1, 10, 250)
+    np.random.seed(0)
+    y = 3.0 * np.exp(-x / 2) - 5.0 * np.exp(-(x - 0.1) / 10.) + 0.1 * np.random.randn(x.size)
+    plt.plot(x, y, 'b')
+    plt.show()
 
-.. image:: _images/emcee_dbl_exp2.png
-   :target: _images/emcee_dbl_exp2.png
-   :width: 50%
+Create a Parameter set for the initial guesses:
+
+.. jupyter-execute::
+
+    p = lmfit.Parameters()
+    p.add_many(('a1', 4.), ('a2', 4.), ('t1', 3.), ('t2', 3., True))
+
+    def residual(p):
+        v = p.valuesdict()
+        return v['a1'] * np.exp(-x / v['t1']) + v['a2'] * np.exp(-(x - 0.1) / v['t2']) - y
+
+Solving with :func:`minimize` gives the Maximum Likelihood solution:
+
+.. jupyter-execute::
+
+    mi = lmfit.minimize(residual, p, method='nelder', nan_policy='omit')
+    lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
+
+and plotting the fit using the Maximum Likelihood solution gives the graph below:
+
+.. jupyter-execute::
+
+    plt.plot(x, y, 'b')
+    plt.plot(x, residual(mi.params) + y, 'r', label='best fit')
+    plt.legend(loc='best')
+    plt.show()
 
 However, this doesn't give a probability distribution for the parameters.
 Furthermore, we wish to deal with the data uncertainty. This is called
@@ -470,77 +484,69 @@ If the objective function returns an array of unweighted residuals (i.e.,
 ``data-model``) as is the case here, you can use ``is_weighted=False`` as an
 argument for ``emcee``. In that case, ``emcee`` will automatically add/use the
 ``__lnsigma`` parameter to estimate the true uncertainty in the data. To
-place boundaries on this parameter one can do::
+place boundaries on this parameter one can do:
 
-    >>> mi.params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2))
+.. jupyter-execute::
 
-Now we have to set up the minimizer and do the sampling::
+    mi.params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2))
 
-    >>> res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300, steps=1000, thin=20,
-                             params=mi.params, is_weighted=False)
+Now we have to set up the minimizer and do the sampling:
+
+.. jupyter-execute::
+
+    res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300, steps=1000, thin=20,
+                         params=mi.params, is_weighted=False)
 
 Of note, the ``is_weighted`` argument will be ignored if your objective function
 returns a float instead of an array. See the Notes in :meth:`Minimizer.emcee` for
 more information.
 
 Lets have a look at those posterior distributions for the parameters. This requires
-installation of the ``corner`` package::
+installation of the ``corner`` package:
 
-    >>> import corner
-    >>> corner.corner(res.flatchain, labels=res.var_names, truths=list(res.params.valuesdict().values()))
+.. jupyter-execute::
 
-.. image:: _images/emcee_corner.png
-   :target: _images/emcee_corner.png
-   :width: 75%
+    import corner
+
+    emcee_plot = corner.corner(res.flatchain, labels=res.var_names,
+                               truths=list(res.params.valuesdict().values()))
 
 The values reported in the :class:`MinimizerResult` are the medians of the
 probability distributions and a 1 :math:`\sigma` quantile, estimated as half the
 difference between the 15.8 and 84.2 percentiles. The median value is not
 necessarily the same as the Maximum Likelihood Estimate. We'll get that as well.
-You can see that we recovered the right uncertainty level on the data::
+You can see that we recovered the right uncertainty level on the data:
 
-    >>> print("median of posterior probability distribution")
-    >>> print('--------------------------------------------')
-    >>> lmfit.report_fit(res.params)
-    median of posterior probability distribution
-    --------------------------------------------
-    [[Variables]]
-        a1:         3.00096797 +/- 0.14231292 (4.74%) (init = 2.986237)
-        a2:        -4.34208406 +/- 0.12652899 (2.91%) (init = -4.335256)
-        t1:         1.31910309 +/- 0.14180921 (10.75%) (init = 1.309932)
-        t2:         11.7812397 +/- 0.49805858 (4.23%) (init = 11.82408)
-        __lnsigma: -2.32838725 +/- 0.04403968 (1.89%) (init = -2.302585)
-    [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) =  0.982
-        C(a2, t1) = -0.940
-        C(t1, t2) = -0.897
-        C(a1, t1) = -0.504
-        C(a1, a2) =  0.214
-        C(a1, t2) =  0.174
+.. jupyter-execute::
 
-    >>> # find the maximum likelihood solution
-    >>> highest_prob = np.argmax(res.lnprob)
-    >>> hp_loc = np.unravel_index(highest_prob, res.lnprob.shape)
-    >>> mle_soln = res.chain[hp_loc]
-    >>> for i, par in enumerate(p):
-    ...     p[par].value = mle_soln[i]
+    print("median of posterior probability distribution")
+    print('--------------------------------------------')
+    lmfit.report_fit(res.params)
 
-    >>> print("\nMaximum likelihood Estimation")
-    >>> print('-----------------------------')
-    >>> print(p)
-    Maximum likelihood Estimation
-    -----------------------------
-   Parameters([('a1', <Parameter 'a1', 3.003878755004621, bounds=[-inf:inf]>),
-   ('a2', <Parameter 'a2', -4.327965057455135, bounds=[-inf:inf]>),
-   ('t1', <Parameter 't1', 1.3006869431937975, bounds=[-inf:inf]>),
-   ('t2', <Parameter 't2', 11.848423244767798, bounds=[-inf:inf]>)])
 
-    >>> # Finally lets work out a 1 and 2-sigma error estimate for 't1'
-    >>> quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
-    >>> print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
-    >>> print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
-    1 sigma spread 0.14235120263891188
-    2 sigma spread 0.2873717185860183
+Find the Maximum Likelihood Estimation (MLE):
+
+.. jupyter-execute::
+
+    highest_prob = np.argmax(res.lnprob)
+    hp_loc = np.unravel_index(highest_prob, res.lnprob.shape)
+    mle_soln = res.chain[hp_loc]
+    for i, par in enumerate(p):
+        p[par].value = mle_soln[i]
+
+    print("Maximum Likelihood Estimation")
+    print('-----------------------------')
+    for _, vals in p.items():
+        print(vals)
+
+Finally, lets work out a 1 and 2-:math:`\sigma` error estimate for 't1':
+
+.. jupyter-execute::
+
+    quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
+    print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
+    print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
+
 
 Getting and Printing Fit Reports
 ===========================================
@@ -551,28 +557,12 @@ Getting and Printing Fit Reports
 
 An example using this to write out a fit report would be:
 
-.. literalinclude:: ../examples/doc_fitting_withreport.py
+.. jupyter-execute:: ../examples/doc_fitting_withreport.py
+    :hide-output:
 
-which would write out::
+which would give as output:
 
-    [[Fit Statistics]]
-        # fitting method   = leastsq
-        # function evals   = 83
-        # data points      = 1001
-        # variables        = 4
-        chi-square         = 498.811759
-        reduced chi-square = 0.50031270
-        Akaike info crit   = -689.222517
-        Bayesian info crit = -669.587497
-    [[Variables]]
-        amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
-        period:  5.48507045 +/- 0.02666492 (0.49%) (init = 2)
-        shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
-        decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
-    [[Correlations]] (unreported correlations are < 0.100)
-        C(period, shift) =  0.797
-        C(amp, decay)    =  0.582
-        C(amp, shift)    = -0.297
-        C(amp, period)   = -0.243
-        C(shift, decay)  = -0.182
-        C(period, decay) = -0.150
+.. jupyter-execute::
+    :hide-code:
+
+    print(fit_report(out))
