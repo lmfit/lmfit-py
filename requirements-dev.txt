@@ -11,4 +11,5 @@ pre-commit
 pytest
 scipy>=0.19
 six>1.10
+Sphinx
 uncertainties>=3.0
