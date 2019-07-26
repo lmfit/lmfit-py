@@ -157,3 +157,5 @@ latex_documents = [
 # configuration for jupyter_sphinx
 package_path = os.path.abspath('../..')
 os.environ['PYTHONPATH'] = ':'.join((package_path, os.environ.get('PYTHONPATH', '')))
+
+image_converter_args=["-density", "300"]

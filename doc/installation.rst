@@ -18,6 +18,9 @@ Downloading and Installation
 .. _numdifftools:  https://github.com/pbrod/numdifftools
 .. _contributing.md: https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md
 .. _corner:  https://github.com/dfm/corner.py
+.. _sphinx: https://www.sphinx-doc.org
+.. _jupyter_sphinx: https://jupyter-sphinx.readthedocs.io
+.. _ImageMagick: https://www.imagemagick.org/
 
 
 Prerequisites
@@ -41,11 +44,17 @@ functionality requires the `emcee`_, `corner`_, `pandas`_, `Jupyter`_,
 `matplotlib`_, `dill`_, or `numdifftools`_ packages.  These are not installed
 automatically, but we highly recommend each of these packages.
 
+For building the documentation, `matplotlib`_, `emcee`_, `corner`_,
+`Sphinx`_, `jupyter_sphinx`_, and `ImageMagick`_ are required (the latter
+one only when generating the PDF document).
+
+Please refer to  ``requirements-dev.txt`` for a list of all dependencies that
+are needed if you want to participate in the development of lmfit.
 
 Downloads
 ~~~~~~~~~~~~~
 
-The latest stable version of lmfit is |release| and is available from `PyPi
+The latest stable version of lmfit is |release| and is available from `PyPI
 <https://pypi.python.org/pypi/lmfit/>`_.
 
 Installation

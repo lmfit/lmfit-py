@@ -33,7 +33,7 @@ htmlzip: html
 	rm -f *.dat *.sav
 
 epub:
-	cp sphinx/ext_imgmath.py extensions.py
+	cp sphinx/ext_mathjax.py extensions.py
 	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b epub  $(ALLSPHINXOPTS) $(BUILDDIR)/epub
 	cp -pr $(BUILDDIR)/epub/*.epub $(BUILDDIR)/html/.
@@ -70,6 +70,7 @@ help:
 clean:
 	-rm -rf $(BUILDDIR)/*
 	-rm -f extensions.py
+	-rm -f *.dat *.sav
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
@@ -93,17 +94,23 @@ htmlhelp:
 	      ".hhp project file in $(BUILDDIR)/htmlhelp."
 
 latex:
+	cp sphinx/ext_imgmath.py extensions.py
+	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) _build/latex
 	@echo
 	@echo "Build finished; the LaTeX files are in _build/latex."
 	@echo "Run \`make all-pdf' or \`make all-ps' in that directory to" \
 	      "run these through (pdf)latex."
+	rm -f *.dat *.sav
 
 latexpdf:
+	cp sphinx/ext_imgmath.py extensions.py
+	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) _build/latex
 	@echo "Running LaTeX files through pdflatex..."
 	make -C _build/latex all-pdf
 	@echo "pdflatex finished; the PDF files are in _build/latex."
+	rm -f *.dat *.sav
 
 changes:
 	$(SPHINXBUILD) -b changes $(ALLSPHINXOPTS) $(BUILDDIR)/changes
