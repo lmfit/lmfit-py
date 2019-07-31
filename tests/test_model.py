@@ -1,3 +1,4 @@
+import sys
 import unittest
 import warnings
 import functools
@@ -624,8 +625,9 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         with pytest.raises(ValueError, match=err_msg):
             mod.fit(y, params, x=x, nan_policy='wrong_argument')
 
+    @pytest.mark.skipif(sys.version_info.major == 2,
+                        reason="cannot use wrapped functions with Python 2")
     def test_wrapped_model_func(self):
-
         x = np.linspace(-1, 1, 51)
         y = 2.0*x + 3 + 0.0003 * x*x
         y += np.random.normal(size=len(x), scale=0.025)
