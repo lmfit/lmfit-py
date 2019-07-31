@@ -1,6 +1,6 @@
 import unittest
 import warnings
-
+import functools
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
@@ -22,6 +22,22 @@ def _skip_if_no_pandas():
         import pandas  # noqa: F401
     except ImportError:
         raise pytest.skip("Skipping tests that require pandas.")
+
+
+def firstarg_ndarray(func):
+    """a simple wrapper used for testing that wrapped
+    functions can be model functions"""
+    @functools.wraps(func)
+    def wrapper(x, *args, **kws):
+        x = np.asarray(x)
+        return func(x, *args, **kws)
+    return wrapper
+
+
+@firstarg_ndarray
+def linear_func(x, a, b):
+    "test wrapped model function"
+    return a*x+b
 
 
 class CommonTests(object):
@@ -607,6 +623,27 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         err_msg = r"nan_policy must be 'propagate', 'omit', or 'raise'."
         with pytest.raises(ValueError, match=err_msg):
             mod.fit(y, params, x=x, nan_policy='wrong_argument')
+
+    def test_wrapped_model_func(self):
+
+        x = np.linspace(-1, 1, 51)
+        y = 2.0*x + 3 + 0.0003 * x*x
+        y += np.random.normal(size=len(x), scale=0.025)
+        mod = Model(linear_func)
+        pars = mod.make_params(a=1.5, b=2.5)
+
+        tmp = mod.eval(pars, x=x)
+
+        self.assertTrue(tmp.max() > 3)
+        self.assertTrue(tmp.min() > -20)
+
+        result = mod.fit(y, pars, x=x)
+        self.assertTrue(result.chisqr < 0.05)
+        self.assertTrue(result.aic < -350)
+        self.assertTrue(result.errorbars)
+
+        self.assertTrue(abs(result.params['a'].value - 2.0) < 0.05)
+        self.assertTrue(abs(result.params['b'].value - 3.0) < 0.41)
 
 
 class TestLinear(CommonTests, unittest.TestCase):
