@@ -1,4 +1,5 @@
 """Implementation of the Model interface."""
+import sys
 from collections import OrderedDict
 from copy import deepcopy
 from functools import wraps
@@ -455,25 +456,43 @@ class Model(object):
         """Build parameters from function arguments."""
         if self.func is None:
             return
+        # need to fetch the following from the function signature:
+        #   pos_args: list of positional argument names
+        #   kw_args: dict of keyword arguments with default values
+        #   keywords_:  name of **kws argument or None
+        # 1. limited support for asteval functions as the model functions:
         if hasattr(self.func, 'argnames') and hasattr(self.func, 'kwargs'):
             pos_args = self.func.argnames[:]
+            keywords_ = None
             kw_args = {}
             for name, defval in self.func.kwargs:
                 kw_args[name] = defval
-            keywords_ = list(kw_args.keys())
+        # 2. modern, best-practice approach: use inspect.signature
+        elif sys.version_info.major == 3 and sys.version_info.minor > 4:
+            pos_args = []
+            kw_args = {}
+            keywords_ = None
+            sig = inspect.signature(self.func)
+            for fnam, fpar in sig.parameters.items():
+                if fpar.kind == fpar.VAR_KEYWORD:
+                    keywords_ = fnam
+                elif fpar.kind == fpar.POSITIONAL_OR_KEYWORD:
+                    if fpar.default == fpar.empty:
+                        pos_args.append(fnam)
+                    else:
+                        kw_args[fnam] = fpar.default
+                elif fpar.kind == fpar.VAR_POSITIONAL:
+                    raise ValueError("varargs '*%s' is not supported" % fnam)
+        # 3. Py2 compatible approach
         else:
-            try:  # PY3
-                argspec = inspect.getfullargspec(self.func)
-                keywords_ = argspec.varkw
-            except AttributeError:  # PY2
-                argspec = inspect.getargspec(self.func)
-                keywords_ = argspec.keywords
-
+            argspec = inspect.getargspec(self.func)
+            keywords_ = argspec.keywords
             pos_args = argspec.args
             kw_args = {}
             if argspec.defaults is not None:
                 for val in reversed(argspec.defaults):
                     kw_args[pos_args.pop()] = val
+        # inspection done
 
         self._func_haskeywords = keywords_ is not None
         self._func_allargs = pos_args + list(kw_args.keys())
