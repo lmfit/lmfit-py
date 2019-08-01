@@ -1,11 +1,11 @@
 """Implementation of the Model interface."""
-import sys
 from collections import OrderedDict
 from copy import deepcopy
 from functools import wraps
 import inspect
 import json
 import operator
+import sys
 import warnings
 
 import numpy as np
@@ -468,7 +468,7 @@ class Model(object):
             for name, defval in self.func.kwargs:
                 kw_args[name] = defval
         # 2. modern, best-practice approach: use inspect.signature
-        elif sys.version_info.major == 3 and sys.version_info.minor > 4:
+        elif sys.version_info > (3, 4):
             pos_args = []
             kw_args = {}
             keywords_ = None
