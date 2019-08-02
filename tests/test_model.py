@@ -1,7 +1,8 @@
+import functools
 import sys
 import unittest
 import warnings
-import functools
+
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
