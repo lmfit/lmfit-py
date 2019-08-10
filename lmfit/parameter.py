@@ -409,6 +409,18 @@ class Parameters(OrderedDict):
 
         """
         return OrderedDict((p.name, p.value) for p in self.values())
+    
+    def stderrdict(self):
+        """Return an ordered dictionary of parameter stderr (standard errors).
+
+        Returns
+        -------
+        OrderedDict
+           An ordered dictionary of :attr:`name`::attr:`stderr` pairs for each
+           Parameter.
+
+        """
+        return OrderedDict((p.name, p.stderr) for p in self.values())
 
     def dumps(self, **kws):
         """Represent Parameters as a JSON string.
