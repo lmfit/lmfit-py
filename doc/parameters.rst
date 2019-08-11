@@ -69,6 +69,8 @@ The :class:`Parameters` class
     .. automethod:: pretty_print
 
     .. automethod:: valuesdict
+    
+    .. automethod:: stderrdict
 
     .. automethod:: dumps
 
