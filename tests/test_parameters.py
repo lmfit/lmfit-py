@@ -288,9 +288,6 @@ class TestParameters(unittest.TestCase):
         params1.add("b", value=2.0)
         params1.add("c", value=3.0)
         
-        #expected result
-        result = OrderedDict([('a', 1.0), ('b', 2.0), ('c', 3.0)])
-        
         #comparison
-        assertEqual(params.valuesdict(),result)
+        assert_equal(params1.valuesdict(),OrderedDict([('a', 1.0), ('b', 2.0), ('c', 3.0)]))
         
