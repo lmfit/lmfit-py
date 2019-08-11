@@ -279,3 +279,18 @@ class TestParameters(unittest.TestCase):
         params = params1 + params2
         assert('b' in params)
         assert_almost_equal(params['b'].value, 1.0)
+        
+    def test_valuesdict(self):
+        from collections import OrderedDict
+        #input
+        params1 = Parameters()
+        params1.add("a", value=1.0)
+        params1.add("b", value=2.0)
+        params1.add("c", value=3.0)
+        
+        #expected result
+        result = OrderedDict([('a', 1.0), ('b', 2.0), ('c', 3.0)])
+        
+        #comparison
+        assertEqual(params.valuesdict(),result)
+        
