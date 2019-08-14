@@ -1686,10 +1686,6 @@ class Minimizer(object):
         result = self.prepare_fit(params=params)
         result.method = 'brute'
 
-        # FIXME: remove after requirement for scipy >= 1.3
-        if int(major) == 0 or (int(major) == 1 and int(minor) < 3):
-            result.nfev -= 1  # correct for "pre-fit" initialization/checks
-
         brute_kws = dict(full_output=1, finish=None, disp=False)
         # keyword 'workers' is introduced in SciPy v1.3
         # FIXME: remove this check after updating the requirement >= 1.3
@@ -1766,7 +1762,7 @@ class Minimizer(object):
 
             result.params = result.candidates[0].params
             result.residual = self.__residual(result.brute_x0, apply_bounds_transformation=False)
-            result.nfev -= 1
+            result.nfev = len(result.brute_Jout.ravel())
 
         result._calculate_statistics()
 

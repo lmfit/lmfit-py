@@ -122,7 +122,11 @@ def test_brute_lmfit_vs_scipy_stepsize(params_lmfit):
     assert_equal(ret[0][0], out.brute_x0[0])
     assert_equal(ret[0][1], out.brute_x0[1])
     assert_equal(ret[1], out.brute_fval)
-    assert_equal(out.nfev, len(out.brute_Jout.ravel()))
+
+    points_x = np.arange(rranges[0].start, rranges[0].stop, rranges[0].step).size
+    points_y = np.arange(rranges[1].start, rranges[1].stop, rranges[1].step).size
+    nmb_evals = points_x * points_y
+    assert_equal(out.nfev, nmb_evals)
 
 
 def test_brute_lmfit_vs_scipy_Ns_stepsize(params_lmfit):
@@ -139,7 +143,11 @@ def test_brute_lmfit_vs_scipy_Ns_stepsize(params_lmfit):
 
     assert_equal(ret[2], out.brute_grid)  # grid identical
     assert_equal(ret[3], out.brute_Jout)  # function values on grid identical
-    assert_equal(out.nfev, len(out.brute_Jout.ravel()))
+
+    points_x = np.arange(rranges[0].start, rranges[0].stop, rranges[0].step).size
+    points_y = 10
+    nmb_evals = points_x * points_y
+    assert_equal(out.nfev, nmb_evals)
 
     # best-fit values and function value identical
     assert_equal(ret[0][0], out.brute_x0[0])
@@ -273,3 +281,10 @@ def test_brute_pickle(params_lmfit):
     mini = lmfit.Minimizer(func_lmfit, params_lmfit)
     out = mini.minimize(method='brute')
     pickle.dumps(out)
+
+
+def test_nfev_workers(params_lmfit):
+    """TEST 12: make sure the nfev is correct for workers != 1."""
+    mini = lmfit.Minimizer(func_lmfit, params_lmfit, workers=-1)
+    out = mini.minimize(method='brute')
+    assert_equal(out.nfev, 20**len(out.var_names))
