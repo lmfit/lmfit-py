@@ -148,7 +148,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
                 for name in parnames_varying:
                     par = params[name]
                     space = ' '*(namelen-len(name))
-                    if np.allclose(par.value, par.init_value):
+                    if par.init_value and np.allclose(par.value, par.init_value):
                         add('    %s:%s  at initial value' % (name, space))
                     if (np.allclose(par.value, par.min) or np.allclose(par.value, par.max)):
                         add('    %s:%s  at boundary' % (name, space))
