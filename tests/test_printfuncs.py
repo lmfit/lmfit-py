@@ -261,6 +261,24 @@ def test_report_no_errorbars_no_numdifftools(fitresult):
     assert 'numdifftools' in report
 
 
+def test_report_no_errorbars_with_numdifftools_no_init_value(fitresult):
+    """No TypeError for parameters without initial value when no errorbars.
+
+    Verify that for parameters without an init_value the fit_report() function
+    does not raise a TypeError when comparing if a parameter is at its initial
+    value (if HAS_NUMDIFFTOOLS is True and result.errorbars is False).
+
+    See GitHub Issue 578: https://github.com/lmfit/lmfit-py/issues/578
+
+    """
+    fitresult.fit(method='nelder')
+    lmfit.printfuncs.HAS_NUMDIFFTOOLS = True
+    fitresult.errorbars = False
+    fitresult.params['amplitude'].init_value = None
+    report = fitresult.fit_report()
+    assert 'Warning: uncertainties could not be estimated:' in report
+
+
 def test_report_fixed_parameter(fitresult):
     """Verify that a fixed parameter is shown correctly."""
     fitresult.params['center'].vary = False
