@@ -164,7 +164,7 @@ image_converter_args=["-density", "300"]
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',
     'gallery_dirs': 'examples',
-    'filename_pattern': '/documentation',
+    'filename_pattern': '/documentation|/example_',
     'ignore_pattern': '/doc_',
     'expected_failing_examples': ['../examples/documentation/model_loadmodel.py']
 }

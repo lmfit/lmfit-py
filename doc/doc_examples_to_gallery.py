@@ -1,15 +1,19 @@
 #! /usr/bin/env python
 
+"""
+Process the examples in the documentation for inclusion in the Gallery:
+
+- create a "documentation" directory within "examples"
+- add a README.txt file
+- copy the examples from the documentation, bu remove the "doc_" from the
+   filename
+- add the required docstring to the files for proper rendering
+- copy the data files
+
+"""
 import os
 
-# Process the examples in the documentation for inclusion in the Gallery:
-
-# - create a "documentation" directory within "examples"
-# - add a README.txt file
-# - copy the examples from the documentation, bu remove the "doc_" from the
-#    filename
-# - add the required docstring to the files for proper rendering
-# - copy the data files
+basedir = os.getcwd()
 
 examples_dir = os.path.join(os.getcwd(), '../examples')
 files = [fn for fn in os.listdir(examples_dir) if fn.startswith('doc_')]
@@ -35,16 +39,15 @@ for fn in files:
 
     # make sure the saved Models and ModelResult are available
     if 'save' in fn:
-        pwd = os.getcwd()
         os.chdir(examples_dir)
-        os.system('/usr/bin/env python {} &> /dev/null'.format(fn))
-        os.chdir(pwd)
+        os.system('python {}'.format(fn))
+        os.chdir(basedir)
 
-os.system('cp ../examples/*.dat ../examples/documentation')
-os.system('cp ../examples/*.csv ../examples/documentation')
-os.system('cp ../examples/*.sav ../examples/documentation')
+os.system('cp {}/*.dat {}'.format(examples_dir, examples_documentation_dir))
+os.system('cp {}/*.csv {}'.format(examples_dir, examples_documentation_dir))
+os.system('cp {}/*.sav {}'.format(examples_dir, examples_documentation_dir))
 
 # data files for the other Gallery examples
-os.system('cp ../examples/*.dat .')
-os.system('cp ../examples/*.csv .')
-os.system('cp ../examples/*.sav .')
+os.system('cp {}/*.dat .'.format(examples_dir))
+os.system('cp {}/*.csv .'.format(examples_dir))
+os.system('cp {}/*.sav .'.format(examples_dir))

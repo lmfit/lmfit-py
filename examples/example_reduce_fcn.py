@@ -1,18 +1,21 @@
-#!/usr/bin/env python
-
-"""Example using the Student's t log-likelihood
-for robust fitting of data with outliers.
 """
+Fit Specifying Different Reduce Function
+========================================
+
+The reduce_fcn specifies how to convert a residual array to a scalar value for
+the scalar minimizers. The default value is None (i.e., "sum of squares of
+residual") - alternatives are: 'negentropy' and 'neglogcauchy' or a
+user-specified "callable". For more information please refer to:
+https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class
+
+Here, we use as an example the Student's t log-likelihood for robust fitting
+of data with outliers.
+
+"""
+import matplotlib.pyplot as plt
 import numpy as np
 
 import lmfit
-
-try:
-    import matplotlib.pyplot as plt
-    HAS_PYLAB = True
-except ImportError:
-    HAS_PYLAB = False
-
 
 np.random.seed(2)
 x = np.linspace(0, 10, 101)
@@ -24,8 +27,7 @@ amp = 2.0
 omega = 4.0
 
 y = offset + amp * np.sin(omega*x) * np.exp(-x/decay)
-
-yn = y + np.random.normal(size=len(y), scale=0.250)
+yn = y + np.random.normal(size=y.size, scale=0.250)
 
 outliers = np.random.randint(int(len(x)/3.0), len(x), int(len(x)/12))
 yn[outliers] += 5*np.random.random(len(outliers))
@@ -51,20 +53,20 @@ params.add('decay', 1.0, min=0)
 method = 'L-BFGS-B'
 
 o1 = lmfit.minimize(resid, params, args=(x, yn), method=method)
-print("# Fit using sum of squares:")
+print("# Fit using sum of squares:\n")
 lmfit.report_fit(o1)
 
-o2 = lmfit.minimize(resid, params, args=(x, yn), method=method, reduce_fcn='neglogcauchy')
-print("# Robust Fit, using log-likelihood with Cauchy PDF:")
+o2 = lmfit.minimize(resid, params, args=(x, yn), method=method,
+                    reduce_fcn='neglogcauchy')
+print("\n\n# Robust Fit, using log-likelihood with Cauchy PDF:\n")
 lmfit.report_fit(o2)
 
-if HAS_PYLAB:
-    plt.plot(x, y, 'ko', lw=2)
-    plt.plot(x, yn, 'k--*', lw=1)
-    plt.plot(x, yn+o1.residual, 'r-', lw=2)
-    plt.plot(x, yn+o2.residual, 'b-', lw=2)
-    plt.legend(['True function',
-                'with noise+outliers',
-                'sum of squares fit',
-                'robust fit'], loc='upper left')
-    plt.show()
+plt.plot(x, y, 'ko', lw=2)
+plt.plot(x, yn, 'k--*', lw=1)
+plt.plot(x, yn+o1.residual, 'r-', lw=2)
+plt.plot(x, yn+o2.residual, 'b-', lw=2)
+plt.legend(['True function',
+            'with noise+outliers',
+            'sum of squares fit',
+            'robust fit'], loc='upper left')
+plt.show()
