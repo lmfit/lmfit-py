@@ -29,6 +29,7 @@ out = mod.fit(y, pars, x=x)
 
 print(out.fit_report(min_correl=0.25))
 
+plt.figure()
 plt.plot(x, y, 'b-')
 plt.plot(x, out.best_fit, 'r-', label='Lorentzian Model')
 plt.legend(loc='best')
