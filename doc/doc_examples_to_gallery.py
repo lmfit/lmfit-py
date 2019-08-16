@@ -25,7 +25,12 @@ with open(os.path.join(examples_documentation_dir, 'README.txt'), 'w') as out:
 for fn in files:
     gallery_file = os.path.join(examples_documentation_dir, fn[4:])
     with open(gallery_file, 'w') as out:
-        out.write('"""\n{}\n{}\n\n"""\n'.format(fn, "="*len(fn)))
+        if fn == 'doc_model_loadmodel.py':
+            msg = ('This example *does* actually work, but for some reason the '
+                   'conversion using sphinx-gallery fails....')
+            out.write('"""\n{}\n{}\n\n{}\n\n"""\n'.format(fn, "="*len(fn), msg))
+        else:
+            out.write('"""\n{}\n{}\n\n"""\n'.format(fn, "="*len(fn)))
     os.system('cat {} >> {}'.format(os.path.join(examples_dir, fn), gallery_file))
 
     # make sure the saved Models and ModelResult are available

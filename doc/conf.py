@@ -166,4 +166,5 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'examples',
     'filename_pattern': '/documentation',
     'ignore_pattern': '/doc_',
+    'expected_failing_examples': ['../examples/documentation/model_loadmodel.py']
 }
