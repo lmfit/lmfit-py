@@ -164,6 +164,6 @@ image_converter_args=["-density", "300"]
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',
     'gallery_dirs': 'examples',
-    'filename_pattern': '/',
+    'filename_pattern': '/documentation',
     'ignore_pattern': '/doc_',
 }

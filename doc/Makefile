@@ -19,34 +19,37 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 html:
 	cp sphinx/ext_mathjax.py extensions.py
-	cp ../examples/*.dat .
+	./doc_examples_to_gallery.py
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	cp -r examples $(BUILDDIR)/html
 	@echo
 	@echo "html build finished: $(BUILDDIR)/html."
-	rm -f *.dat *.sav
+	rm -f *.dat *.sav *.csv
+	rm -rf ../examples/documentation
 
 htmlzip: html
 	cp sphinx/ext_mathjax.py extensions.py
-	cp ../examples/*.dat .
+	./doc_examples_to_gallery.py
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/lmfit_doc
 	cp -r examples $(BUILDDIR)/html
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
-	rm -f *.dat *.sav
+	rm -f *.dat *.sav *.csv
+	rm -rf ../examples/documentation
 
 epub:
 	cp sphinx/ext_mathjax.py extensions.py
-	cp ../examples/*.dat .
+	./doc_examples_to_gallery.py
 	$(SPHINXBUILD) -b epub  $(ALLSPHINXOPTS) $(BUILDDIR)/epub
 	cp -pr $(BUILDDIR)/epub/*.epub $(BUILDDIR)/html/.
-	rm -f *.dat *.sav
+	rm -f *.dat *.sav *.csv
+	rm -rf ../examples/documentation
 
 pdf: latex
 	cp sphinx/ext_imgmath.py extensions.py
 	cp ../examples/*.dat .
 	cd $(BUILDDIR)/latex && make all-pdf
 	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(BUILDDIR)/html/.
-	rm -f *.dat *.sav
+	rm -f *.dat *.sav *.csv
 
 all: html htmlzip epub pdf
 
@@ -72,8 +75,9 @@ help:
 clean:
 	-rm -rf $(BUILDDIR)/*
 	-rm -f extensions.py
-	-rm -f *.dat *.sav
+	-rm -f *.dat *.sav *.csv
 	-rm -rf examples
+	-rm -rf ../examples/documentation
 
 dirhtml:
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
@@ -104,7 +108,7 @@ latex:
 	@echo "Build finished; the LaTeX files are in _build/latex."
 	@echo "Run \`make all-pdf' or \`make all-ps' in that directory to" \
 	      "run these through (pdf)latex."
-	rm -f *.dat *.sav
+	rm -f *.dat *.sav *.csv
 
 latexpdf:
 	cp sphinx/ext_imgmath.py extensions.py
@@ -113,7 +117,7 @@ latexpdf:
 	@echo "Running LaTeX files through pdflatex..."
 	make -C _build/latex all-pdf
 	@echo "pdflatex finished; the PDF files are in _build/latex."
-	rm -f *.dat *.sav
+	rm -f *.dat *.sav *.csv
 
 changes:
 	$(SPHINXBUILD) -b changes $(ALLSPHINXOPTS) $(BUILDDIR)/changes

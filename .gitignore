@@ -3,6 +3,7 @@
 *#
 doc/_build
 doc/examples
+examples/documentation
 doc/*.pdf
 doc/extensions.py
 build
