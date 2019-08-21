@@ -1,16 +1,15 @@
-#!/usr/bin/env python
+"""
+Fit with Algebraic Constraint
+=============================
 
+
+"""
+import matplotlib.pyplot as plt
 from numpy import linspace, random
 
 from lmfit import Minimizer, Parameters
 from lmfit.lineshapes import gaussian, lorentzian
 from lmfit.printfuncs import report_fit
-
-try:
-    import pylab
-    HASPYLAB = True
-except ImportError:
-    HASPYLAB = False
 
 
 def residual(pars, x, sigma=None, data=None):
@@ -20,6 +19,7 @@ def residual(pars, x, sigma=None, data=None):
     slope = pars['line_slope']
     offset = pars['line_off']
     model = yg + yl + offset + x*slope
+
     if data is None:
         return model
     if sigma is None:
@@ -27,20 +27,14 @@ def residual(pars, x, sigma=None, data=None):
     return (model - data) / sigma
 
 
-n = 601
-xmin = 0.
-xmax = 20.0
 random.seed(0)
-x = linspace(xmin, xmax, n)
+x = linspace(0.0, 20.0, 601)
 
 data = (gaussian(x, 21, 8.1, 1.2) +
         lorentzian(x, 10, 9.6, 2.4) +
-        random.normal(scale=0.23, size=n) +
+        random.normal(scale=0.23, size=x.size) +
         x*0.5)
 
-
-if HASPYLAB:
-    pylab.plot(x, data, 'r+')
 
 pfit = Parameters()
 pfit.add(name='amp_g', value=10)
@@ -59,18 +53,14 @@ myfit = Minimizer(residual, pfit,
                   fcn_args=(x,), fcn_kws={'sigma': sigma, 'data': data},
                   scale_covar=True)
 
-myfit.prepare_fit()
-init = residual(myfit.params, x)
-
-if HASPYLAB:
-    pylab.plot(x, init, 'b--')
-
 result = myfit.leastsq()
+init = residual(pfit, x)
+fit = residual(result.params, x)
 
 report_fit(result)
 
-fit = residual(result.params, x)
-
-if HASPYLAB:
-    pylab.plot(x, fit, 'k-')
-    pylab.show()
+plt.plot(x, data, 'r+')
+plt.plot(x, init, 'b--', label='initial fit')
+plt.plot(x, fit, 'k-', label='best fit')
+plt.legend(loc='best')
+plt.show()
