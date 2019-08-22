@@ -21,6 +21,7 @@ Downloading and Installation
 .. _sphinx: https://www.sphinx-doc.org
 .. _jupyter_sphinx: https://jupyter-sphinx.readthedocs.io
 .. _ImageMagick: https://www.imagemagick.org/
+.. _release_notes: https://lmfit.github.io/lmfit-py/whatsnew.html
 
 
 Prerequisites
@@ -55,7 +56,8 @@ Downloads
 ~~~~~~~~~~~~~
 
 The latest stable version of lmfit is |release| and is available from `PyPI
-<https://pypi.python.org/pypi/lmfit/>`_.
+<https://pypi.python.org/pypi/lmfit/>`_. Check the `release_notes`_ for a list
+of changes compared to earlier releases.
 
 Installation
 ~~~~~~~~~~~~~~~~~
