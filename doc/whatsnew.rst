@@ -11,6 +11,40 @@ significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_0914_label:
+
+Version 0.9.14 Release Notes
+==========================================
+
+New features:
+
+- the global optimizers ``shgo`` and ``dual_annealing`` (new in SciPy v1.2) are now supported (Issue #527; PRs #545 and #556)
+- ``eval`` method added to the Parameter class (PR #550 by @zobristnicholas)
+- avoid ZeroDivisionError in ``printfuncs.params_html_table`` (PR #552 by @aaristov and PR #559)
+- add parallelization to ``brute`` method (PR #564, requires SciPy v1.3)
+
+Bug fixes:
+
+- consider only varying parameters when reporting potential issues with calculating errorbars (PR #549) and compare
+  ``value`` to both ``min`` and ``max`` (PR #571)
+- guard against division by zero in lineshape functions and ``FWHM`` and ``height`` expression calculations (PR #545)
+- fix issues with restoring a saved Model (Issue #553; PR #554)
+- always set ``result.method`` for ``emcee`` algorithm (PR #558)
+- more careful adding of parameters to handle out-of-order constraint expressions (Issue #560; PR #561)
+- make sure all parameters in Model.guess() use prefixes (PRs #567 and #569)
+- use ``inspect.signature`` for PY3 to support wrapped functions (Issue #570; PR #576)
+- fix ``result.nfev``` for ``brute`` method when using parallelization (Issue #578; PR #579)
+
+Various:
+
+- remove "missing" in the Model class (replaced by nan_policy) and "drop" as option to nan_policy
+  (replaced by omit) deprecated since 0.9 (PR #565).
+- deprecate 'report_errors' in printfuncs.py (PR #571)
+- updates to the documentation to use ``jupyter-sphinx`` to include examples/output (PRs #573 and #575)
+- include a Gallery with examples in the documentation using ``sphinx-gallery`` (PR #574)
+- improve test-coverage (PRs #571 and #572)
+- update pre-commit hooks and several docstrings
+
 .. _whatsnew_0913_label:
 
 Version 0.9.13 Release Notes
@@ -32,7 +66,7 @@ Bug fixes:
 - improve deprecation warnings for outdated nan_policy keywords (#540)
 - fix for edge case in gformat() (#547)
 
-Project managements:
+Project management:
 
 - using pre-commit framework to improve and enforce coding style (#533)
 - added code coverage report to github main page
