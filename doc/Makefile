@@ -15,41 +15,33 @@ PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
 .PHONY: help clean html dirhtml pickle json htmlhelp qthelp latex changes linkcheck doctest latexpdf htmlzip
-.PHONY: all install pdf
+.PHONY: all install pdf gallery
 
-html:
+html:  gallery
 	cp sphinx/ext_mathjax.py extensions.py
-	./doc_examples_to_gallery.py
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
-	cp -r examples $(BUILDDIR)/html
 	@echo
 	@echo "html build finished: $(BUILDDIR)/html."
-	rm -f *.dat *.sav *.csv
-	rm -rf ../examples/documentation
+
+gallery: examples/index.rst
+
+examples/index.rst:
+	./doc_examples_to_gallery.py
 
 htmlzip: html
 	cp sphinx/ext_mathjax.py extensions.py
-	./doc_examples_to_gallery.py
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/lmfit_doc
-	cp -r examples $(BUILDDIR)/html
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
-	rm -f *.dat *.sav *.csv
-	rm -rf ../examples/documentation
 
-epub:
+epub: html
 	cp sphinx/ext_mathjax.py extensions.py
-	./doc_examples_to_gallery.py
 	$(SPHINXBUILD) -b epub  $(ALLSPHINXOPTS) $(BUILDDIR)/epub
 	cp -pr $(BUILDDIR)/epub/*.epub $(BUILDDIR)/html/.
-	rm -f *.dat *.sav *.csv
-	rm -rf ../examples/documentation
 
 pdf: latex
 	cp sphinx/ext_imgmath.py extensions.py
-	cp ../examples/*.dat .
 	cd $(BUILDDIR)/latex && make all-pdf
 	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(BUILDDIR)/html/.
-	rm -f *.dat *.sav *.csv
 
 all: html htmlzip epub pdf
 
@@ -76,48 +68,44 @@ clean:
 	-rm -rf $(BUILDDIR)/*
 	-rm -f extensions.py
 	-rm -f *.dat *.sav *.csv
-	-rm -rf examples
+	-rm -rf examples/*
 	-rm -rf ../examples/documentation
 
-dirhtml:
+dirhtml:  gallery
 	$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR)/dirhtml
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/dirhtml."
 
-pickle:
+pickle:  gallery
 	$(SPHINXBUILD) -b pickle $(ALLSPHINXOPTS) $(BUILDDIR)/pickle
 	@echo
 	@echo "Build finished; now you can process the pickle files."
 
-json:
+json:  gallery
 	$(SPHINXBUILD) -b json $(ALLSPHINXOPTS) $(BUILDDIR)/json
 	@echo
 	@echo "Build finished; now you can process the JSON files."
 
-htmlhelp:
+htmlhelp:  gallery
 	$(SPHINXBUILD) -b htmlhelp $(ALLSPHINXOPTS) $(BUILDDIR)/htmlhelp
 	@echo
 	@echo "Build finished; now you can run HTML Help Workshop with the" \
 	      ".hhp project file in $(BUILDDIR)/htmlhelp."
 
-latex:
+latex: gallery
 	cp sphinx/ext_imgmath.py extensions.py
-	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) _build/latex
 	@echo
 	@echo "Build finished; the LaTeX files are in _build/latex."
 	@echo "Run \`make all-pdf' or \`make all-ps' in that directory to" \
 	      "run these through (pdf)latex."
-	rm -f *.dat *.sav *.csv
 
 latexpdf:
 	cp sphinx/ext_imgmath.py extensions.py
-	cp ../examples/*.dat .
 	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) _build/latex
 	@echo "Running LaTeX files through pdflatex..."
 	make -C _build/latex all-pdf
 	@echo "pdflatex finished; the PDF files are in _build/latex."
-	rm -f *.dat *.sav *.csv
 
 changes:
 	$(SPHINXBUILD) -b changes $(ALLSPHINXOPTS) $(BUILDDIR)/changes
