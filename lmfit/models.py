@@ -1238,7 +1238,7 @@ class ExpressionModel(Model):
 
         """
         # create ast evaluator, load custom functions
-        self.asteval = Interpreter(max_time=3600.0)
+        self.asteval = Interpreter()
         for name in lineshapes.functions:
             self.asteval.symtable[name] = getattr(lineshapes, name, None)
         if init_script is not None:
