@@ -64,3 +64,4 @@ participating in this effort please use the `lmfit GitHub repository`_.
    bounds
    constraints
    whatsnew
+   examples/index
