@@ -205,6 +205,7 @@ class TestParameters(unittest.TestCase):
         pars.add('x', value=1.0)
         pars.add('y', value=2.0)
         pars['x'].expr = 'y / 2.0'
+        pars['x'].expr = 'y / 2.0'
 
         dumps = pars.dumps()
 
@@ -279,3 +280,23 @@ class TestParameters(unittest.TestCase):
         params = params1 + params2
         assert('b' in params)
         assert_almost_equal(params['b'].value, 1.0)
+
+    def test_params_prints(self):
+        params = Parameters()
+        params.add("a", value=1.0, vary=True)
+        params.add("b", value=8.5, min=0, vary=True)
+        params.add("c", expr='a + sqrt(b)')
+
+        repr_full = params.pretty_repr()
+        repr_one = params.pretty_repr(oneline=True)
+
+        out = []
+        for key, val in params.items():
+            out.append("%s: %s" % (key, repr(val)))
+        out = '\n'.join(out)
+
+        assert(repr_full.count('\n') > 4)
+        assert(repr_one.count('\n') < 2)
+        assert(len(repr_full) > 150)
+        assert(len(repr_one) > 150)
+        assert(len(out) > 150)
