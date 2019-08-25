@@ -390,7 +390,7 @@ class SplitLorentzianModel(Model):
 
     .. math::
 
-        f(x; A, \mu, \sigma, \sigma_r) = \frac{2 A}{\pi (\sigma+\sigma_r)} \big[\frac{1}{(x - \mu)^2 + \sigma^2} * H(\mu-x) + \frac{1}{(x - \mu)^2 + \sigma_r^2} * H(x-\mu)\big]
+        f(x; A, \mu, \sigma, \sigma_r) = \frac{2 A}{\pi (\sigma+\sigma_r)} \big[\frac{\sigma^2}{(x - \mu)^2 + \sigma^2} * H(\mu-x) + \frac{\sigma_r^2}{(x - \mu)^2 + \sigma_r^2} * H(x-\mu)\big]
 
     where the parameter ``amplitude`` corresponds to :math:`A`, ``center`` to
     :math:`\mu`, ``sigma`` to :math:`\sigma`, ``sigma_l`` to
