@@ -16,3 +16,4 @@ Contents
    confidence
    bounds
    constraints
+   examples/index

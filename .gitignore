@@ -5,6 +5,8 @@ doc/_build
 doc/examples
 examples/documentation
 doc/*.pdf
+doc/*.dat
+doc/*.csv
 doc/extensions.py
 build
 dist

@@ -4,10 +4,12 @@ include requirements.txt
 exclude *.pyc core.* *~ *.pdf
 recursive-include lmfit *.py
 recursive-include tests *.py *.dat
-recursive-include examples *.py *.ipynb *.dat
 recursive-include NIST_STRD *.dat
+recursive-include examples *.py *.csv *.dat
+recursive-exclude examples/documentation *
 recursive-include doc *
 recursive-exclude doc/_build *
-recursive-exclude doc *.pdf
+recursive-exclude doc/examples *
+recursive-exclude doc *.pdf *.csv *.dat *.sav
 include versioneer.py
 include lmfit/_version.py
