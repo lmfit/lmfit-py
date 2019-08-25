@@ -492,6 +492,43 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(abs(result.params['g1_center'].value - 1.1) < 0.2)
         self.assertTrue(abs(result.params['g2_center'].value - 2.5) < 0.2)
 
+        for name, par in pars.items():
+            assert(len(repr(par)) > 5)
+
+    def test_composite_plotting(self):
+        # test that a composite model has non-empty best_values
+        pytest.importorskip("matplotlib")
+        import matplotlib
+        matplotlib.use('Agg')
+
+        model1 = models.GaussianModel(prefix='g1_')
+        model2 = models.GaussianModel(prefix='g2_')
+
+        mod = model1 + model2
+        pars = mod.make_params()
+
+        values1 = dict(amplitude=7.10, center=1.1, sigma=2.40)
+        values2 = dict(amplitude=12.2, center=2.5, sigma=0.5)
+        data = (gaussian(x=self.x, **values1) + gaussian(x=self.x, **values2)
+                + 0.1*self.noise)
+
+        pars['g1_sigma'].set(2)
+        pars['g1_center'].set(1, max=1.5)
+        pars['g1_amplitude'].set(3)
+        pars['g2_sigma'].set(1)
+        pars['g2_center'].set(2.6, min=2.0)
+        pars['g2_amplitude'].set(1)
+
+        result = mod.fit(data, params=pars, x=self.x)
+        fig, ax = result.plot(show_init=True)
+
+        assert(isinstance(fig, matplotlib.figure.Figure))
+        assert(isinstance(ax, matplotlib.axes.GridSpec))
+
+        comps = result.eval_components(x=self.x)
+        assert(len(comps) == 2)
+        assert('g1_' in comps)
+
     def test_hints_in_composite_models(self):
         # test propagation of hints from base models to composite model
         def func(x, amplitude):
