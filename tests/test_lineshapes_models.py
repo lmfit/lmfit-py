@@ -4,6 +4,8 @@ import inspect
 import sys
 
 import numpy as np
+from numpy.testing import assert_allclose
+
 import pytest
 from scipy.optimize import fsolve
 
@@ -193,6 +195,71 @@ def test_height_and_fwhm_expression_evalution_in_builtin_models():
         params = mod.make_params(amplitude=1.0, center1=0.0, sigma1=0.0,
                                  center2=0.0, sigma2=0.0, form=f)
         params.update_constraints()
+
+
+def test_guess_modelparams():
+    x = np.linspace(-10, 10, 501)
+
+    mod = models.ConstantModel()
+    y = 6.0 + x*0.005
+    pars = mod.guess(y)
+    assert_allclose(pars['c'].value, 6.0, rtol=0.01)
+
+    mod = models.ComplexConstantModel(prefix='f_')
+    y = 6.0 + x*0.005 + (4.0 - 0.02*x)*1j
+    pars = mod.guess(y)
+    assert_allclose(pars['f_re'].value, 6.0, rtol=0.01)
+    assert_allclose(pars['f_im'].value, 4.0, rtol=0.01)
+
+    #
+    mod = models.QuadraticModel(prefix='g_')
+    y = -0.2 + 3.0*x + 0.005*x**2
+    pars = mod.guess(y, x=x)
+    assert_allclose(pars['g_a'].value, 0.005, rtol=0.01)
+    assert_allclose(pars['g_b'].value, 3.0, rtol=0.01)
+    assert_allclose(pars['g_c'].value, -0.2, rtol=0.01)
+
+    mod = models.PolynomialModel(4, prefix='g_')
+    y = -0.2 + 3.0*x + 0.005*x**2 - 3.3e-6*x**3 + 1.e-9*x**4
+    pars = mod.guess(y, x=x)
+    assert_allclose(pars['g_c0'].value, -0.2, rtol=0.01)
+    assert_allclose(pars['g_c1'].value, 3.0, rtol=0.01)
+    assert_allclose(pars['g_c2'].value, 0.005, rtol=0.1)
+    assert_allclose(pars['g_c3'].value, -3.3e-6, rtol=0.1)
+    assert_allclose(pars['g_c4'].value, 1.e-9, rtol=0.1)
+
+    mod = models.GaussianModel(prefix='g_')
+    y = lineshapes.gaussian(x, amplitude=2.2, center=0.25, sigma=1.3)
+    y += np.random.normal(size=len(x), scale=0.004)
+    pars = mod.guess(y, x=x)
+    assert_allclose(pars['g_amplitude'].value, 3, rtol=2)
+    assert_allclose(pars['g_center'].value, 0.25, rtol=1)
+    assert_allclose(pars['g_sigma'].value, 1.3, rtol=1)
+
+    mod = models.LorentzianModel(prefix='l_')
+    pars = mod.guess(y, x=x)
+    assert_allclose(pars['l_amplitude'].value, 3, rtol=2)
+    assert_allclose(pars['l_center'].value, 0.25, rtol=1)
+    assert_allclose(pars['l_sigma'].value, 1.3, rtol=1)
+
+    mod = models.SplitLorentzianModel(prefix='s_')
+    pars = mod.guess(y, x=x)
+    assert_allclose(pars['s_amplitude'].value, 3, rtol=2)
+    assert_allclose(pars['s_center'].value, 0.25, rtol=1)
+    assert_allclose(pars['s_sigma'].value, 1.3, rtol=1)
+    assert_allclose(pars['s_sigma_r'].value, 1.3, rtol=1)
+
+    mod = models.VoigtModel(prefix='l_')
+    pars = mod.guess(y, x=x)
+    assert_allclose(pars['l_amplitude'].value, 3, rtol=2)
+    assert_allclose(pars['l_center'].value, 0.25, rtol=1)
+    assert_allclose(pars['l_sigma'].value, 1.3, rtol=1)
+
+    mod = models.SkewedVoigtModel(prefix='l_')
+    pars = mod.guess(y, x=x)
+    assert_allclose(pars['l_amplitude'].value, 3, rtol=2)
+    assert_allclose(pars['l_center'].value, 0.25, rtol=1)
+    assert_allclose(pars['l_sigma'].value, 1.3, rtol=1)
 
 
 def test_splitlorentzian_prefix():
