@@ -52,14 +52,17 @@ def split_lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0, sigma_r=1.0):
     to ``amplitude``.
 
     split_lorentzian(x, amplitude, center, sigma, sigma_r) =
-        amplitude * 2 / pi / (sigma + sigma_r) * \
-        (1 / (1 + ((x - center) / sigma)**2) * (x < center)
-         + 1 / (1 + ((x - center) / sigma_r)**2) * (x >= center))
-
+        [2*amplitude / (pi* (sigma + sigma_r)] *
+         {  sigma**2   * (x<center)  / [sigma**2  + (x - center)**2]
+          + sigma_r**2 * (x>=center) / [sigma_r**2+ (x - center)**2] }
     """
-    return amplitude * 2 / pi / max(tiny, (sigma + sigma_r)) * \
-        (1 / (1 + ((x - center) / max(tiny, sigma))**2) * (x < center)
-         + 1 / (1 + ((x - center) / max(tiny, sigma_r))**2) * (x >= center))
+    s = max(tiny, sigma)
+    r = max(tiny, sigma_r)
+    s2 = s*s
+    r2 = r*r
+    xc2 = (x-center)**2
+    amp = 2*amplitude/(pi*(s+r))
+    return amp*(s2*(x < center)/(s2+xc2) + r2*(x >= center)/(r2+xc2))
 
 
 def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
