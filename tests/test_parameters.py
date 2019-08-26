@@ -34,16 +34,16 @@ class TestParameters(unittest.TestCase):
         p1.add('y', expr='x*t + sqrt(t)/3.0')
 
         p2 = p1.copy()
-        assert(isinstance(p2, Parameters))
-        assert('t' in p2)
-        assert('y' in p2)
-        assert(p2['t'].max < 6.0)
-        assert(np.isinf(p2['x'].max) and p2['x'].max > 0)
-        assert(np.isinf(p2['x'].min) and p2['x'].min < 0)
-        assert('sqrt(t)' in p2['y'].expr)
-        assert(p2._asteval is not None)
-        assert(p2._asteval.symtable is not None)
-        assert((p2['y'].value > 20) and (p2['y'].value < 21))
+        assert isinstance(p2, Parameters)
+        assert 't' in p2
+        assert 'y' in p2
+        assert p2['t'].max < 6.0
+        assert np.isinf(p2['x'].max) and p2['x'].max > 0
+        assert np.isinf(p2['x'].min) and p2['x'].min < 0
+        assert 'sqrt(t)' in p2['y'].expr
+        assert p2._asteval is not None
+        assert p2._asteval.symtable is not None
+        assert (p2['y'].value > 20) and (p2['y'].value < 21)
 
     def test_copy_function(self):
         # check copy(Parameters) does not fail
@@ -53,26 +53,26 @@ class TestParameters(unittest.TestCase):
         p1.add('y', expr='x*t + sqrt(t)/3.0')
 
         p2 = copy(p1)
-        assert(isinstance(p2, Parameters))
+        assert isinstance(p2, Parameters)
 
         # change the 'x' value in the original
         p1['x'].value = 4.0
 
-        assert(p2['x'].value > 9.8)
-        assert(p2['x'].value < 10.2)
-        assert(np.isinf(p2['x'].max) and p2['x'].max > 0)
+        assert p2['x'].value > 9.8
+        assert p2['x'].value < 10.2
+        assert np.isinf(p2['x'].max) and p2['x'].max > 0
 
-        assert('t' in p2)
-        assert('y' in p2)
-        assert(p2['t'].max < 6.0)
+        assert 't' in p2
+        assert 'y' in p2
+        assert p2['t'].max < 6.0
 
-        assert(np.isinf(p2['x'].min) and p2['x'].min < 0)
-        assert('sqrt(t)' in p2['y'].expr)
-        assert(p2._asteval is not None)
-        assert(p2._asteval.symtable is not None)
-        assert((p2['y'].value > 20) and (p2['y'].value < 21))
+        assert np.isinf(p2['x'].min) and p2['x'].min < 0
+        assert 'sqrt(t)' in p2['y'].expr
+        assert p2._asteval is not None
+        assert p2._asteval.symtable is not None
+        assert (p2['y'].value > 20) and (p2['y'].value < 21)
 
-        assert(p1['y'].value < 10)
+        assert p1['y'].value < 10
 
     def test_deepcopy(self):
         # check that a simple copy works
@@ -205,7 +205,6 @@ class TestParameters(unittest.TestCase):
         pars.add('x', value=1.0)
         pars.add('y', value=2.0)
         pars['x'].expr = 'y / 2.0'
-        pars['x'].expr = 'y / 2.0'
 
         dumps = pars.dumps()
 
@@ -240,14 +239,14 @@ class TestParameters(unittest.TestCase):
         p1.add('x', 10.0)
         with self.assertRaises(SyntaxError):
             p1.add('y', expr='x*t + sqrt(t)/')
-        assert(len(p1['y']._expr_eval.error) > 0)
+        assert len(p1['y']._expr_eval.error) > 0
         p1.add('y', expr='x*t + sqrt(t)/3.0')
         p1['y'].set(expr='x*3.0 + t**2')
-        assert('x*3' in p1['y'].expr)
-        assert(len(p1['y']._expr_eval.error) == 0)
+        assert 'x*3' in p1['y'].expr
+        assert len(p1['y']._expr_eval.error) == 0
         with self.assertRaises(SyntaxError):
             p1['y'].set(expr='t+')
-        assert(len(p1['y']._expr_eval.error) > 0)
+        assert len(p1['y']._expr_eval.error) > 0
         assert_almost_equal(p1['y'].value, 34.0)
 
     def test_eval(self):
@@ -278,7 +277,7 @@ class TestParameters(unittest.TestCase):
         params2['b'].expr = 'c/2'
 
         params = params1 + params2
-        assert('b' in params)
+        assert 'b' in params
         assert_almost_equal(params['b'].value, 1.0)
 
     def test_params_prints(self):
@@ -295,8 +294,8 @@ class TestParameters(unittest.TestCase):
             out.append("%s: %s" % (key, repr(val)))
         out = '\n'.join(out)
 
-        assert(repr_full.count('\n') > 4)
-        assert(repr_one.count('\n') < 2)
-        assert(len(repr_full) > 150)
-        assert(len(repr_one) > 150)
-        assert(len(out) > 150)
+        assert repr_full.count('\n') > 4
+        assert repr_one.count('\n') < 2
+        assert len(repr_full) > 150
+        assert len(repr_one) > 150
+        assert len(out) > 150

@@ -211,7 +211,6 @@ def test_guess_modelparams():
     assert_allclose(pars['f_re'].value, 6.0, rtol=0.01)
     assert_allclose(pars['f_im'].value, 4.0, rtol=0.01)
 
-    #
     mod = models.QuadraticModel(prefix='g_')
     y = -0.2 + 3.0*x + 0.005*x**2
     pars = mod.guess(y, x=x)

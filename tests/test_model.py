@@ -111,7 +111,7 @@ class CommonTests(object):
             val2 = out2.values[parname]
             if max_diff < abs(val1-val2):
                 max_diff = abs(val1-val2)
-        assert(max_diff > 1.e-8)
+        assert max_diff > 1.e-8
 
     def test_result_attributes(self):
         pars = self.model.make_params(**self.guess())
@@ -160,12 +160,12 @@ class CommonTests(object):
         pars = self.model.make_params(**self.guess())
         result = self.model.fit(self.data, pars, x=self.x)
         report = result.fit_report()
-        assert("[[Model]]" in report)
-        assert("[[Variables]]" in report)
-        assert("[[Fit Statistics]]" in report)
-        assert(" # function evals   =" in report)
-        assert(" Akaike " in report)
-        assert(" chi-square " in report)
+        assert "[[Model]]" in report
+        assert "[[Variables]]" in report
+        assert "[[Fit Statistics]]" in report
+        assert " # function evals   =" in report
+        assert " Akaike " in report
+        assert " chi-square " in report
 
     def test_data_alignment(self):
         _skip_if_no_pandas()
@@ -461,7 +461,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(abs(result.params['bkg_c'].value - 1.0) < 0.25)
 
         comps = mod.eval_components(x=self.x)
-        assert('bkg_' in comps)
+        assert 'bkg_' in comps
 
     def test_composite_has_bestvalues(self):
         # test that a composite model has non-empty best_values
@@ -476,12 +476,12 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         data = (gaussian(x=self.x, **values1) + gaussian(x=self.x, **values2)
                 + 0.1*self.noise)
 
-        pars['g1_sigma'].set(2)
-        pars['g1_center'].set(1, max=1.5)
-        pars['g1_amplitude'].set(3)
-        pars['g2_sigma'].set(1)
-        pars['g2_center'].set(2.6, min=2.0)
-        pars['g2_amplitude'].set(1)
+        pars['g1_sigma'].set(value=2)
+        pars['g1_center'].set(value=1, max=1.5)
+        pars['g1_amplitude'].set(value=3)
+        pars['g2_sigma'].set(value=1)
+        pars['g2_center'].set(value=2.6, min=2.0)
+        pars['g2_amplitude'].set(value=1)
 
         result = mod.fit(data, params=pars, x=self.x)
 
@@ -493,7 +493,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(abs(result.params['g2_center'].value - 2.5) < 0.2)
 
         for name, par in pars.items():
-            assert(len(repr(par)) > 5)
+            assert len(repr(par)) > 5
 
     def test_composite_plotting(self):
         # test that a composite model has non-empty best_values
@@ -522,12 +522,12 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         result = mod.fit(data, params=pars, x=self.x)
         fig, ax = result.plot(show_init=True)
 
-        assert(isinstance(fig, matplotlib.figure.Figure))
-        assert(isinstance(ax, matplotlib.axes.GridSpec))
+        assert isinstance(fig, matplotlib.figure.Figure)
+        assert isinstance(ax, matplotlib.axes.GridSpec)
 
         comps = result.eval_components(x=self.x)
-        assert(len(comps) == 2)
-        assert('g1_' in comps)
+        assert len(comps) == 2
+        assert 'g1_' in comps
 
     def test_hints_in_composite_models(self):
         # test propagation of hints from base models to composite model
