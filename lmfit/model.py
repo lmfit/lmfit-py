@@ -757,7 +757,15 @@ class Model(object):
         The "ravels" throughout are necessary to support pandas.Series.
 
         """
-        diff = self.eval(params, **kwargs) - data
+        model = self.eval(params, **kwargs)
+        if self.nan_policy == 'raise' and not np.all(np.isfinite(model)):
+            msg = ('The model function generated NaN values and the fit '
+                   'aborted! Please check your model function and/or set '
+                   'boundaries on parameters where applicable. In cases like '
+                   'this, using "nan_policy=\'omit\'" will probably not work.')
+            raise ValueError(msg)
+
+        diff = model - data
 
         if diff.dtype == np.complex:
             # data/model are complex
