@@ -1,0 +1,307 @@
+.. note::
+    :class: sphx-glr-download-link-note
+
+    Click :ref:`here <sphx_glr_download_examples_example_emcee_Model_interface.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
+
+.. _sphx_glr_examples_example_emcee_Model_interface.py:
+
+
+Emcee and the Model Interface
+=============================
+
+
+.. code-block:: default
+
+    import corner
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    import lmfit
+
+
+
+
+
+
+
+
+Set up a double-exponential function and create a Model
+
+
+.. code-block:: default
+
+    def double_exp(x, a1, t1, a2, t2):
+        return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
+
+
+    model = lmfit.Model(double_exp)
+
+
+
+
+
+
+
+Generate some fake data from the model with added noise
+
+
+.. code-block:: default
+
+    truths = (3.0, 2.0, -5.0, 10.0)
+    x = np.linspace(1, 10, 250)
+    np.random.seed(0)
+    y = double_exp(x, *truths)+0.1*np.random.randn(x.size)
+
+
+
+
+
+
+
+Create model parameters and give them initial values
+
+
+.. code-block:: default
+
+    p = model.make_params(a1=4, t1=3, a2=4, t2=3)
+
+
+
+
+
+
+
+Fit the model using a traditional minimizer, and show the output:
+
+
+.. code-block:: default
+
+    result = model.fit(data=y, params=p, x=x, method='Nelder', nan_policy='omit')
+
+    lmfit.report_fit(result)
+    result.plot()
+
+
+
+
+.. image:: /examples/images/sphx_glr_example_emcee_Model_interface_001.png
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /home/newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:16: RuntimeWarning: overflow encountered in multiply
+      return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
+    /home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/minimizer.py:176: RuntimeWarning: overflow encountered in multiply
+    [[Fit Statistics]]
+        # fitting method   = Nelder-Mead
+        # function evals   = 609
+        # data points      = 250
+        # variables        = 4
+        chi-square         = 2.33333982
+        reduced chi-square = 0.00948512
+        Akaike info crit   = -1160.54007
+        Bayesian info crit = -1146.45423
+    [[Variables]]
+        a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
+        t1:  1.30993186 +/- 0.13449652 (10.27%) (init = 3)
+        a2: -4.33525597 +/- 0.11765819 (2.71%) (init = 4)
+        t2:  11.8099125 +/- 0.47172590 (3.99%) (init = 3)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(a2, t2) =  0.988
+        C(t1, a2) = -0.928
+        C(t1, t2) = -0.885
+        C(a1, t1) = -0.609
+        C(a1, a2) =  0.297
+        C(a1, t2) =  0.232
+
+
+
+Calculate parameter covariance using emcee:
+
+ - start the walkers out at the best-fit values
+ - set is_weighted to False to estimate the noise weights
+ - set some sensible priors on the uncertainty to keep the MCMC in check
+
+
+
+.. code-block:: default
+
+    emcee_kws = dict(steps=1000, burn=300, thin=20, is_weighted=False)
+    emcee_params = result.params.copy()
+    emcee_params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
+
+
+
+
+
+
+
+run the MCMC algorithm and show the results:
+
+
+.. code-block:: default
+
+    result_emcee = model.fit(data=y, x=x, params=emcee_params, method='emcee',
+                             nan_policy='omit', fit_kws=emcee_kws)
+
+    lmfit.report_fit(result_emcee)
+
+    ax = plt.plot(x, model.eval(params=result.params, x=x), label='Nelder', zorder=100)
+    result_emcee.plot_fit(ax=ax, data_kws=dict(color='gray', markersize=2))
+    plt.show()
+
+
+
+
+.. image:: /examples/images/sphx_glr_example_emcee_Model_interface_002.png
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    [[Fit Statistics]]
+        # fitting method   = emcee
+        # function evals   = 100000
+        # data points      = 250
+        # variables        = 5
+        chi-square         = 245.666306
+        reduced chi-square = 1.00271961
+        Akaike info crit   = 5.62830388
+        Bayesian info crit = 23.2356085
+    [[Variables]]
+        a1:         2.99144822 +/- 0.15041139 (5.03%) (init = 2.986237)
+        t1:         1.32080783 +/- 0.13797389 (10.45%) (init = 1.309932)
+        a2:        -4.34440212 +/- 0.12192017 (2.81%) (init = -4.335256)
+        t2:         11.7921127 +/- 0.47691481 (4.04%) (init = 11.80991)
+        __lnsigma: -2.32821189 +/- 0.04469660 (1.92%) (init = -2.302585)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(a2, t2) =  0.982
+        C(t1, a2) = -0.930
+        C(t1, t2) = -0.886
+        C(a1, t1) = -0.554
+        C(a1, a2) =  0.247
+        C(a1, t2) =  0.203
+    /home/newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:59: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
+
+
+
+Plot the parameter covariances returned by emcee using corner
+
+
+.. code-block:: default
+
+    emcee_corner = corner.corner(result_emcee.flatchain, labels=result_emcee.var_names,
+                                 truths=list(result_emcee.params.valuesdict().values()))
+
+
+
+
+.. image:: /examples/images/sphx_glr_example_emcee_Model_interface_003.png
+    :class: sphx-glr-single-img
+
+
+
+
+
+.. code-block:: default
+
+    print("\nmedian of posterior probability distribution")
+    print('--------------------------------------------')
+    lmfit.report_fit(result_emcee.params)
+
+    # find the maximum likelihood solution
+    highest_prob = np.argmax(result_emcee.lnprob)
+    hp_loc = np.unravel_index(highest_prob, result_emcee.lnprob.shape)
+    mle_soln = result_emcee.chain[hp_loc]
+    print("\nMaximum likelihood Estimation")
+    print('-----------------------------')
+    for ix, param in enumerate(emcee_params):
+        print(param + ': ' + str(mle_soln[ix]))
+
+    quantiles = np.percentile(result_emcee.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
+    print("\n\n1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
+    print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    median of posterior probability distribution
+    --------------------------------------------
+    [[Variables]]
+        a1:         2.99144822 +/- 0.15041139 (5.03%) (init = 2.986237)
+        t1:         1.32080783 +/- 0.13797389 (10.45%) (init = 1.309932)
+        a2:        -4.34440212 +/- 0.12192017 (2.81%) (init = -4.335256)
+        t2:         11.7921127 +/- 0.47691481 (4.04%) (init = 11.80991)
+        __lnsigma: -2.32821189 +/- 0.04469660 (1.92%) (init = -2.302585)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(a2, t2) =  0.982
+        C(t1, a2) = -0.930
+        C(t1, t2) = -0.886
+        C(a1, t1) = -0.554
+        C(a1, a2) =  0.247
+        C(a1, t2) =  0.203
+
+    Maximum likelihood Estimation
+    -----------------------------
+    a1: 3.0014005461441453
+    t1: 1.3081543141778924
+    a2: -4.338194526537342
+    t2: 11.82978386256685
+    __lnsigma: -2.3413942465306334
+
+
+    1 sigma spread 0.1379965150555691
+    2 sigma spread 0.2761505429719371
+
+
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  7.518 seconds)
+
+
+.. _sphx_glr_download_examples_example_emcee_Model_interface.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Python source code: example_emcee_Model_interface.py <example_emcee_Model_interface.py>`
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Jupyter notebook: example_emcee_Model_interface.ipynb <example_emcee_Model_interface.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

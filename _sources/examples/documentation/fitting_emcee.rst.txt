@@ -1,0 +1,208 @@
+.. note::
+    :class: sphx-glr-download-link-note
+
+    Click :ref:`here <sphx_glr_download_examples_documentation_fitting_emcee.py>` to download the full example code
+.. rst-class:: sphx-glr-example-title
+
+.. _sphx_glr_examples_documentation_fitting_emcee.py:
+
+
+doc_fitting_emcee.py
+====================
+
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_001.png
+            :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_002.png
+            :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_003.png
+            :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_004.png
+            :class: sphx-glr-multi-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    [[Variables]]
+        a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
+        a2: -4.33525597 +/- 0.11765819 (2.71%) (init = 4)
+        t1:  1.30993186 +/- 0.13449652 (10.27%) (init = 3)
+        t2:  11.8099125 +/- 0.47172590 (3.99%) (init = 3)
+    [[Correlations]] (unreported correlations are < 0.500)
+        C(a2, t2) =  0.988
+        C(a2, t1) = -0.928
+        C(t1, t2) = -0.885
+        C(a1, t1) = -0.609
+
+    median of posterior probability distribution
+    --------------------------------------------
+    [[Variables]]
+        a1:         2.99347646 +/- 0.14953359 (5.00%) (init = 2.986237)
+        a2:        -4.33830770 +/- 0.12985090 (2.99%) (init = -4.335256)
+        t1:         1.32011463 +/- 0.14590321 (11.05%) (init = 1.309932)
+        t2:         11.8196768 +/- 0.51157526 (4.33%) (init = 11.80991)
+        __lnsigma: -2.32593246 +/- 0.04430796 (1.90%) (init = -2.302585)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(a2, t2) =  0.982
+        C(a2, t1) = -0.932
+        C(t1, t2) = -0.887
+        C(a1, t1) = -0.519
+        C(a1, a2) =  0.211
+        C(a1, t2) =  0.165
+
+    Maximum likelihood Estimation
+    -----------------------------
+    <Parameter 'a1', 3.041045356943767, bounds=[-inf:inf]>
+    <Parameter 'a2', -4.347093950987428, bounds=[-inf:inf]>
+    <Parameter 't1', 1.3022176994120342, bounds=[-inf:inf]>
+    <Parameter 't2', 11.768254890901048, bounds=[-inf:inf]>
+    1 sigma spread 0.14632880940673365
+    2 sigma spread 0.28596106188635373
+
+
+
+
+
+|
+
+
+.. code-block:: default
+
+    ##
+    import warnings
+    warnings.filterwarnings("ignore")
+    ##
+    # <examples/doc_fitting_emcee.py>
+    import numpy as np
+
+    import lmfit
+
+    try:
+        import matplotlib.pyplot as plt
+        HASPYLAB = True
+    except ImportError:
+        HASPYLAB = False
+
+    try:
+        import corner
+        HASCORNER = True
+    except ImportError:
+        HASCORNER = False
+
+    x = np.linspace(1, 10, 250)
+    np.random.seed(0)
+    y = (3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1) / 10.) +
+         0.1*np.random.randn(x.size))
+    if HASPYLAB:
+        plt.plot(x, y, 'b')
+        plt.show()
+
+    p = lmfit.Parameters()
+    p.add_many(('a1', 4), ('a2', 4), ('t1', 3), ('t2', 3., True))
+
+
+    def residual(p):
+        v = p.valuesdict()
+        return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1) / v['t2']) - y
+
+
+    mi = lmfit.minimize(residual, p, method='nelder', nan_policy='omit')
+    lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
+    if HASPYLAB:
+        plt.figure()
+        plt.plot(x, y, 'b')
+        plt.plot(x, residual(mi.params) + y, 'r', label='best fit')
+        plt.legend(loc='best')
+        plt.show()
+
+    # Place bounds on the ln(sigma) parameter that emcee will automatically add
+    # to estimate the true uncertainty in the data since is_weighted=False
+    mi.params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2))
+
+    res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300,
+                         steps=1000, thin=20, params=mi.params, is_weighted=False)
+
+    if HASPYLAB and HASCORNER:
+        emcee_corner = corner.corner(res.flatchain, labels=res.var_names,
+                                     truths=list(res.params.valuesdict().values()))
+        plt.show()
+
+    print("\nmedian of posterior probability distribution")
+    print('--------------------------------------------')
+    lmfit.report_fit(res.params)
+
+    # find the maximum likelihood solution
+    highest_prob = np.argmax(res.lnprob)
+    hp_loc = np.unravel_index(highest_prob, res.lnprob.shape)
+    mle_soln = res.chain[hp_loc]
+    for i, par in enumerate(p):
+        p[par].value = mle_soln[i]
+    print("\nMaximum likelihood Estimation")
+    print('-----------------------------')
+    for _, vals in p.items():
+        print(vals)
+
+    if HASPYLAB:
+        plt.figure()
+        plt.plot(x, y, 'b')
+        plt.plot(x, residual(mi.params) + y, 'r', label='Nelder-Mead')
+        plt.plot(x, residual(res.params) + y, 'k--', label='emcee')
+        plt.legend()
+        plt.show()
+
+    quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
+    print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
+    print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
+    # <end of examples/doc_fitting_emcee.py>
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  7.447 seconds)
+
+
+.. _sphx_glr_download_examples_documentation_fitting_emcee.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Python source code: fitting_emcee.py <fitting_emcee.py>`
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Jupyter notebook: fitting_emcee.ipynb <fitting_emcee.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

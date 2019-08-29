@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,25 +29,31 @@
   </head><body>
 <div>
 <table border=0>
-  <tr><td></td><td width=85% padding=5 align=left>
-       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
      </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
+          <a href="examples/index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
      <td></td>
   </tr>
-  <tr><td></td><td width=75% padding=5 align=left>
-        <a href="index.html" style="color: #157"> <font size=+2>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="contents.html/../index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
      </td>
-     <td width=7% align=left>
-         <a href="faq.html" style="color: #882222">
+     <td width=6% align=left>
+         <a href="#" style="color: #882222">
          <font size+=1>FAQ</font></a> </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
+         <a href="support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
         <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
          <font size+=1>Develop</font></a></td>
      <td></td>
@@ -73,7 +80,7 @@
    <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>]</li>
+   <li><a href="constraints.html">constraints</a>|</li>
  
       </ul>
     </div>
@@ -105,7 +112,7 @@
                         title="previous chapter">Getting Help</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="parameters.html"
-                        title="next chapter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code>  and <code class="docutils literal notranslate"><span class="pre">Parameters</span></code></a></p>
+                        title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code>  and <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -114,13 +121,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -133,9 +138,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <p>%.. _faq_chapter:</p>
-<div class="section" id="frequently-asked-questions">
-<h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="frequently-asked-questions">
+<span id="faq-chapter"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
 <p>A list of common questions.</p>
 <div class="section" id="what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">
 <h2>What’s the best way to ask for help or submit a bug report?<a class="headerlink" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report" title="Permalink to this headline">¶</a></h2>
@@ -157,9 +161,9 @@
 </div>
 <div class="section" id="how-can-i-fit-multi-dimensional-data">
 <h2>How can I fit multi-dimensional data?<a class="headerlink" href="#how-can-i-fit-multi-dimensional-data" title="Permalink to this headline">¶</a></h2>
-<p>The fitting routines accept data arrays that are one dimensional and double
+<p>The fitting routines accept data arrays that are one-dimensional and double
 precision.  So you need to convert the data and model (or the value
-returned by the objective function) to be one dimensional.  A simple way to
+returned by the objective function) to be one-dimensional.  A simple way to
 do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.flatten.html">numpy.ndarray.flatten</a>, for example:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
@@ -170,13 +174,15 @@ do this is to use <a class="reference external" href="https://docs.scipy.org/doc
 </div>
 <div class="section" id="how-can-i-fit-multiple-data-sets">
 <h2>How can I fit multiple data sets?<a class="headerlink" href="#how-can-i-fit-multiple-data-sets" title="Permalink to this headline">¶</a></h2>
-<p>As above, the fitting routines accept data arrays that are one dimensional
+<p>As above, the fitting routines accept data arrays that are one-dimensional
 and double precision.  So you need to convert the sets of data and models
-(or the value returned by the objective function) to be one dimensional.  A
+(or the value returned by the objective function) to be one-dimensional.  A
 simple way to do this is to use <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.concatenate.html">numpy.concatenate</a>.  As an
 example, here is a residual function to simultaneously fit two lines to two
 different arrays.  As a bonus, the two lines share the ‘offset’ parameter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
 <span class="k">def</span> <span class="nf">fit_function</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dat2</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">model1</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;slope1&#39;</span><span class="p">]</span>
     <span class="n">model2</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;slope2&#39;</span><span class="p">]</span>
@@ -191,16 +197,18 @@ different arrays.  As a bonus, the two lines share the ‘offset’ parameter:</
 <h2>How can I fit complex data?<a class="headerlink" href="#how-can-i-fit-complex-data" title="Permalink to this headline">¶</a></h2>
 <p>As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
-precision floating point numbers. The simplest approach is to use
+precision, floating point numbers. The simplest approach is to use
 <a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.view.html">numpy.ndarray.view</a>, perhaps like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="o">....</span>
     <span class="n">resid</span> <span class="o">=</span> <span class="n">calculate_complex_residual</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Alternately, you can use the lmfit.Model class to wrap a fit function
+<p>Alternately, you can use the <code class="xref py py-class docutils literal notranslate"><span class="pre">lmfit.Model</span></code> class to wrap a fit function
 that returns a complex vector. It will automatically apply the above
 prescription when calculating the residual. The benefit to this method
 is that you also get access to the plot routines from the ModelResult
@@ -237,7 +245,7 @@ really must handle that.</p>
 data array and are meant to indicate missing values, or if you using
 <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code> with the same basic intention, then it might be
 possible to get a successful fit in spite of the NaN values. To do this,
-you can add a <code class="docutils literal notranslate"><span class="pre">nan_policy='omit'`</span></code> argument to <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code>, or
+you can add a <code class="docutils literal notranslate"><span class="pre">nan_policy='omit'</span></code> argument to <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code>, or
 when creating a <code class="xref py py-class docutils literal notranslate"><span class="pre">lmfit.Model</span></code>, or when running
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">lmfit.Model.fit()</span></code>.</p>
 <p>In order for this to be effective, the number of NaN values cannot ever
@@ -253,11 +261,11 @@ assumed to be either scalar values or numpy arrays of double precision real
 numbers when fitting.  Some of the most likely causes of NaNs are:</p>
 <blockquote>
 <div><ul class="simple">
-<li>taking <code class="docutils literal notranslate"><span class="pre">sqrt(x)</span></code> or <code class="docutils literal notranslate"><span class="pre">log(x)</span></code> where <code class="docutils literal notranslate"><span class="pre">x</span></code> is negative.</li>
-<li>doing <code class="docutils literal notranslate"><span class="pre">x**y</span></code> where <code class="docutils literal notranslate"><span class="pre">`x</span></code> is negative.  Since <code class="docutils literal notranslate"><span class="pre">y</span></code> is real, there will
+<li><p>taking <code class="docutils literal notranslate"><span class="pre">sqrt(x)</span></code> or <code class="docutils literal notranslate"><span class="pre">log(x)</span></code> where <code class="docutils literal notranslate"><span class="pre">x</span></code> is negative.</p></li>
+<li><p>doing <code class="docutils literal notranslate"><span class="pre">x**y</span></code> where <code class="docutils literal notranslate"><span class="pre">x</span></code> is negative.  Since <code class="docutils literal notranslate"><span class="pre">y</span></code> is real, there will
 be a fractional component, and a negative number to a fractional
-exponent is not a real number.</li>
-<li>doing <code class="docutils literal notranslate"><span class="pre">x/y</span></code> where both <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are 0.</li>
+exponent is not a real number.</p></li>
+<li><p>doing <code class="docutils literal notranslate"><span class="pre">x/y</span></code> where both <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> are 0.</p></li>
 </ul>
 </div></blockquote>
 <p>If you use these very common constructs in your objective or model
@@ -302,13 +310,13 @@ about 700.</p>
    <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>]</li>
+   <li><a href="constraints.html">constraints</a>|</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

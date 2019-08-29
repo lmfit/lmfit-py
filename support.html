@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Getting Help &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,25 +29,31 @@
   </head><body>
 <div>
 <table border=0>
-  <tr><td></td><td width=85% padding=5 align=left>
-       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
      </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
+          <a href="examples/index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
      <td></td>
   </tr>
-  <tr><td></td><td width=75% padding=5 align=left>
-        <a href="index.html" style="color: #157"> <font size=+2>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="contents.html/../index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
      </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
          <a href="faq.html" style="color: #882222">
          <font size+=1>FAQ</font></a> </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
+         <a href="#" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
         <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
          <font size+=1>Develop</font></a></td>
      <td></td>
@@ -73,7 +80,7 @@
    <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>]</li>
+   <li><a href="constraints.html">constraints</a>|</li>
  
       </ul>
     </div>
@@ -94,13 +101,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -127,7 +132,7 @@ please start a conversation on the <a class="reference external" href="https://g
 you’re having may or may not be due to a bug.  If it is due to a bug,
 creating an Issue from the conversation is easy.  If it is not a bug, the
 problem will be discussed and then the Issue will be closed.  While one
-<em>can</em> search through closed Issues on github, these are not so easily
+<em>can</em> search through closed Issues on GitHub, these are not so easily
 searched, and the conversation is not easily useful to others later.
 Starting the conversation on the mailing list with “How do I do this?” or
 “Why didn’t this work?” instead of “This should work and doesn’t” is
@@ -162,13 +167,13 @@ discussions.</p>
    <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>]</li>
+   <li><a href="constraints.html">constraints</a>|</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

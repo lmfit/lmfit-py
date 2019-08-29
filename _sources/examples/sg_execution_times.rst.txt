@@ -1,0 +1,24 @@
+
+:orphan:
+
+.. _sphx_glr_examples_sg_execution_times:
+
+Computation times
+=================
+**00:45.340** total execution time for **examples** files:
+
+- **00:22.136**: :ref:`sphx_glr_examples_example_brute.py` (``example_brute.py``)
+- **00:14.010**: :ref:`sphx_glr_examples_example_confidence_interval.py` (``example_confidence_interval.py``)
+- **00:07.518**: :ref:`sphx_glr_examples_example_emcee_Model_interface.py` (``example_emcee_Model_interface.py``)
+- **00:00.234**: :ref:`sphx_glr_examples_example_diffev.py` (``example_diffev.py``)
+- **00:00.217**: :ref:`sphx_glr_examples_example_complex_resonator_model.py` (``example_complex_resonator_model.py``)
+- **00:00.200**: :ref:`sphx_glr_examples_example_reduce_fcn.py` (``example_reduce_fcn.py``)
+- **00:00.198**: :ref:`sphx_glr_examples_example_use_pandas.py` (``example_use_pandas.py``)
+- **00:00.189**: :ref:`sphx_glr_examples_example_Model_interface.py` (``example_Model_interface.py``)
+- **00:00.128**: :ref:`sphx_glr_examples_example_fit_multi_datasets.py` (``example_fit_multi_datasets.py``)
+- **00:00.109**: :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py` (``example_fit_with_algebraic_constraint.py``)
+- **00:00.103**: :ref:`sphx_glr_examples_example_fit_with_inequality.py` (``example_fit_with_inequality.py``)
+- **00:00.102**: :ref:`sphx_glr_examples_example_expression_model.py` (``example_expression_model.py``)
+- **00:00.100**: :ref:`sphx_glr_examples_example_fit_with_bounds.py` (``example_fit_with_bounds.py``)
+- **00:00.095**: :ref:`sphx_glr_examples_example_fit_with_derivfunc.py` (``example_fit_with_derivfunc.py``)
+- **00:00.000**: :ref:`sphx_glr_examples_lmfit_emcee_model_selection.py` (``lmfit_emcee_model_selection.py``)

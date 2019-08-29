@@ -74,6 +74,8 @@ The :class:`Parameters` class
 
     .. automethod:: dump
 
+    .. automethod:: eval
+
     .. automethod:: loads
 
     .. automethod:: load
@@ -86,12 +88,15 @@ A basic example making use of :class:`~lmfit.parameter.Parameters` and the
 :func:`~lmfit.minimizer.minimize` function (discussed in the next chapter)
 might look like this:
 
-.. literalinclude:: ../examples/doc_parameters_basic.py
+.. jupyter-execute:: ../examples/doc_parameters_basic.py
+    :hide-output:
 
 
 Here, the objective function explicitly unpacks each Parameter value.  This
 can be simplified using the :class:`Parameters` :meth:`valuesdict` method,
-which would make the objective function ``fcn2min`` above look like::
+which would make the objective function ``fcn2min`` above look like:
+
+.. jupyter-execute::
 
     def fcn2min(params, x, data):
         """Model a decaying sine wave and subtract data."""

@@ -1,22 +1,24 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Release Notes &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Examples gallery" href="examples/index.html" />
     <link rel="prev" title="Using Mathematical Constraints" href="constraints.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
@@ -27,25 +29,31 @@
   </head><body>
 <div>
 <table border=0>
-  <tr><td></td><td width=85% padding=5 align=left>
-       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
      </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
+          <a href="examples/index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
           <a href="installation.html" style="color: #882222">
           <font size+=1>Download</font></a></td>
      <td></td>
   </tr>
-  <tr><td></td><td width=75% padding=5 align=left>
-        <a href="index.html" style="color: #157"> <font size=+2>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="contents.html/../index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
      </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
          <a href="faq.html" style="color: #882222">
          <font size+=1>FAQ</font></a> </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
+         <a href="support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
         <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
          <font size+=1>Develop</font></a></td>
      <td></td>
@@ -60,6 +68,9 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
+          <a href="examples/index.html" title="Examples gallery"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
           <a href="constraints.html" title="Using Mathematical Constraints"
              accesskey="P">previous</a> |</li>
    <li>[<a href="intro.html">intro</a>|</li>
@@ -69,7 +80,7 @@
    <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>]</li>
+   <li><a href="constraints.html">constraints</a>|</li>
  
       </ul>
     </div>
@@ -79,6 +90,7 @@
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-0-9-14-release-notes">Version 0.9.14 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-13-release-notes">Version 0.9.13 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-12-release-notes">Version 0.9.12 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-10-release-notes">Version 0.9.10 Release Notes</a></li>
@@ -100,6 +112,9 @@
   <h4>Previous topic</h4>
   <p class="topless"><a href="constraints.html"
                         title="previous chapter">Using Mathematical Constraints</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="examples/index.html"
+                        title="next chapter">Examples gallery</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -108,13 +123,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -133,30 +146,64 @@
 significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>.</p>
+<div class="section" id="version-0-9-14-release-notes">
+<span id="whatsnew-0914-label"></span><h2>Version 0.9.14 Release Notes<a class="headerlink" href="#version-0-9-14-release-notes" title="Permalink to this headline">¶</a></h2>
+<p>New features:</p>
+<ul class="simple">
+<li><p>the global optimizers <code class="docutils literal notranslate"><span class="pre">shgo</span></code> and <code class="docutils literal notranslate"><span class="pre">dual_annealing</span></code> (new in SciPy v1.2) are now supported (Issue #527; PRs #545 and #556)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">eval</span></code> method added to the Parameter class (PR #550 by &#64;zobristnicholas)</p></li>
+<li><p>avoid ZeroDivisionError in <code class="docutils literal notranslate"><span class="pre">printfuncs.params_html_table</span></code> (PR #552 by &#64;aaristov and PR #559)</p></li>
+<li><p>add parallelization to <code class="docutils literal notranslate"><span class="pre">brute</span></code> method (PR #564, requires SciPy v1.3)</p></li>
+</ul>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>consider only varying parameters when reporting potential issues with calculating errorbars (PR #549) and compare
+<code class="docutils literal notranslate"><span class="pre">value</span></code> to both <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code> (PR #571)</p></li>
+<li><p>guard against division by zero in lineshape functions and <code class="docutils literal notranslate"><span class="pre">FWHM</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> expression calculations (PR #545)</p></li>
+<li><p>fix issues with restoring a saved Model (Issue #553; PR #554)</p></li>
+<li><p>always set <code class="docutils literal notranslate"><span class="pre">result.method</span></code> for <code class="docutils literal notranslate"><span class="pre">emcee</span></code> algorithm (PR #558)</p></li>
+<li><p>more careful adding of parameters to handle out-of-order constraint expressions (Issue #560; PR #561)</p></li>
+<li><p>make sure all parameters in Model.guess() use prefixes (PRs #567 and #569)</p></li>
+<li><p>use <code class="docutils literal notranslate"><span class="pre">inspect.signature</span></code> for PY3 to support wrapped functions (Issue #570; PR #576)</p></li>
+<li><p>fix <code class="docutils literal notranslate"><span class="pre">result.nfev`</span></code> for <code class="docutils literal notranslate"><span class="pre">brute</span></code> method when using parallelization (Issue #578; PR #579)</p></li>
+</ul>
+<p>Various:</p>
+<ul class="simple">
+<li><p>remove “missing” in the Model class (replaced by nan_policy) and “drop” as option to nan_policy
+(replaced by omit) deprecated since 0.9 (PR #565).</p></li>
+<li><p>deprecate ‘report_errors’ in printfuncs.py (PR #571)</p></li>
+<li><p>updates to the documentation to use <code class="docutils literal notranslate"><span class="pre">jupyter-sphinx</span></code> to include examples/output (PRs #573 and #575)</p></li>
+<li><p>include a Gallery with examples in the documentation using <code class="docutils literal notranslate"><span class="pre">sphinx-gallery</span></code> (PR #574 and #583)</p></li>
+<li><p>improve test-coverage (PRs #571, #572 and #585)</p></li>
+<li><p>add/clarify warning messages when NaN values are detected (PR #586)</p></li>
+<li><p>several updates to docstrings (Issue #584; PR #583, and others)</p></li>
+<li><p>update pre-commit hooks and several docstrings</p></li>
+</ul>
+</div>
 <div class="section" id="version-0-9-13-release-notes">
 <span id="whatsnew-0913-label"></span><h2>Version 0.9.13 Release Notes<a class="headerlink" href="#version-0-9-13-release-notes" title="Permalink to this headline">¶</a></h2>
 <p>New features:</p>
 <ul class="simple">
-<li>Clearer warning message in fit reports when uncertainties should but cannot be estimated, including guesses of which Parameters to examine (#521, #543)</li>
-<li>SplitLorenztianModel and split_lorentzian function (#523)</li>
-<li>HTML representations for Parameter, MinimizerResult, and Model so that they can be printed better with Jupyter (#524, #548)</li>
-<li>support parallelization for differential evolution (#526)</li>
+<li><p>Clearer warning message in fit reports when uncertainties should but cannot be estimated, including guesses of which Parameters to examine (#521, #543)</p></li>
+<li><p>SplitLorenztianModel and split_lorentzian function (#523)</p></li>
+<li><p>HTML representations for Parameter, MinimizerResult, and Model so that they can be printed better with Jupyter (#524, #548)</p></li>
+<li><p>support parallelization for differential evolution (#526)</p></li>
 </ul>
 <p>Bug fixes:</p>
 <ul class="simple">
-<li>delay import of matplotlib (and so, the selection of its backend) as late as possible (#528, #529)</li>
-<li>fix for saving, loading, and reloading ModelResults (#534)</li>
-<li>fix to leastsq to report the best-fit values, not the values tried last  (#535, #536)</li>
-<li>fix synchronization of all parameter values on Model.guess() (#539, #542)</li>
-<li>improve deprecation warnings for outdated nan_policy keywords (#540)</li>
-<li>fix for edge case in gformat() (#547)</li>
+<li><p>delay import of matplotlib (and so, the selection of its backend) as late as possible (#528, #529)</p></li>
+<li><p>fix for saving, loading, and reloading ModelResults (#534)</p></li>
+<li><p>fix to leastsq to report the best-fit values, not the values tried last  (#535, #536)</p></li>
+<li><p>fix synchronization of all parameter values on Model.guess() (#539, #542)</p></li>
+<li><p>improve deprecation warnings for outdated nan_policy keywords (#540)</p></li>
+<li><p>fix for edge case in gformat() (#547)</p></li>
 </ul>
-<p>Project managements:</p>
+<p>Project management:</p>
 <ul class="simple">
-<li>using pre-commit framework to improve and enforce coding style (#533)</li>
-<li>added code coverage report to github main page</li>
-<li>updated docs, github templates, added several tests.</li>
-<li>dropped support and testing for Python 3.4.</li>
+<li><p>using pre-commit framework to improve and enforce coding style (#533)</p></li>
+<li><p>added code coverage report to github main page</p></li>
+<li><p>updated docs, github templates, added several tests.</p></li>
+<li><p>dropped support and testing for Python 3.4.</p></li>
 </ul>
 </div>
 <div class="section" id="version-0-9-12-release-notes">
@@ -164,23 +211,23 @@ consult the <a class="reference external" href="https://github.com/lmfit/lmfit-p
 <p>Lmfit package is now licensed under BSD-3.</p>
 <p>New features:</p>
 <ul class="simple">
-<li>SkewedVoigtModel was added as built-in model (Issue #493)</li>
-<li>Parameter uncertainties and correlations are reported for least_squares</li>
-<li>Plotting of complex-valued models is now handled in ModelResult class (PR #503)</li>
-<li>A model’s independent variable is allowed to be an object (Issue #492)</li>
-<li>Added <code class="docutils literal notranslate"><span class="pre">usersyms</span></code> to Parameters() initialization to make it easier to add custom functions and symbols (Issue #507)</li>
-<li>the <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> package can be used to calculate parameter uncertainties and correlations for all solvers that do not natively support this (PR #506)</li>
-<li><code class="docutils literal notranslate"><span class="pre">emcee</span></code> can now be used as method keyword-argument to Minimizer.minimize and minimize function, which allows for using <code class="docutils literal notranslate"><span class="pre">emcee</span></code> in the Model class (PR #512; see <code class="docutils literal notranslate"><span class="pre">examples/example_emcee_with_Model.py</span></code>)</li>
+<li><p>SkewedVoigtModel was added as built-in model (Issue #493)</p></li>
+<li><p>Parameter uncertainties and correlations are reported for least_squares</p></li>
+<li><p>Plotting of complex-valued models is now handled in ModelResult class (PR #503)</p></li>
+<li><p>A model’s independent variable is allowed to be an object (Issue #492)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">usersyms</span></code> to Parameters() initialization to make it easier to add custom functions and symbols (Issue #507)</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> package can be used to calculate parameter uncertainties and correlations for all solvers that do not natively support this (PR #506)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">emcee</span></code> can now be used as method keyword-argument to Minimizer.minimize and minimize function, which allows for using <code class="docutils literal notranslate"><span class="pre">emcee</span></code> in the Model class (PR #512; see <code class="docutils literal notranslate"><span class="pre">examples/example_emcee_with_Model.py</span></code>)</p></li>
 </ul>
 <p>(Bug)fixes:</p>
 <ul class="simple">
-<li>asteval errors are now flushed after raising (Issue #486)</li>
-<li>max_time and evaluation time for ExpressionModel increased to 1 hour (Issue #489)</li>
-<li>loading a saved ModelResult now restores all attributes (Issue #491)</li>
-<li>development versions of scipy and emcee are now supported (Issue #497 and PR #496)</li>
-<li>ModelResult.eval() do no longer overwrite the userkws dictionary (Issue #499)</li>
-<li>running the test suite requires <code class="docutils literal notranslate"><span class="pre">pytest</span></code> only (Issue #504)</li>
-<li>improved FWHM calculation for VoigtModel (PR #514)</li>
+<li><p>asteval errors are now flushed after raising (Issue #486)</p></li>
+<li><p>max_time and evaluation time for ExpressionModel increased to 1 hour (Issue #489)</p></li>
+<li><p>loading a saved ModelResult now restores all attributes (Issue #491)</p></li>
+<li><p>development versions of scipy and emcee are now supported (Issue #497 and PR #496)</p></li>
+<li><p>ModelResult.eval() do no longer overwrite the userkws dictionary (Issue #499)</p></li>
+<li><p>running the test suite requires <code class="docutils literal notranslate"><span class="pre">pytest</span></code> only (Issue #504)</p></li>
+<li><p>improved FWHM calculation for VoigtModel (PR #514)</p></li>
 </ul>
 </div>
 <div class="section" id="version-0-9-10-release-notes">
@@ -199,8 +246,8 @@ package (available on PyPI), instead of distributing its own fork.</p>
 using <code class="docutils literal notranslate"><span class="pre">iter_cb</span></code>).</p>
 <p>Bugfixes:</p>
 <ul class="simple">
-<li>all exceptions are allowed when trying to import matplotlib</li>
-<li>simplify and fix corner-case errors when testing closeness of large integers</li>
+<li><p>all exceptions are allowed when trying to import matplotlib</p></li>
+<li><p>simplify and fix corner-case errors when testing closeness of large integers</p></li>
 </ul>
 </div>
 <div class="section" id="version-0-9-9-release-notes">
@@ -217,7 +264,7 @@ is especially important for lmfit maintenance, as it means we can now rely
 on SciPy having code for differential evolution and do not need to keep a
 local copy.</p>
 <p>A brute force method was added, which can be used either with
-<code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.brute()</span></code> or using the <code class="docutils literal notranslate"><span class="pre">method='brute'`</span></code> option to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.brute()</span></code> or using the <code class="docutils literal notranslate"><span class="pre">method='brute'</span></code> option to
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.minimize()</span></code>.  This method requires finite bounds on
 all varying parameters, or that parameters have a finite
 <code class="docutils literal notranslate"><span class="pre">brute_step</span></code> attribute set to specify the step size.</p>
@@ -311,13 +358,13 @@ first fit <code class="docutils literal notranslate"><span class="pre">result1</
 <h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
 <p>The main goal for making this change were to</p>
 <ol class="arabic simple">
-<li>give a better return value to <code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code> and
+<li><p>give a better return value to <code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code> and
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.minimize()</span></code> that can hold all of the information
 about a fit.  By having the return value be an instance of the
 <code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code> class, it can hold an arbitrary amount of
 information that is easily accessed by attribute name, and even
-be given methods.  Using objects is good!</li>
-<li>To limit or even eliminate the amount of “state information” a
+be given methods.  Using objects is good!</p></li>
+<li><p>To limit or even eliminate the amount of “state information” a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code> holds.  By state information, we mean how much of
 the previous fit is remembered after a fit is done.  Keeping (and
 especially using) such information about a previous fit means that
@@ -327,7 +374,7 @@ adjust a set of <code class="xref py py-class docutils literal notranslate"><spa
 result, doing this by changing an internal attribute
 (<code class="xref py py-attr docutils literal notranslate"><span class="pre">Minimizer.params</span></code>) has the undesirable side-effect of not
 being able to “go back”, and makes it somewhat cumbersome to keep
-track of changes made while adjusting parameters and re-running fits.</li>
+track of changes made while adjusting parameters and re-running fits.</p></li>
 </ol>
 </div>
 </div>
@@ -346,6 +393,9 @@ track of changes made while adjusting parameters and re-running fits.</li>
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
+          <a href="examples/index.html" title="Examples gallery"
+             >next</a> |</li>
+        <li class="right" >
           <a href="constraints.html" title="Using Mathematical Constraints"
              >previous</a> |</li>
    <li>[<a href="intro.html">intro</a>|</li>
@@ -355,13 +405,13 @@ track of changes made while adjusting parameters and re-running fits.</li>
    <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>]</li>
+   <li><a href="constraints.html">constraints</a>|</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

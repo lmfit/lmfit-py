@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Downloading and Installation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,25 +29,31 @@
   </head><body>
 <div>
 <table border=0>
-  <tr><td></td><td width=85% padding=5 align=left>
-       <a href="index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
      </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
          <a href="contents.html" style="color: #882222">
          <font size+=1>Contents</font></a> </td>
-     <td width=7% align=left>
-          <a href="installation.html" style="color: #882222">
+     <td width=6% align=left>
+          <a href="examples/index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="#" style="color: #882222">
           <font size+=1>Download</font></a></td>
      <td></td>
   </tr>
-  <tr><td></td><td width=75% padding=5 align=left>
-        <a href="index.html" style="color: #157"> <font size=+2>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="contents.html/../index.html" style="color: #157"> <font size=+2>
 	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
      </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
          <a href="faq.html" style="color: #882222">
          <font size+=1>FAQ</font></a> </td>
-     <td width=7% align=left>
+     <td width=6% align=left>
+         <a href="support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
         <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
          <font size+=1>Develop</font></a></td>
      <td></td>
@@ -73,7 +80,7 @@
    <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>]</li>
+   <li><a href="constraints.html">constraints</a>|</li>
  
       </ul>
     </div>
@@ -108,13 +115,11 @@
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -133,27 +138,32 @@
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <p>Lmfit works with <a class="reference external" href="https://python.org">Python</a> versions 2.7 and 3.5, 3.6, or 3.7. Support for
 2.7 is expected to end in late 2019.</p>
-<dl class="docutils">
-<dt>Lmfit requires the following Python packages, with versions given:</dt>
-<dd><ul class="first last simple">
-<li><a class="reference external" href="https://github.com/benjaminp/six">six</a> version 1.10 or higher.</li>
-<li><a class="reference external" href="http://numpy.org/">NumPy</a> version 1.10 or higher.</li>
-<li><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 0.19 or higher.</li>
-<li><a class="reference external" href="https://github.com/newville/asteval">asteval</a> version 0.9.12 or higher.</li>
-<li><a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a> version 3.0 or higher.</li>
+<dl class="simple">
+<dt>Lmfit requires the following Python packages, with versions given:</dt><dd><ul class="simple">
+<li><p><a class="reference external" href="https://github.com/benjaminp/six">six</a> version 1.10 or higher.</p></li>
+<li><p><a class="reference external" href="http://numpy.org/">NumPy</a> version 1.10 or higher.</p></li>
+<li><p><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 0.19 or higher.</p></li>
+<li><p><a class="reference external" href="https://github.com/newville/asteval">asteval</a> version 0.9.12 or higher.</p></li>
+<li><p><a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a> version 3.0 or higher.</p></li>
 </ul>
 </dd>
 </dl>
 <p>All of these are readily available on PyPI, and should be installed
 automatically if installing with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lmfit</span></code>.</p>
 <p>In order to run the test suite, the <a class="reference external" href="https://pytest.org/">pytest</a> package is required.  Some
-functionality requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a>, <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>,
-<a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>, or <a class="reference external" href="https://github.com/pbrod/numdifftools">numdifftools</a> packages.  These are not installed
+functionality requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a>, <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>, <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>,
+<a class="reference external" href="https://matplotlib.org/">matplotlib</a>, <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>, or <a class="reference external" href="https://github.com/pbrod/numdifftools">numdifftools</a> packages.  These are not installed
 automatically, but we highly recommend each of these packages.</p>
+<p>For building the documentation, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>, <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a>, <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>,
+<a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a>, <a class="reference external" href="https://jupyter-sphinx.readthedocs.io">jupyter_sphinx</a>, and <a class="reference external" href="https://www.imagemagick.org/">ImageMagick</a> are required (the latter
+one only when generating the PDF document).</p>
+<p>Please refer to  <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> for a list of all dependencies that
+are needed if you want to participate in the development of lmfit.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is 0.9.13 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPi</a>.</p>
+<p>The latest stable version of lmfit is 0.9.14 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPI</a>. Check the <a class="reference external" href="https://lmfit.github.io/lmfit-py/whatsnew.html">release_notes</a> for a list
+of changes compared to earlier releases.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -250,10 +260,11 @@ of size of the contribution to the existing code) are from:
 Additional patches, bug fixes, and suggestions have come from Faustin
 Carter, Christoph Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau,
 nmearl, Gustavo Pasquevich, Clemens Prescher, LiCode, Ben Gamari, Yoav
-Roam, Alexander Stark, Alexandre Beelen, and many others.
+Roam, Alexander Stark, Alexandre Beelen, Andrey Aristov, Nicholas Zobrist,
+and many others.
 
 The lmfit code obviously depends on, and owes a very large debt to the code
-in scipy.optimize.  Several discussions on the scipy-user and lmfit mailing
+in scipy.optimize.  Several discussions on the SciPy-user and lmfit mailing
 lists have also led to improvements in this code.
 </pre></div>
 </div>
@@ -363,13 +374,13 @@ released under a MIT license.
    <li><a href="builtin_models.html"> built-in models</a>|</li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>]</li>
+   <li><a href="constraints.html">constraints</a>|</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

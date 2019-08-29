@@ -1,0 +1,799 @@
+:orphan:
+
+
+
+.. _sphx_glr_examples:
+
+Examples gallery
+================
+
+Below are examples of the different things you can do with lmfit.
+Click on any image to see the complete source code and output.
+
+We encourage users (i.e., YOU) to submit user-guide-style, documented,
+and preferably self-contained examples of how you use lmfit for
+inclusion in this gallery! Please note that many of the examples
+below currently do *not* follow these guidelines yet.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Simple example demonstrating how to read in the data using pandas and supply the elements of th...">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_use_pandas_thumb.png
+
+        :ref:`sphx_glr_examples_example_use_pandas.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_use_pandas
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="ExpressionModels allow a model to be built from a user-supplied expression. See: https://lmfit....">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_expression_model_thumb.png
+
+        :ref:`sphx_glr_examples_example_expression_model.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_expression_model
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Sometimes specifying boundaries using min and max are not sufficient, and more complicated (ine...">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_inequality_thumb.png
+
+        :ref:`sphx_glr_examples_example_fit_with_inequality.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_fit_with_inequality
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the &quot;leastsq&quot; and &quot;differential_evolution&quot; algorithms on a fairly simple ...">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_diffev_thumb.png
+
+        :ref:`sphx_glr_examples_example_diffev.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_diffev
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="A major advantage of using lmfit is that one can specify boundaries on fitting parameters, even...">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_bounds_thumb.png
+
+        :ref:`sphx_glr_examples_example_fit_with_bounds.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_fit_with_bounds
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="The reduce_fcn specifies how to convert a residual array to a scalar value for the scalar minim...">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_reduce_fcn_thumb.png
+
+        :ref:`sphx_glr_examples_example_reduce_fcn.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_reduce_fcn
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Fit with Algebraic Constraint">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_algebraic_constraint_thumb.png
+
+        :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_fit_with_algebraic_constraint
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Fitting multiple (simulated) Gaussian data sets simultaneously.">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_fit_multi_datasets_thumb.png
+
+        :ref:`sphx_glr_examples_example_fit_multi_datasets.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_fit_multi_datasets
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information pleas...">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_Model_interface_thumb.png
+
+        :ref:`sphx_glr_examples_example_Model_interface.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_Model_interface
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Specifying an analytical function to calculate the Jacobian can speed-up the fitting procedure.">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_derivfunc_thumb.png
+
+        :ref:`sphx_glr_examples_example_fit_with_derivfunc.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_fit_with_derivfunc
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Emcee and the Model Interface">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_emcee_Model_interface_thumb.png
+
+        :ref:`sphx_glr_examples_example_emcee_Model_interface.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_emcee_Model_interface
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Calculate Confidence Intervals">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_confidence_interval_thumb.png
+
+        :ref:`sphx_glr_examples_example_confidence_interval.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_confidence_interval
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and def...">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_complex_resonator_model_thumb.png
+
+        :ref:`sphx_glr_examples_example_complex_resonator_model.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_complex_resonator_model
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is an useful examples; however, it doesn&#x27;t seem to run correctly anymore....">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_lmfit_emcee_model_selection_thumb.png
+
+        :ref:`sphx_glr_examples_lmfit_emcee_model_selection.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/lmfit_emcee_model_selection
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Global minimization using the">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_brute_thumb.png
+
+        :ref:`sphx_glr_examples_example_brute.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_brute
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+
+
+.. _sphx_glr_examples_documentation:
+
+Examples from the documentation
+===============================
+
+Below are all the examples that are part of the lmfit documentation.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodel">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_savemodel_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_savemodel.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_savemodel
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_loadmodelresult
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult2">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult2_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_loadmodelresult2
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_savemodelresult.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_savemodelresult
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_basic">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_confidence_basic_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_confidence_basic.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/confidence_basic
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodel">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_loadmodel_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_loadmodel.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_loadmodel
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_gaussian">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_gaussian_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_gaussian.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_gaussian
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_nan_policy">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_with_nan_policy_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_with_nan_policy.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_with_nan_policy
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_stepmodel">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_stepmodel_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_builtinmodels_stepmodel.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/builtinmodels_stepmodel
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_two_components">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_two_components_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_two_components.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_two_components
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_uncertainty_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_uncertainty.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_uncertainty
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult2">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult2_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_savemodelresult2.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_savemodelresult2
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_iter_callback">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_with_iter_callback_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_with_iter_callback
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss2">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss2_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/builtinmodels_nistgauss2
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_withreport">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_fitting_withreport_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_fitting_withreport.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/fitting_withreport
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_valuesdict">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_parameters_valuesdict_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_parameters_valuesdict.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/parameters_valuesdict
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_basic">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_parameters_basic_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_parameters_basic.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/parameters_basic
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_peakmodels">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_peakmodels_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_builtinmodels_peakmodels.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/builtinmodels_peakmodels
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/builtinmodels_nistgauss
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_composite">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_model_composite_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_model_composite.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_composite
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_advanced">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_confidence_advanced_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_confidence_advanced.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/confidence_advanced
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_emcee">
+
+.. only:: html
+
+    .. figure:: /examples/documentation/images/thumb/sphx_glr_fitting_emcee_thumb.png
+
+        :ref:`sphx_glr_examples_documentation_fitting_emcee.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/fitting_emcee
+.. raw:: html
+
+    <div style='clear:both'></div>
+
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-gallery
+
+
+  .. container:: sphx-glr-download
+
+    :download:`Download all examples in Python source code: examples_python.zip <//home/newville/Codes/lmfit-py/doc/examples/examples_python.zip>`
+
+
+
+  .. container:: sphx-glr-download
+
+    :download:`Download all examples in Jupyter notebooks: examples_jupyter.zip <//home/newville/Codes/lmfit-py/doc/examples/examples_jupyter.zip>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

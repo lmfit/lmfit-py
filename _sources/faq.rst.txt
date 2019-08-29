@@ -1,4 +1,4 @@
-%\.. _faq_chapter:
+.. _faq_chapter:
 
 ====================================
 Frequently Asked Questions
@@ -35,9 +35,9 @@ then you need to install the ``ipywidgets`` package, try:  ``pip install ipywidg
 How can I fit multi-dimensional data?
 ========================================
 
-The fitting routines accept data arrays that are one dimensional and double
+The fitting routines accept data arrays that are one-dimensional and double
 precision.  So you need to convert the data and model (or the value
-returned by the objective function) to be one dimensional.  A simple way to
+returned by the objective function) to be one-dimensional.  A simple way to
 do this is to use :numpydoc:`ndarray.flatten`, for example::
 
     def residual(params, x, data=None):
@@ -48,14 +48,16 @@ do this is to use :numpydoc:`ndarray.flatten`, for example::
 How can I fit multiple data sets?
 ========================================
 
-As above, the fitting routines accept data arrays that are one dimensional
+As above, the fitting routines accept data arrays that are one-dimensional
 and double precision.  So you need to convert the sets of data and models
-(or the value returned by the objective function) to be one dimensional.  A
+(or the value returned by the objective function) to be one-dimensional.  A
 simple way to do this is to use :numpydoc:`concatenate`.  As an
 example, here is a residual function to simultaneously fit two lines to two
 different arrays.  As a bonus, the two lines share the 'offset' parameter::
 
     import numpy as np
+
+
     def fit_function(params, x=None, dat1=None, dat2=None):
         model1 = params['offset'] + x * params['slope1']
         model2 = params['offset'] + x * params['slope2']
@@ -71,16 +73,18 @@ How can I fit complex data?
 
 As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
-precision floating point numbers. The simplest approach is to use
+precision, floating point numbers. The simplest approach is to use
 :numpydoc:`ndarray.view`, perhaps like::
 
    import numpy as np
+
+
    def residual(params, x, data=None):
        ....
        resid = calculate_complex_residual()
        return resid.view(np.float)
 
-Alternately, you can use the lmfit.Model class to wrap a fit function
+Alternately, you can use the :class:`lmfit.Model` class to wrap a fit function
 that returns a complex vector. It will automatically apply the above
 prescription when calculating the residual. The benefit to this method
 is that you also get access to the plot routines from the ModelResult
@@ -125,7 +129,7 @@ If you are using :class:`lmfit.Model` and the NaN values come from your
 data array and are meant to indicate missing values, or if you using
 :func:`lmfit.minimize` with the same basic intention, then it might be
 possible to get a successful fit in spite of the NaN values. To do this,
-you can add a ``nan_policy='omit'``` argument to :func:`lmfit.minimize`, or
+you can add a ``nan_policy='omit'`` argument to :func:`lmfit.minimize`, or
 when creating a :class:`lmfit.Model`, or when running
 :meth:`lmfit.Model.fit`.
 
@@ -145,7 +149,7 @@ numbers when fitting.  Some of the most likely causes of NaNs are:
 
    * taking ``sqrt(x)`` or ``log(x)`` where ``x`` is negative.
 
-   * doing ``x**y`` where ```x`` is negative.  Since ``y`` is real, there will
+   * doing ``x**y`` where ``x`` is negative.  Since ``y`` is real, there will
      be a fractional component, and a negative number to a fractional
      exponent is not a real number.
 
