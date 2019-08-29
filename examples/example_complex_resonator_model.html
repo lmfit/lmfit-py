@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Complex Resonator Model &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Model Selection using lmfit and emcee" href="lmfit_emcee_model_selection.html" />
+    <link rel="prev" title="Calculate Confidence Intervals" href="example_confidence_interval.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="lmfit_emcee_model_selection.html" title="Model Selection using lmfit and emcee"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example_confidence_interval.html" title="Calculate Confidence Intervals"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="example_confidence_interval.html"
+                        title="previous chapter">Calculate Confidence Intervals</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="lmfit_emcee_model_selection.html"
+                        title="next chapter">Model Selection using lmfit and emcee</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/example_complex_resonator_model.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-complex-resonator-model-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="complex-resonator-model">
+<span id="sphx-glr-examples-example-complex-resonator-model-py"></span><h1>Complex Resonator Model<a class="headerlink" href="#complex-resonator-model" title="Permalink to this headline">¶</a></h1>
+<p>This notebook shows how to fit the parameters of a complex resonator,
+using <cite>lmfit.Model</cite> and defining a custom <cite>Model</cite> class.</p>
+<p>Following Khalil et al. (<a class="reference external" href="https://arxiv.org/abs/1108.3117">https://arxiv.org/abs/1108.3117</a>), we can model the
+forward transmission of a microwave resonator with total quality factor
+<span class="math notranslate nohighlight">\(Q\)</span>, coupling quality factor <span class="math notranslate nohighlight">\(Q_e\)</span>, and resonant frequency
+<span class="math notranslate nohighlight">\(f_0\)</span> using:</p>
+<div class="math notranslate nohighlight">
+\[S_{21}(f) = 1 - \frac{Q Q_e^{-1}}{1+2jQ(f-f_0)/f_0}\]</div>
+<p><span class="math notranslate nohighlight">\(S_{21}\)</span> is thus a complex function of a real frequency.</p>
+<p>By allowing <span class="math notranslate nohighlight">\(Q_e\)</span> to be complex, this model can take into account
+mismatches in the input and output transmission impedances.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">lmfit</span>
+</pre></div>
+</div>
+<p>Since <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code> and <code class="docutils literal notranslate"><span class="pre">lmfit</span></code> require real parameters, we represent
+<span class="math notranslate nohighlight">\(Q_e\)</span> as <code class="docutils literal notranslate"><span class="pre">Q_e_real</span> <span class="pre">+</span> <span class="pre">1j*Q_e_imag</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">linear_resonator</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">f_0</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">Q_e_real</span><span class="p">,</span> <span class="n">Q_e_imag</span><span class="p">):</span>
+    <span class="n">Q_e</span> <span class="o">=</span> <span class="n">Q_e_real</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">Q_e_imag</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">Q</span> <span class="o">*</span> <span class="n">Q_e</span><span class="o">**-</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="n">j</span> <span class="o">*</span> <span class="n">Q</span> <span class="o">*</span> <span class="p">(</span><span class="n">f</span> <span class="o">-</span> <span class="n">f_0</span><span class="p">)</span> <span class="o">/</span> <span class="n">f_0</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p>The standard practice of defining an <code class="docutils literal notranslate"><span class="pre">lmfit</span></code> model is as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ResonatorModel</span><span class="p">(</span><span class="n">lmfit</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;resonator model&quot;</span> <span class="o">+</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">COMMON_DOC</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># pass in the defining equation so the user doesn&#39;t have to later.</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ResonatorModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">linear_resonator</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_param_hint</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Enforce Q is positive</span>
+
+    <span class="k">def</span> <span class="nf">guess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">verbose</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">f</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">argmin_s21</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+        <span class="n">fmin</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">fmax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">f_0_guess</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="n">argmin_s21</span><span class="p">]</span>  <span class="c1"># guess that the resonance is the lowest point</span>
+        <span class="n">Q_min</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">f_0_guess</span><span class="o">/</span><span class="p">(</span><span class="n">fmax</span><span class="o">-</span><span class="n">fmin</span><span class="p">))</span>  <span class="c1"># assume the user isn&#39;t trying to fit just a small part of a resonance curve.</span>
+        <span class="n">delta_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>  <span class="c1"># assume f is sorted</span>
+        <span class="n">min_delta_f</span> <span class="o">=</span> <span class="n">delta_f</span><span class="p">[</span><span class="n">delta_f</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">Q_max</span> <span class="o">=</span> <span class="n">f_0_guess</span><span class="o">/</span><span class="n">min_delta_f</span>  <span class="c1"># assume data actually samples the resonance reasonably</span>
+        <span class="n">Q_guess</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Q_min</span><span class="o">*</span><span class="n">Q_max</span><span class="p">)</span>  <span class="c1"># geometric mean, why not?</span>
+        <span class="n">Q_e_real_guess</span> <span class="o">=</span> <span class="n">Q_guess</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">argmin_s21</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fmin=&quot;</span><span class="p">,</span> <span class="n">fmin</span><span class="p">,</span> <span class="s2">&quot;fmax=&quot;</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="s2">&quot;f_0_guess=&quot;</span><span class="p">,</span> <span class="n">f_0_guess</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Qmin=&quot;</span><span class="p">,</span> <span class="n">Q_min</span><span class="p">,</span> <span class="s2">&quot;Q_max=&quot;</span><span class="p">,</span> <span class="n">Q_max</span><span class="p">,</span> <span class="s2">&quot;Q_guess=&quot;</span><span class="p">,</span> <span class="n">Q_guess</span><span class="p">,</span> <span class="s2">&quot;Q_e_real_guess=&quot;</span><span class="p">,</span> <span class="n">Q_e_real_guess</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">Q</span><span class="o">=</span><span class="n">Q_guess</span><span class="p">,</span> <span class="n">Q_e_real</span><span class="o">=</span><span class="n">Q_e_real_guess</span><span class="p">,</span> <span class="n">Q_e_imag</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">f_0</span><span class="o">=</span><span class="n">f_0_guess</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">Q&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="n">Q_min</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">Q_max</span><span class="p">)</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">f_0&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="n">fmin</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">fmax</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">update_param_vals</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now let’s use the model to generate some fake data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">resonator</span> <span class="o">=</span> <span class="n">ResonatorModel</span><span class="p">()</span>
+<span class="n">true_params</span> <span class="o">=</span> <span class="n">resonator</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">f_0</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">Q_e_real</span><span class="o">=</span><span class="mi">9000</span><span class="p">,</span> <span class="n">Q_e_imag</span><span class="o">=-</span><span class="mi">9000</span><span class="p">)</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">99.95</span><span class="p">,</span> <span class="mf">100.05</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">true_s21</span> <span class="o">=</span> <span class="n">resonator</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">true_params</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<span class="n">noise_scale</span> <span class="o">=</span> <span class="mf">0.02</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">123</span><span class="p">)</span>
+<span class="n">measured_s21</span> <span class="o">=</span> <span class="n">true_s21</span> <span class="o">+</span> <span class="n">noise_scale</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">measured_s21</span><span class="p">)))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;|S21| (dB)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;MHz&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;simulated measurement&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_example_complex_resonator_model_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_complex_resonator_model_001.png" />
+<p>Try out the guess method we added:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">guess</span> <span class="o">=</span> <span class="n">resonator</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">measured_s21</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>fmin= 99.95 fmax= 100.05 f_0_guess= 100.00353535353536
+Qmin= 100.00353535354105 Q_max= 99003.50000055433 Q_guess= 3146.537781821432 Q_e_real_guess= 5082.2474265369565
+</pre></div>
+</div>
+<p>And now fit the data using the guess as a starting point:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">resonator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">measured_s21</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">guess</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">fit_report</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+    Model(linear_resonator)
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 36
+    # data points      = 200
+    # variables        = 4
+    chi-square         = 0.08533642
+    reduced chi-square = 4.3539e-04
+    Akaike info crit   = -1543.89425
+    Bayesian info crit = -1530.70099
+[[Variables]]
+    f_0:       100.000096 +/- 7.0378e-05 (0.00%) (init = 100.0035)
+    Q:         10059.4926 +/- 142.294763 (1.41%) (init = 3146.538)
+    Q_e_real:  9180.61941 +/- 133.776876 (1.46%) (init = 5082.247)
+    Q_e_imag: -9137.03297 +/- 133.770238 (1.46%) (init = 0)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(Q, Q_e_real)   =  0.518
+    C(f_0, Q_e_imag) =  0.517
+    C(f_0, Q_e_real) =  0.515
+    C(Q, Q_e_imag)   = -0.515
+
+Name         Value      Min      Max   Stderr     Vary     Expr Brute_Step
+Q         1.006e+04      100  9.9e+04    142.3     True     None     None
+Q_e_imag     -9137     -inf      inf    133.8     True     None     None
+Q_e_real      9181     -inf      inf    133.8     True     None     None
+f_0            100    99.95      100 7.038e-05     True     None     None
+</pre></div>
+</div>
+<p>Now we’ll make some plots of the data and fit. Define a convenience function
+for plotting complex quantities:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_ri</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">imag</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="n">fit_s21</span> <span class="o">=</span> <span class="n">resonator</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+<span class="n">guess_s21</span> <span class="o">=</span> <span class="n">resonator</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">guess</span><span class="p">,</span> <span class="n">f</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plot_ri</span><span class="p">(</span><span class="n">measured_s21</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plot_ri</span><span class="p">(</span><span class="n">fit_s21</span><span class="p">,</span> <span class="s1">&#39;r.-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
+<span class="n">plot_ri</span><span class="p">(</span><span class="n">guess_s21</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;inital fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Re(S21)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Im(S21)&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">measured_s21</span><span class="p">)),</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">fit_s21</span><span class="p">)),</span> <span class="s1">&#39;r.-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">guess_s21</span><span class="p">)),</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;initial fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;|S21| (dB)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;MHz&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_example_complex_resonator_model_002.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_example_complex_resonator_model_002.png" />
+</li>
+<li><img alt="../_images/sphx_glr_example_complex_resonator_model_003.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_example_complex_resonator_model_003.png" />
+</li>
+</ul>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.217 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-complex-resonator-model-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/3805fc8171e8a0686d5cf65be55085ee/example_complex_resonator_model.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_complex_resonator_model.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/3dcc7459227dbd4ba1982949be8491e1/example_complex_resonator_model.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_complex_resonator_model.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="lmfit_emcee_model_selection.html" title="Model Selection using lmfit and emcee"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example_confidence_interval.html" title="Calculate Confidence Intervals"
+             >previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

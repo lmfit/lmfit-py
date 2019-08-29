@@ -1,0 +1,1 @@
+{"__class__": "Tuple", "value": [{"__class__": "Tuple", "value": ["mysine", null, "mysine", "", {"__class__": "List", "value": ["x"]}, {"__class__": "List", "value": ["amp", "freq", "shift"]}, {"__class__": "Dict"}, "raise", {"__class__": "Dict"}]}, null, null]}

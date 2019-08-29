@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>doc_model_loadmodel.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="doc_model_gaussian.py" href="model_gaussian.html" />
+    <link rel="prev" title="doc_confidence_basic.py" href="confidence_basic.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="../index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="model_gaussian.html" title="doc_model_gaussian.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="confidence_basic.html" title="doc_confidence_basic.py"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../../intro.html">intro</a>|</li>
+   <li><a href="../../parameters.html">parameters</a>|</li>
+   <li><a href="../../fitting.html"> minimize</a>|</li>
+   <li><a href="../../model.html"> model</a>|</li>
+   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../../bounds.html">bounds</a>|</li>
+   <li><a href="../../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="confidence_basic.html"
+                        title="previous chapter">doc_confidence_basic.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model_gaussian.html"
+                        title="next chapter">doc_model_gaussian.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/examples/documentation/model_loadmodel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-documentation-model-loadmodel-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="doc-model-loadmodel-py">
+<span id="sphx-glr-examples-documentation-model-loadmodel-py"></span><h1>doc_model_loadmodel.py<a class="headerlink" href="#doc-model-loadmodel-py" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example <em>does</em> actually work, but running from within  sphinx-gallery fails to find symbols saved in the save file.</p>
+</div>
+<div class="highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">480</span>, in <span class="n">_memory_usage</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
+  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">465</span>, in <span class="n">__call__</span>
+    <span class="k">exec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">globals</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/newville/Codes/lmfit-py/examples/documentation/model_loadmodel.py&quot;</span>, line <span class="m">32</span>, in <span class="n">&lt;module&gt;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">1022</span>, in <span class="n">fit</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">1369</span>, in <span class="n">fit</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">init_fit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">userkws</span><span class="p">)</span>
+  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">848</span>, in <span class="n">eval</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">make_funcargs</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">))</span>
+  File <span class="nb">&quot;/home/newville/Codes/lmfit-py/examples/documentation/model_savemodel.py&quot;</span>, line <span class="m">18</span>, in <span class="n">mysine</span>
+    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span>
+<span class="gr">NameError</span>: <span class="n">name &#39;np&#39; is not defined</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="c1">##</span>
+<span class="c1"># &lt;examples/doc_model_loadmodel.py&gt;</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lmfit.model</span> <span class="k">import</span> <span class="n">load_model</span>
+
+
+<span class="k">def</span> <span class="nf">mysine</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span>
+
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s1">&#39;sinedata.dat&#39;</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="s1">&#39;sinemodel.sav&#39;</span><span class="p">,</span> <span class="n">funcdefs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;mysine&#39;</span><span class="p">:</span> <span class="n">mysine</span><span class="p">})</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">amp</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mf">0.52</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;bo&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">best_fit</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># &lt;end examples/doc_model_loadmodel.py&gt;</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.047 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-model-loadmodel-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/559ed5259a2958bc6b87b02605f694e4/model_loadmodel.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">model_loadmodel.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/35a8db9d0251106c13aff9eb03352d11/model_loadmodel.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">model_loadmodel.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="model_gaussian.html" title="doc_model_gaussian.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="confidence_basic.html" title="doc_confidence_basic.py"
+             >previous</a> |</li>
+   <li>[<a href="../../intro.html">intro</a>|</li>
+   <li><a href="../../parameters.html">parameters</a>|</li>
+   <li><a href="../../fitting.html"> minimize</a>|</li>
+   <li><a href="../../model.html"> model</a>|</li>
+   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../../bounds.html">bounds</a>|</li>
+   <li><a href="../../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

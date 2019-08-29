@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>doc_parameters_basic.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="doc_builtinmodels_peakmodels.py" href="builtinmodels_peakmodels.html" />
+    <link rel="prev" title="doc_parameters_valuesdict.py" href="parameters_valuesdict.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="../index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="builtinmodels_peakmodels.html" title="doc_builtinmodels_peakmodels.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parameters_valuesdict.html" title="doc_parameters_valuesdict.py"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../../intro.html">intro</a>|</li>
+   <li><a href="../../parameters.html">parameters</a>|</li>
+   <li><a href="../../fitting.html"> minimize</a>|</li>
+   <li><a href="../../model.html"> model</a>|</li>
+   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../../bounds.html">bounds</a>|</li>
+   <li><a href="../../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parameters_valuesdict.html"
+                        title="previous chapter">doc_parameters_valuesdict.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="builtinmodels_peakmodels.html"
+                        title="next chapter">doc_builtinmodels_peakmodels.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/examples/documentation/parameters_basic.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-documentation-parameters-basic-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="doc-parameters-basic-py">
+<span id="sphx-glr-examples-documentation-parameters-basic-py"></span><h1>doc_parameters_basic.py<a class="headerlink" href="#doc-parameters-basic-py" title="Permalink to this headline">¶</a></h1>
+<img alt="../../_images/sphx_glr_parameters_basic_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_parameters_basic_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 64
+    # data points      = 301
+    # variables        = 4
+    chi-square         = 11.0484618
+    reduced chi-square = 0.03720021
+    Akaike info crit   = -986.750534
+    Bayesian info crit = -971.922093
+[[Variables]]
+    amp:    4.96078856 +/- 0.03791272 (0.76%) (init = 10)
+    decay:  0.02437789 +/- 4.2572e-04 (1.75%) (init = 0.1)
+    shift: -0.10363212 +/- 0.00981677 (9.47%) (init = 0)
+    omega:  2.00019266 +/- 0.00309578 (0.15%) (init = 3)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(shift, omega) = -0.785
+    C(amp, decay)   =  0.584
+    C(amp, shift)   = -0.117
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="c1">##</span>
+<span class="c1"># &lt;examples/doc_parameters_basic.py&gt;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">report_fit</span>
+
+<span class="c1"># create data to be fitted</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">301</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="mf">5.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="mf">0.025</span><span class="p">)</span> <span class="o">+</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.2</span><span class="p">))</span>
+
+
+<span class="c1"># define objective function: returns the array to be minimized</span>
+<span class="k">def</span> <span class="nf">fcn2min</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">omega</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span> <span class="o">-</span> <span class="n">data</span>
+
+
+<span class="c1"># create a set of Parameters</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+
+<span class="c1"># do fit, here with the default leastsq algorithm</span>
+<span class="n">minner</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">fcn2min</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">fcn_args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">minner</span><span class="o">.</span><span class="n">minimize</span><span class="p">()</span>
+
+<span class="c1"># calculate final result</span>
+<span class="n">final</span> <span class="o">=</span> <span class="n">data</span> <span class="o">+</span> <span class="n">result</span><span class="o">.</span><span class="n">residual</span>
+
+<span class="c1"># write error report</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+<span class="c1"># try to plot results</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;k+&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">final</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="c1"># &lt;end of examples/doc_parameters_basic.py&gt;</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.095 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-parameters-basic-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/6dc0e5594b8cde703d91d0b6a7d2fd80/parameters_basic.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">parameters_basic.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/75c6915a03707670afc5b17d3dd6834f/parameters_basic.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">parameters_basic.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="builtinmodels_peakmodels.html" title="doc_builtinmodels_peakmodels.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parameters_valuesdict.html" title="doc_parameters_valuesdict.py"
+             >previous</a> |</li>
+   <li>[<a href="../../intro.html">intro</a>|</li>
+   <li><a href="../../parameters.html">parameters</a>|</li>
+   <li><a href="../../fitting.html"> minimize</a>|</li>
+   <li><a href="../../model.html"> model</a>|</li>
+   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../../bounds.html">bounds</a>|</li>
+   <li><a href="../../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

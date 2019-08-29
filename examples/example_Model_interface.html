@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fit using the Model interface &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fit Specifying a Function to Compute the Jacobian" href="example_fit_with_derivfunc.html" />
+    <link rel="prev" title="Fit Multiple Data Sets" href="example_fit_multi_datasets.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example_fit_multi_datasets.html" title="Fit Multiple Data Sets"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="example_fit_multi_datasets.html"
+                        title="previous chapter">Fit Multiple Data Sets</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example_fit_with_derivfunc.html"
+                        title="next chapter">Fit Specifying a Function to Compute the Jacobian</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/example_Model_interface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-model-interface-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="fit-using-the-model-interface">
+<span id="sphx-glr-examples-example-model-interface-py"></span><h1>Fit using the Model interface<a class="headerlink" href="#fit-using-the-model-interface" title="Permalink to this headline">¶</a></h1>
+<p>This notebook shows a simple example of using the <code class="docutils literal notranslate"><span class="pre">lmfit.Model</span></code> class. For
+more information please refer to:
+<a class="reference external" href="https://lmfit.github.io/lmfit-py/model.html#the-model-class">https://lmfit.github.io/lmfit-py/model.html#the-model-class</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="k">import</span> <span class="n">Series</span>
+
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">Parameter</span><span class="p">,</span> <span class="n">report_fit</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Model</span></code> class is a flexible, concise curve fitter. I will illustrate
+fitting example data to an exponential decay.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">decay</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">tau</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">N</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t</span><span class="o">/</span><span class="n">tau</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The parameters are in no particular order. We’ll need some example data. I
+will use <code class="docutils literal notranslate"><span class="pre">N=7</span></code> and <code class="docutils literal notranslate"><span class="pre">tau=3</span></code>, and add a little noise.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">decay</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">t</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Simplest Usage</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">decay</span><span class="p">,</span> <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">])</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Model infers the parameter names by inspecting the arguments of the
+function, <code class="docutils literal notranslate"><span class="pre">decay</span></code>. Then I passed the independent variable, <code class="docutils literal notranslate"><span class="pre">t</span></code>, and
+initial guesses for each parameter. A residual function is automatically
+defined, and a least-squared regression is performed.</p>
+<p>We can immediately see the best-fit values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 6.96242791264594, &#39;tau&#39;: 3.026643595024727}
+</pre></div>
+</div>
+<p>and use these best-fit parameters for plotting with the <code class="docutils literal notranslate"><span class="pre">plot</span></code> function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_example_Model_interface_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_Model_interface_001.png" />
+<p>We can review the best-fit <cite>Parameters</cite> by accessing <cite>result.params</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Name     Value      Min      Max   Stderr     Vary     Expr Brute_Step
+N       6.962     -inf      inf  0.08759     True     None     None
+tau     3.027     -inf      inf  0.06605     True     None     None
+</pre></div>
+</div>
+<p>More information about the fit is stored in the result, which is an
+<code class="docutils literal notranslate"><span class="pre">lmfit.MimimizerResult</span></code> object (see:
+<a class="reference external" href="https://lmfit.github.io/lmfit-py/fitting.html#lmfit.minimizer.MinimizerResult">https://lmfit.github.io/lmfit-py/fitting.html#lmfit.minimizer.MinimizerResult</a>)</p>
+<p><strong>Specifying Bounds and Holding Parameters Constant</strong></p>
+<p>Above, the <code class="docutils literal notranslate"><span class="pre">Model</span></code> class implicitly builds <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> objects from
+keyword arguments of <code class="docutils literal notranslate"><span class="pre">fit</span></code> that match the argments of <code class="docutils literal notranslate"><span class="pre">decay</span></code>. You can
+build the <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> objects explicity; the following is equivalent.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
+                   <span class="n">N</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+                   <span class="n">tau</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    N:    6.96242791 +/- 0.08759210 (1.26%) (init = 10)
+    tau:  3.02664360 +/- 0.06604601 (2.18%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(N, tau) = -0.757
+</pre></div>
+</div>
+<p>By building <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> objects explicitly, you can specify bounds
+(<code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>) and set parameters constant (<code class="docutils literal notranslate"><span class="pre">vary=False</span></code>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
+                   <span class="n">N</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                   <span class="n">tau</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    N:    7 (fixed)
+    tau:  3.00553487 +/- 0.04261584 (1.42%) (init = 1)
+</pre></div>
+</div>
+<p><strong>Defining Parameters in Advance</strong></p>
+<p>Passing parameters to <code class="docutils literal notranslate"><span class="pre">fit</span></code> can become unwieldly. As an alternative, you
+can extract the parameters from <code class="docutils literal notranslate"><span class="pre">model</span></code> like so, set them individually,
+and pass them to <code class="docutils literal notranslate"><span class="pre">fit</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
+
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;N&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">params</span><span class="p">[</span><span class="s1">&#39;tau&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    N:    6.96242789 +/- 0.08759211 (1.26%) (init = 10)
+    tau:  3.02664362 +/- 0.06604564 (2.18%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(N, tau) = -0.757
+</pre></div>
+</div>
+<p>Keyword arguments override <code class="docutils literal notranslate"><span class="pre">params</span></code>, resetting <code class="docutils literal notranslate"><span class="pre">value</span></code> and all other
+properties (<code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">vary</span></code>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">tau</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    N:    6.96242789 +/- 0.08759211 (1.26%) (init = 10)
+    tau:  3.02664362 +/- 0.06604564 (2.18%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(N, tau) = -0.757
+</pre></div>
+</div>
+<p>The input parameters are not modified by <code class="docutils literal notranslate"><span class="pre">fit</span></code>. They can be reused,
+retaining the same initial value. If you want to use the result of one fit
+as the initial guess for the next, simply pass <code class="docutils literal notranslate"><span class="pre">params=result.params</span></code>.</p>
+<p>#TODO/FIXME: not sure if there ever way a “helpful exception”, but currently
+#it raises a <code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">The</span> <span class="pre">input</span> <span class="pre">contains</span> <span class="pre">nan</span> <span class="pre">values</span></code>.</p>
+<p>#*A Helpful Exception*</p>
+<p>#All this implicit magic makes it very easy for the user to neglect to set a
+#parameter. The <code class="docutils literal notranslate"><span class="pre">fit</span></code> function checks for this and raises a helpful exception.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># #result = model.fit(data, t=t, tau=1)  # N unspecified</span>
+</pre></div>
+</div>
+<p>#An <em>extra</em> parameter that cannot be matched to the model function will
+#throw a <code class="docutils literal notranslate"><span class="pre">UserWarning</span></code>, but it will not raise, leaving open the possibility
+#of unforeseen extensions calling for some parameters.</p>
+<p><em>Weighted Fits</em></p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">sigma</span></code> argument to perform a weighted fit. If you prefer to think
+of the fit in term of <code class="docutils literal notranslate"><span class="pre">weights</span></code>, <code class="docutils literal notranslate"><span class="pre">sigma=1/weights</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    N:    7.32046022 +/- 0.26470598 (3.62%) (init = 10)
+    tau:  2.85770851 +/- 0.09381294 (3.28%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(N, tau) = -0.929
+</pre></div>
+</div>
+<p><em>Handling Missing Data</em></p>
+<p>By default, attemping to fit data that includes a <code class="docutils literal notranslate"><span class="pre">NaN</span></code>, which
+conventionally indicates a “missing” observation, raises a lengthy exception.
+You can choose to <code class="docutils literal notranslate"><span class="pre">omit</span></code> (i.e., skip over) missing values instead.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_with_holes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">data_with_holes</span><span class="p">[[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">700</span><span class="p">]]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>  <span class="c1"># Replace arbitrary values with NaN.</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">decay</span><span class="p">,</span> <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data_with_holes</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    N:    6.96366760 +/- 0.08808108 (1.26%) (init = 10)
+    tau:  3.02568104 +/- 0.06631720 (2.19%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(N, tau) = -0.758
+</pre></div>
+</div>
+<p>If you don’t want to ignore missing values, you can set the model to raise
+proactively, checking for missing values before attempting the fit.</p>
+<p>Uncomment to see the error
+#model = Model(decay, independent_vars=[‘t’], nan_policy=’raise’)
+#result = model.fit(data_with_holes, params, t=t)</p>
+<p>The default setting is <code class="docutils literal notranslate"><span class="pre">nan_policy='raise'</span></code>, which does check for NaNs and
+raises an exception when present.</p>
+<p>Null-chekcing  relies on <code class="docutils literal notranslate"><span class="pre">pandas.isnull</span></code> if it is available. If pandas
+cannot be imported, it silently falls back on <code class="docutils literal notranslate"><span class="pre">numpy.isnan</span></code>.</p>
+<p><em>Data Alignment</em></p>
+<p>Imagine a collection of time series data with different lengths. It would be
+convenient to define one sufficiently long array <code class="docutils literal notranslate"><span class="pre">t</span></code> and use it for each
+time series, regardless of length. <code class="docutils literal notranslate"><span class="pre">pandas</span></code>
+(<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/">https://pandas.pydata.org/pandas-docs/stable/</a>) provides tools for aligning
+indexed data. And, unlike most wrappers to <code class="docutils literal notranslate"><span class="pre">scipy.leastsq</span></code>, <code class="docutils literal notranslate"><span class="pre">Model</span></code> can
+handle pandas objects out of the box, using its data alignment features.</p>
+<p>Here I take just a slice of the <code class="docutils literal notranslate"><span class="pre">data</span></code> and fit it to the full <code class="docutils literal notranslate"><span class="pre">t</span></code>. It is
+automatically aligned to the correct section of <code class="docutils literal notranslate"><span class="pre">t</span></code> using Series’ index.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">decay</span><span class="p">,</span> <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">])</span>
+<span class="n">truncated_data</span> <span class="o">=</span> <span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="mi">200</span><span class="p">:</span><span class="mi">800</span><span class="p">]</span>  <span class="c1"># data points 200-800</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Series</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>  <span class="c1"># all 1000 points</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">truncated_data</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    N:    7.28271532 +/- 0.24764814 (3.40%) (init = 10)
+    tau:  2.89622228 +/- 0.13198954 (4.56%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(N, tau) = -0.932
+</pre></div>
+</div>
+<p>Data with missing entries and an unequal length still aligns properly.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">decay</span><span class="p">,</span> <span class="n">independent_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;t&#39;</span><span class="p">],</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)</span>
+<span class="n">truncated_data_with_holes</span> <span class="o">=</span> <span class="n">Series</span><span class="p">(</span><span class="n">data_with_holes</span><span class="p">)[</span><span class="mi">200</span><span class="p">:</span><span class="mi">800</span><span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">truncated_data_with_holes</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">)</span>
+<span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    N:    7.28349997 +/- 0.24828342 (3.41%) (init = 10)
+    tau:  2.89551321 +/- 0.13236296 (4.57%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(N, tau) = -0.932
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.189 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-model-interface-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/8b2fe0a32f4790de5b0465c00682a37b/example_Model_interface.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_Model_interface.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/a69966d88009a9341e88bfe1935158a7/example_Model_interface.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_Model_interface.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example_fit_multi_datasets.html" title="Fit Multiple Data Sets"
+             >previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

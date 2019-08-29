@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fit Specifying a Function to Compute the Jacobian &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Emcee and the Model Interface" href="example_emcee_Model_interface.html" />
+    <link rel="prev" title="Fit using the Model interface" href="example_Model_interface.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example_emcee_Model_interface.html" title="Emcee and the Model Interface"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example_Model_interface.html" title="Fit using the Model interface"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="example_Model_interface.html"
+                        title="previous chapter">Fit using the Model interface</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example_emcee_Model_interface.html"
+                        title="next chapter">Emcee and the Model Interface</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/example_fit_with_derivfunc.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-fit-with-derivfunc-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="fit-specifying-a-function-to-compute-the-jacobian">
+<span id="sphx-glr-examples-example-fit-with-derivfunc-py"></span><h1>Fit Specifying a Function to Compute the Jacobian<a class="headerlink" href="#fit-specifying-a-function-to-compute-the-jacobian" title="Permalink to this headline">¶</a></h1>
+<p>Specifying an analytical function to calculate the Jacobian can speed-up the
+fitting procedure.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span>
+
+
+<span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">model</span>
+    <span class="k">return</span> <span class="n">model</span> <span class="o">-</span> <span class="n">data</span>
+
+
+<span class="k">def</span> <span class="nf">dfunc</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">pars</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">v</span><span class="p">,</span> <span class="o">-</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">v</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))])</span>
+
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">var</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">var</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">var</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">0.8</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">([</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">],</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.15</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># fit without analytic derivative</span>
+<span class="n">min1</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">fcn_args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">fcn_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
+<span class="n">out1</span> <span class="o">=</span> <span class="n">min1</span><span class="o">.</span><span class="n">leastsq</span><span class="p">()</span>
+<span class="n">fit1</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">out1</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># fit with analytic derivative</span>
+<span class="n">min2</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">fcn_args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">fcn_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
+<span class="n">out2</span> <span class="o">=</span> <span class="n">min2</span><span class="o">.</span><span class="n">leastsq</span><span class="p">(</span><span class="n">Dfun</span><span class="o">=</span><span class="n">dfunc</span><span class="p">,</span> <span class="n">col_deriv</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">fit2</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">out2</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Comparison of fit to exponential decay with/without analytical derivatives
+to model = a*exp(-b*x) + c</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">&quot;true&quot; parameters are: a = </span><span class="si">%.3f</span><span class="s1">, b = </span><span class="si">%.3f</span><span class="s1">, c = </span><span class="si">%.3f</span><span class="s1"></span>
+
+<span class="s1">==============================================</span>
+<span class="s1">Statistic/Parameter|   Without   | With      |</span>
+<span class="s1">----------------------------------------------</span>
+<span class="s1">N Function Calls   |   </span><span class="si">%3i</span><span class="s1">       |   </span><span class="si">%3i</span><span class="s1">     |</span>
+<span class="s1">Chi-square         |   </span><span class="si">%.4f</span><span class="s1">    |   </span><span class="si">%.4f</span><span class="s1">  |</span>
+<span class="s1">   a               |   </span><span class="si">%.4f</span><span class="s1">    |   </span><span class="si">%.4f</span><span class="s1">  |</span>
+<span class="s1">   b               |   </span><span class="si">%.4f</span><span class="s1">    |   </span><span class="si">%.4f</span><span class="s1">  |</span>
+<span class="s1">   c               |   </span><span class="si">%.4f</span><span class="s1">    |   </span><span class="si">%.4f</span><span class="s1">  |</span>
+<span class="s1">----------------------------------------------</span>
+<span class="s1">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span>
+       <span class="n">out1</span><span class="o">.</span><span class="n">nfev</span><span class="p">,</span> <span class="n">out2</span><span class="o">.</span><span class="n">nfev</span><span class="p">,</span>
+       <span class="n">out1</span><span class="o">.</span><span class="n">chisqr</span><span class="p">,</span> <span class="n">out2</span><span class="o">.</span><span class="n">chisqr</span><span class="p">,</span>
+       <span class="n">out1</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">out2</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span>
+       <span class="n">out1</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span> <span class="n">out2</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">],</span>
+       <span class="n">out1</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="n">out2</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;true&quot; parameters are: a = 2.500, b = 1.300, c = 0.800
+
+==============================================
+Statistic/Parameter|   Without   | With      |
+----------------------------------------------
+N Function Calls   |    40       |    13     |
+Chi-square         |   1.2515    |   1.2515  |
+   a               |   2.4517    |   2.4517  |
+   b               |   1.1909    |   1.1909  |
+   c               |   0.7598    |   0.7598  |
+----------------------------------------------
+</pre></div>
+</div>
+<p>and the best-fit to the synthetic data (with added noise) is the same for
+both methods:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s1">&#39;ro&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fit1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fit2</span><span class="p">,</span> <span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_example_fit_with_derivfunc_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_fit_with_derivfunc_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/newville/Codes/lmfit-py/examples/example_fit_with_derivfunc.py:81: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.095 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-fit-with-derivfunc-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/34710c8e386116e372179d0463d53c6a/example_fit_with_derivfunc.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_fit_with_derivfunc.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/a48b6f5c2c4202cb67d15a117c5eb6bc/example_fit_with_derivfunc.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_fit_with_derivfunc.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example_emcee_Model_interface.html" title="Emcee and the Model Interface"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example_Model_interface.html" title="Fit using the Model interface"
+             >previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

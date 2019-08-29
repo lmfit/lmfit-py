@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Model Selection using lmfit and emcee &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Global minimization using the brute method (a.k.a. grid search)" href="example_brute.html" />
+    <link rel="prev" title="Complex Resonator Model" href="example_complex_resonator_model.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example_brute.html" title="Global minimization using the brute method (a.k.a. grid search)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example_complex_resonator_model.html" title="Complex Resonator Model"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="example_complex_resonator_model.html"
+                        title="previous chapter">Complex Resonator Model</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example_brute.html"
+                        title="next chapter">Global minimization using the <code class="docutils literal notranslate"><span class="pre">brute</span></code> method (a.k.a. grid search)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/lmfit_emcee_model_selection.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-lmfit-emcee-model-selection-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="model-selection-using-lmfit-and-emcee">
+<span id="sphx-glr-examples-lmfit-emcee-model-selection-py"></span><h1>Model Selection using lmfit and emcee<a class="headerlink" href="#model-selection-using-lmfit-and-emcee" title="Permalink to this headline">¶</a></h1>
+<p>FIXME: this is an useful examples; however, it doesn’t seem to run correctly
+anymore….</p>
+<p><cite>lmfit.emcee</cite> can be used to obtain the posterior probability distribution
+of parameters, given a set of experimental data. This notebook shows how it
+can be used for Bayesian model selection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">lmfit</span>
+</pre></div>
+</div>
+<p>Define a Gaussian lineshape and generate some data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a_max</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">sd</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a_max</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">loc</span><span class="p">)</span> <span class="o">/</span> <span class="n">sd</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">+</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mf">5.8</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">+=</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Plot the data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Define the normalised residual for the data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">just_generative</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
+    <span class="n">generative</span> <span class="o">=</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="s1">&#39;a_max</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">M</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+        <span class="n">generative</span> <span class="o">+=</span> <span class="n">gauss</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;a_max</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">M</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;loc</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">M</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="s1">&#39;sd</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">M</span><span class="p">])</span>
+        <span class="n">M</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">just_generative</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">generative</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">generative</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">dy</span>
+</pre></div>
+</div>
+<p>Create a Parameter set for the initial guesses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">initial_peak_params</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+
+    <span class="c1"># a and b give a linear background</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># a_max, loc and sd are the amplitude, location and SD of each Gaussian</span>
+    <span class="c1"># component</span>
+    <span class="n">a_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">sd</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="o">*</span> <span class="mf">0.5</span>
+
+    <span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">M</span><span class="p">):</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s1">&#39;a_max</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">a_max</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">a_max</span><span class="p">),</span>
+                   <span class="p">(</span><span class="s1">&#39;loc</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span>
+                   <span class="p">(</span><span class="s1">&#39;sd</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="n">sd</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+    <span class="k">return</span> <span class="n">p</span>
+</pre></div>
+</div>
+<p>Solving with <cite>minimize</cite> gives the Maximum Likelihood solution.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p1</span> <span class="o">=</span> <span class="n">initial_peak_params</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mi1</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;differential_evolution&#39;</span><span class="p">)</span>
+
+<span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi1</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>From inspection of the data above we can tell that there is going to be more
+than 1 Gaussian component, but how many are there? A Bayesian approach can
+be used for this model selection problem. We can do this with <cite>lmfit.emcee</cite>,
+which uses the <cite>emcee</cite> package to do a Markov Chain Monte Carlo sampling of
+the posterior probability distribution. <cite>lmfit.emcee</cite> requires a function
+that returns the log-posterior probability. The log-posterior probability is
+a sum of the log-prior probability and log-likelihood functions.</p>
+<p>The log-prior probability encodes information about what you already believe
+about the system. <cite>lmfit.emcee</cite> assumes that this log-prior probability is
+zero if all the parameters are within their bounds and <cite>-np.inf</cite> if any of
+the parameters are outside their bounds. As such it’s a uniform prior.</p>
+<p>The log-likelihood function is given below. To use non-uniform priors then
+should include these terms in <cite>lnprob</cite>. This is the log-likelihood
+probability for the sampling.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">lnprob</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+    <span class="n">resid</span> <span class="o">=</span> <span class="n">residual</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">just_generative</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">resid</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">/</span> <span class="n">dy</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>To start with we have to create the minimizers and <em>burn</em> them in. We create
+4 different minimizers representing 0, 1, 2 or 3 Gaussian contributions. To
+do the model selection we have to integrate the over the log-posterior
+distribution to see which has the higher probability. This is done using the
+<cite>thermodynamic_integration_log_evidence</cite> method of the <cite>sampler</cite> attribute
+contained in the <cite>lmfit.Minimizer</cite> object.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Work out the log-evidence for different numbers of peaks:</span>
+<span class="n">total_steps</span> <span class="o">=</span> <span class="mi">310</span>
+<span class="n">burn</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="n">thin</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">ntemps</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">workers</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># the multiprocessing does not work with sphinx-gallery</span>
+<span class="n">log_evidence</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># set up the Minimizers</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="n">p0</span> <span class="o">=</span> <span class="n">initial_peak_params</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="c1"># you can&#39;t use lnprob as a userfcn with minimize because it needs to be</span>
+    <span class="c1"># maximised</span>
+    <span class="n">mini</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Minimizer</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p0</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">mini</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;differential_evolution&#39;</span><span class="p">)</span>
+    <span class="n">res</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="n">mini</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c1"># burn in the samplers</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="c1"># do the sampling</span>
+    <span class="n">mini</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lmfit</span><span class="o">.</span><span class="n">Minimizer</span><span class="p">(</span><span class="n">lnprob</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">))</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">emcee</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">total_steps</span><span class="p">,</span> <span class="n">ntemps</span><span class="o">=</span><span class="n">ntemps</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
+                        <span class="n">reuse_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">float_behavior</span><span class="o">=</span><span class="s1">&#39;posterior&#39;</span><span class="p">)</span>
+    <span class="c1"># get the evidence</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">,</span> <span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">())</span>
+    <span class="n">log_evidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Once we’ve burned in the samplers we have to do a collection run. We thin
+out the MCMC chain to reduce autocorrelation between successive samples.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">6</span><span class="p">):</span>
+    <span class="n">total_steps</span> <span class="o">+=</span> <span class="mi">100</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="c1"># do the sampling</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">emcee</span><span class="p">(</span><span class="n">burn</span><span class="o">=</span><span class="n">burn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="n">thin</span><span class="p">,</span> <span class="n">ntemps</span><span class="o">=</span><span class="n">ntemps</span><span class="p">,</span>
+                            <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span> <span class="n">reuse_sampler</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># get the evidence</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">,</span> <span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">())</span>
+        <span class="n">log_evidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Log-evidence&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;number of peaks&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Bayes factor is related to the exponential of the difference between the
+log-evidence values.  Thus, 0 peaks is not very likely compared to 1 peak.
+But 1 peak is not as good as 2 peaks. 3 peaks is not that much better than 2
+peaks.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r01</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">r12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">r23</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">log_evidence</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">r01</span><span class="p">,</span> <span class="n">r12</span><span class="p">,</span> <span class="n">r23</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These numbers tell us that zero peaks is 0 times as likely as one peak. Two
+peaks is 7e49 times more likely than one peak. Three peaks is 1.1 times more
+likely than two peaks. With this data one would say that two peaks is
+sufficient. Caution has to be taken with these values. The log-priors for
+this sampling are uniform but improper, i.e. they are not normalised properly.
+Internally the lnprior probability is calculated as 0 if all parameters are
+within their bounds and <cite>-np.inf</cite> if any parameter is outside the bounds.
+The <cite>lnprob</cite> function defined above is the log-likelihood alone. Remember,
+that the log-posterior probability is equal to the sum of the log-prior and
+log-likelihood probabilities. Extra terms can be added to the lnprob function
+to calculate the normalised log-probability. These terms would look something
+like:</p>
+<div class="math notranslate nohighlight">
+\[\log (\prod_i \frac{1}{max_i - min_i})\]</div>
+<p>where <span class="math notranslate nohighlight">\(max_i\)</span> and <span class="math notranslate nohighlight">\(min_i\)</span> are the upper and lower bounds for the
+parameter, and the prior is a uniform distribution. Other types of prior are
+possible. For example, you might expect the prior to be Gaussian.</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-lmfit-emcee-model-selection-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/c5b1d1ce60f76e20b3312a2697eca7f1/lmfit_emcee_model_selection.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">lmfit_emcee_model_selection.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/9074bca346e91d4783f1ebfda08595dd/lmfit_emcee_model_selection.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">lmfit_emcee_model_selection.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example_brute.html" title="Global minimization using the brute method (a.k.a. grid search)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example_complex_resonator_model.html" title="Complex Resonator Model"
+             >previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

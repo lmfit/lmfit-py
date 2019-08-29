@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Computation times &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/sg_execution_times.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="computation-times">
+<span id="sphx-glr-examples-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">¶</a></h1>
+<p><strong>00:45.340</strong> total execution time for <strong>examples</strong> files:</p>
+<ul class="simple">
+<li><p><strong>00:22.136</strong>: <a class="reference internal" href="example_brute.html#sphx-glr-examples-example-brute-py"><span class="std std-ref">Global minimization using the brute method (a.k.a. grid search)</span></a> (<code class="docutils literal notranslate"><span class="pre">example_brute.py</span></code>)</p></li>
+<li><p><strong>00:14.010</strong>: <a class="reference internal" href="example_confidence_interval.html#sphx-glr-examples-example-confidence-interval-py"><span class="std std-ref">Calculate Confidence Intervals</span></a> (<code class="docutils literal notranslate"><span class="pre">example_confidence_interval.py</span></code>)</p></li>
+<li><p><strong>00:07.518</strong>: <a class="reference internal" href="example_emcee_Model_interface.html#sphx-glr-examples-example-emcee-model-interface-py"><span class="std std-ref">Emcee and the Model Interface</span></a> (<code class="docutils literal notranslate"><span class="pre">example_emcee_Model_interface.py</span></code>)</p></li>
+<li><p><strong>00:00.234</strong>: <a class="reference internal" href="example_diffev.html#sphx-glr-examples-example-diffev-py"><span class="std std-ref">Fit Using differential_evolution Algorithm</span></a> (<code class="docutils literal notranslate"><span class="pre">example_diffev.py</span></code>)</p></li>
+<li><p><strong>00:00.217</strong>: <a class="reference internal" href="example_complex_resonator_model.html#sphx-glr-examples-example-complex-resonator-model-py"><span class="std std-ref">Complex Resonator Model</span></a> (<code class="docutils literal notranslate"><span class="pre">example_complex_resonator_model.py</span></code>)</p></li>
+<li><p><strong>00:00.200</strong>: <a class="reference internal" href="example_reduce_fcn.html#sphx-glr-examples-example-reduce-fcn-py"><span class="std std-ref">Fit Specifying Different Reduce Function</span></a> (<code class="docutils literal notranslate"><span class="pre">example_reduce_fcn.py</span></code>)</p></li>
+<li><p><strong>00:00.198</strong>: <a class="reference internal" href="example_use_pandas.html#sphx-glr-examples-example-use-pandas-py"><span class="std std-ref">Fit with Data in a pandas DataFrame</span></a> (<code class="docutils literal notranslate"><span class="pre">example_use_pandas.py</span></code>)</p></li>
+<li><p><strong>00:00.189</strong>: <a class="reference internal" href="example_Model_interface.html#sphx-glr-examples-example-model-interface-py"><span class="std std-ref">Fit using the Model interface</span></a> (<code class="docutils literal notranslate"><span class="pre">example_Model_interface.py</span></code>)</p></li>
+<li><p><strong>00:00.128</strong>: <a class="reference internal" href="example_fit_multi_datasets.html#sphx-glr-examples-example-fit-multi-datasets-py"><span class="std std-ref">Fit Multiple Data Sets</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_multi_datasets.py</span></code>)</p></li>
+<li><p><strong>00:00.109</strong>: <a class="reference internal" href="example_fit_with_algebraic_constraint.html#sphx-glr-examples-example-fit-with-algebraic-constraint-py"><span class="std std-ref">Fit with Algebraic Constraint</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_algebraic_constraint.py</span></code>)</p></li>
+<li><p><strong>00:00.103</strong>: <a class="reference internal" href="example_fit_with_inequality.html#sphx-glr-examples-example-fit-with-inequality-py"><span class="std std-ref">Fit Using Inequality Constraint</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_inequality.py</span></code>)</p></li>
+<li><p><strong>00:00.102</strong>: <a class="reference internal" href="example_expression_model.html#sphx-glr-examples-example-expression-model-py"><span class="std std-ref">Using an ExpressionModel</span></a> (<code class="docutils literal notranslate"><span class="pre">example_expression_model.py</span></code>)</p></li>
+<li><p><strong>00:00.100</strong>: <a class="reference internal" href="example_fit_with_bounds.html#sphx-glr-examples-example-fit-with-bounds-py"><span class="std std-ref">Fit Using Bounds</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_bounds.py</span></code>)</p></li>
+<li><p><strong>00:00.095</strong>: <a class="reference internal" href="example_fit_with_derivfunc.html#sphx-glr-examples-example-fit-with-derivfunc-py"><span class="std std-ref">Fit Specifying a Function to Compute the Jacobian</span></a> (<code class="docutils literal notranslate"><span class="pre">example_fit_with_derivfunc.py</span></code>)</p></li>
+<li><p><strong>00:00.000</strong>: <a class="reference internal" href="lmfit_emcee_model_selection.html#sphx-glr-examples-lmfit-emcee-model-selection-py"><span class="std std-ref">Model Selection using lmfit and emcee</span></a> (<code class="docutils literal notranslate"><span class="pre">lmfit_emcee_model_selection.py</span></code>)</p></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>doc_model_with_iter_callback.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="doc_builtinmodels_nistgauss2.py" href="builtinmodels_nistgauss2.html" />
+    <link rel="prev" title="doc_model_savemodelresult2.py" href="model_savemodelresult2.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="../index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="builtinmodels_nistgauss2.html" title="doc_builtinmodels_nistgauss2.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model_savemodelresult2.html" title="doc_model_savemodelresult2.py"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../../intro.html">intro</a>|</li>
+   <li><a href="../../parameters.html">parameters</a>|</li>
+   <li><a href="../../fitting.html"> minimize</a>|</li>
+   <li><a href="../../model.html"> model</a>|</li>
+   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../../bounds.html">bounds</a>|</li>
+   <li><a href="../../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model_savemodelresult2.html"
+                        title="previous chapter">doc_model_savemodelresult2.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="builtinmodels_nistgauss2.html"
+                        title="next chapter">doc_builtinmodels_nistgauss2.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/examples/documentation/model_with_iter_callback.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-documentation-model-with-iter-callback-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="doc-model-with-iter-callback-py">
+<span id="sphx-glr-examples-documentation-model-with-iter-callback-py"></span><h1>doc_model_with_iter_callback.py<a class="headerlink" href="#doc-model-with-iter-callback-py" title="Permalink to this headline">¶</a></h1>
+<img alt="../../_images/sphx_glr_model_with_iter_callback_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_model_with_iter_callback_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span> ITER  -1 [&#39;3.00000&#39;, &#39;6.00000&#39;, &#39;2.00000&#39;, &#39;0.00000&#39;, &#39;0.00000&#39;, &#39;4.70964&#39;, &#39;0.59841&#39;]
+ ITER  0 [&#39;3.00000&#39;, &#39;6.00000&#39;, &#39;2.00000&#39;, &#39;0.00000&#39;, &#39;0.00000&#39;, &#39;4.70964&#39;, &#39;0.59841&#39;]
+ ITER  1 [&#39;3.00000&#39;, &#39;6.00000&#39;, &#39;2.00000&#39;, &#39;0.00000&#39;, &#39;0.00000&#39;, &#39;4.70964&#39;, &#39;0.59841&#39;]
+ ITER  2 [&#39;3.00000&#39;, &#39;6.00000&#39;, &#39;2.00000&#39;, &#39;0.00000&#39;, &#39;0.00000&#39;, &#39;4.70964&#39;, &#39;0.59841&#39;]
+ ITER  3 [&#39;3.00000&#39;, &#39;6.00000&#39;, &#39;2.00000&#39;, &#39;0.00000&#39;, &#39;0.00000&#39;, &#39;4.70964&#39;, &#39;0.59841&#39;]
+ ITER  4 [&#39;3.00000&#39;, &#39;6.00000&#39;, &#39;2.00000&#39;, &#39;0.00000&#39;, &#39;0.00000&#39;, &#39;4.70964&#39;, &#39;0.59841&#39;]
+ ITER  5 [&#39;3.00000&#39;, &#39;6.00000&#39;, &#39;2.00000&#39;, &#39;0.00000&#39;, &#39;0.00000&#39;, &#39;4.70964&#39;, &#39;0.59841&#39;]
+ ITER  6 [&#39;3.00000&#39;, &#39;6.00000&#39;, &#39;2.00000&#39;, &#39;0.00000&#39;, &#39;0.00000&#39;, &#39;4.70964&#39;, &#39;0.59841&#39;]
+ ITER  7 [&#39;27.41810&#39;, &#39;24.48443&#39;, &#39;6.86407&#39;, &#39;-0.20617&#39;, &#39;3.22509&#39;, &#39;16.16365&#39;, &#39;1.59355&#39;]
+ ITER  8 [&#39;27.41810&#39;, &#39;24.48443&#39;, &#39;6.86407&#39;, &#39;-0.20617&#39;, &#39;3.22509&#39;, &#39;16.16365&#39;, &#39;1.59355&#39;]
+ ITER  9 [&#39;27.41810&#39;, &#39;24.48443&#39;, &#39;6.86407&#39;, &#39;-0.20617&#39;, &#39;3.22509&#39;, &#39;16.16365&#39;, &#39;1.59355&#39;]
+ ITER  10 [&#39;27.41810&#39;, &#39;24.48443&#39;, &#39;6.86407&#39;, &#39;-0.20617&#39;, &#39;3.22509&#39;, &#39;16.16365&#39;, &#39;1.59355&#39;]
+ ITER  11 [&#39;27.41810&#39;, &#39;24.48443&#39;, &#39;6.86407&#39;, &#39;-0.20617&#39;, &#39;3.22509&#39;, &#39;16.16365&#39;, &#39;1.59355&#39;]
+ ITER  12 [&#39;27.41810&#39;, &#39;24.48443&#39;, &#39;6.86407&#39;, &#39;-0.20617&#39;, &#39;3.22509&#39;, &#39;16.16365&#39;, &#39;1.59355&#39;]
+ ITER  13 [&#39;6.96502&#39;, &#39;104.53101&#39;, &#39;17.24485&#39;, &#39;0.39526&#39;, &#39;3.20217&#39;, &#39;40.60853&#39;, &#39;0.16113&#39;]
+ ITER  14 [&#39;25.52956&#39;, &#39;29.38325&#39;, &#39;12.08679&#39;, &#39;-0.19932&#39;, &#39;3.90951&#39;, &#39;28.46221&#39;, &#39;0.84264&#39;]
+ ITER  15 [&#39;25.52956&#39;, &#39;29.38325&#39;, &#39;12.08679&#39;, &#39;-0.19932&#39;, &#39;3.90951&#39;, &#39;28.46221&#39;, &#39;0.84264&#39;]
+ ITER  16 [&#39;25.52956&#39;, &#39;29.38325&#39;, &#39;12.08679&#39;, &#39;-0.19932&#39;, &#39;3.90951&#39;, &#39;28.46221&#39;, &#39;0.84264&#39;]
+ ITER  17 [&#39;25.52956&#39;, &#39;29.38325&#39;, &#39;12.08679&#39;, &#39;-0.19932&#39;, &#39;3.90951&#39;, &#39;28.46221&#39;, &#39;0.84264&#39;]
+ ITER  18 [&#39;25.52956&#39;, &#39;29.38325&#39;, &#39;12.08679&#39;, &#39;-0.19932&#39;, &#39;3.90951&#39;, &#39;28.46221&#39;, &#39;0.84264&#39;]
+ ITER  19 [&#39;25.52956&#39;, &#39;29.38325&#39;, &#39;12.08679&#39;, &#39;-0.19932&#39;, &#39;3.90951&#39;, &#39;28.46221&#39;, &#39;0.84264&#39;]
+ ITER  20 [&#39;20.91135&#39;, &#39;29.80809&#39;, &#39;28.98798&#39;, &#39;-0.25803&#39;, &#39;4.54769&#39;, &#39;68.26148&#39;, &#39;0.28779&#39;]
+ ITER  21 [&#39;20.91135&#39;, &#39;29.80809&#39;, &#39;28.98798&#39;, &#39;-0.25803&#39;, &#39;4.54769&#39;, &#39;68.26148&#39;, &#39;0.28779&#39;]
+ ITER  22 [&#39;20.91135&#39;, &#39;29.80809&#39;, &#39;28.98798&#39;, &#39;-0.25803&#39;, &#39;4.54769&#39;, &#39;68.26148&#39;, &#39;0.28779&#39;]
+ ITER  23 [&#39;20.91135&#39;, &#39;29.80809&#39;, &#39;28.98798&#39;, &#39;-0.25803&#39;, &#39;4.54769&#39;, &#39;68.26148&#39;, &#39;0.28779&#39;]
+ ITER  24 [&#39;20.91135&#39;, &#39;29.80809&#39;, &#39;28.98798&#39;, &#39;-0.25803&#39;, &#39;4.54769&#39;, &#39;68.26148&#39;, &#39;0.28779&#39;]
+ ITER  25 [&#39;20.91135&#39;, &#39;29.80809&#39;, &#39;28.98798&#39;, &#39;-0.25803&#39;, &#39;4.54769&#39;, &#39;68.26148&#39;, &#39;0.28779&#39;]
+ ITER  26 [&#39;29.69931&#39;, &#39;8.72233&#39;, &#39;28.44164&#39;, &#39;-0.29097&#39;, &#39;5.00931&#39;, &#39;66.97495&#39;, &#39;0.41658&#39;]
+ ITER  27 [&#39;29.69931&#39;, &#39;8.72233&#39;, &#39;28.44164&#39;, &#39;-0.29097&#39;, &#39;5.00931&#39;, &#39;66.97495&#39;, &#39;0.41658&#39;]
+ ITER  28 [&#39;29.69931&#39;, &#39;8.72233&#39;, &#39;28.44164&#39;, &#39;-0.29097&#39;, &#39;5.00931&#39;, &#39;66.97495&#39;, &#39;0.41658&#39;]
+ ITER  29 [&#39;29.69931&#39;, &#39;8.72233&#39;, &#39;28.44164&#39;, &#39;-0.29097&#39;, &#39;5.00931&#39;, &#39;66.97495&#39;, &#39;0.41658&#39;]
+ ITER  30 [&#39;29.69931&#39;, &#39;8.72233&#39;, &#39;28.44164&#39;, &#39;-0.29097&#39;, &#39;5.00931&#39;, &#39;66.97495&#39;, &#39;0.41658&#39;]
+ ITER  31 [&#39;29.69931&#39;, &#39;8.72233&#39;, &#39;28.44164&#39;, &#39;-0.29097&#39;, &#39;5.00931&#39;, &#39;66.97495&#39;, &#39;0.41658&#39;]
+ ITER  32 [&#39;46.89714&#39;, &#39;8.78074&#39;, &#39;7.31686&#39;, &#39;-0.28389&#39;, &#39;4.21023&#39;, &#39;17.22989&#39;, &#39;2.55701&#39;]
+ ITER  33 [&#39;46.89714&#39;, &#39;8.78074&#39;, &#39;7.31686&#39;, &#39;-0.28389&#39;, &#39;4.21023&#39;, &#39;17.22989&#39;, &#39;2.55701&#39;]
+ ITER  34 [&#39;46.89714&#39;, &#39;8.78074&#39;, &#39;7.31686&#39;, &#39;-0.28389&#39;, &#39;4.21023&#39;, &#39;17.22989&#39;, &#39;2.55701&#39;]
+ ITER  35 [&#39;46.89714&#39;, &#39;8.78074&#39;, &#39;7.31686&#39;, &#39;-0.28389&#39;, &#39;4.21023&#39;, &#39;17.22989&#39;, &#39;2.55701&#39;]
+ ITER  36 [&#39;46.89714&#39;, &#39;8.78074&#39;, &#39;7.31686&#39;, &#39;-0.28389&#39;, &#39;4.21023&#39;, &#39;17.22989&#39;, &#39;2.55701&#39;]
+ ITER  37 [&#39;46.89714&#39;, &#39;8.78074&#39;, &#39;7.31686&#39;, &#39;-0.28389&#39;, &#39;4.21023&#39;, &#39;17.22989&#39;, &#39;2.55701&#39;]
+ ITER  38 [&#39;-4.07961&#39;, &#39;-5.77278&#39;, &#39;1.83400&#39;, &#39;0.19891&#39;, &#39;-0.40734&#39;, &#39;4.31874&#39;, &#39;-0.88742&#39;]
+ ITER  39 [&#39;42.58023&#39;, &#39;9.47162&#39;, &#39;3.59329&#39;, &#39;-0.28184&#39;, &#39;3.21567&#39;, &#39;8.46154&#39;, &#39;4.72744&#39;]
+ ITER  40 [&#39;42.58023&#39;, &#39;9.47162&#39;, &#39;3.59329&#39;, &#39;-0.28184&#39;, &#39;3.21567&#39;, &#39;8.46154&#39;, &#39;4.72744&#39;]
+ ITER  41 [&#39;42.58023&#39;, &#39;9.47162&#39;, &#39;3.59329&#39;, &#39;-0.28184&#39;, &#39;3.21567&#39;, &#39;8.46154&#39;, &#39;4.72744&#39;]
+ ITER  42 [&#39;42.58023&#39;, &#39;9.47162&#39;, &#39;3.59329&#39;, &#39;-0.28184&#39;, &#39;3.21567&#39;, &#39;8.46154&#39;, &#39;4.72744&#39;]
+ ITER  43 [&#39;42.58023&#39;, &#39;9.47162&#39;, &#39;3.59329&#39;, &#39;-0.28184&#39;, &#39;3.21567&#39;, &#39;8.46154&#39;, &#39;4.72744&#39;]
+ ITER  44 [&#39;42.58023&#39;, &#39;9.47162&#39;, &#39;3.59329&#39;, &#39;-0.28184&#39;, &#39;3.21567&#39;, &#39;8.46154&#39;, &#39;4.72744&#39;]
+ ITER  45 [&#39;30.01845&#39;, &#39;6.80220&#39;, &#39;2.99463&#39;, &#39;-0.12851&#39;, &#39;2.34682&#39;, &#39;7.05181&#39;, &#39;3.99904&#39;]
+ ITER  46 [&#39;30.01845&#39;, &#39;6.80220&#39;, &#39;2.99463&#39;, &#39;-0.12851&#39;, &#39;2.34682&#39;, &#39;7.05181&#39;, &#39;3.99904&#39;]
+ ITER  47 [&#39;30.01845&#39;, &#39;6.80220&#39;, &#39;2.99463&#39;, &#39;-0.12851&#39;, &#39;2.34682&#39;, &#39;7.05181&#39;, &#39;3.99904&#39;]
+ ITER  48 [&#39;30.01845&#39;, &#39;6.80220&#39;, &#39;2.99463&#39;, &#39;-0.12851&#39;, &#39;2.34682&#39;, &#39;7.05181&#39;, &#39;3.99904&#39;]
+ ITER  49 [&#39;30.01845&#39;, &#39;6.80220&#39;, &#39;2.99463&#39;, &#39;-0.12851&#39;, &#39;2.34682&#39;, &#39;7.05181&#39;, &#39;3.99904&#39;]
+ ITER  50 [&#39;30.01845&#39;, &#39;6.80220&#39;, &#39;2.99463&#39;, &#39;-0.12851&#39;, &#39;2.34682&#39;, &#39;7.05181&#39;, &#39;3.99904&#39;]
+ ITER  51 [&#39;17.69507&#39;, &#39;8.46657&#39;, &#39;1.01659&#39;, &#39;-0.23045&#39;, &#39;3.83668&#39;, &#39;2.39389&#39;, &#39;6.94409&#39;]
+ ITER  52 [&#39;17.69507&#39;, &#39;8.46657&#39;, &#39;1.01659&#39;, &#39;-0.23045&#39;, &#39;3.83668&#39;, &#39;2.39389&#39;, &#39;6.94409&#39;]
+ ITER  53 [&#39;17.69507&#39;, &#39;8.46657&#39;, &#39;1.01659&#39;, &#39;-0.23045&#39;, &#39;3.83668&#39;, &#39;2.39389&#39;, &#39;6.94409&#39;]
+ ITER  54 [&#39;17.69507&#39;, &#39;8.46657&#39;, &#39;1.01659&#39;, &#39;-0.23045&#39;, &#39;3.83668&#39;, &#39;2.39389&#39;, &#39;6.94409&#39;]
+ ITER  55 [&#39;17.69507&#39;, &#39;8.46657&#39;, &#39;1.01659&#39;, &#39;-0.23045&#39;, &#39;3.83668&#39;, &#39;2.39389&#39;, &#39;6.94409&#39;]
+ ITER  56 [&#39;17.69507&#39;, &#39;8.46657&#39;, &#39;1.01659&#39;, &#39;-0.23045&#39;, &#39;3.83668&#39;, &#39;2.39389&#39;, &#39;6.94409&#39;]
+ ITER  57 [&#39;22.61350&#39;, &#39;7.75137&#39;, &#39;1.45136&#39;, &#39;-0.21630&#39;, &#39;3.56563&#39;, &#39;3.41770&#39;, &#39;6.21586&#39;]
+ ITER  58 [&#39;22.61350&#39;, &#39;7.75137&#39;, &#39;1.45136&#39;, &#39;-0.21630&#39;, &#39;3.56563&#39;, &#39;3.41770&#39;, &#39;6.21586&#39;]
+ ITER  59 [&#39;22.61350&#39;, &#39;7.75137&#39;, &#39;1.45136&#39;, &#39;-0.21630&#39;, &#39;3.56563&#39;, &#39;3.41770&#39;, &#39;6.21586&#39;]
+ ITER  60 [&#39;22.61350&#39;, &#39;7.75137&#39;, &#39;1.45136&#39;, &#39;-0.21630&#39;, &#39;3.56563&#39;, &#39;3.41770&#39;, &#39;6.21586&#39;]
+ ITER  61 [&#39;22.61350&#39;, &#39;7.75137&#39;, &#39;1.45136&#39;, &#39;-0.21630&#39;, &#39;3.56563&#39;, &#39;3.41770&#39;, &#39;6.21586&#39;]
+ ITER  62 [&#39;22.61350&#39;, &#39;7.75137&#39;, &#39;1.45136&#39;, &#39;-0.21630&#39;, &#39;3.56563&#39;, &#39;3.41770&#39;, &#39;6.21586&#39;]
+ ITER  63 [&#39;24.13917&#39;, &#39;7.62179&#39;, &#39;1.18261&#39;, &#39;-0.20160&#39;, &#39;3.34246&#39;, &#39;2.78482&#39;, &#39;8.14315&#39;]
+ ITER  64 [&#39;24.13917&#39;, &#39;7.62179&#39;, &#39;1.18261&#39;, &#39;-0.20160&#39;, &#39;3.34246&#39;, &#39;2.78482&#39;, &#39;8.14315&#39;]
+ ITER  65 [&#39;24.13917&#39;, &#39;7.62179&#39;, &#39;1.18261&#39;, &#39;-0.20160&#39;, &#39;3.34246&#39;, &#39;2.78482&#39;, &#39;8.14315&#39;]
+ ITER  66 [&#39;24.13917&#39;, &#39;7.62179&#39;, &#39;1.18261&#39;, &#39;-0.20160&#39;, &#39;3.34246&#39;, &#39;2.78482&#39;, &#39;8.14315&#39;]
+ ITER  67 [&#39;24.13917&#39;, &#39;7.62179&#39;, &#39;1.18261&#39;, &#39;-0.20160&#39;, &#39;3.34246&#39;, &#39;2.78482&#39;, &#39;8.14315&#39;]
+ ITER  68 [&#39;24.13917&#39;, &#39;7.62179&#39;, &#39;1.18261&#39;, &#39;-0.20160&#39;, &#39;3.34246&#39;, &#39;2.78482&#39;, &#39;8.14315&#39;]
+ ITER  69 [&#39;24.40272&#39;, &#39;7.65357&#39;, &#39;1.22777&#39;, &#39;-0.20151&#39;, &#39;3.32847&#39;, &#39;2.89118&#39;, &#39;7.92923&#39;]
+ ITER  70 [&#39;24.40272&#39;, &#39;7.65357&#39;, &#39;1.22777&#39;, &#39;-0.20151&#39;, &#39;3.32847&#39;, &#39;2.89118&#39;, &#39;7.92923&#39;]
+ ITER  71 [&#39;24.40272&#39;, &#39;7.65357&#39;, &#39;1.22777&#39;, &#39;-0.20151&#39;, &#39;3.32847&#39;, &#39;2.89118&#39;, &#39;7.92923&#39;]
+ ITER  72 [&#39;24.40272&#39;, &#39;7.65357&#39;, &#39;1.22777&#39;, &#39;-0.20151&#39;, &#39;3.32847&#39;, &#39;2.89118&#39;, &#39;7.92923&#39;]
+ ITER  73 [&#39;24.40272&#39;, &#39;7.65357&#39;, &#39;1.22777&#39;, &#39;-0.20151&#39;, &#39;3.32847&#39;, &#39;2.89118&#39;, &#39;7.92923&#39;]
+ ITER  74 [&#39;24.40272&#39;, &#39;7.65357&#39;, &#39;1.22777&#39;, &#39;-0.20151&#39;, &#39;3.32847&#39;, &#39;2.89118&#39;, &#39;7.92923&#39;]
+ ITER  75 [&#39;24.43754&#39;, &#39;7.65514&#39;, &#39;1.22977&#39;, &#39;-0.20146&#39;, &#39;3.32621&#39;, &#39;2.89589&#39;, &#39;7.92763&#39;]
+ ITER  76 [&#39;24.43754&#39;, &#39;7.65514&#39;, &#39;1.22977&#39;, &#39;-0.20146&#39;, &#39;3.32621&#39;, &#39;2.89589&#39;, &#39;7.92763&#39;]
+ ITER  77 [&#39;24.43754&#39;, &#39;7.65514&#39;, &#39;1.22977&#39;, &#39;-0.20146&#39;, &#39;3.32621&#39;, &#39;2.89589&#39;, &#39;7.92763&#39;]
+ ITER  78 [&#39;24.43754&#39;, &#39;7.65514&#39;, &#39;1.22977&#39;, &#39;-0.20146&#39;, &#39;3.32621&#39;, &#39;2.89589&#39;, &#39;7.92763&#39;]
+ ITER  79 [&#39;24.43754&#39;, &#39;7.65514&#39;, &#39;1.22977&#39;, &#39;-0.20146&#39;, &#39;3.32621&#39;, &#39;2.89589&#39;, &#39;7.92763&#39;]
+ ITER  80 [&#39;24.43754&#39;, &#39;7.65514&#39;, &#39;1.22977&#39;, &#39;-0.20146&#39;, &#39;3.32621&#39;, &#39;2.89589&#39;, &#39;7.92763&#39;]
+ ITER  81 [&#39;24.43823&#39;, &#39;7.65514&#39;, &#39;1.22982&#39;, &#39;-0.20146&#39;, &#39;3.32615&#39;, &#39;2.89600&#39;, &#39;7.92754&#39;]
+ ITER  82 [&#39;24.43823&#39;, &#39;7.65514&#39;, &#39;1.22982&#39;, &#39;-0.20146&#39;, &#39;3.32615&#39;, &#39;2.89600&#39;, &#39;7.92754&#39;]
+Nfev =  81
+[[Model]]
+    (Model(gaussian, prefix=&#39;peak_&#39;) + Model(linear, prefix=&#39;bkg_&#39;))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 81
+    # data points      = 401
+    # variables        = 5
+    chi-square         = 20.7309419
+    reduced chi-square = 0.05235086
+    Akaike info crit   = -1177.89596
+    Bayesian info crit = -1157.92615
+[[Variables]]
+    peak_amplitude:  24.4382287 +/- 0.16625391 (0.68%) (init = 3)
+    peak_center:     7.65513988 +/- 0.00768465 (0.10%) (init = 6)
+    peak_sigma:      1.22981974 +/- 0.00834506 (0.68%) (init = 2)
+    bkg_slope:      -0.20145591 +/- 0.00207980 (1.03%) (init = 0)
+    bkg_intercept:   3.32614932 +/- 0.02701936 (0.81%) (init = 0)
+    peak_fwhm:       2.89600411 +/- 0.01965112 (0.68%) == &#39;2.3548200*peak_sigma&#39;
+    peak_height:     7.92753837 +/- 0.04386563 (0.55%) == &#39;0.3989423*peak_amplitude/max(2.220446049250313e-16, peak_sigma)&#39;
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(bkg_slope, bkg_intercept)      = -0.857
+    C(peak_amplitude, peak_sigma)    =  0.668
+    C(peak_amplitude, bkg_intercept) = -0.526
+    C(peak_sigma, bkg_intercept)     = -0.352
+    C(peak_amplitude, bkg_slope)     =  0.285
+    C(peak_sigma, bkg_slope)         =  0.190
+    C(peak_center, bkg_slope)        = -0.146
+    C(peak_center, bkg_intercept)    =  0.125
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="c1">##</span>
+<span class="c1"># &lt;examples/doc_with_itercb.py&gt;</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">random</span>
+
+<span class="kn">from</span> <span class="nn">lmfit.lineshapes</span> <span class="k">import</span> <span class="n">gaussian</span>
+<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="k">import</span> <span class="n">GaussianModel</span><span class="p">,</span> <span class="n">LinearModel</span>
+
+
+<span class="k">def</span> <span class="nf">per_iteration</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="nb">iter</span><span class="p">,</span> <span class="n">resid</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; ITER &quot;</span><span class="p">,</span> <span class="nb">iter</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%.5f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pars</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">401</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="mf">24.56</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mf">7.6543</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">1.23</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="o">.</span><span class="mi">20</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mf">3.333</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.23</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+<span class="n">mod</span> <span class="o">=</span> <span class="n">GaussianModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;peak_&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">LinearModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;bkg_&#39;</span><span class="p">)</span>
+
+<span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">()</span>
+<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;peak_amplitude&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mf">3.0</span>
+<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;peak_center&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mf">6.0</span>
+<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;peak_sigma&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;bkg_intercept&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">pars</span><span class="p">[</span><span class="s1">&#39;bkg_slope&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">iter_cb</span><span class="o">=</span><span class="n">per_iteration</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b--&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Nfev = &#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">nfev</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">best_fit</span><span class="p">,</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># &lt;end examples/doc_with_itercb.py&gt;</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.135 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-model-with-iter-callback-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/e3399e3d57fa9f443949e038071a89f1/model_with_iter_callback.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">model_with_iter_callback.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/ff22f393f5a30edabf03e99a62a54295/model_with_iter_callback.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">model_with_iter_callback.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="builtinmodels_nistgauss2.html" title="doc_builtinmodels_nistgauss2.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model_savemodelresult2.html" title="doc_model_savemodelresult2.py"
+             >previous</a> |</li>
+   <li>[<a href="../../intro.html">intro</a>|</li>
+   <li><a href="../../parameters.html">parameters</a>|</li>
+   <li><a href="../../fitting.html"> minimize</a>|</li>
+   <li><a href="../../model.html"> model</a>|</li>
+   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../../bounds.html">bounds</a>|</li>
+   <li><a href="../../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

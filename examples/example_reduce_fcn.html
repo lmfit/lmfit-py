@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fit Specifying Different Reduce Function &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Fit with Algebraic Constraint" href="example_fit_with_algebraic_constraint.html" />
+    <link rel="prev" title="Fit Using Bounds" href="example_fit_with_bounds.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example_fit_with_algebraic_constraint.html" title="Fit with Algebraic Constraint"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example_fit_with_bounds.html" title="Fit Using Bounds"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="example_fit_with_bounds.html"
+                        title="previous chapter">Fit Using Bounds</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example_fit_with_algebraic_constraint.html"
+                        title="next chapter">Fit with Algebraic Constraint</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/example_reduce_fcn.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-reduce-fcn-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="fit-specifying-different-reduce-function">
+<span id="sphx-glr-examples-example-reduce-fcn-py"></span><h1>Fit Specifying Different Reduce Function<a class="headerlink" href="#fit-specifying-different-reduce-function" title="Permalink to this headline">¶</a></h1>
+<p>The reduce_fcn specifies how to convert a residual array to a scalar value for
+the scalar minimizers. The default value is None (i.e., “sum of squares of
+residual”) - alternatives are: ‘negentropy’ and ‘neglogcauchy’ or a
+user-specified “callable”. For more information please refer to:
+<a class="reference external" href="https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class">https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class</a></p>
+<p>Here, we use as an example the Student’s t log-likelihood for robust fitting
+of data with outliers.</p>
+<img alt="../_images/sphx_glr_example_reduce_fcn_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_reduce_fcn_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span># Fit using sum of squares:
+
+[[Fit Statistics]]
+    # fitting method   = L-BFGS-B
+    # function evals   = 130
+    # data points      = 101
+    # variables        = 4
+    chi-square         = 32.1674767
+    reduced chi-square = 0.33162347
+    Akaike info crit   = -107.560626
+    Bayesian info crit = -97.1001440
+[[Variables]]
+    offset:  1.10392444 +/- 0.05751441 (5.21%) (init = 2)
+    omega:   3.97313427 +/- 0.02073920 (0.52%) (init = 3.3)
+    amp:     1.69977055 +/- 0.21587449 (12.70%) (init = 2.5)
+    decay:   7.64654321 +/- 1.87208875 (24.48%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(amp, decay) = -0.773
+
+
+# Robust Fit, using log-likelihood with Cauchy PDF:
+
+[[Fit Statistics]]
+    # fitting method   = L-BFGS-B
+    # function evals   = 135
+    # data points      = 101
+    # variables        = 4
+    chi-square         = 33.5081353
+    reduced chi-square = 0.34544469
+    Akaike info crit   = -103.436558
+    Bayesian info crit = -92.9760764
+[[Variables]]
+    offset:  1.02005973 +/- 0.06642640 (6.51%) (init = 2)
+    omega:   3.98224423 +/- 0.02898702 (0.73%) (init = 3.3)
+    amp:     1.83231506 +/- 0.27241873 (14.87%) (init = 2.5)
+    decay:   5.76206323 +/- 1.45140372 (25.19%) (init = 1)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(amp, decay)  = -0.758
+    C(offset, amp) = -0.107
+/home/newville/Codes/lmfit-py/examples/example_reduce_fcn.py:72: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">lmfit</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
+
+<span class="c1"># Setup example</span>
+<span class="n">decay</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">offset</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">amp</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">omega</span> <span class="o">=</span> <span class="mf">4.0</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">omega</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">decay</span><span class="p">)</span>
+<span class="n">yn</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">0.250</span><span class="p">)</span>
+
+<span class="n">outliers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="mf">3.0</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">/</span><span class="mi">12</span><span class="p">))</span>
+<span class="n">yn</span><span class="p">[</span><span class="n">outliers</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">outliers</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">resid</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">ydata</span><span class="p">):</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">omega</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;omega&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+
+    <span class="n">y_model</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">+</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">omega</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">decay</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y_model</span> <span class="o">-</span> <span class="n">ydata</span>
+
+
+<span class="n">params</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;omega&#39;</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">)</span>
+<span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;L-BFGS-B&#39;</span>
+
+<span class="n">o1</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">resid</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yn</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# Fit using sum of squares:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">o1</span><span class="p">)</span>
+
+<span class="n">o2</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">resid</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yn</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                    <span class="n">reduce_fcn</span><span class="o">=</span><span class="s1">&#39;neglogcauchy&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2"># Robust Fit, using log-likelihood with Cauchy PDF:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">o2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;ko&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yn</span><span class="p">,</span> <span class="s1">&#39;k--*&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yn</span><span class="o">+</span><span class="n">o1</span><span class="o">.</span><span class="n">residual</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yn</span><span class="o">+</span><span class="n">o2</span><span class="o">.</span><span class="n">residual</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;True function&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;with noise+outliers&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;sum of squares fit&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;robust fit&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper left&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.200 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-reduce-fcn-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/d0e8e1e708ca0de18639372a3ff96a6a/example_reduce_fcn.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_reduce_fcn.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/5d125e1fb5f23aa5a5473c67a4699244/example_reduce_fcn.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_reduce_fcn.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example_fit_with_algebraic_constraint.html" title="Fit with Algebraic Constraint"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example_fit_with_bounds.html" title="Fit Using Bounds"
+             >previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

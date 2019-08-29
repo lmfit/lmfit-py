@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>doc_builtinmodels_stepmodel.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="doc_model_two_components.py" href="model_two_components.html" />
+    <link rel="prev" title="doc_model_with_nan_policy.py" href="model_with_nan_policy.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="../index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="model_two_components.html" title="doc_model_two_components.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="model_with_nan_policy.html" title="doc_model_with_nan_policy.py"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../../intro.html">intro</a>|</li>
+   <li><a href="../../parameters.html">parameters</a>|</li>
+   <li><a href="../../fitting.html"> minimize</a>|</li>
+   <li><a href="../../model.html"> model</a>|</li>
+   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../../bounds.html">bounds</a>|</li>
+   <li><a href="../../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="model_with_nan_policy.html"
+                        title="previous chapter">doc_model_with_nan_policy.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="model_two_components.html"
+                        title="next chapter">doc_model_two_components.py</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/examples/documentation/builtinmodels_stepmodel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-documentation-builtinmodels-stepmodel-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="doc-builtinmodels-stepmodel-py">
+<span id="sphx-glr-examples-documentation-builtinmodels-stepmodel-py"></span><h1>doc_builtinmodels_stepmodel.py<a class="headerlink" href="#doc-builtinmodels-stepmodel-py" title="Permalink to this headline">¶</a></h1>
+<img alt="../../_images/sphx_glr_builtinmodels_stepmodel_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_builtinmodels_stepmodel_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
+    (Model(step, prefix=&#39;step_&#39;, form=&#39;erf&#39;) + Model(linear, prefix=&#39;line_&#39;))
+[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 49
+    # data points      = 201
+    # variables        = 5
+    chi-square         = 593.709622
+    reduced chi-square = 3.02913072
+    Akaike info crit   = 227.700173
+    Bayesian info crit = 244.216698
+[[Variables]]
+    line_slope:      1.87164656 +/- 0.09318713 (4.98%) (init = 0)
+    line_intercept:  12.0964833 +/- 0.27606235 (2.28%) (init = 11.58574)
+    step_amplitude:  112.858376 +/- 0.65392947 (0.58%) (init = 134.7378)
+    step_center:     3.13494792 +/- 0.00516615 (0.16%) (init = 2.5)
+    step_sigma:      0.67392841 +/- 0.01091168 (1.62%) (init = 1.428571)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(line_slope, step_amplitude)     = -0.879
+    C(step_amplitude, step_sigma)     =  0.564
+    C(line_slope, step_sigma)         = -0.457
+    C(line_intercept, step_center)    =  0.427
+    C(line_slope, line_intercept)     = -0.309
+    C(line_slope, step_center)        = -0.234
+    C(line_intercept, step_sigma)     = -0.137
+    C(line_intercept, step_amplitude) = -0.117
+    C(step_amplitude, step_center)    =  0.109
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">##</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="c1">##</span>
+<span class="c1"># &lt;examples/doc_builtinmodels_stepmodel.py&gt;</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="k">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">StepModel</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span><span class="p">[:</span><span class="mi">48</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">y</span><span class="p">[</span><span class="mi">48</span><span class="p">:</span><span class="mi">77</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">77</span><span class="o">-</span><span class="mi">48</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">77.0</span><span class="o">-</span><span class="mi">48</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mf">110.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mf">9e-3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">+</span> <span class="mf">12.0</span> <span class="o">+</span> <span class="mf">2.22</span><span class="o">*</span><span class="n">x</span>
+
+<span class="n">step_mod</span> <span class="o">=</span> <span class="n">StepModel</span><span class="p">(</span><span class="n">form</span><span class="o">=</span><span class="s1">&#39;erf&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;step_&#39;</span><span class="p">)</span>
+<span class="n">line_mod</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;line_&#39;</span><span class="p">)</span>
+
+<span class="n">pars</span> <span class="o">=</span> <span class="n">line_mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">intercept</span><span class="o">=</span><span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">slope</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">pars</span> <span class="o">+=</span> <span class="n">step_mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)</span>
+
+<span class="n">mod</span> <span class="o">=</span> <span class="n">step_mod</span> <span class="o">+</span> <span class="n">line_mod</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">init_fit</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;initial fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">best_fit</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="c1"># &lt;end examples/doc_builtinmodels_stepmodel.py&gt;</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.103 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-builtinmodels-stepmodel-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/7847bfc96f44c681b8ac1c40073559bb/builtinmodels_stepmodel.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">builtinmodels_stepmodel.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/976ae2436d6a07b4d13eaf9335fcbbf2/builtinmodels_stepmodel.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">builtinmodels_stepmodel.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="model_two_components.html" title="doc_model_two_components.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="model_with_nan_policy.html" title="doc_model_with_nan_policy.py"
+             >previous</a> |</li>
+   <li>[<a href="../../intro.html">intro</a>|</li>
+   <li><a href="../../parameters.html">parameters</a>|</li>
+   <li><a href="../../fitting.html"> minimize</a>|</li>
+   <li><a href="../../model.html"> model</a>|</li>
+   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../../bounds.html">bounds</a>|</li>
+   <li><a href="../../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>

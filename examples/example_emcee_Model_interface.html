@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Emcee and the Model Interface &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Calculate Confidence Intervals" href="example_confidence_interval.html" />
+    <link rel="prev" title="Fit Specifying a Function to Compute the Jacobian" href="example_fit_with_derivfunc.html" />
+  <script type="text/x-mathjax-config">
+     MathJax.Hub.Config({
+        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
+        "HTML-CSS": {scale: 90}
+  });</script>
+
+  </head><body>
+<div>
+<table border=0>
+  <tr><td></td><td width=80% padding=5 align=left>
+          <a href="../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../contents.html" style="color: #882222">
+         <font size+=1>Contents</font></a> </td>
+     <td width=6% align=left>
+          <a href="index.html" style="color: #882222">
+          <font size+=1>Examples</font></a></td>
+     <td width=6% align=left>
+          <a href="../installation.html" style="color: #882222">
+          <font size+=1>Download</font></a></td>
+     <td></td>
+  </tr>
+  <tr><td></td><td width=80% padding=5 align=left>
+        <a href="../contents.html/../index.html" style="color: #157"> <font size=+2>
+	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
+     </td>
+     <td width=6% align=left>
+         <a href="../faq.html" style="color: #882222">
+         <font size+=1>FAQ</font></a> </td>
+     <td width=6% align=left>
+         <a href="../support.html" style="color: #882222">
+         <font size+=1>Support</font></a> </td>
+     <td width=6% align=left>
+        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
+         <font size+=1>Develop</font></a></td>
+     <td></td>
+  </tr>
+</table>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="example_confidence_interval.html" title="Calculate Confidence Intervals"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
+             accesskey="P">previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="example_fit_with_derivfunc.html"
+                        title="previous chapter">Fit Specifying a Function to Compute the Jacobian</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example_confidence_interval.html"
+                        title="next chapter">Calculate Confidence Intervals</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/example_emcee_Model_interface.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-emcee-model-interface-py"><span class="std std-ref">here</span></a> to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="emcee-and-the-model-interface">
+<span id="sphx-glr-examples-example-emcee-model-interface-py"></span><h1>Emcee and the Model Interface<a class="headerlink" href="#emcee-and-the-model-interface" title="Permalink to this headline">¶</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">corner</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">lmfit</span>
+</pre></div>
+</div>
+<p>Set up a double-exponential function and create a Model</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">double_exp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">t2</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">/</span><span class="n">t1</span><span class="p">)</span> <span class="o">+</span> <span class="n">a2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">/</span> <span class="n">t2</span><span class="p">)</span>
+
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">double_exp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Generate some fake data from the model with added noise</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">truths</span> <span class="o">=</span> <span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">250</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">double_exp</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">truths</span><span class="p">)</span><span class="o">+</span><span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create model parameters and give them initial values</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">a1</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">t1</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">a2</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">t2</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Fit the model using a traditional minimizer, and show the output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;Nelder&#39;</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)</span>
+
+<span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="n">result</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_example_emcee_Model_interface_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_emcee_Model_interface_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:16: RuntimeWarning: overflow encountered in multiply
+  return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
+/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/minimizer.py:176: RuntimeWarning: overflow encountered in multiply
+[[Fit Statistics]]
+    # fitting method   = Nelder-Mead
+    # function evals   = 609
+    # data points      = 250
+    # variables        = 4
+    chi-square         = 2.33333982
+    reduced chi-square = 0.00948512
+    Akaike info crit   = -1160.54007
+    Bayesian info crit = -1146.45423
+[[Variables]]
+    a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
+    t1:  1.30993186 +/- 0.13449652 (10.27%) (init = 3)
+    a2: -4.33525597 +/- 0.11765819 (2.71%) (init = 4)
+    t2:  11.8099125 +/- 0.47172590 (3.99%) (init = 3)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(a2, t2) =  0.988
+    C(t1, a2) = -0.928
+    C(t1, t2) = -0.885
+    C(a1, t1) = -0.609
+    C(a1, a2) =  0.297
+    C(a1, t2) =  0.232
+</pre></div>
+</div>
+<p>Calculate parameter covariance using emcee:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>start the walkers out at the best-fit values</p></li>
+<li><p>set is_weighted to False to estimate the noise weights</p></li>
+<li><p>set some sensible priors on the uncertainty to keep the MCMC in check</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">emcee_kws</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">burn</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">is_weighted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">emcee_params</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">emcee_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;__lnsigma&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span> <span class="nb">min</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>run the MCMC algorithm and show the results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result_emcee</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">emcee_params</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;emcee&#39;</span><span class="p">,</span>
+                         <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">,</span> <span class="n">fit_kws</span><span class="o">=</span><span class="n">emcee_kws</span><span class="p">)</span>
+
+<span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">result_emcee</span><span class="p">)</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Nelder&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">result_emcee</span><span class="o">.</span><span class="n">plot_fit</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">data_kws</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_example_emcee_Model_interface_002.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_emcee_Model_interface_002.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Fit Statistics]]
+    # fitting method   = emcee
+    # function evals   = 100000
+    # data points      = 250
+    # variables        = 5
+    chi-square         = 245.666306
+    reduced chi-square = 1.00271961
+    Akaike info crit   = 5.62830388
+    Bayesian info crit = 23.2356085
+[[Variables]]
+    a1:         2.99144822 +/- 0.15041139 (5.03%) (init = 2.986237)
+    t1:         1.32080783 +/- 0.13797389 (10.45%) (init = 1.309932)
+    a2:        -4.34440212 +/- 0.12192017 (2.81%) (init = -4.335256)
+    t2:         11.7921127 +/- 0.47691481 (4.04%) (init = 11.80991)
+    __lnsigma: -2.32821189 +/- 0.04469660 (1.92%) (init = -2.302585)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(a2, t2) =  0.982
+    C(t1, a2) = -0.930
+    C(t1, t2) = -0.886
+    C(a1, t1) = -0.554
+    C(a1, a2) =  0.247
+    C(a1, t2) =  0.203
+/home/newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:59: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+</pre></div>
+</div>
+<p>Plot the parameter covariances returned by emcee using corner</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">emcee_corner</span> <span class="o">=</span> <span class="n">corner</span><span class="o">.</span><span class="n">corner</span><span class="p">(</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">flatchain</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">var_names</span><span class="p">,</span>
+                             <span class="n">truths</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_example_emcee_Model_interface_003.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_emcee_Model_interface_003.png" />
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">median of posterior probability distribution&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------&#39;</span><span class="p">)</span>
+<span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+
+<span class="c1"># find the maximum likelihood solution</span>
+<span class="n">highest_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">lnprob</span><span class="p">)</span>
+<span class="n">hp_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">highest_prob</span><span class="p">,</span> <span class="n">result_emcee</span><span class="o">.</span><span class="n">lnprob</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">mle_soln</span> <span class="o">=</span> <span class="n">result_emcee</span><span class="o">.</span><span class="n">chain</span><span class="p">[</span><span class="n">hp_loc</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Maximum likelihood Estimation&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-----------------------------&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">emcee_params</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">param</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">mle_soln</span><span class="p">[</span><span class="n">ix</span><span class="p">]))</span>
+
+<span class="n">quantiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">result_emcee</span><span class="o">.</span><span class="n">flatchain</span><span class="p">[</span><span class="s1">&#39;t1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.28</span><span class="p">,</span> <span class="mf">15.9</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">84.2</span><span class="p">,</span> <span class="mf">97.7</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">1 sigma spread&quot;</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;2 sigma spread&quot;</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>median of posterior probability distribution
+--------------------------------------------
+[[Variables]]
+    a1:         2.99144822 +/- 0.15041139 (5.03%) (init = 2.986237)
+    t1:         1.32080783 +/- 0.13797389 (10.45%) (init = 1.309932)
+    a2:        -4.34440212 +/- 0.12192017 (2.81%) (init = -4.335256)
+    t2:         11.7921127 +/- 0.47691481 (4.04%) (init = 11.80991)
+    __lnsigma: -2.32821189 +/- 0.04469660 (1.92%) (init = -2.302585)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(a2, t2) =  0.982
+    C(t1, a2) = -0.930
+    C(t1, t2) = -0.886
+    C(a1, t1) = -0.554
+    C(a1, a2) =  0.247
+    C(a1, t2) =  0.203
+
+Maximum likelihood Estimation
+-----------------------------
+a1: 3.0014005461441453
+t1: 1.3081543141778924
+a2: -4.338194526537342
+t2: 11.82978386256685
+__lnsigma: -2.3413942465306334
+
+
+1 sigma spread 0.1379965150555691
+2 sigma spread 0.2761505429719371
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.518 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-emcee-model-interface-py">
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/03a011d59481b4216e391c3137bd067d/example_emcee_Model_interface.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_emcee_Model_interface.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/ee678139c10e342d6d8636c0d65e8b74/example_emcee_Model_interface.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">example_emcee_Model_interface.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="example_confidence_interval.html" title="Calculate Confidence Intervals"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
+             >previous</a> |</li>
+   <li>[<a href="../intro.html">intro</a>|</li>
+   <li><a href="../parameters.html">parameters</a>|</li>
+   <li><a href="../fitting.html"> minimize</a>|</li>
+   <li><a href="../model.html"> model</a>|</li>
+   <li><a href="../builtin_models.html"> built-in models</a>|</li>
+   <li><a href="../confidence.html">confidence intervals</a>|</li>
+   <li><a href="../bounds.html">bounds</a>|</li>
+   <li><a href="../constraints.html">constraints</a>|</li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+    </div>
+  </body>
+</html>
