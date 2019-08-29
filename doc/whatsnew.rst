@@ -41,8 +41,10 @@ Various:
   (replaced by omit) deprecated since 0.9 (PR #565).
 - deprecate 'report_errors' in printfuncs.py (PR #571)
 - updates to the documentation to use ``jupyter-sphinx`` to include examples/output (PRs #573 and #575)
-- include a Gallery with examples in the documentation using ``sphinx-gallery`` (PR #574)
-- improve test-coverage (PRs #571 and #572)
+- include a Gallery with examples in the documentation using ``sphinx-gallery`` (PR #574 and #583)
+- improve test-coverage (PRs #571, #572 and #585)
+- add/clarify warning messages when NaN values are detected (PR #586)
+- several updates to docstrings (Issue #584; PR #583, and others)
 - update pre-commit hooks and several docstrings
 
 .. _whatsnew_0913_label:

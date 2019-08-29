@@ -2305,7 +2305,11 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
                           "NaNs will be ignored.", RuntimeWarning)
 
         if contains_nan:
-            raise ValueError("The input contains nan values")
+            msg = ('NaN values detected in your input data or the output of '
+                   'your objective/model function - fitting algorithms cannot '
+                   'handle this! Please read https://lmfit.github.io/lmfit-py/faq.html#i-get-errors-from-nan-in-my-fit-what-can-i-do '
+                   'for more information.')
+            raise ValueError(msg)
     return arr
 
 
