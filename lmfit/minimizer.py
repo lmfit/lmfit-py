@@ -1353,7 +1353,7 @@ class Minimizer(object):
             _neg2_log_likel = -2*result.residual
 
             # assumes that residual is properly weighted
-            result.chisqr = np.exp(_neg2_log_likel)
+            result.chisqr = np.exp(min(650, _neg2_log_likel))
 
             result.redchi = result.chisqr / result.nfree
             result.aic = _neg2_log_likel + 2 * result.nvarys
