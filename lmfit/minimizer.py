@@ -1352,7 +1352,7 @@ class Minimizer(object):
             # assuming prior prob = 1, this is true
             _neg2_log_likel = -2*result.residual
 
-            # assumes that residual is properly weighted
+            # assumes that residual is properly weighted, avoid overflowing np.exp()
             result.chisqr = np.exp(min(650, _neg2_log_likel))
 
             result.redchi = result.chisqr / result.nfree
