@@ -572,7 +572,6 @@ class Parameter(object):
 
         """
         self.name = name
-        self._val = value
         self.user_data = user_data
         self.init_value = value
         self.min = min
@@ -587,6 +586,7 @@ class Parameter(object):
         self.stderr = None
         self.correl = None
         self.from_internal = lambda val: val
+        self._val = value
         self._init_bounds()
 
     def set(self, value=None, vary=None, min=None, max=None, expr=None,
@@ -688,13 +688,14 @@ class Parameter(object):
 
     def __setstate__(self, state):
         """Set state for pickle."""
-        (self.name, self.value, self.vary, self.expr, self.min, self.max,
+        (self.name, _value, self.vary, self.expr, self.min, self.max,
          self.brute_step, self.stderr, self.correl, self.init_value,
          self.user_data) = state
         self._expr_ast = None
         self._expr_eval = None
         self._expr_deps = []
         self._delay_asteval = False
+        self.value = _value
         self._init_bounds()
 
     def __repr__(self):
@@ -787,30 +788,18 @@ class Parameter(object):
         # becomes stale if parameter.expr is not None.
         if (isinstance(self._val, uncertainties.core.Variable) and
                 self._val is not nan):
-
             try:
                 self.value = self._val.nominal_value
             except AttributeError:
                 pass
-        if not self.vary and self._expr is None:
-            return self._val
 
         if self._expr is not None:
             if self._expr_ast is None:
                 self.__set_expression(self._expr)
-
             if self._expr_eval is not None:
                 if not self._delay_asteval:
                     self.value = self._expr_eval(self._expr_ast)
                     check_ast_errors(self._expr_eval)
-
-        if self._val is not None:
-            if self._val > self.max:
-                self._val = self.max
-            elif self._val < self.min:
-                self._val = self.min
-        if self._expr_eval is not None:
-            self._expr_eval.symtable[self.name] = self._val
         return self._val
 
     def set_expr_eval(self, evaluator):
@@ -826,10 +815,15 @@ class Parameter(object):
     def value(self, val):
         """Set the numerical Parameter value."""
         self._val = val
+        if self._val is not None:
+            if self._val > self.max:
+                self._val = self.max
+            elif self._val < self.min:
+                self._val = self.min
         if not hasattr(self, '_expr_eval'):
             self._expr_eval = None
         if self._expr_eval is not None:
-            self._expr_eval.symtable[self.name] = val
+            self._expr_eval.symtable[self.name] = self._val
 
     @property
     def expr(self):
