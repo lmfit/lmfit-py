@@ -2,6 +2,8 @@
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
+from scipy.sparse import bsr_matrix
+from scipy.sparse.linalg import aslinearoperator
 
 import lmfit
 from lmfit.models import VoigtModel
@@ -116,3 +118,52 @@ def test_least_squares_solver_options(peakdata, capsys):
 
     assert 'Iteration' in captured.out
     assert 'final cost' in captured.out
+
+
+def test_least_squares_jacobian_types():
+    """Test support for Jacobian of all types supported by least_squares."""
+    # Build function
+    # f(x, y) = (x - a)^2 + (y - b)^2
+    np.random.seed(42)
+    a = np.random.normal(0, 1, 50)
+    np.random.seed(43)
+    b = np.random.normal(0, 1, 50)
+
+    def f(params):
+        return (params['x'] - a)**2 + (params['y'] - b)**2
+
+    # Build analytic Jacobian functions with the different possible return types
+    # numpy.ndarray, scipy.sparse.spmatrix, scipy.sparse.linalg.LinearOperator
+    # J = [ 2x - 2a , 2y - 2b ]
+    def jac_array(params, *args, **kwargs):
+        return np.column_stack((2 * params[0] - 2 * a, 2 * params[1] - 2 * b))
+
+    def jac_sparse(params, *args, **kwargs):
+        return bsr_matrix(jac_array(params, *args, **kwargs))
+
+    def jac_operator(params, *args, **kwargs):
+        return aslinearoperator(jac_array(params, *args, **kwargs))
+    # Build parameters
+    params = lmfit.Parameters()
+    params.add('x', value=0)
+    params.add('y', value=0)
+    # Solve model for numerical Jacobian and each analytic Jacobian function
+    result = lmfit.minimize(f, params, method='least_squares')
+    result_array = lmfit.minimize(
+        f, params, method='least_squares',
+        jac=jac_array)
+    result_sparse = lmfit.minimize(
+        f, params, method='least_squares',
+        jac=jac_sparse)
+    result_operator = lmfit.minimize(
+        f, params, method='least_squares',
+        jac=jac_operator)
+    # Check that all have uncertainties
+    assert result.errorbars
+    assert result_array.errorbars
+    assert result_sparse.errorbars
+    assert result_operator.errorbars
+    # Check that all have ~equal covariance matrix
+    assert_allclose(result.covar, result_array.covar)
+    assert_allclose(result.covar, result_sparse.covar)
+    assert_allclose(result.covar, result_operator.covar)
