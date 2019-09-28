@@ -25,8 +25,10 @@ from numpy.linalg import LinAlgError
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import differential_evolution, least_squares
+from scipy.optimize import dual_annealing as scipy_dual_annealing
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
+from scipy.optimize import shgo as scipy_shgo
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 from scipy.version import version as scipy_version
@@ -36,16 +38,6 @@ import uncertainties
 from ._ampgo import ampgo
 from .parameter import Parameter, Parameters
 from .printfuncs import fitreport_html_table
-
-# check for SHGO and dual_annealing algorithms
-try:
-    from scipy.optimize import shgo as scipy_shgo
-    from scipy.optimize import dual_annealing as scipy_dual_annealing
-    HAS_SHGO = True
-    HAS_DUAL_ANNEALING = True
-except ImportError:
-    HAS_SHGO = False
-    HAS_DUAL_ANNEALING = False
 
 # check for EMCEE
 try:
@@ -146,15 +138,10 @@ SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'slsqp': 'SLSQP',
                   'dogleg': 'dogleg',
                   'trust-ncg': 'trust-ncg',
-                  'differential_evolution': 'differential_evolution'}
-
-# FIXME: update this when incresing the minimum scipy version
-major, minor, micro = scipy_version.split('.', 2)
-if (int(major) >= 1 and int(minor) >= 1):
-    SCALAR_METHODS.update({'trust-constr': 'trust-constr'})
-if int(major) >= 1:
-    SCALAR_METHODS.update({'trust-exact': 'trust-exact',
-                           'trust-krylov': 'trust-krylov'})
+                  'differential_evolution': 'differential_evolution',
+                  'trust-constr': 'trust-constr',
+                  'trust-exact': 'trust-exact',
+                  'trust-krylov': 'trust-krylov'}
 
 
 def reduce_chisquare(r):
@@ -838,9 +825,9 @@ class Minimizer(object):
             - 'BFGS'
             - 'TNC'
             - 'trust-ncg'
-            - 'trust-exact' (SciPy >= 1.0)
-            - 'trust-krylov' (SciPy >= 1.0)
-            - 'trust-constr' (SciPy >= 1.1)
+            - 'trust-exact'
+            - 'trust-krylov'
+            - 'trust-constr'
             - 'dogleg'
             - 'SLSQP'
             - 'differential_evolution'
@@ -923,12 +910,6 @@ class Minimizer(object):
             for k, v in fmin_kws.items():
                 if k in kwargs:
                     kwargs[k] = v
-
-            # keywords 'updating' and 'workers' are introduced in SciPy v1.2
-            # FIXME: remove after updating the requirement >= 1.2
-            if int(major) == 0 or (int(major) == 1 and int(minor) < 2):
-                kwargs.pop('updating')
-                kwargs.pop('workers')
 
             try:
                 ret = differential_evolution(self.penalty, _bounds, **kwargs)
@@ -1689,6 +1670,8 @@ class Minimizer(object):
         brute_kws = dict(full_output=1, finish=None, disp=False)
         # keyword 'workers' is introduced in SciPy v1.3
         # FIXME: remove this check after updating the requirement >= 1.3
+        major, minor, micro = scipy_version.split('.', 2)
+
         if int(major) == 1 and int(minor) >= 3:
             brute_kws.update({'workers': workers})
 
@@ -1907,10 +1890,6 @@ class Minimizer(object):
         .. versionadded:: 0.9.14
 
         """
-        if not HAS_SHGO:
-            raise NotImplementedError('You must have SciPy >= 1.2 to use the '
-                                      'shgo method.')
-
         result = self.prepare_fit(params=params)
         result.method = 'shgo'
 
@@ -1977,10 +1956,6 @@ class Minimizer(object):
         .. versionadded:: 0.9.14
 
         """
-        if not HAS_DUAL_ANNEALING:
-            raise NotImplementedError('You must have SciPy >= 1.2 to use the'
-                                      ' dual_annealing method')
-
         result = self.prepare_fit(params=params)
         result.method = 'dual_annealing'
 
@@ -2049,14 +2024,14 @@ class Minimizer(object):
             - `'bfgs'`: BFGS
             - `'tnc'`: Truncated Newton
             - `'trust-ncg'`: Newton-CG trust-region
-            - `'trust-exact'`: nearly exact trust-region (SciPy >= 1.0)
-            - `'trust-krylov'`: Newton GLTR trust-region (SciPy >= 1.0)
-            - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
+            - `'trust-exact'`: nearly exact trust-region
+            - `'trust-krylov'`: Newton GLTR trust-region
+            - `'trust-constr'`: trust-region for constrained optimization
             - `'dogleg'`: Dog-leg trust-region
             - `'slsqp'`: Sequential Linear Squares Programming
             - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
-            - `'shgo'`: Simplicial Homology Global Optimization (SciPy >= 1.2)
-            - `'dual_annealing'`: Dual Annealing optimization (SciPy >= 1.2)
+            - `'shgo'`: Simplicial Homology Global Optimization
+            - `'dual_annealing'`: Dual Annealing optimization
 
             In most cases, these methods wrap and use the method with the
             same name from `scipy.optimize`, or use
@@ -2353,14 +2328,14 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         - `'bfgs'`: BFGS
         - `'tnc'`: Truncated Newton
         - `'trust-ncg'`: Newton-CG trust-region
-        - `'trust-exact'`: nearly exact trust-region (SciPy >= 1.0)
-        - `'trust-krylov'`: Newton GLTR trust-region (SciPy >= 1.0)
-        - `'trust-constr'`: trust-region for constrained optimization (SciPy >= 1.1)
+        - `'trust-exact'`: nearly exact trust-region
+        - `'trust-krylov'`: Newton GLTR trust-region
+        - `'trust-constr'`: trust-region for constrained optimization
         - `'dogleg'`: Dog-leg trust-region
         - `'slsqp'`: Sequential Linear Squares Programming
         - `'emcee'`: Maximum likelihood via Monte-Carlo Markov Chain
-        - `'shgo'`: Simplicial Homology Global Optimization (SciPy >= 1.2)
-        - `'dual_annealing'`: Dual Annealing optimization (SciPy >= 1.2)
+        - `'shgo'`: Simplicial Homology Global Optimization
+        - `'dual_annealing'`: Dual Annealing optimization
 
         In most cases, these methods wrap and use the method of the same
         name from `scipy.optimize`, or use `scipy.optimize.minimize` with

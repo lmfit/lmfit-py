@@ -1,5 +1,5 @@
 asteval>=0.9.12
-numpy>=1.10
-scipy>=0.19
-six>1.10
-uncertainties>=3.0
+numpy>=1.16
+scipy>=1.2
+six>=1.11
+uncertainties>=3.0.1

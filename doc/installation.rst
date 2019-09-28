@@ -31,11 +31,11 @@ Lmfit works with `Python`_ versions 2.7 and 3.5, 3.6, or 3.7. Support for
 2.7 is expected to end in late 2019.
 
 Lmfit requires the following Python packages, with versions given:
-   * `six`_ version 1.10 or higher.
-   * `NumPy`_ version 1.10 or higher.
-   * `SciPy`_ version 0.19 or higher.
+   * `six`_ version 1.11 or higher.
+   * `NumPy`_ version 1.16 or higher.
+   * `SciPy`_ version 1.2 or higher.
    * `asteval`_ version 0.9.12 or higher.
-   * `uncertainties`_ version 3.0 or higher.
+   * `uncertainties`_ version 3.0.1 or higher.
 
 All of these are readily available on PyPI, and should be installed
 automatically if installing with ``pip install lmfit``.

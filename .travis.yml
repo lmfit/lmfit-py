@@ -1,50 +1,56 @@
 # Config file for automatic testing at travis-ci.org
 
 language: python
-sudo: false
 
 python:
     - 2.7
     - 3.5
     - 3.6
-    - 3.7-dev
+    - 3.7
 
-# test minium required and latest versions of SciPy and NumPy
+# test with the minium required and latest versions of dependencies
 env:
-    - version=minimum  # SciPy>=0.19 NumPy>=1.10
+    - version=minimum  # asteval>=0.9.12 numpy>=1.16 scipy>=1.2 six>=1.11 uncertainties>=3.0.1
     - version=latest
 
+# test Python 3.8 development version
+matrix:
+  include:
+    - python: 3.8-dev
+      env:
+        - version=latest
+      addons:
+        apt:
+          packages:
+          - libatlas-dev
+          - libatlas-base-dev
+          - liblapack-dev
+          - gfortran
+          - libgmp-dev
+          - libmpfr-dev
+          - libsuitesparse-dev
+          - ccache
+          - swig
+          - libmpc-dev
+  allow_failures:
+    - python: 3.8-dev
+  fast_finish: true
+
 before_install:
-    - wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-    - bash miniconda.sh -b -p $HOME/miniconda
-    - export PATH="$HOME/miniconda/bin:$PATH"
-    - hash -r
-    - conda config --set always_yes yes --set changeps1 no
-    - conda config --add channels conda-forge
-    - conda update -q conda
-    - conda info -a
+    - python -m pip install --upgrade pip setuptools
 
 install:
-    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION != 3.6 && $TRAVIS_PYTHON_VERSION != 3.7-dev ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.10 scipy=0.19 six=1.10; fi
-    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION == 3.6 ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy=1.11.2 scipy=0.19 six=1.10; fi
-    - if [[ $version == minimum && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then conda create -q -n test_env python=3.7 numpy=1.11.3 scipy=1.1 six=1.11; fi
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION != 3.7-dev ]]; then conda create -q -n test_env python=$TRAVIS_PYTHON_VERSION numpy scipy six pandas matplotlib dill; fi
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then conda create -q -n test_env python=3.7 numpy scipy six pandas matplotlib dill sphinx jupyter_sphinx corner sphinx-gallery; fi
-    - source activate test_env
-    - pip install pytest
-    - pip install codecov
-    - pip install asteval
-    - pip install uncertainties
-    - if [[ $version == latest ]]; then pip install emcee numdifftools; fi
+    - if [[ $version == minimum ]]; then pip install asteval==0.9.12 numpy==1.16 scipy==1.2 six==1.11 uncertainties==3.0.1 pytest coverage; fi
+    - if [[ $version == latest ]]; then pip install -r requirements-dev.txt ; fi
     - python setup.py install
-    - conda list
+    - pip list
 
 script:
     - cd tests
     - coverage run --source=lmfit -m pytest
     - coverage report -m
     # test building the documentation
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7-dev ]]; then cd ../doc ; make ; fi
+    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7 ]]; then cd ../doc ; make ; fi
 
 after_success:
     - codecov
