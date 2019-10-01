@@ -1,4 +1,5 @@
 asteval>=0.9.12
+codecov
 corner
 coverage
 dill
