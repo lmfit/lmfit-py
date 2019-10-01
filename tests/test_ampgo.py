@@ -58,7 +58,11 @@ def test_ampgo_maxfunevals(minimizer_Alpine02):
 def test_ampgo_local_solver(minimizer_Alpine02):
     """Test AMPGO algorithm with local solver."""
     kws = {'local': 'Nelder-Mead'}
-    out = minimizer_Alpine02.minimize(method='ampgo', **kws)
+
+    msg = r'Method Nelder-Mead cannot handle constraints nor bounds'
+    with pytest.warns(RuntimeWarning, match=msg):
+        out = minimizer_Alpine02.minimize(method='ampgo', **kws)
+
     out_x = np.array([out.params['x0'].value, out.params['x1'].value])
 
     assert 'ampgo' and 'Nelder-Mead' in out.method
