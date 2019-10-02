@@ -1,8 +1,9 @@
 asteval>=0.9.12
+codecov
 corner
 coverage
 dill
-emcee
+emcee<3.0.0
 jupyter_sphinx
 matplotlib
 numdifftools

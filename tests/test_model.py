@@ -234,6 +234,9 @@ class CommonTests(object):
 class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     # mainly aimed at checking that the API does what it says it does
     # and raises the right exceptions or warnings when things are not right
+    import six
+    if six.PY2:
+        from six import assertRaisesRegex
 
     def setUp(self):
         self.true_values = lambda: dict(amplitude=7.1, center=1.1, sigma=2.40)
@@ -641,7 +644,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         result = lambda: mod.fit(y, params, x=x, nan_policy='raise')
         msg = ('NaN values detected in your input data or the output of your '
                'objective/model function - fitting algorithms cannot handle this!')
-        self.assertRaisesRegexp(ValueError, msg, result)
+        self.assertRaisesRegex(ValueError, msg, result)
 
         # with propagate, should get no error, but bad results
         result = mod.fit(y, params, x=x, nan_policy='propagate')
@@ -684,7 +687,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
                                    nan_policy='raise')
 
         msg = 'The model function generated NaN values and the fit aborted!'
-        self.assertRaisesRegexp(ValueError, msg, result)
+        self.assertRaisesRegex(ValueError, msg, result)
 
     @pytest.mark.skipif(sys.version_info.major == 2,
                         reason="cannot use wrapped functions with Python 2")
