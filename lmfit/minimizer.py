@@ -949,7 +949,7 @@ class Minimizer(object):
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              float_behavior='posterior', is_weighted=True, seed=None, progress=True):
+              float_behavior='posterior', is_weighted=True, seed=None, progress=True, big_output=False):
         r"""Bayesian sampling of the posterior distribution using `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
@@ -1040,6 +1040,9 @@ class Minimizer(object):
             If `seed` is already a `numpy.random.RandomState` instance, then
             that `numpy.random.RandomState` instance is used.
             Specify `seed` for repeatable minimizations.
+        big_output : bool, optional
+            If you want to also get autocorrelation times and acceptance
+            ratios, enable this feature.
 
         Returns
         -------
@@ -1310,6 +1313,12 @@ class Minimizer(object):
         result.errorbars = True
         result.nvarys = len(result.var_names)
         result.nfev = ntemps*nwalkers*steps
+        try:
+            result.acor = self.sampler.acor
+        except:
+            print("The chain is too short to reliably estimate the autocorrelation time")
+            pass
+        result.acceptance_fraction = self.sampler.acceptance_fraction
 
         # Calculate the residual with the "best fit" parameters
         out = self.userfcn(params, *self.userargs, **self.userkws)
