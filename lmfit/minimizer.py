@@ -1316,7 +1316,7 @@ class Minimizer(object):
         result.nvarys = len(result.var_names)
         result.nfev = ntemps*nwalkers*steps
         try:
-            result.acor = self.sampler.acor
+            result.acor = self.sampler.get_autocorr_time()
         except:
             print("The chain is too short to reliably estimate the autocorrelation time")
             pass
