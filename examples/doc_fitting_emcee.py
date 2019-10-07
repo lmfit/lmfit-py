@@ -53,6 +53,17 @@ if HASPYLAB and HASCORNER:
                                  truths=list(res.params.valuesdict().values()))
     plt.show()
 
+if HASPYLAB:
+    plt.plot(res.acceptance_fraction)
+    plt.xlabel('walker')
+    plt.ylabel('acceptance fraction')
+    plt.show()
+
+try:
+    print(res.acor)
+except:
+    pass
+
 print("\nmedian of posterior probability distribution")
 print('--------------------------------------------')
 lmfit.report_fit(res.params)
