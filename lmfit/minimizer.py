@@ -949,7 +949,7 @@ class Minimizer(object):
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              float_behavior='posterior', is_weighted=True, seed=None, progress=True, big_output=False):
+              float_behavior='posterior', is_weighted=True, seed=None, progress=True):
         r"""Bayesian sampling of the posterior distribution using `emcee`.
 
         Bayesian sampling of the posterior distribution for the parameters
@@ -1040,9 +1040,6 @@ class Minimizer(object):
             If `seed` is already a `numpy.random.RandomState` instance, then
             that `numpy.random.RandomState` instance is used.
             Specify `seed` for repeatable minimizations.
-        big_output : bool, optional
-            If you want to also get autocorrelation times and acceptance
-            ratios, enable this feature.
 
         Returns
         -------
@@ -1064,11 +1061,11 @@ class Minimizer(object):
             `result.flatchain[parname]`. The ``lnprob`` attribute contains the
             log probability for each sample in ``chain``. The sample with the
             highest probability corresponds to the maximum likelihood estimate.
-            If `big_output` is set to `True`, the `MinimizerResult` contains also
-            the attribute `acor` (an array with the autocorrelation time
-            for each parameter if the autocorrelation time can be computed from
-            the chain) and `acceptance_fraction` (an array of the fraction
-            of steps accepted for each walker).
+            The `MinimizerResult` contains also the attribute `acor` (an array
+            containing the autocorrelation time for each parameter if the
+            autocorrelation time can be computed from the chain) and
+            `acceptance_fraction` (an array of the fraction of steps accepted
+            for each walker).
 
 
         Notes
