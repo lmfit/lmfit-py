@@ -1064,6 +1064,11 @@ class Minimizer(object):
             `result.flatchain[parname]`. The ``lnprob`` attribute contains the
             log probability for each sample in ``chain``. The sample with the
             highest probability corresponds to the maximum likelihood estimate.
+            If `big_output` is set to `True`, the `MinimizerResult` contains also
+            the attribute `acor` (an array with the autocorrelation time
+            for each parameter if the autocorrelation time can be computed from
+            the chain) and `acceptance_fraction` (an array of the fraction
+            of steps accepted for each walker).
 
 
         Notes
