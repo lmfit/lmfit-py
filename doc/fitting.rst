@@ -501,6 +501,17 @@ Of note, the ``is_weighted`` argument will be ignored if your objective function
 returns a float instead of an array. See the Notes in :meth:`Minimizer.emcee` for
 more information.
 
+The performance of the method can be assessed by checking the acceptance fraction of the walkers.
+Also, one could consider the autocorrelation time, which is not possible here since the chain is 
+too short. Thus, the acceptance fraction per walker is plotted:
+
+.. jupyter-execute::
+
+    plt.plot(res.acceptance_fraction)
+    plt.xlabel('walker')
+    plt.ylabel('acceptance fraction')
+    plt.show()
+
 Lets have a look at those posterior distributions for the parameters. This requires
 installation of the ``corner`` package:
 
