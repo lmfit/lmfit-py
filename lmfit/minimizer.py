@@ -42,6 +42,7 @@ from .printfuncs import fitreport_html_table
 # check for EMCEE
 try:
     import emcee
+    from emcee.autocorr import AutocorrError
     HAS_EMCEE = True
     EMCEE_VERSION = int(emcee.__version__[0])
 except ImportError:
@@ -1317,8 +1318,8 @@ class Minimizer(object):
         result.nfev = ntemps*nwalkers*steps
         try:
             result.acor = self.sampler.get_autocorr_time()
-        except:
-            print("The chain is too short to reliably estimate the autocorrelation time")
+        except AutocorrError as e:
+            print(str(e))
             pass
         result.acceptance_fraction = self.sampler.acceptance_fraction
 

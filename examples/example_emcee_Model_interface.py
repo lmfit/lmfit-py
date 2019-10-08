@@ -67,10 +67,11 @@ plt.show()
 
 ###############################################################################
 # try to compute the autocorrelation time
-try:
-    print(result_emcee.acor)
-except:
-    pass
+if hasattr(result_emcee, "acor"):
+    print("Autocorrelation time for the parameters:")
+    print("----------------------------------------")
+    for i, p in enumerate(result.params):
+        print(p, result.acor[i])
 
 
 ###############################################################################

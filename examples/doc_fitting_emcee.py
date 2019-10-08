@@ -59,10 +59,11 @@ if HASPYLAB:
     plt.ylabel('acceptance fraction')
     plt.show()
 
-try:
-    print(res.acor)
-except:
-    pass
+if hasattr(res, "acor"):
+    print("Autocorrelation time for the parameters:")
+    print("----------------------------------------")
+    for i, p in enumerate(res.params):
+        print(p, res.acor[i])
 
 print("\nmedian of posterior probability distribution")
 print('--------------------------------------------')
