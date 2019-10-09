@@ -29,6 +29,8 @@ from scipy.optimize import dual_annealing as scipy_dual_annealing
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
 from scipy.optimize import shgo as scipy_shgo
+from scipy.sparse import issparse
+from scipy.sparse.linalg import LinearOperator
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 from scipy.version import version as scipy_version
@@ -1408,7 +1410,21 @@ class Minimizer(object):
 
             # calculate the cov_x and estimate uncertainties/correlations
             try:
-                hess = np.matmul(ret.jac.T, ret.jac)
+                if issparse(ret.jac):
+                    hess = (ret.jac.T * ret.jac).toarray()
+                elif isinstance(ret.jac, LinearOperator):
+                    identity = np.eye(ret.jac.shape[1], dtype=ret.jac.dtype)
+                    # TODO: Remove try-except when scipy < 1.4.0 support dropped
+                    try:
+                        # For scipy >= 1.4.0 (with Linear Operator transpose)
+                        # https://github.com/scipy/scipy/pull/9064
+                        hess = (ret.jac.T * ret.jac) * identity
+                    except AttributeError:
+                        # For scipy < 1.4.0 (without Linear Operator transpose)
+                        jac = ret.jac * identity
+                        hess = np.matmul(jac.T, jac)
+                else:
+                    hess = np.matmul(ret.jac.T, ret.jac)
                 result.covar = np.linalg.inv(hess)
                 self._calculate_uncertainties_correlations()
             except LinAlgError:
