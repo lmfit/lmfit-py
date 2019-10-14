@@ -493,6 +493,7 @@ place boundaries on this parameter one can do:
 Now we have to set up the minimizer and do the sampling:
 
 .. jupyter-execute::
+    :hide-output:
 
     res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300, steps=1000, thin=20,
                          params=mi.params, is_weighted=False)
@@ -501,9 +502,11 @@ Of note, the ``is_weighted`` argument will be ignored if your objective function
 returns a float instead of an array. See the Notes in :meth:`Minimizer.emcee` for
 more information.
 
-The performance of the method can be assessed by checking the acceptance fraction of the walkers.
-Also, one could consider the autocorrelation time, which is not possible here since the chain is 
-too short. Thus, the acceptance fraction per walker is plotted:
+The performance of the method (i.e., whether or not the sampling went well) can be assessed by checking
+the integrated autocorrelation time and/or the acceptance fraction of the walkers. For this specific
+example the autocorrelation time could not be estimated because the "chain is too short". Thus, we plot
+the acceptance fraction per walker and its values (or mean value) suggests that the sampling worked as
+intended (as a rule of thumb this value should be between 0.2 and 0.5).
 
 .. jupyter-execute::
 
