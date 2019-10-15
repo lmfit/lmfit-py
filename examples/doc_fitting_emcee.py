@@ -62,8 +62,8 @@ if HASPYLAB:
 if hasattr(res, "acor"):
     print("Autocorrelation time for the parameters:")
     print("----------------------------------------")
-    for i, p in enumerate(res.params):
-        print(p, res.acor[i])
+    for i, par in enumerate(p):
+        print(par, res.acor[i])
 
 print("\nmedian of posterior probability distribution")
 print('--------------------------------------------')
