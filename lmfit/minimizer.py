@@ -44,6 +44,7 @@ from .printfuncs import fitreport_html_table
 # check for EMCEE
 try:
     import emcee
+    from emcee.autocorr import AutocorrError
     HAS_EMCEE = True
     EMCEE_VERSION = int(emcee.__version__[0])
 except ImportError:
@@ -1063,6 +1064,11 @@ class Minimizer(object):
             `result.flatchain[parname]`. The ``lnprob`` attribute contains the
             log probability for each sample in ``chain``. The sample with the
             highest probability corresponds to the maximum likelihood estimate.
+            The `MinimizerResult` contains also the attribute ``acor`` (an array
+            containing the autocorrelation time for each parameter if the
+            autocorrelation time can be computed from the chain) and
+            ``acceptance_fraction`` (an array of the fraction of steps accepted
+            for each walker).
 
 
         Notes
@@ -1312,6 +1318,12 @@ class Minimizer(object):
         result.errorbars = True
         result.nvarys = len(result.var_names)
         result.nfev = ntemps*nwalkers*steps
+        try:
+            result.acor = self.sampler.get_autocorr_time()
+        except AutocorrError as e:
+            print(str(e))
+            pass
+        result.acceptance_fraction = self.sampler.acceptance_fraction
 
         # Calculate the residual with the "best fit" parameters
         out = self.userfcn(params, *self.userargs, **self.userkws)

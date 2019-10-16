@@ -59,6 +59,22 @@ result_emcee.plot_fit(ax=ax, data_kws=dict(color='gray', markersize=2))
 plt.show()
 
 ###############################################################################
+# check the acceptance fraction to see whether emcee performed well
+plt.plot(result_emcee.acceptance_fraction)
+plt.xlabel('walker')
+plt.ylabel('acceptance fraction')
+plt.show()
+
+###############################################################################
+# try to compute the autocorrelation time
+if hasattr(result_emcee, "acor"):
+    print("Autocorrelation time for the parameters:")
+    print("----------------------------------------")
+    for i, p in enumerate(result.params):
+        print(p, result.acor[i])
+
+
+###############################################################################
 # Plot the parameter covariances returned by emcee using corner
 emcee_corner = corner.corner(result_emcee.flatchain, labels=result_emcee.var_names,
                              truths=list(result_emcee.params.valuesdict().values()))
