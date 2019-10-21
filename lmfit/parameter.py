@@ -701,11 +701,11 @@ class Parameter(object):
     def __repr__(self):
         """Return printable representation of a Parameter object."""
         s = []
-        sval = repr(self._getval())
+        sval = "value=%s" % repr(self._getval())
         if not self.vary and self._expr is None:
-            sval = "value=%s (fixed)" % sval
+            sval += " (fixed)"
         elif self.stderr is not None:
-            sval = "value=%s +/- %.3g" % (sval, self.stderr)
+            sval += " +/- %.3g" % self.stderr
         s.append(sval)
         s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
         if self._expr is not None:
