@@ -1685,7 +1685,7 @@ class ModelResult(Minimizer):
         self.params = Parameters()
         state = {'unique_symbols': modres['unique_symbols'], 'params': []}
         for parstate in modres['params']:
-            _par = Parameter()
+            _par = Parameter(name='')
             _par.__setstate__(parstate)
             state['params'].append(_par)
         self.params.__setstate__(state)

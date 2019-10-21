@@ -464,7 +464,7 @@ class Parameters(OrderedDict):
         state = {'unique_symbols': tmp['unique_symbols'],
                  'params': []}
         for parstate in tmp['params']:
-            _par = Parameter()
+            _par = Parameter(name='')
             _par.__setstate__(parstate)
             state['params'].append(_par)
         self.__setstate__(state)
@@ -538,12 +538,12 @@ class Parameter(object):
 
     """
 
-    def __init__(self, name=None, value=None, vary=True, min=-inf, max=inf,
+    def __init__(self, name, value=None, vary=True, min=-inf, max=inf,
                  expr=None, brute_step=None, user_data=None):
         """
         Parameters
         ----------
-        name : str, optional
+        name : str
             Name of the Parameter.
         value : float, optional
             Numerical Parameter value.
@@ -701,8 +701,6 @@ class Parameter(object):
     def __repr__(self):
         """Return printable representation of a Parameter object."""
         s = []
-        if self.name is not None:
-            s.append("'%s'" % self.name)
         sval = repr(self._getval())
         if not self.vary and self._expr is None:
             sval = "value=%s (fixed)" % sval
@@ -714,7 +712,7 @@ class Parameter(object):
             s.append("expr='%s'" % self.expr)
         if self.brute_step is not None:
             s.append("brute_step=%s" % (self.brute_step))
-        return "<Parameter %s>" % ', '.join(s)
+        return "<Parameter '%s', %s>" % (self.name, ', '.join(s))
 
     def setup_bounds(self):
         """Set up Minuit-style internal/external parameter transformation of
