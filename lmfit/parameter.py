@@ -876,9 +876,10 @@ class Parameter(object):
         """positive"""
         return +self._getval()
 
-    def __nonzero__(self):
-        """not zero"""
+    def __bool__(self):
+        """bool"""
         return self._getval() != 0
+    __nonzero__ = __bool__  # TODO: remove when PY3 only
 
     def __int__(self):
         """int"""
@@ -900,10 +901,10 @@ class Parameter(object):
         """-"""
         return self._getval() - other
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         """/"""
         return self._getval() / other
-    __truediv__ = __div__
+    __div__ = __truediv__  # TODO: remove when PY3 only
 
     def __floordiv__(self, other):
         """//"""
@@ -953,10 +954,10 @@ class Parameter(object):
         """+ (right)"""
         return other + self._getval()
 
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         """/ (right)"""
         return other / self._getval()
-    __rtruediv__ = __rdiv__
+    __rdiv__ = __rtruediv__  # TODO: remove when PY3 only
 
     def __rdivmod__(self, other):
         """divmod (right)"""
