@@ -10,7 +10,7 @@ python:
 
 # test with the minium required and latest versions of dependencies
 env:
-    - version=minimum  # asteval>=0.9.12 numpy>=1.16 scipy>=1.2 six>=1.11 uncertainties>=3.0.1
+    - version=minimum  # asteval>=0.9.16 numpy>=1.16 scipy>=1.2 six>=1.11 uncertainties>=3.0.1
     - version=latest
 
 # test Python 3.8 development version
@@ -40,9 +40,8 @@ before_install:
     - python -m pip install --upgrade pip setuptools
 
 install:
-    - if [[ $version == minimum ]]; then pip install asteval==0.9.12 numpy==1.16 scipy==1.2 six==1.11 uncertainties==3.0.1 pytest coverage codecov; fi
+    - if [[ $version == minimum ]]; then pip install asteval==0.9.16 numpy==1.16 scipy==1.2 six==1.11 uncertainties==3.0.1 pytest coverage codecov; fi
     - if [[ $version == latest ]]; then pip install -r requirements-dev.txt ; fi
-    - if [[ $TRAVIS_PYTHON_VERSION == 3.8-dev ]]; then pip install https://github.com/newville/asteval/archive/master.zip; fi
     - python setup.py install
     - pip list
 
