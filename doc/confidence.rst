@@ -93,9 +93,9 @@ Working without standard error estimates.
 
 Sometimes the estiamtion of the standard errors from the covariance 
 matrix fails, especially if values are near given bounds. Hence, to
-find the confidence intervals in these cases it necessary to set the 
-error by hand. Note that the standard error is only used to find an
-upper limit of value, hence the exact given value is not important.
+find the confidence intervals in these cases, it is necessary to set 
+the errors by hand. Note that the standard error is only used to find an
+upper limit for each value, hence the exact value is not important.
 
 To set the step-size to 10% of the inital value we loop thorugh all
 parameters and set it manally:
