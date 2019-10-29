@@ -182,15 +182,11 @@ class ConfidenceInterval(object):
 
         # check that there are at least 2 true variables!
         # check that all stderrs are sensible (including not None or NaN)
-        nvars = 0
+
         for par in self.fit_params:
-            if par.vary:
-                nvars += 1
-            try:
-                if not (par.vary and par.stderr > 0.0):
-                    raise MinimizerException(CONF_ERR_STDERR)
-            except TypeError:
+            if par.vary and (par.stderr is None or par.stderr is np.nan):
                 raise MinimizerException(CONF_ERR_STDERR)
+        nvars = len([p for p in self.params.values() if p.vary])
         if nvars < 2:
             raise MinimizerException(CONF_ERR_NVARS)
 
@@ -255,7 +251,6 @@ class ConfidenceInterval(object):
             try:
                 val = brentq(calc_prob, a_limit,
                              limit, rtol=.5e-4, args=prob)
-
             except ValueError:
                 self.reset_vals()
                 try:
@@ -293,16 +288,35 @@ class ConfidenceInterval(object):
         old_prob = 0
         limit = start_val
         i = 0
+        bound_reached = False
+        max_prob = max(self.probs)
 
-        while old_prob < max(self.probs):
+        while old_prob < max_prob:
             i = i + 1
             limit += step * direction
+            if limit > para.max:
+                limit = para.max
+                bound_reached = True
+            elif limit < para.min:
+                limit = para.min
+                bound_reached = True
 
             new_prob = self.calc_prob(para, limit)
-            rel_change = (new_prob - old_prob) / max(new_prob, old_prob, 1.e-12)
+            rel_change = (new_prob - old_prob) / max(new_prob, old_prob, 1e-12)
             old_prob = new_prob
+            if self.verbose:
+                msg = "P({}={}) = {}, max. prob={}"
+                print(msg.format(para.name, limit, new_prob, max_prob))
 
             # check for convergence
+            if bound_reached:
+                if new_prob < max(self.probs):
+                    errmsg = ("Bound reached with "
+                              "prob({}={}) = {} < max(sigmas)"
+                              ).format(para.name, limit, new_prob)
+                    warn(errmsg)
+                    break
+
             if i > self.maxiter:
                 errmsg = "maxiter={} reached ".format(self.maxiter)
                 errmsg += ("and prob({}={}) = {} < "

@@ -12,7 +12,7 @@ def data():
     """Generate synthetic data."""
     x = np.linspace(0.3, 10, 100)
     np.random.seed(0)
-    y = 1.0/(0.1*x) + 2.0 + 0.1*np.random.randn(x.size)
+    y = 1.0 / (0.1 * x) + 2.0 + 0.1 * np.random.randn(x.size)
     return (x, y)
 
 
@@ -26,7 +26,7 @@ def pars():
 
 def residual(params, x, data):
     """Define objective function for the minimization."""
-    return data - 1.0/(params['a']*x) + params['b']
+    return data - 1.0 / (params['a'] * x) + params['b']
 
 
 @pytest.mark.parametrize("verbose", [False, True])
@@ -54,6 +54,40 @@ def test_confidence_leastsq(data, pars, verbose, capsys):
         assert 'Calculating CI for' in captured.out
 
 
+def test_confidence_pnames(data, pars):
+    """Test if pnames works as expected."""
+    minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
+    out = minimizer.leastsq()
+
+    assert_paramval(out.params['a'], 0.1, tol=0.1)
+    assert_paramval(out.params['b'], -2.0, tol=0.1)
+
+    ci = lmfit.conf_interval(minimizer, out, p_names=['a'])
+    assert 'a' in ci
+    assert 'b' not in ci
+
+
+def test_confidence_bounds_reached(data, pars):
+    """Check if conf_interval handles bounds correctly"""
+
+    # Should work
+    pars['a'].max = 0.2
+    minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
+    out = minimizer.leastsq()
+    out.params['a'].stderr = 1
+    lmfit.conf_interval(minimizer, out, verbose=True)
+
+    # Should warn
+    pars['b'].max = 2.03
+    pars['b'].min = 1.97
+    minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
+    out = minimizer.leastsq()
+    out.params['b'].stderr = 0.005
+    out.params['a'].stderr = 0.01
+    with pytest.warns(UserWarning, match="Bound reached"):
+        lmfit.conf_interval(minimizer, out, verbose=True)
+
+
 def test_confidence_sigma_vs_prob(data, pars):
     """Calculate confidence by specifying sigma or probability."""
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
@@ -61,8 +95,9 @@ def test_confidence_sigma_vs_prob(data, pars):
 
     ci_sigmas = lmfit.conf_interval(minimizer, out, sigmas=[1, 2, 3])
     ci_1sigma = lmfit.conf_interval(minimizer, out, sigmas=[1])
-    ci_probs = lmfit.conf_interval(minimizer, out, sigmas=[0.68269, 0.9545,
-                                                           0.9973])
+    ci_probs = lmfit.conf_interval(minimizer,
+                                   out,
+                                   sigmas=[0.68269, 0.9545, 0.9973])
 
     assert_allclose(ci_sigmas['a'][0][1], ci_probs['a'][0][1], rtol=0.01)
     assert_allclose(ci_sigmas['b'][2][1], ci_probs['b'][2][1], rtol=0.01)
@@ -72,7 +107,9 @@ def test_confidence_sigma_vs_prob(data, pars):
 
 def test_confidence_exceptions(data, pars):
     """Make sure the proper exceptions are raised when needed."""
-    minimizer = lmfit.Minimizer(residual, pars, calc_covar=False,
+    minimizer = lmfit.Minimizer(residual,
+                                pars,
+                                calc_covar=False,
                                 fcn_args=data)
     out = minimizer.minimize(method='nelder')
     out_lsq = minimizer.minimize(params=out.params, method='leastsq')
