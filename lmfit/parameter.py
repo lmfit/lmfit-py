@@ -781,12 +781,15 @@ class Parameter(object):
         """Get value, with bounds applied."""
         # Note assignment to self._val has been changed to self.value
         # The self.value property setter makes sure that the
-        # _expr_eval.symtable is kept updated.
-        # If you just assign to self._val then
-        # _expr_eval.symtable[self.name]
+        # _expr_eval.symtable is kept up-to-date.
+        # If you just assign to self._val then _expr_eval.symtable[self.name]
         # becomes stale if parameter.expr is not None.
         if (isinstance(self._val, uncertainties.core.Variable) and
                 self._val is not nan):
+            msg = ("Please make sure that the Parameter value is a number, "
+                   "not an instance of 'uncertainties.core.Variable'. This "
+                   "automatic conversion will be removed in the next release.")
+            warnings.warn(FutureWarning(msg))
             try:
                 self.value = self._val.nominal_value
             except AttributeError:
