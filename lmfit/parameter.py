@@ -5,6 +5,7 @@ from collections import OrderedDict
 from copy import deepcopy
 import json
 import importlib
+import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, nan, sin, sqrt
@@ -986,5 +987,7 @@ class Parameter(object):
 
 def isParameter(x):
     """Test for Parameter-ness."""
+    msg = 'The isParameter function will be removed in the next release.'
+    warnings.warn(FutureWarning(msg))
     return (isinstance(x, Parameter) or
             x.__class__.__name__ == 'Parameter')
