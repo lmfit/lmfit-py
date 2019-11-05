@@ -88,6 +88,23 @@ around the best fit value.  For this problem, it is not necessary to
 calculate confidence intervals, and the estimates of the uncertainties from
 the covariance matrix are sufficient.
 
+Working without standard error estimates
+----------------------------------------
+
+Sometimes the estimation of the standard errors from the covariance 
+matrix fails, especially if values are near given bounds. Hence, to
+find the confidence intervals in these cases, it is necessary to set 
+the errors by hand. Note that the standard error is only used to find an
+upper limit for each value, hence the exact value is not important.
+
+To set the step-size to 10% of the initial value we loop through all
+parameters and set it manually:
+
+.. code-block:: python
+    for p in result.params:
+        result.params[p].stderr = abs(result.params[p].value * 0.1)
+
+
 An advanced example
 -------------------
 
