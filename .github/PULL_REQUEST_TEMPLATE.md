@@ -36,6 +36,8 @@ Have you
 <!-- Please don't open a new Issue if you are submitting a pull request. -->
 - [ ] verified that existing tests pass locally?
 <!-- Please run the test-suite locally with pytest and make sure it passes. -->
+- [ ] verified that the documentation builds locally?
+<!-- Please build the documentation (i.e., type make in the "doc" directory) and make sure it finishes. -->
 - [ ] squashed/minimized your commits and written descriptive commit messages?
 <!-- We value a clean history with useful commit messages. Ideally, you will take care of this
          before submitting a PR; otherwise you'll be asked to do so before merging. -->
