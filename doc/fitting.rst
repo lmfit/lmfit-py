@@ -496,11 +496,12 @@ Now we have to set up the minimizer and do the sampling:
     :hide-output:
 
     res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300, steps=1000, thin=20,
-                         params=mi.params, is_weighted=False)
+                         params=mi.params, is_weighted=False, progress=False)
 
 Of note, the ``is_weighted`` argument will be ignored if your objective function
 returns a float instead of an array. See the Notes in :meth:`Minimizer.emcee` for
-more information.
+more information. For the documentation we set ``progress=False``; the default is to show a progress bar,
+provided that the ``tqdm`` package is installed.
 
 The performance of the method (i.e., whether or not the sampling went well) can be assessed by checking
 the integrated autocorrelation time and/or the acceptance fraction of the walkers. For this specific

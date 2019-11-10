@@ -43,7 +43,8 @@ result.plot()
 #  - set is_weighted to False to estimate the noise weights
 #  - set some sensible priors on the uncertainty to keep the MCMC in check
 #
-emcee_kws = dict(steps=1000, burn=300, thin=20, is_weighted=False)
+emcee_kws = dict(steps=1000, burn=300, thin=20, is_weighted=False,
+                 progress=False)
 emcee_params = result.params.copy()
 emcee_params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
 
