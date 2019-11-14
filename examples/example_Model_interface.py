@@ -61,16 +61,16 @@ result.params.pretty_print()
 # keyword arguments of ``fit`` that match the argments of ``decay``. You can
 # build the ``Parameter`` objects explicity; the following is equivalent.
 result = model.fit(data, t=t,
-                   N=Parameter(value=10),
-                   tau=Parameter(value=1))
+                   N=Parameter('N', value=10),
+                   tau=Parameter('tau', value=1))
 report_fit(result.params)
 
 ###############################################################################
 # By building ``Parameter`` objects explicitly, you can specify bounds
 # (``min``, ``max``) and set parameters constant (``vary=False``).
 result = model.fit(data, t=t,
-                   N=Parameter(value=7, vary=False),
-                   tau=Parameter(value=1, min=0))
+                   N=Parameter('N', value=7, vary=False),
+                   tau=Parameter('tau', value=1, min=0))
 report_fit(result.params)
 
 ###############################################################################

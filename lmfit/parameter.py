@@ -5,6 +5,7 @@ from collections import OrderedDict
 from copy import deepcopy
 import json
 import importlib
+import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, nan, sin, sqrt
@@ -464,7 +465,7 @@ class Parameters(OrderedDict):
         state = {'unique_symbols': tmp['unique_symbols'],
                  'params': []}
         for parstate in tmp['params']:
-            _par = Parameter()
+            _par = Parameter(name='')
             _par.__setstate__(parstate)
             state['params'].append(_par)
         self.__setstate__(state)
@@ -538,12 +539,12 @@ class Parameter(object):
 
     """
 
-    def __init__(self, name=None, value=None, vary=True, min=-inf, max=inf,
+    def __init__(self, name, value=None, vary=True, min=-inf, max=inf,
                  expr=None, brute_step=None, user_data=None):
         """
         Parameters
         ----------
-        name : str, optional
+        name : str
             Name of the Parameter.
         value : float, optional
             Numerical Parameter value.
@@ -701,20 +702,18 @@ class Parameter(object):
     def __repr__(self):
         """Return printable representation of a Parameter object."""
         s = []
-        if self.name is not None:
-            s.append("'%s'" % self.name)
-        sval = repr(self._getval())
+        sval = "value=%s" % repr(self._getval())
         if not self.vary and self._expr is None:
-            sval = "value=%s (fixed)" % sval
+            sval += " (fixed)"
         elif self.stderr is not None:
-            sval = "value=%s +/- %.3g" % (sval, self.stderr)
+            sval += " +/- %.3g" % self.stderr
         s.append(sval)
         s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
         if self._expr is not None:
             s.append("expr='%s'" % self.expr)
         if self.brute_step is not None:
             s.append("brute_step=%s" % (self.brute_step))
-        return "<Parameter %s>" % ', '.join(s)
+        return "<Parameter '%s', %s>" % (self.name, ', '.join(s))
 
     def setup_bounds(self):
         """Set up Minuit-style internal/external parameter transformation of
@@ -782,12 +781,15 @@ class Parameter(object):
         """Get value, with bounds applied."""
         # Note assignment to self._val has been changed to self.value
         # The self.value property setter makes sure that the
-        # _expr_eval.symtable is kept updated.
-        # If you just assign to self._val then
-        # _expr_eval.symtable[self.name]
+        # _expr_eval.symtable is kept up-to-date.
+        # If you just assign to self._val then _expr_eval.symtable[self.name]
         # becomes stale if parameter.expr is not None.
         if (isinstance(self._val, uncertainties.core.Variable) and
                 self._val is not nan):
+            msg = ("Please make sure that the Parameter value is a number, "
+                   "not an instance of 'uncertainties.core.Variable'. This "
+                   "automatic conversion will be removed in the next release.")
+            warnings.warn(FutureWarning(msg))
             try:
                 self.value = self._val.nominal_value
             except AttributeError:
@@ -878,9 +880,10 @@ class Parameter(object):
         """positive"""
         return +self._getval()
 
-    def __nonzero__(self):
-        """not zero"""
+    def __bool__(self):
+        """bool"""
         return self._getval() != 0
+    __nonzero__ = __bool__  # TODO: remove when PY3 only
 
     def __int__(self):
         """int"""
@@ -902,10 +905,10 @@ class Parameter(object):
         """-"""
         return self._getval() - other
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         """/"""
         return self._getval() / other
-    __truediv__ = __div__
+    __div__ = __truediv__  # TODO: remove when PY3 only
 
     def __floordiv__(self, other):
         """//"""
@@ -955,10 +958,10 @@ class Parameter(object):
         """+ (right)"""
         return other + self._getval()
 
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         """/ (right)"""
         return other / self._getval()
-    __rtruediv__ = __rdiv__
+    __rdiv__ = __rtruediv__  # TODO: remove when PY3 only
 
     def __rdivmod__(self, other):
         """divmod (right)"""
@@ -987,5 +990,7 @@ class Parameter(object):
 
 def isParameter(x):
     """Test for Parameter-ness."""
+    msg = 'The isParameter function will be removed in the next release.'
+    warnings.warn(FutureWarning(msg))
     return (isinstance(x, Parameter) or
             x.__class__.__name__ == 'Parameter')

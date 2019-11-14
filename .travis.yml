@@ -7,42 +7,46 @@ python:
     - 3.5
     - 3.6
     - 3.7
+    - 3.8
 
 # test with the minium required and latest versions of dependencies
 env:
-    - version=minimum  # asteval>=0.9.12 numpy>=1.16 scipy>=1.2 six>=1.11 uncertainties>=3.0.1
-    - version=latest
+    - version=minimum  # asteval>=0.9.16 numpy>=1.16 scipy>=1.2 six>=1.11 uncertainties>=3.0.1
+    - version=latest  # latest version of packages available on PyPI; from requirements-dev.txt
 
-# test Python 3.8 development version
+
+# these packages are needed to compile SciPy, when wheels are not available on PyPI.
+# installing with apt takes little time, so for now always do it to simplify the build matrix
+addons:
+  apt:
+    packages:
+    - libatlas-dev
+    - libatlas-base-dev
+    - liblapack-dev
+    - gfortran
+    - libgmp-dev
+    - libmpfr-dev
+    - libsuitesparse-dev
+    - ccache
+    - swig
+    - libmpc-dev
+
+# test Python nightly build
 matrix:
   include:
-    - python: 3.8-dev
+    - python: nightly
       env:
         - version=latest
-      addons:
-        apt:
-          packages:
-          - libatlas-dev
-          - libatlas-base-dev
-          - liblapack-dev
-          - gfortran
-          - libgmp-dev
-          - libmpfr-dev
-          - libsuitesparse-dev
-          - ccache
-          - swig
-          - libmpc-dev
   allow_failures:
-    - python: 3.8-dev
+    - python: nightly
   fast_finish: true
 
 before_install:
     - python -m pip install --upgrade pip setuptools
 
 install:
-    - if [[ $version == minimum ]]; then pip install asteval==0.9.12 numpy==1.16 scipy==1.2 six==1.11 uncertainties==3.0.1 pytest coverage codecov; fi
+    - if [[ $version == minimum ]]; then pip install asteval==0.9.16 numpy==1.16 scipy==1.2 six==1.11 uncertainties==3.0.1 pytest coverage codecov; fi
     - if [[ $version == latest ]]; then pip install -r requirements-dev.txt ; fi
-    - if [[ $TRAVIS_PYTHON_VERSION == 3.8-dev ]]; then pip install https://github.com/newville/asteval/archive/master.zip; fi
     - python setup.py install
     - pip list
 
@@ -51,7 +55,7 @@ script:
     - coverage run --source=lmfit -m pytest
     - coverage report -m
     # test building the documentation
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.7 ]]; then cd ../doc ; make ; fi
+    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.8 ]]; then cd ../doc ; make ; fi
 
 after_success:
     - codecov
