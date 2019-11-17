@@ -1209,6 +1209,12 @@ class Minimizer(object):
         """
         if not HAS_EMCEE:
             raise NotImplementedError('emcee version 3 is required.')
+
+        if ntemps > 1:
+            msg = ("'ntemps' has no effect anymore, since the PTSampler was "
+                   "removed from emcee version 3.")
+            raise DeprecationWarning(msg)
+
         tparams = params
         # if you're reusing the sampler then nwalkers have to be
         # determined from the previous sampling

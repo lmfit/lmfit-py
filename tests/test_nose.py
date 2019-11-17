@@ -620,6 +620,14 @@ class CommonMinimizerTest(unittest.TestCase):
 
         assert_almost_equal(out.chain, out2.chain)
 
+    def test_emcee_ntemps(self):
+        # check for DeprecationWarning when using ntemps > 1
+        if not HAS_EMCEE:
+            return True
+
+        with pytest.raises(DeprecationWarning):
+            _ = self.mini.emcee(params=self.fit_params, ntemps=5)
+
 
 def residual_for_multiprocessing(pars, x, data=None):
     # a residual function defined in the top level is needed for
