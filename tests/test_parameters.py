@@ -280,7 +280,6 @@ class TestParameters(unittest.TestCase):
         assert 'b' in params
         assert_almost_equal(params['b'].value, 1.0)
 
-
     def test_params_prints(self):
         params = Parameters()
         params.add("a", value=1.0, vary=True)
@@ -301,7 +300,7 @@ class TestParameters(unittest.TestCase):
         assert len(repr_one) > 150
         assert len(out) > 150
 
-    def test_add_with_symtabale(self):
+    def test_add_with_symtable(self):
         pars1 = Parameters()
         pars1.add("a", value=1.0, vary=True)
 
