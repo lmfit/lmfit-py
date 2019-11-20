@@ -15,7 +15,7 @@ CONF_ERR_NVARS = '%s with < 2 variables' % CONF_ERR_GEN
 
 
 def f_compare(best_fit, new_fit):
-    """Return the probability calculated using  the F-test.
+    """Return the probability calculated using the F-test.
 
     The null model (i.e., best-fit solution) is compared to an alternate model
     where one or more parameters are fixed.
@@ -31,6 +31,7 @@ def f_compare(best_fit, new_fit):
     -------
     prob : float
        Value of the calculated probality.
+
     """
     nfree = best_fit.nfree
     nfix = best_fit.nvarys - new_fit.nvarys

@@ -2,10 +2,10 @@
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
+from scipy.stats import f
 
 import lmfit
 from lmfit_testutils import assert_paramval
-from scipy.stats import f
 
 
 @pytest.fixture
@@ -188,12 +188,15 @@ def test_confidence_prob_func(data, pars):
     """Test conf_interval with alternate prob_func."""
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=data)
     out = minimizer.minimize(method='leastsq')
+    called = 0
 
     def my_f_compare(best_fit, new_fit):
+        nonlocal called
+        called += 1
         nfree = best_fit.nfree
         nfix = best_fit.nfree - new_fit.nfree
         dchi = new_fit.chisqr / best_fit.chisqr - 1.0
         return f.cdf(dchi * nfree / nfix, nfix, nfree)
 
-    lmfit.conf_interval(minimizer, out, prob_func=my_f_compare)
-
+    lmfit.conf_interval(minimizer, out, sigmas=[1], prob_func=my_f_compare)
+    assert called > 10
