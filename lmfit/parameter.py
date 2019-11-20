@@ -80,7 +80,7 @@ class Parameters(OrderedDict):
         return self.__deepcopy__(None)
 
     def update(self, other):
-        """Update values and symbols with another Parameters object"""
+        """Update values and symbols with another Parameters object."""
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         self.add_many(*other.values())
