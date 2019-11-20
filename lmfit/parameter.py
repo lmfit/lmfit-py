@@ -75,11 +75,18 @@ class Parameters(OrderedDict):
         for key, val in _syms.items():
             self._asteval.symtable[key] = val
 
-        self.update(*args, **kwds)
-
     def copy(self):
         """Parameters.copy() should always be a deepcopy."""
         return self.__deepcopy__(None)
+
+    def update(self, other):
+        """Update values and symbols with another Parameters object."""
+        if not isinstance(other, Parameters):
+            raise ValueError("'%s' is not a Parameters object" % other)
+        self.add_many(*other.values())
+        for sym in other._asteval.user_defined_symbols():
+            self._asteval.symtable[sym] = other._asteval.symtable[sym]
+        return self
 
     def __copy__(self):
         """Parameters.copy() should always be a deepcopy."""
@@ -137,16 +144,15 @@ class Parameters(OrderedDict):
         if not isinstance(other, Parameters):
             raise ValueError("'%s' is not a Parameters object" % other)
         out = deepcopy(self)
-        params = other.values()
-        out.add_many(*params)
+        out.add_many(*other.values())
+        for sym in other._asteval.user_defined_symbols():
+            if sym not in out._asteval.symtable:
+                out._asteval.symtable[sym] = other._asteval.symtable[sym]
         return out
 
     def __iadd__(self, other):
         """Add/assign Parameters objects."""
-        if not isinstance(other, Parameters):
-            raise ValueError("'%s' is not a Parameters object" % other)
-        params = other.values()
-        self.add_many(*params)
+        self.update(other)
         return self
 
     def __array__(self):

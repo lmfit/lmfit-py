@@ -299,3 +299,24 @@ class TestParameters(unittest.TestCase):
         assert len(repr_full) > 150
         assert len(repr_one) > 150
         assert len(out) > 150
+
+    def test_add_with_symtable(self):
+        pars1 = Parameters()
+        pars1.add("a", value=1.0, vary=True)
+
+        def half(x):
+            return 0.5*x
+
+        pars2 = Parameters(usersyms={"half": half})
+        pars2.add("b", value=3.0)
+        pars2.add("c", expr="half(b)")
+
+        params = pars1 + pars2
+        assert_almost_equal(params['c'].value, 1.5)
+
+        params = pars2 + pars1
+        assert_almost_equal(params['c'].value, 1.5)
+
+        params = deepcopy(pars1)
+        params.update(pars2)
+        assert_almost_equal(params['c'].value, 1.5)
