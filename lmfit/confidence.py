@@ -14,24 +14,18 @@ CONF_ERR_STDERR = '%s without sensible uncertainty estimates' % CONF_ERR_GEN
 CONF_ERR_NVARS = '%s with < 2 variables' % CONF_ERR_GEN
 
 
-def f_compare(ndata, nparas, new_chi, best_chi, nfix=1):
-    """Return the probability calculated using  the F-test.
+def f_compare(best_fit, new_fit):
+    """Return the probability calculated using the F-test.
 
     The null model (i.e., best-fit solution) is compared to an alternate model
     where one or more parameters are fixed.
 
     Parameters
     ----------
-    ndata : int
-        Number of data points: :math:`N`.
-    nparas : int
-        Number of variables in the alternate model.
-    new_chi : float
-        Chi-square of the alternate model.
-    best_chi : float
-        Chi-square of the null model.
-    nfix : int
-        Number of fixed parameters (default is 1).
+    best_fit: MinimizerResult
+        The result from the best-fit.
+    new_fit: MinimizerResult
+        The result from fit with the fixed parameter(s).
 
     Returns
     -------
@@ -39,10 +33,9 @@ def f_compare(ndata, nparas, new_chi, best_chi, nfix=1):
        Value of the calculated probality.
 
     """
-    nparas = nparas + nfix
-    nfree = ndata - nparas
-    nfix = 1.0*nfix
-    dchi = new_chi / best_chi - 1.0
+    nfree = best_fit.nfree
+    nfix = best_fit.nvarys - new_fit.nvarys
+    dchi = new_fit.chisqr / best_fit.chisqr - 1.0
     return f.cdf(dchi * nfree / nfix, nfix, nfree)
 
 
@@ -170,7 +163,7 @@ class ConfidenceInterval(object):
         self.verbose = verbose
         self.minimizer = minimizer
         self.result = result
-        self.params = result.params
+        self.params = result.params.copy()
         self.org = copy_vals(self.params)
         self.best_chi = result.chisqr
 
@@ -190,8 +183,10 @@ class ConfidenceInterval(object):
         if nvars < 2:
             raise MinimizerException(CONF_ERR_NVARS)
 
-        if prob_func is None or not hasattr(prob_func, '__call__'):
+        if prob_func is None:
             self.prob_func = f_compare
+        else:
+            self.prob_func = prob_func
         if trace:
             self.trace_dict = {i: [] for i in self.p_names}
 
@@ -345,8 +340,7 @@ class ConfidenceInterval(object):
         self.params[para.name] = para
         self.minimizer.prepare_fit(self.params)
         out = self.minimizer.leastsq()
-        prob = self.prob_func(out.ndata, out.ndata - out.nfree,
-                              out.chisqr, self.best_chi)
+        prob = self.prob_func(self.result, out)
 
         if self.trace:
             x = [i.value for i in out.params.values()]
@@ -405,7 +399,7 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
     best_chi = result.chisqr
     org = copy_vals(result.params)
 
-    if prob_func is None or not hasattr(prob_func, '__call__'):
+    if prob_func is None:
         prob_func = f_compare
 
     x = params[x_name]
@@ -437,8 +431,7 @@ def conf_interval2d(minimizer, result, x_name, y_name, nx=10, ny=10,
         result.params[y.name] = y
         minimizer.prepare_fit(params=result.params)
         out = minimizer.leastsq()
-        prob = prob_func(out.ndata, out.ndata - out.nfree, out.chisqr,
-                         best_chi, nfix=2.)
+        prob = prob_func(result, out)
         result.params[x.name] = save_x
         result.params[y.name] = save_y
         return prob
