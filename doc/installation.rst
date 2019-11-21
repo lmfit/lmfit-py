@@ -41,11 +41,11 @@ All of these are readily available on PyPI, and should be installed
 automatically if installing with ``pip install lmfit``.
 
 In order to run the test suite, the `pytest`_ package is required.  Some
-functionality requires the `emcee`_, `corner`_, `pandas`_, `Jupyter`_,
+functionality requires the `emcee`_ (version 3+), `corner`_, `pandas`_, `Jupyter`_,
 `matplotlib`_, `dill`_, or `numdifftools`_ packages.  These are not installed
 automatically, but we highly recommend each of these packages.
 
-For building the documentation, `matplotlib`_, `emcee`_, `corner`_,
+For building the documentation, `matplotlib`_, `emcee`_ (version 3+), `corner`_,
 `Sphinx`_, `jupyter_sphinx`_, and `ImageMagick`_ are required (the latter
 one only when generating the PDF document).
 
