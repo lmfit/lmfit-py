@@ -508,11 +508,9 @@ class Minimizer(object):
 
         >>> self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
         """
-        omax_nfev = max_nfev
         if max_nfev is None:
             max_nfev = default_value
         if self.max_nfev in (None, np.inf):
-            print("Set self.max_nfev ", self.max_nfev, max_nfev, omax_nfev, default_value)
             self.max_nfev = max_nfev
 
     @property
