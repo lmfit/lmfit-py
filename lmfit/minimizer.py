@@ -2343,7 +2343,7 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
 
 def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
              scale_covar=True, nan_policy='raise', reduce_fcn=None,
-             calc_covar=True, **fit_kws):
+             calc_covar=True, max_nfev=None, **fit_kws):
     """Perform a fit of a set of parameters by minimizing an objective (or
     cost) function using one of the several available methods.
 
@@ -2426,6 +2426,9 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         Whether to calculate the covariance matrix (default is True) for
         solvers other than `leastsq` and `least_squares`. Requires the
         `numdifftools` package to be installed.
+    max_nfev: int or None
+        Maximum number of function evaluations. Default is different for each
+        fitting method.
     **fit_kws : dict, optional
         Options to pass to the minimizer being used.
 
@@ -2472,5 +2475,5 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
     fitter = Minimizer(fcn, params, fcn_args=args, fcn_kws=kws,
                        iter_cb=iter_cb, scale_covar=scale_covar,
                        nan_policy=nan_policy, reduce_fcn=reduce_fcn,
-                       calc_covar=calc_covar, **fit_kws)
+                       calc_covar=calc_covar, max_nfev=max_nfev, **fit_kws)
     return fitter.minimize(method=method)
