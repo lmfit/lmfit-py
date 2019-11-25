@@ -561,7 +561,7 @@ class Minimizer(object):
             m = "number of function evaluations > %d" % self.max_nfev
             self.result.message = "Fit aborted: %s" % m
             self.result.success = False
-            raise AbortFitException("fit aborted: too many function evaluations.")
+            raise AbortFitException("fit aborted: too many function evaluations (%d)." % self.max_nfev)
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
 
@@ -1625,12 +1625,22 @@ class Minimizer(object):
 
         if not result.aborted:
             _best, _cov, infodict, errmsg, ier = lsout
-            result.residual = self.__residual(_best)
-            result.nfev -= 1
-        result._calculate_statistics()
+        else:
+            _best = [self.result.params[p].value for p in self.result.var_names]
+            _best = np.array(_best)
+            _cov = None
+            ier = -1
+            errmsg = 'Fit aborted.'
 
-        if result.aborted:
-            return result
+        result.nfev -= 1
+        if result.nfev >= self.max_nfev:
+            result.nfev = self.max_nfev - 1
+        self.result.nfev = result.nfev
+        try:
+            result.residual = self.__residual(_best)
+            result._calculate_statistics()
+        except AbortFitException:
+            pass
 
         result.ier = ier
         result.lmdif_message = errmsg
@@ -1645,6 +1655,8 @@ class Minimizer(object):
             result.message = 'One or more variable did not affect the fit.'
         elif ier == 5:
             result.message = self._err_max_evals % lskws['maxfev']
+        elif ier == -1:
+            pass
         else:
             result.message = 'Tolerance seems to be too small.'
 
@@ -2017,7 +2029,7 @@ class Minimizer(object):
         params : :class:`~lmfit.parameter.Parameters`, optional
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
-    max_nfev: int (default is None)
+        max_nfev: int (default is None)
             Maximum number of total function evaluations.
         **kws : dict, optional
             Minimizer options to pass to the SHGO algorithm.
