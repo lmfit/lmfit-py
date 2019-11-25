@@ -1,4 +1,4 @@
-"""Simple minimizer is a wrapper around scipy.leastsq, allowing a user to build
+<"""Simple minimizer is a wrapper around scipy.leastsq, allowing a user to build
 a fitting model as a function of general purpose Fit Parameters that can be
 fixed or varied, bounded, and written as a simple expression of other Fit
 Parameters.
@@ -78,12 +78,15 @@ except ImportError:
 Candidate = namedtuple('Candidate', ['params', 'score'])
 
 MAXEVAL_Warning = """ignoring `%s` keyword argument to `%s`.
-Use `max_evaluations` instead"""
+Use `max_nfev` instead"""
 
 
 def thisfuncname():
     """Return name of calling function"""
-    return inspect.stack()[1].function
+    try:
+        return inspect.stack()[1].function
+    except AttributError:
+        return inspect.stack()[1][3]
 
 
 def asteval_with_uncertainties(*vals, **kwargs):
@@ -378,12 +381,12 @@ class Minimizer(object):
     _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
                      "of Parameters()")
     _err_max_evals = ("Too many function calls (max set to %i)!  Use:"
-                      " minimize(func, params, ..., max_evaluations=NNN)"
+                      " minimize(func, params, ..., max_nfev=NNN)"
                       " to increase this maximum.")
 
     def __init__(self, userfcn, params, fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
-                 reduce_fcn=None, calc_covar=True, max_evaluations=None, **kws):
+                 reduce_fcn=None, calc_covar=True, max_nfev=None, **kws):
         """
         Parameters
         ----------
@@ -400,7 +403,7 @@ class Minimizer(object):
             Positional arguments to pass to `userfcn`.
         fcn_kws : dict, optional
             Keyword arguments to pass to `userfcn`.
-        max_evaluations: int or None
+        max_nfev: int or None
            Maximum number of function evaluations. The default value will
            change with fitting method.
         iter_cb : callable, optional
@@ -478,7 +481,7 @@ class Minimizer(object):
         self.iter_cb = iter_cb
         self.calc_covar = calc_covar
         self.scale_covar = scale_covar
-        self.max_evaluations = max_evaluations
+        self.max_nfev = max_nfev
         self.nfev = 0
         self.nfree = 0
         self.ndata = 0
@@ -496,6 +499,19 @@ class Minimizer(object):
         self.params = params
         self.jacfcn = None
         self.nan_policy = nan_policy
+
+    def set_max_nfev(self, max_nfev=None, default_value=100000):
+        """
+        Set maximum number of function evaluations, possibly setting
+        to the provided default_value
+
+        >>> self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
+        """
+        if max_nfev is None:
+            max_nfev = default_value
+        if self.max_nfev in (None, np.inf):
+            self.max_nfev = max_nfev
+
 
     @property
     def values(self):
@@ -538,11 +554,13 @@ class Minimizer(object):
                 params[name].value = val
         params.update_constraints()
 
+        if self.max_nfev is None:
+            self.max_nfev = np.inf
+
         self.result.nfev += 1
-        if (self.max_evaluations is not None and
-           self.result.nfev > self.max_evaluations):
+        if self.result.nfev > self.max_nfev:
             self.result.aborted = True
-            m = "number of function evaluations > %d" % self.max_evaluations
+            m = "number of function evaluations > %d" % self.max_nfev
             self.result.message = "Fit aborted: %s" % m
             self.result.success = False
             raise AbortFitException("fit aborted: too many function evaluations.")
@@ -823,23 +841,23 @@ class Minimizer(object):
                 for v, nam in zip(uvars, self.result.var_names):
                     self.result.params[nam].value = v.nominal_value
 
-    def scalar_minimize(self, method='Nelder-Mead', params=None,
-                        max_evaluations=None, **kws):
+    def scalar_minimize(self, method='Nelder-Mead', params=None, max_nfev=None,
+                        **kws):
         """Scalar minimization using :scipydoc:`optimize.minimize`.
 
         Perform fit with any of the scalar minimization algorithms supported by
         :scipydoc:`optimize.minimize`. Default argument values are:
 
-        +-------------------------+-----------------+-----------------------------------------------------+
-        | :meth:`scalar_minimize` | Default Value   | Description                                         |
-        | arg                     |                 |                                                     |
-        +=========================+=================+=====================================================+
-        |   method                | ``Nelder-Mead`` | fitting method                                      |
-        +-------------------------+-----------------+-----------------------------------------------------+
-        |   tol                   | 1.e-7           | fitting and parameter tolerance                     |
-        +-------------------------+-----------------+-----------------------------------------------------+
-        |   hess                  | None            | Hessian of objective function                       |
-        +-------------------------+-----------------+-----------------------------------------------------+
+        +-------------------------+-----------------+---------------------------------------+
+        | :meth:`scalar_minimize` | Default Value   | Description                           |
+        | arg                     |                 |                                       |
+        +=========================+=================+=======================================+
+        |   method                | ``Nelder-Mead`` | fitting method                        |
+        +-------------------------+-----------------+---------------------------------------+
+        |   tol                   | 1.e-7           | fitting and parameter tolerance       |
+        +-------------------------+-----------------+---------------------------------------+
+        |   hess                  | None            | Hessian of objective function         |
+        +-------------------------+-----------------+---------------------------------------+
 
 
         Parameters
@@ -865,7 +883,7 @@ class Minimizer(object):
 
         params : :class:`~lmfit.parameter.Parameters`, optional
            Parameters to use as starting point.
-        max_evaluations: int or None
+        max_nfev: int or None
            Maximum number of function evaluations.  Defaults to 1000*(nvars+1)
            where nvars is the number of variable parameters.
         **kws : dict, optional
@@ -899,13 +917,8 @@ class Minimizer(object):
         variables = result.init_vals
         params = result.params
 
-        if max_evaluations is not None:
-            self.max_evaluations = max_evaluations
-        maxfev = self.max_evaluations
-        if maxfev is None:
-            maxfev = 1000*(result.nvarys+1)
-
-        fmin_kws = dict(method=method, options={'maxiter': 2*maxfev})
+        self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
+        fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
         fmin_kws.update(self.kws)
 
         if 'maxiter' in kws:
@@ -1449,7 +1462,7 @@ class Minimizer(object):
 
         return result
 
-    def least_squares(self, params=None, max_evaluations=None, **kws):
+    def least_squares(self, params=None, max_nfev=None, **kws):
         """Least-squares minimization using :scipydoc:`optimize.least_squares`.
 
         This method wraps :scipydoc:`optimize.least_squares`, which has inbuilt
@@ -1461,7 +1474,7 @@ class Minimizer(object):
         ----------
         params : :class:`~lmfit.parameter.Parameters`, optional
            Parameters to use as starting point.
-        max_evaluations: int or None
+        max_nfev: int or None
            Maximum number of function evaluations.  Defaults to 1000*(nvars+1)
            where nvars is the number of variable parameters.
         **kws : dict, optional
@@ -1480,8 +1493,9 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params)
         result.method = 'least_squares'
-
         replace_none = lambda x, sign: sign*np.inf if x is None else x
+
+        self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
 
         start_vals, lower_bounds, upper_bounds = [], [], []
         for vname in result.var_names:
@@ -1494,7 +1508,7 @@ class Minimizer(object):
             ret = least_squares(self.__residual, start_vals,
                                 bounds=(lower_bounds, upper_bounds),
                                 kwargs=dict(apply_bounds_transformation=False),
-                                **kws)
+                                max_nfev=2*self.max_nfev, **kws)
             result.residual = ret.fun
         except AbortFitException:
             pass
@@ -1537,7 +1551,7 @@ class Minimizer(object):
 
         return result
 
-    def leastsq(self, params=None, max_evaluations=None, **kws):
+    def leastsq(self, params=None, max_nfev=None, **kws):
         """Use Levenberg-Marquardt minimization to perform a fit.
 
         It assumes that the input Parameters have been initialized, and
@@ -1564,7 +1578,7 @@ class Minimizer(object):
         ----------
         params : :class:`~lmfit.parameter.Parameters`, optional
            Parameters to use as starting point.
-        max_evaluations: int or None
+        max_nfev: int or None
            Maximum number of function evaluations.  Defaults to 2000*(nvars+1)
            where nvars is the number of variable parameters.
         **kws : dict, optional
@@ -1585,15 +1599,13 @@ class Minimizer(object):
         result.method = 'leastsq'
         result.nfev -= 2  # correct for "pre-fit" initialization/checks
         variables = result.init_vals
-        nvars = len(variables)
-        if max_evaluations is not None:
-            self.max_evaluations = max_evaluations
-        maxfev = self.max_evaluations
-        if maxfev is None:
-            maxfev = 2000*(nvars+1)
+
+        # note we set the max number of function evaluations here, and send twice that
+        # value to the solver so it essentially never stops on its own
+        self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
 
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
-                     gtol=1.e-7, maxfev=maxfev, Dfun=None)
+                     gtol=1.e-7, maxfev=2*self.max_nfev, Dfun=None)
 
         lskws.update(self.kws)
         lskws.update(kws)
@@ -1905,8 +1917,8 @@ class Minimizer(object):
                     Options to pass to the local minimizer.
                 maxfunevals: int (default is None)
                     Maximum number of function evaluations. If None, the optimization will stop
-                    after `totaliter` number of iterations. (deprecated: use `max_evaluations`)
-                max_evaluation: int (default is None)
+                    after `totaliter` number of iterations. (deprecated: use `max_nfev`)
+                max_nfev: int (default is None)
                     Maximum number of total function evaluations. If None, the
                     optimization will stop after `totaliter` number of iterations.
                 totaliter: int (default is 20)
@@ -1954,6 +1966,7 @@ class Minimizer(object):
 
         """
         result = self.prepare_fit(params=params)
+        self.set_max_nfev(max_nfev, 1000000*(result.nvarys+1))
 
         ampgo_kws = dict(local='L-BFGS-B', local_opts=None, maxfunevals=None,
                          totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
@@ -1995,7 +2008,7 @@ class Minimizer(object):
 
         return result
 
-    def shgo(self, params=None, **kws):
+    def shgo(self, params=None, max_nfev=None, **kws):
         """Use the `SHGO` algorithm to find the global minimum.
 
         SHGO stands for "simplicial homology global optimization" and calls
@@ -2006,6 +2019,8 @@ class Minimizer(object):
         params : :class:`~lmfit.parameter.Parameters`, optional
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
+    max_nfev: int (default is None)
+            Maximum number of total function evaluations.
         **kws : dict, optional
             Minimizer options to pass to the SHGO algorithm.
 
@@ -2023,6 +2038,8 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'shgo'
+
+        self.set_max_nfev(max_nfev, 1000000*(result.nvarys+1))
 
         shgo_kws = dict(constraints=None, n=100, iters=1, callback=None,
                         minimizer_kwargs=None, options=None,
@@ -2061,7 +2078,7 @@ class Minimizer(object):
 
         return result
 
-    def dual_annealing(self, params=None, max_evaluations=None, **kws):
+    def dual_annealing(self, params=None, max_nfev=None, **kws):
         """Use the `dual_annealing` algorithm to find the global minimum.
 
         This method calls :scipydoc:`optimize.dual_annealing` using its
@@ -2072,7 +2089,7 @@ class Minimizer(object):
         params : :class:`~lmfit.parameter.Parameters`, optional
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
-        max_evaluations: int or None
+        max_nfev: int or None
            Maximum number of function evaluations. Default is 1e7.
         **kws : dict, optional
             Minimizer options to pass to the dual_annealing algorithm.
@@ -2091,16 +2108,13 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params=params)
         result.method = 'dual_annealing'
-        if max_evaluations is not None:
-            self.max_evaluations = max_evaluations
-        maxfev = self.max_evaluations
-        if maxfev is None:
-            maxfev = 1.e8
+        self.set_max_nfev(max_nfev, 1.e7)
 
         da_kws = dict(maxiter=1000, local_search_options={},
                       initial_temp=5230.0, restart_temp_ratio=2e-05,
-                      visit=2.62, accept=-5.0, maxfun=1e8, seed=None,
-                      no_local_search=False, callback=None, x0=None)
+                      visit=2.62, accept=-5.0, maxfun=2*self.max_nfev,
+                      seed=None, no_local_search=False, callback=None,
+                      x0=None)
 
         da_kws.update(self.kws)
         da_kws.update(kws)
