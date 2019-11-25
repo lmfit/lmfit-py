@@ -354,6 +354,8 @@ class MinimizerResult(object):
     def _calculate_statistics(self):
         """Calculate the fitting statistics."""
         self.nvarys = len(self.init_vals)
+        if not hasattr(self, 'residual'):
+            self.residual = -np.inf
         if isinstance(self.residual, ndarray):
             self.chisqr = (self.residual**2).sum()
             self.ndata = len(self.residual)
@@ -506,9 +508,11 @@ class Minimizer(object):
 
         >>> self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
         """
+        omax_nfev = max_nfev
         if max_nfev is None:
             max_nfev = default_value
         if self.max_nfev in (None, np.inf):
+            print("Set self.max_nfev ", self.max_nfev, max_nfev, omax_nfev, default_value)
             self.max_nfev = max_nfev
 
     @property
@@ -1509,16 +1513,17 @@ class Minimizer(object):
                                 max_nfev=2*self.max_nfev, **kws)
             result.residual = ret.fun
         except AbortFitException:
-            pass
+            ret = None
 
         # note: upstream least_squares is actually returning
         # "last evaluation", not "best result", but we do this
         # here for consistency, and assuming it will be fixed.
-        if not result.aborted:
-            result.residual = self.__residual(ret.x, False)
+        # if not result.aborted:
+        if ret is not None:
             result.nfev -= 1
-        result._calculate_statistics()
+            result.residual = self.__residual(ret.x, False)
 
+        result._calculate_statistics()
         if not result.aborted:
             for attr in ret:
                 setattr(result, attr, ret[attr])
