@@ -1,4 +1,4 @@
-<"""Simple minimizer is a wrapper around scipy.leastsq, allowing a user to build
+"""Simple minimizer is a wrapper around scipy.leastsq, allowing a user to build
 a fitting model as a function of general purpose Fit Parameters that can be
 fixed or varied, bounded, and written as a simple expression of other Fit
 Parameters.
@@ -85,7 +85,7 @@ def thisfuncname():
     """Return name of calling function"""
     try:
         return inspect.stack()[1].function
-    except AttributError:
+    except AttributeError:
         return inspect.stack()[1][3]
 
 
@@ -303,7 +303,6 @@ class MinimizerResult(object):
         Pretty_print() representation of candidates from the `brute` method.
 
     """
-
     def __init__(self, **kws):
         for key, val in kws.items():
             setattr(self, key, val)
@@ -511,7 +510,6 @@ class Minimizer(object):
             max_nfev = default_value
         if self.max_nfev in (None, np.inf):
             self.max_nfev = max_nfev
-
 
     @property
     def values(self):
@@ -1891,7 +1889,7 @@ class Minimizer(object):
 
         return result
 
-    def ampgo(self, params=None, **kws):
+    def ampgo(self, params=None, max_nfev=None, **kws):
         """Find the global minimum of a multivariate function using AMPGO.
 
         AMPGO stands for 'Adaptive Memory Programming for Global Optimization'
