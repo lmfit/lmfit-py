@@ -523,7 +523,7 @@ class Minimizer(object):
         """Return Parameter values in a simple dictionary."""
         return {name: p.value for name, p in self.result.params.items()}
 
-    def __residual(self, fvars, apply_bounds_transformation=True, check_nfev=True):
+    def __residual(self, fvars, apply_bounds_transformation=True):
         """Residual function used for least-squares fit.
 
         With the new, candidate values of `fvars` (the fitting variables),
@@ -539,10 +539,6 @@ class Minimizer(object):
             Whether to apply lmfits parameter transformation to constrain
             parameters (default is True). This is needed for solvers without
             inbuilt support for bounds.
-        check_nfev : bool, optional
-            Whether to check the number of function evals and raise a
-            AbortFitException if exceeded.  Default is True and should only
-            be set to False internally.
 
         Returns
         -------
@@ -567,7 +563,7 @@ class Minimizer(object):
             self.max_nfev = np.inf
 
         self.result.nfev += 1
-        if check_nfev and self.result.nfev > self.max_nfev:
+        if self.result.nfev > self.max_nfev:
             self.result.aborted = True
             m = "number of function evaluations > %d" % self.max_nfev
             self.result.message = "Fit aborted: %s" % m
@@ -998,12 +994,15 @@ class Minimizer(object):
                         setattr(result, attr, getattr(ret, attr))
 
             result.x = np.atleast_1d(result.x)
-            result.residual = self.__residual(result.x, check_nfev=False)
+            result.residual = self.__residual(result.x)
             result.nfev -= 1
         else:
             result.x = np.array([self.result.params[p].value
                                  for p in self.result.var_names])
-            result.residual = self.__residual(result.x, check_nfev=False)
+            self.result.nfev -= 2
+            self._abort = False
+            result.residual = self.__residual(result.x)
+            result.nfev += 1
 
         result._calculate_statistics()
 
@@ -1532,7 +1531,7 @@ class Minimizer(object):
         # if not result.aborted:
         if ret is not None:
             result.nfev -= 1
-            result.residual = self.__residual(ret.x, False, check_nfev=False)
+            result.residual = self.__residual(ret.x, False)
 
         result._calculate_statistics()
         if not result.aborted:
@@ -1656,7 +1655,7 @@ class Minimizer(object):
             result.nfev = self.max_nfev - 1
         self.result.nfev = result.nfev
         try:
-            result.residual = self.__residual(_best, check_nfev=False)
+            result.residual = self.__residual(_best)
             result._calculate_statistics()
         except AbortFitException:
             pass
@@ -1737,7 +1736,7 @@ class Minimizer(object):
 
         if not result.aborted:
             result.message = ret.message
-            result.residual = self.__residual(ret.x, check_nfev=False)
+            result.residual = self.__residual(ret.x)
             result.nfev -= 1
 
         result._calculate_statistics()
@@ -1914,8 +1913,7 @@ class Minimizer(object):
 
             result.params = result.candidates[0].params
             result.residual = self.__residual(result.brute_x0,
-                                              apply_bounds_transformation=False,
-                                              check_nfev=False)
+                                              apply_bounds_transformation=False)
             result.nfev = len(result.brute_Jout.ravel())
 
         result._calculate_statistics()
@@ -2024,7 +2022,7 @@ class Minimizer(object):
             for i, par in enumerate(result.var_names):
                 result.params[par].value = result.ampgo_x0[i]
 
-            result.residual = self.__residual(result.ampgo_x0, check_nfev=False)
+            result.residual = self.__residual(result.ampgo_x0)
             result.nfev -= 1
 
         result._calculate_statistics()
@@ -2095,8 +2093,7 @@ class Minimizer(object):
                 else:
                     setattr(result, 'shgo_{}'.format(attr), value)
 
-            result.residual = self.__residual(result.shgo_x, False,
-                                              check_nfev=False)
+            result.residual = self.__residual(result.shgo_x, False)
             result.nfev -= 1
 
         result._calculate_statistics()
@@ -2171,8 +2168,7 @@ class Minimizer(object):
                 else:
                     setattr(result, 'da_{}'.format(attr), value)
 
-            result.residual = self.__residual(result.da_x, False,
-                                              check_nfev=False)
+            result.residual = self.__residual(result.da_x, False)
             result.nfev -= 1
 
         result._calculate_statistics()
