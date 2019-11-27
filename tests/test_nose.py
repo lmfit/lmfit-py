@@ -7,6 +7,12 @@ from numpy.testing import (assert_, assert_allclose, assert_almost_equal,
 import pytest
 from uncertainties import ufloat
 
+try:
+    import numdifftools  # noqa: F401
+    HAS_NUMDIFFTOOLS = True
+except ImportError:
+    HAS_NUMDIFFTOOLS = False
+
 from lmfit import Minimizer, Parameters, minimize
 from lmfit.lineshapes import gaussian
 from lmfit.minimizer import (HAS_EMCEE, SCALAR_METHODS, MinimizerResult,
@@ -222,15 +228,10 @@ def test_scalar_minimize_has_no_uncertainties():
     assert_(np.isfinite(out.params['amp'].stderr))
     assert out.errorbars
     out2 = mini.minimize(method='nelder-mead')
-    assert_(out2.params['amp'].stderr is not None)
-    assert_(out2.params['decay'].stderr is not None)
-    assert_(out2.params['shift'].stderr is not None)
-    assert_(out2.params['omega'].stderr is not None)
-    assert_(out2.params['amp'].correl is not None)
-    assert_(out2.params['decay'].correl is not None)
-    assert_(out2.params['shift'].correl is not None)
-    assert_(out2.params['omega'].correl is not None)
-    assert out2.errorbars
+    for par in ('amp', 'decay', 'shift', 'omega'):
+        assert HAS_NUMDIFFTOOLS == (out2.params[par].stderr is not None)
+        assert HAS_NUMDIFFTOOLS == (out2.params[par].correl is not None)
+    assert HAS_NUMDIFFTOOLS == out2.errorbars
 
 
 def test_scalar_minimize_reduce_fcn():
