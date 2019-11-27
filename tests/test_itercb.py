@@ -48,19 +48,13 @@ def test_itercb(method, calc_covar):
     assert not out.errorbars
     assert not out.success
 
-# @pytest.mark.parametrize("method", ['ampgo', 'brute', 'basinhopping',
-#                                     'differential_evolution', 'leastsq',
-#                                     'least_squares', 'nelder'])
-
-
-@pytest.mark.parametrize("calc_covar", calc_covar_options)
-@pytest.mark.parametrize("method", ['leastsq', 'least_squares', 'nelder'])
-def test_max_nfev(method, calc_covar):
+@pytest.mark.parametrize("method", ['leastsq', 'least_squares', 'nelder',
+                                    'brute', 'ampgo', 'basinopping', 'differential_evolution'])
+def test_max_nfev(method):
     """Test the iteration callback for all solvers."""
-    out = mod.fit(y, pars, x=x, method=method,
-                  calc_covar=calc_covar, max_nfev=10)
+    out = mod.fit(y, pars, x=x, method=method, max_nfev=10)
 
-    assert out.nfev < 20
+    assert out.nfev < 15
     assert out.aborted
     assert not out.errorbars
     assert not out.success
