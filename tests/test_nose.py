@@ -222,15 +222,15 @@ def test_scalar_minimize_has_no_uncertainties():
     assert_(np.isfinite(out.params['amp'].stderr))
     assert out.errorbars
     out2 = mini.minimize(method='nelder-mead')
-    assert_(out2.params['amp'].stderr is None)
-    assert_(out2.params['decay'].stderr is None)
-    assert_(out2.params['shift'].stderr is None)
-    assert_(out2.params['omega'].stderr is None)
-    assert_(out2.params['amp'].correl is None)
-    assert_(out2.params['decay'].correl is None)
-    assert_(out2.params['shift'].correl is None)
-    assert_(out2.params['omega'].correl is None)
-    assert not out2.errorbars
+    assert_(out2.params['amp'].stderr is not None)
+    assert_(out2.params['decay'].stderr is not None)
+    assert_(out2.params['shift'].stderr is not None)
+    assert_(out2.params['omega'].stderr is not None)
+    assert_(out2.params['amp'].correl is not None)
+    assert_(out2.params['decay'].correl is not None)
+    assert_(out2.params['shift'].correl is not None)
+    assert_(out2.params['omega'].correl is not None)
+    assert out2.errorbars
 
 
 def test_scalar_minimize_reduce_fcn():

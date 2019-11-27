@@ -768,7 +768,7 @@ class Minimizer(object):
 
         nfev = deepcopy(self.result.nfev)
         try:
-            Hfun = ndt.Hessian(self.penalty)
+            Hfun = ndt.Hessian(self.penalty, step=1.e-4)
             hessian_ndt = Hfun(fvars)
             cov_x = inv(hessian_ndt) * 2.0
         except (LinAlgError, ValueError):
