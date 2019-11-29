@@ -894,8 +894,9 @@ class Model:
             Whether to calculate the covariance matrix (default is True) for
             solvers other than `leastsq` and `least_squares`. Requires the
             `numdifftools` package to be installed.
-        max_nfev: int or None
-            Maximum number of function evaluations.  Default varies with solver.
+        max_nfev: int or None, optional
+            Maximum number of function evaluations (default is None). The
+            default value depends on the fitting method.
         **kwargs: optional
             Arguments to pass to the  model function, possibly overriding
             params.
@@ -1307,8 +1308,9 @@ class ModelResult(Minimizer):
             Whether to calculate the covariance matrix (default is True) for
             solvers other than `leastsq` and `least_squares`. Requires the
             `numdifftools` package to be installed.
-        max_nfev: int or None
-            Maximum number of function evaluations.  Default varies with solver.
+        max_nfev: int or None, optional
+            Maximum number of function evaluations (default is None). The
+            default value depends on the fitting method.
         **fit_kws : optional
             Keyword arguments to send to minimization routine.
 
