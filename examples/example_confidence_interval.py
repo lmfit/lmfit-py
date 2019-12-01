@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 from numpy import argsort, exp, linspace, pi, random, sign, sin, unique
 from scipy.interpolate import interp1d
 
-from lmfit import Minimizer, Parameters, conf_interval, conf_interval2d, report_ci, report_fit
+from lmfit import (Minimizer, Parameters, conf_interval, conf_interval2d,
+                   report_ci, report_fit)
 
 ###############################################################################
 # Define the residual function, specify "true" parameter values, and generate

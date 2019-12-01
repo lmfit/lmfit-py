@@ -17,7 +17,7 @@ import copy
 import matplotlib.pyplot as plt
 import numpy as np
 
-from lmfit import fit_report, Minimizer, Parameters
+from lmfit import Minimizer, Parameters, fit_report
 
 ###############################################################################
 # Let's start with the example given in the documentation of SciPy:

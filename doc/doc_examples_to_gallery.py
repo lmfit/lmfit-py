@@ -13,6 +13,7 @@ Process the examples in the documentation for inclusion in the Gallery:
 """
 import os
 import time
+
 basedir = os.getcwd()
 
 examples_dir = os.path.abspath(os.path.join(basedir, '..', 'examples'))

@@ -6,13 +6,12 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 
-import lmfit.jsonutils
 from lmfit import Parameters
-from lmfit.model import (load_model, load_modelresult, save_model,
-                         save_modelresult, Model, ModelResult)
-from lmfit.models import ExponentialModel, GaussianModel, VoigtModel
+import lmfit.jsonutils
 from lmfit.lineshapes import gaussian, lorentzian
-
+from lmfit.model import (Model, ModelResult, load_model, load_modelresult,
+                         save_model, save_modelresult)
+from lmfit.models import ExponentialModel, GaussianModel, VoigtModel
 from lmfit_testutils import assert_between, assert_param_between
 
 y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
