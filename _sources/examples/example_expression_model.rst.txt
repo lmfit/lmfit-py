@@ -90,14 +90,14 @@ this results in the following output:
         # function evals   = 52
         # data points      = 201
         # variables        = 3
-        chi-square         = 0.02208745
-        reduced chi-square = 1.1155e-04
-        Akaike info crit   = -1826.32615
-        Bayesian info crit = -1816.41624
+        chi-square         = 0.01935543
+        reduced chi-square = 9.7755e-05
+        Akaike info crit   = -1852.86549
+        Bayesian info crit = -1842.95557
     [[Variables]]
-        amp:  3.40353650 +/- 0.00545034 (0.16%) (init = 5)
-        cen:  1.80112452 +/- 9.2605e-04 (0.05%) (init = 5)
-        wid:  0.50081014 +/- 9.2605e-04 (0.18%) (init = 1)
+        amp:  3.39822842 +/- 0.00509382 (0.15%) (init = 5)
+        cen:  1.80024769 +/- 8.6400e-04 (0.05%) (init = 5)
+        wid:  0.49917248 +/- 8.6400e-04 (0.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, wid) =  0.577
     /home/newville/Codes/lmfit-py/examples/example_expression_model.py:35: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
@@ -108,7 +108,7 @@ this results in the following output:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.102 seconds)
+   **Total running time of the script:** ( 0 minutes  0.110 seconds)
 
 
 .. _sphx_glr_download_examples_example_expression_model.py:

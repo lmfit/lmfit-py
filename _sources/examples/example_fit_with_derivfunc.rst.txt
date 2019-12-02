@@ -107,11 +107,11 @@ to model = a*exp(-b*x) + c
     ==============================================
     Statistic/Parameter|   Without   | With      |
     ----------------------------------------------
-    N Function Calls   |    40       |    13     |
-    Chi-square         |   1.2515    |   1.2515  |
-       a               |   2.4517    |   2.4517  |
-       b               |   1.1909    |   1.1909  |
-       c               |   0.7598    |   0.7598  |
+    N Function Calls   |    44       |    14     |
+    Chi-square         |   0.8974    |   0.8974  |
+       a               |   2.4327    |   2.4327  |
+       b               |   1.1946    |   1.1946  |
+       c               |   0.7669    |   0.7669  |
     ----------------------------------------------
 
 
@@ -148,7 +148,7 @@ both methods:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.095 seconds)
+   **Total running time of the script:** ( 0 minutes  0.101 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_derivfunc.py:

@@ -23,11 +23,11 @@ doc_model_loadmodel.py
         exec(self.code, self.globals)
       File "/home/newville/Codes/lmfit-py/examples/documentation/model_loadmodel.py", line 32, in <module>
         result = model.fit(y, params, x=x)
-      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py", line 1022, in fit
+      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py", line 1022, in fit
         output.fit(data=data, weights=weights)
-      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py", line 1369, in fit
+      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py", line 1369, in fit
         self.init_fit = self.model.eval(params=self.params, **self.userkws)
-      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py", line 848, in eval
+      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py", line 848, in eval
         return self.func(**self.make_funcargs(params, kwargs))
       File "/home/newville/Codes/lmfit-py/examples/documentation/model_savemodel.py", line 18, in mysine
         return amp * np.sin(x*freq + shift)
@@ -75,7 +75,7 @@ doc_model_loadmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.047 seconds)
+   **Total running time of the script:** ( 0 minutes  0.051 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodel.py:

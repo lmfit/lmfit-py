@@ -17,7 +17,8 @@ Calculate Confidence Intervals
     from numpy import argsort, exp, linspace, pi, random, sign, sin, unique
     from scipy.interpolate import interp1d
 
-    from lmfit import Minimizer, Parameters, conf_interval, conf_interval2d, report_ci, report_fit
+    from lmfit import (Minimizer, Parameters, conf_interval, conf_interval2d,
+                       report_ci, report_fit)
 
 
 
@@ -239,7 +240,7 @@ parameters using the function ``conf_interval2d``:
 
  .. code-block:: none
 
-    /home/newville/Codes/lmfit-py/examples/example_confidence_interval.py:134: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /home/newville/Codes/lmfit-py/examples/example_confidence_interval.py:135: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -247,7 +248,7 @@ parameters using the function ``conf_interval2d``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  14.010 seconds)
+   **Total running time of the script:** ( 0 minutes  14.556 seconds)
 
 
 .. _sphx_glr_download_examples_example_confidence_interval.py:

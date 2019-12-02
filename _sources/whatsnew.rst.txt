@@ -11,6 +11,36 @@ significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+
+.. _whatsnew_0915_label:
+
+Version 0.9.15 Release Notes
+============================
+
+**Version 0.9.15 is the last release that supports Python 2.7**; it now also fully suports Python 3.8.
+
+New features, improvements, and bug fixes:
+
+- move application of parameter bounds to setter instead of getter (PR #587)
+- add support for non-array Jacobian types in least_squares (Issue #588, @ezwelty in PR #589)
+- add more information (i.e., acor and acceptance_fraction) about emcee fit (@j-zimmermann in PR #593)
+- "name" is now a required positional argument for Parameter class, update the magic methods (PR #595)
+- fix nvars count and bound handling in confidence interval calculations (Issue #597, PR #598)
+- support Python 3.8; requires asteval >= 0.9.16 (PR #599)
+- only support emcee version 3 (i.e., no PTSampler anymore) (PR #600)
+- fix and refactor prob_bunc in confidence interval calculations (PR #604)
+- fix adding Parameters with custom user-defined symbols (Issue #607, PR #608; thanks to @gbouvignies for the report)
+
+Various:
+
+- bump requirements to LTS version of SciPy/ NumPy and code clean-up (PR #591)
+- documentation updates (PR #596, and others)
+- improve test coverage and Travis CI updates (PR #595, and others)
+- update pre-commit hooks and configuration in setup.cfg
+
+To-be deprecated:
+- function Parameter.isParameter and conversion from uncertainties.core.Variable to value in _getval (PR #595)
+
 .. _whatsnew_0914_label:
 
 Version 0.9.14 Release Notes

@@ -49,7 +49,7 @@ read the data into a pandas DataFrame, and use the 'x' and 'y' columns:
 
  .. code-block:: none
 
-    /home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/models.py:34: FutureWarning: 
+    /home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/models.py:34: FutureWarning: 
     The current behaviour of 'Series.argmin' is deprecated, use 'idxmin'
     instead.
     The behavior of 'argmin' will be corrected to return the positional
@@ -108,7 +108,7 @@ and gives the plot and fitting results below:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.198 seconds)
+   **Total running time of the script:** ( 0 minutes  0.204 seconds)
 
 
 .. _sphx_glr_download_examples_example_use_pandas.py:

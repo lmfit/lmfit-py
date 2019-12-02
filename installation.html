@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -136,25 +137,25 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>Lmfit works with <a class="reference external" href="https://python.org">Python</a> versions 2.7 and 3.5, 3.6, or 3.7. Support for
-2.7 is expected to end in late 2019.</p>
+<p>Lmfit works with <a class="reference external" href="https://python.org">Python</a> versions 2.7 and 3.5, 3.6, 3.7, or 3.8. Version
+0.9.15 is the final version to support Python 2.7.</p>
 <dl class="simple">
 <dt>Lmfit requires the following Python packages, with versions given:</dt><dd><ul class="simple">
-<li><p><a class="reference external" href="https://github.com/benjaminp/six">six</a> version 1.10 or higher.</p></li>
-<li><p><a class="reference external" href="http://numpy.org/">NumPy</a> version 1.10 or higher.</p></li>
-<li><p><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 0.19 or higher.</p></li>
-<li><p><a class="reference external" href="https://github.com/newville/asteval">asteval</a> version 0.9.12 or higher.</p></li>
-<li><p><a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a> version 3.0 or higher.</p></li>
+<li><p><a class="reference external" href="https://github.com/benjaminp/six">six</a> version 1.11 or higher.</p></li>
+<li><p><a class="reference external" href="http://numpy.org/">NumPy</a> version 1.16 or higher.</p></li>
+<li><p><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 1.2 or higher.</p></li>
+<li><p><a class="reference external" href="https://github.com/newville/asteval">asteval</a> version 0.9.16 or higher.</p></li>
+<li><p><a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a> version 3.0.1 or higher.</p></li>
 </ul>
 </dd>
 </dl>
 <p>All of these are readily available on PyPI, and should be installed
 automatically if installing with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lmfit</span></code>.</p>
 <p>In order to run the test suite, the <a class="reference external" href="https://pytest.org/">pytest</a> package is required.  Some
-functionality requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a>, <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>, <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>,
+functionality requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> (version 3+), <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>, <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>,
 <a class="reference external" href="https://matplotlib.org/">matplotlib</a>, <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>, or <a class="reference external" href="https://github.com/pbrod/numdifftools">numdifftools</a> packages.  These are not installed
 automatically, but we highly recommend each of these packages.</p>
-<p>For building the documentation, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>, <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a>, <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>,
+<p>For building the documentation, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>, <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> (version 3+), <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>,
 <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a>, <a class="reference external" href="https://jupyter-sphinx.readthedocs.io">jupyter_sphinx</a>, and <a class="reference external" href="https://www.imagemagick.org/">ImageMagick</a> are required (the latter
 one only when generating the PDF document).</p>
 <p>Please refer to  <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> for a list of all dependencies that
@@ -162,7 +163,7 @@ are needed if you want to participate in the development of lmfit.</p>
 </div>
 <div class="section" id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
-<p>The latest stable version of lmfit is 0.9.14 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPI</a>. Check the <a class="reference external" href="https://lmfit.github.io/lmfit-py/whatsnew.html">release_notes</a> for a list
+<p>The latest stable version of lmfit is 0.9.15rc1 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPI</a>. Check the <a class="reference external" href="https://lmfit.github.io/lmfit-py/whatsnew.html">release_notes</a> for a list
 of changes compared to earlier releases.</p>
 </div>
 <div class="section" id="installation">
@@ -254,14 +255,14 @@ of size of the contribution to the existing code) are from:
   The propagation of parameter uncertainties to uncertainties in a Model
   was adapted from the excellent description at
   https://www.astro.rug.nl/software/kapteyn/kmpfittutorial.html#confidence-and-prediction-intervals,
-  which references the original work of: J. Wolberg,Data Analysis Using the
-  Method of Least Squares, 2006, Springer
+  which references the original work of: J. Wolberg, Data Analysis Using the
+  Method of Least Squares, 2006, Springer.
 
 Additional patches, bug fixes, and suggestions have come from Faustin
 Carter, Christoph Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau,
 nmearl, Gustavo Pasquevich, Clemens Prescher, LiCode, Ben Gamari, Yoav
 Roam, Alexander Stark, Alexandre Beelen, Andrey Aristov, Nicholas Zobrist,
-and many others.
+Ethan Welty, Julius Zimmermann, and many others.
 
 The lmfit code obviously depends on, and owes a very large debt to the code
 in scipy.optimize.  Several discussions on the SciPy-user and lmfit mailing

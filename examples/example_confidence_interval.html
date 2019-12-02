@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -129,7 +130,8 @@
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">argsort</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">sign</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">unique</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp1d</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">conf_interval</span><span class="p">,</span> <span class="n">conf_interval2d</span><span class="p">,</span> <span class="n">report_ci</span><span class="p">,</span> <span class="n">report_fit</span>
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="p">(</span><span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">conf_interval</span><span class="p">,</span> <span class="n">conf_interval2d</span><span class="p">,</span>
+                   <span class="n">report_ci</span><span class="p">,</span> <span class="n">report_fit</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Define the residual function, specify “true” parameter values, and generate
@@ -284,11 +286,11 @@ parameters using the function <code class="docutils literal notranslate"><span c
 </div>
 <img alt="../_images/sphx_glr_example_confidence_interval_002.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_confidence_interval_002.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/newville/Codes/lmfit-py/examples/example_confidence_interval.py:134: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/newville/Codes/lmfit-py/examples/example_confidence_interval.py:135: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
   plt.show()
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  14.010 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  14.556 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-confidence-interval-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/b6a243851aa5b1d7362705005c5ed3b1/example_confidence_interval.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_confidence_interval.py</span></code></a></p>

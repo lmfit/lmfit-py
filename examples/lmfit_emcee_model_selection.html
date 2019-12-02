@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -125,8 +126,8 @@
 </div>
 <div class="sphx-glr-example-title section" id="model-selection-using-lmfit-and-emcee">
 <span id="sphx-glr-examples-lmfit-emcee-model-selection-py"></span><h1>Model Selection using lmfit and emcee<a class="headerlink" href="#model-selection-using-lmfit-and-emcee" title="Permalink to this headline">¶</a></h1>
-<p>FIXME: this is an useful examples; however, it doesn’t seem to run correctly
-anymore….</p>
+<p>FIXME: this is a useful examples; however, it doesn’t run correctly anymore as
+the PTSampler was removed in emcee v3…</p>
 <p><cite>lmfit.emcee</cite> can be used to obtain the posterior probability distribution
 of parameters, given a set of experimental data. This notebook shows how it
 can be used for Bayesian model selection.</p>
@@ -245,7 +246,8 @@ contained in the <cite>lmfit.Minimizer</cite> object.</p>
     <span class="c1"># do the sampling</span>
     <span class="n">mini</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lmfit</span><span class="o">.</span><span class="n">Minimizer</span><span class="p">(</span><span class="n">lnprob</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">params</span><span class="p">))</span>
     <span class="n">out</span> <span class="o">=</span> <span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">emcee</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="n">total_steps</span><span class="p">,</span> <span class="n">ntemps</span><span class="o">=</span><span class="n">ntemps</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span>
-                        <span class="n">reuse_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">float_behavior</span><span class="o">=</span><span class="s1">&#39;posterior&#39;</span><span class="p">)</span>
+                        <span class="n">reuse_sampler</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">float_behavior</span><span class="o">=</span><span class="s1">&#39;posterior&#39;</span><span class="p">,</span>
+                        <span class="n">progress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="c1"># get the evidence</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">,</span> <span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">())</span>
     <span class="n">log_evidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
@@ -258,7 +260,7 @@ out the MCMC chain to reduce autocorrelation between successive samples.</p>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
         <span class="c1"># do the sampling</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">emcee</span><span class="p">(</span><span class="n">burn</span><span class="o">=</span><span class="n">burn</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="n">thin</span><span class="p">,</span> <span class="n">ntemps</span><span class="o">=</span><span class="n">ntemps</span><span class="p">,</span>
-                            <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span> <span class="n">reuse_sampler</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                            <span class="n">workers</span><span class="o">=</span><span class="n">workers</span><span class="p">,</span> <span class="n">reuse_sampler</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="c1"># get the evidence</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">,</span> <span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">())</span>
         <span class="n">log_evidence</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mini</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sampler</span><span class="o">.</span><span class="n">thermodynamic_integration_log_evidence</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>

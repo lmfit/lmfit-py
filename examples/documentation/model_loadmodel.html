@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../../_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
@@ -136,11 +137,11 @@
     <span class="k">exec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">globals</span><span class="p">)</span>
   File <span class="nb">&quot;/home/newville/Codes/lmfit-py/examples/documentation/model_loadmodel.py&quot;</span>, line <span class="m">32</span>, in <span class="n">&lt;module&gt;</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">1022</span>, in <span class="n">fit</span>
+  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">1022</span>, in <span class="n">fit</span>
     <span class="n">output</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">1369</span>, in <span class="n">fit</span>
+  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">1369</span>, in <span class="n">fit</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">init_fit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">userkws</span><span class="p">)</span>
-  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.14-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">848</span>, in <span class="n">eval</span>
+  File <span class="nb">&quot;/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py&quot;</span>, line <span class="m">848</span>, in <span class="n">eval</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">make_funcargs</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">))</span>
   File <span class="nb">&quot;/home/newville/Codes/lmfit-py/examples/documentation/model_savemodel.py&quot;</span>, line <span class="m">18</span>, in <span class="n">mysine</span>
     <span class="k">return</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">freq</span> <span class="o">+</span> <span class="n">shift</span><span class="p">)</span>
@@ -181,7 +182,7 @@
 <span class="c1"># &lt;end examples/doc_model_loadmodel.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.047 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.051 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-model-loadmodel-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/559ed5259a2958bc6b87b02605f694e4/model_loadmodel.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">model_loadmodel.py</span></code></a></p>

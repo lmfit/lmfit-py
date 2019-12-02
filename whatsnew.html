@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -90,6 +91,7 @@
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-0-9-15-release-notes">Version 0.9.15 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-14-release-notes">Version 0.9.14 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-13-release-notes">Version 0.9.13 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-12-release-notes">Version 0.9.12 Release Notes</a></li>
@@ -146,6 +148,31 @@
 significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>.</p>
+<div class="section" id="version-0-9-15-release-notes">
+<span id="whatsnew-0915-label"></span><h2>Version 0.9.15 Release Notes<a class="headerlink" href="#version-0-9-15-release-notes" title="Permalink to this headline">¶</a></h2>
+<p><strong>Version 0.9.15 is the last release that supports Python 2.7</strong>; it now also fully suports Python 3.8.</p>
+<p>New features, improvements, and bug fixes:</p>
+<ul class="simple">
+<li><p>move application of parameter bounds to setter instead of getter (PR #587)</p></li>
+<li><p>add support for non-array Jacobian types in least_squares (Issue #588, &#64;ezwelty in PR #589)</p></li>
+<li><p>add more information (i.e., acor and acceptance_fraction) about emcee fit (&#64;j-zimmermann in PR #593)</p></li>
+<li><p>“name” is now a required positional argument for Parameter class, update the magic methods (PR #595)</p></li>
+<li><p>fix nvars count and bound handling in confidence interval calculations (Issue #597, PR #598)</p></li>
+<li><p>support Python 3.8; requires asteval &gt;= 0.9.16 (PR #599)</p></li>
+<li><p>only support emcee version 3 (i.e., no PTSampler anymore) (PR #600)</p></li>
+<li><p>fix and refactor prob_bunc in confidence interval calculations (PR #604)</p></li>
+<li><p>fix adding Parameters with custom user-defined symbols (Issue #607, PR #608; thanks to &#64;gbouvignies for the report)</p></li>
+</ul>
+<p>Various:</p>
+<ul class="simple">
+<li><p>bump requirements to LTS version of SciPy/ NumPy and code clean-up (PR #591)</p></li>
+<li><p>documentation updates (PR #596, and others)</p></li>
+<li><p>improve test coverage and Travis CI updates (PR #595, and others)</p></li>
+<li><p>update pre-commit hooks and configuration in setup.cfg</p></li>
+</ul>
+<p>To-be deprecated:
+- function Parameter.isParameter and conversion from uncertainties.core.Variable to value in _getval (PR #595)</p>
+</div>
 <div class="section" id="version-0-9-14-release-notes">
 <span id="whatsnew-0914-label"></span><h2>Version 0.9.14 Release Notes<a class="headerlink" href="#version-0-9-14-release-notes" title="Permalink to this headline">¶</a></h2>
 <p>New features:</p>

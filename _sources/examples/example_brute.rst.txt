@@ -27,7 +27,7 @@ all varying parameters, but will also deal with non-bounded parameters
     import matplotlib.pyplot as plt
     import numpy as np
 
-    from lmfit import fit_report, Minimizer, Parameters
+    from lmfit import Minimizer, Parameters, fit_report
 
 
 
@@ -686,7 +686,7 @@ most optimal result:
         Akaike info crit   = -991.780924
         Bayesian info crit = -976.952483
     [[Variables]]
-        amp:    5.00323087 +/- 0.03805941 (0.76%) (init = 4.75)
+        amp:    5.00323088 +/- 0.03805940 (0.76%) (init = 5.25)
         decay:  0.02563850 +/- 4.4571e-04 (1.74%) (init = 0.025)
         shift: -0.09162988 +/- 0.00978382 (10.68%) (init = 0)
         omega:  1.99611629 +/- 0.00316225 (0.16%) (init = 2)
@@ -857,7 +857,7 @@ and finally, to generated the figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  22.136 seconds)
+   **Total running time of the script:** ( 0 minutes  21.147 seconds)
 
 
 .. _sphx_glr_download_examples_example_brute.py:

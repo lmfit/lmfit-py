@@ -97,7 +97,7 @@ We can immediately see the best-fit values:
 
  .. code-block:: none
 
-    {'N': 6.96242791264594, 'tau': 3.026643595024727}
+    {'N': 6.984064046939685, 'tau': 3.011354296357346}
 
 
 
@@ -135,8 +135,8 @@ We can review the best-fit `Parameters` by accessing `result.params`:
  .. code-block:: none
 
     Name     Value      Min      Max   Stderr     Vary     Expr Brute_Step
-    N       6.962     -inf      inf  0.08759     True     None     None
-    tau     3.027     -inf      inf  0.06605     True     None     None
+    N       6.984     -inf      inf  0.08845     True     None     None
+    tau     3.011     -inf      inf    0.066     True     None     None
 
 
 
@@ -154,8 +154,8 @@ build the ``Parameter`` objects explicity; the following is equivalent.
 .. code-block:: default
 
     result = model.fit(data, t=t,
-                       N=Parameter(value=10),
-                       tau=Parameter(value=1))
+                       N=Parameter('N', value=10),
+                       tau=Parameter('tau', value=1))
     report_fit(result.params)
 
 
@@ -169,10 +169,10 @@ build the ``Parameter`` objects explicity; the following is equivalent.
  .. code-block:: none
 
     [[Variables]]
-        N:    6.96242791 +/- 0.08759210 (1.26%) (init = 10)
-        tau:  3.02664360 +/- 0.06604601 (2.18%) (init = 1)
+        N:    6.98406405 +/- 0.08844670 (1.27%) (init = 10)
+        tau:  3.01135430 +/- 0.06600023 (2.19%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.757
+        C(N, tau) = -0.756
 
 
 
@@ -183,8 +183,8 @@ By building ``Parameter`` objects explicitly, you can specify bounds
 .. code-block:: default
 
     result = model.fit(data, t=t,
-                       N=Parameter(value=7, vary=False),
-                       tau=Parameter(value=1, min=0))
+                       N=Parameter('N', value=7, vary=False),
+                       tau=Parameter('tau', value=1, min=0))
     report_fit(result.params)
 
 
@@ -199,7 +199,7 @@ By building ``Parameter`` objects explicitly, you can specify bounds
 
     [[Variables]]
         N:    7 (fixed)
-        tau:  3.00553487 +/- 0.04261584 (1.42%) (init = 1)
+        tau:  3.00247383 +/- 0.04292226 (1.43%) (init = 1)
 
 
 
@@ -232,10 +232,10 @@ and pass them to ``fit``.
  .. code-block:: none
 
     [[Variables]]
-        N:    6.96242789 +/- 0.08759211 (1.26%) (init = 10)
-        tau:  3.02664362 +/- 0.06604564 (2.18%) (init = 1)
+        N:    6.98406394 +/- 0.08844674 (1.27%) (init = 10)
+        tau:  3.01135441 +/- 0.06599962 (2.19%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.757
+        C(N, tau) = -0.756
 
 
 
@@ -259,10 +259,10 @@ properties (``min``, ``max``, ``vary``).
  .. code-block:: none
 
     [[Variables]]
-        N:    6.96242789 +/- 0.08759211 (1.26%) (init = 10)
-        tau:  3.02664362 +/- 0.06604564 (2.18%) (init = 1)
+        N:    6.98406394 +/- 0.08844674 (1.27%) (init = 10)
+        tau:  3.01135441 +/- 0.06599962 (2.19%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.757
+        C(N, tau) = -0.756
 
 
 
@@ -317,8 +317,8 @@ of the fit in term of ``weights``, ``sigma=1/weights``.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.32046022 +/- 0.26470598 (3.62%) (init = 10)
-        tau:  2.85770851 +/- 0.09381294 (3.28%) (init = 1)
+        N:    7.33054985 +/- 0.26968212 (3.68%) (init = 10)
+        tau:  2.84538080 +/- 0.09473422 (3.33%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(N, tau) = -0.929
 
@@ -351,10 +351,10 @@ You can choose to ``omit`` (i.e., skip over) missing values instead.
  .. code-block:: none
 
     [[Variables]]
-        N:    6.96366760 +/- 0.08808108 (1.26%) (init = 10)
-        tau:  3.02568104 +/- 0.06631720 (2.19%) (init = 1)
+        N:    6.99349787 +/- 0.08886695 (1.27%) (init = 10)
+        tau:  3.00311360 +/- 0.06590577 (2.19%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.758
+        C(N, tau) = -0.757
 
 
 
@@ -403,8 +403,8 @@ automatically aligned to the correct section of ``t`` using Series' index.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.28271532 +/- 0.24764814 (3.40%) (init = 10)
-        tau:  2.89622228 +/- 0.13198954 (4.56%) (init = 1)
+        N:    7.44820824 +/- 0.24899891 (3.34%) (init = 10)
+        tau:  2.80229162 +/- 0.12228516 (4.36%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(N, tau) = -0.932
 
@@ -430,8 +430,8 @@ Data with missing entries and an unequal length still aligns properly.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.28349997 +/- 0.24828342 (3.41%) (init = 10)
-        tau:  2.89551321 +/- 0.13236296 (4.57%) (init = 1)
+        N:    7.46253423 +/- 0.24975620 (3.35%) (init = 10)
+        tau:  2.79210670 +/- 0.12172740 (4.36%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(N, tau) = -0.932
 
@@ -440,7 +440,7 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.189 seconds)
+   **Total running time of the script:** ( 0 minutes  0.209 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:

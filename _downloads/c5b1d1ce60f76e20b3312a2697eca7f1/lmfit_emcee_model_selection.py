@@ -2,8 +2,8 @@
 Model Selection using lmfit and emcee
 =====================================
 
-FIXME: this is an useful examples; however, it doesn't seem to run correctly
-anymore....
+FIXME: this is a useful examples; however, it doesn't run correctly anymore as
+the PTSampler was removed in emcee v3...
 
 """
 ###############################################################################
@@ -139,7 +139,8 @@ for i in range(4):
     # do the sampling
     mini.append(lmfit.Minimizer(lnprob, res[i].params))
     out = mini[i].emcee(steps=total_steps, ntemps=ntemps, workers=workers,
-                        reuse_sampler=False, float_behavior='posterior')
+                        reuse_sampler=False, float_behavior='posterior',
+                        progress=False)
     # get the evidence
     print(i, total_steps, mini[i].sampler.thermodynamic_integration_log_evidence())
     log_evidence.append(mini[i].sampler.thermodynamic_integration_log_evidence()[0])
@@ -152,7 +153,7 @@ for j in range(6):
     for i in range(4):
         # do the sampling
         res = mini[i].emcee(burn=burn, steps=100, thin=thin, ntemps=ntemps,
-                            workers=workers, reuse_sampler=True)
+                            workers=workers, reuse_sampler=True, progress=False)
         # get the evidence
         print(i, total_steps, mini[i].sampler.thermodynamic_integration_log_evidence())
         log_evidence.append(mini[i].sampler.thermodynamic_integration_log_evidence()[0])

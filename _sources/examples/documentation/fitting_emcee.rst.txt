@@ -52,31 +52,34 @@ doc_fitting_emcee.py
         C(a2, t1) = -0.928
         C(t1, t2) = -0.885
         C(a1, t1) = -0.609
+    The chain is shorter than 50 times the integrated autocorrelation time for 5 parameter(s). Use this estimate with caution and run a longer chain!
+    N/50 = 20;
+    tau: [42.56866178 46.31856223 46.34907107 46.97295144 38.29346367]
 
     median of posterior probability distribution
     --------------------------------------------
     [[Variables]]
-        a1:         2.99347646 +/- 0.14953359 (5.00%) (init = 2.986237)
-        a2:        -4.33830770 +/- 0.12985090 (2.99%) (init = -4.335256)
-        t1:         1.32011463 +/- 0.14590321 (11.05%) (init = 1.309932)
-        t2:         11.8196768 +/- 0.51157526 (4.33%) (init = 11.80991)
-        __lnsigma: -2.32593246 +/- 0.04430796 (1.90%) (init = -2.302585)
+        a1:         2.99273590 +/- 0.14795943 (4.94%) (init = 2.986237)
+        a2:        -4.34510429 +/- 0.12509158 (2.88%) (init = -4.335256)
+        t1:         1.32575254 +/- 0.14478422 (10.92%) (init = 1.309932)
+        t2:         11.7909996 +/- 0.48119246 (4.08%) (init = 11.80991)
+        __lnsigma: -2.32735355 +/- 0.04399601 (1.89%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) =  0.982
-        C(a2, t1) = -0.932
-        C(t1, t2) = -0.887
-        C(a1, t1) = -0.519
-        C(a1, a2) =  0.211
-        C(a1, t2) =  0.165
+        C(a2, t2) =  0.979
+        C(a2, t1) = -0.939
+        C(t1, t2) = -0.896
+        C(a1, t1) = -0.498
+        C(a1, a2) =  0.206
+        C(a1, t2) =  0.175
 
     Maximum likelihood Estimation
     -----------------------------
-    <Parameter 'a1', 3.041045356943767, bounds=[-inf:inf]>
-    <Parameter 'a2', -4.347093950987428, bounds=[-inf:inf]>
-    <Parameter 't1', 1.3022176994120342, bounds=[-inf:inf]>
-    <Parameter 't2', 11.768254890901048, bounds=[-inf:inf]>
-    1 sigma spread 0.14632880940673365
-    2 sigma spread 0.28596106188635373
+    <Parameter 'a1', value=2.9906874726524726, bounds=[-inf:inf]>
+    <Parameter 'a2', value=-4.35008975094292, bounds=[-inf:inf]>
+    <Parameter 't1', value=1.322477365772526, bounds=[-inf:inf]>
+    <Parameter 't2', value=11.764400319132873, bounds=[-inf:inf]>
+    1 sigma spread 0.14501906108658946
+    2 sigma spread 0.2985828649641594
 
 
 
@@ -139,12 +142,25 @@ doc_fitting_emcee.py
     mi.params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2))
 
     res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300,
-                         steps=1000, thin=20, params=mi.params, is_weighted=False)
+                         steps=1000, thin=20, params=mi.params, is_weighted=False,
+                         progress=False)
 
     if HASPYLAB and HASCORNER:
         emcee_corner = corner.corner(res.flatchain, labels=res.var_names,
                                      truths=list(res.params.valuesdict().values()))
         plt.show()
+
+    if HASPYLAB:
+        plt.plot(res.acceptance_fraction)
+        plt.xlabel('walker')
+        plt.ylabel('acceptance fraction')
+        plt.show()
+
+    if hasattr(res, "acor"):
+        print("Autocorrelation time for the parameters:")
+        print("----------------------------------------")
+        for i, par in enumerate(p):
+            print(par, res.acor[i])
 
     print("\nmedian of posterior probability distribution")
     print('--------------------------------------------')
@@ -177,7 +193,7 @@ doc_fitting_emcee.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  7.447 seconds)
+   **Total running time of the script:** ( 0 minutes  6.706 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:

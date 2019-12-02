@@ -179,6 +179,26 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Specifying an analytical function to calculate the Jacobian can speed-up the fitting procedure.">
+
+.. only:: html
+
+    .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_derivfunc_thumb.png
+
+        :ref:`sphx_glr_examples_example_fit_with_derivfunc.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_fit_with_derivfunc
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information pleas...">
 
 .. only:: html
@@ -199,13 +219,13 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Specifying an analytical function to calculate the Jacobian can speed-up the fitting procedure.">
+    <div class="sphx-glr-thumbcontainer" tooltip="Outliers can sometimes be identified by assessing the influence of each datapoint. To assess th...">
 
 .. only:: html
 
-    .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_derivfunc_thumb.png
+    .. figure:: /examples/images/thumb/sphx_glr_example_detect_outliers_thumb.png
 
-        :ref:`sphx_glr_examples_example_fit_with_derivfunc.py`
+        :ref:`sphx_glr_examples_example_detect_outliers.py`
 
 .. raw:: html
 
@@ -215,7 +235,7 @@ below currently do *not* follow these guidelines yet.
 .. toctree::
    :hidden:
 
-   /examples/example_fit_with_derivfunc
+   /examples/example_detect_outliers
 
 .. raw:: html
 
@@ -279,7 +299,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is an useful examples; however, it doesn&#x27;t seem to run correctly anymore....">
+    <div class="sphx-glr-thumbcontainer" tooltip="FIXME: this is a useful examples; however, it doesn&#x27;t run correctly anymore as the PTSampler wa...">
 
 .. only:: html
 

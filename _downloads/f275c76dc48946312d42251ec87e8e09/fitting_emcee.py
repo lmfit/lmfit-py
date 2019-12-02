@@ -56,12 +56,25 @@ if HASPYLAB:
 mi.params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2))
 
 res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300,
-                     steps=1000, thin=20, params=mi.params, is_weighted=False)
+                     steps=1000, thin=20, params=mi.params, is_weighted=False,
+                     progress=False)
 
 if HASPYLAB and HASCORNER:
     emcee_corner = corner.corner(res.flatchain, labels=res.var_names,
                                  truths=list(res.params.valuesdict().values()))
     plt.show()
+
+if HASPYLAB:
+    plt.plot(res.acceptance_fraction)
+    plt.xlabel('walker')
+    plt.ylabel('acceptance fraction')
+    plt.show()
+
+if hasattr(res, "acor"):
+    print("Autocorrelation time for the parameters:")
+    print("----------------------------------------")
+    for i, par in enumerate(p):
+        print(par, res.acor[i])
 
 print("\nmedian of posterior probability distribution")
 print('--------------------------------------------')

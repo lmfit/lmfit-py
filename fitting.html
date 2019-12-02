@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
@@ -169,7 +170,7 @@ function can either return the residuals array or a single scalar
 value. The function must have the signature:
 <cite>fcn(params, *args, **kws)</cite></p></li>
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>) – Contains the Parameters for the model.</p></li>
-<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Name of the fitting method to use. Valid values are:</p>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Name of the fitting method to use. Valid values are:</p>
 <ul>
 <li><p><cite>’leastsq’</cite>: Levenberg-Marquardt (default)</p></li>
 <li><p><cite>’least_squares’</cite>: Least-Squares minimization, using Trust Region Reflective method</p></li>
@@ -186,14 +187,14 @@ value. The function must have the signature:
 <li><p><cite>’bfgs’</cite>: BFGS</p></li>
 <li><p><cite>’tnc’</cite>: Truncated Newton</p></li>
 <li><p><cite>’trust-ncg’</cite>: Newton-CG trust-region</p></li>
-<li><p><cite>’trust-exact’</cite>: nearly exact trust-region (SciPy &gt;= 1.0)</p></li>
-<li><p><cite>’trust-krylov’</cite>: Newton GLTR trust-region (SciPy &gt;= 1.0)</p></li>
-<li><p><cite>’trust-constr’</cite>: trust-region for constrained optimization (SciPy &gt;= 1.1)</p></li>
+<li><p><cite>’trust-exact’</cite>: nearly exact trust-region</p></li>
+<li><p><cite>’trust-krylov’</cite>: Newton GLTR trust-region</p></li>
+<li><p><cite>’trust-constr’</cite>: trust-region for constrained optimization</p></li>
 <li><p><cite>’dogleg’</cite>: Dog-leg trust-region</p></li>
 <li><p><cite>’slsqp’</cite>: Sequential Linear Squares Programming</p></li>
 <li><p><cite>’emcee’</cite>: Maximum likelihood via Monte-Carlo Markov Chain</p></li>
-<li><p><cite>’shgo’</cite>: Simplicial Homology Global Optimization (SciPy &gt;= 1.2)</p></li>
-<li><p><cite>’dual_annealing’</cite>: Dual Annealing optimization (SciPy &gt;= 1.2)</p></li>
+<li><p><cite>’shgo’</cite>: Simplicial Homology Global Optimization</p></li>
+<li><p><cite>’dual_annealing’</cite>: Dual Annealing optimization</p></li>
 </ul>
 <p>In most cases, these methods wrap and use the method of the same
 name from <cite>scipy.optimize</cite>, or use <cite>scipy.optimize.minimize</cite> with
@@ -203,15 +204,15 @@ the same <cite>method</cite> argument.  Thus ‘<cite>leastsq</cite>’ will use
 <p>For more details on the fitting methods please refer to the
 <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/optimize.html">SciPy docs</a>.</p>
 </p></li>
-<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, </em><em>optional</em>) – Positional arguments to pass to <cite>fcn</cite>.</p></li>
-<li><p><strong>kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments to pass to <cite>fcn</cite>.</p></li>
+<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><em>optional</em>) – Positional arguments to pass to <cite>fcn</cite>.</p></li>
+<li><p><strong>kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments to pass to <cite>fcn</cite>.</p></li>
 <li><p><strong>iter_cb</strong> (<em>callable</em><em>, </em><em>optional</em>) – Function to be called at each fit iteration. This function should
 have the signature <cite>iter_cb(params, iter, resid, *args, **kws)</cite>,
 where <cite>params</cite> will have the current parameter values, <cite>iter</cite>
 the iteration number, <cite>resid</cite> the current residual array, and <cite>*args</cite>
 and <cite>**kws</cite> as passed to the objective function.</p></li>
-<li><p><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to automatically scale the covariance matrix (default is True).</p></li>
-<li><p><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Specifies action if <cite>userfcn</cite> (or a Jacobian) returns NaN
+<li><p><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to automatically scale the covariance matrix (default is True).</p></li>
+<li><p><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Specifies action if <cite>userfcn</cite> (or a Jacobian) returns NaN
 values. One of:</p>
 <ul>
 <li><p>’raise’ : a <cite>ValueError</cite> is raised</p></li>
@@ -219,12 +220,12 @@ values. One of:</p>
 <li><p>’omit’ : non-finite values are filtered</p></li>
 </ul>
 </p></li>
-<li><p><strong>reduce_fcn</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to convert a residual array to a scalar value for the scalar
+<li><p><strong>reduce_fcn</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to convert a residual array to a scalar value for the scalar
 minimizers. See notes in <cite>Minimizer</cite>.</p></li>
-<li><p><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
+<li><p><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
 solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires the
 <cite>numdifftools</cite> package to be installed.</p></li>
-<li><p><strong>**fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Options to pass to the minimizer being used.</p></li>
+<li><p><strong>**fit_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Options to pass to the minimizer being used.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -406,13 +407,13 @@ uncertainties and correlations if <code class="docutils literal notranslate"><sp
 <td><p><code class="docutils literal notranslate"><span class="pre">trust-ncg</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Exact trust-region</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">trust-exact</span></code> (SciPy &gt;= 1.0)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">trust-exact</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Newton GLTR trust-region</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">trust-krylov</span></code> (SciPy &gt;= 1.0)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">trust-krylov</span></code></p></td>
 </tr>
 <tr class="row-even"><td><p>Constrained trust-region</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">trust-constr</span></code> (SciPy &gt;= 1.1)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">trust-constr</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>Dogleg</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">dogleg</span></code></p></td>
@@ -518,7 +519,7 @@ in the <a class="reference internal" href="#lmfit.minimizer.MinimizerResult.para
 underlying solver. Refer to <cite>message</cite> for details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -531,7 +532,7 @@ useful for understanding the values in <a class="reference internal" href="#lmfi
 <a class="reference internal" href="#lmfit.minimizer.MinimizerResult.covar" title="lmfit.minimizer.MinimizerResult.covar"><code class="xref py py-attr docutils literal notranslate"><span class="pre">covar</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -554,7 +555,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>List of initial values for variable parameters using <a class="reference internal" href="#lmfit.minimizer.MinimizerResult.var_names" title="lmfit.minimizer.MinimizerResult.var_names"><code class="xref py py-attr docutils literal notranslate"><span class="pre">var_names</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)">list</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.8)">list</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -565,7 +566,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>Dictionary of initial values for variable parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)">dict</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -576,7 +577,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>Number of function evaluations.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -587,7 +588,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>True if the fit succeeded, otherwise False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -598,7 +599,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>True if uncertainties were estimated, otherwise False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)">bool</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -609,7 +610,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>Message about fit success.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -620,7 +621,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>Integer error value from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> (<cite>leastsq</cite> only).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -631,7 +632,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>Message from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> (<cite>leastsq</cite> only).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -642,7 +643,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>Number of variables in fit: <span class="math notranslate nohighlight">\(N_{\rm varys}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -653,7 +654,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>Number of data points: <span class="math notranslate nohighlight">\(N\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -664,7 +665,7 @@ corresponding to <a class="reference internal" href="#lmfit.minimizer.MinimizerR
 <dd><p>Degrees of freedom in fit: <span class="math notranslate nohighlight">\(N - N_{\rm varys}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)">int</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)">int</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -687,7 +688,7 @@ function when using the best-fit values of the parameters.</p>
 <dd><p>Chi-square: <span class="math notranslate nohighlight">\(\chi^2 = \sum_i^N [{\rm Resid}_i]^2\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -699,7 +700,7 @@ function when using the best-fit values of the parameters.</p>
 <span class="math notranslate nohighlight">\(\chi^2_{\nu}= {\chi^2} / {(N - N_{\rm varys})}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -711,7 +712,7 @@ function when using the best-fit values of the parameters.</p>
 <span class="math notranslate nohighlight">\(N \ln(\chi^2/N) + 2 N_{\rm varys}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -723,7 +724,7 @@ function when using the best-fit values of the parameters.</p>
 <span class="math notranslate nohighlight">\(N \ln(\chi^2/N) + \ln(N) N_{\rm varys}\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)">float</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -868,7 +869,7 @@ used to abort a fit.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>) – Parameters.</p></li>
-<li><p><strong>iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a>) – Iteration number.</p></li>
+<li><p><strong>iter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a>) – Iteration number.</p></li>
 <li><p><strong>resid</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a>) – Residual array.</p></li>
 <li><p><strong>args</strong> – Positional arguments.  Must match <code class="docutils literal notranslate"><span class="pre">args</span></code> argument to <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a></p></li>
 <li><p><strong>kws</strong> – Keyword arguments.  Must match <code class="docutils literal notranslate"><span class="pre">kws</span></code> argument to <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a></p></li>
@@ -909,8 +910,8 @@ function must have the signature:</p>
 </div>
 </p></li>
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>) – Contains the Parameters for the model.</p></li>
-<li><p><strong>fcn_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.7)"><em>tuple</em></a><em>, </em><em>optional</em>) – Positional arguments to pass to <cite>userfcn</cite>.</p></li>
-<li><p><strong>fcn_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments to pass to <cite>userfcn</cite>.</p></li>
+<li><p><strong>fcn_args</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.8)"><em>tuple</em></a><em>, </em><em>optional</em>) – Positional arguments to pass to <cite>userfcn</cite>.</p></li>
+<li><p><strong>fcn_kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Keyword arguments to pass to <cite>userfcn</cite>.</p></li>
 <li><p><strong>iter_cb</strong> (<em>callable</em><em>, </em><em>optional</em>) – <p>Function to be called at each fit iteration. This function should
 have the signature:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">iter_cb</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">iter</span><span class="p">,</span> <span class="n">resid</span><span class="p">,</span> <span class="o">*</span><span class="n">fcn_args</span><span class="p">,</span> <span class="o">**</span><span class="n">fcn_kws</span><span class="p">)</span>
@@ -920,8 +921,8 @@ have the signature:</p>
 the iteration number, <cite>resid</cite> the current residual array, and <cite>*fcn_args</cite>
 and <cite>**fcn_kws</cite> are passed to the objective function.</p>
 </p></li>
-<li><p><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to automatically scale the covariance matrix (default is True).</p></li>
-<li><p><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Specifies action if <cite>userfcn</cite> (or a Jacobian) returns NaN
+<li><p><strong>scale_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to automatically scale the covariance matrix (default is True).</p></li>
+<li><p><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Specifies action if <cite>userfcn</cite> (or a Jacobian) returns NaN
 values. One of:</p>
 <ul>
 <li><p>’raise’ : a <cite>ValueError</cite> is raised</p></li>
@@ -929,7 +930,7 @@ values. One of:</p>
 <li><p>’omit’ : non-finite values are filtered</p></li>
 </ul>
 </p></li>
-<li><p><strong>reduce_fcn</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – <p>Function to convert a residual array to a scalar value for the scalar
+<li><p><strong>reduce_fcn</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – <p>Function to convert a residual array to a scalar value for the scalar
 minimizers. Optional values are (where <cite>r</cite> is the residual array):</p>
 <ul>
 <li><p>None : sum of squares of residual [default]</p>
@@ -950,10 +951,10 @@ minimizers. Optional values are (where <cite>r</cite> is the residual array):</p
 <li><p>callable : must take one argument (<cite>r</cite>) and return a float.</p></li>
 </ul>
 </p></li>
-<li><p><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
+<li><p><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
 solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires the
 <cite>numdifftools</cite> package to be installed.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Options to pass to the minimizer being used.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Options to pass to the minimizer being used.</p></li>
 </ul>
 </dd>
 </dl>
@@ -982,7 +983,7 @@ and other data structures for the model calculation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Name of the fitting method to use. Valid values are:</p>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Name of the fitting method to use. Valid values are:</p>
 <ul>
 <li><p><cite>’leastsq’</cite>: Levenberg-Marquardt (default)</p></li>
 <li><p><cite>’least_squares’</cite>: Least-Squares minimization, using Trust Region Reflective method</p></li>
@@ -999,14 +1000,14 @@ and other data structures for the model calculation.</p>
 <li><p><cite>’bfgs’</cite>: BFGS</p></li>
 <li><p><cite>’tnc’</cite>: Truncated Newton</p></li>
 <li><p><cite>’trust-ncg’</cite>: Newton-CG trust-region</p></li>
-<li><p><cite>’trust-exact’</cite>: nearly exact trust-region (SciPy &gt;= 1.0)</p></li>
-<li><p><cite>’trust-krylov’</cite>: Newton GLTR trust-region (SciPy &gt;= 1.0)</p></li>
-<li><p><cite>’trust-constr’</cite>: trust-region for constrained optimization (SciPy &gt;= 1.1)</p></li>
+<li><p><cite>’trust-exact’</cite>: nearly exact trust-region</p></li>
+<li><p><cite>’trust-krylov’</cite>: Newton GLTR trust-region</p></li>
+<li><p><cite>’trust-constr’</cite>: trust-region for constrained optimization</p></li>
 <li><p><cite>’dogleg’</cite>: Dog-leg trust-region</p></li>
 <li><p><cite>’slsqp’</cite>: Sequential Linear Squares Programming</p></li>
 <li><p><cite>’emcee’</cite>: Maximum likelihood via Monte-Carlo Markov Chain</p></li>
-<li><p><cite>’shgo’</cite>: Simplicial Homology Global Optimization (SciPy &gt;= 1.2)</p></li>
-<li><p><cite>’dual_annealing’</cite>: Dual Annealing optimization (SciPy &gt;= 1.2)</p></li>
+<li><p><cite>’shgo’</cite>: Simplicial Homology Global Optimization</p></li>
+<li><p><cite>’dual_annealing’</cite>: Dual Annealing optimization</p></li>
 </ul>
 <p>In most cases, these methods wrap and use the method with the
 same name from <cite>scipy.optimize</cite>, or use
@@ -1082,7 +1083,7 @@ arg</p></th>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Parameters to use as starting point.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1110,7 +1111,7 @@ the standard least-squares problem).</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Parameters to use as starting point.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html">scipy.optimize.least_squares</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1163,7 +1164,7 @@ arg</p></th>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Name of the fitting method to use. One of:</p>
+<li><p><strong>method</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Name of the fitting method to use. One of:</p>
 <ul>
 <li><p>’Nelder-Mead’ (default)</p></li>
 <li><p>’L-BFGS-B’</p></li>
@@ -1174,16 +1175,16 @@ arg</p></th>
 <li><p>’BFGS’</p></li>
 <li><p>’TNC’</p></li>
 <li><p>’trust-ncg’</p></li>
-<li><p>’trust-exact’ (SciPy &gt;= 1.0)</p></li>
-<li><p>’trust-krylov’ (SciPy &gt;= 1.0)</p></li>
-<li><p>’trust-constr’ (SciPy &gt;= 1.1)</p></li>
+<li><p>’trust-exact’</p></li>
+<li><p>’trust-krylov’</p></li>
+<li><p>’trust-constr’</p></li>
 <li><p>’dogleg’</p></li>
 <li><p>’SLSQP’</p></li>
 <li><p>’differential_evolution’</p></li>
 </ul>
 </p></li>
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Parameters to use as starting point.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options pass to <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html">scipy.optimize.minimize</a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1281,12 +1282,12 @@ function to minimize has been properly set up.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Contains the Parameters for the model. If None, then the
 Parameters used to initialize the Minimizer object are used.</p></li>
-<li><p><strong>Ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of grid points along the axes, if not otherwise specified
+<li><p><strong>Ns</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Number of grid points along the axes, if not otherwise specified
 (see Notes).</p></li>
-<li><p><strong>keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Number of best candidates from the brute force method that are
+<li><p><strong>keep</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Number of best candidates from the brute force method that are
 stored in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">candidates</span></code> attribute. If ‘all’, then all grid
 points from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a> are stored as candidates.</p></li>
-<li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em> or </em><em>map-like callable</em><em>, </em><em>optional</em>) – For parallel evaluation of the grid, added in SciPy v1.3 (see
+<li><p><strong>workers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> or </em><em>map-like callable</em><em>, </em><em>optional</em>) – For parallel evaluation of the grid, added in SciPy v1.3 (see
 <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brute.html">scipy.optimize.brute</a> for more details).</p></li>
 </ul>
 </dd>
@@ -1382,7 +1383,7 @@ and is an efficient algorithm to find the global minimum.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Contains the Parameters for the model. If None, then the
 Parameters used to initialize the Minimizer object are used.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – <p>Minimizer options to pass to the ampgo algorithm, the options are
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – <p>Minimizer options to pass to the ampgo algorithm, the options are
 listed below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>local: str (default is &#39;L-BFGS-B&#39;)
     Name of the local minimization method. Valid options are:
@@ -1453,7 +1454,7 @@ located here:</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Contains the Parameters for the model. If None, then the
 Parameters used to initialize the Minimizer object are used.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to the SHGO algorithm.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to the SHGO algorithm.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1482,7 +1483,7 @@ default arguments.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Contains the Parameters for the model. If None, then the
 Parameters used to initialize the Minimizer object are used.</p></li>
-<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to the dual_annealing algorithm.</p></li>
+<li><p><strong>**kws</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a><em>, </em><em>optional</em>) – Minimizer options to pass to the dual_annealing algorithm.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1503,48 +1504,43 @@ The return values specific to <a class="reference external" href="https://docs.s
 <dl class="method">
 <dt id="lmfit.minimizer.Minimizer.emcee">
 <code class="sig-prename descclassname">Minimizer.</code><code class="sig-name descname">emcee</code><span class="sig-paren">(</span><em class="sig-param">params=None</em>, <em class="sig-param">steps=1000</em>, <em class="sig-param">nwalkers=100</em>, <em class="sig-param">burn=0</em>, <em class="sig-param">thin=1</em>, <em class="sig-param">ntemps=1</em>, <em class="sig-param">pos=None</em>, <em class="sig-param">reuse_sampler=False</em>, <em class="sig-param">workers=1</em>, <em class="sig-param">float_behavior='posterior'</em>, <em class="sig-param">is_weighted=True</em>, <em class="sig-param">seed=None</em>, <em class="sig-param">progress=True</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.minimizer.Minimizer.emcee" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bayesian sampling of the posterior distribution using <cite>emcee</cite>.</p>
-<p>Bayesian sampling of the posterior distribution for the parameters
-using the <cite>emcee</cite> Markov Chain Monte Carlo package. The method assumes
-that the prior is Uniform. You need to have <cite>emcee</cite> installed to use
-this method.</p>
+<dd><p>Bayesian sampling of the posterior distribution using the <cite>emcee</cite>
+Markov Chain Monte Carlo package.</p>
+<p>The method assumes that the prior is Uniform. You need to have <cite>emcee</cite>
+version 3 installed to use this method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Parameters to use as starting point. If this is not specified
-then the Parameters used to initialize the Minimizer object are
-used.</p></li>
-<li><p><strong>steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – How many samples you would like to draw from the posterior
+<li><p><strong>params</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a>, optional) – Parameters to use as starting point. If this is not specified then
+the Parameters used to initialize the Minimizer object are used.</p></li>
+<li><p><strong>steps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – How many samples you would like to draw from the posterior
 distribution for each of the walkers?</p></li>
-<li><p><strong>nwalkers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Should be set so <span class="math notranslate nohighlight">\(nwalkers &gt;&gt; nvarys\)</span>, where <cite>nvarys</cite> are
+<li><p><strong>nwalkers</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Should be set so <span class="math notranslate nohighlight">\(nwalkers &gt;&gt; nvarys\)</span>, where <cite>nvarys</cite> are
 the number of parameters being varied during the fit.
-“Walkers are the members of the ensemble. They are almost like
+‘Walkers are the members of the ensemble. They are almost like
 separate Metropolis-Hastings chains but, of course, the proposal
 distribution for a given walker depends on the positions of all
-the other walkers in the ensemble.” - from the <cite>emcee</cite> webpage.</p></li>
-<li><p><strong>burn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Discard this many samples from the start of the sampling regime.</p></li>
-<li><p><strong>thin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – Only accept 1 in every <cite>thin</cite> samples.</p></li>
-<li><p><strong>ntemps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – If <cite>ntemps &gt; 1</cite> perform a Parallel Tempering.</p></li>
-<li><p><strong>pos</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Specify the initial positions for the sampler.  If <cite>ntemps == 1</cite>
-then <cite>pos.shape</cite> should be <cite>(nwalkers, nvarys)</cite>. Otherwise,
-<cite>(ntemps, nwalkers, nvarys)</cite>. You can also initialise using a
-previous chain that had the same <cite>ntemps</cite>, <cite>nwalkers</cite> and
-<cite>nvarys</cite>. Note that <cite>nvarys</cite> may be one larger than you expect it
-to be if your <cite>userfcn</cite> returns an array and <cite>is_weighted is
-False</cite>.</p></li>
-<li><p><strong>reuse_sampler</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – If you have already run <cite>emcee</cite> on a given <cite>Minimizer</cite> object then
-it possesses an internal <code class="docutils literal notranslate"><span class="pre">sampler</span></code> attribute. You can continue to
-draw from the same sampler (retaining the chain history) if you set
-this option to True. Otherwise a new sampler is created. The
-<cite>nwalkers</cite>, <cite>ntemps</cite>, <cite>pos</cite>, and <cite>params</cite> keywords are ignored with
-this option.
+the other walkers in the ensemble.’ - from the <cite>emcee</cite> webpage.</p></li>
+<li><p><strong>burn</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Discard this many samples from the start of the sampling regime.</p></li>
+<li><p><strong>thin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Only accept 1 in every <cite>thin</cite> samples.</p></li>
+<li><p><strong>ntemps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>deprecated</em>) – ntemps has no effect.</p></li>
+<li><p><strong>pos</strong> (<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v1.17)"><em>numpy.ndarray</em></a><em>, </em><em>optional</em>) – Specify the initial positions for the sampler, an ndarray of shape
+<cite>(nwalkers, nvarys)</cite>.  You can also initialise using a previous
+chain of the same <cite>nwalkers</cite> and <cite>nvarys</cite>. Note that <cite>nvarys</cite> may
+be one larger than you expect it to be if your <cite>userfcn</cite> returns
+an array and <cite>is_weighted</cite> is <cite>False</cite>.</p></li>
+<li><p><strong>reuse_sampler</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Set to <cite>True</cite> if you have already run <cite>emcee</cite> with the <cite>Minimizer</cite>
+instance and want to continue to draw from its <code class="docutils literal notranslate"><span class="pre">sampler</span></code> (and so
+retain the chain history). If <cite>False</cite>,  a new sampler is created.
+The keywords <cite>nwalkers</cite>, <cite>pos</cite>, and <cite>params</cite> will be ignored when
+this is set, as they will be set by the existing sampler.
 <strong>Important</strong>: the Parameters used to create the sampler must not
 change in-between calls to <cite>emcee</cite>. Alteration of Parameters
 would include changed <code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>, <code class="docutils literal notranslate"><span class="pre">vary</span></code> and <code class="docutils literal notranslate"><span class="pre">expr</span></code>
 attributes. This may happen, for example, if you use an altered
 Parameters object and call the <cite>minimize</cite> method in-between calls
 to <cite>emcee</cite>.</p></li>
-<li><p><strong>workers</strong> (<em>Pool-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><em>int</em></a><em>, </em><em>optional</em>) – For parallelization of sampling.  It can be any Pool-like object
+<li><p><strong>workers</strong> (<em>Pool-like</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – For parallelization of sampling.  It can be any Pool-like object
 with a map method that follows the same calling sequence as the
 built-in <cite>map</cite> function. If int is given as the argument, then a
 multiprocessing-based pool is spawned internally with the
@@ -1553,17 +1549,11 @@ parallelization and ‘joblib’-based parallelization pools can also
 be used here. <strong>Note</strong>: because of multiprocessing overhead it may
 only be worth parallelising if the objective function is expensive
 to calculate, or if there are a large number of objective
-evaluations per step (<cite>ntemps * nwalkers * nvarys</cite>).</p></li>
-<li><p><strong>float_behavior</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><em>str</em></a><em>, </em><em>optional</em>) – <p>Specifies meaning of the objective function output if it returns a
-float. One of:</p>
-<ul>
-<li><p>’posterior’ - objective function returns a log-posterior
-probability</p></li>
-<li><p>’chi2’ - objective function returns <span class="math notranslate nohighlight">\(\chi^2\)</span></p></li>
-</ul>
-<p>See Notes for further details.</p>
-</p></li>
-<li><p><strong>is_weighted</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Has your objective function been weighted by measurement
+evaluations per step (<cite>nwalkers * nvarys</cite>).</p></li>
+<li><p><strong>float_behavior</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Meaning of float (scalar) output of objective function. Use
+‘posterior’ if it returns a log-posterior probability or ‘chi2’
+if it returns <span class="math notranslate nohighlight">\(\chi^2\)</span>. See Notes for further details.</p></li>
+<li><p><strong>is_weighted</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Has your objective function been weighted by measurement
 uncertainties? If <cite>is_weighted is True</cite> then your objective
 function is assumed to return residuals that have been divided by
 the true measurement uncertainty <cite>(data - model) / sigma</cite>. If
@@ -1581,85 +1571,71 @@ used, seeded with <cite>seed</cite>.
 If <cite>seed</cite> is already a <cite>numpy.random.RandomState</cite> instance, then
 that <cite>numpy.random.RandomState</cite> instance is used.
 Specify <cite>seed</cite> for repeatable minimizations.</p></li>
+<li><p><strong>progress</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Print a progress bar to the console while running.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>MinimizerResult object containing updated params, statistics,
-etc. The updated params represent the median (50th percentile) of
-all the samples, whilst the parameter uncertainties are half of the
-difference between the 15.87 and 84.13 percentiles.
-The <cite>MinimizerResult</cite> also contains the <code class="docutils literal notranslate"><span class="pre">chain</span></code>, <code class="docutils literal notranslate"><span class="pre">flatchain</span></code>
-and <code class="docutils literal notranslate"><span class="pre">lnprob</span></code> attributes. The <code class="docutils literal notranslate"><span class="pre">chain</span></code> and <code class="docutils literal notranslate"><span class="pre">flatchain</span></code>
-attributes contain the samples and have the shape
-<cite>(nwalkers, (steps - burn) // thin, nvarys)</cite> or
-<cite>(ntemps, nwalkers, (steps - burn) // thin, nvarys)</cite>,
-depending on whether Parallel tempering was used or not.
-<cite>nvarys</cite> is the number of parameters that are allowed to vary.
-The <code class="docutils literal notranslate"><span class="pre">flatchain</span></code> attribute is a <cite>pandas.DataFrame</cite> of the
-flattened chain, <cite>chain.reshape(-1, nvarys)</cite>. To access flattened
-chain values for a particular parameter use
-<cite>result.flatchain[parname]</cite>. The <code class="docutils literal notranslate"><span class="pre">lnprob</span></code> attribute contains the
-log probability for each sample in <code class="docutils literal notranslate"><span class="pre">chain</span></code>. The sample with the
-highest probability corresponds to the maximum likelihood estimate.</p>
+etc. The updated params represent the median of the samples,
+while the uncertainties are half the difference of the 15.87
+and 84.13 percentiles.  The <cite>MinimizerResult</cite> contains a few
+additional attributes: <code class="docutils literal notranslate"><span class="pre">chain</span></code> contain the samples and has
+shape <cite>((steps - burn) // thin, nwalkers, nvarys)</cite>.
+<code class="docutils literal notranslate"><span class="pre">flatchain</span></code> is a <cite>pandas.DataFrame</cite> of the flattened chain,
+that can be accessed with <cite>result.flatchain[parname]</cite>.
+<code class="docutils literal notranslate"><span class="pre">lnprob</span></code> contains the log probability for each sample in
+<code class="docutils literal notranslate"><span class="pre">chain</span></code>.  The sample with the highest probability corresponds
+to the maximum likelihood estimate.  <code class="docutils literal notranslate"><span class="pre">acor</span></code> is an array
+containing the autocorrelation time for each parameter if the
+autocorrelation time can be computed from the chain. Finally,
+<code class="docutils literal notranslate"><span class="pre">acceptance_fraction</span></code> (an array of the fraction of steps
+accepted for each walker).</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><a class="reference internal" href="#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code></a></p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>This method samples the posterior distribution of the parameters using
-Markov Chain Monte Carlo.  To do so it needs to calculate the
-log-posterior probability of the model parameters, <cite>F</cite>, given the data,
-<cite>D</cite>, <span class="math notranslate nohighlight">\(\ln p(F_{true} | D)\)</span>. This ‘posterior probability’ is
-calculated as:</p>
+<p>This method samples the posterior distribution of the parameters
+using Markov Chain Monte Carlo.  It calculates the log-posterior
+probability of the model parameters, <cite>F</cite>, given the data, <cite>D</cite>,
+<span class="math notranslate nohighlight">\(\ln p(F_{true} | D)\)</span>. This ‘posterior probability’ is given by:</p>
 <div class="math notranslate nohighlight">
 \[\ln p(F_{true} | D) \propto \ln p(D | F_{true}) + \ln p(F_{true})\]</div>
 <p>where <span class="math notranslate nohighlight">\(\ln p(D | F_{true})\)</span> is the ‘log-likelihood’ and
 <span class="math notranslate nohighlight">\(\ln p(F_{true})\)</span> is the ‘log-prior’. The default log-prior
-encodes prior information already known about the model. This method
-assumes that the log-prior probability is <cite>-numpy.inf</cite> (impossible) if
-the one of the parameters is outside its limits. The log-prior probability
-term is zero if all the parameters are inside their bounds (known as a
-uniform prior). The log-likelihood function is given by <a class="footnote-reference brackets" href="#id2" id="id1">1</a>:</p>
+encodes prior information known about the model that the log-prior
+probability is <cite>-numpy.inf</cite> (impossible) if any of the parameters
+is outside its limits, and is zero if all the parameters are inside
+their bounds (uniform prior). The log-likelihood function is <a class="footnote-reference brackets" href="#id2" id="id1">1</a>:</p>
 <div class="math notranslate nohighlight">
 \[\ln p(D|F_{true}) = -\frac{1}{2}\sum_n \left[\frac{(g_n(F_{true}) - D_n)^2}{s_n^2}+\ln (2\pi s_n^2)\right]\]</div>
-<p>The first summand in the square brackets represents the residual for a
-given datapoint (<span class="math notranslate nohighlight">\(g\)</span> being the generative model, <span class="math notranslate nohighlight">\(D_n\)</span> the
-data and <span class="math notranslate nohighlight">\(s_n\)</span> the standard deviation, or measurement
-uncertainty, of the datapoint). This term represents <span class="math notranslate nohighlight">\(\chi^2\)</span>
-when summed over all data points.
-Ideally the objective function used to create <cite>lmfit.Minimizer</cite> should
-return the log-posterior probability, <span class="math notranslate nohighlight">\(\ln p(F_{true} | D)\)</span>.
-However, since the in-built log-prior term is zero, the objective
-function can also just return the log-likelihood, unless you wish to
-create a non-uniform prior.</p>
-<p>If a float value is returned by the objective function then this value
-is assumed by default to be the log-posterior probability, i.e.
-<cite>float_behavior is ‘posterior’</cite>. If your objective function returns
-<span class="math notranslate nohighlight">\(\chi^2\)</span>, then you should use a value of <cite>‘chi2’</cite> for
-<cite>float_behavior</cite>. <cite>emcee</cite> will then multiply your <span class="math notranslate nohighlight">\(\chi^2\)</span> value
-by -0.5 to obtain the posterior probability.</p>
-<p>However, the default behaviour of many objective functions is to return
-a vector of (possibly weighted) residuals. Therefore, if your objective
-function returns a vector, <cite>res</cite>, then the vector is assumed to contain
-the residuals. If <cite>is_weighted is True</cite> then your residuals are assumed
-to be correctly weighted by the standard deviation (measurement
-uncertainty) of the data points (<cite>res = (data - model) / sigma</cite>) and
-the log-likelihood (and log-posterior probability) is calculated as:
-<cite>-0.5 * numpy.sum(res**2)</cite>.
-This ignores the second summand in the square brackets. Consequently,
-in order to calculate a fully correct log-posterior probability value
-your objective function should return a single value. If
-<cite>is_weighted is False</cite> then the data uncertainty, <cite>s_n</cite>, will be
-treated as a nuisance parameter and will be marginalized out. This is
-achieved by employing a strictly positive uncertainty
-(homoscedasticity) for each data point, <span class="math notranslate nohighlight">\(s_n = \exp(\_\_lnsigma)\)</span>.
-<cite>__lnsigma</cite> will be present in <cite>MinimizerResult.params</cite>, as well as
-<cite>Minimizer.chain</cite>, <cite>nvarys</cite> will also be increased by one.</p>
+<p>The first term represents the residual (<span class="math notranslate nohighlight">\(g\)</span> being the generative
+model, <span class="math notranslate nohighlight">\(D_n\)</span> the data and <span class="math notranslate nohighlight">\(s_n\)</span> the measurement
+uncertainty). This gives <span class="math notranslate nohighlight">\(\chi^2\)</span> when summed over all data
+points.  The objective function may also return the log-posterior
+probability, <span class="math notranslate nohighlight">\(\ln p(F_{true} | D)\)</span>.  Since the default
+log-prior term is zero, the objective function can also just return
+the log-likelihood, unless you wish to create a non-uniform prior.</p>
+<p>If the objective function returns a float value, this is assumed by
+default to be the log-posterior probability, (<cite>float_behavior</cite> default
+is ‘posterior’. If your objective function returns <span class="math notranslate nohighlight">\(\chi^2\)</span>,
+then you should use a value of <cite>float_behavior=’chi2’</cite>.</p>
+<p>By default objective functions may return an ndarray of (possibly
+weighted) residuals. In this case, use <cite>is_weighted</cite> to select whether
+these are correctly weighted by measurement uncertainty.  Note that
+this ignores the second term above, so that to calculate a correct
+log-posterior probability value your objective function should return
+a float value.  With <cite>is_weighted=False</cite> the data uncertainty, <cite>s_n</cite>,
+will be treated as a nuisance parameter to be marginalized out. This
+uses strictly positive uncertainty (homoscedasticity) for each data
+point, <span class="math notranslate nohighlight">\(s_n = \exp(\rm{\_\_lnsigma})\)</span>.  <cite>__lnsigma</cite> will be
+present in <cite>MinimizerResult.params</cite>, as well as <cite>Minimizer.chain</cite> and
+<cite>nvarys</cite> will be increased by one.</p>
 <p class="rubric">References</p>
 <dl class="footnote brackets">
 <dt class="label" id="id2"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p><a class="reference external" href="http://dan.iel.fm/emcee/current/user/line/">http://dan.iel.fm/emcee/current/user/line/</a></p>
+<dd><p><a class="reference external" href="https://emcee.readthedocs.io">https://emcee.readthedocs.io</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1672,8 +1648,8 @@ parameters, given a set of experimental data. An example problem is a double
 exponential decay. A small amount of Gaussian noise is also added in:</p>
 <div class="docutils container">
 </div>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">lmfit</span>
@@ -1687,8 +1663,8 @@ exponential decay. A small amount of Gaussian noise is also added in:</p>
 </div>
 <img alt="_images/fitting_1_0.svg" src="_images/fitting_1_0.svg" /></div>
 <p>Create a Parameter set for the initial guesses:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
 <span class="n">p</span><span class="o">.</span><span class="n">add_many</span><span class="p">((</span><span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="mf">4.</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;t1&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;t2&#39;</span><span class="p">,</span> <span class="mf">3.</span><span class="p">,</span> <span class="bp">True</span><span class="p">))</span>
 
 <span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
@@ -1698,27 +1674,27 @@ exponential decay. A small amount of Gaussian noise is also added in:</p>
 </div>
 </div>
 <p>Solving with <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a> gives the Maximum Likelihood solution:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nelder&#39;</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nelder&#39;</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)</span>
 <span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Variables</span><span class="p">]]</span>
-    <span class="n">a1</span><span class="p">:</span>  <span class="mf">2.98623689</span> <span class="o">+/-</span> <span class="mf">0.15010519</span> <span class="p">(</span><span class="mf">5.03</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">a2</span><span class="p">:</span> <span class="o">-</span><span class="mf">4.33525597</span> <span class="o">+/-</span> <span class="mf">0.11765819</span> <span class="p">(</span><span class="mf">2.71</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
-    <span class="n">t1</span><span class="p">:</span>  <span class="mf">1.30993186</span> <span class="o">+/-</span> <span class="mf">0.13449652</span> <span class="p">(</span><span class="mf">10.27</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">t2</span><span class="p">:</span>  <span class="mf">11.8099125</span> <span class="o">+/-</span> <span class="mf">0.47172590</span> <span class="p">(</span><span class="mf">3.99</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
-<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span> <span class="mf">0.500</span><span class="p">)</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.988</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.928</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.885</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.609</span>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
+    a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
+    a2: -4.33525597 +/- 0.11765819 (2.71%) (init = 4)
+    t1:  1.30993186 +/- 0.13449652 (10.27%) (init = 3)
+    t2:  11.8099125 +/- 0.47172590 (3.99%) (init = 3)
+[[Correlations]] (unreported correlations are &lt; 0.500)
+    C(a2, t2) =  0.988
+    C(a2, t1) = -0.928
+    C(t1, t2) = -0.885
+    C(a1, t1) = -0.609
 </pre></div>
 </div>
 </div>
 <p>and plotting the fit using the Maximum Likelihood solution gives the graph below:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">residual</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1737,63 +1713,77 @@ if any of the parameters are outside their bounds.</p>
 argument for <code class="docutils literal notranslate"><span class="pre">emcee</span></code>. In that case, <code class="docutils literal notranslate"><span class="pre">emcee</span></code> will automatically add/use the
 <code class="docutils literal notranslate"><span class="pre">__lnsigma</span></code> parameter to estimate the true uncertainty in the data. To
 place boundaries on this parameter one can do:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;__lnsigma&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span> <span class="nb">min</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;__lnsigma&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span> <span class="nb">min</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">0.001</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
 <p>Now we have to set up the minimizer and do the sampling:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;emcee&#39;</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">,</span> <span class="n">burn</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-                     <span class="n">params</span><span class="o">=</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">is_weighted</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;emcee&#39;</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">,</span> <span class="n">burn</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                     <span class="n">params</span><span class="o">=</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">is_weighted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <p>Of note, the <code class="docutils literal notranslate"><span class="pre">is_weighted</span></code> argument will be ignored if your objective function
 returns a float instead of an array. See the Notes in <a class="reference internal" href="#lmfit.minimizer.Minimizer.emcee" title="lmfit.minimizer.Minimizer.emcee"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code></a> for
-more information.</p>
+more information. For the documentation we set <code class="docutils literal notranslate"><span class="pre">progress=False</span></code>; the default is to show a progress bar,
+provided that the <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> package is installed.</p>
+<p>The performance of the method (i.e., whether or not the sampling went well) can be assessed by checking
+the integrated autocorrelation time and/or the acceptance fraction of the walkers. For this specific
+example the autocorrelation time could not be estimated because the “chain is too short”. Thus, we plot
+the acceptance fraction per walker and its values (or mean value) suggests that the sampling worked as
+intended (as a rule of thumb this value should be between 0.2 and 0.5).</p>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">acceptance_fraction</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;walker&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;acceptance fraction&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="_images/fitting_7_0.svg" src="_images/fitting_7_0.svg" /></div>
 <p>Lets have a look at those posterior distributions for the parameters. This requires
 installation of the <code class="docutils literal notranslate"><span class="pre">corner</span></code> package:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">corner</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">corner</span>
 
 <span class="n">emcee_plot</span> <span class="o">=</span> <span class="n">corner</span><span class="o">.</span><span class="n">corner</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">flatchain</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">res</span><span class="o">.</span><span class="n">var_names</span><span class="p">,</span>
                            <span class="n">truths</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
 </pre></div>
 </div>
-<img alt="_images/fitting_7_0.svg" src="_images/fitting_7_0.svg" /></div>
+<img alt="_images/fitting_8_0.svg" src="_images/fitting_8_0.svg" /></div>
 <p>The values reported in the <a class="reference internal" href="#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code></a> are the medians of the
 probability distributions and a 1 <span class="math notranslate nohighlight">\(\sigma\)</span> quantile, estimated as half the
 difference between the 15.8 and 84.2 percentiles. The median value is not
 necessarily the same as the Maximum Likelihood Estimate. We’ll get that as well.
 You can see that we recovered the right uncertainty level on the data:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;median of posterior probability distribution&quot;</span><span class="p">)</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;median of posterior probability distribution&quot;</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------&#39;</span><span class="p">)</span>
 <span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">median</span> <span class="n">of</span> <span class="n">posterior</span> <span class="n">probability</span> <span class="n">distribution</span>
-<span class="o">--------------------------------------------</span>
-<span class="p">[[</span><span class="n">Variables</span><span class="p">]]</span>
-    <span class="n">a1</span><span class="p">:</span>         <span class="mf">2.99754602</span> <span class="o">+/-</span> <span class="mf">0.14997225</span> <span class="p">(</span><span class="mf">5.00</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">2.986237</span><span class="p">)</span>
-    <span class="n">a2</span><span class="p">:</span>        <span class="o">-</span><span class="mf">4.33209256</span> <span class="o">+/-</span> <span class="mf">0.11355869</span> <span class="p">(</span><span class="mf">2.62</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="o">-</span><span class="mf">4.335256</span><span class="p">)</span>
-    <span class="n">t1</span><span class="p">:</span>         <span class="mf">1.31266427</span> <span class="o">+/-</span> <span class="mf">0.13008100</span> <span class="p">(</span><span class="mf">9.91</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">1.309932</span><span class="p">)</span>
-    <span class="n">t2</span><span class="p">:</span>         <span class="mf">11.8291349</span> <span class="o">+/-</span> <span class="mf">0.45815590</span> <span class="p">(</span><span class="mf">3.87</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">11.80991</span><span class="p">)</span>
-    <span class="n">__lnsigma</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.32753938</span> <span class="o">+/-</span> <span class="mf">0.04492202</span> <span class="p">(</span><span class="mf">1.93</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.302585</span><span class="p">)</span>
-<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span> <span class="mf">0.100</span><span class="p">)</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.981</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">a2</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.930</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.888</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.542</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.236</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">a1</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.203</span>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>median of posterior probability distribution
+--------------------------------------------
+[[Variables]]
+    a1:         2.99273590 +/- 0.14795943 (4.94%) (init = 2.986237)
+    a2:        -4.34510429 +/- 0.12509158 (2.88%) (init = -4.335256)
+    t1:         1.32575254 +/- 0.14478422 (10.92%) (init = 1.309932)
+    t2:         11.7909996 +/- 0.48119246 (4.08%) (init = 11.80991)
+    __lnsigma: -2.32735355 +/- 0.04399601 (1.89%) (init = -2.302585)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(a2, t2) =  0.979
+    C(a2, t1) = -0.939
+    C(t1, t2) = -0.896
+    C(a1, t1) = -0.498
+    C(a1, a2) =  0.206
+    C(a1, t2) =  0.175
 </pre></div>
 </div>
 </div>
 <p>Find the Maximum Likelihood Estimation (MLE):</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">highest_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">lnprob</span><span class="p">)</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">highest_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">lnprob</span><span class="p">)</span>
 <span class="n">hp_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">highest_prob</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">lnprob</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="n">mle_soln</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">chain</span><span class="p">[</span><span class="n">hp_loc</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">par</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
@@ -1805,24 +1795,24 @@ You can see that we recovered the right uncertainty level on the data:</p>
     <span class="k">print</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Maximum</span> <span class="n">Likelihood</span> <span class="n">Estimation</span>
-<span class="o">-----------------------------</span>
-<span class="o">&lt;</span><span class="n">Parameter</span> <span class="s1">&#39;a1&#39;</span><span class="p">,</span> <span class="mf">3.005047802095173</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">inf</span><span class="p">:</span><span class="n">inf</span><span class="p">]</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="n">Parameter</span> <span class="s1">&#39;a2&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.317032916864595</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">inf</span><span class="p">:</span><span class="n">inf</span><span class="p">]</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="n">Parameter</span> <span class="s1">&#39;t1&#39;</span><span class="p">,</span> <span class="mf">1.2897246528831197</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">inf</span><span class="p">:</span><span class="n">inf</span><span class="p">]</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="n">Parameter</span> <span class="s1">&#39;t2&#39;</span><span class="p">,</span> <span class="mf">11.89230102288206</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="n">inf</span><span class="p">:</span><span class="n">inf</span><span class="p">]</span><span class="o">&gt;</span>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Maximum Likelihood Estimation
+-----------------------------
+&lt;Parameter &#39;a1&#39;, value=2.9906874726524726, bounds=[-inf:inf]&gt;
+&lt;Parameter &#39;a2&#39;, value=-4.35008975094292, bounds=[-inf:inf]&gt;
+&lt;Parameter &#39;t1&#39;, value=1.322477365772526, bounds=[-inf:inf]&gt;
+&lt;Parameter &#39;t2&#39;, value=11.764400319132873, bounds=[-inf:inf]&gt;
 </pre></div>
 </div>
 </div>
 <p>Finally, lets work out a 1 and 2-<span class="math notranslate nohighlight">\(\sigma\)</span> error estimate for ‘t1’:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quantiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">flatchain</span><span class="p">[</span><span class="s1">&#39;t1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.28</span><span class="p">,</span> <span class="mf">15.9</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">84.2</span><span class="p">,</span> <span class="mf">97.7</span><span class="p">])</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quantiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">flatchain</span><span class="p">[</span><span class="s1">&#39;t1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.28</span><span class="p">,</span> <span class="mf">15.9</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">84.2</span><span class="p">,</span> <span class="mf">97.7</span><span class="p">])</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;1 sigma spread&quot;</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
 <span class="k">print</span><span class="p">(</span><span class="s2">&quot;2 sigma spread&quot;</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="mi">1</span> <span class="n">sigma</span> <span class="n">spread</span> <span class="mf">0.12999563109800394</span>
-<span class="mi">2</span> <span class="n">sigma</span> <span class="n">spread</span> <span class="mf">0.2749982934378121</span>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>1 sigma spread 0.14501906108658946
+2 sigma spread 0.2985828649641594
 </pre></div>
 </div>
 </div>
@@ -1840,9 +1830,9 @@ uncertainties and correlations.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>inpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a>) – Input Parameters from fit or MinimizerResult returned from a fit.</p></li>
 <li><p><strong>modelpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Known Model Parameters.</p></li>
-<li><p><strong>show_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show list of sorted correlations (default is True).</p></li>
-<li><p><strong>min_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.7)"><em>float</em></a><em>, </em><em>optional</em>) – Smallest correlation in absolute value to show (default is 0.1).</p></li>
-<li><p><strong>sort_pars</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Whether to show parameter names sorted in alphanumerical order. If
+<li><p><strong>show_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show list of sorted correlations (default is True).</p></li>
+<li><p><strong>min_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – Smallest correlation in absolute value to show (default is 0.1).</p></li>
+<li><p><strong>sort_pars</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Whether to show parameter names sorted in alphanumerical order. If
 False (default), then the parameters will be listed in the order they
 were added to the Parameters dictionary. If callable, then this (one
 argument) function is used to extract a comparison key from each
@@ -1859,8 +1849,8 @@ list element.</p></li>
 </dd></dl>
 
 <p>An example using this to write out a fit report would be:</p>
-<div class="docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_fitting_withreport.py&gt;</span>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_fitting_withreport.py&gt;</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">sign</span><span class="p">,</span> <span class="n">sin</span>
 
 <span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">fit_report</span><span class="p">,</span> <span class="n">minimize</span>
@@ -1908,27 +1898,27 @@ list element.</p></li>
 </div>
 <p>which would give as output:</p>
 <div class="docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="n">Fit</span> <span class="n">Statistics</span><span class="p">]]</span>
-    <span class="c1"># fitting method   = leastsq</span>
-    <span class="c1"># function evals   = 83</span>
-    <span class="c1"># data points      = 1001</span>
-    <span class="c1"># variables        = 4</span>
-    <span class="n">chi</span><span class="o">-</span><span class="n">square</span>         <span class="o">=</span> <span class="mf">498.811759</span>
-    <span class="n">reduced</span> <span class="n">chi</span><span class="o">-</span><span class="n">square</span> <span class="o">=</span> <span class="mf">0.50031270</span>
-    <span class="n">Akaike</span> <span class="n">info</span> <span class="n">crit</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">689.222517</span>
-    <span class="n">Bayesian</span> <span class="n">info</span> <span class="n">crit</span> <span class="o">=</span> <span class="o">-</span><span class="mf">669.587497</span>
-<span class="p">[[</span><span class="n">Variables</span><span class="p">]]</span>
-    <span class="n">amp</span><span class="p">:</span>     <span class="mf">13.9121945</span> <span class="o">+/-</span> <span class="mf">0.14120288</span> <span class="p">(</span><span class="mf">1.01</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">13</span><span class="p">)</span>
-    <span class="n">period</span><span class="p">:</span>  <span class="mf">5.48507045</span> <span class="o">+/-</span> <span class="mf">0.02666493</span> <span class="p">(</span><span class="mf">0.49</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">shift</span><span class="p">:</span>   <span class="mf">0.16203677</span> <span class="o">+/-</span> <span class="mf">0.01405661</span> <span class="p">(</span><span class="mf">8.67</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">decay</span><span class="p">:</span>   <span class="mf">0.03264538</span> <span class="o">+/-</span> <span class="mf">3.8014e-04</span> <span class="p">(</span><span class="mf">1.16</span><span class="o">%</span><span class="p">)</span> <span class="p">(</span><span class="n">init</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">)</span>
-<span class="p">[[</span><span class="n">Correlations</span><span class="p">]]</span> <span class="p">(</span><span class="n">unreported</span> <span class="n">correlations</span> <span class="n">are</span> <span class="o">&lt;</span> <span class="mf">0.100</span><span class="p">)</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span> <span class="o">=</span>  <span class="mf">0.797</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">decay</span><span class="p">)</span>    <span class="o">=</span>  <span class="mf">0.582</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>    <span class="o">=</span> <span class="o">-</span><span class="mf">0.297</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="n">period</span><span class="p">)</span>   <span class="o">=</span> <span class="o">-</span><span class="mf">0.243</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span> <span class="n">decay</span><span class="p">)</span>  <span class="o">=</span> <span class="o">-</span><span class="mf">0.182</span>
-    <span class="n">C</span><span class="p">(</span><span class="n">period</span><span class="p">,</span> <span class="n">decay</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.150</span>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 83
+    # data points      = 1001
+    # variables        = 4
+    chi-square         = 498.811759
+    reduced chi-square = 0.50031270
+    Akaike info crit   = -689.222517
+    Bayesian info crit = -669.587497
+[[Variables]]
+    amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
+    period:  5.48507045 +/- 0.02666493 (0.49%) (init = 2)
+    shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
+    decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(period, shift) =  0.797
+    C(amp, decay)    =  0.582
+    C(amp, shift)    = -0.297
+    C(amp, period)   = -0.243
+    C(shift, decay)  = -0.182
+    C(period, decay) = -0.150
 </pre></div>
 </div>
 </div>

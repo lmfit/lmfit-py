@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -18,8 +19,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Fit Specifying a Function to Compute the Jacobian" href="example_fit_with_derivfunc.html" />
-    <link rel="prev" title="Fit Multiple Data Sets" href="example_fit_multi_datasets.html" />
+    <link rel="next" title="Outlier detection via leave-one-out" href="example_detect_outliers.html" />
+    <link rel="prev" title="Fit Specifying a Function to Compute the Jacobian" href="example_fit_with_derivfunc.html" />
   <script type="text/x-mathjax-config">
      MathJax.Hub.Config({
         "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
@@ -68,10 +69,10 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
+          <a href="example_detect_outliers.html" title="Outlier detection via leave-one-out"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="example_fit_multi_datasets.html" title="Fit Multiple Data Sets"
+          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
              accesskey="P">previous</a> |</li>
    <li>[<a href="../intro.html">intro</a>|</li>
    <li><a href="../parameters.html">parameters</a>|</li>
@@ -89,11 +90,11 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="example_fit_multi_datasets.html"
-                        title="previous chapter">Fit Multiple Data Sets</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="example_fit_with_derivfunc.html"
-                        title="next chapter">Fit Specifying a Function to Compute the Jacobian</a></p>
+                        title="previous chapter">Fit Specifying a Function to Compute the Jacobian</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="example_detect_outliers.html"
+                        title="next chapter">Outlier detection via leave-one-out</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -160,7 +161,7 @@ defined, and a least-squared regression is performed.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 6.96242791264594, &#39;tau&#39;: 3.026643595024727}
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 6.984064046939685, &#39;tau&#39;: 3.011354296357346}
 </pre></div>
 </div>
 <p>and use these best-fit parameters for plotting with the <code class="docutils literal notranslate"><span class="pre">plot</span></code> function:</p>
@@ -174,8 +175,8 @@ defined, and a least-squared regression is performed.</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Name     Value      Min      Max   Stderr     Vary     Expr Brute_Step
-N       6.962     -inf      inf  0.08759     True     None     None
-tau     3.027     -inf      inf  0.06605     True     None     None
+N       6.984     -inf      inf  0.08845     True     None     None
+tau     3.011     -inf      inf    0.066     True     None     None
 </pre></div>
 </div>
 <p>More information about the fit is stored in the result, which is an
@@ -186,31 +187,31 @@ tau     3.027     -inf      inf  0.06605     True     None     None
 keyword arguments of <code class="docutils literal notranslate"><span class="pre">fit</span></code> that match the argments of <code class="docutils literal notranslate"><span class="pre">decay</span></code>. You can
 build the <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> objects explicity; the following is equivalent.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
-                   <span class="n">N</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
-                   <span class="n">tau</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+                   <span class="n">N</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span>
+                   <span class="n">tau</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;tau&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    6.96242791 +/- 0.08759210 (1.26%) (init = 10)
-    tau:  3.02664360 +/- 0.06604601 (2.18%) (init = 1)
+    N:    6.98406405 +/- 0.08844670 (1.27%) (init = 10)
+    tau:  3.01135430 +/- 0.06600023 (2.19%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.757
+    C(N, tau) = -0.756
 </pre></div>
 </div>
 <p>By building <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> objects explicitly, you can specify bounds
 (<code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>) and set parameters constant (<code class="docutils literal notranslate"><span class="pre">vary=False</span></code>).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">t</span><span class="p">,</span>
-                   <span class="n">N</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-                   <span class="n">tau</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+                   <span class="n">N</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;N&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">vary</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                   <span class="n">tau</span><span class="o">=</span><span class="n">Parameter</span><span class="p">(</span><span class="s1">&#39;tau&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7 (fixed)
-    tau:  3.00553487 +/- 0.04261584 (1.42%) (init = 1)
+    tau:  3.00247383 +/- 0.04292226 (1.43%) (init = 1)
 </pre></div>
 </div>
 <p><strong>Defining Parameters in Advance</strong></p>
@@ -229,10 +230,10 @@ and pass them to <code class="docutils literal notranslate"><span class="pre">fi
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    6.96242789 +/- 0.08759211 (1.26%) (init = 10)
-    tau:  3.02664362 +/- 0.06604564 (2.18%) (init = 1)
+    N:    6.98406394 +/- 0.08844674 (1.27%) (init = 10)
+    tau:  3.01135441 +/- 0.06599962 (2.19%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.757
+    C(N, tau) = -0.756
 </pre></div>
 </div>
 <p>Keyword arguments override <code class="docutils literal notranslate"><span class="pre">params</span></code>, resetting <code class="docutils literal notranslate"><span class="pre">value</span></code> and all other
@@ -243,10 +244,10 @@ properties (<code class="docutils literal notranslate"><span class="pre">min</sp
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    6.96242789 +/- 0.08759211 (1.26%) (init = 10)
-    tau:  3.02664362 +/- 0.06604564 (2.18%) (init = 1)
+    N:    6.98406394 +/- 0.08844674 (1.27%) (init = 10)
+    tau:  3.01135441 +/- 0.06599962 (2.19%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.757
+    C(N, tau) = -0.756
 </pre></div>
 </div>
 <p>The input parameters are not modified by <code class="docutils literal notranslate"><span class="pre">fit</span></code>. They can be reused,
@@ -273,8 +274,8 @@ of the fit in term of <code class="docutils literal notranslate"><span class="pr
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.32046022 +/- 0.26470598 (3.62%) (init = 10)
-    tau:  2.85770851 +/- 0.09381294 (3.28%) (init = 1)
+    N:    7.33054985 +/- 0.26968212 (3.68%) (init = 10)
+    tau:  2.84538080 +/- 0.09473422 (3.33%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(N, tau) = -0.929
 </pre></div>
@@ -293,10 +294,10 @@ You can choose to <code class="docutils literal notranslate"><span class="pre">o
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    6.96366760 +/- 0.08808108 (1.26%) (init = 10)
-    tau:  3.02568104 +/- 0.06631720 (2.19%) (init = 1)
+    N:    6.99349787 +/- 0.08886695 (1.27%) (init = 10)
+    tau:  3.00311360 +/- 0.06590577 (2.19%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(N, tau) = -0.758
+    C(N, tau) = -0.757
 </pre></div>
 </div>
 <p>If you don’t want to ignore missing values, you can set the model to raise
@@ -326,8 +327,8 @@ automatically aligned to the correct section of <code class="docutils literal no
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.28271532 +/- 0.24764814 (3.40%) (init = 10)
-    tau:  2.89622228 +/- 0.13198954 (4.56%) (init = 1)
+    N:    7.44820824 +/- 0.24899891 (3.34%) (init = 10)
+    tau:  2.80229162 +/- 0.12228516 (4.36%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(N, tau) = -0.932
 </pre></div>
@@ -341,13 +342,13 @@ automatically aligned to the correct section of <code class="docutils literal no
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    N:    7.28349997 +/- 0.24828342 (3.41%) (init = 10)
-    tau:  2.89551321 +/- 0.13236296 (4.57%) (init = 1)
+    N:    7.46253423 +/- 0.24975620 (3.35%) (init = 10)
+    tau:  2.79210670 +/- 0.12172740 (4.36%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(N, tau) = -0.932
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.189 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.209 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-model-interface-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/8b2fe0a32f4790de5b0465c00682a37b/example_Model_interface.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_Model_interface.py</span></code></a></p>
@@ -372,10 +373,10 @@ automatically aligned to the correct section of <code class="docutils literal no
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
+          <a href="example_detect_outliers.html" title="Outlier detection via leave-one-out"
              >next</a> |</li>
         <li class="right" >
-          <a href="example_fit_multi_datasets.html" title="Fit Multiple Data Sets"
+          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
              >previous</a> |</li>
    <li>[<a href="../intro.html">intro</a>|</li>
    <li><a href="../parameters.html">parameters</a>|</li>

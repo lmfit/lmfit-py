@@ -34,8 +34,8 @@ doc_parameters_valuesdict.py
     [[Variables]]
         amp:    4.96174550 +/- 0.03830181 (0.77%) (init = 10)
         decay:  0.02571887 +/- 4.5357e-04 (1.76%) (init = 0.1)
-        shift: -0.09714733 +/- 0.00991436 (10.21%) (init = 0)
-        omega:  1.99750219 +/- 0.00321063 (0.16%) (init = 3)
+        shift: -0.09714732 +/- 0.00991436 (10.21%) (init = 0)
+        omega:  1.99750218 +/- 0.00321063 (0.16%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.100)
         C(shift, omega) = -0.785
         C(amp, decay)   =  0.584
@@ -104,7 +104,7 @@ doc_parameters_valuesdict.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.098 seconds)
+   **Total running time of the script:** ( 0 minutes  0.093 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_valuesdict.py:

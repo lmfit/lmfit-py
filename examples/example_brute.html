@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
@@ -137,7 +138,7 @@ all varying parameters, but will also deal with non-bounded parameters
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">fit_report</span><span class="p">,</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span>
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="k">import</span> <span class="n">Minimizer</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">fit_report</span>
 </pre></div>
 </div>
 <p>Let’s start with the example given in the documentation of SciPy:</p>
@@ -519,7 +520,7 @@ most optimal result:</p>
     Akaike info crit   = -991.780924
     Bayesian info crit = -976.952483
 [[Variables]]
-    amp:    5.00323087 +/- 0.03805941 (0.76%) (init = 4.75)
+    amp:    5.00323088 +/- 0.03805940 (0.76%) (init = 5.25)
     decay:  0.02563850 +/- 4.4571e-04 (1.74%) (init = 0.025)
     shift: -0.09162988 +/- 0.00978382 (10.68%) (init = 0)
     omega:  1.99611629 +/- 0.00316225 (0.16%) (init = 2)
@@ -654,7 +655,7 @@ in lmfit at some point).</p>
 </pre></div>
 </div>
 <img alt="../_images/sphx_glr_example_brute_004.png" class="sphx-glr-single-img" src="../_images/sphx_glr_example_brute_004.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  22.136 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  21.147 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-brute-py">
 <div class="sphx-glr-download docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/c004866ac6395edd2609ff96cecdc255/example_brute.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_brute.py</span></code></a></p>
