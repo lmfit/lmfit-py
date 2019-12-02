@@ -8,7 +8,6 @@ import numpy as np
 from numpy.testing import assert_, assert_almost_equal, assert_equal
 
 from lmfit import Model, Parameter, Parameters
-
 from lmfit.printfuncs import params_html_table
 
 

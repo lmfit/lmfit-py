@@ -3,8 +3,8 @@ from __future__ import division
 
 from collections import OrderedDict
 from copy import deepcopy
-import json
 import importlib
+import json
 import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
