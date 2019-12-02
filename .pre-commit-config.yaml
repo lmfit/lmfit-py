@@ -1,0 +1,40 @@
+exclude: 'versioneer.py|lmfit/_version|doc/conf.py'
+
+repos:
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v1.25.1
+    hooks:
+    -   id: pyupgrade
+        # for now don't force to change from %-operator to {}
+        args: [--keep-percent-format]
+
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.4.0
+    hooks:
+    -   id: check-ast
+    -   id: check-builtin-literals
+    -   id: check-merge-conflict
+    -   id: debug-statements
+    -   id: end-of-file-fixer
+    -   id: mixed-line-ending
+    -   id: trailing-whitespace
+    -   id: requirements-txt-fixer
+
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.7.9
+    hooks:
+    -   id: flake8
+
+-   repo: local
+    hooks:
+    -   id: rstcheck
+        name: rstcheck
+        entry: rstcheck
+        files: '.rst'
+        language: python
+        additional_dependencies: [rstcheck, sphinx]
+
+-   repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.4.2
+    hooks:
+    -   id: rst-backticks
