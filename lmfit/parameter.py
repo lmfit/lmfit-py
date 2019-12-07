@@ -127,7 +127,7 @@ class Parameters(OrderedDict):
         return _pars
 
     def __setitem__(self, key, par):
-        """TODO: add magic method docstring."""
+        """Set items of Parameters object."""
         if key not in self:
             if not valid_symbol_name(key):
                 raise KeyError("'%s' is not a valid Parameters name" % key)

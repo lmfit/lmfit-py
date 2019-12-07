@@ -1298,7 +1298,7 @@ class ExpressionModel(Model):
         self.def_vals = {}
 
     def __repr__(self):
-        """TODO: docstring in magic method."""
+        """Return printable representation of ExpressionModel."""
         return "<lmfit.ExpressionModel('%s')>" % (self.expr)
 
     def _parse_params(self):

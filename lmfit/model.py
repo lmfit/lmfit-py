@@ -1131,7 +1131,7 @@ class CompositeModel(Model):
                                self.right._reprstring(long=long))
 
     def eval(self, params=None, **kwargs):
-        """TODO: docstring in public method."""
+        """Evaluate model function for composite model."""
         return self.op(self.left.eval(params=params, **kwargs),
                        self.right.eval(params=params, **kwargs))
 
