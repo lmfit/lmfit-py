@@ -143,7 +143,7 @@ class ConstantModel(Model):
 
         def constant(x, c=0.0):
             return c
-        super(ConstantModel, self).__init__(constant, **kwargs)
+        super().__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -173,7 +173,7 @@ class ComplexConstantModel(Model):
 
         def constant(x, re=0., im=0.):
             return re + 1j*im
-        super(ComplexConstantModel, self).__init__(constant, **kwargs)
+        super().__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -203,7 +203,7 @@ class LinearModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(LinearModel, self).__init__(linear, **kwargs)
+        super().__init__(linear, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -232,7 +232,7 @@ class QuadraticModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(QuadraticModel, self).__init__(parabolic, **kwargs)
+        super().__init__(parabolic, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -279,7 +279,7 @@ class PolynomialModel(Model):
         def polynomial(x, c0=0, c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0):
             return np.polyval([c7, c6, c5, c4, c3, c2, c1, c0], x)
 
-        super(PolynomialModel, self).__init__(polynomial, **kwargs)
+        super().__init__(polynomial, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -319,7 +319,7 @@ class GaussianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(GaussianModel, self).__init__(gaussian, **kwargs)
+        super().__init__(gaussian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -360,7 +360,7 @@ class LorentzianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(LorentzianModel, self).__init__(lorentzian, **kwargs)
+        super().__init__(lorentzian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -408,7 +408,7 @@ class SplitLorentzianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(SplitLorentzianModel, self).__init__(split_lorentzian, **kwargs)
+        super().__init__(split_lorentzian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -466,7 +466,7 @@ class VoigtModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(VoigtModel, self).__init__(voigt, **kwargs)
+        super().__init__(voigt, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -519,7 +519,7 @@ class PseudoVoigtModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
+        super().__init__(pvoigt, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -565,7 +565,7 @@ class MoffatModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(MoffatModel, self).__init__(moffat, **kwargs)
+        super().__init__(moffat, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -607,7 +607,7 @@ class Pearson7Model(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(Pearson7Model, self).__init__(pearson7, **kwargs)
+        super().__init__(pearson7, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -648,7 +648,7 @@ class StudentsTModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(StudentsTModel, self).__init__(students_t, **kwargs)
+        super().__init__(students_t, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -687,7 +687,7 @@ class BreitWignerModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
+        super().__init__(breit_wigner, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -726,7 +726,7 @@ class LognormalModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(LognormalModel, self).__init__(lognormal, **kwargs)
+        super().__init__(lognormal, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -772,7 +772,7 @@ class DampedOscillatorModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
+        super().__init__(damped_oscillator, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -821,7 +821,7 @@ class DampedHarmonicOscillatorModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DampedHarmonicOscillatorModel, self).__init__(dho, **kwargs)
+        super().__init__(dho, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -870,7 +870,7 @@ class ExponentialGaussianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
+        super().__init__(expgaussian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -918,7 +918,7 @@ class SkewedGaussianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(SkewedGaussianModel, self).__init__(skewed_gaussian, **kwargs)
+        super().__init__(skewed_gaussian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -965,7 +965,7 @@ class SkewedVoigtModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(SkewedVoigtModel, self).__init__(skewed_voigt, **kwargs)
+        super().__init__(skewed_voigt, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -1003,7 +1003,7 @@ class DonaichModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DonaichModel, self).__init__(donaich, **kwargs)
+        super().__init__(donaich, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -1034,7 +1034,7 @@ class PowerLawModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(PowerLawModel, self).__init__(powerlaw, **kwargs)
+        super().__init__(powerlaw, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1065,7 +1065,7 @@ class ExponentialModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(ExponentialModel, self).__init__(exponential, **kwargs)
+        super().__init__(exponential, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1113,7 +1113,7 @@ class StepModel(Model):
                  form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'form': form, 'independent_vars': independent_vars})
-        super(StepModel, self).__init__(step, **kwargs)
+        super().__init__(step, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1170,7 +1170,7 @@ class RectangleModel(Model):
                  form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'form': form, 'independent_vars': independent_vars})
-        super(RectangleModel, self).__init__(rectangle, **kwargs)
+        super().__init__(rectangle, **kwargs)
 
         self._set_paramhints_prefix()
 
@@ -1287,7 +1287,7 @@ class ExpressionModel(Model):
 
         kws["nan_policy"] = nan_policy
 
-        super(ExpressionModel, self).__init__(_eval, **kws)
+        super().__init__(_eval, **kws)
 
         # set param names here, and other things normally
         # set in _parse_params(), which will be short-circuited.

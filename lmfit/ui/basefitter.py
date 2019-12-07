@@ -46,7 +46,7 @@ _COMMON_EXAMPLES_DOC = """
     """
 
 
-class BaseFitter(object):
+class BaseFitter:
     __doc__ = _COMMON_DOC + """
 
     Parameters
@@ -231,7 +231,7 @@ class MPLFitter(BaseFitter):
         self.data_style = data_style
         self.init_style = init_style
         self.best_style = best_style
-        super(MPLFitter, self).__init__(data, model, **kwargs)
+        super().__init__(data, model, **kwargs)
 
     def plot(self, axes_style={}, data_style={}, init_style={}, best_style={},
              ax=None):

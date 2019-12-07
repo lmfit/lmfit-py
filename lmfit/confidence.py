@@ -154,7 +154,7 @@ def map_trace_to_names(trace, params):
     return out
 
 
-class ConfidenceInterval(object):
+class ConfidenceInterval:
     """Class used to calculate the confidence interval."""
 
     def __init__(self, minimizer, result, p_names=None, prob_func=None,

@@ -35,7 +35,6 @@ from scipy.sparse.linalg import LinearOperator
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 from scipy.version import version as scipy_version
-import six
 import uncertainties
 
 from ._ampgo import ampgo
@@ -224,7 +223,7 @@ def reduce_cauchylogpdf(r):
     return -cauchy_dist.logpdf(r).sum()
 
 
-class MinimizerResult(object):
+class MinimizerResult:
     r"""The results of a minimization.
 
     Minimization results include data such as status and error messages,
@@ -364,7 +363,7 @@ class MinimizerResult(object):
                                     min_correl=min_correl)
 
 
-class Minimizer(object):
+class Minimizer:
     """A general minimizer for curve fitting and optimization."""
 
     _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
@@ -679,7 +678,7 @@ class Minimizer(object):
         #    2. string starting with 'neglogc' or 'negent'
         #    3. sum of squares
         if not callable(self.reduce_fcn):
-            if isinstance(self.reduce_fcn, six.string_types):
+            if isinstance(self.reduce_fcn, str):
                 if self.reduce_fcn.lower().startswith('neglogc'):
                     self.reduce_fcn = reduce_cauchylogpdf
                 elif self.reduce_fcn.lower().startswith('negent'):

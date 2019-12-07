@@ -5,7 +5,6 @@ from math import trunc
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
-import six
 import uncertainties as un
 
 import lmfit
@@ -65,13 +64,8 @@ def test_initialize_Parameter(par, attr_values):
 def test_Parameter_no_name():
     """Test for Parameter name, now required positional argument."""
     msg = r"missing 1 required positional argument: 'name'"
-    msg_PY2 = r"__init__()"
-    if six.PY2:
-        with pytest.raises(TypeError, match=msg_PY2):
-            lmfit.Parameter()
-    else:
-        with pytest.raises(TypeError, match=msg):
-            lmfit.Parameter()
+    with pytest.raises(TypeError, match=msg):
+        lmfit.Parameter()
 
 
 def test_init_bounds():

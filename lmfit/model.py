@@ -182,7 +182,7 @@ def propagate_err(z, dz, option):
     return err
 
 
-class Model(object):
+class Model:
     """Model class."""
 
     _forbidden_args = ('data', 'weights', 'params')

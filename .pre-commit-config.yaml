@@ -6,7 +6,7 @@ repos:
     hooks:
     -   id: pyupgrade
         # for now don't force to change from %-operator to {}
-        args: [--keep-percent-format]
+        args: [--keep-percent-format, --py3-plus]
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.4.0
