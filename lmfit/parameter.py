@@ -888,7 +888,6 @@ class Parameter:
     def __bool__(self):
         """bool"""
         return self._getval() != 0
-    __nonzero__ = __bool__  # TODO: remove when PY3 only
 
     def __int__(self):
         """int"""
@@ -913,7 +912,6 @@ class Parameter:
     def __truediv__(self, other):
         """/"""
         return self._getval() / other
-    __div__ = __truediv__  # TODO: remove when PY3 only
 
     def __floordiv__(self, other):
         """//"""
@@ -966,7 +964,6 @@ class Parameter:
     def __rtruediv__(self, other):
         """/ (right)"""
         return other / self._getval()
-    __rdiv__ = __rtruediv__  # TODO: remove when PY3 only
 
     def __rdivmod__(self, other):
         """divmod (right)"""
