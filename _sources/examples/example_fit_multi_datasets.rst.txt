@@ -145,7 +145,7 @@ Run the global fit and show the fitting result
         cen_3:  0.30698606 +/- 0.00133040 (0.43%) (init = 0.4)
         sig_3:  0.27096733 +/- 6.7335e-04 (0.25%) == 'sig_1'
         amp_4:  3.62962270 +/- 0.02384778 (0.66%) (init = 0.5)
-        cen_4:  0.00271542 +/- 0.00247237 (91.05%) (init = 0.4)
+        cen_4:  0.00271542 +/- 0.00247235 (91.05%) (init = 0.4)
         sig_4:  0.27096733 +/- 6.7335e-04 (0.25%) == 'sig_1'
         amp_5:  6.29975266 +/- 0.02469084 (0.39%) (init = 0.5)
         cen_5: -0.15885172 +/- 0.00142452 (0.90%) (init = 0.4)
@@ -188,7 +188,7 @@ Plot the data sets and fits
 
  .. code-block:: none
 
-    /home/newville/Codes/lmfit-py/examples/example_fit_multi_datasets.py:88: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Users/Newville/Codes/lmfit-py/examples/example_fit_multi_datasets.py:88: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -196,7 +196,7 @@ Plot the data sets and fits
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.138 seconds)
+   **Total running time of the script:** ( 0 minutes  0.207 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_multi_datasets.py:

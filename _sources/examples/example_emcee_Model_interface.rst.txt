@@ -95,11 +95,9 @@ Fit the model using a traditional minimizer, and show the output:
 
  .. code-block:: none
 
-    /home/newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:16: RuntimeWarning: overflow encountered in exp
+    /Users/Newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:16: RuntimeWarning: overflow encountered in multiply
       return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
-    /home/newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:16: RuntimeWarning: overflow encountered in multiply
-      return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
-    /home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/minimizer.py:174: RuntimeWarning: overflow encountered in multiply
+    /Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15-py3.7.egg/lmfit/minimizer.py:174: RuntimeWarning: overflow encountered in multiply
     [[Fit Statistics]]
         # fitting method   = Nelder-Mead
         # function evals   = 609
@@ -197,7 +195,7 @@ run the MCMC algorithm and show the results:
         C(a1, t1) = -0.567
         C(a1, a2) =  0.271
         C(a1, t2) =  0.230
-    /home/newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:60: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Users/Newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:60: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -225,7 +223,7 @@ check the acceptance fraction to see whether emcee performed well
 
  .. code-block:: none
 
-    /home/newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:67: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Users/Newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:67: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -328,7 +326,7 @@ Plot the parameter covariances returned by emcee using corner
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  7.163 seconds)
+   **Total running time of the script:** ( 0 minutes  11.583 seconds)
 
 
 .. _sphx_glr_download_examples_example_emcee_Model_interface.py:

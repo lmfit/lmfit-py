@@ -17,19 +17,19 @@ doc_model_loadmodel.py
 .. code-block:: pytb
 
     Traceback (most recent call last):
-      File "/home/newville/anaconda3/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py", line 480, in _memory_usage
+      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py", line 480, in _memory_usage
         out = func()
-      File "/home/newville/anaconda3/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py", line 465, in __call__
+      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py", line 465, in __call__
         exec(self.code, self.globals)
-      File "/home/newville/Codes/lmfit-py/examples/documentation/model_loadmodel.py", line 32, in <module>
+      File "/Users/Newville/Codes/lmfit-py/examples/documentation/model_loadmodel.py", line 32, in <module>
         result = model.fit(y, params, x=x)
-      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py", line 1022, in fit
+      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15-py3.7.egg/lmfit/model.py", line 1022, in fit
         output.fit(data=data, weights=weights)
-      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py", line 1369, in fit
+      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15-py3.7.egg/lmfit/model.py", line 1369, in fit
         self.init_fit = self.model.eval(params=self.params, **self.userkws)
-      File "/home/newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15rc1-py3.7.egg/lmfit/model.py", line 848, in eval
+      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15-py3.7.egg/lmfit/model.py", line 848, in eval
         return self.func(**self.make_funcargs(params, kwargs))
-      File "/home/newville/Codes/lmfit-py/examples/documentation/model_savemodel.py", line 18, in mysine
+      File "/Users/Newville/Codes/lmfit-py/examples/documentation/model_savemodel.py", line 18, in mysine
         return amp * np.sin(x*freq + shift)
     NameError: name 'np' is not defined
 
@@ -75,7 +75,7 @@ doc_model_loadmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.051 seconds)
+   **Total running time of the script:** ( 0 minutes  0.075 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodel.py:

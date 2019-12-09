@@ -43,10 +43,10 @@ of data with outliers.
         Akaike info crit   = -107.560626
         Bayesian info crit = -97.1001440
     [[Variables]]
-        offset:  1.10392445 +/- 0.05751441 (5.21%) (init = 2)
-        omega:   3.97313428 +/- 0.02073920 (0.52%) (init = 3.3)
-        amp:     1.69977011 +/- 0.21587454 (12.70%) (init = 2.5)
-        decay:   7.64654787 +/- 1.87209157 (24.48%) (init = 1)
+        offset:  1.10392444 +/- 0.05751441 (5.21%) (init = 2)
+        omega:   3.97313427 +/- 0.02073920 (0.52%) (init = 3.3)
+        amp:     1.69977080 +/- 0.21587445 (12.70%) (init = 2.5)
+        decay:   7.64654024 +/- 1.87208687 (24.48%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.773
 
@@ -55,22 +55,22 @@ of data with outliers.
 
     [[Fit Statistics]]
         # fitting method   = L-BFGS-B
-        # function evals   = 135
+        # function evals   = 130
         # data points      = 101
         # variables        = 4
-        chi-square         = 33.5081328
-        reduced chi-square = 0.34544467
-        Akaike info crit   = -103.436566
-        Bayesian info crit = -92.9760840
+        chi-square         = 33.5081495
+        reduced chi-square = 0.34544484
+        Akaike info crit   = -103.436516
+        Bayesian info crit = -92.9760337
     [[Variables]]
-        offset:  1.02005967 +/- 0.06642640 (6.51%) (init = 2)
-        omega:   3.98224426 +/- 0.02898701 (0.73%) (init = 3.3)
-        amp:     1.83231407 +/- 0.27241875 (14.87%) (init = 2.5)
-        decay:   5.76206951 +/- 1.45140712 (25.19%) (init = 1)
+        offset:  1.02005941 +/- 0.06642641 (6.51%) (init = 2)
+        omega:   3.98224469 +/- 0.02898704 (0.73%) (init = 3.3)
+        amp:     1.83231477 +/- 0.27241847 (14.87%) (init = 2.5)
+        decay:   5.76205973 +/- 1.45140075 (25.19%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay)  = -0.758
         C(offset, amp) = -0.107
-    /home/newville/Codes/lmfit-py/examples/example_reduce_fcn.py:72: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Users/Newville/Codes/lmfit-py/examples/example_reduce_fcn.py:72: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
 
@@ -144,7 +144,7 @@ of data with outliers.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.213 seconds)
+   **Total running time of the script:** ( 0 minutes  0.319 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:

@@ -803,13 +803,13 @@ Below are all the examples that are part of the lmfit documentation.
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: examples_python.zip <//home/newville/Codes/lmfit-py/doc/examples/examples_python.zip>`
+    :download:`Download all examples in Python source code: examples_python.zip <//Users/Newville/Codes/lmfit-py/doc/examples/examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: examples_jupyter.zip <//home/newville/Codes/lmfit-py/doc/examples/examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: examples_jupyter.zip <//Users/Newville/Codes/lmfit-py/doc/examples/examples_jupyter.zip>`
 
 
 .. only:: html
