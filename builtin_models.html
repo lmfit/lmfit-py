@@ -15,7 +15,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -82,7 +82,7 @@
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
- 
+
       </ul>
     </div>
 
@@ -168,7 +168,7 @@
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-            
+
   <div class="section" id="module-lmfit.models">
 <span id="built-in-fitting-models-in-the-models-module"></span><span id="builtin-models-chapter"></span><h1>Built-in Fitting Models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module<a class="headerlink" href="#module-lmfit.models" title="Permalink to this headline">¶</a></h1>
 <p>Lmfit provides several built-in fitting models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module.
@@ -1446,6 +1446,9 @@ A Voigt model does a better job. Using <a class="reference internal" href="#lmfi
     C(amplitude, sigma) =  0.651
 </pre></div>
 </div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 </div>
 <p>which has a much better value for <span class="math notranslate nohighlight">\(\chi^2\)</span> and the other
 goodness-of-fit measures, and an obviously better match to the data as seen
@@ -1479,12 +1482,12 @@ give it a starting value using something like:</p>
     Akaike info crit   = -1436.57602
     Bayesian info crit = -1420.60017
 [[Variables]]
-    amplitude:  34.1914737 +/- 0.17946861 (0.52%) (init = 65.43358)
+    amplitude:  34.1914737 +/- 0.17946860 (0.52%) (init = 65.43358)
     center:     9.24374847 +/- 0.00441903 (0.05%) (init = 9.25)
     sigma:      0.89518909 +/- 0.01415450 (1.58%) (init = 0.8775)
-    gamma:      0.52540198 +/- 0.01857955 (3.54%) (init = 0.7)
+    gamma:      0.52540199 +/- 0.01857955 (3.54%) (init = 0.7)
     fwhm:       2.72573635 +/- 0.01363980 (0.50%) == &#39;1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)&#39;
-    height:     10.0872204 +/- 0.03482130 (0.35%) == &#39;(amplitude/(max(2.220446049250313e-16, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(2.220446049250313e-16, sigma*sqrt(2)))).real&#39;
+    height:     10.0872204 +/- 0.03482129 (0.35%) == &#39;(amplitude/(max(2.220446049250313e-16, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(2.220446049250313e-16, sigma*sqrt(2)))).real&#39;
 [[Correlations]] (unreported correlations are &lt; 0.250)
     C(sigma, gamma)     = -0.928
     C(amplitude, gamma) =  0.821
@@ -1680,18 +1683,18 @@ parameter values.</p>
     Akaike info crit   = 417.864631
     Bayesian info crit = 446.036318
 [[Variables]]
-    exp_amplitude:  99.0183283 +/- 0.53748735 (0.54%) (init = 162.2102)
-    exp_decay:      90.9508860 +/- 1.10310509 (1.21%) (init = 93.24905)
-    g1_amplitude:   4257.77319 +/- 42.3833645 (1.00%) (init = 2000)
-    g1_center:      107.030954 +/- 0.15006786 (0.14%) (init = 105)
-    g1_sigma:       16.6725753 +/- 0.16048160 (0.96%) (init = 15)
-    g1_fwhm:        39.2609138 +/- 0.37790529 (0.96%) == &#39;2.3548200*g1_sigma&#39;
+    exp_amplitude:  99.0183282 +/- 0.53748735 (0.54%) (init = 162.2102)
+    exp_decay:      90.9508861 +/- 1.10310509 (1.21%) (init = 93.24905)
+    g1_amplitude:   4257.77318 +/- 42.3833640 (1.00%) (init = 2000)
+    g1_center:      107.030954 +/- 0.15006784 (0.14%) (init = 105)
+    g1_sigma:       16.6725753 +/- 0.16048161 (0.96%) (init = 15)
+    g1_fwhm:        39.2609138 +/- 0.37790530 (0.96%) == &#39;2.3548200*g1_sigma&#39;
     g1_height:      101.880231 +/- 0.59217099 (0.58%) == &#39;0.3989423*g1_amplitude/max(2.220446049250313e-16, g1_sigma)&#39;
-    g2_amplitude:   2493.41771 +/- 36.1694725 (1.45%) (init = 2000)
-    g2_center:      153.270100 +/- 0.19466730 (0.13%) (init = 155)
-    g2_sigma:       13.8069485 +/- 0.18679414 (1.35%) (init = 15)
-    g2_fwhm:        32.5128784 +/- 0.43986659 (1.35%) == &#39;2.3548200*g2_sigma&#39;
-    g2_height:      72.0455934 +/- 0.61722094 (0.86%) == &#39;0.3989423*g2_amplitude/max(2.220446049250313e-16, g2_sigma)&#39;
+    g2_amplitude:   2493.41771 +/- 36.1694729 (1.45%) (init = 2000)
+    g2_center:      153.270100 +/- 0.19466742 (0.13%) (init = 155)
+    g2_sigma:       13.8069484 +/- 0.18679415 (1.35%) (init = 15)
+    g2_fwhm:        32.5128783 +/- 0.43986659 (1.35%) == &#39;2.3548200*g2_sigma&#39;
+    g2_height:      72.0455934 +/- 0.61722093 (0.86%) == &#39;0.3989423*g2_amplitude/max(2.220446049250313e-16, g2_sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(g1_amplitude, g1_sigma)      =  0.824
     C(g2_amplitude, g2_sigma)      =  0.815
@@ -1772,13 +1775,13 @@ and without any bounds on parameters at all:</p>
     Bayesian info crit = 446.036318
 [[Variables]]
     exp_amplitude:  99.0183270 +/- 0.53748905 (0.54%) (init = 94.53724)
-    exp_decay:      90.9508890 +/- 1.10310484 (1.21%) (init = 111.1985)
-    g1_amplitude:   4257.77343 +/- 42.3836428 (1.00%) (init = 3189.648)
+    exp_decay:      90.9508890 +/- 1.10310483 (1.21%) (init = 111.1985)
+    g1_amplitude:   4257.77343 +/- 42.3836427 (1.00%) (init = 3189.648)
     g1_center:      107.030956 +/- 0.15006873 (0.14%) (init = 106.5)
     g1_sigma:       16.6725765 +/- 0.16048227 (0.96%) (init = 14.5)
     g1_fwhm:        39.2609166 +/- 0.37790686 (0.96%) == &#39;2.3548200*g1_sigma&#39;
-    g1_height:      101.880230 +/- 0.59217233 (0.58%) == &#39;0.3989423*g1_amplitude/max(2.220446049250313e-16, g1_sigma)&#39;
-    g2_amplitude:   2493.41733 +/- 36.1696904 (1.45%) (init = 2818.337)
+    g1_height:      101.880230 +/- 0.59217232 (0.58%) == &#39;0.3989423*g1_amplitude/max(2.220446049250313e-16, g1_sigma)&#39;
+    g2_amplitude:   2493.41733 +/- 36.1696902 (1.45%) (init = 2818.337)
     g2_center:      153.270101 +/- 0.19466905 (0.13%) (init = 150)
     g2_sigma:       13.8069461 +/- 0.18679534 (1.35%) (init = 15)
     g2_fwhm:        32.5128728 +/- 0.43986939 (1.35%) == &#39;2.3548200*g2_sigma&#39;
@@ -1843,12 +1846,12 @@ and the figure above shows an improved initial estimate of the data.</p>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
- 
+
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
     </div>
   </body>
 </html>
