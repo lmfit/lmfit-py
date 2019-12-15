@@ -4,7 +4,7 @@ from lmfit.lineshapes import gaussian
 from lmfit.models import Model
 
 
-class Stepper(object):
+class Stepper:
     def __init__(self, start, stop, npts):
         self.start = start
         self.stop = stop

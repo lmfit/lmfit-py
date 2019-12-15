@@ -5,7 +5,6 @@ from math import trunc
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
-import six
 import uncertainties as un
 
 import lmfit
@@ -65,13 +64,8 @@ def test_initialize_Parameter(par, attr_values):
 def test_Parameter_no_name():
     """Test for Parameter name, now required positional argument."""
     msg = r"missing 1 required positional argument: 'name'"
-    msg_PY2 = r"__init__()"
-    if six.PY2:
-        with pytest.raises(TypeError, match=msg_PY2):
-            lmfit.Parameter()
-    else:
-        with pytest.raises(TypeError, match=msg):
-            lmfit.Parameter()
+    with pytest.raises(TypeError, match=msg):
+        lmfit.Parameter()
 
 
 def test_init_bounds():
@@ -333,14 +327,8 @@ def test__pos__(parameter):
     assert_allclose(+par, -10.0)
 
 
-def test__nonzero__(parameter):
-    """Test the __nonzero__ magic method; PY2 only."""
-    par, _ = parameter
-    assert bool(par)
-
-
 def test__bool__(parameter):
-    """Test the __bool__ magic method; PY3 only."""
+    """Test the __bool__ magic method."""
     par, _ = parameter
     assert bool(par)
 
@@ -378,12 +366,6 @@ def test__sub__(parameter):
     """Test the __sub__ magic method."""
     par, _ = parameter
     assert_allclose(par - 5.25, 4.75)
-
-
-def test__div__(parameter):
-    """Test the __div__ magic method; PY2 only."""
-    par, _ = parameter
-    assert_allclose(par / 1.25, 8.0)
 
 
 def test__truediv__(parameter):
@@ -474,12 +456,6 @@ def test__radd__(parameter):
     """Test the __radd__ magic method."""
     par, _ = parameter
     assert_allclose(5.25 + par, 15.25)
-
-
-def test__rdiv__(parameter):
-    """Test the __rdiv__ magic method; PY2 only."""
-    par, _ = parameter
-    assert_allclose(1.25 / par, 0.125)
 
 
 def test__rtruediv__(parameter):

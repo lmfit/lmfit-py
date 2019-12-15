@@ -3,7 +3,6 @@ from base64 import b64decode, b64encode
 import sys
 
 import numpy as np
-import six
 
 try:
     import dill
@@ -19,19 +18,13 @@ except ImportError:
 
 
 def bindecode(val):
-    """b64decode wrapper, Python 2 and 3 version."""
-    return b64decode(six.b(val))
+    """b64decode wrapper."""
+    return b64decode(val)
 
 
-if six.PY3:
-    def binencode(val):
-        """b64encode wrapper, Python 3 version."""
-        # b64encode result is /always/ UTF-8
-        return str(b64encode(val), 'utf-8')
-else:
-    def binencode(val):
-        """b64encode wrapper, Python 2 version."""
-        return str(b64encode(val))
+def binencode(val):
+    """b64encode wrapper."""
+    return str(b64encode(val), 'utf-8')
 
 
 def find_importer(obj):
@@ -80,7 +73,7 @@ def encode4js(obj):
                     __dtype__=obj.dtype.name, value=val)
     elif isinstance(obj, (np.float, np.int)):
         return float(obj)
-    elif isinstance(obj, six.string_types):
+    elif isinstance(obj, str):
         try:
             return str(obj)
         except UnicodeError:

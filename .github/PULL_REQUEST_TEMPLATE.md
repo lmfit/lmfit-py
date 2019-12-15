@@ -20,10 +20,10 @@ To ease the process of reviewing your PR, do make sure to complete the following
 
 ###### Tested on
 <!-- Generate version information with this command in the Python shell and copy the output here:
-import sys, lmfit, numpy, scipy, asteval, uncertainties, six
-print('Python: {}\n\nlmfit: {}, scipy: {}, numpy: {}, asteval: {}, uncertainties: {}, six: {}'\
+import sys, lmfit, numpy, scipy, asteval, uncertainties
+print('Python: {}\n\nlmfit: {}, scipy: {}, numpy: {}, asteval: {}, uncertainties: {}'\
       .format(sys.version, lmfit.__version__, scipy.__version__, numpy.__version__, \
-      asteval.__version__, uncertainties.__version__, six.__version__))
+      asteval.__version__, uncertainties.__version__))
 -->
 
 

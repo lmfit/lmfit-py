@@ -1,5 +1,4 @@
 """Parameter class."""
-from __future__ import division
 
 from collections import OrderedDict
 from copy import deepcopy
@@ -62,7 +61,7 @@ class Parameters(OrderedDict):
             Keyword arguments.
 
         """
-        super(Parameters, self).__init__(self)
+        super().__init__(self)
 
         self._asteval = asteval
         if self._asteval is None:
@@ -128,7 +127,7 @@ class Parameters(OrderedDict):
         return _pars
 
     def __setitem__(self, key, par):
-        """TODO: add magic method docstring."""
+        """Set items of Parameters object."""
         if key not in self:
             if not valid_symbol_name(key):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
@@ -269,7 +268,7 @@ class Parameters(OrderedDict):
 
         """
         if oneline:
-            return super(Parameters, self).__repr__()
+            return super().__repr__()
         s = "Parameters({\n"
         for key in self.keys():
             s += "    '%s': %s, \n" % (key, self[key])
@@ -523,7 +522,7 @@ class Parameters(OrderedDict):
         return self.loads(fp.read(), **kws)
 
 
-class Parameter(object):
+class Parameter:
     """A Parameter is an object that can be varied in a fit, or one of the
     controlling variables in a model. It is a central component of lmfit,
     and all minimization and modeling methods use Parameter objects.
@@ -889,7 +888,6 @@ class Parameter(object):
     def __bool__(self):
         """bool"""
         return self._getval() != 0
-    __nonzero__ = __bool__  # TODO: remove when PY3 only
 
     def __int__(self):
         """int"""
@@ -914,7 +912,6 @@ class Parameter(object):
     def __truediv__(self, other):
         """/"""
         return self._getval() / other
-    __div__ = __truediv__  # TODO: remove when PY3 only
 
     def __floordiv__(self, other):
         """//"""
@@ -967,7 +964,6 @@ class Parameter(object):
     def __rtruediv__(self, other):
         """/ (right)"""
         return other / self._getval()
-    __rdiv__ = __rtruediv__  # TODO: remove when PY3 only
 
     def __rdivmod__(self, other):
         """divmod (right)"""

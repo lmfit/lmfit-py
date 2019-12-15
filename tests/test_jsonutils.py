@@ -1,12 +1,9 @@
 """Tests for the JSON utilities."""
-# coding: utf-8
-# TODO: remove the line above when dropping Python 2.7
 from types import BuiltinFunctionType, FunctionType
 
 import numpy as np
 import pytest
 from scipy.optimize import basinhopping
-import six
 
 import lmfit
 from lmfit.jsonutils import decode4js, encode4js, find_importer, import_from
@@ -21,12 +18,12 @@ def test_import_from(obj):
                       (BuiltinFunctionType, FunctionType))
 
 
-objects = [('test_string', six.string_types),
+objects = [('test_string', (str,)),
            (np.array([7.0]), np.ndarray),
            (np.array([1.0+2.0j]), np.ndarray),
            (123.456, np.float),
            (10, np.float),
-           (u'café', six.string_types),
+           ('café', (str,)),
            (10.0-5.0j, np.complex),
            (['a', 'b', 'c'], list),
            (('a', 'b', 'c'), tuple),

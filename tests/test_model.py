@@ -42,7 +42,7 @@ def linear_func(x, a, b):
     return a*x+b
 
 
-class CommonTests(object):
+class CommonTests:
     # to be subclassed for testing predefined models
 
     def setUp(self):
@@ -244,7 +244,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         # return a fresh copy
         self.model_constructor = (
             lambda *args, **kwargs: Model(gaussian, *args, **kwargs))
-        super(TestUserDefiniedModel, self).setUp()
+        super().setUp()
 
     @property
     def x(self):
@@ -718,7 +718,7 @@ class TestLinear(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(slope=5, intercept=2)
         self.guess = lambda: dict(slope=10, intercept=6)
         self.model_constructor = models.LinearModel
-        super(TestLinear, self).setUp()
+        super().setUp()
 
 
 class TestParabolic(CommonTests, unittest.TestCase):
@@ -727,7 +727,7 @@ class TestParabolic(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(a=5, b=2, c=8)
         self.guess = lambda: dict(a=1, b=6, c=3)
         self.model_constructor = models.ParabolicModel
-        super(TestParabolic, self).setUp()
+        super().setUp()
 
 
 class TestPolynomialOrder2(CommonTests, unittest.TestCase):
@@ -737,7 +737,7 @@ class TestPolynomialOrder2(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(c1=1, c2=6, c0=3)
         self.model_constructor = models.PolynomialModel
         self.args = (2,)
-        super(TestPolynomialOrder2, self).setUp()
+        super().setUp()
 
 
 class TestPolynomialOrder3(CommonTests, unittest.TestCase):
@@ -747,7 +747,7 @@ class TestPolynomialOrder3(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(c3=1, c1=1, c2=6, c0=3)
         self.model_constructor = models.PolynomialModel
         self.args = (3,)
-        super(TestPolynomialOrder3, self).setUp()
+        super().setUp()
 
 
 class TestConstant(CommonTests, unittest.TestCase):
@@ -755,7 +755,7 @@ class TestConstant(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(c=5)
         self.guess = lambda: dict(c=2)
         self.model_constructor = models.ConstantModel
-        super(TestConstant, self).setUp()
+        super().setUp()
 
     def check_skip_independent_vars(self):
         raise pytest.skip("ConstantModel has not independent_vars.")
@@ -766,7 +766,7 @@ class TestPowerlaw(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(amplitude=5, exponent=3)
         self.guess = lambda: dict(amplitude=2, exponent=8)
         self.model_constructor = models.PowerLawModel
-        super(TestPowerlaw, self).setUp()
+        super().setUp()
 
 
 class TestExponential(CommonTests, unittest.TestCase):
@@ -774,7 +774,7 @@ class TestExponential(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(amplitude=5, decay=3)
         self.guess = lambda: dict(amplitude=2, decay=8)
         self.model_constructor = models.ExponentialModel
-        super(TestExponential, self).setUp()
+        super().setUp()
 
 
 class TestComplexConstant(CommonTests, unittest.TestCase):
@@ -782,7 +782,7 @@ class TestComplexConstant(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(re=5, im=5)
         self.guess = lambda: dict(re=2, im=2)
         self.model_constructor = models.ComplexConstantModel
-        super(TestComplexConstant, self).setUp()
+        super().setUp()
 
 
 class TestExpression(CommonTests, unittest.TestCase):
@@ -792,7 +792,7 @@ class TestExpression(CommonTests, unittest.TestCase):
         self.expression = "off_c + amp_c * exp(-x/x0)"
         self.model_constructor = (
             lambda *args, **kwargs: models.ExpressionModel(self.expression, *args, **kwargs))
-        super(TestExpression, self).setUp()
+        super().setUp()
 
     def test_composite_with_expression(self):
         expression_model = models.ExpressionModel("exp(-x/x0)", name='exp')
