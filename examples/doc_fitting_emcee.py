@@ -8,6 +8,7 @@ try:
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
+HASPYLAB = False
 
 try:
     import corner
@@ -70,16 +71,21 @@ print("\nmedian of posterior probability distribution")
 print('--------------------------------------------')
 lmfit.report_fit(res.params)
 
+
 # find the maximum likelihood solution
 highest_prob = np.argmax(res.lnprob)
 hp_loc = np.unravel_index(highest_prob, res.lnprob.shape)
 mle_soln = res.chain[hp_loc]
 for i, par in enumerate(p):
     p[par].value = mle_soln[i]
-print("\nMaximum likelihood Estimation")
-print('-----------------------------')
-for _, vals in p.items():
-    print(vals)
+
+print('\nMaximum Likelihood Estimation from emcee       ')
+print('-------------------------------------------------')
+print('Parameter  MLE Value   Median Value   Uncertainty')
+fmt = '  {:5s}  {:11.5f} {:11.5f}   {:11.5f}'.format
+for name, param in p.items():
+    print(fmt(name, param.value, res.params[name].value,
+              res.params[name].stderr))
 
 if HASPYLAB:
     plt.figure()
@@ -89,7 +95,17 @@ if HASPYLAB:
     plt.legend()
     plt.show()
 
-quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
-print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
-print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
-# <end of examples/doc_fitting_emcee.py>
+print('\nError Estimates from emcee    ')
+print('------------------------------------------------------')
+print('Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma ')
+
+for name in p.keys():
+    quantiles = np.percentile(res.flatchain[name],
+                              [2.275, 15.865, 50, 84.135, 97.275])
+    median = quantiles[2]
+    err_m2 = quantiles[0] - median
+    err_m1 = quantiles[1] - median
+    err_p1 = quantiles[3] - median
+    err_p2 = quantiles[4] - median
+    fmt = '  {:5s}   {:8.4f} {:8.4f} {:8.4f} {:8.4f} {:8.4f}'.format
+    print(fmt(name, err_m2, err_m1, median, err_p1, err_p2))
