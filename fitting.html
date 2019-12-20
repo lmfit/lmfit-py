@@ -97,12 +97,13 @@
 <li><a class="reference internal" href="#minimizerresult-the-optimization-result"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code> – the optimization result</a><ul>
 <li><a class="reference internal" href="#goodness-of-fit-statistics">Goodness-of-Fit Statistics</a></li>
 <li><a class="reference internal" href="#akaike-and-bayesian-information-criteria">Akaike and Bayesian Information Criteria</a></li>
+<li><a class="reference internal" href="#uncertainties-in-variable-parameters-and-their-correlations">Uncertainties in Variable Parameters, and their Correlations</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#getting-and-printing-fit-reports">Getting and Printing Fit Reports</a></li>
 <li><a class="reference internal" href="#using-a-iteration-callback-function">Using a Iteration Callback Function</a></li>
 <li><a class="reference internal" href="#using-the-minimizer-class">Using the <code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code> class</a></li>
 <li><a class="reference internal" href="#minimizer-emcee-calculating-the-posterior-probability-distribution-of-parameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code> - calculating the posterior probability distribution of parameters</a></li>
-<li><a class="reference internal" href="#getting-and-printing-fit-reports">Getting and Printing Fit Reports</a></li>
 </ul>
 </li>
 </ul>
@@ -853,6 +854,184 @@ typically selects the model with lowest reduced chi-square, Akaike
 information criterion, and/or Bayesian information criterion.  Generally,
 the Bayesian information criterion is considered the most conservative of
 these statistics.</p>
+</div>
+<div class="section" id="uncertainties-in-variable-parameters-and-their-correlations">
+<h3>Uncertainties in Variable Parameters, and their Correlations<a class="headerlink" href="#uncertainties-in-variable-parameters-and-their-correlations" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above, when a fit is complete the uncertainties for fitted
+Parameters as well as the correlations between pairs of Parameters are
+usually calculated.  This happens automatically either when using the
+default <code class="xref py py-meth docutils literal notranslate"><span class="pre">leastsq()</span></code> method, the <code class="xref py py-meth docutils literal notranslate"><span class="pre">least_squares()</span></code> method, or for
+most other fitting methods if the highly-recommended <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code>
+package is available.  The estimated standard error (the <span class="math notranslate nohighlight">\(1\sigma\)</span>
+uncertainty) for each variable Parameter will be contained in the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">stderr</span></code>, while the <code class="xref py py-attr docutils literal notranslate"><span class="pre">correl</span></code> attribute for each Parameter will
+contain a dictionary of the correlation with each other variable Parameter.</p>
+<p>These estimates of the uncertainties are done by inverting the Hessian
+matrix which represents the second derivative of fit quality for each
+variable parameter. There are situations for which the uncertainties cannot
+be estimated, which generally indicates that this matrix cannot be inverted
+because one of the fit is not actually sensitive to one of the variables.
+This can happen if a Parameter is stuck at an upper or lower bound, if the
+variable is simply not used by the fit, or if the value for the variable is
+such that it has no real influence on the fit.</p>
+<p>In principle, the scale of the uncertainties in the Parameters is closely
+tied to the goodness-of-fit statistics chi-square and reduced chi-square
+(<code class="docutils literal notranslate"><span class="pre">chisqr</span></code> and <code class="docutils literal notranslate"><span class="pre">redchi</span></code>).  The standard errors or <span class="math notranslate nohighlight">\(1 \sigma\)</span>
+uncertainties are those that increase chi-square by 1.  Since a “good fit”
+should have <code class="docutils literal notranslate"><span class="pre">redchi</span></code> of around 1, this requires that the data
+uncertainties (and to some extent the sampling of the N data points) is
+correct. Unfortunately, it is often not the case that one has high-quality
+estimates of the data uncertainties (getting the data is hard enough!).
+Because of this common situation, the uncertainties reported and held in
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">stderr</span></code> are not those that increase chi-square by 1, but those that
+increase chi-square by reduced chi-square.  This is equivalent to rescaling
+the uncertainty in the data such that reduced chi-square would be 1.  To be
+clear, this rescaling is done by default because if reduced chi-square is
+far from 1, this rescaling often makes the reported uncertainties sensible,
+and if reduced chi-square is near 1 it does little harm.  If you have good
+scaling of the data uncertainty and believe the scale of the residual
+array is correct,  this automatic rescaling can be turned off using
+<code class="docutils literal notranslate"><span class="pre">scale_covar=False</span></code>.</p>
+<p>Note that the simple (and fast!) approach to estimating uncertainties and
+correlations by inverting the second derivative matrix assumes that the
+components of the residual array (if, indeed, an array is used) are
+distributed around 0 with a normal (Gaussian distribution), and that a map
+of probability distributions for pairs would be elliptical – the size of
+the of ellipse gives the uncertainty itself and the eccentricity of the
+ellipse gives the correlation.  This simple approach to assessing
+uncertainties ignores outliers, highly asymmetric uncertainties, or complex
+correlations between Parameters.  In fact, it is not too hard to come up
+with problems where such effects are important.  Our experience is that the
+automated results are usually the right scale and quite reasonable as
+initial estimates, but a more thorough exploration of the Parameter space
+using the tools described in <a class="reference internal" href="#label-emcee"><span class="std std-ref">Minimizer.emcee() - calculating the posterior probability distribution of parameters</span></a> and
+<a class="reference internal" href="confidence.html#label-confidence-advanced"><span class="std std-ref">An advanced example for evaluating confidence intervals</span></a> can give a more complete understanding of
+the distributions and relations between Parameters.</p>
+</div>
+</div>
+<div class="section" id="getting-and-printing-fit-reports">
+<span id="fit-reports-label"></span><h2>Getting and Printing Fit Reports<a class="headerlink" href="#getting-and-printing-fit-reports" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lmfit.printfuncs.fit_report">
+<code class="sig-name descname">fit_report</code><span class="sig-paren">(</span><em class="sig-param">inpars</em>, <em class="sig-param">modelpars=None</em>, <em class="sig-param">show_correl=True</em>, <em class="sig-param">min_correl=0.1</em>, <em class="sig-param">sort_pars=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.printfuncs.fit_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a report of the fitting results.</p>
+<p>The report contains the best-fit values for the parameters and their
+uncertainties and correlations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a>) – Input Parameters from fit or MinimizerResult returned from a fit.</p></li>
+<li><p><strong>modelpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Known Model Parameters.</p></li>
+<li><p><strong>show_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show list of sorted correlations (default is True).</p></li>
+<li><p><strong>min_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – Smallest correlation in absolute value to show (default is 0.1).</p></li>
+<li><p><strong>sort_pars</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Whether to show parameter names sorted in alphanumerical order. If
+False (default), then the parameters will be listed in the order they
+were added to the Parameters dictionary. If callable, then this (one
+argument) function is used to extract a comparison key from each
+list element.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Multi-line text of fit report.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>An example using this to write out a fit report would be:</p>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_fitting_withreport.py&gt;</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">sign</span><span class="p">,</span> <span class="n">sin</span>
+
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">fit_report</span><span class="p">,</span> <span class="n">minimize</span>
+
+<span class="n">p_true</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">14.0</span><span class="p">)</span>
+<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;period&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">5.46</span><span class="p">)</span>
+<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.123</span><span class="p">)</span>
+<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.032</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">pars</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
+    <span class="n">per</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;period&#39;</span><span class="p">]</span>
+    <span class="n">shift</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span>
+    <span class="n">decay</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">shift</span> <span class="o">=</span> <span class="n">shift</span> <span class="o">-</span> <span class="n">sign</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">shift</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="n">per</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">model</span>
+    <span class="k">return</span> <span class="n">model</span> <span class="o">-</span> <span class="n">data</span>
+
+
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">250.</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.7215</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">residual</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span>
+
+<span class="n">fit_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
+<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">13.0</span><span class="p">)</span>
+<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;period&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+
+<span class="n">out</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">fit_params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">fit_report</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
+<span class="c1"># &lt;end examples/doc_fitting_withreport.py&gt;</span>
+</pre></div>
+</div>
+</div>
+<p>which would give as output:</p>
+<div class="docutils container">
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Fit Statistics]]
+    # fitting method   = leastsq
+    # function evals   = 83
+    # data points      = 1001
+    # variables        = 4
+    chi-square         = 498.811759
+    reduced chi-square = 0.50031270
+    Akaike info crit   = -689.222517
+    Bayesian info crit = -669.587497
+[[Variables]]
+    amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
+    period:  5.48507045 +/- 0.02666492 (0.49%) (init = 2)
+    shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
+    decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
+[[Correlations]] (unreported correlations are &lt; 0.100)
+    C(period, shift) =  0.797
+    C(amp, decay)    =  0.582
+    C(amp, shift)    = -0.297
+    C(amp, period)   = -0.243
+    C(shift, decay)  = -0.182
+    C(period, decay) = -0.150
+</pre></div>
+</div>
+</div>
+<p>To be clear, you can get at all of these values from the fit result <code class="docutils literal notranslate"><span class="pre">out</span></code>
+and <code class="docutils literal notranslate"><span class="pre">out.params</span></code>.  For example, a crude printout of the best fit variables
+and standard errors could be done as</p>
+<div class="jupyter_container docutils container">
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Parameter    Value       Stderr&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;{:7s} {:11.5f} {:11.5f}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">stderr</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>-------------------------------
+Parameter    Value       Stderr
+amp        13.91219     0.14120
+period      5.48507     0.02666
+shift       0.16204     0.01406
+decay       0.03265     0.00038
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="using-a-iteration-callback-function">
@@ -1643,9 +1822,24 @@ present in <cite>MinimizerResult.params</cite>, as well as <cite>Minimizer.chain
 </div>
 <div class="section" id="minimizer-emcee-calculating-the-posterior-probability-distribution-of-parameters">
 <span id="label-emcee"></span><h2><a class="reference internal" href="#lmfit.minimizer.Minimizer.emcee" title="lmfit.minimizer.Minimizer.emcee"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code></a> - calculating the posterior probability distribution of parameters<a class="headerlink" href="#minimizer-emcee-calculating-the-posterior-probability-distribution-of-parameters" title="Permalink to this headline">¶</a></h2>
-<p><a class="reference internal" href="#lmfit.minimizer.Minimizer.emcee" title="lmfit.minimizer.Minimizer.emcee"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code></a> can be used to obtain the posterior probability distribution of
-parameters, given a set of experimental data. An example problem is a double
-exponential decay. A small amount of Gaussian noise is also added in:</p>
+<p><a class="reference internal" href="#lmfit.minimizer.Minimizer.emcee" title="lmfit.minimizer.Minimizer.emcee"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code></a> can be used to obtain the posterior probability
+distribution of parameters, given a set of experimental data.  Note that this
+method does <em>not</em> actually perform a fit at all.  Instead, it explores
+parameter space to determine the probability distributions for the parameters,
+but without an explicit goal of attempting to refine the solution.  It should
+not be used for fitting, but it is a useful method to to more thoroughly
+explore the parameter space around the solution after a fit has been done and
+thereby get an improved understanding of the probability distribution for the
+parameters.  It may be able to refine your estimate of the most likely values
+for a set of parameters, but it will not iteratively find a good solution to
+the minimization problem.  To use this method effectively, you should first
+use another minimization method and then use this method to explore the
+parameter space around thosee best-fit values.</p>
+<p>To illustrate this, we’ll use an example problem of fitting data to function
+of a double exponential decay, including a modest amount of Gaussian noise to
+the data.  Note that this example is the same problem used in
+<a class="reference internal" href="confidence.html#label-confidence-advanced"><span class="std std-ref">An advanced example for evaluating confidence intervals</span></a> for evaluating confidence intervals in the
+parameters, which is a similar goal to the one here.</p>
 <div class="docutils container">
 </div>
 <div class="jupyter_container docutils container">
@@ -1661,7 +1855,7 @@ exponential decay. A small amount of Gaussian noise is also added in:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="_images/fitting_1_0.svg" src="_images/fitting_1_0.svg" /></div>
+<img alt="_images/fitting_4_0.svg" src="_images/fitting_4_0.svg" /></div>
 <p>Create a Parameter set for the initial guesses:</p>
 <div class="jupyter_container docutils container">
 <div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
@@ -1673,7 +1867,10 @@ exponential decay. A small amount of Gaussian noise is also added in:</p>
 </pre></div>
 </div>
 </div>
-<p>Solving with <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a> gives the Maximum Likelihood solution:</p>
+<p>Solving with <a class="reference internal" href="#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a> gives the Maximum Likelihood solution.   Note
+that we use the robust Nelder-Mead method here.  The default Levenberg-Marquardt
+method seems to have difficulty with exponential decays, though it can refine
+the solution if starting near the solution:</p>
 <div class="jupyter_container docutils container">
 <div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mi</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;nelder&#39;</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">)</span>
 <span class="n">lmfit</span><span class="o">.</span><span class="n">printfuncs</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
@@ -1700,14 +1897,19 @@ exponential decay. A small amount of Gaussian noise is also added in:</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="_images/fitting_4_0.svg" src="_images/fitting_4_0.svg" /></div>
-<p>However, this doesn’t give a probability distribution for the parameters.
-Furthermore, we wish to deal with the data uncertainty. This is called
-marginalisation of a nuisance parameter. <code class="docutils literal notranslate"><span class="pre">emcee</span></code> requires a function that returns
-the log-posterior probability. The log-posterior probability is a sum of the
-log-prior probability and log-likelihood functions. The log-prior probability is
-assumed to be zero if all the parameters are within their bounds and <code class="docutils literal notranslate"><span class="pre">-np.inf</span></code>
-if any of the parameters are outside their bounds.</p>
+<img alt="_images/fitting_7_0.svg" src="_images/fitting_7_0.svg" /></div>
+<p>Note that the fit here (for which the <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> package is installed)
+does estimate and report uncertainties in the parameters and correlations for
+the parameters, and reports the correlation of parameters <code class="docutils literal notranslate"><span class="pre">a2</span></code> and <code class="docutils literal notranslate"><span class="pre">t2</span></code> to
+be very high. As we’ll see, these estimates are pretty good, but when faced
+with such high correlation, it can be helpful to get the full probability
+distribution for the parameters.  MCMC methods are very good for this.</p>
+<p>Furthermore, we wish to deal with the data uncertainty. This is called
+marginalisation of a nuisance parameter. <code class="docutils literal notranslate"><span class="pre">emcee</span></code> requires a function that
+returns the log-posterior probability. The log-posterior probability is a sum
+of the log-prior probability and log-likelihood functions. The log-prior
+probability is assumed to be zero if all the parameters are within their
+bounds and <code class="docutils literal notranslate"><span class="pre">-np.inf</span></code> if any of the parameters are outside their bounds.</p>
 <p>If the objective function returns an array of unweighted residuals (i.e.,
 <code class="docutils literal notranslate"><span class="pre">data-model</span></code>) as is the case here, you can use <code class="docutils literal notranslate"><span class="pre">is_weighted=False</span></code> as an
 argument for <code class="docutils literal notranslate"><span class="pre">emcee</span></code>. In that case, <code class="docutils literal notranslate"><span class="pre">emcee</span></code> will automatically add/use the
@@ -1718,22 +1920,25 @@ place boundaries on this parameter one can do:</p>
 </pre></div>
 </div>
 </div>
-<p>Now we have to set up the minimizer and do the sampling:</p>
+<p>Now we have to set up the minimizer and do the sampling (again, just to be
+clear, this is <em>not</em> doing a fit):</p>
 <div class="jupyter_container docutils container">
 <div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;emcee&#39;</span><span class="p">,</span> <span class="n">nan_policy</span><span class="o">=</span><span class="s1">&#39;omit&#39;</span><span class="p">,</span> <span class="n">burn</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">steps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">thin</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
                      <span class="n">params</span><span class="o">=</span><span class="n">mi</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">is_weighted</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">progress</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>Of note, the <code class="docutils literal notranslate"><span class="pre">is_weighted</span></code> argument will be ignored if your objective function
-returns a float instead of an array. See the Notes in <a class="reference internal" href="#lmfit.minimizer.Minimizer.emcee" title="lmfit.minimizer.Minimizer.emcee"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code></a> for
-more information. For the documentation we set <code class="docutils literal notranslate"><span class="pre">progress=False</span></code>; the default is to show a progress bar,
-provided that the <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> package is installed.</p>
-<p>The performance of the method (i.e., whether or not the sampling went well) can be assessed by checking
-the integrated autocorrelation time and/or the acceptance fraction of the walkers. For this specific
-example the autocorrelation time could not be estimated because the “chain is too short”. Thus, we plot
-the acceptance fraction per walker and its values (or mean value) suggests that the sampling worked as
-intended (as a rule of thumb this value should be between 0.2 and 0.5).</p>
+<p>As mentioned in the Notes for <a class="reference internal" href="#lmfit.minimizer.Minimizer.emcee" title="lmfit.minimizer.Minimizer.emcee"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code></a>, the <code class="docutils literal notranslate"><span class="pre">is_weighted</span></code>
+argument will be ignored if your objective function returns a float instead of
+an array. For the documentation we set <code class="docutils literal notranslate"><span class="pre">progress=False</span></code>; the default is to
+print a progress bar to the Terminal if the <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> package is installed.</p>
+<p>The success of the method (i.e., whether or not the sampling went well) can be
+assessed by checking the integrated autocorrelation time and/or the acceptance
+fraction of the walkers. For this specific example the autocorrelation time
+could not be estimated because the “chain is too short”.  Instead, we plot the
+acceptance fraction per walker and its mean value suggests that the sampling
+worked as intended (as a rule of thumb the value should be between 0.2 and
+0.5).</p>
 <div class="jupyter_container docutils container">
 <div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">acceptance_fraction</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;walker&#39;</span><span class="p">)</span>
@@ -1741,9 +1946,9 @@ intended (as a rule of thumb this value should be between 0.2 and 0.5).</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="_images/fitting_7_0.svg" src="_images/fitting_7_0.svg" /></div>
-<p>Lets have a look at those posterior distributions for the parameters. This requires
-installation of the <code class="docutils literal notranslate"><span class="pre">corner</span></code> package:</p>
+<img alt="_images/fitting_10_0.svg" src="_images/fitting_10_0.svg" /></div>
+<p>With the results from <code class="docutils literal notranslate"><span class="pre">emcee</span></code>, we can visualize the posterior distributions
+for the parameters using the <code class="docutils literal notranslate"><span class="pre">corner</span></code> package:</p>
 <div class="jupyter_container docutils container">
 <div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">corner</span>
 
@@ -1751,14 +1956,12 @@ installation of the <code class="docutils literal notranslate"><span class="pre"
                            <span class="n">truths</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
 </pre></div>
 </div>
-<img alt="_images/fitting_8_0.svg" src="_images/fitting_8_0.svg" /></div>
+<img alt="_images/fitting_11_0.svg" src="_images/fitting_11_0.svg" /></div>
 <p>The values reported in the <a class="reference internal" href="#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code></a> are the medians of the
-probability distributions and a 1 <span class="math notranslate nohighlight">\(\sigma\)</span> quantile, estimated as half the
-difference between the 15.8 and 84.2 percentiles. The median value is not
-necessarily the same as the Maximum Likelihood Estimate. We’ll get that as well.
-You can see that we recovered the right uncertainty level on the data:</p>
+probability distributions and a 1 <span class="math notranslate nohighlight">\(\sigma\)</span> quantile, estimated as half
+the difference between the 15.8 and 84.2 percentiles.  Printing these values:</p>
 <div class="jupyter_container docutils container">
-<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s2">&quot;median of posterior probability distribution&quot;</span><span class="p">)</span>
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;median of posterior probability distribution&#39;</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s1">&#39;--------------------------------------------&#39;</span><span class="p">)</span>
 <span class="n">lmfit</span><span class="o">.</span><span class="n">report_fit</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
@@ -1781,7 +1984,19 @@ You can see that we recovered the right uncertainty level on the data:</p>
 </pre></div>
 </div>
 </div>
-<p>Find the Maximum Likelihood Estimation (MLE):</p>
+<p>You can see that this recovered the right uncertainty level on the data.  Note
+that these values agree pretty well with the results, uncertainties and
+correlations found by the fit and using <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> to estimate the
+covariance matrix.  That is, even though the parameters <code class="docutils literal notranslate"><span class="pre">a2</span></code>, <code class="docutils literal notranslate"><span class="pre">t1</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">t2</span></code> are all highly correlated and do not display perfectly Gaussian
+probability distributions, the probability distributions found by explicitly
+sampling the parameter space are not so far from elliptical as to make the
+simple (and much faster) estimates from inverting the covariance matrix
+completely invalid.</p>
+<p>As mentioned above, the result from <code class="docutils literal notranslate"><span class="pre">emcee</span></code> reports the median values, which
+are not necessarily the same as the Maximum Likelihood Estimate.  To obtain
+the values for the Maximum Likelihood Estimation (MLE) we find the location in
+the chain with the highest probability:</p>
 <div class="jupyter_container docutils container">
 <div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">highest_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">lnprob</span><span class="p">)</span>
 <span class="n">hp_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">highest_prob</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">lnprob</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -1789,139 +2004,63 @@ You can see that we recovered the right uncertainty level on the data:</p>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">par</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
     <span class="n">p</span><span class="p">[</span><span class="n">par</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">mle_soln</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;Maximum Likelihood Estimation&quot;</span><span class="p">)</span>
-<span class="k">print</span><span class="p">(</span><span class="s1">&#39;-----------------------------&#39;</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">vals</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">print</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Maximum Likelihood Estimation from emcee       &#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;-------------------------------------------------&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Parameter  MLE Value   Median Value   Uncertainty&#39;</span><span class="p">)</span>
+<span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;  {:5s}  {:11.5f} {:11.5f}   {:11.5f}&#39;</span><span class="o">.</span><span class="n">format</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">fmt</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">param</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+              <span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">stderr</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>Maximum Likelihood Estimation
------------------------------
-&lt;Parameter &#39;a1&#39;, value=2.9906874726524726, bounds=[-inf:inf]&gt;
-&lt;Parameter &#39;a2&#39;, value=-4.35008975094292, bounds=[-inf:inf]&gt;
-&lt;Parameter &#39;t1&#39;, value=1.322477365772526, bounds=[-inf:inf]&gt;
-&lt;Parameter &#39;t2&#39;, value=11.764400319132873, bounds=[-inf:inf]&gt;
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
+Maximum Likelihood Estimation from emcee
+-------------------------------------------------
+Parameter  MLE Value   Median Value   Uncertainty
+  a1         2.99069     2.99274       0.14796
+  a2        -4.35009    -4.34510       0.12509
+  t1         1.32248     1.32575       0.14478
+  t2        11.76440    11.79100       0.48119
 </pre></div>
 </div>
 </div>
-<p>Finally, lets work out a 1 and 2-<span class="math notranslate nohighlight">\(\sigma\)</span> error estimate for ‘t1’:</p>
+<p>Here the difference between MLE and median value are seen to be below 0.5%,
+and well within the estimated 1-<span class="math notranslate nohighlight">\(\sigma\)</span> uncertainty.</p>
+<p>Finally, we can use the samples from <code class="docutils literal notranslate"><span class="pre">emcee</span></code> to work out the 1- and
+2-<span class="math notranslate nohighlight">\(\sigma\)</span> error estimates.</p>
 <div class="jupyter_container docutils container">
-<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">quantiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">flatchain</span><span class="p">[</span><span class="s1">&#39;t1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.28</span><span class="p">,</span> <span class="mf">15.9</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">84.2</span><span class="p">,</span> <span class="mf">97.7</span><span class="p">])</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;1 sigma spread&quot;</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-<span class="k">print</span><span class="p">(</span><span class="s2">&quot;2 sigma spread&quot;</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">quantiles</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Error Estimates from emcee    &#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;------------------------------------------------------&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma &#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="n">quantiles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">flatchain</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                              <span class="p">[</span><span class="mf">2.275</span><span class="p">,</span> <span class="mf">15.865</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">84.135</span><span class="p">,</span> <span class="mf">97.275</span><span class="p">])</span>
+    <span class="n">median</span> <span class="o">=</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">err_m2</span> <span class="o">=</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">median</span>
+    <span class="n">err_m1</span> <span class="o">=</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">median</span>
+    <span class="n">err_p1</span> <span class="o">=</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">median</span>
+    <span class="n">err_p2</span> <span class="o">=</span> <span class="n">quantiles</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">median</span>
+    <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;  {:5s}   {:8.4f} {:8.4f} {:8.4f} {:8.4f} {:8.4f}&#39;</span><span class="o">.</span><span class="n">format</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">fmt</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">err_m2</span><span class="p">,</span> <span class="n">err_m1</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">err_p1</span><span class="p">,</span> <span class="n">err_p2</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>1 sigma spread 0.14501906108658946
-2 sigma spread 0.2985828649641594
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="getting-and-printing-fit-reports">
-<h2>Getting and Printing Fit Reports<a class="headerlink" href="#getting-and-printing-fit-reports" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="lmfit.printfuncs.fit_report">
-<code class="sig-name descname">fit_report</code><span class="sig-paren">(</span><em class="sig-param">inpars</em>, <em class="sig-param">modelpars=None</em>, <em class="sig-param">show_correl=True</em>, <em class="sig-param">min_correl=0.1</em>, <em class="sig-param">sort_pars=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.printfuncs.fit_report" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a report of the fitting results.</p>
-<p>The report contains the best-fit values for the parameters and their
-uncertainties and correlations.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>inpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a>) – Input Parameters from fit or MinimizerResult returned from a fit.</p></li>
-<li><p><strong>modelpars</strong> (<a class="reference internal" href="parameters.html#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><em>Parameters</em></a><em>, </em><em>optional</em>) – Known Model Parameters.</p></li>
-<li><p><strong>show_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to show list of sorted correlations (default is True).</p></li>
-<li><p><strong>min_correl</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.8)"><em>float</em></a><em>, </em><em>optional</em>) – Smallest correlation in absolute value to show (default is 0.1).</p></li>
-<li><p><strong>sort_pars</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Whether to show parameter names sorted in alphanumerical order. If
-False (default), then the parameters will be listed in the order they
-were added to the Parameters dictionary. If callable, then this (one
-argument) function is used to extract a comparison key from each
-list element.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Multi-line text of fit report.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>string</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p>An example using this to write out a fit report would be:</p>
-<div class="jupyter_container docutils container">
-<div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_fitting_withreport.py&gt;</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">sign</span><span class="p">,</span> <span class="n">sin</span>
-
-<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">fit_report</span><span class="p">,</span> <span class="n">minimize</span>
-
-<span class="n">p_true</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">14.0</span><span class="p">)</span>
-<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;period&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">5.46</span><span class="p">)</span>
-<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.123</span><span class="p">)</span>
-<span class="n">p_true</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.032</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">residual</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Model a decaying sine wave and subtract data.&quot;&quot;&quot;</span>
-    <span class="n">vals</span> <span class="o">=</span> <span class="n">pars</span><span class="o">.</span><span class="n">valuesdict</span><span class="p">()</span>
-    <span class="n">amp</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;amp&#39;</span><span class="p">]</span>
-    <span class="n">per</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;period&#39;</span><span class="p">]</span>
-    <span class="n">shift</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;shift&#39;</span><span class="p">]</span>
-    <span class="n">decay</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="s1">&#39;decay&#39;</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">:</span>
-        <span class="n">shift</span> <span class="o">=</span> <span class="n">shift</span> <span class="o">-</span> <span class="n">sign</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span><span class="o">*</span><span class="n">pi</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">shift</span> <span class="o">+</span> <span class="n">x</span><span class="o">/</span><span class="n">per</span><span class="p">)</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">decay</span><span class="o">*</span><span class="n">decay</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">model</span>
-    <span class="k">return</span> <span class="n">model</span> <span class="o">-</span> <span class="n">data</span>
-
-
-<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">250.</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
-<span class="n">noise</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.7215</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">residual</span><span class="p">(</span><span class="n">p_true</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">noise</span>
-
-<span class="n">fit_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
-<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">13.0</span><span class="p">)</span>
-<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;period&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;shift&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
-<span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
-
-<span class="n">out</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">fit_params</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,),</span> <span class="n">kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
-
-<span class="k">print</span><span class="p">(</span><span class="n">fit_report</span><span class="p">(</span><span class="n">out</span><span class="p">))</span>
-<span class="c1"># &lt;end examples/doc_fitting_withreport.py&gt;</span>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
+Error Estimates from emcee
+------------------------------------------------------
+Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma
+  a1       -0.2635  -0.1408   2.9927   0.1552   0.3262
+  a2       -0.3474  -0.1393  -4.3451   0.1110   0.1931
+  t1       -0.2411  -0.1335   1.3258   0.1561   0.3420
+  t2       -1.1149  -0.4989  11.7910   0.4635   0.8741
 </pre></div>
 </div>
 </div>
-<p>which would give as output:</p>
-<div class="docutils container">
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Fit Statistics]]
-    # fitting method   = leastsq
-    # function evals   = 83
-    # data points      = 1001
-    # variables        = 4
-    chi-square         = 498.811759
-    reduced chi-square = 0.50031270
-    Akaike info crit   = -689.222517
-    Bayesian info crit = -669.587497
-[[Variables]]
-    amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
-    period:  5.48507045 +/- 0.02666492 (0.49%) (init = 2)
-    shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
-    decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
-[[Correlations]] (unreported correlations are &lt; 0.100)
-    C(period, shift) =  0.797
-    C(amp, decay)    =  0.582
-    C(amp, shift)    = -0.297
-    C(amp, period)   = -0.243
-    C(shift, decay)  = -0.182
-    C(period, decay) = -0.150
-</pre></div>
-</div>
-</div>
+<p>And we see that the initial estimates for the 1-<span class="math notranslate nohighlight">\(\sigma\)</span> standard error
+using <code class="docutils literal notranslate"><span class="pre">numdifftools</span></code> was not too bad.  We’ll return to this example
+problem in <a class="reference internal" href="confidence.html#label-confidence-advanced"><span class="std std-ref">An advanced example for evaluating confidence intervals</span></a> and use a different method to
+calculate the 1- and 2-<span class="math notranslate nohighlight">\(\sigma\)</span> error bars.</p>
 </div>
 </div>
 
@@ -1956,7 +2095,7 @@ list element.</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
     </div>
   </body>
 </html>

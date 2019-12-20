@@ -76,7 +76,7 @@ doc_model_loadmodelresult.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.231 seconds)
+   **Total running time of the script:** ( 0 minutes  0.118 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodelresult.py:

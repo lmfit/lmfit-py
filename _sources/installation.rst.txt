@@ -13,7 +13,6 @@ Downloading and Installation
 .. _matplotlib:  https://matplotlib.org/
 .. _dill:  https://github.com/uqfoundation/dill
 .. _asteval:  https://github.com/newville/asteval
-.. _six:  https://github.com/benjaminp/six
 .. _uncertainties:  https://github.com/lebigot/uncertainties
 .. _numdifftools:  https://github.com/pbrod/numdifftools
 .. _contributing.md: https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md
@@ -27,11 +26,10 @@ Downloading and Installation
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-Lmfit works with `Python`_ versions 2.7 and 3.5, 3.6, 3.7, or 3.8. Version
+Lmfit works with `Python`_ versions 3.5 and higher. Version
 0.9.15 is the final version to support Python 2.7.
 
 Lmfit requires the following Python packages, with versions given:
-   * `six`_ version 1.11 or higher.
    * `NumPy`_ version 1.16 or higher.
    * `SciPy`_ version 1.2 or higher.
    * `asteval`_ version 0.9.16 or higher.

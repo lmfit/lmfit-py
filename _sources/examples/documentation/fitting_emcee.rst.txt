@@ -72,14 +72,21 @@ doc_fitting_emcee.py
         C(a1, a2) =  0.206
         C(a1, t2) =  0.175
 
-    Maximum likelihood Estimation
-    -----------------------------
-    <Parameter 'a1', value=2.9906874726524726, bounds=[-inf:inf]>
-    <Parameter 'a2', value=-4.35008975094292, bounds=[-inf:inf]>
-    <Parameter 't1', value=1.322477365772526, bounds=[-inf:inf]>
-    <Parameter 't2', value=11.764400319132873, bounds=[-inf:inf]>
-    1 sigma spread 0.14501906108658946
-    2 sigma spread 0.2985828649641594
+    Maximum Likelihood Estimation from emcee
+    ---------------------------------------------------
+    Parameter  MLE Value   Median Value   Uncertainty
+      a1         2.99069     2.99274       0.14796
+      a2        -4.35009    -4.34510       0.12509
+      t1         1.32248     1.32575       0.14478
+      t2        11.76440    11.79100       0.48119
+
+    Error Estimates from numdifftools and emcee
+    ---------------------------------------------
+    Parameter  stderr    1-sigma     2-sigma
+      a1       0.14796   0.14809     0.29925
+      a2       0.12509   0.12498     0.27318
+      t1       0.14478   0.14502     0.29858
+      t2       0.48119   0.48199     1.01225
 
 
 
@@ -166,16 +173,21 @@ doc_fitting_emcee.py
     print('--------------------------------------------')
     lmfit.report_fit(res.params)
 
+
     # find the maximum likelihood solution
     highest_prob = np.argmax(res.lnprob)
     hp_loc = np.unravel_index(highest_prob, res.lnprob.shape)
     mle_soln = res.chain[hp_loc]
     for i, par in enumerate(p):
         p[par].value = mle_soln[i]
-    print("\nMaximum likelihood Estimation")
-    print('-----------------------------')
-    for _, vals in p.items():
-        print(vals)
+
+    print('\nMaximum Likelihood Estimation from emcee         ')
+    print('---------------------------------------------------')
+    print('Parameter  MLE Value   Median Value   Uncertainty')
+    for name, param in p.items():
+        print('  {:5s}  {:11.5f} {:11.5f}   {:11.5f}'.format(name, param.value,
+                                                             res.params[name].value,
+                                                             res.params[name].stderr))
 
     if HASPYLAB:
         plt.figure()
@@ -185,15 +197,22 @@ doc_fitting_emcee.py
         plt.legend()
         plt.show()
 
-    quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
-    print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
-    print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
-    # <end of examples/doc_fitting_emcee.py>
+    print('\nError Estimates from numdifftools and emcee')
+    print('---------------------------------------------')
+    print('Parameter  stderr    1-sigma     2-sigma ')
+
+    for name in p.keys():
+        quantiles = np.percentile(res.flatchain[name], [2.28, 15.9, 84.2, 97.7])
+        err1s = (quantiles[2] - quantiles[1])/2
+        err2s = (quantiles[3] - quantiles[0])/2
+        print('  {:5s}   {:8.5f}  {:8.5f}    {:8.5f}'.format(name,
+                                                             res.params[name].stderr,
+                                                             err1s, err2s))
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  11.120 seconds)
+   **Total running time of the script:** ( 0 minutes  9.998 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:

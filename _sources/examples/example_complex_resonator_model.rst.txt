@@ -71,7 +71,7 @@ The standard practice of defining an ``lmfit`` model is as follows:
 
         def __init__(self, *args, **kwargs):
             # pass in the defining equation so the user doesn't have to later.
-            super(ResonatorModel, self).__init__(linear_resonator, *args, **kwargs)
+            super().__init__(linear_resonator, *args, **kwargs)
 
             self.set_param_hint('Q', min=0)  # Enforce Q is positive
 
@@ -260,7 +260,7 @@ for plotting complex quantities:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.354 seconds)
+   **Total running time of the script:** ( 0 minutes  0.318 seconds)
 
 
 .. _sphx_glr_download_examples_example_complex_resonator_model.py:

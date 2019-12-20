@@ -5,21 +5,21 @@
 
 Computation times
 =================
-**01:16.507** total execution time for **examples** files:
+**01:07.423** total execution time for **examples** files:
 
-- **00:34.582**: :ref:`sphx_glr_examples_example_brute.py` (``example_brute.py``)
-- **00:26.309**: :ref:`sphx_glr_examples_example_confidence_interval.py` (``example_confidence_interval.py``)
-- **00:11.583**: :ref:`sphx_glr_examples_example_emcee_Model_interface.py` (``example_emcee_Model_interface.py``)
-- **00:01.518**: :ref:`sphx_glr_examples_example_detect_outliers.py` (``example_detect_outliers.py``)
-- **00:00.385**: :ref:`sphx_glr_examples_example_diffev.py` (``example_diffev.py``)
-- **00:00.354**: :ref:`sphx_glr_examples_example_complex_resonator_model.py` (``example_complex_resonator_model.py``)
-- **00:00.319**: :ref:`sphx_glr_examples_example_reduce_fcn.py` (``example_reduce_fcn.py``)
-- **00:00.299**: :ref:`sphx_glr_examples_example_Model_interface.py` (``example_Model_interface.py``)
-- **00:00.215**: :ref:`sphx_glr_examples_example_use_pandas.py` (``example_use_pandas.py``)
-- **00:00.207**: :ref:`sphx_glr_examples_example_fit_multi_datasets.py` (``example_fit_multi_datasets.py``)
-- **00:00.169**: :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py` (``example_fit_with_algebraic_constraint.py``)
-- **00:00.150**: :ref:`sphx_glr_examples_example_fit_with_inequality.py` (``example_fit_with_inequality.py``)
-- **00:00.144**: :ref:`sphx_glr_examples_example_expression_model.py` (``example_expression_model.py``)
-- **00:00.138**: :ref:`sphx_glr_examples_example_fit_with_bounds.py` (``example_fit_with_bounds.py``)
-- **00:00.134**: :ref:`sphx_glr_examples_example_fit_with_derivfunc.py` (``example_fit_with_derivfunc.py``)
+- **00:32.589**: :ref:`sphx_glr_examples_example_brute.py` (``example_brute.py``)
+- **00:20.501**: :ref:`sphx_glr_examples_example_confidence_interval.py` (``example_confidence_interval.py``)
+- **00:10.530**: :ref:`sphx_glr_examples_example_emcee_Model_interface.py` (``example_emcee_Model_interface.py``)
+- **00:01.194**: :ref:`sphx_glr_examples_example_detect_outliers.py` (``example_detect_outliers.py``)
+- **00:00.363**: :ref:`sphx_glr_examples_example_diffev.py` (``example_diffev.py``)
+- **00:00.318**: :ref:`sphx_glr_examples_example_complex_resonator_model.py` (``example_complex_resonator_model.py``)
+- **00:00.316**: :ref:`sphx_glr_examples_example_reduce_fcn.py` (``example_reduce_fcn.py``)
+- **00:00.302**: :ref:`sphx_glr_examples_example_Model_interface.py` (``example_Model_interface.py``)
+- **00:00.274**: :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py` (``example_fit_with_algebraic_constraint.py``)
+- **00:00.233**: :ref:`sphx_glr_examples_example_use_pandas.py` (``example_use_pandas.py``)
+- **00:00.190**: :ref:`sphx_glr_examples_example_fit_with_derivfunc.py` (``example_fit_with_derivfunc.py``)
+- **00:00.185**: :ref:`sphx_glr_examples_example_fit_multi_datasets.py` (``example_fit_multi_datasets.py``)
+- **00:00.147**: :ref:`sphx_glr_examples_example_fit_with_inequality.py` (``example_fit_with_inequality.py``)
+- **00:00.142**: :ref:`sphx_glr_examples_example_fit_with_bounds.py` (``example_fit_with_bounds.py``)
+- **00:00.140**: :ref:`sphx_glr_examples_example_expression_model.py` (``example_expression_model.py``)
 - **00:00.000**: :ref:`sphx_glr_examples_lmfit_emcee_model_selection.py` (``lmfit_emcee_model_selection.py``)

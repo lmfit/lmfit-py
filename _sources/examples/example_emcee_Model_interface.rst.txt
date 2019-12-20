@@ -97,7 +97,7 @@ Fit the model using a traditional minimizer, and show the output:
 
     /Users/Newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:16: RuntimeWarning: overflow encountered in multiply
       return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
-    /Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15-py3.7.egg/lmfit/minimizer.py:174: RuntimeWarning: overflow encountered in multiply
+    /Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-0.9.15+6.gf7b48b7.dirty-py3.7.egg/lmfit/minimizer.py:173: RuntimeWarning: overflow encountered in multiply
     [[Fit Statistics]]
         # fitting method   = Nelder-Mead
         # function evals   = 609
@@ -326,7 +326,7 @@ Plot the parameter covariances returned by emcee using corner
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  11.583 seconds)
+   **Total running time of the script:** ( 0 minutes  10.530 seconds)
 
 
 .. _sphx_glr_download_examples_example_emcee_Model_interface.py:

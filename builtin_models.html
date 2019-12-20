@@ -198,21 +198,32 @@ example, a Lorentzian plus a linear background might be represented as:</p>
 variable named <code class="docutils literal notranslate"><span class="pre">x</span></code>.  Many of these models represent a function with a
 distinct peak, and so share common features.  To maintain uniformity,
 common parameter names are used whenever possible.  Thus, most models have
-a parameter called <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> that represents the overall height (or
-area of) a peak or function, a <code class="docutils literal notranslate"><span class="pre">center</span></code> parameter that represents a peak
-centroid position, and a <code class="docutils literal notranslate"><span class="pre">sigma</span></code> parameter that gives a characteristic
-width.  Many peak shapes also have a parameter <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> (constrained by
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code>) giving the full width at half maximum and a parameter <code class="docutils literal notranslate"><span class="pre">height</span></code>
-(constrained by <code class="docutils literal notranslate"><span class="pre">sigma</span></code> and <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>) to give the maximum peak
-height.</p>
+a parameter called <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> that represents the overall intensity (or
+area of) a peak or function and a <code class="docutils literal notranslate"><span class="pre">sigma</span></code> parameter that gives a
+characteristic width.</p>
 <p>After a list of built-in models, a few examples of their use are given.</p>
 <div class="section" id="peak-like-models">
 <h2>Peak-like models<a class="headerlink" href="#peak-like-models" title="Permalink to this headline">¶</a></h2>
 <p>There are many peak-like models available.  These include
-<a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code></a>, <a class="reference internal" href="#lmfit.models.LorentzianModel" title="lmfit.models.LorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a>, <a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a> and
-some less commonly used variations.  The <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code>
-methods for all of these make a fairly crude guess for the value of
-<code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, but also set a lower bound of 0 on the value of <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.</p>
+<a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code></a>, <a class="reference internal" href="#lmfit.models.LorentzianModel" title="lmfit.models.LorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a>, <a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a>,
+<a class="reference internal" href="#lmfit.models.PseudoVoigtModel" title="lmfit.models.PseudoVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PseudoVoigtModel</span></code></a>, and some less commonly used variations.  Most of
+these models are <em>unit-normalized</em> and share the same parameter names so
+that you can easily switch between models and interpret the results.  The
+<code class="docutils literal notranslate"><span class="pre">amplitude</span></code> parameter is the multiplicative factor for the
+unit-normalized peak lineshape, and so will represent the strength of that
+peak or the area under that curve.  The <code class="docutils literal notranslate"><span class="pre">center</span></code> parameter will be the
+centroid <code class="docutils literal notranslate"><span class="pre">x</span></code> value.  The <code class="docutils literal notranslate"><span class="pre">sigma</span></code> parameter is the characteristic width
+of the peak, with many functions using <span class="math notranslate nohighlight">\((x-\mu)/\sigma\)</span> where
+<span class="math notranslate nohighlight">\(\mu\)</span> is the centroid value.  Most of these peak functions will have
+two additional parameters derived from and constrained by the other
+parameters. The first of these is <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> which will hold the estimated
+“Full Width at Half Max” for the peak, which is often easier to compare
+between different models than <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.  The second of these is <code class="docutils literal notranslate"><span class="pre">height</span></code>
+which will contain the maximum value of the peak, typically the value at
+<span class="math notranslate nohighlight">\(x = \mu\)</span>.  Finally, each of these models has a <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> method
+that uses data to make a fairly crude but usually sufficient guess for the
+value of <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>, and sets a lower bound
+of 0 on the value of <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.</p>
 <div class="section" id="gaussianmodel">
 <h3><a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code></a><a class="headerlink" href="#gaussianmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
@@ -1446,9 +1457,6 @@ A Voigt model does a better job. Using <a class="reference internal" href="#lmfi
     C(amplitude, sigma) =  0.651
 </pre></div>
 </div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
 </div>
 <p>which has a much better value for <span class="math notranslate nohighlight">\(\chi^2\)</span> and the other
 goodness-of-fit measures, and an obviously better match to the data as seen
@@ -1851,7 +1859,7 @@ and the figure above shows an improved initial estimate of the data.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
     </div>
   </body>
 </html>

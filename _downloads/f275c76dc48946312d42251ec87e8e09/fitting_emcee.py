@@ -80,16 +80,21 @@ print("\nmedian of posterior probability distribution")
 print('--------------------------------------------')
 lmfit.report_fit(res.params)
 
+
 # find the maximum likelihood solution
 highest_prob = np.argmax(res.lnprob)
 hp_loc = np.unravel_index(highest_prob, res.lnprob.shape)
 mle_soln = res.chain[hp_loc]
 for i, par in enumerate(p):
     p[par].value = mle_soln[i]
-print("\nMaximum likelihood Estimation")
-print('-----------------------------')
-for _, vals in p.items():
-    print(vals)
+
+print('\nMaximum Likelihood Estimation from emcee         ')
+print('---------------------------------------------------')
+print('Parameter  MLE Value   Median Value   Uncertainty')
+for name, param in p.items():
+    print('  {:5s}  {:11.5f} {:11.5f}   {:11.5f}'.format(name, param.value,
+                                                         res.params[name].value,
+                                                         res.params[name].stderr))
 
 if HASPYLAB:
     plt.figure()
@@ -99,7 +104,14 @@ if HASPYLAB:
     plt.legend()
     plt.show()
 
-quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
-print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
-print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
-# <end of examples/doc_fitting_emcee.py>
+print('\nError Estimates from numdifftools and emcee')
+print('---------------------------------------------')
+print('Parameter  stderr    1-sigma     2-sigma ')
+
+for name in p.keys():
+    quantiles = np.percentile(res.flatchain[name], [2.28, 15.9, 84.2, 97.7])
+    err1s = (quantiles[2] - quantiles[1])/2
+    err2s = (quantiles[3] - quantiles[0])/2
+    print('  {:5s}   {:8.5f}  {:8.5f}    {:8.5f}'.format(name,
+                                                         res.params[name].stderr,
+                                                         err1s, err2s))
