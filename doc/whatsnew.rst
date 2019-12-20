@@ -12,6 +12,26 @@ to be a comprehensive list of changes.  For such a complete record,
 consult the `lmfit GitHub repository`_.
 
 
+.. _whatsnew_100_label:
+
+Version 1.0.0 Release Notes
+============================
+
+**Version 1.0.0 supports Python 3.5, 3.6, 3.7, and 3.8**
+
+New features:
+
+- no new features are introduced in 1.0.0.
+
+Improvements:
+
+- support for Python 2 and use of the ``six`` package are removed. (PR #612)
+
+Various:
+
+- documentation updates to clarify the use of ``emcee``. (PR #614)
+
+
 .. _whatsnew_0915_label:
 
 Version 0.9.15 Release Notes
