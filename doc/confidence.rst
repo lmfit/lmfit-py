@@ -106,15 +106,20 @@ parameters and set it manually:
         result.params[p].stderr = abs(result.params[p].value * 0.1)
 
 
-An advanced example
--------------------
+..  _label-confidence-advanced:
+
+An advanced example for evaluating confidence intervals
+---------------------------------------------------------
 
 Now we look at a problem where calculating the error from approximated
-covariance can lead to misleading result -- two decaying exponentials.  In
-fact such a problem is particularly hard for the Levenberg-Marquardt
-method, so we first estimate the results using the slower but robust
-Nelder-Mead  method, and *then* use Levenberg-Marquardt to estimate the
-uncertainties and correlations.
+covariance can lead to misleading result -- the same double exponential
+problem shown in :ref:`label-emcee`.  In fact such a problem is particularly
+hard for the Levenberg-Marquardt method, so we first estimate the results
+using the slower but robust Nelder-Mead method.  We can then compare the
+uncertainties computed (if the ``numdifftools`` package is installed) with
+those estimated using Levenberg-Marquardt around the previously found
+solution.  We can also compare to the results of using ``emcee``.
+
 
 .. jupyter-execute::
     :hide-code:
@@ -168,7 +173,13 @@ Plots of the confidence region are shown in the figures below for ``a1`` and
     plt.show()
 
 Neither of these plots is very much like an ellipse, which is implicitly
-assumed by the approach using the covariance matrix.
+assumed by the approach using the covariance matrix.  The plots actually
+look quite a bit like those found with MCMC and shown in the "corner plot"
+in :ref:`label-emcee`.  In fact, comparing the confidence interval results
+here with the results for the 1- and 2-:math:`\sigma` error estimated with
+``emcee``, we can see that the agreement is pretty good and that the
+asymmetry in the parameter distributions are reflected well in the
+asymmetry of the uncertainties
 
 The trace returned as the optional second argument from
 :func:`conf_interval` contains a dictionary for each variable parameter.
