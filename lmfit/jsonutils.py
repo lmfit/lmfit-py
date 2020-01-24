@@ -17,16 +17,6 @@ except ImportError:
     read_json = None
 
 
-def bindecode(val):
-    """b64decode wrapper."""
-    return b64decode(val)
-
-
-def binencode(val):
-    """b64encode wrapper."""
-    return str(b64encode(val), 'utf-8')
-
-
 def find_importer(obj):
     """Find importer of an object."""
     oname = obj.__name__
@@ -96,7 +86,7 @@ def encode4js(obj):
         pyvers = "%d.%d" % (sys.version_info.major,
                             sys.version_info.minor)
         if HAS_DILL:
-            val = binencode(dill.dumps(obj))
+            val = str(b64encode(dill.dumps(obj)), 'utf-8')
         else:
             val = None
             importer = find_importer(obj)
@@ -142,7 +132,7 @@ def decode4js(obj):
         pyvers = "%d.%d" % (sys.version_info.major,
                             sys.version_info.minor)
         if pyvers == obj['pyversion'] and HAS_DILL:
-            out = dill.loads(bindecode(obj['value']))
+            out = dill.loads(b64decode(obj['value']))
         elif obj['importer'] is not None:
             out = import_from(obj['importer'], val)
 
