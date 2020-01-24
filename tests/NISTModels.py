@@ -171,7 +171,7 @@ def ReadNistData(dataset):
     """NIST STRD data is in a simple, fixed format with
     line numbers being significant!
     """
-    finp = open(os.path.join(NIST_DIR, "%s.dat" % dataset), 'r')
+    finp = open(os.path.join(NIST_DIR, "%s.dat" % dataset))
     lines = [l[:-1] for l in finp.readlines()]
     finp.close()
     ModelLines = lines[30:39]

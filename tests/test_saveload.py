@@ -100,7 +100,7 @@ def test_save_load_model(dill):
     file_exists = wait_for_file(SAVE_MODEL, timeout=10)
     assert file_exists
 
-    with open(SAVE_MODEL, 'r') as fh:
+    with open(SAVE_MODEL) as fh:
         text = fh.read()
     assert 1000 < len(text) < 2500
 
@@ -141,7 +141,7 @@ def test_save_load_modelresult(dill):
     assert file_exists
 
     text = ''
-    with open(SAVE_MODELRESULT, 'r') as fh:
+    with open(SAVE_MODELRESULT) as fh:
         text = fh.read()
     assert_between(len(text), 8000, 25000)
 

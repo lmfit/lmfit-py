@@ -939,7 +939,7 @@ The components were generated after the fit using the
 :meth:`ModelResult.eval_components` method of the ``result``, which returns
 a dictionary of the components, using keys of the model name
 (or ``prefix`` if that is set).  This will use the parameter values in
-`result.params` and the independent variables (``x``) used during the
+``result.params`` and the independent variables (``x``) used during the
 fit.  Note that while the :class:`ModelResult` held in ``result`` does store the
 best parameters and the best estimate of the model in ``result.best_fit``,
 the original model and parameters in ``pars`` are left unaltered.
