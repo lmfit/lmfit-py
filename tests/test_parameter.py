@@ -6,7 +6,6 @@ import pickle
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
-import uncertainties as un
 
 import lmfit
 
@@ -343,17 +342,6 @@ def test_setup_bounds_and_scale_gradient_methods():
     assert_allclose(par_both_bounds.setup_bounds(), 0.4115168460674879)
     assert_allclose(par_both_bounds.scale_gradient(par_both_bounds.value),
                     -20.976788, rtol=1.e-6)
-
-
-def test__getval(parameter):
-    """Test _getval function."""
-    par, _ = parameter
-
-    # test uncertainties.core.Variable in _getval [deprecated]
-    par.set(value=un.ufloat(5.0, 0.2))
-    with pytest.warns(FutureWarning, match='removed in the next release'):
-        val = par.value
-    assert_allclose(val, 5.0)
 
 
 def test_value_setter(parameter):
