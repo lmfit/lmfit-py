@@ -568,13 +568,3 @@ def test__rsub__(parameter):
     """Test the __rsub__ magic method."""
     par, _ = parameter
     assert_allclose(5.25 - par, -4.75)
-
-
-def test_isParameter(parameter):
-    """Test function to check whether something is a Parameter [deprecated]."""
-    # TODO: this function isn't used anywhere in the codebase; useful at all?
-    par, _ = parameter
-    assert lmfit.parameter.isParameter(par)
-    assert not lmfit.parameter.isParameter('test')
-    with pytest.warns(FutureWarning, match='removed in the next release'):
-        lmfit.parameter.isParameter(par)
