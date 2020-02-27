@@ -1,6 +1,7 @@
 """Tests for the Parameter class."""
 
 from math import trunc
+import pickle
 
 import numpy as np
 from numpy.testing import assert_allclose
@@ -8,6 +9,23 @@ import pytest
 import uncertainties as un
 
 import lmfit
+
+
+@pytest.fixture
+def parameters():
+    """Initialize a Parameters class for tests."""
+    pars = lmfit.Parameters()
+    pars.add(lmfit.Parameter(name='a', value=10.0, vary=True, min=-100.0,
+                             max=100.0, expr=None, brute_step=5.0,
+                             user_data=1))
+    pars.add(lmfit.Parameter(name='b', value=0.0, vary=True, min=-250.0,
+                             max=250.0, expr="2.0*a", brute_step=25.0,
+                             user_data=2.5))
+    exp_attr_values_A = ('a', 10.0, True, -100.0, 100.0, None, 5.0, 1)
+    exp_attr_values_B = ('b', 20.0, False, -250.0, 250.0, "2.0*a", 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], exp_attr_values_A)
+    assert_parameter_attributes(pars['b'], exp_attr_values_B)
+    return pars, exp_attr_values_A, exp_attr_values_B
 
 
 @pytest.fixture
@@ -149,8 +167,8 @@ def test_parameter_set_expr(parameter):
     """Test the Parameter.set() function with expr.
 
     Of note, this only tests for setting/removal of the expression; nothing
-    else gets evaluated here.... More specific tests will be present in the
-    Parameters class.
+    else gets evaluated here... More specific tests that require a Parameters
+    class can be found below.
 
     """
     par, _ = parameter
@@ -166,6 +184,60 @@ def test_parameter_set_expr(parameter):
     par.set(expr='')  # should remove the expression
     changed_attribute_values = ('a', 10.0, False, -100.0, 100.0, None, 5.0, 1)
     assert_parameter_attributes(par, changed_attribute_values)
+
+
+def test_parameters_set_value_with_expr(parameters):
+    """Test the Parameter.set() function with value in presence of expr."""
+    pars, init_attr_values_A, init_attr_values_B = parameters
+
+    pars['a'].set(value=5.0)
+    pars.update_constraints()  # update constraints/expressions
+    changed_attr_values_A = ('a', 5.0, True, -100.0, 100.0, None, 5.0, 1)
+    changed_attr_values_B = ('b', 10.0, False, -250.0, 250.0, "2.0*a", 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], changed_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
+
+    # with expression present, setting a value works and will leave vary=False
+    pars['b'].set(value=1.0)
+    pars.update_constraints()  # update constraints/expressions
+    changed_attr_values_A = ('a', 5.0, True, -100.0, 100.0, None, 5.0, 1)
+    changed_attr_values_B = ('b', 1.0, False, -250.0, 250.0, None, 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], changed_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
+
+
+def test_parameters_set_vary_with_expr(parameters):
+    """Test the Parameter.set() function with vary in presence of expr."""
+    pars, init_attr_values_A, init_attr_values_B = parameters
+
+    pars['b'].set(vary=True)  # expression should get cleared
+    pars.update_constraints()  # update constraints/expressions
+    changed_attr_values_B = ('b', 20.0, True, -250.0, 250.0, None, 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], init_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
+
+
+def test_parameters_set_expr(parameters):
+    """Test the Parameter.set() function with expr."""
+    pars, init_attr_values_A, init_attr_values_B = parameters
+
+    pars['b'].set(expr=None)  # nothing should change
+    pars.update_constraints()  # update constraints/expressions
+    assert_parameter_attributes(pars['a'], init_attr_values_A)
+    assert_parameter_attributes(pars['b'], init_attr_values_B)
+
+    pars['b'].set(expr='')  # expression should get cleared, vary still False
+    pars.update_constraints()  # update constraints/expressions
+    changed_attr_values_B = ('b', 20.0, False, -250.0, 250.0, None, 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], init_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
+
+    pars['a'].set(expr="b/4.0")  # expression should be set, vary --> False
+    pars.update_constraints()
+    changed_attr_values_A = ('a', 5.0, False, -100.0, 100.0, "b/4.0", 5.0, 1)
+    changed_attr_values_B = ('b', 20.0, False, -250.0, 250.0, None, 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], changed_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
 
 
 def test_parameter_set_brute_step(parameter):
@@ -202,6 +274,15 @@ def test_setstate(parameter):
 
     par_new.__setstate__(state)
     assert_parameter_attributes(par_new, initial_attribute_values)
+
+
+def test_parameter_pickle_(parameter):
+    """Test that we can pickle a Parameter."""
+    par, initial_attribute_values = parameter
+    pkl = pickle.dumps(par)
+    loaded_par = pickle.loads(pkl)
+
+    assert loaded_par == par
 
 
 def test_repr():
@@ -280,14 +361,11 @@ def test_value_setter(parameter):
     par, initial_attribute_values = parameter
     assert_parameter_attributes(par, initial_attribute_values)
 
-    par.set(value=200.0)  # above maximum
+    par.value = 200.0  # above maximum
     assert_allclose(par.value, 100.0)
 
-    par.set(value=-200.0)  # below minimum
+    par.value = -200.0  # below minimum
     assert_allclose(par.value, -100.0)
-
-
-# TODO: add tests for  setter/getter methods for VALUE, EXPR
 
 
 # Tests for magic methods of the Parameter class
