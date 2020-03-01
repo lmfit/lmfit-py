@@ -353,9 +353,8 @@ class Model:
 
         Returns
         -------
-        None or int
-            Return value from `fp.write()`. None for Python 2.7 and the
-            number of characters written in Python 3.
+        int
+            Return value from `fp.write()`: the number of characters written.
 
         See Also
         --------
@@ -1637,9 +1636,8 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        None or int
-            Return value from `fp.write()`. None for Python 2.7 and the
-            number of characters written in Python 3.
+        int
+            Return value from `fp.write()`: the number of characters written.
 
         See Also
         --------
