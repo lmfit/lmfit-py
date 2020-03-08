@@ -808,10 +808,6 @@ class Parameter:
                     check_ast_errors(self._expr_eval)
         return self._val
 
-    def set_expr_eval(self, evaluator):
-        """Set expression evaluator instance."""
-        self._expr_eval = evaluator
-
     @property
     def value(self):
         """Return the numerical value of the Parameter, with bounds applied."""
