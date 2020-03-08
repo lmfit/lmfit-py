@@ -440,6 +440,7 @@ def test_dumps_loads_parameters(parameters):
     pars, _, _ = parameters
 
     dumps = pars.dumps()
+    assert isinstance(dumps, str)
     newpars = lmfit.Parameters().loads(dumps)
     assert newpars == pars
 
@@ -460,6 +461,41 @@ def test_dump_load_parameters(parameters):
     assert newpars == pars
     newpars['a'].value = 100.0
     assert_allclose(newpars['b'].value, 200.0)
+
+
+def test_dumps_loads_parameters_usersyms():
+    """Test for dumps/loads methods for a Parameters class with usersyms."""
+    def half(x):
+        return 0.5*x
+
+    pars = lmfit.Parameters(usersyms={"half": half, 'my_func': np.sqrt})
+    pars.add(lmfit.Parameter(name='a', value=9.0, min=-100.0, max=100.0))
+    pars.add(lmfit.Parameter(name='b', value=100.0, min=-250.0, max=250.0))
+    pars.add("c", expr="half(b) + my_func(a)")
+
+    dumps = pars.dumps()
+    assert isinstance(dumps, str)
+    assert '"half": {' in dumps
+    assert '"my_func": {' in dumps
+
+    newpars = lmfit.Parameters().loads(dumps)
+    assert 'half' in newpars._asteval.symtable
+    assert 'my_func' in newpars._asteval.symtable
+    assert_allclose(newpars['a'].value, 9.0)
+    assert_allclose(newpars['b'].value, 100.0)
+
+    # within the py.test environment the encoding of the function 'half' does
+    # not work correctly as it is changed from <function half at 0x?????????>"
+    # to "<function test_dumps_loads_parameters_usersyms.<locals>.half at 0x?????????>
+    # This result in the "importer" to be set to None and the final "decode4js"
+    # does not do the correct thing.
+    #
+    # Of note, this is only an issue within the py.test framework and it DOES
+    # work correctly in a normal Python interpreter. Also, it isn't an issue
+    # when DILL is used, so in that case the two asserts below will pass.
+    if lmfit.jsonutils.HAS_DILL:
+        assert newpars == pars
+        assert_allclose(newpars['c'].value, 53.0)
 
 
 def test_parameters_expr_and_constraints():

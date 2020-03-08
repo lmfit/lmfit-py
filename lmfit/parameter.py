@@ -2,7 +2,6 @@
 
 from collections import OrderedDict
 from copy import deepcopy
-import importlib
 import json
 import warnings
 
@@ -190,22 +189,12 @@ class Parameters(OrderedDict):
         # an Error. Another way of doing this would be to remove all the expr
         # from the Parameter instances before they get added, then to restore
         # them.
-        # self._asteval.symtable.update(state['unique_symbols'])
 
         symtab = self._asteval.symtable
         for key, val in state['unique_symbols'].items():
             if key not in symtab:
-                if isinstance(val, dict):
-                    value = val.get('__name__', None)
-                    symname = val.get('__name__', None)
-                    importer = val.get('importer', None)
-                    if value is None and symname is not None and importer is not None:
-                        _mod = importlib.import_module(importer)
-                        value = getattr(_mod, symname, None)
-                    if value is not None:
-                        symtab[key] = value
-                else:
-                    symtab[key] = val
+                symtab[key] = val
+
         # then add all the parameters
         self.add_many(*state['params'])
 
@@ -466,9 +455,11 @@ class Parameters(OrderedDict):
         """
         self.clear()
 
-        tmp = decode4js(json.loads(s, **kws))
-        state = {'unique_symbols': tmp['unique_symbols'],
-                 'params': []}
+        tmp = json.loads(s, **kws)
+        unique_symbols = {key: decode4js(tmp['unique_symbols'][key]) for key
+                          in tmp['unique_symbols']}
+
+        state = {'unique_symbols': unique_symbols, 'params': []}
         for parstate in tmp['params']:
             _par = Parameter(name='')
             _par.__setstate__(parstate)
