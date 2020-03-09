@@ -18,6 +18,8 @@ def test_import_from(obj):
                       (BuiltinFunctionType, FunctionType))
 
 
+# test-case missing for string object that causes a UnicodeError; cannot find
+# a way to trigger that exception (perhaps not needed in PY3 anymore?)
 objects = [('test_string', (str,)),
            (np.array([7.0]), np.ndarray),
            (np.array([1.0+2.0j]), np.ndarray),
@@ -28,7 +30,8 @@ objects = [('test_string', (str,)),
            (['a', 'b', 'c'], list),
            (('a', 'b', 'c'), tuple),
            ({'a': 1.0, 'b': 2.0, 'c': 3.0}, dict),
-           (lmfit.lineshapes.gaussian, FunctionType)]
+           (lmfit.lineshapes.gaussian, FunctionType),
+           (np.array(['a', np.array([1, 2, 3])], dtype=object), np.ndarray)]
 
 
 @pytest.mark.parametrize('obj, obj_type', objects)
@@ -37,7 +40,12 @@ def test_encode_decode(obj, obj_type):
     encoded = encode4js(obj)
     decoded = decode4js(encoded)
 
-    assert decoded == obj
+    if isinstance(obj, np.ndarray) and obj.dtype == 'object':
+        assert decoded[0] == obj[0]
+        assert np.all(decoded[1] == obj[1])
+    else:
+        assert decoded == obj
+
     assert isinstance(decoded, obj_type)
 
 

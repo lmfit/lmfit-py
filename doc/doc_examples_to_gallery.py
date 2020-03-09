@@ -32,7 +32,7 @@ with open(os.path.join(examples_documentation_dir, 'README.txt'), 'w') as out:
 
 for fn in files:
     inp_path = os.path.join(examples_dir, fn)
-    with open(inp_path, 'r') as inp:
+    with open(inp_path) as inp:
         script_text = inp.read()
 
     gallery_file = os.path.join(examples_documentation_dir, fn[4:])

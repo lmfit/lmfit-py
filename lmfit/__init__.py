@@ -31,7 +31,7 @@ enhancements, including:
   * Many built-in models for common lineshapes are included and ready
     to use.
 
-Copyright (c) 2019 Lmfit Developers ; BSD-3 license ; see LICENSE
+Copyright (c) 2020 Lmfit Developers ; BSD-3 license ; see LICENSE
 
 """
 from asteval import Interpreter

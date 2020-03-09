@@ -1,4 +1,6 @@
 """Tests for the calculation of confidence intervals."""
+import copy
+
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
@@ -27,7 +29,61 @@ def pars():
 
 def residual(params, x, data):
     """Define objective function for the minimization."""
-    return data - 1.0 / (params['a'] * x) + params['b']
+    model = 1.0 / (params['a'] * x) + params['b']
+    return data - model
+
+
+def test_default_f_compare(data, pars):
+    """Test the default f_compare function: F-test."""
+    minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
+    out = minimizer.leastsq()
+
+    # "fixing" a parameter, keeping the chisqr the same
+    out2 = copy.deepcopy(out)
+    out2.nvarys = 1
+    prob = lmfit.confidence.f_compare(out, out2)
+    assert_allclose(prob, 0.0)
+
+    # "fixing" a parameter, increasing the chisqr
+    out2.chisqr = 1.0015*out.chisqr
+    prob = lmfit.confidence.f_compare(out, out2)
+    assert_allclose(prob, 0.2977506)
+
+
+def test_copy_and_restore_vals(data, pars):
+    """Test functions to save and restore parameter values and stderrs."""
+    # test copy_vals without/with stderr present
+    copy_pars = lmfit.confidence.copy_vals(pars)
+
+    assert isinstance(copy_pars, dict)
+    for _, par in enumerate(pars):
+        assert_allclose(pars[par].value, copy_pars[par][0])
+        assert copy_pars[par][1] is None  # no stderr present
+
+    minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
+    out = minimizer.leastsq()
+    copy_pars_out = lmfit.confidence.copy_vals(out.params)
+
+    assert isinstance(copy_pars_out, dict)
+    for _, par in enumerate(out.params):
+        assert_allclose(out.params[par].value, copy_pars_out[par][0])
+        assert_allclose(out.params[par].stderr, copy_pars_out[par][1])
+
+    # test restore_vals to the original parameter set after changing them first
+    pars['a'].set(value=1.0)
+    pars['b'].set(value=10)
+    lmfit.confidence.restore_vals(copy_pars, pars)
+
+    assert isinstance(pars, lmfit.parameter.Parameters)
+    assert_allclose(pars['a'].value, 0.1)
+    assert_allclose(pars['b'].value, 1.0)
+    assert pars['a'].stderr is None
+    assert pars['b'].stderr is None
+
+    lmfit.confidence.restore_vals(copy_pars_out, pars)
+    for _, par in enumerate(pars):
+        assert_allclose(pars[par].value, out.params[par].value)
+        assert_allclose(pars[par].stderr, out.params[par].stderr)
 
 
 @pytest.mark.parametrize("verbose", [False, True])
@@ -40,15 +96,15 @@ def test_confidence_leastsq(data, pars, verbose, capsys):
     assert out.chisqr < 3.0
     assert out.nvarys == 2
     assert_paramval(out.params['a'], 0.1, tol=0.1)
-    assert_paramval(out.params['b'], -2.0, tol=0.1)
+    assert_paramval(out.params['b'], 2.0, tol=0.1)
 
     ci = lmfit.conf_interval(minimizer, out, verbose=verbose)
     assert_allclose(ci['b'][0][0], 0.997, rtol=0.01)
-    assert_allclose(ci['b'][0][1], -2.022, rtol=0.01)
+    assert_allclose(ci['b'][0][1], 1.947, rtol=0.01)
     assert_allclose(ci['b'][2][0], 0.683, rtol=0.01)
-    assert_allclose(ci['b'][2][1], -1.997, rtol=0.01)
+    assert_allclose(ci['b'][2][1], 1.972, rtol=0.01)
     assert_allclose(ci['b'][5][0], 0.95, rtol=0.01)
-    assert_allclose(ci['b'][5][1], -1.96, rtol=0.01)
+    assert_allclose(ci['b'][5][1], 2.01, rtol=0.01)
 
     if verbose:
         captured = capsys.readouterr()
@@ -61,7 +117,7 @@ def test_confidence_pnames(data, pars):
     out = minimizer.leastsq()
 
     assert_paramval(out.params['a'], 0.1, tol=0.1)
-    assert_paramval(out.params['b'], -2.0, tol=0.1)
+    assert_paramval(out.params['b'], 2.0, tol=0.1)
 
     ci = lmfit.conf_interval(minimizer, out, p_names=['a'])
     assert 'a' in ci
@@ -78,13 +134,18 @@ def test_confidence_bounds_reached(data, pars):
     out.params['a'].stderr = 1
     lmfit.conf_interval(minimizer, out, verbose=True)
 
-    # Should warn
+    # Should warn (i.e,. limit < para.min)
     pars['b'].max = 2.03
     pars['b'].min = 1.97
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
     out = minimizer.leastsq()
     out.params['b'].stderr = 0.005
     out.params['a'].stderr = 0.01
+    with pytest.warns(UserWarning, match="Bound reached"):
+        lmfit.conf_interval(minimizer, out, verbose=True)
+
+    # Should warn (i.e,. limit > para.max)
+    out.params['b'].stderr = 0.1
     with pytest.warns(UserWarning, match="Bound reached"):
         lmfit.conf_interval(minimizer, out, verbose=True)
 
@@ -96,8 +157,7 @@ def test_confidence_sigma_vs_prob(data, pars):
 
     ci_sigmas = lmfit.conf_interval(minimizer, out, sigmas=[1, 2, 3])
     ci_1sigma = lmfit.conf_interval(minimizer, out, sigmas=[1])
-    ci_probs = lmfit.conf_interval(minimizer,
-                                   out,
+    ci_probs = lmfit.conf_interval(minimizer, out,
                                    sigmas=[0.68269, 0.9545, 0.9973])
 
     assert_allclose(ci_sigmas['a'][0][1], ci_probs['a'][0][1], rtol=0.01)
@@ -108,9 +168,7 @@ def test_confidence_sigma_vs_prob(data, pars):
 
 def test_confidence_exceptions(data, pars):
     """Make sure the proper exceptions are raised when needed."""
-    minimizer = lmfit.Minimizer(residual,
-                                pars,
-                                calc_covar=False,
+    minimizer = lmfit.Minimizer(residual, pars, calc_covar=False,
                                 fcn_args=data)
     out = minimizer.minimize(method='nelder')
     out_lsq = minimizer.minimize(params=out.params, method='leastsq')
@@ -188,11 +246,15 @@ def test_confidence_prob_func(data, pars):
     """Test conf_interval with alternate prob_func."""
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=data)
     out = minimizer.minimize(method='leastsq')
+    called = 0
 
     def my_f_compare(best_fit, new_fit):
+        nonlocal called
+        called += 1
         nfree = best_fit.nfree
         nfix = best_fit.nfree - new_fit.nfree
         dchi = new_fit.chisqr / best_fit.chisqr - 1.0
         return f.cdf(dchi * nfree / nfix, nfix, nfree)
 
     lmfit.conf_interval(minimizer, out, sigmas=[1], prob_func=my_f_compare)
+    assert called > 10

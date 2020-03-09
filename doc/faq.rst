@@ -111,7 +111,7 @@ I get errors from NaN in my fit.  What can I do?
 The solvers used by lmfit use NaN (see
 https://en.wikipedia.org/wiki/NaN) values as signals that the calculation
 cannot continue.  If any value in the residual array (typically
-`(data-model)*weight`) is NaN, then calculations of chi-square or
+``(data-model)*weight``) is NaN, then calculations of chi-square or
 comparisons with other residual arrays to try find a better fit will also
 give NaN and fail. There is no sensible way for lmfit or any of the
 optimization routines to know how to handle such NaN values.  They
@@ -122,7 +122,7 @@ function (if using ``Model``) generates a NaN, the fit will stop
 immediately. If your objective or model function generates a NaN, you
 really must handle that.
 
-`nan_policy`
+``nan_policy``
 ~~~~~~~~~~~~~~~~~~
 
 If you are using :class:`lmfit.Model` and the NaN values come from your
