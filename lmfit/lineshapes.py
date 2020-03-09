@@ -2,7 +2,6 @@
 
 from numpy import (arctan, cos, exp, finfo, float64, isnan, log, pi, real, sin,
                    sqrt, where)
-from numpy.testing import assert_allclose
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
 from scipy.special import gammaln, wofz
@@ -471,11 +470,3 @@ def parabolic(x, a=0.0, b=0.0, c=0.0):
 
     """
     return a * x**2 + b * x + c
-
-
-def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03,
-                         err_msg='', verbose=True):
-    """Check whether all actual and desired parameter values are close."""
-    for param_name, value in desired.items():
-        assert_allclose(actual[param_name], value, rtol,
-                        atol, err_msg, verbose)
