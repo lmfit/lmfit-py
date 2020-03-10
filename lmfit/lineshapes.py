@@ -4,7 +4,7 @@ from numpy import (arctan, cos, exp, finfo, float64, isnan, log, pi, real, sin,
                    sqrt, where)
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
-from scipy.special import gammaln, wofz
+from scipy.special import wofz
 
 log2 = log(2)
 s2pi = sqrt(2*pi)
@@ -408,43 +408,6 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
         raise ValueError(msg)
 
     return amplitude*out
-
-
-def _erf(x):
-    """Return the error function.
-
-    erf = 2/sqrt(pi)*integral(exp(-t**2), t=[0, z])
-
-    """
-    return erf(x)
-
-
-def _erfc(x):
-    """Return the complementary error function.
-
-    erfc = 1 - erf(x)
-
-    """
-    return erfc(x)
-
-
-def _wofz(x):
-    """Return the fadeeva function for complex argument.
-
-    wofz = exp(-x**2)*erfc(-i*x)
-
-    """
-    return wofz(x)
-
-
-def _gamma(x):
-    """Return the gamma function."""
-    return gamfcn(x)
-
-
-def _gammaln(x):
-    """Return the log of absolute value of gamma function."""
-    return gammaln(x)
 
 
 def exponential(x, amplitude=1, decay=1):
