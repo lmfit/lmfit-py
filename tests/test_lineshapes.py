@@ -7,12 +7,8 @@ import pytest
 
 import lmfit
 
-lineshapes_functions = [fnc_name for fnc_name in lmfit.lineshapes.functions if
-                        fnc_name not in ('gamma', 'gammaln', 'wofz', 'erf',
-                                         'erfc')]
 
-
-@pytest.mark.parametrize("lineshape", lineshapes_functions)
+@pytest.mark.parametrize("lineshape", lmfit.lineshapes.functions)
 def test_no_ZeroDivisionError_and_finite_output(lineshape):
     """Tests for finite output and ZeroDivisionError is not raised."""
     xvals = np.linspace(0, 10, 100)
@@ -52,7 +48,7 @@ def test_no_ZeroDivisionError_and_finite_output(lineshape):
         assert np.all(np.isfinite(fnc_output))
 
 
-@pytest.mark.parametrize("lineshape", lineshapes_functions)
+@pytest.mark.parametrize("lineshape", lmfit.lineshapes.functions)
 def test_x_float_value(lineshape):
     """Test lineshapes when x is not an array but a float."""
     xval = 7.0

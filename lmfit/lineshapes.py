@@ -15,9 +15,9 @@ tiny = finfo(float64).eps
 functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'breit_wigner', 'damped_oscillator', 'dho', 'logistic', 'lognormal',
              'students_t', 'expgaussian', 'donaich', 'skewed_gaussian',
-             'skewed_voigt', 'thermal_distribution', 'step', 'rectangle', 'erf',
-             'erfc', 'wofz', 'gamma', 'gammaln', 'exponential', 'powerlaw',
-             'linear', 'parabolic', 'sine', 'expsine', 'split_lorentzian')
+             'skewed_voigt', 'thermal_distribution', 'step', 'rectangle',
+             'exponential', 'powerlaw', 'linear', 'parabolic', 'sine',
+             'expsine', 'split_lorentzian')
 
 
 def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
