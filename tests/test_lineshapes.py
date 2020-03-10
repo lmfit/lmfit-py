@@ -73,3 +73,56 @@ def test_x_float_value(lineshape):
     else:
         fnc_output = func(*fnc_args)
         assert isinstance(fnc_output, float)
+
+
+rising_form = ['erf', 'logistic', 'atan', 'arctan', 'linear', 'unknown']
+@pytest.mark.parametrize("form", rising_form)
+@pytest.mark.parametrize("lineshape", ['step', 'rectangle'])
+def test_form_argument_step_rectangle(form, lineshape):
+    """Test 'form' argument for step- and rectangle-functions."""
+    xvals = np.linspace(0, 10, 100)
+
+    func = getattr(lmfit.lineshapes, lineshape)
+    sig = inspect.signature(func)
+
+    fnc_args = [xvals]
+    for par in [par_name for par_name in sig.parameters.keys()
+                if par_name != 'x']:
+        if par == 'form':
+            fnc_args.append(form)
+        else:
+            fnc_args.append(sig.parameters[par].default)
+
+    if form == 'unknown':
+        msg = r"Invalid value .* for argument .*; should be one of .*"
+        with pytest.raises(ValueError, match=msg):
+            func(*fnc_args)
+    else:
+        fnc_output = func(*fnc_args)
+        assert len(fnc_output) == len(xvals)
+
+
+thermal_form = ['bose', 'maxwell', 'fermi', 'Bose-Einstein', 'unknown']
+@pytest.mark.parametrize("form", thermal_form)
+def test_form_argument_thermal_distribution(form):
+    """Test 'form' argument for thermal_distribution function."""
+    xvals = np.linspace(0, 10, 100)
+
+    func = lmfit.lineshapes.thermal_distribution
+    sig = inspect.signature(lmfit.lineshapes.thermal_distribution)
+
+    fnc_args = [xvals]
+    for par in [par_name for par_name in sig.parameters.keys()
+                if par_name != 'x']:
+        if par == 'form':
+            fnc_args.append(form)
+        else:
+            fnc_args.append(sig.parameters[par].default)
+
+    if form == 'unknown':
+        msg = r"Invalid value .* for argument .*; should be one of .*"
+        with pytest.raises(ValueError, match=msg):
+            func(*fnc_args)
+    else:
+        fnc_output = func(*fnc_args)
+        assert len(fnc_output) == len(xvals)

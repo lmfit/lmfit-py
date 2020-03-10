@@ -356,13 +356,18 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
 
     if form == 'erf':
         out = 0.5*(1 + erf(out))
-    elif form.startswith('logi'):
+    elif form == 'logistic':
         out = (1. - 1./(1. + exp(out)))
     elif form in ('atan', 'arctan'):
         out = 0.5 + arctan(out)/pi
-    else:
+    elif form == 'linear':
         out[where(out < 0)] = 0.0
         out[where(out > 1)] = 1.0
+    else:
+        msg = "Invalid value ('%s') for argument 'form'; should be one of %s."\
+               % (form, "'erf', 'logistic', 'atan', 'arctan', or 'linear'")
+        raise ValueError(msg)
+
     return amplitude*out
 
 
@@ -387,16 +392,21 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
 
     if form == 'erf':
         out = 0.5*(erf(arg1) + erf(arg2))
-    elif form.startswith('logi'):
+    elif form == 'logistic':
         out = (1. - 1./(1. + exp(arg1)) - 1./(1. + exp(arg2)))
     elif form in ('atan', 'arctan'):
         out = (arctan(arg1) + arctan(arg2))/pi
-    else:
+    elif form == 'linear':
         arg1[where(arg1 < 0)] = 0.0
         arg1[where(arg1 > 1)] = 1.0
         arg2[where(arg2 > 0)] = 0.0
         arg2[where(arg2 < -1)] = -1.0
         out = arg1 + arg2
+    else:
+        msg = "Invalid value ('%s') for argument 'form'; should be one of %s."\
+               % (form, "'erf', 'logistic', 'atan', 'arctan', or 'linear'")
+        raise ValueError(msg)
+
     return amplitude*out
 
 
