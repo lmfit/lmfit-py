@@ -120,6 +120,7 @@ def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
     and beta() is the beta function.
 
     """
+    expon = max(tiny, expon)
     arg = (x-center)/max(tiny, sigma)
     scale = amplitude * gamfcn(expon)/(gamfcn(0.5)*gamfcn(expon-0.5))
     return scale*(1+arg**2)**(-expon)/max(tiny, sigma)
@@ -179,7 +180,7 @@ def logistic(x, amplitude=1., center=0., sigma=1.):
         = amplitude*(1.  - 1. / (1 + exp((x-center)/sigma)))
 
     """
-    return amplitude*(1. - 1./(1. + exp((x-center)/sigma)))
+    return amplitude*(1. - 1./(1. + exp((x-center)/max(tiny, sigma))))
 
 
 def lognormal(x, amplitude=1.0, center=0., sigma=1):
@@ -442,6 +443,7 @@ def exponential(x, amplitude=1, decay=1):
     x -> amplitude * exp(-x/decay)
 
     """
+    decay = max(tiny, decay)
     return amplitude * exp(-x/decay)
 
 
