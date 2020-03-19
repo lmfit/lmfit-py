@@ -139,6 +139,11 @@ of 0 on the value of ``sigma``.
 
 .. autoclass:: SkewedVoigtModel
 
+:class:`ThermalDistributionModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: ThermalDistributionModel
+
 :class:`DonaichModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

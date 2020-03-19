@@ -9,7 +9,8 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
                          pvoigt, rectangle, skewed_gaussian, skewed_voigt,
-                         split_lorentzian, step, students_t, voigt)
+                         thermal_distribution, split_lorentzian, step,
+                         students_t, voigt)
 from .model import Model
 
 tiny = np.finfo(np.float).eps
@@ -978,6 +979,57 @@ class SkewedVoigtModel(Model):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class ThermalDistributionModel(Model):
+    r"""Return a thermal distribution function. Variable ``kind`` defines
+    the kind of distribution as below with parameters ``amplitude``
+    (:math:`A`), ``center`` (:math:`x_0`) and ``kT`` (:math:`kT`).
+
+    .. math::
+
+        f(x; A, x_0, kT, T) = \frac{1}{A \exp(\frac{x - x_0}{kT}) + kind}
+
+    As such, these thermal distributions are available:
+
+    - Bose-Einstein distribution via :math:`kind=-1` (the default)
+    - Maxwell-Boltzmann distribution via :math:`kind=0`
+    - Fermi-Dirac distribution via :math:`kind=1`
+
+    see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
+
+    Comments:
+
+    - Amplitude and kind are set not to vary by default.
+    - kT should be defined in the same units as x (kB = 8.617e-5 eV/K).
+    - set :math:`kT<0` to implement the energy loss convention common in
+      scattering research.
+    """
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super().__init__(thermal_distribution, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
+        self.set_param_hint('amplitude', min=0, max=1, vary=False)
+        self.set_param_hint('kind', min=-1, max=1, vary=False)
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        if x is None:
+            center = 0
+            kT = 1
+        else:
+            center = np.mean(x)
+            kT = (max(x) - min(x))/10
+
+        pars = self.make_params()
+        return update_param_vals(pars, self.prefix, center=center, kT=kT)
 
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
