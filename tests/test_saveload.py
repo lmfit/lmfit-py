@@ -185,18 +185,20 @@ def test_saveload_modelresult_exception():
     clear_savefile(SAVE_MODEL)
 
 
-def test_saveload_modelresult_roundtrip():
+def test_saveload_modelresult_roundtrip(method='leastsq'):
     """Test for modelresult.loads()/dumps() and repeating that"""
     def mfunc(x, a, b):
         return a * (x-b)
 
     model = Model(mfunc)
-    params = model.make_params(a=0.0, b=3.0)
+    params = model.make_params(a=0.1, b=3.0)
+    params['a'].set(min=.01, max=1, brute_step=0.01)
+    params['b'].set(min=.01, max=3.1, brute_step=0.01)
 
     xx = np.linspace(-5, 5, 201)
     yy = 0.5 * (xx - 0.22) + np.random.normal(scale=0.01, size=len(xx))
 
-    result1 = model.fit(yy, params, x=xx)
+    result1 = model.fit(yy, params=params, x=xx, method=method)
 
     result2 = ModelResult(model, Parameters())
     result2.loads(result1.dumps(), funcdefs={'mfunc': mfunc})
@@ -237,3 +239,14 @@ def test_saveload_usersyms():
     assert_param_between(result2.params['sigma'], 0.7, 2.1)
     assert_param_between(result2.params['center'], 8.4, 8.6)
     assert_param_between(result2.params['height'], 0.2, 1.0)
+
+
+def test_dumps():
+    """Different fitting methods can yield different attributes in
+    ModelRessult. Check that these can be dumped with out problems."""
+    methods = ['leastsq', 'nelder', 'powell', 'cobyla', 'bfgsb',
+               'differential_evolution',
+               'brute', 'basinhopping', 'ampgo', 'shgo', 'dual_annealing']
+
+    for method in methods:
+        test_saveload_modelresult_roundtrip(method=method)
