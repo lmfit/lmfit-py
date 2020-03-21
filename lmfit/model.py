@@ -1618,7 +1618,10 @@ class ModelResult(Minimizer):
                      'nfree', 'nvarys', 'redchi', 'scale_covar', 'calc_covar',
                      'success', 'userargs', 'userkws', 'values', 'var_names',
                      'weights', 'user_options'):
-            val = getattr(self, attr)
+            try:
+                val = getattr(self, attr)
+            except AttributeError:
+                continue
             if isinstance(val, np.bool_):
                 val = bool(val)
             out[attr] = encode4js(val)
