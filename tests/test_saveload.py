@@ -243,7 +243,7 @@ def test_saveload_usersyms():
 
 def test_dumps():
     """Different fitting methods can yield different attributes in
-    ModelRessult. Chcek that these can be dumped with out problems"""
+    ModelRessult. Check that these can be dumped with out problems."""
     methods = ['leastsq', 'nelder', 'powell', 'cobyla', 'bfgsb',
                'differential_evolution',
                'brute', 'basinhopping', 'ampgo', 'shgo', 'dual_annealing']
