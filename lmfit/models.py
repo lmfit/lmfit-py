@@ -985,51 +985,55 @@ class SkewedVoigtModel(Model):
 
 
 class ThermalDistributionModel(Model):
-    r"""Return a thermal distribution function. Variable ``kind`` defines
+    r"""Return a thermal distribution function.
+
+    Variable ``form`` defines
     the kind of distribution as below with parameters ``amplitude``
-    (:math:`A`), ``center`` (:math:`x_0`) and ``kT`` (:math:`kT`).
+    (:math:`A`), ``center`` (:math:`x_0`) and ``kt`` (:math:`kt`). The
+    following distributions are available:
+
+    - ``bose`` (the default) Bose-Einstein distribution
+    - ``maxwell`` Maxwell-Boltzmann distribution
+    - ``fermi`` Fermi-Dirac distribution
+
+    The functional forms are defined as:
 
     .. math::
+        :nowrap:
 
-        f(x; A, x_0, kT, T) = \frac{1}{A \exp(\frac{x - x_0}{kT}) + kind}
-
-    As such, these thermal distributions are available:
-
-    - Bose-Einstein distribution via :math:`kind=-1` (the default)
-    - Maxwell-Boltzmann distribution via :math:`kind=0`
-    - Fermi-Dirac distribution via :math:`kind=1`
+        \begin{eqnarray*}
+        & f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt}) - 1} \\
+        & f(x; A, x_0, kt, {\mathrm{form={}'maxwell{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt})} \\
+        & f(x; A, x_0, kt, {\mathrm{form={}'fermi{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt}) + 1} ]
+        \end{eqnarray*}
 
     see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
 
     Comments:
 
-    - Amplitude and kind are set not to vary by default.
-    - kT should be defined in the same units as x (kB = 8.617e-5 eV/K).
-    - set :math:`kT<0` to implement the energy loss convention common in
+    - ``kt`` should be defined in the same units as ``x`` (:math:`k_B = 8.617\times10^{-5}` eV/K).
+    - set :math:`kt<0` to implement the energy loss convention common in
       scattering research.
+
     """
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
-                 **kwargs):
+                 form='bose', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
-                       'independent_vars': independent_vars})
+                       'form': form, 'independent_vars': independent_vars})
         super().__init__(thermal_distribution, **kwargs)
         self._set_paramhints_prefix()
-
-    def _set_paramhints_prefix(self):
-        self.set_param_hint('amplitude', min=0, max=1, vary=False)
-        self.set_param_hint('kind', min=-1, max=1, vary=False)
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         if x is None:
             center = 0
-            kT = 1
+            kt = 1
         else:
             center = np.mean(x)
-            kT = (max(x) - min(x))/10
+            kt = (max(x) - min(x))/10
 
         pars = self.make_params()
-        return update_param_vals(pars, self.prefix, center=center, kT=kT)
+        return update_param_vals(pars, self.prefix, center=center, kt=kt)
 
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC

@@ -302,24 +302,39 @@ def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
     return amplitude*sin(x*frequency + shift) * exp(-x*decay)
 
 
-def thermal_distribution(x, amplitude=1.0, center=0.0, kT=1.0, kind=-1):
+def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='Bose'):
     """Return a thermal distribution function
-    kind = -1 (default) is the Bose-Einstein distribution
-    kind = 0 is the Maxwell-Boltzmann distribution
-    kind = 1 is the Fermi-Dirac distribution
-
-    thermal_distribution(x, amplitude=1.0, center=0.0, kBT=1.0, kind=-1):
-       = 1/(amplitude*exp((x - center)/kT) + kind)
+    form = 'bose' (default) is the Bose-Einstein distribution
+    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
+       = 1/(amplitude*exp((x - center)/kt) - 1)
+    form = 'maxwell' is the Maxwell-Boltzmann distribution
+    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
+       = 1/(amplitude*exp((x - center)/kt))
+    form = 'fermi' is the Fermi-Dirac distribution
+    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
+       = 1/(amplitude*exp((x - center)/kt) + 1)
 
     Notes:
-    - kT should be defined in the same units as x
-    -The Boltzmann constant is kB = 8.617e-5 eV/K
-    set kBT<0 to implement the energy loss convention common in scattering
+    - kt should be defined in the same units as x. (The Boltzmann constant is
+    kB = 8.617e-5 eV/K).
+    - set kt<0 to implement the energy loss convention common in scattering
     research.
 
     see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
     """
-    return real(1/(amplitude*exp((x - center)/kT) + kind + tiny*1j))
+    form = form.lower()
+    if form.startswith('bose'):
+        offset = -1
+    elif form.startswith('maxwell'):
+        offset = 0
+    elif form.startswith('fermi'):
+        offset = 1
+    else:
+        msg = "Invalid value ('%s') for argument 'form'; should be one of %s."\
+              % (form, "'maxwell', 'fermi', or 'bose'")
+        raise ValueError(msg)
+
+    return real(1/(amplitude*exp((x - center)/kt) + offset + tiny*1j))
 
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
