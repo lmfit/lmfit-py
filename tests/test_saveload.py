@@ -185,7 +185,8 @@ def test_saveload_modelresult_exception():
     clear_savefile(SAVE_MODEL)
 
 
-def test_saveload_modelresult_roundtrip(method='leastsq'):
+@pytest.mark.parametrize("method", ['leastsq', 'nelder', 'powell', 'cobyla', 'bfgsb', 'differential_evolution', 'brute', 'basinhopping', 'ampgo', 'shgo', 'dual_annealing'])
+def test_saveload_modelresult_roundtrip(method):
     """Test for modelresult.loads()/dumps() and repeating that"""
     def mfunc(x, a, b):
         return a * (x-b)
@@ -239,14 +240,3 @@ def test_saveload_usersyms():
     assert_param_between(result2.params['sigma'], 0.7, 2.1)
     assert_param_between(result2.params['center'], 8.4, 8.6)
     assert_param_between(result2.params['height'], 0.2, 1.0)
-
-
-def test_dumps():
-    """Different fitting methods can yield different attributes in
-    ModelRessult. Check that these can be dumped with out problems."""
-    methods = ['leastsq', 'nelder', 'powell', 'cobyla', 'bfgsb',
-               'differential_evolution',
-               'brute', 'basinhopping', 'ampgo', 'shgo', 'dual_annealing']
-
-    for method in methods:
-        test_saveload_modelresult_roundtrip(method=method)
