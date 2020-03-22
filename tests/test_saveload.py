@@ -185,7 +185,10 @@ def test_saveload_modelresult_exception():
     clear_savefile(SAVE_MODEL)
 
 
-@pytest.mark.parametrize("method", ['leastsq', 'nelder', 'powell', 'cobyla', 'bfgsb', 'differential_evolution', 'brute', 'basinhopping', 'ampgo', 'shgo', 'dual_annealing'])
+@pytest.mark.parametrize("method", ['leastsq', 'nelder', 'powell', 'cobyla',
+                                    'bfgsb', 'differential_evolution', 'brute',
+                                    'basinhopping', 'ampgo', 'shgo',
+                                    'dual_annealing'])
 def test_saveload_modelresult_roundtrip(method):
     """Test for modelresult.loads()/dumps() and repeating that"""
     def mfunc(x, a, b):
