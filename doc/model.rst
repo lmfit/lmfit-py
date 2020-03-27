@@ -117,7 +117,7 @@ the expected names::
     params = gmodel.make_params()
 
 This creates the :class:`~lmfit.parameter.Parameters` but does not
-automaticaly give them initial values since it has no idea what the scale
+automatically give them initial values since it has no idea what the scale
 should be.  You can set initial values for parameters with keyword
 arguments to :meth:`make_params`::
 

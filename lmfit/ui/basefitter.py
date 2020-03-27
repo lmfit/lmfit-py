@@ -291,7 +291,7 @@ class MPLFitter(BaseFitter):
             ax.plot(indep_var, self._data, **_data_style)
         else:
             raise NotImplementedError("Cannot plot models with more than one "
-                                      "indepedent variable.")
+                                      "independent variable.")
         result = self.current_result  # alias for brevity
         if not result:
             ax.set(**_axes_style)

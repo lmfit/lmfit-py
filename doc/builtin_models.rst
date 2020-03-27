@@ -475,7 +475,7 @@ plus a constant:
 After constructing step-like data, we first create a :class:`StepModel`
 telling it to use the ``erf`` form (see details above), and a
 :class:`ConstantModel`.  We set initial values, in one case using the data
-and :meth:`guess` method for the initial step function paramaters, and
+and :meth:`guess` method for the initial step function parameters, and
 :meth:`make_params` arguments for the linear component.
 After making a composite model, we run :meth:`fit` and report the
 results, which gives:

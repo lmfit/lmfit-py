@@ -583,7 +583,7 @@ def test__rsub__(parameter):
 
 
 def test_isParameter(parameter):
-    """Test function to check whether something is a Paramter [deprecated]."""
+    """Test function to check whether something is a Parameter [deprecated]."""
     # TODO: this function isn't used anywhere in the codebase; useful at all?
     par, _ = parameter
     assert lmfit.parameter.isParameter(par)

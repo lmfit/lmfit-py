@@ -251,7 +251,7 @@ ParabolicModel = QuadraticModel
 
 
 class PolynomialModel(Model):
-    r"""A polynomial model with up to 7 Parameters, specfied by ``degree``.
+    r"""A polynomial model with up to 7 Parameters, specified by ``degree``.
 
     .. math::
 

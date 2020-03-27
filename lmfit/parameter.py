@@ -523,7 +523,7 @@ class Parameter:
     placed on the Parameter's value by setting its `min` and/or `max`
     attributes.  A Parameter can also have its value determined by a
     mathematical expression of other Parameter values held in the `expr`
-    attrribute.  Additional attributes include `brute_step` used as the step
+    attribute.  Additional attributes include `brute_step` used as the step
     size in a brute-force minimization, and `user_data` reserved
     exclusively for user's need.
 
