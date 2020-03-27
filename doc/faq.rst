@@ -141,7 +141,7 @@ calculated model, that should be the case.
 Common sources of NaN
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you are seeing erros due to NaN values, you will need to figure out
+If you are seeing errors due to NaN values, you will need to figure out
 where they are coming from and eliminate them.  It is sometimes difficult
 to tell what causes NaN values.  Keep in mind that all values should be
 assumed to be either scalar values or numpy arrays of double precision real

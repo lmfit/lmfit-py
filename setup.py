@@ -14,7 +14,7 @@ Parameters.  The Levenberg-Marquardt (leastsq) is the default minimization
 algorithm, and provides estimated standard errors and correlations between
 varied Parameters.  Other minimization methods, including Nelder-Mead's
 downhill simplex, Powell's method, BFGS, Sequential Least Squares, and
-others are also supported.  Bounds and contraints can be placed on
+others are also supported.  Bounds and constraints can be placed on
 Parameters for all of these methods.
 
 In addition, methods for explicitly calculating confidence intervals are

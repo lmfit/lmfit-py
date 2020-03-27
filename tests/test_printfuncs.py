@@ -374,7 +374,7 @@ def test_ci_report_with_offset(confidence_interval):
 
 @pytest.mark.parametrize("ndigits", [3, 5, 7])
 def test_ci_report_with_ndigits(confidence_interval, ndigits):
-    """Verify output of CI report when specifiying ndigits."""
+    """Verify output of CI report when specifying ndigits."""
     report_split = ci_report(confidence_interval, ndigits=ndigits).split('\n')
     period_values = [val for val in report_split[2].split()[2:]]
     length = [len(val.split('.')[-1]) for val in period_values]

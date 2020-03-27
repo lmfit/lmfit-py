@@ -58,8 +58,8 @@ result.params.pretty_print()
 # **Specifying Bounds and Holding Parameters Constant**
 #
 # Above, the ``Model`` class implicitly builds ``Parameter`` objects from
-# keyword arguments of ``fit`` that match the argments of ``decay``. You can
-# build the ``Parameter`` objects explicity; the following is equivalent.
+# keyword arguments of ``fit`` that match the arguments of ``decay``. You can
+# build the ``Parameter`` objects explicitly; the following is equivalent.
 result = model.fit(data, t=t,
                    N=Parameter('N', value=10),
                    tau=Parameter('tau', value=1))
@@ -76,7 +76,7 @@ report_fit(result.params)
 ###############################################################################
 # **Defining Parameters in Advance**
 #
-# Passing parameters to ``fit`` can become unwieldly. As an alternative, you
+# Passing parameters to ``fit`` can become unwieldy. As an alternative, you
 # can extract the parameters from ``model`` like so, set them individually,
 # and pass them to ``fit``.
 params = model.make_params()
@@ -127,7 +127,7 @@ report_fit(result.params)
 ###############################################################################
 # *Handling Missing Data*
 #
-# By default, attemping to fit data that includes a ``NaN``, which
+# By default, attempting to fit data that includes a ``NaN``, which
 # conventionally indicates a "missing" observation, raises a lengthy exception.
 # You can choose to ``omit`` (i.e., skip over) missing values instead.
 data_with_holes = data.copy()

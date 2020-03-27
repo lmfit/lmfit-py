@@ -37,7 +37,7 @@ Various:
 Version 0.9.15 Release Notes
 ============================
 
-**Version 0.9.15 is the last release that supports Python 2.7**; it now also fully suports Python 3.8.
+**Version 0.9.15 is the last release that supports Python 2.7**; it now also fully supports Python 3.8.
 
 New features, improvements, and bug fixes:
 
@@ -250,7 +250,7 @@ so that the Parameter value does not need ``sigma = params['sigma'].value``.
 The older, explicit usage still works, but the docs, samples, and tests
 have been updated to use the simpler usage.
 
-Support for Python 2.6 and SciPy 0.13 is now explicitly deprecated and wil
+Support for Python 2.6 and SciPy 0.13 is now explicitly deprecated and will
 be dropped in version 0.9.5.
 
 .. _whatsnew_093_label:

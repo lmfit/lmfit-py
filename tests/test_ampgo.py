@@ -104,7 +104,7 @@ def test_ampgo_local_opts(minimizer_Alpine02):
     with pytest.raises(TypeError):
         minimizer_Alpine02.minimize(method='ampgo', **kws)
 
-    # for coverage: make sure that both occurences are reached
+    # for coverage: make sure that both occurrences are reached
     kws = {'local_opts': {'maxiter': 10}, 'maxfunevals': 50}
     minimizer_Alpine02.minimize(method='ampgo', **kws)
 

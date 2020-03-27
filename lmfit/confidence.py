@@ -82,7 +82,7 @@ def conf_interval(minimizer, result, p_names=None, sigmas=[1, 2, 3],
     maxiter : int, optional
         Maximum of iteration to find an upper limit (default is 200).
     verbose: bool, optional
-        Print extra debuging information (default is False).
+        Print extra debugging information (default is False).
     prob_func : None or callable, optional
         Function to calculate the probability from the optimized chi-square.
         Default is None and uses the built-in f_compare (i.e., F-test).
