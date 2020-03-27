@@ -1,7 +1,7 @@
 """Basic model line shapes and distribution functions."""
 
 from numpy import (arctan, cos, exp, finfo, float64, isnan, log, pi, sin, sqrt,
-                   where)
+                   where, real)
 from numpy.testing import assert_allclose
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
@@ -16,9 +16,9 @@ tiny = finfo(float64).eps
 functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'breit_wigner', 'damped_oscillator', 'dho', 'logistic', 'lognormal',
              'students_t', 'expgaussian', 'donaich', 'skewed_gaussian',
-             'skewed_voigt', 'step', 'rectangle', 'erf', 'erfc', 'wofz',
-             'gamma', 'gammaln', 'exponential', 'powerlaw', 'linear',
-             'parabolic', 'sine', 'expsine', 'split_lorentzian')
+             'skewed_voigt', 'thermal_distribution', 'step', 'rectangle', 'erf',
+             'erfc', 'wofz', 'gamma', 'gammaln', 'exponential', 'powerlaw',
+             'linear', 'parabolic', 'sine', 'expsine', 'split_lorentzian')
 
 
 def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
@@ -300,6 +300,43 @@ def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
 
     """
     return amplitude*sin(x*frequency + shift) * exp(-x*decay)
+
+
+def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
+    """Return a thermal distribution function.
+
+    form = 'bose' (default) is the Bose-Einstein distribution
+    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
+       = 1/(amplitude*exp((x - center)/kt) - 1)
+    form = 'maxwell' is the Maxwell-Boltzmann distribution
+    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
+       = 1/(amplitude*exp((x - center)/kt))
+    form = 'fermi' is the Fermi-Dirac distribution
+    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
+       = 1/(amplitude*exp((x - center)/kt) + 1)
+
+    Notes:
+    - ``kt`` should be defined in the same units as ``x``. (The Boltzmann constant is
+    kB = 8.617e-5 eV/K).
+    - set ``kt<0`` to implement the energy loss convention common in scattering
+    research.
+
+    see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
+
+    """
+    form = form.lower()
+    if form.startswith('bose'):
+        offset = -1
+    elif form.startswith('maxwell'):
+        offset = 0
+    elif form.startswith('fermi'):
+        offset = 1
+    else:
+        msg = "Invalid value ('%s') for argument 'form'; should be one of %s."\
+              % (form, "'maxwell', 'fermi', or 'bose'")
+        raise ValueError(msg)
+
+    return real(1/(amplitude*exp((x - center)/kt) + offset + tiny*1j))
 
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):

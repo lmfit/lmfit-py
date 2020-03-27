@@ -111,6 +111,8 @@ def test_finite_output_lineshape(lineshape):
         func_args = (x, 1.0, x.size/2.0, 0.0, 'linear')
     elif lineshape == 'rectangle':
         func_args = (x, 1.0, x.size/2.0, 0.0, x.size/2.0, 0.0, 'linear')
+    elif lineshape == 'thermal_distribution':
+        func_args = (x, 1.0, 0.0, x.size/10.0, 'bose')
 
     ls = getattr(lineshapes, lineshape)
     out = ls(*func_args)

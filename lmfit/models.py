@@ -9,7 +9,8 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
                          pvoigt, rectangle, skewed_gaussian, skewed_voigt,
-                         split_lorentzian, step, students_t, voigt)
+                         thermal_distribution, split_lorentzian, step,
+                         students_t, voigt)
 from .model import Model
 
 tiny = np.finfo(np.float).eps
@@ -978,6 +979,61 @@ class SkewedVoigtModel(Model):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
         return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class ThermalDistributionModel(Model):
+    r"""Return a thermal distribution function.
+
+    Variable ``form`` defines
+    the kind of distribution as below with parameters ``amplitude``
+    (:math:`A`), ``center`` (:math:`x_0`) and ``kt`` (:math:`kt`). The
+    following distributions are available:
+
+    - ``bose`` (the default) Bose-Einstein distribution
+    - ``maxwell`` Maxwell-Boltzmann distribution
+    - ``fermi`` Fermi-Dirac distribution
+
+    The functional forms are defined as:
+
+    .. math::
+        :nowrap:
+
+        \begin{eqnarray*}
+        & f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt}) - 1} \\
+        & f(x; A, x_0, kt, {\mathrm{form={}'maxwell{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt})} \\
+        & f(x; A, x_0, kt, {\mathrm{form={}'fermi{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt}) + 1} ]
+        \end{eqnarray*}
+
+    see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
+
+    Comments:
+
+    - ``kt`` should be defined in the same units as ``x`` (:math:`k_B = 8.617\times10^{-5}` eV/K).
+    - set :math:`kt<0` to implement the energy loss convention common in
+      scattering research.
+
+    """
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 form='bose', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'form': form, 'independent_vars': independent_vars})
+        super().__init__(thermal_distribution, **kwargs)
+        self._set_paramhints_prefix()
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        if x is None:
+            center = 0
+            kt = 1
+        else:
+            center = np.mean(x)
+            kt = (max(x) - min(x))/10
+
+        pars = self.make_params()
+        return update_param_vals(pars, self.prefix, center=center, kt=kt)
 
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
