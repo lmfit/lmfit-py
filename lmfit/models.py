@@ -9,8 +9,8 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
                          pvoigt, rectangle, skewed_gaussian, skewed_voigt,
-                         thermal_distribution, split_lorentzian, step,
-                         students_t, voigt)
+                         split_lorentzian, step, students_t,
+                         thermal_distribution, voigt)
 from .model import Model
 
 tiny = np.finfo(np.float).eps
