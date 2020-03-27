@@ -54,6 +54,7 @@ def split_lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0, sigma_r=1.0):
         [2*amplitude / (pi* (sigma + sigma_r)] *
          {  sigma**2   * (x<center)  / [sigma**2  + (x - center)**2]
           + sigma_r**2 * (x>=center) / [sigma_r**2+ (x - center)**2] }
+
     """
     s = max(tiny, sigma)
     r = max(tiny, sigma_r)
@@ -203,8 +204,8 @@ def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
 
     students_t(x, amplitude, center, sigma) =
 
-        gamma((sigma+1)/2)   (1 + (x-center)**2/sigma)^(-(sigma+1)/2)
-        -------------------------
+             gamma((sigma+1)/2)
+        ---------------------------- * (1 + (x-center)**2/sigma)^(-(sigma+1)/2)
         sqrt(sigma*pi)gamma(sigma/2)
 
     """
@@ -214,10 +215,11 @@ def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
 
 
 def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
-    """Return a exponentially modified Gaussian.
+    """Return an exponentially modified Gaussian.
 
-    expgaussian(x, amplitude, center, sigma, gamma=)
-        = (gamma/2) exp[center*gamma + (gamma*sigma)**2/2 - gamma*x] *
+    expgaussian(x, amplitude, center, sigma, gamma)
+        = amplitude * (gamma/2) *
+          exp[center*gamma + (gamma*sigma)**2/2 - gamma*x] *
           erfc[(center + gamma*sigma**2 - x)/(sqrt(2)*sigma)]
 
     https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution
@@ -316,10 +318,10 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
        = 1/(amplitude*exp((x - center)/kt) + 1)
 
     Notes:
-    - ``kt`` should be defined in the same units as ``x``. (The Boltzmann constant is
-    kB = 8.617e-5 eV/K).
+    - ``kt`` should be defined in the same units as ``x``. (The Boltzmann
+      constant is kB = 8.617e-5 eV/K).
     - set ``kt<0`` to implement the energy loss convention common in scattering
-    research.
+      research.
 
     see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
 
