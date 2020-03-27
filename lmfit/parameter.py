@@ -3,12 +3,10 @@
 from collections import OrderedDict
 from copy import deepcopy
 import json
-import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
-from numpy import arcsin, array, cos, inf, isclose, nan, sin, sqrt
+from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
 import scipy.special
-import uncertainties
 
 from .jsonutils import decode4js, encode4js
 from .printfuncs import params_html_table
@@ -779,17 +777,6 @@ class Parameter:
         # _expr_eval.symtable is kept up-to-date.
         # If you just assign to self._val then _expr_eval.symtable[self.name]
         # becomes stale if parameter.expr is not None.
-        if (isinstance(self._val, uncertainties.core.Variable) and
-                self._val is not nan):
-            msg = ("Please make sure that the Parameter value is a number, "
-                   "not an instance of 'uncertainties.core.Variable'. This "
-                   "automatic conversion will be removed in the next release.")
-            warnings.warn(FutureWarning(msg))
-            try:
-                self.value = self._val.nominal_value
-            except AttributeError:
-                pass
-
         if self._expr is not None:
             if self._expr_ast is None:
                 self.__set_expression(self._expr)
@@ -974,11 +961,3 @@ class Parameter:
     def __rsub__(self, other):
         """- (right)"""
         return other - self._getval()
-
-
-def isParameter(x):
-    """Test for Parameter-ness."""
-    msg = 'The isParameter function will be removed in the next release.'
-    warnings.warn(FutureWarning(msg))
-    return (isinstance(x, Parameter) or
-            x.__class__.__name__ == 'Parameter')

@@ -6,7 +6,6 @@ import pickle
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
-import uncertainties as un
 
 import lmfit
 
@@ -345,17 +344,6 @@ def test_setup_bounds_and_scale_gradient_methods():
                     -20.976788, rtol=1.e-6)
 
 
-def test__getval(parameter):
-    """Test _getval function."""
-    par, _ = parameter
-
-    # test uncertainties.core.Variable in _getval [deprecated]
-    par.set(value=un.ufloat(5.0, 0.2))
-    with pytest.warns(FutureWarning, match='removed in the next release'):
-        val = par.value
-    assert_allclose(val, 5.0)
-
-
 def test_value_setter(parameter):
     """Tests for the value setter."""
     par, initial_attribute_values = parameter
@@ -580,13 +568,3 @@ def test__rsub__(parameter):
     """Test the __rsub__ magic method."""
     par, _ = parameter
     assert_allclose(5.25 - par, -4.75)
-
-
-def test_isParameter(parameter):
-    """Test function to check whether something is a Parameter [deprecated]."""
-    # TODO: this function isn't used anywhere in the codebase; useful at all?
-    par, _ = parameter
-    assert lmfit.parameter.isParameter(par)
-    assert not lmfit.parameter.isParameter('test')
-    with pytest.warns(FutureWarning, match='removed in the next release'):
-        lmfit.parameter.isParameter(par)
