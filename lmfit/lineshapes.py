@@ -302,8 +302,9 @@ def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
     return amplitude*sin(x*frequency + shift) * exp(-x*decay)
 
 
-def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='Bose'):
-    """Return a thermal distribution function
+def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
+    """Return a thermal distribution function.
+
     form = 'bose' (default) is the Bose-Einstein distribution
     thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
        = 1/(amplitude*exp((x - center)/kt) - 1)
@@ -315,12 +316,13 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='Bose'):
        = 1/(amplitude*exp((x - center)/kt) + 1)
 
     Notes:
-    - kt should be defined in the same units as x. (The Boltzmann constant is
+    - ``kt`` should be defined in the same units as ``x``. (The Boltzmann constant is
     kB = 8.617e-5 eV/K).
-    - set kt<0 to implement the energy loss convention common in scattering
+    - set ``kt<0`` to implement the energy loss convention common in scattering
     research.
 
     see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
+
     """
     form = form.lower()
     if form.startswith('bose'):

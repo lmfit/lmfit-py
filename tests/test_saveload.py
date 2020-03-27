@@ -185,18 +185,24 @@ def test_saveload_modelresult_exception():
     clear_savefile(SAVE_MODEL)
 
 
-def test_saveload_modelresult_roundtrip():
+@pytest.mark.parametrize("method", ['leastsq', 'nelder', 'powell', 'cobyla',
+                                    'bfgsb', 'differential_evolution', 'brute',
+                                    'basinhopping', 'ampgo', 'shgo',
+                                    'dual_annealing'])
+def test_saveload_modelresult_roundtrip(method):
     """Test for modelresult.loads()/dumps() and repeating that"""
     def mfunc(x, a, b):
         return a * (x-b)
 
     model = Model(mfunc)
-    params = model.make_params(a=0.0, b=3.0)
+    params = model.make_params(a=0.1, b=3.0)
+    params['a'].set(min=.01, max=1, brute_step=0.01)
+    params['b'].set(min=.01, max=3.1, brute_step=0.01)
 
     xx = np.linspace(-5, 5, 201)
     yy = 0.5 * (xx - 0.22) + np.random.normal(scale=0.01, size=len(xx))
 
-    result1 = model.fit(yy, params, x=xx)
+    result1 = model.fit(yy, params=params, x=xx, method=method)
 
     result2 = ModelResult(model, Parameters())
     result2.loads(result1.dumps(), funcdefs={'mfunc': mfunc})
