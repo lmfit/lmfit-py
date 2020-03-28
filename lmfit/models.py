@@ -28,13 +28,6 @@ def _validate_1d(independent_vars):
             "This model requires exactly one independent variable.")
 
 
-def index_of(arr, val):
-    """Return index of array nearest to a value."""
-    if val < min(arr):
-        return 0
-    return np.abs(arr-val).argmin()
-
-
 def fwhm_expr(model):
     """Return constraint expression for fwhm."""
     fmt = "{factor:.7f}*{prefix:s}sigma"
@@ -51,22 +44,25 @@ def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     """Estimate amp, cen, sigma for a peak, create params."""
     if x is None:
         return 1.0, 0.0, 1.0
+
+    sort_increasing = np.argsort(x)
+    x = x[sort_increasing]
+    y = y[sort_increasing]
+
     maxy, miny = max(y), min(y)
     maxx, minx = max(x), min(x)
-    imaxy = index_of(y, maxy)
-    cen = x[imaxy]
-    amp = (maxy - miny)*3.0
+    cen = x[np.argmax(y)]
+    height = (maxy - miny)*3.0
     sig = (maxx-minx)/6.0
 
-    halfmax_vals = np.where(y > (maxy+miny)/2.0)[0]
+    x_halfmax = x[y > (maxy+miny)/2.0]
     if negative:
-        imaxy = index_of(y, miny)
-        amp = -(maxy - miny)*3.0
-        halfmax_vals = np.where(y < (maxy+miny)/2.0)[0]
-    if len(halfmax_vals) > 2:
-        sig = (x[halfmax_vals[-1]] - x[halfmax_vals[0]])/2.0
-        cen = x[halfmax_vals].mean()
-    amp = amp*sig*ampscale
+        height = -(maxy - miny)*3.0
+        x_halfmax = x[y < (maxy+miny)/2.0]
+    if len(x_halfmax) > 2:
+        sig = (x_halfmax[-1] - x_halfmax[0])/2.0
+        cen = x_halfmax.mean()
+    amp = height*sig*ampscale
     sig = sig*sigscale
 
     pars = model.make_params(amplitude=amp, center=cen, sigma=sig)
