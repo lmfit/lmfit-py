@@ -20,6 +20,7 @@ Downloading and Installation
 .. _sphinx: https://www.sphinx-doc.org
 .. _jupyter_sphinx: https://jupyter-sphinx.readthedocs.io
 .. _ImageMagick: https://www.imagemagick.org/
+.. _Pillow: https://python-pillow.org/
 .. _release_notes: https://lmfit.github.io/lmfit-py/whatsnew.html
 
 
@@ -43,11 +44,12 @@ functionality requires the `emcee`_ (version 3+), `corner`_, `pandas`_, `Jupyter
 `matplotlib`_, `dill`_, or `numdifftools`_ packages.  These are not installed
 automatically, but we highly recommend each of these packages.
 
-For building the documentation, `matplotlib`_, `emcee`_ (version 3+), `corner`_,
-`Sphinx`_, `jupyter_sphinx`_, and `ImageMagick`_ are required (the latter
-one only when generating the PDF document).
+For building the documentation and generating the examples gallery,
+`matplotlib`_, `emcee`_ (version 3+), `corner`_, `Sphinx`_,
+`jupyter_sphinx`_, `Pillow`_ and `ImageMagick`_ are required (the
+latter one only when generating the PDF document).
 
-Please refer to  ``requirements-dev.txt`` for a list of all dependencies that
+Please refer to ``requirements-dev.txt`` for a list of all dependencies that
 are needed if you want to participate in the development of lmfit.
 
 Downloads

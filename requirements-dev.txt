@@ -9,6 +9,7 @@ matplotlib
 numdifftools
 numpy>=1.16
 pandas
+Pillow
 pre-commit
 pytest
 scipy>=1.2
