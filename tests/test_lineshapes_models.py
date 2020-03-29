@@ -270,3 +270,21 @@ def test_splitlorentzian_prefix():
     mod2 = models.SplitLorentzianModel(prefix='prefix_')
     par2 = mod2.make_params(amplitude=1.0, center=0.0, sigma=0.9, sigma_r=1.3)
     par2.update_constraints()
+
+
+def test_guess_from_peak():
+    x = np.linspace(-5, 5)
+    amplitude = 0.8
+    center = 1.7
+    sigma = 0.3
+    y = lineshapes.lorentzian(x, amplitude=amplitude, center=center, sigma=sigma)
+
+    model = models.LorentzianModel()
+    guess_increasing_x = model.guess(y, x=x)
+    guess_decreasing_x = model.guess(y[::-1], x=x[::-1])
+
+    assert guess_increasing_x == guess_decreasing_x
+
+    for param, value in zip(['amplitude', 'center', 'sigma'],
+                            [amplitude, center, sigma]):
+        assert np.abs((guess_increasing_x[param].value - value)/value) < 0.5
