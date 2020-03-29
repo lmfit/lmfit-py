@@ -195,8 +195,8 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
         x = max(tiny, x)
     else:
         x[where(x <= tiny)] = tiny
-    return ((amplitude/(x*max(tiny, sigma*s2pi))) * exp(-(log(x)-center)**2
-            / max(tiny, (2*sigma**2))))
+    return ((amplitude/(x*max(tiny, sigma*s2pi))) *
+            exp(-(log(x)-center)**2 / max(tiny, (2*sigma**2))))
 
 
 def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
