@@ -55,7 +55,9 @@ def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     height = (maxy - miny)*3.0
     sig = (maxx-minx)/6.0
 
-    x_halfmax = x[y > (maxy+miny)/2.0]
+    # the explicit conversion to a NumPy array is to make sure that the
+    # indexing on line 65 also works if the data is supplied as pandas.Series
+    x_halfmax = np.array(x[y > (maxy+miny)/2.0])
     if negative:
         height = -(maxy - miny)*3.0
         x_halfmax = x[y < (maxy+miny)/2.0]
