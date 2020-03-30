@@ -588,7 +588,8 @@ class Pearson7Model(Model):
     with four parameters: ``amplitude`` (:math:`A`), ``center``
     (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`).
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
+    to report estimates for the full width at half maximum and maximum peak height,
+    respectively.
 
     .. math::
 
@@ -673,8 +674,6 @@ class BreitWignerModel(Model):
     https://en.wikipedia.org/wiki/Fano_resonance), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`).
-    In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -691,11 +690,6 @@ class BreitWignerModel(Model):
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0.0)
-        fmt = ("{prefix:s}amplitude*{prefix:s}q**2")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
-        fmt = ("2*(sqrt({prefix:s}q**2*{prefix:s}sigma**2*({prefix:s}q**2+2))/"
-               "max({0}, 2*({prefix:s}q**2)-2))")
-        self.set_param_hint('fwhm', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -713,7 +707,8 @@ class LognormalModel(Model):
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma``
     (:math:`\sigma`).
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
+    to report estimates of full width at half maximum and maximum peak height,
+    respectively.
 
     .. math::
 
@@ -756,8 +751,8 @@ class DampedOscillatorModel(Model):
     (see https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part), with
     three Parameters:  ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
     ``sigma`` (:math:`\sigma`).
-    In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
+    In addition, the parameter ``height`` is included as a constraint
+    to report the maximum peak height.
 
     .. math::
 
@@ -777,13 +772,6 @@ class DampedOscillatorModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('height', expr=height_expr(self))
-        fmt = ("sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)+"
-               "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
-               "({prefix:s}sigma**2+3)))))-"
-               "sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)-"
-               "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
-               "({prefix:s}sigma**2+3)))))")
-        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -802,7 +790,8 @@ class DampedHarmonicOscillatorModel(Model):
     four Parameters: ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and ``gamma`` (:math:`\gamma`).
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
+    to report estimates for full width at half maximum and maximum peak height,
+    respectively.
 
     .. math::
 
@@ -849,8 +838,6 @@ class ExponentialGaussianModel(Model):
     (see https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution) with
     four Parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and  ``gamma`` (:math:`\gamma`).
-    In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -862,9 +849,6 @@ class ExponentialGaussianModel(Model):
     where :func:`erfc` is the complementary error function.
 
     """
-
-    fwhm_factor = 2*np.sqrt(2*np.log(2))
-
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
@@ -875,11 +859,6 @@ class ExponentialGaussianModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', min=0, max=20)
-        fmt = ("{prefix:s}amplitude*{prefix:s}gamma/2*"
-               "exp({prefix:s}gamma**2*{prefix:s}sigma**2/2)*"
-               "erfc({prefix:s}gamma*{prefix:s}sigma/sqrt(2))")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -895,8 +874,6 @@ class SkewedGaussianModel(Model):
     (see https://en.wikipedia.org/wiki/Skew_normal_distribution), with Parameters
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),  ``sigma`` (:math:`\sigma`),
     and ``gamma`` (:math:`\gamma`).
-    In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -910,9 +887,6 @@ class SkewedGaussianModel(Model):
 
     """
 
-    fwhm_factor = 2*np.sqrt(2*np.log(2))
-    height_factor = 1./np.sqrt(2*np.pi)
-
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
@@ -922,8 +896,6 @@ class SkewedGaussianModel(Model):
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
-        self.set_param_hint('height', expr=height_expr(self))
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -940,10 +912,7 @@ class SkewedVoigtModel(Model):
       https://en.wikipedia.org/wiki/Voigt_distribution).  It has Parameters
       ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`), ``sigma``
       (:math:`\sigma`), and ``gamma`` (:math:`\gamma`), as usual for a
-      Voigt distribution, and add a Parameter ``skew``.  In addition,
-      parameters ``fwhm`` and ``height`` are included as constraints to
-      report full width at half maximum and maximum peak height, of the
-      Voigt distribution, respectively.
+      Voigt distribution, and add a Parameter ``skew``.
 
     .. math::
 
@@ -957,9 +926,6 @@ class SkewedVoigtModel(Model):
 
     """
 
-    fwhm_factor = 3.60131
-    height_factor = 1./np.sqrt(2*np.pi)
-
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
@@ -970,8 +936,6 @@ class SkewedVoigtModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
-        self.set_param_hint('height', expr=height_expr(self))
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
