@@ -19,11 +19,15 @@ repos:
     -   id: mixed-line-ending
     -   id: trailing-whitespace
     -   id: requirements-txt-fixer
+    -   id: fix-encoding-pragma
+        args: [--remove]
+    -   id: mixed-line-ending
 
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
     hooks:
     -   id: flake8
+        additional_dependencies: [flake8-deprecated, flake8-mutable]
 
 -   repo: local
     hooks:
@@ -48,3 +52,8 @@ repos:
         # escaped characters currently do not work correctly
         # so \nnumber is considered a spelling error....
         args: [-L nnumber]
+
+-   repo: https://github.com/asottile/yesqa
+    rev: v1.1.0
+    hooks:
+    -   id: yesqa
