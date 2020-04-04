@@ -47,7 +47,7 @@ class CommonTests:
 
     def setUp(self):
         np.random.seed(1)
-        self.noise = 0.0001*np.random.randn(*self.x.shape)
+        self.noise = 0.0001*np.random.randn(self.x.size)
         # Some Models need args (e.g., polynomial order), and others don't.
         try:
             args = self.args
@@ -347,7 +347,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             set_prefix_failed = False
         except AttributeError:
             set_prefix_failed = True
-        except:  # noqa: E722
+        except Exception:
             set_prefix_failed = None
         self.assertFalse(set_prefix_failed)
 
@@ -495,7 +495,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(abs(result.params['g1_center'].value - 1.1) < 0.2)
         self.assertTrue(abs(result.params['g2_center'].value - 2.5) < 0.2)
 
-        for name, par in pars.items():
+        for _, par in pars.items():
             assert len(repr(par)) > 5
 
     def test_composite_plotting(self):
@@ -561,7 +561,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         m2 = models.GaussianModel(prefix='m2_')
         params.update(m2.make_params())
 
-        m = m1 + m2  # noqa: F841
+        _m = m1 + m2  # noqa: F841
 
         param_values = {name: p.value for name, p in params.items()}
         self.assertTrue(param_values['m1_intercept'] < -0.0)

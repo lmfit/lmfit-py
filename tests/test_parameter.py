@@ -187,7 +187,7 @@ def test_parameter_set_expr(parameter):
 
 def test_parameters_set_value_with_expr(parameters):
     """Test the Parameter.set() function with value in presence of expr."""
-    pars, init_attr_values_A, init_attr_values_B = parameters
+    pars, _, _ = parameters
 
     pars['a'].set(value=5.0)
     pars.update_constraints()  # update constraints/expressions
@@ -207,7 +207,7 @@ def test_parameters_set_value_with_expr(parameters):
 
 def test_parameters_set_vary_with_expr(parameters):
     """Test the Parameter.set() function with vary in presence of expr."""
-    pars, init_attr_values_A, init_attr_values_B = parameters
+    pars, init_attr_values_A, _ = parameters
 
     pars['b'].set(vary=True)  # expression should get cleared
     pars.update_constraints()  # update constraints/expressions
@@ -277,7 +277,7 @@ def test_setstate(parameter):
 
 def test_parameter_pickle_(parameter):
     """Test that we can pickle a Parameter."""
-    par, initial_attribute_values = parameter
+    par, _ = parameter
     pkl = pickle.dumps(par)
     loaded_par = pickle.loads(pkl)
 
@@ -477,45 +477,45 @@ def test__pow__(parameter):
 def test__gt__(parameter):
     """Test the __gt__ magic method."""
     par, _ = parameter
-    assert 11 > par
-    assert not 10 > par
+    assert par < 11
+    assert not par < 10
 
 
 def test__ge__(parameter):
     """Test the __ge__ magic method."""
     par, _ = parameter
-    assert 11 >= par
-    assert 10 >= par
-    assert not 9 >= par
+    assert par <= 11
+    assert par <= 10
+    assert not par <= 9
 
 
 def test__le__(parameter):
     """Test the __le__ magic method."""
     par, _ = parameter
-    assert 9 <= par
-    assert 10 <= par
-    assert not 11 <= par
+    assert par >= 9
+    assert par >= 10
+    assert not par >= 11
 
 
 def test__lt__(parameter):
     """Test the __lt__ magic method."""
     par, _ = parameter
-    assert 9 < par
-    assert not 10 < par
+    assert par > 9
+    assert not par > 10
 
 
 def test__eq__(parameter):
     """Test the __eq__ magic method."""
     par, _ = parameter
-    assert 10 == par
-    assert not 9 == par
+    assert par == 10
+    assert not par == 9
 
 
 def test__ne__(parameter):
     """Test the __ne__ magic method."""
     par, _ = parameter
-    assert 9 != par
-    assert not 10 != par
+    assert par != 9
+    assert not par != 10
 
 
 def test__radd__(parameter):

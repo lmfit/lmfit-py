@@ -43,7 +43,7 @@ def test_1var():
     out = lmfit.minimize(linear_chisq, params, args=(x, y))
 
     assert_allclose(params['m'].value, 1.025, rtol=0.02, atol=0.02)
-    assert(len(params) == 2)
-    assert(out.nvarys == 1)
-    assert(out.chisqr > 0.01)
-    assert(out.chisqr < 5.00)
+    assert len(params) == 2
+    assert out.nvarys == 1
+    assert out.chisqr > 0.01
+    assert out.chisqr < 5.00

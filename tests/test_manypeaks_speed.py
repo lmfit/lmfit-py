@@ -25,11 +25,11 @@ def test_manypeaks_speed():
     t1 = time.time()
     pars = model.make_params()
     t2 = time.time()
-    cpars = deepcopy(pars)  # noqa: F841
+    _cpars = deepcopy(pars)  # noqa: F841
     t3 = time.time()
 
     # these are very conservative tests that
     # should be satisfied on nearly any machine
-    assert((t3-t2) < 0.5)
-    assert((t2-t1) < 0.5)
-    assert((t1-t0) < 5.0)
+    assert (t3-t2) < 0.5
+    assert (t2-t1) < 0.5
+    assert (t1-t0) < 5.0

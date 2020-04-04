@@ -23,7 +23,7 @@ def test_bounds():
         model = amp*sin(shift + x/per) * exp(-x*x*decay*decay)
         if data is None:
             return model
-        return (model - data)
+        return model - data
 
     n = 1500
     xmin = 0.
@@ -41,9 +41,9 @@ def test_bounds():
 
     out = minimize(residual, fit_params, args=(x,), kws={'data': data})
 
-    assert(out.nfev > 10)
-    assert(out.nfree > 50)
-    assert(out.chisqr > 1.0)
+    assert out.nfev > 10
+    assert out.nfree > 50
+    assert out.chisqr > 1.0
 
     assert_paramval(out.params['decay'], 0.01, tol=1.e-2)
     assert_paramval(out.params['shift'], 0.123, tol=1.e-2)

@@ -12,7 +12,7 @@ from lmfit.models import ExponentialModel, VoigtModel
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
-    assert(err < sig * para.stderr)
+    assert err < sig * para.stderr
 
 
 def test_bounded_parameters():

@@ -29,9 +29,9 @@ pars['peak_center'].set(min=5, max=10)
 pars['peak_sigma'].set(min=0.5, max=2)
 
 
-def per_iteration(pars, iter, resid, *args, **kws):
+def per_iteration(pars, iteration, resid, *args, **kws):
     """Iteration callback, will abort at iteration 23."""
-    return iter == 23
+    return iteration == 23
 
 
 @pytest.mark.parametrize("calc_covar", calc_covar_options)
