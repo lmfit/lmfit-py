@@ -36,7 +36,7 @@ def _align(var, mask, data):
 
 
 try:
-    import matplotlib  # noqa: F401
+    from matplotlib import pyplot as plt
     _HAS_MATPLOTLIB = True
 except Exception:
     _HAS_MATPLOTLIB = False
@@ -435,7 +435,6 @@ class Model:
 
     def _set_paramhints_prefix(self):
         """Reset parameter hints for prefix: intended to be overwritten."""
-        pass
 
     @property
     def param_names(self):
@@ -2036,7 +2035,6 @@ class ModelResult(Minimizer):
         ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
 
         """
-        from matplotlib import pyplot as plt
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:

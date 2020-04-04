@@ -133,8 +133,6 @@ class MinimizerException(Exception):
 class AbortFitException(MinimizerException):
     """Raised when a fit is aborted by the user."""
 
-    pass
-
 
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'powell': 'Powell',
@@ -693,7 +691,6 @@ class Minimizer:
         removes AST compilations of constraint expressions.
 
         """
-        pass
 
     def _calculate_covariance_matrix(self, fvars):
         """Calculate the covariance matrix.
@@ -1377,7 +1374,6 @@ class Minimizer:
             result.acor = self.sampler.get_autocorr_time()
         except AutocorrError as e:
             print(str(e))
-            pass
         result.acceptance_fraction = self.sampler.acceptance_fraction
 
         # Calculate the residual with the "best fit" parameters
@@ -1570,7 +1566,7 @@ class Minimizer:
             pass
 
         if not result.aborted:
-            _best, _cov, infodict, errmsg, ier = lsout
+            _best, _cov, _infodict, errmsg, ier = lsout
             result.residual = self.__residual(_best)
             result.nfev -= 1
         result._calculate_statistics()
@@ -1754,7 +1750,7 @@ class Minimizer:
         brute_kws = dict(full_output=1, finish=None, disp=False)
         # keyword 'workers' is introduced in SciPy v1.3
         # FIXME: remove this check after updating the requirement >= 1.3
-        major, minor, micro = scipy_version.split('.', 2)
+        major, minor, _micro = scipy_version.split('.', 2)
 
         if int(major) == 1 and int(minor) >= 3:
             brute_kws.update({'workers': workers})

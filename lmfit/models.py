@@ -19,8 +19,6 @@ tiny = np.finfo(np.float).eps
 class DimensionalError(Exception):
     """Raise exception when number of independent variables is not one."""
 
-    pass
-
 
 def _validate_1d(independent_vars):
     if len(independent_vars) != 1:
@@ -1325,4 +1323,3 @@ class ExpressionModel(Model):
         This prevents normal parsing of function for parameter names.
 
         """
-        pass
