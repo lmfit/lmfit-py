@@ -234,10 +234,6 @@ class CommonTests:
 class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     # mainly aimed at checking that the API does what it says it does
     # and raises the right exceptions or warnings when things are not right
-    import six
-    if six.PY2:
-        from six import assertRaisesRegex
-
     def setUp(self):
         self.true_values = lambda: dict(amplitude=7.1, center=1.1, sigma=2.40)
         self.guess = lambda: dict(amplitude=5, center=2, sigma=4)
