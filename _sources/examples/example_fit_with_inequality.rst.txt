@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_fit_with_inequality.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_fit_with_inequality.py:
+        Click :ref:`here <sphx_glr_download_examples_example_fit_with_inequality.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_fit_with_inequality.py:
 
 
 Fit Using Inequality Constraint
@@ -39,6 +41,7 @@ See also: https://lmfit.github.io/lmfit-py/constraints.html#using-inequality-con
 
 
 
+
 Generate the simulated data using a Gaussian and Lorentzian line shape:
 
 
@@ -49,6 +52,7 @@ Generate the simulated data using a Gaussian and Lorentzian line shape:
 
     data = (gaussian(x, 21, 6.1, 1.2) + lorentzian(x, 10, 9.6, 1.3) +
             np.random.normal(scale=0.1, size=x.size))
+
 
 
 
@@ -76,6 +80,7 @@ expression to be ``'peak_split+cen_g'``:
     mini = Minimizer(residual, pfit, fcn_args=(x, data))
     out = mini.leastsq()
     best_fit = data + out.residual
+
 
 
 
@@ -121,6 +126,7 @@ fitting results:
 
 
 
+
 and figure:
 
 
@@ -149,9 +155,10 @@ and figure:
 
 
 
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.147 seconds)
+   **Total running time of the script:** ( 0 minutes  0.094 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_inequality.py:
@@ -164,13 +171,13 @@ and figure:
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_fit_with_inequality.py <example_fit_with_inequality.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_fit_with_inequality.ipynb <example_fit_with_inequality.ipynb>`
 

@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_detect_outliers.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_detect_outliers.py:
+        Click :ref:`here <sphx_glr_download_examples_example_detect_outliers.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_detect_outliers.py:
 
 
 Outlier detection via leave-one-out
@@ -27,6 +29,7 @@ shows how to do this with lmfit. Note that the presented method is very basic.
 
     plt.rcParams['figure.dpi'] = 130
     plt.rcParams['figure.autolayout'] = True
+
 
 
 
@@ -57,6 +60,7 @@ Generate test data and model. Apply the model to the data
     # Fit the data
     model = lmfit.Model(func, independent_vars=['x'])
     fit_result = model.fit(y, x=x, a=0.1, b=2)
+
 
 
 
@@ -109,6 +113,7 @@ and gives the plot and fitting results below:
 
 
 
+
 Fit the dataset while omitting one data point
 
 
@@ -138,6 +143,7 @@ Fit the dataset while omitting one data point
 
 
 
+
 Plot the influence on the red. chisqr of each point
 
 
@@ -160,6 +166,15 @@ Plot the influence on the red. chisqr of each point
 .. image:: /examples/images/sphx_glr_example_detect_outliers_002.png
     :class: sphx-glr-single-img
 
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    <matplotlib.legend.Legend object at 0x1a1a173c50>
 
 
 
@@ -194,12 +209,21 @@ Plot the influence on the parameter value and error of each point
     :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    Text(0.5, 0, 'x')
+
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.194 seconds)
+   **Total running time of the script:** ( 0 minutes  2.029 seconds)
 
 
 .. _sphx_glr_download_examples_example_detect_outliers.py:
@@ -212,13 +236,13 @@ Plot the influence on the parameter value and error of each point
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_detect_outliers.py <example_detect_outliers.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_detect_outliers.ipynb <example_detect_outliers.ipynb>`
 

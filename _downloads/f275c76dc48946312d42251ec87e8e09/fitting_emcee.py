@@ -18,6 +18,7 @@ try:
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
+HASPYLAB = False
 
 try:
     import corner
@@ -88,13 +89,13 @@ mle_soln = res.chain[hp_loc]
 for i, par in enumerate(p):
     p[par].value = mle_soln[i]
 
-print('\nMaximum Likelihood Estimation from emcee         ')
-print('---------------------------------------------------')
+print('\nMaximum Likelihood Estimation from emcee       ')
+print('-------------------------------------------------')
 print('Parameter  MLE Value   Median Value   Uncertainty')
+fmt = '  {:5s}  {:11.5f} {:11.5f}   {:11.5f}'.format
 for name, param in p.items():
-    print('  {:5s}  {:11.5f} {:11.5f}   {:11.5f}'.format(name, param.value,
-                                                         res.params[name].value,
-                                                         res.params[name].stderr))
+    print(fmt(name, param.value, res.params[name].value,
+              res.params[name].stderr))
 
 if HASPYLAB:
     plt.figure()
@@ -104,14 +105,17 @@ if HASPYLAB:
     plt.legend()
     plt.show()
 
-print('\nError Estimates from numdifftools and emcee')
-print('---------------------------------------------')
-print('Parameter  stderr    1-sigma     2-sigma ')
+print('\nError Estimates from emcee    ')
+print('------------------------------------------------------')
+print('Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma ')
 
 for name in p.keys():
-    quantiles = np.percentile(res.flatchain[name], [2.28, 15.9, 84.2, 97.7])
-    err1s = (quantiles[2] - quantiles[1])/2
-    err2s = (quantiles[3] - quantiles[0])/2
-    print('  {:5s}   {:8.5f}  {:8.5f}    {:8.5f}'.format(name,
-                                                         res.params[name].stderr,
-                                                         err1s, err2s))
+    quantiles = np.percentile(res.flatchain[name],
+                              [2.275, 15.865, 50, 84.135, 97.275])
+    median = quantiles[2]
+    err_m2 = quantiles[0] - median
+    err_m1 = quantiles[1] - median
+    err_p1 = quantiles[3] - median
+    err_p2 = quantiles[4] - median
+    fmt = '  {:5s}   {:8.4f} {:8.4f} {:8.4f} {:8.4f} {:8.4f}'.format
+    print(fmt(name, err_m2, err_m1, median, err_p1, err_p2))

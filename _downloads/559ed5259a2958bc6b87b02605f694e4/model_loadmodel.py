@@ -2,7 +2,7 @@
 doc_model_loadmodel.py
 ======================
 
-.. note:: This example *does* actually work, but running from within  sphinx-gallery fails to find symbols saved in the save file.
+
 """
 ##
 import warnings

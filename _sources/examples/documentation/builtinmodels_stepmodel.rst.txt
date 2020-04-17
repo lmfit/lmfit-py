@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_builtinmodels_stepmodel.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_builtinmodels_stepmodel.py:
 
 
 doc_builtinmodels_stepmodel.py
@@ -54,6 +56,7 @@ doc_builtinmodels_stepmodel.py
 
 
 
+
 |
 
 
@@ -97,7 +100,7 @@ doc_builtinmodels_stepmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.168 seconds)
+   **Total running time of the script:** ( 0 minutes  0.091 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py:
@@ -110,13 +113,13 @@ doc_builtinmodels_stepmodel.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: builtinmodels_stepmodel.py <builtinmodels_stepmodel.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: builtinmodels_stepmodel.ipynb <builtinmodels_stepmodel.ipynb>`
 

@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_model_gaussian.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_model_gaussian.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_model_gaussian.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_model_gaussian.py:
 
 
 doc_model_gaussian.py
@@ -39,6 +41,7 @@ doc_model_gaussian.py
         wid:  0.69765468 +/- 0.01030495 (1.48%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, wid) =  0.577
+
 
 
 
@@ -84,7 +87,7 @@ doc_model_gaussian.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.137 seconds)
+   **Total running time of the script:** ( 0 minutes  0.078 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_gaussian.py:
@@ -97,13 +100,13 @@ doc_model_gaussian.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: model_gaussian.py <model_gaussian.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: model_gaussian.ipynb <model_gaussian.ipynb>`
 

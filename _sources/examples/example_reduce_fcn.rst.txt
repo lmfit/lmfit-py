@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_reduce_fcn.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_reduce_fcn.py:
+        Click :ref:`here <sphx_glr_download_examples_example_reduce_fcn.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_reduce_fcn.py:
 
 
 Fit Specifying Different Reduce Function
@@ -77,6 +79,7 @@ of data with outliers.
 
 
 
+
 |
 
 
@@ -144,7 +147,7 @@ of data with outliers.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.316 seconds)
+   **Total running time of the script:** ( 0 minutes  0.295 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:
@@ -157,13 +160,13 @@ of data with outliers.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_reduce_fcn.py <example_reduce_fcn.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_reduce_fcn.ipynb <example_reduce_fcn.ipynb>`
 

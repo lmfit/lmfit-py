@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_fit_multi_datasets.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_fit_multi_datasets.py:
+        Click :ref:`here <sphx_glr_download_examples_example_fit_multi_datasets.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_fit_multi_datasets.py:
 
 
 Fit Multiple Data Sets
@@ -58,6 +60,7 @@ TODO: this should be using the Model interface / built-in models!
 
 
 
+
 Create five simulated Gaussian data sets
 
 
@@ -74,6 +77,7 @@ Create five simulated Gaussian data sets
         dat = gauss(x, amp, cen, sig) + np.random.normal(size=x.size, scale=0.1)
         data.append(dat)
     data = np.array(data)
+
 
 
 
@@ -99,6 +103,7 @@ Create five sets of fitting parameters, one per data set
 
 
 
+
 Constrain the values of sigma to be the same for all peaks by assigning
 sig_2, ..., sig_5 to be equal to sig_1.
 
@@ -108,6 +113,7 @@ sig_2, ..., sig_5 to be equal to sig_1.
 
     for iy in (2, 3, 4, 5):
         fit_params['sig_%i' % iy].expr = 'sig_1'
+
 
 
 
@@ -164,6 +170,7 @@ Run the global fit and show the fitting result
 
 
 
+
 Plot the data sets and fits
 
 
@@ -194,9 +201,10 @@ Plot the data sets and fits
 
 
 
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.185 seconds)
+   **Total running time of the script:** ( 0 minutes  0.132 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_multi_datasets.py:
@@ -209,13 +217,13 @@ Plot the data sets and fits
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_fit_multi_datasets.py <example_fit_multi_datasets.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_fit_multi_datasets.ipynb <example_fit_multi_datasets.ipynb>`
 

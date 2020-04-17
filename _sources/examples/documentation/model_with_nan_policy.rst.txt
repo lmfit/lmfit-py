@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_model_with_nan_policy.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_model_with_nan_policy.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_model_with_nan_policy.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_model_with_nan_policy.py:
 
 
 doc_model_with_nan_policy.py
@@ -41,6 +43,7 @@ doc_model_with_nan_policy.py
         height:     5.08771012 +/- 0.06488211 (1.28%) == '0.3989423*amplitude/max(2.220446049250313e-16, sigma)'
     [[Correlations]] (unreported correlations are < 0.100)
         C(amplitude, sigma) =  0.610
+
 
 
 
@@ -92,7 +95,7 @@ doc_model_with_nan_policy.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.138 seconds)
+   **Total running time of the script:** ( 0 minutes  0.081 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_nan_policy.py:
@@ -105,13 +108,13 @@ doc_model_with_nan_policy.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: model_with_nan_policy.py <model_with_nan_policy.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: model_with_nan_policy.ipynb <model_with_nan_policy.ipynb>`
 

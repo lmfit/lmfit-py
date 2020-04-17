@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_expression_model.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_expression_model.py:
+        Click :ref:`here <sphx_glr_download_examples_example_expression_model.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_expression_model.py:
 
 
 Using an ExpressionModel
@@ -20,6 +22,7 @@ See: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models
     import numpy as np
 
     from lmfit.models import ExpressionModel
+
 
 
 
@@ -44,6 +47,7 @@ Generate synthetic data for the user-supplied model:
 
 
 
+
 Define the ExpressionModel and perform the fit:
 
 
@@ -51,6 +55,7 @@ Define the ExpressionModel and perform the fit:
 
     gmod = ExpressionModel("amp * exp(-(x-cen)**2 /(2*wid**2))/(sqrt(2*pi)*wid)")
     result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+
 
 
 
@@ -87,17 +92,17 @@ this results in the following output:
         Model(_eval)
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 50
+        # function evals   = 52
         # data points      = 201
         # variables        = 3
-        chi-square         = 0.02177140
-        reduced chi-square = 1.0996e-04
-        Akaike info crit   = -1829.22310
-        Bayesian info crit = -1819.31318
+        chi-square         = 0.01919918
+        reduced chi-square = 9.6966e-05
+        Akaike info crit   = -1854.49475
+        Bayesian info crit = -1844.58484
     [[Variables]]
-        amp:  3.39760713 +/- 0.00540819 (0.16%) (init = 5)
-        cen:  1.79869325 +/- 9.1946e-04 (0.05%) (init = 5)
-        wid:  0.50024929 +/- 9.1946e-04 (0.18%) (init = 1)
+        amp:  3.39526345 +/- 0.00507776 (0.15%) (init = 5)
+        cen:  1.79937549 +/- 8.6357e-04 (0.05%) (init = 5)
+        wid:  0.50006819 +/- 8.6357e-04 (0.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, wid) =  0.577
     /Users/Newville/Codes/lmfit-py/examples/example_expression_model.py:35: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
@@ -106,9 +111,10 @@ this results in the following output:
 
 
 
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.140 seconds)
+   **Total running time of the script:** ( 0 minutes  0.093 seconds)
 
 
 .. _sphx_glr_download_examples_example_expression_model.py:
@@ -121,13 +127,13 @@ this results in the following output:
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_expression_model.py <example_expression_model.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_expression_model.ipynb <example_expression_model.ipynb>`
 

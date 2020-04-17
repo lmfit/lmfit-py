@@ -38,6 +38,7 @@ div.jupyter_container {
   border-radius: 2px;
   background-color: #f7f7f7;
   margin: 0 0;
+  overflow: auto;
 }
 
 .jupyter_container div.code_cell pre {
@@ -104,5 +105,10 @@ div.jupyter_container * {
 /* combine sequential jupyter cells,
    by moving sequential ones up higher on y-axis */
 div.jupyter_container + div.jupyter_container {
-    margin: -.5em 0 .4em 0; 
+    margin: -.5em 0 .4em 0;
+}
+
+/* Fix for sphinx_rtd_theme spacing after jupyter_container #91 */
+.rst-content .jupyter_container {
+    margin: 0 0 24px 0;
 }

@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_brute.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_brute.py:
+        Click :ref:`here <sphx_glr_download_examples_example_brute.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_brute.py:
 
 
 Global minimization using the ``brute`` method (a.k.a. grid search)
@@ -28,6 +30,7 @@ all varying parameters, but will also deal with non-bounded parameters
     import numpy as np
 
     from lmfit import Minimizer, Parameters, fit_report
+
 
 
 
@@ -74,6 +77,7 @@ First, we create a set of Parameters where all variables except ``x`` and
 
 
 
+
 Second, create the three functions and the objective function:
 
 
@@ -109,6 +113,7 @@ Second, create the three functions and the objective function:
 
 
 
+
 Just as in the documentation we will do a grid search between ``-4`` and
 ``4`` and use a stepsize of ``0.25``. The bounds can be set as usual with
 the ``min`` and ``max`` attributes, and the stepsize is set using
@@ -126,6 +131,7 @@ the ``min`` and ``max`` attributes, and the stepsize is set using
 
 
 
+
 Performing the actual grid search is done with:
 
 
@@ -133,6 +139,7 @@ Performing the actual grid search is done with:
 
     fitter = Minimizer(f, params)
     result = fitter.minimize(method='brute')
+
 
 
 
@@ -165,6 +172,7 @@ Performing the actual grid search is done with:
 
 
 
+
 The objective function is evaluated on this grid, and the raw output from
 ``scipy.optimize.brute`` is stored in the MinimizerResult as
 ``brute_<parname>`` attributes. These attributes are:
@@ -191,6 +199,7 @@ which the objective function had its minimum value.
 
 
 
+
 ``result.brute_fval`` -- Function value at the point x0.
 
 
@@ -209,6 +218,7 @@ which the objective function had its minimum value.
  .. code-block:: none
 
     -2.8923637137222027
+
 
 
 
@@ -248,6 +258,7 @@ same length as x0.
 
 
 
+
 ``result.brute_Jout`` -- Function values at each point of the evaluation
 grid, i.e., Jout = func(\*grid).
 
@@ -282,12 +293,13 @@ grid, i.e., Jout = func(\*grid).
 
 
 
-**Reassuringly, the obtained results are indentical to using the method in
+
+**Reassuringly, the obtained results are identical to using the method in
 SciPy directly!**
 
 Example 2: fit of a decaying sine wave
 
-In this example, will explain some of the options ot the algorithm.
+In this example, we will explain some of the options of the algorithm.
 
 We start off by generating some synthetic data with noise for a decaying
 sine wave, define an objective function and create a Parameter set.
@@ -328,6 +340,7 @@ sine wave, define an objective function and create a Parameter set.
 
 
 
+
 In contrast to the implementation in SciPy (as shown in the first example),
 varying parameters do not need to have finite bounds in lmfit. However, in
 that case they **do** need the ``brute_step`` attribute specified, so let's
@@ -339,6 +352,7 @@ do that:
     params['amp'].set(brute_step=0.25)
     params['decay'].set(brute_step=0.005)
     params['omega'].set(brute_step=0.25)
+
 
 
 
@@ -372,6 +386,7 @@ determine how the grid is set-up.
 
 
 
+
 First, we initialize a Minimizer and perform the grid search:
 
 
@@ -379,6 +394,7 @@ First, we initialize a Minimizer and perform the grid search:
 
     fitter = Minimizer(fcn2min, params, fcn_args=(x, data))
     result_brute = fitter.minimize(method='brute', Ns=25, keep=25)
+
 
 
 
@@ -425,6 +441,7 @@ to ``max`` (inclusive), is here shown for the parameter ``shift``:
 
 
 
+
 If finite bounds are not set for a certain parameter then the user **must**
 specify ``brute_step`` - three more scenarios are considered here:
 
@@ -453,6 +470,7 @@ range = (min, min + Ns * brute_step, brute_step)
     number of steps = 25
     grid = [2.5  2.75 3.   3.25 3.5  3.75 4.   4.25 4.5  4.75 5.   5.25 5.5  5.75
      6.   6.25 6.5  6.75 7.   7.25 7.5  7.75 8.   8.25 8.5 ]
+
 
 
 
@@ -485,6 +503,7 @@ range = (max - Ns * brute_step, max, brute_step)
 
 
 
+
 **(4)** numerical value (value) and brute_step are specified:
 range = (value - (Ns//2) * brute_step, value + (Ns//2) * brute_step, brute_step)
 
@@ -514,6 +533,7 @@ range = (value - (Ns//2) * brute_step, value + (Ns//2) * brute_step, brute_step)
       5.00000000e-02  5.50000000e-02  6.00000000e-02  6.50000000e-02
       7.00000000e-02  7.50000000e-02  8.00000000e-02  8.50000000e-02
       9.00000000e-02  9.50000000e-02  1.00000000e-01  1.05000000e-01]
+
 
 
 
@@ -556,6 +576,8 @@ is given below together with a plot:
         decay:  0.02500000 (init = 0.05)
         shift: -0.13089969 (init = 0)
         omega:  2.00000000 (init = 3)
+
+    [<matplotlib.lines.Line2D object at 0x1a1a05aed0>]
 
 
 
@@ -607,6 +629,7 @@ attribute and is, therefore, identical to ``result_brute.show_candidates(1)``.
 
 
 
+
 In this case, the next-best scoring candidate has already a ``chisqr`` that
 increased quite a bit:
 
@@ -635,6 +658,7 @@ increased quite a bit:
 
 
 
+
 and is, therefore, probably not so likely... However, as said above, in most
 cases you'll want to do another minimization using the solutions from the
 ``brute`` method as starting values. That can be easily accomplished as
@@ -651,6 +675,7 @@ is lower than the previously 'optimal' solution:
         trial = fitter.minimize(method='leastsq', params=candidate.params)
         if trial.chisqr < best_result.chisqr:
             best_result = trial
+
 
 
 
@@ -697,6 +722,7 @@ most optimal result:
 
 
 
+
 As expected the parameters have not changed significantly as they were
 already very close to the "real" values, which can also be appreciated from
 the plots below.
@@ -718,6 +744,15 @@ the plots below.
 .. image:: /examples/images/sphx_glr_example_brute_003.png
     :class: sphx-glr-single-img
 
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    <matplotlib.legend.Legend object at 0x1a1a30e790>
 
 
 
@@ -839,6 +874,7 @@ in lmfit at some point).
 
 
 
+
 and finally, to generated the figure:
 
 
@@ -855,9 +891,10 @@ and finally, to generated the figure:
 
 
 
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  32.589 seconds)
+   **Total running time of the script:** ( 0 minutes  42.154 seconds)
 
 
 .. _sphx_glr_download_examples_example_brute.py:
@@ -870,13 +907,13 @@ and finally, to generated the figure:
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_brute.py <example_brute.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_brute.ipynb <example_brute.ipynb>`
 

@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_model_savemodelresult.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_model_savemodelresult.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_model_savemodelresult.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_model_savemodelresult.py:
 
 
 doc_model_savemodelresult.py
@@ -43,6 +45,7 @@ doc_model_savemodelresult.py
 
 
 
+
 |
 
 
@@ -73,7 +76,7 @@ doc_model_savemodelresult.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.085 seconds)
+   **Total running time of the script:** ( 0 minutes  0.026 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_savemodelresult.py:
@@ -86,13 +89,13 @@ doc_model_savemodelresult.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: model_savemodelresult.py <model_savemodelresult.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: model_savemodelresult.ipynb <model_savemodelresult.ipynb>`
 

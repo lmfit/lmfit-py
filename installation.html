@@ -7,16 +7,18 @@
     <title>Downloading and Installation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Help" href="support.html" />
@@ -124,7 +126,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -154,10 +156,11 @@ automatically if installing with <code class="docutils literal notranslate"><spa
 functionality requires the <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> (version 3+), <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>, <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://jupyter.org/">Jupyter</a>,
 <a class="reference external" href="https://matplotlib.org/">matplotlib</a>, <a class="reference external" href="https://github.com/uqfoundation/dill">dill</a>, or <a class="reference external" href="https://github.com/pbrod/numdifftools">numdifftools</a> packages.  These are not installed
 automatically, but we highly recommend each of these packages.</p>
-<p>For building the documentation, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>, <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> (version 3+), <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>,
-<a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a>, <a class="reference external" href="https://jupyter-sphinx.readthedocs.io">jupyter_sphinx</a>, and <a class="reference external" href="https://www.imagemagick.org/">ImageMagick</a> are required (the latter
-one only when generating the PDF document).</p>
-<p>Please refer to  <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> for a list of all dependencies that
+<p>For building the documentation and generating the examples gallery,
+<a class="reference external" href="https://matplotlib.org/">matplotlib</a>, <a class="reference external" href="http://dan.iel.fm/emcee/">emcee</a> (version 3+), <a class="reference external" href="https://github.com/dfm/corner.py">corner</a>, <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a>,
+<a class="reference external" href="https://jupyter-sphinx.readthedocs.io">jupyter_sphinx</a>, <a class="reference external" href="https://python-pillow.org/">Pillow</a> and <a class="reference external" href="https://www.imagemagick.org/">ImageMagick</a> are required (the
+latter one only when generating the PDF document).</p>
+<p>Please refer to <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> for a list of all dependencies that
 are needed if you want to participate in the development of lmfit.</p>
 </div>
 <div class="section" id="downloads">
@@ -274,7 +277,7 @@ lists have also led to improvements in this code.
 <p>The LMFIT-py code is distributed under the following license:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BSD-3
 
-Copyright 2019 Matthew Newville, The University of Chicago
+Copyright 2020 Matthew Newville, The University of Chicago
                Renee Otten, Brandeis University
                Till Stensitzki, Freie Universitat Berlin
                A. R. J. Nelson, Australian Nuclear Science and Technology Organisation
@@ -379,8 +382,8 @@ released under a MIT license.
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
+        &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
 </html>

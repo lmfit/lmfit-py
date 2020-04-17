@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_builtinmodels_nistgauss.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_builtinmodels_nistgauss.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_builtinmodels_nistgauss.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_builtinmodels_nistgauss.py:
 
 
 doc_builtinmodels_nistgauss.py
@@ -57,6 +59,7 @@ doc_builtinmodels_nistgauss.py
         C(g1_center, g2_center)     =  0.621
         C(g1_center, g1_sigma)      =  0.507
         C(exp_decay, g1_amplitude)  = -0.507
+
 
 
 
@@ -124,7 +127,7 @@ doc_builtinmodels_nistgauss.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.242 seconds)
+   **Total running time of the script:** ( 0 minutes  0.417 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_nistgauss.py:
@@ -137,13 +140,13 @@ doc_builtinmodels_nistgauss.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: builtinmodels_nistgauss.py <builtinmodels_nistgauss.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: builtinmodels_nistgauss.ipynb <builtinmodels_nistgauss.ipynb>`
 

@@ -7,16 +7,18 @@
     <title>Built-in Fitting Models in the models module &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Calculation of confidence intervals" href="confidence.html" />
@@ -107,7 +109,8 @@
 <li><a class="reference internal" href="#exponentialgaussianmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialGaussianModel</span></code></a></li>
 <li><a class="reference internal" href="#skewedgaussianmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedGaussianModel</span></code></a></li>
 <li><a class="reference internal" href="#skewedvoigtmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a></li>
-<li><a class="reference internal" href="#donaichmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DonaichModel</span></code></a></li>
+<li><a class="reference internal" href="#thermaldistributionmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a></li>
+<li><a class="reference internal" href="#doniachmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoniachModel</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#linear-and-polynomial-models">Linear and Polynomial Models</a><ul>
@@ -160,7 +163,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -187,7 +190,7 @@ is that models can easily be combined to give a composite
 seem pretty trivial (notably, <a class="reference internal" href="#lmfit.models.ConstantModel" title="lmfit.models.ConstantModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConstantModel</span></code></a> and <a class="reference internal" href="#lmfit.models.LinearModel" title="lmfit.models.LinearModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinearModel</span></code></a>),
 the main point of having these is to be able to use them in composite models. For
 example, a Lorentzian plus a linear background might be represented as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="k">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">LorentzianModel</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">LorentzianModel</span>
 
 <span class="n">peak</span> <span class="o">=</span> <span class="n">LorentzianModel</span><span class="p">()</span>
 <span class="n">background</span> <span class="o">=</span> <span class="n">LinearModel</span><span class="p">()</span>
@@ -499,7 +502,8 @@ data. Should be one of:</p>
 with four parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code>
 (<span class="math notranslate nohighlight">\(\mu\)</span>), <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">exponent</span></code> (<span class="math notranslate nohighlight">\(m\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
-to report full width at half maximum and maximum peak height, respectively.</p>
+to report estimates for the full width at half maximum and maximum peak height,
+respectively.</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, m) = \frac{A}{\sigma{\beta(m-\frac{1}{2}, \frac{1}{2})}} \bigl[1 + \frac{(x-\mu)^2}{\sigma^2}  \bigr]^{-m}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\beta\)</span> is the beta function (see <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.beta.html">scipy.special.beta</a>)
@@ -578,9 +582,7 @@ data. Should be one of:</p>
 <dd><p>A model based on a Breit-Wigner-Fano function (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Fano_resonance">https://en.wikipedia.org/wiki/Fano_resonance</a>), with four Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">q</span></code> (<span class="math notranslate nohighlight">\(q\)</span>).
-In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
-to report full width at half maximum and maximum peak height, respectively.</p>
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">q</span></code> (<span class="math notranslate nohighlight">\(q\)</span>).</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, q) = \frac{A (q\sigma/2 + x - \mu)^2}{(\sigma/2)^2 + (x - \mu)^2}\]</div>
 <dl class="field-list simple">
@@ -618,7 +620,8 @@ data. Should be one of:</p>
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>
 (<span class="math notranslate nohighlight">\(\sigma\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
-to report full width at half maximum and maximum peak height, respectively.</p>
+to report estimates of full width at half maximum and maximum peak height,
+respectively.</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma) = \frac{A}{\sigma\sqrt{2\pi}}\frac{e^{-(\ln(x) - \mu)^2/ 2\sigma^2}}{x}\]</div>
 <dl class="field-list simple">
@@ -655,8 +658,8 @@ data. Should be one of:</p>
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part">https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part</a>), with
 three Parameters:  <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and
 <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>).
-In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
-to report full width at half maximum and maximum peak height, respectively.</p>
+In addition, the parameter <code class="docutils literal notranslate"><span class="pre">height</span></code> is included as a constraint
+to report the maximum peak height.</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma) = \frac{A}{\sqrt{ [1 - (x/\mu)^2]^2 + (2\sigma x/\mu)^2}}\]</div>
 <dl class="field-list simple">
@@ -695,7 +698,8 @@ definition given in DAVE/PAN (see <a class="reference external" href="https://ww
 four Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),
 <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>).
 In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
-to report full width at half maximum and maximum peak height, respectively.</p>
+to report estimates for full width at half maximum and maximum peak height,
+respectively.</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A\sigma}{\pi [1 - \exp(-x/\gamma)]}
         \Big[ \frac{1}{(x-\mu)^2 + \sigma^2} - \frac{1}{(x+\mu)^2 + \sigma^2} \Big]\]</div>
@@ -734,9 +738,7 @@ data. Should be one of:</p>
 <dd><p>A model of an Exponentially modified Gaussian distribution
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution">https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution</a>) with
 four Parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),
-<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and  <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>).
-In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
-to report full width at half maximum and maximum peak height, respectively.</p>
+<code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>), and  <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>).</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A\gamma}{2}
 \exp\bigl[\gamma({\mu - x  + \gamma\sigma^2/2})\bigr]
@@ -775,9 +777,7 @@ data. Should be one of:</p>
 <dd><p>A variation of the Exponential Gaussian, this uses a skewed normal distribution
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Skew_normal_distribution">https://en.wikipedia.org/wiki/Skew_normal_distribution</a>), with Parameters
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),  <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>),
-and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>).
-In addition, parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints
-to report full width at half maximum and maximum peak height, respectively.</p>
+and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>).</p>
 <div class="math notranslate nohighlight">
 \[f(x; A, \mu, \sigma, \gamma) = \frac{A}{\sigma\sqrt{2\pi}}
 e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]} \Bigl\{ 1 +
@@ -820,10 +820,7 @@ data. Should be one of:</p>
 <a class="reference external" href="https://en.wikipedia.org/wiki/Voigt_distribution">https://en.wikipedia.org/wiki/Voigt_distribution</a>).  It has Parameters
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>), <code class="docutils literal notranslate"><span class="pre">sigma</span></code>
 (<span class="math notranslate nohighlight">\(\sigma\)</span>), and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> (<span class="math notranslate nohighlight">\(\gamma\)</span>), as usual for a
-Voigt distribution, and add a Parameter <code class="docutils literal notranslate"><span class="pre">skew</span></code>.  In addition,
-parameters <code class="docutils literal notranslate"><span class="pre">fwhm</span></code> and <code class="docutils literal notranslate"><span class="pre">height</span></code> are included as constraints to
-report full width at half maximum and maximum peak height, of the
-Voigt distribution, respectively.</p>
+Voigt distribution, and add a Parameter <code class="docutils literal notranslate"><span class="pre">skew</span></code>.</p>
 </dd>
 </dl>
 <div class="math notranslate nohighlight">
@@ -857,11 +854,64 @@ data. Should be one of:</p>
 </dd></dl>
 
 </div>
-<div class="section" id="donaichmodel">
-<h3><a class="reference internal" href="#lmfit.models.DonaichModel" title="lmfit.models.DonaichModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DonaichModel</span></code></a><a class="headerlink" href="#donaichmodel" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="thermaldistributionmodel">
+<h3><a class="reference internal" href="#lmfit.models.ThermalDistributionModel" title="lmfit.models.ThermalDistributionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a><a class="headerlink" href="#thermaldistributionmodel" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
-<dt id="lmfit.models.DonaichModel">
-<em class="property">class </em><code class="sig-name descname">DonaichModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DonaichModel" title="Permalink to this definition">¶</a></dt>
+<dt id="lmfit.models.ThermalDistributionModel">
+<em class="property">class </em><code class="sig-name descname">ThermalDistributionModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', form='bose', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ThermalDistributionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a thermal distribution function.</p>
+<p>Variable <code class="docutils literal notranslate"><span class="pre">form</span></code> defines
+the kind of distribution as below with parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>
+(<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(x_0\)</span>) and <code class="docutils literal notranslate"><span class="pre">kt</span></code> (<span class="math notranslate nohighlight">\(kt\)</span>). The
+following distributions are available:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">bose</span></code> (the default) Bose-Einstein distribution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">maxwell</span></code> Maxwell-Boltzmann distribution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fermi</span></code> Fermi-Dirac distribution</p></li>
+</ul>
+<p>The functional forms are defined as:</p>
+<div class="math notranslate nohighlight">
+\begin{eqnarray*}
+&amp; f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}})  &amp; = \frac{1}{A \exp(\frac{x - x_0}{kt}) - 1} \\
+&amp; f(x; A, x_0, kt, {\mathrm{form={}'maxwell{}'}})  &amp; = \frac{1}{A \exp(\frac{x - x_0}{kt})} \\
+&amp; f(x; A, x_0, kt, {\mathrm{form={}'fermi{}'}})  &amp; = \frac{1}{A \exp(\frac{x - x_0}{kt}) + 1} ]
+\end{eqnarray*}</div><p>see <a class="reference external" href="http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html">http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html</a></p>
+<p>Comments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">kt</span></code> should be defined in the same units as <code class="docutils literal notranslate"><span class="pre">x</span></code> (<span class="math notranslate nohighlight">\(k_B = 8.617\times10^{-5}\)</span> eV/K).</p></li>
+<li><p>set <span class="math notranslate nohighlight">\(kt&lt;0\)</span> to implement the energy loss convention common in
+scattering research.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>independent_vars</strong> (<em>[</em><em>'x'</em><em>]</em>) – Arguments to func that are independent variables.</p></li>
+<li><p><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – String to prepend to parameter names, needed to add two Models that
+have parameter names in common.</p></li>
+<li><p><strong>nan_policy</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – How to handle NaN and missing values in data. Must be one of:
+‘raise’ (default), ‘propagate’, or ‘omit’. See Notes below.</p></li>
+<li><p><strong>**kwargs</strong> (<em>optional</em>) – Keyword arguments to pass to <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>1. nan_policy sets what to do when a NaN or missing value is seen in the
+data. Should be one of:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘raise’ : Raise a ValueError (default)</p></li>
+<li><p>‘propagate’ : do nothing</p></li>
+<li><p>‘omit’ : drop missing data</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="doniachmodel">
+<h3><a class="reference internal" href="#lmfit.models.DoniachModel" title="lmfit.models.DoniachModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoniachModel</span></code></a><a class="headerlink" href="#doniachmodel" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="lmfit.models.DoniachModel">
+<em class="property">class </em><code class="sig-name descname">DoniachModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DoniachModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model of an Doniach Sunjic asymmetric lineshape
 (see <a class="reference external" href="https://www.casaxps.com/help_manual/line_shapes.htm">https://www.casaxps.com/help_manual/line_shapes.htm</a>), used in
 photo-emission, with four Parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>),
@@ -1013,7 +1063,7 @@ data. Should be one of:</p>
 <dl class="class">
 <dt id="lmfit.models.PolynomialModel">
 <em class="property">class </em><code class="sig-name descname">PolynomialModel</code><span class="sig-paren">(</span><em class="sig-param">degree, independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>A polynomial model with up to 7 Parameters, specfied by <code class="docutils literal notranslate"><span class="pre">degree</span></code>.</p>
+<dd><p>A polynomial model with up to 7 Parameters, specified by <code class="docutils literal notranslate"><span class="pre">degree</span></code>.</p>
 <div class="math notranslate nohighlight">
 \[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i\]</div>
 <p>with parameters <code class="docutils literal notranslate"><span class="pre">c0</span></code>, <code class="docutils literal notranslate"><span class="pre">c1</span></code>, …, <code class="docutils literal notranslate"><span class="pre">c7</span></code>.  The supplied <code class="docutils literal notranslate"><span class="pre">degree</span></code>
@@ -1350,7 +1400,7 @@ built-in default values.  We will simply use:</p>
 <span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">guess</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.25</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -1533,8 +1583,8 @@ various backgrounds.  An example of a simple fit to a noisy step function
 plus a constant:</p>
 <div class="jupyter_container docutils container">
 <div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_stepmodel.py&gt;</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">LinearModel</span><span class="p">,</span> <span class="n">StepModel</span>
 
@@ -1554,7 +1604,7 @@ plus a constant:</p>
 <span class="n">mod</span> <span class="o">=</span> <span class="n">step_mod</span> <span class="o">+</span> <span class="n">line_mod</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="o">.</span><span class="n">init_fit</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;initial fit&#39;</span><span class="p">)</span>
@@ -1568,7 +1618,7 @@ plus a constant:</p>
 <p>After constructing step-like data, we first create a <a class="reference internal" href="#lmfit.models.StepModel" title="lmfit.models.StepModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StepModel</span></code></a>
 telling it to use the <code class="docutils literal notranslate"><span class="pre">erf</span></code> form (see details above), and a
 <a class="reference internal" href="#lmfit.models.ConstantModel" title="lmfit.models.ConstantModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConstantModel</span></code></a>.  We set initial values, in one case using the data
-and <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> method for the initial step function paramaters, and
+and <code class="xref py py-meth docutils literal notranslate"><span class="pre">guess()</span></code> method for the initial step function parameters, and
 <code class="xref py py-meth docutils literal notranslate"><span class="pre">make_params()</span></code> arguments for the linear component.
 After making a composite model, we run <code class="xref py py-meth docutils literal notranslate"><span class="pre">fit()</span></code> and report the
 results, which gives:</p>
@@ -1618,8 +1668,8 @@ illustrate, we fit one of the classic datasets from the <a class="reference exte
 involving a decaying exponential and two gaussians.</p>
 <div class="jupyter_container docutils container">
 <div class="code_cell highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># &lt;examples/doc_builtinmodels_nistgauss.py&gt;</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">lmfit.models</span> <span class="kn">import</span> <span class="n">ExponentialModel</span><span class="p">,</span> <span class="n">GaussianModel</span>
 
@@ -1649,7 +1699,7 @@ involving a decaying exponential and two gaussians.</p>
 <span class="n">init</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 <span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
 
-<span class="k">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">(</span><span class="n">min_correl</span><span class="o">=</span><span class="mf">0.5</span><span class="p">))</span>
 
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">12.8</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">))</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
@@ -1858,8 +1908,8 @@ and the figure above shows an improved initial estimate of the data.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
+        &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
 </html>

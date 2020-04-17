@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_parameters_basic.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_parameters_basic.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_parameters_basic.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_parameters_basic.py:
 
 
 doc_parameters_basic.py
@@ -40,6 +42,7 @@ doc_parameters_basic.py
         C(shift, omega) = -0.785
         C(amp, decay)   =  0.584
         C(amp, shift)   = -0.117
+
 
 
 
@@ -106,7 +109,7 @@ doc_parameters_basic.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.130 seconds)
+   **Total running time of the script:** ( 0 minutes  0.151 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_basic.py:
@@ -119,13 +122,13 @@ doc_parameters_basic.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: parameters_basic.py <parameters_basic.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: parameters_basic.ipynb <parameters_basic.ipynb>`
 

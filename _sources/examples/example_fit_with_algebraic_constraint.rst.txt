@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_fit_with_algebraic_constraint.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_fit_with_algebraic_constraint.py:
+        Click :ref:`here <sphx_glr_download_examples_example_fit_with_algebraic_constraint.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_fit_with_algebraic_constraint.py:
 
 
 Fit with Algebraic Constraint
@@ -56,6 +58,7 @@ Fit with Algebraic Constraint
         C(wid_g, line_slope)    =  0.174
     /Users/Newville/Codes/lmfit-py/examples/example_fit_with_algebraic_constraint.py:66: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
+
 
 
 
@@ -130,7 +133,7 @@ Fit with Algebraic Constraint
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.274 seconds)
+   **Total running time of the script:** ( 0 minutes  0.106 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_algebraic_constraint.py:
@@ -143,13 +146,13 @@ Fit with Algebraic Constraint
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_fit_with_algebraic_constraint.py <example_fit_with_algebraic_constraint.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_fit_with_algebraic_constraint.ipynb <example_fit_with_algebraic_constraint.ipynb>`
 

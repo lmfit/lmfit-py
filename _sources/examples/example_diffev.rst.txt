@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_diffev.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_diffev.py:
+        Click :ref:`here <sphx_glr_download_examples_example_diffev.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_diffev.py:
 
 
 Fit Using differential_evolution Algorithm
@@ -47,7 +49,7 @@ a fairly simple problem.
     # Fit using differential_evolution:
     [[Fit Statistics]]
         # fitting method   = differential_evolution
-        # function evals   = 1595
+        # function evals   = 1425
         # data points      = 101
         # variables        = 4
         chi-square         = 21.7961792
@@ -55,14 +57,15 @@ a fairly simple problem.
         Akaike info crit   = -146.871969
         Bayesian info crit = -136.411487
     [[Variables]]
-        offset:  0.96333094 +/- 0.04735903 (4.92%) (init = 2)
-        omega:   3.98700859 +/- 0.02121806 (0.53%) (init = 3.3)
-        amp:     1.80252931 +/- 0.19022466 (10.55%) (init = 2.5)
-        decay:   5.73540163 +/- 1.00452879 (17.51%) (init = 1)
+        offset:  0.96333133 +/- 0.04735903 (4.92%) (init = 2)
+        omega:   3.98700854 +/- 0.02121808 (0.53%) (init = 3.3)
+        amp:     1.80252617 +/- 0.19022408 (10.55%) (init = 2.5)
+        decay:   5.73540283 +/- 1.00452607 (17.51%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.743
     /Users/Newville/Codes/lmfit-py/examples/example_diffev.py:55: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
+
 
 
 
@@ -124,7 +127,7 @@ a fairly simple problem.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.363 seconds)
+   **Total running time of the script:** ( 0 minutes  0.331 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:
@@ -137,13 +140,13 @@ a fairly simple problem.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_diffev.py <example_diffev.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_diffev.ipynb <example_diffev.ipynb>`
 

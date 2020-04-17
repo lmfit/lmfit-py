@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_Model_interface.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_Model_interface.py:
+        Click :ref:`here <sphx_glr_download_examples_example_Model_interface.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_Model_interface.py:
 
 
 Fit using the Model interface
@@ -21,6 +23,7 @@ https://lmfit.github.io/lmfit-py/model.html#the-model-class.
     from pandas import Series
 
     from lmfit import Model, Parameter, report_fit
+
 
 
 
@@ -46,6 +49,7 @@ fitting example data to an exponential decay.
 
 
 
+
 The parameters are in no particular order. We'll need some example data. I
 will use ``N=7`` and ``tau=3``, and add a little noise.
 
@@ -61,6 +65,7 @@ will use ``N=7`` and ``tau=3``, and add a little noise.
 
 
 
+
 **Simplest Usage**
 
 
@@ -68,6 +73,7 @@ will use ``N=7`` and ``tau=3``, and add a little noise.
 
     model = Model(decay, independent_vars=['t'])
     result = model.fit(data, t=t, N=10, tau=1)
+
 
 
 
@@ -101,6 +107,7 @@ We can immediately see the best-fit values:
 
 
 
+
 and use these best-fit parameters for plotting with the ``plot`` function:
 
 
@@ -114,6 +121,15 @@ and use these best-fit parameters for plotting with the ``plot`` function:
 .. image:: /examples/images/sphx_glr_example_Model_interface_001.png
     :class: sphx-glr-single-img
 
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    (<Figure size 640x640 with 2 Axes>, GridSpec(2, 1, height_ratios=[1, 4]))
 
 
 
@@ -140,6 +156,7 @@ We can review the best-fit `Parameters` by accessing `result.params`:
 
 
 
+
 More information about the fit is stored in the result, which is an
 ``lmfit.MimimizerResult`` object (see:
 https://lmfit.github.io/lmfit-py/fitting.html#lmfit.minimizer.MinimizerResult)
@@ -147,8 +164,8 @@ https://lmfit.github.io/lmfit-py/fitting.html#lmfit.minimizer.MinimizerResult)
 **Specifying Bounds and Holding Parameters Constant**
 
 Above, the ``Model`` class implicitly builds ``Parameter`` objects from
-keyword arguments of ``fit`` that match the argments of ``decay``. You can
-build the ``Parameter`` objects explicity; the following is equivalent.
+keyword arguments of ``fit`` that match the arguments of ``decay``. You can
+build the ``Parameter`` objects explicitly; the following is equivalent.
 
 
 .. code-block:: default
@@ -173,6 +190,7 @@ build the ``Parameter`` objects explicity; the following is equivalent.
         tau:  3.01135430 +/- 0.06600023 (2.19%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(N, tau) = -0.756
+
 
 
 
@@ -203,9 +221,10 @@ By building ``Parameter`` objects explicitly, you can specify bounds
 
 
 
+
 **Defining Parameters in Advance**
 
-Passing parameters to ``fit`` can become unwieldly. As an alternative, you
+Passing parameters to ``fit`` can become unwieldy. As an alternative, you
 can extract the parameters from ``model`` like so, set them individually,
 and pass them to ``fit``.
 
@@ -239,6 +258,7 @@ and pass them to ``fit``.
 
 
 
+
 Keyword arguments override ``params``, resetting ``value`` and all other
 properties (``min``, ``max``, ``vary``).
 
@@ -266,6 +286,7 @@ properties (``min``, ``max``, ``vary``).
 
 
 
+
 The input parameters are not modified by ``fit``. They can be reused,
 retaining the same initial value. If you want to use the result of one fit
 as the initial guess for the next, simply pass ``params=result.params``.
@@ -283,6 +304,7 @@ as the initial guess for the next, simply pass ``params=result.params``.
 
 
     # #result = model.fit(data, t=t, tau=1)  # N unspecified
+
 
 
 
@@ -324,9 +346,10 @@ of the fit in term of ``weights``, ``sigma=1/weights``.
 
 
 
+
 *Handling Missing Data*
 
-By default, attemping to fit data that includes a ``NaN``, which
+By default, attempting to fit data that includes a ``NaN``, which
 conventionally indicates a "missing" observation, raises a lengthy exception.
 You can choose to ``omit`` (i.e., skip over) missing values instead.
 
@@ -355,6 +378,7 @@ You can choose to ``omit`` (i.e., skip over) missing values instead.
         tau:  3.00311360 +/- 0.06590577 (2.19%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(N, tau) = -0.757
+
 
 
 
@@ -410,6 +434,7 @@ automatically aligned to the correct section of ``t`` using Series' index.
 
 
 
+
 Data with missing entries and an unequal length still aligns properly.
 
 
@@ -438,9 +463,10 @@ Data with missing entries and an unequal length still aligns properly.
 
 
 
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.302 seconds)
+   **Total running time of the script:** ( 0 minutes  0.246 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:
@@ -453,13 +479,13 @@ Data with missing entries and an unequal length still aligns properly.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_Model_interface.py <example_Model_interface.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_Model_interface.ipynb <example_Model_interface.ipynb>`
 

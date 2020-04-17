@@ -1,40 +1,53 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_model_loadmodel.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_model_loadmodel.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_model_loadmodel.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_model_loadmodel.py:
 
 
 doc_model_loadmodel.py
 ======================
 
-.. note:: This example *does* actually work, but running from within  sphinx-gallery fails to find symbols saved in the save file.
+
+
+.. image:: /examples/documentation/images/sphx_glr_model_loadmodel_001.png
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    [[Model]]
+        Model(mysine)
+    [[Fit Statistics]]
+        # fitting method   = leastsq
+        # function evals   = 21
+        # data points      = 101
+        # variables        = 3
+        chi-square         = 7.68903767
+        reduced chi-square = 0.07845957
+        Akaike info crit   = -254.107813
+        Bayesian info crit = -246.262452
+    [[Variables]]
+        amp:    2.32733714 +/- 0.03950803 (1.70%) (init = 3)
+        freq:   0.50098755 +/- 5.7726e-04 (0.12%) (init = 0.52)
+        shift:  0.53604521 +/- 0.03383118 (6.31%) (init = 0)
+    [[Correlations]] (unreported correlations are < 0.100)
+        C(freq, shift) = -0.866
 
 
 
-.. code-block:: pytb
-
-    Traceback (most recent call last):
-      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py", line 480, in _memory_usage
-        out = func()
-      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py", line 465, in __call__
-        exec(self.code, self.globals)
-      File "/Users/Newville/Codes/lmfit-py/examples/documentation/model_loadmodel.py", line 32, in <module>
-        result = model.fit(y, params, x=x)
-      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-1.0.0-py3.7.egg/lmfit/model.py", line 1022, in fit
-        output.fit(data=data, weights=weights)
-      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-1.0.0-py3.7.egg/lmfit/model.py", line 1369, in fit
-        self.init_fit = self.model.eval(params=self.params, **self.userkws)
-      File "/Users/Newville/anaconda3/lib/python3.7/site-packages/lmfit-1.0.0-py3.7.egg/lmfit/model.py", line 848, in eval
-        return self.func(**self.make_funcargs(params, kwargs))
-      File "/Users/Newville/Codes/lmfit-py/examples/documentation/model_savemodel.py", line 18, in mysine
-        return amp * np.sin(x*freq + shift)
-    NameError: name 'np' is not defined
 
 
 
+|
 
 
 .. code-block:: default
@@ -75,7 +88,7 @@ doc_model_loadmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.066 seconds)
+   **Total running time of the script:** ( 0 minutes  0.084 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodel.py:
@@ -88,13 +101,13 @@ doc_model_loadmodel.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: model_loadmodel.py <model_loadmodel.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: model_loadmodel.ipynb <model_loadmodel.ipynb>`
 

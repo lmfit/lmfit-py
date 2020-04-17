@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_fit_with_bounds.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_fit_with_bounds.py:
+        Click :ref:`here <sphx_glr_download_examples_example_fit_with_bounds.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_fit_with_bounds.py:
 
 
 Fit Using Bounds
@@ -65,6 +67,7 @@ attributes to fitting parameters.
 
 
 
+
 This gives the following fitting results:
 
 
@@ -103,6 +106,7 @@ This gives the following fitting results:
 
 
 
+
 and shows the plot below:
 
 
@@ -131,9 +135,10 @@ and shows the plot below:
 
 
 
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.142 seconds)
+   **Total running time of the script:** ( 0 minutes  0.086 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_bounds.py:
@@ -146,13 +151,13 @@ and shows the plot below:
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_fit_with_bounds.py <example_fit_with_bounds.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_fit_with_bounds.ipynb <example_fit_with_bounds.ipynb>`
 

@@ -7,16 +7,18 @@
     <title>Contents &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
   <script type="text/x-mathjax-config">
@@ -96,7 +98,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -151,7 +153,7 @@
 <li class="toctree-l2"><a class="reference internal" href="faq.html#can-i-constrain-values-to-have-integer-values">Can I constrain values to have integer values?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#i-get-errors-from-nan-in-my-fit-what-can-i-do">I get errors from NaN in my fit.  What can I do?</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="faq.html#nan-policy"><cite>nan_policy</cite></a></li>
+<li class="toctree-l3"><a class="reference internal" href="faq.html#nan-policy"><code class="docutils literal notranslate"><span class="pre">nan_policy</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="faq.html#common-sources-of-nan">Common sources of NaN</a></li>
 </ul>
 </li>
@@ -220,7 +222,8 @@
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#exponentialgaussianmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialGaussianModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#skewedgaussianmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedGaussianModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#skewedvoigtmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#donaichmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DonaichModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#thermaldistributionmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#doniachmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoniachModel</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#linear-and-polynomial-models">Linear and Polynomial Models</a><ul>
@@ -299,8 +302,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
+        &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
 </html>

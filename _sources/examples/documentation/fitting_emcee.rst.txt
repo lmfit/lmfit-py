@@ -1,39 +1,18 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_fitting_emcee.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_fitting_emcee.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_fitting_emcee.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_fitting_emcee.py:
 
 
 doc_fitting_emcee.py
 ====================
 
 
-
-.. rst-class:: sphx-glr-horizontal
-
-
-    *
-
-      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_001.png
-            :class: sphx-glr-multi-img
-
-    *
-
-      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_002.png
-            :class: sphx-glr-multi-img
-
-    *
-
-      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_003.png
-            :class: sphx-glr-multi-img
-
-    *
-
-      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_004.png
-            :class: sphx-glr-multi-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -73,20 +52,21 @@ doc_fitting_emcee.py
         C(a1, t2) =  0.175
 
     Maximum Likelihood Estimation from emcee
-    ---------------------------------------------------
+    -------------------------------------------------
     Parameter  MLE Value   Median Value   Uncertainty
       a1         2.99069     2.99274       0.14796
       a2        -4.35009    -4.34510       0.12509
       t1         1.32248     1.32575       0.14478
       t2        11.76440    11.79100       0.48119
 
-    Error Estimates from numdifftools and emcee
-    ---------------------------------------------
-    Parameter  stderr    1-sigma     2-sigma
-      a1       0.14796   0.14809     0.29925
-      a2       0.12509   0.12498     0.27318
-      t1       0.14478   0.14502     0.29858
-      t2       0.48119   0.48199     1.01225
+    Error Estimates from emcee
+    ------------------------------------------------------
+    Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma
+      a1       -0.2635  -0.1408   2.9927   0.1552   0.3262
+      a2       -0.3474  -0.1393  -4.3451   0.1110   0.1931
+      t1       -0.2411  -0.1335   1.3258   0.1561   0.3420
+      t2       -1.1149  -0.4989  11.7910   0.4635   0.8741
+
 
 
 
@@ -111,6 +91,7 @@ doc_fitting_emcee.py
         HASPYLAB = True
     except ImportError:
         HASPYLAB = False
+    HASPYLAB = False
 
     try:
         import corner
@@ -181,13 +162,13 @@ doc_fitting_emcee.py
     for i, par in enumerate(p):
         p[par].value = mle_soln[i]
 
-    print('\nMaximum Likelihood Estimation from emcee         ')
-    print('---------------------------------------------------')
+    print('\nMaximum Likelihood Estimation from emcee       ')
+    print('-------------------------------------------------')
     print('Parameter  MLE Value   Median Value   Uncertainty')
+    fmt = '  {:5s}  {:11.5f} {:11.5f}   {:11.5f}'.format
     for name, param in p.items():
-        print('  {:5s}  {:11.5f} {:11.5f}   {:11.5f}'.format(name, param.value,
-                                                             res.params[name].value,
-                                                             res.params[name].stderr))
+        print(fmt(name, param.value, res.params[name].value,
+                  res.params[name].stderr))
 
     if HASPYLAB:
         plt.figure()
@@ -197,22 +178,25 @@ doc_fitting_emcee.py
         plt.legend()
         plt.show()
 
-    print('\nError Estimates from numdifftools and emcee')
-    print('---------------------------------------------')
-    print('Parameter  stderr    1-sigma     2-sigma ')
+    print('\nError Estimates from emcee    ')
+    print('------------------------------------------------------')
+    print('Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma ')
 
     for name in p.keys():
-        quantiles = np.percentile(res.flatchain[name], [2.28, 15.9, 84.2, 97.7])
-        err1s = (quantiles[2] - quantiles[1])/2
-        err2s = (quantiles[3] - quantiles[0])/2
-        print('  {:5s}   {:8.5f}  {:8.5f}    {:8.5f}'.format(name,
-                                                             res.params[name].stderr,
-                                                             err1s, err2s))
+        quantiles = np.percentile(res.flatchain[name],
+                                  [2.275, 15.865, 50, 84.135, 97.275])
+        median = quantiles[2]
+        err_m2 = quantiles[0] - median
+        err_m1 = quantiles[1] - median
+        err_p1 = quantiles[3] - median
+        err_p2 = quantiles[4] - median
+        fmt = '  {:5s}   {:8.4f} {:8.4f} {:8.4f} {:8.4f} {:8.4f}'.format
+        print(fmt(name, err_m2, err_m1, median, err_p1, err_p2))
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  9.998 seconds)
+   **Total running time of the script:** ( 0 minutes  11.081 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:
@@ -225,13 +209,13 @@ doc_fitting_emcee.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: fitting_emcee.py <fitting_emcee.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: fitting_emcee.ipynb <fitting_emcee.ipynb>`
 

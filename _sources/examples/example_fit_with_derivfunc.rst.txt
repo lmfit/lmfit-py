@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_fit_with_derivfunc.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_fit_with_derivfunc.py:
+        Click :ref:`here <sphx_glr_download_examples_example_fit_with_derivfunc.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_fit_with_derivfunc.py:
 
 
 Fit Specifying a Function to Compute the Jacobian
@@ -66,6 +68,7 @@ fitting procedure.
 
 
 
+
 Comparison of fit to exponential decay with/without analytical derivatives
 to model = a*exp(-b*x) + c
 
@@ -117,6 +120,7 @@ to model = a*exp(-b*x) + c
 
 
 
+
 and the best-fit to the synthetic data (with added noise) is the same for
 both methods:
 
@@ -146,9 +150,10 @@ both methods:
 
 
 
+
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.190 seconds)
+   **Total running time of the script:** ( 0 minutes  0.076 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_derivfunc.py:
@@ -161,13 +166,13 @@ both methods:
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_fit_with_derivfunc.py <example_fit_with_derivfunc.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_fit_with_derivfunc.ipynb <example_fit_with_derivfunc.ipynb>`
 

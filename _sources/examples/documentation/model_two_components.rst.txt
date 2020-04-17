@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_model_two_components.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_model_two_components.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_model_two_components.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_model_two_components.py:
 
 
 doc_model_two_components.py
@@ -48,6 +50,7 @@ doc_model_two_components.py
         C(wid, intercept)   = -0.148
         C(cen, intercept)   =  0.129
         C(wid, slope)       = -0.113
+
 
 
 
@@ -100,7 +103,7 @@ doc_model_two_components.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.140 seconds)
+   **Total running time of the script:** ( 0 minutes  0.103 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_two_components.py:
@@ -113,13 +116,13 @@ doc_model_two_components.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: model_two_components.py <model_two_components.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: model_two_components.ipynb <model_two_components.ipynb>`
 

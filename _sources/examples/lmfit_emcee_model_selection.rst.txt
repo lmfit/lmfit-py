@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_lmfit_emcee_model_selection.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_lmfit_emcee_model_selection.py:
+        Click :ref:`here <sphx_glr_download_examples_lmfit_emcee_model_selection.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_lmfit_emcee_model_selection.py:
 
 
 Model Selection using lmfit and emcee
@@ -258,13 +260,13 @@ possible. For example, you might expect the prior to be Gaussian.
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: lmfit_emcee_model_selection.py <lmfit_emcee_model_selection.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: lmfit_emcee_model_selection.ipynb <lmfit_emcee_model_selection.ipynb>`
 

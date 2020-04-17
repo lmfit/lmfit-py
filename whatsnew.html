@@ -7,16 +7,18 @@
     <title>Release Notes &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Examples gallery" href="examples/index.html" />
@@ -134,7 +136,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -167,7 +169,7 @@ consult the <a class="reference external" href="https://github.com/lmfit/lmfit-p
 </div>
 <div class="section" id="version-0-9-15-release-notes">
 <span id="whatsnew-0915-label"></span><h2>Version 0.9.15 Release Notes<a class="headerlink" href="#version-0-9-15-release-notes" title="Permalink to this headline">¶</a></h2>
-<p><strong>Version 0.9.15 is the last release that supports Python 2.7</strong>; it now also fully suports Python 3.8.</p>
+<p><strong>Version 0.9.15 is the last release that supports Python 2.7</strong>; it now also fully supports Python 3.8.</p>
 <p>New features, improvements, and bug fixes:</p>
 <ul class="simple">
 <li><p>move application of parameter bounds to setter instead of getter (PR #587)</p></li>
@@ -339,7 +341,7 @@ added.</p>
 so that the Parameter value does not need <code class="docutils literal notranslate"><span class="pre">sigma</span> <span class="pre">=</span> <span class="pre">params['sigma'].value</span></code>.
 The older, explicit usage still works, but the docs, samples, and tests
 have been updated to use the simpler usage.</p>
-<p>Support for Python 2.6 and SciPy 0.13 is now explicitly deprecated and wil
+<p>Support for Python 2.6 and SciPy 0.13 is now explicitly deprecated and will
 be dropped in version 0.9.5.</p>
 </div>
 <div class="section" id="version-0-9-3-release-notes">
@@ -454,8 +456,8 @@ track of changes made while adjusting parameters and re-running fits.</p></li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
+        &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
 </html>

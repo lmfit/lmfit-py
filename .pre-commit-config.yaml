@@ -24,6 +24,7 @@ repos:
     rev: 3.7.9
     hooks:
     -   id: flake8
+        exclude: '_downloads'
 
 -   repo: local
     hooks:
@@ -33,6 +34,8 @@ repos:
         files: '.rst'
         language: python
         additional_dependencies: [rstcheck, sphinx]
+        exclude: ^_downloads
+        exclude: ^_sources
 
 -   repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.5.1
@@ -45,6 +48,7 @@ repos:
     -   id: codespell
         files: '.py|.rst'
         exclude: 'doc/doc_examples_to_gallery.py'
+        exclude: '_downloads/'
         # escaped characters currently do not work correctly
         # so \nnumber is considered a spelling error....
         args: [-L nnumber]

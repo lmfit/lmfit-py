@@ -118,13 +118,13 @@ print(result.brute_grid)
 print(result.brute_Jout)
 
 ###############################################################################
-# **Reassuringly, the obtained results are indentical to using the method in
+# **Reassuringly, the obtained results are identical to using the method in
 # SciPy directly!**
 
 ###############################################################################
 # Example 2: fit of a decaying sine wave
 #
-# In this example, will explain some of the options ot the algorithm.
+# In this example, we will explain some of the options of the algorithm.
 #
 # We start off by generating some synthetic data with noise for a decaying
 # sine wave, define an objective function and create a Parameter set.

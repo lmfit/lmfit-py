@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_example_complex_resonator_model.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_example_complex_resonator_model.py:
+        Click :ref:`here <sphx_glr_download_examples_example_complex_resonator_model.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_example_complex_resonator_model.py:
 
 
 Complex Resonator Model
@@ -41,6 +43,7 @@ mismatches in the input and output transmission impedances.
 
 
 
+
 Since ``scipy.optimize`` and ``lmfit`` require real parameters, we represent
 :math:`Q_e` as ``Q_e_real + 1j*Q_e_imag``.
 
@@ -52,6 +55,7 @@ Since ``scipy.optimize`` and ``lmfit`` require real parameters, we represent
     def linear_resonator(f, f_0, Q, Q_e_real, Q_e_imag):
         Q_e = Q_e_real + 1j*Q_e_imag
         return (1 - (Q * Q_e**-1 / (1 + 2j * Q * (f - f_0) / f_0)))
+
 
 
 
@@ -104,6 +108,7 @@ The standard practice of defining an ``lmfit`` model is as follows:
 
 
 
+
 Now let's use the model to generate some fake data:
 
 
@@ -132,6 +137,15 @@ Now let's use the model to generate some fake data:
     :class: sphx-glr-single-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    Text(0.5, 1.0, 'simulated measurement')
+
 
 
 Try out the guess method we added:
@@ -154,6 +168,7 @@ Try out the guess method we added:
 
     fmin= 99.95 fmax= 100.05 f_0_guess= 100.00353535353536
     Qmin= 100.00353535354105 Q_max= 99003.50000055433 Q_guess= 3146.537781821432 Q_e_real_guess= 5082.2474265369565
+
 
 
 
@@ -208,6 +223,7 @@ And now fit the data using the guess as a starting point:
 
 
 
+
 Now we'll make some plots of the data and fit. Define a convenience function
 for plotting complex quantities:
 
@@ -255,12 +271,21 @@ for plotting complex quantities:
             :class: sphx-glr-multi-img
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    Text(0.5, 0, 'MHz')
+
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.318 seconds)
+   **Total running time of the script:** ( 0 minutes  0.469 seconds)
 
 
 .. _sphx_glr_download_examples_example_complex_resonator_model.py:
@@ -273,13 +298,13 @@ for plotting complex quantities:
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: example_complex_resonator_model.py <example_complex_resonator_model.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: example_complex_resonator_model.ipynb <example_complex_resonator_model.ipynb>`
 

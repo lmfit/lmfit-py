@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_parameters_valuesdict.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_parameters_valuesdict.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_parameters_valuesdict.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_parameters_valuesdict.py:
 
 
 doc_parameters_valuesdict.py
@@ -40,6 +42,7 @@ doc_parameters_valuesdict.py
         C(shift, omega) = -0.785
         C(amp, decay)   =  0.584
         C(amp, shift)   = -0.120
+
 
 
 
@@ -104,7 +107,7 @@ doc_parameters_valuesdict.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.127 seconds)
+   **Total running time of the script:** ( 0 minutes  0.074 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_valuesdict.py:
@@ -117,13 +120,13 @@ doc_parameters_valuesdict.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: parameters_valuesdict.py <parameters_valuesdict.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: parameters_valuesdict.ipynb <parameters_valuesdict.ipynb>`
 

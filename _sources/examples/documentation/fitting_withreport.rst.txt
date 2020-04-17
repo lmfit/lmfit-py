@@ -1,10 +1,12 @@
-.. note::
-    :class: sphx-glr-download-link-note
+.. only:: html
 
-    Click :ref:`here <sphx_glr_download_examples_documentation_fitting_withreport.py>` to download the full example code
-.. rst-class:: sphx-glr-example-title
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_examples_documentation_fitting_withreport.py:
+        Click :ref:`here <sphx_glr_download_examples_documentation_fitting_withreport.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_examples_documentation_fitting_withreport.py:
 
 
 doc_fitting_withreport.py
@@ -40,6 +42,7 @@ doc_fitting_withreport.py
         C(amp, period)   = -0.243
         C(shift, decay)  = -0.182
         C(period, decay) = -0.150
+
 
 
 
@@ -101,7 +104,7 @@ doc_fitting_withreport.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.066 seconds)
+   **Total running time of the script:** ( 0 minutes  0.014 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_withreport.py:
@@ -114,13 +117,13 @@ doc_fitting_withreport.py
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: fitting_withreport.py <fitting_withreport.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: fitting_withreport.ipynb <fitting_withreport.ipynb>`
 

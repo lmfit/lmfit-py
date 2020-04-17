@@ -7,16 +7,18 @@
     <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/@jupyter-widgets/html-manager@^0.14.0/dist/embed-amd.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Parameter and Parameters" href="parameters.html" />
@@ -100,7 +102,7 @@
 <li><a class="reference internal" href="#can-i-constrain-values-to-have-integer-values">Can I constrain values to have integer values?</a></li>
 <li><a class="reference internal" href="#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
 <li><a class="reference internal" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do">I get errors from NaN in my fit.  What can I do?</a><ul>
-<li><a class="reference internal" href="#nan-policy"><cite>nan_policy</cite></a></li>
+<li><a class="reference internal" href="#nan-policy"><code class="docutils literal notranslate"><span class="pre">nan_policy</span></code></a></li>
 <li><a class="reference internal" href="#common-sources-of-nan">Common sources of NaN</a></li>
 </ul>
 </li>
@@ -130,7 +132,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -153,7 +155,7 @@
 <div class="section" id="i-get-import-errors-from-ipython">
 <h2>I get import errors from IPython<a class="headerlink" href="#i-get-import-errors-from-ipython" title="Permalink to this headline">¶</a></h2>
 <p>If you see something like:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="k">import</span> <span class="n">Dropdown</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="kn">import</span> <span class="n">Dropdown</span>
 
 <span class="ne">ImportError</span><span class="p">:</span> <span class="n">No</span> <span class="n">module</span> <span class="n">named</span> <span class="s1">&#39;widgets&#39;</span>
 </pre></div>
@@ -231,7 +233,7 @@ the value to be minimized.</p>
 <p>The solvers used by lmfit use NaN (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/NaN">https://en.wikipedia.org/wiki/NaN</a>) values as signals that the calculation
 cannot continue.  If any value in the residual array (typically
-<cite>(data-model)*weight</cite>) is NaN, then calculations of chi-square or
+<code class="docutils literal notranslate"><span class="pre">(data-model)*weight</span></code>) is NaN, then calculations of chi-square or
 comparisons with other residual arrays to try find a better fit will also
 give NaN and fail. There is no sensible way for lmfit or any of the
 optimization routines to know how to handle such NaN values.  They
@@ -241,7 +243,7 @@ function (if using <code class="docutils literal notranslate"><span class="pre">
 immediately. If your objective or model function generates a NaN, you
 really must handle that.</p>
 <div class="section" id="nan-policy">
-<h3><cite>nan_policy</cite><a class="headerlink" href="#nan-policy" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">nan_policy</span></code><a class="headerlink" href="#nan-policy" title="Permalink to this headline">¶</a></h3>
 <p>If you are using <code class="xref py py-class docutils literal notranslate"><span class="pre">lmfit.Model</span></code> and the NaN values come from your
 data array and are meant to indicate missing values, or if you using
 <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code> with the same basic intention, then it might be
@@ -255,7 +257,7 @@ calculated model, that should be the case.</p>
 </div>
 <div class="section" id="common-sources-of-nan">
 <h3>Common sources of NaN<a class="headerlink" href="#common-sources-of-nan" title="Permalink to this headline">¶</a></h3>
-<p>If you are seeing erros due to NaN values, you will need to figure out
+<p>If you are seeing errors due to NaN values, you will need to figure out
 where they are coming from and eliminate them.  It is sometimes difficult
 to tell what causes NaN values.  Keep in mind that all values should be
 assumed to be either scalar values or numpy arrays of double precision real
@@ -316,8 +318,8 @@ about 700.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.3.0.
+        &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
     </div>
   </body>
 </html>
