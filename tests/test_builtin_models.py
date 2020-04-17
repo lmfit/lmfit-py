@@ -76,7 +76,7 @@ def test_height_fwhm_calculation(peakdata):
                       models.ExponentialGaussianModel())
     check_height_fwhm(x, y, lineshapes.skewed_gaussian,
                       models.SkewedGaussianModel())
-    check_height_fwhm(x, y, lineshapes.donaich, models.DonaichModel())
+    check_height_fwhm(x, y, lineshapes.doniach, models.DoniachModel())
     x = x-9  # Lognormal will only fit peaks with centers < 1
     check_height_fwhm(x, y, lineshapes.lognormal, models.LognormalModel())
 
@@ -144,7 +144,7 @@ def test_height_and_fwhm_expression_evalution_in_builtin_models():
                              skew=0.0)
     params.update_constraints()
 
-    mod = models.DonaichModel()
+    mod = models.DoniachModel()
     params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, gamma=0.0)
     params.update_constraints()
 

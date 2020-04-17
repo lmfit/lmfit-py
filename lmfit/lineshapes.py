@@ -14,7 +14,7 @@ tiny = finfo(float64).eps
 
 functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
              'breit_wigner', 'damped_oscillator', 'dho', 'logistic', 'lognormal',
-             'students_t', 'expgaussian', 'donaich', 'skewed_gaussian',
+             'students_t', 'expgaussian', 'doniach', 'donaich', 'skewed_gaussian',
              'skewed_voigt', 'thermal_distribution', 'step', 'rectangle',
              'exponential', 'powerlaw', 'linear', 'parabolic', 'sine',
              'expsine', 'split_lorentzian')
@@ -231,10 +231,10 @@ def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
     return amplitude*(gamma/2) * exp(arg1) * erfc(arg2)
 
 
-def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
+def doniach(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     """Return a Doniach Sunjic asymmetric lineshape, used for photo-emission.
 
-    donaich(x, amplitude, center, sigma, gamma) =
+    doniach(x, amplitude, center, sigma, gamma) =
         amplitude / sigma^(1-gamma) *
         cos(pi*gamma/2 + (1-gamma) arctan((x-center)/sigma) /
         (sigma**2 + (x-center)**2)**[(1-gamma)/2]
@@ -246,6 +246,9 @@ def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     gm1 = (1.0 - gamma)
     scale = amplitude/max(tiny, (sigma**gm1))
     return scale*cos(pi*gamma/2 + gm1*arctan(arg))/(1 + arg**2)**(gm1/2)
+
+
+donaich = doniach   # for back-compat
 
 
 def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):

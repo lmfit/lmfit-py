@@ -276,6 +276,7 @@ class Model:
             self.independent_vars = []
         if name is None and hasattr(self.func, '__name__'):
             name = self.func.__name__
+        print(" Got Param names ", self._param_names, name)
         self._name = name
 
     def _reprstring(self, long=False):
@@ -472,7 +473,9 @@ class Model:
             kw_args = {}
             keywords_ = None
             sig = inspect.signature(self.func)
+            print("SIG ", sig, self.func)
             for fnam, fpar in sig.parameters.items():
+                print("SIG par ", fnam, fpar)
                 if fpar.kind == fpar.VAR_KEYWORD:
                     keywords_ = fnam
                 elif fpar.kind == fpar.POSITIONAL_OR_KEYWORD:

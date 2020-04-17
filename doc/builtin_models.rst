@@ -144,10 +144,10 @@ of 0 on the value of ``sigma``.
 
 .. autoclass:: ThermalDistributionModel
 
-:class:`DonaichModel`
+:class:`DoniachModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: DonaichModel
+.. autoclass:: DoniachModel
 
 
 Linear and Polynomial Models

@@ -5,7 +5,7 @@ from asteval import Interpreter, get_ast_names
 import numpy as np
 
 from . import lineshapes
-from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
+from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
                          pvoigt, rectangle, skewed_gaussian, skewed_voigt,
@@ -1001,7 +1001,7 @@ class ThermalDistributionModel(Model):
     guess.__doc__ = COMMON_GUESS_DOC
 
 
-class DonaichModel(Model):
+class DoniachModel(Model):
     r"""A model of an Doniach Sunjic asymmetric lineshape
     (see https://www.casaxps.com/help_manual/line_shapes.htm), used in
     photo-emission, with four Parameters ``amplitude`` (:math:`A`),
@@ -1021,7 +1021,7 @@ class DonaichModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super().__init__(donaich, **kwargs)
+        super().__init__(doniach, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -1036,6 +1036,9 @@ class DonaichModel(Model):
 
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
+
+
+DonaichModel = DoniachModel   # for back-compat
 
 
 class PowerLawModel(Model):
