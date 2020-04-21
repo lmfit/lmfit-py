@@ -1478,6 +1478,8 @@ class ModelResult(Minimizer):
         covar = self.covar
         fjac = np.zeros((nvarys, ndata))
         df2 = np.zeros(ndata)
+        if any([p.stderr is None for p in self.params.values()]):
+            return df2
 
         # find derivative by hand!
         pars = self.params.copy()
