@@ -6,6 +6,7 @@ from numpy.testing import assert_allclose
 import pytest
 
 import lmfit
+from lmfit._ampgo import ampgo, tunnel
 
 # correct result for Alpine02 function
 global_optimum = [7.91705268, 4.81584232]
@@ -103,6 +104,26 @@ def test_ampgo_local_opts(minimizer_Alpine02):
     with pytest.raises(TypeError):
         minimizer_Alpine02.minimize(method='ampgo', **kws)
 
-    # for coverage: make sure that both occurences are reached
+    # for coverage: make sure that both occurrences are reached
     kws = {'local_opts': {'maxiter': 10}, 'maxfunevals': 50}
     minimizer_Alpine02.minimize(method='ampgo', **kws)
+
+
+def test_ampgo_incorrect_length_for_bounds():
+    """Test for ValueError when bounds are given for only some parameters."""
+    def func(x):
+        return x[0]**2 + 10.0*x[1]
+
+    msg = r'length of x0 != length of bounds'
+    with pytest.raises(ValueError, match=msg):
+        ampgo(func, x0=[0, 1], bounds=[(-10, 10)])
+
+
+def test_ampgo_tunnel_more_than_three_arguments():
+    """Test AMPGO tunnel function with more than three arguments."""
+    def func(x, val):
+        return x[0]**2 + val*x[1]
+
+    args = [func, 0.1, np.array([1, 2]), 5.0]
+    out = tunnel(np.array([10, 5]), *args)
+    assert_allclose(out, 185.386275588)

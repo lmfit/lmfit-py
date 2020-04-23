@@ -1,14 +1,30 @@
 """Tests for the Parameter class."""
 
 from math import trunc
+import pickle
 
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
-import six
-import uncertainties as un
 
 import lmfit
+
+
+@pytest.fixture
+def parameters():
+    """Initialize a Parameters class for tests."""
+    pars = lmfit.Parameters()
+    pars.add(lmfit.Parameter(name='a', value=10.0, vary=True, min=-100.0,
+                             max=100.0, expr=None, brute_step=5.0,
+                             user_data=1))
+    pars.add(lmfit.Parameter(name='b', value=0.0, vary=True, min=-250.0,
+                             max=250.0, expr="2.0*a", brute_step=25.0,
+                             user_data=2.5))
+    exp_attr_values_A = ('a', 10.0, True, -100.0, 100.0, None, 5.0, 1)
+    exp_attr_values_B = ('b', 20.0, False, -250.0, 250.0, "2.0*a", 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], exp_attr_values_A)
+    assert_parameter_attributes(pars['b'], exp_attr_values_B)
+    return pars, exp_attr_values_A, exp_attr_values_B
 
 
 @pytest.fixture
@@ -65,13 +81,8 @@ def test_initialize_Parameter(par, attr_values):
 def test_Parameter_no_name():
     """Test for Parameter name, now required positional argument."""
     msg = r"missing 1 required positional argument: 'name'"
-    msg_PY2 = r"__init__()"
-    if six.PY2:
-        with pytest.raises(TypeError, match=msg_PY2):
-            lmfit.Parameter()
-    else:
-        with pytest.raises(TypeError, match=msg):
-            lmfit.Parameter()
+    with pytest.raises(TypeError, match=msg):
+        lmfit.Parameter()
 
 
 def test_init_bounds():
@@ -114,6 +125,11 @@ def test_parameter_set_value(parameter):
     changed_attribute_values = ('a', 5.0, True, -100.0, 100.0, None, 5.0, 1)
     assert_parameter_attributes(par, changed_attribute_values)
 
+    # check if set value works with new bounds, see issue#636
+    par.set(value=500.0, min=400, max=600)
+    changed_attribute_values2 = ('a', 500.0, True, 400.0, 600.0, None, 5.0, 1)
+    assert_parameter_attributes(par, changed_attribute_values2)
+
 
 def test_parameter_set_vary(parameter):
     """Test the Parameter.set() function with vary."""
@@ -155,8 +171,8 @@ def test_parameter_set_expr(parameter):
     """Test the Parameter.set() function with expr.
 
     Of note, this only tests for setting/removal of the expression; nothing
-    else gets evaluated here.... More specific tests will be present in the
-    Parameters class.
+    else gets evaluated here... More specific tests that require a Parameters
+    class can be found below.
 
     """
     par, _ = parameter
@@ -172,6 +188,60 @@ def test_parameter_set_expr(parameter):
     par.set(expr='')  # should remove the expression
     changed_attribute_values = ('a', 10.0, False, -100.0, 100.0, None, 5.0, 1)
     assert_parameter_attributes(par, changed_attribute_values)
+
+
+def test_parameters_set_value_with_expr(parameters):
+    """Test the Parameter.set() function with value in presence of expr."""
+    pars, _, _ = parameters
+
+    pars['a'].set(value=5.0)
+    pars.update_constraints()  # update constraints/expressions
+    changed_attr_values_A = ('a', 5.0, True, -100.0, 100.0, None, 5.0, 1)
+    changed_attr_values_B = ('b', 10.0, False, -250.0, 250.0, "2.0*a", 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], changed_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
+
+    # with expression present, setting a value works and will leave vary=False
+    pars['b'].set(value=1.0)
+    pars.update_constraints()  # update constraints/expressions
+    changed_attr_values_A = ('a', 5.0, True, -100.0, 100.0, None, 5.0, 1)
+    changed_attr_values_B = ('b', 1.0, False, -250.0, 250.0, None, 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], changed_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
+
+
+def test_parameters_set_vary_with_expr(parameters):
+    """Test the Parameter.set() function with vary in presence of expr."""
+    pars, init_attr_values_A, _ = parameters
+
+    pars['b'].set(vary=True)  # expression should get cleared
+    pars.update_constraints()  # update constraints/expressions
+    changed_attr_values_B = ('b', 20.0, True, -250.0, 250.0, None, 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], init_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
+
+
+def test_parameters_set_expr(parameters):
+    """Test the Parameter.set() function with expr."""
+    pars, init_attr_values_A, init_attr_values_B = parameters
+
+    pars['b'].set(expr=None)  # nothing should change
+    pars.update_constraints()  # update constraints/expressions
+    assert_parameter_attributes(pars['a'], init_attr_values_A)
+    assert_parameter_attributes(pars['b'], init_attr_values_B)
+
+    pars['b'].set(expr='')  # expression should get cleared, vary still False
+    pars.update_constraints()  # update constraints/expressions
+    changed_attr_values_B = ('b', 20.0, False, -250.0, 250.0, None, 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], init_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
+
+    pars['a'].set(expr="b/4.0")  # expression should be set, vary --> False
+    pars.update_constraints()
+    changed_attr_values_A = ('a', 5.0, False, -100.0, 100.0, "b/4.0", 5.0, 1)
+    changed_attr_values_B = ('b', 20.0, False, -250.0, 250.0, None, 25.0, 2.5)
+    assert_parameter_attributes(pars['a'], changed_attr_values_A)
+    assert_parameter_attributes(pars['b'], changed_attr_values_B)
 
 
 def test_parameter_set_brute_step(parameter):
@@ -208,6 +278,15 @@ def test_setstate(parameter):
 
     par_new.__setstate__(state)
     assert_parameter_attributes(par_new, initial_attribute_values)
+
+
+def test_parameter_pickle_(parameter):
+    """Test that we can pickle a Parameter."""
+    par, _ = parameter
+    pkl = pickle.dumps(par)
+    loaded_par = pickle.loads(pkl)
+
+    assert loaded_par == par
 
 
 def test_repr():
@@ -270,30 +349,16 @@ def test_setup_bounds_and_scale_gradient_methods():
                     -20.976788, rtol=1.e-6)
 
 
-def test__getval(parameter):
-    """Test _getval function."""
-    par, _ = parameter
-
-    # test uncertainties.core.Variable in _getval [deprecated]
-    par.set(value=un.ufloat(5.0, 0.2))
-    with pytest.warns(FutureWarning, match='removed in the next release'):
-        val = par.value
-    assert_allclose(val, 5.0)
-
-
 def test_value_setter(parameter):
     """Tests for the value setter."""
     par, initial_attribute_values = parameter
     assert_parameter_attributes(par, initial_attribute_values)
 
-    par.set(value=200.0)  # above maximum
+    par.value = 200.0  # above maximum
     assert_allclose(par.value, 100.0)
 
-    par.set(value=-200.0)  # below minimum
+    par.value = -200.0  # below minimum
     assert_allclose(par.value, -100.0)
-
-
-# TODO: add tests for  setter/getter methods for VALUE, EXPR
 
 
 # Tests for magic methods of the Parameter class
@@ -333,14 +398,8 @@ def test__pos__(parameter):
     assert_allclose(+par, -10.0)
 
 
-def test__nonzero__(parameter):
-    """Test the __nonzero__ magic method; PY2 only."""
-    par, _ = parameter
-    assert bool(par)
-
-
 def test__bool__(parameter):
-    """Test the __bool__ magic method; PY3 only."""
+    """Test the __bool__ magic method."""
     par, _ = parameter
     assert bool(par)
 
@@ -378,12 +437,6 @@ def test__sub__(parameter):
     """Test the __sub__ magic method."""
     par, _ = parameter
     assert_allclose(par - 5.25, 4.75)
-
-
-def test__div__(parameter):
-    """Test the __div__ magic method; PY2 only."""
-    par, _ = parameter
-    assert_allclose(par / 1.25, 8.0)
 
 
 def test__truediv__(parameter):
@@ -429,57 +482,51 @@ def test__pow__(parameter):
 def test__gt__(parameter):
     """Test the __gt__ magic method."""
     par, _ = parameter
-    assert 11 > par
-    assert not 10 > par
+    assert par < 11
+    assert not par < 10
 
 
 def test__ge__(parameter):
     """Test the __ge__ magic method."""
     par, _ = parameter
-    assert 11 >= par
-    assert 10 >= par
-    assert not 9 >= par
+    assert par <= 11
+    assert par <= 10
+    assert not par <= 9
 
 
 def test__le__(parameter):
     """Test the __le__ magic method."""
     par, _ = parameter
-    assert 9 <= par
-    assert 10 <= par
-    assert not 11 <= par
+    assert par >= 9
+    assert par >= 10
+    assert not par >= 11
 
 
 def test__lt__(parameter):
     """Test the __lt__ magic method."""
     par, _ = parameter
-    assert 9 < par
-    assert not 10 < par
+    assert par > 9
+    assert not par > 10
 
 
 def test__eq__(parameter):
     """Test the __eq__ magic method."""
     par, _ = parameter
-    assert 10 == par
-    assert not 9 == par
+    assert par == 10
+    assert not par == 9
 
 
 def test__ne__(parameter):
     """Test the __ne__ magic method."""
     par, _ = parameter
-    assert 9 != par
-    assert not 10 != par
+    assert par != 9
+    assert not par != 10
 
 
 def test__radd__(parameter):
     """Test the __radd__ magic method."""
     par, _ = parameter
     assert_allclose(5.25 + par, 15.25)
-
-
-def test__rdiv__(parameter):
-    """Test the __rdiv__ magic method; PY2 only."""
-    par, _ = parameter
-    assert_allclose(1.25 / par, 0.125)
 
 
 def test__rtruediv__(parameter):
@@ -526,13 +573,3 @@ def test__rsub__(parameter):
     """Test the __rsub__ magic method."""
     par, _ = parameter
     assert_allclose(5.25 - par, -4.75)
-
-
-def test_isParameter(parameter):
-    """Test function to check whether something is a Paramter [deprecated]."""
-    # TODO: this function isn't used anywhere in the codebase; useful at all?
-    par, _ = parameter
-    assert lmfit.parameter.isParameter(par)
-    assert not lmfit.parameter.isParameter('test')
-    with pytest.warns(FutureWarning, match='removed in the next release'):
-        lmfit.parameter.isParameter(par)

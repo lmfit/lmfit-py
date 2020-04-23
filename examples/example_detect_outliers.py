@@ -7,10 +7,12 @@ datapoint. To assess the influence of one point, we fit the dataset while the
 point and compare the result with the fit of the full dataset. The code below
 shows how to do this with lmfit. Note that the presented method is very basic.
 """
-import numpy as np
-import matplotlib.pyplot as plt
-import lmfit
 from collections import defaultdict
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+import lmfit
 
 plt.rcParams['figure.dpi'] = 130
 plt.rcParams['figure.autolayout'] = True

@@ -34,13 +34,9 @@ All the models listed below are one-dimensional, with an independent
 variable named ``x``.  Many of these models represent a function with a
 distinct peak, and so share common features.  To maintain uniformity,
 common parameter names are used whenever possible.  Thus, most models have
-a parameter called ``amplitude`` that represents the overall height (or
-area of) a peak or function, a ``center`` parameter that represents a peak
-centroid position, and a ``sigma`` parameter that gives a characteristic
-width.  Many peak shapes also have a parameter ``fwhm`` (constrained by
-``sigma``) giving the full width at half maximum and a parameter ``height``
-(constrained by ``sigma`` and ``amplitude``) to give the maximum peak
-height.
+a parameter called ``amplitude`` that represents the overall intensity (or
+area of) a peak or function and a ``sigma`` parameter that gives a
+characteristic width.
 
 After a list of built-in models, a few examples of their use are given.
 
@@ -48,10 +44,25 @@ Peak-like models
 -------------------
 
 There are many peak-like models available.  These include
-:class:`GaussianModel`, :class:`LorentzianModel`, :class:`VoigtModel` and
-some less commonly used variations.  The :meth:`guess`
-methods for all of these make a fairly crude guess for the value of
-``amplitude``, but also set a lower bound of 0 on the value of ``sigma``.
+:class:`GaussianModel`, :class:`LorentzianModel`, :class:`VoigtModel`,
+:class:`PseudoVoigtModel`, and some less commonly used variations.  Most of
+these models are *unit-normalized* and share the same parameter names so
+that you can easily switch between models and interpret the results.  The
+``amplitude`` parameter is the multiplicative factor for the
+unit-normalized peak lineshape, and so will represent the strength of that
+peak or the area under that curve.  The ``center`` parameter will be the
+centroid ``x`` value.  The ``sigma`` parameter is the characteristic width
+of the peak, with many functions using :math:`(x-\mu)/\sigma` where
+:math:`\mu` is the centroid value.  Most of these peak functions will have
+two additional parameters derived from and constrained by the other
+parameters. The first of these is ``fwhm`` which will hold the estimated
+"Full Width at Half Max" for the peak, which is often easier to compare
+between different models than ``sigma``.  The second of these is ``height``
+which will contain the maximum value of the peak, typically the value at
+:math:`x = \mu`.  Finally, each of these models has a :meth:`guess` method
+that uses data to make a fairly crude but usually sufficient guess for the
+value of ``amplitude``, ``center``, and ``sigma``, and sets a lower bound
+of 0 on the value of ``sigma``.
 
 :class:`GaussianModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -128,10 +139,15 @@ methods for all of these make a fairly crude guess for the value of
 
 .. autoclass:: SkewedVoigtModel
 
-:class:`DonaichModel`
+:class:`ThermalDistributionModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: ThermalDistributionModel
+
+:class:`DoniachModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. autoclass:: DonaichModel
+.. autoclass:: DoniachModel
 
 
 Linear and Polynomial Models
@@ -459,7 +475,7 @@ plus a constant:
 After constructing step-like data, we first create a :class:`StepModel`
 telling it to use the ``erf`` form (see details above), and a
 :class:`ConstantModel`.  We set initial values, in one case using the data
-and :meth:`guess` method for the initial step function paramaters, and
+and :meth:`guess` method for the initial step function parameters, and
 :meth:`make_params` arguments for the linear component.
 After making a composite model, we run :meth:`fit` and report the
 results, which gives:

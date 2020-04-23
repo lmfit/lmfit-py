@@ -21,4 +21,4 @@ def test_default_inputs_gauss():
     result2 = g.fit(y, x=x, amplitude=1, center=0, sigma=0.5,
                     fit_kws=fit_option2)
 
-    assert(result1.values != result2.values)
+    assert result1.values != result2.values

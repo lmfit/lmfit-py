@@ -13,6 +13,7 @@ Process the examples in the documentation for inclusion in the Gallery:
 """
 import os
 import time
+
 basedir = os.getcwd()
 
 examples_dir = os.path.abspath(os.path.join(basedir, '..', 'examples'))
@@ -31,15 +32,12 @@ with open(os.path.join(examples_documentation_dir, 'README.txt'), 'w') as out:
 
 for fn in files:
     inp_path = os.path.join(examples_dir, fn)
-    with open(inp_path, 'r') as inp:
+    with open(inp_path) as inp:
         script_text = inp.read()
 
     gallery_file = os.path.join(examples_documentation_dir, fn[4:])
     with open(gallery_file, 'w') as out:
-        msg = ""
-        if 'model_loadmodel.py' in fn:
-            msg = ('.. note:: This example *does* actually work, but running from within '
-                   ' sphinx-gallery fails to find symbols saved in the save file.')
+        msg = ""  # add optional message f
         out.write('"""\n{}\n{}\n\n{}\n"""\n'.format(fn, "="*len(fn), msg))
         out.write('##\nimport warnings\nwarnings.filterwarnings("ignore")\n##\n')
         out.write(script_text)
@@ -53,7 +51,6 @@ time.sleep(1.0)
 os.system('cp {}/*.dat {}'.format(examples_dir, examples_documentation_dir))
 os.system('cp {}/*.csv {}'.format(examples_dir, examples_documentation_dir))
 os.system('cp {}/*.sav {}'.format(examples_dir, examples_documentation_dir))
-#
 
 os.chdir(examples_documentation_dir)
 

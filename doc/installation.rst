@@ -13,7 +13,6 @@ Downloading and Installation
 .. _matplotlib:  https://matplotlib.org/
 .. _dill:  https://github.com/uqfoundation/dill
 .. _asteval:  https://github.com/newville/asteval
-.. _six:  https://github.com/benjaminp/six
 .. _uncertainties:  https://github.com/lebigot/uncertainties
 .. _numdifftools:  https://github.com/pbrod/numdifftools
 .. _contributing.md: https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md
@@ -21,17 +20,17 @@ Downloading and Installation
 .. _sphinx: https://www.sphinx-doc.org
 .. _jupyter_sphinx: https://jupyter-sphinx.readthedocs.io
 .. _ImageMagick: https://www.imagemagick.org/
+.. _Pillow: https://python-pillow.org/
 .. _release_notes: https://lmfit.github.io/lmfit-py/whatsnew.html
 
 
 Prerequisites
 ~~~~~~~~~~~~~~~
 
-Lmfit works with `Python`_ versions 2.7 and 3.5, 3.6, 3.7, or 3.8. Support for
-2.7 is expected to end in late 2019.
+Lmfit works with `Python`_ versions 3.5 and higher. Version
+0.9.15 is the final version to support Python 2.7.
 
 Lmfit requires the following Python packages, with versions given:
-   * `six`_ version 1.11 or higher.
    * `NumPy`_ version 1.16 or higher.
    * `SciPy`_ version 1.2 or higher.
    * `asteval`_ version 0.9.16 or higher.
@@ -45,11 +44,12 @@ functionality requires the `emcee`_ (version 3+), `corner`_, `pandas`_, `Jupyter
 `matplotlib`_, `dill`_, or `numdifftools`_ packages.  These are not installed
 automatically, but we highly recommend each of these packages.
 
-For building the documentation, `matplotlib`_, `emcee`_ (version 3+), `corner`_,
-`Sphinx`_, `jupyter_sphinx`_, and `ImageMagick`_ are required (the latter
-one only when generating the PDF document).
+For building the documentation and generating the examples gallery,
+`matplotlib`_, `emcee`_ (version 3+), `corner`_, `Sphinx`_,
+`jupyter_sphinx`_, `Pillow`_ and `ImageMagick`_ are required (the
+latter one only when generating the PDF document).
 
-Please refer to  ``requirements-dev.txt`` for a list of all dependencies that
+Please refer to ``requirements-dev.txt`` for a list of all dependencies that
 are needed if you want to participate in the development of lmfit.
 
 Downloads

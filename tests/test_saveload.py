@@ -6,13 +6,12 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 
-import lmfit.jsonutils
 from lmfit import Parameters
-from lmfit.model import (load_model, load_modelresult, save_model,
-                         save_modelresult, Model, ModelResult)
-from lmfit.models import ExponentialModel, GaussianModel, VoigtModel
+import lmfit.jsonutils
 from lmfit.lineshapes import gaussian, lorentzian
-
+from lmfit.model import (Model, ModelResult, load_model, load_modelresult,
+                         save_model, save_modelresult)
+from lmfit.models import ExponentialModel, GaussianModel, VoigtModel
 from lmfit_testutils import assert_between, assert_param_between
 
 y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
@@ -101,7 +100,7 @@ def test_save_load_model(dill):
     file_exists = wait_for_file(SAVE_MODEL, timeout=10)
     assert file_exists
 
-    with open(SAVE_MODEL, 'r') as fh:
+    with open(SAVE_MODEL) as fh:
         text = fh.read()
     assert 1000 < len(text) < 2500
 
@@ -142,7 +141,7 @@ def test_save_load_modelresult(dill):
     assert file_exists
 
     text = ''
-    with open(SAVE_MODELRESULT, 'r') as fh:
+    with open(SAVE_MODELRESULT) as fh:
         text = fh.read()
     assert_between(len(text), 8000, 25000)
 
@@ -186,18 +185,24 @@ def test_saveload_modelresult_exception():
     clear_savefile(SAVE_MODEL)
 
 
-def test_saveload_modelresult_roundtrip():
+@pytest.mark.parametrize("method", ['leastsq', 'nelder', 'powell', 'cobyla',
+                                    'bfgsb', 'differential_evolution', 'brute',
+                                    'basinhopping', 'ampgo', 'shgo',
+                                    'dual_annealing'])
+def test_saveload_modelresult_roundtrip(method):
     """Test for modelresult.loads()/dumps() and repeating that"""
     def mfunc(x, a, b):
         return a * (x-b)
 
     model = Model(mfunc)
-    params = model.make_params(a=0.0, b=3.0)
+    params = model.make_params(a=0.1, b=3.0)
+    params['a'].set(min=.01, max=1, brute_step=0.01)
+    params['b'].set(min=.01, max=3.1, brute_step=0.01)
 
     xx = np.linspace(-5, 5, 201)
     yy = 0.5 * (xx - 0.22) + np.random.normal(scale=0.01, size=len(xx))
 
-    result1 = model.fit(yy, params, x=xx)
+    result1 = model.fit(yy, params=params, x=xx, method=method)
 
     result2 = ModelResult(model, Parameters())
     result2.loads(result1.dumps(), funcdefs={'mfunc': mfunc})

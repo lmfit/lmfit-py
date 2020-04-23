@@ -4,7 +4,7 @@ from lmfit.lineshapes import gaussian
 from lmfit.models import Model
 
 
-class Stepper(object):
+class Stepper:
     def __init__(self, start, stop, npts):
         self.start = start
         self.stop = stop
@@ -33,13 +33,13 @@ def test_custom_independentvar():
     params = gmod.make_params(amplitude=2, center=5, sigma=8)
     out = gmod.fit(y, params, obj=obj)
 
-    assert(out.nvarys == 3)
-    assert(out.nfev > 10)
-    assert(out.chisqr > 1)
-    assert(out.chisqr < 100)
-    assert(out.params['sigma'].value < 3)
-    assert(out.params['sigma'].value > 2)
-    assert(out.params['center'].value > xmin)
-    assert(out.params['center'].value < xmax)
-    assert(out.params['amplitude'].value > 1)
-    assert(out.params['amplitude'].value < 5)
+    assert out.nvarys == 3
+    assert out.nfev > 10
+    assert out.chisqr > 1
+    assert out.chisqr < 100
+    assert out.params['sigma'].value < 3
+    assert out.params['sigma'].value > 2
+    assert out.params['center'].value > xmin
+    assert out.params['center'].value < xmax
+    assert out.params['amplitude'].value > 1
+    assert out.params['amplitude'].value < 5

@@ -2,14 +2,14 @@ exclude: 'versioneer.py|lmfit/_version|doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v1.25.1
+    rev: v2.1.0
     hooks:
     -   id: pyupgrade
         # for now don't force to change from %-operator to {}
-        args: [--keep-percent-format]
+        args: [--keep-percent-format, --py3-plus]
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.4.0
+    rev: v2.5.0
     hooks:
     -   id: check-ast
     -   id: check-builtin-literals
@@ -19,12 +19,16 @@ repos:
     -   id: mixed-line-ending
     -   id: trailing-whitespace
     -   id: requirements-txt-fixer
+    -   id: fix-encoding-pragma
+        args: [--remove]
+    -   id: mixed-line-ending
 
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
     hooks:
     -   id: flake8
-  
+        additional_dependencies: [flake8-deprecated, flake8-mutable]
+
 -   repo: local
     hooks:
     -   id: rstcheck
@@ -35,6 +39,21 @@ repos:
         additional_dependencies: [rstcheck, sphinx]
 
 -   repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.4.2
+    rev: v1.5.1
     hooks:
     -   id: rst-backticks
+
+-   repo: https://github.com/codespell-project/codespell
+    rev: v1.16.0
+    hooks:
+    -   id: codespell
+        files: '.py|.rst'
+        exclude: 'doc/doc_examples_to_gallery.py'
+        # escaped characters currently do not work correctly
+        # so \nnumber is considered a spelling error....
+        args: [-L nnumber]
+
+-   repo: https://github.com/asottile/yesqa
+    rev: v1.1.0
+    hooks:
+    -   id: yesqa

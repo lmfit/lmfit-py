@@ -40,7 +40,7 @@ else:
     from ipywidgets import Checkbox
 
 
-class ParameterWidgetGroup(object):
+class ParameterWidgetGroup:
     """Construct several widgets that together represent a Parameter.
 
     This will only be used if IPython is available."""
@@ -235,9 +235,8 @@ class NotebookFitter(MPLFitter):
 
         # Parameter widgets are not built here. They are (re-)built when
         # the model is (re-)set.
-        super(NotebookFitter, self).__init__(data, model, axes_style,
-                                             data_style, init_style,
-                                             best_style, **kwargs)
+        super().__init__(data, model, axes_style, data_style, init_style,
+                         best_style, **kwargs)
 
     def _repr_html_(self):
         display(self.models_menu)
@@ -249,7 +248,7 @@ class NotebookFitter(MPLFitter):
         self.plot()
 
     def guess(self):
-        guessing_successful = super(NotebookFitter, self).guess()
+        guessing_successful = super().guess()
         self.guess_button.disabled = not guessing_successful
 
     def _finalize_model(self, value):
@@ -275,8 +274,8 @@ class NotebookFitter(MPLFitter):
 
     def plot(self):
         clear_output(wait=True)
-        super(NotebookFitter, self).plot()
+        super().plot()
 
     def fit(self):
-        super(NotebookFitter, self).fit()
+        super().fit()
         self.plot()

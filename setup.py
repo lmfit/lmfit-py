@@ -14,7 +14,7 @@ Parameters.  The Levenberg-Marquardt (leastsq) is the default minimization
 algorithm, and provides estimated standard errors and correlations between
 varied Parameters.  Other minimization methods, including Nelder-Mead's
 downhill simplex, Powell's method, BFGS, Sequential Least Squares, and
-others are also supported.  Bounds and contraints can be placed on
+others are also supported.  Bounds and constraints can be placed on
 Parameters for all of these methods.
 
 In addition, methods for explicitly calculating confidence intervals are
@@ -32,9 +32,8 @@ setup(name='lmfit',
       install_requires=['asteval>=0.9.16',
                         'numpy>=1.16',
                         'scipy>=1.2',
-                        'six>=1.11',
                         'uncertainties>=3.0.1'],
-      python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+      python_requires='>=3.5',
       license='BSD-3',
       description="Least-Squares Minimization with Bounds and Constraints",
       long_description=long_desc,
@@ -43,7 +42,6 @@ setup(name='lmfit',
                    'Intended Audience :: Science/Research',
                    'License :: OSI Approved :: BSD License',
                    'Operating System :: OS Independent',
-                   'Programming Language :: Python :: 2.7',
                    'Programming Language :: Python :: 3.5',
                    'Programming Language :: Python :: 3.6',
                    'Programming Language :: Python :: 3.7',

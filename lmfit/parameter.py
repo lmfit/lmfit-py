@@ -1,16 +1,12 @@
 """Parameter class."""
-from __future__ import division
 
 from collections import OrderedDict
 from copy import deepcopy
 import json
-import importlib
-import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
-from numpy import arcsin, array, cos, inf, isclose, nan, sin, sqrt
+from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
 import scipy.special
-import uncertainties
 
 from .jsonutils import decode4js, encode4js
 from .printfuncs import params_html_table
@@ -62,7 +58,7 @@ class Parameters(OrderedDict):
             Keyword arguments.
 
         """
-        super(Parameters, self).__init__(self)
+        super().__init__(self)
 
         self._asteval = asteval
         if self._asteval is None:
@@ -128,7 +124,7 @@ class Parameters(OrderedDict):
         return _pars
 
     def __setitem__(self, key, par):
-        """TODO: add magic method docstring."""
+        """Set items of Parameters object."""
         if key not in self:
             if not valid_symbol_name(key):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
@@ -191,22 +187,12 @@ class Parameters(OrderedDict):
         # an Error. Another way of doing this would be to remove all the expr
         # from the Parameter instances before they get added, then to restore
         # them.
-        # self._asteval.symtable.update(state['unique_symbols'])
 
         symtab = self._asteval.symtable
         for key, val in state['unique_symbols'].items():
             if key not in symtab:
-                if isinstance(val, dict):
-                    value = val.get('__name__', None)
-                    symname = val.get('__name__', None)
-                    importer = val.get('importer', None)
-                    if value is None and symname is not None and importer is not None:
-                        _mod = importlib.import_module(importer)
-                        value = getattr(_mod, symname, None)
-                    if value is not None:
-                        symtab[key] = value
-                else:
-                    symtab[key] = val
+                symtab[key] = val
+
         # then add all the parameters
         self.add_many(*state['params'])
 
@@ -269,7 +255,7 @@ class Parameters(OrderedDict):
 
         """
         if oneline:
-            return super(Parameters, self).__repr__()
+            return super().__repr__()
         s = "Parameters({\n"
         for key in self.keys():
             s += "    '%s': %s, \n" % (key, self[key])
@@ -467,9 +453,11 @@ class Parameters(OrderedDict):
         """
         self.clear()
 
-        tmp = decode4js(json.loads(s, **kws))
-        state = {'unique_symbols': tmp['unique_symbols'],
-                 'params': []}
+        tmp = json.loads(s, **kws)
+        unique_symbols = {key: decode4js(tmp['unique_symbols'][key]) for key
+                          in tmp['unique_symbols']}
+
+        state = {'unique_symbols': unique_symbols, 'params': []}
         for parstate in tmp['params']:
             _par = Parameter(name='')
             _par.__setstate__(parstate)
@@ -489,9 +477,8 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        None or int
-            Return value from `fp.write()`. None for Python 2.7 and the
-            number of characters written in Python 3.
+        int
+            Return value from `fp.write()`: the number of characters written.
 
         See Also
         --------
@@ -523,7 +510,7 @@ class Parameters(OrderedDict):
         return self.loads(fp.read(), **kws)
 
 
-class Parameter(object):
+class Parameter:
     """A Parameter is an object that can be varied in a fit, or one of the
     controlling variables in a model. It is a central component of lmfit,
     and all minimization and modeling methods use Parameter objects.
@@ -534,7 +521,7 @@ class Parameter(object):
     placed on the Parameter's value by setting its `min` and/or `max`
     attributes.  A Parameter can also have its value determined by a
     mathematical expression of other Parameter values held in the `expr`
-    attrribute.  Additional attributes include `brute_step` used as the step
+    attribute.  Additional attributes include `brute_step` used as the step
     size in a brute-force minimization, and `user_data` reserved
     exclusively for user's need.
 
@@ -644,10 +631,6 @@ class Parameter(object):
             par.set(brute_step=0)     # removes brute_step
 
         """
-        if value is not None:
-            self.value = value
-            self.__set_expression('')
-
         if vary is not None:
             self.vary = vary
             if vary:
@@ -658,6 +641,12 @@ class Parameter(object):
 
         if max is not None:
             self.max = max
+
+        # need to set this after min and max, so that it will use new
+        # bounds in the setter for value
+        if value is not None:
+            self.value = value
+            self.__set_expression("")
 
         if expr is not None:
             self.__set_expression(expr)
@@ -790,17 +779,6 @@ class Parameter(object):
         # _expr_eval.symtable is kept up-to-date.
         # If you just assign to self._val then _expr_eval.symtable[self.name]
         # becomes stale if parameter.expr is not None.
-        if (isinstance(self._val, uncertainties.core.Variable) and
-                self._val is not nan):
-            msg = ("Please make sure that the Parameter value is a number, "
-                   "not an instance of 'uncertainties.core.Variable'. This "
-                   "automatic conversion will be removed in the next release.")
-            warnings.warn(FutureWarning(msg))
-            try:
-                self.value = self._val.nominal_value
-            except AttributeError:
-                pass
-
         if self._expr is not None:
             if self._expr_ast is None:
                 self.__set_expression(self._expr)
@@ -809,10 +787,6 @@ class Parameter(object):
                     self.value = self._expr_eval(self._expr_ast)
                     check_ast_errors(self._expr_eval)
         return self._val
-
-    def set_expr_eval(self, evaluator):
-        """Set expression evaluator instance."""
-        self._expr_eval = evaluator
 
     @property
     def value(self):
@@ -889,7 +863,6 @@ class Parameter(object):
     def __bool__(self):
         """bool"""
         return self._getval() != 0
-    __nonzero__ = __bool__  # TODO: remove when PY3 only
 
     def __int__(self):
         """int"""
@@ -914,7 +887,6 @@ class Parameter(object):
     def __truediv__(self, other):
         """/"""
         return self._getval() / other
-    __div__ = __truediv__  # TODO: remove when PY3 only
 
     def __floordiv__(self, other):
         """//"""
@@ -967,7 +939,6 @@ class Parameter(object):
     def __rtruediv__(self, other):
         """/ (right)"""
         return other / self._getval()
-    __rdiv__ = __rtruediv__  # TODO: remove when PY3 only
 
     def __rdivmod__(self, other):
         """divmod (right)"""
@@ -992,11 +963,3 @@ class Parameter(object):
     def __rsub__(self, other):
         """- (right)"""
         return other - self._getval()
-
-
-def isParameter(x):
-    """Test for Parameter-ness."""
-    msg = 'The isParameter function will be removed in the next release.'
-    warnings.warn(FutureWarning(msg))
-    return (isinstance(x, Parameter) or
-            x.__class__.__name__ == 'Parameter')

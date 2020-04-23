@@ -1804,7 +1804,7 @@ class Minimizer:
 
         Notes
         -----
-        The :meth:`brute` method evalutes the function at each point of a
+        The :meth:`brute` method evaluates the function at each point of a
         multidimensional grid of points. The grid points are generated from the
         parameter ranges using `Ns` and (optional) `brute_step`.
         The implementation in :scipydoc:`optimize.brute` requires finite bounds
@@ -1831,7 +1831,7 @@ class Minimizer:
         brute_kws = dict(full_output=1, finish=None, disp=False)
         # keyword 'workers' is introduced in SciPy v1.3
         # FIXME: remove this check after updating the requirement >= 1.3
-        major, minor, micro = scipy_version.split('.', 2)
+        major, minor, _micro = scipy_version.split('.', 2)
 
         if int(major) == 1 and int(minor) >= 3:
             brute_kws.update({'workers': workers})
@@ -2338,7 +2338,7 @@ def _nan_policy(arr, nan_policy='raise', handle_inf=True):
             with np.errstate(invalid='ignore'):
                 contains_nan = handler_func(np.sum(arr))
         except TypeError:
-            # If the check cannot be properly performed we fallback to omiting
+            # If the check cannot be properly performed we fallback to omitting
             # nan values and raising a warning. This can happen when attempting to
             # sum things that are not numbers (e.g. as in the function `mode`).
             contains_nan = False

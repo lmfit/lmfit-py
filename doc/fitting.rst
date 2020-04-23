@@ -2,7 +2,6 @@
 
 .. module:: lmfit.minimizer
 
-
 =======================================
 Performing Fits and Analyzing Outputs
 =======================================
@@ -340,11 +339,104 @@ information criterion, and/or Bayesian information criterion.  Generally,
 the Bayesian information criterion is considered the most conservative of
 these statistics.
 
-..  _fit-itercb-label:
 
+Uncertainties in Variable Parameters, and their Correlations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+As mentioned above, when a fit is complete the uncertainties for fitted
+Parameters as well as the correlations between pairs of Parameters are
+usually calculated.  This happens automatically either when using the
+default :meth:`leastsq` method, the :meth:`least_squares` method, or for
+most other fitting methods if the highly-recommended ``numdifftools``
+package is available.  The estimated standard error (the :math:`1\sigma`
+uncertainty) for each variable Parameter will be contained in the
+:attr:`stderr`, while the :attr:`correl` attribute for each Parameter will
+contain a dictionary of the correlation with each other variable Parameter.
+
+These estimates of the uncertainties are done by inverting the Hessian
+matrix which represents the second derivative of fit quality for each
+variable parameter. There are situations for which the uncertainties cannot
+be estimated, which generally indicates that this matrix cannot be inverted
+because one of the fit is not actually sensitive to one of the variables.
+This can happen if a Parameter is stuck at an upper or lower bound, if the
+variable is simply not used by the fit, or if the value for the variable is
+such that it has no real influence on the fit.
+
+In principle, the scale of the uncertainties in the Parameters is closely
+tied to the goodness-of-fit statistics chi-square and reduced chi-square
+(``chisqr`` and ``redchi``).  The standard errors or :math:`1 \sigma`
+uncertainties are those that increase chi-square by 1.  Since a "good fit"
+should have ``redchi`` of around 1, this requires that the data
+uncertainties (and to some extent the sampling of the N data points) is
+correct. Unfortunately, it is often not the case that one has high-quality
+estimates of the data uncertainties (getting the data is hard enough!).
+Because of this common situation, the uncertainties reported and held in
+:attr:`stderr` are not those that increase chi-square by 1, but those that
+increase chi-square by reduced chi-square.  This is equivalent to rescaling
+the uncertainty in the data such that reduced chi-square would be 1.  To be
+clear, this rescaling is done by default because if reduced chi-square is
+far from 1, this rescaling often makes the reported uncertainties sensible,
+and if reduced chi-square is near 1 it does little harm.  If you have good
+scaling of the data uncertainty and believe the scale of the residual
+array is correct,  this automatic rescaling can be turned off using
+``scale_covar=False``.
+
+Note that the simple (and fast!) approach to estimating uncertainties and
+correlations by inverting the second derivative matrix assumes that the
+components of the residual array (if, indeed, an array is used) are
+distributed around 0 with a normal (Gaussian distribution), and that a map
+of probability distributions for pairs would be elliptical -- the size of
+the of ellipse gives the uncertainty itself and the eccentricity of the
+ellipse gives the correlation.  This simple approach to assessing
+uncertainties ignores outliers, highly asymmetric uncertainties, or complex
+correlations between Parameters.  In fact, it is not too hard to come up
+with problems where such effects are important.  Our experience is that the
+automated results are usually the right scale and quite reasonable as
+initial estimates, but a more thorough exploration of the Parameter space
+using the tools described in :ref:`label-emcee` and
+:ref:`label-confidence-advanced` can give a more complete understanding of
+the distributions and relations between Parameters.
+
+
+..  _fit-reports-label:
+
+Getting and Printing Fit Reports
+===========================================
+
+.. currentmodule:: lmfit.printfuncs
+
+.. autofunction:: fit_report
+
+An example using this to write out a fit report would be:
+
+.. jupyter-execute:: ../examples/doc_fitting_withreport.py
+    :hide-output:
+
+which would give as output:
+
+.. jupyter-execute::
+    :hide-code:
+
+    print(fit_report(out))
+
+To be clear, you can get at all of these values from the fit result ``out``
+and ``out.params``.  For example, a crude printout of the best fit variables
+and standard errors could be done as
+
+.. jupyter-execute::
+
+    print('-------------------------------')
+    print('Parameter    Value       Stderr')
+    for name, param in out.params.items():
+        print('{:7s} {:11.5f} {:11.5f}'.format(name, param.value, param.stderr))
+
+
+..  _fit-itercb-label:
 
 Using a Iteration Callback Function
 ====================================
+
+.. currentmodule:: lmfit.minimizer
 
 An iteration callback function is a function to be called at each
 iteration, just after the objective function is called.  The iteration
@@ -374,10 +466,13 @@ exception is raised in the iteration callback. When a fit is aborted this
 way, the parameters will have the values from the last iteration.  The fit
 statistics are not likely to be meaningful, and uncertainties will not be computed.
 
+
 ..  _fit-minimizer-label:
 
 Using the :class:`Minimizer` class
 =======================================
+
+.. currentmodule:: lmfit.minimizer
 
 For full control of the fitting process, you will want to create a
 :class:`Minimizer` object.
@@ -410,14 +505,31 @@ For more information, check the examples in ``examples/lmfit_brute_example.ipynb
 
 .. automethod:: Minimizer.emcee
 
+
 .. _label-emcee:
 
 :meth:`Minimizer.emcee` - calculating the posterior probability distribution of parameters
 ==============================================================================================
 
-:meth:`Minimizer.emcee` can be used to obtain the posterior probability distribution of
-parameters, given a set of experimental data. An example problem is a double
-exponential decay. A small amount of Gaussian noise is also added in:
+:meth:`Minimizer.emcee` can be used to obtain the posterior probability
+distribution of parameters, given a set of experimental data.  Note that this
+method does *not* actually perform a fit at all.  Instead, it explores
+parameter space to determine the probability distributions for the parameters,
+but without an explicit goal of attempting to refine the solution.  It should
+not be used for fitting, but it is a useful method to to more thoroughly
+explore the parameter space around the solution after a fit has been done and
+thereby get an improved understanding of the probability distribution for the
+parameters.  It may be able to refine your estimate of the most likely values
+for a set of parameters, but it will not iteratively find a good solution to
+the minimization problem.  To use this method effectively, you should first
+use another minimization method and then use this method to explore the
+parameter space around thosee best-fit values.
+
+To illustrate this, we'll use an example problem of fitting data to function
+of a double exponential decay, including a modest amount of Gaussian noise to
+the data.  Note that this example is the same problem used in
+:ref:`label-confidence-advanced` for evaluating confidence intervals in the
+parameters, which is a similar goal to the one here.
 
 .. jupyter-execute::
     :hide-code:
@@ -456,7 +568,10 @@ Create a Parameter set for the initial guesses:
         v = p.valuesdict()
         return v['a1'] * np.exp(-x / v['t1']) + v['a2'] * np.exp(-(x - 0.1) / v['t2']) - y
 
-Solving with :func:`minimize` gives the Maximum Likelihood solution:
+Solving with :func:`minimize` gives the Maximum Likelihood solution.   Note
+that we use the robust Nelder-Mead method here.  The default Levenberg-Marquardt
+method seems to have difficulty with exponential decays, though it can refine
+the solution if starting near the solution:
 
 .. jupyter-execute::
 
@@ -472,13 +587,19 @@ and plotting the fit using the Maximum Likelihood solution gives the graph below
     plt.legend(loc='best')
     plt.show()
 
-However, this doesn't give a probability distribution for the parameters.
+Note that the fit here (for which the ``numdifftools`` package is installed)
+does estimate and report uncertainties in the parameters and correlations for
+the parameters, and reports the correlation of parameters ``a2`` and ``t2`` to
+be very high. As we'll see, these estimates are pretty good, but when faced
+with such high correlation, it can be helpful to get the full probability
+distribution for the parameters.  MCMC methods are very good for this.
+
 Furthermore, we wish to deal with the data uncertainty. This is called
-marginalisation of a nuisance parameter. ``emcee`` requires a function that returns
-the log-posterior probability. The log-posterior probability is a sum of the
-log-prior probability and log-likelihood functions. The log-prior probability is
-assumed to be zero if all the parameters are within their bounds and ``-np.inf``
-if any of the parameters are outside their bounds.
+marginalisation of a nuisance parameter. ``emcee`` requires a function that
+returns the log-posterior probability. The log-posterior probability is a sum
+of the log-prior probability and log-likelihood functions. The log-prior
+probability is assumed to be zero if all the parameters are within their
+bounds and ``-np.inf`` if any of the parameters are outside their bounds.
 
 If the objective function returns an array of unweighted residuals (i.e.,
 ``data-model``) as is the case here, you can use ``is_weighted=False`` as an
@@ -490,7 +611,8 @@ place boundaries on this parameter one can do:
 
     mi.params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2))
 
-Now we have to set up the minimizer and do the sampling:
+Now we have to set up the minimizer and do the sampling (again, just to be
+clear, this is *not* doing a fit):
 
 .. jupyter-execute::
     :hide-output:
@@ -498,16 +620,18 @@ Now we have to set up the minimizer and do the sampling:
     res = lmfit.minimize(residual, method='emcee', nan_policy='omit', burn=300, steps=1000, thin=20,
                          params=mi.params, is_weighted=False, progress=False)
 
-Of note, the ``is_weighted`` argument will be ignored if your objective function
-returns a float instead of an array. See the Notes in :meth:`Minimizer.emcee` for
-more information. For the documentation we set ``progress=False``; the default is to show a progress bar,
-provided that the ``tqdm`` package is installed.
+As mentioned in the Notes for :meth:`Minimizer.emcee`, the ``is_weighted``
+argument will be ignored if your objective function returns a float instead of
+an array. For the documentation we set ``progress=False``; the default is to
+print a progress bar to the Terminal if the ``tqdm`` package is installed.
 
-The performance of the method (i.e., whether or not the sampling went well) can be assessed by checking
-the integrated autocorrelation time and/or the acceptance fraction of the walkers. For this specific
-example the autocorrelation time could not be estimated because the "chain is too short". Thus, we plot
-the acceptance fraction per walker and its values (or mean value) suggests that the sampling worked as
-intended (as a rule of thumb this value should be between 0.2 and 0.5).
+The success of the method (i.e., whether or not the sampling went well) can be
+assessed by checking the integrated autocorrelation time and/or the acceptance
+fraction of the walkers. For this specific example the autocorrelation time
+could not be estimated because the "chain is too short".  Instead, we plot the
+acceptance fraction per walker and its mean value suggests that the sampling
+worked as intended (as a rule of thumb the value should be between 0.2 and
+0.5).
 
 .. jupyter-execute::
 
@@ -516,8 +640,8 @@ intended (as a rule of thumb this value should be between 0.2 and 0.5).
     plt.ylabel('acceptance fraction')
     plt.show()
 
-Lets have a look at those posterior distributions for the parameters. This requires
-installation of the ``corner`` package:
+With the results from ``emcee``, we can visualize the posterior distributions
+for the parameters using the ``corner`` package:
 
 .. jupyter-execute::
 
@@ -527,19 +651,30 @@ installation of the ``corner`` package:
                                truths=list(res.params.valuesdict().values()))
 
 The values reported in the :class:`MinimizerResult` are the medians of the
-probability distributions and a 1 :math:`\sigma` quantile, estimated as half the
-difference between the 15.8 and 84.2 percentiles. The median value is not
-necessarily the same as the Maximum Likelihood Estimate. We'll get that as well.
-You can see that we recovered the right uncertainty level on the data:
+probability distributions and a 1 :math:`\sigma` quantile, estimated as half
+the difference between the 15.8 and 84.2 percentiles.  Printing these values:
+
 
 .. jupyter-execute::
 
-    print("median of posterior probability distribution")
+    print('median of posterior probability distribution')
     print('--------------------------------------------')
     lmfit.report_fit(res.params)
 
+You can see that this recovered the right uncertainty level on the data.  Note
+that these values agree pretty well with the results, uncertainties and
+correlations found by the fit and using ``numdifftools`` to estimate the
+covariance matrix.  That is, even though the parameters ``a2``, ``t1``, and
+``t2`` are all highly correlated and do not display perfectly Gaussian
+probability distributions, the probability distributions found by explicitly
+sampling the parameter space are not so far from elliptical as to make the
+simple (and much faster) estimates from inverting the covariance matrix
+completely invalid.
 
-Find the Maximum Likelihood Estimation (MLE):
+As mentioned above, the result from ``emcee`` reports the median values, which
+are not necessarily the same as the Maximum Likelihood Estimate.  To obtain
+the values for the Maximum Likelihood Estimation (MLE) we find the location in
+the chain with the highest probability:
 
 .. jupyter-execute::
 
@@ -549,35 +684,40 @@ Find the Maximum Likelihood Estimation (MLE):
     for i, par in enumerate(p):
         p[par].value = mle_soln[i]
 
-    print("Maximum Likelihood Estimation")
-    print('-----------------------------')
-    for _, vals in p.items():
-        print(vals)
 
-Finally, lets work out a 1 and 2-:math:`\sigma` error estimate for 't1':
-
-.. jupyter-execute::
-
-    quantiles = np.percentile(res.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
-    print("1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
-    print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
+    print('\nMaximum Likelihood Estimation from emcee       ')
+    print('-------------------------------------------------')
+    print('Parameter  MLE Value   Median Value   Uncertainty')
+    fmt = '  {:5s}  {:11.5f} {:11.5f}   {:11.5f}'.format
+    for name, param in p.items():
+        print(fmt(name, param.value, res.params[name].value,
+                  res.params[name].stderr))
 
 
-Getting and Printing Fit Reports
-===========================================
+Here the difference between MLE and median value are seen to be below 0.5%,
+and well within the estimated 1-:math:`\sigma` uncertainty.
 
-.. currentmodule:: lmfit.printfuncs
-
-.. autofunction:: fit_report
-
-An example using this to write out a fit report would be:
-
-.. jupyter-execute:: ../examples/doc_fitting_withreport.py
-    :hide-output:
-
-which would give as output:
+Finally, we can use the samples from ``emcee`` to work out the 1- and
+2-:math:`\sigma` error estimates.
 
 .. jupyter-execute::
-    :hide-code:
 
-    print(fit_report(out))
+    print('\nError Estimates from emcee    ')
+    print('------------------------------------------------------')
+    print('Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma ')
+
+    for name in p.keys():
+        quantiles = np.percentile(res.flatchain[name],
+                                  [2.275, 15.865, 50, 84.135, 97.275])
+        median = quantiles[2]
+        err_m2 = quantiles[0] - median
+        err_m1 = quantiles[1] - median
+        err_p1 = quantiles[3] - median
+        err_p2 = quantiles[4] - median
+        fmt = '  {:5s}   {:8.4f} {:8.4f} {:8.4f} {:8.4f} {:8.4f}'.format
+        print(fmt(name, err_m2, err_m1, median, err_p1, err_p2))
+
+And we see that the initial estimates for the 1-:math:`\sigma` standard error
+using ``numdifftools`` was not too bad.  We'll return to this example
+problem in :ref:`label-confidence-advanced` and use a different method to
+calculate the 1- and 2-:math:`\sigma` error bars.

@@ -9,10 +9,10 @@ matplotlib
 numdifftools
 numpy>=1.16
 pandas
+Pillow
 pre-commit
 pytest
 scipy>=1.2
-six>=1.11
 Sphinx
 sphinx-gallery
 uncertainties>=3.0.1

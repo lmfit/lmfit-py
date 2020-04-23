@@ -3,7 +3,6 @@ from base64 import b64decode, b64encode
 import sys
 
 import numpy as np
-import six
 
 try:
     import dill
@@ -16,22 +15,6 @@ try:
 except ImportError:
     DataFrame = Series = type(NotImplemented)
     read_json = None
-
-
-def bindecode(val):
-    """b64decode wrapper, Python 2 and 3 version."""
-    return b64decode(six.b(val))
-
-
-if six.PY3:
-    def binencode(val):
-        """b64encode wrapper, Python 3 version."""
-        # b64encode result is /always/ UTF-8
-        return str(b64encode(val), 'utf-8')
-else:
-    def binencode(val):
-        """b64encode wrapper, Python 2 version."""
-        return str(b64encode(val))
 
 
 def find_importer(obj):
@@ -73,14 +56,14 @@ def encode4js(obj):
         if 'complex' in obj.dtype.name:
             val = [(obj.real).tolist(), (obj.imag).tolist()]
         elif obj.dtype.name == 'object':
-            val = [encode4js(item) for item in obj['value']]
+            val = [encode4js(item) for item in obj]
         else:
             val = obj.flatten().tolist()
         return dict(__class__='NDArray', __shape__=obj.shape,
                     __dtype__=obj.dtype.name, value=val)
     elif isinstance(obj, (np.float, np.int)):
         return float(obj)
-    elif isinstance(obj, six.string_types):
+    elif isinstance(obj, str):
         try:
             return str(obj)
         except UnicodeError:
@@ -103,7 +86,7 @@ def encode4js(obj):
         pyvers = "%d.%d" % (sys.version_info.major,
                             sys.version_info.minor)
         if HAS_DILL:
-            val = binencode(dill.dumps(obj))
+            val = str(b64encode(dill.dumps(obj)), 'utf-8')
         else:
             val = None
             importer = find_importer(obj)
@@ -149,7 +132,7 @@ def decode4js(obj):
         pyvers = "%d.%d" % (sys.version_info.major,
                             sys.version_info.minor)
         if pyvers == obj['pyversion'] and HAS_DILL:
-            out = dill.loads(bindecode(obj['value']))
+            out = dill.loads(b64decode(obj['value']))
         elif obj['importer'] is not None:
             out = import_from(obj['importer'], val)
 

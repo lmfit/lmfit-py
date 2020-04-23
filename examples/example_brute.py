@@ -15,9 +15,10 @@ Global minimization using the ``brute`` method (a.k.a. grid search)
 import copy
 
 import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
 import numpy as np
 
-from lmfit import fit_report, Minimizer, Parameters
+from lmfit import Minimizer, Parameters, fit_report
 
 ###############################################################################
 # Let's start with the example given in the documentation of SciPy:
@@ -56,19 +57,20 @@ params.add_many(
 def f1(p):
     par = p.valuesdict()
     return (par['a'] * par['x']**2 + par['b'] * par['x'] * par['y'] +
-            par['c'] * par['y']**2 + par['d']*par['x'] + par['e']*par['y'] + par['f'])
+            par['c'] * par['y']**2 + par['d']*par['x'] + par['e']*par['y'] +
+            par['f'])
 
 
 def f2(p):
     par = p.valuesdict()
     return (-1.0*par['g']*np.exp(-((par['x']-par['h'])**2 +
-            (par['y']-par['i'])**2) / par['scale']))
+                                   (par['y']-par['i'])**2) / par['scale']))
 
 
 def f3(p):
     par = p.valuesdict()
     return (-1.0*par['j']*np.exp(-((par['x']-par['k'])**2 +
-            (par['y']-par['l'])**2) / par['scale']))
+                                   (par['y']-par['l'])**2) / par['scale']))
 
 
 def f(params):
@@ -118,13 +120,13 @@ print(result.brute_grid)
 print(result.brute_Jout)
 
 ###############################################################################
-# **Reassuringly, the obtained results are indentical to using the method in
+# **Reassuringly, the obtained results are identical to using the method in
 # SciPy directly!**
 
 ###############################################################################
 # Example 2: fit of a decaying sine wave
 #
-# In this example, will explain some of the options ot the algorithm.
+# In this example, we will explain some of the options of the algorithm.
 #
 # We start off by generating some synthetic data with noise for a decaying
 # sine wave, define an objective function and create a Parameter set.
@@ -185,7 +187,8 @@ par_name = 'shift'
 indx_shift = result_brute.var_names.index(par_name)
 grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
 print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name,
-      len(grid_shift), grid_shift))
+                                                               len(grid_shift),
+                                                               grid_shift))
 
 ###############################################################################
 # If finite bounds are not set for a certain parameter then the user **must**
@@ -311,10 +314,8 @@ def plot_results_brute(result, best_vals=True, varlabels=None,
     output : str, optional
         Name of the output PDF file (default is 'None')
     """
-    from matplotlib.colors import LogNorm
-
     npars = len(result.var_names)
-    fig, axes = plt.subplots(npars, npars)
+    _fig, axes = plt.subplots(npars, npars)
 
     if not varlabels:
         varlabels = result.var_names
@@ -366,7 +367,7 @@ def plot_results_brute(result, best_vals=True, varlabels=None,
             # contour plots for all combinations of two parameters
             elif j > i:
                 ax = axes[j, i+1]
-                red_axis = tuple([a for a in range(npars) if a != i and a != j])
+                red_axis = tuple([a for a in range(npars) if a not in (i, j)])
                 X, Y = np.meshgrid(np.unique(result.brute_grid[i]),
                                    np.unique(result.brute_grid[j]))
                 lvls1 = np.linspace(result.brute_Jout.min(),

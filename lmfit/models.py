@@ -5,11 +5,12 @@ from asteval import Interpreter, get_ast_names
 import numpy as np
 
 from . import lineshapes
-from .lineshapes import (breit_wigner, damped_oscillator, dho, donaich,
+from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          expgaussian, exponential, gaussian, linear, lognormal,
                          lorentzian, moffat, parabolic, pearson7, powerlaw,
                          pvoigt, rectangle, skewed_gaussian, skewed_voigt,
-                         split_lorentzian, step, students_t, voigt)
+                         split_lorentzian, step, students_t,
+                         thermal_distribution, voigt)
 from .model import Model
 
 tiny = np.finfo(np.float).eps
@@ -18,20 +19,11 @@ tiny = np.finfo(np.float).eps
 class DimensionalError(Exception):
     """Raise exception when number of independent variables is not one."""
 
-    pass
-
 
 def _validate_1d(independent_vars):
     if len(independent_vars) != 1:
         raise DimensionalError(
             "This model requires exactly one independent variable.")
-
-
-def index_of(arr, val):
-    """Return index of array nearest to a value."""
-    if val < min(arr):
-        return 0
-    return np.abs(arr-val).argmin()
 
 
 def fwhm_expr(model):
@@ -50,22 +42,27 @@ def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     """Estimate amp, cen, sigma for a peak, create params."""
     if x is None:
         return 1.0, 0.0, 1.0
+
+    sort_increasing = np.argsort(x)
+    x = x[sort_increasing]
+    y = y[sort_increasing]
+
     maxy, miny = max(y), min(y)
     maxx, minx = max(x), min(x)
-    imaxy = index_of(y, maxy)
-    cen = x[imaxy]
-    amp = (maxy - miny)*3.0
+    cen = x[np.argmax(y)]
+    height = (maxy - miny)*3.0
     sig = (maxx-minx)/6.0
 
-    halfmax_vals = np.where(y > (maxy+miny)/2.0)[0]
+    # the explicit conversion to a NumPy array is to make sure that the
+    # indexing on line 65 also works if the data is supplied as pandas.Series
+    x_halfmax = np.array(x[y > (maxy+miny)/2.0])
     if negative:
-        imaxy = index_of(y, miny)
-        amp = -(maxy - miny)*3.0
-        halfmax_vals = np.where(y < (maxy+miny)/2.0)[0]
-    if len(halfmax_vals) > 2:
-        sig = (x[halfmax_vals[-1]] - x[halfmax_vals[0]])/2.0
-        cen = x[halfmax_vals].mean()
-    amp = amp*sig*ampscale
+        height = -(maxy - miny)*3.0
+        x_halfmax = x[y < (maxy+miny)/2.0]
+    if len(x_halfmax) > 2:
+        sig = (x_halfmax[-1] - x_halfmax[0])/2.0
+        cen = x_halfmax.mean()
+    amp = height*sig*ampscale
     sig = sig*sigscale
 
     pars = model.make_params(amplitude=amp, center=cen, sigma=sig)
@@ -143,7 +140,7 @@ class ConstantModel(Model):
 
         def constant(x, c=0.0):
             return c
-        super(ConstantModel, self).__init__(constant, **kwargs)
+        super().__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -173,7 +170,7 @@ class ComplexConstantModel(Model):
 
         def constant(x, re=0., im=0.):
             return re + 1j*im
-        super(ComplexConstantModel, self).__init__(constant, **kwargs)
+        super().__init__(constant, **kwargs)
 
     def guess(self, data, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -203,7 +200,7 @@ class LinearModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(LinearModel, self).__init__(linear, **kwargs)
+        super().__init__(linear, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -232,7 +229,7 @@ class QuadraticModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(QuadraticModel, self).__init__(parabolic, **kwargs)
+        super().__init__(parabolic, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -250,7 +247,7 @@ ParabolicModel = QuadraticModel
 
 
 class PolynomialModel(Model):
-    r"""A polynomial model with up to 7 Parameters, specfied by ``degree``.
+    r"""A polynomial model with up to 7 Parameters, specified by ``degree``.
 
     .. math::
 
@@ -279,7 +276,7 @@ class PolynomialModel(Model):
         def polynomial(x, c0=0, c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0):
             return np.polyval([c7, c6, c5, c4, c3, c2, c1, c0], x)
 
-        super(PolynomialModel, self).__init__(polynomial, **kwargs)
+        super().__init__(polynomial, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -319,7 +316,7 @@ class GaussianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(GaussianModel, self).__init__(gaussian, **kwargs)
+        super().__init__(gaussian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -360,7 +357,7 @@ class LorentzianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(LorentzianModel, self).__init__(lorentzian, **kwargs)
+        super().__init__(lorentzian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -408,7 +405,7 @@ class SplitLorentzianModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(SplitLorentzianModel, self).__init__(split_lorentzian, **kwargs)
+        super().__init__(split_lorentzian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -466,7 +463,7 @@ class VoigtModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(VoigtModel, self).__init__(voigt, **kwargs)
+        super().__init__(voigt, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -519,7 +516,7 @@ class PseudoVoigtModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(PseudoVoigtModel, self).__init__(pvoigt, **kwargs)
+        super().__init__(pvoigt, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -565,7 +562,7 @@ class MoffatModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(MoffatModel, self).__init__(moffat, **kwargs)
+        super().__init__(moffat, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -589,7 +586,8 @@ class Pearson7Model(Model):
     with four parameters: ``amplitude`` (:math:`A`), ``center``
     (:math:`\mu`), ``sigma`` (:math:`\sigma`), and ``exponent`` (:math:`m`).
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
+    to report estimates for the full width at half maximum and maximum peak height,
+    respectively.
 
     .. math::
 
@@ -607,7 +605,7 @@ class Pearson7Model(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(Pearson7Model, self).__init__(pearson7, **kwargs)
+        super().__init__(pearson7, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -648,7 +646,7 @@ class StudentsTModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(StudentsTModel, self).__init__(students_t, **kwargs)
+        super().__init__(students_t, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -674,8 +672,6 @@ class BreitWignerModel(Model):
     https://en.wikipedia.org/wiki/Fano_resonance), with four Parameters:
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and ``q`` (:math:`q`).
-    In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -687,16 +683,11 @@ class BreitWignerModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(BreitWignerModel, self).__init__(breit_wigner, **kwargs)
+        super().__init__(breit_wigner, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0.0)
-        fmt = ("{prefix:s}amplitude*{prefix:s}q**2")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
-        fmt = ("2*(sqrt({prefix:s}q**2*{prefix:s}sigma**2*({prefix:s}q**2+2))/"
-               "max({0}, 2*({prefix:s}q**2)-2))")
-        self.set_param_hint('fwhm', expr=fmt.format(tiny, prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -714,7 +705,8 @@ class LognormalModel(Model):
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and ``sigma``
     (:math:`\sigma`).
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
+    to report estimates of full width at half maximum and maximum peak height,
+    respectively.
 
     .. math::
 
@@ -726,7 +718,7 @@ class LognormalModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(LognormalModel, self).__init__(lognormal, **kwargs)
+        super().__init__(lognormal, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -757,8 +749,8 @@ class DampedOscillatorModel(Model):
     (see https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part), with
     three Parameters:  ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`) and
     ``sigma`` (:math:`\sigma`).
-    In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
+    In addition, the parameter ``height`` is included as a constraint
+    to report the maximum peak height.
 
     .. math::
 
@@ -772,19 +764,12 @@ class DampedOscillatorModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DampedOscillatorModel, self).__init__(damped_oscillator, **kwargs)
+        super().__init__(damped_oscillator, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('height', expr=height_expr(self))
-        fmt = ("sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)+"
-               "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
-               "({prefix:s}sigma**2+3)))))-"
-               "sqrt(abs({prefix:s}center**2*(1-2*{prefix:s}sigma**2)-"
-               "(2*sqrt({prefix:s}center**4*{prefix:s}sigma**2*"
-               "({prefix:s}sigma**2+3)))))")
-        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -803,7 +788,8 @@ class DampedHarmonicOscillatorModel(Model):
     four Parameters: ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and ``gamma`` (:math:`\gamma`).
     In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
+    to report estimates for full width at half maximum and maximum peak height,
+    respectively.
 
     .. math::
 
@@ -821,7 +807,7 @@ class DampedHarmonicOscillatorModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DampedHarmonicOscillatorModel, self).__init__(dho, **kwargs)
+        super().__init__(dho, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -850,8 +836,6 @@ class ExponentialGaussianModel(Model):
     (see https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution) with
     four Parameters ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),
     ``sigma`` (:math:`\sigma`), and  ``gamma`` (:math:`\gamma`).
-    In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -863,24 +847,16 @@ class ExponentialGaussianModel(Model):
     where :func:`erfc` is the complementary error function.
 
     """
-
-    fwhm_factor = 2*np.sqrt(2*np.log(2))
-
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(ExponentialGaussianModel, self).__init__(expgaussian, **kwargs)
+        super().__init__(expgaussian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', min=0, max=20)
-        fmt = ("{prefix:s}amplitude*{prefix:s}gamma/2*"
-               "exp({prefix:s}gamma**2*{prefix:s}sigma**2/2)*"
-               "erfc({prefix:s}gamma*{prefix:s}sigma/sqrt(2))")
-        self.set_param_hint('height', expr=fmt.format(prefix=self.prefix))
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -896,8 +872,6 @@ class SkewedGaussianModel(Model):
     (see https://en.wikipedia.org/wiki/Skew_normal_distribution), with Parameters
     ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`),  ``sigma`` (:math:`\sigma`),
     and ``gamma`` (:math:`\gamma`).
-    In addition, parameters ``fwhm`` and ``height`` are included as constraints
-    to report full width at half maximum and maximum peak height, respectively.
 
     .. math::
 
@@ -911,20 +885,15 @@ class SkewedGaussianModel(Model):
 
     """
 
-    fwhm_factor = 2*np.sqrt(2*np.log(2))
-    height_factor = 1./np.sqrt(2*np.pi)
-
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(SkewedGaussianModel, self).__init__(skewed_gaussian, **kwargs)
+        super().__init__(skewed_gaussian, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
-        self.set_param_hint('height', expr=height_expr(self))
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -941,10 +910,7 @@ class SkewedVoigtModel(Model):
       https://en.wikipedia.org/wiki/Voigt_distribution).  It has Parameters
       ``amplitude`` (:math:`A`), ``center`` (:math:`\mu`), ``sigma``
       (:math:`\sigma`), and ``gamma`` (:math:`\gamma`), as usual for a
-      Voigt distribution, and add a Parameter ``skew``.  In addition,
-      parameters ``fwhm`` and ``height`` are included as constraints to
-      report full width at half maximum and maximum peak height, of the
-      Voigt distribution, respectively.
+      Voigt distribution, and add a Parameter ``skew``.
 
     .. math::
 
@@ -958,21 +924,16 @@ class SkewedVoigtModel(Model):
 
     """
 
-    fwhm_factor = 3.60131
-    height_factor = 1./np.sqrt(2*np.pi)
-
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(SkewedVoigtModel, self).__init__(skewed_voigt, **kwargs)
+        super().__init__(skewed_voigt, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
-        self.set_param_hint('height', expr=height_expr(self))
-        self.set_param_hint('fwhm', expr=fwhm_expr(self))
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -983,7 +944,62 @@ class SkewedVoigtModel(Model):
     guess.__doc__ = COMMON_GUESS_DOC
 
 
-class DonaichModel(Model):
+class ThermalDistributionModel(Model):
+    r"""Return a thermal distribution function.
+
+    Variable ``form`` defines
+    the kind of distribution as below with parameters ``amplitude``
+    (:math:`A`), ``center`` (:math:`x_0`) and ``kt`` (:math:`kt`). The
+    following distributions are available:
+
+    - ``bose`` (the default) Bose-Einstein distribution
+    - ``maxwell`` Maxwell-Boltzmann distribution
+    - ``fermi`` Fermi-Dirac distribution
+
+    The functional forms are defined as:
+
+    .. math::
+        :nowrap:
+
+        \begin{eqnarray*}
+        & f(x; A, x_0, kt, {\mathrm{form={}'bose{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt}) - 1} \\
+        & f(x; A, x_0, kt, {\mathrm{form={}'maxwell{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt})} \\
+        & f(x; A, x_0, kt, {\mathrm{form={}'fermi{}'}})  & = \frac{1}{A \exp(\frac{x - x_0}{kt}) + 1} ]
+        \end{eqnarray*}
+
+    see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
+
+    Comments:
+
+    - ``kt`` should be defined in the same units as ``x`` (:math:`k_B = 8.617\times10^{-5}` eV/K).
+    - set :math:`kt<0` to implement the energy loss convention common in
+      scattering research.
+
+    """
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 form='bose', **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'form': form, 'independent_vars': independent_vars})
+        super().__init__(thermal_distribution, **kwargs)
+        self._set_paramhints_prefix()
+
+    def guess(self, data, x=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        if x is None:
+            center = 0
+            kt = 1
+        else:
+            center = np.mean(x)
+            kt = (max(x) - min(x))/10
+
+        pars = self.make_params()
+        return update_param_vals(pars, self.prefix, center=center, kt=kt)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class DoniachModel(Model):
     r"""A model of an Doniach Sunjic asymmetric lineshape
     (see https://www.casaxps.com/help_manual/line_shapes.htm), used in
     photo-emission, with four Parameters ``amplitude`` (:math:`A`),
@@ -1003,7 +1019,7 @@ class DonaichModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(DonaichModel, self).__init__(donaich, **kwargs)
+        super().__init__(doniach, **kwargs)
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
@@ -1020,6 +1036,9 @@ class DonaichModel(Model):
     guess.__doc__ = COMMON_GUESS_DOC
 
 
+DonaichModel = DoniachModel   # for back-compat
+
+
 class PowerLawModel(Model):
     r"""A model based on a Power Law (see https://en.wikipedia.org/wiki/Power_law),
     with two Parameters: ``amplitude`` (:math:`A`), and ``exponent`` (:math:`k`), in:
@@ -1034,7 +1053,7 @@ class PowerLawModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(PowerLawModel, self).__init__(powerlaw, **kwargs)
+        super().__init__(powerlaw, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1065,7 +1084,7 @@ class ExponentialModel(Model):
                  **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
-        super(ExponentialModel, self).__init__(exponential, **kwargs)
+        super().__init__(exponential, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1113,7 +1132,7 @@ class StepModel(Model):
                  form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'form': form, 'independent_vars': independent_vars})
-        super(StepModel, self).__init__(step, **kwargs)
+        super().__init__(step, **kwargs)
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1170,7 +1189,7 @@ class RectangleModel(Model):
                  form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'form': form, 'independent_vars': independent_vars})
-        super(RectangleModel, self).__init__(rectangle, **kwargs)
+        super().__init__(rectangle, **kwargs)
 
         self._set_paramhints_prefix()
 
@@ -1287,7 +1306,7 @@ class ExpressionModel(Model):
 
         kws["nan_policy"] = nan_policy
 
-        super(ExpressionModel, self).__init__(_eval, **kws)
+        super().__init__(_eval, **kws)
 
         # set param names here, and other things normally
         # set in _parse_params(), which will be short-circuited.
@@ -1298,7 +1317,7 @@ class ExpressionModel(Model):
         self.def_vals = {}
 
     def __repr__(self):
-        """TODO: docstring in magic method."""
+        """Return printable representation of ExpressionModel."""
         return "<lmfit.ExpressionModel('%s')>" % (self.expr)
 
     def _parse_params(self):
@@ -1307,4 +1326,3 @@ class ExpressionModel(Model):
         This prevents normal parsing of function for parameter names.
 
         """
-        pass

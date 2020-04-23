@@ -5,7 +5,6 @@ from functools import wraps
 import inspect
 import json
 import operator
-import sys
 import warnings
 
 import numpy as np
@@ -37,7 +36,7 @@ def _align(var, mask, data):
 
 
 try:
-    import matplotlib  # noqa: F401
+    from matplotlib import pyplot as plt
     _HAS_MATPLOTLIB = True
 except Exception:
     _HAS_MATPLOTLIB = False
@@ -182,7 +181,7 @@ def propagate_err(z, dz, option):
     return err
 
 
-class Model(object):
+class Model:
     """Model class."""
 
     _forbidden_args = ('data', 'weights', 'params')
@@ -353,9 +352,8 @@ class Model(object):
 
         Returns
         -------
-        None or int
-            Return value from `fp.write()`. None for Python 2.7 and the
-            number of characters written in Python 3.
+        int
+            Return value from `fp.write()`: the number of characters written.
 
         See Also
         --------
@@ -437,7 +435,6 @@ class Model(object):
 
     def _set_paramhints_prefix(self):
         """Reset parameter hints for prefix: intended to be overwritten."""
-        pass
 
     @property
     def param_names(self):
@@ -468,7 +465,7 @@ class Model(object):
             for name, defval in self.func.kwargs:
                 kw_args[name] = defval
         # 2. modern, best-practice approach: use inspect.signature
-        elif sys.version_info > (3, 4):
+        else:
             pos_args = []
             kw_args = {}
             keywords_ = None
@@ -483,15 +480,6 @@ class Model(object):
                         kw_args[fnam] = fpar.default
                 elif fpar.kind == fpar.VAR_POSITIONAL:
                     raise ValueError("varargs '*%s' is not supported" % fnam)
-        # 3. Py2 compatible approach
-        else:
-            argspec = inspect.getargspec(self.func)
-            keywords_ = argspec.keywords
-            pos_args = argspec.args
-            kw_args = {}
-            if argspec.defaults is not None:
-                for val in reversed(argspec.defaults):
-                    kw_args[pos_args.pop()] = val
         # inspection done
 
         self._func_haskeywords = keywords_ is not None
@@ -1133,7 +1121,7 @@ class CompositeModel(Model):
                                self.right._reprstring(long=long))
 
     def eval(self, params=None, **kwargs):
-        """TODO: docstring in public method."""
+        """Evaluate model function for composite model."""
         return self.op(self.left.eval(params=params, **kwargs),
                        self.right.eval(params=params, **kwargs))
 
@@ -1485,6 +1473,8 @@ class ModelResult(Minimizer):
         covar = self.covar
         fjac = np.zeros((nvarys, ndata))
         df2 = np.zeros(ndata)
+        if any([p.stderr is None for p in self.params.values()]):
+            return df2
 
         # find derivative by hand!
         pars = self.params.copy()
@@ -1625,7 +1615,10 @@ class ModelResult(Minimizer):
                      'nfree', 'nvarys', 'redchi', 'scale_covar', 'calc_covar',
                      'success', 'userargs', 'userkws', 'values', 'var_names',
                      'weights', 'user_options'):
-            val = getattr(self, attr)
+            try:
+                val = getattr(self, attr)
+            except AttributeError:
+                continue
             if isinstance(val, np.bool_):
                 val = bool(val)
             out[attr] = encode4js(val)
@@ -1643,9 +1636,8 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        None or int
-            Return value from `fp.write()`. None for Python 2.7 and the
-            number of characters written in Python 3.
+        int
+            Return value from `fp.write()`: the number of characters written.
 
         See Also
         --------
@@ -2051,7 +2043,6 @@ class ModelResult(Minimizer):
         ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
 
         """
-        from matplotlib import pyplot as plt
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:

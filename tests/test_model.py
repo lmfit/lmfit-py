@@ -42,12 +42,12 @@ def linear_func(x, a, b):
     return a*x+b
 
 
-class CommonTests(object):
+class CommonTests:
     # to be subclassed for testing predefined models
 
     def setUp(self):
         np.random.seed(1)
-        self.noise = 0.0001*np.random.randn(*self.x.shape)
+        self.noise = 0.0001*np.random.randn(self.x.size)
         # Some Models need args (e.g., polynomial order), and others don't.
         try:
             args = self.args
@@ -234,17 +234,13 @@ class CommonTests(object):
 class TestUserDefiniedModel(CommonTests, unittest.TestCase):
     # mainly aimed at checking that the API does what it says it does
     # and raises the right exceptions or warnings when things are not right
-    import six
-    if six.PY2:
-        from six import assertRaisesRegex
-
     def setUp(self):
         self.true_values = lambda: dict(amplitude=7.1, center=1.1, sigma=2.40)
         self.guess = lambda: dict(amplitude=5, center=2, sigma=4)
         # return a fresh copy
         self.model_constructor = (
             lambda *args, **kwargs: Model(gaussian, *args, **kwargs))
-        super(TestUserDefiniedModel, self).setUp()
+        super().setUp()
 
     @property
     def x(self):
@@ -347,7 +343,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             set_prefix_failed = False
         except AttributeError:
             set_prefix_failed = True
-        except:  # noqa: E722
+        except Exception:
             set_prefix_failed = None
         self.assertFalse(set_prefix_failed)
 
@@ -495,7 +491,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(abs(result.params['g1_center'].value - 1.1) < 0.2)
         self.assertTrue(abs(result.params['g2_center'].value - 2.5) < 0.2)
 
-        for name, par in pars.items():
+        for _, par in pars.items():
             assert len(repr(par)) > 5
 
     def test_composite_plotting(self):
@@ -561,7 +557,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         m2 = models.GaussianModel(prefix='m2_')
         params.update(m2.make_params())
 
-        m = m1 + m2  # noqa: F841
+        _m = m1 + m2  # noqa: F841
 
         param_values = {name: p.value for name, p in params.items()}
         self.assertTrue(param_values['m1_intercept'] < -0.0)
@@ -718,7 +714,7 @@ class TestLinear(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(slope=5, intercept=2)
         self.guess = lambda: dict(slope=10, intercept=6)
         self.model_constructor = models.LinearModel
-        super(TestLinear, self).setUp()
+        super().setUp()
 
 
 class TestParabolic(CommonTests, unittest.TestCase):
@@ -727,7 +723,7 @@ class TestParabolic(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(a=5, b=2, c=8)
         self.guess = lambda: dict(a=1, b=6, c=3)
         self.model_constructor = models.ParabolicModel
-        super(TestParabolic, self).setUp()
+        super().setUp()
 
 
 class TestPolynomialOrder2(CommonTests, unittest.TestCase):
@@ -737,7 +733,7 @@ class TestPolynomialOrder2(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(c1=1, c2=6, c0=3)
         self.model_constructor = models.PolynomialModel
         self.args = (2,)
-        super(TestPolynomialOrder2, self).setUp()
+        super().setUp()
 
 
 class TestPolynomialOrder3(CommonTests, unittest.TestCase):
@@ -747,7 +743,7 @@ class TestPolynomialOrder3(CommonTests, unittest.TestCase):
         self.guess = lambda: dict(c3=1, c1=1, c2=6, c0=3)
         self.model_constructor = models.PolynomialModel
         self.args = (3,)
-        super(TestPolynomialOrder3, self).setUp()
+        super().setUp()
 
 
 class TestConstant(CommonTests, unittest.TestCase):
@@ -755,7 +751,7 @@ class TestConstant(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(c=5)
         self.guess = lambda: dict(c=2)
         self.model_constructor = models.ConstantModel
-        super(TestConstant, self).setUp()
+        super().setUp()
 
     def check_skip_independent_vars(self):
         raise pytest.skip("ConstantModel has not independent_vars.")
@@ -766,7 +762,7 @@ class TestPowerlaw(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(amplitude=5, exponent=3)
         self.guess = lambda: dict(amplitude=2, exponent=8)
         self.model_constructor = models.PowerLawModel
-        super(TestPowerlaw, self).setUp()
+        super().setUp()
 
 
 class TestExponential(CommonTests, unittest.TestCase):
@@ -774,7 +770,7 @@ class TestExponential(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(amplitude=5, decay=3)
         self.guess = lambda: dict(amplitude=2, decay=8)
         self.model_constructor = models.ExponentialModel
-        super(TestExponential, self).setUp()
+        super().setUp()
 
 
 class TestComplexConstant(CommonTests, unittest.TestCase):
@@ -782,7 +778,7 @@ class TestComplexConstant(CommonTests, unittest.TestCase):
         self.true_values = lambda: dict(re=5, im=5)
         self.guess = lambda: dict(re=2, im=2)
         self.model_constructor = models.ComplexConstantModel
-        super(TestComplexConstant, self).setUp()
+        super().setUp()
 
 
 class TestExpression(CommonTests, unittest.TestCase):
@@ -792,7 +788,7 @@ class TestExpression(CommonTests, unittest.TestCase):
         self.expression = "off_c + amp_c * exp(-x/x0)"
         self.model_constructor = (
             lambda *args, **kwargs: models.ExpressionModel(self.expression, *args, **kwargs))
-        super(TestExpression, self).setUp()
+        super().setUp()
 
     def test_composite_with_expression(self):
         expression_model = models.ExpressionModel("exp(-x/x0)", name='exp')

@@ -32,7 +32,7 @@ import lmfit
 
 def linear_resonator(f, f_0, Q, Q_e_real, Q_e_imag):
     Q_e = Q_e_real + 1j*Q_e_imag
-    return (1 - (Q * Q_e**-1 / (1 + 2j * Q * (f - f_0) / f_0)))
+    return 1 - (Q * Q_e**-1 / (1 + 2j * Q * (f - f_0) / f_0))
 
 
 ###############################################################################
@@ -43,7 +43,7 @@ class ResonatorModel(lmfit.model.Model):
 
     def __init__(self, *args, **kwargs):
         # pass in the defining equation so the user doesn't have to later.
-        super(ResonatorModel, self).__init__(linear_resonator, *args, **kwargs)
+        super().__init__(linear_resonator, *args, **kwargs)
 
         self.set_param_hint('Q', min=0)  # Enforce Q is positive
 
