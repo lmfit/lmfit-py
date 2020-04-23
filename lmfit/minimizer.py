@@ -25,8 +25,9 @@ from numpy.dual import inv
 from numpy.linalg import LinAlgError
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
-from scipy.optimize import differential_evolution, least_squares
+from scipy.optimize import differential_evolution
 from scipy.optimize import dual_annealing as scipy_dual_annealing
+from scipy.optimize import least_squares
 from scipy.optimize import leastsq as scipy_leastsq
 from scipy.optimize import minimize as scipy_minimize
 from scipy.optimize import shgo as scipy_shgo
@@ -35,7 +36,6 @@ from scipy.sparse.linalg import LinearOperator
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
 from scipy.version import version as scipy_version
-import six
 import uncertainties
 
 from ._ampgo import ampgo
@@ -144,8 +144,6 @@ class MinimizerException(Exception):
 class AbortFitException(MinimizerException):
     """Raised when a fit is aborted by the user."""
 
-    pass
-
 
 SCALAR_METHODS = {'nelder': 'Nelder-Mead',
                   'powell': 'Powell',
@@ -234,7 +232,7 @@ def reduce_cauchylogpdf(r):
     return -cauchy_dist.logpdf(r).sum()
 
 
-class MinimizerResult(object):
+class MinimizerResult:
     r"""The results of a minimization.
 
     Minimization results include data such as status and error messages,
@@ -302,6 +300,7 @@ class MinimizerResult(object):
         Pretty_print() representation of candidates from the `brute` method.
 
     """
+
     def __init__(self, **kws):
         for key, val in kws.items():
             setattr(self, key, val)
@@ -375,7 +374,7 @@ class MinimizerResult(object):
                                     min_correl=min_correl)
 
 
-class Minimizer(object):
+class Minimizer:
     """A general minimizer for curve fitting and optimization."""
 
     _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
@@ -721,7 +720,7 @@ class Minimizer(object):
         #    2. string starting with 'neglogc' or 'negent'
         #    3. sum of squares
         if not callable(self.reduce_fcn):
-            if isinstance(self.reduce_fcn, six.string_types):
+            if isinstance(self.reduce_fcn, str):
                 if self.reduce_fcn.lower().startswith('neglogc'):
                     self.reduce_fcn = reduce_cauchylogpdf
                 elif self.reduce_fcn.lower().startswith('negent'):
@@ -736,7 +735,6 @@ class Minimizer(object):
         removes AST compilations of constraint expressions.
 
         """
-        pass
 
     def _calculate_covariance_matrix(self, fvars):
         """Calculate the covariance matrix.
@@ -853,16 +851,16 @@ class Minimizer(object):
         Perform fit with any of the scalar minimization algorithms supported by
         :scipydoc:`optimize.minimize`. Default argument values are:
 
-        +-------------------------+-----------------+---------------------------------------+
-        | :meth:`scalar_minimize` | Default Value   | Description                           |
-        | arg                     |                 |                                       |
-        +=========================+=================+=======================================+
-        |   method                | ``Nelder-Mead`` | fitting method                        |
-        +-------------------------+-----------------+---------------------------------------+
-        |   tol                   | 1.e-7           | fitting and parameter tolerance       |
-        +-------------------------+-----------------+---------------------------------------+
-        |   hess                  | None            | Hessian of objective function         |
-        +-------------------------+-----------------+---------------------------------------+
+        +-------------------------+-----------------+-----------------------------------------------------+
+        | :meth:`scalar_minimize` | Default Value   | Description                                         |
+        | arg                     |                 |                                                     |
+        +=========================+=================+=====================================================+
+        |   method                | ``Nelder-Mead`` | fitting method                                      |
+        +-------------------------+-----------------+-----------------------------------------------------+
+        |   tol                   | 1.e-7           | fitting and parameter tolerance                     |
+        +-------------------------+-----------------+-----------------------------------------------------+
+        |   hess                  | None            | Hessian of objective function                       |
+        +-------------------------+-----------------+-----------------------------------------------------+
 
 
         Parameters
@@ -1436,7 +1434,6 @@ class Minimizer(object):
             result.acor = self.sampler.get_autocorr_time()
         except AutocorrError as e:
             print(str(e))
-            pass
         result.acceptance_fraction = self.sampler.acceptance_fraction
 
         # Calculate the residual with the "best fit" parameters
@@ -1505,8 +1502,8 @@ class Minimizer(object):
         """
         result = self.prepare_fit(params)
         result.method = 'least_squares'
-        replace_none = lambda x, sign: sign*np.inf if x is None else x
 
+        replace_none = lambda x, sign: sign*np.inf if x is None else x
         self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
 
         start_vals, lower_bounds, upper_bounds = [], [], []
@@ -1526,14 +1523,12 @@ class Minimizer(object):
             ret = None
 
         # note: upstream least_squares is actually returning
-        # "last evaluation", not "best result", but we do this
-        # here for consistency, and assuming it will be fixed.
-        # if not result.aborted:
-        if ret is not None:
-            result.nfev -= 1
-            result.residual = self.__residual(ret.x, False)
-
+        # "last evaluation", not "best result", do we do that
+        # here for consistency
+        result.nfev -= 1
+        result.residual = self.__residual(ret.x, False)
         result._calculate_statistics()
+
         if not result.aborted:
             for attr in ret:
                 setattr(result, attr, ret[attr])
@@ -1642,7 +1637,7 @@ class Minimizer(object):
             pass
 
         if not result.aborted:
-            _best, _cov, infodict, errmsg, ier = lsout
+            _best, _cov, _infodict, errmsg, ier = lsout
         else:
             _best = np.array([self.result.params[p].value
                               for p in self.result.var_names])
@@ -1673,8 +1668,6 @@ class Minimizer(object):
             result.message = 'One or more variable did not affect the fit.'
         elif ier == 5:
             result.message = self._err_max_evals % lskws['maxfev']
-        elif ier == -1:
-            pass
         else:
             result.message = 'Tolerance seems to be too small.'
 
