@@ -8,7 +8,6 @@ from numpy.testing import assert_allclose
 import pytest
 
 import lmfit
-from lmfit_testutils import assert_paramval
 
 
 @pytest.fixture
@@ -126,14 +125,10 @@ def test_parameter_set_value(parameter):
     changed_attribute_values = ('a', 5.0, True, -100.0, 100.0, None, 5.0, 1)
     assert_parameter_attributes(par, changed_attribute_values)
 
-
-def test_parameter_change_value():
-    """Test if value can be set to a value that was previous out of bounds"""
-    p = lmfit.Parameter("test", value=5, min=4, max=10)
-    assert_paramval(p, 5, tol=1.0e-2)
-
-    p.set(value=22, min=20, max=30)
-    assert_paramval(p, 22, tol=1.0e-2)
+    # check if set value works with new bounds, see issue#636
+    par.set(value=500.0, min=400, max=600)
+    changed_attribute_values2 = ('a', 500.0, True, 400.0, 600.0, None, 5.0, 1)
+    assert_parameter_attributes(par, changed_attribute_values2)
 
 
 def test_parameter_set_vary(parameter):
