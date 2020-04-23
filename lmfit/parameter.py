@@ -631,10 +631,6 @@ class Parameter:
             par.set(brute_step=0)     # removes brute_step
 
         """
-        if value is not None:
-            self.value = value
-            self.__set_expression('')
-
         if vary is not None:
             self.vary = vary
             if vary:
@@ -645,6 +641,12 @@ class Parameter:
 
         if max is not None:
             self.max = max
+
+        # need to set this after min and max, so that it will use new
+        # bounds in the setter for value
+        if value is not None:
+            self.value = value
+            self.__set_expression("")
 
         if expr is not None:
             self.__set_expression(expr)

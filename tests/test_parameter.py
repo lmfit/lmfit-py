@@ -125,6 +125,11 @@ def test_parameter_set_value(parameter):
     changed_attribute_values = ('a', 5.0, True, -100.0, 100.0, None, 5.0, 1)
     assert_parameter_attributes(par, changed_attribute_values)
 
+    # check if set value works with new bounds, see issue#636
+    par.set(value=500.0, min=400, max=600)
+    changed_attribute_values2 = ('a', 500.0, True, 400.0, 600.0, None, 5.0, 1)
+    assert_parameter_attributes(par, changed_attribute_values2)
+
 
 def test_parameter_set_vary(parameter):
     """Test the Parameter.set() function with vary."""
