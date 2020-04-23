@@ -23,15 +23,15 @@ def test_stepmodel_linear():
 
     out = mod.fit(y, pars, x=x)
 
-    assert(out.nfev > 5)
-    assert(out.nvarys == 4)
-    assert(out.chisqr > 1)
-    assert(out.params['c'].value > 3)
-    assert(out.params['center'].value > 1)
-    assert(out.params['center'].value < 4)
-    assert(out.params['sigma'].value > 0.5)
-    assert(out.params['sigma'].value < 3.5)
-    assert(out.params['amplitude'].value > 50)
+    assert out.nfev > 5
+    assert out.nvarys == 4
+    assert out.chisqr > 1
+    assert out.params['c'].value > 3
+    assert out.params['center'].value > 1
+    assert out.params['center'].value < 4
+    assert out.params['sigma'].value > 0.5
+    assert out.params['sigma'].value < 3.5
+    assert out.params['amplitude'].value > 50
 
 
 def test_stepmodel_erf():
@@ -44,12 +44,12 @@ def test_stepmodel_erf():
 
     out = mod.fit(y, pars, x=x)
 
-    assert(out.nfev > 5)
-    assert(out.nvarys == 4)
-    assert(out.chisqr > 1)
-    assert(out.params['c'].value > 3)
-    assert(out.params['center'].value > 1)
-    assert(out.params['center'].value < 4)
-    assert(out.params['amplitude'].value > 50)
-    assert(out.params['sigma'].value > 0.2)
-    assert(out.params['sigma'].value < 1.5)
+    assert out.nfev > 5
+    assert out.nvarys == 4
+    assert out.chisqr > 1
+    assert out.params['c'].value > 3
+    assert out.params['center'].value > 1
+    assert out.params['center'].value < 4
+    assert out.params['amplitude'].value > 50
+    assert out.params['sigma'].value > 0.2
+    assert out.params['sigma'].value < 1.5

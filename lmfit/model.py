@@ -5,7 +5,6 @@ from functools import wraps
 import inspect
 import json
 import operator
-import sys
 import warnings
 
 import numpy as np
@@ -37,7 +36,7 @@ def _align(var, mask, data):
 
 
 try:
-    import matplotlib  # noqa: F401
+    from matplotlib import pyplot as plt
     _HAS_MATPLOTLIB = True
 except Exception:
     _HAS_MATPLOTLIB = False
@@ -436,7 +435,6 @@ class Model:
 
     def _set_paramhints_prefix(self):
         """Reset parameter hints for prefix: intended to be overwritten."""
-        pass
 
     @property
     def param_names(self):
@@ -467,7 +465,7 @@ class Model:
             for name, defval in self.func.kwargs:
                 kw_args[name] = defval
         # 2. modern, best-practice approach: use inspect.signature
-        elif sys.version_info > (3, 4):
+        else:
             pos_args = []
             kw_args = {}
             keywords_ = None
@@ -482,15 +480,6 @@ class Model:
                         kw_args[fnam] = fpar.default
                 elif fpar.kind == fpar.VAR_POSITIONAL:
                     raise ValueError("varargs '*%s' is not supported" % fnam)
-        # 3. Py2 compatible approach
-        else:
-            argspec = inspect.getargspec(self.func)
-            keywords_ = argspec.keywords
-            pos_args = argspec.args
-            kw_args = {}
-            if argspec.defaults is not None:
-                for val in reversed(argspec.defaults):
-                    kw_args[pos_args.pop()] = val
         # inspection done
 
         self._func_haskeywords = keywords_ is not None
@@ -2046,7 +2035,6 @@ class ModelResult(Minimizer):
         ModelResult.plot_residuals : Plot the fit residuals using matplotlib.
 
         """
-        from matplotlib import pyplot as plt
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:

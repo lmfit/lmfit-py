@@ -28,10 +28,10 @@ def test_bounded_jacobian():
 
     assert_paramval(out0.params['x0'], 1.2243, tol=0.02)
     assert_paramval(out0.params['x1'], 1.5000, tol=0.02)
-    assert(jac_count == 0)
+    assert jac_count == 0
 
     out1 = minimize(resid, pars, Dfun=jac)
 
     assert_paramval(out1.params['x0'], 1.2243, tol=0.02)
     assert_paramval(out1.params['x1'], 1.5000, tol=0.02)
-    assert(jac_count > 5)
+    assert jac_count > 5

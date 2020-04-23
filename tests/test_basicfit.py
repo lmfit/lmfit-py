@@ -31,9 +31,9 @@ def test_basic():
     # do fit, here with leastsq model
     result = minimize(fcn2min, params, args=(x, data))
 
-    assert(result.nfev > 5)
-    assert(result.nfev < 500)
-    assert(result.chisqr > 1)
-    assert(result.nvarys == 4)
+    assert result.nfev > 5
+    assert result.nfev < 500
+    assert result.chisqr > 1
+    assert result.nvarys == 4
     assert_paramval(result.params['amp'], 5.03, tol=0.05)
     assert_paramval(result.params['omega'], 2.0, tol=0.05)

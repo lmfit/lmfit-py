@@ -45,7 +45,7 @@ def test_check_ast_errors():
         pars.add('par1', expr='2.0*par2')
 
 
-def test_parameters_init(parameters):
+def test_parameters_init():
     """Test for initialization of the Parameters class"""
     ast_int = asteval.Interpreter()
     pars = lmfit.Parameters(asteval=ast_int, usersyms={'test': np.sin})
@@ -74,7 +74,7 @@ def test_parameters_copy(parameters):
 
 def test_parameters_deepcopy(parameters):
     """Tests for deepcopy of a Parameters class."""
-    pars, exp_attr_values_A, exp_attr_values_B = parameters
+    pars, _, _ = parameters
 
     deepcopy_pars = deepcopy(pars)
     assert isinstance(deepcopy_pars, lmfit.Parameters)
@@ -124,7 +124,7 @@ def test_parameters_update(parameters):
 
 def test_parameters__setitem__(parameters):
     """Tests for __setitem__ method of a Parameters class."""
-    pars, exp_attr_values_A, exp_attr_values_B = parameters
+    pars, _, exp_attr_values_B = parameters
 
     msg = r"'10' is not a valid Parameters name"
     with pytest.raises(KeyError, match=msg):
@@ -185,7 +185,7 @@ def test_parameters__iadd__(parameters):
     assert_parameter_attributes(pars['d'], exp_attr_values_D)
 
 
-def test_parameters_add_with_symtable(parameters):
+def test_parameters_add_with_symtable():
     """Regression test for GitHub Issue 607."""
     pars1 = lmfit.Parameters()
     pars1.add('a', value=1.0)

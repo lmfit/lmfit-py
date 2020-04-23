@@ -25,7 +25,7 @@ def decay(t, N, tau):
 # The parameters are in no particular order. We'll need some example data. I
 # will use ``N=7`` and ``tau=3``, and add a little noise.
 t = np.linspace(0, 5, num=1000)
-data = decay(t, 7, 3) + np.random.randn(*t.shape)
+data = decay(t, 7, 3) + np.random.randn(t.size)
 
 ###############################################################################
 # **Simplest Usage**

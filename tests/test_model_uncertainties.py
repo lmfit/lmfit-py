@@ -74,8 +74,8 @@ def test_gauss_sigmalevel():
     dely_sigma2 = ret.eval_uncertainty(sigma=2)
     dely_sigma3 = ret.eval_uncertainty(sigma=3)
 
-    assert(dely_sigma3.mean() > 1.5*dely_sigma2.mean())
-    assert(dely_sigma2.mean() > 1.5*dely_sigma1.mean())
+    assert dely_sigma3.mean() > 1.5*dely_sigma2.mean()
+    assert dely_sigma2.mean() > 1.5*dely_sigma1.mean()
 
 
 def test_gauss_noiselevel():

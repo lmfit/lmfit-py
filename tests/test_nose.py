@@ -2,8 +2,8 @@ import unittest
 
 import numpy as np
 from numpy import pi
-from numpy.testing import (assert_, assert_allclose, assert_almost_equal,
-                           assert_equal, dec)
+from numpy.testing import (assert_allclose, assert_almost_equal, assert_equal,
+                           dec)
 import pytest
 from uncertainties import ufloat
 
@@ -15,12 +15,12 @@ from lmfit.minimizer import (HAS_EMCEE, SCALAR_METHODS, MinimizerResult,
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
-    assert(err < sig * para.stderr)
+    assert err < sig * para.stderr
 
 
 def check_wo_stderr(para, real_val, sig=0.1):
     err = abs(para.value - real_val)
-    assert(err < sig)
+    assert err < sig
 
 
 def check_paras(para_fit, para_real, sig=3):
@@ -79,7 +79,7 @@ def test_lbfgsb():
         model = amp * np.sin(shift + x / per) * np.exp(-x * x * decay * decay)
         if data is None:
             return model
-        return (model - data)
+        return model - data
 
     n = 2500
     xmin = 0.
@@ -150,7 +150,7 @@ def test_peakfit():
         model = g1 + g2
         if data is None:
             return model
-        return (model - data)
+        return model - data
 
     n = 601
     xmin = 0.
@@ -219,17 +219,17 @@ def test_scalar_minimize_has_no_uncertainties():
 
     mini = Minimizer(fcn2min, params, fcn_args=(x, data))
     out = mini.minimize()
-    assert_(np.isfinite(out.params['amp'].stderr))
+    assert np.isfinite(out.params['amp'].stderr)
     assert out.errorbars
     out2 = mini.minimize(method='nelder-mead')
-    assert_(out2.params['amp'].stderr is None)
-    assert_(out2.params['decay'].stderr is None)
-    assert_(out2.params['shift'].stderr is None)
-    assert_(out2.params['omega'].stderr is None)
-    assert_(out2.params['amp'].correl is None)
-    assert_(out2.params['decay'].correl is None)
-    assert_(out2.params['shift'].correl is None)
-    assert_(out2.params['omega'].correl is None)
+    assert out2.params['amp'].stderr is None
+    assert out2.params['decay'].stderr is None
+    assert out2.params['shift'].stderr is None
+    assert out2.params['omega'].stderr is None
+    assert out2.params['amp'].correl is None
+    assert out2.params['decay'].correl is None
+    assert out2.params['shift'].correl is None
+    assert out2.params['omega'].correl is None
     assert not out2.errorbars
 
 
@@ -282,7 +282,7 @@ def test_multidimensional_fit_GH205():
                                           np.cos(yv * lambda2))
 
     data = f(xv, yv, 0.3, 3)
-    assert_(data.ndim, 2)
+    assert data.ndim, 2
 
     def fcn2min(params, xv, yv, data):
         """model decaying sine wave, subtract data"""
@@ -414,12 +414,12 @@ class CommonMinimizerTest(unittest.TestCase):
     def test_nan_policy_function(self):
         a = np.array([0, 1, 2, 3, np.nan])
         pytest.raises(ValueError, _nan_policy, a)
-        assert_(np.isnan(_nan_policy(a, nan_policy='propagate')[-1]))
+        assert np.isnan(_nan_policy(a, nan_policy='propagate')[-1])
         assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
 
         a[-1] = np.inf
         pytest.raises(ValueError, _nan_policy, a)
-        assert_(np.isposinf(_nan_policy(a, nan_policy='propagate')[-1]))
+        assert np.isposinf(_nan_policy(a, nan_policy='propagate')[-1])
         assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
         assert_equal(_nan_policy(a, handle_inf=False), a)
 
@@ -516,11 +516,11 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # if you've run the sampler the Minimizer object should have a _lastpos
         # attribute
-        assert_(hasattr(self.mini, '_lastpos'))
+        assert hasattr(self.mini, '_lastpos')
 
         # now try and re-use sampler
         out2 = self.mini.emcee(steps=10, reuse_sampler=True)
-        assert_(out2.chain.shape == (35, 20, 4))
+        assert out2.chain.shape == (35, 20, 4)
 
         # you shouldn't be able to reuse the sampler if nvarys has changed.
         self.mini.params['amp'].vary = False
@@ -563,23 +563,23 @@ class CommonMinimizerTest(unittest.TestCase):
         except ImportError:
             return True
         out = self.mini.emcee(nwalkers=10, steps=20, burn=5, thin=2)
-        assert_(isinstance(out, MinimizerResult))
-        assert_(isinstance(out.flatchain, DataFrame))
+        assert isinstance(out, MinimizerResult)
+        assert isinstance(out.flatchain, DataFrame)
 
         # check that we can access the chains via parameter name
         # print( out.flatchain['amp'].shape[0],  200)
-        assert_(out.flatchain['amp'].shape[0] == 70)
+        assert out.flatchain['amp'].shape[0] == 70
         assert out.errorbars
-        assert_(np.isfinite(out.params['amp'].correl['period']))
+        assert np.isfinite(out.params['amp'].correl['period'])
 
         # the lnprob array should be the same as the chain size
-        assert_(np.size(out.chain)//out.nvarys == np.size(out.lnprob))
+        assert np.size(out.chain)//out.nvarys == np.size(out.lnprob)
 
         # test chain output shapes
         print(out.lnprob.shape, out.chain.shape, out.flatchain.shape)
-        assert_(out.lnprob.shape == (7, 10))
-        assert_(out.chain.shape == (7, 10, 4))
-        assert_(out.flatchain.shape == (70, 4))
+        assert out.lnprob.shape == (7, 10)
+        assert out.chain.shape == (7, 10, 4)
+        assert out.flatchain.shape == (70, 4)
 
     @dec.slow
     def test_emcee_float(self):
@@ -642,4 +642,4 @@ def residual_for_multiprocessing(pars, x, data=None):
     model = amp*np.sin(shift + x/per) * np.exp(-x*x*decay*decay)
     if data is None:
         return model
-    return (model - data)
+    return model - data
