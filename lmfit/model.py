@@ -864,7 +864,7 @@ class Model:
 
     def fit(self, data, params=None, weights=None, method='leastsq',
             iter_cb=None, scale_covar=True, verbose=False, fit_kws=None,
-            nan_policy=None, calc_covar=True, **kwargs):
+            nan_policy=None, calc_covar=True, max_nfev=None, **kwargs):
         """Fit the model to the data using the supplied Parameters.
 
         Parameters
@@ -894,6 +894,8 @@ class Model:
             Whether to calculate the covariance matrix (default is True) for
             solvers other than `leastsq` and `least_squares`. Requires the
             `numdifftools` package to be installed.
+        max_nfev: int or None
+            Maximum number of function evaluations.  Default varies with solver.
         **kwargs: optional
             Arguments to pass to the  model function, possibly overriding
             params.
@@ -1006,7 +1008,7 @@ class Model:
         output = ModelResult(self, params, method=method, iter_cb=iter_cb,
                              scale_covar=scale_covar, fcn_kws=kwargs,
                              nan_policy=self.nan_policy, calc_covar=calc_covar,
-                             **fit_kws)
+                             max_nfev=max_nfev, **fit_kws)
         output.fit(data=data, weights=weights)
         output.components = self.components
         return output
@@ -1277,7 +1279,7 @@ class ModelResult(Minimizer):
     def __init__(self, model, params, data=None, weights=None,
                  method='leastsq', fcn_args=None, fcn_kws=None,
                  iter_cb=None, scale_covar=True, nan_policy='raise',
-                 calc_covar=True, **fit_kws):
+                 calc_covar=True, max_nfev=None, **fit_kws):
         """
         Parameters
         ----------
@@ -1305,6 +1307,8 @@ class ModelResult(Minimizer):
             Whether to calculate the covariance matrix (default is True) for
             solvers other than `leastsq` and `least_squares`. Requires the
             `numdifftools` package to be installed.
+        max_nfev: int or None
+            Maximum number of function evaluations.  Default varies with solver.
         **fit_kws : optional
             Keyword arguments to send to minimization routine.
 
@@ -1316,9 +1320,11 @@ class ModelResult(Minimizer):
         self.ci_out = None
         self.user_options = None
         self.init_params = deepcopy(params)
-        Minimizer.__init__(self, model._residual, params, fcn_args=fcn_args,
-                           fcn_kws=fcn_kws, iter_cb=iter_cb, nan_policy=nan_policy,
-                           scale_covar=scale_covar, calc_covar=calc_covar, **fit_kws)
+        Minimizer.__init__(self, model._residual, params,
+                           fcn_args=fcn_args, fcn_kws=fcn_kws,
+                           iter_cb=iter_cb, nan_policy=nan_policy,
+                           scale_covar=scale_covar, calc_covar=calc_covar,
+                           max_nfev=max_nfev, **fit_kws)
 
     def fit(self, data=None, params=None, weights=None, method=None,
             nan_policy=None, **kwargs):
