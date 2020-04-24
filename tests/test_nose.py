@@ -12,6 +12,12 @@ from lmfit.lineshapes import gaussian
 from lmfit.minimizer import (HAS_EMCEE, SCALAR_METHODS, MinimizerResult,
                              _nan_policy)
 
+try:
+    import numdifftools  # noqa: F401
+    HAS_NUMDIFFTOOLS = True
+except ImportError:
+    HAS_NUMDIFFTOOLS = False
+
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
@@ -222,16 +228,11 @@ def test_scalar_minimize_has_no_uncertainties():
     assert np.isfinite(out.params['amp'].stderr)
     assert out.errorbars
     out2 = mini.minimize(method='nelder-mead')
-    assert out2.params['amp'].stderr is None
-    assert out2.params['decay'].stderr is None
-    assert out2.params['shift'].stderr is None
-    assert out2.params['omega'].stderr is None
-    assert out2.params['amp'].correl is None
-    assert out2.params['decay'].correl is None
-    assert out2.params['shift'].correl is None
-    assert out2.params['omega'].correl is None
+    for par in ('amp', 'decay', 'shift', 'omega'):
+        assert_(out2.params['decay'].stderr is not None)
+        assert_(out2.params['shift'].stderr is not None)
+        assert_(out2.params['omega'].stderr is not None)
     assert not out2.errorbars
-
 
 def test_scalar_minimize_reduce_fcn():
     # test that the reduce_fcn option for scalar_minimize
