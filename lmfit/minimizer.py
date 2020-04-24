@@ -1520,13 +1520,14 @@ class Minimizer:
                                 max_nfev=2*self.max_nfev, **kws)
             result.residual = ret.fun
         except AbortFitException:
-            ret = None
+            pass
 
         # note: upstream least_squares is actually returning
         # "last evaluation", not "best result", do we do that
         # here for consistency
-        result.nfev -= 1
-        result.residual = self.__residual(ret.x, False)
+        if not result.aborted:
+            result.nfev -= 1
+            result.residual = self.__residual(ret.x, False)
         result._calculate_statistics()
 
         if not result.aborted:
