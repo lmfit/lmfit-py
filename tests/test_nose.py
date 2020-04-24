@@ -228,11 +228,13 @@ def test_scalar_minimize_has_no_uncertainties():
     assert np.isfinite(out.params['amp'].stderr)
     assert out.errorbars
     out2 = mini.minimize(method='nelder-mead')
+
     for par in ('amp', 'decay', 'shift', 'omega'):
-        assert_(out2.params['decay'].stderr is not None)
-        assert_(out2.params['shift'].stderr is not None)
-        assert_(out2.params['omega'].stderr is not None)
-    assert not out2.errorbars
+        assert HAS_NUMDIFFTOOLS == (out2.params[par].stderr is not None)
+        assert HAS_NUMDIFFTOOLS == (out2.params[par].correl is not None)
+
+    assert HAS_NUMDIFFTOOLS == out2.errorbars
+
 
 def test_scalar_minimize_reduce_fcn():
     # test that the reduce_fcn option for scalar_minimize
