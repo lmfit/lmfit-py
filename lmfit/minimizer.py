@@ -267,6 +267,8 @@ class MinimizerResult:
         True if uncertainties were estimated, otherwise False.
     message : str
         Message about fit success.
+    call_kws : dict
+        Dict of keyword arguments sent to underlying solver method.
     ier : int
         Integer error value from :scipydoc:`optimize.leastsq` (`leastsq` only).
     lmdif_message : str

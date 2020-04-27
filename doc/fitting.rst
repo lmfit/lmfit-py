@@ -268,6 +268,8 @@ Goodness-of-Fit Statistics
 +----------------------+----------------------------------------------------------------------------+
 |    init_vals         | list of initial values for variable parameters                             |
 +----------------------+----------------------------------------------------------------------------+
+|    call_kws          | dict of keyword arguments sent to underlying solver                        |
++----------------------+----------------------------------------------------------------------------+
 
 Note that the calculation of chi-square and reduced chi-square assume
 that the returned residual function is scaled properly to the
