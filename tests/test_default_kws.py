@@ -13,12 +13,12 @@ def test_default_inputs_gauss():
 
     g = GaussianModel()
 
-    fit_option1 = {'max_nfev': 5000, 'xtol': 1e-2}
+    fit_option1 = {'xtol': 1e-2}
     result1 = g.fit(y, x=x, amplitude=1, center=0, sigma=0.5,
-                    fit_kws=fit_option1)
+                    max_nfev=5000, fit_kws=fit_option1)
 
-    fit_option2 = {'max_nfev': 5000, 'xtol': 1e-6}
+    fit_option2 = {'xtol': 1e-6}
     result2 = g.fit(y, x=x, amplitude=1, center=0, sigma=0.5,
-                    fit_kws=fit_option2)
+                    max_nfev=5000, fit_kws=fit_option2)
 
     assert result1.values != result2.values
