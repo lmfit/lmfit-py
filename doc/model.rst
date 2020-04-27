@@ -726,6 +726,10 @@ comparing different models, including ``chisqr``, ``redchi``, ``aic``, and ``bic
 
    String naming fitting method for :func:`~lmfit.minimizer.minimize`.
 
+.. attribute::  call_kws
+
+   Dict of keyword arguments actually send to underlying solver with :func:`~lmfit.minimizer.minimize`.
+
 .. attribute::  model
 
    Instance of :class:`Model` used for model.
