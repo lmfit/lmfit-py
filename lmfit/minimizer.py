@@ -364,6 +364,7 @@ class MinimizerResult:
             self.nfree = 1
         self.redchi = self.chisqr / max(1, self.nfree)
         # this is -2*loglikelihood
+        self.chisqr = max(self.chisqr, 1.e-250*self.ndata)
         _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
         self.aic = _neg2_log_likel + 2 * self.nvarys
         self.bic = _neg2_log_likel + np.log(self.ndata) * self.nvarys
