@@ -267,6 +267,8 @@ class MinimizerResult:
         True if uncertainties were estimated, otherwise False.
     message : str
         Message about fit success.
+    call_kws : dict
+        Dict of keyword arguments sent to underlying solver method.
     ier : int
         Integer error value from :scipydoc:`optimize.leastsq` (`leastsq` only).
     lmdif_message : str
@@ -364,6 +366,7 @@ class MinimizerResult:
             self.nfree = 1
         self.redchi = self.chisqr / max(1, self.nfree)
         # this is -2*loglikelihood
+        self.chisqr = max(self.chisqr, 1.e-250*self.ndata)
         _neg2_log_likel = self.ndata * np.log(self.chisqr / self.ndata)
         self.aic = _neg2_log_likel + 2 * self.nvarys
         self.bic = _neg2_log_likel + np.log(self.ndata) * self.nvarys
@@ -697,6 +700,7 @@ class Minimizer:
         result.init_vals = []
         result.params.update_constraints()
         result.nfev = 0
+        result.call_kws = {}
         result.errorbars = False
         result.aborted = False
         for name, par in self.result.params.items():
@@ -971,12 +975,15 @@ class Minimizer:
                 if k in kwargs:
                     kwargs[k] = v
 
+            fmin_kws = kwargs
+            result.call_kws = fmin_kws
             try:
-                ret = differential_evolution(self.penalty, _bounds, **kwargs)
+                ret = differential_evolution(self.penalty, _bounds, **fmin_kws)
             except AbortFitException:
                 pass
 
         else:
+            result.call_kws = fmin_kws
             try:
                 ret = scipy_minimize(self.penalty, variables, **fmin_kws)
             except AbortFitException:
@@ -1430,6 +1437,7 @@ class Minimizer:
         result.errorbars = True
         result.nvarys = len(result.var_names)
         result.nfev = nwalkers*steps
+
         try:
             result.acor = self.sampler.get_autocorr_time()
         except AutocorrError as e:
@@ -1513,6 +1521,7 @@ class Minimizer:
             lower_bounds.append(replace_none(par.min, -1))
             upper_bounds.append(replace_none(par.max, 1))
 
+        result.call_kws = kws
         try:
             ret = least_squares(self.__residual, start_vals,
                                 bounds=(lower_bounds, upper_bounds),
@@ -1631,7 +1640,7 @@ class Minimizer:
         # suppress runtime warnings during fit and error analysis
         orig_warn_settings = np.geterr()
         np.seterr(all='ignore')
-
+        result.call_kws = lskws
         try:
             lsout = scipy_leastsq(self.__residual, variables, **lskws)
         except AbortFitException:
@@ -1722,7 +1731,7 @@ class Minimizer:
         basinhopping_kws.update(kws)
 
         x0 = result.init_vals
-
+        result.call_kws = basinhopping_kws
         try:
             ret = scipy_basinhopping(self.penalty, x0, **basinhopping_kws)
         except AbortFitException:
@@ -1829,7 +1838,7 @@ class Minimizer:
         result = self.prepare_fit(params=params)
         result.method = 'brute'
 
-        brute_kws = dict(full_output=1, finish=None, disp=False)
+        brute_kws = dict(full_output=1, finish=None, disp=False, Ns=Ns)
         # keyword 'workers' is introduced in SciPy v1.3
         # FIXME: remove this check after updating the requirement >= 1.3
         major, minor, _micro = scipy_version.split('.', 2)
@@ -1868,9 +1877,9 @@ class Minimizer:
                                  'least an initial value and brute_step for '
                                  'parameter "{}".'.format(result.var_names[i]))
             ranges.append(par_range)
-
+        result.call_kws = brute_kws
         try:
-            ret = scipy_brute(self.penalty, tuple(ranges), Ns=Ns, **brute_kws)
+            ret = scipy_brute(self.penalty, tuple(ranges), **brute_kws)
         except AbortFitException:
             pass
 
@@ -2000,7 +2009,7 @@ class Minimizer:
 
         values = result.init_vals
         result.method = "ampgo, with {} as local solver".format(ampgo_kws['local'])
-
+        result.call_kws = ampgo_kws
         try:
             ret = ampgo(self.penalty, values, **ampgo_kws)
         except AbortFitException:
@@ -2074,7 +2083,7 @@ class Minimizer:
         varying = np.asarray([par.vary for par in self.params.values()])
         bounds = np.asarray([(par.min, par.max) for par in
                              self.params.values()])[varying]
-
+        result.call_kws = shgo_kws
         try:
             ret = scipy_shgo(self.penalty, bounds, **shgo_kws)
         except AbortFitException:
@@ -2149,7 +2158,7 @@ class Minimizer:
         if not np.all(np.isfinite(bounds)):
             raise ValueError('dual_annealing requires finite bounds for all'
                              ' varying parameters')
-
+        result.call_kws = da_kws
         try:
             ret = scipy_dual_annealing(self.penalty, bounds, **da_kws)
         except AbortFitException:
