@@ -52,7 +52,7 @@ Additional patches, bug fixes, and suggestions have come from Faustin
 Carter, Christoph Deil, Francois Boulogne, Thomas Caswell, Colin Brosseau,
 nmearl, Gustavo Pasquevich, Clemens Prescher, LiCode, Ben Gamari, Yoav
 Roam, Alexander Stark, Alexandre Beelen, Andrey Aristov, Nicholas Zobrist,
-Ethan Welty, Julius Zimmermann, and many others.
+Ethan Welty, Julius Zimmermann, Mark Dean, Arun Persaud, and many others.
 
 The lmfit code obviously depends on, and owes a very large debt to the code
 in scipy.optimize.  Several discussions on the SciPy-user and lmfit mailing

@@ -14,10 +14,10 @@ See LICENSE for more complete authorship information and license.
 """
 from collections import namedtuple
 from copy import deepcopy
+import inspect
 import multiprocessing
 import numbers
 import warnings
-import inspect
 
 import numpy as np
 from numpy import ndarray, ones_like, sqrt
@@ -77,11 +77,11 @@ except ImportError:
 # define the namedtuple here so pickle will work with the MinimizerResult
 Candidate = namedtuple('Candidate', ['params', 'score'])
 
-MAXEVAL_Warning = """ignoring `%s` argument to `%s()`. Use `max_nfev` instead."""
+MAXEVAL_Warning = "ignoring `%s` argument to `%s()`. Use `max_nfev` instead."
 
 
 def thisfuncname():
-    """Return name of calling function"""
+    """Return the name of calling function."""
     try:
         return inspect.stack()[1].function
     except AttributeError:
@@ -268,7 +268,7 @@ class MinimizerResult:
     message : str
         Message about fit success.
     call_kws : dict
-        Dict of keyword arguments sent to underlying solver method.
+        Keyword arguments sent to underlying solver.
     ier : int
         Integer error value from :scipydoc:`optimize.leastsq` (`leastsq` only).
     lmdif_message : str
@@ -380,9 +380,9 @@ class MinimizerResult:
 class Minimizer:
     """A general minimizer for curve fitting and optimization."""
 
-    _err_nonparam = ("params must be a minimizer.Parameters() instance or list "
-                     "of Parameters()")
-    _err_max_evals = ("Too many function calls (max set to %i)!  Use:"
+    _err_nonparam = ("params must be a minimizer.Parameters() instance or"
+                     " list of Parameters()")
+    _err_max_evals = ("Too many function calls (max set to %i)! Use:"
                       " minimize(func, params, ..., max_nfev=NNN)"
                       " to increase this maximum.")
 
@@ -405,9 +405,9 @@ class Minimizer:
             Positional arguments to pass to `userfcn`.
         fcn_kws : dict, optional
             Keyword arguments to pass to `userfcn`.
-        max_nfev: int or None
-           Maximum number of function evaluations. The default value will
-           change with fitting method.
+        max_nfev: int or None, optional
+            Maximum number of function evaluations (default is None). The
+            default value depends on the fitting method.
         iter_cb : callable, optional
             Function to be called at each fit iteration. This function should
             have the signature::
@@ -509,11 +509,12 @@ class Minimizer:
         self.nan_policy = nan_policy
 
     def set_max_nfev(self, max_nfev=None, default_value=100000):
-        """
-        Set maximum number of function evaluations, possibly setting
-        to the provided default_value
+        """Set maximum number of function evaluations.
+
+        If `max_nfev` is None, use the provided `default_value`.
 
         >>> self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
+
         """
         if max_nfev is not None:
             self.max_nfev = max_nfev
@@ -889,10 +890,10 @@ class Minimizer:
             - 'differential_evolution'
 
         params : :class:`~lmfit.parameter.Parameters`, optional
-           Parameters to use as starting point.
-        max_nfev: int or None
-           Maximum number of function evaluations.  Defaults to 1000*(nvars+1)
-           where nvars is the number of variable parameters.
+            Parameters to use as starting point.
+        max_nfev: int or None, optional
+            Maximum number of function evaluations. Defaults to 1000*(nvars+1),
+            where nvars is the number of variable parameters.
         **kws : dict, optional
             Minimizer options pass to :scipydoc:`optimize.minimize`.
 
@@ -904,7 +905,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-           Return value changed to :class:`MinimizerResult`.
+            Return value changed to :class:`MinimizerResult`.
 
         Notes
         -----
@@ -1490,10 +1491,10 @@ class Minimizer:
         Parameters
         ----------
         params : :class:`~lmfit.parameter.Parameters`, optional
-           Parameters to use as starting point.
-        max_nfev: int or None
-           Maximum number of function evaluations.  Defaults to 1000*(nvars+1)
-           where nvars is the number of variable parameters.
+            Parameters to use as starting point.
+        max_nfev: int or None, optional
+            Maximum number of function evaluations. Defaults to 1000*(nvars+1),
+            where nvars is the number of variable parameters.
         **kws : dict, optional
             Minimizer options to pass to :scipydoc:`optimize.least_squares`.
 
@@ -1505,7 +1506,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-           Return value changed to :class:`MinimizerResult`.
+            Return value changed to :class:`MinimizerResult`.
 
         """
         result = self.prepare_fit(params)
@@ -1595,10 +1596,10 @@ class Minimizer:
         Parameters
         ----------
         params : :class:`~lmfit.parameter.Parameters`, optional
-           Parameters to use as starting point.
-        max_nfev: int or None
-           Maximum number of function evaluations.  Defaults to 2000*(nvars+1)
-           where nvars is the number of variable parameters.
+            Parameters to use as starting point.
+        max_nfev: int or None, optional
+            Maximum number of function evaluations. Defaults to 2000*(nvars+1),
+            where nvars is the number of variable parameters.
         **kws : dict, optional
             Minimizer options to pass to :scipydoc:`optimize.leastsq`.
 
@@ -1610,7 +1611,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-           Return value changed to :class:`MinimizerResult`.
+            Return value changed to :class:`MinimizerResult`.
 
         """
         result = self.prepare_fit(params=params)
@@ -1986,7 +1987,7 @@ class Minimizer:
 
 
         Notes
-        ----
+        -----
         The Python implementation was written by Andrea Gavana in 2014
         (http://infinity77.net/global_optimization/index.html).
 
@@ -2051,8 +2052,10 @@ class Minimizer:
         params : :class:`~lmfit.parameter.Parameters`, optional
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
-        max_nfev: int (default is None)
-            Maximum number of total function evaluations.
+        max_nfev: int or None, optional
+            Maximum number of function evaluations. Defaults to
+            1e6*(result.nvarys+1), where nvars is the number of variable
+            parameters.
         **kws : dict, optional
             Minimizer options to pass to the SHGO algorithm.
 
@@ -2121,8 +2124,8 @@ class Minimizer:
         params : :class:`~lmfit.parameter.Parameters`, optional
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
-        max_nfev: int or None
-           Maximum number of function evaluations. Default is 1e7.
+        max_nfev: int or None, optional
+            Maximum number of function evaluations. Defaults to 1e7.
         **kws : dict, optional
             Minimizer options to pass to the dual_annealing algorithm.
 
@@ -2242,7 +2245,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-           Return value changed to :class:`MinimizerResult`.
+            Return value changed to :class:`MinimizerResult`.
 
         """
         function = self.leastsq
@@ -2449,9 +2452,9 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
         Whether to calculate the covariance matrix (default is True) for
         solvers other than `leastsq` and `least_squares`. Requires the
         `numdifftools` package to be installed.
-    max_nfev: int or None
-        Maximum number of function evaluations. Default is different for each
-        fitting method.
+    max_nfev: int or None, optional
+        Maximum number of function evaluations (default is None). The
+        default value depends on the fitting method.
     **fit_kws : dict, optional
         Options to pass to the minimizer being used.
 
