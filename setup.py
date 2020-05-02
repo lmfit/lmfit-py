@@ -51,5 +51,5 @@ setup(name='lmfit',
       keywords='curve-fitting, least-squares minimization',
       tests_require=['pytest'],
       package_dir={'lmfit': 'lmfit'},
-      packages=['lmfit', 'lmfit.ui'],
+      packages=['lmfit'],
       )
