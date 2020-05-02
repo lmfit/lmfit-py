@@ -44,6 +44,7 @@ Various:
 - removed deprecated ``isParameter`` function and automatic conversion of an ``uncertainties`` object (PR #626)
 - inaccurate FWHM calculations were removed from built-in models, others labeled as estimates (Issue #616 and PR #630)
 - corrected spelling mistake for the Doniach lineshape and model (Issue #634; @rayosborn)
+- removed unsupported/untested code for IPython notebooks in lmfit/ui/*
 
 
 .. _whatsnew_100_label:
