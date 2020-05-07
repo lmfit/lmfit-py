@@ -46,9 +46,9 @@ of data with outliers.
         Bayesian info crit = -97.1001440
     [[Variables]]
         offset:  1.10392444 +/- 0.05751441 (5.21%) (init = 2)
-        omega:   3.97313427 +/- 0.02073920 (0.52%) (init = 3.3)
-        amp:     1.69977080 +/- 0.21587445 (12.70%) (init = 2.5)
-        decay:   7.64654024 +/- 1.87208687 (24.48%) (init = 1)
+        omega:   3.97313427 +/- 0.02073921 (0.52%) (init = 3.3)
+        amp:     1.69977080 +/- 0.21587456 (12.70%) (init = 2.5)
+        decay:   7.65881338 +/- 1.87208831 (24.44%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.773
 
@@ -67,8 +67,8 @@ of data with outliers.
     [[Variables]]
         offset:  1.02005941 +/- 0.06642641 (6.51%) (init = 2)
         omega:   3.98224469 +/- 0.02898704 (0.73%) (init = 3.3)
-        amp:     1.83231477 +/- 0.27241847 (14.87%) (init = 2.5)
-        decay:   5.76205973 +/- 1.45140075 (25.19%) (init = 1)
+        amp:     1.83231477 +/- 0.27241844 (14.87%) (init = 2.5)
+        decay:   5.77306791 +/- 1.45140012 (25.14%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay)  = -0.758
         C(offset, amp) = -0.107
@@ -147,7 +147,7 @@ of data with outliers.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.295 seconds)
+   **Total running time of the script:** ( 0 minutes  0.138 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:

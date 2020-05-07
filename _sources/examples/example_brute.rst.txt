@@ -27,6 +27,7 @@ all varying parameters, but will also deal with non-bounded parameters
     import copy
 
     import matplotlib.pyplot as plt
+    from matplotlib.colors import LogNorm
     import numpy as np
 
     from lmfit import Minimizer, Parameters, fit_report
@@ -88,19 +89,20 @@ Second, create the three functions and the objective function:
     def f1(p):
         par = p.valuesdict()
         return (par['a'] * par['x']**2 + par['b'] * par['x'] * par['y'] +
-                par['c'] * par['y']**2 + par['d']*par['x'] + par['e']*par['y'] + par['f'])
+                par['c'] * par['y']**2 + par['d']*par['x'] + par['e']*par['y'] +
+                par['f'])
 
 
     def f2(p):
         par = p.valuesdict()
         return (-1.0*par['g']*np.exp(-((par['x']-par['h'])**2 +
-                (par['y']-par['i'])**2) / par['scale']))
+                                       (par['y']-par['i'])**2) / par['scale']))
 
 
     def f3(p):
         par = p.valuesdict()
         return (-1.0*par['j']*np.exp(-((par['x']-par['k'])**2 +
-                (par['y']-par['l'])**2) / par['scale']))
+                                       (par['y']-par['l'])**2) / par['scale']))
 
 
     def f(params):
@@ -419,7 +421,8 @@ to ``max`` (inclusive), is here shown for the parameter ``shift``:
     indx_shift = result_brute.var_names.index(par_name)
     grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
     print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name,
-          len(grid_shift), grid_shift))
+                                                                   len(grid_shift),
+                                                                   grid_shift))
 
 
 
@@ -577,7 +580,7 @@ is given below together with a plot:
         shift: -0.13089969 (init = 0)
         omega:  2.00000000 (init = 3)
 
-    [<matplotlib.lines.Line2D object at 0x1a1a05aed0>]
+    [<matplotlib.lines.Line2D object at 0x1a23b402d0>]
 
 
 
@@ -752,7 +755,7 @@ the plots below.
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x1a1a30e790>
+    <matplotlib.legend.Legend object at 0x1a23587290>
 
 
 
@@ -787,10 +790,8 @@ in lmfit at some point).
         output : str, optional
             Name of the output PDF file (default is 'None')
         """
-        from matplotlib.colors import LogNorm
-
         npars = len(result.var_names)
-        fig, axes = plt.subplots(npars, npars)
+        _fig, axes = plt.subplots(npars, npars)
 
         if not varlabels:
             varlabels = result.var_names
@@ -842,7 +843,7 @@ in lmfit at some point).
                 # contour plots for all combinations of two parameters
                 elif j > i:
                     ax = axes[j, i+1]
-                    red_axis = tuple([a for a in range(npars) if a != i and a != j])
+                    red_axis = tuple([a for a in range(npars) if a not in (i, j)])
                     X, Y = np.meshgrid(np.unique(result.brute_grid[i]),
                                        np.unique(result.brute_grid[j]))
                     lvls1 = np.linspace(result.brute_Jout.min(),
@@ -894,7 +895,7 @@ and finally, to generated the figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  42.154 seconds)
+   **Total running time of the script:** ( 0 minutes  35.860 seconds)
 
 
 .. _sphx_glr_download_examples_example_brute.py:

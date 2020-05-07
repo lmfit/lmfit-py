@@ -105,7 +105,8 @@ Fit the model using a traditional minimizer, and show the output:
       return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
     /Users/Newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:16: RuntimeWarning: overflow encountered in multiply
       return a1*np.exp(-x/t1) + a2*np.exp(-(x-0.1) / t2)
-    /Users/Newville/opt/anaconda3/lib/python3.7/site-packages/lmfit-1.0.0+43.g85fe9dc-py3.7.egg/lmfit/minimizer.py:173: RuntimeWarning: overflow encountered in multiply
+    /Users/Newville/Codes/lmfit-py/lmfit/minimizer.py:182: RuntimeWarning: overflow encountered in multiply
+      return (r*r).sum()
     [[Fit Statistics]]
         # fitting method   = Nelder-Mead
         # function evals   = 609
@@ -117,9 +118,9 @@ Fit the model using a traditional minimizer, and show the output:
         Bayesian info crit = -1146.45423
     [[Variables]]
         a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
-        t1:  1.30993186 +/- 0.13449652 (10.27%) (init = 3)
-        a2: -4.33525597 +/- 0.11765819 (2.71%) (init = 4)
-        t2:  11.8099125 +/- 0.47172590 (3.99%) (init = 3)
+        t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
+        a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
+        t2:  11.8238752 +/- 0.47172610 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.100)
         C(a2, t2) =  0.988
         C(t1, a2) = -0.928
@@ -183,29 +184,29 @@ run the MCMC algorithm and show the results:
 
     The chain is shorter than 50 times the integrated autocorrelation time for 5 parameter(s). Use this estimate with caution and run a longer chain!
     N/50 = 20;
-    tau: [42.86236444 45.34591993 45.49852485 45.00527243 38.05671107]
+    tau: [35.56392373 44.73700579 43.7791575  43.25068188 39.74200473]
     [[Fit Statistics]]
         # fitting method   = emcee
         # function evals   = 100000
         # data points      = 250
         # variables        = 5
-        chi-square         = 245.135584
-        reduced chi-square = 1.00055340
-        Akaike info crit   = 5.08763609
-        Bayesian info crit = 22.6949407
+        chi-square         = 245.432479
+        reduced chi-square = 1.00176522
+        Akaike info crit   = 5.39023941
+        Bayesian info crit = 22.9975440
     [[Variables]]
-        a1:         2.99729292 +/- 0.14788788 (4.93%) (init = 2.986237)
-        t1:         1.31860631 +/- 0.14157651 (10.74%) (init = 1.309932)
-        a2:        -4.34320377 +/- 0.12457281 (2.87%) (init = -4.335256)
-        t2:         11.7995440 +/- 0.49140460 (4.16%) (init = 11.80991)
-        __lnsigma: -2.32707117 +/- 0.04573634 (1.97%) (init = -2.302585)
+        a1:         2.99350790 +/- 0.14824450 (4.95%) (init = 2.986237)
+        t1:         1.32069789 +/- 0.13786038 (10.44%) (init = 1.309932)
+        a2:        -4.34337361 +/- 0.12069121 (2.78%) (init = -4.335256)
+        t2:         11.7930756 +/- 0.47843748 (4.06%) (init = 11.82388)
+        __lnsigma: -2.32761729 +/- 0.04413131 (1.90%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
         C(a2, t2) =  0.982
-        C(t1, a2) = -0.933
-        C(t1, t2) = -0.888
-        C(a1, t1) = -0.567
-        C(a1, a2) =  0.271
-        C(a1, t2) =  0.230
+        C(t1, a2) = -0.934
+        C(t1, t2) = -0.891
+        C(a1, t1) = -0.507
+        C(a1, a2) =  0.201
+        C(a1, t2) =  0.165
     /Users/Newville/Codes/lmfit-py/examples/example_emcee_Model_interface.py:60: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
@@ -311,30 +312,30 @@ Plot the parameter covariances returned by emcee using corner
     median of posterior probability distribution
     --------------------------------------------
     [[Variables]]
-        a1:         2.99729292 +/- 0.14788788 (4.93%) (init = 2.986237)
-        t1:         1.31860631 +/- 0.14157651 (10.74%) (init = 1.309932)
-        a2:        -4.34320377 +/- 0.12457281 (2.87%) (init = -4.335256)
-        t2:         11.7995440 +/- 0.49140460 (4.16%) (init = 11.80991)
-        __lnsigma: -2.32707117 +/- 0.04573634 (1.97%) (init = -2.302585)
+        a1:         2.99350790 +/- 0.14824450 (4.95%) (init = 2.986237)
+        t1:         1.32069789 +/- 0.13786038 (10.44%) (init = 1.309932)
+        a2:        -4.34337361 +/- 0.12069121 (2.78%) (init = -4.335256)
+        t2:         11.7930756 +/- 0.47843748 (4.06%) (init = 11.82388)
+        __lnsigma: -2.32761729 +/- 0.04413131 (1.90%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
         C(a2, t2) =  0.982
-        C(t1, a2) = -0.933
-        C(t1, t2) = -0.888
-        C(a1, t1) = -0.567
-        C(a1, a2) =  0.271
-        C(a1, t2) =  0.230
+        C(t1, a2) = -0.934
+        C(t1, t2) = -0.891
+        C(a1, t1) = -0.507
+        C(a1, a2) =  0.201
+        C(a1, t2) =  0.165
 
     Maximum likelihood Estimation
     -----------------------------
-    a1: 2.9516079567371394
-    t1: 1.320921622273492
-    a2: -4.333103563716343
-    t2: 11.84652506057183
-    __lnsigma: -2.3328583631734823
+    a1: 3.0003656786320465
+    t1: 1.3103018352619047
+    a2: -4.341063692346895
+    t2: 11.793354771438743
+    __lnsigma: -2.347842498970973
 
 
-    1 sigma spread 0.14166142736065634
-    2 sigma spread 0.28026477066939837
+    1 sigma spread 0.13798676890022543
+    2 sigma spread 0.293504036837235
 
 
 
@@ -342,7 +343,7 @@ Plot the parameter covariances returned by emcee using corner
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  19.894 seconds)
+   **Total running time of the script:** ( 0 minutes  13.775 seconds)
 
 
 .. _sphx_glr_download_examples_example_emcee_Model_interface.py:

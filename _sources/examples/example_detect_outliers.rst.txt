@@ -174,7 +174,7 @@ Plot the influence on the red. chisqr of each point
  .. code-block:: none
 
 
-    <matplotlib.legend.Legend object at 0x1a1a173c50>
+    <matplotlib.legend.Legend object at 0x1a235ef950>
 
 
 
@@ -223,7 +223,7 @@ Plot the influence on the parameter value and error of each point
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.029 seconds)
+   **Total running time of the script:** ( 0 minutes  1.336 seconds)
 
 
 .. _sphx_glr_download_examples_example_detect_outliers.py:

@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Release Notes &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
@@ -84,7 +84,7 @@
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
-
+ 
       </ul>
     </div>
 
@@ -93,6 +93,7 @@
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
+<li><a class="reference internal" href="#version-1-0-1-release-notes">Version 1.0.1 Release Notes</a></li>
 <li><a class="reference internal" href="#version-1-0-0-release-notes">Version 1.0.0 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-15-release-notes">Version 0.9.15 Release Notes</a></li>
 <li><a class="reference internal" href="#version-0-9-14-release-notes">Version 0.9.14 Release Notes</a></li>
@@ -144,13 +145,44 @@
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-
+            
   <div class="section" id="release-notes">
 <span id="whatsnew-chapter"></span><h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
 <p>This section discusses changes between versions, especially changes
 significant to the use and behavior of the library.  This is not meant
 to be a comprehensive list of changes.  For such a complete record,
 consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>.</p>
+<div class="section" id="version-1-0-1-release-notes">
+<span id="whatsnew-101-label"></span><h2>Version 1.0.1 Release Notes<a class="headerlink" href="#version-1-0-1-release-notes" title="Permalink to this headline">¶</a></h2>
+<p><strong>Version 1.0.1 is the last release that supports Python 3.5</strong>. All newer version will
+require 3.6+ so that we can use formatting-strings and rely on dictionaries being ordered.</p>
+<p>New features:</p>
+<ul class="simple">
+<li><p>added thermal distribution model and lineshape (PR #620; &#64;mpmdean)</p></li>
+<li><p>introduced a new argument <code class="docutils literal notranslate"><span class="pre">max_nfev</span></code> to uniformly specify the maximum number of function evalutions (PR #610)
+<strong>Please note: all other arguments (e.g., ``maxfev``, ``maxiter``, …) will no longer be passed to the underlying
+solver. A warning will be emitted stating that one should use ``max_nfev``.</strong></p></li>
+<li><p>the attribute <code class="docutils literal notranslate"><span class="pre">call_kws</span></code> was added to the <code class="docutils literal notranslate"><span class="pre">MinimizerResult</span></code> class and contains the keyword arguments that are
+supplied to the solver in SciPy.</p></li>
+</ul>
+<p>Bug fixes:</p>
+<ul class="simple">
+<li><p>fixes to the <code class="docutils literal notranslate"><span class="pre">load</span></code> and <code class="docutils literal notranslate"><span class="pre">__setstate__</span></code> methods of the Parameter class</p></li>
+<li><p>fixed failure of ModelResult.dump() due to missing attributes (Issue #611, PR #623; &#64;mpmdean)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">guess_from_peak</span></code> function now also works correctly with decreasing x-values or when using
+pandas (PRs #627 and #629; &#64;mpmdean)</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">Parameter.set()</span></code> method now correctly first updates the boundaries and then the value (Issue #636, PR #637; &#64;arunpersaud)</p></li>
+</ul>
+<p>Various:</p>
+<ul class="simple">
+<li><p>fixed typo for the use of expressions in the documentation (Issue #610; &#64;jkrogager)</p></li>
+<li><p>removal of PY2-compatibility and unused code and improved test coverage (PRs #619, #631, and #633)</p></li>
+<li><p>removed deprecated <code class="docutils literal notranslate"><span class="pre">isParameter</span></code> function and automatic conversion of an <code class="docutils literal notranslate"><span class="pre">uncertainties</span></code> object (PR #626)</p></li>
+<li><p>inaccurate FWHM calculations were removed from built-in models, others labeled as estimates (Issue #616 and PR #630)</p></li>
+<li><p>corrected spelling mistake for the Doniach lineshape and model (Issue #634; &#64;rayosborn)</p></li>
+<li><p>removed unsupported/untested code for IPython notebooks in lmfit/ui/*</p></li>
+</ul>
+</div>
 <div class="section" id="version-1-0-0-release-notes">
 <span id="whatsnew-100-label"></span><h2>Version 1.0.0 Release Notes<a class="headerlink" href="#version-1-0-0-release-notes" title="Permalink to this headline">¶</a></h2>
 <p><strong>Version 1.0.0 supports Python 3.5, 3.6, 3.7, and 3.8</strong></p>
@@ -452,12 +484,12 @@ track of changes made while adjusting parameters and re-running fits.</p></li>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
-
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
     </div>
   </body>
 </html>

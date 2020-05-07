@@ -16,8 +16,8 @@ from lmfit.lineshapes import gaussian
 from lmfit.models import GaussianModel, LinearModel
 
 
-def per_iteration(pars, iter, resid, *args, **kws):
-    print(" ITER ", iter, ["%.5f" % p for p in pars.values()])
+def per_iteration(pars, iteration, resid, *args, **kws):
+    print(" ITER ", iteration, ["%.5f" % p for p in pars.values()])
 
 
 x = linspace(0., 20, 401)

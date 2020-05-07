@@ -12,6 +12,41 @@ to be a comprehensive list of changes.  For such a complete record,
 consult the `lmfit GitHub repository`_.
 
 
+.. _whatsnew_101_label:
+
+Version 1.0.1 Release Notes
+============================
+
+**Version 1.0.1 is the last release that supports Python 3.5**. All newer version will
+require 3.6+ so that we can use formatting-strings and rely on dictionaries being ordered.
+
+New features:
+
+- added thermal distribution model and lineshape (PR #620; @mpmdean)
+- introduced a new argument ``max_nfev`` to uniformly specify the maximum number of function evalutions (PR #610)
+  **Please note: all other arguments (e.g., ``maxfev``, ``maxiter``, ...) will no longer be passed to the underlying
+  solver. A warning will be emitted stating that one should use ``max_nfev``.**
+- the attribute ``call_kws`` was added to the ``MinimizerResult`` class and contains the keyword arguments that are
+  supplied to the solver in SciPy.
+
+Bug fixes:
+
+- fixes to the ``load`` and ``__setstate__`` methods of the Parameter class
+- fixed failure of ModelResult.dump() due to missing attributes (Issue #611, PR #623; @mpmdean)
+- ``guess_from_peak`` function now also works correctly with decreasing x-values or when using
+  pandas (PRs #627 and #629; @mpmdean)
+- the ``Parameter.set()`` method now correctly first updates the boundaries and then the value (Issue #636, PR #637; @arunpersaud)
+
+Various:
+
+- fixed typo for the use of expressions in the documentation (Issue #610; @jkrogager)
+- removal of PY2-compatibility and unused code and improved test coverage (PRs #619, #631, and #633)
+- removed deprecated ``isParameter`` function and automatic conversion of an ``uncertainties`` object (PR #626)
+- inaccurate FWHM calculations were removed from built-in models, others labeled as estimates (Issue #616 and PR #630)
+- corrected spelling mistake for the Doniach lineshape and model (Issue #634; @rayosborn)
+- removed unsupported/untested code for IPython notebooks in lmfit/ui/*
+
+
 .. _whatsnew_100_label:
 
 Version 1.0.0 Release Notes

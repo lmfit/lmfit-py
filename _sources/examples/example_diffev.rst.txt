@@ -58,9 +58,9 @@ a fairly simple problem.
         Bayesian info crit = -136.411487
     [[Variables]]
         offset:  0.96333133 +/- 0.04735903 (4.92%) (init = 2)
-        omega:   3.98700854 +/- 0.02121808 (0.53%) (init = 3.3)
+        omega:   3.98700854 +/- 0.02121810 (0.53%) (init = 3.3)
         amp:     1.80252617 +/- 0.19022408 (10.55%) (init = 2.5)
-        decay:   5.73540283 +/- 1.00452607 (17.51%) (init = 1)
+        decay:   5.76185677 +/- 1.00452607 (17.43%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.743
     /Users/Newville/Codes/lmfit-py/examples/example_diffev.py:55: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
@@ -127,7 +127,7 @@ a fairly simple problem.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.331 seconds)
+   **Total running time of the script:** ( 0 minutes  0.422 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:

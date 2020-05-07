@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Modeling Data and Curve Fitting &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
@@ -84,7 +84,7 @@
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
-
+ 
       </ul>
     </div>
 
@@ -154,7 +154,7 @@
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-
+            
   <div class="section" id="module-lmfit.model">
 <span id="modeling-data-and-curve-fitting"></span><span id="model-chapter"></span><h1>Modeling Data and Curve Fitting<a class="headerlink" href="#module-lmfit.model" title="Permalink to this headline">¶</a></h1>
 <p>A common use of least-squares minimization is <em>curve fitting</em>, where one
@@ -214,7 +214,7 @@ arrays <code class="docutils literal notranslate"><span class="pre">y</span></co
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;best_vals: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">best_vals</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>best_vals: [2.35021707 0.24255519 1.42374306]
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>best_vals: [2.4409701  0.21554583 1.49199916]
 </pre></div>
 </div>
 </div>
@@ -377,9 +377,9 @@ detail.</p>
 <h2>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class<a class="headerlink" href="#the-model-class" title="Permalink to this headline">¶</a></h2>
 <p>The <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class provides a general way to wrap a pre-defined
 function as a fitting model.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.model.Model">
-<em class="property">class </em><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param">func</em>, <em class="sig-param">independent_vars=None</em>, <em class="sig-param">param_names=None</em>, <em class="sig-param">nan_policy='raise'</em>, <em class="sig-param">prefix=''</em>, <em class="sig-param">name=None</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em>, <em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">param_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Model class.</p>
 <p>Create a model from a user-supplied model function.</p>
 <p>The model function will normally take an independent variable
@@ -440,9 +440,9 @@ and parameters:</p>
 
 <div class="section" id="model-class-methods">
 <h3><a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class Methods<a class="headerlink" href="#model-class-methods" title="Permalink to this headline">¶</a></h3>
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.Model.eval">
-<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param">params=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.eval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the model with supplied parameters and keyword arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -468,9 +468,9 @@ all the independent variables</strong> will need to be passed in using
 keyword arguments.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.Model.fit">
-<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">params=None</em>, <em class="sig-param">weights=None</em>, <em class="sig-param">method='leastsq'</em>, <em class="sig-param">iter_cb=None</em>, <em class="sig-param">scale_covar=True</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">fit_kws=None</em>, <em class="sig-param">nan_policy=None</em>, <em class="sig-param">calc_covar=True</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'leastsq'</span></em>, <em class="sig-param"><span class="n">iter_cb</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale_covar</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fit_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">calc_covar</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">max_nfev</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model to the data using the supplied Parameters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -490,6 +490,8 @@ of a hint (default is True).</p></li>
 <li><p><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
 solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires the
 <cite>numdifftools</cite> package to be installed.</p></li>
+<li><p><strong>max_nfev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em>) – Maximum number of function evaluations (default is None). The
+default value depends on the fitting method.</p></li>
 <li><p><strong>**kwargs</strong> (<em>optional</em>) – Arguments to pass to the  model function, possibly overriding
 params.</p></li>
 </ul>
@@ -528,9 +530,9 @@ original Parameter objects are unchanged, and the updated values
 are in the returned <cite>ModelResult</cite>.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.Model.guess">
-<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">guess</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.guess" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">guess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.guess" title="Permalink to this definition">¶</a></dt>
 <dd><p>Guess starting values for the parameters of a Model.</p>
 <p>This is not implemented for all models, but is available for many of
 the built-in models.</p>
@@ -559,9 +561,9 @@ Parameters object.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.Model.make_params">
-<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">make_params</code><span class="sig-paren">(</span><em class="sig-param">verbose=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.make_params" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">make_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.make_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a Parameters object for a Model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -584,9 +586,9 @@ parameter.</p>
 been set.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.Model.set_param_hint">
-<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">set_param_hint</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.set_param_hint" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">set_param_hint</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.set_param_hint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set <em>hints</em> to use when creating parameters with <cite>make_params()</cite> for
 the named parameter.</p>
 <p>This is especially convenient for setting initial values. The <cite>name</cite>
@@ -638,9 +640,9 @@ Can be any of the following:</p>
 <p>See <a class="reference internal" href="#model-param-hints-section"><span class="std std-ref">Using parameter hints</span></a>.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.Model.print_param_hints">
-<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">print_param_hints</code><span class="sig-paren">(</span><em class="sig-param">colwidth=8</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.print_param_hints" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">Model.</code><code class="sig-name descname">print_param_hints</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colwidth</span><span class="o">=</span><span class="default_value">8</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.Model.print_param_hints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Print a nicely aligned text-table of parameter hints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -652,19 +654,19 @@ Can be any of the following:</p>
 </div>
 <div class="section" id="model-class-attributes">
 <h3><a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> class Attributes<a class="headerlink" href="#model-class-attributes" title="Permalink to this headline">¶</a></h3>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.func">
 <code class="sig-name descname">func</code><a class="headerlink" href="#lmfit.model.func" title="Permalink to this definition">¶</a></dt>
 <dd><p>The model function used to calculate the model.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.independent_vars">
 <code class="sig-name descname">independent_vars</code><a class="headerlink" href="#lmfit.model.independent_vars" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of strings for names of the independent variables.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.nan_policy">
 <code class="sig-name descname">nan_policy</code><a class="headerlink" href="#lmfit.model.nan_policy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Describes what to do for NaNs that indicate missing values in the data.
@@ -681,33 +683,33 @@ installed, <code class="xref py py-func docutils literal notranslate"><span clas
 </div></blockquote>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.name">
 <code class="sig-name descname">name</code><a class="headerlink" href="#lmfit.model.name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the model, used only in the string representation of the
 model. By default this will be taken from the model function.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.opts">
 <code class="sig-name descname">opts</code><a class="headerlink" href="#lmfit.model.opts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extra keyword arguments to pass to model function.  Normally this will
 be determined internally and should not be changed.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.param_hints">
 <code class="sig-name descname">param_hints</code><a class="headerlink" href="#lmfit.model.param_hints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary of parameter hints.  See <a class="reference internal" href="#model-param-hints-section"><span class="std std-ref">Using parameter hints</span></a>.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.param_names">
 <code class="sig-name descname">param_names</code><a class="headerlink" href="#lmfit.model.param_names" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of strings of parameter names.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.prefix">
 <code class="sig-name descname">prefix</code><a class="headerlink" href="#lmfit.model.prefix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prefix used for name-mangling of parameter names.  The default is ‘’.
@@ -781,9 +783,6 @@ you can say so:</p>
 </pre></div>
 </div>
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>independent variables: [&#39;tau&#39;]
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
 
 Parameters:
 t &lt;Parameter &#39;t&#39;, value=-inf, bounds=[-inf:inf]&gt;
@@ -1018,9 +1017,9 @@ the saved name, the corresponding function object will be used as the model
 function. With this approach, if you save a model and can provide the code
 used for the model function, the model can be saved and reliably reloaded
 and used.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="lmfit.model.save_model">
-<code class="sig-name descname">save_model</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">fname</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.save_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.save_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a Model to a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1032,9 +1031,9 @@ and used.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="lmfit.model.load_model">
-<code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">funcdefs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.load_model" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">funcdefs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.load_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a saved Model from a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1129,9 +1128,9 @@ with a model.</p>
 results, and several methods for working with fits.  These include
 statistics inherited from <a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code></a> useful for
 comparing different models, including <code class="docutils literal notranslate"><span class="pre">chisqr</span></code>, <code class="docutils literal notranslate"><span class="pre">redchi</span></code>, <code class="docutils literal notranslate"><span class="pre">aic</span></code>, and <code class="docutils literal notranslate"><span class="pre">bic</span></code>.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.model.ModelResult">
-<em class="property">class </em><code class="sig-name descname">ModelResult</code><span class="sig-paren">(</span><em class="sig-param">model</em>, <em class="sig-param">params</em>, <em class="sig-param">data=None</em>, <em class="sig-param">weights=None</em>, <em class="sig-param">method='leastsq'</em>, <em class="sig-param">fcn_args=None</em>, <em class="sig-param">fcn_kws=None</em>, <em class="sig-param">iter_cb=None</em>, <em class="sig-param">scale_covar=True</em>, <em class="sig-param">nan_policy='raise'</em>, <em class="sig-param">calc_covar=True</em>, <em class="sig-param">**fit_kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ModelResult</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">params</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'leastsq'</span></em>, <em class="sig-param"><span class="n">fcn_args</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fcn_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">iter_cb</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scale_covar</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="n">calc_covar</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">max_nfev</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">fit_kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Result from the Model fit.</p>
 <p>This has many attributes and methods for viewing and working with
 the results of a fit using Model. It inherits from Minimizer, so
@@ -1152,6 +1151,8 @@ that it can be used to modify and re-run the fit for the Model.</p>
 <li><p><strong>calc_covar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to calculate the covariance matrix (default is True) for
 solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires the
 <cite>numdifftools</cite> package to be installed.</p></li>
+<li><p><strong>max_nfev</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em> or </em><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.8)"><em>None</em></a><em>, </em><em>optional</em>) – Maximum number of function evaluations (default is None). The
+default value depends on the fitting method.</p></li>
 <li><p><strong>**fit_kws</strong> (<em>optional</em>) – Keyword arguments to send to minimization routine.</p></li>
 </ul>
 </dd>
@@ -1160,9 +1161,9 @@ solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires
 
 <div class="section" id="modelresult-methods">
 <h3><a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> methods<a class="headerlink" href="#modelresult-methods" title="Permalink to this headline">¶</a></h3>
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.eval">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param">params=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.eval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate model function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1180,9 +1181,9 @@ solvers other than <cite>leastsq</cite> and <cite>least_squares</cite>. Requires
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.eval_components">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">eval_components</code><span class="sig-paren">(</span><em class="sig-param">params=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.eval_components" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">eval_components</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.eval_components" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate each component of a composite model function.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1201,9 +1202,9 @@ the estimated model value for each component of the model.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.fit">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param">data=None</em>, <em class="sig-param">params=None</em>, <em class="sig-param">weights=None</em>, <em class="sig-param">method=None</em>, <em class="sig-param">nan_policy=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">weights</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Re-perform fit for a Model, given data and params.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1219,9 +1220,9 @@ the estimated model value for each component of the model.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.fit_report">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">fit_report</code><span class="sig-paren">(</span><em class="sig-param">modelpars=None</em>, <em class="sig-param">show_correl=True</em>, <em class="sig-param">min_correl=0.1</em>, <em class="sig-param">sort_pars=False</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.fit_report" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">fit_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">modelpars</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">show_correl</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">min_correl</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">sort_pars</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.fit_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a printable fit report.</p>
 <p>The report contains fit statistics and best-fit values with
 uncertainties and correlations.</p>
@@ -1251,9 +1252,9 @@ from each list element.</p></li>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.conf_interval">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">conf_interval</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.conf_interval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">conf_interval</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.conf_interval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the confidence intervals for the variable parameters.</p>
 <p>Confidence intervals are calculated using the
 <code class="xref py py-func docutils literal notranslate"><span class="pre">confidence.conf_interval()</span></code> function and keyword
@@ -1262,9 +1263,9 @@ is stored in the <a class="reference internal" href="#lmfit.model.ci_out" title=
 accessed without recalculating them.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.ci_report">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">ci_report</code><span class="sig-paren">(</span><em class="sig-param">with_offset=True</em>, <em class="sig-param">ndigits=5</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.ci_report" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">ci_report</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">with_offset</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ndigits</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.ci_report" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a nicely formatted text report of the confidence intervals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1283,9 +1284,9 @@ accessed without recalculating them.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.eval_uncertainty">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">eval_uncertainty</code><span class="sig-paren">(</span><em class="sig-param">params=None</em>, <em class="sig-param">sigma=1</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.eval_uncertainty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">eval_uncertainty</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sigma</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.eval_uncertainty" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the uncertainty of the <em>model function</em>.</p>
 <p>This can be used to give confidence bands for the model from the
 uncertainties in the best-fit parameters.</p>
@@ -1327,9 +1328,9 @@ interpreted as the probability itself. That is, <cite>sigma=1</cite> and
 </ol>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.plot">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">datafmt='o'</em>, <em class="sig-param">fitfmt='-'</em>, <em class="sig-param">initfmt='--'</em>, <em class="sig-param">xlabel=None</em>, <em class="sig-param">ylabel=None</em>, <em class="sig-param">yerr=None</em>, <em class="sig-param">numpoints=None</em>, <em class="sig-param">fig=None</em>, <em class="sig-param">data_kws=None</em>, <em class="sig-param">fit_kws=None</em>, <em class="sig-param">init_kws=None</em>, <em class="sig-param">ax_res_kws=None</em>, <em class="sig-param">ax_fit_kws=None</em>, <em class="sig-param">fig_kws=None</em>, <em class="sig-param">show_init=False</em>, <em class="sig-param">parse_complex='abs'</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">datafmt</span><span class="o">=</span><span class="default_value">'o'</span></em>, <em class="sig-param"><span class="n">fitfmt</span><span class="o">=</span><span class="default_value">'-'</span></em>, <em class="sig-param"><span class="n">initfmt</span><span class="o">=</span><span class="default_value">'--'</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">yerr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">numpoints</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fig</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fit_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">init_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ax_res_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ax_fit_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fig_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">show_init</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">parse_complex</span><span class="o">=</span><span class="default_value">'abs'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit results and residuals using matplotlib, if available.</p>
 <p>The method will produce a matplotlib figure with both results of the
 fit and the residuals plotted. If the fit model included weights,
@@ -1389,9 +1390,9 @@ otherwise <cite>fig_kws</cite> is ignored.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.plot_fit">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">plot_fit</code><span class="sig-paren">(</span><em class="sig-param">ax=None</em>, <em class="sig-param">datafmt='o'</em>, <em class="sig-param">fitfmt='-'</em>, <em class="sig-param">initfmt='--'</em>, <em class="sig-param">xlabel=None</em>, <em class="sig-param">ylabel=None</em>, <em class="sig-param">yerr=None</em>, <em class="sig-param">numpoints=None</em>, <em class="sig-param">data_kws=None</em>, <em class="sig-param">fit_kws=None</em>, <em class="sig-param">init_kws=None</em>, <em class="sig-param">ax_kws=None</em>, <em class="sig-param">show_init=False</em>, <em class="sig-param">parse_complex='abs'</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_fit" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">plot_fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">datafmt</span><span class="o">=</span><span class="default_value">'o'</span></em>, <em class="sig-param"><span class="n">fitfmt</span><span class="o">=</span><span class="default_value">'-'</span></em>, <em class="sig-param"><span class="n">initfmt</span><span class="o">=</span><span class="default_value">'--'</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">yerr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">numpoints</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fit_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">init_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ax_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">show_init</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">parse_complex</span><span class="o">=</span><span class="default_value">'abs'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit results using matplotlib, if available.</p>
 <p>The plot will include the data points, the initial fit curve (optional,
 with <cite>show_init=True</cite>), and the best-fit curve. If the fit model
@@ -1449,9 +1450,9 @@ weights are in this case.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.model.ModelResult.plot_residuals">
-<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">plot_residuals</code><span class="sig-paren">(</span><em class="sig-param">ax=None</em>, <em class="sig-param">datafmt='o'</em>, <em class="sig-param">yerr=None</em>, <em class="sig-param">data_kws=None</em>, <em class="sig-param">fit_kws=None</em>, <em class="sig-param">ax_kws=None</em>, <em class="sig-param">parse_complex='abs'</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_residuals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">ModelResult.</code><code class="sig-name descname">plot_residuals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">datafmt</span><span class="o">=</span><span class="default_value">'o'</span></em>, <em class="sig-param"><span class="n">yerr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fit_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ax_kws</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parse_complex</span><span class="o">=</span><span class="default_value">'abs'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.ModelResult.plot_residuals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the fit residuals using matplotlib, if available.</p>
 <p>If <cite>yerr</cite> is supplied or if the model included weights, errorbars
 will also be plotted.</p>
@@ -1500,88 +1501,88 @@ weights are in this case.</p>
 </div>
 <div class="section" id="modelresult-attributes">
 <h3><a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> attributes<a class="headerlink" href="#modelresult-attributes" title="Permalink to this headline">¶</a></h3>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.aic">
 <code class="sig-name descname">aic</code><a class="headerlink" href="#lmfit.model.aic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Floating point best-fit Akaike Information Criterion statistic (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.best_fit">
 <code class="sig-name descname">best_fit</code><a class="headerlink" href="#lmfit.model.best_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>numpy.ndarray result of model function, evaluated at provided
 independent variables and with best-fit parameters.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.best_values">
 <code class="sig-name descname">best_values</code><a class="headerlink" href="#lmfit.model.best_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary with parameter names as keys, and best-fit values as values.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.bic">
 <code class="sig-name descname">bic</code><a class="headerlink" href="#lmfit.model.bic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Floating point best-fit Bayesian Information Criterion statistic (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.chisqr">
 <code class="sig-name descname">chisqr</code><a class="headerlink" href="#lmfit.model.chisqr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Floating point best-fit chi-square statistic (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.ci_out">
 <code class="sig-name descname">ci_out</code><a class="headerlink" href="#lmfit.model.ci_out" title="Permalink to this definition">¶</a></dt>
 <dd><p>Confidence interval data (see <a class="reference internal" href="confidence.html#confidence-chapter"><span class="std std-ref">Calculation of confidence intervals</span></a>) or None if
 the confidence intervals have not been calculated.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.covar">
 <code class="sig-name descname">covar</code><a class="headerlink" href="#lmfit.model.covar" title="Permalink to this definition">¶</a></dt>
 <dd><p>numpy.ndarray (square) covariance matrix returned from fit.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.data">
 <code class="sig-name descname">data</code><a class="headerlink" href="#lmfit.model.data" title="Permalink to this definition">¶</a></dt>
 <dd><p>numpy.ndarray of data to compare to model.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.errorbars">
 <code class="sig-name descname">errorbars</code><a class="headerlink" href="#lmfit.model.errorbars" title="Permalink to this definition">¶</a></dt>
 <dd><p>Boolean for whether error bars were estimated by fit.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.ier">
 <code class="sig-name descname">ier</code><a class="headerlink" href="#lmfit.model.ier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integer returned code from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.init_fit">
 <code class="sig-name descname">init_fit</code><a class="headerlink" href="#lmfit.model.init_fit" title="Permalink to this definition">¶</a></dt>
 <dd><p>numpy.ndarray result of model function, evaluated at provided
 independent variables and with initial parameters.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.init_params">
 <code class="sig-name descname">init_params</code><a class="headerlink" href="#lmfit.model.init_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initial parameters.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.init_values">
 <code class="sig-name descname">init_values</code><a class="headerlink" href="#lmfit.model.init_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dictionary with parameter names as keys, and initial values as values.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.iter_cb">
 <code class="sig-name descname">iter_cb</code><a class="headerlink" href="#lmfit.model.iter_cb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional callable function, to be called at each fit iteration.  This
@@ -1591,91 +1592,97 @@ iteration, <code class="docutils literal notranslate"><span class="pre">resid</s
 <code class="docutils literal notranslate"><span class="pre">**kws</span></code> as passed to the objective function.  See <a class="reference internal" href="fitting.html#fit-itercb-label"><span class="std std-ref">Using a Iteration Callback Function</span></a>.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.jacfcn">
 <code class="sig-name descname">jacfcn</code><a class="headerlink" href="#lmfit.model.jacfcn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional callable function, to be called to calculate Jacobian array.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.lmdif_message">
 <code class="sig-name descname">lmdif_message</code><a class="headerlink" href="#lmfit.model.lmdif_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>String message returned from <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a>.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.message">
 <code class="sig-name descname">message</code><a class="headerlink" href="#lmfit.model.message" title="Permalink to this definition">¶</a></dt>
 <dd><p>String message returned from <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.method">
 <code class="sig-name descname">method</code><a class="headerlink" href="#lmfit.model.method" title="Permalink to this definition">¶</a></dt>
 <dd><p>String naming fitting method for <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
+<dt id="lmfit.model.call_kws">
+<code class="sig-name descname">call_kws</code><a class="headerlink" href="#lmfit.model.call_kws" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dict of keyword arguments actually send to underlying solver with <a class="reference internal" href="fitting.html#lmfit.minimizer.minimize" title="lmfit.minimizer.minimize"><code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt id="lmfit.model.model">
 <code class="sig-name descname">model</code><a class="headerlink" href="#lmfit.model.model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instance of <a class="reference internal" href="#lmfit.model.Model" title="lmfit.model.Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></a> used for model.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.ndata">
 <code class="sig-name descname">ndata</code><a class="headerlink" href="#lmfit.model.ndata" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integer number of data points.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.nfev">
 <code class="sig-name descname">nfev</code><a class="headerlink" href="#lmfit.model.nfev" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integer number of function evaluations used for fit.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.nfree">
 <code class="sig-name descname">nfree</code><a class="headerlink" href="#lmfit.model.nfree" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integer number of free parameters in fit.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.nvarys">
 <code class="sig-name descname">nvarys</code><a class="headerlink" href="#lmfit.model.nvarys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integer number of independent, freely varying variables in fit.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.params">
 <code class="sig-name descname">params</code><a class="headerlink" href="#lmfit.model.params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parameters used in fit.  Will have best-fit values.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.redchi">
 <code class="sig-name descname">redchi</code><a class="headerlink" href="#lmfit.model.redchi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Floating point reduced chi-square statistic (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>).</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.residual">
 <code class="sig-name descname">residual</code><a class="headerlink" href="#lmfit.model.residual" title="Permalink to this definition">¶</a></dt>
 <dd><p>numpy.ndarray for residual.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.scale_covar">
 <code class="sig-name descname">scale_covar</code><a class="headerlink" href="#lmfit.model.scale_covar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Boolean flag for whether to automatically scale covariance matrix.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.success">
 <code class="sig-name descname">success</code><a class="headerlink" href="#lmfit.model.success" title="Permalink to this definition">¶</a></dt>
 <dd><p>Boolean value of whether fit succeeded.</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.model.weights">
 <code class="sig-name descname">weights</code><a class="headerlink" href="#lmfit.model.weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>numpy.ndarray (or None) of weighting values to be used in fit.  If not
@@ -1726,9 +1733,9 @@ saving model functions that may make it difficult to restore a saved a
 Use of the optional <code class="xref py py-attr docutils literal notranslate"><span class="pre">funcdefs</span></code> argument is generally the most
 reliable way to ensure that a loaded <a class="reference internal" href="#lmfit.model.ModelResult" title="lmfit.model.ModelResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code></a> can be used to
 evaluate the model function or redo the fit.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="lmfit.model.save_modelresult">
-<code class="sig-name descname">save_modelresult</code><span class="sig-paren">(</span><em class="sig-param">modelresult</em>, <em class="sig-param">fname</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.save_modelresult" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_modelresult</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">modelresult</span></em>, <em class="sig-param"><span class="n">fname</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.save_modelresult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a ModelResult to a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1740,9 +1747,9 @@ evaluate the model function or redo the fit.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="lmfit.model.load_modelresult">
-<code class="sig-name descname">load_modelresult</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">funcdefs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.load_modelresult" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load_modelresult</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">funcdefs</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.load_modelresult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a saved ModelResult from a file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1950,7 +1957,7 @@ If they had, the <code class="docutils literal notranslate"><span class="pre">pr
 us to identify which parameter went with which component model.  As we will
 see in the next chapter, using composite models with the built-in models
 provides a simple way to build up complex models.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.model.CompositeModel">
 <em class="property">class </em><code class="sig-name descname">CompositeModel</code><span class="sig-paren">(</span><em class="sig-param">left</em>, <em class="sig-param">right</em>, <em class="sig-param">op</em><span class="optional">[</span>, <em class="sig-param">**kws</em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.model.CompositeModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine two models (<cite>left</cite> and <cite>right</cite>) with a binary operator (<cite>op</cite>)
@@ -2078,7 +2085,7 @@ binary operator.  A full script using this technique is here:</p>
 <p>which prints out the results:</p>
 <div class="docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
-    (Model(jump) &lt;function convolve at 0x1a25cc8b00&gt; Model(gaussian))
+    (Model(jump) &lt;function convolve at 0x1a2a340b00&gt; Model(gaussian))
 [[Fit Statistics]]
     # fitting method   = leastsq
     # function evals   = 25
@@ -2133,12 +2140,12 @@ build complex models from testable sub-components.</p>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
-
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
     </div>
   </body>
 </html>

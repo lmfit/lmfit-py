@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Parameter and Parameters &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
@@ -84,7 +84,7 @@
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
-
+ 
       </ul>
     </div>
 
@@ -130,7 +130,7 @@
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-
+            
   <span class="target" id="module-lmfit.parameter"><span id="parameters-chapter"></span></span><div class="section" id="parameter-and-parameters">
 <h1><a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a>  and <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a><a class="headerlink" href="#parameter-and-parameters" title="Permalink to this headline">¶</a></h1>
 <p>This chapter describes the <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> object, which is a key concept of
@@ -164,9 +164,9 @@ parameter values, bounds and other attributes can be printed using
 <a class="reference internal" href="#lmfit.parameter.Parameters.pretty_print" title="lmfit.parameter.Parameters.pretty_print"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Parameters.pretty_print()</span></code></a>.</p>
 <div class="section" id="the-parameter-class">
 <h2>The <a class="reference internal" href="#lmfit.parameter.Parameter" title="lmfit.parameter.Parameter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code></a> class<a class="headerlink" href="#the-parameter-class" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.parameter.Parameter">
-<em class="property">class </em><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value=None</em>, <em class="sig-param">vary=True</em>, <em class="sig-param">min=-inf</em>, <em class="sig-param">max=inf</em>, <em class="sig-param">expr=None</em>, <em class="sig-param">brute_step=None</em>, <em class="sig-param">user_data=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Parameter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vary</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">min</span><span class="o">=</span><span class="default_value">- inf</span></em>, <em class="sig-param"><span class="n">max</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">expr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">brute_step</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">user_data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter" title="Permalink to this definition">¶</a></dt>
 <dd><p>A Parameter is an object that can be varied in a fit, or one of the
 controlling variables in a model. It is a central component of lmfit,
 and all minimization and modeling methods use Parameter objects.</p>
@@ -197,7 +197,7 @@ with other Parameters used in the minimization.</p>
 </ul>
 </dd>
 </dl>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.parameter.Parameter.stderr">
 <code class="sig-name descname">stderr</code><a class="headerlink" href="#lmfit.parameter.Parameter.stderr" title="Permalink to this definition">¶</a></dt>
 <dd><p>The estimated standard error for the best-fit value.</p>
@@ -208,7 +208,7 @@ with other Parameters used in the minimization.</p>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="lmfit.parameter.Parameter.correl">
 <code class="sig-name descname">correl</code><a class="headerlink" href="#lmfit.parameter.Parameter.correl" title="Permalink to this definition">¶</a></dt>
 <dd><p>A dictionary of the correlation with the other fitted Parameters
@@ -229,9 +229,9 @@ bounds with <code class="xref py py-attr docutils literal notranslate"><span cla
 be used to compute the value for the Parameter at each step in the fit.
 See <a class="reference internal" href="constraints.html#constraints-chapter"><span class="std std-ref">Using Mathematical Constraints</span></a> for more details and examples of this
 feature.</p>
-<span class="target" id="index-0"></span><dl class="method">
+<span class="target" id="index-0"></span><dl class="py method">
 <dt id="lmfit.parameter.Parameter.set">
-<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param">value=None</em>, <em class="sig-param">vary=None</em>, <em class="sig-param">min=None</em>, <em class="sig-param">max=None</em>, <em class="sig-param">expr=None</em>, <em class="sig-param">brute_step=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter.set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vary</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">expr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">brute_step</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameter.set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set or update Parameter attributes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -278,9 +278,9 @@ clear the expression.</p>
 </div>
 <div class="section" id="the-parameters-class">
 <h2>The <a class="reference internal" href="#lmfit.parameter.Parameters" title="lmfit.parameter.Parameters"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a> class<a class="headerlink" href="#the-parameters-class" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.parameter.Parameters">
-<em class="property">class </em><code class="sig-name descname">Parameters</code><span class="sig-paren">(</span><em class="sig-param">asteval=None</em>, <em class="sig-param">usersyms=None</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Parameters</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">asteval</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">usersyms</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwds</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>An ordered dictionary of all the Parameter objects required to
 specify a fit model. All minimization and Model fitting routines in
 lmfit will use exactly one Parameters object, typically given as the
@@ -305,9 +305,9 @@ Warning: <em>deprecated, use usersyms if possible</em></p></li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">name</em>, <em class="sig-param">value=None</em>, <em class="sig-param">vary=True</em>, <em class="sig-param">min=-inf</em>, <em class="sig-param">max=inf</em>, <em class="sig-param">expr=None</em>, <em class="sig-param">brute_step=None</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.add" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">value</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vary</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">min</span><span class="o">=</span><span class="default_value">- inf</span></em>, <em class="sig-param"><span class="n">max</span><span class="o">=</span><span class="default_value">inf</span></em>, <em class="sig-param"><span class="n">expr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">brute_step</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a Parameter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -337,9 +337,9 @@ a Python reserved word.</p></li>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.add_many">
-<code class="sig-name descname">add_many</code><span class="sig-paren">(</span><em class="sig-param">*parlist</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.add_many" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_many</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">parlist</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.add_many" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add many parameters, using a sequence of tuples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -364,9 +364,9 @@ min, max, expr, brute_step)</cite>.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.pretty_print">
-<code class="sig-name descname">pretty_print</code><span class="sig-paren">(</span><em class="sig-param">oneline=False, colwidth=8, precision=4, fmt='g', columns=['value', 'min', 'max', 'stderr', 'vary', 'expr', 'brute_step']</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.pretty_print" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">pretty_print</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">oneline</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">colwidth</span><span class="o">=</span><span class="default_value">8</span></em>, <em class="sig-param"><span class="n">precision</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">'g'</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">['value', 'min', 'max', 'stderr', 'vary', 'expr', 'brute_step']</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.pretty_print" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pretty-print of parameters data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -383,7 +383,7 @@ point, ‘g’ floating point and exponential, or ‘e’ exponential.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.valuesdict">
 <code class="sig-name descname">valuesdict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.valuesdict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return an ordered dictionary of parameter values.</p>
@@ -398,9 +398,9 @@ Parameter.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.dumps">
-<code class="sig-name descname">dumps</code><span class="sig-paren">(</span><em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.dumps" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dumps</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.dumps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represent Parameters as a JSON string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -419,9 +419,9 @@ Parameter.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.dump">
-<code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param">fp</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.dump" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dump</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fp</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.dump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write JSON representation of Parameters to a file-like object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -443,9 +443,9 @@ Parameter.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.eval">
-<code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param">expr</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.eval" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">eval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">expr</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.eval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate a statement using the asteval Interpreter.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -461,9 +461,9 @@ recognizable by the asteval Interpreter.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.loads">
-<code class="sig-name descname">loads</code><span class="sig-paren">(</span><em class="sig-param">s</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.loads" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">loads</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.loads" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load Parameters from a JSON string.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -485,9 +485,9 @@ JSON string.</p>
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="lmfit.parameter.Parameters.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param">fp</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.load" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fp</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.parameter.Parameters.load" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load JSON representation of Parameters from a file-like object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -612,12 +612,12 @@ which would make the objective function <code class="docutils literal notranslat
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
-
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
     </div>
   </body>
 </html>

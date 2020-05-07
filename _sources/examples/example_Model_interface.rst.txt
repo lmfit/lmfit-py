@@ -57,7 +57,7 @@ will use ``N=7`` and ``tau=3``, and add a little noise.
 .. code-block:: default
 
     t = np.linspace(0, 5, num=1000)
-    data = decay(t, 7, 3) + np.random.randn(*t.shape)
+    data = decay(t, 7, 3) + np.random.randn(t.size)
 
 
 
@@ -466,7 +466,7 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.246 seconds)
+   **Total running time of the script:** ( 0 minutes  0.388 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:

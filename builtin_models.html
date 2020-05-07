@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
     <title>Built-in Fitting Models in the models module &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
@@ -84,7 +84,7 @@
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
-
+ 
       </ul>
     </div>
 
@@ -171,7 +171,7 @@
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body" role="main">
-
+            
   <div class="section" id="module-lmfit.models">
 <span id="built-in-fitting-models-in-the-models-module"></span><span id="builtin-models-chapter"></span><h1>Built-in Fitting Models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module<a class="headerlink" href="#module-lmfit.models" title="Permalink to this headline">¶</a></h1>
 <p>Lmfit provides several built-in fitting models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module.
@@ -229,9 +229,9 @@ value of <code class="docutils literal notranslate"><span class="pre">amplitude<
 of 0 on the value of <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.</p>
 <div class="section" id="gaussianmodel">
 <h3><a class="reference internal" href="#lmfit.models.GaussianModel" title="lmfit.models.GaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code></a><a class="headerlink" href="#gaussianmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.GaussianModel">
-<em class="property">class </em><code class="sig-name descname">GaussianModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.GaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">GaussianModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.GaussianModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Gaussian or normal distribution lineshape (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Normal_distribution">https://en.wikipedia.org/wiki/Normal_distribution</a>), with three Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.
@@ -270,9 +270,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="lorentzianmodel">
 <h3><a class="reference internal" href="#lmfit.models.LorentzianModel" title="lmfit.models.LorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LorentzianModel</span></code></a><a class="headerlink" href="#lorentzianmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.LorentzianModel">
-<em class="property">class </em><code class="sig-name descname">LorentzianModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LorentzianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">LorentzianModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LorentzianModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Lorentzian or Cauchy-Lorentz distribution function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Cauchy_distribution">https://en.wikipedia.org/wiki/Cauchy_distribution</a>), with three Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>.
@@ -310,9 +310,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="splitlorentzianmodel">
 <h3><a class="reference internal" href="#lmfit.models.SplitLorentzianModel" title="lmfit.models.SplitLorentzianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitLorentzianModel</span></code></a><a class="headerlink" href="#splitlorentzianmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.SplitLorentzianModel">
-<em class="property">class </em><code class="sig-name descname">SplitLorentzianModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SplitLorentzianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">SplitLorentzianModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SplitLorentzianModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Lorentzian or Cauchy-Lorentz distribution function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Cauchy_distribution">https://en.wikipedia.org/wiki/Cauchy_distribution</a>), with four
 parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">sigma</span></code>, and <code class="docutils literal notranslate"><span class="pre">sigma_r</span></code>.</p>
@@ -357,9 +357,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="voigtmodel">
 <h3><a class="reference internal" href="#lmfit.models.VoigtModel" title="lmfit.models.VoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">VoigtModel</span></code></a><a class="headerlink" href="#voigtmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.VoigtModel">
-<em class="property">class </em><code class="sig-name descname">VoigtModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.VoigtModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">VoigtModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.VoigtModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Voigt distribution function (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Voigt_profile">https://en.wikipedia.org/wiki/Voigt_profile</a>), with four Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>, <code class="docutils literal notranslate"><span class="pre">center</span></code>, <code class="docutils literal notranslate"><span class="pre">sigma</span></code>, and <code class="docutils literal notranslate"><span class="pre">gamma</span></code>.  By default,
@@ -408,9 +408,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="pseudovoigtmodel">
 <h3><a class="reference internal" href="#lmfit.models.PseudoVoigtModel" title="lmfit.models.PseudoVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PseudoVoigtModel</span></code></a><a class="headerlink" href="#pseudovoigtmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.PseudoVoigtModel">
-<em class="property">class </em><code class="sig-name descname">PseudoVoigtModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PseudoVoigtModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">PseudoVoigtModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PseudoVoigtModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a pseudo-Voigt distribution function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation">https://en.wikipedia.org/wiki/Voigt_profile#Pseudo-Voigt_Approximation</a>),
 which is a weighted sum of a Gaussian and Lorentzian distribution function
@@ -453,9 +453,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="moffatmodel">
 <h3><a class="reference internal" href="#lmfit.models.MoffatModel" title="lmfit.models.MoffatModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">MoffatModel</span></code></a><a class="headerlink" href="#moffatmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.MoffatModel">
-<em class="property">class </em><code class="sig-name descname">MoffatModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.MoffatModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">MoffatModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.MoffatModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on the Moffat distribution function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Moffat_distribution">https://en.wikipedia.org/wiki/Moffat_distribution</a>), with four Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>), a width parameter
@@ -494,9 +494,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="pearson7model">
 <h3><a class="reference internal" href="#lmfit.models.Pearson7Model" title="lmfit.models.Pearson7Model"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pearson7Model</span></code></a><a class="headerlink" href="#pearson7model" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.Pearson7Model">
-<em class="property">class </em><code class="sig-name descname">Pearson7Model</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Pearson7Model" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Pearson7Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.Pearson7Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Pearson VII distribution (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution">https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_VII_distribution</a>),
 with four parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code>
@@ -538,9 +538,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="studentstmodel">
 <h3><a class="reference internal" href="#lmfit.models.StudentsTModel" title="lmfit.models.StudentsTModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StudentsTModel</span></code></a><a class="headerlink" href="#studentstmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.StudentsTModel">
-<em class="property">class </em><code class="sig-name descname">StudentsTModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StudentsTModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">StudentsTModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StudentsTModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Student’s t distribution function (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">https://en.wikipedia.org/wiki/Student%27s_t-distribution</a>), with three Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>).
@@ -576,9 +576,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="breitwignermodel">
 <h3><a class="reference internal" href="#lmfit.models.BreitWignerModel" title="lmfit.models.BreitWignerModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BreitWignerModel</span></code></a><a class="headerlink" href="#breitwignermodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.BreitWignerModel">
-<em class="property">class </em><code class="sig-name descname">BreitWignerModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.BreitWignerModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">BreitWignerModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.BreitWignerModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Breit-Wigner-Fano function (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Fano_resonance">https://en.wikipedia.org/wiki/Fano_resonance</a>), with four Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),
@@ -612,9 +612,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="lognormalmodel">
 <h3><a class="reference internal" href="#lmfit.models.LognormalModel" title="lmfit.models.LognormalModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LognormalModel</span></code></a><a class="headerlink" href="#lognormalmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.LognormalModel">
-<em class="property">class </em><code class="sig-name descname">LognormalModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LognormalModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">LognormalModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LognormalModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on the Log-normal distribution function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Lognormal">https://en.wikipedia.org/wiki/Lognormal</a>), with three Parameters
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>
@@ -651,9 +651,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="dampedocsillatormodel">
 <h3><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedOcsillatorModel</span></code><a class="headerlink" href="#dampedocsillatormodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.DampedOscillatorModel">
-<em class="property">class </em><code class="sig-name descname">DampedOscillatorModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedOscillatorModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">DampedOscillatorModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedOscillatorModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on the Damped Harmonic Oscillator Amplitude
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part">https://en.wikipedia.org/wiki/Harmonic_oscillator#Amplitude_part</a>), with
 three Parameters:  <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and
@@ -689,9 +689,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="dampedharmonicocsillatormodel">
 <h3><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedHarmonicOcsillatorModel</span></code><a class="headerlink" href="#dampedharmonicocsillatormodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.DampedHarmonicOscillatorModel">
-<em class="property">class </em><code class="sig-name descname">DampedHarmonicOscillatorModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedHarmonicOscillatorModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">DampedHarmonicOscillatorModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DampedHarmonicOscillatorModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a variation of the Damped Harmonic Oscillator (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Harmonic_oscillator">https://en.wikipedia.org/wiki/Harmonic_oscillator</a>), following the
 definition given in DAVE/PAN (see <a class="reference external" href="https://www.ncnr.nist.gov/dave/">https://www.ncnr.nist.gov/dave/</a>) with
@@ -732,9 +732,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="exponentialgaussianmodel">
 <h3><a class="reference internal" href="#lmfit.models.ExponentialGaussianModel" title="lmfit.models.ExponentialGaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialGaussianModel</span></code></a><a class="headerlink" href="#exponentialgaussianmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.ExponentialGaussianModel">
-<em class="property">class </em><code class="sig-name descname">ExponentialGaussianModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialGaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ExponentialGaussianModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialGaussianModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model of an Exponentially modified Gaussian distribution
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution">https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution</a>) with
 four Parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),
@@ -771,9 +771,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="skewedgaussianmodel">
 <h3><a class="reference internal" href="#lmfit.models.SkewedGaussianModel" title="lmfit.models.SkewedGaussianModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedGaussianModel</span></code></a><a class="headerlink" href="#skewedgaussianmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.SkewedGaussianModel">
-<em class="property">class </em><code class="sig-name descname">SkewedGaussianModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedGaussianModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">SkewedGaussianModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedGaussianModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A variation of the Exponential Gaussian, this uses a skewed normal distribution
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Skew_normal_distribution">https://en.wikipedia.org/wiki/Skew_normal_distribution</a>), with Parameters
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>),  <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>),
@@ -812,9 +812,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="skewedvoigtmodel">
 <h3><a class="reference internal" href="#lmfit.models.SkewedVoigtModel" title="lmfit.models.SkewedVoigtModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a><a class="headerlink" href="#skewedvoigtmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.SkewedVoigtModel">
-<em class="property">class </em><code class="sig-name descname">SkewedVoigtModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedVoigtModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">SkewedVoigtModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.SkewedVoigtModel" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>A variation of the Skewed Gaussian, this applies the same skewing</dt><dd><p>to a Voigt distribution (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/Voigt_distribution">https://en.wikipedia.org/wiki/Voigt_distribution</a>).  It has Parameters
@@ -856,9 +856,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="thermaldistributionmodel">
 <h3><a class="reference internal" href="#lmfit.models.ThermalDistributionModel" title="lmfit.models.ThermalDistributionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ThermalDistributionModel</span></code></a><a class="headerlink" href="#thermaldistributionmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.ThermalDistributionModel">
-<em class="property">class </em><code class="sig-name descname">ThermalDistributionModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', form='bose', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ThermalDistributionModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ThermalDistributionModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="n">form</span><span class="o">=</span><span class="default_value">'bose'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ThermalDistributionModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a thermal distribution function.</p>
 <p>Variable <code class="docutils literal notranslate"><span class="pre">form</span></code> defines
 the kind of distribution as below with parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code>
@@ -909,9 +909,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="doniachmodel">
 <h3><a class="reference internal" href="#lmfit.models.DoniachModel" title="lmfit.models.DoniachModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DoniachModel</span></code></a><a class="headerlink" href="#doniachmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.DoniachModel">
-<em class="property">class </em><code class="sig-name descname">DoniachModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DoniachModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">DoniachModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.DoniachModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model of an Doniach Sunjic asymmetric lineshape
 (see <a class="reference external" href="https://www.casaxps.com/help_manual/line_shapes.htm">https://www.casaxps.com/help_manual/line_shapes.htm</a>), used in
 photo-emission, with four Parameters <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>),
@@ -956,9 +956,9 @@ or <a class="reference external" href="https://docs.scipy.org/doc/scipy/referenc
 of many components of a composite model.</p>
 <div class="section" id="constantmodel">
 <h3><a class="reference internal" href="#lmfit.models.ConstantModel" title="lmfit.models.ConstantModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConstantModel</span></code></a><a class="headerlink" href="#constantmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.ConstantModel">
-<em class="property">class </em><code class="sig-name descname">ConstantModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ConstantModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ConstantModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ConstantModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constant model, with a single Parameter: <code class="docutils literal notranslate"><span class="pre">c</span></code>.</p>
 <p>Note that this is ‘constant’ in the sense of having no dependence on
 the independent variable <code class="docutils literal notranslate"><span class="pre">x</span></code>, not in the sense of being non-varying.
@@ -991,9 +991,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="linearmodel">
 <h3><a class="reference internal" href="#lmfit.models.LinearModel" title="lmfit.models.LinearModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LinearModel</span></code></a><a class="headerlink" href="#linearmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.LinearModel">
-<em class="property">class </em><code class="sig-name descname">LinearModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LinearModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">LinearModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.LinearModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear model, with two Parameters <code class="docutils literal notranslate"><span class="pre">intercept</span></code> and <code class="docutils literal notranslate"><span class="pre">slope</span></code>.</p>
 <p>Defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1026,9 +1026,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="quadraticmodel">
 <h3><a class="reference internal" href="#lmfit.models.QuadraticModel" title="lmfit.models.QuadraticModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">QuadraticModel</span></code></a><a class="headerlink" href="#quadraticmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.QuadraticModel">
-<em class="property">class </em><code class="sig-name descname">QuadraticModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.QuadraticModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">QuadraticModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.QuadraticModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A quadratic model, with three Parameters <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, and <code class="docutils literal notranslate"><span class="pre">c</span></code>.</p>
 <p>Defined as:</p>
 <div class="math notranslate nohighlight">
@@ -1060,9 +1060,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="polynomialmodel">
 <h3><a class="reference internal" href="#lmfit.models.PolynomialModel" title="lmfit.models.PolynomialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolynomialModel</span></code></a><a class="headerlink" href="#polynomialmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.PolynomialModel">
-<em class="property">class </em><code class="sig-name descname">PolynomialModel</code><span class="sig-paren">(</span><em class="sig-param">degree, independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">PolynomialModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">degree</span></em>, <em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PolynomialModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A polynomial model with up to 7 Parameters, specified by <code class="docutils literal notranslate"><span class="pre">degree</span></code>.</p>
 <div class="math notranslate nohighlight">
 \[f(x; c_0, c_1, \ldots, c_7) = \sum_{i=0, 7} c_i  x^i\]</div>
@@ -1100,9 +1100,9 @@ data. Should be one of:</p>
 <p>Two models represent step-like functions, and share many characteristics.</p>
 <div class="section" id="stepmodel">
 <h3><a class="reference internal" href="#lmfit.models.StepModel" title="lmfit.models.StepModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StepModel</span></code></a><a class="headerlink" href="#stepmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.StepModel">
-<em class="property">class </em><code class="sig-name descname">StepModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', form='linear', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StepModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">StepModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="n">form</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.StepModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Step function, with three Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center</span></code> (<span class="math notranslate nohighlight">\(\mu\)</span>) and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> (<span class="math notranslate nohighlight">\(\sigma\)</span>).</p>
 <p>There are four choices for <code class="docutils literal notranslate"><span class="pre">form</span></code>:</p>
@@ -1149,9 +1149,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="rectanglemodel">
 <h3><a class="reference internal" href="#lmfit.models.RectangleModel" title="lmfit.models.RectangleModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangleModel</span></code></a><a class="headerlink" href="#rectanglemodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.RectangleModel">
-<em class="property">class </em><code class="sig-name descname">RectangleModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', form='linear', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.RectangleModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">RectangleModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="n">form</span><span class="o">=</span><span class="default_value">'linear'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.RectangleModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Step-up and Step-down function, with five
 Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), <code class="docutils literal notranslate"><span class="pre">center1</span></code> (<span class="math notranslate nohighlight">\(\mu_1\)</span>),
 <code class="docutils literal notranslate"><span class="pre">center2</span></code> (<span class="math notranslate nohighlight">\(\mu_2\)</span>), <cite>sigma1`</cite> (<span class="math notranslate nohighlight">\(\sigma_1\)</span>) and
@@ -1207,9 +1207,9 @@ data. Should be one of:</p>
 <h2>Exponential and Power law models<a class="headerlink" href="#exponential-and-power-law-models" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="exponentialmodel">
 <h3><a class="reference internal" href="#lmfit.models.ExponentialModel" title="lmfit.models.ExponentialModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialModel</span></code></a><a class="headerlink" href="#exponentialmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.ExponentialModel">
-<em class="property">class </em><code class="sig-name descname">ExponentialModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ExponentialModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExponentialModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on an exponential decay function
 (see <a class="reference external" href="https://en.wikipedia.org/wiki/Exponential_decay">https://en.wikipedia.org/wiki/Exponential_decay</a>) with two Parameters:
 <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), and <code class="docutils literal notranslate"><span class="pre">decay</span></code> (<span class="math notranslate nohighlight">\(\tau\)</span>), in:</p>
@@ -1242,9 +1242,9 @@ data. Should be one of:</p>
 </div>
 <div class="section" id="powerlawmodel">
 <h3><a class="reference internal" href="#lmfit.models.PowerLawModel" title="lmfit.models.PowerLawModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerLawModel</span></code></a><a class="headerlink" href="#powerlawmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.PowerLawModel">
-<em class="property">class </em><code class="sig-name descname">PowerLawModel</code><span class="sig-paren">(</span><em class="sig-param">independent_vars=['x'], prefix='', nan_policy='raise', **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PowerLawModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">PowerLawModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">['x']</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.PowerLawModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>A model based on a Power Law (see <a class="reference external" href="https://en.wikipedia.org/wiki/Power_law">https://en.wikipedia.org/wiki/Power_law</a>),
 with two Parameters: <code class="docutils literal notranslate"><span class="pre">amplitude</span></code> (<span class="math notranslate nohighlight">\(A\)</span>), and <code class="docutils literal notranslate"><span class="pre">exponent</span></code> (<span class="math notranslate nohighlight">\(k\)</span>), in:</p>
 <div class="math notranslate nohighlight">
@@ -1290,9 +1290,9 @@ user-supplied expression.  This uses the <a class="reference external" href="htt
 mathematical constraints as discussed in <a class="reference internal" href="constraints.html#constraints-chapter"><span class="std std-ref">Using Mathematical Constraints</span></a>.</p>
 <div class="section" id="expressionmodel">
 <h3><a class="reference internal" href="#lmfit.models.ExpressionModel" title="lmfit.models.ExpressionModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a><a class="headerlink" href="#expressionmodel" title="Permalink to this headline">¶</a></h3>
-<dl class="class">
+<dl class="py class">
 <dt id="lmfit.models.ExpressionModel">
-<em class="property">class </em><code class="sig-name descname">ExpressionModel</code><span class="sig-paren">(</span><em class="sig-param">expr</em>, <em class="sig-param">independent_vars=None</em>, <em class="sig-param">init_script=None</em>, <em class="sig-param">nan_policy='raise'</em>, <em class="sig-param">**kws</em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExpressionModel" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">ExpressionModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">expr</span></em>, <em class="sig-param"><span class="n">independent_vars</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">init_script</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nan_policy</span><span class="o">=</span><span class="default_value">'raise'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kws</span></em><span class="sig-paren">)</span><a class="headerlink" href="#lmfit.models.ExpressionModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate a model from user-supplied expression.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1469,6 +1469,9 @@ we try gives results that are worse by comaparing the fit statistics:</p>
     height:     10.7421156 +/- 0.08633945 (0.80%) == &#39;0.3183099*amplitude/max(2.220446049250313e-16, sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.250)
     C(amplitude, sigma) =  0.709
+</pre></div>
+</div>
+<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
 </div>
 </div>
@@ -1741,18 +1744,18 @@ parameter values.</p>
     Akaike info crit   = 417.864631
     Bayesian info crit = 446.036318
 [[Variables]]
-    exp_amplitude:  99.0183282 +/- 0.53748735 (0.54%) (init = 162.2102)
-    exp_decay:      90.9508861 +/- 1.10310509 (1.21%) (init = 93.24905)
-    g1_amplitude:   4257.77318 +/- 42.3833640 (1.00%) (init = 2000)
-    g1_center:      107.030954 +/- 0.15006784 (0.14%) (init = 105)
+    exp_amplitude:  99.0183283 +/- 0.53748735 (0.54%) (init = 162.2102)
+    exp_decay:      90.9508860 +/- 1.10310509 (1.21%) (init = 93.24905)
+    g1_amplitude:   4257.77319 +/- 42.3833645 (1.00%) (init = 2000)
+    g1_center:      107.030954 +/- 0.15006786 (0.14%) (init = 105)
     g1_sigma:       16.6725753 +/- 0.16048161 (0.96%) (init = 15)
     g1_fwhm:        39.2609138 +/- 0.37790530 (0.96%) == &#39;2.3548200*g1_sigma&#39;
     g1_height:      101.880231 +/- 0.59217099 (0.58%) == &#39;0.3989423*g1_amplitude/max(2.220446049250313e-16, g1_sigma)&#39;
-    g2_amplitude:   2493.41771 +/- 36.1694729 (1.45%) (init = 2000)
-    g2_center:      153.270100 +/- 0.19466742 (0.13%) (init = 155)
+    g2_amplitude:   2493.41771 +/- 36.1694731 (1.45%) (init = 2000)
+    g2_center:      153.270101 +/- 0.19466743 (0.13%) (init = 155)
     g2_sigma:       13.8069484 +/- 0.18679415 (1.35%) (init = 15)
     g2_fwhm:        32.5128783 +/- 0.43986659 (1.35%) == &#39;2.3548200*g2_sigma&#39;
-    g2_height:      72.0455934 +/- 0.61722093 (0.86%) == &#39;0.3989423*g2_amplitude/max(2.220446049250313e-16, g2_sigma)&#39;
+    g2_height:      72.0455934 +/- 0.61722094 (0.86%) == &#39;0.3989423*g2_amplitude/max(2.220446049250313e-16, g2_sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(g1_amplitude, g1_sigma)      =  0.824
     C(g2_amplitude, g2_sigma)      =  0.815
@@ -1834,12 +1837,12 @@ and without any bounds on parameters at all:</p>
 [[Variables]]
     exp_amplitude:  99.0183270 +/- 0.53748905 (0.54%) (init = 94.53724)
     exp_decay:      90.9508890 +/- 1.10310483 (1.21%) (init = 111.1985)
-    g1_amplitude:   4257.77343 +/- 42.3836427 (1.00%) (init = 3189.648)
+    g1_amplitude:   4257.77343 +/- 42.3836433 (1.00%) (init = 3189.648)
     g1_center:      107.030956 +/- 0.15006873 (0.14%) (init = 106.5)
     g1_sigma:       16.6725765 +/- 0.16048227 (0.96%) (init = 14.5)
     g1_fwhm:        39.2609166 +/- 0.37790686 (0.96%) == &#39;2.3548200*g1_sigma&#39;
-    g1_height:      101.880230 +/- 0.59217232 (0.58%) == &#39;0.3989423*g1_amplitude/max(2.220446049250313e-16, g1_sigma)&#39;
-    g2_amplitude:   2493.41733 +/- 36.1696902 (1.45%) (init = 2818.337)
+    g1_height:      101.880230 +/- 0.59217233 (0.58%) == &#39;0.3989423*g1_amplitude/max(2.220446049250313e-16, g1_sigma)&#39;
+    g2_amplitude:   2493.41733 +/- 36.1696906 (1.45%) (init = 2818.337)
     g2_center:      153.270101 +/- 0.19466905 (0.13%) (init = 150)
     g2_sigma:       13.8069461 +/- 0.18679534 (1.35%) (init = 15)
     g2_fwhm:        32.5128728 +/- 0.43986939 (1.35%) == &#39;2.3548200*g2_sigma&#39;
@@ -1904,12 +1907,12 @@ and the figure above shows an improved initial estimate of the data.</p>
    <li><a href="confidence.html">confidence intervals</a>|</li>
    <li><a href="bounds.html">bounds</a>|</li>
    <li><a href="constraints.html">constraints</a>|</li>
-
+ 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
     </div>
   </body>
 </html>

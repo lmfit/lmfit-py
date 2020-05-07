@@ -23,9 +23,9 @@ doc_fitting_emcee.py
 
     [[Variables]]
         a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
-        a2: -4.33525597 +/- 0.11765819 (2.71%) (init = 4)
-        t1:  1.30993186 +/- 0.13449652 (10.27%) (init = 3)
-        t2:  11.8099125 +/- 0.47172590 (3.99%) (init = 3)
+        a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
+        t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
+        t2:  11.8238752 +/- 0.47172610 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.500)
         C(a2, t2) =  0.988
         C(a2, t1) = -0.928
@@ -33,39 +33,39 @@ doc_fitting_emcee.py
         C(a1, t1) = -0.609
     The chain is shorter than 50 times the integrated autocorrelation time for 5 parameter(s). Use this estimate with caution and run a longer chain!
     N/50 = 20;
-    tau: [42.56866178 46.31856223 46.34907107 46.97295144 38.29346367]
+    tau: [39.61270231 44.54869391 43.67539884 45.10768282 42.66250096]
 
     median of posterior probability distribution
     --------------------------------------------
     [[Variables]]
-        a1:         2.99273590 +/- 0.14795943 (4.94%) (init = 2.986237)
-        a2:        -4.34510429 +/- 0.12509158 (2.88%) (init = -4.335256)
-        t1:         1.32575254 +/- 0.14478422 (10.92%) (init = 1.309932)
-        t2:         11.7909996 +/- 0.48119246 (4.08%) (init = 11.80991)
-        __lnsigma: -2.32735355 +/- 0.04399601 (1.89%) (init = -2.302585)
+        a1:         2.99635243 +/- 0.15120055 (5.05%) (init = 2.986237)
+        a2:        -4.34051531 +/- 0.12100150 (2.79%) (init = -4.335256)
+        t1:         1.32328984 +/- 0.13821025 (10.44%) (init = 1.309932)
+        t2:         11.8019963 +/- 0.47549352 (4.03%) (init = 11.82388)
+        __lnsigma: -2.32752129 +/- 0.04400234 (1.89%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) =  0.979
-        C(a2, t1) = -0.939
-        C(t1, t2) = -0.896
-        C(a1, t1) = -0.498
-        C(a1, a2) =  0.206
-        C(a1, t2) =  0.175
+        C(a2, t2) =  0.981
+        C(a2, t1) = -0.931
+        C(t1, t2) = -0.888
+        C(a1, t1) = -0.493
+        C(a1, a2) =  0.175
+        C(a1, t2) =  0.140
 
-    Maximum Likelihood Estimation from emcee
+    Maximum Likelihood Estimation from emcee       
     -------------------------------------------------
     Parameter  MLE Value   Median Value   Uncertainty
-      a1         2.99069     2.99274       0.14796
-      a2        -4.35009    -4.34510       0.12509
-      t1         1.32248     1.32575       0.14478
-      t2        11.76440    11.79100       0.48119
+      a1         3.01605     2.99635       0.15120
+      a2        -4.33859    -4.34052       0.12100
+      t1         1.30511     1.32329       0.13821
+      t2        11.81635    11.80200       0.47549
 
-    Error Estimates from emcee
+    Error Estimates from emcee    
     ------------------------------------------------------
-    Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma
-      a1       -0.2635  -0.1408   2.9927   0.1552   0.3262
-      a2       -0.3474  -0.1393  -4.3451   0.1110   0.1931
-      t1       -0.2411  -0.1335   1.3258   0.1561   0.3420
-      t2       -1.1149  -0.4989  11.7910   0.4635   0.8741
+    Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma 
+      a1       -0.2695  -0.1436   2.9964   0.1589   0.3313
+      a2       -0.3339  -0.1408  -4.3405   0.1014   0.1893
+      t1       -0.2410  -0.1287   1.3233   0.1478   0.3319
+      t2       -1.0962  -0.5133  11.8020   0.4379   0.8778
 
 
 
@@ -196,7 +196,7 @@ doc_fitting_emcee.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  11.081 seconds)
+   **Total running time of the script:** ( 0 minutes  14.876 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:

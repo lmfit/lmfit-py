@@ -107,7 +107,7 @@ doc_model_with_iter_callback.py
      ITER  79 ['24.43754', '7.65514', '1.22977', '-0.20146', '3.32621', '2.89589', '7.92763']
      ITER  80 ['24.43754', '7.65514', '1.22977', '-0.20146', '3.32621', '2.89589', '7.92763']
      ITER  81 ['24.43823', '7.65514', '1.22982', '-0.20146', '3.32615', '2.89600', '7.92754']
-     ITER  82 ['24.43823', '7.65514', '1.22982', '-0.20146', '3.32615', '2.89600', '7.92754']
+     ITER  81 ['24.43823', '7.65514', '1.22982', '-0.20146', '3.32615', '2.89600', '7.92754']
     Nfev =  81
     [[Model]]
         (Model(gaussian, prefix='peak_') + Model(linear, prefix='bkg_'))
@@ -160,8 +160,8 @@ doc_model_with_iter_callback.py
     from lmfit.models import GaussianModel, LinearModel
 
 
-    def per_iteration(pars, iter, resid, *args, **kws):
-        print(" ITER ", iter, ["%.5f" % p for p in pars.values()])
+    def per_iteration(pars, iteration, resid, *args, **kws):
+        print(" ITER ", iteration, ["%.5f" % p for p in pars.values()])
 
 
     x = linspace(0., 20, 401)
@@ -192,7 +192,7 @@ doc_model_with_iter_callback.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.114 seconds)
+   **Total running time of the script:** ( 0 minutes  0.104 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_iter_callback.py:
