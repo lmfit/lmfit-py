@@ -103,8 +103,8 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         raise ValueError('length of x0 != length of bounds')
 
     bounds = [b if b is not None else (None, None) for b in bounds]
-    _bounds = [(-np.inf if l is None else l, np.inf if u is None else u)
-               for l, u in bounds]
+    _bounds = [(-np.inf if lb is None else lb, np.inf if ub is None else ub)
+               for lb, ub in bounds]
     low, up = np.array(_bounds).T
 
     if maxfunevals is None:

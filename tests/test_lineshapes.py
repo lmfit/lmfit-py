@@ -72,6 +72,8 @@ def test_x_float_value(lineshape):
 
 
 rising_form = ['erf', 'logistic', 'atan', 'arctan', 'linear', 'unknown']
+
+
 @pytest.mark.parametrize("form", rising_form)
 @pytest.mark.parametrize("lineshape", ['step', 'rectangle'])
 def test_form_argument_step_rectangle(form, lineshape):
@@ -99,6 +101,8 @@ def test_form_argument_step_rectangle(form, lineshape):
 
 
 thermal_form = ['bose', 'maxwell', 'fermi', 'Bose-Einstein', 'unknown']
+
+
 @pytest.mark.parametrize("form", thermal_form)
 def test_form_argument_thermal_distribution(form):
     """Test 'form' argument for thermal_distribution function."""
