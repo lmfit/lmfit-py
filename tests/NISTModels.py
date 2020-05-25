@@ -172,7 +172,7 @@ def ReadNistData(dataset):
     line numbers being significant!
     """
     finp = open(os.path.join(NIST_DIR, "%s.dat" % dataset))
-    lines = [l[:-1] for l in finp.readlines()]
+    lines = [line[:-1] for line in finp.readlines()]
     finp.close()
     ModelLines = lines[30:39]
     ParamLines = lines[40:58]
