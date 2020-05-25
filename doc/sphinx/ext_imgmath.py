@@ -7,5 +7,5 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
               'sphinx.ext.todo',
               'IPython.sphinxext.ipython_console_highlighting',
-              'jupyter_sphinx.execute',
+              'jupyter_sphinx',
               'sphinx.ext.imgconverter']
