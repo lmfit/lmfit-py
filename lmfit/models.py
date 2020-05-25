@@ -6,9 +6,9 @@ import numpy as np
 
 from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
-                         expgaussian, exponential, gaussian, linear, lognormal,
-                         lorentzian, moffat, parabolic, pearson7, powerlaw,
-                         pvoigt, rectangle, skewed_gaussian, skewed_voigt,
+                         expgaussian, exponential, gaussian, gaussian2d, linear,
+                         lognormal, lorentzian, moffat, parabolic, pearson7,
+                         powerlaw, pvoigt, rectangle, skewed_gaussian, skewed_voigt,
                          split_lorentzian, step, students_t,
                          thermal_distribution, voigt)
 from .model import Model
@@ -67,6 +67,36 @@ def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
 
     pars = model.make_params(amplitude=amp, center=cen, sigma=sig)
     pars['%ssigma' % model.prefix].set(min=0.0)
+    return pars
+
+
+def guess_from_peak2d(model, z, x, y, negative):
+    """Crudely estimate amp, centerx, centery, sigmax, sigmay for a 2d peak,
+    create params."""
+    if x is None or y is None:
+        return 1.0, 0.0, 0.0, 1.0, 1.0
+
+    maxx, minx = max(x), min(x)
+    maxy, miny = max(y), min(y)
+    maxz, minz = max(z), min(x)
+
+    centerx = x[np.argmax(z)]
+    centery = y[np.argmax(z)]
+    height = (maxz - minz)
+    sigmax = (maxx-minx)/6.0
+    sigmay = (maxy-miny)/6.0
+
+    if negative:
+        centerx = x[np.argmin(z)]
+        centery = y[np.argmin(z)]
+        height = (minz - maxz)
+
+    amp = height*sigmax*sigmay
+
+    pars = model.make_params(amplitude=amp, centerx=centerx, centery=centery,
+                             sigmax=sigmax, sigmay=sigmay)
+    pars['%ssigmax' % model.prefix].set(min=0.0)
+    pars['%ssigmay' % model.prefix].set(min=0.0)
     return pars
 
 
@@ -330,6 +360,57 @@ class GaussianModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class Gaussian2dModel(Model):
+    r"""A model based on a two-dimensional Gaussian as a function of ``x`` and
+    ``y``. This has five Parameters:
+    ``amplitude``, ``centerx``, ``sigmax``, ``centery``, and ``sigmay``.
+    In addition, parameters ``fwhmx``, ``fwhmy`` and ``height`` are included as
+    constraints to report the maximum peak height and the two full width at half
+    maxima,  respectively.
+
+    .. math::
+
+        f(x, y; A, \mu_x, \sigma_x, \mu_y, \sigma_y) =
+        A g(x; A=1, \mu_x, \sigma_x) g(y; A=1, \mu_y, \sigma_y)
+
+    where subfunction :math:`g(x; A, \mu, \sigma)` is a gaussian
+
+    .. math::
+
+        g(x; A, \mu, \sigma) =
+        \frac{A}{\sigma\sqrt{2\pi}} e^{[{-{(x-\mu)^2}/{{2\sigma}^2}}]}.
+
+    """
+    fwhm_factor = 2*np.sqrt(2*np.log(2))
+    height_factor = 1./2*np.pi
+
+    def __init__(self, independent_vars=['x', 'y'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super().__init__(gaussian2d, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
+        self.set_param_hint('sigmax', min=0)
+        self.set_param_hint('sigmay', min=0)
+        expr = fwhm_expr(self)
+        self.set_param_hint('fwhmx', expr=expr.replace('sigma', 'sigmax'))
+        self.set_param_hint('fwhmy', expr=expr.replace('sigma', 'sigmay'))
+        fmt = ("{factor:.7f}*{prefix:s}amplitude/(max({tiny}, {prefix:s}sigmax)"
+               + "*max({tiny}, {prefix:s}sigmay))")
+        expr = fmt.format(tiny=tiny, factor=self.height_factor, prefix=self.prefix)
+        self.set_param_hint('height', expr=expr)
+
+    def guess(self, data, x=None, y=None, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        pars = guess_from_peak2d(self, data, x, y, negative)
+        return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC.replace("['x']", "['x', 'y']")
     guess.__doc__ = COMMON_GUESS_DOC
 
 
