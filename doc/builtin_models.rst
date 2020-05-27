@@ -30,7 +30,7 @@ example, a Lorentzian plus a linear background might be represented as::
     background = LinearModel()
     model = peak + background
 
-All the models listed below are one-dimensional, with an independent
+Almost all the models listed below are one-dimensional, with an independent
 variable named ``x``.  Many of these models represent a function with a
 distinct peak, and so share common features.  To maintain uniformity,
 common parameter names are used whenever possible.  Thus, most models have
@@ -208,6 +208,16 @@ Exponential and Power law models
 
 .. autoclass:: PowerLawModel
 
+
+Two dimensional Peak-like models
+--------------------------------
+
+The one example of a two-dimensional peak is a two-dimensional Gaussian.
+
+:class:`Gaussian2dModel`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: Gaussian2dModel
 
 User-defined Models
 ----------------------------

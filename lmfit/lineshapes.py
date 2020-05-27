@@ -12,12 +12,13 @@ spi = sqrt(pi)
 s2 = sqrt(2.0)
 tiny = finfo(float64).eps
 
-functions = ('gaussian', 'lorentzian', 'voigt', 'pvoigt', 'moffat', 'pearson7',
-             'breit_wigner', 'damped_oscillator', 'dho', 'logistic', 'lognormal',
-             'students_t', 'expgaussian', 'doniach', 'donaich', 'skewed_gaussian',
-             'skewed_voigt', 'thermal_distribution', 'step', 'rectangle',
-             'exponential', 'powerlaw', 'linear', 'parabolic', 'sine',
-             'expsine', 'split_lorentzian')
+functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt', 'pvoigt',
+             'moffat', 'pearson7', 'breit_wigner', 'damped_oscillator',
+             'dho', 'logistic', 'lognormal', 'students_t', 'expgaussian',
+             'doniach', 'donaich', 'skewed_gaussian', 'skewed_voigt',
+             'thermal_distribution', 'step', 'rectangle', 'exponential',
+             'powerlaw', 'linear', 'parabolic', 'sine', 'expsine',
+             'split_lorentzian')
 
 
 def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
@@ -29,6 +30,20 @@ def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
     """
     return ((amplitude/(max(tiny, s2pi*sigma)))
             * exp(-(1.0*x-center)**2 / max(tiny, (2*sigma**2))))
+
+
+def gaussian2d(x, y=0.0, amplitude=1.0, centerx=0.0, centery=0.0, sigmax=1.0,
+               sigmay=1.0):
+    """Return a 2-dimensional Gaussian function.
+
+    gaussian2d(x, y, amplitude, centerx, centery, sigmax, sigmay) =
+        amplitude/(2*pi*sigmax*sigmay) * exp(-(x-centerx)**2/(2*sigmax**2)
+                                             -(y-centery)**2/(2*sigmay**2))
+
+    """
+    z = amplitude*(gaussian(x, amplitude=1, center=centerx, sigma=sigmax) *
+                   gaussian(y, amplitude=1, center=centery, sigma=sigmay))
+    return z
 
 
 def lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0):

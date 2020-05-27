@@ -159,6 +159,11 @@ def test_height_and_fwhm_expression_evalution_in_builtin_models():
                                  center2=0.0, sigma2=0.0, form=f)
         params.update_constraints()
 
+    mod = models.Gaussian2dModel()
+    params = mod.make_params(amplitude=1.0, centerx=0.0, sigmax=0.9,
+                             centery=0.0, sigmay=0.9)
+    params.update_constraints()
+
 
 def test_guess_modelparams():
     """Tests for the 'guess' function of built-in models."""
@@ -252,4 +257,27 @@ def test_guess_from_peak():
 
     for param, value in zip(['amplitude', 'center', 'sigma'],
                             [amplitude, center, sigma]):
+        assert np.abs((guess_increasing_x[param].value - value)/value) < 0.5
+
+
+def test_guess_from_peak2d():
+    """Regression test for guess_from_peak2d function (see GH #627)."""
+    x = np.linspace(-5, 5)
+    y = np.linspace(-5, 5)
+    amplitude = 0.8
+    centerx = 1.7
+    sigmax = 0.3
+    centery = 1.3
+    sigmay = 0.2
+    z = lineshapes.gaussian2d(x, y, amplitude=amplitude,
+                              centerx=centerx, sigmax=sigmax,
+                              centery=centery, sigmay=sigmay)
+
+    model = models.Gaussian2dModel()
+    guess_increasing_x = model.guess(z, x=x, y=y)
+    guess_decreasing_x = model.guess(z[::-1], x=x[::-1], y=y[::-1])
+
+    assert guess_increasing_x == guess_decreasing_x
+
+    for param, value in zip(['centerx', 'centery'], [centerx, centery]):
         assert np.abs((guess_increasing_x[param].value - value)/value) < 0.5
