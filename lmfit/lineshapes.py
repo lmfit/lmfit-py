@@ -1,5 +1,7 @@
 """Basic model line shapes and distribution functions."""
 
+import warnings
+
 from numpy import (arctan, cos, exp, finfo, float64, isnan, log, pi, real, sin,
                    sqrt, where)
 from scipy.special import erf, erfc
@@ -263,7 +265,18 @@ def doniach(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     return scale*cos(pi*gamma/2 + gm1*arctan(arg))/(1 + arg**2)**(gm1/2)
 
 
-donaich = doniach   # for back-compat
+def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
+    """Return a Doniach Sunjic asymmetric lineshape, used for photo-emission.
+
+    Function added here for backwards-compatibility, will emit a FutureWarning
+    when used.
+
+    """
+    msg = ('Please correct the name of your lineshape function: donaich --> '
+           'doniach. The incorrect spelling will be removed in a later '
+           'release.')
+    warnings.warn(FutureWarning(msg))
+    return doniach(x, amplitude, center, sigma, gamma)
 
 
 def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):
