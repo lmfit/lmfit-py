@@ -803,7 +803,6 @@ class LognormalModel(Model):
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
-        self.set_param_hint('center', min=1.e-19)
         self.set_param_hint('sigma', min=0)
 
         fmt = ("{prefix:s}amplitude/max({0}, ({prefix:s}sigma*sqrt(2*pi)))"
