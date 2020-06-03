@@ -14,8 +14,8 @@ Global minimization using the ``brute`` method (a.k.a. grid search)
 # (see below).
 import copy
 
-import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
+import matplotlib.pyplot as plt
 import numpy as np
 
 from lmfit import Minimizer, Parameters, fit_report

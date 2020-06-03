@@ -4,11 +4,12 @@ Fit Two Dimensional Peaks
 
 This example illustrates how to handle two-dimensional data with lmfit.
 """
+import matplotlib.pyplot as plt
 import numpy as np
+from scipy.interpolate import griddata
+
 import lmfit
 from lmfit.lineshapes import gaussian2d, lorentzian
-from scipy.interpolate import griddata
-import matplotlib.pyplot as plt
 
 ###############################################################################
 # Two-dimensional Gaussian
