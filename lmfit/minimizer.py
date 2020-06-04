@@ -20,7 +20,6 @@ import numbers
 import warnings
 
 import numpy as np
-from numpy import ndarray, ones_like, sqrt
 from numpy.dual import inv
 from numpy.linalg import LinAlgError
 from scipy.optimize import basinhopping as scipy_basinhopping
@@ -356,7 +355,7 @@ class MinimizerResult:
         self.nvarys = len(self.init_vals)
         if not hasattr(self, 'residual'):
             self.residual = -np.inf
-        if isinstance(self.residual, ndarray):
+        if isinstance(self.residual, np.ndarray):
             self.chisqr = (self.residual**2).sum()
             self.ndata = len(self.residual)
             self.nfree = self.ndata - self.nvarys
@@ -599,7 +598,7 @@ class Minimizer:
 
         """
         pars = self.result.params
-        grad_scale = ones_like(fvars)
+        grad_scale = np.ones_like(fvars)
         for ivar, name in enumerate(self.result.var_names):
             val = fvars[ivar]
             pars[name].value = pars[name].from_internal(val)
@@ -642,9 +641,9 @@ class Minimizer:
             apply_bounds_transformation = True
 
         r = self.__residual(fvars, apply_bounds_transformation)
-        if isinstance(r, ndarray) and r.size > 1:
+        if isinstance(r, np.ndarray) and r.size > 1:
             r = self.reduce_fcn(r)
-            if isinstance(r, ndarray) and r.size > 1:
+            if isinstance(r, np.ndarray) and r.size > 1:
                 r = r.sum()
         return r
 
@@ -822,14 +821,14 @@ class Minimizer:
 
         for ivar, name in enumerate(self.result.var_names):
             par = self.result.params[name]
-            par.stderr = sqrt(self.result.covar[ivar, ivar])
+            par.stderr = np.sqrt(self.result.covar[ivar, ivar])
             par.correl = {}
             try:
                 self.result.errorbars = self.result.errorbars and (par.stderr > 0.0)
                 for jvar, varn2 in enumerate(self.result.var_names):
                     if jvar != ivar:
                         par.correl[varn2] = (self.result.covar[ivar, jvar] /
-                                             (par.stderr * sqrt(self.result.covar[jvar, jvar])))
+                                             (par.stderr * np.sqrt(self.result.covar[jvar, jvar])))
             except ZeroDivisionError:
                 self.result.errorbars = False
 
@@ -1455,7 +1454,7 @@ class Minimizer:
                 result.residual = result.residual/np.exp(params['__lnsigma'].value)
 
         # Calculate statistics for the two standard cases:
-        if isinstance(result.residual, ndarray) or (float_behavior == 'chi2'):
+        if isinstance(result.residual, np.ndarray) or (float_behavior == 'chi2'):
             result._calculate_statistics()
 
         # Handle special case unique to emcee:
