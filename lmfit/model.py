@@ -1471,15 +1471,15 @@ class ModelResult(Minimizer):
 
         nvarys = self.nvarys
         # ensure fjac and df2 are correct size if independent var updated by kwargs
-        ndata = self.model.eval(self.params, **userkws).size
+        ndata = self.model.eval(params, **userkws).size
         covar = self.covar
         fjac = np.zeros((nvarys, ndata))
         df2 = np.zeros(ndata)
-        if any([p.stderr is None for p in self.params.values()]):
+        if any([p.stderr is None for p in params.values()]):
             return df2
 
         # find derivative by hand!
-        pars = self.params.copy()
+        pars = params.copy()
         for i in range(nvarys):
             pname = self.var_names[i]
             val0 = pars[pname].value
