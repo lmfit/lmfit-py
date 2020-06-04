@@ -4,6 +4,7 @@ import inspect
 
 import numpy as np
 from numpy.testing import assert_allclose
+import pytest
 from scipy.optimize import fsolve
 
 from lmfit import lineshapes, models
@@ -284,3 +285,12 @@ def test_guess_from_peak2d():
 
     for param, value in zip(['centerx', 'centery'], [centerx, centery]):
         assert np.abs((guess_increasing_x[param].value - value)/value) < 0.5
+
+
+def test_DonaichModel_emits_futurewarning():
+    """Assert that using the wrong spelling emits a FutureWarning."""
+    msg = ('Please correct the name of your built-in model: DonaichModel --> '
+           'DoniachModel. The incorrect spelling will be removed in a later '
+           'release.')
+    with pytest.warns(FutureWarning, match=msg):
+        models.DonaichModel()
