@@ -3,6 +3,7 @@ Fit Two Dimensional Peaks
 =========================
 
 This example illustrates how to handle two-dimensional data with lmfit.
+
 """
 import matplotlib.pyplot as plt
 import numpy as np
@@ -31,16 +32,16 @@ Z = griddata((x, y), z, (X, Y), method='linear', fill_value=0)
 
 fig, ax = plt.subplots()
 art = ax.pcolor(X, Y, Z)
-cb = plt.colorbar(art, ax=ax)
+plt.colorbar(art, ax=ax, label='z')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
-cb.set_label('z')
+plt.show()
 ###############################################################################
 # In this case, we can use a built-in model to fit
 model = lmfit.models.Gaussian2dModel()
 params = model.guess(z, x, y)
 result = model.fit(z, x=x, y=y, params=params, weights=1/error)
-result
+lmfit.report_fit(result)
 ###############################################################################
 # To check the fit, we can evaluate the function on the same grid we used
 # before and make plots of the data, the fit and the difference between the two.
@@ -50,29 +51,26 @@ vmax = np.nanpercentile(Z, 99.9)
 
 ax = axs[0, 0]
 art = ax.pcolor(X, Y, Z, vmin=0, vmax=vmax)
-cb = plt.colorbar(art, ax=ax, label='z')
+plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Data')
 
 ax = axs[0, 1]
 fit = model.func(X, Y, **result.best_values)
 art = ax.pcolor(X, Y, fit, vmin=0, vmax=vmax)
-cb = plt.colorbar(art, ax=ax, label='z')
+plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Fit')
 
 ax = axs[1, 0]
 fit = model.func(X, Y, **result.best_values)
 art = ax.pcolor(X, Y, Z-fit, vmin=0, vmax=10)
-cb = plt.colorbar(art, ax=ax, label='z')
+plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Data - Fit')
 
-
-def set_label(ax):
+for ax in axs.ravel():
     ax.set_xlabel('x')
     ax.set_ylabel('y')
-
-
-[set_label(ax) for ax in axs.ravel()]
 axs[1, 1].remove()
+plt.show()
 
 
 ###############################################################################
@@ -113,11 +111,11 @@ X, Y = np.meshgrid(np.linspace(x.min(), x.max(), 100),
 Z = griddata((x, y), z, (X, Y), method='linear', fill_value=0)
 
 fig, ax = plt.subplots()
-art = ax.pcolor(X, Y, Z)
-cb = plt.colorbar(art, ax=ax)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
-cb.set_label('z')
+art = ax.pcolor(X, Y, Z)
+plt.colorbar(art, ax=ax, label='z')
+plt.show()
 
 ###############################################################################
 # To fit, create a model from the function. Don't forget to tell lmfit that both
@@ -134,7 +132,7 @@ params['sigmax'].set(value=1, min=0)
 params['sigmay'].set(value=2, min=0)
 
 result = model.fit(z, x=x, y=y, params=params, weights=1/error)
-result
+lmfit.report_fit(result)
 
 ###############################################################################
 # The process of making plots to check it worked is the same as before.
@@ -144,26 +142,23 @@ vmax = np.nanpercentile(Z, 99.9)
 
 ax = axs[0, 0]
 art = ax.pcolor(X, Y, Z, vmin=0, vmax=vmax)
-cb = plt.colorbar(art, ax=ax, label='z')
+plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Data')
 
 ax = axs[0, 1]
 fit = model.func(X, Y, **result.best_values)
 art = ax.pcolor(X, Y, fit, vmin=0, vmax=vmax)
-cb = plt.colorbar(art, ax=ax, label='z')
+plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Fit')
 
 ax = axs[1, 0]
 fit = model.func(X, Y, **result.best_values)
 art = ax.pcolor(X, Y, Z-fit, vmin=0, vmax=10)
-cb = plt.colorbar(art, ax=ax, label='z')
+plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Data - Fit')
 
-
-def set_label(ax):
+for ax in axs.ravel():
     ax.set_xlabel('x')
     ax.set_ylabel('y')
-
-
-[set_label(ax) for ax in axs.ravel()]
 axs[1, 1].remove()
+plt.show()
