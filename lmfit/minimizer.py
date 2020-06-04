@@ -1408,7 +1408,6 @@ class Minimizer:
             result.message = "Fit aborted by user callback. Could not estimate error-bars."
             result.success = False
             result.nfev = self.result.nfev
-            output = None
 
         # discard the burn samples and thin
         chain = self.sampler.get_chain(thin=thin, discard=burn)[..., :, :]
