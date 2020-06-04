@@ -2248,7 +2248,6 @@ class Minimizer:
             Return value changed to :class:`MinimizerResult`.
 
         """
-        function = self.leastsq
         kwargs = {'params': params}
         kwargs.update(self.kws)
         for maxnfev_alias in ('maxfev', 'maxiter'):
