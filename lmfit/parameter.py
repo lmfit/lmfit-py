@@ -12,8 +12,8 @@ from .jsonutils import decode4js, encode4js
 from .printfuncs import params_html_table
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
-for name in ('erf', 'erfc', 'wofz'):
-    SCIPY_FUNCTIONS[name] = getattr(scipy.special, name)
+for fnc_name in ('erf', 'erfc', 'wofz'):
+    SCIPY_FUNCTIONS[fnc_name] = getattr(scipy.special, fnc_name)
 
 
 def check_ast_errors(expr_eval):
