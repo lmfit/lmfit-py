@@ -9,6 +9,7 @@
 from datetime import date
 import os
 import sys
+import warnings
 
 import lmfit
 
@@ -166,4 +167,13 @@ sphinx_gallery_conf = {
     'gallery_dirs': 'examples',
     'filename_pattern': '/documentation|/example_',
     'ignore_pattern': '/doc_',
+    'ignore_repr_types': r'matplotlib',
 }
+
+# remove warnings about matplotlib and Agg backend from gallery examples
+warnings.filterwarnings("ignore", category=UserWarning,
+                        message='Matplotlib is currently using agg, which is a'
+                                ' non-GUI backend, so cannot show the figure.')
+
+
+

@@ -39,7 +39,6 @@ for fn in files:
     with open(gallery_file, 'w') as out:
         msg = ""  # add optional message f
         out.write('"""\n{}\n{}\n\n{}\n"""\n'.format(fn, "="*len(fn), msg))
-        out.write('##\nimport warnings\nwarnings.filterwarnings("ignore")\n##\n')
         out.write(script_text)
 
     # make sure the saved Models and ModelResult are available
