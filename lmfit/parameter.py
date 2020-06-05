@@ -48,10 +48,10 @@ class Parameters(OrderedDict):
         ---------
         asteval : :class:`asteval.Interpreter`, optional
             Instance of the asteval Interpreter to use for constraint
-            expressions. If None, a new interpreter will be created.
-            Warning: *deprecated, use usersyms if possible*
-        usersyms : dictionary of symbols to add to the
-            :class:`asteval.Interpreter`.
+            expressions. If None (default), a new interpreter will be created.
+            Warning: *deprecated, use usersyms if possible*.
+        usersyms : dict, optional
+            Dictionary of symbols to add to the :class:`asteval.Interpreter`.
 
         """
         super().__init__(self)
