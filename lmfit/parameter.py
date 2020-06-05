@@ -3,6 +3,7 @@
 from collections import OrderedDict
 from copy import deepcopy
 import json
+import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
@@ -57,8 +58,14 @@ class Parameters(OrderedDict):
         super().__init__(self)
 
         self._asteval = asteval
-        if self._asteval is None:
+        if asteval is None:
             self._asteval = Interpreter()
+        else:
+            msg = ("The use of the 'asteval' argument for the Parameters class"
+                   " was deprecated in lmfit v0.9.12 and will be removed in a "
+                   "later release. Please use the 'usersyms' argument instead!")
+            warnings.warn(FutureWarning(msg))
+            self._asteval = asteval
 
         _syms = {}
         _syms.update(SCIPY_FUNCTIONS)
