@@ -42,7 +42,7 @@ class Parameters(OrderedDict):
 
     """
 
-    def __init__(self, asteval=None, usersyms=None, *args, **kwds):
+    def __init__(self, asteval=None, usersyms=None):
         """
         Arguments
         ---------
@@ -52,10 +52,6 @@ class Parameters(OrderedDict):
             Warning: *deprecated, use usersyms if possible*
         usersyms : dictionary of symbols to add to the
             :class:`asteval.Interpreter`.
-        *args : optional
-            Arguments.
-        **kwds : optional
-            Keyword arguments.
 
         """
         super().__init__(self)
