@@ -23,9 +23,9 @@ def getfloat_attr(obj, attr, length=11):
     val = getattr(obj, attr, None)
     if val is None:
         return 'unknown'
-    elif isinstance(val, int):
+    if isinstance(val, int):
         return '%d' % val
-    elif isinstance(val, float):
+    if isinstance(val, float):
         return gformat(val, length=length).strip()
     return repr(val)
 

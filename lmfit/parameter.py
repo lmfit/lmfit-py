@@ -762,9 +762,9 @@ class Parameter:
         """
         if self.min == -inf and self.max == inf:
             return 1.0
-        elif self.max == inf:
+        if self.max == inf:
             return val / sqrt(val*val + 1)
-        elif self.min == -inf:
+        if self.min == -inf:
             return -val / sqrt(val*val + 1)
         return cos(val) * (self.max - self.min) / 2.0
 
