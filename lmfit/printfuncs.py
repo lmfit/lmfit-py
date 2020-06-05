@@ -231,7 +231,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     stat_row('Bayesian info crit.', gformat(result.bic))
     add('</table>')
     add('<h2>Variables</h2>')
-    add(result.params._repr_html_())
+    add(params_html_table(result.params))
     if show_correl:
         correls = []
         parnames = list(result.params.keys())
