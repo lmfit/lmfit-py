@@ -223,8 +223,8 @@ def test_report_fit(fitresult, capsys):
 
 
 def test_report_errors_deprecated(fitresult):
-    """Verify that a DeprecationWarning is shown when calling report_errors."""
-    with pytest.deprecated_call():
+    """Verify that a FutureWarning is shown when calling report_errors."""
+    with pytest.warns(FutureWarning):
         report_errors(params=fitresult.params)
 
 

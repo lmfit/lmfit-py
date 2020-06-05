@@ -318,7 +318,7 @@ def report_errors(params, **kws):
     """Print a report for fitted params: see error_report()."""
     warnings.warn("The function 'report_errors' is deprecated as of lmfit "
                   "0.9.14 and will be removed in the next release. Please "
-                  "use 'report_fit' instead.", DeprecationWarning)
+                  "use 'report_fit' instead.", FutureWarning)
     print(fit_report(params, **kws))
 
 
