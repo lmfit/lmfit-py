@@ -376,6 +376,6 @@ def test_ci_report_with_offset(confidence_interval):
 def test_ci_report_with_ndigits(confidence_interval, ndigits):
     """Verify output of CI report when specifying ndigits."""
     report_split = ci_report(confidence_interval, ndigits=ndigits).split('\n')
-    period_values = [val for val in report_split[2].split()[2:]]
+    period_values = list(report_split[2].split()[2:])
     length = [len(val.split('.')[-1]) for val in period_values]
     assert np.all(np.equal(length, ndigits))
