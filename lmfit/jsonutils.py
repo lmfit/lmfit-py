@@ -50,9 +50,9 @@ def encode4js(obj):
     """
     if isinstance(obj, DataFrame):
         return dict(__class__='PDataFrame', value=obj.to_json())
-    elif isinstance(obj, Series):
+    if isinstance(obj, Series):
         return dict(__class__='PSeries', value=obj.to_json())
-    elif isinstance(obj, np.ndarray):
+    if isinstance(obj, np.ndarray):
         if 'complex' in obj.dtype.name:
             val = [(obj.real).tolist(), (obj.imag).tolist()]
         elif obj.dtype.name == 'object':
@@ -61,27 +61,27 @@ def encode4js(obj):
             val = obj.flatten().tolist()
         return dict(__class__='NDArray', __shape__=obj.shape,
                     __dtype__=obj.dtype.name, value=val)
-    elif isinstance(obj, (np.float, np.int)):
+    if isinstance(obj, (np.float, np.int)):
         return float(obj)
-    elif isinstance(obj, str):
+    if isinstance(obj, str):
         try:
             return str(obj)
         except UnicodeError:
             return obj
-    elif isinstance(obj, np.complex):
+    if isinstance(obj, np.complex):
         return dict(__class__='Complex', value=(obj.real, obj.imag))
-    elif isinstance(obj, (tuple, list)):
+    if isinstance(obj, (tuple, list)):
         ctype = 'List'
         if isinstance(obj, tuple):
             ctype = 'Tuple'
         val = [encode4js(item) for item in obj]
         return dict(__class__=ctype, value=val)
-    elif isinstance(obj, dict):
+    if isinstance(obj, dict):
         out = dict(__class__='Dict')
         for key, val in obj.items():
             out[encode4js(key)] = encode4js(val)
         return out
-    elif callable(obj):
+    if callable(obj):
         val, importer = None, None
         pyvers = "%d.%d" % (sys.version_info.major,
                             sys.version_info.minor)

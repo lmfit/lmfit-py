@@ -23,9 +23,9 @@ def getfloat_attr(obj, attr, length=11):
     val = getattr(obj, attr, None)
     if val is None:
         return 'unknown'
-    elif isinstance(val, int):
+    if isinstance(val, int):
         return '%d' % val
-    elif isinstance(val, float):
+    if isinstance(val, float):
         return gformat(val, length=length).strip()
     return repr(val)
 
@@ -231,7 +231,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     stat_row('Bayesian info crit.', gformat(result.bic))
     add('</table>')
     add('<h2>Variables</h2>')
-    add(result.params._repr_html_())
+    add(params_html_table(result.params))
     if show_correl:
         correls = []
         parnames = list(result.params.keys())
@@ -318,7 +318,7 @@ def report_errors(params, **kws):
     """Print a report for fitted params: see error_report()."""
     warnings.warn("The function 'report_errors' is deprecated as of lmfit "
                   "0.9.14 and will be removed in the next release. Please "
-                  "use 'report_fit' instead.", DeprecationWarning)
+                  "use 'report_fit' instead.", FutureWarning)
     print(fit_report(params, **kws))
 
 

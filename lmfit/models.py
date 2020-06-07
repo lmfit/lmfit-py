@@ -7,11 +7,11 @@ import numpy as np
 
 from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
-                         expgaussian, exponential, gaussian, gaussian2d, linear,
-                         lognormal, lorentzian, moffat, parabolic, pearson7,
-                         powerlaw, pvoigt, rectangle, skewed_gaussian, skewed_voigt,
-                         split_lorentzian, step, students_t,
-                         thermal_distribution, voigt)
+                         expgaussian, exponential, gaussian, gaussian2d,
+                         linear, lognormal, lorentzian, moffat, parabolic,
+                         pearson7, powerlaw, pvoigt, rectangle,
+                         skewed_gaussian, skewed_voigt, split_lorentzian, step,
+                         students_t, thermal_distribution, voigt)
 from .model import Model
 
 tiny = np.finfo(np.float).eps

@@ -79,7 +79,7 @@ class CommonTests:
         assert_results_close(result.values, self.true_values())
 
         # Pass inidividual Parameter objects as kwargs.
-        kwargs = {name: p for name, p in params.items()}
+        kwargs = dict(params.items())
         result = self.model.fit(self.data, x=self.x, **kwargs)
         assert_results_close(result.values, self.true_values())
 

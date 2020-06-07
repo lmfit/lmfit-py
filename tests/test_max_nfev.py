@@ -4,9 +4,8 @@ import numpy as np
 import pytest
 
 from lmfit.lineshapes import gaussian
-from lmfit.models import GaussianModel, LinearModel
 from lmfit.minimizer import Minimizer
-
+from lmfit.models import GaussianModel, LinearModel
 
 nvarys = 5
 methods = ['leastsq', 'least_squares', 'nelder', 'brute', 'ampgo',

@@ -3,6 +3,7 @@
 from collections import OrderedDict
 from copy import deepcopy
 import json
+import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
@@ -12,8 +13,8 @@ from .jsonutils import decode4js, encode4js
 from .printfuncs import params_html_table
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
-for name in ('erf', 'erfc', 'wofz'):
-    SCIPY_FUNCTIONS[name] = getattr(scipy.special, name)
+for fnc_name in ('erf', 'erfc', 'wofz'):
+    SCIPY_FUNCTIONS[fnc_name] = getattr(scipy.special, fnc_name)
 
 
 def check_ast_errors(expr_eval):
@@ -42,27 +43,29 @@ class Parameters(OrderedDict):
 
     """
 
-    def __init__(self, asteval=None, usersyms=None, *args, **kwds):
+    def __init__(self, asteval=None, usersyms=None):
         """
         Arguments
         ---------
         asteval : :class:`asteval.Interpreter`, optional
             Instance of the asteval Interpreter to use for constraint
-            expressions. If None, a new interpreter will be created.
-            Warning: *deprecated, use usersyms if possible*
-        usersyms : dictionary of symbols to add to the
-            :class:`asteval.Interpreter`.
-        *args : optional
-            Arguments.
-        **kwds : optional
-            Keyword arguments.
+            expressions. If None (default), a new interpreter will be created.
+            Warning: *deprecated, use usersyms if possible*.
+        usersyms : dict, optional
+            Dictionary of symbols to add to the :class:`asteval.Interpreter`.
 
         """
         super().__init__(self)
 
         self._asteval = asteval
-        if self._asteval is None:
+        if asteval is None:
             self._asteval = Interpreter()
+        else:
+            msg = ("The use of the 'asteval' argument for the Parameters class"
+                   " was deprecated in lmfit v0.9.12 and will be removed in a "
+                   "later release. Please use the 'usersyms' argument instead!")
+            warnings.warn(FutureWarning(msg))
+            self._asteval = asteval
 
         _syms = {}
         _syms.update(SCIPY_FUNCTIONS)
@@ -766,9 +769,9 @@ class Parameter:
         """
         if self.min == -inf and self.max == inf:
             return 1.0
-        elif self.max == inf:
+        if self.max == inf:
             return val / sqrt(val*val + 1)
-        elif self.min == -inf:
+        if self.min == -inf:
             return -val / sqrt(val*val + 1)
         return cos(val) * (self.max - self.min) / 2.0
 

@@ -8,7 +8,6 @@ try:
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
-HASPYLAB = False
 
 try:
     import corner
