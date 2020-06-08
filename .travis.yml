@@ -45,7 +45,7 @@ before_install:
 
 install:
     - if [[ $version == minimum ]]; then pip install asteval==0.9.16 numpy==1.16 scipy==1.2 uncertainties==3.0.1 pytest coverage codecov; fi
-    - if [[ $version == latest ]]; then pip install -r requirements-dev.txt ; fi
+    - if [[ $version == latest ]]; then pip install -r requirements-dev.txt -U; fi
     - python setup.py install
     - pip list
 
