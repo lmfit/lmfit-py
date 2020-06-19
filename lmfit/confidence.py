@@ -54,8 +54,8 @@ def restore_vals(tmp_params, params):
         params[para_key].value, params[para_key].stderr = tmp_params[para_key]
 
 
-def conf_interval(minimizer, result, p_names=None, sigmas=[1, 2, 3],
-                  trace=False, maxiter=200, verbose=False, prob_func=None):
+def conf_interval(minimizer, result, p_names=None, sigmas=None, trace=False,
+                  maxiter=200, verbose=False, prob_func=None):
     """Calculate the confidence interval (ci) for parameters.
 
     The parameter for which the ci is calculated will be varied, while the
@@ -133,6 +133,9 @@ def conf_interval(minimizer, result, p_names=None, sigmas=[1, 2, 3],
     parameters.
 
     """
+    if sigmas is None:
+        sigmas = [1, 2, 3]
+
     ci = ConfidenceInterval(minimizer, result, p_names, prob_func, sigmas,
                             trace, verbose, maxiter)
     output = ci.calc_all_ci()
@@ -158,8 +161,7 @@ class ConfidenceInterval:
     """Class used to calculate the confidence interval."""
 
     def __init__(self, minimizer, result, p_names=None, prob_func=None,
-                 sigmas=[1, 2, 3], trace=False, verbose=False,
-                 maxiter=50):
+                 sigmas=None, trace=False, verbose=False, maxiter=50):
         self.verbose = verbose
         self.minimizer = minimizer
         self.result = result
@@ -194,6 +196,8 @@ class ConfidenceInterval:
         self.maxiter = maxiter
         self.min_rel_change = 1e-5
 
+        if sigmas is None:
+            sigmas = [1, 2, 3]
         self.sigmas = list(sigmas)
         self.sigmas.sort()
         self.probs = []
