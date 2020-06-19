@@ -265,11 +265,7 @@ def tunnel(x0, *args):
     from all points in `tabulist`.
 
     """
-    objfun, aspiration, tabulist = args[0:3]
-
-    fun_args = ()
-    if len(args) > 3:
-        fun_args = tuple(args[3:])
+    objfun, aspiration, tabulist, *fun_args = args
 
     numerator = (objfun(x0, *fun_args) - aspiration)**2
     denominator = 1.0
