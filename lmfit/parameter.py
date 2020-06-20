@@ -24,10 +24,12 @@ def check_ast_errors(expr_eval):
 
 
 class Parameters(OrderedDict):
-    """An ordered dictionary of all the Parameter objects required to
-    specify a fit model. All minimization and Model fitting routines in
-    lmfit will use exactly one Parameters object, typically given as the
-    first argument to the objective function.
+    """An ordered dictionary of Parameter objects.
+
+    It should contain all Parameter objects that are required to specify
+    a fit model. All minimization and Model fitting routines in lmfit will
+    use exactly one Parameters object, typically given as the first
+    argument to the objective function.
 
     All keys of a Parameters() instance must be strings and valid Python
     symbol names, so that the name must match ``[a-z_][a-z0-9_]*`` and
@@ -35,7 +37,7 @@ class Parameters(OrderedDict):
 
     All values of a Parameters() instance must be Parameter objects.
 
-    A Parameters() instance includes an asteval interpreter used for
+    A Parameters() instance includes an `asteval` Interpreter used for
     evaluation of constrained Parameters.
 
     Parameters() support copying and pickling, and have methods to convert
@@ -48,11 +50,12 @@ class Parameters(OrderedDict):
         Arguments
         ---------
         asteval : :class:`asteval.Interpreter`, optional
-            Instance of the asteval Interpreter to use for constraint
-            expressions. If None (default), a new interpreter will be created.
-            Warning: *deprecated, use usersyms if possible*.
+            Instance of the `asteval.Interpreter` to use for constraint
+            expressions. If None (default), a new interpreter will be
+            created. **Warning: deprecated**, use `usersyms` if possible!
         usersyms : dict, optional
-            Dictionary of symbols to add to the :class:`asteval.Interpreter`.
+            Dictionary of symbols to add to the
+            :class:`asteval.Interpreter` (default is None).
 
         """
         super().__init__(self)
@@ -94,8 +97,8 @@ class Parameters(OrderedDict):
     def __deepcopy__(self, memo):
         """Implementation of Parameters.deepcopy().
 
-        The method needs to make sure that asteval is available and that all
-        individual Parameter objects are copied.
+        The method needs to make sure that `asteval` is available and that
+        all individual Parameter objects are copied.
 
         """
         _pars = Parameters(asteval=None)
@@ -177,9 +180,9 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         state : dict
-            state['unique_symbols'] is a dictionary containing symbols that
-            need to be injected into _asteval.symtable
-            state['params'] is a list of Parameter instances to be added
+            state['unique_symbols'] is a dictionary containing symbols
+            that need to be injected into `_asteval.symtable`.
+            state['params'] is a list of Parameter instances to be added.
 
         """
         # first update the Interpreter symbol table. This needs to be done
@@ -200,24 +203,28 @@ class Parameters(OrderedDict):
         self.add_many(*state['params'])
 
     def eval(self, expr):
-        """Evaluate a statement using the asteval Interpreter.
+        """Evaluate a statement using the `asteval` Interpreter.
 
         Parameters
         ----------
-        expr : string
+        expr : str
             An expression containing parameter names and other symbols
-            recognizable by the asteval Interpreter.
+            recognizable by the `asteval` Interpreter.
 
         Returns
         -------
-           The result of the expression.
+        float
+            The result of evaluating the expression.
 
         """
         return self._asteval.eval(expr)
 
     def update_constraints(self):
-        """Update all constrained parameters, checking that dependencies are
-        evaluated as needed."""
+        """Update all constrained parameters.
+
+        This method ensures that dependencies are evaluated as needed.
+
+        """
         requires_update = {name for name, par in self.items() if par._expr is
                            not None}
         updated_tracker = set(requires_update)
@@ -225,8 +232,8 @@ class Parameters(OrderedDict):
         def _update_param(name):
             """Update a parameter value, including setting bounds.
 
-            For a constrained parameter (one with an `expr` defined),
-            this first updates (recursively) all parameters on which the
+            For a constrained parameter (one with an `expr` defined), this
+            first updates (recursively) all parameters on which the
             parameter depends (using the 'deps' field).
 
             """
@@ -248,13 +255,13 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         oneline : bool, optional
-            If True prints a one-line parameters representation (default is
-            False).
+            If True prints a one-line parameters representation (default
+            is False).
 
         Returns
         -------
         s: str
-           Parameters representation.
+            Parameters representation.
 
         """
         if oneline:
@@ -273,17 +280,21 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         oneline : bool, optional
-            If True prints a one-line parameters representation (default is
-            False).
+            If True prints a one-line parameters representation (default
+            is False).
         colwidth : int, optional
-            Column width for all columns specified in :attr:`columns`.
+            Column width for all columns specified in `columns` (default
+            is 8).
         precision : int, optional
-            Number of digits to be printed after floating point.
+            Number of digits to be printed after floating point (default
+            is 4).
         fmt : {'g', 'e', 'f'}, optional
-            Single-character numeric formatter. Valid values are: 'f' floating
-            point, 'g' floating point and exponential, or 'e' exponential.
+            Single-character numeric formatter. Valid values are: `'g'`
+            floating point and exponential (default), `'e'` exponential,
+            or `'f'` floating point.
         columns : :obj:`list` of :obj:`str`, optional
-            List of :class:`Parameter` attribute names to print.
+            List of :class:`Parameter` attribute names to print (default
+            is to show all attributes).
 
         """
         if oneline:
@@ -313,7 +324,7 @@ class Parameters(OrderedDict):
                               f=fmt, **pvalues))
 
     def _repr_html_(self):
-        """Returns a HTML representation of parameters data."""
+        """Return a HTML representation of parameters data."""
         return params_html_table(self)
 
     def add(self, name, value=None, vary=True, min=-inf, max=inf, expr=None,
@@ -323,20 +334,24 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         name : str
-            Name of parameter.  Must match ``[a-z_][a-z0-9_]*`` and cannot be
-            a Python reserved word.
+            Name of parameter. Must match ``[a-z_][a-z0-9_]*`` and cannot
+            be a Python reserved word.
         value : float, optional
             Numerical Parameter value, typically the *initial value*.
         vary : bool, optional
             Whether the Parameter is varied during a fit (default is True).
         min : float, optional
-            Lower bound for value (default is `-numpy.inf`, no lower bound).
+            Lower bound for value (default is ``-numpy.inf``, no lower
+            bound).
         max : float, optional
-            Upper bound for value (default is `numpy.inf`, no upper bound).
+            Upper bound for value (default is ``numpy.inf``, no upper
+            bound).
         expr : str, optional
-            Mathematical expression used to constrain the value during the fit.
+            Mathematical expression used to constrain the value during the
+            fit (default is None).
         brute_step : float, optional
-            Step size for grid points in the `brute` method.
+            Step size for grid points in the `brute` method (default is
+            None).
 
         Examples
         --------
@@ -363,11 +378,11 @@ class Parameters(OrderedDict):
 
         Parameters
         ----------
-        parlist : :obj:`sequence` of :obj:`tuple` or :class:`Parameter`
-            A sequence of tuples, or a sequence of `Parameter` instances. If
-            it is a sequence of tuples, then each tuple must contain at least
-            the name. The order in each tuple must be `(name, value, vary,
-            min, max, expr, brute_step)`.
+        *parlist : :obj:`sequence` of :obj:`tuple` or Parameter
+            A sequence of tuples, or a sequence of `Parameter` instances.
+            If it is a sequence of tuples, then each tuple must contain at
+            least a `name`. The order in each tuple must be
+            ``(name, value, vary, min, max, expr, brute_step)``.
 
         Examples
         --------
@@ -400,8 +415,8 @@ class Parameters(OrderedDict):
         Returns
         -------
         OrderedDict
-           An ordered dictionary of :attr:`name`::attr:`value` pairs for each
-           Parameter.
+            An ordered dictionary of :attr:`name`::attr:`value` pairs for
+            each Parameter.
 
         """
         return OrderedDict((p.name, p.value) for p in self.values())
@@ -412,16 +427,16 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         **kws : optional
-            Keyword arguments that are passed to `json.dumps()`.
+            Keyword arguments that are passed to `json.dumps`.
 
         Returns
         -------
         str
-           JSON string representation of Parameters.
+            JSON string representation of Parameters.
 
         See Also
         --------
-        dump(), loads(), load(), json.dumps()
+        dump, loads, load, json.dumps
 
         """
         params = [p.__getstate__() for p in self.values()]
@@ -437,21 +452,21 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         **kws : optional
-            Keyword arguments that are passed to `json.loads()`.
+            Keyword arguments that are passed to `json.loads`.
 
         Returns
         -------
-        :class:`Parameters`
-           Updated Parameters from the JSON string.
+        Parameters
+            Updated Parameters from the JSON string.
 
         Notes
         -----
-        Current Parameters will be cleared before loading the data from the
-        JSON string.
+        Current Parameters will be cleared before loading the data from
+        the JSON string.
 
         See Also
         --------
-        dump(), dumps(), load(), json.loads()
+        dump, dumps, load, json.loads
 
         """
         self.clear()
@@ -474,18 +489,19 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         fp : file-like object
-            An open and ``.write()``-supporting file-like object.
+            An open and `.write()`-supporting file-like object.
         **kws : optional
-            Keyword arguments that are passed to `dumps()`.
+            Keyword arguments that are passed to `dumps`.
 
         Returns
         -------
         int
-            Return value from `fp.write()`: the number of characters written.
+            Return value from `fp.write()`: the number of characters
+            written.
 
         See Also
         --------
-        dump(), load(), json.dump()
+        dumps, load, json.dump
 
         """
         return fp.write(self.dumps(**kws))
@@ -496,35 +512,36 @@ class Parameters(OrderedDict):
         Parameters
         ----------
         fp : file-like object
-            An open and ``.read()``-supporting file-like object.
+            An open and `.read()`-supporting file-like object.
         **kws : optional
-            Keyword arguments that are passed to `loads()`.
+            Keyword arguments that are passed to `loads`.
 
         Returns
         -------
-        :class:`Parameters`
-           Updated Parameters loaded from `fp`.
+        Parameters
+            Updated Parameters loaded from `fp`.
 
         See Also
         --------
-        dump(), loads(), json.load()
+        dump, loads, json.load
 
         """
         return self.loads(fp.read(), **kws)
 
 
 class Parameter:
-    """A Parameter is an object that can be varied in a fit, or one of the
-    controlling variables in a model. It is a central component of lmfit,
-    and all minimization and modeling methods use Parameter objects.
+    """A Parameter is an object that can be varied in a fit.
+
+    It is a central component of lmfit, and all minimization and modeling
+    methods use Parameter objects.
 
     A Parameter has a `name` attribute, and a scalar floating point
-    `value`.  It also has a `vary` attribute that describes whether the
-    value should be varied during the minimization.  Finite bounds can be
+    `value`. It also has a `vary` attribute that describes whether the
+    value should be varied during the minimization. Finite bounds can be
     placed on the Parameter's value by setting its `min` and/or `max`
-    attributes.  A Parameter can also have its value determined by a
+    attributes. A Parameter can also have its value determined by a
     mathematical expression of other Parameter values held in the `expr`
-    attribute.  Additional attributes include `brute_step` used as the step
+    attribute. Additional attributes include `brute_step` used as the step
     size in a brute-force minimization, and `user_data` reserved
     exclusively for user's need.
 
@@ -547,25 +564,30 @@ class Parameter:
         vary : bool, optional
             Whether the Parameter is varied during a fit (default is True).
         min : float, optional
-            Lower bound for value (default is `-numpy.inf`, no lower bound).
+            Lower bound for value (default is ``-numpy.inf``, no lower
+            bound).
         max : float, optional
-            Upper bound for value (default is `numpy.inf`, no upper bound).
+            Upper bound for value (default is ``numpy.inf``, no upper
+            bound).
         expr : str, optional
-            Mathematical expression used to constrain the value during the fit.
+            Mathematical expression used to constrain the value during the
+            fit (default is None).
         brute_step : float, optional
-            Step size for grid points in the `brute` method.
+            Step size for grid points in the `brute` method (default is
+            None).
         user_data : optional
-            User-definable extra attribute used for a Parameter.
+            User-definable extra attribute used for a Parameter (default
+            is None).
 
         Attributes
         ----------
         stderr : float
             The estimated standard error for the best-fit value.
         correl : dict
-            A dictionary of the correlation with the other fitted Parameters
-            of the form::
+            A dictionary of the correlation with the other fitted
+            Parameters of the form::
 
-            `{'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}`
+            {'decay': 0.404, 'phase': -0.020, 'frequency': 0.102}
 
         """
         self.name = name
@@ -598,37 +620,37 @@ class Parameter:
             Whether the Parameter is varied during a fit.
         min : float, optional
             Lower bound for value. To remove a lower bound you must use
-            `-numpy.inf`.
+            ``-numpy.inf``.
         max : float, optional
             Upper bound for value. To remove an upper bound you must use
-            `numpy.inf`.
+            ``numpy.inf``.
         expr : str, optional
-            Mathematical expression used to constrain the value during the fit.
-            To remove a constraint you must supply an empty string.
+            Mathematical expression used to constrain the value during the
+            fit. To remove a constraint you must supply an empty string.
         brute_step : float, optional
             Step size for grid points in the `brute` method. To remove the
             step size you must use ``0``.
 
         Notes
         -----
-        Each argument to `set()` has a default value of `None`, which will
-        leave the current value for the attribute unchanged.  Thus, to lift a
-        lower or upper bound, passing in `None` will not work.  Instead,
-        you must set these to `-numpy.inf` or `numpy.inf`, as with::
+        Each argument to `set()` has a default value of None, which will
+        leave the current value for the attribute unchanged. Thus, to lift
+        a lower or upper bound, passing in None will not work. Instead,
+        you must set these to ``-numpy.inf`` or ``numpy.inf``, as with::
 
             par.set(min=None)        # leaves lower bound unchanged
             par.set(min=-numpy.inf)  # removes lower bound
 
         Similarly, to clear an expression, pass a blank string, (not
-        ``None``!) as with::
+        None!) as with::
 
             par.set(expr=None)  # leaves expression unchanged
             par.set(expr='')    # removes expression
 
-        Explicitly setting a value or setting `vary=True` will also
+        Explicitly setting a value or setting ``vary=True`` will also
         clear the expression.
 
-        Finally, to clear the brute_step size, pass ``0``, not ``None``::
+        Finally, to clear the brute_step size, pass ``0``, not None::
 
             par.set(brute_step=None)  # leaves brute_step unchanged
             par.set(brute_step=0)     # removes brute_step
@@ -714,8 +736,8 @@ class Parameter:
         return "<Parameter '%s', %s>" % (self.name, ', '.join(s))
 
     def setup_bounds(self):
-        """Set up Minuit-style internal/external parameter transformation of
-        min/max bounds.
+        """Set up Minuit-style internal/external parameter transformation
+        of min/max bounds.
 
         As a side-effect, this also defines the self.from_internal method
         used to re-calculate self.value from the internal value, applying
@@ -728,7 +750,7 @@ class Parameter:
         Returns
         -------
         _val : float
-            The internal value for parameter from self.value (which holds
+            The internal value for parameter from `self.value` (which holds
             the external, user-expected value). This internal value should
             actually be used in a fit.
 
@@ -757,7 +779,7 @@ class Parameter:
 
         Parameters
         ----------
-        val: float
+        val : float
             Numerical Parameter value.
 
         Returns
@@ -793,7 +815,7 @@ class Parameter:
 
     @property
     def value(self):
-        """Return the numerical value of the Parameter, with bounds applied."""
+        """Return the numerical Parameter value, with bounds applied."""
         return self._getval()
 
     @value.setter
@@ -812,14 +834,12 @@ class Parameter:
 
     @property
     def expr(self):
-        """Return the mathematical expression used to constrain the value
-        during the fit."""
+        """Return the mathematical expression used to constrain the value in fit."""
         return self._expr
 
     @expr.setter
     def expr(self, val):
-        """Set the mathematical expression used to constrain the value during
-        the fit.
+        """Set the mathematical expression used to constrain the value in fit.
 
         To remove a constraint you must supply an empty string.
 
