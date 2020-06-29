@@ -166,18 +166,49 @@ which helps make the `asteval`_ module safe from malicious use.
 
 One important feature of the `asteval`_ module is that you can add
 domain-specific functions into the it, for later use in constraint
-expressions. To do this, you would use the :attr:`asteval` attribute of
-the :class:`Minimizer` class, which contains a complete AST interpreter.
+expressions. To do this, you would use the :attr:`_asteval` attribute of
+the :class:`Parameters` class, which contains a complete AST interpreter.
 The `asteval`_ interpreter uses a flat namespace, implemented as a single
 dictionary. That means you can preload any Python symbol into the namespace
-for the constraints::
+for the constraints, for example this Lorentzian function:
+
+.. jupyter-execute::
 
     def mylorentzian(x, amp, cen, wid):
         "lorentzian function: wid = half-width at half-max"
         return (amp / (1 + ((x-cen) / wid)**2))
 
-    fitter = Minimizer()
-    fitter._asteval.symtable['lorentzian'] = mylorentzian
 
-and this :meth:`lorentzian` function can now be used in constraint
-expressions.
+You can add this user-defined function to the `asteval`_ interpreter of
+the :class:`Parameters` class:
+
+.. jupyter-execute::
+
+    from lmfit import Parameters
+
+    pars = Parameters()
+    pars._asteval.symtable['lorentzian'] = mylorentzian
+
+and then initialize the :class:`Minimizer` class with this parameter set:
+
+.. jupyter-execute::
+
+    from lmfit import Minimizer
+
+    def userfcn(x, params):
+        pass
+
+    fitter = Minimizer(userfcn, pars)
+
+Alternatively, one can first initialize the :class:`Minimizer` class and
+add the function to the `asteval`_ interpreter of :attr:`Minimizer.params`
+afterwards:
+
+.. jupyter-execute::
+
+    pars = Parameters()
+    fitter = Minimizer(userfcn, pars)
+    fitter.params._asteval.symtable['lorentzian'] = mylorentzian
+
+In both cases the user-defined :meth:`lorentzian` function can now be
+used in constraint expressions.
