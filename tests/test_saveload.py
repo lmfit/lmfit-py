@@ -12,7 +12,6 @@ from lmfit.lineshapes import gaussian, lorentzian
 from lmfit.model import (Model, ModelResult, load_model, load_modelresult,
                          save_model, save_modelresult)
 from lmfit.models import ExponentialModel, GaussianModel, VoigtModel
-from lmfit_testutils import assert_between, assert_param_between
 
 y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
                                'examples', 'NIST_Gauss2.dat')).T
@@ -65,24 +64,24 @@ def create_model_params(x, y):
 def check_fit_results(result):
     """Check the result of optimization."""
     assert result.nvarys == 8
-    assert_between(result.chisqr, 1000, 1500)
-    assert_between(result.aic, 400, 450)
+    assert_allclose(result.chisqr, 1247.528209)
+    assert_allclose(result.aic, 417.864631)
 
     pars = result.params
-    assert_param_between(pars['exp_decay'], 90, 92)
-    assert_param_between(pars['exp_amplitude'], 98, 101)
+    assert_allclose(pars['exp_decay'], 90.950886)
+    assert_allclose(pars['exp_amplitude'], 99.018328)
 
-    assert_param_between(pars['g1_sigma'], 16, 17)
-    assert_param_between(pars['g1_center'], 106, 109)
-    assert_param_between(pars['g1_amplitude'], 4100, 4500)
-    assert_param_between(pars['g1_fwhm'], 38, 42)
-    assert_param_between(pars['g1_height'], 100, 103)
+    assert_allclose(pars['g1_sigma'], 16.672575)
+    assert_allclose(pars['g1_center'], 107.030954)
+    assert_allclose(pars['g1_amplitude'], 4257.773192)
+    assert_allclose(pars['g1_fwhm'], 39.260914)
+    assert_allclose(pars['g1_height'], 101.880231)
 
-    assert_param_between(pars['g2_sigma'], 10, 15)
-    assert_param_between(pars['g2_center'], 150, 160)
-    assert_param_between(pars['g2_amplitude'], 2100, 2900)
-    assert_param_between(pars['g2_fwhm'], 30, 34)
-    assert_param_between(pars['g2_height'], 70, 75)
+    assert_allclose(pars['g2_sigma'], 13.806948)
+    assert_allclose(pars['g2_center'], 153.270101)
+    assert_allclose(pars['g2_amplitude'], 2493.417703)
+    assert_allclose(pars['g2_fwhm'], 32.512878)
+    assert_allclose(pars['g2_height'], 72.045593)
 
 
 @pytest.mark.parametrize("dill", [False, True])
@@ -143,7 +142,7 @@ def test_save_load_modelresult(dill):
     text = ''
     with open(SAVE_MODELRESULT) as fh:
         text = fh.read()
-    assert_between(len(text), 8000, 25000)
+    assert 13400 < len(text) < 13800  # dependin on whether dill is present
 
     # load the saved ModelResult from file and compare results
     result_saved = load_modelresult(SAVE_MODELRESULT)
@@ -199,6 +198,7 @@ def test_saveload_modelresult_roundtrip(method):
     params['a'].set(min=.01, max=1, brute_step=0.01)
     params['b'].set(min=.01, max=3.1, brute_step=0.01)
 
+    np.random.seed(2020)
     xx = np.linspace(-5, 5, 201)
     yy = 0.5 * (xx - 0.22) + np.random.normal(scale=0.01, size=len(xx))
 
@@ -211,10 +211,10 @@ def test_saveload_modelresult_roundtrip(method):
     result3.loads(result2.dumps(), funcdefs={'mfunc': mfunc})
 
     assert result3 is not None
-    assert_param_between(result2.params['a'], 0.48, 0.52)
-    assert_param_between(result2.params['b'], 0.20, 0.25)
-    assert_param_between(result3.params['a'], 0.48, 0.52)
-    assert_param_between(result3.params['b'], 0.20, 0.25)
+    assert_allclose(result2.params['a'], 0.5, rtol=1.0e-2)
+    assert_allclose(result2.params['b'], 0.22, rtol=1.0e-2)
+    assert_allclose(result3.params['a'], 0.50, rtol=1.0e-2)
+    assert_allclose(result3.params['b'], 0.22, rtol=1.0e-2)
 
 
 def test_saveload_usersyms():
@@ -233,13 +233,13 @@ def test_saveload_usersyms():
     savefile = 'tmpvoigt_modelresult.sav'
     save_modelresult(result, savefile)
 
-    assert_param_between(result.params['sigma'], 0.7, 2.1)
-    assert_param_between(result.params['center'], 8.4, 8.6)
-    assert_param_between(result.params['height'], 0.2, 1.0)
+    assert_allclose(result.params['sigma'], 1.075487, rtol=1.0e-5)
+    assert_allclose(result.params['center'], 8.489738, rtol=1.0e-5)
+    assert_allclose(result.params['height'], 0.557778, rtol=1.0e-5)
 
     time.sleep(0.25)
     result2 = load_modelresult(savefile)
 
-    assert_param_between(result2.params['sigma'], 0.7, 2.1)
-    assert_param_between(result2.params['center'], 8.4, 8.6)
-    assert_param_between(result2.params['height'], 0.2, 1.0)
+    assert_allclose(result2.params['sigma'], 1.075487, rtol=1.0e-5)
+    assert_allclose(result2.params['center'], 8.489738, rtol=1.0e-5)
+    assert_allclose(result2.params['height'], 0.557778, rtol=1.0e-5)

@@ -7,7 +7,6 @@ import pytest
 from scipy.stats import f
 
 import lmfit
-from lmfit_testutils import assert_paramval
 
 
 @pytest.fixture
@@ -95,8 +94,8 @@ def test_confidence_leastsq(data, pars, verbose, capsys):
     assert 5 < out.nfev < 500
     assert out.chisqr < 3.0
     assert out.nvarys == 2
-    assert_paramval(out.params['a'], 0.1, tol=0.1)
-    assert_paramval(out.params['b'], 2.0, tol=0.1)
+    assert_allclose(out.params['a'], 0.1, rtol=0.01)
+    assert_allclose(out.params['b'], 2.0, rtol=0.01)
 
     ci = lmfit.conf_interval(minimizer, out, verbose=verbose)
     assert_allclose(ci['b'][0][0], 0.997, rtol=0.01)
@@ -116,8 +115,8 @@ def test_confidence_pnames(data, pars):
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
     out = minimizer.leastsq()
 
-    assert_paramval(out.params['a'], 0.1, tol=0.1)
-    assert_paramval(out.params['b'], 2.0, tol=0.1)
+    assert_allclose(out.params['a'], 0.1, rtol=0.01)
+    assert_allclose(out.params['b'], 2.0, rtol=0.01)
 
     ci = lmfit.conf_interval(minimizer, out, p_names=['a'])
     assert 'a' in ci

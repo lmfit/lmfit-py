@@ -1,7 +1,7 @@
 from numpy import exp, linspace, pi, random, sign, sin
+from numpy.testing import assert_allclose
 
 from lmfit import Parameters, minimize
-from lmfit_testutils import assert_paramval
 
 
 def test_bounds():
@@ -45,5 +45,5 @@ def test_bounds():
     assert out.nfree > 50
     assert out.chisqr > 1.0
 
-    assert_paramval(out.params['decay'], 0.01, tol=1.e-2)
-    assert_paramval(out.params['shift'], 0.123, tol=1.e-2)
+    assert_allclose(out.params['decay'], 0.01, rtol=2.e-2)
+    assert_allclose(out.params['shift'], 0.123, rtol=2.e-2)
