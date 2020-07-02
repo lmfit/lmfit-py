@@ -2,12 +2,12 @@
 
 .. module:: lmfit.minimizer
 
-=======================================
+=====================================
 Performing Fits and Analyzing Outputs
-=======================================
+=====================================
 
 As shown in the previous chapter, a simple fit can be performed with the
-:func:`minimize` function.  For more sophisticated modeling, the
+:func:`minimize` function. For more sophisticated modeling, the
 :class:`Minimizer` class can be used to gain a bit more control, especially
 when using complicated constraints or comparing results from related fits.
 
@@ -16,9 +16,9 @@ The :func:`minimize` function
 =============================
 
 The :func:`minimize` function is a wrapper around :class:`Minimizer` for
-running an optimization problem.  It takes an objective function (the
+running an optimization problem. It takes an objective function (the
 function that calculates the array to be minimized), a :class:`Parameters`
-object, and several optional arguments.  See :ref:`fit-func-label` for
+object, and several optional arguments. See :ref:`fit-func-label` for
 details on writing the objective function.
 
 .. autofunction:: minimize
@@ -26,12 +26,12 @@ details on writing the objective function.
 ..  _fit-func-label:
 
 Writing a Fitting Function
-===============================
+==========================
 
 An important component of a fit is writing a function to be minimized --
-the *objective function*.  Since this function will be called by other
+the *objective function*. Since this function will be called by other
 routines, there are fairly stringent requirements for its call signature
-and return value.  In principle, your function can be any Python callable,
+and return value. In principle, your function can be any Python callable,
 but it must look like this:
 
 .. function:: func(params, *args, **kws):
@@ -40,10 +40,10 @@ but it must look like this:
 
    :param params: Parameters.
    :type  params: :class:`~lmfit.parameter.Parameters`
-   :param args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`.
-   :param kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`.
-   :return: Residual array (generally data-model) to be minimized in the least-squares sense.
-   :rtype: numpy.ndarray.  The length of this array cannot change between calls.
+   :param args:  Positional arguments. Must match ``args`` argument to :func:`minimize`.
+   :param kws:   Keyword arguments. Must match ``kws`` argument to :func:`minimize`.
+   :return: Residual array (generally ``data-model``) to be minimized in the least-squares sense.
+   :rtype: :numpydoc:`ndarray`. The length of this array cannot change between calls.
 
 
 A common use for the positional and keyword arguments would be to pass in other
@@ -51,16 +51,18 @@ data needed to calculate the residual, including things as the data array,
 dependent variable, uncertainties in the data, and other data structures for the
 model calculation.
 
-The objective function should return the value to be minimized.  For the
+The objective function should return the value to be minimized. For the
 Levenberg-Marquardt algorithm from :meth:`leastsq`, this returned value **must** be an
 array, with a length greater than or equal to the number of fitting variables in the
-model.  For the other methods, the return value can either be a scalar or an array.  If an
+model. For the other methods, the return value can either be a scalar or an array. If an
 array is returned, the sum of squares of the array will be sent to the underlying fitting
 method, effectively doing a least-squares optimization of the return values.
 
 Since the function will be passed in a dictionary of :class:`Parameters`, it is advisable
-to unpack these to get numerical values at the top of the function.  A
-simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
+to unpack these to get numerical values at the top of the function. A
+simple way to do this is with :meth:`Parameters.valuesdict`, as shown below:
+
+.. jupyter-execute::
 
     from numpy import exp, sign, sin, pi
 
@@ -88,30 +90,46 @@ simple way to do this is with :meth:`Parameters.valuesdict`, as shown below::
 
 In this example, ``x`` is a positional (required) argument, while the
 ``data`` array is actually optional (so that the function returns the model
-calculation if the data is neglected).  Also note that the model
-calculation will divide ``x`` by the value of the ``period`` Parameter.  It
-might be wise to ensure this parameter cannot be 0.  It would be possible
-to use bounds on the :class:`Parameter` to do this::
+calculation if the data is neglected). Also note that the model
+calculation will divide ``x`` by the value of the ``period`` Parameter. It
+might be wise to ensure this parameter cannot be 0. It would be possible
+to use bounds on the :class:`Parameter` to do this:
 
-    params['period'] = Parameter(value=2, min=1.e-10)
+.. jupyter-execute::
+    :hide-code:
 
-but putting this directly in the function with::
+    from lmfit import Parameter, Parameters
+
+    params =  Parameters()
+
+.. jupyter-execute::
+
+    params['period'] = Parameter(name='period', value=2, min=1.e-10)
+
+but putting this directly in the function with:
+
+.. jupyter-execute::
+    :hide-code:
+
+    period = 1
+
+.. jupyter-execute::
 
     if abs(period) < 1.e-10:
         period = sign(period)*1.e-10
 
-is also a reasonable approach.   Similarly, one could place bounds on the
+is also a reasonable approach. Similarly, one could place bounds on the
 ``decay`` parameter to take values only between ``-pi/2`` and ``pi/2``.
 
 ..  _fit-methods-label:
 
 Choosing Different Fitting Methods
-===========================================
+==================================
 
 By default, the `Levenberg-Marquardt
 <https://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm>`_ algorithm is
-used for fitting.  While often criticized, including the fact it finds a
-*local* minima, this approach has some distinct advantages.  These include
+used for fitting. While often criticized, including the fact it finds a
+*local* minima, this approach has some distinct advantages. These include
 being fast, and well-behaved for most curve-fitting needs, and making it
 easy to estimate uncertainties for and correlations between pairs of fit
 variables, as discussed in :ref:`fit-results-label`.
@@ -121,7 +139,7 @@ keyword to the :func:`minimize` function or :meth:`Minimizer.minimize`
 class as listed in the :ref:`Table of Supported Fitting Methods
 <fit-methods-table>`. If you have the ``numdifftools`` package installed, lmfit
 will try to estimate the covariance matrix and determine parameter
-uncertainties and correlations if ``calc_covar`` is True (default).
+uncertainties and correlations if ``calc_covar`` is ``True`` (default).
 
 .. _fit-methods-table:
 
@@ -185,7 +203,7 @@ uncertainties and correlations if ``calc_covar`` is True (default).
 .. note::
 
    The objective function for the Levenberg-Marquardt method **must**
-   return an array, with more elements than variables.  All other methods
+   return an array, with more elements than variables. All other methods
    can return either a scalar value or an array. The Monte-Carlo Markov
    Chain or ``emcee`` method has two different operating methods when the
    objective function returns a scalar value. See the documentation for ``emcee``.
@@ -204,19 +222,19 @@ uncertainties and correlations if ``calc_covar`` is True (default).
 ..  _fit-results-label:
 
 :class:`MinimizerResult` -- the optimization result
-========================================================
+===================================================
 
 .. versionadded:: 0.9.0
 
 An optimization with :func:`minimize` or :meth:`Minimizer.minimize`
-will return a :class:`MinimizerResult` object.  This is an otherwise
+will return a :class:`MinimizerResult` object. This is an otherwise
 plain container object (that is, with no methods of its own) that
-simply holds the results of the minimization.  These results will
+simply holds the results of the minimization. These results will
 include several pieces of informational data such as status and error
 messages, fit statistics, and the updated parameters themselves.
 
 Importantly, the parameters passed in to :meth:`Minimizer.minimize`
-will be not be changed.  To find the best-fit values, uncertainties
+will be not be changed. To find the best-fit values, uncertainties
 and so on for each parameter, one must use the
 :attr:`MinimizerResult.params` attribute. For example, to print the
 fitted values, bounds and other parameter attributes in a
@@ -233,11 +251,11 @@ for customizing the output (e.g., column width, numeric format, etcetera).
 
 
 Goodness-of-Fit Statistics
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. _goodfit-table:
 
- Table of Fit Results:  These values, including the standard Goodness-of-Fit statistics,
+ Table of Fit Results: These values, including the standard Goodness-of-Fit statistics,
  are all attributes of the :class:`MinimizerResult` object returned by
  :func:`minimize` or :meth:`Minimizer.minimize`.
 
@@ -246,11 +264,11 @@ Goodness-of-Fit Statistics
 +======================+============================================================================+
 |    nfev              | number of function evaluations                                             |
 +----------------------+----------------------------------------------------------------------------+
-|    nvarys            | number of variables in fit  :math:`N_{\rm varys}`                          |
+|    nvarys            | number of variables in fit :math:`N_{\rm varys}`                           |
 +----------------------+----------------------------------------------------------------------------+
-|    ndata             | number of data points:  :math:`N`                                          |
+|    ndata             | number of data points: :math:`N`                                           |
 +----------------------+----------------------------------------------------------------------------+
-|    nfree             | degrees of freedom in fit:  :math:`N - N_{\rm varys}`                      |
+|    nfree             | degrees of freedom in fit: :math:`N - N_{\rm varys}`                       |
 +----------------------+----------------------------------------------------------------------------+
 |    residual          | residual array, returned by the objective function: :math:`\{\rm Resid_i\}`|
 +----------------------+----------------------------------------------------------------------------+
@@ -273,14 +291,14 @@ Goodness-of-Fit Statistics
 
 Note that the calculation of chi-square and reduced chi-square assume
 that the returned residual function is scaled properly to the
-uncertainties in the data.  For these statistics to be meaningful, the
+uncertainties in the data. For these statistics to be meaningful, the
 person writing the function to be minimized **must** scale them properly.
 
 After a fit using the :meth:`leastsq` or :meth:`least_squares` method has
 completed successfully, standard errors for the fitted variables and
 correlations between pairs of fitted variables are automatically calculated from
-the covariance matrix. For other methods, the ``calc_covar`` parameter (default is
-True) in the :class:`Minimizer` class determines whether or not to use the
+the covariance matrix. For other methods, the ``calc_covar`` parameter (default
+is ``True``) in the :class:`Minimizer` class determines whether or not to use the
 ``numdifftools`` package to estimate the covariance matrix. The standard error
 (estimated :math:`1\sigma` error-bar) goes into the :attr:`stderr` attribute of
 the Parameter. The correlations with all other variables will be put into the
@@ -288,11 +306,11 @@ the Parameter. The correlations with all other variables will be put into the
 other Parameters and values of the corresponding correlation.
 
 In some cases, it may not be possible to estimate the errors and
-correlations.  For example, if a variable actually has no practical effect
+correlations. For example, if a variable actually has no practical effect
 on the fit, it will likely cause the covariance matrix to be singular,
-making standard errors impossible to estimate.  Placing bounds on varied
+making standard errors impossible to estimate. Placing bounds on varied
 Parameters makes it more likely that errors cannot be estimated, as being
-near the maximum or minimum value makes the covariance matrix singular.  In
+near the maximum or minimum value makes the covariance matrix singular. In
 these cases, the :attr:`errorbars` attribute of the fit result
 (:class:`Minimizer` object) will be ``False``.
 
@@ -300,9 +318,10 @@ these cases, the :attr:`errorbars` attribute of the fit result
 .. _information_criteria_label:
 
 Akaike and Bayesian Information Criteria
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The :class:`MinimizerResult` includes the traditional chi-square and reduced chi-square statistics:
+The :class:`MinimizerResult` includes the traditional chi-square and
+reduced chi-square statistics:
 
 .. math::
    :nowrap:
@@ -321,7 +340,7 @@ Also included are the `Akaike Information Criterion
 <https://en.wikipedia.org/wiki/Akaike_information_criterion>`_, and
 `Bayesian Information Criterion
 <https://en.wikipedia.org/wiki/Bayesian_information_criterion>`_ statistics,
-held in the ``aic`` and ``bic`` attributes, respectively.  These give slightly
+held in the ``aic`` and ``bic`` attributes, respectively. These give slightly
 different measures of the relative quality for a fit, trying to balance
 quality of fit with the number of variable parameters used in the fit.
 These are calculated as:
@@ -337,20 +356,20 @@ These are calculated as:
 
 When comparing fits with different numbers of varying parameters, one
 typically selects the model with lowest reduced chi-square, Akaike
-information criterion, and/or Bayesian information criterion.  Generally,
+information criterion, and/or Bayesian information criterion. Generally,
 the Bayesian information criterion is considered the most conservative of
 these statistics.
 
 
 Uncertainties in Variable Parameters, and their Correlations
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As mentioned above, when a fit is complete the uncertainties for fitted
 Parameters as well as the correlations between pairs of Parameters are
-usually calculated.  This happens automatically either when using the
+usually calculated. This happens automatically either when using the
 default :meth:`leastsq` method, the :meth:`least_squares` method, or for
 most other fitting methods if the highly-recommended ``numdifftools``
-package is available.  The estimated standard error (the :math:`1\sigma`
+package is available. The estimated standard error (the :math:`1\sigma`
 uncertainty) for each variable Parameter will be contained in the
 :attr:`stderr`, while the :attr:`correl` attribute for each Parameter will
 contain a dictionary of the correlation with each other variable Parameter.
@@ -366,19 +385,19 @@ such that it has no real influence on the fit.
 
 In principle, the scale of the uncertainties in the Parameters is closely
 tied to the goodness-of-fit statistics chi-square and reduced chi-square
-(``chisqr`` and ``redchi``).  The standard errors or :math:`1 \sigma`
-uncertainties are those that increase chi-square by 1.  Since a "good fit"
+(``chisqr`` and ``redchi``). The standard errors or :math:`1 \sigma`
+uncertainties are those that increase chi-square by 1. Since a "good fit"
 should have ``redchi`` of around 1, this requires that the data
 uncertainties (and to some extent the sampling of the N data points) is
 correct. Unfortunately, it is often not the case that one has high-quality
 estimates of the data uncertainties (getting the data is hard enough!).
 Because of this common situation, the uncertainties reported and held in
 :attr:`stderr` are not those that increase chi-square by 1, but those that
-increase chi-square by reduced chi-square.  This is equivalent to rescaling
-the uncertainty in the data such that reduced chi-square would be 1.  To be
+increase chi-square by reduced chi-square. This is equivalent to rescaling
+the uncertainty in the data such that reduced chi-square would be 1. To be
 clear, this rescaling is done by default because if reduced chi-square is
 far from 1, this rescaling often makes the reported uncertainties sensible,
-and if reduced chi-square is near 1 it does little harm.  If you have good
+and if reduced chi-square is near 1 it does little harm. If you have good
 scaling of the data uncertainty and believe the scale of the residual
 array is correct,  this automatic rescaling can be turned off using
 ``scale_covar=False``.
@@ -389,10 +408,10 @@ components of the residual array (if, indeed, an array is used) are
 distributed around 0 with a normal (Gaussian distribution), and that a map
 of probability distributions for pairs would be elliptical -- the size of
 the of ellipse gives the uncertainty itself and the eccentricity of the
-ellipse gives the correlation.  This simple approach to assessing
+ellipse gives the correlation. This simple approach to assessing
 uncertainties ignores outliers, highly asymmetric uncertainties, or complex
-correlations between Parameters.  In fact, it is not too hard to come up
-with problems where such effects are important.  Our experience is that the
+correlations between Parameters. In fact, it is not too hard to come up
+with problems where such effects are important. Our experience is that the
 automated results are usually the right scale and quite reasonable as
 initial estimates, but a more thorough exploration of the Parameter space
 using the tools described in :ref:`label-emcee` and
@@ -403,7 +422,7 @@ the distributions and relations between Parameters.
 ..  _fit-reports-label:
 
 Getting and Printing Fit Reports
-===========================================
+================================
 
 .. currentmodule:: lmfit.printfuncs
 
@@ -422,7 +441,7 @@ which would give as output:
     print(fit_report(out))
 
 To be clear, you can get at all of these values from the fit result ``out``
-and ``out.params``.  For example, a crude printout of the best fit variables
+and ``out.params``. For example, a crude printout of the best fit variables
 and standard errors could be done as
 
 .. jupyter-execute::
@@ -436,14 +455,14 @@ and standard errors could be done as
 ..  _fit-itercb-label:
 
 Using a Iteration Callback Function
-====================================
+===================================
 
 .. currentmodule:: lmfit.minimizer
 
 An iteration callback function is a function to be called at each
-iteration, just after the objective function is called.  The iteration
-callback allows user-supplied code to be run at each iteration, and can be
-used to abort a fit.
+iteration, just after the objective function is called. The iteration
+callback allows user-supplied code to be run at each iteration, and can
+be used to abort a fit.
 
 .. function:: iter_cb(params, iter, resid, *args, **kws):
 
@@ -455,24 +474,24 @@ used to abort a fit.
    :type  iter:   int
    :param resid:  Residual array.
    :type  resid:  numpy.ndarray
-   :param args:  Positional arguments.  Must match ``args`` argument to :func:`minimize`
-   :param kws:   Keyword arguments.  Must match ``kws`` argument to :func:`minimize`
-   :return:      Residual array (generally data-model) to be minimized in the least-squares sense.
-   :rtype:    None for normal behavior, any value like True to abort the fit.
+   :param args:  Positional arguments. Must match ``args`` argument to :func:`minimize`
+   :param kws:   Keyword arguments. Must match ``kws`` argument to :func:`minimize`
+   :return:      Residual array (generally ``data-model``) to be minimized in the least-squares sense.
+   :rtype:    None for normal behavior, any value like ``True`` to abort the fit.
 
 
 Normally, the iteration callback would have no return value or return
-``None``.  To abort a fit, have this function return a value that is
-``True`` (including any non-zero integer).  The fit will also abort if any
+``None``. To abort a fit, have this function return a value that is
+``True`` (including any non-zero integer). The fit will also abort if any
 exception is raised in the iteration callback. When a fit is aborted this
-way, the parameters will have the values from the last iteration.  The fit
+way, the parameters will have the values from the last iteration. The fit
 statistics are not likely to be meaningful, and uncertainties will not be computed.
 
 
 ..  _fit-minimizer-label:
 
 Using the :class:`Minimizer` class
-=======================================
+==================================
 
 .. currentmodule:: lmfit.minimizer
 
@@ -511,25 +530,25 @@ For more information, check the examples in ``examples/lmfit_brute_example.ipynb
 .. _label-emcee:
 
 :meth:`Minimizer.emcee` - calculating the posterior probability distribution of parameters
-==============================================================================================
+==========================================================================================
 
 :meth:`Minimizer.emcee` can be used to obtain the posterior probability
-distribution of parameters, given a set of experimental data.  Note that this
-method does *not* actually perform a fit at all.  Instead, it explores
+distribution of parameters, given a set of experimental data. Note that this
+method does *not* actually perform a fit at all. Instead, it explores
 parameter space to determine the probability distributions for the parameters,
-but without an explicit goal of attempting to refine the solution.  It should
+but without an explicit goal of attempting to refine the solution. It should
 not be used for fitting, but it is a useful method to to more thoroughly
 explore the parameter space around the solution after a fit has been done and
 thereby get an improved understanding of the probability distribution for the
-parameters.  It may be able to refine your estimate of the most likely values
+parameters. It may be able to refine your estimate of the most likely values
 for a set of parameters, but it will not iteratively find a good solution to
-the minimization problem.  To use this method effectively, you should first
+the minimization problem. To use this method effectively, you should first
 use another minimization method and then use this method to explore the
 parameter space around thosee best-fit values.
 
 To illustrate this, we'll use an example problem of fitting data to function
 of a double exponential decay, including a modest amount of Gaussian noise to
-the data.  Note that this example is the same problem used in
+the data. Note that this example is the same problem used in
 :ref:`label-confidence-advanced` for evaluating confidence intervals in the
 parameters, which is a similar goal to the one here.
 
@@ -570,8 +589,8 @@ Create a Parameter set for the initial guesses:
         v = p.valuesdict()
         return v['a1'] * np.exp(-x / v['t1']) + v['a2'] * np.exp(-(x - 0.1) / v['t2']) - y
 
-Solving with :func:`minimize` gives the Maximum Likelihood solution.   Note
-that we use the robust Nelder-Mead method here.  The default Levenberg-Marquardt
+Solving with :func:`minimize` gives the Maximum Likelihood solution. Note
+that we use the robust Nelder-Mead method here. The default Levenberg-Marquardt
 method seems to have difficulty with exponential decays, though it can refine
 the solution if starting near the solution:
 
@@ -594,7 +613,7 @@ does estimate and report uncertainties in the parameters and correlations for
 the parameters, and reports the correlation of parameters ``a2`` and ``t2`` to
 be very high. As we'll see, these estimates are pretty good, but when faced
 with such high correlation, it can be helpful to get the full probability
-distribution for the parameters.  MCMC methods are very good for this.
+distribution for the parameters. MCMC methods are very good for this.
 
 Furthermore, we wish to deal with the data uncertainty. This is called
 marginalisation of a nuisance parameter. ``emcee`` requires a function that
@@ -630,17 +649,16 @@ print a progress bar to the Terminal if the ``tqdm`` package is installed.
 The success of the method (i.e., whether or not the sampling went well) can be
 assessed by checking the integrated autocorrelation time and/or the acceptance
 fraction of the walkers. For this specific example the autocorrelation time
-could not be estimated because the "chain is too short".  Instead, we plot the
+could not be estimated because the "chain is too short". Instead, we plot the
 acceptance fraction per walker and its mean value suggests that the sampling
 worked as intended (as a rule of thumb the value should be between 0.2 and
 0.5).
 
 .. jupyter-execute::
 
-    plt.plot(res.acceptance_fraction)
+    plt.plot(res.acceptance_fraction, 'b')
     plt.xlabel('walker')
     plt.ylabel('acceptance fraction')
-    plt.show()
 
 With the results from ``emcee``, we can visualize the posterior distributions
 for the parameters using the ``corner`` package:
@@ -654,7 +672,7 @@ for the parameters using the ``corner`` package:
 
 The values reported in the :class:`MinimizerResult` are the medians of the
 probability distributions and a 1 :math:`\sigma` quantile, estimated as half
-the difference between the 15.8 and 84.2 percentiles.  Printing these values:
+the difference between the 15.8 and 84.2 percentiles. Printing these values:
 
 
 .. jupyter-execute::
@@ -663,10 +681,10 @@ the difference between the 15.8 and 84.2 percentiles.  Printing these values:
     print('--------------------------------------------')
     lmfit.report_fit(res.params)
 
-You can see that this recovered the right uncertainty level on the data.  Note
+You can see that this recovered the right uncertainty level on the data. Note
 that these values agree pretty well with the results, uncertainties and
 correlations found by the fit and using ``numdifftools`` to estimate the
-covariance matrix.  That is, even though the parameters ``a2``, ``t1``, and
+covariance matrix. That is, even though the parameters ``a2``, ``t1``, and
 ``t2`` are all highly correlated and do not display perfectly Gaussian
 probability distributions, the probability distributions found by explicitly
 sampling the parameter space are not so far from elliptical as to make the
@@ -674,7 +692,7 @@ simple (and much faster) estimates from inverting the covariance matrix
 completely invalid.
 
 As mentioned above, the result from ``emcee`` reports the median values, which
-are not necessarily the same as the Maximum Likelihood Estimate.  To obtain
+are not necessarily the same as the Maximum Likelihood Estimate. To obtain
 the values for the Maximum Likelihood Estimation (MLE) we find the location in
 the chain with the highest probability:
 
@@ -704,9 +722,9 @@ Finally, we can use the samples from ``emcee`` to work out the 1- and
 
 .. jupyter-execute::
 
-    print('\nError Estimates from emcee    ')
+    print('\nError estimates from emcee:')
     print('------------------------------------------------------')
-    print('Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma ')
+    print('Parameter  -2sigma  -1sigma   median  +1sigma  +2sigma')
 
     for name in p.keys():
         quantiles = np.percentile(res.flatchain[name],
@@ -720,6 +738,6 @@ Finally, we can use the samples from ``emcee`` to work out the 1- and
         print(fmt(name, err_m2, err_m1, median, err_p1, err_p2))
 
 And we see that the initial estimates for the 1-:math:`\sigma` standard error
-using ``numdifftools`` was not too bad.  We'll return to this example
+using ``numdifftools`` was not too bad. We'll return to this example
 problem in :ref:`label-confidence-advanced` and use a different method to
 calculate the 1- and 2-:math:`\sigma` error bars.

@@ -7,6 +7,7 @@ based on the Python implementation of Andrea Gavana
 
 Implementation details can be found in this paper:
     http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf
+
 """
 
 import numpy as np
@@ -18,75 +19,81 @@ SCIPY_LOCAL_SOLVERS = ['Nelder-Mead', 'Powell', 'L-BFGS-B', 'TNC', 'SLSQP']
 def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
           maxfunevals=None, totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
           eps2=0.1, tabulistsize=5, tabustrategy='farthest', disp=False):
-    """Find the global minimum of a multivariate function using the AMPGO
-    (Adaptive Memory Programming for Global Optimization) algorithm.
+    """Find the global minimum of a multivariate function using AMPGO.
+
+    AMPGO stands for "Adaptive Memory Programming for Global Optimization.
 
     Parameters
     ----------
-    objfun: callable
-        Objective function to be minimized. The function must have the signature:
-        objfun(params, *args, **kws)
-    x0: numpy.ndarray
-         Initial guesses for parameter values.
-    args: tuple, optional
-         Additional arguments passed to `objfun`.
-    local: str, optional
+    objfun : callable
+        Objective function to be minimized. The function must have the
+        signature::
+
+            objfun(params, *args, **kws)
+
+    x0 : numpy.ndarray
+        Initial guesses for parameter values.
+    args : tuple, optional
+        Additional arguments passed to `objfun`.
+    local : str, optional
         Name of the local minimization method. Valid options are:
 
         - `'L-BFGS-B'` (default)
-        - `Nelder-Mead'`
+        - `'Nelder-Mead'`
         - `'Powell'`
         - `'TNC'`
         - `'SLSQP'`
 
-    local_opts: dict, optional
+    local_opts : dict, optional
         Options to pass to the local minimizer.
-    bounds: sequence, optional
+    bounds : sequence, optional
         List of tuples specifying the lower and upper bound for each
-        independent variable [(`xl0`, `xu0`), (`xl1`, `xu1`), ...].
-    maxfunevals: int, optional
-        Maximum number of function evaluations. If None, the optimization will
-        stop after `totaliter` number of iterations.
-    totaliter: int, optional
+        independent variable ``[(xl0, xu0), (xl1, xu1), ...]``.
+    maxfunevals : int, optional
+        Maximum number of function evaluations. If None, the optimization
+        will stop after `totaliter` number of iterations.
+    totaliter : int, optional
         Maximum number of global iterations.
-    maxiter: int, optional
-        Maximum number of `Tabu Tunneling` iterations during each global
+    maxiter : int, optional
+        Maximum number of 'Tabu Tunneling' iterations during each global
         iteration.
-    glbtol: float, optional
-        Tolerance whether or not to accept a solution after a tunneling phase.
-    eps1: float, optional
-        Constant used to define an aspiration value for the objective function
-        during the Tunneling phase.
-    eps2: float, optional
-        Perturbation factor used to move away from the latest local minimum
-        at the start of a Tunneling phase.
-    tabulistsize: int, optional
+    glbtol : float, optional
+        Tolerance whether or not to accept a solution after a tunneling
+        phase.
+    eps1 : float, optional
+        Constant used to define an aspiration value for the objective
+        function during the Tunneling phase.
+    eps2 : float, optional
+        Perturbation factor used to move away from the latest local
+        minimum at the start of a Tunneling phase.
+    tabulistsize : int, optional
         Size of the (circular) tabu search list.
-    tabustrategy: str, optional
-        Strategy to use when the size of the tabu list exceeds `tabulistsize`.
-        It can be 'oldest' to drop the oldest point from the tabu list or
-        'farthest' to drop the element farthest from the last local minimum
-        found.
-    disp: bool, optional
+    tabustrategy : {'farthest', 'oldest'}, optional
+        Strategy to use when the size of the tabu list exceeds
+        `tabulistsize`. It can be 'oldest' to drop the oldest point from
+        the tabu list or 'farthest' (default) to drop the element farthest
+        from the last local minimum found.
+    disp : bool, optional
         Set to True to print convergence messages.
 
     Returns
     -------
-    tuple:
+    tuple
         A tuple of 5 elements, in the following order:
-         1. **best_x** (`array_like`): the estimated position of the global
+         1. **best_x** (array_like): the estimated position of the global
              minimum.
-         2. **best_f** (`float`): the value of `objfun` at the minimum.
-         3. **evaluations** (`integer`): the number of function evaluations.
-         4. **msg** (`string`): a message describes the cause of the termination.
-         5. **tunnel_info** (`tuple`): a tuple containing the total number of
-             Tunneling phases performed and the successful ones.
+         2. **best_f** (float): the value of `objfun` at the minimum.
+         3. **evaluations** (int): the number of function evaluations.
+         4. **msg** (str): a message describes the cause of the
+             termination.
+         5. **tunnel_info** (tuple): a tuple containing the total number
+             of Tunneling phases performed and the successful ones.
 
     Notes
     -----
     The detailed implementation of AMPGO is described in the paper
-    "Adaptive Memory Programming for Constrained Global Optimization" located
-    here:
+    "Adaptive Memory Programming for Constrained Global Optimization"
+    located here:
 
     http://leeds-faculty.colorado.edu/glover/fred%20pubs/416%20-%20AMP%20(TS)%20for%20Constrained%20Global%20Opt%20w%20Lasdon%20et%20al%20.pdf
 
@@ -105,7 +112,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
     bounds = [b if b is not None else (None, None) for b in bounds]
     _bounds = [(-np.inf if lb is None else lb, np.inf if ub is None else ub)
                for lb, ub in bounds]
-    low, up = np.array(_bounds).T
+    low, up = zip(*_bounds)
 
     if maxfunevals is None:
         maxfunevals = np.inf
@@ -261,15 +268,11 @@ def tunnel(x0, *args):
     """Tunneling objective function.
 
     This function has a global minimum of zero at any feasible point where
-    `f(x) = aspiration`, and minimizing this expression tends to move away
-    from all points in `tabulist`.
+    ``f(x) = aspiration``, and minimizing this expression tends to move
+    away from all points in `tabulist`.
 
     """
-    objfun, aspiration, tabulist = args[0:3]
-
-    fun_args = ()
-    if len(args) > 3:
-        fun_args = tuple(args[3:])
+    objfun, aspiration, tabulist, *fun_args = args
 
     numerator = (objfun(x0, *fun_args) - aspiration)**2
     denominator = 1.0

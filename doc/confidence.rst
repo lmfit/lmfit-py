@@ -1,24 +1,24 @@
 .. _confidence_chapter:
 
 Calculation of confidence intervals
-====================================
+===================================
 
 .. module:: lmfit.confidence
 
 The lmfit :mod:`confidence` module allows you to explicitly calculate
-confidence intervals for variable parameters.  For most models, it is not
+confidence intervals for variable parameters. For most models, it is not
 necessary since the estimation of the standard error from the estimated
 covariance matrix is normally quite good.
 
 But for some models, the sum of two exponentials for example, the approximation
 begins to fail. For this case, lmfit has the function :func:`conf_interval`
-to calculate confidence intervals directly.  This is substantially slower
+to calculate confidence intervals directly. This is substantially slower
 than using the errors estimated from the covariance matrix, but the results
 are more robust.
 
 
 Method used for calculating confidence intervals
--------------------------------------------------
+------------------------------------------------
 
 The F-test is used to compare our null model, which is the best fit we have
 found, with an alternate model, where one of the parameters is fixed to a
@@ -80,11 +80,11 @@ intervals:
 
 This shows the best-fit values for the parameters in the ``_BEST_`` column,
 and parameter values that are at the varying confidence levels given by
-steps in :math:`\sigma`.  As we can see, the estimated error is almost the
+steps in :math:`\sigma`. As we can see, the estimated error is almost the
 same, and the uncertainties are well behaved: Going from 1-:math:`\sigma`
 (68% confidence) to 3-:math:`\sigma` (99.7% confidence) uncertainties is
-fairly linear.  It can also be seen that the errors are fairy symmetric
-around the best fit value.  For this problem, it is not necessary to
+fairly linear. It can also be seen that the errors are fairy symmetric
+around the best fit value. For this problem, it is not necessary to
 calculate confidence intervals, and the estimates of the uncertainties from
 the covariance matrix are sufficient.
 
@@ -109,16 +109,16 @@ parameters and set it manually:
 ..  _label-confidence-advanced:
 
 An advanced example for evaluating confidence intervals
----------------------------------------------------------
+-------------------------------------------------------
 
 Now we look at a problem where calculating the error from approximated
 covariance can lead to misleading result -- the same double exponential
-problem shown in :ref:`label-emcee`.  In fact such a problem is particularly
+problem shown in :ref:`label-emcee`. In fact such a problem is particularly
 hard for the Levenberg-Marquardt method, so we first estimate the results
-using the slower but robust Nelder-Mead method.  We can then compare the
+using the slower but robust Nelder-Mead method. We can then compare the
 uncertainties computed (if the ``numdifftools`` package is installed) with
 those estimated using Levenberg-Marquardt around the previously found
-solution.  We can also compare to the results of using ``emcee``.
+solution. We can also compare to the results of using ``emcee``.
 
 
 .. jupyter-execute::
@@ -145,7 +145,7 @@ which will report:
     lmfit.printfuncs.report_ci(ci)
 
 Again we called :func:`conf_interval`, this time with tracing and only for
-1- and 2-:math:`\sigma`.  Comparing these two different estimates, we see
+1- and 2-:math:`\sigma`. Comparing these two different estimates, we see
 that the estimate for ``a1`` is reasonably well approximated from the
 covariance matrix, but the estimates for ``a2`` and especially for ``t1``, and
 ``t2`` are very asymmetric and that going from 1 :math:`\sigma` (68%
@@ -173,9 +173,9 @@ Plots of the confidence region are shown in the figures below for ``a1`` and
     plt.show()
 
 Neither of these plots is very much like an ellipse, which is implicitly
-assumed by the approach using the covariance matrix.  The plots actually
+assumed by the approach using the covariance matrix. The plots actually
 look quite a bit like those found with MCMC and shown in the "corner plot"
-in :ref:`label-emcee`.  In fact, comparing the confidence interval results
+in :ref:`label-emcee`. In fact, comparing the confidence interval results
 here with the results for the 1- and 2-:math:`\sigma` error estimated with
 ``emcee``, we can see that the agreement is pretty good and that the
 asymmetry in the parameter distributions are reflected well in the
@@ -185,7 +185,7 @@ The trace returned as the optional second argument from
 :func:`conf_interval` contains a dictionary for each variable parameter.
 The values are dictionaries with arrays of values for each variable, and an
 array of corresponding probabilities for the corresponding cumulative
-variables.  This can be used to show the dependence between two
+variables. This can be used to show the dependence between two
 parameters:
 
 .. jupyter-execute::
@@ -236,9 +236,8 @@ datapoint. A tutorial on the possibilities offered by MCMC can be found at [1]_.
 .. [1] https://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/
 
 
-
 Confidence Interval Functions
-----------------------------------
+-----------------------------
 
 .. autofunction:: lmfit.conf_interval
 

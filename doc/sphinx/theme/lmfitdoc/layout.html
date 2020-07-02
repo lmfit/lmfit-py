@@ -7,7 +7,7 @@
     :copyright: Copyright 2007-2014 by the Sphinx team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 #}
-{%- extends "basic/layout.html" %}
+{%- extends "./basic_layout.html" %}
 
 {%- block extrahead %}
   <script type="text/x-mathjax-config">
@@ -21,19 +21,19 @@
 {% block rootrellink %}
    <li>[<a href="{{ pathto('intro') }}">intro</a>|</li>
    <li><a href="{{ pathto('parameters') }}">parameters</a>|</li>
-   <li><a href="{{ pathto('fitting') }}"> minimize</a>|</li>
-   <li><a href="{{ pathto('model') }}"> model</a>|</li>
-   <li><a href="{{ pathto('builtin_models') }}"> built-in models</a>|</li>
+   <li><a href="{{ pathto('fitting') }}">minimize</a>|</li>
+   <li><a href="{{ pathto('model') }}">model</a>|</li>
+   <li><a href="{{ pathto('builtin_models') }}">built-in models</a>|</li>
    <li><a href="{{ pathto('confidence') }}">confidence intervals</a>|</li>
    <li><a href="{{ pathto('bounds') }}">bounds</a>|</li>
-   <li><a href="{{ pathto('constraints') }}">constraints</a>|</li>
+   <li><a href="{{ pathto('constraints') }}">constraints</a>]</li>
 {% endblock %}
 
 {% block relbar1 %}
 <div>
 <table border=0>
   <tr><td></td><td width=80% padding=5 align=left>
-          <a href="{{ pathto('contents') }}/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
+          <a href="{{ pathto('contents') }}/../index.html" style="color: #157"><font size=+3>LMFIT</font></a>
      </td>
      <td width=6% align=left>
          <a href="{{ pathto('contents') }}" style="color: #882222">

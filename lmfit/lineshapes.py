@@ -64,8 +64,8 @@ def split_lorentzian(x, amplitude=1.0, center=0.0, sigma=1.0, sigma_r=1.0):
 
     Split means that width of the function is different between
     left and right slope of the function. The peak height is calculated
-    from the condition that the integral from ``-.inf`` to ``+.inf`` is equal
-    to ``amplitude``.
+    from the condition that the integral from ``-numpy.inf`` to
+    ``numpy.inf`` is equal to `amplitude`.
 
     split_lorentzian(x, amplitude, center, sigma, sigma_r) =
         [2*amplitude / (pi* (sigma + sigma_r)] *
@@ -88,7 +88,7 @@ def voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None):
     voigt(x, amplitude, center, sigma, gamma) =
         amplitude*wofz(z).real / (sigma*s2pi)
 
-    see https://en.wikipedia.org/wiki/Voigt_profile
+    For more information, see: https://en.wikipedia.org/wiki/Voigt_profile
 
     """
     if gamma is None:
@@ -101,15 +101,15 @@ def pvoigt(x, amplitude=1.0, center=0.0, sigma=1.0, fraction=0.5):
     """Return a 1-dimensional pseudo-Voigt function.
 
     pvoigt(x, amplitude, center, sigma, fraction) =
-       amplitude*(1-fraction)*gaussian(x, center, sigma_g) +
-       amplitude*fraction*lorentzian(x, center, sigma)
+        amplitude*(1-fraction)*gaussian(x, center, sigma_g) +
+        amplitude*fraction*lorentzian(x, center, sigma)
 
-    where sigma_g (the sigma for the Gaussian component) is
+    where `sigma_g` (the sigma for the Gaussian component) is
 
-        sigma_g = sigma / sqrt(2*log(2)) ~= sigma / 1.17741
+        ``sigma_g = sigma / sqrt(2*log(2)) ~= sigma / 1.17741``
 
-    so that the Gaussian and Lorentzian components have the
-    same FWHM of 2*sigma.
+    so that the Gaussian and Lorentzian components have the same FWHM of
+    ``2.0*sigma``.
 
     """
     sigma_g = sigma / sqrt(2*log2)
@@ -130,12 +130,12 @@ def moffat(x, amplitude=1, center=0., sigma=1, beta=1.):
 def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
     """Return a Pearson7 lineshape.
 
-    Using the wikipedia definition:
+    Using the Wikipedia definition:
+
     pearson7(x, center, sigma, expon) =
         amplitude*(1+arg**2)**(-expon)/(sigma*beta(expon-0.5, 0.5))
 
-    where arg = (x-center)/sigma
-    and beta() is the beta function.
+    where ``arg = (x-center)/sigma`` and `beta` is the beta function.
 
     """
     expon = max(tiny, expon)
@@ -170,13 +170,14 @@ def damped_oscillator(x, amplitude=1.0, center=1., sigma=0.1):
 def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
     """Return a Damped Harmonic Oscillator.
 
-    Similar to version from PAN
+    Similar to the version from PAN:
+
     dho(x, amplitude, center, sigma, gamma) =
         amplitude*sigma*pi * (lm - lp) / (1.0 - exp(-x/gamma))
 
     where
-        lm(x, center, sigma) = 1.0 / ((x-center)**2 + sigma**2)
-        lp(x, center, sigma) = 1.0 / ((x+center)**2 + sigma**2)
+        ``lm(x, center, sigma) = 1.0 / ((x-center)**2 + sigma**2)``
+        ``lp(x, center, sigma) = 1.0 / ((x+center)**2 + sigma**2)``
 
     """
     bose = (1.0 - exp(-x/max(tiny, gamma)))
@@ -195,7 +196,7 @@ def logistic(x, amplitude=1., center=0., sigma=1.):
     """Return a Logistic lineshape (yet another sigmoidal curve).
 
     logistic(x, amplitude, center, sigma) =
-        = amplitude*(1.  - 1. / (1 + exp((x-center)/sigma)))
+        amplitude*(1. - 1. / (1 + exp((x-center)/sigma)))
 
     """
     return amplitude*(1. - 1./(1. + exp((x-center)/max(tiny, sigma))))
@@ -204,8 +205,8 @@ def logistic(x, amplitude=1., center=0., sigma=1.):
 def lognormal(x, amplitude=1.0, center=0., sigma=1):
     """Return a log-normal function.
 
-    lognormal(x, amplitude, center, sigma)
-        = (amplitude/(x*sigma*s2pi)) * exp(-(ln(x) - center)**2/ (2* sigma**2))
+    lognormal(x, amplitude, center, sigma) =
+        (amplitude/(x*sigma*s2pi)) * exp(-(ln(x) - center)**2/ (2* sigma**2))
 
     """
     if isinstance(x, (int, float)):
@@ -217,7 +218,7 @@ def lognormal(x, amplitude=1.0, center=0., sigma=1):
 
 
 def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
-    """Return Student's t distribution.
+    """Return Student's t-distribution.
 
     students_t(x, amplitude, center, sigma) =
 
@@ -234,11 +235,12 @@ def students_t(x, amplitude=1.0, center=0.0, sigma=1.0):
 def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
     """Return an exponentially modified Gaussian.
 
-    expgaussian(x, amplitude, center, sigma, gamma)
-        = amplitude * (gamma/2) *
-          exp[center*gamma + (gamma*sigma)**2/2 - gamma*x] *
-          erfc[(center + gamma*sigma**2 - x)/(sqrt(2)*sigma)]
+    expgaussian(x, amplitude, center, sigma, gamma) =
+        amplitude * (gamma/2) *
+        exp[center*gamma + (gamma*sigma)**2/2 - gamma*x] *
+        erfc[(center + gamma*sigma**2 - x)/(sqrt(2)*sigma)]
 
+    For more information, see:
     https://en.wikipedia.org/wiki/Exponentially_modified_Gaussian_distribution
 
     """
@@ -249,14 +251,15 @@ def expgaussian(x, amplitude=1, center=0, sigma=1.0, gamma=1.0):
 
 
 def doniach(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
-    """Return a Doniach Sunjic asymmetric lineshape, used for photo-emission.
+    """Return a Doniach Sunjic asymmetric lineshape.
 
     doniach(x, amplitude, center, sigma, gamma) =
         amplitude / sigma^(1-gamma) *
         cos(pi*gamma/2 + (1-gamma) arctan((x-center)/sigma) /
         (sigma**2 + (x-center)**2)**[(1-gamma)/2]
 
-    see http://www.casaxps.com/help_manual/line_shapes.htm
+    For example used in photo-emission; see
+    http://www.casaxps.com/help_manual/line_shapes.htm for more information.
 
     """
     arg = (x-center)/max(tiny, sigma)
@@ -266,10 +269,10 @@ def doniach(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
 
 
 def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
-    """Return a Doniach Sunjic asymmetric lineshape, used for photo-emission.
+    """Return a Doniach Sunjic asymmetric lineshape.
 
-    Function added here for backwards-compatibility, will emit a FutureWarning
-    when used.
+    Function added here for backwards-compatibility, will emit a
+    `FutureWarning` when used.
 
     """
     msg = ('Please correct the name of your lineshape function: donaich --> '
@@ -284,12 +287,13 @@ def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):
 
     Equal to: gaussian(x, center, sigma)*(1+erf(beta*(x-center)))
 
-    with beta = gamma/(sigma*sqrt(2))
+    where ``beta = gamma/(sigma*sqrt(2))``
 
-    with  gamma < 0:  tail to low value of centroid
-          gamma > 0:  tail to high value of centroid
+    with ``gamma < 0``: tail to low value of centroid
+         ``gamma > 0``: tail to high value of centroid
 
-    see https://en.wikipedia.org/wiki/Skew_normal_distribution
+    For more information, see:
+    https://en.wikipedia.org/wiki/Skew_normal_distribution
 
     """
     asym = 1 + erf(gamma*(x-center)/max(tiny, (s2*sigma)))
@@ -299,15 +303,15 @@ def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):
 def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
     """Return a Voigt lineshape, skewed with error function.
 
-    useful for ad-hoc Compton scatter profile
+    Equal to: voigt(x, center, sigma, gamma)*(1+erf(beta*(x-center)))
 
-    with beta = skew/(sigma*sqrt(2))
-    = voigt(x, center, sigma, gamma)*(1+erf(beta*(x-center)))
+    where ``beta = skew/(sigma*sqrt(2))``
 
-    skew < 0:  tail to low value of centroid
-    skew > 0:  tail to high value of centroid
+    with ``skew < 0``: tail to low value of centroid
+         ``skew > 0``: tail to high value of centroid
 
-    see https://en.wikipedia.org/wiki/Skew_normal_distribution
+    Useful, for example, for ad-hoc Compton scatter profile. For more
+    information, see: https://en.wikipedia.org/wiki/Skew_normal_distribution
 
     """
     beta = skew/max(tiny, (s2*sigma))
@@ -318,8 +322,8 @@ def skewed_voigt(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=None, skew=0.0):
 def sine(x, amplitude=1.0, frequency=1.0, shift=0.0):
     """Return a sinusoidal function.
 
-    sine(x, amplitude, frequency, shift):
-       = amplitude * sin(x*frequency + shift)
+    sine(x, amplitude, frequency, shift) =
+        amplitude * sin(x*frequency + shift)
 
     """
     return amplitude*sin(x*frequency + shift)
@@ -328,8 +332,8 @@ def sine(x, amplitude=1.0, frequency=1.0, shift=0.0):
 def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
     """Return an exponentially decaying sinusoidal function.
 
-    expsine(x, amplitude, frequency, shift,  decay):
-       = amplitude * sin(x*frequency + shift) * exp(-x*decay)
+    expsine(x, amplitude, frequency, shift, decay) =
+        amplitude * sin(x*frequency + shift) * exp(-x*decay)
 
     """
     return amplitude*sin(x*frequency + shift) * exp(-x*decay)
@@ -338,23 +342,30 @@ def expsine(x, amplitude=1.0, frequency=1.0, shift=0.0, decay=0.0):
 def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
     """Return a thermal distribution function.
 
-    form = 'bose' (default) is the Bose-Einstein distribution
-    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
-       = 1/(amplitude*exp((x - center)/kt) - 1)
-    form = 'maxwell' is the Maxwell-Boltzmann distribution
-    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
-       = 1/(amplitude*exp((x - center)/kt))
-    form = 'fermi' is the Fermi-Dirac distribution
-    thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0):
-       = 1/(amplitude*exp((x - center)/kt) + 1)
+    The variable `form` defines the kind of distribution:
 
-    Notes:
-    - ``kt`` should be defined in the same units as ``x``. (The Boltzmann
-      constant is kB = 8.617e-5 eV/K).
-    - set ``kt<0`` to implement the energy loss convention common in scattering
-      research.
+    - ``form='bose'`` (default) is the Bose-Einstein distribution:
 
-    see http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
+        thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0) =
+            1/(amplitude*exp((x - center)/kt) - 1)
+
+    - ``form='maxwell'`` is the Maxwell-Boltzmann distribution:
+        thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0) =
+            1/(amplitude*exp((x - center)/kt))
+
+    - ``form='fermi'`` is the Fermi-Dirac distribution:
+        thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0) =
+            1/(amplitude*exp((x - center)/kt) + 1)
+
+    Notes
+    -----
+    - `kt` should be defined in the same units as `x`. The Boltzmann
+      constant is ``kB = 8.617e-5 eV/K``.
+    - set ``kt<0`` to implement the energy loss convention common in
+      scattering research.
+
+    For more information, see:
+    http://hyperphysics.phy-astr.gsu.edu/hbase/quantum/disfcn.html
 
     """
     form = form.lower()
@@ -375,14 +386,15 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     """Return a step function.
 
-    starts at 0.0, ends at amplitude, with half-max at center, and
-    rising with form:
-      'linear' (default) = amplitude * min(1, max(0, arg))
-      'atan', 'arctan'   = amplitude * (0.5 + atan(arg)/pi)
-      'erf'              = amplitude * (1 + erf(arg))/2.0
-      'logistic'         = amplitude * [1 - 1/(1 + exp(arg))]
+    Starts at 0.0, ends at `amplitude`, with half-max at `center`, and
+    rising with `form`:
 
-    where arg = (x - center)/sigma
+    - `'linear'` (default) = amplitude * min(1, max(0, arg))
+    - `'atan'`, `'arctan'` = amplitude * (0.5 + atan(arg)/pi)
+    - `'erf'`              = amplitude * (1 + erf(arg))/2.0
+    - `'logistic'`         = amplitude * [1 - 1/(1 + exp(arg))]
+
+    where ``arg = (x - center)/sigma``.
 
     """
     out = (x - center)/max(tiny, sigma)
@@ -408,16 +420,19 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
               center2=1.0, sigma2=1.0, form='linear'):
     """Return a rectangle function: step up, step down.
 
-    (see step function)
-    starts at 0.0, rises to amplitude (at center1 with width sigma1)
-    then drops to 0.0 (at center2 with width sigma2) with form:
-      'linear' (default) = ramp_up + ramp_down
-      'atan', 'arctan'   = amplitude*(atan(arg1) + atan(arg2))/pi
-      'erf'              = amplitude*(erf(arg1) + erf(arg2))/2.
-      'logisitic'        = amplitude*[1 - 1/(1 + exp(arg1)) - 1/(1+exp(arg2))]
+    Starts at 0.0, rises to `amplitude` (at `center1` with width `sigma1`),
+    then drops to 0.0 (at `center2` with width `sigma2`) with `form`:
+    - `'linear'` (default) = ramp_up + ramp_down
+    - `'atan'`, `'arctan`' = amplitude*(atan(arg1) + atan(arg2))/pi
+    - `'erf'`              = amplitude*(erf(arg1) + erf(arg2))/2.
+    - `'logisitic'`        = amplitude*[1 - 1/(1 + exp(arg1)) - 1/(1+exp(arg2))]
 
-    where arg1 =  (x - center1)/sigma1
-    and   arg2 = -(x - center2)/sigma2
+    where ``arg1 = (x - center1)/sigma1`` and
+    ``arg2 = -(x - center2)/sigma2``.
+
+    See Also
+    --------
+    step
 
     """
     arg1 = (x - center1)/max(tiny, sigma1)
@@ -446,7 +461,7 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
 def exponential(x, amplitude=1, decay=1):
     """Return an exponential function.
 
-    x -> amplitude * exp(-x/decay)
+    exponential(x, amplitude, decay) = amplitude * exp(-x/decay)
 
     """
     decay = max(tiny, decay)
@@ -456,7 +471,7 @@ def exponential(x, amplitude=1, decay=1):
 def powerlaw(x, amplitude=1, exponent=1.0):
     """Return the powerlaw function.
 
-    x -> amplitude * x**exponent
+    powerlaw(x, amplitude, exponent) = amplitude * x**exponent
 
     """
     return amplitude * x**exponent
@@ -465,7 +480,7 @@ def powerlaw(x, amplitude=1, exponent=1.0):
 def linear(x, slope=1.0, intercept=0.0):
     """Return a linear function.
 
-    x -> slope * x + intercept
+    linear(x, slope, interceps) = slope * x + intercept
 
     """
     return slope * x + intercept
@@ -474,7 +489,7 @@ def linear(x, slope=1.0, intercept=0.0):
 def parabolic(x, a=0.0, b=0.0, c=0.0):
     """Return a parabolic function.
 
-    x -> a * x**2 + b * x + c
+    parabolic(x, a, b, c) = a * x**2 + b * x + c
 
     """
     return a * x**2 + b * x + c

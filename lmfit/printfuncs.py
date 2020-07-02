@@ -1,4 +1,5 @@
 """Functions to display fitting results and confidence intervals."""
+
 from math import log10
 import re
 import warnings
@@ -39,14 +40,14 @@ def gformat(val, length=11):
         b) the precision will be as high as possible.
         c) trailing zeros will not be trimmed.
 
-    The precision will typically be length-7.
+    The precision will typically be ``length-7``.
 
     Parameters
     ----------
     val : float
-       Value to be formatted.
+        Value to be formatted.
     length : int, optional
-       Length of output string (default is 11).
+        Length of output string (default is 11).
 
     Returns
     -------
@@ -90,24 +91,24 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     Parameters
     ----------
     inpars : Parameters
-       Input Parameters from fit or MinimizerResult returned from a fit.
+        Input Parameters from fit or MinimizerResult returned from a fit.
     modelpars : Parameters, optional
-       Known Model Parameters.
+        Known Model Parameters.
     show_correl : bool, optional
-       Whether to show list of sorted correlations (default is True).
+        Whether to show list of sorted correlations (default is True).
     min_correl : float, optional
-       Smallest correlation in absolute value to show (default is 0.1).
+        Smallest correlation in absolute value to show (default is 0.1).
     sort_pars : bool or callable, optional
-       Whether to show parameter names sorted in alphanumerical order. If
-       False (default), then the parameters will be listed in the order they
-       were added to the Parameters dictionary. If callable, then this (one
-       argument) function is used to extract a comparison key from each
-       list element.
+        Whether to show parameter names sorted in alphanumerical order. If
+        False (default), then the parameters will be listed in the order
+        they were added to the Parameters dictionary. If callable, then
+        this (one argument) function is used to extract a comparison key
+        from each list element.
 
     Returns
     -------
-    string
-       Multi-line text of fit report.
+    str
+        Multi-line text of fit report.
 
     """
     from .parameter import Parameters
@@ -212,7 +213,24 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
 
 def fitreport_html_table(result, show_correl=True, min_correl=0.1):
-    """Generate a report of the fitting result as an HTML table."""
+    """Generate a report of the fitting result as an HTML table.
+
+    Parameters
+    ----------
+    result : MinimizerResult or ModelResult
+        Object containing the optimized parameters and several
+        goodness-of-fit statistics.
+    show_correl : bool, optional
+        Whether to show list of sorted correlations (default is True).
+    min_correl : float, optional
+        Smallest correlation in absolute value to show (default is 0.1).
+
+    Returns
+    -------
+    str
+        Multi-line HTML code of fit report.
+
+    """
     html = []
     add = html.append
 
@@ -257,7 +275,19 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
 
 
 def params_html_table(params):
-    """Return an HTML representation of Parameters."""
+    """Return an HTML representation of Parameters.
+
+    Parameters
+    ----------
+    params : Parameters
+        Object containing the Parameters of the model.
+
+    Returns
+    -------
+    str
+        Multi-line HTML code of fitting parameters.
+
+    """
     has_err = any([p.stderr is not None for p in params.values()])
     has_expr = any([p.expr is not None for p in params.values()])
     has_brute = any([p.brute_step is not None for p in params.values()])
@@ -332,15 +362,19 @@ def ci_report(ci, with_offset=True, ndigits=5):
 
     Parameters
     ----------
+    ci : dict
+        The result of :func:`~lmfit.confidence.conf_interval`: a dictionary
+        containing a list of ``(sigma, vals)``-tuples for each parameter.
     with_offset : bool, optional
-        Whether to subtract best value from all other values (default is True).
+        Whether to subtract best value from all other values (default is
+        True).
     ndigits : int, optional
         Number of significant digits to show (default is 5).
 
     Returns
     -------
     str
-       Text of formatted report on confidence intervals.
+        Text of formatted report on confidence intervals.
 
     """
     maxlen = max([len(i) for i in ci])
