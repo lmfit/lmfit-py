@@ -154,11 +154,13 @@ def test_confidence_sigma_vs_prob(data, pars):
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
     out = minimizer.leastsq()
 
+    ci_sigma_None = lmfit.conf_interval(minimizer, out, sigmas=None)
     ci_sigmas = lmfit.conf_interval(minimizer, out, sigmas=[1, 2, 3])
     ci_1sigma = lmfit.conf_interval(minimizer, out, sigmas=[1])
     ci_probs = lmfit.conf_interval(minimizer, out,
                                    sigmas=[0.68269, 0.9545, 0.9973])
 
+    assert ci_sigma_None == ci_sigmas
     assert_allclose(ci_sigmas['a'][0][1], ci_probs['a'][0][1], rtol=0.01)
     assert_allclose(ci_sigmas['b'][2][1], ci_probs['b'][2][1], rtol=0.01)
     assert len(ci_1sigma['a']) == 3
