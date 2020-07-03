@@ -141,6 +141,9 @@ def propagate_err(z, dz, option):
     if option not in ['real', 'imag', 'abs', 'angle']:
         raise ValueError("Invalid option ('%s') for function 'propagate_err'." % option)
 
+    if not z.shape == dz.shape:
+        raise ValueError("shape of z: %s != shape of dz: %s" % (z.shape, dz.shape))
+
     # Check the main vector for complex. Do nothing if real.
     if any(np.iscomplex(z)):
         # if uncertainties are real, apply them equally to
