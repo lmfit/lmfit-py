@@ -1,14 +1,17 @@
 import os
 
 import numpy as np
+from numpy.random import RandomState, MT19937, SeedSequence
 from numpy import pi
 from numpy.testing import assert_allclose, assert_almost_equal
 import pytest
 
 from lmfit import Parameters, minimize
 from lmfit.lineshapes import exponential
-from lmfit.models import ExponentialModel, VoigtModel
+from lmfit.models import ExponentialModel, VoigtModel, LinearModel
 
+def random_seed(seed):
+    return RandomState(MT19937(SeedSequence(seed)))
 
 def check(para, real_val, sig=3):
     err = abs(para.value - real_val)
@@ -17,10 +20,10 @@ def check(para, real_val, sig=3):
 
 def test_bounded_parameters():
     # create data to be fitted
-    np.random.seed(1)
+
     x = np.linspace(0, 15, 301)
     data = (5. * np.sin(2 * x - 0.1) * np.exp(-x*x*0.025) +
-            np.random.normal(size=len(x), scale=0.2))
+            random_seed(123).normal(size=len(x), scale=0.2))
 
     # define objective function: returns the array to be minimized
     def fcn2min(params, x, data):
@@ -49,30 +52,45 @@ def test_bounded_parameters():
 
     # assert that the covariance matrix is correct [cf. lmfit v0.9.10]
     cov_x = np.array([
-        [1.42428250e-03, 9.45395985e-06, -4.33997922e-05, 1.07362106e-05],
-        [9.45395985e-06, 1.84110424e-07, -2.90588963e-07, 7.19107184e-08],
-        [-4.33997922e-05, -2.90588963e-07, 9.53427031e-05, -2.37750362e-05],
-        [1.07362106e-05, 7.19107184e-08, -2.37750362e-05, 9.60952336e-06]])
+        [1.549018e-03,  1.029426e-05, -4.688367e-05,  1.165545e-05],
+        [ 1.029426e-05,  2.006218e-07, -3.143045e-07,  7.816005e-08],
+        [-4.688367e-05, -3.143045e-07,  1.015423e-04, -2.545474e-05],
+        [ 1.165545e-05,  7.816005e-08, -2.545474e-05,  1.034857e-05]])
     assert_allclose(result.covar, cov_x, rtol=1e-6)
 
     # assert that stderr and correlations are correct [cf. lmfit v0.9.10]
-    assert_almost_equal(result.params['amp'].stderr, 0.03773967, decimal=6)
-    assert_almost_equal(result.params['decay'].stderr, 4.2908e-04, decimal=6)
-    assert_almost_equal(result.params['shift'].stderr, 0.00976436, decimal=6)
-    assert_almost_equal(result.params['omega'].stderr, 0.00309992, decimal=6)
+    assert_almost_equal(result.params['amp'].stderr,  0.03935756, decimal=6)
+    assert_almost_equal(result.params['decay'].stderr, 4.47908224e-4, decimal=6)
+    assert_almost_equal(result.params['shift'].stderr, 0.0100768202, decimal=6)
+    assert_almost_equal(result.params['omega'].stderr, 0.003216920, decimal=6)
 
     assert_almost_equal(result.params['amp'].correl['decay'],
-                        0.5838166760743324, decimal=6)
+                        0.5839531336, decimal=6)
     assert_almost_equal(result.params['amp'].correl['shift'],
-                        -0.11777303073961824, decimal=6)
+                        -0.118214277, decimal=6)
     assert_almost_equal(result.params['amp'].correl['omega'],
-                        0.09177027400788784, decimal=6)
+                        0.0920578223, decimal=6)
     assert_almost_equal(result.params['decay'].correl['shift'],
-                        -0.0693579417651835, decimal=6)
+                        -0.0696366793, decimal=6)
     assert_almost_equal(result.params['decay'].correl['omega'],
-                        0.05406342001021014, decimal=6)
+                        0.054244477, decimal=6)
     assert_almost_equal(result.params['shift'].correl['omega'],
-                        -0.7854644476455469, decimal=6)
+                        -0.78524443, decimal=6)
+
+def test_final_parameter_values():
+
+    model = LinearModel()
+    params = model.make_params()
+    params['intercept'].set(value=-1, min=-20, max=0)
+    params['slope'].set(value=1,      min=-100, max=400)
+
+    x = np.linspace(0, 9, 10)
+    y = x* 1.34 - 4.5 + random_seed(123).normal(scale=0.05, size=x.size)
+
+    result = model.fit(y, x=x, method='nelder', params=params)
+    assert_almost_equal(result.chisqr, 0.0229766180, decimal=6)
+    assert_almost_equal(result.params['intercept'], -4.46617198, decimal=6)
+    assert_almost_equal(result.params['slope'], 1.3352113, decimal=6)
 
 
 def test_bounds_expression():
@@ -112,9 +130,8 @@ def test_bounds_expression():
 def test_numdifftools_no_bounds(fit_method):
     pytest.importorskip("numdifftools")
 
-    np.random.seed(7)
     x = np.linspace(0, 100, num=50)
-    noise = np.random.normal(scale=0.25, size=x.size)
+    noise = random_seed(123).normal(scale=0.25, size=x.size)
     y = exponential(x, amplitude=5, decay=15) + noise
 
     mod = ExponentialModel()
