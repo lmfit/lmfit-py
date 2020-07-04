@@ -764,7 +764,8 @@ class Minimizer:
         """
         warnings.filterwarnings(action="ignore", module="scipy",
                                 message="^internal gelsd")
-
+        vbest = np.atleast_1d([self.result.params[name].value for name in
+                               self.result.var_names])
         nfev = deepcopy(self.result.nfev)
         try:
             Hfun = ndt.Hessian(self.penalty, step=1.e-4)
@@ -774,7 +775,9 @@ class Minimizer:
             return None
         finally:
             self.result.nfev = nfev
-
+        # restore original values
+        for val, nam in zip(vbest, self.result.var_names):
+            self.result.params[nam].value = val
         return cov_x
 
     def _int2ext_cov_x(self, cov_int, fvars):
