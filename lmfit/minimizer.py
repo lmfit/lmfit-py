@@ -784,6 +784,8 @@ class Minimizer:
                                 message="^internal gelsd")
 
         nfev = deepcopy(self.result.nfev)
+        best_vals = self.result.params.valuesdict()
+
         try:
             Hfun = ndt.Hessian(self.penalty, step=1.e-4)
             hessian_ndt = Hfun(fvars)
@@ -793,6 +795,9 @@ class Minimizer:
         finally:
             self.result.nfev = nfev
 
+        # restore original values
+        for name in self.result.var_names:
+            self.result.params[name].value = best_vals[name]
         return cov_x
 
     def _int2ext_cov_x(self, cov_int, fvars):
