@@ -7,7 +7,7 @@ import pytest
 
 from lmfit import Parameters, minimize
 from lmfit.lineshapes import exponential
-from lmfit.models import ExponentialModel, VoigtModel
+from lmfit.models import ExponentialModel, VoigtModel, LinearModel
 
 
 def check(para, real_val, sig=3):
@@ -225,3 +225,19 @@ def test_numdifftools_calc_covar_false():
 
     assert result_ndt.covar is None
     assert result_ndt.errorbars is False
+
+def test_final_parameter_values():
+    model = LinearModel()
+    params = model.make_params()
+    params['intercept'].set(value=-1, min=-20, max=0)
+    params['slope'].set(value=1, min=-100, max=400)
+
+    np.random.seed(78281)
+    x = np.linspace(0, 9, 10)
+    y = x* 1.34 - 4.5 + np.random.normal(scale=0.05, size=x.size)
+
+    result = model.fit(y, x=x, method='nelder', params=params)
+
+    assert_almost_equal(result.chisqr, 0.014625543, decimal=6)
+    assert_almost_equal(result.params['intercept'].value, -4.511087126, decimal=6)
+    assert_almost_equal(result.params['slope'].value, 1.339685514, decimal=6)
