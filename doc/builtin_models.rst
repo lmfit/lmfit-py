@@ -117,7 +117,7 @@ of 0 on the value of ``sigma``.
 
 .. autoclass:: LognormalModel
 
-:class:`DampedOcsillatorModel`
+:class:`DampedOscillatorModel`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: DampedOscillatorModel
