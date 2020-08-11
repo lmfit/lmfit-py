@@ -1109,6 +1109,8 @@ class ThermalDistributionModel(Model):
 
     """
 
+    forms = ('bose', 'maxwell', 'fermi')
+
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='bose', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
@@ -1290,6 +1292,8 @@ class StepModel(Model):
 
     """
 
+    forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
+
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
@@ -1349,6 +1353,8 @@ class RectangleModel(Model):
     :math:`\alpha_2 = -(x - \mu_2)/{\sigma_2}`.
 
     """
+
+    forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='linear', **kwargs):
