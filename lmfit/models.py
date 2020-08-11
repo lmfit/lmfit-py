@@ -1491,3 +1491,34 @@ class ExpressionModel(Model):
         This prevents normal parsing of function for parameter names.
 
         """
+
+lmfit_models = {'Constant': ConstantModel,
+                'Complex Constant': ComplexConstantModel,
+                'Linear': LinearModel,
+                'Quadratic': QuadraticModel,
+                'Polynomial': PolynomialModel,
+                'Gaussian': GaussianModel,
+                'Gaussian-2D': Gaussian2dModel,
+                'Lorentzian': LorentzianModel,
+                'Split-Lorentzian': SplitLorentzianModel,
+                'Voigt': VoigtModel,
+                'PseudoVoigt': PseudoVoigtModel,
+                'Moffat': MoffatModel,
+                'Pearson7': Pearson7Model,
+                'StudentsT': StudentsTModel,
+                'Breit-Wigner': BreitWignerModel,
+                'Log-Normal': LognormalModel,
+                'Damped Oscillator': DampedOscillatorModel,
+                'Damped Harmonic Oscillator': DampedHarmonicOscillatorModel,
+                'Exponential Gaussian': ExponentialGaussianModel,
+                'Skewed Gaussian': SkewedGaussianModel,
+                'Skewed Voigt': SkewedVoigtModel,
+                'Thermal Distribution': ThermalDistributionModel,
+                'Doniach': DoniachModel,
+                'Power Law': PowerLawModel,
+                'Exponential': ExponentialModel,
+                'Step': StepModel,
+                'Rectangle': RectangleModel,
+                'Expression': ExpressionModel}
+                    
+    
