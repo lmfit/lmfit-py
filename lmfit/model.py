@@ -194,7 +194,7 @@ class Model:
     valid_forms = ()
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 nan_policy='raise', prefix='', name=None, form=None, **kws):
+                 nan_policy='raise', prefix='', name=None, **kws):
         """
         The model function will normally take an independent variable
         (generally, the first argument) and a series of arguments that are
@@ -218,8 +218,6 @@ class Model:
         name : str, optional
             Name for the model. When None (default) the name is the same
             as the model function (`func`).
-        form : str, optional
-            Additional 
         **kws : dict, optional
             Additional keyword arguments to pass to model function.
 
