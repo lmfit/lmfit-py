@@ -1109,7 +1109,7 @@ class ThermalDistributionModel(Model):
 
     """
 
-    forms = ('bose', 'maxwell', 'fermi')
+    valid_forms = ('bose', 'maxwell', 'fermi')
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='bose', **kwargs):
@@ -1292,7 +1292,7 @@ class StepModel(Model):
 
     """
 
-    forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
+    valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='linear', **kwargs):
@@ -1354,7 +1354,7 @@ class RectangleModel(Model):
 
     """
 
-    forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
+    valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='linear', **kwargs):
