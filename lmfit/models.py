@@ -294,10 +294,14 @@ class PolynomialModel(Model):
     MAX_DEGREE = 7
     DEGREE_ERR = "degree must be an integer less than %d."
 
-    def __init__(self, degree, independent_vars=['x'], prefix='',
+    valid_forms = (0, 1, 2, 3, 4, 5, 6, 7)
+
+    def __init__(self, degree=7, independent_vars=['x'], prefix='',
                  nan_policy='raise', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
+        if 'form' in kwargs:
+            degree = int(kwargs.pop('form'))
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
 
