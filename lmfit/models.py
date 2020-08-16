@@ -294,10 +294,14 @@ class PolynomialModel(Model):
     MAX_DEGREE = 7
     DEGREE_ERR = "degree must be an integer less than %d."
 
-    def __init__(self, degree, independent_vars=['x'], prefix='',
+    valid_forms = (0, 1, 2, 3, 4, 5, 6, 7)
+
+    def __init__(self, degree=7, independent_vars=['x'], prefix='',
                  nan_policy='raise', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
+        if 'form' in kwargs:
+            degree = int(kwargs.pop('form'))
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
             raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
 
@@ -1109,6 +1113,8 @@ class ThermalDistributionModel(Model):
 
     """
 
+    valid_forms = ('bose', 'maxwell', 'fermi')
+
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='bose', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
@@ -1290,6 +1296,8 @@ class StepModel(Model):
 
     """
 
+    valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
+
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='linear', **kwargs):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
@@ -1349,6 +1357,8 @@ class RectangleModel(Model):
     :math:`\alpha_2 = -(x - \mu_2)/{\sigma_2}`.
 
     """
+
+    valid_forms = ('linear', 'atan', 'arctan', 'erf', 'logistic')
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
                  form='linear', **kwargs):
@@ -1491,3 +1501,34 @@ class ExpressionModel(Model):
         This prevents normal parsing of function for parameter names.
 
         """
+
+lmfit_models = {'Constant': ConstantModel,
+                'Complex Constant': ComplexConstantModel,
+                'Linear': LinearModel,
+                'Quadratic': QuadraticModel,
+                'Polynomial': PolynomialModel,
+                'Gaussian': GaussianModel,
+                'Gaussian-2D': Gaussian2dModel,
+                'Lorentzian': LorentzianModel,
+                'Split-Lorentzian': SplitLorentzianModel,
+                'Voigt': VoigtModel,
+                'PseudoVoigt': PseudoVoigtModel,
+                'Moffat': MoffatModel,
+                'Pearson7': Pearson7Model,
+                'StudentsT': StudentsTModel,
+                'Breit-Wigner': BreitWignerModel,
+                'Log-Normal': LognormalModel,
+                'Damped Oscillator': DampedOscillatorModel,
+                'Damped Harmonic Oscillator': DampedHarmonicOscillatorModel,
+                'Exponential Gaussian': ExponentialGaussianModel,
+                'Skewed Gaussian': SkewedGaussianModel,
+                'Skewed Voigt': SkewedVoigtModel,
+                'Thermal Distribution': ThermalDistributionModel,
+                'Doniach': DoniachModel,
+                'Power Law': PowerLawModel,
+                'Exponential': ExponentialModel,
+                'Step': StepModel,
+                'Rectangle': RectangleModel,
+                'Expression': ExpressionModel}
+                    
+    

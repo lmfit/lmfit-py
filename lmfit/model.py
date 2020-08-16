@@ -191,6 +191,7 @@ class Model:
     _invalid_par = "Invalid parameter name ('%s') for function %s"
     _invalid_hint = "unknown parameter hint '%s' for param '%s'"
     _hint_names = ('value', 'vary', 'min', 'max', 'expr')
+    valid_forms = ()
 
     def __init__(self, func, independent_vars=None, param_names=None,
                  nan_policy='raise', prefix='', name=None, **kws):
