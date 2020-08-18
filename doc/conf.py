@@ -166,8 +166,8 @@ image_converter_args=["-density", "300"]
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',
     'gallery_dirs': 'examples',
-    'filename_pattern': '/documentation|/example_',
-    'ignore_pattern': '/doc_',
+    'filename_pattern': r'(\\|/)documentation|(\\|/)example_',
+    'ignore_pattern': r'(\\|/)doc_',
     'ignore_repr_types': r'matplotlib',
 }
 
