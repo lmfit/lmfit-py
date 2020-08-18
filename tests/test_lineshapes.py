@@ -3,9 +3,20 @@
 import inspect
 
 import numpy as np
+from numpy.testing import assert_almost_equal
 import pytest
 
 import lmfit
+from lmfit.lineshapes import not_zero, tiny
+
+
+@pytest.mark.parametrize(
+    "value, expected_result",
+    [(1, 1.0), (-1, -1.0), (0, tiny), (-0, -tiny), (np.array([1]), 1.0)],
+)
+def test_not_zero(value, expected_result):
+    """Test that not_zero gives the expected results"""
+    assert_almost_equal(not_zero(value), expected_result)
 
 
 @pytest.mark.parametrize("lineshape", lmfit.lineshapes.functions)
