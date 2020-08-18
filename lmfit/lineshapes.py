@@ -398,7 +398,7 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
               % (form, "'maxwell', 'fermi', or 'bose'")
         raise ValueError(msg)
 
-    return real(1/(amplitude*exp((x - center)/kt) + offset + tiny*1j))
+    return real(1/(amplitude*exp((x - center)/not_zero(kt)) + offset + tiny*1j))
 
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
