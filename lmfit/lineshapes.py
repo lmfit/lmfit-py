@@ -2,8 +2,8 @@
 
 import warnings
 
-from numpy import (arctan, cos, exp, finfo, float64, isnan, log, pi, real, sin,
-                   sqrt, where)
+from numpy import (arctan, copysign, cos, exp, finfo, float64, isnan, log, pi, real,
+                   sin, sqrt, where)
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
 from scipy.special import wofz
@@ -21,6 +21,24 @@ functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt', 'pvoigt',
              'thermal_distribution', 'step', 'rectangle', 'exponential',
              'powerlaw', 'linear', 'parabolic', 'sine', 'expsine',
              'split_lorentzian')
+
+
+def not_zero(value):
+    """Return value with a minimal absolute size of tiny, preserving the sign.
+
+    This is a helper function the prevent ZeroDivisionError's.
+
+    Parameters
+    ----------
+    value : scalar
+        Value to be ensured not to be Zero
+
+    Returns
+    -------
+    scalar
+        Value ensured not to be Zero
+    """
+    return float(copysign(max(tiny, abs(value)), value))
 
 
 def gaussian(x, amplitude=1.0, center=0.0, sigma=1.0):
@@ -380,7 +398,7 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
               % (form, "'maxwell', 'fermi', or 'bose'")
         raise ValueError(msg)
 
-    return real(1/(amplitude*exp((x - center)/kt) + offset + tiny*1j))
+    return real(1/(amplitude*exp((x - center)/not_zero(kt)) + offset + tiny*1j))
 
 
 def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
@@ -464,7 +482,7 @@ def exponential(x, amplitude=1, decay=1):
     exponential(x, amplitude, decay) = amplitude * exp(-x/decay)
 
     """
-    decay = max(tiny, decay)
+    decay = not_zero(decay)
     return amplitude * exp(-x/decay)
 
 
