@@ -1415,7 +1415,7 @@ class Minimizer:
         else:
             p0 = 1 + rng.randn(nwalkers, self.nvarys) * 1.e-4
             p0 *= var_arr
-            sampler_kwargs['pool'] = auto_pool
+            sampler_kwargs.setdefault('pool',auto_pool)
             self.sampler = emcee.EnsembleSampler(nwalkers, self.nvarys,
                                                  self._lnprob, **sampler_kwargs)
 
