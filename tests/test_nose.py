@@ -368,7 +368,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # but only if a parameter is not fixed
         self.fit_params['decay'].vary = False
-        self.mini.scalar_minimize(method='differential_evolution', maxiter=1)
+        self.mini.scalar_minimize(method='differential_evolution', max_nfev=1)
 
     def test_scalar_minimizers(self):
         # test all the scalar minimizers
