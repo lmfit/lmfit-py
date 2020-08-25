@@ -4,6 +4,7 @@ import numpy as np
 from numpy import pi
 from numpy.testing import (assert_allclose, assert_almost_equal, assert_equal,
                            dec)
+from scipy.optimize import rosen_der
 import pytest
 from uncertainties import ufloat
 
@@ -368,7 +369,7 @@ class CommonMinimizerTest(unittest.TestCase):
 
         # but only if a parameter is not fixed
         self.fit_params['decay'].vary = False
-        self.mini.scalar_minimize(method='differential_evolution', maxiter=1)
+        self.mini.scalar_minimize(method='differential_evolution', max_nfev=1)
 
     def test_scalar_minimizers(self):
         # test all the scalar minimizers
@@ -632,6 +633,34 @@ class CommonMinimizerTest(unittest.TestCase):
             _ = self.mini.emcee(params=self.fit_params, ntemps=5)
 
 
+    def test_emcee_custom_pool(self):
+        # tests use of a custom pool
+
+        if not HAS_EMCEE:
+            return True
+        
+        global emcee_counter
+        emcee_counter = 0
+        
+        class my_pool:
+            def map(self, f, arg):
+                global emcee_counter
+                emcee_counter += 1
+                return map(f, arg)
+
+        def cost_fun(params, **kwargs):
+            return rosen_der([params['a'],params['b']])
+      
+        params = Parameters()
+        params.add('a', 1,min=-5,max=5,vary=True)
+        params.add('b', 1,min=-5,max=5,vary=True)
+        
+        fitter = Minimizer(cost_fun,params)
+        MC_results = fitter.emcee(workers= my_pool(), steps=1000, nwalkers=100)
+        assert emcee_counter > 500
+
+        
+
 def residual_for_multiprocessing(pars, x, data=None):
     # a residual function defined in the top level is needed for
     # multiprocessing. bound methods don't work.
@@ -646,3 +675,5 @@ def residual_for_multiprocessing(pars, x, data=None):
     if data is None:
         return model
     return model - data
+
+

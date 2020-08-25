@@ -580,6 +580,7 @@ class Minimizer:
             self.max_nfev = np.inf
 
         self.result.nfev += 1
+        self.result.last_internal_values = fvars
         if self.result.nfev > self.max_nfev:
             self.result.aborted = True
             m = "number of function evaluations > %d" % self.max_nfev
@@ -1032,8 +1033,7 @@ class Minimizer:
             result.residual = self.__residual(result.x)
             result.nfev -= 1
         else:
-            result.x = np.array([self.result.params[p].value
-                                 for p in self.result.var_names])
+            result.x = result.last_internal_values
             self.result.nfev -= 2
             self._abort = False
             result.residual = self.__residual(result.x)
@@ -1415,7 +1415,7 @@ class Minimizer:
         else:
             p0 = 1 + rng.randn(nwalkers, self.nvarys) * 1.e-4
             p0 *= var_arr
-            sampler_kwargs['pool'] = auto_pool
+            sampler_kwargs.setdefault('pool',auto_pool)
             self.sampler = emcee.EnsembleSampler(nwalkers, self.nvarys,
                                                  self._lnprob, **sampler_kwargs)
 
@@ -1693,8 +1693,7 @@ class Minimizer:
         if not result.aborted:
             _best, _cov, _infodict, errmsg, ier = lsout
         else:
-            _best = np.array([self.result.params[p].value
-                              for p in self.result.var_names])
+            _best = result.last_internal_values
             _cov = None
             ier = -1
             errmsg = 'Fit aborted.'
