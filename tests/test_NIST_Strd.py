@@ -1,6 +1,6 @@
 import math
 from optparse import OptionParser
-
+from numpy.testing import assert_allclose
 from NISTModels import Models, ReadNistData
 
 from lmfit import Parameters, minimize
@@ -74,13 +74,17 @@ def NIST_Dataset(DataSet, method='leastsq', start='start2',
         pname = 'b%i' % (i+1)
         pval1 = NISTdata[start][i]
         params.add(pname, value=pval1)
-
-    myfit = minimize(resid, params, method=method, args=(x,), kws={'y': y})
+    try:
+        myfit = minimize(resid, params, method=method, args=(x,), kws={'y': y}, nan_policy='raise')
+    except ValueError:
+        if verbose:
+            print("Fit failed... nans?")
+        return False
     digs, buff = Compare_NIST_Results(DataSet, myfit, myfit.params, NISTdata)
     if verbose:
         print(buff)
 
-    return digs > 1
+    return digs > 2
 
 
 def build_usage():
@@ -162,9 +166,20 @@ def run_interactive():
 
 
 def RunNIST_Model(model):
+
+    dset = ReadNistData(model)
+    func, npar, dimx = Models[model]
+    rss = (func(dset['cert_values'], x=dset['x'], y=dset['y'])**2).sum()
+    tiny_rss = 1.e-16
+    print(rss, dset['sum_squares'], tiny_rss)
+
+    if dset['sum_squares'] < tiny_rss:
+        assert rss < tiny_rss
+    else:
+        assert_allclose(rss, dset['sum_squares'])
+
     out1 = NIST_Dataset(model, start='start1', plot=False, verbose=False)
     out2 = NIST_Dataset(model, start='start2', plot=False, verbose=False)
-    print("NIST Test", model, out1, out2)
     assert(out1 or out2)
     return out1 or out2
 

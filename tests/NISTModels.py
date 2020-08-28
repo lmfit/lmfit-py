@@ -22,119 +22,134 @@ def Bennet5(b, x, y=0):
 
 def BoxBOD(b, x, y=0):
     b = read_params(b)
-    return y - b[0]*(1-exp(-b[1]*x))
+    model = b[0]*(1-exp(-b[1]*x))
+    return model -y
 
 
 def Chwirut(b, x, y=0):
     b = read_params(b)
-    return y - exp(-b[0]*x)/(b[1]+b[2]*x)
+    model = exp(-b[0]*x)/(b[1]+b[2]*x)
+    return model - y
 
 
 def DanWood(b, x, y=0):
     b = read_params(b)
-    return y - b[0]*x**b[1]
+    model = b[0]*x**b[1]
+    return model - y
 
 
 def ENSO(b, x, y=0):
     b = read_params(b)
     pi = 3.141592653589793238462643383279
-
-    return y - b[0] + (b[1]*cos(2*pi*x/12) + b[2]*sin(2*pi*x/12) +
-                       b[4]*cos(2*pi*x/b[3]) + b[5]*sin(2*pi*x/b[3]) +
-                       b[7]*cos(2*pi*x/b[6]) + b[8]*sin(2*pi*x/b[6]))
-
+    model = b[0] + (b[1]*cos(2*pi*x/12) + b[2]*sin(2*pi*x/12) +
+                    b[4]*cos(2*pi*x/b[3]) + b[5]*sin(2*pi*x/b[3]) +
+                    b[7]*cos(2*pi*x/b[6]) + b[8]*sin(2*pi*x/b[6]))
+    return model - y
 
 def Eckerle4(b, x, y=0):
     b = read_params(b)
-    return y - (b[0]/b[1]) * exp(-0.5*((x-b[2])/b[1])**2)
+    model = (b[0]/b[1]) * exp(-0.5*((x-b[2])/b[1])**2)
+    return model - y
 
 
 def Gauss(b, x, y=0):
     b = read_params(b)
-    return y - b[0]*exp(-b[1]*x) + (b[2]*exp(-(x-b[3])**2 / b[4]**2) +
-                                    b[5]*exp(-(x-b[6])**2 / b[7]**2))
+    model = (b[0]*exp(-b[1]*x) + (b[2]*exp(-(x-b[3])**2 / b[4]**2) +
+                                  b[5]*exp(-(x-b[6])**2 / b[7]**2)))
+    return model - y
 
 
 def Hahn1(b, x, y=0):
     b = read_params(b)
-    return y - ((b[0]+b[1]*x+b[2]*x**2+b[3]*x**3) /
-                (1+b[4]*x+b[5]*x**2+b[6]*x**3))
-
+    model = (b[0]+b[1]*x+b[2]*x**2+b[3]*x**3) /(1+b[4]*x+b[5]*x**2+b[6]*x**3)
+    return model - y
 
 def Kirby(b, x, y=0):
     b = read_params(b)
-    return y - (b[0] + b[1]*x + b[2]*x**2) / (1 + b[3]*x + b[4]*x**2)
+    model = (b[0] + b[1]*x + b[2]*x**2) / (1 + b[3]*x + b[4]*x**2)
+    return model - y
 
 
 def Lanczos(b, x, y=0):
     b = read_params(b)
-    return y - b[0]*exp(-b[1]*x) + b[2]*exp(-b[3]*x) + b[4]*exp(-b[5]*x)
+    model = b[0]*exp(-b[1]*x) + b[2]*exp(-b[3]*x) + b[4]*exp(-b[5]*x)
+    return model - y 
 
 
 def MGH09(b, x, y=0):
     b = read_params(b)
-    return y - b[0]*(x**2+x*b[1]) / (x**2+x*b[2]+b[3])
+    model = b[0]*(x**2+x*b[1]) / (x**2+x*b[2]+b[3])
+    return model - y
 
 
 def MGH10(b, x, y=0):
     b = read_params(b)
-    return y - b[0] * exp(b[1]/(x+b[2]))
+    model = b[0] * exp(b[1]/(x+b[2]))
+    return model - y
 
 
 def MGH17(b, x, y=0):
     b = read_params(b)
-    return y - b[0] + b[1]*exp(-x*b[3]) + b[2]*exp(-x*b[4])
+    model = b[0] + b[1]*exp(-x*b[3]) + b[2]*exp(-x*b[4])
+    return model - y
 
 
 def Misra1a(b, x, y=0):
     b = read_params(b)
-    return y - b[0]*(1-exp(-b[1]*x))
+    model = b[0]*(1-exp(-b[1]*x))
+    return model - y
 
 
 def Misra1b(b, x, y=0):
     b = read_params(b)
-    return y - b[0] * (1-(1+b[1]*x/2)**(-2))
+    model = b[0] * (1-(1+b[1]*x/2)**(-2))
+    return model - y
 
 
 def Misra1c(b, x, y=0):
     b = read_params(b)
-    return y - b[0] * (1-(1+2*b[1]*x)**(-.5))
+    model = b[0] * (1-(1+2*b[1]*x)**(-.5))
+    return model - y
 
 
 def Misra1d(b, x, y=0):
     b = read_params(b)
-    return y - b[0]*b[1]*x*((1+b[1]*x)**(-1))
+    model = b[0]*b[1]*x*((1+b[1]*x)**(-1))
+    return model - y
 
 
 def Nelson(b, x, y=None):
     b = read_params(b)
     x1 = x[:, 0]
     x2 = x[:, 1]
-    if y is None:
-        return - exp(b[0] - b[1]*x1 * exp(-b[2]*x2))
-    return log(y) - (b[0] - b[1]*x1 * exp(-b[2]*x2))
+    model = b[0] - b[1]*x1 * exp(-b[2]*x2)
+    return model - log(y)
 
 
 def Rat42(b, x, y=0):
     b = read_params(b)
-    return y - b[0] / (1+exp(b[1]-b[2]*x))
+    model = b[0] / (1+exp(b[1]-b[2]*x))
+    return model - y
 
 
 def Rat43(b, x, y=0):
     b = read_params(b)
-    return y - b[0] / ((1+exp(b[1]-b[2]*x))**(1/b[3]))
+    model = b[0] / ((1+exp(b[1]-b[2]*x))**(1/b[3]))
+    return model - y
 
 
 def Roszman1(b, x, y=0):
     b = read_params(b)
     pi = 3.141592653589793238462643383279
-    return y - b[0] - b[1]*x - arctan(b[2]/(x-b[3]))/pi
+    model = b[0] - b[1]*x - arctan(b[2]/(x-b[3]))/pi
+    return model - y
 
 
 def Thurber(b, x, y=0):
     b = read_params(b)
-    return y - ((b[0] + b[1]*x + b[2]*x**2 + b[3]*x**3) /
-                (1 + b[4]*x + b[5]*x**2 + b[6]*x**3))
+    model = ((b[0] + b[1]*x + b[2]*x**2 + b[3]*x**3) /
+             (1 + b[4]*x + b[5]*x**2 + b[6]*x**3))
+    return model - y
 
 
 #  Model name        fcn,    #fitting params, dim of x
