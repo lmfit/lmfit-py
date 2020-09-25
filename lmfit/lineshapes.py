@@ -3,7 +3,7 @@
 import warnings
 
 from numpy import (arctan, copysign, cos, exp, finfo, float64, isnan, log, pi, real,
-                   sin, sqrt, where)
+                   sin, sqrt, where, zeros_like, argmin)
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
 from scipy.special import wofz
@@ -511,3 +511,24 @@ def parabolic(x, a=0.0, b=0.0, c=0.0):
 
     """
     return a * x**2 + b * x + c
+
+
+def delta(x, amplitude=1, center=0.0):
+    """Return a Dirac delta.
+
+    Creates an `out` array of zeros of same shape as `x`.
+    Then, finds the index of the closest value to `center` in `x`.
+
+    Set the value in `out` array to `amplitude` divided
+    by the increment in `x`.
+
+    """
+    out = zeros_like(x)
+
+    peakIdx = argmin((x - center)**2)
+
+    deltaX = x[1] - x[0]
+
+    out[peakIdx] = amplitude / deltaX
+
+    return out

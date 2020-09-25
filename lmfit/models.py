@@ -12,7 +12,7 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          linear, lognormal, lorentzian, moffat, parabolic,
                          pearson7, powerlaw, pvoigt, rectangle,
                          skewed_gaussian, skewed_voigt, split_lorentzian, step,
-                         students_t, thermal_distribution, voigt)
+                         students_t, thermal_distribution, voigt, delta)
 from .model import Model
 
 tiny = np.finfo(np.float).eps
@@ -1392,6 +1392,30 @@ class RectangleModel(Model):
     guess.__doc__ = COMMON_GUESS_DOC
 
 
+class DeltaModel(Model):
+    r"""A model based on a Dirac Delta.
+
+    The model has two Parameters: `amplitude`, and `center`.
+
+    .. math::
+
+        f(x; a, b) = a \frac{\delta(x - b)}{\Delta x}
+
+    where the parameter `amplitude` corresponds to `a`,
+    and `center` to `b`
+
+    For more information, see:
+    https://en.wikipedia.org/wiki/Dirac_delta_function
+    """
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super().__init__(delta, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+
+
 class ExpressionModel(Model):
     """ExpressionModel class."""
 
@@ -1502,6 +1526,7 @@ class ExpressionModel(Model):
 
         """
 
+
 lmfit_models = {'Constant': ConstantModel,
                 'Complex Constant': ComplexConstantModel,
                 'Linear': LinearModel,
@@ -1529,6 +1554,5 @@ lmfit_models = {'Constant': ConstantModel,
                 'Exponential': ExponentialModel,
                 'Step': StepModel,
                 'Rectangle': RectangleModel,
+                'DeltaModel': DeltaModel,
                 'Expression': ExpressionModel}
-                    
-    

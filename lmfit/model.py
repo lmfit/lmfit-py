@@ -194,7 +194,8 @@ class Model:
     valid_forms = ()
 
     def __init__(self, func, independent_vars=None, param_names=None,
-                 nan_policy='raise', prefix='', name=None, **kws):
+                 nan_policy='raise', prefix='', name=None,
+                 convolutions=None, on_undefined_conv='numeric', **kws):
         """
         The model function will normally take an independent variable
         (generally, the first argument) and a series of arguments that are
@@ -218,6 +219,18 @@ class Model:
         name : str, optional
             Name for the model. When None (default) the name is the same
             as the model function (`func`).
+        convolutions : dict, optional
+            User-defined analytical convolution function between this
+            model function and another one.
+            The keys should refer to the other function name, and the
+            values to a callable of the form, ``myConvolution(left, right)``,
+            which return the result of the convolution with the parameters
+            of left and right.
+        on_undefined_conv : {'numeric', 'raise'}, optional
+            Determine the behavior for :func:`convolve` when the other
+            function name is not found in `convolutions`.
+            Option 'numeric' results in numerical convolution.
+            Option 'raise' raises a KeyError.
         **kws : dict, optional
             Additional keyword arguments to pass to model function.
 
@@ -276,6 +289,12 @@ class Model:
         if name is None and hasattr(self.func, '__name__'):
             name = self.func.__name__
         self._name = name
+
+        if convolutions is None:
+            convolutions = {}
+        self._convolutions = convolutions
+
+        self._on_undefined_conv = on_undefined_conv
 
     def _reprstring(self, long=False):
         out = self._name
@@ -441,6 +460,11 @@ class Model:
     def param_names(self):
         """Return the parameter names of the Model."""
         return self._param_names
+
+    @property
+    def convolutions(self):
+        """Return the user-defined convolutions for the Model."""
+        return self._convolutions
 
     def __repr__(self):
         """Return representation of Model."""
@@ -845,6 +869,13 @@ class Model:
         """Return components for composite model."""
         return [self]
 
+    def _operators(self):
+        """Return empty string for a model and a list of operators
+        for a composite model.
+
+        """
+        return []
+
     def eval_components(self, params=None, **kwargs):
         """Evaluate the model with the supplied parameters.
 
@@ -1035,6 +1066,13 @@ class Model:
         """/"""
         return CompositeModel(self, other, operator.truediv)
 
+    def __lshift__(self, other):
+        """Overload the left shift binary operator for analytical
+        convolution, if defined.
+
+        """
+        return ConvolvedModel(self, other)
+
 
 class CompositeModel(Model):
     """Combine two models (`left` and `right`) with binary operator (`op`).
@@ -1141,6 +1179,22 @@ class CompositeModel(Model):
     def components(self):
         """Return components for composite model."""
         return self.left.components + self.right.components
+
+    def _operators(self):
+        """Return the operators for composite model."""
+        ops = [self.op]
+
+        left = self.left
+        right = self.right
+        while hasattr(left, 'op') or hasattr(right, 'op'):
+            if hasattr(left, 'op'):
+                ops.insert(0, left.op)
+                left = left.left
+            if hasattr(right, 'op'):
+                ops.append(right.op)
+                right = right.right
+
+        return ops
 
     def _get_state(self):
         return (self.left._get_state(),
@@ -2093,3 +2147,234 @@ class ModelResult(Minimizer):
         plt.setp(ax_res.get_xticklabels(), visible=False)
         ax_fit.set_title('')
         return fig, gs
+
+
+class ConvolvedModel(Model):
+    """Combine two models (`left` and `right`) with the provided analytic
+    convolution function(s).
+
+    The convolution can be performed using the left shift operator as well::
+
+    >>> convmod = model1 << model2
+
+    """
+
+    _names_collide = ("\nTwo models have parameters named '{clash}'. "
+                      "Use distinct names.")
+    _bad_arg = "ConvolvedModel: argument {arg} is not a Model"
+
+    def __init__(self, left, right, **kws):
+        """
+        Parameters
+        ----------
+        left : :class:`Model` or :class:`CompositeModel`
+            Left-hand model.
+        right : :class:`Model` or :class:`CompositeModel`
+            Right-hand model.
+        **kws : optional
+            Additional keywords are passed to `Model` when creating this
+            new model.
+
+        Notes
+        -----
+        The two models must use the same independent variable.
+        Only the parameters from left and right are used and exposed.
+        The parameters of the convolution function are not exposed outside
+        the class. They are only used internally and determined inside the
+        convolution function by the combination of the parameters and keywords
+        provided for left and right.
+
+
+        Examples
+        --------
+        First create two models to be convolved (here two Lorentzians):
+
+        >>> l1 = lmfit.Model.LorentzianModel()
+        >>> l2 = lmfit.Model.LorentzianModel()
+
+
+        Define the convolution function using:
+
+        >>> def myConv(left, right, params, **kwargs):
+        ...     lp = left.make_funcargs(params, **kwargs)
+        ...     rp = right.make_funcargs(params, **kwargs)
+        ...     amplitude = lp['amplitude'] * rp['amplitude']
+        ...     sigma = lp['sigma'] + rp['sigma']
+        ...     center = lp['center'] + rp['center']
+        ...
+        ...     out = sigma / (np.pi * ((lp['x'] - center)**2 + sigma**2))
+        ...
+        ...     return out
+
+        Assign the convolution function to name 'lorentzian' in *l1*:
+
+        >>> l1.convolutions['lorentzian'] = myConv
+
+        Eventually perform the convolution:
+
+        >>> convModel = l1 << l2
+
+        """
+        if not isinstance(left, Model):
+            raise ValueError(self._bad_arg.format(arg=left))
+        if not isinstance(right, Model):
+            raise ValueError(self._bad_arg.format(arg=right))
+
+        self.left = left
+        self.right = right
+
+        name_collisions = set(left.param_names) & set(right.param_names)
+        if len(name_collisions) > 0:
+            msg = ''
+            for collision in name_collisions:
+                msg += self._names_collide.format(clash=collision)
+            raise NameError(msg)
+
+        # we assume that all the sub-models have the same independent vars
+        if 'independent_vars' not in kws:
+            kws['independent_vars'] = self.left.independent_vars
+        if 'nan_policy' not in kws:
+            kws['nan_policy'] = self.left.nan_policy
+
+        def _tmp(self, *args, **kws):
+            pass
+        Model.__init__(self, _tmp, **kws)
+
+        for side in (left, right):
+            prefix = side.prefix
+            for basename, hint in side.param_hints.items():
+                self.param_hints["%s%s" % (prefix, basename)] = hint
+
+    def _parse_params(self):
+        self._func_haskeywords = (self.left._func_haskeywords or
+                                  self.right._func_haskeywords)
+        self._func_allargs = (self.left._func_allargs +
+                              self.right._func_allargs)
+        self.def_vals = deepcopy(self.right.def_vals)
+        self.def_vals.update(self.left.def_vals)
+        self.opts = deepcopy(self.right.opts)
+        self.opts.update(self.left.opts)
+
+    def _reprstring(self, long=False):
+        return "(%s %s)" % (self.left._reprstring(long=long),
+                            self.right._reprstring(long=long))
+
+    def eval(self, params=None, **kwargs):
+        """Evaluate model function for convolved model."""
+        return self._convolve(self.left,
+                              self.right,
+                              params,
+                              **kwargs)
+
+    def eval_components(self, **kwargs):
+        """Return OrderedDict of name, results for each component."""
+        out = OrderedDict(self.left.eval_components(**kwargs))
+        out.update(self.right.eval_components(**kwargs))
+        return out
+
+    @property
+    def param_names(self):
+        """Return parameter names for composite model."""
+        return self.left.param_names + self.right.param_names
+
+    @property
+    def components(self):
+        """Return components for composite model."""
+        return self.left.components + self.right.components
+
+    def _operators(self):
+        """Return the operators for composite model."""
+        left = self.left
+        right = self.right
+        ops = []
+        while hasattr(left, 'op') or hasattr(right, 'op'):
+            if hasattr(left, 'op'):
+                ops.insert(0, left.op)
+                left = left.left
+            if hasattr(right, 'op'):
+                ops.append(right.op)
+                right = right.right
+
+        return ops
+
+    def _get_state(self):
+        return (self.left._get_state(),
+                self.right._get_state())
+
+    def _set_state(self, state, funcdefs=None):
+        return _buildmodel(state, funcdefs=funcdefs)
+
+    def _make_all_args(self, params=None, **kwargs):
+        """Generate **all** function arguments for all functions."""
+        out = self.right._make_all_args(params=params, **kwargs)
+        out.update(self.left._make_all_args(params=params, **kwargs))
+        return out
+
+    def _convolve(self, left, right, params, **kwargs):
+        r"""Perform a convolution between this (composite) model and `other`.
+
+        If the convolutions between this model function and the
+        other function is defined in `convolutions` attribute,
+        then use this corresponding function for analytical
+        convolution.
+        Else, the behavior is determined by the `on_undefined_conv`
+        parameter.
+
+        Parameters
+        ----------
+        other : :class:`Model` or :class:`CompositeModel`
+            Another Model or CompositeModel to be
+            convolved with.
+
+        Returns
+        -------
+        A :class:`Model` containing the convoluted function.
+
+        Notes
+        -----
+        This composition of models works differently than for other operators,
+        as the operators is applied between each pair of components in left
+        and right components.
+        That is, for ``left = a1 + a2 - a3`` and ``right = b1 * b2``, where
+        a's and b's are instances of :class:`Model` class:
+
+        .. math::
+            left \otimes right = (a_1 \otimes b_1 * a_1 \otimes b_2)
+                                 + (a_2 \otimes b_1 * a_2 \otimes b_2)
+                                 - (a_3 \otimes b_1 * a_3 \otimes b_2)
+
+        """
+        lcomponents = left.components
+        rcomponents = right.components
+
+        lops = left._operators()
+        rops = right._operators()
+
+        models = []
+        for lidx, lcomp in enumerate(lcomponents):
+            tmpRes = []
+            for ridx, rcomp in enumerate(rcomponents):
+                funcName = rcomp.func.__name__
+                if funcName in lcomp.convolutions.keys():
+                    convFunc = lcomp.convolutions[funcName]
+                    tmpRes.append(convFunc(lcomp, rcomp, params, **kwargs))
+                else:
+                    if lcomp._on_undefined_conv == 'numeric':
+                        tmpRes.append(
+                            CompositeModel(lcomp, rcomp, np.convolve).eval(
+                                params, **kwargs))
+                    elif lcomp._on_undefined_conv == 'raise':
+                        raise KeyError(
+                            'Convolution function between %s and %s is '
+                            'not defined.' % (lcomp.func.__name__, funcName))
+
+            # apply operators from the right
+            for idx, rop in enumerate(rops):
+                tmpRes[0] = rop(tmpRes[idx], tmpRes[idx + 1])
+            models.append(tmpRes[0])
+
+        # finally apply operators from the left
+        for idx, lop in enumerate(lops):
+            models[0] = lop(models[idx], models[idx + 1])
+
+        return models[0]
