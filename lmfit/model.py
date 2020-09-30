@@ -466,6 +466,25 @@ class Model:
         """Return the user-defined convolutions for the Model."""
         return self._convolutions
 
+    @convolutions.setter
+    def convolutions(self, convolutions):
+        """Setter for convolutions."""
+        self._convolutions.update(convolutions)
+
+    @property
+    def on_undefined_conv(self):
+        """Return the parameter for the behavior on undefined convolutions."""
+        return self._on_undefined_conv
+
+    @on_undefined_conv.setter
+    def on_undefined_conv(self, value):
+        """Setter for the *on_undefined_conv*."""
+        if value not in ('numeric', 'raise'):
+            print("Unknown value for *on_undefined_conv*.\n Only the "
+                  "following are accepted: 'numeric' or 'raise'.")
+        else:
+            self._on_undefined_conv = value
+
     def __repr__(self):
         """Return representation of Model."""
         return "<lmfit.Model: %s>" % (self.name)
@@ -2357,11 +2376,18 @@ class ConvolvedModel(Model):
                 funcName = rcomp.func.__name__
                 if funcName in lcomp.convolutions.keys():
                     convFunc = lcomp.convolutions[funcName]
+
+                    # if no params, default parameters in functions
+                    if params is None:
+                        params = self.make_params()
+
                     tmpRes.append(convFunc(lcomp, rcomp, params, **kwargs))
                 else:
                     if lcomp._on_undefined_conv == 'numeric':
+                        convFunc = lambda left, right: np.convolve(
+                            left, right, mode='same')
                         tmpRes.append(
-                            CompositeModel(lcomp, rcomp, np.convolve).eval(
+                            CompositeModel(lcomp, rcomp, convFunc).eval(
                                 params, **kwargs))
                     elif lcomp._on_undefined_conv == 'raise':
                         raise KeyError(

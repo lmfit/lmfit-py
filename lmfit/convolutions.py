@@ -15,8 +15,8 @@ def conv_lorentzian_lorentzian(left, right, params, **kwargs):
             a_1 a_2 \mathcal{L}_{\sigma_1 + \sigma_2, center_1 + center_2}
 
     """
-    lp = left.make_funcargs(params, **kwargs)
-    rp = right.make_funcargs(params, **kwargs)
+    lp = left.make_funcargs(params, kwargs)
+    rp = right.make_funcargs(params, kwargs)
     amplitude = lp['amplitude'] * rp['amplitude']
     sigma = lp['sigma'] + rp['sigma']
     center = lp['center'] + rp['center']
@@ -39,8 +39,8 @@ def conv_delta_lorentzian(left, right, params, **kwargs):
         right = left
         left = tmp
 
-    lp = left.make_funcargs(params, **kwargs)
-    rp = right.make_funcargs(params, **kwargs)
+    lp = left.make_funcargs(params, kwargs)
+    rp = right.make_funcargs(params, kwargs)
 
     amplitude = lp['amplitude'] * rp['amplitude']
     sigma = rp['sigma']
@@ -64,8 +64,8 @@ def conv_delta_gaussian(left, right, params, **kwargs):
         right = left
         left = tmp
 
-    lp = left.make_funcargs(params, **kwargs)
-    rp = right.make_funcargs(params, **kwargs)
+    lp = left.make_funcargs(params, kwargs)
+    rp = right.make_funcargs(params, kwargs)
 
     amplitude = lp['amplitude'] * rp['amplitude']
     sigma = rp['sigma']
@@ -86,8 +86,8 @@ def conv_gaussian_lorentzian(left, right, params, **kwargs):
         right = left
         left = tmp
 
-    lp = left.make_funcargs(params, **kwargs)
-    rp = right.make_funcargs(params, **kwargs)
+    lp = left.make_funcargs(params, kwargs)
+    rp = right.make_funcargs(params, kwargs)
 
     amplitude = lp['amplitude'] * rp['amplitude']
     center = rp['center'] + lp['center']
@@ -106,8 +106,8 @@ def conv_gaussian_gaussian(left, right, params, **kwargs):
             a_1 * a_2 G_{\sigma_1 + \sigma2, center_1 + center_2}
 
     """
-    lp = left.make_funcargs(params, **kwargs)
-    rp = right.make_funcargs(params, **kwargs)
+    lp = left.make_funcargs(params, kwargs)
+    rp = right.make_funcargs(params, kwargs)
 
     amplitude = lp['amplitude'] * rp['amplitude']
     center = lp['center'] + rp['center']
@@ -132,8 +132,8 @@ def conv_delta_pvoigt(left, right, params, **kwargs):
         right = left
         left = tmp
 
-    lp = left.make_funcargs(params, **kwargs)
-    rp = right.make_funcargs(params, **kwargs)
+    lp = left.make_funcargs(params, kwargs)
+    rp = right.make_funcargs(params, kwargs)
 
     amplitude = lp['amplitude'] * rp['amplitude']
     center = lp['center']
@@ -167,8 +167,8 @@ def conv_lorentzian_pvoigt(left, right, params, **kwargs):
         right = left
         left = tmp
 
-    lp = left.make_funcargs(params, **kwargs)
-    rp = right.make_funcargs(params, **kwargs)
+    lp = left.make_funcargs(params, kwargs)
+    rp = right.make_funcargs(params, kwargs)
 
     amplitude = lp['amplitude'] * rp['amplitude']
     center = lp['center'] + rp['center']
@@ -208,8 +208,8 @@ def conv_gaussian_pvoigt(left, right, params, **kwargs):
         right = left
         left = tmp
 
-    lp = left.make_funcargs(params, **kwargs)
-    rp = right.make_funcargs(params, **kwargs)
+    lp = left.make_funcargs(params, kwargs)
+    rp = right.make_funcargs(params, kwargs)
 
     amplitude = lp['amplitude'] * rp['amplitude']
     center = lp['center'] + rp['center']

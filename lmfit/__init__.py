@@ -41,7 +41,7 @@ from .parameter import Parameter, Parameters
 from .printfuncs import (ci_report, fit_report, report_ci, report_errors,
                          report_fit)
 from .model import Model, CompositeModel
-from . import lineshapes, models
+from . import lineshapes, models, convolutions
 
 # versioneer code
 from ._version import get_versions

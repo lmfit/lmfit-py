@@ -8,8 +8,9 @@ from numpy.testing import assert_allclose
 import pytest
 
 from lmfit import Model, models
-from lmfit.lineshapes import gaussian
+from lmfit.lineshapes import gaussian, lorentzian, delta
 from lmfit.models import PseudoVoigtModel
+from lmfit.convolutions import conv_delta_gaussian, conv_delta_lorentzian
 
 
 def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03, err_msg='',
@@ -809,4 +810,57 @@ class TestExpression(CommonTests, unittest.TestCase):
 
         data_components = comp_model.eval_components(x=x)
         self.assertIn('exp', data_components)
-#
+
+
+class TestConvolvedModel(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(1)
+        self.noise = 0.0001*np.random.randn(self.x.size)
+
+        self.true_values = lambda: dict(l_center=0.0, l_sigma=2.4,
+                                        g_center=0.0, g_sigma=1.4,
+                                        d1_center=-1.2, d2_center=3.5)
+        self.guess = lambda: dict(l_amplitude=1.2, l_center=0.0, l_sigma=1.6,
+                                  g_amplitude=2.2, g_center=0.0, g_sigma=2.0,
+                                  d1_amplitude=1., d1_center=-0.8,
+                                  d2_amplitude=1., d2_center=3.1)
+
+        # set up the models with different undefined convolution policy
+        lorentz = Model(lorentzian, prefix='l_')
+        gauss = Model(gaussian, prefix='g_')
+        delta1 = Model(delta, prefix='d1_')
+        delta2 = Model(delta, prefix='d2_')
+
+        self.model = (lorentz << delta1) + (gauss << delta2)
+        self.model.set_param_hint('l_center', vary=False)
+        self.model.set_param_hint('g_center', vary=False)
+        self.model.set_param_hint('d1_amplitude', vary=False)
+        self.model.set_param_hint('d2_amplitude', vary=False)
+
+        self.data = self.model.eval(x=self.x, **self.true_values())
+
+    @property
+    def x(self):
+        return np.linspace(-10, 10, num=1000)
+
+    def test_numeric_conv(self):
+        params = self.model.make_params(**self.guess())
+        result = self.model.fit(self.data, x=self.x, params=params,
+                                method='basinhopping', fit_kws={'niter': 30})
+
+        assert_results_close(result.values, self.true_values(), rtol=0.1, atol=0.1)
+
+    def test_analytic_conv(self):
+        self.model.left.left.convolutions['delta'] = conv_delta_lorentzian
+        self.model.right.left.convolutions['delta'] = conv_delta_gaussian
+
+        params = self.model.make_params(**self.guess())
+        result = self.model.fit(self.data, x=self.x, params=params)
+
+        assert_results_close(result.values, self.true_values(), rtol=0.01, atol=0.01)
+
+    def test_raise_conv(self):
+        self.model.left.left._on_undefined_conv = 'raise'
+
+        params = self.model.make_params(**self.guess())
+        self.assertRaises(KeyError, self.model.fit(self.data, x=self.x, params=params))
