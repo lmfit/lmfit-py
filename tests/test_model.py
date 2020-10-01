@@ -863,4 +863,5 @@ class TestConvolvedModel(unittest.TestCase):
         self.model.left.left._on_undefined_conv = 'raise'
 
         params = self.model.make_params(**self.guess())
-        self.assertRaises(KeyError, self.model.fit(self.data, x=self.x, params=params))
+        with self.assertRaises(KeyError):
+            self.model.fit(self.data, x=self.x, params=params)
