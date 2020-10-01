@@ -2203,7 +2203,6 @@ class ConvolvedModel(Model):
         convolution function by the combination of the parameters and keywords
         provided for left and right.
 
-
         Examples
         --------
         First create two models to be convolved (here two Lorentzians):
@@ -2329,11 +2328,11 @@ class ConvolvedModel(Model):
         out.update(self.left._make_all_args(params=params, **kwargs))
         return out
 
-    def _convolve(self, left, right, params, **kwargs):
-        r"""Perform a convolution between this (composite) model and `other`.
+    def _convolve(self, left, right, params=None, **kwargs):
+        r"""Perform a convolution between `left` and `right`.
 
-        If the convolutions between this model function and the
-        other function is defined in `convolutions` attribute,
+        If the convolutions between function in `left` and the
+        function in `right` is defined in `convolutions` attribute,
         then use this corresponding function for analytical
         convolution.
         Else, the behavior is determined by the `on_undefined_conv`
@@ -2341,13 +2340,18 @@ class ConvolvedModel(Model):
 
         Parameters
         ----------
-        other : :class:`Model` or :class:`CompositeModel`
-            Another Model or CompositeModel to be
-            convolved with.
+        left : :class:`Model` or :class:`CompositeModel`
+            Model or CompositeModel to be used for convolution.
+        right : :class:`Model` or :class:`CompositeModel`
+            Model or CompositeModel to be used for convolution.
+        params : Parameters, optional
+            Parameters to be given to the model functions.
+        kwargs : dict
+            Additional keyword arguments to pass to the model functions.
 
         Returns
         -------
-        A :class:`Model` containing the convoluted function.
+        An array containing the result of the convolution.
 
         Notes
         -----
