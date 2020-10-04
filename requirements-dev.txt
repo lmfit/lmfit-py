@@ -1,4 +1,4 @@
-asteval>=0.9.16
+-r requirements.txt
 codecov
 corner
 coverage
@@ -7,13 +7,10 @@ emcee>=3.0.0
 jupyter_sphinx>=0.2.4
 matplotlib
 numdifftools
-numpy>=1.16
 pandas
 Pillow
 pre-commit
 pytest
-scipy>=1.2
 Sphinx
 sphinx-gallery
 sympy
-uncertainties>=3.0.1
