@@ -182,6 +182,17 @@ of many components of a composite model.
 .. autoclass:: PolynomialModel
 
 
+Periodic Models
+---------------
+
+These models correspond to periodic functions.
+
+:class:`SineModel`
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: SineModel
+
+
 Step-like models
 ----------------
 
