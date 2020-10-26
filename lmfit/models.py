@@ -16,6 +16,7 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
 from .model import Model
 
 tiny = np.finfo(np.float).eps
+tau = 2.0 * np.pi
 
 
 class DimensionalError(Exception):
@@ -334,10 +335,11 @@ class SineModel(Model):
 
     .. math::
 
-        f(x; A, \phi, f) = a \sin (f x + \phi)
+        f(x; A, \phi, f) = A \sin (f x + \phi) + B
 
     where the parameter `amplitude` corresponds to :math:`A`, `frequency` to
-    :math:`\f`, and `shift` to :math:`\phi`.
+    :math:`\f`, `shift` to :math:`\phi`. All are constrained to be
+    non-negative, and `shift` additionally to be smaller than :math:`2\pi`.
     """
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
@@ -345,46 +347,32 @@ class SineModel(Model):
         kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
                        'independent_vars': independent_vars})
         super().__init__(sine, **kwargs)
+        self._set_paramhints_prefix()
 
-    _number_of_shift_guesses = 10
+    def _set_paramhints_prefix(self):
+        self.set_param_hint('amplitude', min=0)
+        self.set_param_hint('frequency', min=0)
+        self.set_param_hint('shift', min=0, max=tau)
 
     def guess(self, data, x, **kwargs):
-        """Estimate initial model parameter values from data."""
-        amplitude = data.std() / np.sqrt(2)
-        # frequency guess
-        xx = np.array(x)
-        yy = np.array(data)
-        ff = np.fft.fftfreq(len(xx), (xx[1] - xx[0]))  # assume uniform spacing
-        Fyy = abs(np.fft.fft(yy))
-        frequency = abs(ff[np.argmax(Fyy[1:]) + 1])  # excluding the zero frequency "peak", which is related to offset
-        # shift guess - try shifts in the range from 0 to 2 pi and take the one with the lowest error signal
-        shift_guesses = np.linspace(0, 2*np.pi, self._number_of_shift_guesses)
-        errors = [(self.eval(x=x, amplitude=amplitude, frequency=frequency, shift=shift_guess)**2).sum()
+        """Estimate initial model parameter values from the FFT of the data."""
+        data = data - data.mean()
+        # assume uniform spacing
+        frequencies = np.fft.fftfreq(len(x), abs(x[-1] - x[0]) / (len(x) - 1))
+        fft = abs(np.fft.fft(data))
+        argmax = abs(fft).argmax()
+        amplitude = 2.0 * fft[argmax] / len(fft)
+        frequency = tau * abs(frequencies[argmax])
+        # try shifts in the range [0, 2*pi) and take the one with best residual
+        shift_guesses = np.linspace(0, tau, 11, endpoint=False)
+        errors = [np.linalg.norm(self.eval(x=x, amplitude=amplitude,
+                                           frequency=frequency,
+                                           shift=shift_guess) - data)
                   for shift_guess in shift_guesses]
         shift = shift_guesses[np.argmin(errors)]
-        pars = self.make_params(amplitude=amplitude, frequency=frequency, shift=shift)
+        pars = self.make_params(amplitude=amplitude, frequency=frequency,
+                                shift=shift)
         return update_param_vals(pars, self.prefix, **kwargs)
-
-    def post_process_fit_result(self, fit_result):
-        """I wasnt sure if there was a hook for such a certainly useful function, so for now I simply added it here."""
-        best_values = fit_result.best_values
-        if best_values["frequency"] < 0:
-            best_values["frequency"] = -best_values["frequency"]
-            best_values["amplitude"] = -best_values["amplitude"]
-            best_values["shift"] *= -1
-        if best_values["amplitude"] < 0:
-            best_values["amplitude"] = -best_values["amplitude"]
-            best_values["shift"] += np.pi
-        best_values["shift"] %= (2.0 * np.pi)
-        # second modulo to be sure the result is in the half-open interval [0, 2pi) (rounding issues might cause this)
-        best_values["shift"] %= (2.0 * np.pi)
-        return best_values
-
-    def guess_and_fit(self, data, x):
-        """Adding this function to discuss whether this thing should exist."""
-        pars = self.guess(data, x)
-        fit_result = self.fit(data, pars, x=x)
-        return self.post_process_fit_result(fit_result)
 
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
