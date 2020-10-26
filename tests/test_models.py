@@ -70,6 +70,20 @@ class BaseTestForModels:
             f"fitted {fit_value}."
 
 
+class TestLinearModel(BaseTestForModels):
+    _model = lmfit.models.LinearModel
+
+    def test_random_parameters(self):
+        self.check_guess_and_fit(x=np.linspace(-1, 1, 300))
+
+
+class TestQuadraticModel(BaseTestForModels):
+    _model = lmfit.models.QuadraticModel
+
+    def test_random_parameters(self):
+        self.check_guess_and_fit(x=np.linspace(-10, 10, 300))
+
+
 class TestSineModel(BaseTestForModels):
     _model = lmfit.models.SineModel
 
