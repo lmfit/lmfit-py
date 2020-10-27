@@ -335,7 +335,7 @@ class SineModel(Model):
 
     .. math::
 
-        f(x; A, \phi, f) = A \sin (f x + \phi) + B
+        f(x; A, \phi, f) = A \sin (f x + \phi) 
 
     where the parameter `amplitude` corresponds to :math:`A`, `frequency` to
     :math:`\f`, `shift` to :math:`\phi`. All are constrained to be
