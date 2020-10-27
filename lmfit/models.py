@@ -10,12 +10,13 @@ from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          expgaussian, exponential, gaussian, gaussian2d,
                          linear, lognormal, lorentzian, moffat, parabolic,
-                         pearson7, powerlaw, pvoigt, rectangle,
+                         pearson7, powerlaw, pvoigt, rectangle, sine,
                          skewed_gaussian, skewed_voigt, split_lorentzian, step,
                          students_t, thermal_distribution, voigt)
 from .model import Model
 
 tiny = np.finfo(np.float).eps
+tau = 2.0 * np.pi
 
 
 class DimensionalError(Exception):
@@ -321,6 +322,56 @@ class PolynomialModel(Model):
             out = np.polyfit(x, data, self.poly_degree)
             for i, coef in enumerate(out[::-1]):
                 pars['%sc%i' % (self.prefix, i)].set(value=coef)
+        return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class SineModel(Model):
+    r"""A model based on a sinusoidal lineshape.
+
+    The model has three Parameters: `amplitude`, `frequency`, and `shift`.
+
+    .. math::
+
+        f(x; A, \phi, f) = A \sin (f x + \phi) 
+
+    where the parameter `amplitude` corresponds to :math:`A`, `frequency` to
+    :math:`\f`, `shift` to :math:`\phi`. All are constrained to be
+    non-negative, and `shift` additionally to be smaller than :math:`2\pi`.
+    """
+
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super().__init__(sine, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
+        self.set_param_hint('amplitude', min=0)
+        self.set_param_hint('frequency', min=0)
+        self.set_param_hint('shift', min=0, max=tau)
+
+    def guess(self, data, x, **kwargs):
+        """Estimate initial model parameter values from the FFT of the data."""
+        data = data - data.mean()
+        # assume uniform spacing
+        frequencies = np.fft.fftfreq(len(x), abs(x[-1] - x[0]) / (len(x) - 1))
+        fft = abs(np.fft.fft(data))
+        argmax = abs(fft).argmax()
+        amplitude = 2.0 * fft[argmax] / len(fft)
+        frequency = tau * abs(frequencies[argmax])
+        # try shifts in the range [0, 2*pi) and take the one with best residual
+        shift_guesses = np.linspace(0, tau, 11, endpoint=False)
+        errors = [np.linalg.norm(self.eval(x=x, amplitude=amplitude,
+                                           frequency=frequency,
+                                           shift=shift_guess) - data)
+                  for shift_guess in shift_guesses]
+        shift = shift_guesses[np.argmin(errors)]
+        pars = self.make_params(amplitude=amplitude, frequency=frequency,
+                                shift=shift)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
