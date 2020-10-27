@@ -1625,6 +1625,9 @@ class ModelResult(Minimizer):
             if isinstance(val, np.bool_):
                 val = bool(val)
             out[attr] = encode4js(val)
+
+        out['message'] = str(out.get('message', ''))
+
         return json.dumps(out, **kws)
 
     def dump(self, fp, **kws):
