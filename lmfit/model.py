@@ -1624,7 +1624,13 @@ class ModelResult(Minimizer):
                 continue
             if isinstance(val, np.bool_):
                 val = bool(val)
+
             out[attr] = encode4js(val)
+
+        val = out.get('message', '')
+        if isinstance(val, bytes):
+            out['message'] = str(val, encoding='ASCII')
+
         return json.dumps(out, **kws)
 
     def dump(self, fp, **kws):

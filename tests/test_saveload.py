@@ -186,7 +186,7 @@ def test_saveload_modelresult_exception():
 
 
 @pytest.mark.parametrize("method", ['leastsq', 'nelder', 'powell', 'cobyla',
-                                    'bfgsb', 'differential_evolution', 'brute',
+                                    'bfgs', 'lbfgsb', 'differential_evolution', 'brute',
                                     'basinhopping', 'ampgo', 'shgo',
                                     'dual_annealing'])
 def test_saveload_modelresult_roundtrip(method):
