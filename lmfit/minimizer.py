@@ -519,6 +519,7 @@ class Minimizer:
         self.residual = None
         self.reduce_fcn = reduce_fcn
         self.params = params
+        self.col_deriv = False
         self.jacfcn = None
         self.nan_policy = nan_policy
 
@@ -971,11 +972,16 @@ class Minimizer:
                                                  'trust-krylov', 'trust-exact'):
             fmin_kws.pop('hess')
 
-        # jac supported only in some methods (and Dfun could be used...)
+        # Accept Jacobians given as Dfun argument
         if 'jac' not in fmin_kws and fmin_kws.get('Dfun', None) is not None:
+            fmin_kws['jac'] = fmin_kws.pop('Dfun')
+
+        # Wrap Jacobian function to deal with bounds
+        if 'jac' in fmin_kws:
             self.jacfcn = fmin_kws.pop('jac')
             fmin_kws['jac'] = self.__jacobian
 
+        # Ignore jac argument for methods that do not support it
         if 'jac' in fmin_kws and method not in ('CG', 'BFGS', 'Newton-CG',
                                                 'L-BFGS-B', 'TNC', 'SLSQP',
                                                 'dogleg', 'trust-ncg',
@@ -1415,7 +1421,7 @@ class Minimizer:
         else:
             p0 = 1 + rng.randn(nwalkers, self.nvarys) * 1.e-4
             p0 *= var_arr
-            sampler_kwargs.setdefault('pool',auto_pool)
+            sampler_kwargs.setdefault('pool', auto_pool)
             self.sampler = emcee.EnsembleSampler(nwalkers, self.nvarys,
                                                  self._lnprob, **sampler_kwargs)
 
