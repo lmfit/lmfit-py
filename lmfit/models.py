@@ -352,7 +352,9 @@ class SineModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('amplitude', min=0)
         self.set_param_hint('frequency', min=0)
-        self.set_param_hint('shift', min=0, max=tau)
+        bugfix_active = False
+        if not bugfix_active:
+            self.set_param_hint('shift', min=0, max=tau)
 
     def guess(self, data, x, **kwargs):
         """Estimate initial model parameter values from the FFT of the data."""

@@ -97,6 +97,18 @@ class TestSineModel(BaseTestForModels):
         else:
             super()._isclose(name, actual_value, fit_value, atol, rtol)
 
+    @pytest.mark.parametrize("shift", np.linspace(0, tau, 62))
+    def test_perfect_sine(self, shift):
+        self.check_guess_and_fit(
+            frequency=0.3,
+            amplitude=1.0,
+            shift=shift,
+            noise_scale=0,
+            atol=0.05,
+            x=np.linspace(0, 25, 100),
+        )
+
+
     @pytest.mark.parametrize("shift", list(range(7)))
     def test_less_than_1_period(self, shift):
         self.check_guess_and_fit(
