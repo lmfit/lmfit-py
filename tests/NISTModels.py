@@ -23,7 +23,7 @@ def Bennet5(b, x, y=0):
 def BoxBOD(b, x, y=0):
     b = read_params(b)
     model = b[0]*(1-exp(-b[1]*x))
-    return model -y
+    return model - y
 
 
 def Chwirut(b, x, y=0):
@@ -46,6 +46,7 @@ def ENSO(b, x, y=0):
                     b[7]*cos(2*pi*x/b[6]) + b[8]*sin(2*pi*x/b[6]))
     return model - y
 
+
 def Eckerle4(b, x, y=0):
     b = read_params(b)
     model = (b[0]/b[1]) * exp(-0.5*((x-b[2])/b[1])**2)
@@ -61,8 +62,9 @@ def Gauss(b, x, y=0):
 
 def Hahn1(b, x, y=0):
     b = read_params(b)
-    model = (b[0]+b[1]*x+b[2]*x**2+b[3]*x**3) /(1+b[4]*x+b[5]*x**2+b[6]*x**3)
+    model = (b[0]+b[1]*x+b[2]*x**2+b[3]*x**3) / (1+b[4]*x+b[5]*x**2+b[6]*x**3)
     return model - y
+
 
 def Kirby(b, x, y=0):
     b = read_params(b)
@@ -73,7 +75,7 @@ def Kirby(b, x, y=0):
 def Lanczos(b, x, y=0):
     b = read_params(b)
     model = b[0]*exp(-b[1]*x) + b[2]*exp(-b[3]*x) + b[4]*exp(-b[5]*x)
-    return model - y 
+    return model - y
 
 
 def MGH09(b, x, y=0):

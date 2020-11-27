@@ -335,7 +335,7 @@ class SineModel(Model):
 
     .. math::
 
-        f(x; A, \phi, f) = A \sin (f x + \phi) 
+        f(x; A, \phi, f) = A \sin (f x + \phi)
 
     where the parameter `amplitude` corresponds to :math:`A`, `frequency` to
     :math:`\f`, `shift` to :math:`\phi`. All are constrained to be
@@ -1553,6 +1553,7 @@ class ExpressionModel(Model):
 
         """
 
+
 lmfit_models = {'Constant': ConstantModel,
                 'Complex Constant': ComplexConstantModel,
                 'Linear': LinearModel,
@@ -1581,5 +1582,3 @@ lmfit_models = {'Constant': ConstantModel,
                 'Step': StepModel,
                 'Rectangle': RectangleModel,
                 'Expression': ExpressionModel}
-                    
-    
