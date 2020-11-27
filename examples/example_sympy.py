@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 np.random.seed(1)
 
 # %%
-# Instead of creating the sympy-sybols explictly and building an expression
+# Instead of creating the sympy-sybols explicitly and building an expression
 # with  them, we will use the sympy parser.
 
 gauss_peak1 = sympy_parser.parse_expr('A1*exp(-(x-xc1)**2/(2*sigma1**2))')
