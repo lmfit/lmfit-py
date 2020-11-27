@@ -6,6 +6,7 @@ python:
     - 3.6
     - 3.7
     - 3.8
+    - 3.9
 
 # test with the minium required and latest versions of dependencies
 env:
@@ -37,6 +38,9 @@ matrix:
         - version=latest
   allow_failures:
     - python: nightly
+    - python: 3.9
+      env:
+        - version=minimum
   fast_finish: true
 
 before_install:
@@ -53,7 +57,7 @@ script:
     - coverage run --source=lmfit -m pytest
     - coverage report -m
     # test building the documentation
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.8 ]]; then cd ../doc ; make ; fi
+    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.9 ]]; then cd ../doc ; make ; fi
 
 after_success:
     - codecov
