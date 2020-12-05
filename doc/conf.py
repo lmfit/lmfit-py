@@ -98,7 +98,7 @@ pygments_style = 'sphinx'
 
 # Add any paths that contain custom themes here, relative to this directory.
 html_theme_path = ['sphinx/theme']
-html_theme = 'lmfitdoc'
+html_theme = 'sphinx13'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
