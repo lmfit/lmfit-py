@@ -30,12 +30,26 @@ addons:
     - swig
     - libmpc-dev
 
-# test Python nightly build
-matrix:
+# test Python nightly build, run pre-commit hooks and build documentation in separate stage
+jobs:
   include:
     - python: nightly
       env:
         - version=latest
+    - python: 3.9
+      env:
+        - version=latest
+      stage: pre-commit hooks
+      script:
+        - pre-commit autoupdate ; pre-commit run --all-files
+      after_success: skip
+    - python: 3.9
+      env:
+        - version=latest
+      stage: build documentation
+      script:
+        - cd doc ; make
+      after_success: skip
   allow_failures:
     - python: nightly
     - python: 3.9
@@ -52,12 +66,15 @@ install:
     - python setup.py install
     - pip list
 
+stages:
+    - pre-commit hooks
+    - test
+    - build documentation
+
 script:
     - cd tests
     - coverage run --source=lmfit -m pytest
     - coverage report -m
-    # test building the documentation
-    - if [[ $version == latest && $TRAVIS_PYTHON_VERSION == 3.9 ]]; then cd ../doc ; make ; fi
 
 after_success:
     - codecov
