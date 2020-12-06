@@ -12,5 +12,5 @@ Pillow
 pre-commit
 pytest
 Sphinx
-sphinx-gallery
+sphinx-gallery>=0.8
 sympy

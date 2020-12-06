@@ -170,11 +170,3 @@ sphinx_gallery_conf = {
     'ignore_pattern': r'(\\|/)doc_',
     'ignore_repr_types': r'matplotlib',
 }
-
-# remove warnings about matplotlib and Agg backend from gallery examples
-warnings.filterwarnings("ignore", category=UserWarning,
-                        message='Matplotlib is currently using agg, which is a'
-                                ' non-GUI backend, so cannot show the figure.')
-
-
-
