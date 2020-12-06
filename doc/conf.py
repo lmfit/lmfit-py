@@ -170,3 +170,6 @@ sphinx_gallery_conf = {
     'ignore_pattern': r'(\\|/)doc_',
     'ignore_repr_types': r'matplotlib',
 }
+
+# Suppress "WARNING: unknown mimetype for _static/empty
+suppress_warnings = ['epub.unknown_project_files']
