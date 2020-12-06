@@ -57,21 +57,29 @@
 {% endblock %}
 
 {% block rootrellink %}
-        <li><a href="{{ pathto('index') }}">Sphinx home</a>&#160;|</li>
-        <li><a href="{{ pathto('contents') }}">Documentation</a> &#187;</li>
+    <li>[ <a href="{{ pathto('intro') }}">intro</a> |</li>
+    <li><a href="{{ pathto('parameters') }}">parameters</a> |</li>
+    <li><a href="{{ pathto('fitting') }}">minimize</a> |</li>
+    <li><a href="{{ pathto('model') }}">model</a> |</li>
+    <li><a href="{{ pathto('builtin_models') }}">built-in models</a> |</li>
+    <li><a href="{{ pathto('confidence') }}">confidence intervals</a> |</li>
+    <li><a href="{{ pathto('bounds') }}">bounds</a> |</li>
+    <li><a href="{{ pathto('constraints') }}">constraints</a> ]</li>
 {% endblock %}
 
 {% block header %}
 <div class="pageheader">
   <ul>
-    <li><a href="{{ pathto('index') }}">Home</a></li>
-    <li><a href="{{ pathto('usage/installation') }}">Get it</a></li>
-    <li><a href="{{ pathto('contents') }}">Docs</a></li>
-    <li><a href="{{ pathto('develop') }}">Extend/Develop</a></li>
+    <li><a href="{{ pathto('contents') }}">Contents</a></li>
+    <li><a href="{{ pathto('examples/index') }}">Examples</a></li>
+    <li><a href="{{ pathto('installation') }}">Installation</a></li>
+    <li><a href="{{ pathto('faq') }}">FAQ</a></li>
+    <li><a href="{{ pathto('support') }}">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
   </ul>
   <div>
     <a href="{{ pathto('index') }}">
-      <img src="{{ pathto('_static/sphinxheader.png', 1) }}" alt="SPHINX" />
+      <img src="{{ pathto('_static/lmfitheader.png', 1) }}" alt="LMFIT" />
     </a>
   </div>
 </div>
