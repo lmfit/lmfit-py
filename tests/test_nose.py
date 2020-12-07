@@ -632,16 +632,15 @@ class CommonMinimizerTest(unittest.TestCase):
         with pytest.raises(DeprecationWarning):
             _ = self.mini.emcee(params=self.fit_params, ntemps=5)
 
-
     def test_emcee_custom_pool(self):
         # tests use of a custom pool
 
         if not HAS_EMCEE:
             return True
-        
+
         global emcee_counter
         emcee_counter = 0
-        
+
         class my_pool:
             def map(self, f, arg):
                 global emcee_counter
@@ -649,17 +648,16 @@ class CommonMinimizerTest(unittest.TestCase):
                 return map(f, arg)
 
         def cost_fun(params, **kwargs):
-            return rosen_der([params['a'],params['b']])
-      
+            return rosen_der([params['a'], params['b']])
+
         params = Parameters()
-        params.add('a', 1,min=-5,max=5,vary=True)
-        params.add('b', 1,min=-5,max=5,vary=True)
-        
-        fitter = Minimizer(cost_fun,params)
-        MC_results = fitter.emcee(workers= my_pool(), steps=1000, nwalkers=100)
+        params.add('a', 1, min=-5, max=5, vary=True)
+        params.add('b', 1, min=-5, max=5, vary=True)
+
+        fitter = Minimizer(cost_fun, params)
+        fitter.emcee(workers=my_pool(), steps=1000, nwalkers=100)
         assert emcee_counter > 500
 
-        
 
 def residual_for_multiprocessing(pars, x, data=None):
     # a residual function defined in the top level is needed for
@@ -675,5 +673,3 @@ def residual_for_multiprocessing(pars, x, data=None):
     if data is None:
         return model
     return model - data
-
-

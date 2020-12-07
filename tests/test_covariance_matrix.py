@@ -226,6 +226,7 @@ def test_numdifftools_calc_covar_false():
     assert result_ndt.covar is None
     assert result_ndt.errorbars is False
 
+
 def test_final_parameter_values():
     model = LinearModel()
     params = model.make_params()
@@ -234,7 +235,7 @@ def test_final_parameter_values():
 
     np.random.seed(78281)
     x = np.linspace(0, 9, 10)
-    y = x* 1.34 - 4.5 + np.random.normal(scale=0.05, size=x.size)
+    y = x * 1.34 - 4.5 + np.random.normal(scale=0.05, size=x.size)
 
     result = model.fit(y, x=x, method='nelder', params=params)
 

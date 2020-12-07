@@ -26,17 +26,18 @@ functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt', 'pvoigt',
 def not_zero(value):
     """Return value with a minimal absolute size of tiny, preserving the sign.
 
-    This is a helper function the prevent ZeroDivisionError's.
+    This is a helper function to prevent ZeroDivisionError's.
 
     Parameters
     ----------
     value : scalar
-        Value to be ensured not to be Zero
+        Value to be ensured not to be zero.
 
     Returns
     -------
     scalar
-        Value ensured not to be Zero
+        Value ensured not to be zero.
+
     """
     return float(copysign(max(tiny, abs(value)), value))
 

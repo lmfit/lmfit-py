@@ -13,3 +13,4 @@ recursive-exclude doc/examples *
 recursive-exclude doc *.pdf *.csv *.dat *.sav
 include versioneer.py
 include lmfit/_version.py
+global-exclude __pycache__/*
