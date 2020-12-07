@@ -39,14 +39,16 @@ htmlzip: html
 	$(SPHINXBUILD) -b html $(SPHINX_OUTPUT) $(SPHINX_OPTS) . $(BUILDDIR)/lmfit_doc
 	cd $(BUILDDIR) && zip -pur html/lmfit_doc.zip lmfit_doc
 
-epub: html
-	cp sphinx/ext_mathjax.py extensions.py
+epub: gallery
+	cp sphinx/ext_imgmath.py extensions.py
 	$(SPHINXBUILD) -b epub  $(SPHINX_OUTPUT) $(SPHINX_OPTS) . $(BUILDDIR)/epub
+	mkdir -p $(BUILDDIR)/html
 	cp -pr $(BUILDDIR)/epub/*.epub $(BUILDDIR)/html/.
 
 pdf: latex
 	cp sphinx/ext_imgmath.py extensions.py
 	cd $(BUILDDIR)/latex && make all-pdf
+	mkdir -p $(BUILDDIR)/html
 	cp -pr $(BUILDDIR)/latex/lmfit.pdf $(BUILDDIR)/html/.
 
 all: html htmlzip epub pdf
