@@ -140,7 +140,7 @@ class MinimizerException(Exception):
 
     def __str__(self):
         """string"""
-        return "{}".format(self.msg)
+        return f"{self.msg}"
 
 
 class AbortFitException(MinimizerException):
@@ -2159,7 +2159,7 @@ class Minimizer:
                 if attr in ['success', 'message']:
                     setattr(result, attr, value)
                 else:
-                    setattr(result, 'shgo_{}'.format(attr), value)
+                    setattr(result, f'shgo_{attr}', value)
 
             result.residual = self.__residual(result.shgo_x, False)
             result.nfev -= 1
@@ -2235,7 +2235,7 @@ class Minimizer:
                 if attr in ['success', 'message']:
                     setattr(result, attr, value)
                 else:
-                    setattr(result, 'da_{}'.format(attr), value)
+                    setattr(result, f'da_{attr}', value)
 
             result.residual = self.__residual(result.da_x, False)
             result.nfev -= 1

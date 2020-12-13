@@ -158,7 +158,7 @@ def test_fitreports_init_values(fitresult):
     indx_amplitude = [i for i, val in enumerate(report_split) if
                       'amplitude:' in val][0]
     for indx, init_val in zip([indx_center, indx_amplitude], [5, 50]):
-        assert '(init = {})'.format(init_val) in report_split[indx]
+        assert f'(init = {init_val})' in report_split[indx]
 
 
 def test_fitreports_min_correl(fitresult):

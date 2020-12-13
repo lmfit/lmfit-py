@@ -67,7 +67,7 @@ copy_data_files(examples_dir, examples_documentation_dir)
 os.chdir(examples_documentation_dir)
 
 for script in scripts_to_run:
-    subprocess.run(shlex.split("python {}".format(script.as_posix())), check=True)
+    subprocess.run(shlex.split(f"python {script.as_posix()}"), check=True)
 
 os.chdir(doc_dir)
 
