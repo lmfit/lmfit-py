@@ -33,8 +33,8 @@ model
 # We are using sympys lambdify function to make a function from the model
 # expressions. We use these functions to generate some fake data.
 
-model_list_func = sympy.lambdify(model_list.free_symbols, model_list)
-model_func = sympy.lambdify(model.free_symbols, model)
+model_list_func = sympy.lambdify(list(model_list.free_symbols), model_list)
+model_func = sympy.lambdify(list(model.free_symbols), model)
 
 x = np.linspace(0, 10, 40)
 param_values = dict(x=x, A1=2, sigma1=1, sigma2=1, A2=3,
@@ -66,7 +66,7 @@ res
 # reason. Both can be expressed by just substituting the variables.
 
 model2 = model.subs('sigma2', 'sigma1').subs('A2', '3/2*A1')
-model2_func = sympy.lambdify(model2.free_symbols, model2)
+model2_func = sympy.lambdify(list(model2.free_symbols), model2)
 lm_mod = lmfit.Model(model2_func, independent_vars=('x'))
 param2_values = dict(x=x, A1=2, sigma1=1, A2=3, xc1=2, xc2=5, xw=4, B=5)
 res2 = lm_mod.fit(data=yn, **param_values)

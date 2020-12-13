@@ -31,7 +31,7 @@ X, Y = np.meshgrid(np.linspace(x.min(), x.max(), 100),
 Z = griddata((x, y), z, (X, Y), method='linear', fill_value=0)
 
 fig, ax = plt.subplots()
-art = ax.pcolor(X, Y, Z)
+art = ax.pcolor(X, Y, Z, shading='auto')
 plt.colorbar(art, ax=ax, label='z')
 ax.set_xlabel('x')
 ax.set_ylabel('y')
@@ -50,19 +50,19 @@ fig, axs = plt.subplots(2, 2, figsize=(10, 10))
 vmax = np.nanpercentile(Z, 99.9)
 
 ax = axs[0, 0]
-art = ax.pcolor(X, Y, Z, vmin=0, vmax=vmax)
+art = ax.pcolor(X, Y, Z, vmin=0, vmax=vmax, shading='auto')
 plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Data')
 
 ax = axs[0, 1]
 fit = model.func(X, Y, **result.best_values)
-art = ax.pcolor(X, Y, fit, vmin=0, vmax=vmax)
+art = ax.pcolor(X, Y, fit, vmin=0, vmax=vmax, shading='auto')
 plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Fit')
 
 ax = axs[1, 0]
 fit = model.func(X, Y, **result.best_values)
-art = ax.pcolor(X, Y, Z-fit, vmin=0, vmax=10)
+art = ax.pcolor(X, Y, Z-fit, vmin=0, vmax=10, shading='auto')
 plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Data - Fit')
 
@@ -113,7 +113,7 @@ Z = griddata((x, y), z, (X, Y), method='linear', fill_value=0)
 fig, ax = plt.subplots()
 ax.set_xlabel('x')
 ax.set_ylabel('y')
-art = ax.pcolor(X, Y, Z)
+art = ax.pcolor(X, Y, Z, shading='auto')
 plt.colorbar(art, ax=ax, label='z')
 plt.show()
 
@@ -141,19 +141,19 @@ fig, axs = plt.subplots(2, 2, figsize=(10, 10))
 vmax = np.nanpercentile(Z, 99.9)
 
 ax = axs[0, 0]
-art = ax.pcolor(X, Y, Z, vmin=0, vmax=vmax)
+art = ax.pcolor(X, Y, Z, vmin=0, vmax=vmax, shading='auto')
 plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Data')
 
 ax = axs[0, 1]
 fit = model.func(X, Y, **result.best_values)
-art = ax.pcolor(X, Y, fit, vmin=0, vmax=vmax)
+art = ax.pcolor(X, Y, fit, vmin=0, vmax=vmax, shading='auto')
 plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Fit')
 
 ax = axs[1, 0]
 fit = model.func(X, Y, **result.best_values)
-art = ax.pcolor(X, Y, Z-fit, vmin=0, vmax=10)
+art = ax.pcolor(X, Y, Z-fit, vmin=0, vmax=10, shading='auto')
 plt.colorbar(art, ax=ax, label='z')
 ax.set_title('Data - Fit')
 
