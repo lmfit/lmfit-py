@@ -1,3 +1,6 @@
+"""Tests for the Model, CompositeModel, and ModelResult classes."""
+
+from collections import OrderedDict
 import functools
 import sys
 import unittest
@@ -7,10 +10,276 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 
+import lmfit
 from lmfit import Model, models
 from lmfit.lineshapes import gaussian
+from lmfit.model import get_reducer, propagate_err
 from lmfit.models import PseudoVoigtModel
 
+
+@pytest.fixture()
+def gmodel():
+    """Return a Gaussian model."""
+    return Model(lmfit.lineshapes.gaussian)
+
+
+def test_get_reducer_invalid_option():
+    """Tests for ValueError when using an unsupported option."""
+    option = 'unknown'
+    msg = r'Invalid option'
+    with pytest.raises(ValueError, match=msg):
+        get_reducer(option)
+
+
+test_data_get_reducer = [('real', [1.0, 1.0, 2.0, 2.0]),
+                         ('imag', [0.0, 10.0, 0.0, 20.0]),
+                         ('abs', [1.0, 10.04987562, 2.0, 20.09975124]),
+                         ('angle', [0.0, 1.47112767, 0.0, 1.471127670])]
+
+
+@pytest.mark.parametrize('option, expected_array', test_data_get_reducer)
+def test_get_reducer(option, expected_array):
+    """Tests for ValueError when using an unsupported option."""
+    complex_array = np.array([1.0, 1.0+10j, 2.0, 2.0+20j], dtype='complex')
+    func = get_reducer(option)
+    real_array = func(complex_array)
+
+    assert np.all(np.isreal(real_array))
+    assert_allclose(real_array, expected_array)
+
+    # nothing should happen to an array that only contains real data
+    assert_allclose(func(real_array), real_array)
+
+
+def test_propagate_err_invalid_option():
+    """Tests for ValueError when using an unsupported option."""
+    z = np.array([0, 1, 2, 3, 4, 5])
+    dz = np.random.normal(size=z.size, scale=0.1)
+    option = 'unknown'
+    msg = r'Invalid option'
+    with pytest.raises(ValueError, match=msg):
+        propagate_err(z, dz, option)
+
+
+def test_propagate_err_unequal_shape_z_dz():
+    """Tests for ValueError when using unequal arrays for z and dz."""
+    z = np.array([0, 1, 2, 3, 4, 5])
+    dz = np.random.normal(size=z.size-1, scale=0.1)
+    msg = r'shape of z:'
+    with pytest.raises(ValueError, match=msg):
+        propagate_err(z, dz, option='abs')
+
+
+@pytest.mark.parametrize('option', ['real', 'imag', 'abs', 'angle'])
+def test_propagate_err(option):
+    """Tests for ValueError when using an unsupported option."""
+    np.random.seed(2020)
+    z = np.array([1.0, 1.0+10j, 2.0, 2.0+20j], dtype='complex')
+    dz = np.random.normal(z.size, scale=0.1)*z
+
+    # if `z` is real, assume that `dz` is also real and return it as-is
+    err = propagate_err(np.real(z), np.real(dz), option)
+    assert_allclose(err, np.real(dz))
+
+    # if `z` is complex, but `dz` is real apply the err to both real/imag
+    err_complex_real = propagate_err(z, np.real(dz), option)
+    assert np.all(np.isreal(err_complex_real))
+    dz_used = np.real(dz)+1j*np.real(dz)
+    if option == 'real':
+        assert_allclose(err_complex_real, np.real(dz_used))
+    elif option == 'imag':
+        assert_allclose(err_complex_real, np.imag(dz_used))
+    elif option == 'abs':
+        assert_allclose(err_complex_real,
+                        [3.823115, 3.823115, 7.646231, 7.646231],
+                        rtol=1.0e-5)
+    elif option == 'angle':
+        assert_allclose(err_complex_real,
+                        [3.823115, 0.380414, 3.823115, 0.380414],
+                        rtol=1.0e-5)
+
+    # both `z` and `dz` are complex
+    err_complex_complex = propagate_err(z, dz, option)
+    assert np.all(np.isreal(err_complex_complex))
+    if option == 'real':
+        assert_allclose(err_complex_complex, np.real(dz))
+    elif option == 'imag':
+        assert_allclose(err_complex_complex, np.imag(dz))
+    elif option == 'abs':
+        assert_allclose(err_complex_complex,
+                        [3.823115, 38.043322, 7.646231, 76.086645],
+                        rtol=1.0e-5)
+    elif option == 'angle':
+        assert_allclose(err_complex_complex, [0., 0.535317, 0., 0.535317],
+                        rtol=1.0e-5)
+
+
+def test_initialize_Model_class_default_arguments(gmodel):
+    """Test for Model class initialized with default arguments."""
+    assert gmodel.prefix == ''
+    assert gmodel._param_root_names == ['amplitude', 'center', 'sigma']
+    assert gmodel.param_names == ['amplitude', 'center', 'sigma']
+    assert gmodel.independent_vars == ['x']
+    assert gmodel.nan_policy == 'raise'
+    assert gmodel.name == 'Model(gaussian)'
+    assert gmodel.opts == {}
+
+
+def test_initialize_Model_class_independent_vars():
+    """Test for Model class initialized with independent_vars."""
+    model = Model(lmfit.lineshapes.gaussian, independent_vars=['amplitude'])
+    assert model._param_root_names == ['x', 'center', 'sigma']
+    assert model.param_names == ['x', 'center', 'sigma']
+    assert model.independent_vars == ['amplitude']
+
+
+def test_initialize_Model_class_param_names():
+    """Test for Model class initialized with param_names."""
+    model = Model(lmfit.lineshapes.gaussian, param_names=['amplitude'])
+
+    assert model._param_root_names == ['amplitude']
+    assert model.param_names == ['amplitude']
+
+
+@pytest.mark.parametrize("policy", ['raise', 'omit', 'propagate'])
+def test_initialize_Model_class_nan_policy(policy):
+    """Test for Model class initialized with nan_policy."""
+    model = Model(lmfit.lineshapes.gaussian, nan_policy=policy)
+
+    assert model.nan_policy == policy
+
+
+def test_initialize_Model_class_prefix():
+    """Test for Model class initialized with prefix."""
+    model = Model(lmfit.lineshapes.gaussian, prefix='test_')
+
+    assert model.prefix == 'test_'
+    assert model._param_root_names == ['amplitude', 'center', 'sigma']
+    assert model.param_names == ['test_amplitude', 'test_center', 'test_sigma']
+    assert model.name == "Model(gaussian, prefix='test_')"
+
+
+def test_initialize_Model_name():
+    """Test for Model class initialized with name."""
+    model = Model(lmfit.lineshapes.gaussian, name='test_function')
+
+    assert model.name == 'Model(test_function)'
+
+
+def test_initialize_Model_kws():
+    """Test for Model class initialized with **kws."""
+    kws = {'amplitude': 10.0}
+    model = Model(lmfit.lineshapes.gaussian,
+                  independent_vars=['x', 'amplitude'], **kws)
+
+    assert model._param_root_names == ['center', 'sigma']
+    assert model.param_names == ['center', 'sigma']
+    assert model.independent_vars == ['x', 'amplitude']
+    assert model.opts == kws
+
+
+test_reprstring_data = [(False, 'Model(gaussian)'),
+                        (True, "Model(gaussian, amplitude='10.0')")]
+
+
+@pytest.mark.parametrize("option, expected", test_reprstring_data)
+def test_Model_reprstring(option, expected):
+    """Test for Model class function _reprstring."""
+    kws = {'amplitude': 10.0}
+    model = Model(lmfit.lineshapes.gaussian,
+                  independent_vars=['x', 'amplitude'], **kws)
+
+    assert model._reprstring(option) == expected
+
+
+def test_Model_get_state(gmodel):
+    """Test for Model class function _get_state."""
+    out = gmodel._get_state()
+
+    assert isinstance(out, tuple)
+    assert out[1] == out[2] is None
+    assert (out[0][1] is not None) == lmfit.jsonutils.HAS_DILL
+
+    assert out[0][0] == 'gaussian'
+    assert out[0][2:] == ('gaussian', '', ['x'],
+                          ['amplitude', 'center', 'sigma'], OrderedDict(),
+                          'raise', {})
+
+
+def test_Model_set_state(gmodel):
+    """Test for Model class function _set_state.
+
+    This function is just calling `_buildmodel`, which will be tested
+    below together with the use of `funcdefs`.
+
+    """
+    out = gmodel._get_state()
+
+    new_model = Model(lmfit.lineshapes.lorentzian)
+    new_model = new_model._set_state(out)
+
+    assert new_model.prefix == gmodel.prefix
+    assert new_model._param_root_names == gmodel._param_root_names
+    assert new_model.param_names == gmodel.param_names
+    assert new_model.independent_vars == gmodel.independent_vars
+    assert new_model.nan_policy == gmodel.nan_policy
+    assert new_model.name == gmodel.name
+    assert new_model.opts == gmodel.opts
+
+
+def test_Model_dumps_loads(gmodel):
+    """Test for Model class functions dumps and loads.
+
+    These function are used when saving/loading the Model class and will be
+    tested more thoroughly later.
+
+    """
+    model_json = gmodel.dumps()
+    _ = gmodel.loads(model_json)
+
+
+def test_Model_getter_setter_name(gmodel):
+    """Test for Model class getter/setter functions for name."""
+    assert gmodel.name == 'Model(gaussian)'
+
+    gmodel.name = 'test_gaussian'
+    assert gmodel.name == 'Model(test_gaussian)'
+
+
+def test_Model_getter_setter_prefix(gmodel):
+    """Test for Model class getter/setter functions for prefix."""
+    assert gmodel.prefix == ''
+    assert gmodel.param_names == ['amplitude', 'center', 'sigma']
+
+    gmodel.prefix = 'g1_'
+    assert gmodel.prefix == 'g1_'
+    assert gmodel.param_names == ['g1_amplitude', 'g1_center', 'g1_sigma']
+
+    gmodel.prefix = ''
+    assert gmodel.prefix == ''
+    assert gmodel.param_names == ['amplitude', 'center', 'sigma']
+
+
+def test_Model_getter_param_names(gmodel):
+    """Test for Model class getter function for param_names."""
+    assert gmodel.param_names == ['amplitude', 'center', 'sigma']
+
+
+def test_Model__repr__(gmodel):
+    """Test for Model class __repr__ method."""
+    assert gmodel.__repr__() == '<lmfit.Model: Model(gaussian)>'
+
+
+def test_Model_copy(gmodel):
+    """Test for Model class copy method."""
+    msg = 'Model.copy does not work. Make a new Model'
+    with pytest.raises(NotImplementedError, match=msg):
+        gmodel.copy()
+
+
+# Below is the content of the original test_model.py file. These tests still
+# need to be checked and possibly updated to the pytest-style. They work fine
+# though so leave them in for now.
 
 def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03, err_msg='',
                          verbose=True):
@@ -809,4 +1078,3 @@ class TestExpression(CommonTests, unittest.TestCase):
 
         data_components = comp_model.eval_components(x=x)
         self.assertIn('exp', data_components)
-#
