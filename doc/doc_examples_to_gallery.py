@@ -13,11 +13,10 @@ Process the examples in the documentation for inclusion in the Gallery:
 """
 
 import os
-import shlex
-import subprocess
-
 from pathlib import Path
+import shlex
 from shutil import copy2
+import subprocess
 
 
 def copy_data_files(src_dir, dest_dir):

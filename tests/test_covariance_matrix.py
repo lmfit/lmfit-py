@@ -7,7 +7,7 @@ import pytest
 
 from lmfit import Parameters, minimize
 from lmfit.lineshapes import exponential
-from lmfit.models import ExponentialModel, VoigtModel, LinearModel
+from lmfit.models import ExponentialModel, LinearModel, VoigtModel
 
 
 def check(para, real_val, sig=3):

@@ -68,7 +68,7 @@ except ImportError:
 
 # check for dill
 try:
-    import dill   # noqa: F401
+    import dill  # noqa: F401
     HAS_DILL = True
 except ImportError:
     HAS_DILL = False

@@ -8,12 +8,12 @@ lmfit. This example shows how to do that. Notice, that this example requires
 both sympy and matplotlib.
 """
 
-# %%
+import matplotlib.pyplot as plt
 import numpy as np
 import sympy
-import lmfit
 from sympy.parsing import sympy_parser
-import matplotlib.pyplot as plt
+
+import lmfit
 
 np.random.seed(1)
 

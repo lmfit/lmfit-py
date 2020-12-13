@@ -2,8 +2,8 @@
 
 import warnings
 
-from numpy import (arctan, copysign, cos, exp, finfo, float64, isnan, log, pi, real,
-                   sin, sqrt, where)
+from numpy import (arctan, copysign, cos, exp, finfo, float64, isnan, log, pi,
+                   real, sin, sqrt, where)
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
 from scipy.special import wofz

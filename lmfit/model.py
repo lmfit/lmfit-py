@@ -21,7 +21,7 @@ from .printfuncs import ci_report, fit_report, fitreport_html_table
 # Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
 try:
-    from pandas import isnull, Series
+    from pandas import Series, isnull
 except ImportError:
     isnull = np.isnan
     Series = type(NotImplemented)
