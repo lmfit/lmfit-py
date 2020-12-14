@@ -338,8 +338,9 @@ class SineModel(Model):
         f(x; A, \phi, f) = A \sin (f x + \phi)
 
     where the parameter `amplitude` corresponds to :math:`A`, `frequency` to
-    :math:`\f`, `shift` to :math:`\phi`. All are constrained to be
+    :math:`f`, and `shift` to :math:`\phi`. All are constrained to be
     non-negative, and `shift` additionally to be smaller than :math:`2\pi`.
+
     """
 
     def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',

@@ -1,4 +1,4 @@
-# sphinx extensions for mathjax
+# Sphinx extensions for generating HTML output
 
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.extlinks',

@@ -1,4 +1,4 @@
-# sphinx extensions for mathjax
+# Sphinx extensions for generating EPUB/PDF output
 
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.extlinks',
@@ -8,4 +8,5 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.todo',
               'IPython.sphinxext.ipython_console_highlighting',
               'jupyter_sphinx',
-              'sphinx.ext.imgconverter']
+              'sphinx_gallery.gen_gallery',
+              'sphinxcontrib.cairosvgconverter']

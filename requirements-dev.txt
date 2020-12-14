@@ -1,4 +1,5 @@
 -r requirements.txt
+cairosvg
 codecov
 corner
 coverage
@@ -12,5 +13,6 @@ Pillow
 pre-commit
 pytest
 Sphinx
-sphinx-gallery
+sphinx-gallery>=0.8
+sphinxcontrib-svg2pdfconverter
 sympy

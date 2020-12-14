@@ -98,7 +98,7 @@ pygments_style = 'sphinx'
 
 # Add any paths that contain custom themes here, relative to this directory.
 html_theme_path = ['sphinx/theme']
-html_theme = 'lmfitdoc'
+html_theme = 'sphinx13'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -133,7 +133,7 @@ html_use_index = True
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, an OpenSearch description file will be output, and all pages will
 # contain a <link> tag referring to it.  The value of this option must be the
@@ -160,8 +160,6 @@ latex_documents = [
 package_path = os.path.abspath('../..')
 os.environ['PYTHONPATH'] = ':'.join((package_path, os.environ.get('PYTHONPATH', '')))
 
-image_converter_args=["-density", "300"]
-
 # Sphinx-gallery configuration
 sphinx_gallery_conf = {
     'examples_dirs': '../examples',
@@ -171,10 +169,5 @@ sphinx_gallery_conf = {
     'ignore_repr_types': r'matplotlib',
 }
 
-# remove warnings about matplotlib and Agg backend from gallery examples
-warnings.filterwarnings("ignore", category=UserWarning,
-                        message='Matplotlib is currently using agg, which is a'
-                                ' non-GUI backend, so cannot show the figure.')
-
-
-
+# Suppress "WARNING: unknown mimetype for _static/empty
+suppress_warnings = ['epub.unknown_project_files']

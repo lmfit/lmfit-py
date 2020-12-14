@@ -13,7 +13,6 @@ env:
     - version=minimum  # asteval>=0.9.16 numpy>=1.16 scipy>=1.2 uncertainties>=3.0.1
     - version=latest  # latest version of packages available on PyPI; from requirements-dev.txt
 
-
 # these packages are needed to compile SciPy, when wheels are not available on PyPI.
 # installing with apt takes little time, so for now always do it to simplify the build matrix
 addons:
@@ -47,8 +46,12 @@ jobs:
       env:
         - version=latest
       stage: build documentation
+      addons:
+        apt:
+          packages:
+          - texlive-full
       script:
-        - cd doc ; make
+        - cd doc ; make all
       after_success: skip
   allow_failures:
     - python: nightly

@@ -324,6 +324,7 @@ The :class:`MinimizerResult` includes the traditional chi-square and
 reduced chi-square statistics:
 
 .. math::
+   :nowrap:
 
    \begin{eqnarray*}
         \chi^2  &=&  \sum_i^N r_i^2 \\
@@ -345,6 +346,7 @@ quality of fit with the number of variable parameters used in the fit.
 These are calculated as:
 
 .. math::
+   :nowrap:
 
    \begin{eqnarray*}
      {\rm aic} &=&  N \ln(\chi^2/N) + 2 N_{\rm varys} \\

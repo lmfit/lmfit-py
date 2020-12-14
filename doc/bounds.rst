@@ -26,6 +26,7 @@ parameters :math:`P_{\rm bounded}`. When both ``min`` and ``max`` bounds
 are specified, the mapping is:
 
 .. math::
+   :nowrap:
 
    \begin{eqnarray*}
         P_{\rm internal} &=& \arcsin\big(\frac{2 (P_{\rm bounded} - {\rm min})}{({\rm max} - {\rm min})} - 1\big) \\
@@ -36,6 +37,7 @@ With only an upper limit ``max`` supplied, but ``min`` left unbounded, the
 mapping is:
 
 .. math::
+   :nowrap:
 
    \begin{eqnarray*}
         P_{\rm internal} &=& \sqrt{({\rm max} - P_{\rm bounded} + 1)^2 - 1} \\
@@ -46,6 +48,7 @@ With only a lower limit ``min`` supplied, but ``max`` left unbounded, the
 mapping is:
 
 .. math::
+   :nowrap:
 
    \begin{eqnarray*}
         P_{\rm internal} &=& \sqrt{(P_{\rm bounded} - {\rm min} + 1)^2 - 1} \\

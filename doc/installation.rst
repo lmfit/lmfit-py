@@ -19,7 +19,8 @@ Downloading and Installation
 .. _corner: https://github.com/dfm/corner.py
 .. _sphinx: https://www.sphinx-doc.org
 .. _jupyter_sphinx: https://jupyter-sphinx.readthedocs.io
-.. _ImageMagick: https://www.imagemagick.org/
+.. _sphinxcontrib-svg2pdfconverter: https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter
+.. _cairosvg: https://cairosvg.org/
 .. _Pillow: https://python-pillow.org/
 .. _release_notes: https://lmfit.github.io/lmfit-py/whatsnew.html
 
@@ -46,8 +47,8 @@ automatically, but we highly recommend each of these packages.
 
 For building the documentation and generating the examples gallery,
 `matplotlib`_, `emcee`_ (version 3+), `corner`_, `Sphinx`_,
-`jupyter_sphinx`_, `Pillow`_ and `ImageMagick`_ are required (the
-latter one only when generating the PDF document).
+`jupyter_sphinx`_, `Pillow`_, `sphinxcontrib-svg2pdfconverter`_, and `cairosvg`_
+are required (the latter two only when generating the PDF document).
 
 Please refer to ``requirements-dev.txt`` for a list of all dependencies that
 are needed if you want to participate in the development of lmfit.
