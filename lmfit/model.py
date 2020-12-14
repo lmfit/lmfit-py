@@ -70,7 +70,7 @@ def get_reducer(option):
 
     """
     if option not in ['real', 'imag', 'abs', 'angle']:
-        raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'." % option)
+        raise ValueError("Invalid option ('%s') for function 'propagate_err'." % option)
 
     def reducer(array):
         """Convert a complex array to a real array.
@@ -139,7 +139,10 @@ def propagate_err(z, dz, option):
 
     """
     if option not in ['real', 'imag', 'abs', 'angle']:
-        raise ValueError("Invalid parameter name ('%s') for function 'propagate_err'." % option)
+        raise ValueError("Invalid option ('%s') for function 'propagate_err'." % option)
+
+    if not z.shape == dz.shape:
+        raise ValueError("shape of z: %s != shape of dz: %s" % (z.shape, dz.shape))
 
     # Check the main vector for complex. Do nothing if real.
     if any(np.iscomplex(z)):

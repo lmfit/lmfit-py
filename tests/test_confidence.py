@@ -7,7 +7,6 @@ import pytest
 from scipy.stats import f
 
 import lmfit
-from lmfit_testutils import assert_paramval
 
 
 @pytest.fixture
@@ -95,8 +94,8 @@ def test_confidence_leastsq(data, pars, verbose, capsys):
     assert 5 < out.nfev < 500
     assert out.chisqr < 3.0
     assert out.nvarys == 2
-    assert_paramval(out.params['a'], 0.1, tol=0.1)
-    assert_paramval(out.params['b'], 2.0, tol=0.1)
+    assert_allclose(out.params['a'], 0.1, rtol=0.01)
+    assert_allclose(out.params['b'], 2.0, rtol=0.01)
 
     ci = lmfit.conf_interval(minimizer, out, verbose=verbose)
     assert_allclose(ci['b'][0][0], 0.997, rtol=0.01)
@@ -116,8 +115,8 @@ def test_confidence_pnames(data, pars):
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
     out = minimizer.leastsq()
 
-    assert_paramval(out.params['a'], 0.1, tol=0.1)
-    assert_paramval(out.params['b'], 2.0, tol=0.1)
+    assert_allclose(out.params['a'], 0.1, rtol=0.01)
+    assert_allclose(out.params['b'], 2.0, rtol=0.01)
 
     ci = lmfit.conf_interval(minimizer, out, p_names=['a'])
     assert 'a' in ci
@@ -155,11 +154,13 @@ def test_confidence_sigma_vs_prob(data, pars):
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
     out = minimizer.leastsq()
 
+    ci_sigma_None = lmfit.conf_interval(minimizer, out, sigmas=None)
     ci_sigmas = lmfit.conf_interval(minimizer, out, sigmas=[1, 2, 3])
     ci_1sigma = lmfit.conf_interval(minimizer, out, sigmas=[1])
     ci_probs = lmfit.conf_interval(minimizer, out,
                                    sigmas=[0.68269, 0.9545, 0.9973])
 
+    assert ci_sigma_None == ci_sigmas
     assert_allclose(ci_sigmas['a'][0][1], ci_probs['a'][0][1], rtol=0.01)
     assert_allclose(ci_sigmas['b'][2][1], ci_probs['b'][2][1], rtol=0.01)
     assert len(ci_1sigma['a']) == 3
