@@ -99,7 +99,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
 
     """
     if local not in SCIPY_LOCAL_SOLVERS:
-        raise Exception('Invalid local solver selected: {}'.format(local))
+        raise Exception(f'Invalid local solver selected: {local}')
 
     x0 = np.atleast_1d(x0)
     n = len(x0)
@@ -159,7 +159,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
             best_x = xf
 
         if disp:
-            print('\n\n ==> Reached local minimum: {:.5g}\n'.format(yf))
+            print(f'\n\n ==> Reached local minimum: {yf:.5g}\n')
 
         if maxfunevals <= 0:
             if disp:

@@ -320,7 +320,7 @@ class ConfidenceInterval:
                     break
 
             if i > self.maxiter:
-                errmsg = "maxiter={} reached ".format(self.maxiter)
+                errmsg = f"maxiter={self.maxiter} reached "
                 errmsg += ("and prob({}={}) = {} < "
                            "max(sigmas).".format(para.name, limit, new_prob))
                 warn(errmsg)

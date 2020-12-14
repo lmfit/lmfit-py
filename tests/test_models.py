@@ -1,7 +1,7 @@
 import numpy as np
-import lmfit
 import pytest
 
+import lmfit
 
 tau = 2.0 * np.pi
 

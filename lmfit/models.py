@@ -1,7 +1,7 @@
 """Module containing built-in fitting models."""
 
-import warnings
 import time
+import warnings
 
 from asteval import Interpreter, get_ast_names
 import numpy as np

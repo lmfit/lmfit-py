@@ -4,8 +4,8 @@ import numpy as np
 from numpy import pi
 from numpy.testing import (assert_allclose, assert_almost_equal, assert_equal,
                            dec)
-from scipy.optimize import rosen_der
 import pytest
+from scipy.optimize import rosen_der
 from uncertainties import ufloat
 
 from lmfit import Minimizer, Parameters, minimize

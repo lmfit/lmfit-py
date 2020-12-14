@@ -36,7 +36,6 @@ from scipy.sparse import issparse
 from scipy.sparse.linalg import LinearOperator
 from scipy.stats import cauchy as cauchy_dist
 from scipy.stats import norm as norm_dist
-from scipy.version import version as scipy_version
 import uncertainties
 
 from ._ampgo import ampgo
@@ -69,7 +68,7 @@ except ImportError:
 
 # check for dill
 try:
-    import dill   # noqa: F401
+    import dill  # noqa: F401
     HAS_DILL = True
 except ImportError:
     HAS_DILL = False
@@ -141,7 +140,7 @@ class MinimizerException(Exception):
 
     def __str__(self):
         """string"""
-        return "{}".format(self.msg)
+        return f"{self.msg}"
 
 
 class AbortFitException(MinimizerException):
@@ -1841,8 +1840,8 @@ class Minimizer:
             all grid points from :scipydoc:`optimize.brute` are stored as
             candidates.
         workers : int or map-like callable, optional
-            For parallel evaluation of the grid, added in SciPy v1.3 (see
-            :scipydoc:`optimize.brute` for more details).
+            For parallel evaluation of the grid (see :scipydoc:`optimize.brute`
+            for more details).
 
         Returns
         -------
@@ -1892,13 +1891,8 @@ class Minimizer:
         result = self.prepare_fit(params=params)
         result.method = 'brute'
 
-        brute_kws = dict(full_output=1, finish=None, disp=False, Ns=Ns)
-        # keyword 'workers' is introduced in SciPy v1.3
-        # FIXME: remove this check after updating the requirement >= 1.3
-        major, minor, _micro = scipy_version.split('.', 2)
-
-        if int(major) == 1 and int(minor) >= 3:
-            brute_kws.update({'workers': workers})
+        brute_kws = dict(full_output=1, finish=None, disp=False, Ns=Ns,
+                         workers=workers)
 
         varying = np.asarray([par.vary for par in self.params.values()])
         replace_none = lambda x, sign: sign*np.inf if x is None else x
@@ -2165,7 +2159,7 @@ class Minimizer:
                 if attr in ['success', 'message']:
                     setattr(result, attr, value)
                 else:
-                    setattr(result, 'shgo_{}'.format(attr), value)
+                    setattr(result, f'shgo_{attr}', value)
 
             result.residual = self.__residual(result.shgo_x, False)
             result.nfev -= 1
@@ -2241,7 +2235,7 @@ class Minimizer:
                 if attr in ['success', 'message']:
                     setattr(result, attr, value)
                 else:
-                    setattr(result, 'da_{}'.format(attr), value)
+                    setattr(result, f'da_{attr}', value)
 
             result.residual = self.__residual(result.da_x, False)
             result.nfev -= 1

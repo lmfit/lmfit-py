@@ -57,7 +57,7 @@ def minimizerGaussian(modelGaussian):
 def test_max_nfev_Minimizer(minimizerGaussian, method):
     """Test the max_nfev argument for all solvers using Minimizer interface."""
     if method in ('brute', 'basinhopping'):
-        pytest.xfail('max_nfev not yet supported in {}'.format(method))  # FIXME
+        pytest.xfail(f'max_nfev not yet supported in {method}')  # FIXME
 
     result = minimizerGaussian.minimize(method=method, max_nfev=10)
     assert minimizerGaussian.max_nfev == 10
@@ -94,7 +94,7 @@ def test_default_max_nfev(modelGaussian, minimizerGaussian, method,
                           default_max_nfev):
     """Test the default values when setting max_nfev=None."""
     if method in ('brute', 'basinhopping'):
-        pytest.xfail('max_nfev not yet supported in {}'.format(method))  # FIXME
+        pytest.xfail(f'max_nfev not yet supported in {method}')  # FIXME
 
     x, y, mod, pars = modelGaussian
     result = mod.fit(y, pars, x=x, method=method, max_nfev=None)

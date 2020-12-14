@@ -13,11 +13,10 @@ Process the examples in the documentation for inclusion in the Gallery:
 """
 
 import os
-import shlex
-import subprocess
-
 from pathlib import Path
+import shlex
 from shutil import copy2
+import subprocess
 
 
 def copy_data_files(src_dir, dest_dir):
@@ -67,7 +66,7 @@ copy_data_files(examples_dir, examples_documentation_dir)
 os.chdir(examples_documentation_dir)
 
 for script in scripts_to_run:
-    subprocess.run(shlex.split("python {}".format(script.as_posix())), check=True)
+    subprocess.run(shlex.split(f"python {script.as_posix()}"), check=True)
 
 os.chdir(doc_dir)
 

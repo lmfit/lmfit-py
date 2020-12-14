@@ -10,7 +10,7 @@ python:
 
 # test with the minium required and latest versions of dependencies
 env:
-    - version=minimum  # asteval>=0.9.16 numpy>=1.16 scipy>=1.2 uncertainties>=3.0.1
+    - version=minimum  # asteval>=0.9.21 numpy>=1.16 scipy>=1.3 uncertainties>=3.0.1
     - version=latest  # latest version of packages available on PyPI; from requirements-dev.txt
 
 # these packages are needed to compile SciPy, when wheels are not available on PyPI.
@@ -64,7 +64,7 @@ before_install:
     - python -m pip install --upgrade pip setuptools
 
 install:
-    - if [[ $version == minimum ]]; then pip install asteval==0.9.16 numpy==1.16 scipy==1.2 uncertainties==3.0.1 pytest coverage codecov; fi
+    - if [[ $version == minimum ]]; then pip install asteval==0.9.21 numpy==1.16 scipy==1.3 uncertainties==3.0.1 pytest coverage codecov; fi
     - if [[ $version == latest ]]; then pip install -r requirements-dev.txt -U; fi
     - python setup.py install
     - pip list
