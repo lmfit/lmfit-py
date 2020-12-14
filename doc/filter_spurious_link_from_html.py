@@ -10,7 +10,6 @@ Filter the lines that link to the Examples gallery index from the HTML output.
 
 from pathlib import Path
 
-
 doc_dir = Path(__file__).parent.absolute()
 
 examples_html_dir = doc_dir.parent / 'doc/_build/html/examples'
