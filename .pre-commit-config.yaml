@@ -9,7 +9,7 @@ repos:
         args: [--keep-percent-format, --py36-plus]
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.3.0
+    rev: v3.4.0
     hooks:
     -   id: check-ast
     -   id: check-builtin-literals
