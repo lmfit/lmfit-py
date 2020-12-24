@@ -42,5 +42,5 @@ Have you
 <!-- We value a clean history with useful commit messages. Ideally, you will take care of this
          before submitting a PR; otherwise you'll be asked to do so before merging. -->
 - [ ] added or updated existing tests to cover the changes?
-- [ ] updated the documentation?
+- [ ] updated the documentation and/or added an entry to the release notes (doc/whatsnew.rst)?
 - [ ] added an example?
