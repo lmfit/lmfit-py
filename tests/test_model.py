@@ -123,6 +123,7 @@ def test_initialize_Model_class_default_arguments(gmodel):
     assert gmodel.nan_policy == 'raise'
     assert gmodel.name == 'Model(gaussian)'
     assert gmodel.opts == {}
+    assert gmodel.def_vals == {'amplitude': 1.0, 'center': 0.0, 'sigma': 1.0}
 
 
 def test_initialize_Model_class_independent_vars():
@@ -157,6 +158,10 @@ def test_initialize_Model_class_prefix():
     assert model._param_root_names == ['amplitude', 'center', 'sigma']
     assert model.param_names == ['test_amplitude', 'test_center', 'test_sigma']
     assert model.name == "Model(gaussian, prefix='test_')"
+
+    model = Model(lmfit.lineshapes.gaussian, prefix=None)
+
+    assert model.prefix == ''
 
 
 def test_initialize_Model_name():
@@ -231,7 +236,7 @@ def test_Model_dumps_loads(gmodel):
     """Test for Model class functions dumps and loads.
 
     These function are used when saving/loading the Model class and will be
-    tested more thoroughly later.
+    tested more thoroughly in test_model_saveload.py.
 
     """
     model_json = gmodel.dumps()
@@ -275,6 +280,83 @@ def test_Model_copy(gmodel):
     msg = 'Model.copy does not work. Make a new Model'
     with pytest.raises(NotImplementedError, match=msg):
         gmodel.copy()
+
+
+def test__parse_params_func_None():
+    """Test for _parse_params function with func=None."""
+    mod = Model(None)
+
+    assert mod._prefix == ''
+    assert mod.func is None
+    assert mod._func_allargs == []
+    assert mod._func_haskeywords is False
+    assert mod.independent_vars == []
+
+
+def test__parse_params_asteval_functions():
+    """Test for _parse_params function with asteval functions."""
+    # TODO: cannot find a use-case for this....
+    pass
+
+
+def test__parse_params_inspect_signature():
+    """Test for _parse_params function using inspect.signature."""
+    # 1. function with a positional argument
+    def func_var_positional(a, *b):
+        pass
+
+    with pytest.raises(ValueError, match=r"varargs '\*b' is not supported"):
+        Model(func_var_positional)
+
+    # 2. function with a keyword argument
+    def func_keyword(a, b, **c):
+        pass
+
+    mod = Model(func_keyword)
+    assert mod._func_allargs == ['a', 'b']
+    assert mod._func_haskeywords is True
+    assert mod.independent_vars == ['a']
+    assert mod.def_vals == {}
+
+    # 3. function with keyword argument only
+    def func_keyword_only(**b):
+        pass
+
+    mod = Model(func_keyword_only)
+    assert mod._func_allargs == []
+    assert mod._func_haskeywords is True
+    assert mod.independent_vars == []
+    assert mod._param_root_names is None
+
+    # 4. function with default value
+    def func_default_value(a, b, c=10):
+        pass
+
+    mod = Model(func_default_value)
+    assert mod._func_allargs == ['a', 'b', 'c']
+    assert mod._func_haskeywords is False
+    assert mod.independent_vars == ['a']
+
+    assert isinstance(mod.def_vals, dict)
+    assert_allclose(mod.def_vals['c'], 10)
+
+
+def test__parse_params_forbidden_variable_names():
+    """Tests for _parse_params function using invalid variable names."""
+
+    def func_invalid_var(data, a):
+        pass
+
+    def func_invalid_par(a, weights):
+        pass
+
+    msg = r"Invalid independent variable name \('data'\) for function func_invalid_var"
+    with pytest.raises(ValueError, match=msg):
+        Model(func_invalid_var)
+
+    msg = r"Invalid parameter name \('weights'\) for function func_invalid_par"
+    with pytest.raises(ValueError, match=msg):
+        Model(func_invalid_par)
 
 
 # Below is the content of the original test_model.py file. These tests still
