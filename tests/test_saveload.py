@@ -142,7 +142,7 @@ def test_save_load_modelresult(dill):
     text = ''
     with open(SAVE_MODELRESULT) as fh:
         text = fh.read()
-    assert 13400 < len(text) < 13800  # dependin on whether dill is present
+    assert 13300 < len(text) < 13900  # depending on whether dill is present
 
     # load the saved ModelResult from file and compare results
     result_saved = load_modelresult(SAVE_MODELRESULT)
