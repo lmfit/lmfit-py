@@ -36,6 +36,7 @@ Bug fixes:
 - save last_internal_values and use to restore internal values if fit is aborted (PR #667)
 - dumping a fit using the lbfgsb method now works, convert bytes to string if needed (Issue #677, PR #678; @leonfoks)
 - fix use of callable Jacobian for scalar methods (PR #681; @mstimberg)
+- preserve float/int types when encoding for JSON (PR #696; @jedzill4)
 
 Various:
 
