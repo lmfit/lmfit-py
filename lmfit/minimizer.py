@@ -22,8 +22,7 @@ import numbers
 import warnings
 
 import numpy as np
-from numpy.dual import inv
-from numpy.linalg import LinAlgError
+from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import differential_evolution
