@@ -82,7 +82,7 @@ precision, floating point numbers. The simplest approach is to use
    def residual(params, x, data=None):
        ....
        resid = calculate_complex_residual()
-       return resid.view(np.float)
+       return resid.view(float)
 
 Alternately, you can use the :class:`lmfit.Model` class to wrap a fit function
 that returns a complex vector. It will automatically apply the above

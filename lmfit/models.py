@@ -15,7 +15,7 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          students_t, thermal_distribution, voigt)
 from .model import Model
 
-tiny = np.finfo(np.float).eps
+tiny = np.finfo(np.float64).eps
 tau = 2.0 * np.pi
 
 

@@ -242,7 +242,7 @@ def test_brute_one_parameter(params_lmfit):
     assert out.candidates[0].score <= out.candidates[1].score
     assert isinstance(out.candidates[0], lmfit.minimizer.Candidate)
     assert isinstance(out.candidates[0].params, lmfit.Parameters)
-    assert isinstance(out.candidates[0].score, np.float64)
+    assert isinstance(out.candidates[0].score, float)
 
 
 def test_brute_keep(params_lmfit, capsys):
@@ -260,7 +260,7 @@ def test_brute_keep(params_lmfit, capsys):
 
     assert isinstance(out.candidates[0], lmfit.minimizer.Candidate)
     assert isinstance(out.candidates[0].params, lmfit.Parameters)
-    assert isinstance(out.candidates[0].score, np.float64)
+    assert isinstance(out.candidates[0].score, float)
 
     with pytest.raises(ValueError, match=r"'candidate_nmb' should be between"):
         out_keep10.show_candidates(25)
