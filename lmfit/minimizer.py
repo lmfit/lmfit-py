@@ -22,8 +22,7 @@ import numbers
 import warnings
 
 import numpy as np
-from numpy.dual import inv
-from numpy.linalg import LinAlgError
+from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
 from scipy.optimize import differential_evolution
@@ -1943,10 +1942,10 @@ class Minimizer:
 
             if len(result.var_names) == 1:
                 grid_result = np.array([res for res in zip(zip(grid_points), grid_score)],
-                                       dtype=[('par', 'O'), ('score', 'float64')])
+                                       dtype=[('par', 'O'), ('score', 'float')])
             else:
                 grid_result = np.array([res for res in zip(zip(*grid_points), grid_score)],
-                                       dtype=[('par', 'O'), ('score', 'float64')])
+                                       dtype=[('par', 'O'), ('score', 'float')])
             grid_result_sorted = grid_result[grid_result.argsort(order='score')]
 
             result.candidates = []

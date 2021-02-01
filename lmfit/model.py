@@ -748,7 +748,7 @@ class Model:
 
         Since the underlying `scipy.optimize` routines expect
         ``numpy.float`` arrays, the only complex type supported is
-        ``np.complex``.
+        ``complex``.
 
         The "ravels" throughout are necessary to support `pandas.Series`.
 
@@ -763,16 +763,16 @@ class Model:
 
         diff = model - data
 
-        if diff.dtype == np.complex:
+        if diff.dtype == complex:
             # data/model are complex
-            diff = diff.ravel().view(np.float)
+            diff = diff.ravel().view(float)
             if weights is not None:
-                if weights.dtype == np.complex:
+                if weights.dtype == complex:
                     # weights are complex
-                    weights = weights.ravel().view(np.float)
+                    weights = weights.ravel().view(float)
                 else:
                     # real weights but complex data
-                    weights = (weights + 1j * weights).ravel().view(np.float)
+                    weights = (weights + 1j * weights).ravel().view(float)
         if weights is not None:
             diff *= weights
         return np.asarray(diff).ravel()  # for compatibility with pandas.Series

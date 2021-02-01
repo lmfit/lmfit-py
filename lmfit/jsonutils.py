@@ -62,16 +62,16 @@ def encode4js(obj):
             val = obj.flatten().tolist()
         return dict(__class__='NDArray', __shape__=obj.shape,
                     __dtype__=obj.dtype.name, value=val)
-    if isinstance(obj, np.float):
+    if isinstance(obj, float):
         return float(obj)
-    if isinstance(obj, np.int):
+    if isinstance(obj, int):
         return int(obj)
     if isinstance(obj, str):
         try:
             return str(obj)
         except UnicodeError:
             return obj
-    if isinstance(obj, np.complex):
+    if isinstance(obj, complex):
         return dict(__class__='Complex', value=(obj.real, obj.imag))
     if isinstance(obj, (tuple, list)):
         ctype = 'List'
