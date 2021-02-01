@@ -1150,7 +1150,8 @@ class Minimizer:
 
     def emcee(self, params=None, steps=1000, nwalkers=100, burn=0, thin=1,
               ntemps=1, pos=None, reuse_sampler=False, workers=1,
-              float_behavior='posterior', is_weighted=True, seed=None, progress=True):
+              float_behavior='posterior', is_weighted=True, seed=None,
+              progress=True, run_mcmc_kwargs={}):
         r"""Bayesian sampling of the posterior distribution.
 
         The method uses the ``emcee`` Markov Chain Monte Carlo package and
@@ -1239,6 +1240,9 @@ class Minimizer:
             `seed` for repeatable minimizations.
         progress : bool, optional
             Print a progress bar to the console while running.
+        run_mcmc_kwargs : dict, optional
+            Additional (optional) keyword arguments that are passed to
+            ``emcee.EnsembleSampler.run_mcmc``.
 
         Returns
         -------
@@ -1442,9 +1446,12 @@ class Minimizer:
         if seed is not None:
             self.sampler.random_state = rng.get_state()
 
+        if not isinstance(run_mcmc_kwargs, dict):
+            raise ValueError('run_mcmc_kwargs should be a dict of keyword arguments')
+
         # now do a production run, sampling all the time
         try:
-            output = self.sampler.run_mcmc(p0, steps, progress=progress)
+            output = self.sampler.run_mcmc(p0, steps, progress=progress, **run_mcmc_kwargs)
             self._lastpos = output.coords
         except AbortFitException:
             result.aborted = True
