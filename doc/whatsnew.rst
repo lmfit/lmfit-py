@@ -15,10 +15,10 @@ consult the `lmfit GitHub repository`_.
 .. _whatsnew_1XX_label:
 
 
-Version 1.X.X Release Notes (unreleased)
+Version 1.0.2 Release Notes (unreleased)
 ========================================
 
-Version 1.X.X officially supports Python 3.9 and has dropped support for Python 3.5. The minimum version
+Version 1.0.2 officially supports Python 3.9 and has dropped support for Python 3.5. The minimum version
 of the following dependencies were updated: asteval>=0.9.21, numpy>=1.18, and scipy>=1.3.
 
 New features:
@@ -26,13 +26,14 @@ New features:
 - added two-dimensional Gaussian lineshape and model (PR #642; @mpmdean)
 - all built-in models are now registered in lmfit.models.lmfit_models; new Model class attribute "valid_forms" (PR #663; @rayosborn)
 - added a SineModel (PR #676; @lneuhaus)
+- add the ``run_mcmc_kwargs argument`` to ``Minimizer.emcee`` to pass to the ``emcee.EnsembleSampler.run_mcmc`` function (PR #694; @rbnvrw)
 
 Bug fixes:
 
-- ModelResult.eval_uncertainty should use provided Parameters (PR #646)
+- ``ModelResult.eval_uncertainty`` should use provided Parameters (PR #646)
 - center in lognormal model can be negative (Issue #644, PR #645; @YoshieraHuang)
 - restore best-fit values after calculation of covariance matrix (Issue #655, PR #657)
-- add helper-function 'not_zero' to prevent ZeroDivisionError in lineshapes and use in exponential lineshape (Issue #631, PR #664; @s-weigand)
+- add helper-function ``not_zero`` to prevent ZeroDivisionError in lineshapes and use in exponential lineshape (Issue #631, PR #664; @s-weigand)
 - save last_internal_values and use to restore internal values if fit is aborted (PR #667)
 - dumping a fit using the lbfgsb method now works, convert bytes to string if needed (Issue #677, PR #678; @leonfoks)
 - fix use of callable Jacobian for scalar methods (PR #681; @mstimberg)
@@ -49,6 +50,10 @@ Various:
 - make building of documentation cross-platform (PR #673; @s-weigand)
 - relax module name check in test_check_ast_errors for Python 3.9 (Issue #674, PR #675; @mwhudson)
 - fix/update layout of documentation, now uses the sphinx13 theme (PR #687)
+- fixed DeprecationWarnings reported by NumPy v1.2.0 (PR #699)
+- increase value of ``tiny`` and check for it in bounded parameters to avoid "parameter not moving from initial value" (Issue #700, PR #701)
+- add ``max_nfev`` to ``basinhopping`` and ``brute`` (now supported everywhere in lmfit) and set to more uniform default values (PR #701)
+- use Azure Pipelines for CI, drop Travis (PRs #696 and #702)
 
 
 .. _whatsnew_101_label:
