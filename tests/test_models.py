@@ -1,148 +1,103 @@
-import sys
-
 import numpy as np
-import pytest
 
 import lmfit
 
-tau = 2.0 * np.pi
+
+def _isclose(name, expected_value, fit_value, atol, rtol):
+    """isclose with error message"""
+    assert np.isclose(expected_value, fit_value, atol=atol, rtol=rtol), \
+           f"bad value for {name}: expected {expected_value}, got {fit_value}."
 
 
-class BaseTestForModels:
-    _model = None
-    _seed = 42
+def check_fit(model, params, x, y, test_values, noise_scale=1.e-3, atol=0.1, rtol=0.05):
+    """Checks that a model fits noisy data well
 
-    @pytest.fixture(autouse=True)
-    def seed(self):
-        np.random.seed(self._seed)
+    Parameters
+    -----------
+    model:  model to use
+    par:  parameters to use
+    x:      x data
+    y:      y data
+    test_values: dict of 'true values'
+    noise_scale: float, optional
+           The standard deviation of noise that is added to the test data.
+    atol: float, optional
+           Absolute tolerance for considering fit parameters close to the
+           parameters test data was generated with.
+    rtol: float, optional
+           Relative tolerance for considering fit parameters close to the
+           parameters test data was generated with.
 
-    def check_guess_and_fit(self, noise_scale=0.0, atol=0.1, rtol=0.0,
-                            offset=None, **kwargs):
-        """Checks that the ``self._model()` correctly fits noisy data.
+    Returns
+    -------
+      fit result
 
-        Parameters
-        -----------
-        noise_scale: float, optional
-            The standard deviation of Gaussian noise that is added to the test
-            data.
-        atol: float, optional
-            Absolute tolerance for considering fit parameters close to the
-            parameters test data was generated with.
-        rtol: float, optional
-            Relative tolerance for considering fit parameters close to the
-            parameters test data was generated with.
-        offset: float, optional
-            This setting adds the specified offset to the test data and
-            adds a `ConstantModel` to the model before attempting the fit.
-        **kwargs : optional
-            Keyword arguments to pass to the model function. The model fit
-            parameters among these are used to generate data to try fitting
-            on, the remaining ones are simply passed on to the model function,
-            the guess method, and the fit method.
-
-        Raises
-        -------
-        AssertionError
-            Any fit parameter that is not close to the parameter used to
-            generate the test data raises this error.
-        """
-        model = self._model()
-        original_params = {name: kwargs.pop(name, np.random.rand())
-                           for name in model.param_names}
-        print(f"Original parameters: {original_params}")
-        data = model.func(**kwargs, **original_params)
-        if offset is not None:
-            data += offset
-        data += np.random.normal(scale=noise_scale, size=data.shape)
-        guessed_params = model.guess(data, **kwargs)
-        if offset is not None:
-            constant_model = lmfit.models.ConstantModel()
-            guessed_params += constant_model.guess(data)
-            model += constant_model
-        print(f"Guessed parameters: {guessed_params}")
-        fit_result = model.fit(data, guessed_params, **kwargs)
-        fit_values = fit_result.best_values
-        for name, original_value in original_params.items():
-            self._isclose(name, original_value, fit_values[name], atol, rtol)
-        return fit_result
-
-    def _isclose(self, name, actual_value, fit_value, atol, rtol):
-        assert np.isclose(actual_value, fit_value, atol=atol, rtol=rtol), \
-            f"wrong fit for parameter {name}: expected {actual_value}, " \
-            f"fitted {fit_value}."
+    Raises
+    -------
+       AssertionError
+          Any fit parameter that is not close to the parameter used to
+          generate the test data raises this error.
+    """
+    y += np.random.normal(scale=noise_scale, size=len(y))
+    result = model.fit(y, params, x=x)
+    fit_values = result.best_values
+    for name, test_val in test_values.items():
+        _isclose(name, test_val, fit_values[name], atol, rtol)
+    return result
 
 
-class TestLinearModel(BaseTestForModels):
-    _model = lmfit.models.LinearModel
-
-    def test_random_parameters(self):
-        self.check_guess_and_fit(x=np.linspace(-1, 1, 300))
-
-
-class TestQuadraticModel(BaseTestForModels):
-    _model = lmfit.models.QuadraticModel
-
-    def test_random_parameters(self):
-        self.check_guess_and_fit(x=np.linspace(-10, 10, 300))
+def testLinear():
+    mod = lmfit.models.LinearModel()
+    x = np.linspace(-1, 1, 201)
+    y = 10*x + 2
+    params = mod.make_params(intercept=1, slope=2)
+    check_fit(mod, params, x, y, dict(intercept=2, slope=10))
 
 
-# FIXME: tests for SineModel fail on macOS but pass on Linux (see: PR #676).
-# This should be fixed, but for now just skip it on macOS...
-@pytest.mark.skipif(sys.platform == 'darwin', reason="flaky test on macOS")
-class TestSineModel(BaseTestForModels):
-    _model = lmfit.models.SineModel
+def testQuadraric():
+    mod = lmfit.models.QuadraticModel()
+    x = np.linspace(-1, 1, 201)
+    y = 0.3*x*x + 10*x + 2
+    params = mod.make_params(a=0, b=5, c=1)
+    check_fit(mod, params, x, y, dict(a=0.3, b=10, c=2))
 
-    def _isclose(self, name, actual_value, fit_value, atol, rtol):
-        if name == "shift":
-            # need to handle subtleties arising from subtracting two phases
-            diff = abs((actual_value - fit_value + np.pi) % tau - np.pi)
-            assert np.isclose(diff, 0, atol=atol, rtol=rtol), \
-                f"wrong fit for parameter {name}: expected {actual_value}, " \
-                f"fitted {fit_value}, phase difference {diff}."
-        else:
-            super()._isclose(name, actual_value, fit_value, atol, rtol)
 
-    @pytest.mark.parametrize("shift", list(range(7)))
-    def test_less_than_1_period(self, shift):
-        self.check_guess_and_fit(
-            frequency=0.65,
-            amplitude=1.0,
-            shift=shift,
-            noise_scale=0.1,
-            atol=0.05,
-            x=np.linspace(0, tau, 1000),
-        )
+def testSine_partialperiod():
+    mod = lmfit.models.SineModel()
+    x = np.linspace(-1, 1, 201)
+    pars = dict(amplitude=1.5, frequency=0.9, shift=0.4)
 
-    @pytest.mark.parametrize("shift", list(range(7)))
-    def test_typical_regime(self, shift):
-        self.check_guess_and_fit(
-            frequency=4.123,
-            amplitude=23.5,
-            shift=shift,
-            noise_scale=3,
-            atol=0.5,
-            x=np.linspace(0, tau, 1000),
-        )
+    y = pars['amplitude']*np.sin(x*pars['frequency'] + pars['shift'])
 
-    @pytest.mark.parametrize("shift", list(range(7)))
-    def test_high_noise(self, shift):
-        self.check_guess_and_fit(
-            frequency=78.32,
-            amplitude=1.0,
-            shift=shift,
-            noise_scale=5.0,
-            atol=0.3,
-            x=np.linspace(0, tau, 10000),
-        )
+    params = mod.make_params(amplitude=1, frequency=1, shift=-0.2)
+    check_fit(mod, params, x, y, pars)
 
-    @pytest.mark.parametrize("offset", [0, -100, 1234.678])
-    def test_with_offset(self, offset):
-        self.check_guess_and_fit(
-            frequency=3.23,
-            amplitude=0.01,
-            shift=2.1,
-            noise_scale=0.01,
-            offset=offset,
-            atol=0.25,
-            x=np.linspace(0, tau, 100),
-        )
+
+def testSineWithLine():
+    mod = lmfit.models.SineModel() + lmfit.models.LinearModel()
+    x = np.linspace(-5, 5, 501)
+    pars = dict(amplitude=5.3, frequency=3.8, shift=0.1, intercept=8.2, slope=0.2)
+
+    y = pars['amplitude']*np.sin(x*pars['frequency'] + pars['shift'])
+    y += pars['intercept'] + x * pars['slope']
+
+    params = mod.make_params(amplitude=10, frequency=4.5, shift=0.1,
+                             intercept=10, slope=0)
+
+    check_fit(mod, params, x, y, pars, noise_scale=0.02)
+
+
+def testSineManyShifts():
+    mod = lmfit.models.SineModel() + lmfit.models.LinearModel()
+    x = np.linspace(-5, 5, 501)
+    pars = dict(amplitude=5.3, frequency=3.8, intercept=8.2, slope=0.2)
+
+    for shift in (0.1, 0.5, 1.0, 1.5):
+        pars['shift'] = shift
+        y = pars['amplitude']*np.sin(x*pars['frequency'] + pars['shift'])
+        y += pars['intercept'] + x*pars['slope']
+
+        params = mod.make_params(amplitude=10, frequency=4.5, shift=0.8,
+                                 intercept=10, slope=0)
+
+        check_fit(mod, params, x, y, pars, noise_scale=0.02)
