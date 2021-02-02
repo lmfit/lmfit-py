@@ -12,10 +12,9 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          linear, lognormal, lorentzian, moffat, parabolic,
                          pearson7, powerlaw, pvoigt, rectangle, sine,
                          skewed_gaussian, skewed_voigt, split_lorentzian, step,
-                         students_t, thermal_distribution, voigt)
+                         students_t, thermal_distribution, tiny, voigt)
 from .model import Model
 
-tiny = np.finfo(np.float64).eps
 tau = 2.0 * np.pi
 
 
