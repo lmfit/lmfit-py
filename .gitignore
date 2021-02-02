@@ -1,0 +1,16 @@
+*.pyc
+*~
+*#
+doc
+build
+dist
+lmfit.egg-info
+sandbox/
+*.swp
+.idea/
+.DS_Store
+.ipynb_checkpoints/
+.vscode/
+*.sav
+.pytest*
+.pre-commit-config.yaml
