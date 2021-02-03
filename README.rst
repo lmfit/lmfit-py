@@ -1,8 +1,8 @@
 LMfit-py
 ========
 
-.. image:: https://travis-ci.org/lmfit/lmfit-py.svg
-   :target: https://travis-ci.org/lmfit/lmfit-py
+.. image:: https://dev.azure.com/lmfit/lmfit-py/_apis/build/status/lmfit.lmfit-py?branchName=master
+    :target: https://dev.azure.com/lmfit/lmfit-py/_build/latest?definitionId=1&branchName=master
 
 .. image:: https://codecov.io/gh/lmfit/lmfit-py/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/lmfit/lmfit-py
