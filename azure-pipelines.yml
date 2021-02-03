@@ -61,9 +61,13 @@ stages:
             pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
-            pytest
-          displayName: 'Run test-suite'
+            pip install pytest-azurepipelines pytest-cov
+            coverage run --source=lmfit -m pytest
+            coverage report -m
+          displayName: 'Run test-suite and collect coverage'
+        - script: |
+            bash <(curl -s https://codecov.io/bash)
+          displayName: 'Upload to codecov.io'
 
 - stage: tests_latest_dependencies
   dependsOn: check_codestyle
@@ -95,7 +99,7 @@ stages:
         - script: |
             python -m pip install --upgrade pip setuptools
             pip install -r requirements-dev.txt
-          displayName: 'Install latests available versions of Python dependencies'
+          displayName: 'Install latest available versions of Python dependencies'
         - script: |
             python setup.py install
           displayName: 'Install lmfit'
@@ -103,10 +107,13 @@ stages:
             pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
-            pytest
-          displayName: 'Run test-suite'
-
+            pip install pytest-azurepipelines pytest-cov
+            coverage run --source=lmfit -m pytest
+            coverage report -m
+          displayName: 'Run test-suite and collect coverage'
+        - script: |
+            bash <(curl -s https://codecov.io/bash)
+          displayName: 'Upload to codecov.io'
 
 - stage: development_version
   dependsOn: check_codestyle
@@ -130,7 +137,7 @@ stages:
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
             python3.10 get-pip.py --user
             pip3.10 install -r requirements-dev.txt -U --user
-          displayName: 'Install latests available versions of Python dependencies'
+          displayName: 'Install latest available versions of Python dependencies'
         - script: |
             python3.10 setup.py install --user
           displayName: 'Install lmfit'
