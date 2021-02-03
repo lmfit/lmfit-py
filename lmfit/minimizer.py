@@ -526,12 +526,12 @@ class Minimizer:
 
         If `max_nfev` is None, use the provided `default_value`.
 
-        >>> self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
+        >>> self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
 
         """
         if max_nfev is not None:
             self.max_nfev = max_nfev
-        elif self.max_nfev in (None, np.inf):
+        if self.max_nfev in (None, np.inf):
             self.max_nfev = default_value
 
     @property
@@ -576,7 +576,7 @@ class Minimizer:
         params.update_constraints()
 
         if self.max_nfev is None:
-            self.max_nfev = np.inf
+            self.max_nfev = 200000*(len(fvars)+1)
 
         self.result.nfev += 1
         self.result.last_internal_values = fvars
@@ -921,7 +921,7 @@ class Minimizer:
             Parameters to use as starting point.
         max_nfev : int or None, optional
             Maximum number of function evaluations. Defaults to
-            ``1000*(nvars+1)``, where ``nvars`` is the number of variable
+            ``2000*(nvars+1)``, where ``nvars`` is the number of variable
             parameters.
         **kws : dict, optional
             Minimizer options pass to :scipydoc:`optimize.minimize`.
@@ -954,7 +954,7 @@ class Minimizer:
         variables = result.init_vals
         params = result.params
 
-        self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
+        self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
         fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
         fmin_kws.update(self.kws)
 
@@ -1543,7 +1543,7 @@ class Minimizer:
             Parameters to use as starting point.
         max_nfev : int or None, optional
             Maximum number of function evaluations. Defaults to
-            ``1000*(nvars+1)``, where ``nvars`` is the number of variable
+            ``2000*(nvars+1)``, where ``nvars`` is the number of variable
             parameters.
         **kws : dict, optional
             Minimizer options to pass to :scipydoc:`optimize.least_squares`.
@@ -1563,7 +1563,7 @@ class Minimizer:
         result.method = 'least_squares'
 
         replace_none = lambda x, sign: sign*np.inf if x is None else x
-        self.set_max_nfev(max_nfev, 1000*(result.nvarys+1))
+        self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
 
         start_vals, lower_bounds, upper_bounds = [], [], []
         for vname in result.var_names:
@@ -1749,7 +1749,7 @@ class Minimizer:
 
         return result
 
-    def basinhopping(self, params=None, **kws):
+    def basinhopping(self, params=None, max_nfev=None, **kws):
         """Use the `basinhopping` algorithm to find the global minimum.
 
         This method calls :scipydoc:`optimize.basinhopping` using the
@@ -1762,6 +1762,9 @@ class Minimizer:
         params : Parameters, optional
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
+        max_nfev : int or None, optional
+            Maximum number of function evaluations (default is None). Defaults
+            to ``200000*(nvarys+1)``.
         **kws : dict, optional
             Minimizer options to pass to :scipydoc:`optimize.basinhopping`.
 
@@ -1777,7 +1780,7 @@ class Minimizer:
         """
         result = self.prepare_fit(params=params)
         result.method = 'basinhopping'
-
+        self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
         basinhopping_kws = dict(niter=100, T=1.0, stepsize=0.5,
                                 minimizer_kwargs={}, take_step=None,
                                 accept_test=None, callback=None, interval=50,
@@ -1810,7 +1813,7 @@ class Minimizer:
 
         return result
 
-    def brute(self, params=None, Ns=20, keep=50, workers=1):
+    def brute(self, params=None, Ns=20, keep=50, workers=1, max_nfev=None):
         """Use the `brute` method to find the global minimum of a function.
 
         The following parameters are passed to :scipydoc:`optimize.brute`
@@ -1848,6 +1851,9 @@ class Minimizer:
         workers : int or map-like callable, optional
             For parallel evaluation of the grid (see :scipydoc:`optimize.brute`
             for more details).
+        max_nfev : int or None, optional
+            Maximum number of function evaluations (default is None). Defaults
+            to ``200000*(nvarys+1)``.
 
         Returns
         -------
@@ -1896,6 +1902,7 @@ class Minimizer:
         """
         result = self.prepare_fit(params=params)
         result.method = 'brute'
+        self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
         brute_kws = dict(full_output=1, finish=None, disp=False, Ns=Ns,
                          workers=workers)
@@ -2066,7 +2073,7 @@ class Minimizer:
 
         """
         result = self.prepare_fit(params=params)
-        self.set_max_nfev(max_nfev, 1000000*(result.nvarys+1))
+        self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
         ampgo_kws = dict(local='L-BFGS-B', local_opts=None, maxfunevals=None,
                          totaliter=20, maxiter=5, glbtol=1e-5, eps1=0.02,
@@ -2121,7 +2128,7 @@ class Minimizer:
             Parameters used to initialize the Minimizer object are used.
         max_nfev : int or None, optional
             Maximum number of function evaluations. Defaults to
-            ``1e6*(nvars+1)``, where ``nvars`` is the number of variable
+            ``200000*(nvars+1)``, where ``nvars`` is the number of variable
             parameters.
         **kws : dict, optional
             Minimizer options to pass to the SHGO algorithm.
@@ -2142,7 +2149,7 @@ class Minimizer:
         result = self.prepare_fit(params=params)
         result.method = 'shgo'
 
-        self.set_max_nfev(max_nfev, 1000000*(result.nvarys+1))
+        self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
         shgo_kws = dict(constraints=None, n=100, iters=1, callback=None,
                         minimizer_kwargs=None, options=None,
@@ -2193,7 +2200,8 @@ class Minimizer:
             Contains the Parameters for the model. If None, then the
             Parameters used to initialize the Minimizer object are used.
         max_nfev : int or None, optional
-            Maximum number of function evaluations. Defaults to 1e7.
+            Maximum number of function evaluations. Defaults to
+            ``200000*(nvars+1)``, where ``nvars`` is the number of variables.
         **kws : dict, optional
             Minimizer options to pass to the dual_annealing algorithm.
 
@@ -2212,7 +2220,7 @@ class Minimizer:
         """
         result = self.prepare_fit(params=params)
         result.method = 'dual_annealing'
-        self.set_max_nfev(max_nfev, 1.e7)
+        self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
         da_kws = dict(maxiter=1000, local_search_options={},
                       initial_temp=5230.0, restart_temp_ratio=2e-05,
@@ -2446,8 +2454,8 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
     """Perform the minimization of the objective function.
 
     The minimize function takes an objective function to be minimized,
-    a dictionary (:class:`~lmfit.parameter.Parameters` ; Parameters) containing the
-    model parameters, and several optional arguments including the fitting
+    a dictionary (:class:`~lmfit.parameter.Parameters` ; Parameters) containing
+    the model parameters, and several optional arguments including the fitting
     method.
 
     Parameters

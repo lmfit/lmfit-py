@@ -56,9 +56,6 @@ def minimizerGaussian(modelGaussian):
 @pytest.mark.parametrize("method", methods)
 def test_max_nfev_Minimizer(minimizerGaussian, method):
     """Test the max_nfev argument for all solvers using Minimizer interface."""
-    if method in ('brute', 'basinhopping'):
-        pytest.xfail(f'max_nfev not yet supported in {method}')  # FIXME
-
     result = minimizerGaussian.minimize(method=method, max_nfev=10)
     assert minimizerGaussian.max_nfev == 10
     assert result.nfev < 15
@@ -82,20 +79,17 @@ def test_max_nfev_Model(modelGaussian, minimizerGaussian, method):
 
 @pytest.mark.parametrize("method, default_max_nfev",
                          [('leastsq', 2000*(nvarys+1)),
-                          ('least_squares', 1000*(nvarys+1)),
-                          ('nelder', 1000*(nvarys+1)),
-                          ('brute', np.inf),
-                          ('ampgo', 1000000*(nvarys+1)),
-                          ('basinhopping', 2000*(nvarys+1)),
-                          ('differential_evolution', 1000*(nvarys+1)),
-                          ('shgo', 1000000*(nvarys+1)),
-                          ('dual_annealing', 1.e7)])
+                          ('least_squares', 2000*(nvarys+1)),
+                          ('nelder', 2000*(nvarys+1)),
+                          ('differential_evolution', 2000*(nvarys+1)),
+                          ('ampgo', 200000*(nvarys+1)),
+                          ('brute', 200000*(nvarys+1)),
+                          ('basinhopping', 200000*(nvarys+1)),
+                          ('shgo', 200000*(nvarys+1)),
+                          ('dual_annealing', 200000*(nvarys+1))])
 def test_default_max_nfev(modelGaussian, minimizerGaussian, method,
                           default_max_nfev):
     """Test the default values when setting max_nfev=None."""
-    if method in ('brute', 'basinhopping'):
-        pytest.xfail(f'max_nfev not yet supported in {method}')  # FIXME
-
     x, y, mod, pars = modelGaussian
     result = mod.fit(y, pars, x=x, method=method, max_nfev=None)
     assert result.max_nfev == default_max_nfev
