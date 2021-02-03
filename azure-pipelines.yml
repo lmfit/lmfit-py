@@ -23,6 +23,30 @@ stages:
             pre-commit autoupdate ; pre-commit run --all-files
           displayName: 'Run pre-commit hooks'
 
+- stage: build_documentation
+  jobs:
+    - job: build_documentation
+      pool:
+        vmImage: 'ubuntu-latest'
+
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.9'
+        - script: |
+            python -m pip install --upgrade pip setuptools
+            pip install -r requirements-dev.txt
+          displayName: 'Install Python dependencies'
+        - script: |
+            python setup.py install
+          displayName: 'Install lmfit'
+        - script: |
+            sudo apt install -qq -y texlive-full
+          displayName: 'Install TeX Live'
+        - script: |
+           cd doc ; make all
+          displayName: 'Build the documentation'
+
 - stage: tests_minimum_dependencies
   dependsOn: check_codestyle
   jobs:
@@ -149,31 +173,3 @@ stages:
             pip3.10 install pytest-azurepipelines --user
             pytest || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Run test-suite'
-
-- stage: build_documentation
-  dependsOn:
-  - tests_minimum_dependencies
-  - tests_latest_dependencies
-  condition: succeeded()
-  jobs:
-    - job: build_documentation
-      pool:
-        vmImage: 'ubuntu-latest'
-
-      steps:
-        - task: UsePythonVersion@0
-          inputs:
-            versionSpec: '3.9'
-        - script: |
-            python -m pip install --upgrade pip setuptools
-            pip install -r requirements-dev.txt
-          displayName: 'Install Python dependencies'
-        - script: |
-            python setup.py install
-          displayName: 'Install lmfit'
-        - script: |
-            sudo apt install -qq -y texlive-full
-          displayName: 'Install TeX Live'
-        - script: |
-           cd doc ; make all
-          displayName: 'Build the documentation'
