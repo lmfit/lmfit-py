@@ -23,6 +23,30 @@ stages:
             pre-commit autoupdate ; pre-commit run --all-files
           displayName: 'Run pre-commit hooks'
 
+- stage: build_documentation
+  jobs:
+    - job: build_documentation
+      pool:
+        vmImage: 'ubuntu-latest'
+
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '3.9'
+        - script: |
+            python -m pip install --upgrade pip setuptools
+            pip install -r requirements-dev.txt
+          displayName: 'Install Python dependencies'
+        - script: |
+            python setup.py install
+          displayName: 'Install lmfit'
+        - script: |
+            sudo apt install -qq -y texlive-full
+          displayName: 'Install TeX Live'
+        - script: |
+           cd doc ; make all
+          displayName: 'Build the documentation'
+
 - stage: tests_minimum_dependencies
   dependsOn: check_codestyle
   jobs:
@@ -61,9 +85,13 @@ stages:
             pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
-            pytest
-          displayName: 'Run test-suite'
+            pip install pytest-azurepipelines pytest-cov
+            coverage run --source=lmfit -m pytest
+            coverage report -m
+          displayName: 'Run test-suite and collect coverage'
+        - script: |
+            bash <(curl -s https://codecov.io/bash)
+          displayName: 'Upload to codecov.io'
 
 - stage: tests_latest_dependencies
   dependsOn: check_codestyle
@@ -95,7 +123,7 @@ stages:
         - script: |
             python -m pip install --upgrade pip setuptools
             pip install -r requirements-dev.txt
-          displayName: 'Install latests available versions of Python dependencies'
+          displayName: 'Install latest available versions of Python dependencies'
         - script: |
             python setup.py install
           displayName: 'Install lmfit'
@@ -103,10 +131,13 @@ stages:
             pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
-            pytest
-          displayName: 'Run test-suite'
-
+            pip install pytest-azurepipelines pytest-cov
+            coverage run --source=lmfit -m pytest
+            coverage report -m
+          displayName: 'Run test-suite and collect coverage'
+        - script: |
+            bash <(curl -s https://codecov.io/bash)
+          displayName: 'Upload to codecov.io'
 
 - stage: development_version
   dependsOn: check_codestyle
@@ -129,43 +160,16 @@ stages:
             export PATH=/home/vsts/.local/bin:$PATH
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
             python3.10 get-pip.py --user
-            pip3.10 install -r requirements-dev.txt -U --user
-          displayName: 'Install latests available versions of Python dependencies'
+            pip3.10 install -r requirements-dev.txt -U --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+          displayName: 'Install latest available versions of Python dependencies'
         - script: |
-            python3.10 setup.py install --user
+            python3.10 setup.py install --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Install lmfit'
         - script: |
+            export PATH=/home/vsts/.local/bin:$PATH
             pip3.10 list
           displayName: 'List installed Python packages'
         - script: |
             pip3.10 install pytest-azurepipelines --user
-            pytest
+            pytest || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Run test-suite'
-
-- stage: build_documentation
-  dependsOn:
-  - tests_minimum_dependencies
-  - tests_latest_dependencies
-  condition: succeeded()
-  jobs:
-    - job: build_documentation
-      pool:
-        vmImage: 'ubuntu-latest'
-
-      steps:
-        - task: UsePythonVersion@0
-          inputs:
-            versionSpec: '3.9'
-        - script: |
-            python -m pip install --upgrade pip setuptools
-            pip install -r requirements-dev.txt
-          displayName: 'Install Python dependencies'
-        - script: |
-            python setup.py install
-          displayName: 'Install lmfit'
-        - script: |
-            sudo apt install -qq -y texlive-full
-          displayName: 'Install TeX Live'
-        - script: |
-           cd doc ; make all
-          displayName: 'Build the documentation'
