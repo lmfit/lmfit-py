@@ -101,3 +101,19 @@ def testSineManyShifts():
                                  intercept=10, slope=0)
 
         check_fit(mod, params, x, y, pars, noise_scale=0.02)
+
+
+def testSineModel_guess():
+    mod = lmfit.models.SineModel()
+    x = np.linspace(-10, 10, 201)
+    pars = dict(amplitude=1.5, frequency=0.5, shift=0.4)
+
+    y = pars['amplitude']*np.sin(x*pars['frequency'] + pars['shift'])
+
+    params = mod.guess(y, x=x)
+    assert params['amplitude'] > 0.5
+    assert params['amplitude'] < 5.0
+    assert params['frequency'] > 0.1
+    assert params['frequency'] < 1.5
+    assert params['shift'] > 0.0
+    assert params['shift'] < 1.0
