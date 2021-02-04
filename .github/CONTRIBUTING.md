@@ -50,6 +50,7 @@ mailing list, but many questions are not Issues. We will try our best to engage
 in all discussions, but we may simply close GitHub Issues that are actually
 questions.
 
+
 ## Providing an Example with GitHub Issues
 
 If you are reporting a bug with GitHub Issues, we do expect a small, complete,
@@ -77,9 +78,23 @@ print('Python: {}\n\nlmfit: {}, scipy: {}, numpy: {}, asteval: {}, uncertainties
       asteval.__version__, uncertainties.__version__, six.__version__))
 ```
 
+
 ## Using IPython Notebooks to Show Examples
 
 IPython Notebooks are very useful for showing code snippets and outcomes,
 and are a good way to demonstrate a question or raise an issue. Please
 see the above about providing examples. The notebook you provide will be
 *read*, but will probably not be run.
+
+
+## Secret Code for First Time Issues
+
+If you have not done so in the past, and are going to submit a GitHub Issue,
+you will need to include the phrase
+
+```
+Yes, I read the instructions and I am sure this is a GitHub Issue.
+```
+
+as the First Time Issue Code. If you do not copy and paste this in verbatim,
+we will know that you did not read the instructions.
