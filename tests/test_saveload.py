@@ -11,7 +11,8 @@ import lmfit.jsonutils
 from lmfit.lineshapes import gaussian, lorentzian
 from lmfit.model import (Model, ModelResult, load_model, load_modelresult,
                          save_model, save_modelresult)
-from lmfit.models import ExponentialModel, GaussianModel, VoigtModel
+from lmfit.models import (ExponentialModel, ExpressionModel, GaussianModel,
+                          VoigtModel)
 
 y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
                                'examples', 'NIST_Gauss2.dat')).T
@@ -215,6 +216,33 @@ def test_saveload_modelresult_roundtrip(method):
     assert_allclose(result2.params['b'], 0.22, rtol=1.0e-2)
     assert_allclose(result3.params['a'], 0.50, rtol=1.0e-2)
     assert_allclose(result3.params['b'], 0.22, rtol=1.0e-2)
+
+
+def test_saveload_modelresult_expression_model():
+    """Test for ModelResult.loads()/dumps() for ExpressionModel.
+
+    * make sure that the loaded ModelResult has `init_params` and `init_fit`.
+
+    """
+    savefile = 'expr_modres.txt'
+    x = np.linspace(-10, 10, 201)
+    amp, cen, wid = 3.4, 1.8, 0.5
+
+    y = amp * np.exp(-(x-cen)**2 / (2*wid**2)) / (np.sqrt(2*np.pi)*wid)
+    y = y + np.random.normal(size=x.size, scale=0.01)
+
+    gmod = ExpressionModel("amp * exp(-(x-cen)**2 /(2*wid**2))/(sqrt(2*pi)*wid)")
+    result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
+    save_modelresult(result, savefile)
+    time.sleep(0.25)
+
+    result2 = load_modelresult(savefile)
+
+    assert result2 is not None
+    assert result2.init_fit is not None
+    assert_allclose((result2.init_fit - result.init_fit).sum() + 1.00, 1.00,
+                    rtol=1.0e-2)
+    os.unlink(savefile)
 
 
 def test_saveload_usersyms():
