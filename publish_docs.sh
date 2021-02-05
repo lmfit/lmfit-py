@@ -1,21 +1,16 @@
-installdir='/www/apache/htdocs/software/python/lmfit'
-docbuild='doc/_build'
+#!/usr/bin/env sh
+
+# shell script for building the documentation and updating GitHub Pages
 
 cd doc
-echo '# Making docs'
+echo '# Building lmfit documentation (PDF/EPUB/HTML)'
+make clean
 make all
 cd ../
 
-echo '# Building tarball of docs'
-mkdir _tmpdoc
-cp -pr doc/lmfit.pdf     _tmpdoc/lmfit.pdf
-cp -pr doc/_build/html/*    _tmpdoc/.
-cd _tmpdoc
-tar czf ../../lmfit_docs.tar.gz .
-cd ..
-rm -rf _tmpdoc
+echo '# Building tarball of documentation'
+tar czf lmfit_docs.tar.gz doc/_build/html/* -C doc/_build/html .
 
-#
 echo "# Switching to gh-pages branch"
 git checkout gh-pages
 
@@ -24,36 +19,24 @@ if  [ $? -ne 0 ]  ; then
   exit
 fi
 
-tar xzf ../lmfit_docs.tar.gz .
+echo '# Clean-up old documentation files'
+rm -rf *.html *.js
+rm -rf _download _images _sources _static
 
-echo "# commit changes to gh-pages branch"
-git commit -am "changed docs"
+echo '# Unpack new documentation files'
+tar xzf lmfit_docs.tar.gz
+rm -f lmfit_docs.tar.gz
+rm -f .buildinfo
 
-if  [ $? -ne 0 ]  ; then
-  echo ' failed.'
-  exit
-fi
-
-echo "# Pushing docs to github"
-git push
-
-
-echo "# switch back to master branch"
-git checkout master
+echo '# Commit changes to gh-pages branch'
+export version=`git tag | sort | tail -1`
+git add *
+git commit -am "DOC: update documentation for ${version}"
 
 if  [ $? -ne 0 ]  ; then
   echo ' failed.'
   exit
 fi
 
-# install locally
-echo "# Installing docs to CARS web pages"
-cp ../lmfit_docs.tar.gz $installdir/..
-
-cd $installdir
-if  [ $? -ne 0 ]  ; then
-  echo ' failed.'
-  exit
-fi
-
-tar xvzf ../lmfit_docs.tar.gz
+echo '# Please check the commit and if everything looks good, push the changes:'
+echo 'for example by doing: `git push` or `git push upstream`'
