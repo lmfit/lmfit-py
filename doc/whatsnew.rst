@@ -15,8 +15,8 @@ consult the `lmfit GitHub repository`_.
 .. _whatsnew_1XX_label:
 
 
-Version 1.0.2 Release Notes (unreleased)
-========================================
+Version 1.0.2 Release Notes
+===========================
 
 Version 1.0.2 officially supports Python 3.9 and has dropped support for Python 3.5. The minimum version
 of the following dependencies were updated: asteval>=0.9.21, numpy>=1.18, and scipy>=1.3.
@@ -38,6 +38,7 @@ Bug fixes:
 - dumping a fit using the lbfgsb method now works, convert bytes to string if needed (Issue #677, PR #678; @leonfoks)
 - fix use of callable Jacobian for scalar methods (PR #681; @mstimberg)
 - preserve float/int types when encoding for JSON (PR #696; @jedzill4)
+- better support for saving/loading of ExpressionModels and assure that ``init_params`` and ``init_fit`` are set when loading a ``ModelResult`` (PR #706)
 
 Various:
 

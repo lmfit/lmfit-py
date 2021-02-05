@@ -302,6 +302,8 @@ class Model:
         funcdef = None
         if HAS_DILL:
             funcdef = self.func
+        if self.func.__name__ == '_eval':
+            funcdef = self.expr
         state = (self.func.__name__, funcdef, self._name, self._prefix,
                  self.independent_vars, self._param_root_names,
                  self.param_hints, self.nan_policy, self.opts)
@@ -1222,9 +1224,17 @@ def _buildmodel(state, funcdefs=None):
         if fcndef is None:
             raise ValueError("Cannot restore Model: model function not found")
 
-        model = Model(fcndef, name=name, prefix=prefix,
-                      independent_vars=ivars, param_names=pnames,
-                      nan_policy=nan_policy, **opts)
+        if fname == '_eval' and isinstance(fcndef, str):
+            from .models import ExpressionModel
+            model = ExpressionModel(fcndef, name=name,
+                                    independent_vars=ivars,
+                                    param_names=pnames,
+                                    nan_policy=nan_policy, **opts)
+
+        else:
+            model = Model(fcndef, name=name, prefix=prefix,
+                          independent_vars=ivars, param_names=pnames,
+                          nan_policy=nan_policy, **opts)
 
         for name, hint in phints.items():
             model.set_param_hint(name, **hint)
@@ -1694,12 +1704,19 @@ class ModelResult(Minimizer):
 
         # params
         self.params = Parameters()
+        self.init_params = Parameters()
         state = {'unique_symbols': modres['unique_symbols'], 'params': []}
+        ini_state = {'unique_symbols': modres['unique_symbols'], 'params': []}
         for parstate in modres['params']:
             _par = Parameter(name='')
             _par.__setstate__(parstate)
             state['params'].append(_par)
+            _par = Parameter(name='')
+            _par.__setstate__(parstate)
+            ini_state['params'].append(_par)
+
         self.params.__setstate__(state)
+        self.init_params.__setstate__(ini_state)
 
         for attr in ('aborted', 'aic', 'best_fit', 'best_values', 'bic',
                      'chisqr', 'ci_out', 'col_deriv', 'covar', 'data',
@@ -1715,7 +1732,13 @@ class ModelResult(Minimizer):
         if len(self.userargs) == 2:
             self.data = self.userargs[0]
             self.weights = self.userargs[1]
-        self.init_params = self.model.make_params(**self.init_values)
+
+        for parname, val in self.init_values.items():
+            par = self.init_params.get(parname, None)
+            if par is not None:
+                par.correl = par.stderr = None
+                par.value = par.init_value = self.init_values[parname]
+        self.init_fit = self.model.eval(self.init_params, **self.userkws)
         self.result = MinimizerResult()
         self.result.params = self.params
         self.init_vals = list(self.init_values.items())
