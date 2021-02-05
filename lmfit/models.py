@@ -12,10 +12,9 @@ from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          linear, lognormal, lorentzian, moffat, parabolic,
                          pearson7, powerlaw, pvoigt, rectangle, sine,
                          skewed_gaussian, skewed_voigt, split_lorentzian, step,
-                         students_t, thermal_distribution, voigt)
+                         students_t, thermal_distribution, tiny, voigt)
 from .model import Model
 
-tiny = np.finfo(np.float64).eps
 tau = 2.0 * np.pi
 
 
@@ -353,7 +352,7 @@ class SineModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('amplitude', min=0)
         self.set_param_hint('frequency', min=0)
-        self.set_param_hint('shift', min=0, max=tau)
+        self.set_param_hint('shift', min=-tau-1.e-5, max=tau+1.e-5)
 
     def guess(self, data, x, **kwargs):
         """Estimate initial model parameter values from the FFT of the data."""

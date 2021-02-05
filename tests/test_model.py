@@ -856,6 +856,29 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         params = pmod.make_params(sigma=2, fraction=0.77)
         assert_allclose(params['fraction'].value, 0.77, rtol=0.01)
 
+    def test_symmetric_boundss(self):
+        # tests Github Issue 700
+        np.random.seed(0)
+
+        x = np.linspace(0, 20, 51)
+        y = gaussian(x, amplitude=8.0, center=13, sigma=2.5)
+        y += np.random.normal(size=len(x), scale=0.1)
+
+        mod = Model(gaussian)
+        params = mod.make_params(sigma=2.2, center=10, amplitude=10)
+        # carefully selected to have inexact floating-point representation
+        params['sigma'].min = 2.2 - 0.95
+        params['sigma'].max = 2.2 + 0.95
+
+        result = mod.fit(y, params, x=x)
+        print(result.fit_report())
+        self.assertTrue(result.params['sigma'].value > 2.3)
+        self.assertTrue(result.params['sigma'].value < 2.7)
+        self.assertTrue(result.params['sigma'].stderr is not None)
+        self.assertTrue(result.params['amplitude'].stderr is not None)
+        self.assertTrue(result.params['sigma'].stderr > 0.02)
+        self.assertTrue(result.params['sigma'].stderr < 0.50)
+
     def test_composite_model_with_expr_constrains(self):
         """Smoke test for composite model fitting with expr constraints."""
         y = [0, 0, 4, 2, 1, 8, 21, 21, 23, 35, 50, 54, 46, 70, 77, 87, 98,

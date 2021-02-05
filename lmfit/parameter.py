@@ -10,6 +10,7 @@ from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
 import scipy.special
 
 from .jsonutils import decode4js, encode4js
+from .lineshapes import tiny
 from .printfuncs import params_html_table
 
 SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
@@ -772,6 +773,8 @@ class Parameter:
             self.from_internal = lambda val: self.min + (sin(val) + 1) * \
                                  (self.max - self.min) / 2.0
             _val = arcsin(2*(self._val - self.min)/(self.max - self.min) - 1)
+        if abs(_val) < tiny:
+            _val = 0.0
         return _val
 
     def scale_gradient(self, val):

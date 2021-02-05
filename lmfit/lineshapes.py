@@ -2,8 +2,8 @@
 
 import warnings
 
-from numpy import (arctan, copysign, cos, exp, finfo, float64, isnan, log, pi,
-                   real, sin, sqrt, where)
+from numpy import (arctan, copysign, cos, exp, isnan, log, pi, real, sin, sqrt,
+                   where)
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
 from scipy.special import wofz
@@ -12,7 +12,9 @@ log2 = log(2)
 s2pi = sqrt(2*pi)
 spi = sqrt(pi)
 s2 = sqrt(2.0)
-tiny = finfo(float64).eps
+# tiny had been numpy.finfo(numpy.float64).eps ~=2.2e16.
+# here, we explicitly set it to 1.e-15 == numpy.finfo(numpy.float64).resolution
+tiny = 1.0e-15
 
 functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt', 'pvoigt',
              'moffat', 'pearson7', 'breit_wigner', 'damped_oscillator',
