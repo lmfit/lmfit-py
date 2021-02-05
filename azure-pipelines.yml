@@ -41,7 +41,7 @@ stages:
             python setup.py install
           displayName: 'Install lmfit'
         - script: |
-            sudo apt install -qq -y texlive-full
+            sudo apt install -qq -y texlive-latex-extra latexmk
           displayName: 'Install TeX Live'
         - script: |
            cd doc ; make all
