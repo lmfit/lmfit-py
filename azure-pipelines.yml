@@ -123,6 +123,8 @@ stages:
         - script: |
             python -m pip install --upgrade pip setuptools wheel
             pip install -r requirements-dev.txt
+            # temporarily install asteval from master branch to avoid NumPy v1.20 DeprecationWarnings
+            pip install git+https://github.com/newville/asteval@master
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python setup.py install
@@ -183,6 +185,8 @@ stages:
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             pip3.10 install asteval uncertainties dill emcee numdifftools
+            # temporarily install asteval from master branch to avoid NumPy v1.20 DeprecationWarnings
+            pip3.10 install git+https://github.com/newville/asteval@master
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python3.10 setup.py install --user
