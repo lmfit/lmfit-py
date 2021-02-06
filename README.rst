@@ -13,6 +13,9 @@ LMfit-py
 .. image:: https://img.shields.io/pypi/dm/lmfit.svg
    :target: https://pypi.org/project/lmfit
 
+.. image:: https://img.shields.io/badge/docs-read-brightgreen
+   :target: https://lmfit.github.io/lmfit-py/
+
 .. image:: https://zenodo.org/badge/4185/lmfit/lmfit-py.svg
    :target: https://zenodo.org/badge/latestdoi/4185/lmfit/lmfit-py
 
