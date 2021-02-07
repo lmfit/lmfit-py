@@ -61,9 +61,9 @@ Supported Operators, Functions, and Constants
 =============================================
 
 The mathematical expressions used to define constrained Parameters need to
-be valid python expressions. As you'd expect, the operators '+', '-', '*',
-'/', '**', are supported. In fact, a much more complete set can be used,
-including Python's bit- and logical operators::
+be valid Python expressions. As you would expect, the operators ``+``, ``-``,
+``*``, ``/``, and ``**``, are supported. In fact, a much more complete set can
+be used, including Python's bit- and logical operators::
 
     +, -, *, /, **, &, |, ^, <<, >>, %, and, or,
     ==, >, >=, <, <=, !=, ~, not, is, is not, in, not in

@@ -149,7 +149,7 @@ New features:
 
 - the global optimizers ``shgo`` and ``dual_annealing`` (new in SciPy v1.2) are now supported (Issue #527; PRs #545 and #556)
 - ``eval`` method added to the Parameter class (PR #550 by @zobristnicholas)
-- avoid ZeroDivisionError in ``printfuncs.para ms_html_table`` (PR #552 by @aaristov and PR #559)
+- avoid ZeroDivisionError in ``printfuncs.params_html_table`` (PR #552 by @aaristov and PR #559)
 - add parallelization to ``brute`` method (PR #564, requires SciPy v1.3)
 
 Bug fixes:

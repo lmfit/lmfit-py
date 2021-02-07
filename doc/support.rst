@@ -8,8 +8,8 @@ Getting Help
 .. _github issues: https://github.com/lmfit/lmfit-py/issues
 
 If you have questions, comments, or suggestions for LMFIT, please use the
-`mailing list`_. This provides an on-line conversation that is and
-archived well and can be searched well with standard web searches. If you
+`mailing list`_. This provides an on-line conversation that is both
+archived well and can be searched easily with standard web searches. If you
 find a bug in the code or documentation, use `GitHub Issues`_ to submit a
 report. If you have an idea for how to solve the problem and are familiar
 with Python and GitHub, submitting a GitHub Pull Request would be greatly

@@ -179,7 +179,7 @@ in :ref:`label-emcee`. In fact, comparing the confidence interval results
 here with the results for the 1- and 2-:math:`\sigma` error estimated with
 ``emcee``, we can see that the agreement is pretty good and that the
 asymmetry in the parameter distributions are reflected well in the
-asymmetry of the uncertainties
+asymmetry of the uncertainties.
 
 The trace returned as the optional second argument from
 :func:`conf_interval` contains a dictionary for each variable parameter.
