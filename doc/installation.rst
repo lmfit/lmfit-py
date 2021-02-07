@@ -7,7 +7,7 @@ Downloading and Installation
 .. _scipy: https://scipy.org/scipylib/index.html
 .. _numpy: http://numpy.org/
 .. _pytest: https://pytest.org/
-.. _emcee: http://dan.iel.fm/emcee/
+.. _emcee: https://emcee.readthedocs.io/
 .. _pandas: https://pandas.pydata.org/
 .. _jupyter: https://jupyter.org/
 .. _matplotlib: https://matplotlib.org/
@@ -22,7 +22,6 @@ Downloading and Installation
 .. _sphinxcontrib-svg2pdfconverter: https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter
 .. _cairosvg: https://cairosvg.org/
 .. _Pillow: https://python-pillow.org/
-.. _release_notes: https://lmfit.github.io/lmfit-py/whatsnew.html
 
 
 Prerequisites
@@ -57,8 +56,8 @@ Downloads
 ~~~~~~~~~
 
 The latest stable version of lmfit is |release| and is available from `PyPI
-<https://pypi.python.org/pypi/lmfit/>`_. Check the `release_notes`_ for a list
-of changes compared to earlier releases.
+<https://pypi.python.org/pypi/lmfit/>`_. Check the :ref:`whatsnew_chapter` for
+a list of changes compared to earlier releases.
 
 Installation
 ~~~~~~~~~~~~

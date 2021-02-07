@@ -228,10 +228,10 @@ refer to :ref:`label-emcee` where this methodology was used on the same problem.
 
 Credible intervals (the Bayesian equivalent of the frequentist confidence
 interval) can be obtained with this method. MCMC can be used for model
-selection, to determine outliers, to marginalise over nuisance parameters, etcetera.
+selection, to determine outliers, to marginalize over nuisance parameters, etcetera.
 For example, you may have fractionally underestimated the uncertainties on a
 dataset. MCMC can be used to estimate the true level of uncertainty on each
-datapoint. A tutorial on the possibilities offered by MCMC can be found at [1]_.
+data point. A tutorial on the possibilities offered by MCMC can be found at [1]_.
 
 .. [1] https://jakevdp.github.io/blog/2014/03/11/frequentism-and-bayesianism-a-practical-intro/
 

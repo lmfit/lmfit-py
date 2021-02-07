@@ -63,7 +63,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'lmfit'
-copyright = u'{}, Matthew Newville, Till Stensitzki, and others'.format(date.today().year)
+copyright = u'{}, Matthew Newville, Till Stensitzki, Renee Otten, and others'.format(date.today().year)
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -153,7 +153,7 @@ htmlhelp_basename = 'lmfitdoc'
 latex_documents = [
   ('index', 'lmfit.tex',
    'Non-Linear Least-Squares Minimization and Curve-Fitting for Python',
-   'Matthew Newville, Till Stensitzki, and others', 'manual'),
+   'Matthew Newville, Till Stensitzki, Renee Otten, and others', 'manual'),
 ]
 
 # configuration for jupyter_sphinx

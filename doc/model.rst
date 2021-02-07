@@ -42,7 +42,7 @@ Motivation and simple example: Fit data to Gaussian profile
 ===========================================================
 
 Let's start with a simple and common example of fitting data to a Gaussian
-peak. As we will see, there is a buit-in :class:`GaussianModel` class that
+peak. As we will see, there is a built-in :class:`GaussianModel` class that
 can help do this, but here we'll build our own. We start with a simple
 definition of the model function:
 

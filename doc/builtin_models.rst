@@ -9,7 +9,7 @@ Built-in Fitting Models in the :mod:`models` module
 Lmfit provides several built-in fitting models in the :mod:`models` module.
 These pre-defined models each subclass from the :class:`~lmfit.model.Model` class of the
 previous chapter and wrap relatively well-known functional forms, such as
-Gaussians, Lorentzian, and Exponentials that are used in a wide range of
+Gaussian, Lorentzian, and Exponential that are used in a wide range of
 scientific domains. In fact, all the models are based on simple, plain
 Python functions defined in the :mod:`~lmfit.lineshapes` module. In addition to
 wrapping a function into a :class:`~lmfit.model.Model`, these models also provide a
@@ -396,7 +396,7 @@ better? To do this, we simply replace ``GaussianModel`` with
     mod = LorentzianModel()
 
 with the rest of the script as above. Perhaps predictably, the first thing
-we try gives results that are worse by comaparing the fit statistics:
+we try gives results that are worse by comparing the fit statistics:
 
 .. jupyter-execute::
     :hide-code:
@@ -543,7 +543,7 @@ different parts of the model having the same name. To overcome this, each
 :class:`~lmfit.model.Model` can have a ``prefix`` attribute (normally set to a blank
 string) that will be put at the beginning of each parameter name. To
 illustrate, we fit one of the classic datasets from the `NIST StRD`_ suite
-involving a decaying exponential and two gaussians.
+involving a decaying exponential and two Gaussians.
 
 .. jupyter-execute:: ../examples/doc_builtinmodels_nistgauss.py
     :hide-output:

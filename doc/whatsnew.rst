@@ -12,8 +12,7 @@ to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
 
-.. _whatsnew_1XX_label:
-
+.. _whatsnew_102_label:
 
 Version 1.0.2 Release Notes
 ===========================
@@ -24,7 +23,7 @@ of the following dependencies were updated: asteval>=0.9.21, numpy>=1.18, and sc
 New features:
 
 - added two-dimensional Gaussian lineshape and model (PR #642; @mpmdean)
-- all built-in models are now registered in lmfit.models.lmfit_models; new Model class attribute "valid_forms" (PR #663; @rayosborn)
+- all built-in models are now registered in ``lmfit.models.lmfit_models``; new Model class attribute ``valid_forms`` (PR #663; @rayosborn)
 - added a SineModel (PR #676; @lneuhaus)
 - add the ``run_mcmc_kwargs argument`` to ``Minimizer.emcee`` to pass to the ``emcee.EnsembleSampler.run_mcmc`` function (PR #694; @rbnvrw)
 
@@ -34,8 +33,8 @@ Bug fixes:
 - center in lognormal model can be negative (Issue #644, PR #645; @YoshieraHuang)
 - restore best-fit values after calculation of covariance matrix (Issue #655, PR #657)
 - add helper-function ``not_zero`` to prevent ZeroDivisionError in lineshapes and use in exponential lineshape (Issue #631, PR #664; @s-weigand)
-- save last_internal_values and use to restore internal values if fit is aborted (PR #667)
-- dumping a fit using the lbfgsb method now works, convert bytes to string if needed (Issue #677, PR #678; @leonfoks)
+- save ``last_internal_values`` and use to restore internal values if fit is aborted (PR #667)
+- dumping a fit using the ``lbfgsb`` method now works, convert bytes to string if needed (Issue #677, PR #678; @leonfoks)
 - fix use of callable Jacobian for scalar methods (PR #681; @mstimberg)
 - preserve float/int types when encoding for JSON (PR #696; @jedzill4)
 - better support for saving/loading of ExpressionModels and assure that ``init_params`` and ``init_fit`` are set when loading a ``ModelResult`` (PR #706)
@@ -49,7 +48,7 @@ Various:
 - allow better custom pool for emcee() (Issue #666, PR #667)
 - update NIST Strd reference functions and tests (PR #670)
 - make building of documentation cross-platform (PR #673; @s-weigand)
-- relax module name check in test_check_ast_errors for Python 3.9 (Issue #674, PR #675; @mwhudson)
+- relax module name check in ``test_check_ast_errors`` for Python 3.9 (Issue #674, PR #675; @mwhudson)
 - fix/update layout of documentation, now uses the sphinx13 theme (PR #687)
 - fixed DeprecationWarnings reported by NumPy v1.2.0 (PR #699)
 - increase value of ``tiny`` and check for it in bounded parameters to avoid "parameter not moving from initial value" (Issue #700, PR #701)
@@ -150,7 +149,7 @@ New features:
 
 - the global optimizers ``shgo`` and ``dual_annealing`` (new in SciPy v1.2) are now supported (Issue #527; PRs #545 and #556)
 - ``eval`` method added to the Parameter class (PR #550 by @zobristnicholas)
-- avoid ZeroDivisionError in ``printfuncs.params_html_table`` (PR #552 by @aaristov and PR #559)
+- avoid ZeroDivisionError in ``printfuncs.para ms_html_table`` (PR #552 by @aaristov and PR #559)
 - add parallelization to ``brute`` method (PR #564, requires SciPy v1.3)
 
 Bug fixes:
