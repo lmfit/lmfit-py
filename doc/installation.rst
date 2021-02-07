@@ -69,10 +69,6 @@ The easiest way to install lmfit is with::
 For Anaconda Python, lmfit is not an official package, but several
 Anaconda channels provide it, allowing installation with (for example)::
 
-   conda install -c GSECARS lmfit
-
-or::
-
    conda install -c conda-forge lmfit
 
 
