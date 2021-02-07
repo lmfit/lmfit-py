@@ -15,7 +15,7 @@ See :ref:`support_chapter`.
 Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?
 =================================================================
 
-See :ref:`whatsnew_090_label`
+See :ref:`whatsnew_090_label`.
 
 
 I get import errors from IPython
@@ -28,7 +28,6 @@ If you see something like::
     ImportError: No module named 'widgets'
 
 then you need to install the ``ipywidgets`` package, try: ``pip install ipywidgets``.
-
 
 
 
@@ -90,14 +89,6 @@ prescription when calculating the residual. The benefit to this method
 is that you also get access to the plot routines from the ModelResult
 class, which are also complex-aware.
 
-
-Can I constrain values to have integer values?
-==============================================
-
-Basically, no. None of the minimizers in lmfit support integer
-programming. They all (I think) assume that they can make a very small
-change to a floating point value for a parameters value and see a change in
-the value to be minimized.
 
 
 How should I cite LMFIT?
@@ -169,3 +160,159 @@ fit. However, unlike NaN, it is also usually clear how to handle Inf, as
 you probably won't ever have values greater than 1.e308 and can therefore
 (usually) safely clip the argument passed to ``exp()`` to be smaller than
 about 700.
+
+.. _faq_params_stuck:
+
+Why are Parameter Values sometime stuck at initial values?
+===========================================================
+
+In order for a Parameter to be optimized in a fit, changing its value must
+have an impact on the fit residual (`data-model` when curve fitting, for
+example).  If a fit has not changed one or more of the Parameters, it means
+that changing those Parameters did not change the fit residual.
+
+Normally (that is, unless you specifically provide a function for
+calculating the derivatives, in which case you probably would not be asking
+this question ;)), the fitting process begins by making a very small change
+to each Parameter value to determine which way and how large of a change to
+make for the parameter: This is the derivative or Jacobian (change in
+residual per change in parameter value).  By default, the change made for
+each variable Parameter is to multiply its value by (1.0+1.0e-8) or so
+(unless the value is below about 1.e-15, in which case it adds 1.0e-8).  If
+that small change does not change the residual, then the value of the
+Parameter will not be updated.
+
+Parameter values that are "way off" are a common reason for Parameters
+being stuck at initial values.  As an example, imagine fitting peak-like
+data with and `x` range of 0 to 10, peak centered at 6, and a width of 1 or
+2 or so, as in the example at
+:ref:`sphx_glr_examples_documentation_model_gaussian.py`.  A Gaussian
+function with an initial value of for the peak center at 5 and an initial
+width or 5 will almost certainly find a good fit.  An initial value of the
+peak center of -50 will end up being stuck with a "bad fit" because a small
+change in Parameters will still lead the modeled Gaussian to have no
+intensity over the actual range of the data.  You should make sure that
+initial values for Parameters are reasonable enough to actually effect the
+fit.  As it turns out in the example linked to above, changing the center
+value to any value between about 0 and 10 (that is, the data range) will
+result to a good fit.
+
+Another common cause for Parameters being stuck at initial values is when
+the initial value is at a boundary value.  For this case, too, a small
+change in the initial value for the Parameter will still leave the value at
+the boundary value and not show any real change in the residual.
+
+If you're using bounds, make sure the initial values for the Parameters are
+not at the boundary values.
+
+Finally, one reason for a Parameter to not change is that they are actually
+used as discrete values.  This is discussed below in :ref:`faq_discrete_params`.
+
+.. _faq_params_no_uncertainties:
+
+Why are uncertainties in Parameters sometimes not determined?
+=============================================================
+
+In order for Parameter uncertainties to be estimated, each variable
+Parameter must actually change the fit, and cannot be stuck at an initial
+value or at a boundary value.  See :ref:`faq_params_stuck` for why values may
+not change from their initial values.
+
+
+.. _faq_discrete_params:
+
+Can Parameters be used for Array Indices or Discrete Values?
+=============================================================
+
+
+The short answer is "No": variables in all of the fitting methods used in
+`lmfit` (and all of those available in `scipy.optimize`) are treated as
+continuous values, and represented as double precision floating point
+values.  As an important example, you cannot have a variable that is
+somehow constrained to be an integer.
+
+Still, it is a rather common question of how to fit data to a model that
+includes a breakpoint, perhaps
+
+    .. math::
+
+       f(x; x_0, a, b, c) =
+       \begin{cases}
+       c          & \quad \text{for} \> x < x_0 \\
+       a + bx^2  & \quad \text{for} \> x > x_0
+       \end{cases}
+
+
+That you implement with a model function and use to fit data like this:
+
+.. jupyter-execute::
+
+    import numpy as np
+    import lmfit
+
+    def quad_off(x, x0, a, b, c):
+        model = a + b*x**2
+        model[np.where(x<x0)] = c
+        return model
+
+    x0 = 19
+    b = 0.02
+    a = 2.0
+    xdat = np.linspace(0, 100, 101)
+    ydat = a + b*xdat**2
+    ydat[np.where(xdat < x0)] = a + b * x0**2
+    ydat +=  np.random.normal(scale=0.1, size=len(xdat))
+
+    mod = lmfit.Model(quad_off)
+    pars = mod.make_params(x0=22, a=1, b=1, c=1)
+
+    result = mod.fit(ydat, pars, x=xdat)
+    print(result.fit_report())
+
+This will not result in a very good fit, as the value for `x0` cannot be
+found by making a small change in its value.  Specifically,
+`model[np.where(x<x0)]` will give the same result for `x0=22` and
+`x0=22.001`, and so that value is not changed during the fit.
+
+There are a couple ways around this problems. First, you may be able to
+make the fit depend on `x0` in a way that is not just discrete.  That
+depends on your model function. A second option is treat the break not as a
+hard break but as a more gentle transition with a sigmoidal function, such
+as an error function.  Like the break-point, these will go from 0 to 1, but
+more gently and with some finite value leaking into neighboring points.
+The amount of leakage or width of the step can also be adjusted.
+
+A simple modification of the above would to use an error function would
+look like this and give better fit results:
+
+.. jupyter-execute::
+
+    import numpy as np
+    import lmfit
+    from scipy.special import erf
+
+    def quad_off(x, x0, a, b, c):
+        m1 = a + b*x**2
+        m2 = c * np.ones(len(x))
+        # step up from 0 to 1 at x0:  (erf(x-x0)+1)/2
+        # step down from 1 to 0 at x0: (1-erf(x-x0))/2
+        model = m1 * (erf(x-x0)+1)/2 + m2*(1-erf(x-x0))/2
+        return model
+
+    x0 = 19
+    b = 0.02
+    a = 2.0
+    xdat = np.linspace(0, 100, 101)
+    ydat = a + b*xdat**2
+    ydat[np.where(xdat < x0)] = a + b * x0**2
+    ydat +=  np.random.normal(scale=0.1, size=len(xdat))
+
+    mod = lmfit.Model(quad_off)
+    pars = mod.make_params(x0=22, a=1, b=1, c=1)
+
+    result = mod.fit(ydat, pars, x=xdat)
+    print(result.fit_report())
+
+The natural width of the error function is about 2 `x` units, but you can
+adjust this, shortening it with `erf((x-x0)*2)` to give a sharper
+transition for example.
