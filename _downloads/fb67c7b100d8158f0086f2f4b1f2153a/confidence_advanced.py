@@ -4,10 +4,6 @@ doc_confidence_advanced.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_confidence_advanced.py>
 import matplotlib.pyplot as plt
 import numpy as np

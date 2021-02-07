@@ -4,10 +4,6 @@ doc_fitting_emcee.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_fitting_emcee.py>
 import numpy as np
 
@@ -18,7 +14,6 @@ try:
     HASPYLAB = True
 except ImportError:
     HASPYLAB = False
-HASPYLAB = False
 
 try:
     import corner

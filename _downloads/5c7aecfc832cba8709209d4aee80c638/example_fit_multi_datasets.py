@@ -47,7 +47,7 @@ def objective(params, x, data):
 
 x = np.linspace(-1, 2, 151)
 data = []
-for i in np.arange(5):
+for _ in np.arange(5):
     params = Parameters()
     amp = 0.60 + 9.50*np.random.rand()
     cen = -0.20 + 1.20*np.random.rand()

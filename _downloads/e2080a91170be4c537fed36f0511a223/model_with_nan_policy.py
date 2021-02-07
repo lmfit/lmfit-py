@@ -4,10 +4,6 @@ doc_model_with_nan_policy.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_model_with_nan_policy.py>
 import matplotlib.pyplot as plt
 import numpy as np

@@ -24,6 +24,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_use_pandas_thumb.png
+     :alt: Fit with Data in a pandas DataFrame
 
      :ref:`sphx_glr_examples_example_use_pandas.py`
 
@@ -44,6 +45,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_expression_model_thumb.png
+     :alt: Using an ExpressionModel
 
      :ref:`sphx_glr_examples_example_expression_model.py`
 
@@ -64,6 +66,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_inequality_thumb.png
+     :alt: Fit Using Inequality Constraint
 
      :ref:`sphx_glr_examples_example_fit_with_inequality.py`
 
@@ -84,6 +87,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_diffev_thumb.png
+     :alt: Fit Using differential_evolution Algorithm
 
      :ref:`sphx_glr_examples_example_diffev.py`
 
@@ -104,6 +108,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_bounds_thumb.png
+     :alt: Fit Using Bounds
 
      :ref:`sphx_glr_examples_example_fit_with_bounds.py`
 
@@ -124,6 +129,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_reduce_fcn_thumb.png
+     :alt: Fit Specifying Different Reduce Function
 
      :ref:`sphx_glr_examples_example_reduce_fcn.py`
 
@@ -139,11 +145,33 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="SymPy is a Python library for symbolic mathematics. It can be very useful to build a model with...">
+
+.. only:: html
+
+ .. figure:: /examples/images/thumb/sphx_glr_example_sympy_thumb.png
+     :alt: Building a lmfit model with SymPy
+
+     :ref:`sphx_glr_examples_example_sympy.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_sympy
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Fit with Algebraic Constraint">
 
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_algebraic_constraint_thumb.png
+     :alt: Fit with Algebraic Constraint
 
      :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py`
 
@@ -164,6 +192,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_fit_multi_datasets_thumb.png
+     :alt: Fit Multiple Data Sets
 
      :ref:`sphx_glr_examples_example_fit_multi_datasets.py`
 
@@ -184,6 +213,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_derivfunc_thumb.png
+     :alt: Fit Specifying a Function to Compute the Jacobian
 
      :ref:`sphx_glr_examples_example_fit_with_derivfunc.py`
 
@@ -204,6 +234,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_Model_interface_thumb.png
+     :alt: Fit using the Model interface
 
      :ref:`sphx_glr_examples_example_Model_interface.py`
 
@@ -224,6 +255,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_detect_outliers_thumb.png
+     :alt: Outlier detection via leave-one-out
 
      :ref:`sphx_glr_examples_example_detect_outliers.py`
 
@@ -244,6 +276,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_emcee_Model_interface_thumb.png
+     :alt: Emcee and the Model Interface
 
      :ref:`sphx_glr_examples_example_emcee_Model_interface.py`
 
@@ -264,6 +297,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_confidence_interval_thumb.png
+     :alt: Calculate Confidence Intervals
 
      :ref:`sphx_glr_examples_example_confidence_interval.py`
 
@@ -284,6 +318,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_complex_resonator_model_thumb.png
+     :alt: Complex Resonator Model
 
      :ref:`sphx_glr_examples_example_complex_resonator_model.py`
 
@@ -304,6 +339,7 @@ below currently do *not* follow these guidelines yet.
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_lmfit_emcee_model_selection_thumb.png
+     :alt: Model Selection using lmfit and emcee
 
      :ref:`sphx_glr_examples_lmfit_emcee_model_selection.py`
 
@@ -319,11 +355,33 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example illustrates how to handle two-dimensional data with lmfit.">
+
+.. only:: html
+
+ .. figure:: /examples/images/thumb/sphx_glr_example_two_dimensional_peak_thumb.png
+     :alt: Fit Two Dimensional Peaks
+
+     :ref:`sphx_glr_examples_example_two_dimensional_peak.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_two_dimensional_peak
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Global minimization using the brute method (a.k.a. grid search)">
 
 .. only:: html
 
  .. figure:: /examples/images/thumb/sphx_glr_example_brute_thumb.png
+     :alt: Global minimization using the ``brute`` method (a.k.a. grid search)
 
      :ref:`sphx_glr_examples_example_brute.py`
 
@@ -357,6 +415,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_savemodel_thumb.png
+     :alt: doc_model_savemodel.py
 
      :ref:`sphx_glr_examples_documentation_model_savemodel.py`
 
@@ -377,6 +436,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult_thumb.png
+     :alt: doc_model_loadmodelresult.py
 
      :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py`
 
@@ -397,6 +457,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult2_thumb.png
+     :alt: doc_model_loadmodelresult2.py
 
      :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py`
 
@@ -417,6 +478,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult_thumb.png
+     :alt: doc_model_savemodelresult.py
 
      :ref:`sphx_glr_examples_documentation_model_savemodelresult.py`
 
@@ -437,6 +499,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_confidence_basic_thumb.png
+     :alt: doc_confidence_basic.py
 
      :ref:`sphx_glr_examples_documentation_confidence_basic.py`
 
@@ -457,6 +520,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_loadmodel_thumb.png
+     :alt: doc_model_loadmodel.py
 
      :ref:`sphx_glr_examples_documentation_model_loadmodel.py`
 
@@ -477,6 +541,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_gaussian_thumb.png
+     :alt: doc_model_gaussian.py
 
      :ref:`sphx_glr_examples_documentation_model_gaussian.py`
 
@@ -497,6 +562,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_with_nan_policy_thumb.png
+     :alt: doc_model_with_nan_policy.py
 
      :ref:`sphx_glr_examples_documentation_model_with_nan_policy.py`
 
@@ -517,6 +583,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_stepmodel_thumb.png
+     :alt: doc_builtinmodels_stepmodel.py
 
      :ref:`sphx_glr_examples_documentation_builtinmodels_stepmodel.py`
 
@@ -537,6 +604,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_two_components_thumb.png
+     :alt: doc_model_two_components.py
 
      :ref:`sphx_glr_examples_documentation_model_two_components.py`
 
@@ -557,6 +625,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_uncertainty_thumb.png
+     :alt: doc_model_uncertainty.py
 
      :ref:`sphx_glr_examples_documentation_model_uncertainty.py`
 
@@ -577,6 +646,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult2_thumb.png
+     :alt: doc_model_savemodelresult2.py
 
      :ref:`sphx_glr_examples_documentation_model_savemodelresult2.py`
 
@@ -597,6 +667,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_with_iter_callback_thumb.png
+     :alt: doc_model_with_iter_callback.py
 
      :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py`
 
@@ -617,6 +688,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss2_thumb.png
+     :alt: doc_builtinmodels_nistgauss2.py
 
      :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py`
 
@@ -637,6 +709,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_fitting_withreport_thumb.png
+     :alt: doc_fitting_withreport.py
 
      :ref:`sphx_glr_examples_documentation_fitting_withreport.py`
 
@@ -657,6 +730,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_parameters_valuesdict_thumb.png
+     :alt: doc_parameters_valuesdict.py
 
      :ref:`sphx_glr_examples_documentation_parameters_valuesdict.py`
 
@@ -677,6 +751,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_parameters_basic_thumb.png
+     :alt: doc_parameters_basic.py
 
      :ref:`sphx_glr_examples_documentation_parameters_basic.py`
 
@@ -697,6 +772,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_peakmodels_thumb.png
+     :alt: doc_builtinmodels_peakmodels.py
 
      :ref:`sphx_glr_examples_documentation_builtinmodels_peakmodels.py`
 
@@ -717,6 +793,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss_thumb.png
+     :alt: doc_builtinmodels_nistgauss.py
 
      :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss.py`
 
@@ -737,6 +814,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_model_composite_thumb.png
+     :alt: doc_model_composite.py
 
      :ref:`sphx_glr_examples_documentation_model_composite.py`
 
@@ -757,6 +835,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_confidence_advanced_thumb.png
+     :alt: doc_confidence_advanced.py
 
      :ref:`sphx_glr_examples_documentation_confidence_advanced.py`
 
@@ -777,6 +856,7 @@ Below are all the examples that are part of the lmfit documentation.
 .. only:: html
 
  .. figure:: /examples/documentation/images/thumb/sphx_glr_fitting_emcee_thumb.png
+     :alt: doc_fitting_emcee.py
 
      :ref:`sphx_glr_examples_documentation_fitting_emcee.py`
 
@@ -803,13 +883,13 @@ Below are all the examples that are part of the lmfit documentation.
 
   .. container:: sphx-glr-download sphx-glr-download-python
 
-    :download:`Download all examples in Python source code: examples_python.zip <//Users/Newville/Codes/lmfit-py/doc/examples/examples_python.zip>`
+    :download:`Download all examples in Python source code: examples_python.zip </examples/examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-    :download:`Download all examples in Jupyter notebooks: examples_jupyter.zip <//Users/Newville/Codes/lmfit-py/doc/examples/examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: examples_jupyter.zip </examples/examples_jupyter.zip>`
 
 
 .. only:: html

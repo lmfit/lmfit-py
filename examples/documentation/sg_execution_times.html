@@ -4,62 +4,78 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Computation times &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" href="../../_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx13.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-  <script type="text/x-mathjax-config">
-     MathJax.Hub.Config({
-        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
-        "HTML-CSS": {scale: 90}
-  });</script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+    </style>
+    <script>
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
 
   </head><body>
-<div>
-<table border=0>
-  <tr><td></td><td width=80% padding=5 align=left>
-          <a href="../../contents.html/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td>
-     <td width=6% align=left>
-         <a href="../../contents.html" style="color: #882222">
-         <font size+=1>Contents</font></a> </td>
-     <td width=6% align=left>
-          <a href="../index.html" style="color: #882222">
-          <font size+=1>Examples</font></a></td>
-     <td width=6% align=left>
-          <a href="../../installation.html" style="color: #882222">
-          <font size+=1>Download</font></a></td>
-     <td></td>
-  </tr>
-  <tr><td></td><td width=80% padding=5 align=left>
-        <a href="../../contents.html/../index.html" style="color: #157"> <font size=+2>
-	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td>
-     <td width=6% align=left>
-         <a href="../../faq.html" style="color: #882222">
-         <font size+=1>FAQ</font></a> </td>
-     <td width=6% align=left>
-         <a href="../../support.html" style="color: #882222">
-         <font size+=1>Support</font></a> </td>
-     <td width=6% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
-     <td></td>
-  </tr>
-</table>
+<div class="pageheader">
+  <ul>
+    <li><a href="../../contents.html">Contents</a></li>
+    <li><a href="../index.html">Examples</a></li>
+    <li><a href="../../installation.html">Installation</a></li>
+    <li><a href="../../faq.html">FAQ</a></li>
+    <li><a href="../../support.html">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
+  </ul>
+  <div>
+    <a href="../../index.html">
+      <img src="../../_static/lmfitheader.png" alt="LMFIT" />
+    </a>
+  </div>
 </div>
 
     <div class="related" role="navigation" aria-label="related navigation">
@@ -68,27 +84,19 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-   <li>[<a href="../../intro.html">intro</a>|</li>
-   <li><a href="../../parameters.html">parameters</a>|</li>
-   <li><a href="../../fitting.html"> minimize</a>|</li>
-   <li><a href="../../model.html"> model</a>|</li>
-   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
-   <li><a href="../../confidence.html">confidence intervals</a>|</li>
-   <li><a href="../../bounds.html">bounds</a>|</li>
-   <li><a href="../../constraints.html">constraints</a>|</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
  
       </ul>
     </div>
-
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/documentation/sg_execution_times.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -109,7 +117,7 @@
             
   <div class="section" id="computation-times">
 <span id="sphx-glr-examples-documentation-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">¶</a></h1>
-<p><strong>00:26.005</strong> total execution time for <strong>examples_documentation</strong> files:</p>
+<p><strong>00:12.869</strong> total execution time for <strong>examples_documentation</strong> files:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 84%" />
@@ -118,91 +126,91 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="fitting_emcee.html#sphx-glr-examples-documentation-fitting-emcee-py"><span class="std std-ref">doc_fitting_emcee.py</span></a> (<code class="docutils literal notranslate"><span class="pre">fitting_emcee.py</span></code>)</p></td>
-<td><p>00:14.876</p></td>
+<td><p>00:06.669</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="confidence_advanced.html#sphx-glr-examples-documentation-confidence-advanced-py"><span class="std std-ref">doc_confidence_advanced.py</span></a> (<code class="docutils literal notranslate"><span class="pre">confidence_advanced.py</span></code>)</p></td>
-<td><p>00:08.825</p></td>
+<td><p>00:04.522</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="builtinmodels_peakmodels.html#sphx-glr-examples-documentation-builtinmodels-peakmodels-py"><span class="std std-ref">doc_builtinmodels_peakmodels.py</span></a> (<code class="docutils literal notranslate"><span class="pre">builtinmodels_peakmodels.py</span></code>)</p></td>
-<td><p>00:00.369</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="confidence_basic.html#sphx-glr-examples-documentation-confidence-basic-py"><span class="std std-ref">doc_confidence_basic.py</span></a> (<code class="docutils literal notranslate"><span class="pre">confidence_basic.py</span></code>)</p></td>
-<td><p>00:00.272</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_composite.html#sphx-glr-examples-documentation-model-composite-py"><span class="std std-ref">doc_model_composite.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_composite.py</span></code>)</p></td>
-<td><p>00:00.268</p></td>
+<td><p>00:00.285</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="builtinmodels_nistgauss.html#sphx-glr-examples-documentation-builtinmodels-nistgauss-py"><span class="std std-ref">doc_builtinmodels_nistgauss.py</span></a> (<code class="docutils literal notranslate"><span class="pre">builtinmodels_nistgauss.py</span></code>)</p></td>
-<td><p>00:00.240</p></td>
+<td><p>00:00.179</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="confidence_basic.html#sphx-glr-examples-documentation-confidence-basic-py"><span class="std std-ref">doc_confidence_basic.py</span></a> (<code class="docutils literal notranslate"><span class="pre">confidence_basic.py</span></code>)</p></td>
+<td><p>00:00.162</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_composite.html#sphx-glr-examples-documentation-model-composite-py"><span class="std std-ref">doc_model_composite.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_composite.py</span></code>)</p></td>
+<td><p>00:00.126</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="builtinmodels_nistgauss2.html#sphx-glr-examples-documentation-builtinmodels-nistgauss2-py"><span class="std std-ref">doc_builtinmodels_nistgauss2.py</span></a> (<code class="docutils literal notranslate"><span class="pre">builtinmodels_nistgauss2.py</span></code>)</p></td>
-<td><p>00:00.105</p></td>
+<td><p>00:00.102</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="model_with_iter_callback.html#sphx-glr-examples-documentation-model-with-iter-callback-py"><span class="std std-ref">doc_model_with_iter_callback.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_with_iter_callback.py</span></code>)</p></td>
-<td><p>00:00.104</p></td>
+<td><p>00:00.101</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="model_uncertainty.html#sphx-glr-examples-documentation-model-uncertainty-py"><span class="std std-ref">doc_model_uncertainty.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_uncertainty.py</span></code>)</p></td>
-<td><p>00:00.094</p></td>
+<td><p>00:00.073</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="builtinmodels_stepmodel.html#sphx-glr-examples-documentation-builtinmodels-stepmodel-py"><span class="std std-ref">doc_builtinmodels_stepmodel.py</span></a> (<code class="docutils literal notranslate"><span class="pre">builtinmodels_stepmodel.py</span></code>)</p></td>
-<td><p>00:00.090</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="parameters_valuesdict.html#sphx-glr-examples-documentation-parameters-valuesdict-py"><span class="std std-ref">doc_parameters_valuesdict.py</span></a> (<code class="docutils literal notranslate"><span class="pre">parameters_valuesdict.py</span></code>)</p></td>
+<td><p>00:00.072</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_with_nan_policy.html#sphx-glr-examples-documentation-model-with-nan-policy-py"><span class="std std-ref">doc_model_with_nan_policy.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_with_nan_policy.py</span></code>)</p></td>
-<td><p>00:00.088</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="builtinmodels_stepmodel.html#sphx-glr-examples-documentation-builtinmodels-stepmodel-py"><span class="std std-ref">doc_builtinmodels_stepmodel.py</span></a> (<code class="docutils literal notranslate"><span class="pre">builtinmodels_stepmodel.py</span></code>)</p></td>
+<td><p>00:00.070</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="model_two_components.html#sphx-glr-examples-documentation-model-two-components-py"><span class="std std-ref">doc_model_two_components.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_two_components.py</span></code>)</p></td>
-<td><p>00:00.087</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="parameters_basic.html#sphx-glr-examples-documentation-parameters-basic-py"><span class="std std-ref">doc_parameters_basic.py</span></a> (<code class="docutils literal notranslate"><span class="pre">parameters_basic.py</span></code>)</p></td>
-<td><p>00:00.084</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_gaussian.html#sphx-glr-examples-documentation-model-gaussian-py"><span class="std std-ref">doc_model_gaussian.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_gaussian.py</span></code>)</p></td>
-<td><p>00:00.084</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="model_loadmodelresult2.html#sphx-glr-examples-documentation-model-loadmodelresult2-py"><span class="std std-ref">doc_model_loadmodelresult2.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_loadmodelresult2.py</span></code>)</p></td>
-<td><p>00:00.081</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_loadmodel.html#sphx-glr-examples-documentation-model-loadmodel-py"><span class="std std-ref">doc_model_loadmodel.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_loadmodel.py</span></code>)</p></td>
-<td><p>00:00.080</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="parameters_valuesdict.html#sphx-glr-examples-documentation-parameters-valuesdict-py"><span class="std std-ref">doc_parameters_valuesdict.py</span></a> (<code class="docutils literal notranslate"><span class="pre">parameters_valuesdict.py</span></code>)</p></td>
-<td><p>00:00.080</p></td>
-<td><p>0.0 MB</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="model_loadmodelresult.html#sphx-glr-examples-documentation-model-loadmodelresult-py"><span class="std std-ref">doc_model_loadmodelresult.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_loadmodelresult.py</span></code>)</p></td>
 <td><p>00:00.068</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_with_nan_policy.html#sphx-glr-examples-documentation-model-with-nan-policy-py"><span class="std std-ref">doc_model_with_nan_policy.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_with_nan_policy.py</span></code>)</p></td>
+<td><p>00:00.066</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_gaussian.html#sphx-glr-examples-documentation-model-gaussian-py"><span class="std std-ref">doc_model_gaussian.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_gaussian.py</span></code>)</p></td>
+<td><p>00:00.065</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="model_loadmodelresult.html#sphx-glr-examples-documentation-model-loadmodelresult-py"><span class="std std-ref">doc_model_loadmodelresult.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_loadmodelresult.py</span></code>)</p></td>
+<td><p>00:00.063</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_loadmodelresult2.html#sphx-glr-examples-documentation-model-loadmodelresult2-py"><span class="std std-ref">doc_model_loadmodelresult2.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_loadmodelresult2.py</span></code>)</p></td>
+<td><p>00:00.062</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="parameters_basic.html#sphx-glr-examples-documentation-parameters-basic-py"><span class="std std-ref">doc_parameters_basic.py</span></a> (<code class="docutils literal notranslate"><span class="pre">parameters_basic.py</span></code>)</p></td>
+<td><p>00:00.061</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="model_loadmodel.html#sphx-glr-examples-documentation-model-loadmodel-py"><span class="std std-ref">doc_model_loadmodel.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_loadmodel.py</span></code>)</p></td>
+<td><p>00:00.059</p></td>
+<td><p>0.0 MB</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="model_savemodelresult2.html#sphx-glr-examples-documentation-model-savemodelresult2-py"><span class="std std-ref">doc_model_savemodelresult2.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_savemodelresult2.py</span></code>)</p></td>
-<td><p>00:00.050</p></td>
+<td><p>00:00.035</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="model_savemodelresult.html#sphx-glr-examples-documentation-model-savemodelresult-py"><span class="std std-ref">doc_model_savemodelresult.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_savemodelresult.py</span></code>)</p></td>
-<td><p>00:00.031</p></td>
+<td><p>00:00.016</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="fitting_withreport.html#sphx-glr-examples-documentation-fitting-withreport-py"><span class="std std-ref">doc_fitting_withreport.py</span></a> (<code class="docutils literal notranslate"><span class="pre">fitting_withreport.py</span></code>)</p></td>
-<td><p>00:00.022</p></td>
+<td><p>00:00.011</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="model_savemodel.html#sphx-glr-examples-documentation-model-savemodel-py"><span class="std std-ref">doc_model_savemodel.py</span></a> (<code class="docutils literal notranslate"><span class="pre">model_savemodel.py</span></code>)</p></td>
-<td><p>00:00.006</p></td>
+<td><p>00:00.002</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 </tbody>
@@ -210,6 +218,7 @@
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -221,20 +230,20 @@
         <li class="right" style="margin-right: 10px">
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
-   <li>[<a href="../../intro.html">intro</a>|</li>
-   <li><a href="../../parameters.html">parameters</a>|</li>
-   <li><a href="../../fitting.html"> minimize</a>|</li>
-   <li><a href="../../model.html"> model</a>|</li>
-   <li><a href="../../builtin_models.html"> built-in models</a>|</li>
-   <li><a href="../../confidence.html">confidence intervals</a>|</li>
-   <li><a href="../../bounds.html">bounds</a>|</li>
-   <li><a href="../../constraints.html">constraints</a>|</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

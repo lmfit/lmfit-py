@@ -4,10 +4,6 @@ doc_fitting_withreport.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_fitting_withreport.py>
 from numpy import exp, linspace, pi, random, sign, sin
 

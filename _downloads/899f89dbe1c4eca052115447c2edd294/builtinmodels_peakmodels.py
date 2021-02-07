@@ -4,10 +4,6 @@ doc_builtinmodels_peakmodels.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_builtinmodels_peakmodels.py>
 import matplotlib.pyplot as plt
 from numpy import loadtxt

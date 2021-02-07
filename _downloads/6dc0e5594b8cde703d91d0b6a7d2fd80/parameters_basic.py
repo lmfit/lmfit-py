@@ -4,10 +4,6 @@ doc_parameters_basic.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_parameters_basic.py>
 import numpy as np
 

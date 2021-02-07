@@ -4,10 +4,6 @@ doc_builtinmodels_stepmodel.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_builtinmodels_stepmodel.py>
 import matplotlib.pyplot as plt
 import numpy as np

@@ -4,10 +4,6 @@ doc_model_savemodelresult2.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_model_savemodelresult2.py>
 import numpy as np
 

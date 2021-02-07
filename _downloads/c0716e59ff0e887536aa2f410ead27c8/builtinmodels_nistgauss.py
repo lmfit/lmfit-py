@@ -4,10 +4,6 @@ doc_builtinmodels_nistgauss.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_builtinmodels_nistgauss.py>
 import matplotlib.pyplot as plt
 import numpy as np

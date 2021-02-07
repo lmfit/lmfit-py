@@ -4,62 +4,78 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Contents &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" href="_static/lmfitdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx13.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-  <script type="text/x-mathjax-config">
-     MathJax.Hub.Config({
-        "TeX": {Macros: {AA : "{\\unicode{x212B}}"}},
-        "HTML-CSS": {scale: 90}
-  });</script>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+    </style>
+    <script>
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
 
   </head><body>
-<div>
-<table border=0>
-  <tr><td></td><td width=80% padding=5 align=left>
-          <a href="#/../index.html" style="color: #157"> <font size=+3>LMFIT</font></a>
-     </td>
-     <td width=6% align=left>
-         <a href="#" style="color: #882222">
-         <font size+=1>Contents</font></a> </td>
-     <td width=6% align=left>
-          <a href="examples/index.html" style="color: #882222">
-          <font size+=1>Examples</font></a></td>
-     <td width=6% align=left>
-          <a href="installation.html" style="color: #882222">
-          <font size+=1>Download</font></a></td>
-     <td></td>
-  </tr>
-  <tr><td></td><td width=80% padding=5 align=left>
-        <a href="#/../index.html" style="color: #157"> <font size=+2>
-	Non-Linear Least-Squares Minimization and Curve-Fitting for Python</font></a>
-     </td>
-     <td width=6% align=left>
-         <a href="faq.html" style="color: #882222">
-         <font size+=1>FAQ</font></a> </td>
-     <td width=6% align=left>
-         <a href="support.html" style="color: #882222">
-         <font size+=1>Support</font></a> </td>
-     <td width=6% align=left>
-        <a href="https://github.com/lmfit/lmfit-py/" style="color: #882222">
-         <font size+=1>Develop</font></a></td>
-     <td></td>
-  </tr>
-</table>
+<div class="pageheader">
+  <ul>
+    <li><a href="#">Contents</a></li>
+    <li><a href="examples/index.html">Examples</a></li>
+    <li><a href="installation.html">Installation</a></li>
+    <li><a href="faq.html">FAQ</a></li>
+    <li><a href="support.html">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
+  </ul>
+  <div>
+    <a href="index.html">
+      <img src="_static/lmfitheader.png" alt="LMFIT" />
+    </a>
+  </div>
 </div>
 
     <div class="related" role="navigation" aria-label="related navigation">
@@ -68,27 +84,19 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
-   <li>[<a href="intro.html">intro</a>|</li>
-   <li><a href="parameters.html">parameters</a>|</li>
-   <li><a href="fitting.html"> minimize</a>|</li>
-   <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> built-in models</a>|</li>
-   <li><a href="confidence.html">confidence intervals</a>|</li>
-   <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>|</li>
+    <li>[ <a href="intro.html">intro</a> |</li>
+    <li><a href="parameters.html">parameters</a> |</li>
+    <li><a href="fitting.html">minimize</a> |</li>
+    <li><a href="model.html">model</a> |</li>
+    <li><a href="builtin_models.html">built-in models</a> |</li>
+    <li><a href="confidence.html">confidence intervals</a> |</li>
+    <li><a href="bounds.html">bounds</a> |</li>
+    <li><a href="constraints.html">constraints</a> ]</li>
  
       </ul>
     </div>
-
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/contents.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -123,6 +131,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="whatsnew.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-1-0-2-release-notes">Version 1.0.2 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-1-0-1-release-notes">Version 1.0.1 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-1-0-0-release-notes">Version 1.0.0 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="whatsnew.html#version-0-9-15-release-notes">Version 0.9.15 Release Notes</a></li>
@@ -151,16 +160,18 @@
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-multi-dimensional-data">How can I fit multi-dimensional data?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-multiple-data-sets">How can I fit multiple data sets?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-i-fit-complex-data">How can I fit complex data?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#can-i-constrain-values-to-have-integer-values">Can I constrain values to have integer values?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="faq.html#how-should-i-cite-lmfit">How should I cite LMFIT?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="faq.html#i-get-errors-from-nan-in-my-fit-what-can-i-do">I get errors from NaN in my fit.  What can I do?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#i-get-errors-from-nan-in-my-fit-what-can-i-do">I get errors from NaN in my fit. What can I do?</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="faq.html#nan-policy"><code class="docutils literal notranslate"><span class="pre">nan_policy</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="faq.html#common-sources-of-nan">Common sources of NaN</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-are-parameter-values-sometime-stuck-at-initial-values">Why are Parameter Values sometime stuck at initial values?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-are-uncertainties-in-parameters-sometimes-not-determined">Why are uncertainties in Parameters sometimes not determined?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#can-parameters-be-used-for-array-indices-or-discrete-values">Can Parameters be used for Array Indices or Discrete Values?</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="parameters.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code>  and <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a><ul>
+<li class="toctree-l1"><a class="reference internal" href="parameters.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameter-class">The <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameters-class">The <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parameters.html#simple-example">Simple Example</a></li>
@@ -218,8 +229,8 @@
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#studentstmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StudentsTModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#breitwignermodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">BreitWignerModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#lognormalmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">LognormalModel</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#dampedocsillatormodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedOcsillatorModel</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#dampedharmonicocsillatormodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedHarmonicOcsillatorModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#dampedoscillatormodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedOscillatorModel</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#dampedharmonicoscillatormodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DampedHarmonicOscillatorModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#exponentialgaussianmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExponentialGaussianModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#skewedgaussianmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedGaussianModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#skewedvoigtmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SkewedVoigtModel</span></code></a></li>
@@ -234,6 +245,10 @@
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#polynomialmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolynomialModel</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#periodic-models">Periodic Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#sinemodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SineModel</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#step-like-models">Step-like models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#stepmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">StepModel</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#rectanglemodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectangleModel</span></code></a></li>
@@ -244,11 +259,15 @@
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#powerlawmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">PowerLawModel</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#two-dimensional-peak-like-models">Two dimensional Peak-like models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="builtin_models.html#gaussian2dmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Gaussian2dModel</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#user-defined-models">User-defined Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="builtin_models.html#expressionmodel"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExpressionModel</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-1-fit-peak-data-to-gaussian-lorentzian-and-voigt-profiles">Example 1: Fit Peak data to Gaussian, Lorentzian, and  Voigt profiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-1-fit-peak-data-to-gaussian-lorentzian-and-voigt-profiles">Example 1: Fit Peak data to Gaussian, Lorentzian, and Voigt profiles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-2-fit-data-to-a-composite-model-with-pre-defined-models">Example 2: Fit data to a Composite Model with pre-defined models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="builtin_models.html#example-3-fitting-multiple-peaks-and-using-prefixes">Example 3: Fitting Multiple Peaks – and using Prefixes</a></li>
 </ul>
@@ -280,6 +299,7 @@
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -291,20 +311,20 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
-   <li>[<a href="intro.html">intro</a>|</li>
-   <li><a href="parameters.html">parameters</a>|</li>
-   <li><a href="fitting.html"> minimize</a>|</li>
-   <li><a href="model.html"> model</a>|</li>
-   <li><a href="builtin_models.html"> built-in models</a>|</li>
-   <li><a href="confidence.html">confidence intervals</a>|</li>
-   <li><a href="bounds.html">bounds</a>|</li>
-   <li><a href="constraints.html">constraints</a>|</li>
+    <li>[ <a href="intro.html">intro</a> |</li>
+    <li><a href="parameters.html">parameters</a> |</li>
+    <li><a href="fitting.html">minimize</a> |</li>
+    <li><a href="model.html">model</a> |</li>
+    <li><a href="builtin_models.html">built-in models</a> |</li>
+    <li><a href="confidence.html">confidence intervals</a> |</li>
+    <li><a href="bounds.html">bounds</a> |</li>
+    <li><a href="constraints.html">constraints</a> ]</li>
  
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Matthew Newville, Till Stensitzki, and others.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

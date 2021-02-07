@@ -4,10 +4,6 @@ doc_confidence_basic.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_confidence_basic.py>
 import numpy as np
 

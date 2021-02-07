@@ -4,10 +4,6 @@ doc_model_two_components.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_model_two_components.py>
 import matplotlib.pyplot as plt
 from numpy import exp, loadtxt, pi, sqrt

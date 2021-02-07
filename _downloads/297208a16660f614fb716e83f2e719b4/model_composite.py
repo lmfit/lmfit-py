@@ -4,10 +4,6 @@ doc_model_composite.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_model_composite.py>
 import matplotlib.pyplot as plt
 import numpy as np

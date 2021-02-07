@@ -14,8 +14,8 @@ Global minimization using the ``brute`` method (a.k.a. grid search)
 # (see below).
 import copy
 
-import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
+import matplotlib.pyplot as plt
 import numpy as np
 
 from lmfit import Minimizer, Parameters, fit_report
@@ -359,7 +359,7 @@ def plot_results_brute(result, best_vals=True, varlabels=None,
                 ax.set_ylabel(varlabels[i])
                 if i != npars-1:
                     ax.set_xticks([])
-                elif i == npars-1:
+                else:
                     ax.set_xlabel(r'$\chi^{2}$')
                 if best_vals:
                     ax.axhline(best_vals[par1].value, ls='dashed', color='r')
@@ -384,7 +384,7 @@ def plot_results_brute(result, best_vals=True, varlabels=None,
                     ax.plot(best_vals[par1].value, best_vals[par2].value, 'rs', ms=3)
                 if j != npars-1:
                     ax.set_xticks([])
-                elif j == npars-1:
+                else:
                     ax.set_xlabel(varlabels[i])
                 if j - i >= 2:
                     axes[i, j].axis('off')

@@ -4,10 +4,6 @@ doc_model_with_iter_callback.py
 
 
 """
-##
-import warnings
-warnings.filterwarnings("ignore")
-##
 # <examples/doc_with_itercb.py>
 import matplotlib.pyplot as plt
 from numpy import linspace, random
