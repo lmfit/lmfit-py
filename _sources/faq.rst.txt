@@ -184,7 +184,7 @@ Parameter will not be updated.
 
 Parameter values that are "way off" are a common reason for Parameters
 being stuck at initial values.  As an example, imagine fitting peak-like
-data with and `x` range of 0 to 10, peak centered at 6, and a width of 1 or
+data with and ``x`` range of 0 to 10, peak centered at 6, and a width of 1 or
 2 or so, as in the example at
 :ref:`sphx_glr_examples_documentation_model_gaussian.py`.  A Gaussian
 function with an initial value of for the peak center at 5 and an initial
@@ -226,7 +226,7 @@ Can Parameters be used for Array Indices or Discrete Values?
 
 
 The short answer is "No": variables in all of the fitting methods used in
-`lmfit` (and all of those available in `scipy.optimize`) are treated as
+``lmfit`` (and all of those available in ``scipy.optimize``) are treated as
 continuous values, and represented as double precision floating point
 values.  As an important example, you cannot have a variable that is
 somehow constrained to be an integer.
@@ -269,13 +269,13 @@ That you implement with a model function and use to fit data like this:
     result = mod.fit(ydat, pars, x=xdat)
     print(result.fit_report())
 
-This will not result in a very good fit, as the value for `x0` cannot be
+This will not result in a very good fit, as the value for ``x0`` cannot be
 found by making a small change in its value.  Specifically,
-`model[np.where(x<x0)]` will give the same result for `x0=22` and
-`x0=22.001`, and so that value is not changed during the fit.
+``model[np.where(x<x0)]`` will give the same result for ``x0=22`` and
+``x0=22.001``, and so that value is not changed during the fit.
 
 There are a couple ways around this problems. First, you may be able to
-make the fit depend on `x0` in a way that is not just discrete.  That
+make the fit depend on ``x0`` in a way that is not just discrete.  That
 depends on your model function. A second option is treat the break not as a
 hard break but as a more gentle transition with a sigmoidal function, such
 as an error function.  Like the break-point, these will go from 0 to 1, but
@@ -313,6 +313,6 @@ look like this and give better fit results:
     result = mod.fit(ydat, pars, x=xdat)
     print(result.fit_report())
 
-The natural width of the error function is about 2 `x` units, but you can
-adjust this, shortening it with `erf((x-x0)*2)` to give a sharper
+The natural width of the error function is about 2 ``x`` units, but you can
+adjust this, shortening it with ``erf((x-x0)*2)`` to give a sharper
 transition for example.

@@ -115,14 +115,14 @@ this results in the following output:
         # function evals   = 52
         # data points      = 201
         # variables        = 3
-        chi-square         = 0.01569562
-        reduced chi-square = 7.9271e-05
-        Akaike info crit   = -1894.99338
-        Bayesian info crit = -1885.08346
+        chi-square         = 0.01879950
+        reduced chi-square = 9.4947e-05
+        Akaike info crit   = -1858.72319
+        Bayesian info crit = -1848.81327
     [[Variables]]
-        amp:  3.40303999 +/- 0.00459174 (0.13%) (init = 5)
-        cen:  1.79921671 +/- 7.7934e-04 (0.04%) (init = 5)
-        wid:  0.50020007 +/- 7.7934e-04 (0.16%) (init = 1)
+        amp:  3.39808648 +/- 0.00502234 (0.15%) (init = 5)
+        cen:  1.79989541 +/- 8.5266e-04 (0.05%) (init = 5)
+        wid:  0.49961370 +/- 8.5266e-04 (0.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, wid) =  0.577
 
@@ -132,7 +132,7 @@ this results in the following output:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.108 seconds)
+   **Total running time of the script:** ( 0 minutes  0.073 seconds)
 
 
 .. _sphx_glr_download_examples_example_expression_model.py:
