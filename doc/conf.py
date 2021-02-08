@@ -169,5 +169,9 @@ sphinx_gallery_conf = {
     'ignore_repr_types': r'matplotlib',
 }
 
+# remove certain RuntimeWarnings from examples
+warnings.filterwarnings("ignore", category=RuntimeWarning,
+                        message="overflow encountered")
+
 # Suppress "WARNING: unknown mimetype for _static/empty
 suppress_warnings = ['epub.unknown_project_files']
