@@ -110,8 +110,8 @@ This gives the following fitting results:
         Bayesian info crit = 3058.44044
     [[Variables]]
         amp:     13.8903938 +/- 0.24412383 (1.76%) (init = 13), model_value = 14
-        period:  5.44026441 +/- 0.01416176 (0.26%) (init = 2), model_value = 5.4321
-        shift:   0.12464469 +/- 0.02414210 (19.37%) (init = 0), model_value = 0.12345
+        period:  5.44026442 +/- 0.01416175 (0.26%) (init = 2), model_value = 5.4321
+        shift:   0.12464470 +/- 0.02414209 (19.37%) (init = 0), model_value = 0.12345
         decay:   0.00996351 +/- 2.0278e-04 (2.04%) (init = 0.02), model_value = 0.01
     [[Correlations]] (unreported correlations are < 0.100)
         C(period, shift) =  0.800
@@ -146,7 +146,7 @@ and shows the plot below:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.070 seconds)
+   **Total running time of the script:** ( 0 minutes  0.127 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_bounds.py:

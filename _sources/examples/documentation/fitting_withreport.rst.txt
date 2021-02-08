@@ -43,7 +43,7 @@ doc_fitting_withreport.py
         Bayesian info crit = -669.587497
     [[Variables]]
         amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
-        period:  5.48507044 +/- 0.02666492 (0.49%) (init = 2)
+        period:  5.48507045 +/- 0.02666492 (0.49%) (init = 2)
         shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
         decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
     [[Correlations]] (unreported correlations are < 0.100)
@@ -110,7 +110,7 @@ doc_fitting_withreport.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.010 seconds)
+   **Total running time of the script:** ( 0 minutes  0.064 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_withreport.py:

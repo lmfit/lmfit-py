@@ -650,7 +650,7 @@ is given below together with a plot:
         shift: -0.13089969 (init = 0)
         omega:  2.00000000 (init = 3)
 
-    [<matplotlib.lines.Line2D object at 0x7ff52018cb20>]
+    [<matplotlib.lines.Line2D object at 0x7fa63916fa90>]
 
 
 
@@ -980,7 +980,7 @@ and finally, to generated the figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  20.871 seconds)
+   **Total running time of the script:** ( 0 minutes  34.996 seconds)
 
 
 .. _sphx_glr_download_examples_example_brute.py:

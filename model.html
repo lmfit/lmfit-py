@@ -18,10 +18,9 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -403,7 +402,7 @@ components, including a <code class="xref py py-meth docutils literal notranslat
     Akaike info crit   = -336.263713
     Bayesian info crit = -328.418352
 [[Variables]]
-    amp:  8.88021830 +/- 0.11359493 (1.28%) (init = 5)
+    amp:  8.88021830 +/- 0.11359492 (1.28%) (init = 5)
     cen:  5.65866102 +/- 0.01030495 (0.18%) (init = 5)
     wid:  0.69765468 +/- 0.01030495 (1.48%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
@@ -1517,9 +1516,9 @@ correspond to the NumPy functions with the same name.</p></li>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit" title="lmfit.model.ModelResult.plot_fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot_fit()</span></code></a></dt><dd><p>Plot the fit results using matplotlib.</p>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit" title="lmfit.model.ModelResult.plot_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelResult.plot_fit</span></code></a></dt><dd><p>Plot the fit results using matplotlib.</p>
 </dd>
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals" title="lmfit.model.ModelResult.plot_residuals"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot_residuals()</span></code></a></dt><dd><p>Plot the fit residuals using matplotlib.</p>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals" title="lmfit.model.ModelResult.plot_residuals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelResult.plot_residuals</span></code></a></dt><dd><p>Plot the fit residuals using matplotlib.</p>
 </dd>
 </dl>
 </div>
@@ -1580,9 +1579,9 @@ correspond to the NumPy functions with the same name.</p></li>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals" title="lmfit.model.ModelResult.plot_residuals"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot_residuals()</span></code></a></dt><dd><p>Plot the fit residuals using matplotlib.</p>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_residuals" title="lmfit.model.ModelResult.plot_residuals"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelResult.plot_residuals</span></code></a></dt><dd><p>Plot the fit residuals using matplotlib.</p>
 </dd>
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot" title="lmfit.model.ModelResult.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot()</span></code></a></dt><dd><p>Plot the fit results and residuals using matplotlib.</p>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot" title="lmfit.model.ModelResult.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelResult.plot</span></code></a></dt><dd><p>Plot the fit results and residuals using matplotlib.</p>
 </dd>
 </dl>
 </div>
@@ -1629,9 +1628,9 @@ correspond to the NumPy functions with the same name.</p></li>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit" title="lmfit.model.ModelResult.plot_fit"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot_fit()</span></code></a></dt><dd><p>Plot the fit results using matplotlib.</p>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot_fit" title="lmfit.model.ModelResult.plot_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelResult.plot_fit</span></code></a></dt><dd><p>Plot the fit results using matplotlib.</p>
 </dd>
-<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot" title="lmfit.model.ModelResult.plot"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ModelResult.plot()</span></code></a></dt><dd><p>Plot the fit results and residuals using matplotlib.</p>
+<dt><a class="reference internal" href="#lmfit.model.ModelResult.plot" title="lmfit.model.ModelResult.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModelResult.plot</span></code></a></dt><dd><p>Plot the fit results and residuals using matplotlib.</p>
 </dd>
 </dl>
 </div>
@@ -2315,7 +2314,7 @@ binary operator. A full script using this technique is here:</p>
 <div class="jupyter_cell docutils container">
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
-    (Model(jump) &lt;function convolve at 0x7f379e4d90d0&gt; Model(gaussian))
+    (Model(jump) &lt;function convolve at 0x7f8dd89810d0&gt; Model(gaussian))
 [[Fit Statistics]]
     # fitting method   = leastsq
     # function evals   = 25
@@ -2379,7 +2378,7 @@ build complex models from testable sub-components.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.1.
     </div>
   </body>
 </html>

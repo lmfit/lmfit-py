@@ -52,8 +52,8 @@ a fairly simple problem.
     [[Variables]]
         offset:  0.96333090 +/- 0.04735921 (4.92%) (init = 2)
         omega:   3.98700821 +/- 0.02079710 (0.52%) (init = 3.3)
-        amp:     1.80253572 +/- 0.19401988 (10.76%) (init = 2.5)
-        decay:   5.76279857 +/- 1.04073320 (18.06%) (init = 1)
+        amp:     1.80253577 +/- 0.19401989 (10.76%) (init = 2.5)
+        decay:   5.76279825 +/- 1.04073303 (18.06%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.755
 
@@ -71,8 +71,8 @@ a fairly simple problem.
     [[Variables]]
         offset:  0.96333133 +/- 0.04735903 (4.92%) (init = 2)
         omega:   3.98700854 +/- 0.02121810 (0.53%) (init = 3.3)
-        amp:     1.80252621 +/- 0.19022409 (10.55%) (init = 2.5)
-        decay:   5.76284506 +/- 1.00452610 (17.43%) (init = 1)
+        amp:     1.80252618 +/- 0.19022408 (10.55%) (init = 2.5)
+        decay:   5.76284488 +/- 1.00452599 (17.43%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.743
 
@@ -136,7 +136,7 @@ a fairly simple problem.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.206 seconds)
+   **Total running time of the script:** ( 0 minutes  1.590 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:

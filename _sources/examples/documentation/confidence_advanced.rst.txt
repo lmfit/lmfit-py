@@ -53,17 +53,17 @@ doc_confidence_advanced.py
 
  .. code-block:: none
 
-    /home/matt/Codes/lmfit-py/examples/documentation/confidence_advanced.py:22: RuntimeWarning: overflow encountered in exp
+    /Users/Newville/Codes/lmfit-py/examples/documentation/confidence_advanced.py:22: RuntimeWarning: overflow encountered in exp
       return p['a1']*np.exp(-x/p['t1']) + p['a2']*np.exp(-(x-0.1)/p['t2']) - y
-    /home/matt/anaconda3/lib/python3.8/site-packages/lmfit-1.0.1+182.gddf7d40-py3.8.egg/lmfit/parameter.py:931: RuntimeWarning: overflow encountered in multiply
+    /Users/Newville/anaconda3/lib/python3.8/site-packages/lmfit-1.0.1+177.gc6cd665-py3.8.egg/lmfit/parameter.py:931: RuntimeWarning: overflow encountered in multiply
       return self._getval() * other
-    /home/matt/anaconda3/lib/python3.8/site-packages/lmfit-1.0.1+182.gddf7d40-py3.8.egg/lmfit/minimizer.py:184: RuntimeWarning: overflow encountered in multiply
+    /Users/Newville/anaconda3/lib/python3.8/site-packages/lmfit-1.0.1+177.gc6cd665-py3.8.egg/lmfit/minimizer.py:184: RuntimeWarning: overflow encountered in multiply
       return (r*r).sum()
     [[Variables]]
         a1:  2.98622120 +/- 0.14867187 (4.98%) (init = 2.986237)
-        a2: -4.33526328 +/- 0.11527506 (2.66%) (init = -4.335256)
-        t1:  1.30994234 +/- 0.13121177 (10.02%) (init = 1.309932)
-        t2:  11.8240350 +/- 0.46316470 (3.92%) (init = 11.82408)
+        a2: -4.33526327 +/- 0.11527506 (2.66%) (init = -4.335256)
+        t1:  1.30994233 +/- 0.13121177 (10.02%) (init = 1.309932)
+        t2:  11.8240351 +/- 0.46316470 (3.92%) (init = 11.82408)
     [[Correlations]] (unreported correlations are < 0.500)
         C(a2, t2) =  0.987
         C(a2, t1) = -0.925
@@ -155,7 +155,7 @@ doc_confidence_advanced.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.427 seconds)
+   **Total running time of the script:** ( 0 minutes  8.113 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_advanced.py:
