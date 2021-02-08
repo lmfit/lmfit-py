@@ -18,9 +18,10 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -353,9 +354,9 @@ solution. We can also compare to the results of using <code class="docutils lite
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     a1:  2.98622120 +/- 0.14867187 (4.98%) (init = 2.986237)
-    a2: -4.33526327 +/- 0.11527506 (2.66%) (init = -4.335256)
-    t1:  1.30994233 +/- 0.13121177 (10.02%) (init = 1.309932)
-    t2:  11.8240351 +/- 0.46316470 (3.92%) (init = 11.82408)
+    a2: -4.33526328 +/- 0.11527506 (2.66%) (init = -4.335256)
+    t1:  1.30994234 +/- 0.13121177 (10.02%) (init = 1.309932)
+    t2:  11.8240350 +/- 0.46316470 (3.92%) (init = 11.82408)
 [[Correlations]] (unreported correlations are &lt; 0.500)
     C(a2, t2) =  0.987
     C(a2, t1) = -0.925
@@ -482,7 +483,7 @@ of the corresponding values.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#lmfit.conf_interval2d" title="lmfit.conf_interval2d"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conf_interval2d</span></code></a></p>
+<p><a class="reference internal" href="#lmfit.conf_interval2d" title="lmfit.conf_interval2d"><code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval2d()</span></code></a></p>
 </div>
 <p class="rubric">Notes</p>
 <p>The values for <cite>sigma</cite> are taken as the number of standard deviations
@@ -548,7 +549,7 @@ Default is None and uses the built-in function <cite>f_compare</cite>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#lmfit.conf_interval" title="lmfit.conf_interval"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conf_interval</span></code></a></p>
+<p><a class="reference internal" href="#lmfit.conf_interval" title="lmfit.conf_interval"><code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mini</span> <span class="o">=</span> <span class="n">Minimizer</span><span class="p">(</span><span class="n">some_func</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
@@ -617,7 +618,7 @@ True).</p></li>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

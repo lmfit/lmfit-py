@@ -133,8 +133,8 @@ In this case, we can use a built-in model to fit
         sigmax:     0.55187429 +/- 0.01262250 (2.29%) (init = 1.66637)
         sigmay:     0.73663336 +/- 0.01696361 (2.30%) (init = 0.8328972)
         fwhmx:      1.29956462 +/- 0.02972371 (2.29%) == '2.3548200*sigmax'
-        fwhmy:      1.73463898 +/- 0.03994626 (2.30%) == '2.3548200*sigmay'
-        height:     106.882390 +/- 3.63826498 (3.40%) == '1.5707963*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
+        fwhmy:      1.73463897 +/- 0.03994626 (2.30%) == '2.3548200*sigmay'
+        height:     106.882391 +/- 3.63826502 (3.40%) == '1.5707963*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
     [[Correlations]] (unreported correlations are < 0.100)
         C(amplitude, sigmay) =  0.253
         C(amplitude, sigmax) =  0.220
@@ -307,12 +307,12 @@ over a quarter circle.
         Akaike info crit   = 1456.56121
         Bayesian info crit = 1499.82325
     [[Variables]]
-        amplitude:  25.4520941 +/- 0.50893773 (2.00%) (init = 10)
+        amplitude:  25.4520940 +/- 0.50893773 (2.00%) (init = 10)
         centerx:    1.99532738 +/- 0.01162425 (0.58%) (init = 2.077652)
         centery:   -0.50221822 +/- 0.01657490 (3.30%) (init = -0.5359784)
-        sigmax:     0.50576995 +/- 0.01047067 (2.07%) (init = 1)
+        sigmax:     0.50576994 +/- 0.01047067 (2.07%) (init = 1)
         sigmay:     1.11968508 +/- 0.02191517 (1.96%) (init = 2)
-        rotation:   0.48387509 +/- 0.01534530 (3.17%) (init = 0.1)
+        rotation:   0.48387508 +/- 0.01534530 (3.17%) (init = 0.1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(centerx, centery)  =  0.537
         C(amplitude, sigmax) =  0.371
@@ -369,7 +369,7 @@ The process of making plots to check it worked is the same as before.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.529 seconds)
+   **Total running time of the script:** ( 0 minutes  1.333 seconds)
 
 
 .. _sphx_glr_download_examples_example_two_dimensional_peak.py:

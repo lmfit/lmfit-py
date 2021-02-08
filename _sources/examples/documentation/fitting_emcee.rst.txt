@@ -59,17 +59,17 @@ doc_fitting_emcee.py
 
  .. code-block:: none
 
-    /Users/Newville/Codes/lmfit-py/examples/documentation/fitting_emcee.py:38: RuntimeWarning: overflow encountered in exp
+    /home/matt/Codes/lmfit-py/examples/documentation/fitting_emcee.py:38: RuntimeWarning: overflow encountered in exp
       return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1) / v['t2']) - y
-    /Users/Newville/Codes/lmfit-py/examples/documentation/fitting_emcee.py:38: RuntimeWarning: overflow encountered in multiply
+    /home/matt/Codes/lmfit-py/examples/documentation/fitting_emcee.py:38: RuntimeWarning: overflow encountered in multiply
       return v['a1']*np.exp(-x/v['t1']) + v['a2']*np.exp(-(x-0.1) / v['t2']) - y
-    /Users/Newville/anaconda3/lib/python3.8/site-packages/lmfit-1.0.1+177.gc6cd665-py3.8.egg/lmfit/minimizer.py:184: RuntimeWarning: overflow encountered in multiply
+    /home/matt/anaconda3/lib/python3.8/site-packages/lmfit-1.0.1+182.gddf7d40-py3.8.egg/lmfit/minimizer.py:184: RuntimeWarning: overflow encountered in multiply
       return (r*r).sum()
     [[Variables]]
         a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
-        a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
-        t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
-        t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
+        a2: -4.33525597 +/- 0.11765821 (2.71%) (init = 4)
+        t1:  1.30993186 +/- 0.13449653 (10.27%) (init = 3)
+        t2:  11.8240752 +/- 0.47172598 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.500)
         C(a2, t2) =  0.988
         C(a2, t1) = -0.928
@@ -234,7 +234,7 @@ doc_fitting_emcee.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  10.869 seconds)
+   **Total running time of the script:** ( 0 minutes  6.751 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:

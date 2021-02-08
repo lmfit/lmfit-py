@@ -224,9 +224,9 @@ And now fit the data using the guess as a starting point:
         Bayesian info crit = -1530.70099
     [[Variables]]
         f_0:       100.000096 +/- 7.0378e-05 (0.00%) (init = 100.0035)
-        Q:         10059.4926 +/- 142.294761 (1.41%) (init = 3146.538)
-        Q_e_real:  9180.61935 +/- 133.776862 (1.46%) (init = 5082.247)
-        Q_e_imag: -9137.03303 +/- 133.770211 (1.46%) (init = 0)
+        Q:         10059.4926 +/- 142.294763 (1.41%) (init = 3146.538)
+        Q_e_real:  9180.61941 +/- 133.776876 (1.46%) (init = 5082.247)
+        Q_e_imag: -9137.03297 +/- 133.770238 (1.46%) (init = 0)
     [[Correlations]] (unreported correlations are < 0.100)
         C(Q, Q_e_real)   =  0.518
         C(f_0, Q_e_imag) =  0.517
@@ -300,7 +300,7 @@ for plotting complex quantities:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.330 seconds)
+   **Total running time of the script:** ( 0 minutes  0.190 seconds)
 
 
 .. _sphx_glr_download_examples_example_complex_resonator_model.py:
