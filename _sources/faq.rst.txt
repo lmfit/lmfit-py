@@ -30,7 +30,6 @@ If you see something like::
 then you need to install the ``ipywidgets`` package, try: ``pip install ipywidgets``.
 
 
-
 How can I fit multi-dimensional data?
 =====================================
 
@@ -43,6 +42,7 @@ do this is to use :numpydoc:`ndarray.flatten`, for example::
         ....
         resid = calculate_multidim_residual()
         return resid.flatten()
+
 
 How can I fit multiple data sets?
 =================================
@@ -64,7 +64,6 @@ different arrays. As a bonus, the two lines share the 'offset' parameter::
         resid1 = dat1 - model1
         resid2 = dat2 - model2
         return np.concatenate((resid1, resid2))
-
 
 
 How can I fit complex data?
@@ -90,11 +89,11 @@ is that you also get access to the plot routines from the ModelResult
 class, which are also complex-aware.
 
 
-
 How should I cite LMFIT?
 ========================
 
 See https://dx.doi.org/10.5281/zenodo.11813
+
 
 I get errors from NaN in my fit. What can I do?
 ================================================
@@ -112,6 +111,7 @@ This means that if your objective function (if using ``minimize``) or model
 function (if using ``Model``) generates a NaN, the fit will stop
 immediately. If your objective or model function generates a NaN, you
 really must handle that.
+
 
 ``nan_policy``
 ~~~~~~~~~~~~~~
@@ -161,13 +161,14 @@ you probably won't ever have values greater than 1.e308 and can therefore
 (usually) safely clip the argument passed to ``exp()`` to be smaller than
 about 700.
 
+
 .. _faq_params_stuck:
 
-Why are Parameter Values sometime stuck at initial values?
+Why are Parameter values sometimes stuck at initial values?
 ===========================================================
 
 In order for a Parameter to be optimized in a fit, changing its value must
-have an impact on the fit residual (`data-model` when curve fitting, for
+have an impact on the fit residual (``data-model`` when curve fitting, for
 example).  If a fit has not changed one or more of the Parameters, it means
 that changing those Parameters did not change the fit residual.
 
@@ -208,6 +209,7 @@ not at the boundary values.
 Finally, one reason for a Parameter to not change is that they are actually
 used as discrete values.  This is discussed below in :ref:`faq_discrete_params`.
 
+
 .. _faq_params_no_uncertainties:
 
 Why are uncertainties in Parameters sometimes not determined?
@@ -223,7 +225,6 @@ not change from their initial values.
 
 Can Parameters be used for Array Indices or Discrete Values?
 =============================================================
-
 
 The short answer is "No": variables in all of the fitting methods used in
 ``lmfit`` (and all of those available in ``scipy.optimize``) are treated as
@@ -248,20 +249,23 @@ That you implement with a model function and use to fit data like this:
 .. jupyter-execute::
 
     import numpy as np
+
     import lmfit
 
+
     def quad_off(x, x0, a, b, c):
-        model = a + b*x**2
-        model[np.where(x<x0)] = c
+        model = a + b * x**2
+        model[np.where(x < x0)] = c
         return model
+
 
     x0 = 19
     b = 0.02
     a = 2.0
     xdat = np.linspace(0, 100, 101)
-    ydat = a + b*xdat**2
+    ydat = a + b * xdat**2
     ydat[np.where(xdat < x0)] = a + b * x0**2
-    ydat +=  np.random.normal(scale=0.1, size=len(xdat))
+    ydat += np.random.normal(scale=0.1, size=xdat.size)
 
     mod = lmfit.Model(quad_off)
     pars = mod.make_params(x0=22, a=1, b=1, c=1)
@@ -271,41 +275,44 @@ That you implement with a model function and use to fit data like this:
 
 This will not result in a very good fit, as the value for ``x0`` cannot be
 found by making a small change in its value.  Specifically,
-``model[np.where(x<x0)]`` will give the same result for ``x0=22`` and
+``model[np.where(x < x0)]`` will give the same result for ``x0=22`` and
 ``x0=22.001``, and so that value is not changed during the fit.
 
-There are a couple ways around this problems. First, you may be able to
+There are a couple ways around this problem. First, you may be able to
 make the fit depend on ``x0`` in a way that is not just discrete.  That
-depends on your model function. A second option is treat the break not as a
+depends on your model function. A second option is to treat the break not as a
 hard break but as a more gentle transition with a sigmoidal function, such
 as an error function.  Like the break-point, these will go from 0 to 1, but
 more gently and with some finite value leaking into neighboring points.
 The amount of leakage or width of the step can also be adjusted.
 
-A simple modification of the above would to use an error function would
+A simple modification of the above to use an error function would
 look like this and give better fit results:
 
 .. jupyter-execute::
 
     import numpy as np
-    import lmfit
     from scipy.special import erf
 
+    import lmfit
+
+
     def quad_off(x, x0, a, b, c):
-        m1 = a + b*x**2
+        m1 = a + b * x**2
         m2 = c * np.ones(len(x))
-        # step up from 0 to 1 at x0:  (erf(x-x0)+1)/2
+        # step up from 0 to 1 at x0: (erf(x-x0)+1)/2
         # step down from 1 to 0 at x0: (1-erf(x-x0))/2
-        model = m1 * (erf(x-x0)+1)/2 + m2*(1-erf(x-x0))/2
+        model = m1 * (erf(x-x0)+1)/2 + m2 * (1-erf(x-x0))/2
         return model
+
 
     x0 = 19
     b = 0.02
     a = 2.0
     xdat = np.linspace(0, 100, 101)
-    ydat = a + b*xdat**2
+    ydat = a + b * xdat**2
     ydat[np.where(xdat < x0)] = a + b * x0**2
-    ydat +=  np.random.normal(scale=0.1, size=len(xdat))
+    ydat += np.random.normal(scale=0.1, size=xdat.size)
 
     mod = lmfit.Model(quad_off)
     pars = mod.make_params(x0=22, a=1, b=1, c=1)

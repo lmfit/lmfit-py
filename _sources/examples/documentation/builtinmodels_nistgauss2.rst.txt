@@ -50,7 +50,7 @@ doc_builtinmodels_nistgauss2.py
     [[Variables]]
         exp_amplitude:  99.0183270 +/- 0.53748905 (0.54%) (init = 94.53724)
         exp_decay:      90.9508890 +/- 1.10310483 (1.21%) (init = 111.1985)
-        g1_amplitude:   4257.77343 +/- 42.3836431 (1.00%) (init = 3189.648)
+        g1_amplitude:   4257.77343 +/- 42.3836433 (1.00%) (init = 3189.648)
         g1_center:      107.030956 +/- 0.15006873 (0.14%) (init = 106.5)
         g1_sigma:       16.6725765 +/- 0.16048227 (0.96%) (init = 14.5)
         g1_fwhm:        39.2609166 +/- 0.37790686 (0.96%) == '2.3548200*g1_sigma'
@@ -128,7 +128,7 @@ doc_builtinmodels_nistgauss2.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.102 seconds)
+   **Total running time of the script:** ( 0 minutes  0.401 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_nistgauss2.py:

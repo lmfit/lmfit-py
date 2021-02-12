@@ -148,7 +148,7 @@ report_fit(result.params)
 # The default setting is ``nan_policy='raise'``, which does check for NaNs and
 # raises an exception when present.
 #
-# Null-chekcing  relies on ``pandas.isnull`` if it is available. If pandas
+# Null-checking  relies on ``pandas.isnull`` if it is available. If pandas
 # cannot be imported, it silently falls back on ``numpy.isnan``.
 
 ###############################################################################

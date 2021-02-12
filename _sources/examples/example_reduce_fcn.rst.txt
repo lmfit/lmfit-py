@@ -58,9 +58,9 @@ of data with outliers.
         Bayesian info crit = -97.1001440
     [[Variables]]
         offset:  1.10392445 +/- 0.05751441 (5.21%) (init = 2)
-        omega:   3.97313427 +/- 0.02073920 (0.52%) (init = 3.3)
-        amp:     1.69977011 +/- 0.21587449 (12.70%) (init = 2.5)
-        decay:   7.65901977 +/- 1.87209105 (24.44%) (init = 1)
+        omega:   3.97313428 +/- 0.02073920 (0.52%) (init = 3.3)
+        amp:     1.69977036 +/- 0.21587450 (12.70%) (init = 2.5)
+        decay:   7.65901704 +/- 1.87208973 (24.44%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.773
 
@@ -72,15 +72,15 @@ of data with outliers.
         # function evals   = 130
         # data points      = 101
         # variables        = 4
-        chi-square         = 33.5081501
-        reduced chi-square = 0.34544485
-        Akaike info crit   = -103.436514
-        Bayesian info crit = -92.9760318
+        chi-square         = 33.5081438
+        reduced chi-square = 0.34544478
+        Akaike info crit   = -103.436533
+        Bayesian info crit = -92.9760507
     [[Variables]]
-        offset:  1.02005938 +/- 0.06642641 (6.51%) (init = 2)
-        omega:   3.98224471 +/- 0.02898704 (0.73%) (init = 3.3)
-        amp:     1.83231462 +/- 0.27241825 (14.87%) (init = 2.5)
-        decay:   5.77326609 +/- 1.45139846 (25.14%) (init = 1)
+        offset:  1.02005947 +/- 0.06642640 (6.51%) (init = 2)
+        omega:   3.98224468 +/- 0.02898703 (0.73%) (init = 3.3)
+        amp:     1.83231389 +/- 0.27241853 (14.87%) (init = 2.5)
+        decay:   5.77327242 +/- 1.45140477 (25.14%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay)  = -0.758
         C(offset, amp) = -0.107
@@ -156,7 +156,7 @@ of data with outliers.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.116 seconds)
+   **Total running time of the script:** ( 0 minutes  0.478 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:

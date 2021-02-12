@@ -5,42 +5,42 @@
 
 Computation times
 =================
-**00:46.558** total execution time for **examples** files:
+**05:14.167** total execution time for **examples** files:
 
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_brute.py` (``example_brute.py``)                                                 | 00:21.202 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_two_dimensional_peak.py` (``example_two_dimensional_peak.py``)                   | 02:37.017 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_confidence_interval.py` (``example_confidence_interval.py``)                     | 00:14.107 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_brute.py` (``example_brute.py``)                                                 | 01:08.961 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_emcee_Model_interface.py` (``example_emcee_Model_interface.py``)                 | 00:07.231 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_confidence_interval.py` (``example_confidence_interval.py``)                     | 00:51.867 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_two_dimensional_peak.py` (``example_two_dimensional_peak.py``)                   | 00:01.333 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_emcee_Model_interface.py` (``example_emcee_Model_interface.py``)                 | 00:26.500 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_detect_outliers.py` (``example_detect_outliers.py``)                             | 00:00.754 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_detect_outliers.py` (``example_detect_outliers.py``)                             | 00:02.777 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_sympy.py` (``example_sympy.py``)                                                 | 00:00.512 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_sympy.py` (``example_sympy.py``)                                                 | 00:01.919 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_diffev.py` (``example_diffev.py``)                                               | 00:00.292 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_diffev.py` (``example_diffev.py``)                                               | 00:00.878 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_complex_resonator_model.py` (``example_complex_resonator_model.py``)             | 00:00.190 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_complex_resonator_model.py` (``example_complex_resonator_model.py``)             | 00:00.781 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_Model_interface.py` (``example_Model_interface.py``)                             | 00:00.171 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_Model_interface.py` (``example_Model_interface.py``)                             | 00:00.700 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_use_pandas.py` (``example_use_pandas.py``)                                       | 00:00.160 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_reduce_fcn.py` (``example_reduce_fcn.py``)                                       | 00:00.478 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_reduce_fcn.py` (``example_reduce_fcn.py``)                                       | 00:00.116 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_fit_multi_datasets.py` (``example_fit_multi_datasets.py``)                       | 00:00.447 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_fit_multi_datasets.py` (``example_fit_multi_datasets.py``)                       | 00:00.102 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_use_pandas.py` (``example_use_pandas.py``)                                       | 00:00.385 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py` (``example_fit_with_algebraic_constraint.py``) | 00:00.086 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_fit_with_algebraic_constraint.py` (``example_fit_with_algebraic_constraint.py``) | 00:00.327 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_fit_with_inequality.py` (``example_fit_with_inequality.py``)                     | 00:00.082 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_fit_with_inequality.py` (``example_fit_with_inequality.py``)                     | 00:00.303 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_expression_model.py` (``example_expression_model.py``)                           | 00:00.081 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_expression_model.py` (``example_expression_model.py``)                           | 00:00.283 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_fit_with_bounds.py` (``example_fit_with_bounds.py``)                             | 00:00.074 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_fit_with_bounds.py` (``example_fit_with_bounds.py``)                             | 00:00.277 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_example_fit_with_derivfunc.py` (``example_fit_with_derivfunc.py``)                       | 00:00.065 | 0.0 MB |
+| :ref:`sphx_glr_examples_example_fit_with_derivfunc.py` (``example_fit_with_derivfunc.py``)                       | 00:00.267 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+
 | :ref:`sphx_glr_examples_lmfit_emcee_model_selection.py` (``lmfit_emcee_model_selection.py``)                     | 00:00.000 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------------------+-----------+--------+

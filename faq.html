@@ -18,10 +18,9 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
     <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -120,7 +119,7 @@
 <li><a class="reference internal" href="#common-sources-of-nan">Common sources of NaN</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#why-are-parameter-values-sometime-stuck-at-initial-values">Why are Parameter Values sometime stuck at initial values?</a></li>
+<li><a class="reference internal" href="#why-are-parameter-values-sometimes-stuck-at-initial-values">Why are Parameter values sometimes stuck at initial values?</a></li>
 <li><a class="reference internal" href="#why-are-uncertainties-in-parameters-sometimes-not-determined">Why are uncertainties in Parameters sometimes not determined?</a></li>
 <li><a class="reference internal" href="#can-parameters-be-used-for-array-indices-or-discrete-values">Can Parameters be used for Array Indices or Discrete Values?</a></li>
 </ul>
@@ -289,10 +288,10 @@ you probably won’t ever have values greater than 1.e308 and can therefore
 about 700.</p>
 </div>
 </div>
-<div class="section" id="why-are-parameter-values-sometime-stuck-at-initial-values">
-<span id="faq-params-stuck"></span><h2>Why are Parameter Values sometime stuck at initial values?<a class="headerlink" href="#why-are-parameter-values-sometime-stuck-at-initial-values" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="why-are-parameter-values-sometimes-stuck-at-initial-values">
+<span id="faq-params-stuck"></span><h2>Why are Parameter values sometimes stuck at initial values?<a class="headerlink" href="#why-are-parameter-values-sometimes-stuck-at-initial-values" title="Permalink to this headline">¶</a></h2>
 <p>In order for a Parameter to be optimized in a fit, changing its value must
-have an impact on the fit residual (<cite>data-model</cite> when curve fitting, for
+have an impact on the fit residual (<code class="docutils literal notranslate"><span class="pre">data-model</span></code> when curve fitting, for
 example).  If a fit has not changed one or more of the Parameters, it means
 that changing those Parameters did not change the fit residual.</p>
 <p>Normally (that is, unless you specifically provide a function for
@@ -332,7 +331,7 @@ used as discrete values.  This is discussed below in <a class="reference interna
 <span id="faq-params-no-uncertainties"></span><h2>Why are uncertainties in Parameters sometimes not determined?<a class="headerlink" href="#why-are-uncertainties-in-parameters-sometimes-not-determined" title="Permalink to this headline">¶</a></h2>
 <p>In order for Parameter uncertainties to be estimated, each variable
 Parameter must actually change the fit, and cannot be stuck at an initial
-value or at a boundary value.  See <a class="reference internal" href="#faq-params-stuck"><span class="std std-ref">Why are Parameter Values sometime stuck at initial values?</span></a> for why values may
+value or at a boundary value.  See <a class="reference internal" href="#faq-params-stuck"><span class="std std-ref">Why are Parameter values sometimes stuck at initial values?</span></a> for why values may
 not change from their initial values.</p>
 </div>
 <div class="section" id="can-parameters-be-used-for-array-indices-or-discrete-values">
@@ -356,20 +355,23 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="kn">import</span> <span class="nn">lmfit</span>
 
+
 <span class="k">def</span> <span class="nf">quad_off</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span>
-    <span class="n">model</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span><span class="o">&lt;</span><span class="n">x0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">c</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">model</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">x0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">c</span>
     <span class="k">return</span> <span class="n">model</span>
+
 
 <span class="n">x0</span> <span class="o">=</span> <span class="mi">19</span>
 <span class="n">b</span> <span class="o">=</span> <span class="mf">0.02</span>
 <span class="n">a</span> <span class="o">=</span> <span class="mf">2.0</span>
 <span class="n">xdat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
-<span class="n">ydat</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">xdat</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">ydat</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">xdat</span><span class="o">**</span><span class="mi">2</span>
 <span class="n">ydat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">xdat</span> <span class="o">&lt;</span> <span class="n">x0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x0</span><span class="o">**</span><span class="mi">2</span>
-<span class="n">ydat</span> <span class="o">+=</span>  <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">xdat</span><span class="p">))</span>
+<span class="n">ydat</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">xdat</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">quad_off</span><span class="p">)</span>
 <span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -387,55 +389,58 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     # function evals   = 11
     # data points      = 101
     # variables        = 4
-    chi-square         = 9.56995125
-    reduced chi-square = 0.09865929
-    Akaike info crit   = -230.005733
-    Bayesian info crit = -219.545251
+    chi-square         = 8.98698679
+    reduced chi-square = 0.09264935
+    Akaike info crit   = -236.353633
+    Bayesian info crit = -225.893151
 ##  Warning: uncertainties could not be estimated:
     x0:  at initial value
 [[Variables]]
     x0:  22.0000000 (init = 22)
-    a:   2.05757087 (init = 1)
-    b:   0.01998927 (init = 1)
-    c:   9.41796121 (init = 1)
+    a:   2.00662240 (init = 1)
+    b:   0.01999860 (init = 1)
+    c:   9.41588075 (init = 1)
 </pre></div>
 </div>
 </div>
 </div>
 <p>This will not result in a very good fit, as the value for <code class="docutils literal notranslate"><span class="pre">x0</span></code> cannot be
 found by making a small change in its value.  Specifically,
-<code class="docutils literal notranslate"><span class="pre">model[np.where(x&lt;x0)]</span></code> will give the same result for <code class="docutils literal notranslate"><span class="pre">x0=22</span></code> and
+<code class="docutils literal notranslate"><span class="pre">model[np.where(x</span> <span class="pre">&lt;</span> <span class="pre">x0)]</span></code> will give the same result for <code class="docutils literal notranslate"><span class="pre">x0=22</span></code> and
 <code class="docutils literal notranslate"><span class="pre">x0=22.001</span></code>, and so that value is not changed during the fit.</p>
-<p>There are a couple ways around this problems. First, you may be able to
+<p>There are a couple ways around this problem. First, you may be able to
 make the fit depend on <code class="docutils literal notranslate"><span class="pre">x0</span></code> in a way that is not just discrete.  That
-depends on your model function. A second option is treat the break not as a
+depends on your model function. A second option is to treat the break not as a
 hard break but as a more gentle transition with a sigmoidal function, such
 as an error function.  Like the break-point, these will go from 0 to 1, but
 more gently and with some finite value leaking into neighboring points.
 The amount of leakage or width of the step can also be adjusted.</p>
-<p>A simple modification of the above would to use an error function would
+<p>A simple modification of the above to use an error function would
 look like this and give better fit results:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">lmfit</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">erf</span>
 
+<span class="kn">import</span> <span class="nn">lmfit</span>
+
+
 <span class="k">def</span> <span class="nf">quad_off</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
-    <span class="n">m1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">m1</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
     <span class="n">m2</span> <span class="o">=</span> <span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-    <span class="c1"># step up from 0 to 1 at x0:  (erf(x-x0)+1)/2</span>
+    <span class="c1"># step up from 0 to 1 at x0: (erf(x-x0)+1)/2</span>
     <span class="c1"># step down from 1 to 0 at x0: (1-erf(x-x0))/2</span>
-    <span class="n">model</span> <span class="o">=</span> <span class="n">m1</span> <span class="o">*</span> <span class="p">(</span><span class="n">erf</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">m2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">erf</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">m1</span> <span class="o">*</span> <span class="p">(</span><span class="n">erf</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span> <span class="o">+</span> <span class="n">m2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">erf</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="n">x0</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
     <span class="k">return</span> <span class="n">model</span>
+
 
 <span class="n">x0</span> <span class="o">=</span> <span class="mi">19</span>
 <span class="n">b</span> <span class="o">=</span> <span class="mf">0.02</span>
 <span class="n">a</span> <span class="o">=</span> <span class="mf">2.0</span>
 <span class="n">xdat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span>
-<span class="n">ydat</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">xdat</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">ydat</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">xdat</span><span class="o">**</span><span class="mi">2</span>
 <span class="n">ydat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">xdat</span> <span class="o">&lt;</span> <span class="n">x0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">*</span> <span class="n">x0</span><span class="o">**</span><span class="mi">2</span>
-<span class="n">ydat</span> <span class="o">+=</span>  <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">xdat</span><span class="p">))</span>
+<span class="n">ydat</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">xdat</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
 
 <span class="n">mod</span> <span class="o">=</span> <span class="n">lmfit</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">quad_off</span><span class="p">)</span>
 <span class="n">pars</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">make_params</span><span class="p">(</span><span class="n">x0</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -450,22 +455,23 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 41
+    # function evals   = 49
     # data points      = 101
     # variables        = 4
-    chi-square         = 1.03309254
-    reduced chi-square = 0.01065044
-    Akaike info crit   = -454.838938
-    Bayesian info crit = -444.378456
+    chi-square         = 0.97282415
+    reduced chi-square = 0.01002911
+    Akaike info crit   = -460.909918
+    Bayesian info crit = -450.449436
 [[Variables]]
-    x0:  19.0936257 +/- 0.43611323 (2.28%) (init = 22)
-    a:   2.03581209 +/- 0.02054154 (1.01%) (init = 1)
-    b:   0.01999147 +/- 4.0626e-06 (0.02%) (init = 1)
-    c:   9.20012451 +/- 0.02363972 (0.26%) (init = 1)
+    x0:  19.0017718 +/- 0.45529598 (2.40%) (init = 22)
+    a:   2.00753574 +/- 0.01978852 (0.99%) (init = 1)
+    b:   0.01999621 +/- 3.9239e-06 (0.02%) (init = 1)
+    c:   9.22815090 +/- 0.02318015 (0.25%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.828
-    C(x0, a) =  0.167
-    C(x0, b) = -0.134
+    C(a, b)  = -0.826
+    C(x0, c) = -0.150
+    C(x0, a) =  0.129
+    C(x0, b) = -0.103
 </pre></div>
 </div>
 </div>
@@ -508,7 +514,7 @@ transition for example.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
     </div>
   </body>
 </html>
