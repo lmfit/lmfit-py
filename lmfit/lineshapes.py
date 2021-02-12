@@ -1,7 +1,5 @@
 """Basic model line shapes and distribution functions."""
 
-import warnings
-
 from numpy import (arctan, copysign, cos, exp, isnan, log, pi, real, sin, sqrt,
                    where)
 from scipy.special import erf, erfc
@@ -19,7 +17,7 @@ tiny = 1.0e-15
 functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt', 'pvoigt',
              'moffat', 'pearson7', 'breit_wigner', 'damped_oscillator',
              'dho', 'logistic', 'lognormal', 'students_t', 'expgaussian',
-             'doniach', 'donaich', 'skewed_gaussian', 'skewed_voigt',
+             'doniach', 'skewed_gaussian', 'skewed_voigt',
              'thermal_distribution', 'step', 'rectangle', 'exponential',
              'powerlaw', 'linear', 'parabolic', 'sine', 'expsine',
              'split_lorentzian')
@@ -287,20 +285,6 @@ def doniach(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
     gm1 = (1.0 - gamma)
     scale = amplitude/max(tiny, (sigma**gm1))
     return scale*cos(pi*gamma/2 + gm1*arctan(arg))/(1 + arg**2)**(gm1/2)
-
-
-def donaich(x, amplitude=1.0, center=0, sigma=1.0, gamma=0.0):
-    """Return a Doniach Sunjic asymmetric lineshape.
-
-    Function added here for backwards-compatibility, will emit a
-    `FutureWarning` when used.
-
-    """
-    msg = ('Please correct the name of your lineshape function: donaich --> '
-           'doniach. The incorrect spelling will be removed in a later '
-           'release.')
-    warnings.warn(FutureWarning(msg))
-    return doniach(x, amplitude, center, sigma, gamma)
 
 
 def skewed_gaussian(x, amplitude=1.0, center=0.0, sigma=1.0, gamma=0.0):

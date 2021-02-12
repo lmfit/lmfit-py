@@ -23,6 +23,7 @@ Bug fixes:
 
 Various:
 - update asteval dependency to >=0.9.22 to avoid DeprecationWarnings from NumPy v1.20.0 (PR #707)
+- remove incorrectly spelled ``DonaichModel`` and ``donaich`` lineshape, deprecated in version 1.0.1 (PR #707)
 
 
 .. _whatsnew_102_label:
