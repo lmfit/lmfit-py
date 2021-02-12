@@ -76,7 +76,7 @@ stages:
           displayName: 'Install dependencies'
         - script: |
             python -m pip install --upgrade pip setuptools wheel
-            pip install asteval==0.9.21 numpy==1.18 scipy==1.3.2 uncertainties==3.0.1 pytest coverage codecov
+            pip install asteval==0.9.22 numpy==1.18 scipy==1.3.2 uncertainties==3.0.1 pytest coverage codecov
           displayName: 'Install minimum required version of dependencies'
         - script: |
             python setup.py install
@@ -123,8 +123,6 @@ stages:
         - script: |
             python -m pip install --upgrade pip setuptools wheel
             pip install -r requirements-dev.txt
-            # temporarily install asteval from master branch to avoid NumPy v1.20 DeprecationWarnings
-            pip install git+https://github.com/newville/asteval@master
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python setup.py install
@@ -185,8 +183,6 @@ stages:
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             pip3.10 install asteval uncertainties dill emcee numdifftools
-            # temporarily install asteval from master branch to avoid NumPy v1.20 DeprecationWarnings
-            pip3.10 install git+https://github.com/newville/asteval@master
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python3.10 setup.py install --user

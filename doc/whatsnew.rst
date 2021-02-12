@@ -12,10 +12,23 @@ to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
 
+.. _whatsnew_103_label:
+
+Version 1.0.3 Release Notes (unreleased)
+========================================
+
+New features:
+
+Bug fixes:
+
+Various:
+- update asteval dependency to >=0.9.22 to avoid DeprecationWarnings from NumPy v1.20.0 (PR #707)
+
+
 .. _whatsnew_102_label:
 
-Version 1.0.2 Release Notes
-===========================
+Version 1.0.2 Release Notes (February 7, 2021)
+==============================================
 
 Version 1.0.2 officially supports Python 3.9 and has dropped support for Python 3.5. The minimum version
 of the following dependencies were updated: asteval>=0.9.21, numpy>=1.18, and scipy>=1.3.
