@@ -1,4 +1,5 @@
 """Tests for saving/loading Models and ModelResults."""
+
 import os
 import time
 
@@ -186,11 +187,11 @@ def test_saveload_modelresult_exception():
 
 
 @pytest.mark.parametrize("method", ['leastsq', 'nelder', 'powell', 'cobyla',
-                                    'bfgs', 'lbfgsb', 'differential_evolution', 'brute',
-                                    'basinhopping', 'ampgo', 'shgo',
+                                    'bfgs', 'lbfgsb', 'differential_evolution',
+                                    'brute', 'basinhopping', 'ampgo', 'shgo',
                                     'dual_annealing'])
 def test_saveload_modelresult_roundtrip(method):
-    """Test for modelresult.loads()/dumps() and repeating that"""
+    """Test for modelresult.loads()/dumps() and repeating that."""
     def mfunc(x, a, b):
         return a * (x-b)
 
@@ -201,7 +202,7 @@ def test_saveload_modelresult_roundtrip(method):
 
     np.random.seed(2020)
     xx = np.linspace(-5, 5, 201)
-    yy = 0.5 * (xx - 0.22) + np.random.normal(scale=0.01, size=len(xx))
+    yy = 0.5 * (xx - 0.22) + np.random.normal(scale=0.01, size=xx.size)
 
     result1 = model.fit(yy, params=params, x=xx, method=method)
 
@@ -246,9 +247,12 @@ def test_saveload_modelresult_expression_model():
 
 
 def test_saveload_usersyms():
-    """Test save/load of modelresult with non-trivial user symbols,
-    this example uses a VoigtModel, wheree `wofz()` is used in a
-    constraint expression"""
+    """Test save/load of ModelResult with non-trivial user symbols.
+
+    This example uses a VoigtModel, where `wofz()` is used in a constraint
+    expression.
+
+    """
     x = np.linspace(0, 20, 501)
     y = gaussian(x, 1.1, 8.5, 2) + lorentzian(x, 1.7, 8.5, 1.5)
     np.random.seed(20)

@@ -1,7 +1,6 @@
 """Module containing built-in fitting models."""
 
 import time
-import warnings
 
 from asteval import Interpreter, get_ast_names
 import numpy as np
@@ -1227,24 +1226,6 @@ class DoniachModel(Model):
 
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
-
-
-class DonaichModel(DoniachModel):
-    """A model of an Doniach Sunjic asymmetric lineshape.
-
-    Model added here for backwards-compatibility, will emit a
-    `FutureWarning` when used.
-
-    """
-
-    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
-                 **kwargs):
-
-        msg = ('Please correct the name of your built-in model: DonaichModel '
-               '--> DoniachModel. The incorrect spelling will be removed in '
-               'a later release.')
-        warnings.warn(FutureWarning(msg))
-        super().__init__(**kwargs)
 
 
 class PowerLawModel(Model):
