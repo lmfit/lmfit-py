@@ -1897,7 +1897,8 @@ class ModelResult(Minimizer):
                                            **{independent_var: x_array_dense})),
             fitfmt, label='best-fit', **fit_kws)
 
-        ax.set_title(self.model.name)
+        if ax.get_title() == '':
+            ax.set_title(self.model.name)
         if xlabel is None:
             ax.set_xlabel(independent_var)
         else:
@@ -1997,7 +1998,8 @@ class ModelResult(Minimizer):
             ax.plot(x_array, reduce_complex(self.eval()) - reduce_complex(self.data), datafmt,
                     label='residuals', **data_kws)
 
-        ax.set_title(self.model.name)
+        if ax.get_title() == '':
+            ax.set_title(self.model.name)
         ax.set_ylabel('residuals')
         ax.legend(loc='best')
         return ax
