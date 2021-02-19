@@ -764,6 +764,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         for _, par in pars.items():
             assert len(repr(par)) > 5
 
+    @pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB, reason="requires matplotlib.pyplot")
     def test_composite_plotting(self):
         # test that a composite model has non-empty best_values
         pytest.importorskip("matplotlib")
