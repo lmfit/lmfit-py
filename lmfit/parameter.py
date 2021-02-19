@@ -202,6 +202,12 @@ class Parameters(dict):
         # then add all the parameters
         self.add_many(*state['params'])
 
+    def __repr__(self):
+        """__repr__ from OrderedDict."""
+        if not self:
+            return '%s()' % (self.__class__.__name__,)
+        return '%s(%r)' % (self.__class__.__name__, list(self.items()))
+
     def eval(self, expr):
         """Evaluate a statement using the `asteval` Interpreter.
 
@@ -265,7 +271,7 @@ class Parameters(dict):
 
         """
         if oneline:
-            return super().__repr__()
+            return self.__repr__()
         s = "Parameters({\n"
         for key in self.keys():
             s += "    '%s': %s, \n" % (key, self[key])
