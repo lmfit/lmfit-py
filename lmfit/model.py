@@ -1,6 +1,5 @@
 """Implementation of the Model interface."""
 
-from collections import OrderedDict
 from copy import deepcopy
 from functools import wraps
 import inspect
@@ -270,8 +269,8 @@ class Model:
         self.nan_policy = nan_policy
 
         self.opts = kws
-        self.param_hints = OrderedDict()
         # the following has been changed from OrderedSet for the time being
+        self.param_hints = {}
         self._param_names = []
         self._parse_params()
         if self.independent_vars is None:
@@ -589,7 +588,7 @@ class Model:
             name = name[npref:]
 
         if name not in self.param_hints:
-            self.param_hints[name] = OrderedDict()
+            self.param_hints[name] = {}
 
         for key, val in kwargs.items():
             if key in self._hint_names:
@@ -862,7 +861,7 @@ class Model:
 
         Returns
         -------
-        OrderedDict
+        dict
             Keys are prefixes for component model, values are value of
             each component.
 
@@ -1132,8 +1131,8 @@ class CompositeModel(Model):
                        self.right.eval(params=params, **kwargs))
 
     def eval_components(self, **kwargs):
-        """Return OrderedDict of name, results for each component."""
-        out = OrderedDict(self.left.eval_components(**kwargs))
+        """Return dictionary of name, results for each component."""
+        out = dict(self.left.eval_components(**kwargs))
         out.update(self.right.eval_components(**kwargs))
         return out
 
@@ -1425,7 +1424,7 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        OrderedDict
+        dict
             Keys are prefixes of component models, and values are the
             estimated model value for each component of the model.
 
