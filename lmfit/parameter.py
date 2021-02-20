@@ -1,6 +1,5 @@
 """Parameter class."""
 
-from collections import OrderedDict
 from copy import deepcopy
 import json
 import warnings
@@ -24,8 +23,8 @@ def check_ast_errors(expr_eval):
         expr_eval.raise_exception(None)
 
 
-class Parameters(OrderedDict):
-    """An ordered dictionary of Parameter objects.
+class Parameters(dict):
+    """A dictionary of Parameter objects.
 
     It should contain all Parameter objects that are required to specify
     a fit model. All minimization and Model fitting routines in lmfit will
@@ -137,7 +136,7 @@ class Parameters(OrderedDict):
                 raise KeyError("'%s' is not a valid Parameters name" % key)
         if par is not None and not isinstance(par, Parameter):
             raise ValueError("'%s' is not a Parameter" % par)
-        OrderedDict.__setitem__(self, key, par)
+        dict.__setitem__(self, key, par)
         par.name = key
         par._expr_eval = self._asteval
         self._asteval.symtable[key] = par.value
@@ -203,6 +202,12 @@ class Parameters(OrderedDict):
         # then add all the parameters
         self.add_many(*state['params'])
 
+    def __repr__(self):
+        """__repr__ from OrderedDict."""
+        if not self:
+            return '%s()' % (self.__class__.__name__,)
+        return '%s(%r)' % (self.__class__.__name__, list(self.items()))
+
     def eval(self, expr):
         """Evaluate a statement using the `asteval` Interpreter.
 
@@ -266,7 +271,7 @@ class Parameters(OrderedDict):
 
         """
         if oneline:
-            return super().__repr__()
+            return self.__repr__()
         s = "Parameters({\n"
         for key in self.keys():
             s += "    '%s': %s, \n" % (key, self[key])
@@ -415,12 +420,12 @@ class Parameters(OrderedDict):
 
         Returns
         -------
-        OrderedDict
-            An ordered dictionary of :attr:`name`::attr:`value` pairs for
-            each Parameter.
+        dict
+            A dictionary of :attr:`name`::attr:`value` pairs for each
+            Parameter.
 
         """
-        return OrderedDict((p.name, p.value) for p in self.values())
+        return {p.name: p.value for p in self.values()}
 
     def dumps(self, **kws):
         """Represent Parameters as a JSON string.

@@ -1,6 +1,5 @@
 """Tests for the Model, CompositeModel, and ModelResult classes."""
 
-from collections import OrderedDict
 import functools
 import sys
 import unittest
@@ -207,8 +206,7 @@ def test_Model_get_state(gmodel):
 
     assert out[0][0] == 'gaussian'
     assert out[0][2:] == ('gaussian', '', ['x'],
-                          ['amplitude', 'center', 'sigma'], OrderedDict(),
-                          'raise', {})
+                          ['amplitude', 'center', 'sigma'], {}, 'raise', {})
 
 
 def test_Model_set_state(gmodel):

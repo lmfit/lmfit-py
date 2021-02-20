@@ -1,6 +1,5 @@
 """Contains functions to calculate confidence intervals."""
 
-from collections import OrderedDict
 from warnings import warn
 
 import numpy as np
@@ -213,7 +212,7 @@ class ConfidenceInterval:
 
     def calc_all_ci(self):
         """Calculate all confidence intervals."""
-        out = OrderedDict()
+        out = {}
 
         for p in self.p_names:
             out[p] = (self.calc_ci(p, -1)[::-1] +
