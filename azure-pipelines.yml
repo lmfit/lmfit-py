@@ -166,16 +166,18 @@ stages:
           displayName: 'Install pip, setuptools, wheel, pybind11 cython'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            wget https://github.com/numpy/numpy/releases/download/v1.20.0/numpy-1.20.0.tar.gz
-            tar xzvf numpy-1.20.0.tar.gz
-            cd numpy-1.20.0
+            export numpy_version=1.20.1
+            wget https://github.com/numpy/numpy/releases/download/v${numpy_version}/numpy-${numpy_version}.tar.gz
+            tar xzvf numpy-${numpy_version}.tar.gz
+            cd numpy-${numpy_version}
             python3.10 setup.py install --user
           displayName: 'Install latest available version of NumPy'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            wget https://github.com/scipy/scipy/releases/download/v1.6.0/scipy-1.6.0.tar.gz
-            tar xzvf scipy-1.6.0.tar.gz
-            cd scipy-1.6.0
+            export scipy_version=1.6.1
+            wget https://github.com/scipy/scipy/releases/download/v${scipy_version}/scipy-${scipy_version}.tar.gz
+            tar xzvf scipy-${scipy_version}.tar.gz
+            cd scipy-${scipy_version}
             # force Cythonizing code in attempt to avoid "undefined symbol: _PyGen_Send" error
             rm -f PKG-INFO cythonize.dat
             python3.10 setup.py install --user
