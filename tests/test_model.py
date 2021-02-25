@@ -705,7 +705,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             params[param_name].value = value
         self.model.fit(self.data, params, x=self.x)
 
-    @pytest.mark.xfail("np.__version__ == '1.20.0'")  # FIXME
     def test_extra_param_issues_warning(self):
         # The function accepts extra params, Model will warn but not raise.
         def flexible_func(x, amplitude, center, sigma, **kwargs):

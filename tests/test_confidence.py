@@ -191,7 +191,6 @@ def test_confidence_exceptions(data, pars):
         lmfit.conf_interval(minimizer, out_lsq)
 
 
-@pytest.mark.xfail("np.__version__ == '1.20.0'")  # FIXME
 def test_confidence_warnings(data, pars):
     """Make sure the proper warnings are emitted when needed."""
     minimizer = lmfit.Minimizer(residual, pars, fcn_args=data)
