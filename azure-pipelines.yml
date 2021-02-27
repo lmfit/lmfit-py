@@ -160,10 +160,8 @@ stages:
             export PATH=/home/vsts/.local/bin:$PATH
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
             python3.10 get-pip.py --user
-            pip3.10 install -U pip setuptools wheel pybind11
-            # install Cython from GitHub to fix "undefined symbol: _PyGen_Send" error
-            pip3.10 install git+https://github.com/cython/cython@0.29.x
-          displayName: 'Install pip, setuptools, wheel, pybind11 cython'
+            pip3.10 install -U pip setuptools wheel pybind11 cython
+          displayName: 'Install pip, setuptools, wheel, pybind11, and cython'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             export numpy_version=1.20.1
