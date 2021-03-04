@@ -357,6 +357,94 @@ def test__parse_params_forbidden_variable_names():
         Model(func_invalid_par)
 
 
+@pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
+                    reason="requires matplotlib.pyplot")
+def test_figure_default_title(peakdata):
+    """Test default figure title."""
+    x, y = peakdata
+    pvmodel = PseudoVoigtModel()
+    params = pvmodel.guess(y, x=x)
+    result = pvmodel.fit(y, params, x=x)
+
+    ax = result.plot_fit()
+    assert ax.axes.get_title() == 'Model(pvoigt)'
+
+    ax = result.plot_residuals()
+    assert ax.axes.get_title() == 'Model(pvoigt)'
+
+    fig, _ = result.plot()
+    assert fig.axes[0].get_title() == 'Model(pvoigt)'  # default model.name
+    assert fig.axes[1].get_title() == ''  # no title for fit subplot
+
+
+@pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
+                    reason="requires matplotlib.pyplot")
+def test_figure_title_using_title_keyword_argument(peakdata):
+    """Test setting figure title using title keyword argument."""
+    x, y = peakdata
+    pvmodel = PseudoVoigtModel()
+    params = pvmodel.guess(y, x=x)
+    result = pvmodel.fit(y, params, x=x)
+
+    ax = result.plot_fit(title='test')
+    assert ax.axes.get_title() == 'test'
+
+    ax = result.plot_residuals(title='test')
+    assert ax.axes.get_title() == 'test'
+
+    fig, _ = result.plot(title='test')
+    assert fig.axes[0].get_title() == 'test'
+    assert fig.axes[1].get_title() == ''  # no title for fit subplot
+
+
+@pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
+                    reason="requires matplotlib.pyplot")
+def test_figure_title_using_title_to_ax_kws(peakdata):
+    """Test setting figure title by supplying ax_{fit,res}_kws."""
+    x, y = peakdata
+    pvmodel = PseudoVoigtModel()
+    params = pvmodel.guess(y, x=x)
+    result = pvmodel.fit(y, params, x=x)
+
+    ax = result.plot_fit(ax_kws={'title': 'ax_kws'})
+    assert ax.axes.get_title() == 'ax_kws'
+
+    ax = result.plot_residuals(ax_kws={'title': 'ax_kws'})
+    assert ax.axes.get_title() == 'ax_kws'
+
+    fig, _ = result.plot(ax_res_kws={'title': 'ax_res_kws'})
+    assert fig.axes[0].get_title() == 'ax_res_kws'
+    assert fig.axes[1].get_title() == ''
+
+    fig, _ = result.plot(ax_fit_kws={'title': 'ax_fit_kws'})
+    assert fig.axes[0].get_title() == 'Model(pvoigt)'  # default model.name
+    assert fig.axes[1].get_title() == ''  # no title for fit subplot
+
+
+@pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
+                    reason="requires matplotlib.pyplot")
+def test_priority_setting_figure_title(peakdata):
+    """Test for setting figure title: title keyword argument has priority."""
+    x, y = peakdata
+    pvmodel = PseudoVoigtModel()
+    params = pvmodel.guess(y, x=x)
+    result = pvmodel.fit(y, params, x=x)
+
+    ax = result.plot_fit(ax_kws={'title': 'ax_kws'}, title='test')
+    assert ax.axes.get_title() == 'test'
+
+    ax = result.plot_residuals(ax_kws={'title': 'ax_kws'}, title='test')
+    assert ax.axes.get_title() == 'test'
+
+    fig, _ = result.plot(ax_res_kws={'title': 'ax_res_kws'}, title='test')
+    assert fig.axes[0].get_title() == 'test'
+    assert fig.axes[1].get_title() == ''
+
+    fig, _ = result.plot(ax_fit_kws={'title': 'ax_fit_kws'}, title='test')
+    assert fig.axes[0].get_title() == 'test'
+    assert fig.axes[1].get_title() == ''
+
+
 # Below is the content of the original test_model.py file. These tests still
 # need to be checked and possibly updated to the pytest-style. They work fine
 # though so leave them in for now.
@@ -617,7 +705,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             params[param_name].value = value
         self.model.fit(self.data, params, x=self.x)
 
-    @pytest.mark.xfail("np.__version__ == '1.20.0'")  # FIXME
     def test_extra_param_issues_warning(self):
         # The function accepts extra params, Model will warn but not raise.
         def flexible_func(x, amplitude, center, sigma, **kwargs):
@@ -844,10 +931,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         for _, par in pars.items():
             assert len(repr(par)) > 5
 
-    @pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB, reason="requires matplotlib.pyplot")
+    @pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
+                        reason="requires matplotlib.pyplot")
     def test_composite_plotting(self):
         # test that a composite model has non-empty best_values
-        pytest.importorskip("matplotlib")
         import matplotlib
         matplotlib.use('Agg')
 

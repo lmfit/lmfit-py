@@ -1771,7 +1771,7 @@ class ModelResult(Minimizer):
     def plot_fit(self, ax=None, datafmt='o', fitfmt='-', initfmt='--',
                  xlabel=None, ylabel=None, yerr=None, numpoints=None,
                  data_kws=None, fit_kws=None, init_kws=None, ax_kws=None,
-                 show_init=False, parse_complex='abs'):
+                 show_init=False, parse_complex='abs', title=None):
         """Plot the fit results using matplotlib, if available.
 
         The plot will include the data points, the initial fit curve
@@ -1816,6 +1816,8 @@ class ModelResult(Minimizer):
             How to reduce complex data for plotting. Options are one of:
             `'abs'` (default), `'real'`, `'imag'`, or `'angle'`, which
             correspond to the NumPy functions with the same name.
+        title : str, optional
+            Matplotlib format string for figure title.
 
         Returns
         -------
@@ -1897,7 +1899,10 @@ class ModelResult(Minimizer):
                                            **{independent_var: x_array_dense})),
             fitfmt, label='best-fit', **fit_kws)
 
-        ax.set_title(self.model.name)
+        if title:
+            ax.set_title(title)
+        elif ax.get_title() == '':
+            ax.set_title(self.model.name)
         if xlabel is None:
             ax.set_xlabel(independent_var)
         else:
@@ -1911,7 +1916,8 @@ class ModelResult(Minimizer):
 
     @_ensureMatplotlib
     def plot_residuals(self, ax=None, datafmt='o', yerr=None, data_kws=None,
-                       fit_kws=None, ax_kws=None, parse_complex='abs'):
+                       fit_kws=None, ax_kws=None, parse_complex='abs',
+                       title=None):
         """Plot the fit residuals using matplotlib, if available.
 
         If `yerr` is supplied or if the model included weights, errorbars
@@ -1936,6 +1942,8 @@ class ModelResult(Minimizer):
             How to reduce complex data for plotting. Options are one of:
             `'abs'` (default), `'real'`, `'imag'`, or `'angle'`, which
             correspond to the NumPy functions with the same name.
+        title : str, optional
+            Matplotlib format string for figure title.
 
         Returns
         -------
@@ -1997,7 +2005,10 @@ class ModelResult(Minimizer):
             ax.plot(x_array, reduce_complex(self.eval()) - reduce_complex(self.data), datafmt,
                     label='residuals', **data_kws)
 
-        ax.set_title(self.model.name)
+        if title:
+            ax.set_title(title)
+        elif ax.get_title() == '':
+            ax.set_title(self.model.name)
         ax.set_ylabel('residuals')
         ax.legend(loc='best')
         return ax
@@ -2006,7 +2017,7 @@ class ModelResult(Minimizer):
     def plot(self, datafmt='o', fitfmt='-', initfmt='--', xlabel=None,
              ylabel=None, yerr=None, numpoints=None, fig=None, data_kws=None,
              fit_kws=None, init_kws=None, ax_res_kws=None, ax_fit_kws=None,
-             fig_kws=None, show_init=False, parse_complex='abs'):
+             fig_kws=None, show_init=False, parse_complex='abs', title=None):
         """Plot the fit results and residuals using matplotlib.
 
         The method will produce a matplotlib figure (if package available)
@@ -2056,6 +2067,8 @@ class ModelResult(Minimizer):
             How to reduce complex data for plotting. Options are one of:
             `'abs'` (default), `'real'`, `'imag'`, or `'angle'`, which
             correspond to the NumPy functions with the same name.
+        title : str, optional
+            Matplotlib format string for figure title.
 
         Returns
         -------
@@ -2117,10 +2130,12 @@ class ModelResult(Minimizer):
                       initfmt=initfmt, xlabel=xlabel, ylabel=ylabel,
                       numpoints=numpoints, data_kws=data_kws,
                       fit_kws=fit_kws, init_kws=init_kws, ax_kws=ax_fit_kws,
-                      show_init=show_init, parse_complex=parse_complex)
+                      show_init=show_init, parse_complex=parse_complex,
+                      title=title)
         self.plot_residuals(ax=ax_res, datafmt=datafmt, yerr=yerr,
                             data_kws=data_kws, fit_kws=fit_kws,
-                            ax_kws=ax_res_kws, parse_complex=parse_complex)
+                            ax_kws=ax_res_kws, parse_complex=parse_complex,
+                            title=title)
         plt.setp(ax_res.get_xticklabels(), visible=False)
         ax_fit.set_title('')
         return fig, gs
