@@ -48,8 +48,8 @@ def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     x = x[sort_increasing]
     y = y[sort_increasing]
 
-    maxy, miny = max(y), min(y)
-    maxx, minx = max(x), min(x)
+    maxy, miny = np.max(y), np.min(y)
+    maxx, minx = np.max(x), np.min(x)
     cen = x[np.argmax(y)]
     height = (maxy - miny)*3.0
     sig = (maxx-minx)/6.0
@@ -76,9 +76,9 @@ def guess_from_peak2d(model, z, x, y, negative):
     if x is None or y is None:
         return 1.0, 0.0, 0.0, 1.0, 1.0
 
-    maxx, minx = max(x), min(x)
-    maxy, miny = max(y), min(y)
-    maxz, minz = max(z), min(x)
+    maxx, minx = np.max(x), np.min(x)
+    maxy, miny = np.max(y), np.min(y)
+    maxz, minz = np.max(z), np.min(x)
 
     centerx = x[np.argmax(z)]
     centery = y[np.argmax(z)]
