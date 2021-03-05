@@ -76,6 +76,10 @@ def guess_from_peak2d(model, z, x, y, negative):
     if x is None or y is None:
         return 1.0, 0.0, 0.0, 1.0, 1.0
 
+    x = np.array(x).flatten()
+    y = np.array(y).flatten()
+    z = np.array(z).flatten()
+    
     maxx, minx = np.max(x), np.min(x)
     maxy, miny = np.max(y), np.min(y)
     maxz, minz = np.max(z), np.min(x)
