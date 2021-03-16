@@ -111,6 +111,18 @@ def test_parameters_deepcopy(parameters):
                     deepcopy_pars._asteval.symtable[unique_symbol])
 
 
+def test_parameters_deepcopy_subclass():
+    """Test that a subclass of parameters is preserved when performing a deepcopy"""
+    class ParametersSubclass(lmfit.Parameters):
+        pass
+
+    parameters = ParametersSubclass()
+    assert isinstance(parameters, ParametersSubclass)
+
+    parameterscopy = deepcopy(parameters)
+    assert isinstance(parameterscopy, ParametersSubclass)
+
+
 def test_parameters_update(parameters):
     """Tests for updating a Parameters class."""
     pars, exp_attr_values_A, exp_attr_values_B = parameters
