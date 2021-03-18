@@ -21,6 +21,7 @@ New features:
 
 Bug fixes/enhancements:
 - do not overwrite user-specified figure titles in Model.plot() functions and allow setting with 'title' keyword argument (PR #711)
+- preserve Parameters subclass in deepcopy (@jenshnielsen; PR #719)
 
 Various:
 - update asteval dependency to >=0.9.22 to avoid DeprecationWarnings from NumPy v1.20.0 (PR #707)
