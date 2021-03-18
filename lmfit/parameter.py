@@ -101,7 +101,7 @@ class Parameters(dict):
         all individual Parameter objects are copied.
 
         """
-        _pars = Parameters(asteval=None)
+        _pars = self.__class__(asteval=None)
 
         # find the symbols that were added by users, not during construction
         unique_symbols = {key: self._asteval.symtable[key]
