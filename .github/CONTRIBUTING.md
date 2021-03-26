@@ -12,15 +12,18 @@ style, we make use of the [pre-commit](https://pre-commit.com/) framework to run
 several *hooks* when committing code. Please follow the instructions below if
 you intend to contribute to the lmfit repository:
 
-- clone the GitHub repository:
-  ``git clone https://github.com/lmfit/lmfit-py.git``
+- fork the GitHub repository
+- clone your forked GitHub repository:
+  ``git clone https://github.com/<your-name>/lmfit-py.git``
 - install all (optional) dependencies either using ``pip`` or ``conda``:
-  ``pip -r install requirements-dev.txt`` or
+  ``pip install -U -r requirements-dev.txt`` or
   ``conda install <packages in requirements-dev.txt>``
-- initialize ``pre-commit`` running ``pre-commit install`` in the lmfit directory
+- initialize ``pre-commit`` by running ``pre-commit install`` in the lmfit directory
 - create a new branch: ``git checkout -b <awesome_new_feature>``
 - start coding
+- install the latest version of your code using one of the usual ``python setup.py`` commands (e.g., ``python setup.py install --user``)
 - make sure the test-suite passes locally: run ``pytest`` in the lmfit directory
+- make sure the documentation builds locally: run ``make`` in the doc directory
 - push to your fork: ``git push origin``
 - open a Pull Request on https://github.com/lmfit/lmfit-py/pulls
 
