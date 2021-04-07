@@ -36,7 +36,7 @@ def _align(var, mask, data):
 
 
 try:
-    from matplotlib import pyplot as plt
+    import matplotlib  # noqa: F401
     _HAS_MATPLOTLIB = True
 except Exception:
     _HAS_MATPLOTLIB = False
@@ -2097,6 +2097,7 @@ class ModelResult(Minimizer):
         called, otherwise `fig_kws` is ignored.
 
         """
+        from matplotlib import pyplot as plt
         if data_kws is None:
             data_kws = {}
         if fit_kws is None:
