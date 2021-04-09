@@ -1574,6 +1574,9 @@ class Minimizer:
 
         result.call_kws = kws
         try:
+            if 'x' in self.userkws:
+                if np.asarray(self.userkws['x']).dtype is np.dtype(np.float32):
+                    warnings.warn('input argument x has inccorect type np.float32')
             ret = least_squares(self.__residual, start_vals,
                                 bounds=(lower_bounds, upper_bounds),
                                 kwargs=dict(apply_bounds_transformation=False),

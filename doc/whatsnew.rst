@@ -27,7 +27,7 @@ Various:
 - remove incorrectly spelled ``DonaichModel`` and ``donaich`` lineshape, deprecated in version 1.0.1 (PR #707)
 - remove occurrences of OrderedDict throughout the code; dict is order-preserving since Python 3.6 (PR #713)
 - update the contributing instructions (PR #718; @martin-majlis)
-
+- add warning if independent data of incorrect type is used in least squares fitting (PR #722)
 
 .. _whatsnew_102_label:
 
