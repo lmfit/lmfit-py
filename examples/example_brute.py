@@ -199,7 +199,7 @@ print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name,
 par_name = 'amp'
 indx_shift = result_brute.var_names.index(par_name)
 grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
-print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name, len(grid_shift), grid_shift))
+print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 ###############################################################################
 # **(3)** upper bound (max) and brute_step are specified:
@@ -207,7 +207,7 @@ print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name, len(gri
 par_name = 'omega'
 indx_shift = result_brute.var_names.index(par_name)
 grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
-print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name, len(grid_shift), grid_shift))
+print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 ###############################################################################
 # **(4)** numerical value (value) and brute_step are specified:
@@ -215,7 +215,7 @@ print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name, len(gri
 par_name = 'decay'
 indx_shift = result_brute.var_names.index(par_name)
 grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
-print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name, len(grid_shift), grid_shift))
+print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 ###############################################################################
 # The ``MinimizerResult`` contains all the usual best-fit parameters and
