@@ -12,7 +12,7 @@ import pytest
 import lmfit
 from lmfit import Model, models
 from lmfit.lineshapes import gaussian
-from lmfit.model import get_reducer, propagate_err
+from lmfit.model import DataPrecisionWarning, get_reducer, propagate_err
 from lmfit.models import PseudoVoigtModel
 
 
@@ -355,6 +355,19 @@ def test__parse_params_forbidden_variable_names():
     msg = r"Invalid parameter name \('weights'\) for function func_invalid_par"
     with pytest.raises(ValueError, match=msg):
         Model(func_invalid_par)
+
+
+def test_Model_input_data_check():
+    def optimization_function(x, b):
+        return x+b
+    model = Model(optimization_function)
+    data = np.array([1., 2., 3.], dtype=np.float64)
+
+    with pytest.warns(DataPrecisionWarning, match='independent data x has type '):
+        _ = model.fit(data, x=data.astype(np.float32), method='least_sq', b=0.1)
+
+    with pytest.warns(DataPrecisionWarning, match='input data has type '):
+        _ = model.fit(data.astype(np.float32), x=data, method='least_squares', b=-0.1)
 
 
 @pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,

@@ -185,6 +185,15 @@ def propagate_err(z, dz, option):
     return err
 
 
+class DataPrecisionWarning(UserWarning):
+    """ Warning generated when input data for the fitting methods is of incorrect type
+
+    Data in lmfit is expected to be of double-precision. When data is supplied in single-precision
+    this warning is emitted.
+    """
+    pass
+
+
 class Model:
     """Create a model from a user-supplied model function."""
 
@@ -1008,9 +1017,16 @@ class Model:
         # and apply the mask from above if there is one.
 
         for var in self.independent_vars:
+            independent_dtype = np.asarray(kwargs[var]).dtype
+            if independent_dtype is np.dtype(np.float32):
+                warnings.warn(f'independent data {var} has type {independent_dtype}', DataPrecisionWarning)
+
             if not np.isscalar(kwargs[var]):
-                # print("Model fit align ind dep ", var, mask.sum())
                 kwargs[var] = _align(kwargs[var], mask, data)
+
+        data_dtype = np.asarray(data).dtype
+        if data_dtype is np.dtype(np.float32):
+            warnings.warn(f'input data has type {data_dtype}', DataPrecisionWarning)
 
         if fit_kws is None:
             fit_kws = {}
