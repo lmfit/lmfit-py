@@ -339,7 +339,7 @@ class Parameters(dict):
 
         Parameters
         ----------
-        name : str
+        name : str, Parameter
             Name of parameter. Must match ``[a-z_][a-z0-9_]*`` and cannot
             be a Python reserved word.
         value : float, optional
