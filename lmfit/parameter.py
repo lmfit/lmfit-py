@@ -340,9 +340,10 @@ class Parameters(dict):
         Parameters
         ----------
         name : str or Parameter
-            Name of the parameter or a Parameter object. If the name is given, 
-            a new Parameter object will be created. The name must match 
-            ``[a-z_][a-z0-9_]*`` and cannot be a Python reserved word. 
+            If ``name`` refers to a Parameter object it will be added directly
+            to the Parameters instance, otherwise a new Parameter object with name
+            ``string`` is created before adding it. In both cases, ``name`` must
+            match ``[a-z_][a-z0-9_]*`` and cannot be a Python reserved word.
         value : float, optional
             Numerical Parameter value, typically the *initial value*.
         vary : bool, optional
