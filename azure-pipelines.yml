@@ -159,7 +159,7 @@ stages:
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-            python3.10 get-pip.py --user
+            python3.10 get-pip.py --install-layout=unix_local
             pip3.10 install -U pip setuptools wheel pybind11 cython
           displayName: 'Install pip, setuptools, wheel, pybind11, and cython'
         - script: |
@@ -168,7 +168,7 @@ stages:
             wget https://github.com/numpy/numpy/releases/download/v${numpy_version}/numpy-${numpy_version}.tar.gz
             tar xzvf numpy-${numpy_version}.tar.gz
             cd numpy-${numpy_version}
-            python3.10 setup.py install --user
+            python3.10 setup.py install --install-layout=unix_local
           displayName: 'Install latest available version of NumPy'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
@@ -178,14 +178,14 @@ stages:
             cd scipy-${scipy_version}
             # force Cythonizing code in attempt to avoid "undefined symbol: _PyGen_Send" error
             rm -f PKG-INFO cythonize.dat
-            python3.10 setup.py install --user
+            python3.10 setup.py install --install-layout=unix_local
           displayName: 'Install latest available version of SciPy'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             pip3.10 install asteval uncertainties dill emcee numdifftools
           displayName: 'Install latest available version of Python dependencies'
         - script: |
-            python3.10 setup.py install --user
+            python3.10 setup.py install --instal-layout=unix_local
           displayName: 'Install lmfit'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
