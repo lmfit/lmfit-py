@@ -202,6 +202,11 @@ stages:
             wget https://github.com/numpy/numpy/releases/download/v${numpy_version}/numpy-${numpy_version}.tar.gz
             tar xzvf numpy-${numpy_version}.tar.gz
             cd numpy-${numpy_version}
+            # apply patch for change in _Py_HashDouble
+            git init
+            wget https://github.com/numpy/numpy/commit/ad2a73c18dcff95d844c382c94ab7f73b5571cf3.patch
+            cat ad2a73c18dcff95d844c382c94ab7f73b5571cf3.patch  | head -84 > patch-to-apply
+            git apply patch-to-apply --verbose
             python3.10 setup.py install --user
           displayName: 'Install latest available version of NumPy'
         - script: |
