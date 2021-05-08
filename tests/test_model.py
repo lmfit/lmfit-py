@@ -357,10 +357,10 @@ def test__parse_params_forbidden_variable_names():
         Model(func_invalid_par)
 
 
-@pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
-                    reason="requires matplotlib.pyplot")
 def test_figure_default_title(peakdata):
     """Test default figure title."""
+    pytest.importorskip('matplotlib')
+
     x, y = peakdata
     pvmodel = PseudoVoigtModel()
     params = pvmodel.guess(y, x=x)
@@ -377,10 +377,10 @@ def test_figure_default_title(peakdata):
     assert fig.axes[1].get_title() == ''  # no title for fit subplot
 
 
-@pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
-                    reason="requires matplotlib.pyplot")
 def test_figure_title_using_title_keyword_argument(peakdata):
     """Test setting figure title using title keyword argument."""
+    pytest.importorskip('matplotlib')
+
     x, y = peakdata
     pvmodel = PseudoVoigtModel()
     params = pvmodel.guess(y, x=x)
@@ -397,10 +397,10 @@ def test_figure_title_using_title_keyword_argument(peakdata):
     assert fig.axes[1].get_title() == ''  # no title for fit subplot
 
 
-@pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
-                    reason="requires matplotlib.pyplot")
 def test_figure_title_using_title_to_ax_kws(peakdata):
     """Test setting figure title by supplying ax_{fit,res}_kws."""
+    pytest.importorskip('matplotlib')
+
     x, y = peakdata
     pvmodel = PseudoVoigtModel()
     params = pvmodel.guess(y, x=x)
@@ -421,10 +421,10 @@ def test_figure_title_using_title_to_ax_kws(peakdata):
     assert fig.axes[1].get_title() == ''  # no title for fit subplot
 
 
-@pytest.mark.skipif(not lmfit.model._HAS_MATPLOTLIB,
-                    reason="requires matplotlib.pyplot")
 def test_priority_setting_figure_title(peakdata):
     """Test for setting figure title: title keyword argument has priority."""
+    pytest.importorskip('matplotlib')
+
     x, y = peakdata
     pvmodel = PseudoVoigtModel()
     params = pvmodel.guess(y, x=x)
@@ -454,13 +454,6 @@ def assert_results_close(actual, desired, rtol=1e-03, atol=1e-03, err_msg='',
     for param_name, value in desired.items():
         assert_allclose(actual[param_name], value, rtol, atol, err_msg,
                         verbose)
-
-
-def _skip_if_no_pandas():
-    try:
-        import pandas  # noqa: F401
-    except ImportError:
-        raise pytest.skip("Skipping tests that require pandas.")
 
 
 def firstarg_ndarray(func):
@@ -605,7 +598,8 @@ class CommonTests:
         assert " chi-square " in report
 
     def test_data_alignment(self):
-        _skip_if_no_pandas()
+        pytest.importorskip('pandas')
+
         from pandas import Series
 
         # Align data and indep var of different lengths using pandas index.
