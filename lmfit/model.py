@@ -1865,7 +1865,7 @@ class ModelResult(Minimizer):
             return False
 
         if not isinstance(ax, plt.Axes):
-            ax = plt.gca(**ax_kws)
+            ax = plt.axes(**ax_kws)
 
         x_array = self.userkws[independent_var]
 
@@ -1989,7 +1989,7 @@ class ModelResult(Minimizer):
             return False
 
         if not isinstance(ax, plt.Axes):
-            ax = plt.gca(**ax_kws)
+            ax = plt.axes(**ax_kws)
 
         x_array = self.userkws[independent_var]
 
