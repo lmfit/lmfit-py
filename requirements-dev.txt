@@ -11,6 +11,7 @@ numdifftools
 pandas
 Pillow
 pre-commit
+pycairo;platform_system=="Windows"
 pytest
 Sphinx
 sphinx-gallery>=0.8
