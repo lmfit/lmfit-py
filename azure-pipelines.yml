@@ -44,7 +44,7 @@ stages:
             sudo apt install -qq -y texlive-latex-extra latexmk
           displayName: 'Install TeX Live'
         - script: |
-           cd doc ; make all
+            cd doc ; make all
           displayName: 'Build the documentation'
 
 - stage: tests_minimum_dependencies
@@ -138,6 +138,40 @@ stages:
         - script: |
             bash <(curl -s https://codecov.io/bash)
           displayName: 'Upload to codecov.io'
+
+- stage: test_Windows_latest
+  dependsOn: check_codestyle
+  jobs:
+    - job:
+      pool:
+        vmImage: 'windows-latest'
+      strategy:
+        matrix:
+          Python39:
+            python.version: '3.9'
+
+      steps:
+        - task: UsePythonVersion@0
+          inputs:
+            versionSpec: '$(python.version)'
+          displayName: 'Use Python $(python.version)'
+        - script: |
+            python -m pip install --upgrade pip setuptools wheel
+            pip install -r requirements-dev.txt
+          displayName: 'Install latest available version of Python dependencies'
+        - script: |
+            python setup.py install
+          displayName: 'Install lmfit'
+        - script: |
+            pip list
+          displayName: 'List installed Python packages'
+        - script: |
+            pip install pytest-azurepipelines
+            pytest
+          displayName: 'Run test-suite'
+        - powershell:
+            cd doc ; .\make.bat html
+          displayName: 'Build the HTML documentation'
 
 - stage: development_version
   dependsOn: check_codestyle
