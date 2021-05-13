@@ -8,7 +8,6 @@ from scipy.special import wofz
 
 log2 = log(2)
 s2pi = sqrt(2*pi)
-spi = sqrt(pi)
 s2 = sqrt(2.0)
 # tiny had been numpy.finfo(numpy.float64).eps ~=2.2e16.
 # here, we explicitly set it to 1.e-15 == numpy.finfo(numpy.float64).resolution
