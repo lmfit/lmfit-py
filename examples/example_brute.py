@@ -93,7 +93,7 @@ result = fitter.minimize(method='brute')
 ###############################################################################
 # , which will increment ``x`` and ``y`` between ``-4`` in increments of
 # ``0.25`` until ``4`` (not inclusive).
-grid_x, grid_y = [np.unique(par.ravel()) for par in result.brute_grid]
+grid_x, grid_y = (np.unique(par.ravel()) for par in result.brute_grid)
 print(grid_x)
 
 ###############################################################################
@@ -338,7 +338,7 @@ def plot_results_brute(result, best_vals=True, varlabels=None,
                 if i == 0:
                     axes[0, 0].axis('off')
                 ax = axes[i, j+1]
-                red_axis = tuple([a for a in range(npars) if a != i])
+                red_axis = tuple(a for a in range(npars) if a != i)
                 ax.plot(np.unique(result.brute_grid[i]),
                         np.minimum.reduce(result.brute_Jout, axis=red_axis),
                         'o', ms=3)
@@ -352,7 +352,7 @@ def plot_results_brute(result, best_vals=True, varlabels=None,
             # parameter vs chi2 profile on the left
             elif j == 0 and i > 0:
                 ax = axes[i, j]
-                red_axis = tuple([a for a in range(npars) if a != i])
+                red_axis = tuple(a for a in range(npars) if a != i)
                 ax.plot(np.minimum.reduce(result.brute_Jout, axis=red_axis),
                         np.unique(result.brute_grid[i]), 'o', ms=3)
                 ax.invert_xaxis()
@@ -367,7 +367,7 @@ def plot_results_brute(result, best_vals=True, varlabels=None,
             # contour plots for all combinations of two parameters
             elif j > i:
                 ax = axes[j, i+1]
-                red_axis = tuple([a for a in range(npars) if a not in (i, j)])
+                red_axis = tuple(a for a in range(npars) if a not in (i, j))
                 X, Y = np.meshgrid(np.unique(result.brute_grid[i]),
                                    np.unique(result.brute_grid[j]))
                 lvls1 = np.linspace(result.brute_Jout.min(),

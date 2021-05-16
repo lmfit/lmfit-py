@@ -131,7 +131,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
 
     buff = []
     add = buff.append
-    namelen = max([len(n) for n in parnames])
+    namelen = max(len(n) for n in parnames)
     if result is not None:
         add("[[Fit Statistics]]")
         add("    # fitting method   = %s" % (result.method))
@@ -205,7 +205,7 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         sort_correl.reverse()
         if len(sort_correl) > 0:
             add(CORREL_HEAD % min_correl)
-            maxlen = max([len(k) for k in list(correls.keys())])
+            maxlen = max(len(k) for k in list(correls.keys()))
         for name, val in sort_correl:
             lspace = max(0, maxlen - len(name))
             add('    C(%s)%s = % .3f' % (name, (' '*30)[:lspace], val))
@@ -288,9 +288,9 @@ def params_html_table(params):
         Multi-line HTML code of fitting parameters.
 
     """
-    has_err = any([p.stderr is not None for p in params.values()])
-    has_expr = any([p.expr is not None for p in params.values()])
-    has_brute = any([p.brute_step is not None for p in params.values()])
+    has_err = any(p.stderr is not None for p in params.values())
+    has_expr = any(p.expr is not None for p in params.values())
+    has_brute = any(p.brute_step is not None for p in params.values())
 
     html = []
     add = html.append
@@ -377,7 +377,7 @@ def ci_report(ci, with_offset=True, ndigits=5):
         Text of formatted report on confidence intervals.
 
     """
-    maxlen = max([len(i) for i in ci])
+    maxlen = max(len(i) for i in ci)
     buff = []
     add = buff.append
 

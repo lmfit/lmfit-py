@@ -2,14 +2,14 @@ exclude: 'versioneer.py|lmfit/_version|doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.15.0
+    rev: v2.18.1
     hooks:
     -   id: pyupgrade
         # for now don't force to change from %-operator to {}
         args: [--keep-percent-format, --py36-plus]
 
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
     -   id: check-ast
     -   id: check-builtin-literals

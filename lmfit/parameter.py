@@ -315,7 +315,7 @@ class Parameters(dict):
         otherstyles = dict(name='{name:<{name_len}} ', stderr='{stderr!s:>{n}}',
                            vary='{vary!s:>{n}}', expr='{expr!s:>{n}}',
                            brute_step='{brute_step!s:>{n}}')
-        line = ' '.join([otherstyles.get(k, numstyle % k) for k in allcols])
+        line = ' '.join(otherstyles.get(k, numstyle % k) for k in allcols)
         for name, values in sorted(self.items()):
             pvalues = {k: getattr(values, k) for k in columns}
             pvalues['name'] = name
