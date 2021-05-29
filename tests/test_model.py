@@ -357,6 +357,43 @@ def test__parse_params_forbidden_variable_names():
         Model(func_invalid_par)
 
 
+input_dtypes = [(np.int32, np.float64), (np.float32, np.float64),
+                (np.complex64, np.complex128), ('list', np.float64),
+                ('tuple', np.float64), ('pandas-real', np.float64),
+                ('pandas-complex', np.complex128)]
+
+
+@pytest.mark.parametrize('input_dtype, expected_dtype', input_dtypes)
+def test_coercion_of_input_data(peakdata, input_dtype, expected_dtype):
+    """Test for coercion of 'data' and 'independent_vars'.
+
+    - 'data' should become 'float64' or 'complex128'
+    - dtype for 'indepdendent_vars' is only changed when the input is a list,
+        tuple, numpy.ndarray, or pandas.Series
+
+    """
+    x, y = peakdata
+    model = lmfit.Model(gaussian)
+    pars = model.make_params()
+
+    if input_dtype == 'pandas-real' and lmfit.minimizer.HAS_PANDAS:
+        result = model.fit(lmfit.model.Series(y, dtype=np.float32), pars,
+                           x=lmfit.model.Series(x, dtype=np.float32))
+    elif input_dtype == 'pandas-complex' and lmfit.minimizer.HAS_PANDAS:
+        result = model.fit(lmfit.model.Series(y, dtype=np.complex64), pars,
+                           x=lmfit.model.Series(x, dtype=np.complex64))
+    elif input_dtype == 'list':
+        result = model.fit(y.tolist(), pars, x=x.tolist())
+    elif input_dtype == 'tuple':
+        result = model.fit(tuple(y), pars, x=tuple(x))
+    else:
+        result = model.fit(np.asarray(y, dtype=input_dtype), pars,
+                           x=np.asarray(x, dtype=input_dtype))
+
+    assert result.__dict__['userkws']['x'].dtype == expected_dtype
+    assert result.__dict__['userargs'][0].dtype == expected_dtype
+
+
 def test_figure_default_title(peakdata):
     """Test default figure title."""
     pytest.importorskip('matplotlib')
