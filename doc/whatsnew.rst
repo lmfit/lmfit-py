@@ -20,7 +20,7 @@ Version 1.0.3 Release Notes (unreleased)
 New features:
 
 Bug fixes/enhancements:
-- do not overwrite user-specified figure titles in Model.plot() functions and allow setting with 'title' keyword argument (PR #711)
+- do not overwrite user-specified figure titles in Model.plot() functions and allow setting with ``title`` keyword argument (PR #711)
 - preserve Parameters subclass in deepcopy (@jenshnielsen; PR #719)
 - coerce ``data`` and ``indepdent_vars`` to NumPy array with ``dtype=float64`` or ``dtype=complex128`` where  applicable (Issues #723 and #727)
 
@@ -29,6 +29,9 @@ Various:
 - remove incorrectly spelled ``DonaichModel`` and ``donaich`` lineshape, deprecated in version 1.0.1 (PR #707)
 - remove occurrences of OrderedDict throughout the code; dict is order-preserving since Python 3.6 (PR #713)
 - update the contributing instructions (PR #718; @martin-majlis)
+- (again) defer import of matplotlib to when it is needed (@zobristnicholas; PR #721)
+- fix description of ``name`` argument in ``Parameters.add`` (@kristianmeyerr; PR #725)
+- update dependencies, make sure a functional development environment is installed on Windows (Issue #712))
 
 
 .. _whatsnew_102_label:
