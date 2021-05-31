@@ -22,3 +22,14 @@ def test_pandas_guess_from_peak():
     guess = model.guess(ydat, x=xdat)
 
     assert guess_pd == guess
+
+
+def test_pandas_Voigt_model():
+    """Regression test for Series.real reported in GH Issues 727."""
+    data = pandas.read_csv(os.path.join(os.path.dirname(__file__), '..',
+                                        'examples', 'peak.csv'))
+    model = lmfit.models.VoigtModel()
+    params = model.make_params()
+    fit = model.fit(data['y'], params, x=data['x'])
+
+    assert fit.success
