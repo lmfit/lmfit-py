@@ -8,9 +8,6 @@ from scipy import __version__ as scipy_version
 
 import lmfit
 
-# SHGO algorithm is present in SciPy >= 1.2
-pytest.importorskip("scipy", minversion="1.2")
-
 
 def eggholder(x):
     return (-(x[1] + 47.0) * np.sin(np.sqrt(abs(x[0]/2.0 + (x[1] + 47.0))))
