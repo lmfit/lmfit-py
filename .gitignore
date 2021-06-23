@@ -20,3 +20,6 @@ sandbox/
 doc/html
 *.sav
 .pytest*
+*.coverage*
+*htmlcov/*
+.eggs

@@ -86,8 +86,7 @@ stages:
           displayName: 'List installed Python packages'
         - script: |
             pip install pytest-azurepipelines pytest-cov
-            coverage run --source=lmfit -m pytest
-            coverage report -m
+            pytest
           displayName: 'Run test-suite and collect coverage'
         - script: |
             bash <(curl -s https://codecov.io/bash)
@@ -132,8 +131,7 @@ stages:
           displayName: 'List installed Python packages'
         - script: |
             pip install pytest-azurepipelines pytest-cov
-            coverage run --source=lmfit -m pytest
-            coverage report -m
+            pytest
           displayName: 'Run test-suite and collect coverage'
         - script: |
             bash <(curl -s https://codecov.io/bash)
@@ -166,7 +164,7 @@ stages:
             pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
+            pip install pytest-azurepipelines pytest-cov
             pytest
           displayName: 'Run test-suite'
         - powershell:
@@ -232,7 +230,7 @@ stages:
           displayName: 'List installed Python packages'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            pip3.10 install pytest pytest-azurepipelines
+            pip3.10 install pytest pytest-azurepipelines pytest-cov
             cd $(Agent.BuildDirectory)/s/tests
             pytest || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Run test-suite'
