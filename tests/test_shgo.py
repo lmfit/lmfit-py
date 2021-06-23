@@ -4,6 +4,7 @@ import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 import scipy
+from scipy import __version__ as scipy_version
 
 import lmfit
 
@@ -29,7 +30,13 @@ def test_shgo_scipy_vs_lmfit():
     bounds = [(-512, 512), (-512, 512)]
     result_scipy = scipy.optimize.shgo(eggholder, bounds, n=30,
                                        sampling_method='sobol')
-    assert len(result_scipy.xl) == 13
+
+    # in SciPy v1.7.0: "sobol was fixed and is now using scipy.stats.qmc.Sobol"
+    # FIXME: clean this up after we require SciPy >= 1.7.0
+    if int(scipy_version.split('.')[1]) < 7:
+        assert len(result_scipy.xl) == 13
+    else:
+        assert len(result_scipy.xl) == 6
 
     pars = lmfit.Parameters()
     pars.add_many(('x0', 0, True, -512, 512), ('x1', 0, True, -512, 512))
@@ -48,7 +55,13 @@ def test_shgo_scipy_vs_lmfit_2():
     bounds = [(-512, 512), (-512, 512)]
     result_scipy = scipy.optimize.shgo(eggholder, bounds, n=60, iters=5,
                                        sampling_method='sobol')
-    assert len(result_scipy.xl) == 39
+
+    # in SciPy v1.7.0: "sobol was fixed and is now using scipy.stats.qmc.Sobol"
+    # FIXME: clean this up after we require SciPy >= 1.7.0
+    if int(scipy_version.split('.')[1]) < 7:
+        assert len(result_scipy.xl) == 39
+    else:
+        assert len(result_scipy.xl) == 74
 
     pars = lmfit.Parameters()
     pars.add_many(('x0', 0, True, -512, 512), ('x1', 0, True, -512, 512))
