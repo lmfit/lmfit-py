@@ -23,3 +23,4 @@ doc/html
 *.coverage*
 *htmlcov/*
 .eggs
+lmfit/version.py

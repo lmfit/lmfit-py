@@ -2,8 +2,6 @@
 
 from setuptools import setup
 
-import versioneer
-
 long_desc = """A library for least-squares minimization and data fitting in
 Python.  Built on top of scipy.optimize, lmfit provides a Parameter object
 which can be set as fixed or free, can have upper and/or lower bounds, or
@@ -23,12 +21,14 @@ estimating Parameter uncertainties from the covariance matrix is
 questionable. """
 
 setup(name='lmfit',
-      version=versioneer.get_version(),
-      cmdclass=versioneer.get_cmdclass(),
+      use_scm_version={
+          'write_to': 'lmfit/version.py',
+          'version_scheme': 'post-release'},
       author='LMFit Development Team',
       author_email='matt.newville@gmail.com',
       url='https://lmfit.github.io/lmfit-py/',
       download_url='https://lmfit.github.io//lmfit-py/',
+      setup_requires=['setuptools_scm'],
       install_requires=['asteval>=0.9.22',
                         'numpy>=1.18',
                         'scipy>=1.3',
