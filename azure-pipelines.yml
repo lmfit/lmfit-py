@@ -20,7 +20,7 @@ stages:
             pip install pre-commit
           displayName: 'Install Python dependencies'
         - script: |
-            pre-commit autoupdate ; pre-commit run --all-files
+            pre-commit install ; pre-commit run --all-files
           displayName: 'Run pre-commit hooks'
 
 - stage: build_documentation
