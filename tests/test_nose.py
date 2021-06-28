@@ -2,8 +2,7 @@ import unittest
 
 import numpy as np
 from numpy import pi
-from numpy.testing import (assert_allclose, assert_almost_equal, assert_equal,
-                           dec)
+from numpy.testing import assert_allclose, assert_almost_equal, assert_equal
 import pytest
 from scipy.optimize import rosen_der
 from uncertainties import ufloat
@@ -427,7 +426,6 @@ class CommonMinimizerTest(unittest.TestCase):
         assert_equal(_nan_policy(a, nan_policy='omit'), [0, 1, 2, 3])
         assert_equal(_nan_policy(a, handle_inf=False), a)
 
-    @dec.slow
     def test_emcee(self):
         # test emcee
         if not HAS_EMCEE:
@@ -438,7 +436,6 @@ class CommonMinimizerTest(unittest.TestCase):
 
         check_paras(out.params, self.p_true, sig=3)
 
-    @dec.slow
     def test_emcee_method_kwarg(self):
         # test with emcee as method keyword argument
         if not HAS_EMCEE:
@@ -458,7 +455,6 @@ class CommonMinimizerTest(unittest.TestCase):
                                             is_weighted=False)
         assert out_unweighted.method == 'emcee'
 
-    @dec.slow
     def test_emcee_multiprocessing(self):
         # test multiprocessing runs
         raise pytest.skip("Pytest fails with multiprocessing")
@@ -480,7 +476,6 @@ class CommonMinimizerTest(unittest.TestCase):
 
         self.mini.emcee(steps=10)
 
-    @dec.slow
     def test_emcee_partial_bounds(self):
         # mcmc with partial bounds
         if not HAS_EMCEE:
@@ -585,7 +580,6 @@ class CommonMinimizerTest(unittest.TestCase):
         assert out.chain.shape == (7, 10, 4)
         assert out.flatchain.shape == (70, 4)
 
-    @dec.slow
     def test_emcee_float(self):
         # test that it works if the residuals returns a float, not a vector
         if not HAS_EMCEE:
@@ -609,7 +603,6 @@ class CommonMinimizerTest(unittest.TestCase):
                               burn=50, thin=10, float_behavior='chi2')
         check_paras(out.params, self.p_true, sig=3)
 
-    @dec.slow
     def test_emcee_seed(self):
         # test emcee seeding can reproduce a sampling run
         if not HAS_EMCEE:

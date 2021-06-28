@@ -1,4 +1,4 @@
-exclude: 'versioneer.py|lmfit/_version|doc/conf.py'
+exclude: 'doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
@@ -30,7 +30,7 @@ repos:
         additional_dependencies: [flake8-deprecated, flake8-mutable]
 
 -   repo: https://github.com/PyCQA/isort/
-    rev: 5.8.0
+    rev: 5.9.1
     hooks:
     -   id: isort
 

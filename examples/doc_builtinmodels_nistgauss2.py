@@ -14,7 +14,7 @@ gauss2 = GaussianModel(prefix='g2_')
 
 
 def index_of(arrval, value):
-    """return index of array *at or below* value """
+    """Return index of array *at or below* value."""
     if value < min(arrval):
         return 0
     return max(np.where(arrval <= value)[0])

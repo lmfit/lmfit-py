@@ -33,6 +33,7 @@ p_true.add('shift', value=0.123)
 p_true.add('decay', value=0.010)
 
 x = linspace(0.0, 250.0, 2500)
+random.seed(2021)
 noise = random.normal(scale=0.7215, size=x.size)
 data = residual(p_true, x) + noise
 

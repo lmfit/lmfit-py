@@ -69,7 +69,7 @@ copyright = u'{}, Matthew Newville, Till Stensitzki, Renee Otten, and others'.fo
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
-version = release = lmfit.__version__.split('+', 1)[0]
+version = release = lmfit.__version__.split('.post')[0]
 
 # List of directories, relative to source directory, that shouldn't be searched
 # for source files.

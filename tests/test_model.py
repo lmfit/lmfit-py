@@ -376,10 +376,14 @@ def test_coercion_of_input_data(peakdata, input_dtype, expected_dtype):
     model = lmfit.Model(gaussian)
     pars = model.make_params()
 
-    if input_dtype == 'pandas-real' and lmfit.minimizer.HAS_PANDAS:
+    if (not lmfit.minimizer.HAS_PANDAS and input_dtype in ['pandas-real',
+                                                           'pandas-complex']):
+        return
+
+    elif input_dtype == 'pandas-real':
         result = model.fit(lmfit.model.Series(y, dtype=np.float32), pars,
                            x=lmfit.model.Series(x, dtype=np.float32))
-    elif input_dtype == 'pandas-complex' and lmfit.minimizer.HAS_PANDAS:
+    elif input_dtype == 'pandas-complex':
         result = model.fit(lmfit.model.Series(y, dtype=np.complex64), pars,
                            x=lmfit.model.Series(x, dtype=np.complex64))
     elif input_dtype == 'list':

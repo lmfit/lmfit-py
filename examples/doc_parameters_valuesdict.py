@@ -5,6 +5,7 @@ from lmfit import Minimizer, Parameters, report_fit
 
 # create data to be fitted
 x = np.linspace(0, 15, 301)
+np.random.seed(2021)
 data = (5.0 * np.sin(2.0*x - 0.1) * np.exp(-x*x*0.025) +
         np.random.normal(size=x.size, scale=0.2))
 

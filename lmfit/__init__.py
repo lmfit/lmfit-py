@@ -43,8 +43,4 @@ from .printfuncs import (ci_report, fit_report, report_ci, report_errors,
 from .model import Model, CompositeModel
 from . import lineshapes, models
 
-# versioneer code
-from ._version import get_versions
-
-__version__ = get_versions()['version']
-del get_versions
+from lmfit.version import version as __version__

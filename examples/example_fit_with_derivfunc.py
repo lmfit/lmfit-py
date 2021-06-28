@@ -38,6 +38,7 @@ params.add('c', value=10)
 a, b, c = 2.5, 1.3, 0.8
 x = np.linspace(0, 4, 50)
 y = f([a, b, c], x)
+np.random.seed(2021)
 data = y + 0.15*np.random.normal(size=x.size)
 
 # fit without analytic derivative

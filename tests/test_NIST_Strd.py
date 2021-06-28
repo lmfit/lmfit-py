@@ -1,10 +1,11 @@
 import math
 from optparse import OptionParser
 
-from NISTModels import Models, ReadNistData
 from numpy.testing import assert_allclose
 
 from lmfit import Parameters, minimize
+
+from .NISTModels import Models, ReadNistData
 
 
 def ndig(a, b):

@@ -19,6 +19,7 @@ from lmfit.lineshapes import gaussian2d, lorentzian
 # depends on coordinates `(x, y)`. The most general case of experimental
 # data will be irregularly sampled and noisy. Let's simulate some:
 npoints = 10000
+np.random.seed(2021)
 x = np.random.rand(npoints)*10 - 4
 y = np.random.rand(npoints)*5 - 3
 z = gaussian2d(x, y, amplitude=30, centerx=2, centery=-.5, sigmax=.6, sigmay=.8)

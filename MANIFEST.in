@@ -5,12 +5,10 @@ exclude *.pyc core.* *~ *.pdf
 recursive-include lmfit *.py
 recursive-include tests *.py *.dat
 recursive-include NIST_STRD *.dat
-recursive-include examples *.py *.csv *.dat
+recursive-include examples *.py *.csv *.dat *.txt
 recursive-exclude examples/documentation *
 recursive-include doc *
 recursive-exclude doc/_build *
 recursive-exclude doc/examples *
 recursive-exclude doc *.pdf *.csv *.dat *.sav
-include versioneer.py
-include lmfit/_version.py
 global-exclude __pycache__/*

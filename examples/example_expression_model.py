@@ -17,6 +17,7 @@ x = np.linspace(-10, 10, 201)
 amp, cen, wid = 3.4, 1.8, 0.5
 
 y = amp * np.exp(-(x-cen)**2 / (2*wid**2)) / (np.sqrt(2*np.pi)*wid)
+np.random.seed(2021)
 y = y + np.random.normal(size=x.size, scale=0.01)
 
 ###############################################################################

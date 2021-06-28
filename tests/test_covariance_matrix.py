@@ -154,8 +154,6 @@ def test_numdifftools_no_bounds(fit_method):
                                         'shgo', 'dual_annealing'])
 def test_numdifftools_with_bounds(fit_method):
     pytest.importorskip("numdifftools")
-    if fit_method in ['shgo', 'dual_annealing']:
-        pytest.importorskip("scipy", minversion="1.2")
 
     # load data to be fitted
     data = np.loadtxt(os.path.join(os.path.dirname(__file__), '..', 'examples',

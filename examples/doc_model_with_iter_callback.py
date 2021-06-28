@@ -12,6 +12,7 @@ def per_iteration(pars, iteration, resid, *args, **kws):
 
 x = linspace(0., 20, 401)
 y = gaussian(x, amplitude=24.56, center=7.6543, sigma=1.23)
+random.seed(2021)
 y = y - .20*x + 3.333 + random.normal(scale=0.23, size=x.size)
 
 mod = GaussianModel(prefix='peak_') + LinearModel(prefix='bkg_')

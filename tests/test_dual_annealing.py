@@ -2,13 +2,9 @@
 
 import numpy as np
 from numpy.testing import assert_allclose
-import pytest
 import scipy
 
 import lmfit
-
-# dual_annealing algorithm is present in SciPy >= 1.2
-pytest.importorskip("scipy", minversion="1.2")
 
 
 def eggholder(x):
