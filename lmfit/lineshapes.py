@@ -380,8 +380,8 @@ def thermal_distribution(x, amplitude=1.0, center=0.0, kt=1.0, form='bose'):
     elif form.startswith('fermi'):
         offset = 1
     else:
-        msg = "Invalid value ('%s') for argument 'form'; should be one of %s."\
-              % (form, "'maxwell', 'fermi', or 'bose'")
+        msg = (f"Invalid value ('{form}') for argument 'form'; should be one "
+               "of 'maxwell', 'fermi', or 'bose'.")
         raise ValueError(msg)
 
     return real(1/(amplitude*exp((x - center)/not_zero(kt)) + offset + tiny*1j))
@@ -413,8 +413,8 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
         out[where(out < 0)] = 0.0
         out[where(out > 1)] = 1.0
     else:
-        msg = "Invalid value ('%s') for argument 'form'; should be one of %s."\
-               % (form, "'erf', 'logistic', 'atan', 'arctan', or 'linear'")
+        msg = (f"Invalid value ('{form}') for argument 'form'; should be one "
+               "of 'erf', 'logistic', 'atan', 'arctan', or 'linear'.")
         raise ValueError(msg)
 
     return amplitude*out
@@ -455,8 +455,8 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
         arg2[where(arg2 < -1)] = -1.0
         out = arg1 + arg2
     else:
-        msg = "Invalid value ('%s') for argument 'form'; should be one of %s."\
-               % (form, "'erf', 'logistic', 'atan', 'arctan', or 'linear'")
+        msg = (f"Invalid value ('{form}') for argument 'form'; should be one "
+               "of 'erf', 'logistic', 'atan', 'arctan', or 'linear'.")
         raise ValueError(msg)
 
     return amplitude*out

@@ -17,7 +17,7 @@ def test_manypeaks_speed():
     model = None
     t0 = time.time()
     for i in np.arange(500):
-        g = Model(gaussian, prefix='g%i_' % i)
+        g = Model(gaussian, prefix=f'g{i}')
         if model is None:
             model = g
         else:

@@ -118,11 +118,11 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
         maxfunevals = np.inf
 
     if tabulistsize < 1:
-        raise Exception('Invalid tabulistsize specified: {:d}. It should be '
-                        'an integer greater than zero.'.format(tabulistsize))
+        raise Exception(f'Invalid tabulistsize specified: {tabulistsize}. '
+                        'It should be an integer greater than zero.')
     if tabustrategy not in ['oldest', 'farthest']:
-        raise Exception('Invalid tabustrategy specified: {:s}. It must be one '
-                        'of "oldest" or "farthest".'.format(tabustrategy))
+        raise Exception(f'Invalid tabustrategy specified: {tabustrategy}. '
+                        'It must be one of "oldest" or "farthest".')
 
     tabulist = []
     best_f = np.inf
@@ -225,7 +225,7 @@ def ampgo(objfun, x0, args=(), local='L-BFGS-B', local_opts=None, bounds=None,
 
                 if disp:
                     print('\n\n ==> Successful tunnelling phase. Reached new '
-                          'local minimum: {:.5g} < {:.5g}\n'.format(yf, oldf))
+                          f'local minimum: {yf:.5g} < {oldf:.5g}\n')
 
             i += 1
 

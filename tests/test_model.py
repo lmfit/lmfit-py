@@ -1047,7 +1047,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
             m.set_param_hint('amp', value=1)
             m.set_param_hint('amp', value=25)
 
-            models[i] = Model(func, prefix='mod%i_' % i)
+            models[i] = Model(func, prefix=f'mod{i}')
             models[i].param_hints['amp'] = m.param_hints['amp']
 
         self.assertEqual(models[0].param_hints['amp'],

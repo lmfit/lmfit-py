@@ -36,6 +36,7 @@ Various:
 - fix description of ``name`` argument in ``Parameters.add`` (@kristianmeyerr; PR #725)
 - update dependencies, make sure a functional development environment is installed on Windows (Issue #712))
 - use ``setuptools_scm`` for version info instead of ``versioneer`` (PR #729)
+- transition to using ``f-strings`` (PR #730)
 
 
 .. _whatsnew_102_label:

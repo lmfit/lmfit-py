@@ -18,7 +18,7 @@ ABAR = ' |----------------+----------------+------------------+-----------------
 
 def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
     buff = [' ======================================',
-            ' %s: ' % DataSet,
+            f' {DataSet}: ',
             ' | Parameter Name |  Value Found   |  Certified Value | # Matching Digits |']
     buff.append(ABAR)
 
@@ -26,7 +26,7 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
     err_dig_min = 200
     fmt = ' | %s | % -.7e | % -.7e   | %2i                |'
     for i in range(NISTdata['nparams']):
-        parname = 'b%i' % (i+1)
+        parname = f'b{i+1}'
         par = params[parname]
         thisval = par.value
         certval = NISTdata['cert_values'][i]
@@ -56,10 +56,10 @@ def Compare_NIST_Results(DataSet, myfit, params, NISTdata):
         buff.append(' |          * * * * COULD NOT ESTIMATE UNCERTAINTIES * * * *              |')
         err_dig_min = 0
     if err_dig_min < 199:
-        buff.append(' Worst agreement: %i digits for value, %i digits for error '
-                    % (val_dig_min, err_dig_min))
+        buff.append(f' Worst agreement: {val_dig_min} digits for value, '
+                    f'{err_dig_min} digits for error ')
     else:
-        buff.append(' Worst agreement: %i digits' % (val_dig_min))
+        buff.append(f' Worst agreement: {val_dig_min} digits')
     return val_dig_min, '\n'.join(buff)
 
 
@@ -73,7 +73,7 @@ def NIST_Dataset(DataSet, method='leastsq', start='start2',
 
     params = Parameters()
     for i in range(npar):
-        pname = 'b%i' % (i+1)
+        pname = f'b{i+1}'
         pval1 = NISTdata[start][i]
         params.add(pname, value=pval1)
     try:
@@ -93,14 +93,14 @@ def build_usage():
     modelnames = []
     ms = ''
     for d in sorted(Models.keys()):
-        ms = ms + ' %s ' % d
+        ms = ms + f' {d} '
         if len(ms) > 55:
             modelnames.append(ms)
             ms = '    '
     modelnames.append(ms)
     modelnames = '\n'.join(modelnames)
 
-    usage = """
+    usage = f"""
  === Test Fit to NIST StRD Models ===
 
 usage:
@@ -110,7 +110,7 @@ usage:
 where Start is one of 'start1','start2' or 'cert', for different
 starting values, and Model is one of
 
-    %s
+    {modelnames}
 
 if Model = 'all', all models and starting values will be run.
 
@@ -120,7 +120,7 @@ options:
           leastsq, nelder, powell, lbfgsb, bfgs,
           tnc, cobyla, slsqp, cg, newto-cg
       leastsq (Levenberg-Marquardt) is the default
-""" % modelnames
+"""
     return usage
 ############################
 
@@ -154,10 +154,10 @@ def run_interactive():
                     tpass += 1
                 else:
                     tfail += 1
-                    failures.append("   %s (starting at '%s')" % (dset, start))
+                    failures.append(f"   {dset} (starting at '{start}')")
         print('--------------------------------------')
-        print(' Fit Method: %s ' % opts.method)
-        print(' Final Results: %i pass, %i fail.' % (tpass, tfail))
+        print(f' Fit Method: {opts.method} ')
+        print(f' Final Results: {tpass} pass, {tfail} fail.')
         print(' Tests Failed for:\n %s' % '\n '.join(failures))
         print('--------------------------------------')
     elif dset not in Models:

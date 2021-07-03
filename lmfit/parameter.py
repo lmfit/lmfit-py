@@ -84,7 +84,7 @@ class Parameters(dict):
     def update(self, other):
         """Update values and symbols with another Parameters object."""
         if not isinstance(other, Parameters):
-            raise ValueError("'%s' is not a Parameters object" % other)
+            raise ValueError(f"'{other}' is not a Parameters object")
         self.add_many(*other.values())
         for sym in other._asteval.user_defined_symbols():
             self._asteval.symtable[sym] = other._asteval.symtable[sym]
@@ -133,9 +133,9 @@ class Parameters(dict):
         """Set items of Parameters object."""
         if key not in self:
             if not valid_symbol_name(key):
-                raise KeyError("'%s' is not a valid Parameters name" % key)
+                raise KeyError(f"'{key}' is not a valid Parameters name")
         if par is not None and not isinstance(par, Parameter):
-            raise ValueError("'%s' is not a Parameter" % par)
+            raise ValueError(f"'{par}' is not a Parameter")
         dict.__setitem__(self, key, par)
         par.name = key
         par._expr_eval = self._asteval
@@ -144,7 +144,7 @@ class Parameters(dict):
     def __add__(self, other):
         """Add Parameters objects."""
         if not isinstance(other, Parameters):
-            raise ValueError("'%s' is not a Parameters object" % other)
+            raise ValueError(f"'{other}' is not a Parameters object")
         out = deepcopy(self)
         out.add_many(*other.values())
         for sym in other._asteval.user_defined_symbols():
@@ -205,8 +205,8 @@ class Parameters(dict):
     def __repr__(self):
         """__repr__ from OrderedDict."""
         if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self.items()))
+            return f'{self.__class__.__name__}()'
+        return f'{self.__class__.__name__}({list(self.items())!r})'
 
     def eval(self, expr):
         """Evaluate a statement using the `asteval` Interpreter.
@@ -274,7 +274,7 @@ class Parameters(dict):
             return self.__repr__()
         s = "Parameters({\n"
         for key in self.keys():
-            s += "    '%s': %s, \n" % (key, self[key])
+            s += f"    '{key}': {self[key]}, \n"
         s += "    })\n"
         return s
 
@@ -702,7 +702,7 @@ class Parameter:
         if self.min > self.max:
             self.min, self.max = self.max, self.min
         if isclose(self.min, self.max, atol=1e-13, rtol=1e-13):
-            raise ValueError("Parameter '%s' has min == max" % self.name)
+            raise ValueError(f"Parameter '{self.name}' has min == max")
         if self._val > self.max:
             self._val = self.max
         if self._val < self.min:
@@ -731,18 +731,18 @@ class Parameter:
     def __repr__(self):
         """Return printable representation of a Parameter object."""
         s = []
-        sval = "value=%s" % repr(self._getval())
+        sval = f"value={repr(self._getval())}"
         if not self.vary and self._expr is None:
             sval += " (fixed)"
         elif self.stderr is not None:
-            sval += " +/- %.3g" % self.stderr
+            sval += f" +/- {self.stderr:.3g}"
         s.append(sval)
-        s.append("bounds=[%s:%s]" % (repr(self.min), repr(self.max)))
+        s.append(f"bounds=[{repr(self.min)}:{repr(self.max)}]")
         if self._expr is not None:
-            s.append("expr='%s'" % self.expr)
+            s.append(f"expr='{self.expr}'")
         if self.brute_step is not None:
-            s.append("brute_step=%s" % (self.brute_step))
-        return "<Parameter '%s', %s>" % (self.name, ', '.join(s))
+            s.append(f"brute_step={self.brute_step}")
+        return f"<Parameter '{self.name}', {', '.join(s)}>"
 
     def setup_bounds(self):
         """Set up Minuit-style internal/external parameter transformation

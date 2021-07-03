@@ -76,7 +76,7 @@ except ImportError:
 # define the namedtuple here so pickle will work with the MinimizerResult
 Candidate = namedtuple('Candidate', ['params', 'score'])
 
-MAXEVAL_Warning = "ignoring `%s` argument to `%s()`. Use `max_nfev` instead."
+maxeval_warning = "ignoring `{}` argument to `{}()`. Use `max_nfev` instead."
 
 
 def thisfuncname():
@@ -347,16 +347,13 @@ class MinimizerResult:
         if hasattr(self, 'candidates'):
             if candidate_nmb == 'all':
                 for i, candidate in enumerate(self.candidates):
-                    print("\nCandidate #{}, chisqr = "
-                          "{:.3f}".format(i+1, candidate.score))
+                    print(f"\nCandidate #{i + 1}, chisqr = {candidate.score:.3f}")
                     candidate.params.pretty_print()
             elif (candidate_nmb < 1 or candidate_nmb > len(self.candidates)):
-                raise ValueError("'candidate_nmb' should be between 1 and {}."
-                                 .format(len(self.candidates)))
+                raise ValueError(f"'candidate_nmb' should be between 1 and {len(self.candidates)}.")
             else:
                 candidate = self.candidates[candidate_nmb-1]
-                print("\nCandidate #{}, chisqr = "
-                      "{:.3f}".format(candidate_nmb, candidate.score))
+                print(f"\nCandidate #{candidate_nmb}, chisqr = {candidate.score:.3f}")
                 candidate.params.pretty_print()
 
     def _calculate_statistics(self):
@@ -390,7 +387,7 @@ class Minimizer:
 
     _err_nonparam = ("params must be a minimizer.Parameters() instance or"
                      " list of Parameters()")
-    _err_max_evals = ("Too many function calls (max set to %i)! Use:"
+    _err_max_evals = ("Too many function calls (max set to {:i})! Use:"
                       " minimize(func, params, ..., max_nfev=NNN)"
                       " to increase this maximum.")
 
@@ -493,7 +490,7 @@ class Minimizer:
             self.userkws = {}
         for maxnfev_alias in ('maxfev', 'maxiter'):
             if maxnfev_alias in kws:
-                warnings.warn(MAXEVAL_Warning % (maxnfev_alias, 'Minimizer'),
+                warnings.warn(maxeval_warning.format(maxnfev_alias, 'Minimizer'),
                               RuntimeWarning)
                 kws.pop(maxnfev_alias)
 
@@ -582,10 +579,10 @@ class Minimizer:
         self.result.last_internal_values = fvars
         if self.result.nfev > self.max_nfev:
             self.result.aborted = True
-            m = "number of function evaluations > %d" % self.max_nfev
-            self.result.message = "Fit aborted: %s" % m
+            m = f"number of function evaluations > {self.max_nfev}"
+            self.result.message = f"Fit aborted: {m}"
             self.result.success = False
-            raise AbortFitException("fit aborted: too many function evaluations (%d)." % self.max_nfev)
+            raise AbortFitException(f"fit aborted: too many function evaluations {self.max_nfev}")
 
         out = self.userfcn(params, *self.userargs, **self.userkws)
 
@@ -959,7 +956,7 @@ class Minimizer:
         fmin_kws.update(self.kws)
 
         if 'maxiter' in kws:
-            warnings.warn(MAXEVAL_Warning % ('maxiter', thisfuncname()),
+            warnings.warn(maxeval_warning.format('maxiter', thisfuncname()),
                           RuntimeWarning)
             kws.pop('maxiter')
         fmin_kws.update(kws)
@@ -1680,7 +1677,7 @@ class Minimizer:
         lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
                      gtol=1.e-7, maxfev=2*self.max_nfev, Dfun=None)
         if 'maxfev' in kws:
-            warnings.warn(MAXEVAL_Warning % ('maxfev', thisfuncname()),
+            warnings.warn(maxeval_warning.format('maxfev', thisfuncname()),
                           RuntimeWarning)
             kws.pop('maxfev')
 
@@ -1731,7 +1728,7 @@ class Minimizer:
         elif ier == 4:
             result.message = 'One or more variable did not affect the fit.'
         elif ier == 5:
-            result.message = self._err_max_evals % lskws['maxfev']
+            result.message = self._err_max_evals.format(lskws['maxfev'])
         else:
             result.message = 'Tolerance seems to be too small.'
 
@@ -1743,7 +1740,7 @@ class Minimizer:
             # calculate parameter uncertainties and correlations
             self._calculate_uncertainties_correlations()
         else:
-            result.message = '%s Could not estimate error-bars.' % result.message
+            result.message = f'{result.message} Could not estimate error-bars.'
 
         np.seterr(**orig_warn_settings)
 
@@ -2083,7 +2080,7 @@ class Minimizer:
         ampgo_kws.update(kws)
 
         values = result.init_vals
-        result.method = "ampgo, with {} as local solver".format(ampgo_kws['local'])
+        result.method = f"ampgo, with {ampgo_kws['local']} as local solver"
         result.call_kws = ampgo_kws
         try:
             ret = ampgo(self.penalty, values, **ampgo_kws)
@@ -2331,7 +2328,7 @@ class Minimizer:
         kwargs.update(self.kws)
         for maxnfev_alias in ('maxfev', 'maxiter'):
             if maxnfev_alias in kws:
-                warnings.warn(MAXEVAL_Warning % (maxnfev_alias, thisfuncname()),
+                warnings.warn(maxeval_warning.format(maxnfev_alias, thisfuncname()),
                               RuntimeWarning)
                 kws.pop(maxnfev_alias)
 
@@ -2378,8 +2375,8 @@ def _make_random_gen(seed):
         return np.random.RandomState(seed)
     if isinstance(seed, np.random.RandomState):
         return seed
-    raise ValueError('%r cannot be used to seed a numpy.random.RandomState'
-                     ' instance' % seed)
+    raise ValueError(f'{seed:r} cannot be used to seed a numpy.random.RandomState'
+                     ' instance')
 
 
 def _nan_policy(arr, nan_policy='raise', handle_inf=True):

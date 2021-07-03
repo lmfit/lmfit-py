@@ -51,11 +51,8 @@ for fn in files:
 
     gallery_file = examples_documentation_dir / fn.name[4:]
     msg = ""  # add optional message f
-    gallery_file.write_text(
-        '"""\n{}\n{}\n\n{}\n"""\n{}'.format(
-            fn.name, "=" * len(fn.name), msg, script_text
-        )
-    )
+    gallery_file.write_text(f'"""\n{fn.name}\n{"=" * len(fn.name)}\n\n'
+                            f'{msg}\n"""\n{script_text}')
 
     # make sure the saved Models and ModelResult are available
     if "save" in fn.name:

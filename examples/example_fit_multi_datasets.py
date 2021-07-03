@@ -23,9 +23,9 @@ def gauss(x, amp, cen, sigma):
 
 def gauss_dataset(params, i, x):
     """Calculate Gaussian lineshape from parameters for data set."""
-    amp = params['amp_%i' % (i+1)]
-    cen = params['cen_%i' % (i+1)]
-    sig = params['sig_%i' % (i+1)]
+    amp = params[f'amp_{i+1}']
+    cen = params[f'cen_{i+1}']
+    sig = params[f'sig_{i+1}']
     return gauss(x, amp, cen, sig)
 
 
@@ -62,16 +62,16 @@ data = np.array(data)
 
 fit_params = Parameters()
 for iy, y in enumerate(data):
-    fit_params.add('amp_%i' % (iy+1), value=0.5, min=0.0, max=200)
-    fit_params.add('cen_%i' % (iy+1), value=0.4, min=-2.0, max=2.0)
-    fit_params.add('sig_%i' % (iy+1), value=0.3, min=0.01, max=3.0)
+    fit_params.add(f'amp_{iy+1}', value=0.5, min=0.0, max=200)
+    fit_params.add(f'cen_{iy+1}', value=0.4, min=-2.0, max=2.0)
+    fit_params.add(f'sig_{iy+1}', value=0.3, min=0.01, max=3.0)
 
 ###############################################################################
 # Constrain the values of sigma to be the same for all peaks by assigning
 # sig_2, ..., sig_5 to be equal to sig_1.
 
 for iy in (2, 3, 4, 5):
-    fit_params['sig_%i' % iy].expr = 'sig_1'
+    fit_params[f'sig_{iy}'].expr = 'sig_1'
 
 ###############################################################################
 # Run the global fit and show the fitting result

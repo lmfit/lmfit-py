@@ -62,11 +62,11 @@ class ResonatorModel(lmfit.model.Model):
         Q_guess = np.sqrt(Q_min*Q_max)  # geometric mean, why not?
         Q_e_real_guess = Q_guess/(1-np.abs(data[argmin_s21]))
         if verbose:
-            print("fmin=", fmin, "fmax=", fmax, "f_0_guess=", f_0_guess)
-            print("Qmin=", Q_min, "Q_max=", Q_max, "Q_guess=", Q_guess, "Q_e_real_guess=", Q_e_real_guess)
+            print(f"fmin={fmin}, fmax={fmax}, f_0_guess={f_0_guess}")
+            print(f"Qmin={Q_min}, Q_max={Q_max}, Q_guess={Q_guess}, Q_e_real_guess={Q_e_real_guess}")
         params = self.make_params(Q=Q_guess, Q_e_real=Q_e_real_guess, Q_e_imag=0, f_0=f_0_guess)
-        params['%sQ' % self.prefix].set(min=Q_min, max=Q_max)
-        params['%sf_0' % self.prefix].set(min=fmin, max=fmax)
+        params[f'{self.prefix}Q'].set(min=Q_min, max=Q_max)
+        params[f'{self.prefix}f_0'].set(min=fmin, max=fmax)
         return lmfit.models.update_param_vals(params, self.prefix, **kwargs)
 
 

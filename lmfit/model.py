@@ -69,7 +69,7 @@ def get_reducer(option):
 
     """
     if option not in ['real', 'imag', 'abs', 'angle']:
-        raise ValueError("Invalid option ('%s') for function 'propagate_err'." % option)
+        raise ValueError(f"Invalid option ('{option}') for function 'propagate_err'.")
 
     def reducer(array):
         """Convert a complex array to a real array.
@@ -138,10 +138,10 @@ def propagate_err(z, dz, option):
 
     """
     if option not in ['real', 'imag', 'abs', 'angle']:
-        raise ValueError("Invalid option ('%s') for function 'propagate_err'." % option)
+        raise ValueError(f"Invalid option ('{option}') for function 'propagate_err'.")
 
     if not z.shape == dz.shape:
-        raise ValueError("shape of z: %s != shape of dz: %s" % (z.shape, dz.shape))
+        raise ValueError(f"shape of z: {z.shape} != shape of dz: {dz.shape}")
 
     # Check the main vector for complex. Do nothing if real.
     if any(np.iscomplex(z)):
@@ -283,13 +283,13 @@ class Model:
         out = self._name
         opts = []
         if len(self._prefix) > 0:
-            opts.append("prefix='%s'" % (self._prefix))
+            opts.append(f"prefix='{self._prefix}'")
         if long:
             for k, v in self.opts.items():
-                opts.append("%s='%s'" % (k, v))
+                opts.append(f"{k}='{v}'")
         if len(opts) > 0:
-            out = "%s, %s" % (out, ', '.join(opts))
-        return "Model(%s)" % out
+            out = f"{out}, {', '.join(opts)}"
+        return f"Model({out})"
 
     def _get_state(self):
         """Save a Model for serialization.
@@ -448,7 +448,7 @@ class Model:
 
     def __repr__(self):
         """Return representation of Model."""
-        return "<lmfit.Model: %s>" % (self.name)
+        return f"<lmfit.Model: {self.name}>"
 
     def copy(self, **kwargs):
         """DOES NOT WORK."""
@@ -484,7 +484,7 @@ class Model:
                     else:
                         kw_args[fnam] = fpar.default
                 elif fpar.kind == fpar.VAR_POSITIONAL:
-                    raise ValueError("varargs '*%s' is not supported" % fnam)
+                    raise ValueError(f"varargs '*{fnam}' is not supported")
         # inspection done
 
         self._func_haskeywords = keywords_ is not None
@@ -529,7 +529,7 @@ class Model:
         if self._prefix is None:
             self._prefix = ''
         for pname in self._param_root_names:
-            names.append("%s%s" % (self._prefix, pname))
+            names.append(f"{self._prefix}{pname}")
 
         # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
@@ -673,20 +673,20 @@ class Model:
                 par.value = kwargs[name]
             params.add(par)
             if verbose:
-                print(' - Adding parameter "%s"' % name)
+                print(f' - Adding parameter "{name}"')
 
         # next build parameters defined in param_hints
         # note that composites may define their own additional
         # convenience parameters here
         for basename, hint in self.param_hints.items():
-            name = "%s%s" % (self._prefix, basename)
+            name = f"{self._prefix}{basename}"
             if name in params:
                 par = params[name]
             else:
                 par = Parameter(name=name)
                 params.add(par)
                 if verbose:
-                    print(' - Adding parameter for hint "%s"' % name)
+                    print(f' - Adding parameter for hint "{name}"')
             par._delay_asteval = True
             for item in self._hint_names:
                 if item in hint:
@@ -732,7 +732,7 @@ class Model:
 
         """
         cname = self.__class__.__name__
-        msg = 'guess() not implemented for %s' % cname
+        msg = f'guess() not implemented for {cname}'
         raise NotImplementedError(msg)
 
     def _residual(self, params, data, weights, **kwargs):
@@ -823,7 +823,7 @@ class Model:
         """Generate **all** function args for all functions."""
         args = {}
         for key, val in self.make_funcargs(params, kwargs).items():
-            args["%s%s" % (self._prefix, key)] = val
+            args[f"{self._prefix}{key}"] = val
         return args
 
     def eval(self, params=None, **kwargs):
@@ -975,7 +975,7 @@ class Model:
         # All remaining kwargs should correspond to independent variables.
         for name in kwargs:
             if name not in self.independent_vars:
-                warnings.warn("The keyword argument %s does not " % name +
+                warnings.warn(f"The keyword argument {name} does not " +
                               "match any arguments of the model function. " +
                               "It will be ignored.", UserWarning)
 
@@ -989,8 +989,8 @@ class Model:
             missing = [p for p in self.param_names if p not in params.keys()]
             blank = [name for name, p in params.items()
                      if p.value is None and p.expr is None]
-            msg += 'Missing parameters: %s\n' % str(missing)
-            msg += 'Non initialized parameters: %s' % str(blank)
+            msg += f'Missing parameters: {str(missing)}\n'
+            msg += f'Non initialized parameters: {str(blank)}'
             raise ValueError(msg)
 
         # Handle null/missing values.
@@ -1067,10 +1067,6 @@ class CompositeModel(Model):
 
     """
 
-    _names_collide = ("\nTwo models have parameters named '{clash}'. "
-                      "Use distinct names.")
-    _bad_arg = "CompositeModel: argument {arg} is not a Model"
-    _bad_op = "CompositeModel: operator {op} is not callable"
     _known_ops = {operator.add: '+', operator.sub: '-',
                   operator.mul: '*', operator.truediv: '/'}
 
@@ -1094,11 +1090,11 @@ class CompositeModel(Model):
 
         """
         if not isinstance(left, Model):
-            raise ValueError(self._bad_arg.format(arg=left))
+            raise ValueError(f'CompositeModel: argument {left} is not a Model')
         if not isinstance(right, Model):
-            raise ValueError(self._bad_arg.format(arg=right))
+            raise ValueError(f'CompositeModel: argument {right} is not a Model')
         if not callable(op):
-            raise ValueError(self._bad_op.format(op=op))
+            raise ValueError(f'CompositeModel: operator {op} is not callable')
 
         self.left = left
         self.right = right
@@ -1108,7 +1104,8 @@ class CompositeModel(Model):
         if len(name_collisions) > 0:
             msg = ''
             for collision in name_collisions:
-                msg += self._names_collide.format(clash=collision)
+                msg += (f"\nTwo models have parameters named '{collision}'; "
+                        "use distinct names.")
             raise NameError(msg)
 
         # we assume that all the sub-models have the same independent vars
@@ -1124,7 +1121,7 @@ class CompositeModel(Model):
         for side in (left, right):
             prefix = side.prefix
             for basename, hint in side.param_hints.items():
-                self.param_hints["%s%s" % (prefix, basename)] = hint
+                self.param_hints[f"{prefix}{basename}"] = hint
 
     def _parse_params(self):
         self._func_haskeywords = (self.left._func_haskeywords or
@@ -1137,9 +1134,9 @@ class CompositeModel(Model):
         self.opts.update(self.left.opts)
 
     def _reprstring(self, long=False):
-        return "(%s %s %s)" % (self.left._reprstring(long=long),
-                               self._known_ops.get(self.op, self.op),
-                               self.right._reprstring(long=long))
+        return (f"({self.left._reprstring(long=long)} "
+                f"{self._known_ops.get(self.op, self.op)} "
+                f"{self.right._reprstring(long=long)})")
 
     def eval(self, params=None, **kwargs):
         """Evaluate model function for composite model."""
@@ -1605,14 +1602,14 @@ class ModelResult(Minimizer):
                             show_correl=show_correl,
                             min_correl=min_correl, sort_pars=sort_pars)
         modname = self.model._reprstring(long=True)
-        return '[[Model]]\n    %s\n%s' % (modname, report)
+        return f'[[Model]]\n    {modname}\n{report}'
 
     def _repr_html_(self, show_correl=True, min_correl=0.1):
         """Return a HTML representation of parameters data."""
         report = fitreport_html_table(self, show_correl=show_correl,
                                       min_correl=min_correl)
         modname = self.model._reprstring(long=True)
-        return "<h2> Model</h2> %s %s" % (modname, report)
+        return f"<h2> Model</h2> {modname} {report}"
 
     def dumps(self, **kws):
         """Represent ModelResult as a JSON string.

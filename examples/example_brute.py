@@ -186,9 +186,7 @@ result_brute = fitter.minimize(method='brute', Ns=25, keep=25)
 par_name = 'shift'
 indx_shift = result_brute.var_names.index(par_name)
 grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
-print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name,
-                                                               len(grid_shift),
-                                                               grid_shift))
+print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 ###############################################################################
 # If finite bounds are not set for a certain parameter then the user **must**

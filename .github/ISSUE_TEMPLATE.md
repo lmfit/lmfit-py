@@ -28,7 +28,7 @@ of the sections does not apply to your Issue, state that explicitly.
 <!-- Provide a short description of the issue, describe the expected outcome, and give the actual result -->
 
 ###### A Minimal, Complete, and Verifiable example
-<!-- see, for example, https://stackoverflow.com/help/mcve on how to do this. -->
+<!-- see, for example, https://stackoverflow.com/help/mcve on how to do this -->
 
 ###### Error message:
 <!-- If any, paste the *full* error message inside a code block (starting from line Traceback) -->
@@ -42,12 +42,9 @@ Traceback (most recent call last):
 ###### Version information
 <!-- Generate version information with this command in the Python shell and copy the output here:
 import sys, lmfit, numpy, scipy, asteval, uncertainties
-print('Python: {}\n\nlmfit: {}, scipy: {}, numpy: {}, asteval: {}, uncertainties: {}'\
-      .format(sys.version, lmfit.__version__, scipy.__version__, numpy.__version__, \
-      asteval.__version__, uncertainties.__version__))
- -->
+print(f"Python: {sys.version}\n\nlmfit: {lmfit.__version__}, scipy: {scipy.__version__}, numpy: {numpy.__version__}"
+      f", asteval: {asteval.__version__}, uncertainties: {uncertainties.__version__}")
+-->
 
 ###### Link(s)
-<!--If you started a discussion on the lmfit mailing list or Stack Overflow, please provide
-        the relevant link(s).
--->
+<!-- If you started a discussion on the lmfit mailing list or Stack Overflow, please provide the relevant link(s) -->
