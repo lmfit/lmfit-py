@@ -792,13 +792,24 @@ class Model:
             kwargs = {}
         out = {}
         out.update(self.opts)
+
+        # 1. fill in in all parameter values
         for name, par in params.items():
             if strip:
                 name = self._strip_prefix(name)
             if name in self._func_allargs or self._func_haskeywords:
                 out[name] = par.value
 
-        # kwargs handled slightly differently -- may set param value too!
+        # 2. for each function argument, use 'prefx+varname' in params,
+        # avoiding possible name collisions with unprefixed params
+        if len(self._prefix) > 0:
+            for fullname in self._param_names:
+                if fullname in params:
+                    name = self._strip_prefix(fullname)
+                    if name in self._func_allargs or self._func_haskeywords:
+                        out[name]  = params[fullname].value
+
+        # 3. kwargs handled slightly differently -- may set param value too!
         for name, val in kwargs.items():
             if strip:
                 name = self._strip_prefix(name)
@@ -982,6 +993,15 @@ class Model:
             msg += 'Non initialized parameters: %s' % str(blank)
             raise ValueError(msg)
 
+        # Do not alter anything that implements the array interface (np.array, pd.Series)
+        # but convert other iterables (e.g., Python lists) to NumPy arrays.
+        if not hasattr(data, '__array__'):
+            data = np.asfarray(data)
+        for var in self.independent_vars:
+            var_data = kwargs[var]
+            if isinstance(var_data, (list, tuple)):
+                kwargs[var] = np.asfarray(var_data)
+
         # Handle null/missing values.
         if nan_policy is not None:
             self.nan_policy = nan_policy
@@ -996,26 +1016,11 @@ class Model:
 
         # If independent_vars and data are alignable (pandas), align them,
         # and apply the mask from above if there is one.
+
         for var in self.independent_vars:
             if not np.isscalar(kwargs[var]):
+                # print("Model fit align ind dep ", var, mask.sum())
                 kwargs[var] = _align(kwargs[var], mask, data)
-
-        # Make sure `dtype` for data is always `float64` or `complex128`
-        if np.isrealobj(data):
-            data = np.asfarray(data)
-        elif np.iscomplexobj(data):
-            data = np.asarray(data, dtype='complex128')
-
-        # Coerce `dtype` for independent variable(s) to `float64` or
-        # `complex128` when the variable has one of the following types: list,
-        # tuple, numpy.ndarray, or pandas.Series
-        for var in self.independent_vars:
-            var_data = kwargs[var]
-            if isinstance(var_data, (list, tuple, np.ndarray, Series)):
-                if np.isrealobj(var_data):
-                    kwargs[var] = np.asfarray(var_data)
-                elif np.iscomplexobj(var_data):
-                    kwargs[var] = np.asarray(var_data, dtype='complex128')
 
         if fit_kws is None:
             fit_kws = {}
