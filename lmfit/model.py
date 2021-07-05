@@ -792,13 +792,24 @@ class Model:
             kwargs = {}
         out = {}
         out.update(self.opts)
+
+        # 1. fill in in all parameter values
         for name, par in params.items():
             if strip:
                 name = self._strip_prefix(name)
             if name in self._func_allargs or self._func_haskeywords:
                 out[name] = par.value
 
-        # kwargs handled slightly differently -- may set param value too!
+        # 2. for each function argument, use 'prefx+varname' in params,
+        # avoiding possible name collisions with unprefixed params
+        if len(self._prefix) > 0:
+            for fullname in self._param_names:
+                if fullname in params:
+                    name = self._strip_prefix(fullname)
+                    if name in self._func_allargs or self._func_haskeywords:
+                        out[name] = params[fullname].value
+
+        # 3. kwargs handled slightly differently -- may set param value too!
         for name, val in kwargs.items():
             if strip:
                 name = self._strip_prefix(name)
