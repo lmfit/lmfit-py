@@ -807,7 +807,7 @@ class Model:
                 if fullname in params:
                     name = self._strip_prefix(fullname)
                     if name in self._func_allargs or self._func_haskeywords:
-                        out[name]  = params[fullname].value
+                        out[name] = params[fullname].value
 
         # 3. kwargs handled slightly differently -- may set param value too!
         for name, val in kwargs.items():
