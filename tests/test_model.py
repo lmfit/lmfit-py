@@ -1082,7 +1082,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(result.params['sigma'].stderr > 0.02)
         self.assertTrue(result.params['sigma'].stderr < 0.50)
 
-
     def test_unprefixed_name_collisions(self):
         # tests Github Issue 710
         np.random.seed(0)
@@ -1112,7 +1111,6 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(result.params['line_b'].value < 0.75)
         self.assertTrue(result.params['a'].value > 10)
         self.assertTrue(result.params['a'].value < 11)
-
 
     def test_composite_model_with_expr_constrains(self):
         """Smoke test for composite model fitting with expr constraints."""
