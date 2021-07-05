@@ -1082,6 +1082,38 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(result.params['sigma'].stderr > 0.02)
         self.assertTrue(result.params['sigma'].stderr < 0.50)
 
+
+    def test_unprefixed_name_collisions(self):
+        # tests Github Issue 710
+        np.random.seed(0)
+        x = np.linspace(0, 20, 201)
+        y = 6 + x * 0.55 + gaussian(x, 4.5, 8.5, 2.1) + np.random.normal(size=len(x), scale=0.03)
+        
+        def myline(x, a, b):
+            return a + b * x
+        
+        def mygauss(x, a, b, c):
+            return gaussian(x, a, b, c)
+
+        mod = Model(myline, prefix='line_') + Model(mygauss, prefix='peak_')
+        pars = mod.make_params(line_a=5, line_b=1, peak_a=10, peak_b=10, peak_c=5)
+        pars.add('a', expr='line_a + peak_a')
+
+        result = mod.fit(y, pars, x=x)
+        self.assertTrue(result.params['peak_a'].value > 4)
+        self.assertTrue(result.params['peak_a'].value < 5)
+        self.assertTrue(result.params['peak_b'].value > 8)
+        self.assertTrue(result.params['peak_b'].value < 9)
+        self.assertTrue(result.params['peak_c'].value > 1.5)
+        self.assertTrue(result.params['peak_c'].value < 2.5)
+        self.assertTrue(result.params['line_a'].value > 5.5)
+        self.assertTrue(result.params['line_a'].value < 6.5)
+        self.assertTrue(result.params['line_b'].value > 0.25)
+        self.assertTrue(result.params['line_b'].value < 0.75)
+        self.assertTrue(result.params['a'].value > 10)
+        self.assertTrue(result.params['a'].value < 11)
+        
+
     def test_composite_model_with_expr_constrains(self):
         """Smoke test for composite model fitting with expr constraints."""
         y = [0, 0, 4, 2, 1, 8, 21, 21, 23, 35, 50, 54, 46, 70, 77, 87, 98,
