@@ -1088,10 +1088,10 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         np.random.seed(0)
         x = np.linspace(0, 20, 201)
         y = 6 + x * 0.55 + gaussian(x, 4.5, 8.5, 2.1) + np.random.normal(size=len(x), scale=0.03)
-        
+
         def myline(x, a, b):
             return a + b * x
-        
+
         def mygauss(x, a, b, c):
             return gaussian(x, a, b, c)
 
@@ -1112,7 +1112,7 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(result.params['line_b'].value < 0.75)
         self.assertTrue(result.params['a'].value > 10)
         self.assertTrue(result.params['a'].value < 11)
-        
+
 
     def test_composite_model_with_expr_constrains(self):
         """Smoke test for composite model fitting with expr constraints."""
