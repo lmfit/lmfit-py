@@ -357,47 +357,6 @@ def test__parse_params_forbidden_variable_names():
         Model(func_invalid_par)
 
 
-input_dtypes = [(np.int32, np.float64), (np.float32, np.float64),
-                (np.complex64, np.complex128), ('list', np.float64),
-                ('tuple', np.float64), ('pandas-real', np.float64),
-                ('pandas-complex', np.complex128)]
-
-
-@pytest.mark.parametrize('input_dtype, expected_dtype', input_dtypes)
-def test_coercion_of_input_data(peakdata, input_dtype, expected_dtype):
-    """Test for coercion of 'data' and 'independent_vars'.
-
-    - 'data' should become 'float64' or 'complex128'
-    - dtype for 'indepdendent_vars' is only changed when the input is a list,
-        tuple, numpy.ndarray, or pandas.Series
-
-    """
-    x, y = peakdata
-    model = lmfit.Model(gaussian)
-    pars = model.make_params()
-
-    if (not lmfit.minimizer.HAS_PANDAS and input_dtype in ['pandas-real',
-                                                           'pandas-complex']):
-        return
-
-    elif input_dtype == 'pandas-real':
-        result = model.fit(lmfit.model.Series(y, dtype=np.float32), pars,
-                           x=lmfit.model.Series(x, dtype=np.float32))
-    elif input_dtype == 'pandas-complex':
-        result = model.fit(lmfit.model.Series(y, dtype=np.complex64), pars,
-                           x=lmfit.model.Series(x, dtype=np.complex64))
-    elif input_dtype == 'list':
-        result = model.fit(y.tolist(), pars, x=x.tolist())
-    elif input_dtype == 'tuple':
-        result = model.fit(tuple(y), pars, x=tuple(x))
-    else:
-        result = model.fit(np.asarray(y, dtype=input_dtype), pars,
-                           x=np.asarray(x, dtype=input_dtype))
-
-    assert result.__dict__['userkws']['x'].dtype == expected_dtype
-    assert result.__dict__['userargs'][0].dtype == expected_dtype
-
-
 def test_figure_default_title(peakdata):
     """Test default figure title."""
     pytest.importorskip('matplotlib')
@@ -1059,6 +1018,37 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         params = pmod.make_params(sigma=2, fraction=0.77)
         assert_allclose(params['fraction'].value, 0.77, rtol=0.01)
 
+
+    def test_unprefixed_name_collisions(self):
+        # tests Github Issue 710
+        np.random.seed(0)
+        x = np.linspace(0, 20, 201)
+        y = 6 + x * 0.55 + gaussian(x, 4.5, 8.5, 2.1) + np.random.normal(size=len(x), scale=0.03)
+        
+        def myline(x, a, b):
+            return a + b * x
+        
+        def mygauss(x, a, b, c):
+            return gaussian(x, a, b, c)
+
+        mod = Model(myline, prefix='line_') + Model(mygauss, prefix='peak_')
+        pars = mod.make_params(line_a=5, line_b=1, peak_a=10, peak_b=10, peak_c=5)
+        pars.add('a', expr='line_a + peak_a')
+
+        result = mod.fit(y, pars, x=x)
+        self.assertTrue(result.params['peak_a'].value > 4)
+        self.assertTrue(result.params['peak_a'].value < 5)
+        self.assertTrue(result.params['peak_b'].value > 8)
+        self.assertTrue(result.params['peak_b'].value < 9)
+        self.assertTrue(result.params['peak_c'].value > 1.5)
+        self.assertTrue(result.params['peak_c'].value < 2.5)
+        self.assertTrue(result.params['line_a'].value > 5.5)
+        self.assertTrue(result.params['line_a'].value < 6.5)
+        self.assertTrue(result.params['line_b'].value > 0.25)
+        self.assertTrue(result.params['line_b'].value < 0.75)
+        self.assertTrue(result.params['a'].value > 10)
+        self.assertTrue(result.params['a'].value < 11)
+        
     def test_symmetric_boundss(self):
         # tests Github Issue 700
         np.random.seed(0)
