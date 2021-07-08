@@ -12,4 +12,3 @@ coverage:
         target:    75%
         threshold: 20%
         informational: true
-
