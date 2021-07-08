@@ -2,7 +2,14 @@ coverage:
   status:
     project:
       default:
-        range 20..80
+        range: 20..95
+        target:    75%
+        threshold: 20%
+        informational: true
     patch:
       default:
-        range 20..80
+        range: 20..95
+        target:    75%
+        threshold: 20%
+        informational: true
+
