@@ -2,7 +2,7 @@ exclude: 'doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.19.4
+    rev: v2.23.1
     hooks:
     -   id: pyupgrade
         # for now don't force to change from %-operator to {}
@@ -30,7 +30,7 @@ repos:
         additional_dependencies: [flake8-deprecated, flake8-mutable]
 
 -   repo: https://github.com/PyCQA/isort/
-    rev: 5.9.1
+    rev: 5.9.3
     hooks:
     -   id: isort
 
