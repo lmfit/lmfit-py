@@ -302,7 +302,7 @@ class PolynomialModel(Model):
         if 'form' in kwargs:
             degree = int(kwargs.pop('form'))
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
-            raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
+            raise TypeError(self.DEGREE_ERR % (self.MAX_DEGREE+1))
 
         self.poly_degree = degree
         pnames = ['c%i' % (i) for i in range(degree + 1)]
