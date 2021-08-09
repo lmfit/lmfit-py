@@ -291,7 +291,7 @@ class PolynomialModel(Model):
     """
 
     MAX_DEGREE = 7
-    DEGREE_ERR = "degree must be an integer less than %d."
+    DEGREE_ERR = "degree must be an integer equal to or smaller than %d."
 
     valid_forms = (0, 1, 2, 3, 4, 5, 6, 7)
 
