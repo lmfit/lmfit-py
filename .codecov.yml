@@ -1,4 +1,6 @@
 coverage:
+  notify:
+    after_n_builds: 8
   status:
     project:
       default:
