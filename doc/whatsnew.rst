@@ -24,6 +24,7 @@ Bug fixes/enhancements:
 - preserve Parameters subclass in deepcopy (@jenshnielsen; PR #719)
 - coerce ``data`` and ``indepdent_vars`` to NumPy array with ``dtype=float64`` or ``dtype=complex128`` where  applicable (Issues #723 and #727)
 - fix collision between parameter names in built-in models and user-specified parameters (Issue #710 and PR #732)
+- correct error message in PolynomialModel (@kremeyer; PR #737)
 
 Various:
 - update asteval dependency to >=0.9.22 to avoid DeprecationWarnings from NumPy v1.20.0 (PR #707)
