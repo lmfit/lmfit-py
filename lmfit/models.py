@@ -291,7 +291,7 @@ class PolynomialModel(Model):
     """
 
     MAX_DEGREE = 7
-    DEGREE_ERR = "degree must be an integer less than %d."
+    DEGREE_ERR = "degree must be an integer equal to or smaller than %d."
 
     valid_forms = (0, 1, 2, 3, 4, 5, 6, 7)
 
@@ -302,7 +302,7 @@ class PolynomialModel(Model):
         if 'form' in kwargs:
             degree = int(kwargs.pop('form'))
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
-            raise TypeError(self.DEGREE_ERR % (self.MAX_DEGREE+1))
+            raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
 
         self.poly_degree = degree
         pnames = ['c%i' % (i) for i in range(degree + 1)]
