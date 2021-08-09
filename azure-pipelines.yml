@@ -3,6 +3,7 @@
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
+
 stages:
 
 - stage: check_codestyle
@@ -24,6 +25,8 @@ stages:
           displayName: 'Run pre-commit hooks'
 
 - stage: build_documentation
+  dependsOn: check_codestyle
+  condition: succeededOrFailed()
   jobs:
     - job: build_documentation
       pool:
@@ -49,6 +52,7 @@ stages:
 
 - stage: tests_minimum_dependencies
   dependsOn: check_codestyle
+  condition: succeededOrFailed()
   jobs:
     - job:
       pool:
@@ -94,6 +98,7 @@ stages:
 
 - stage: tests_latest_dependencies
   dependsOn: check_codestyle
+  condition: succeededOrFailed()
   jobs:
     - job:
       pool:
@@ -139,6 +144,7 @@ stages:
 
 - stage: test_Windows_latest
   dependsOn: check_codestyle
+  condition: succeededOrFailed()
   jobs:
     - job:
       pool:
@@ -173,6 +179,7 @@ stages:
 
 - stage: development_version
   dependsOn: check_codestyle
+  condition: succeededOrFailed()
   jobs:
     - job: Python310_dev
       pool:
