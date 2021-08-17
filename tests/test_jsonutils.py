@@ -66,3 +66,22 @@ def test_encode_decode_pandas():
     decoded_ser = decode4js(encoded_ser)
     assert np.all(pd.Series.eq(obj_ser, decoded_ser))
     assert isinstance(decoded_ser, pd.Series)
+
+
+def test_altered_params_json():
+    """Regression test for loading altered JSON Parameters (see GH #739)."""
+    pars = lmfit.Parameters()
+    pars.add('a', 3.0, min=0)
+    pars.add('b', 10.0, max=1000)
+    pars.add('c', 20.0)
+    pars.add('d', expr='c - b/a')
+
+    # mangle JSON as JavaScript or others might:
+    json_rep = pars.dumps().replace('-Infinity', 'null').replace('Infinity', 'null')
+
+    new = lmfit.Parameters()
+    new.loads(json_rep)
+    for vname in ('a', 'b', 'c', 'd'):
+        assert new[vname].value == pars[vname].value
+        assert new[vname].min == pars[vname].min
+        assert new[vname].max == pars[vname].max
