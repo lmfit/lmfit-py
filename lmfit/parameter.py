@@ -724,8 +724,9 @@ class Parameter:
         self._expr_eval = None
         self._expr_deps = []
         self._delay_asteval = False
-        self.value = _value
+        self._val = _value
         self._init_bounds()
+        self.value = _value
 
     def __repr__(self):
         """Return printable representation of a Parameter object."""
