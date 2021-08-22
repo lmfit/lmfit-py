@@ -22,6 +22,7 @@ Downloading and Installation
 .. _sphinxcontrib-svg2pdfconverter: https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter
 .. _cairosvg: https://cairosvg.org/
 .. _Pillow: https://python-pillow.org/
+.. _flaky: https://github.com/box/flaky
 
 
 Prerequisites
@@ -39,7 +40,7 @@ Lmfit requires the following Python packages, with versions given:
 All of these are readily available on PyPI, and should be installed
 automatically if installing with ``pip install lmfit``.
 
-In order to run the test suite, the `pytest`_ package is required. Some
+In order to run the test suite, the `pytest`_ and `flaky`_ packages are required. Some
 functionality requires the `emcee`_ (version 3+), `corner`_, `pandas`_, `Jupyter`_,
 `matplotlib`_, `dill`_, or `numdifftools`_ packages. These are not installed
 automatically, but we highly recommend each of these packages.
