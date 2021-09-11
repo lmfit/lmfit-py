@@ -18,6 +18,9 @@ except ImportError:
     read_json = None
 
 
+pyvers = f'{sys.version_info.major}.{sys.version_info.minor}'
+
+
 def find_importer(obj):
     """Find importer of an object."""
     oname = obj.__name__
@@ -86,8 +89,6 @@ def encode4js(obj):
         return out
     if callable(obj):
         val, importer = None, None
-        pyvers = "%d.%d" % (sys.version_info.major,
-                            sys.version_info.minor)
         if HAS_DILL:
             val = str(b64encode(dill.dumps(obj)), 'utf-8')
         else:
@@ -132,8 +133,6 @@ def decode4js(obj):
         out = read_json(obj['value'], typ='series')
     elif classname == 'Callable':
         out = val = obj['__name__']
-        pyvers = "%d.%d" % (sys.version_info.major,
-                            sys.version_info.minor)
         if pyvers == obj['pyversion'] and HAS_DILL:
             out = dill.loads(b64decode(obj['value']))
         elif obj['importer'] is not None:

@@ -43,8 +43,8 @@ def residual(p, just_generative=False):
     v = p.valuesdict()
     generative = v['a'] + v['b'] * x
     M = 0
-    while 'a_max%d' % M in v:
-        generative += gauss(x, v['a_max%d' % M], v['loc%d' % M], v['sd%d' % M])
+    while f'a_max{M}' in v:
+        generative += gauss(x, v[f'a_max{M}'], v[f'loc{M}'], v[f'sd{M}'])
         M += 1
 
     if just_generative:
@@ -70,9 +70,9 @@ def initial_peak_params(M):
     p.add_many(('a', a, True, 0, 10), ('b', b, True, 1, 15))
 
     for i in range(M):
-        p.add_many(('a_max%d' % i, 0.5 * a_max, True, 10, a_max),
-                   ('loc%d' % i, loc, True, np.min(x), np.max(x)),
-                   ('sd%d' % i, sd, True, 0.1, np.max(x) - np.min(x)))
+        p.add_many((f'a_max{i}', 0.5 * a_max, True, 10, a_max),
+                   (f'loc{i}', loc, True, np.min(x), np.max(x)),
+                   (f'sd{i}', sd, True, 0.1, np.max(x) - np.min(x)))
     return p
 
 

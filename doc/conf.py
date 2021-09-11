@@ -65,7 +65,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'lmfit'
-copyright = u'{}, Matthew Newville, Till Stensitzki, Renee Otten, and others'.format(date.today().year)
+copyright = f'{date.today().year}, Matthew Newville, Till Stensitzki, Renee Otten, and others'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

@@ -10,8 +10,8 @@ from scipy.stats import f
 from .minimizer import MinimizerException
 
 CONF_ERR_GEN = 'Cannot determine Confidence Intervals'
-CONF_ERR_STDERR = '%s without sensible uncertainty estimates' % CONF_ERR_GEN
-CONF_ERR_NVARS = '%s with < 2 variables' % CONF_ERR_GEN
+CONF_ERR_STDERR = f'{CONF_ERR_GEN} without sensible uncertainty estimates'
+CONF_ERR_NVARS = f'{CONF_ERR_GEN} with < 2 variables'
 
 
 def f_compare(best_fit, new_fit):
@@ -275,7 +275,7 @@ class ConfidenceInterval:
     def find_limit(self, para, direction):
         """Find a value for given parameter so that prob(val) > sigmas."""
         if self.verbose:
-            print('Calculating CI for ' + para.name)
+            print(f'Calculating CI for {para.name}')
         self.reset_vals()
 
         # determine starting step
@@ -306,30 +306,27 @@ class ConfidenceInterval:
             rel_change = (new_prob - old_prob) / max(new_prob, old_prob, 1e-12)
             old_prob = new_prob
             if self.verbose:
-                msg = "P({}={}) = {}, max. prob={}"
-                print(msg.format(para.name, limit, new_prob, max_prob))
+                print(f'P({para.name}={limit}) = {new_prob}, '
+                      f'max. prob={max_prob}')
 
             # check for convergence
             if bound_reached:
                 if new_prob < max(self.probs):
-                    errmsg = ("Bound reached with "
-                              "prob({}={}) = {} < max(sigmas)"
-                              ).format(para.name, limit, new_prob)
+                    errmsg = (f'Bound reached with prob({para.name}={limit}) '
+                              f'= {new_prob} < max(sigmas)')
                     warn(errmsg)
                     break
 
             if i > self.maxiter:
-                errmsg = f"maxiter={self.maxiter} reached "
-                errmsg += ("and prob({}={}) = {} < "
-                           "max(sigmas).".format(para.name, limit, new_prob))
+                errmsg = (f'maxiter={self.maxiter} reached and prob('
+                          f'{para.name}={limit}) = {new_prob} < max(sigmas)')
                 warn(errmsg)
                 break
 
             if rel_change < self.min_rel_change:
-                errmsg = "rel_change={} < {} ".format(rel_change,
-                                                      self.min_rel_change)
-                errmsg += ("at iteration {} and prob({}={}) = {} < max"
-                           "(sigmas).".format(i, para.name, limit, new_prob))
+                errmsg = (f'rel_change={rel_change} < {self.min_rel_change} '
+                          f'at iteration {i} and prob({para.name}={limit}) = '
+                          f'{new_prob} < max(sigmas)')
                 warn(errmsg)
                 break
 

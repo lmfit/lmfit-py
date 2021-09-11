@@ -67,7 +67,7 @@ def guess_from_peak(model, y, x, negative, ampscale=1.0, sigscale=1.0):
     sig = sig*sigscale
 
     pars = model.make_params(amplitude=amp, center=cen, sigma=sig)
-    pars['%ssigma' % model.prefix].set(min=0.0)
+    pars[f'{model.prefix}sigma'].set(min=0.0)
     return pars
 
 
@@ -95,15 +95,15 @@ def guess_from_peak2d(model, z, x, y, negative):
 
     pars = model.make_params(amplitude=amp, centerx=centerx, centery=centery,
                              sigmax=sigmax, sigmay=sigmay)
-    pars['%ssigmax' % model.prefix].set(min=0.0)
-    pars['%ssigmay' % model.prefix].set(min=0.0)
+    pars[f'{model.prefix}sigmax'].set(min=0.0)
+    pars[f'{model.prefix}sigmay'].set(min=0.0)
     return pars
 
 
 def update_param_vals(pars, prefix, **kwargs):
     """Update parameter values with keyword arguments."""
     for key, val in kwargs.items():
-        pname = "%s%s" % (prefix, key)
+        pname = f"{prefix}{key}"
         if pname in pars:
             pars[pname].value = val
     pars.update_constraints()
@@ -177,7 +177,7 @@ class ConstantModel(Model):
         """Estimate initial model parameter values from data."""
         pars = self.make_params()
 
-        pars['%sc' % self.prefix].set(value=data.mean())
+        pars[f'{self.prefix}c'].set(value=data.mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -206,8 +206,8 @@ class ComplexConstantModel(Model):
     def guess(self, data, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = self.make_params()
-        pars['%sre' % self.prefix].set(value=data.real.mean())
-        pars['%sim' % self.prefix].set(value=data.imag.mean())
+        pars[f'{self.prefix}re'].set(value=data.real.mean())
+        pars[f'{self.prefix}im'].set(value=data.imag.mean())
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -291,7 +291,7 @@ class PolynomialModel(Model):
     """
 
     MAX_DEGREE = 7
-    DEGREE_ERR = "degree must be an integer equal to or smaller than %d."
+    DEGREE_ERR = f"degree must be an integer equal to or smaller than {MAX_DEGREE}."
 
     valid_forms = (0, 1, 2, 3, 4, 5, 6, 7)
 
@@ -302,10 +302,10 @@ class PolynomialModel(Model):
         if 'form' in kwargs:
             degree = int(kwargs.pop('form'))
         if not isinstance(degree, int) or degree > self.MAX_DEGREE:
-            raise TypeError(self.DEGREE_ERR % self.MAX_DEGREE)
+            raise TypeError(self.DEGREE_ERR)
 
         self.poly_degree = degree
-        pnames = ['c%i' % (i) for i in range(degree + 1)]
+        pnames = [f'c{i}' for i in range(degree + 1)]
         kwargs['param_names'] = pnames
 
         def polynomial(x, c0=0, c1=0, c2=0, c3=0, c4=0, c5=0, c6=0, c7=0):
@@ -319,7 +319,7 @@ class PolynomialModel(Model):
         if x is not None:
             out = np.polyfit(x, data, self.poly_degree)
             for i, coef in enumerate(out[::-1]):
-                pars['%sc%i' % (self.prefix, i)].set(value=coef)
+                pars[f'{self.prefix}c{i}'].set(value=coef)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -570,8 +570,8 @@ class SplitLorentzianModel(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
-        sigma = pars['%ssigma' % self.prefix]
-        pars['%ssigma_r' % self.prefix].set(value=sigma.value, min=sigma.min, max=sigma.max)
+        sigma = pars[f'{self.prefix}sigma']
+        pars[f'{self.prefix}sigma_r'].set(value=sigma.value, min=sigma.min, max=sigma.max)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -622,7 +622,7 @@ class VoigtModel(Model):
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
-        self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
+        self.set_param_hint('gamma', expr=f'{self.prefix}sigma')
 
         fexpr = ("1.0692*{pre:s}gamma+" +
                  "sqrt(0.8664*{pre:s}gamma**2+5.545083*{pre:s}sigma**2)")
@@ -691,7 +691,7 @@ class PseudoVoigtModel(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=1.25)
-        pars['%sfraction' % self.prefix].set(value=0.5, min=0.0, max=1.0)
+        pars[f'{self.prefix}fraction'].set(value=0.5, min=0.0, max=1.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -731,8 +731,8 @@ class MoffatModel(Model):
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('beta')
-        self.set_param_hint('fwhm', expr="2*%ssigma*sqrt(2**(1.0/max(1e-3, %sbeta))-1)" % (self.prefix, self.prefix))
-        self.set_param_hint('height', expr="%samplitude" % self.prefix)
+        self.set_param_hint('fwhm', expr=f"2*{self.prefix}sigma*sqrt(2**(1.0/max(1e-3, {self.prefix}beta))-1)")
+        self.set_param_hint('height', expr=f"{self.prefix}amplitude")
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -785,7 +785,7 @@ class Pearson7Model(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
-        pars['%sexpon' % self.prefix].set(value=1.5)
+        pars[f'{self.prefix}expon'].set(value=1.5)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -863,7 +863,7 @@ class BreitWignerModel(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative)
-        pars['%sq' % self.prefix].set(value=1.0)
+        pars[f'{self.prefix}q'].set(value=1.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -908,7 +908,7 @@ class LognormalModel(Model):
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = self.make_params(amplitude=1.0, center=0.0, sigma=0.25)
-        pars['%ssigma' % self.prefix].set(min=0.0)
+        pars[f'{self.prefix}sigma'].set(min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -1001,7 +1001,7 @@ class DampedHarmonicOscillatorModel(Model):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative,
                                ampscale=0.1, sigscale=0.1)
-        pars['%sgamma' % self.prefix].set(value=1.0, min=0.0)
+        pars[f'{self.prefix}gamma'].set(value=1.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -1118,7 +1118,7 @@ class SkewedVoigtModel(Model):
 
     def _set_paramhints_prefix(self):
         self.set_param_hint('sigma', min=0)
-        self.set_param_hint('gamma', expr='%ssigma' % self.prefix)
+        self.set_param_hint('gamma', expr=f'{self.prefix}sigma')
 
     def guess(self, data, x=None, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1344,7 +1344,7 @@ class StepModel(Model):
         xmin, xmax = min(x), max(x)
         pars = self.make_params(amplitude=(ymax-ymin),
                                 center=(xmax+xmin)/2.0)
-        pars['%ssigma' % self.prefix].set(value=(xmax-xmin)/7.0, min=0.0)
+        pars[f'{self.prefix}sigma'].set(value=(xmax-xmin)/7.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -1404,8 +1404,7 @@ class RectangleModel(Model):
         self.set_param_hint('center1')
         self.set_param_hint('center2')
         self.set_param_hint('midpoint',
-                            expr='(%scenter1+%scenter2)/2.0' % (self.prefix,
-                                                                self.prefix))
+                            expr=f'({self.prefix}center1+{self.prefix}center2)/2.0')
 
     def guess(self, data, x=None, **kwargs):
         """Estimate initial model parameter values from data."""
@@ -1416,8 +1415,8 @@ class RectangleModel(Model):
         pars = self.make_params(amplitude=(ymax-ymin),
                                 center1=(xmax+xmin)/4.0,
                                 center2=3*(xmax+xmin)/4.0)
-        pars['%ssigma1' % self.prefix].set(value=(xmax-xmin)/7.0, min=0.0)
-        pars['%ssigma2' % self.prefix].set(value=(xmax-xmin)/7.0, min=0.0)
+        pars[f'{self.prefix}sigma1'].set(value=(xmax-xmin)/7.0, min=0.0)
+        pars[f'{self.prefix}sigma2'].set(value=(xmax-xmin)/7.0, min=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -1427,8 +1426,8 @@ class RectangleModel(Model):
 class ExpressionModel(Model):
     """ExpressionModel class."""
 
-    idvar_missing = "No independent variable found in\n %s"
-    idvar_notfound = "Cannot find independent variables '%s' in\n %s"
+    idvar_missing = "No independent variable found in\n {}"
+    idvar_notfound = "Cannot find independent variables '{}' in\n {}"
     no_prefix = "ExpressionModel does not support `prefix` argument"
 
     def __init__(self, expr, independent_vars=None, init_script=None,
@@ -1480,7 +1479,7 @@ class ExpressionModel(Model):
         if independent_vars is None and 'x' in sym_names:
             independent_vars = ['x']
         if independent_vars is None:
-            raise ValueError(self.idvar_missing % (self.expr))
+            raise ValueError(self.idvar_missing.format(self.expr))
 
         # determine which named symbols are parameter names,
         # try to find all independent variables
@@ -1499,7 +1498,7 @@ class ExpressionModel(Model):
                 if not found:
                     lost.append(independent_vars[ix])
             lost = ', '.join(lost)
-            raise ValueError(self.idvar_notfound % (lost, self.expr))
+            raise ValueError(self.idvar_notfound.format(lost, self.expr))
 
         kws['independent_vars'] = independent_vars
         if 'prefix' in kws:
@@ -1525,7 +1524,7 @@ class ExpressionModel(Model):
 
     def __repr__(self):
         """Return printable representation of ExpressionModel."""
-        return "<lmfit.ExpressionModel('%s')>" % (self.expr)
+        return f"<lmfit.ExpressionModel('{self.expr}')>"
 
     def _parse_params(self):
         """Over-write ExpressionModel._parse_params with `pass`.

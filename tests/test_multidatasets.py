@@ -9,9 +9,9 @@ from lmfit.lineshapes import gaussian
 def gauss_dataset(params, i, x):
     """calc gaussian from params for data set i
     using simple, hardwired naming convention"""
-    amp = params['amp_%i' % (i+1)]
-    cen = params['cen_%i' % (i+1)]
-    sig = params['sig_%i' % (i+1)]
+    amp = params[f'amp_{i+1}']
+    cen = params[f'cen_{i+1}']
+    sig = params[f'sig_{i+1}']
     return gaussian(x, amp, cen, sig)
 
 
@@ -46,14 +46,14 @@ def test_multidatasets():
     # create 5 sets of parameters, one per data set
     pars = Parameters()
     for iy, _ in enumerate(data):
-        pars.add('amp_%i' % (iy+1), value=0.5, min=0.0, max=200)
-        pars.add('cen_%i' % (iy+1), value=0.4, min=-2.0, max=2.0)
-        pars.add('sig_%i' % (iy+1), value=0.3, min=0.01, max=3.0)
+        pars.add(f'amp_{iy+1}', value=0.5, min=0.0, max=200)
+        pars.add(f'cen_{iy+1}', value=0.4, min=-2.0, max=2.0)
+        pars.add(f'sig_{iy+1}', value=0.3, min=0.01, max=3.0)
 
     # but now constrain all values of sigma to have the same value
     # by assigning sig_2, sig_3, .. sig_5 to be equal to sig_1
     for iy in (2, 3, 4, 5):
-        pars['sig_%i' % iy].expr = 'sig_1'
+        pars[f'sig_{iy}'].expr = 'sig_1'
 
     # run the global fit to all the data sets
     out = minimize(objective, pars, args=(x, data))

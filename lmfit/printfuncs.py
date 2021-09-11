@@ -25,7 +25,7 @@ def getfloat_attr(obj, attr, length=11):
     if val is None:
         return 'unknown'
     if isinstance(val, int):
-        return '%d' % val
+        return f'{val}'
     if isinstance(val, float):
         return gformat(val, length=length).strip()
     return repr(val)
@@ -74,11 +74,7 @@ def gformat(val, length=11):
         prec += 4
         if expon > 0:
             prec -= expon
-    fmt = '{0: %i.%i%s}' % (length, prec, form)
-    return fmt.format(val)[:length]
-
-
-CORREL_HEAD = '[[Correlations]] (unreported correlations are < %.3f)'
+    return f'{val:{length}.{prec}{form}}'
 
 
 def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
@@ -134,14 +130,14 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     namelen = max(len(n) for n in parnames)
     if result is not None:
         add("[[Fit Statistics]]")
-        add("    # fitting method   = %s" % (result.method))
-        add("    # function evals   = %s" % getfloat_attr(result, 'nfev'))
-        add("    # data points      = %s" % getfloat_attr(result, 'ndata'))
-        add("    # variables        = %s" % getfloat_attr(result, 'nvarys'))
-        add("    chi-square         = %s" % getfloat_attr(result, 'chisqr'))
-        add("    reduced chi-square = %s" % getfloat_attr(result, 'redchi'))
-        add("    Akaike info crit   = %s" % getfloat_attr(result, 'aic'))
-        add("    Bayesian info crit = %s" % getfloat_attr(result, 'bic'))
+        add(f"    # fitting method   = {result.method}")
+        add(f"    # function evals   = {getfloat_attr(result, 'nfev')}")
+        add(f"    # data points      = {getfloat_attr(result, 'ndata')}")
+        add(f"    # variables        = {getfloat_attr(result, 'nvarys')}")
+        add(f"    chi-square         = {getfloat_attr(result, 'chisqr')}")
+        add(f"    reduced chi-square = {getfloat_attr(result, 'redchi')}")
+        add(f"    Akaike info crit   = {getfloat_attr(result, 'aic')}")
+        add(f"    Bayesian info crit = {getfloat_attr(result, 'bic')}")
         if not result.errorbars:
             add("##  Warning: uncertainties could not be estimated:")
             if result.method in ('leastsq', 'least_squares') or HAS_NUMDIFFTOOLS:
@@ -151,9 +147,9 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
                     par = params[name]
                     space = ' '*(namelen-len(name))
                     if par.init_value and np.allclose(par.value, par.init_value):
-                        add('    %s:%s  at initial value' % (name, space))
+                        add(f'    {name}:{space}  at initial value')
                     if (np.allclose(par.value, par.min) or np.allclose(par.value, par.max)):
-                        add('    %s:%s  at boundary' % (name, space))
+                        add(f'    {name}:{space}  at boundary')
             else:
                 add("    this fitting method does not natively calculate uncertainties")
                 add("    and numdifftools is not installed for lmfit to do this. Use")
@@ -164,12 +160,12 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
     for name in parnames:
         par = params[name]
         space = ' '*(namelen-len(name))
-        nout = "%s:%s" % (name, space)
+        nout = f"{name}:{space}"
         inval = '(init = ?)'
         if par.init_value is not None:
-            inval = '(init = %.7g)' % par.init_value
+            inval = f'(init = {par.init_value:.7g})'
         if modelpars is not None and name in modelpars:
-            inval = '%s, model_value = %.7g' % (inval, modelpars[name].value)
+            inval = f'{inval}, model_value = {modelpars[name].value:.7g}'
         try:
             sval = gformat(par.value)
         except (TypeError, ValueError):
@@ -180,14 +176,14 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
                 spercent = f'({abs(par.stderr/par.value):.2%})'
             except ZeroDivisionError:
                 spercent = ''
-            sval = '%s +/-%s %s' % (sval, serr, spercent)
+            sval = f'{sval} +/-{serr} {spercent}'
 
         if par.vary:
-            add("    %s %s %s" % (nout, sval, inval))
+            add(f"    {nout} {sval} {inval}")
         elif par.expr is not None:
-            add("    %s %s == '%s'" % (nout, sval, par.expr))
+            add(f"    {nout} {sval} == '{par.expr}'")
         else:
-            add("    %s % .7g (fixed)" % (nout, par.value))
+            add(f"    {nout} {par.value: .7g} (fixed)")
 
     if show_correl:
         correls = {}
@@ -199,16 +195,17 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
                 for name2 in parnames[i+1:]:
                     if (name != name2 and name2 in par.correl and
                             abs(par.correl[name2]) > min_correl):
-                        correls["%s, %s" % (name, name2)] = par.correl[name2]
+                        correls[f"{name}, {name2}"] = par.correl[name2]
 
         sort_correl = sorted(correls.items(), key=lambda it: abs(it[1]))
         sort_correl.reverse()
         if len(sort_correl) > 0:
-            add(CORREL_HEAD % min_correl)
+            add('[[Correlations]] (unreported correlations are < '
+                f'{min_correl:.3f})')
             maxlen = max(len(k) for k in list(correls.keys()))
         for name, val in sort_correl:
             lspace = max(0, maxlen - len(name))
-            add('    C(%s)%s = % .3f' % (name, (' '*30)[:lspace], val))
+            add(f"    C({name}){(' '*30)[:lspace]} = {val:.3f}")
     return '\n'.join(buff)
 
 
@@ -235,7 +232,7 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     add = html.append
 
     def stat_row(label, val, val2=''):
-        add('<tr><td>%s</td><td>%s</td><td>%s</td></tr>' % (label, val, val2))
+        add(f'<tr><td>{label}</td><td>{val}</td><td>{val2}</td></tr>')
 
     add('<h2>Fit Statistics</h2>')
     add('<table>')
@@ -265,11 +262,11 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
         if len(correls) > 0:
             sort_correls = sorted(correls, key=lambda val: abs(val[2]))
             sort_correls.reverse()
-            extra = '(unreported correlations are < %.3f)' % (min_correl)
-            add('<h2>Correlations %s</h2>' % extra)
+            extra = f'(unreported correlations are < {min_correl:.3f})'
+            add(f'<h2>Correlations {extra}</h2>')
             add('<table>')
             for name1, name2, val in sort_correls:
-                stat_row(name1, name2, "%.4f" % val)
+                stat_row(name1, name2, f"{val:.4f}")
             add('</table>')
     return ''.join(html)
 
@@ -296,7 +293,7 @@ def params_html_table(params):
     add = html.append
 
     def cell(x, cat='td'):
-        return add('<%s> %s </%s>' % (cat, x, cat))
+        return add(f'<{cat}> {x} </{cat}>')
 
     add('<table><tr>')
     headers = ['name', 'value']
@@ -323,7 +320,7 @@ def params_html_table(params):
                     spercent = ''
             rows.extend([serr, spercent])
         rows.extend((par.init_value, gformat(par.min),
-                     gformat(par.max), '%s' % par.vary))
+                     gformat(par.max), f'{par.vary}'))
         if has_expr:
             expr = ''
             if par.expr is not None:
@@ -385,7 +382,7 @@ def ci_report(ci, with_offset=True, ndigits=5):
         """Convert probabilities into header for CI report."""
         if abs(x[0]) < 1.e-2:
             return "_BEST_"
-        return "%.2f%%" % (x[0]*100)
+        return f"{x[0] * 100:.2f}%"
 
     title_shown = False
     fmt_best = fmt_diff = "{0:.%if}" % ndigits
@@ -396,7 +393,7 @@ def ci_report(ci, with_offset=True, ndigits=5):
             add("".join([''.rjust(maxlen+1)] + [i.rjust(ndigits+5)
                                                 for i in map(convp, row)]))
             title_shown = True
-        thisrow = [" %s:" % name.ljust(maxlen)]
+        thisrow = [f" {name.ljust(maxlen)}:"]
         offset = 0.0
         if with_offset:
             for cval, val in row:

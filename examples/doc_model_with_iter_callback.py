@@ -7,7 +7,7 @@ from lmfit.models import GaussianModel, LinearModel
 
 
 def per_iteration(pars, iteration, resid, *args, **kws):
-    print(" ITER ", iteration, ["%.5f" % p for p in pars.values()])
+    print(" ITER ", iteration, [f"{p.name} = {p.value:.5f}" for p in pars.values()])
 
 
 x = linspace(0., 20, 401)
@@ -28,7 +28,7 @@ out = mod.fit(y, pars, x=x, iter_cb=per_iteration)
 
 plt.plot(x, y, 'b--')
 
-print('Nfev = ', out.nfev)
+print(f'Nfev = {out.nfev}')
 print(out.fit_report())
 
 plt.plot(x, out.best_fit, 'k-', label='best fit')
