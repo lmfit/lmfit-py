@@ -44,7 +44,7 @@ stages:
             python setup.py install
           displayName: 'Install lmfit'
         - script: |
-            sudo apt install -qq -y texlive-latex-extra latexmk
+            sudo apt update && sudo apt install -qq -y texlive-latex-extra latexmk
           displayName: 'Install TeX Live'
         - script: |
             cd doc ; make all
@@ -206,8 +206,7 @@ stages:
       steps:
         - script: |
             sudo add-apt-repository ppa:deadsnakes/nightly
-            sudo apt-get update
-            sudo apt-get install -y --no-install-recommends python3.10-dev python3.10-distutils
+            sudo apt update && sudo apt install -y --no-install-recommends python3.10-dev python3.10-distutils
           displayName: Install Python development version from the deadsnakes PPA
         - script: |
             sudo apt update && sudo apt install -yq --no-install-suggests --no-install-recommends \
