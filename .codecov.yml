@@ -1,6 +1,10 @@
+codecov:
+  token: 11c28e95-6e64-4829-9887-04e4cd661bf6
+
 coverage:
   notify:
     after_n_builds: 8
+  informational: true
   status:
     project:
       default:
