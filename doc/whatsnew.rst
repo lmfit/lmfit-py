@@ -19,6 +19,13 @@ Version 1.0.3 Release Notes (unreleased)
 
 New features:
 
+Potentially breaking change:
+- argument ``x`` is now required for the ``guess`` method of Models (Issue #747; PR #748)
+
+To get reasonable estimates for starting values one should always supply both ``x`` and ``y`` values; in some cases it would work
+when only providing ``data`` (i.e., y-values). With the change above, ``x`` is now required in the ``guess`` method call, so scripts might
+need to be updated to explicitly supply ``x``.
+
 Bug fixes/enhancements:
 - do not overwrite user-specified figure titles in Model.plot() functions and allow setting with ``title`` keyword argument (PR #711)
 - preserve Parameters subclass in deepcopy (@jenshnielsen; PR #719)

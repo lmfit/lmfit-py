@@ -486,6 +486,21 @@ def test_priority_setting_figure_title(peakdata):
     assert fig.axes[1].get_title() == ''
 
 
+def test_guess_requires_x():
+    """Test to make sure that ``guess()`` method requires the argument ``x``.
+
+    The ``guess`` method needs ``x`` values (i.e., the independent variable)
+    to estimate initial parameters, but this was not a required argument.
+    See GH #747.
+
+    """
+    mod = lmfit.model.Model(gaussian)
+
+    msg = r"guess\(\) missing 2 required positional arguments: 'data' and 'x'"
+    with pytest.raises(TypeError, match=msg):
+        mod.guess()
+
+
 # Below is the content of the original test_model.py file. These tests still
 # need to be checked and possibly updated to the pytest-style. They work fine
 # though so leave them in for now.
