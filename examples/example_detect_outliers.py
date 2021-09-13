@@ -42,7 +42,7 @@ fit_result = model.fit(y, x=x, a=0.1, b=2)
 # and gives the plot and fitting results below:
 
 fit_result.plot_fit()
-plt.plot(x[idx], y[idx], 'o', color='r', label='outliers')
+plt.plot(x[idx], y[idx], 'o', label='outliers')
 plt.show()
 print(fit_result.fit_report())
 

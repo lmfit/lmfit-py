@@ -22,7 +22,7 @@ params['amp'].min = 0.0
 result = model.fit(y, params, x=x)
 print(result.fit_report())
 
-plt.plot(x, y, 'bo')
-plt.plot(x, result.best_fit, 'r-')
+plt.plot(x, y, 'o')
+plt.plot(x, result.best_fit, '-')
 plt.show()
 # <end examples/doc_model_loadmodel.py>

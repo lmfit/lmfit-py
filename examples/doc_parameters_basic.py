@@ -41,8 +41,8 @@ report_fit(result)
 # try to plot results
 try:
     import matplotlib.pyplot as plt
-    plt.plot(x, data, 'k+')
-    plt.plot(x, final, 'r')
+    plt.plot(x, data, '+')
+    plt.plot(x, final)
     plt.show()
 except ImportError:
     pass

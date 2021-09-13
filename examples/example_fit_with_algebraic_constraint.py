@@ -59,8 +59,8 @@ fit = residual(result.params, x)
 
 report_fit(result)
 
-plt.plot(x, data, 'r+')
-plt.plot(x, init, 'b--', label='initial fit')
-plt.plot(x, fit, 'k-', label='best fit')
+plt.plot(x, data, '+')
+plt.plot(x, init, '--', label='initial fit')
+plt.plot(x, fit, '-', label='best fit')
 plt.legend(loc='best')
 plt.show()

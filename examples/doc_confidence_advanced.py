@@ -33,8 +33,8 @@ lmfit.printfuncs.report_ci(ci)
 
 # plot data and best fit
 plt.figure()
-plt.plot(x, y, 'b')
-plt.plot(x, residual(out2.params) + y, 'r-')
+plt.plot(x, y)
+plt.plot(x, residual(out2.params) + y, '-')
 
 # plot confidence intervals (a1 vs t2 and a2 vs t2)
 fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))

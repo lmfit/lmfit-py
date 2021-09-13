@@ -129,7 +129,7 @@ for i in range(4):
             t, s = unique(x, True)
             f = interp1d(t, y[s], 'slinear')
             xn = linspace(x.min(), x.max(), 50)
-            plt.plot(xn, f(xn), 'g', lw=1)
+            plt.plot(xn, f(xn), lw=1)
             plt.xlabel(names[i])
             plt.ylabel('prob')
 

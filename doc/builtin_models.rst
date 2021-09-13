@@ -378,8 +378,8 @@ are pretty good. A plot of the fit:
     %config InlineBackend.figure_format = 'svg'
 
     import matplotlib.pyplot as plt
-    plt.plot(x, y, 'b-')
-    plt.plot(x, out.best_fit, 'r-', label='Gaussian Model')
+    plt.plot(x, y, '-')
+    plt.plot(x, out.best_fit, '-', label='Gaussian Model')
     plt.legend(loc='best')
     plt.show()
 
@@ -410,8 +410,8 @@ and also by visual inspection of the fit to the data (figure below).
 .. jupyter-execute::
     :hide-code:
 
-     plt.plot(x, y, 'b-')
-     plt.plot(x, out.best_fit, 'r-', label='Lorentzian Model')
+     plt.plot(x, y, '-')
+     plt.plot(x, out.best_fit, '-', label='Lorentzian Model')
      plt.legend(loc='best')
      plt.show()
 
@@ -440,14 +440,14 @@ in the figure below (left).
     :hide-code:
 
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
-    axes[0].plot(x, y, 'b-')
-    axes[0].plot(x, out.best_fit, 'r-', label='Voigt Model\ngamma constrained')
+    axes[0].plot(x, y, '-')
+    axes[0].plot(x, out.best_fit, '-', label='Voigt Model\ngamma constrained')
     axes[0].legend(loc='best')
     # free gamma parameter
     pars['gamma'].set(value=0.7, vary=True, expr='')
     out_gamma = mod.fit(y, pars, x=x)
-    axes[1].plot(x, y, 'b-')
-    axes[1].plot(x, out_gamma.best_fit, 'r-', label='Voigt Model\ngamma unconstrained')
+    axes[1].plot(x, y, '-')
+    axes[1].plot(x, out_gamma.best_fit, '-', label='Voigt Model\ngamma unconstrained')
     axes[1].legend(loc='best')
     plt.show()
 
@@ -525,9 +525,9 @@ with a plot of
 .. jupyter-execute::
     :hide-code:
 
-    plt.plot(x, y, 'b')
-    plt.plot(x, out.init_fit, 'k--', label='initial fit')
-    plt.plot(x, out.best_fit, 'r-', label='best fit')
+    plt.plot(x, y)
+    plt.plot(x, out.init_fit, '--', label='initial fit')
+    plt.plot(x, out.best_fit, '-', label='best fit')
     plt.legend(loc='best')
     plt.show()
 
@@ -576,16 +576,16 @@ components displayed on the right:
     :hide-code:
 
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
-    axes[0].plot(x, y, 'b')
-    axes[0].plot(x, init, 'k--', label='initial fit')
-    axes[0].plot(x, out.best_fit, 'r-', label='best fit')
+    axes[0].plot(x, y)
+    axes[0].plot(x, init, '--', label='initial fit')
+    axes[0].plot(x, out.best_fit, '-', label='best fit')
     axes[0].legend(loc='best')
 
     comps = out.eval_components(x=x)
-    axes[1].plot(x, y, 'b')
-    axes[1].plot(x, comps['g1_'], 'g--', label='Gaussian component 1')
-    axes[1].plot(x, comps['g2_'], 'm--', label='Gaussian component 2')
-    axes[1].plot(x, comps['exp_'], 'k--', label='Exponential component')
+    axes[1].plot(x, y)
+    axes[1].plot(x, comps['g1_'], '--', label='Gaussian component 1')
+    axes[1].plot(x, comps['g2_'], '--', label='Gaussian component 2')
+    axes[1].plot(x, comps['exp_'], '--', label='Exponential component')
     axes[1].legend(loc='best')
 
     plt.show()
@@ -622,9 +622,9 @@ we can get a better initial estimate (see below).
 .. jupyter-execute::
     :hide-code:
 
-    plt.plot(x, y, 'b')
-    plt.plot(x, out.init_fit, 'k--', label='initial fit')
-    plt.plot(x, out.best_fit, 'r-', label='best fit')
+    plt.plot(x, y)
+    plt.plot(x, out.init_fit, '--', label='initial fit')
+    plt.plot(x, out.best_fit, '-', label='best fit')
     plt.legend(loc='best')
 
     plt.show()

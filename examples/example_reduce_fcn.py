@@ -61,10 +61,10 @@ o2 = lmfit.minimize(resid, params, args=(x, yn), method=method,
 print("\n\n# Robust Fit, using log-likelihood with Cauchy PDF:\n")
 lmfit.report_fit(o2)
 
-plt.plot(x, y, 'ko', lw=2)
-plt.plot(x, yn, 'k--*', lw=1)
-plt.plot(x, yn+o1.residual, 'r-', lw=2)
-plt.plot(x, yn+o2.residual, 'b-', lw=2)
+plt.plot(x, y, 'o', lw=2)
+plt.plot(x, yn, '--*', lw=1)
+plt.plot(x, yn+o1.residual, '-', lw=2)
+plt.plot(x, yn+o2.residual, '-', lw=2)
 plt.legend(['True function',
             'with noise+outliers',
             'sum of squares fit',

@@ -57,6 +57,6 @@ report_fit(out, show_correl=True, modelpars=p_true)
 ###############################################################################
 # and shows the plot below:
 #
-plt.plot(x, data, 'ro')
-plt.plot(x, fit, 'b')
+plt.plot(x, data, 'o')
+plt.plot(x, fit)
 plt.show()

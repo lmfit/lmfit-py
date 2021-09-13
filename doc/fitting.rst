@@ -575,7 +575,7 @@ parameters, which is a similar goal to the one here.
     x = np.linspace(1, 10, 250)
     np.random.seed(0)
     y = 3.0 * np.exp(-x / 2) - 5.0 * np.exp(-(x - 0.1) / 10.) + 0.1 * np.random.randn(x.size)
-    plt.plot(x, y, 'b')
+    plt.plot(x, y)
     plt.show()
 
 Create a Parameter set for the initial guesses:
@@ -603,8 +603,8 @@ and plotting the fit using the Maximum Likelihood solution gives the graph below
 
 .. jupyter-execute::
 
-    plt.plot(x, y, 'b')
-    plt.plot(x, residual(mi.params) + y, 'r', label='best fit')
+    plt.plot(x, y)
+    plt.plot(x, residual(mi.params) + y, label='best fit')
     plt.legend(loc='best')
     plt.show()
 
@@ -656,7 +656,7 @@ worked as intended (as a rule of thumb the value should be between 0.2 and
 
 .. jupyter-execute::
 
-    plt.plot(res.acceptance_fraction, 'b')
+    plt.plot(res.acceptance_fraction, 'o')
     plt.xlabel('walker')
     plt.ylabel('acceptance fraction')
 

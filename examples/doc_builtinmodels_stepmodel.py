@@ -22,9 +22,9 @@ out = mod.fit(y, pars, x=x)
 
 print(out.fit_report())
 
-plt.plot(x, y, 'b')
-plt.plot(x, out.init_fit, 'k--', label='initial fit')
-plt.plot(x, out.best_fit, 'r-', label='best fit')
+plt.plot(x, y)
+plt.plot(x, out.init_fit, '--', label='initial fit')
+plt.plot(x, out.best_fit, '-', label='best fit')
 plt.legend(loc='best')
 plt.show()
 # <end examples/doc_builtinmodels_stepmodel.py>

@@ -61,7 +61,7 @@ plt.show()
 
 ###############################################################################
 # check the acceptance fraction to see whether emcee performed well
-plt.plot(result_emcee.acceptance_fraction)
+plt.plot(result_emcee.acceptance_fraction, 'o')
 plt.xlabel('walker')
 plt.ylabel('acceptance fraction')
 plt.show()
