@@ -39,7 +39,7 @@ def linear_resonator(f, f_0, Q, Q_e_real, Q_e_imag):
 # The standard practice of defining an ``lmfit`` model is as follows:
 
 class ResonatorModel(lmfit.model.Model):
-    __doc__ = "resonator model" + lmfit.models.COMMON_DOC
+    __doc__ = "resonator model" + lmfit.models.COMMON_INIT_DOC
 
     def __init__(self, *args, **kwargs):
         # pass in the defining equation so the user doesn't have to later.

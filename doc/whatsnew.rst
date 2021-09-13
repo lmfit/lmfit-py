@@ -17,9 +17,8 @@ consult the `lmfit GitHub repository`_.
 Version 1.0.3 Release Notes (unreleased)
 ========================================
 
-New features:
-
 Potentially breaking change:
+
 - argument ``x`` is now required for the ``guess`` method of Models (Issue #747; PR #748)
 
 To get reasonable estimates for starting values one should always supply both ``x`` and ``y`` values; in some cases it would work
@@ -27,14 +26,17 @@ when only providing ``data`` (i.e., y-values). With the change above, ``x`` is n
 need to be updated to explicitly supply ``x``.
 
 Bug fixes/enhancements:
+
 - do not overwrite user-specified figure titles in Model.plot() functions and allow setting with ``title`` keyword argument (PR #711)
 - preserve Parameters subclass in deepcopy (@jenshnielsen; PR #719)
-- coerce ``data`` and ``indepdent_vars`` to NumPy array with ``dtype=float64`` or ``dtype=complex128`` where  applicable (Issues #723 and #727)
+- coerce ``data`` and ``indepdent_vars`` to NumPy array with ``dtype=float64`` or ``dtype=complex128`` where applicable (Issues #723 and #728)
 - fix collision between parameter names in built-in models and user-specified parameters (Issue #710 and PR #732)
 - correct error message in PolynomialModel (@kremeyer; PR #737)
 - improved handling of altered JSON data (Issue #739; PR #740, reported by Matthew Giammar)
+- map ``max_nfev`` to ``maxiter`` when using ``differential_evolution`` (PR #749, reported by Olivier B.)
 
 Various:
+
 - update asteval dependency to >=0.9.22 to avoid DeprecationWarnings from NumPy v1.20.0 (PR #707)
 - remove incorrectly spelled ``DonaichModel`` and ``donaich`` lineshape, deprecated in version 1.0.1 (PR #707)
 - remove occurrences of OrderedDict throughout the code; dict is order-preserving since Python 3.6 (PR #713)

@@ -7,7 +7,7 @@ LMfit-py
 .. image:: https://codecov.io/gh/lmfit/lmfit-py/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/lmfit/lmfit-py
 
-.. image:: 	https://img.shields.io/pypi/v/lmfit.svg
+.. image:: https://img.shields.io/pypi/v/lmfit.svg
    :target: https://pypi.org/project/lmfit
 
 .. image:: https://img.shields.io/pypi/dm/lmfit.svg
@@ -18,7 +18,6 @@ LMfit-py
 
 .. image:: https://zenodo.org/badge/4185/lmfit/lmfit-py.svg
    :target: https://zenodo.org/badge/latestdoi/4185/lmfit/lmfit-py
-
 
 .. _LMfit mailing list: https://groups.google.com/group/lmfit-py
 

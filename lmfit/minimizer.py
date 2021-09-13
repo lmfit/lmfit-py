@@ -687,7 +687,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
         """
         # determine which parameters are actually variables
@@ -931,7 +931,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
 
         Notes
@@ -1553,7 +1553,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
         """
         result = self.prepare_fit(params)
@@ -1662,7 +1662,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
         """
         result = self.prepare_fit(params=params)
@@ -2321,7 +2321,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
         """
         kwargs = {'params': params}
@@ -2550,7 +2550,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
 
 
     .. versionchanged:: 0.9.0
-        Return value changed to :class:`MinimizerResult`.
+       Return value changed to :class:`MinimizerResult`.
 
 
     Notes

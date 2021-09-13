@@ -69,11 +69,12 @@ help:
 	@echo "  doctest   to run all doctests embedded in the documentation (if enabled)"
 
 clean:
-	-rm -rf $(BUILDDIR)/*
+	-rm -rf $(BUILDDIR)
 	-rm -f extensions.py
 	-rm -f *.dat *.sav *.csv
 	-rm -rf examples/*
 	-rm -rf ../examples/documentation
+	-rm -rf __pycache__
 
 dirhtml:  gallery
 	$(SPHINXBUILD) -b dirhtml $(SPHINX_OUTPUT) $(SPHINX_OPTS) . $(BUILDDIR)/dirhtml
