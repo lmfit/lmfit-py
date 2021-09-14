@@ -4,9 +4,11 @@ import inspect
 
 import numpy as np
 from numpy.testing import assert_allclose
+import pytest
 from scipy.optimize import fsolve
 
 from lmfit import lineshapes, models
+from lmfit.models import GaussianModel
 
 
 def check_height_fwhm(x, y, lineshape, model):
@@ -284,3 +286,14 @@ def test_guess_from_peak2d():
 
     for param, value in zip(['centerx', 'centery'], [centerx, centery]):
         assert np.abs((guess_increasing_x[param].value - value)/value) < 0.5
+
+
+def test_guess_requires_x():
+    """Regression test for GH #747."""
+    x = np.arange(100)
+    y = np.exp(-(x-50)**2/(2*10**2))
+
+    mod = GaussianModel()
+    msg = r"guess\(\) missing 1 required positional argument: 'x'"
+    with pytest.raises(TypeError, match=msg):
+        mod.guess(y)

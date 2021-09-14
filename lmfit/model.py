@@ -701,7 +701,7 @@ class Model:
             p._delay_asteval = False
         return params
 
-    def guess(self, data, **kws):
+    def guess(self, data, x, **kws):
         """Guess starting values for the parameters of a Model.
 
         This is not implemented for all models, but is available for many
@@ -710,7 +710,9 @@ class Model:
         Parameters
         ----------
         data : array_like
-            Array of data to use to guess parameter values.
+            Array of data (i.e., y-values) to use to guess parameter values.
+        x : array_like
+            Array of values for the independent variable (i.e., x-values).
         **kws : optional
             Additional keyword arguments, passed to model function.
 
@@ -729,6 +731,9 @@ class Model:
         Should be implemented for each model subclass to run
         `self.make_params()`, update starting values and return a
         Parameters object.
+
+        .. versionchanged:: 1.0.3
+           Argument ``x`` is now explicitly required to estimate starting values.
 
         """
         cname = self.__class__.__name__
