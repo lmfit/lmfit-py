@@ -1,11 +1,10 @@
-#
-# test speed of building complex model
-#
+"""Test speed of building complex model."""
 from copy import deepcopy
 import sys
 import time
 
 import numpy as np
+import pytest
 
 from lmfit import Model
 from lmfit.lineshapes import gaussian
@@ -13,6 +12,7 @@ from lmfit.lineshapes import gaussian
 sys.setrecursionlimit(2000)
 
 
+@pytest.mark.flaky(max_runs=5)
 def test_manypeaks_speed():
     model = None
     t0 = time.time()

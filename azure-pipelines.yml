@@ -81,7 +81,7 @@ stages:
         - script: |
             python -m pip install --upgrade pip wheel
             pip install setuptools==57.5.0
-            pip install asteval==0.9.22 numpy==1.18 scipy==1.3.2 uncertainties==3.0.1 pytest coverage codecov
+            pip install asteval==0.9.22 numpy==1.18 scipy==1.3.2 uncertainties==3.0.1 pytest coverage codecov flaky
           displayName: 'Install minimum required version of dependencies'
         - script: |
             python setup.py install
@@ -238,7 +238,7 @@ stages:
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             # remove numdifftools for now as it pulls in statsmodels, that wants to build with NumPy 1.14.5
-            pip3.10 install asteval uncertainties dill emcee
+            pip3.10 install asteval uncertainties dill emcee flaky
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python3.10 setup.py install --user
