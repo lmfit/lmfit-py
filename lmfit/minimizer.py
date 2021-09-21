@@ -997,7 +997,7 @@ class Minimizer:
                                      'bound for all varying parameters')
 
             _bounds = [(-np.pi / 2., np.pi / 2.)] * len(variables)
-            kwargs = dict(args=(), strategy='best1bin', maxiter=None,
+            kwargs = dict(args=(), strategy='best1bin', maxiter=self.max_nfev,
                           popsize=15, tol=0.01, mutation=(0.5, 1),
                           recombination=0.7, seed=None, callback=None,
                           disp=False, polish=True, init='latinhypercube',
