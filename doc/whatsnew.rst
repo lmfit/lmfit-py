@@ -37,7 +37,7 @@ Bug fixes/enhancements:
 
 Various:
 
-- update asteval dependency to >=0.9.22 to avoid DeprecationWarnings from NumPy v1.20.0 (PR #707)
+- update asteval dependency to >= 0.9.22 to avoid DeprecationWarnings from NumPy v1.20.0 (PR #707)
 - remove incorrectly spelled ``DonaichModel`` and ``donaich`` lineshape, deprecated in version 1.0.1 (PR #707)
 - remove occurrences of OrderedDict throughout the code; dict is order-preserving since Python 3.6 (PR #713)
 - update the contributing instructions (PR #718; @martin-majlis)
@@ -47,6 +47,7 @@ Various:
 - use ``setuptools_scm`` for version info instead of ``versioneer`` (PR #729)
 - transition to using ``f-strings`` (PR #730)
 - mark ``test_manypeaks_speed.py`` as flaky to avoid intermittent test failures (repeat up to 5 times; PR #745)
+- update scipy dependency to >= 1.14.0 (PR #751)
 
 
 .. _whatsnew_102_label:
