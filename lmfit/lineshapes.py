@@ -484,7 +484,7 @@ def powerlaw(x, amplitude=1, exponent=1.0):
 def linear(x, slope=1.0, intercept=0.0):
     """Return a linear function.
 
-    linear(x, slope, interceps) = slope * x + intercept
+    linear(x, slope, intercept) = slope * x + intercept
 
     """
     return slope * x + intercept

@@ -102,7 +102,7 @@ require 3.6+ so that we can use formatting-strings and rely on dictionaries bein
 New features:
 
 - added thermal distribution model and lineshape (PR #620; @mpmdean)
-- introduced a new argument ``max_nfev`` to uniformly specify the maximum number of function evalutions (PR #610)
+- introduced a new argument ``max_nfev`` to uniformly specify the maximum number of function evaluations (PR #610)
   **Please note: all other arguments (e.g., ``maxfev``, ``maxiter``, ...) will no longer be passed to the underlying
   solver. A warning will be emitted stating that one should use ``max_nfev``.**
 - the attribute ``call_kws`` was added to the ``MinimizerResult`` class and contains the keyword arguments that are
