@@ -44,7 +44,7 @@ sine wave, and so write an objective function like this:
 
     from numpy import exp, sin
 
-    def residual(variables, x, data, eps_data):
+    def residual(variables, x, data, uncertainty):
         """Model a decaying sine wave and subtract data."""
         amp = variables[0]
         phaseshift = variables[1]
@@ -53,7 +53,7 @@ sine wave, and so write an objective function like this:
 
         model = amp * sin(x*freq + phaseshift) * exp(-x*x*decay)
 
-        return (data-model) / eps_data
+        return (data-model) / uncertainty
 
 To perform the minimization with :mod:`scipy.optimize`, one would do this:
 
@@ -64,11 +64,14 @@ To perform the minimization with :mod:`scipy.optimize`, one would do this:
 
     # generate synthetic data with noise
     x = linspace(0, 100)
-    eps_data = random.normal(size=x.size, scale=0.2)
-    data = 7.5 * sin(x*0.22 + 2.5) * exp(-x*x*0.01) + eps_data
+    noise = random.normal(size=x.size, scale=0.2)
+    data = 7.5 * sin(x*0.22 + 2.5) * exp(-x*x*0.01) + noise
+
+    # generate experimental uncertainties
+    uncertainty = abs(0.16 + random.normal(size=x.size, scale=0.05))
 
     variables = [10.0, 0.2, 3.0, 0.007]
-    out = leastsq(residual, variables, args=(x, data, eps_data))
+    out = leastsq(residual, variables, args=(x, data, uncertainty))
 
 Though it is wonderful to be able to use Python for such optimization
 problems, and the SciPy library is robust and easy to use, the approach
@@ -122,7 +125,7 @@ for the decaying sine wave as:
     from lmfit import minimize, Parameters
 
 
-    def residual(params, x, data, eps_data):
+    def residual(params, x, data, uncertainty):
         amp = params['amp']
         phaseshift = params['phase']
         freq = params['frequency']
@@ -130,7 +133,7 @@ for the decaying sine wave as:
 
         model = amp * sin(x*freq + phaseshift) * exp(-x*x*decay)
 
-        return (data-model) / eps_data
+        return (data-model) / uncertainty
 
 
     params = Parameters()
@@ -139,7 +142,7 @@ for the decaying sine wave as:
     params.add('phase', value=0.2)
     params.add('frequency', value=3.0)
 
-    out = minimize(residual, params, args=(x, data, eps_data))
+    out = minimize(residual, params, args=(x, data, uncertainty))
 
 At first look, we simply replaced a list of values with a dictionary,
 accessed by name -- not a huge improvement. But each of the named

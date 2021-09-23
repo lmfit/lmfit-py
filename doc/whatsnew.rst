@@ -34,6 +34,7 @@ Bug fixes/enhancements:
 - correct error message in PolynomialModel (@kremeyer; PR #737)
 - improved handling of altered JSON data (Issue #739; PR #740, reported by Matthew Giammar)
 - map ``max_nfev`` to ``maxiter`` when using ``differential_evolution`` (PR #749, reported by Olivier B.)
+- correct use of noise versus experimental uncertainty in the documentation (PR #751, reported by Andrés Zelcer)
 
 Various:
 
