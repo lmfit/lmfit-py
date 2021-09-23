@@ -48,8 +48,8 @@ o2 = lmfit.minimize(resid, params, args=(x, yn), method='differential_evolution'
 print("\n\n# Fit using differential_evolution:")
 lmfit.report_fit(o2)
 
-plt.plot(x, yn, 'ko', lw=2)
-plt.plot(x, yn+o1.residual, 'r-', lw=2)
-plt.plot(x, yn+o2.residual, 'b--', lw=2)
+plt.plot(x, yn, 'o', lw=2)
+plt.plot(x, yn+o1.residual, '-', lw=2)
+plt.plot(x, yn+o2.residual, '--', lw=2)
 plt.legend(['data', 'leastsq', 'diffev'], loc='upper left')
 plt.show()

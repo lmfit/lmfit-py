@@ -150,8 +150,6 @@ COMMON_GUESS_DOC = """Guess starting values for the parameters of a model.
 
     """
 
-COMMON_DOC = COMMON_INIT_DOC
-
 
 class ConstantModel(Model):
     """Constant model, with a single Parameter: `c`.
@@ -1441,7 +1439,7 @@ class ExpressionModel(Model):
         2. `prefix` is **not supported** for ExpressionModel.
 
         3. `nan_policy` sets what to do when a NaN or missing value is
-        seen in the data. Should be one of:
+           seen in the data. Should be one of:
 
             - `'raise'` : raise a `ValueError` (default)
             - `'propagate'` : do nothing

@@ -76,7 +76,7 @@ Chi-square         |   %.4f    |   %.4f  |
 ###############################################################################
 # and the best-fit to the synthetic data (with added noise) is the same for
 # both methods:
-plt.plot(x, data, 'ro')
-plt.plot(x, fit1, 'b')
-plt.plot(x, fit2, 'k')
+plt.plot(x, data, 'o')
+plt.plot(x, fit1)
+plt.plot(x, fit2)
 plt.show()

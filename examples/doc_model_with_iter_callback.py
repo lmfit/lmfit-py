@@ -26,12 +26,12 @@ pars['bkg_slope'].value = 0.0
 
 out = mod.fit(y, pars, x=x, iter_cb=per_iteration)
 
-plt.plot(x, y, 'b--')
+plt.plot(x, y, '--')
 
 print(f'Nfev = {out.nfev}')
 print(out.fit_report())
 
-plt.plot(x, out.best_fit, 'k-', label='best fit')
+plt.plot(x, out.best_fit, '-', label='best fit')
 plt.legend(loc='best')
 plt.show()
 # <end examples/doc_with_itercb.py>

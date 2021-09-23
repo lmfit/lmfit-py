@@ -687,7 +687,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
         """
         # determine which parameters are actually variables
@@ -931,7 +931,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
 
         Notes
@@ -1553,7 +1553,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
         """
         result = self.prepare_fit(params)
@@ -1599,15 +1599,7 @@ class Minimizer:
                     hess = (ret.jac.T * ret.jac).toarray()
                 elif isinstance(ret.jac, LinearOperator):
                     identity = np.eye(ret.jac.shape[1], dtype=ret.jac.dtype)
-                    # TODO: Remove try-except when SciPy < 1.4.0 support dropped
-                    try:
-                        # For SciPy >= 1.4.0 (with Linear Operator transpose)
-                        # https://github.com/scipy/scipy/pull/9064
-                        hess = (ret.jac.T * ret.jac) * identity
-                    except AttributeError:
-                        # For SciPy < 1.4.0 (without Linear Operator transpose)
-                        jac = ret.jac * identity
-                        hess = np.matmul(jac.T, jac)
+                    hess = (ret.jac.T * ret.jac) * identity
                 else:
                     hess = np.matmul(ret.jac.T, ret.jac)
                 result.covar = np.linalg.inv(hess)
@@ -1662,7 +1654,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
         """
         result = self.prepare_fit(params=params)
@@ -2321,7 +2313,7 @@ class Minimizer:
 
 
         .. versionchanged:: 0.9.0
-            Return value changed to :class:`MinimizerResult`.
+           Return value changed to :class:`MinimizerResult`.
 
         """
         kwargs = {'params': params}
@@ -2550,7 +2542,7 @@ def minimize(fcn, params, method='leastsq', args=None, kws=None, iter_cb=None,
 
 
     .. versionchanged:: 0.9.0
-        Return value changed to :class:`MinimizerResult`.
+       Return value changed to :class:`MinimizerResult`.
 
 
     Notes

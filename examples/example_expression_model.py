@@ -29,8 +29,8 @@ result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 # this results in the following output:
 print(result.fit_report())
 
-plt.plot(x, y, 'bo')
-plt.plot(x, result.init_fit, 'k--', label='initial fit')
-plt.plot(x, result.best_fit, 'r-', label='best fit')
+plt.plot(x, y, 'o')
+plt.plot(x, result.init_fit, '--', label='initial fit')
+plt.plot(x, result.best_fit, '-', label='best fit')
 plt.legend(loc='best')
 plt.show()

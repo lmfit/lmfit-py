@@ -134,7 +134,7 @@ x = np.linspace(0, 15, 301)
 np.random.seed(7)
 noise = np.random.normal(size=x.size, scale=0.2)
 data = (5. * np.sin(2*x - 0.1) * np.exp(-x*x*0.025) + noise)
-plt.plot(x, data, 'b')
+plt.plot(x, data)
 
 
 def fcn2min(params, x, data):
@@ -220,8 +220,8 @@ print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {gri
 # fitting statistics. For example, the optimal solution from the grid search
 # is given below together with a plot:
 print(fit_report(result_brute))
-plt.plot(x, data, 'b')
-plt.plot(x, data + fcn2min(result_brute.params, x, data), 'r--')
+plt.plot(x, data)
+plt.plot(x, data + fcn2min(result_brute.params, x, data), '--')
 
 ###############################################################################
 # We can see that this fit is already very good, which is what we should expect
@@ -276,10 +276,10 @@ print(fit_report(best_result))
 # As expected the parameters have not changed significantly as they were
 # already very close to the "real" values, which can also be appreciated from
 # the plots below.
-plt.plot(x, data, 'b')
-plt.plot(x, data + fcn2min(result_brute.params, x, data), 'r--',
+plt.plot(x, data)
+plt.plot(x, data + fcn2min(result_brute.params, x, data), '--',
          label='brute')
-plt.plot(x, data + fcn2min(best_result.params, x, data), 'g--',
+plt.plot(x, data + fcn2min(best_result.params, x, data), '--',
          label='brute followed by leastsq')
 plt.legend()
 

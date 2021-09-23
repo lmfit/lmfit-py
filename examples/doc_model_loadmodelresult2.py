@@ -11,7 +11,7 @@ y = dat[:, 0]
 result = load_modelresult('nistgauss_modelresult.sav')
 print(result.fit_report())
 
-plt.plot(x, y, 'bo')
-plt.plot(x, result.best_fit, 'r-')
+plt.plot(x, y, 'o')
+plt.plot(x, result.best_fit, '-')
 plt.show()
 # <end examples/doc_model_loadmodelresult2.py>

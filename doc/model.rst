@@ -186,14 +186,14 @@ plot:
 .. jupyter-execute::
     :hide-code:
 
-    plt.plot(x, y, 'bo')
-    plt.plot(x, result.init_fit, 'k--', label='initial fit')
-    plt.plot(x, result.best_fit, 'r-', label='best fit')
+    plt.plot(x, y, 'o')
+    plt.plot(x, result.init_fit, '--', label='initial fit')
+    plt.plot(x, result.best_fit, '-', label='best fit')
     plt.legend(loc='best')
     plt.show()
 
-which shows the data in blue dots, the best fit as a solid red line, and
-the initial fit as a dashed black line.
+which shows the data in blue dots, the best fit as a solid green line, and
+the initial fit as a dashed orange line.
 
 Note that the model fitting was really performed with:
 
@@ -834,9 +834,9 @@ figure below.
 .. jupyter-execute::
     :hide-code:
 
-    plt.plot(x, y, 'bo')
-    plt.plot(x, result.init_fit, 'k--', label='initial fit')
-    plt.plot(x, result.best_fit, 'r-', label='best fit')
+    plt.plot(x, y, 'o')
+    plt.plot(x, result.init_fit, '--', label='initial fit')
+    plt.plot(x, result.best_fit, '-', label='best fit')
     plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB",
                      label='3-$\sigma$ uncertainty band')
     plt.legend(loc='best')
@@ -949,31 +949,31 @@ and shows the plot on the left.
     :hide-code:
 
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
-    axes[0].plot(x, y, 'bo')
-    axes[0].plot(x, result.init_fit, 'k--', label='initial fit')
-    axes[0].plot(x, result.best_fit, 'r-', label='best fit')
+    axes[0].plot(x, y, 'o')
+    axes[0].plot(x, result.init_fit, '--', label='initial fit')
+    axes[0].plot(x, result.best_fit, '-', label='best fit')
     axes[0].legend(loc='best')
 
     comps = result.eval_components()
-    axes[1].plot(x, y, 'bo')
-    axes[1].plot(x, comps['gaussian'], 'k--', label='Gaussian component')
-    axes[1].plot(x, comps['line'], 'r--', label='Line component')
+    axes[1].plot(x, y, 'o')
+    axes[1].plot(x, comps['gaussian'], '--', label='Gaussian component')
+    axes[1].plot(x, comps['line'], '--', label='Line component')
     axes[1].legend(loc='best')
     plt.show()
 
 On the left, data is shown in blue dots, the total fit is shown in solid
-red line, and the initial fit is shown as a black dashed line. The figure
+green line, and the initial fit is shown as a orange dashed line. The figure
 on the right shows again the data in blue dots, the Gaussian component as
-a black dashed line and the linear component as a red dashed line. It is
+a orange dashed line and the linear component as a green dashed line. It is
 created using the following code:
 
 .. jupyter-execute::
     :hide-output:
 
     comps = result.eval_components()
-    plt.plot(x, y, 'bo')
-    plt.plot(x, comps['gaussian'], 'k--', label='Gaussian component')
-    plt.plot(x, comps['line'], 'r--', label='Line component')
+    plt.plot(x, y, 'o')
+    plt.plot(x, comps['gaussian'], '--', label='Gaussian component')
+    plt.plot(x, comps['line'], '--', label='Line component')
 
 The components were generated after the fit using the
 :meth:`ModelResult.eval_components` method of the ``result``, which returns
@@ -1066,13 +1066,13 @@ and shows the plots:
     :hide-code:
 
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
-    axes[0].plot(x, y, 'bo')
-    axes[0].plot(x, result.init_fit, 'k--', label='initial fit')
-    axes[0].plot(x, result.best_fit, 'r-', label='best fit')
+    axes[0].plot(x, y, 'o')
+    axes[0].plot(x, result.init_fit, '--', label='initial fit')
+    axes[0].plot(x, result.best_fit, '-', label='best fit')
     axes[0].legend(loc='best')
-    axes[1].plot(x, y, 'bo')
-    axes[1].plot(x, 10*comps['jump'], 'k--', label='Jump component')
-    axes[1].plot(x, 10*comps['gaussian'], 'r-', label='Gaussian component')
+    axes[1].plot(x, y, 'o')
+    axes[1].plot(x, 10*comps['jump'], '--', label='Jump component')
+    axes[1].plot(x, 10*comps['gaussian'], '-', label='Gaussian component')
     axes[1].legend(loc='best')
     plt.show()
 
