@@ -1078,7 +1078,7 @@ class Minimizer:
             Extra keyword arguments required for user objective function.
         float_behavior : {'posterior', 'chi2'}, optional
             Specifies meaning of objective when it returns a float. Use
-            `'posterior'` if objective function returnins a log-posterior
+            `'posterior'` if objective function returns a log-posterior
             probability (default) or `'chi2'` if it returns a chi2 value.
         is_weighted : bool, optional
             If `userfcn` returns a vector of residuals then `is_weighted`

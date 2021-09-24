@@ -87,7 +87,7 @@ def test_least_squares_cov_x(peakdata, bounds):
     assert_allclose(vals, vals_lsq, rtol=1e-5)
     assert_allclose(result.chisqr, result_lsq.chisqr)
 
-    # assert that parameter uncertaintes obtained from the leastsq method and
+    # assert that parameter uncertainties obtained from the leastsq method and
     # those from the covariance matrix estimated from the Jacbian matrix in
     # least_squares are similar
     stderr = [result.params[p].stderr for p in result.params.valuesdict()]

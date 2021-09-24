@@ -131,7 +131,7 @@ def test_numdifftools_no_bounds(fit_method):
     assert_allclose(vals_ndt, vals, rtol=0.1)
     assert_allclose(result_ndt.chisqr, result.chisqr, rtol=1e-5)
 
-    # assert that parameter uncertaintes from leastsq and calculated from
+    # assert that parameter uncertainties from leastsq and calculated from
     # the covariance matrix using numdifftools are very similar
     stderr = [result.params[p].stderr for p in result.params.valuesdict()]
     stderr_ndt = [result_ndt.params[p].stderr for p in result_ndt.params.valuesdict()]
@@ -179,7 +179,7 @@ def test_numdifftools_with_bounds(fit_method):
     assert_allclose(vals_ndt, vals, rtol=0.1)
     assert_allclose(result_ndt.chisqr, result.chisqr, rtol=1e-5)
 
-    # assert that parameter uncertaintes from leastsq and calculated from
+    # assert that parameter uncertainties from leastsq and calculated from
     # the covariance matrix using numdifftools are very similar
     stderr = [result.params[p].stderr for p in result.params.valuesdict()]
     stderr_ndt = [result_ndt.params[p].stderr for p in result_ndt.params.valuesdict()]
