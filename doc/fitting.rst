@@ -575,8 +575,6 @@ parameters, which is a similar goal to the one here.
     x = np.linspace(1, 10, 250)
     np.random.seed(0)
     y = 3.0 * np.exp(-x / 2) - 5.0 * np.exp(-(x - 0.1) / 10.) + 0.1 * np.random.randn(x.size)
-    plt.plot(x, y)
-    plt.show()
 
 Create a Parameter set for the initial guesses:
 
@@ -603,9 +601,9 @@ and plotting the fit using the Maximum Likelihood solution gives the graph below
 
 .. jupyter-execute::
 
-    plt.plot(x, y)
+    plt.plot(x, y, 'o')
     plt.plot(x, residual(mi.params) + y, label='best fit')
-    plt.legend(loc='best')
+    plt.legend()
     plt.show()
 
 Note that the fit here (for which the ``numdifftools`` package is installed)
@@ -659,6 +657,7 @@ worked as intended (as a rule of thumb the value should be between 0.2 and
     plt.plot(res.acceptance_fraction, 'o')
     plt.xlabel('walker')
     plt.ylabel('acceptance fraction')
+    plt.show()
 
 With the results from ``emcee``, we can visualize the posterior distributions
 for the parameters using the ``corner`` package:

@@ -380,7 +380,7 @@ are pretty good. A plot of the fit:
     import matplotlib.pyplot as plt
     plt.plot(x, y, '-')
     plt.plot(x, out.best_fit, '-', label='Gaussian Model')
-    plt.legend(loc='best')
+    plt.legend()
     plt.show()
 
 shows a decent match to the data -- the fit worked with no explicit setting
@@ -412,7 +412,7 @@ and also by visual inspection of the fit to the data (figure below).
 
      plt.plot(x, y, '-')
      plt.plot(x, out.best_fit, '-', label='Lorentzian Model')
-     plt.legend(loc='best')
+     plt.legend()
      plt.show()
 
 The tails are now too big, and the value for :math:`\chi^2` almost doubled.
@@ -442,13 +442,13 @@ in the figure below (left).
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
     axes[0].plot(x, y, '-')
     axes[0].plot(x, out.best_fit, '-', label='Voigt Model\ngamma constrained')
-    axes[0].legend(loc='best')
+    axes[0].legend()
     # free gamma parameter
     pars['gamma'].set(value=0.7, vary=True, expr='')
     out_gamma = mod.fit(y, pars, x=x)
     axes[1].plot(x, y, '-')
     axes[1].plot(x, out_gamma.best_fit, '-', label='Voigt Model\ngamma unconstrained')
-    axes[1].legend(loc='best')
+    axes[1].legend()
     plt.show()
 
 Fit to peak with Voigt model (left) and Voigt model with ``gamma``
@@ -528,7 +528,7 @@ with a plot of
     plt.plot(x, y)
     plt.plot(x, out.init_fit, '--', label='initial fit')
     plt.plot(x, out.best_fit, '-', label='best fit')
-    plt.legend(loc='best')
+    plt.legend()
     plt.show()
 
 
@@ -579,14 +579,14 @@ components displayed on the right:
     axes[0].plot(x, y)
     axes[0].plot(x, init, '--', label='initial fit')
     axes[0].plot(x, out.best_fit, '-', label='best fit')
-    axes[0].legend(loc='best')
+    axes[0].legend()
 
     comps = out.eval_components(x=x)
     axes[1].plot(x, y)
     axes[1].plot(x, comps['g1_'], '--', label='Gaussian component 1')
     axes[1].plot(x, comps['g2_'], '--', label='Gaussian component 2')
     axes[1].plot(x, comps['exp_'], '--', label='Exponential component')
-    axes[1].legend(loc='best')
+    axes[1].legend()
 
     plt.show()
 
@@ -625,7 +625,7 @@ we can get a better initial estimate (see below).
     plt.plot(x, y)
     plt.plot(x, out.init_fit, '--', label='initial fit')
     plt.plot(x, out.best_fit, '-', label='best fit')
-    plt.legend(loc='best')
+    plt.legend()
 
     plt.show()
 

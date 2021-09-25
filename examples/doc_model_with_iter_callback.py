@@ -32,6 +32,6 @@ print(f'Nfev = {out.nfev}')
 print(out.fit_report())
 
 plt.plot(x, out.best_fit, '-', label='best fit')
-plt.legend(loc='best')
+plt.legend()
 plt.show()
 # <end examples/doc_with_itercb.py>

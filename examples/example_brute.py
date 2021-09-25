@@ -26,7 +26,7 @@ from lmfit import Minimizer, Parameters, fit_report
 # "We illustrate the use of brute to seek the global minimum of a function of
 # two variables that is given as the sum of a positive-definite quadratic and
 # two deep “Gaussian-shaped” craters. Specifically, define the objective
-# function f as the sum of three other functions, ``f = f1 + f2 + f3``. We
+# function ``f`` as the sum of three other functions, ``f = f1 + f2 + f3``. We
 # suppose each of these has a signature ``(z, *params), where z = (x, y)``,
 # and params and the functions are as defined below."
 #
@@ -106,17 +106,17 @@ print(grid_x)
 print(result.brute_x0)
 
 ###############################################################################
-# ``result.brute_fval`` -- Function value at the point x0.
+# ``result.brute_fval`` -- Function value at the point ``x0``.
 print(result.brute_fval)
 
 ###############################################################################
 # ``result.brute_grid`` -- Representation of the evaluation grid. It has the
-# same length as x0.
+# same length as ``x0``.
 print(result.brute_grid)
 
 ###############################################################################
 # ``result.brute_Jout`` -- Function values at each point of the evaluation
-# grid, i.e., Jout = func(\*grid).
+# grid, i.e., ``Jout = func(*grid)``.
 print(result.brute_Jout)
 
 ###############################################################################
@@ -128,13 +128,14 @@ print(result.brute_Jout)
 #
 # In this example, we will explain some of the options of the algorithm.
 #
-# We start off by generating some synthetic data with noise for a decaying
-# sine wave, define an objective function and create a Parameter set.
+# We start off by generating some synthetic data with noise for a decaying sine
+# wave, define an objective function, and create/initialize a Parameter set.
 x = np.linspace(0, 15, 301)
 np.random.seed(7)
 noise = np.random.normal(size=x.size, scale=0.2)
 data = (5. * np.sin(2*x - 0.1) * np.exp(-x*x*0.025) + noise)
-plt.plot(x, data)
+plt.plot(x, data, 'o')
+plt.show()
 
 
 def fcn2min(params, x, data):
@@ -169,7 +170,7 @@ params['omega'].set(brute_step=0.25)
 params.pretty_print()
 
 ###############################################################################
-# First, we initialize a Minimizer and perform the grid search:
+# First, we initialize a ``Minimizer`` and perform the grid search:
 fitter = Minimizer(fcn2min, params, fcn_args=(x, data))
 result_brute = fitter.minimize(method='brute', Ns=25, keep=25)
 
@@ -192,24 +193,24 @@ print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {gri
 # If finite bounds are not set for a certain parameter then the user **must**
 # specify ``brute_step`` - three more scenarios are considered here:
 #
-# **(2)** lower bound (min) and brute_step are specified:
-# range = (min, min + Ns * brute_step, brute_step)
+# **(2)** lower bound ``(min``) and ``brute_step`` are specified:
+# ``range = (min, min + Ns * brute_step, brute_step)``
 par_name = 'amp'
 indx_shift = result_brute.var_names.index(par_name)
 grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
 print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 ###############################################################################
-# **(3)** upper bound (max) and brute_step are specified:
-# range = (max - Ns * brute_step, max, brute_step)
+# **(3)** upper bound (``max``) and ``brute_step`` are specified:
+# ``range = (max - Ns * brute_step, max, brute_step)``
 par_name = 'omega'
 indx_shift = result_brute.var_names.index(par_name)
 grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
 print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 ###############################################################################
-# **(4)** numerical value (value) and brute_step are specified:
-# range = (value - (Ns//2) * brute_step, value + (Ns//2) * brute_step, brute_step)
+# **(4)** numerical value (``value``) and ``brute_step`` are specified:
+# ``range = (value - (Ns//2) * brute_step, value + (Ns//2) * brute_step, brute_step)``
 par_name = 'decay'
 indx_shift = result_brute.var_names.index(par_name)
 grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
@@ -220,8 +221,11 @@ print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {gri
 # fitting statistics. For example, the optimal solution from the grid search
 # is given below together with a plot:
 print(fit_report(result_brute))
-plt.plot(x, data)
+
+###############################################################################
+plt.plot(x, data, 'o')
 plt.plot(x, data + fcn2min(result_brute.params, x, data), '--')
+plt.show()
 
 ###############################################################################
 # We can see that this fit is already very good, which is what we should expect
@@ -231,12 +235,12 @@ plt.plot(x, data + fcn2min(result_brute.params, x, data), '--')
 # In a more realistic, complicated example the ``brute`` method will be used
 # to get reasonable values for the parameters and perform another minimization
 # (e.g., using ``leastsq``) using those as starting values. That is where the
-# `keep`` parameter comes into play: it determines the "number of best
+# ``keep`` parameter comes into play: it determines the "number of best
 # candidates from the brute force method that are stored in the ``candidates``
 # attribute". In the example above we store the best-ranking 25 solutions (the
 # default value is ``50`` and storing all the grid points can be accomplished
 # by choosing ``all``). The ``candidates`` attribute contains the parameters
-# and ``chisqr`` from the brute force method as a namedtuple,
+# and ``chisqr`` from the brute force method as a ``namedtuple``,
 # ``(‘Candidate’, [‘params’, ‘score’])``, sorted on the (lowest) ``chisqr``
 # value. To access the values for a particular candidate one can use
 # ``result.candidate[#].params`` or ``result.candidate[#].score``, where a
@@ -276,8 +280,8 @@ print(fit_report(best_result))
 # As expected the parameters have not changed significantly as they were
 # already very close to the "real" values, which can also be appreciated from
 # the plots below.
-plt.plot(x, data)
-plt.plot(x, data + fcn2min(result_brute.params, x, data), '--',
+plt.plot(x, data, 'o')
+plt.plot(x, data + fcn2min(result_brute.params, x, data), '-',
          label='brute')
 plt.plot(x, data + fcn2min(best_result.params, x, data), '--',
          label='brute followed by leastsq')

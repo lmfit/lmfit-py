@@ -189,7 +189,7 @@ plot:
     plt.plot(x, y, 'o')
     plt.plot(x, result.init_fit, '--', label='initial fit')
     plt.plot(x, result.best_fit, '-', label='best fit')
-    plt.legend(loc='best')
+    plt.legend()
     plt.show()
 
 which shows the data in blue dots, the best fit as a solid green line, and
@@ -839,7 +839,7 @@ figure below.
     plt.plot(x, result.best_fit, '-', label='best fit')
     plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB",
                      label='3-$\sigma$ uncertainty band')
-    plt.legend(loc='best')
+    plt.legend()
     plt.show()
 
 
@@ -952,13 +952,13 @@ and shows the plot on the left.
     axes[0].plot(x, y, 'o')
     axes[0].plot(x, result.init_fit, '--', label='initial fit')
     axes[0].plot(x, result.best_fit, '-', label='best fit')
-    axes[0].legend(loc='best')
+    axes[0].legend()
 
     comps = result.eval_components()
     axes[1].plot(x, y, 'o')
     axes[1].plot(x, comps['gaussian'], '--', label='Gaussian component')
     axes[1].plot(x, comps['line'], '--', label='Line component')
-    axes[1].legend(loc='best')
+    axes[1].legend()
     plt.show()
 
 On the left, data is shown in blue dots, the total fit is shown in solid
@@ -1069,11 +1069,11 @@ and shows the plots:
     axes[0].plot(x, y, 'o')
     axes[0].plot(x, result.init_fit, '--', label='initial fit')
     axes[0].plot(x, result.best_fit, '-', label='best fit')
-    axes[0].legend(loc='best')
+    axes[0].legend()
     axes[1].plot(x, y, 'o')
     axes[1].plot(x, 10*comps['jump'], '--', label='Jump component')
     axes[1].plot(x, 10*comps['gaussian'], '-', label='Gaussian component')
-    axes[1].legend(loc='best')
+    axes[1].legend()
     plt.show()
 
 Using composite models with built-in or custom operators allows you to

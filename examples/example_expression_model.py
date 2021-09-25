@@ -21,7 +21,7 @@ np.random.seed(2021)
 y = y + np.random.normal(size=x.size, scale=0.01)
 
 ###############################################################################
-# Define the ExpressionModel and perform the fit:
+# Define the ``ExpressionModel`` and perform the fit:
 gmod = ExpressionModel("amp * exp(-(x-cen)**2 /(2*wid**2))/(sqrt(2*pi)*wid)")
 result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 
@@ -29,8 +29,8 @@ result = gmod.fit(y, x=x, amp=5, cen=5, wid=1)
 # this results in the following output:
 print(result.fit_report())
 
+###############################################################################
 plt.plot(x, y, 'o')
 plt.plot(x, result.init_fit, '--', label='initial fit')
 plt.plot(x, result.best_fit, '-', label='best fit')
-plt.legend(loc='best')
-plt.show()
+plt.legend()

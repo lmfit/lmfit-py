@@ -52,12 +52,12 @@ fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
 axes[0].plot(x, y, 'bo')
 axes[0].plot(x, result.init_fit, 'k--', label='initial fit')
 axes[0].plot(x, result.best_fit, 'r-', label='best fit')
-axes[0].legend(loc='best')
+axes[0].legend()
 
 axes[1].plot(x, y, 'bo')
 axes[1].plot(x, 10*comps['jump'], 'k--', label='Jump component')
 axes[1].plot(x, 10*comps['gaussian'], 'r-', label='Gaussian component')
-axes[1].legend(loc='best')
+axes[1].legend()
 
 plt.show()
 # <end examples/doc_model_composite.py>

@@ -57,5 +57,4 @@ report_fit(out.params)
 # and figure:
 plt.plot(x, data, 'o')
 plt.plot(x, best_fit, '--', label='best fit')
-plt.legend(loc='best')
-plt.show()
+plt.legend()

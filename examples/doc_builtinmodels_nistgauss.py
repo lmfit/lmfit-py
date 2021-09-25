@@ -36,14 +36,14 @@ fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
 axes[0].plot(x, y)
 axes[0].plot(x, init, '--', label='initial fit')
 axes[0].plot(x, out.best_fit, '-', label='best fit')
-axes[0].legend(loc='best')
+axes[0].legend()
 
 comps = out.eval_components(x=x)
 axes[1].plot(x, y)
 axes[1].plot(x, comps['g1_'], '--', label='Gaussian component 1')
 axes[1].plot(x, comps['g2_'], '--', label='Gaussian component 2')
 axes[1].plot(x, comps['exp_'], '--', label='Exponential component')
-axes[1].legend(loc='best')
+axes[1].legend()
 
 plt.show()
 # <end examples/doc_builtinmodels_nistgauss.py>
