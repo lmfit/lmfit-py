@@ -2024,7 +2024,7 @@ class ModelResult(Minimizer):
 
         x_array = self.userkws[independent_var]
 
-        ax.axhline(0, **fit_kws)
+        ax.axhline(0, **fit_kws, color='k')
 
         y_eval = self.model.eval(self.params, **{independent_var: x_array})
         if isinstance(self.model, (lmfit.models.ConstantModel,
@@ -2033,20 +2033,20 @@ class ModelResult(Minimizer):
 
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
+
+        residuals = reduce_complex(self.eval()) - reduce_complex(self.data)
         if yerr is not None:
-            ax.errorbar(x_array, reduce_complex(y_eval) - reduce_complex(self.data),
+            ax.errorbar(x_array, residuals,
                         yerr=propagate_err(self.data, yerr, parse_complex),
-                        fmt=datafmt, label='residuals', **data_kws)
+                        fmt=datafmt, **data_kws)
         else:
-            ax.plot(x_array, reduce_complex(y_eval) - reduce_complex(self.data),
-                    datafmt, label='residuals', **data_kws)
+            ax.plot(x_array, residuals, datafmt, **data_kws)
 
         if title:
             ax.set_title(title)
         elif ax.get_title() == '':
             ax.set_title(self.model.name)
         ax.set_ylabel('residuals')
-        ax.legend()
         return ax
 
     @_ensureMatplotlib
