@@ -413,7 +413,7 @@ def test_figure_default_title(peakdata):
     ax = result.plot_residuals()
     assert ax.axes.get_title() == 'Model(pvoigt)'
 
-    fig, _ = result.plot()
+    fig = result.plot()
     assert fig.axes[0].get_title() == 'Model(pvoigt)'  # default model.name
     assert fig.axes[1].get_title() == ''  # no title for fit subplot
 
@@ -433,7 +433,7 @@ def test_figure_title_using_title_keyword_argument(peakdata):
     ax = result.plot_residuals(title='test')
     assert ax.axes.get_title() == 'test'
 
-    fig, _ = result.plot(title='test')
+    fig = result.plot(title='test')
     assert fig.axes[0].get_title() == 'test'
     assert fig.axes[1].get_title() == ''  # no title for fit subplot
 
@@ -453,11 +453,11 @@ def test_figure_title_using_title_to_ax_kws(peakdata):
     ax = result.plot_residuals(ax_kws={'title': 'ax_kws'})
     assert ax.axes.get_title() == 'ax_kws'
 
-    fig, _ = result.plot(ax_res_kws={'title': 'ax_res_kws'})
+    fig = result.plot(ax_res_kws={'title': 'ax_res_kws'})
     assert fig.axes[0].get_title() == 'ax_res_kws'
     assert fig.axes[1].get_title() == ''
 
-    fig, _ = result.plot(ax_fit_kws={'title': 'ax_fit_kws'})
+    fig = result.plot(ax_fit_kws={'title': 'ax_fit_kws'})
     assert fig.axes[0].get_title() == 'Model(pvoigt)'  # default model.name
     assert fig.axes[1].get_title() == ''  # no title for fit subplot
 
@@ -477,11 +477,11 @@ def test_priority_setting_figure_title(peakdata):
     ax = result.plot_residuals(ax_kws={'title': 'ax_kws'}, title='test')
     assert ax.axes.get_title() == 'test'
 
-    fig, _ = result.plot(ax_res_kws={'title': 'ax_res_kws'}, title='test')
+    fig = result.plot(ax_res_kws={'title': 'ax_res_kws'}, title='test')
     assert fig.axes[0].get_title() == 'test'
     assert fig.axes[1].get_title() == ''
 
-    fig, _ = result.plot(ax_fit_kws={'title': 'ax_fit_kws'}, title='test')
+    fig = result.plot(ax_fit_kws={'title': 'ax_fit_kws'}, title='test')
     assert fig.axes[0].get_title() == 'test'
     assert fig.axes[1].get_title() == ''
 
@@ -1007,10 +1007,9 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         pars['g2_amplitude'].set(1)
 
         result = mod.fit(data, params=pars, x=self.x)
-        fig, ax = result.plot(show_init=True)
+        fig = result.plot(show_init=True)
 
         assert isinstance(fig, matplotlib.figure.Figure)
-        assert isinstance(ax, matplotlib.axes.GridSpec)
 
         comps = result.eval_components(x=self.x)
         assert len(comps) == 2

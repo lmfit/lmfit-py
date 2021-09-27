@@ -2108,8 +2108,7 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        tuple
-            A tuple with matplotlib's Figure and GridSpec objects.
+        matplotlib.figure.Figure
 
         See Also
         --------
@@ -2175,4 +2174,4 @@ class ModelResult(Minimizer):
                             title=title)
         plt.setp(ax_res.get_xticklabels(), visible=False)
         ax_fit.set_title('')
-        return fig, gs
+        return fig
