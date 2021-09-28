@@ -11,6 +11,8 @@ import numpy as np
 from scipy.special import erf
 from scipy.stats import t
 
+import lmfit
+
 from . import Minimizer, Parameter, Parameters, lineshapes
 from .confidence import conf_interval
 from .jsonutils import HAS_DILL, decode4js, encode4js
@@ -843,7 +845,7 @@ class Model:
 
         Returns
         -------
-        numpy.ndarray
+        numpy.ndarray, float, int or complex
             Value of model given the parameters and other arguments.
 
         Notes
@@ -856,6 +858,11 @@ class Model:
         2. all non-parameter arguments for the model function, **including
         all the independent variables** will need to be passed in using
         keyword arguments.
+
+        3. The return type depends on the model function. For many of the
+        built-models it is a `numpy.ndarray`, with the exception of
+        `ConstantModel` and `ComplexConstantModel`, which return a `float`/`int`
+        or `complex` value.
 
         """
         return self.func(**self.make_funcargs(params, kwargs))
@@ -1420,8 +1427,8 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        numpy.ndarray
-            Array for evaluated model.
+        numpy.ndarray, float, int, or complex
+            Array or value for the evaluated model.
 
         """
         userkws = self.userkws.copy()
@@ -1894,11 +1901,15 @@ class ModelResult(Minimizer):
             x_array_dense = x_array
 
         if show_init:
+            y_eval_init = self.model.eval(self.init_params,
+                                          **{independent_var: x_array_dense})
+            if isinstance(self.model, (lmfit.models.ConstantModel,
+                                       lmfit.models.ComplexConstantModel)):
+                y_eval_init *= np.ones(x_array_dense.size)
+
             ax.plot(
-                x_array_dense,
-                reduce_complex(self.model.eval(
-                    self.init_params, **{independent_var: x_array_dense})),
-                initfmt, label='init', **init_kws)
+                x_array_dense, reduce_complex(y_eval_init), initfmt,
+                label='initial fit', **init_kws)
 
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
@@ -1911,11 +1922,13 @@ class ModelResult(Minimizer):
             ax.plot(x_array, reduce_complex(self.data),
                     datafmt, label='data', **data_kws)
 
-        ax.plot(
-            x_array_dense,
-            reduce_complex(self.model.eval(self.params,
-                                           **{independent_var: x_array_dense})),
-            fitfmt, label='best-fit', **fit_kws)
+        y_eval = self.model.eval(self.params, **{independent_var: x_array_dense})
+        if isinstance(self.model, (lmfit.models.ConstantModel,
+                                   lmfit.models.ComplexConstantModel)):
+            y_eval *= np.ones(x_array_dense.size)
+
+        ax.plot(x_array_dense, reduce_complex(y_eval), fitfmt, label='best fit',
+                **fit_kws)
 
         if title:
             ax.set_title(title)
@@ -1929,7 +1942,7 @@ class ModelResult(Minimizer):
             ax.set_ylabel('y')
         else:
             ax.set_ylabel(ylabel)
-        ax.legend(loc='best')
+        ax.legend()
         return ax
 
     @_ensureMatplotlib
@@ -2013,22 +2026,27 @@ class ModelResult(Minimizer):
 
         ax.axhline(0, **fit_kws)
 
+        y_eval = self.model.eval(self.params, **{independent_var: x_array})
+        if isinstance(self.model, (lmfit.models.ConstantModel,
+                                   lmfit.models.ComplexConstantModel)):
+            y_eval *= np.ones(x_array.size)
+
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
         if yerr is not None:
-            ax.errorbar(x_array, reduce_complex(self.eval()) - reduce_complex(self.data),
+            ax.errorbar(x_array, reduce_complex(y_eval) - reduce_complex(self.data),
                         yerr=propagate_err(self.data, yerr, parse_complex),
                         fmt=datafmt, label='residuals', **data_kws)
         else:
-            ax.plot(x_array, reduce_complex(self.eval()) - reduce_complex(self.data), datafmt,
-                    label='residuals', **data_kws)
+            ax.plot(x_array, reduce_complex(y_eval) - reduce_complex(self.data),
+                    datafmt, label='residuals', **data_kws)
 
         if title:
             ax.set_title(title)
         elif ax.get_title() == '':
             ax.set_title(self.model.name)
         ax.set_ylabel('residuals')
-        ax.legend(loc='best')
+        ax.legend()
         return ax
 
     @_ensureMatplotlib
