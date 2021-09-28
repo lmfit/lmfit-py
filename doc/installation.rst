@@ -22,6 +22,7 @@ Downloading and Installation
 .. _sphinxcontrib-svg2pdfconverter: https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter
 .. _cairosvg: https://cairosvg.org/
 .. _Pillow: https://python-pillow.org/
+.. _sphinx-gallery: https://sphinx-gallery.github.io/stable/index.html
 .. _flaky: https://github.com/box/flaky
 
 
@@ -46,7 +47,7 @@ functionality requires the `emcee`_ (version 3+), `corner`_, `pandas`_, `Jupyter
 automatically, but we highly recommend each of these packages.
 
 For building the documentation and generating the examples gallery,
-`matplotlib`_, `emcee`_ (version 3+), `corner`_, `Sphinx`_,
+`matplotlib`_, `emcee`_ (version 3+), `corner`_, `Sphinx`_, `sphinx-gallery`_,
 `jupyter_sphinx`_, `Pillow`_, `sphinxcontrib-svg2pdfconverter`_, and `cairosvg`_
 are required (the latter two only when generating the PDF document).
 

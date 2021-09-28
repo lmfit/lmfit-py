@@ -51,6 +51,7 @@ Various:
 - transition to using ``f-strings`` (PR #730)
 - mark ``test_manypeaks_speed.py`` as flaky to avoid intermittent test failures (repeat up to 5 times; PR #745)
 - update scipy dependency to >= 1.14.0 (PR #751)
+- improvement to output of examples in sphinx-gallery and use higher resolution figures (PR #753)
 
 
 .. _whatsnew_102_label:

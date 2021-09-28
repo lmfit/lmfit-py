@@ -15,6 +15,6 @@ pre-commit
 pycairo;platform_system=="Windows"
 pytest
 Sphinx
-sphinx-gallery>=0.8
+sphinx-gallery>=0.10
 sphinxcontrib-svg2pdfconverter
 sympy
