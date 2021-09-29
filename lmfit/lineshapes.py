@@ -1,7 +1,7 @@
 """Basic model line shapes and distribution functions."""
 
-from numpy import (arctan, copysign, cos, exp, isnan, log, pi, real, sin, sqrt,
-                   where)
+from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, pi, real, 
+                   sin, sqrt, where)
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
 from scipy.special import wofz
@@ -198,6 +198,7 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
         ``lp(x, center, sigma) = 1.0 / ((x+center)**2 + sigma**2)``
 
     """
+    factor = amplitude * sigma / pi
     bose = (1.0 - exp(-x/max(tiny, gamma)))
     if isinstance(bose, (int, float)):
         bose = not_zero(bose)
@@ -207,7 +208,9 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
 
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)
-    return amplitude*sigma/pi*(lm - lp)/bose
+    return factor * where(isclose(x, 0.0), 
+                          4*gamma*center/(center**2+sigma**2)**2,
+                          (lm - lp)/bose)
 
 
 def logistic(x, amplitude=1., center=0., sigma=1.):
