@@ -185,7 +185,7 @@ def damped_oscillator(x, amplitude=1.0, center=1., sigma=0.1):
     return amplitude/sqrt((1.0 - (x/center)**2)**2 + (2*sigma*x/center)**2)
 
 
-def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
+def dho(x, amplitude=1., center=1., sigma=1., gamma=1.0):
     """Return a Damped Harmonic Oscillator.
 
     Similar to the version from PAN:

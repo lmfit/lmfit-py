@@ -980,6 +980,7 @@ class DampedHarmonicOscillatorModel(Model):
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
+        self.set_param_hint('center', min=0)
         self.set_param_hint('sigma', min=0)
         self.set_param_hint('gamma', min=1.e-19)
         fmt = ("({prefix:s}amplitude*{prefix:s}sigma)/"
