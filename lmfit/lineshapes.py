@@ -200,10 +200,10 @@ def dho(x, amplitude=1., center=0., sigma=1., gamma=1.0):
     """
     bose = (1.0 - exp(-x/max(tiny, gamma)))
     if isinstance(bose, (int, float)):
-        bose = max(tiny, bose)
+        bose = not_zero(bose)
     else:
         bose[where(isnan(bose))] = tiny
-        bose[where(bose <= tiny)] = tiny
+        bose[where(abs(bose)<=tiny)] = tiny
 
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)
