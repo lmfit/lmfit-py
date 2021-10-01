@@ -35,6 +35,8 @@ Bug fixes/enhancements:
 - improved handling of altered JSON data (Issue #739; PR #740, reported by Matthew Giammar)
 - map ``max_nfev`` to ``maxiter`` when using ``differential_evolution`` (PR #749, reported by Olivier B.)
 - correct use of noise versus experimental uncertainty in the documentation (PR #751, reported by Andrés Zelcer)
+- specify return type of ``eval`` method more precisely and allow for plotting of (Complex)ConstantModel by coercing their
+  ``float``, ``int``, or ``complex`` return value to a ``numpy.ndarray`` (Issue #684 and PR #754)
 
 Various:
 
