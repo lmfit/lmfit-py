@@ -204,7 +204,7 @@ def dho(x, amplitude=1., center=1., sigma=1., gamma=1.0):
         bose = not_zero(bose)
     else:
         bose[where(isnan(bose))] = tiny
-        bose[where(abs(bose)<=tiny)] = tiny
+        bose[where(abs(bose) <= tiny)] = tiny
 
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)
