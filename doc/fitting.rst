@@ -449,7 +449,7 @@ and standard errors could be done as
     print('-------------------------------')
     print('Parameter    Value       Stderr')
     for name, param in out.params.items():
-        print('{:7s} {:11.5f} {:11.5f}'.format(name, param.value, param.stderr))
+        print(f'{name:7s} {param.value:11.5f} {param.stderr:11.5f}')
 
 
 ..  _fit-itercb-label:

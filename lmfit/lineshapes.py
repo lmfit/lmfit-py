@@ -1,6 +1,6 @@
-"""Basic model line shapes and distribution functions."""
+"""Basic model lineshapes and distribution functions."""
 
-from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, pi, real, 
+from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, pi, real,
                    sin, sqrt, where)
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
@@ -208,7 +208,7 @@ def dho(x, amplitude=1., center=1., sigma=1., gamma=1.0):
 
     lm = 1.0/((x-center)**2 + sigma**2)
     lp = 1.0/((x+center)**2 + sigma**2)
-    return factor * where(isclose(x, 0.0), 
+    return factor * where(isclose(x, 0.0),
                           4*gamma*center/(center**2+sigma**2)**2,
                           (lm - lp)/bose)
 

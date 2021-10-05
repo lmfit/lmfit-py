@@ -37,6 +37,7 @@ Bug fixes/enhancements:
 - correct use of noise versus experimental uncertainty in the documentation (PR #751, reported by Andrés Zelcer)
 - specify return type of ``eval`` method more precisely and allow for plotting of (Complex)ConstantModel by coercing their
   ``float``, ``int``, or ``complex`` return value to a ``numpy.ndarray`` (Issue #684 and PR #754)
+- fix ``dho`` (Damped Harmonic Oscillator) lineshape (PR #755; @rayosborn)
 
 Various:
 

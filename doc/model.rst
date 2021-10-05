@@ -28,7 +28,7 @@ different from :scipydoc:`optimize.curve_fit`, for example in that it uses
 important advantages.
 
 In addition to allowing you to turn any model function into a curve-fitting
-method, lmfit also provides canonical definitions for many known line shapes
+method, lmfit also provides canonical definitions for many known lineshapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
 used in many scientific domains. These are available in the :mod:`models`
 module that will be discussed in more detail in the next chapter
@@ -91,8 +91,8 @@ signature itself:
     from lmfit import Model
 
     gmodel = Model(gaussian)
-    print('parameter names: {}'.format(gmodel.param_names))
-    print('independent variables: {}'.format(gmodel.independent_vars))
+    print(f'parameter names: {gmodel.param_names}')
+    print(f'independent variables: {gmodel.independent_vars}')
 
 As you can see, the Model ``gmodel`` determined the names of the parameters
 and the independent variables. By default, the first argument of the
@@ -329,7 +329,7 @@ function is fairly easy. Let's try another one:
 
 
     decay_model = Model(decay)
-    print('independent variables: {}'.format(decay_model.independent_vars))
+    print(f'independent variables: {decay_model.independent_vars}')
 
     params = decay_model.make_params()
     print('\nParameters:')
@@ -346,7 +346,7 @@ you can say so:
 .. jupyter-execute::
 
     decay_model = Model(decay, independent_vars=['tau'])
-    print('independent variables: {}'.format(decay_model.independent_vars))
+    print(f'independent variables: {decay_model.independent_vars}')
 
     params = decay_model.make_params()
     print('\nParameters:')

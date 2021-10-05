@@ -1042,7 +1042,7 @@ class Minimizer:
 
         result._calculate_statistics()
 
-        # calculate the cov_x and estimate uncertanties/correlations
+        # calculate the cov_x and estimate uncertainties/correlations
         if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(result.x)
@@ -1255,8 +1255,8 @@ class Minimizer:
             `lnprob` contains the log probability for each sample in
             `chain`. The sample with the highest probability corresponds
             to the maximum likelihood estimate. `acor` is an array
-            containing the autocorrelation time for each parameter if the
-            autocorrelation time can be computed from the chain. Finally,
+            containing the auto-correlation time for each parameter if the
+            auto-correlation time can be computed from the chain. Finally,
             `acceptance_fraction` (an array of the fraction of steps
             accepted for each walker).
 
@@ -1792,7 +1792,7 @@ class Minimizer:
 
         result._calculate_statistics()
 
-        # calculate the cov_x and estimate uncertanties/correlations
+        # calculate the cov_x and estimate uncertainties/correlations
         if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(ret.x)
@@ -2094,7 +2094,7 @@ class Minimizer:
 
         result._calculate_statistics()
 
-        # calculate the cov_x and estimate uncertanties/correlations
+        # calculate the cov_x and estimate uncertainties/correlations
         if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             _covar_ndt = self._calculate_covariance_matrix(result.ampgo_x0)
@@ -2168,7 +2168,7 @@ class Minimizer:
 
         result._calculate_statistics()
 
-        # calculate the cov_x and estimate uncertanties/correlations
+        # calculate the cov_x and estimate uncertainties/correlations
         if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             result.covar = self._calculate_covariance_matrix(result.shgo_x)
@@ -2245,7 +2245,7 @@ class Minimizer:
 
         result._calculate_statistics()
 
-        # calculate the cov_x and estimate uncertanties/correlations
+        # calculate the cov_x and estimate uncertainties/correlations
         if (not result.aborted and self.calc_covar and HAS_NUMDIFFTOOLS and
                 len(result.residual) > len(result.var_names)):
             result.covar = self._calculate_covariance_matrix(result.da_x)

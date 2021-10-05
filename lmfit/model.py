@@ -135,7 +135,7 @@ def propagate_err(z, dz, option):
     so a value of `math:pi` is returned.
 
     In the case where ``option='abs'`` and ``numpy.abs(z) == 0`` for any
-    value of `z` the mangnitude uncertainty is approximated by
+    value of `z` the magnitude uncertainty is approximated by
     ``numpy.abs(dz)`` for that value.
 
     """
@@ -807,7 +807,7 @@ class Model:
             if name in self._func_allargs or self._func_haskeywords:
                 out[name] = par.value
 
-        # 2. for each function argument, use 'prefx+varname' in params,
+        # 2. for each function argument, use 'prefix+varname' in params,
         # avoiding possible name collisions with unprefixed params
         if len(self._prefix) > 0:
             for fullname in self._param_names:

@@ -1,6 +1,6 @@
-Many people have contributed to lmfit.  The attribution of credit in a
+Many people have contributed to lmfit. The attribution of credit in a
 project such as this is difficult to get perfect, and there are no doubt
-important contributions that are missing or under-represented here.  Please
+important contributions that are missing or under-represented here. Please
 consider this file as part of the code and documentation that may have bugs
 that need fixing.
 
@@ -34,7 +34,7 @@ of size of the contribution to the existing code) are from:
 
   The method used for placing bounds on parameters was derived from the
   clear description in the MINUIT documentation, and adapted from
-  J. J. Helmus's python implementation in leastsqbounds.py.
+  J. J. Helmus's Python implementation in leastsqbounds.py.
 
   E. O. Le Bigot wrote the uncertainties package, a version of which was
   used by lmfit for many years, and is now an external dependency.
@@ -58,5 +58,5 @@ Michael Hudson-Doyle, Ruben Verweij, @jedzill4, @spalato, Jens Hedegaard Nielsen
 Martin Majli, Kristian Meyer, and many others.
 
 The lmfit code obviously depends on, and owes a very large debt to the code
-in scipy.optimize.  Several discussions on the SciPy-user and lmfit mailing
+in scipy.optimize. Several discussions on the SciPy-user and lmfit mailing
 lists have also led to improvements in this code.

@@ -30,7 +30,7 @@ def f_compare(best_fit, new_fit):
     Returns
     -------
     float
-        Value of the calculated probality.
+        Value of the calculated probability.
 
     """
     nfree = best_fit.nfree

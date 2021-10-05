@@ -331,7 +331,7 @@ and ``wid``, and build a model that can be used to fit data.
 Example 1: Fit Peak data to Gaussian, Lorentzian, and Voigt profiles
 --------------------------------------------------------------------
 
-Here, we will fit data to three similar line shapes, in order to decide which
+Here, we will fit data to three similar lineshapes, in order to decide which
 might be the better model. We will start with a Gaussian profile, as in
 the previous chapter, but use the built-in :class:`GaussianModel` instead
 of writing one ourselves. This is a slightly different version from the

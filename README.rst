@@ -72,9 +72,9 @@ positional and keyword arguments as desired::
         ...
         return residual_array
 
-For each call of this function, the values for the params may have changed,
+For each call of this function, the values for the ``params`` may have changed,
 subject to the bounds and constraint settings for each Parameter. The function
-should return the residual (i.e., data-model) array to be minimized.
+should return the residual (i.e., ``data-model``) array to be minimized.
 
 The advantage here is that the function to be minimized does not have to be
 changed if different bounds or constraints are placed on the fitting Parameters.
@@ -94,7 +94,7 @@ the fit (e.g., fitting statistics and optimized parameters). The dictionary
 ``result.params`` contains the best-fit values, estimated standard deviations,
 and correlations with other variables in the fit.
 
-By default, the underlying fit algorithm is the Levenberg-Marquart algorithm
+By default, the underlying fit algorithm is the Levenberg-Marquardt algorithm
 with numerically-calculated derivatives from MINPACK's lmdif function, as used
 by ``scipy.optimize.leastsq``. Most other solvers that are present in ``scipy``
 (e.g., Nelder-Mead, differential_evolution, basinhopping, etctera) are also
