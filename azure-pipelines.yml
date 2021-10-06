@@ -44,7 +44,7 @@ stages:
             python setup.py install
           displayName: 'Install lmfit'
         - script: |
-            sudo apt update && sudo apt install -qq -y texlive-latex-extra latexmk
+            sudo apt-get update && sudo apt-get install -qq -y texlive-latex-extra latexmk
           displayName: 'Install TeX Live'
         - script: |
             cd doc ; make all
@@ -74,7 +74,7 @@ stages:
             versionSpec: '$(python.version)'
           displayName: 'Use Python $(python.version)'
         - script: |
-            sudo apt update && sudo apt install -yq --no-install-suggests --no-install-recommends \
+            sudo apt-get update && sudo apt-get install -yq --no-install-suggests --no-install-recommends \
             libatlas-base-dev liblapack-dev gfortran libgmp-dev libmpfr-dev libsuitesparse-dev ccache \
             swig libmpc-dev
           displayName: 'Install dependencies'
@@ -130,7 +130,7 @@ stages:
             versionSpec: '$(python.version)'
           displayName: 'Use Python $(python.version)'
         - script: |
-            sudo apt update && sudo apt install -yq --no-install-suggests --no-install-recommends \
+            sudo apt-get update && sudo apt-get install -yq --no-install-suggests --no-install-recommends \
             libatlas-base-dev liblapack-dev gfortran libgmp-dev libmpfr-dev libsuitesparse-dev ccache \
             swig libmpc-dev
           displayName: 'Install dependencies'
@@ -206,10 +206,10 @@ stages:
       steps:
         - script: |
             sudo add-apt-repository ppa:deadsnakes/nightly
-            sudo apt update && sudo apt install -y --no-install-recommends python3.10-dev python3.10-distutils
+            sudo apt-get update && sudo apt-get install -y --no-install-recommends python3.10-dev python3.10-distutils
           displayName: Install Python development version from the deadsnakes PPA
         - script: |
-            sudo apt update && sudo apt install -yq --no-install-suggests --no-install-recommends \
+            sudo apt-get update && sudo apt-get install -yq --no-install-suggests --no-install-recommends \
             libatlas-base-dev liblapack-dev gfortran libgmp-dev libmpfr-dev libsuitesparse-dev ccache \
             swig libmpc-dev
           displayName: 'Install dependencies'
