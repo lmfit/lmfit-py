@@ -46,8 +46,8 @@ fit_params.add('shift', value=0.0)
 fit_params.add('decay', value=0.02)
 
 ###############################################################################
-# Set-up the minimizer and perform the fit using leastsq algorithm, and show
-# the report:
+# Set-up the minimizer and perform the fit using ``leastsq`` algorithm, and
+# show the report:
 mini = Minimizer(residual, fit_params, fcn_args=(x,), fcn_kws={'data': data})
 out = mini.leastsq()
 
@@ -95,7 +95,7 @@ for fixed in names:
         f = prob < 0.96
 
         x, y = res[free], res[fixed]
-        ax.scatter(x[f], y[f], c=1-prob[f], s=200*(1-prob[f]+0.5))
+        ax.scatter(x[f], y[f], c=1-prob[f], s=25*(1-prob[f]+0.5))
         ax.autoscale(1, 1)
         j += 1
     i += 1
@@ -107,21 +107,34 @@ for fixed in names:
 names = list(out.params.keys())
 
 plt.figure()
-cm = plt.cm.coolwarm
 for i in range(4):
     for j in range(4):
-        plt.subplot(4, 4, 16-j*4-i)
+        indx = 16-j*4-i
+        ax = plt.subplot(4, 4, indx)
+        ax.ticklabel_format(style='sci', scilimits=(-2, 2), axis='y')
+
+        # set-up labels and tick marks
+        ax.tick_params(labelleft=False, labelbottom=False)
+        if indx in (2, 5, 9, 13):
+            plt.ylabel(names[j])
+            ax.tick_params(labelleft=True)
+        if indx == 1:
+            ax.tick_params(labelleft=True)
+        if indx in (13, 14, 15, 16):
+            plt.xlabel(names[i])
+            ax.tick_params(labelbottom=True)
+            [label.set_rotation(45) for label in ax.get_xticklabels()]
+
         if i != j:
             x, y, m = conf_interval2d(mini, out, names[i], names[j], 20, 20)
-            plt.contourf(x, y, m, linspace(0, 1, 10), cmap=cm)
-            plt.xlabel(names[i])
-            plt.ylabel(names[j])
+            plt.contourf(x, y, m, linspace(0, 1, 10))
 
             x = tr[names[i]][names[i]]
             y = tr[names[i]][names[j]]
             pr = tr[names[i]]['prob']
             s = argsort(x)
-            plt.scatter(x[s], y[s], c=pr[s], s=30, lw=1, cmap=cm)
+            plt.scatter(x[s], y[s], c=pr[s], s=30, lw=1)
+
         else:
             x = tr[names[i]][names[i]]
             y = tr[names[i]]['prob']
@@ -130,7 +143,8 @@ for i in range(4):
             f = interp1d(t, y[s], 'slinear')
             xn = linspace(x.min(), x.max(), 50)
             plt.plot(xn, f(xn), lw=1)
-            plt.xlabel(names[i])
             plt.ylabel('prob')
+            ax.tick_params(labelleft=True)
 
+plt.tight_layout()
 plt.show()

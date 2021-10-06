@@ -38,6 +38,6 @@ print(out.fit_report(min_correl=0.5))
 plt.plot(x, y)
 plt.plot(x, out.init_fit, '--', label='initial fit')
 plt.plot(x, out.best_fit, '-', label='best fit')
-plt.legend(loc='best')
+plt.legend()
 plt.show()
 # <end examples/doc_nistgauss2.py>

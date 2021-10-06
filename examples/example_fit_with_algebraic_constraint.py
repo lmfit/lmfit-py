@@ -2,7 +2,6 @@
 Fit with Algebraic Constraint
 =============================
 
-
 """
 import matplotlib.pyplot as plt
 from numpy import linspace, random
@@ -32,9 +31,7 @@ x = linspace(0.0, 20.0, 601)
 
 data = (gaussian(x, 21, 8.1, 1.2) +
         lorentzian(x, 10, 9.6, 2.4) +
-        random.normal(scale=0.23, size=x.size) +
-        x*0.5)
-
+        random.normal(scale=0.23, size=x.size) + x*0.5)
 
 pfit = Parameters()
 pfit.add(name='amp_g', value=10)
@@ -49,9 +46,8 @@ pfit.add(name='line_off', value=0.0)
 
 sigma = 0.021  # estimate of data error (for all data points)
 
-myfit = Minimizer(residual, pfit,
-                  fcn_args=(x,), fcn_kws={'sigma': sigma, 'data': data},
-                  scale_covar=True)
+myfit = Minimizer(residual, pfit, fcn_args=(x,),
+                  fcn_kws={'sigma': sigma, 'data': data})
 
 result = myfit.leastsq()
 init = residual(pfit, x)
@@ -59,8 +55,8 @@ fit = residual(result.params, x)
 
 report_fit(result)
 
+###############################################################################
 plt.plot(x, data, '+')
 plt.plot(x, init, '--', label='initial fit')
 plt.plot(x, fit, '-', label='best fit')
-plt.legend(loc='best')
-plt.show()
+plt.legend()

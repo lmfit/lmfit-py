@@ -169,6 +169,7 @@ sphinx_gallery_conf = {
     'filename_pattern': r'(\\|/)documentation|(\\|/)example_',
     'ignore_pattern': r'(\\|/)doc_',
     'ignore_repr_types': r'matplotlib',
+    'image_srcset': ["3x"],
 }
 
 # remove certain RuntimeWarnings from examples

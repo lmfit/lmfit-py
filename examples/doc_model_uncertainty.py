@@ -26,6 +26,6 @@ plt.plot(x, result.init_fit, '--', label='initial fit')
 plt.plot(x, result.best_fit, '-', label='best fit')
 plt.fill_between(x, result.best_fit-dely, result.best_fit+dely,
                  color="#ABABAB", label=r'3-$\sigma$ uncertainty band')
-plt.legend(loc='best')
+plt.legend()
 plt.show()
 # <end examples/doc_model_uncertainty.py>

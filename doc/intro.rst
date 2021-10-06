@@ -169,7 +169,7 @@ created:
     params['decay'].min = 0.10
 
 Importantly, our objective function remains unchanged. This means the
-objective function can simply express the parameterized phenomenon to be
+objective function can simply express the parametrized phenomenon to be
 modeled, and is separate from the choice of parameters to be varied in the
 fit.
 

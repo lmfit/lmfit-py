@@ -25,6 +25,6 @@ print(out.fit_report())
 plt.plot(x, y)
 plt.plot(x, out.init_fit, '--', label='initial fit')
 plt.plot(x, out.best_fit, '-', label='best fit')
-plt.legend(loc='best')
+plt.legend()
 plt.show()
 # <end examples/doc_builtinmodels_stepmodel.py>

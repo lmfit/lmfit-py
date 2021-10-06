@@ -18,7 +18,7 @@ print(out.fit_report(min_correl=0.25))
 
 plt.plot(x, y)
 plt.plot(x, out.best_fit, '-', label='Gaussian Model')
-plt.legend(loc='best')
+plt.legend()
 plt.show()
 
 
@@ -32,7 +32,7 @@ print(out.fit_report(min_correl=0.25))
 plt.figure()
 plt.plot(x, y, '-')
 plt.plot(x, out.best_fit, '-', label='Lorentzian Model')
-plt.legend(loc='best')
+plt.legend()
 plt.show()
 
 
@@ -47,14 +47,14 @@ fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
 
 axes[0].plot(x, y, '-')
 axes[0].plot(x, out.best_fit, '-', label='Voigt Model\ngamma constrained')
-axes[0].legend(loc='best')
+axes[0].legend()
 
 # free gamma parameter
 pars['gamma'].set(value=0.7, vary=True, expr='')
 out_gamma = mod.fit(y, pars, x=x)
 axes[1].plot(x, y, '-')
 axes[1].plot(x, out_gamma.best_fit, '-', label='Voigt Model\ngamma unconstrained')
-axes[1].legend(loc='best')
+axes[1].legend()
 
 plt.show()
 # <end examples/doc_builtinmodels_peakmodels.py>

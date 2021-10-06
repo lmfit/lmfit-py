@@ -28,7 +28,7 @@ different from :scipydoc:`optimize.curve_fit`, for example in that it uses
 important advantages.
 
 In addition to allowing you to turn any model function into a curve-fitting
-method, lmfit also provides canonical definitions for many known line shapes
+method, lmfit also provides canonical definitions for many known lineshapes
 such as Gaussian or Lorentzian peaks and Exponential decays that are widely
 used in many scientific domains. These are available in the :mod:`models`
 module that will be discussed in more detail in the next chapter
@@ -91,8 +91,8 @@ signature itself:
     from lmfit import Model
 
     gmodel = Model(gaussian)
-    print('parameter names: {}'.format(gmodel.param_names))
-    print('independent variables: {}'.format(gmodel.independent_vars))
+    print(f'parameter names: {gmodel.param_names}')
+    print(f'independent variables: {gmodel.independent_vars}')
 
 As you can see, the Model ``gmodel`` determined the names of the parameters
 and the independent variables. By default, the first argument of the
@@ -189,7 +189,7 @@ plot:
     plt.plot(x, y, 'o')
     plt.plot(x, result.init_fit, '--', label='initial fit')
     plt.plot(x, result.best_fit, '-', label='best fit')
-    plt.legend(loc='best')
+    plt.legend()
     plt.show()
 
 which shows the data in blue dots, the best fit as a solid green line, and
@@ -329,7 +329,7 @@ function is fairly easy. Let's try another one:
 
 
     decay_model = Model(decay)
-    print('independent variables: {}'.format(decay_model.independent_vars))
+    print(f'independent variables: {decay_model.independent_vars}')
 
     params = decay_model.make_params()
     print('\nParameters:')
@@ -346,7 +346,7 @@ you can say so:
 .. jupyter-execute::
 
     decay_model = Model(decay, independent_vars=['tau'])
-    print('independent variables: {}'.format(decay_model.independent_vars))
+    print(f'independent variables: {decay_model.independent_vars}')
 
     params = decay_model.make_params()
     print('\nParameters:')
@@ -839,7 +839,7 @@ figure below.
     plt.plot(x, result.best_fit, '-', label='best fit')
     plt.fill_between(x, result.best_fit-dely, result.best_fit+dely, color="#ABABAB",
                      label='3-$\sigma$ uncertainty band')
-    plt.legend(loc='best')
+    plt.legend()
     plt.show()
 
 
@@ -952,13 +952,13 @@ and shows the plot on the left.
     axes[0].plot(x, y, 'o')
     axes[0].plot(x, result.init_fit, '--', label='initial fit')
     axes[0].plot(x, result.best_fit, '-', label='best fit')
-    axes[0].legend(loc='best')
+    axes[0].legend()
 
     comps = result.eval_components()
     axes[1].plot(x, y, 'o')
     axes[1].plot(x, comps['gaussian'], '--', label='Gaussian component')
     axes[1].plot(x, comps['line'], '--', label='Line component')
-    axes[1].legend(loc='best')
+    axes[1].legend()
     plt.show()
 
 On the left, data is shown in blue dots, the total fit is shown in solid
@@ -1069,11 +1069,11 @@ and shows the plots:
     axes[0].plot(x, y, 'o')
     axes[0].plot(x, result.init_fit, '--', label='initial fit')
     axes[0].plot(x, result.best_fit, '-', label='best fit')
-    axes[0].legend(loc='best')
+    axes[0].legend()
     axes[1].plot(x, y, 'o')
     axes[1].plot(x, 10*comps['jump'], '--', label='Jump component')
     axes[1].plot(x, 10*comps['gaussian'], '-', label='Gaussian component')
-    axes[1].legend(loc='best')
+    axes[1].legend()
     plt.show()
 
 Using composite models with built-in or custom operators allows you to

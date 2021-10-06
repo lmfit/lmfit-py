@@ -135,7 +135,7 @@ def propagate_err(z, dz, option):
     so a value of `math:pi` is returned.
 
     In the case where ``option='abs'`` and ``numpy.abs(z) == 0`` for any
-    value of `z` the mangnitude uncertainty is approximated by
+    value of `z` the magnitude uncertainty is approximated by
     ``numpy.abs(dz)`` for that value.
 
     """
@@ -807,7 +807,7 @@ class Model:
             if name in self._func_allargs or self._func_haskeywords:
                 out[name] = par.value
 
-        # 2. for each function argument, use 'prefx+varname' in params,
+        # 2. for each function argument, use 'prefix+varname' in params,
         # avoiding possible name collisions with unprefixed params
         if len(self._prefix) > 0:
             for fullname in self._param_names:
@@ -2024,7 +2024,7 @@ class ModelResult(Minimizer):
 
         x_array = self.userkws[independent_var]
 
-        ax.axhline(0, **fit_kws)
+        ax.axhline(0, **fit_kws, color='k')
 
         y_eval = self.model.eval(self.params, **{independent_var: x_array})
         if isinstance(self.model, (lmfit.models.ConstantModel,
@@ -2033,20 +2033,20 @@ class ModelResult(Minimizer):
 
         if yerr is None and self.weights is not None:
             yerr = 1.0/self.weights
+
+        residuals = reduce_complex(self.eval()) - reduce_complex(self.data)
         if yerr is not None:
-            ax.errorbar(x_array, reduce_complex(y_eval) - reduce_complex(self.data),
+            ax.errorbar(x_array, residuals,
                         yerr=propagate_err(self.data, yerr, parse_complex),
-                        fmt=datafmt, label='residuals', **data_kws)
+                        fmt=datafmt, **data_kws)
         else:
-            ax.plot(x_array, reduce_complex(y_eval) - reduce_complex(self.data),
-                    datafmt, label='residuals', **data_kws)
+            ax.plot(x_array, residuals, datafmt, **data_kws)
 
         if title:
             ax.set_title(title)
         elif ax.get_title() == '':
             ax.set_title(self.model.name)
         ax.set_ylabel('residuals')
-        ax.legend()
         return ax
 
     @_ensureMatplotlib
@@ -2108,8 +2108,7 @@ class ModelResult(Minimizer):
 
         Returns
         -------
-        tuple
-            A tuple with matplotlib's Figure and GridSpec objects.
+        matplotlib.figure.Figure
 
         See Also
         --------
@@ -2175,4 +2174,4 @@ class ModelResult(Minimizer):
                             title=title)
         plt.setp(ax_res.get_xticklabels(), visible=False)
         ax_fit.set_title('')
-        return fig, gs
+        return fig

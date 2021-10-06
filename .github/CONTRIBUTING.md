@@ -29,13 +29,13 @@ you intend to contribute to the lmfit repository:
 
 If you need any additional help, please send a message to the
 [mailing list](https://groups.google.com/group/lmfit-py) or use the
-[github discussion page](https://github.com/lmfit/lmfit-py/discussions).
+[GitHub discussions page](https://github.com/lmfit/lmfit-py/discussions).
 
 ## Using the Mailing List versus GitHub Issues
 
 If you have ***questions, comments, or suggestions*** for lmfit, please use
 the [mailing list](https://groups.google.com/group/lmfit-py) or
-[github discussion page](https://github.com/lmfit/lmfit-py/discussions).
+[GitHub discussions page](https://github.com/lmfit/lmfit-py/discussions).
 These provide online conversations that are archived and can be searched
 easily.
 
@@ -77,12 +77,10 @@ version and installed dependencies. You can paste the code below in your
 Python shell to get this information:
 
 ```python
-import sys, lmfit, numpy, scipy, asteval, uncertainties, six
-print('Python: {}\n\nlmfit: {}, scipy: {}, numpy: {}, asteval: {}, uncertainties: {}, six: {}'\
-	  .format(sys.version, lmfit.__version__, scipy.__version__, numpy.__version__, \
-	  asteval.__version__, uncertainties.__version__, six.__version__))
+import sys, lmfit, numpy, scipy, asteval, uncertainties
+print(f"Python: {sys.version}\n\nlmfit: {lmfit.__version__}, scipy: {scipy.__version__}, numpy: {numpy.__version__},"
+	  f"asteval: {asteval.__version__}, uncertainties: {uncertainties.__version__}")
 ```
-
 
 ## Using IPython Notebooks to Show Examples
 

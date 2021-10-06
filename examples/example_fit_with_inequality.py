@@ -23,7 +23,7 @@ def residual(pars, x, data):
 
 
 ###############################################################################
-# Generate the simulated data using a Gaussian and Lorentzian line shape:
+# Generate the simulated data using a Gaussian and Lorentzian lineshape:
 np.random.seed(0)
 x = np.linspace(0, 20.0, 601)
 
@@ -57,5 +57,4 @@ report_fit(out.params)
 # and figure:
 plt.plot(x, data, 'o')
 plt.plot(x, best_fit, '--', label='best fit')
-plt.legend(loc='best')
-plt.show()
+plt.legend()

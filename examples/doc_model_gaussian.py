@@ -22,6 +22,6 @@ print(result.fit_report())
 plt.plot(x, y, 'o')
 plt.plot(x, result.init_fit, '--', label='initial fit')
 plt.plot(x, result.best_fit, '-', label='best fit')
-plt.legend(loc='best')
+plt.legend()
 plt.show()
 # <end examples/doc_model_gaussian.py>
