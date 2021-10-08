@@ -690,8 +690,8 @@ class Minimizer:
            Return value changed to :class:`MinimizerResult`.
 
         """
-        # determine which parameters are actually variables
-        # and which are defined expressions.
+        self._abort = False
+
         self.result = MinimizerResult()
         result = self.result
         if params is not None:

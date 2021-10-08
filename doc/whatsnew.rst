@@ -38,6 +38,7 @@ Bug fixes/enhancements:
 - specify return type of ``eval`` method more precisely and allow for plotting of (Complex)ConstantModel by coercing their
   ``float``, ``int``, or ``complex`` return value to a ``numpy.ndarray`` (Issue #684 and PR #754)
 - fix ``dho`` (Damped Harmonic Oscillator) lineshape (PR #755; @rayosborn)
+- reset ``Minimizer._abort`` to ``False`` before starting a new fit (Issue #756 and PR #757; @azelcer)
 
 Various:
 
