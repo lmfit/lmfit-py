@@ -2325,6 +2325,7 @@ class Minimizer:
                 kws.pop(maxnfev_alias)
 
         kwargs.update(kws)
+        self._abort = False
 
         user_method = method.lower()
         if user_method.startswith('leasts'):
