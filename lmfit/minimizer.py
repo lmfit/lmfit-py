@@ -717,6 +717,7 @@ class Minimizer:
         result.call_kws = {}
         result.errorbars = False
         result.aborted = False
+        self._abort = False
         for name, par in self.result.params.items():
             par.stderr = None
             par.correl = None
@@ -2325,7 +2326,6 @@ class Minimizer:
                 kws.pop(maxnfev_alias)
 
         kwargs.update(kws)
-        self._abort = False
 
         user_method = method.lower()
         if user_method.startswith('leasts'):
