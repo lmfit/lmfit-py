@@ -7,6 +7,7 @@ Downloading and Installation
 .. _scipy: https://scipy.org/scipylib/index.html
 .. _numpy: http://numpy.org/
 .. _pytest: https://pytest.org/
+.. _pytest-cov: https://github.com/pytest-dev/pytest-cov
 .. _emcee: https://emcee.readthedocs.io/
 .. _pandas: https://pandas.pydata.org/
 .. _jupyter: https://jupyter.org/
@@ -24,7 +25,8 @@ Downloading and Installation
 .. _Pillow: https://python-pillow.org/
 .. _sphinx-gallery: https://sphinx-gallery.github.io/stable/index.html
 .. _flaky: https://github.com/box/flaky
-
+.. _SymPy: https://www.sympy.org/
+.. _Latexmk: https://ctan.org/pkg/latexmk/
 
 Prerequisites
 ~~~~~~~~~~~~~
@@ -41,15 +43,16 @@ Lmfit requires the following Python packages, with versions given:
 All of these are readily available on PyPI, and should be installed
 automatically if installing with ``pip install lmfit``.
 
-In order to run the test suite, the `pytest`_ and `flaky`_ packages are required. Some
+In order to run the test suite, the `pytest`_, `pytest-cov`_, and `flaky`_ packages are required. Some
 functionality requires the `emcee`_ (version 3+), `corner`_, `pandas`_, `Jupyter`_,
 `matplotlib`_, `dill`_, or `numdifftools`_ packages. These are not installed
 automatically, but we highly recommend each of these packages.
 
 For building the documentation and generating the examples gallery,
 `matplotlib`_, `emcee`_ (version 3+), `corner`_, `Sphinx`_, `sphinx-gallery`_,
-`jupyter_sphinx`_, `Pillow`_, `sphinxcontrib-svg2pdfconverter`_, and `cairosvg`_
-are required (the latter two only when generating the PDF document).
+`jupyter_sphinx`_, `Pillow`_, and `SymPy`_ are required. For generating the PDF document,
+`sphinxcontrib-svg2pdfconverter`_, and `cairosvg`_ are also required, as well as the LaTex package
+`Latexmk`_ (which is included by default in some LaTex distributions).
 
 Please refer to ``requirements-dev.txt`` for a list of all dependencies that
 are needed if you want to participate in the development of lmfit.
