@@ -72,7 +72,7 @@ def guess_from_peak2d(model, z, x, y, negative):
     """Estimate starting values from 2D peak data and create Parameters."""
     maxx, minx = max(x), min(x)
     maxy, miny = max(y), min(y)
-    maxz, minz = max(z), min(x)
+    maxz, minz = max(z), min(z)
 
     centerx = x[np.argmax(z)]
     centery = y[np.argmax(z)]
