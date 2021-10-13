@@ -39,6 +39,7 @@ Bug fixes/enhancements:
   ``float``, ``int``, or ``complex`` return value to a ``numpy.ndarray`` (Issue #684 and PR #754)
 - fix ``dho`` (Damped Harmonic Oscillator) lineshape (PR #755; @rayosborn)
 - reset ``Minimizer._abort`` to ``False`` before starting a new fit (Issue #756 and PR #757; @azelcer)
+- fix typo in ``guess_from_peak2d`` (@ivan-usovl; PR #758)
 
 Various:
 
@@ -54,6 +55,7 @@ Various:
 - mark ``test_manypeaks_speed.py`` as flaky to avoid intermittent test failures (repeat up to 5 times; PR #745)
 - update scipy dependency to >= 1.14.0 (PR #751)
 - improvement to output of examples in sphinx-gallery and use higher resolution figures (PR #753)
+- remove deprecated functions ``lmfit.printfuncs.report_errors`` and ``asteval`` argument in ``Parameters`` class (PR #759)
 
 
 .. _whatsnew_102_label:
