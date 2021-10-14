@@ -13,11 +13,12 @@ from lmfit.models import GaussianModel, LinearModel
 
 
 def per_iteration(pars, iteration, resid, *args, **kws):
-    print(" ITER ", iteration, ["%.5f" % p for p in pars.values()])
+    print(" ITER ", iteration, [f"{p.name} = {p.value:.5f}" for p in pars.values()])
 
 
 x = linspace(0., 20, 401)
 y = gaussian(x, amplitude=24.56, center=7.6543, sigma=1.23)
+random.seed(2021)
 y = y - .20*x + 3.333 + random.normal(scale=0.23, size=x.size)
 
 mod = GaussianModel(prefix='peak_') + LinearModel(prefix='bkg_')
@@ -31,12 +32,12 @@ pars['bkg_slope'].value = 0.0
 
 out = mod.fit(y, pars, x=x, iter_cb=per_iteration)
 
-plt.plot(x, y, 'b--')
+plt.plot(x, y, '--')
 
-print('Nfev = ', out.nfev)
+print(f'Nfev = {out.nfev}')
 print(out.fit_report())
 
-plt.plot(x, out.best_fit, 'k-', label='best fit')
-plt.legend(loc='best')
+plt.plot(x, out.best_fit, '-', label='best fit')
+plt.legend()
 plt.show()
 # <end examples/doc_with_itercb.py>

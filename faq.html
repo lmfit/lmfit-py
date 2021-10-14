@@ -4,24 +4,28 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/sphinx13.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Parameter and Parameters" href="parameters.html" />
@@ -136,7 +140,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -150,18 +154,18 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="frequently-asked-questions">
+  <section id="frequently-asked-questions">
 <span id="faq-chapter"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
 <p>A list of common questions.</p>
-<div class="section" id="what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">
+<section id="what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">
 <h2>What’s the best way to ask for help or submit a bug report?<a class="headerlink" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report" title="Permalink to this headline">¶</a></h2>
 <p>See <a class="reference internal" href="support.html#support-chapter"><span class="std std-ref">Getting Help</span></a>.</p>
-</div>
-<div class="section" id="why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">
+</section>
+<section id="why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">
 <h2>Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?<a class="headerlink" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0" title="Permalink to this headline">¶</a></h2>
 <p>See <a class="reference internal" href="whatsnew.html#whatsnew-090-label"><span class="std std-ref">Version 0.9.0 Release Notes</span></a>.</p>
-</div>
-<div class="section" id="i-get-import-errors-from-ipython">
+</section>
+<section id="i-get-import-errors-from-ipython">
 <h2>I get import errors from IPython<a class="headerlink" href="#i-get-import-errors-from-ipython" title="Permalink to this headline">¶</a></h2>
 <p>If you see something like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="kn">import</span> <span class="n">Dropdown</span>
@@ -170,8 +174,8 @@
 </pre></div>
 </div>
 <p>then you need to install the <code class="docutils literal notranslate"><span class="pre">ipywidgets</span></code> package, try: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ipywidgets</span></code>.</p>
-</div>
-<div class="section" id="how-can-i-fit-multi-dimensional-data">
+</section>
+<section id="how-can-i-fit-multi-dimensional-data">
 <h2>How can I fit multi-dimensional data?<a class="headerlink" href="#how-can-i-fit-multi-dimensional-data" title="Permalink to this headline">¶</a></h2>
 <p>The fitting routines accept data arrays that are one-dimensional and double
 precision. So you need to convert the data and model (or the value
@@ -183,8 +187,8 @@ do this is to use <a class="reference external" href="https://docs.scipy.org/doc
     <span class="k">return</span> <span class="n">resid</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="how-can-i-fit-multiple-data-sets">
+</section>
+<section id="how-can-i-fit-multiple-data-sets">
 <h2>How can I fit multiple data sets?<a class="headerlink" href="#how-can-i-fit-multiple-data-sets" title="Permalink to this headline">¶</a></h2>
 <p>As above, the fitting routines accept data arrays that are one-dimensional
 and double precision. So you need to convert the sets of data and models
@@ -204,8 +208,8 @@ different arrays. As a bonus, the two lines share the ‘offset’ parameter:</p
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">resid1</span><span class="p">,</span> <span class="n">resid2</span><span class="p">))</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="how-can-i-fit-complex-data">
+</section>
+<section id="how-can-i-fit-complex-data">
 <h2>How can I fit complex data?<a class="headerlink" href="#how-can-i-fit-complex-data" title="Permalink to this headline">¶</a></h2>
 <p>As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
@@ -225,12 +229,12 @@ that returns a complex vector. It will automatically apply the above
 prescription when calculating the residual. The benefit to this method
 is that you also get access to the plot routines from the ModelResult
 class, which are also complex-aware.</p>
-</div>
-<div class="section" id="how-should-i-cite-lmfit">
+</section>
+<section id="how-should-i-cite-lmfit">
 <h2>How should I cite LMFIT?<a class="headerlink" href="#how-should-i-cite-lmfit" title="Permalink to this headline">¶</a></h2>
 <p>See <a class="reference external" href="https://dx.doi.org/10.5281/zenodo.11813">https://dx.doi.org/10.5281/zenodo.11813</a></p>
-</div>
-<div class="section" id="i-get-errors-from-nan-in-my-fit-what-can-i-do">
+</section>
+<section id="i-get-errors-from-nan-in-my-fit-what-can-i-do">
 <h2>I get errors from NaN in my fit. What can I do?<a class="headerlink" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do" title="Permalink to this headline">¶</a></h2>
 <p>The solvers used by lmfit use NaN (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/NaN">https://en.wikipedia.org/wiki/NaN</a>) values as signals that the calculation
@@ -244,7 +248,7 @@ indicate that numerical calculations are not sensible and must stop.</p>
 function (if using <code class="docutils literal notranslate"><span class="pre">Model</span></code>) generates a NaN, the fit will stop
 immediately. If your objective or model function generates a NaN, you
 really must handle that.</p>
-<div class="section" id="nan-policy">
+<section id="nan-policy">
 <h3><code class="docutils literal notranslate"><span class="pre">nan_policy</span></code><a class="headerlink" href="#nan-policy" title="Permalink to this headline">¶</a></h3>
 <p>If you are using <code class="xref py py-class docutils literal notranslate"><span class="pre">lmfit.Model</span></code> and the NaN values come from your
 data array and are meant to indicate missing values, or if you using
@@ -256,8 +260,8 @@ when creating a <code class="xref py py-class docutils literal notranslate"><spa
 <p>In order for this to be effective, the number of NaN values cannot ever
 change during the fit. If the NaN values come from the data and not the
 calculated model, that should be the case.</p>
-</div>
-<div class="section" id="common-sources-of-nan">
+</section>
+<section id="common-sources-of-nan">
 <h3>Common sources of NaN<a class="headerlink" href="#common-sources-of-nan" title="Permalink to this headline">¶</a></h3>
 <p>If you are seeing errors due to NaN values, you will need to figure out
 where they are coming from and eliminate them. It is sometimes difficult
@@ -286,9 +290,9 @@ fit. However, unlike NaN, it is also usually clear how to handle Inf, as
 you probably won’t ever have values greater than 1.e308 and can therefore
 (usually) safely clip the argument passed to <code class="docutils literal notranslate"><span class="pre">exp()</span></code> to be smaller than
 about 700.</p>
-</div>
-</div>
-<div class="section" id="why-are-parameter-values-sometimes-stuck-at-initial-values">
+</section>
+</section>
+<section id="why-are-parameter-values-sometimes-stuck-at-initial-values">
 <span id="faq-params-stuck"></span><h2>Why are Parameter values sometimes stuck at initial values?<a class="headerlink" href="#why-are-parameter-values-sometimes-stuck-at-initial-values" title="Permalink to this headline">¶</a></h2>
 <p>In order for a Parameter to be optimized in a fit, changing its value must
 have an impact on the fit residual (<code class="docutils literal notranslate"><span class="pre">data-model</span></code> when curve fitting, for
@@ -326,15 +330,15 @@ the boundary value and not show any real change in the residual.</p>
 not at the boundary values.</p>
 <p>Finally, one reason for a Parameter to not change is that they are actually
 used as discrete values.  This is discussed below in <a class="reference internal" href="#faq-discrete-params"><span class="std std-ref">Can Parameters be used for Array Indices or Discrete Values?</span></a>.</p>
-</div>
-<div class="section" id="why-are-uncertainties-in-parameters-sometimes-not-determined">
+</section>
+<section id="why-are-uncertainties-in-parameters-sometimes-not-determined">
 <span id="faq-params-no-uncertainties"></span><h2>Why are uncertainties in Parameters sometimes not determined?<a class="headerlink" href="#why-are-uncertainties-in-parameters-sometimes-not-determined" title="Permalink to this headline">¶</a></h2>
 <p>In order for Parameter uncertainties to be estimated, each variable
 Parameter must actually change the fit, and cannot be stuck at an initial
 value or at a boundary value.  See <a class="reference internal" href="#faq-params-stuck"><span class="std std-ref">Why are Parameter values sometimes stuck at initial values?</span></a> for why values may
 not change from their initial values.</p>
-</div>
-<div class="section" id="can-parameters-be-used-for-array-indices-or-discrete-values">
+</section>
+<section id="can-parameters-be-used-for-array-indices-or-discrete-values">
 <span id="faq-discrete-params"></span><h2>Can Parameters be used for Array Indices or Discrete Values?<a class="headerlink" href="#can-parameters-be-used-for-array-indices-or-discrete-values" title="Permalink to this headline">¶</a></h2>
 <p>The short answer is “No”: variables in all of the fitting methods used in
 <code class="docutils literal notranslate"><span class="pre">lmfit</span></code> (and all of those available in <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>) are treated as
@@ -389,17 +393,17 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     # function evals   = 11
     # data points      = 101
     # variables        = 4
-    chi-square         = 8.98698679
-    reduced chi-square = 0.09264935
-    Akaike info crit   = -236.353633
-    Bayesian info crit = -225.893151
+    chi-square         = 8.79693339
+    reduced chi-square = 0.09069003
+    Akaike info crit   = -238.512451
+    Bayesian info crit = -228.051969
 ##  Warning: uncertainties could not be estimated:
     x0:  at initial value
 [[Variables]]
     x0:  22.0000000 (init = 22)
-    a:   2.00662240 (init = 1)
-    b:   0.01999860 (init = 1)
-    c:   9.41588075 (init = 1)
+    a:   1.99347228 (init = 1)
+    b:   0.02000061 (init = 1)
+    c:   9.39397534 (init = 1)
 </pre></div>
 </div>
 </div>
@@ -455,23 +459,22 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 49
+    # function evals   = 71
     # data points      = 101
     # variables        = 4
-    chi-square         = 0.97282415
-    reduced chi-square = 0.01002911
-    Akaike info crit   = -460.909918
-    Bayesian info crit = -450.449436
+    chi-square         = 1.22205174
+    reduced chi-square = 0.01259847
+    Akaike info crit   = -437.873521
+    Bayesian info crit = -427.413039
 [[Variables]]
-    x0:  19.0017718 +/- 0.45529598 (2.40%) (init = 22)
-    a:   2.00753574 +/- 0.01978852 (0.99%) (init = 1)
-    b:   0.01999621 +/- 3.9239e-06 (0.02%) (init = 1)
-    c:   9.22815090 +/- 0.02318015 (0.25%) (init = 1)
+    x0:  19.1687256 +/- 0.46240449 (2.41%) (init = 22)
+    a:   2.02976278 +/- 0.02236479 (1.10%) (init = 1)
+    b:   0.01999156 +/- 4.4215e-06 (0.02%) (init = 1)
+    c:   9.24584679 +/- 0.02565511 (0.28%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.826
-    C(x0, c) = -0.150
-    C(x0, a) =  0.129
-    C(x0, b) = -0.103
+    C(a, b)  = -0.828
+    C(x0, a) = 0.166
+    C(x0, b) = -0.133
 </pre></div>
 </div>
 </div>
@@ -479,8 +482,8 @@ look like this and give better fit results:</p>
 <p>The natural width of the error function is about 2 <code class="docutils literal notranslate"><span class="pre">x</span></code> units, but you can
 adjust this, shortening it with <code class="docutils literal notranslate"><span class="pre">erf((x-x0)*2)</span></code> to give a sharper
 transition for example.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -514,7 +517,7 @@ transition for example.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

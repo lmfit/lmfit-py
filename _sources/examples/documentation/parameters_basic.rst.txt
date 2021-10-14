@@ -21,13 +21,14 @@
 doc_parameters_basic.py
 =======================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-55
+.. GENERATED FROM PYTHON SOURCE LINES 7-56
 
 
 
-.. image:: /examples/documentation/images/sphx_glr_parameters_basic_001.png
-    :alt: parameters basic
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/documentation/images/sphx_glr_parameters_basic_001.png
+   :alt: parameters basic
+   :srcset: /examples/documentation/images/sphx_glr_parameters_basic_001.png, /examples/documentation/images/sphx_glr_parameters_basic_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -38,22 +39,22 @@ doc_parameters_basic.py
 
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 64
+        # function evals   = 59
         # data points      = 301
         # variables        = 4
-        chi-square         = 11.0484618
-        reduced chi-square = 0.03720021
-        Akaike info crit   = -986.750534
-        Bayesian info crit = -971.922093
+        chi-square         = 12.1867036
+        reduced chi-square = 0.04103267
+        Akaike info crit   = -957.236198
+        Bayesian info crit = -942.407756
     [[Variables]]
-        amp:    4.96078856 +/- 0.03791272 (0.76%) (init = 10)
-        decay:  0.02437789 +/- 4.2572e-04 (1.75%) (init = 0.1)
-        shift: -0.10363212 +/- 0.00981677 (9.47%) (init = 0)
-        omega:  2.00019266 +/- 0.00309578 (0.15%) (init = 3)
+        amp:    5.03087926 +/- 0.04005805 (0.80%) (init = 10)
+        decay:  0.02495454 +/- 4.5395e-04 (1.82%) (init = 0.1)
+        shift: -0.10264934 +/- 0.01022298 (9.96%) (init = 0)
+        omega:  2.00026304 +/- 0.00326184 (0.16%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.100)
         C(shift, omega) = -0.785
         C(amp, decay)   =  0.584
-        C(amp, shift)   = -0.117
+        C(amp, shift)   = -0.118
 
 
 
@@ -71,6 +72,7 @@ doc_parameters_basic.py
 
     # create data to be fitted
     x = np.linspace(0, 15, 301)
+    np.random.seed(2021)
     data = (5.0 * np.sin(2.0*x - 0.1) * np.exp(-x*x*0.025) +
             np.random.normal(size=x.size, scale=0.2))
 
@@ -106,8 +108,8 @@ doc_parameters_basic.py
     # try to plot results
     try:
         import matplotlib.pyplot as plt
-        plt.plot(x, data, 'k+')
-        plt.plot(x, final, 'r')
+        plt.plot(x, data, '+')
+        plt.plot(x, final)
         plt.show()
     except ImportError:
         pass
@@ -116,7 +118,7 @@ doc_parameters_basic.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.233 seconds)
+   **Total running time of the script:** ( 0 minutes  0.191 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_basic.py:

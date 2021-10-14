@@ -25,9 +25,10 @@ doc_model_loadmodelresult.py
 
 
 
-.. image:: /examples/documentation/images/sphx_glr_model_loadmodelresult_001.png
-    :alt: model loadmodelresult
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/documentation/images/sphx_glr_model_loadmodelresult_001.png
+   :alt: model loadmodelresult
+   :srcset: /examples/documentation/images/sphx_glr_model_loadmodelresult_001.png, /examples/documentation/images/sphx_glr_model_loadmodelresult_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -78,15 +79,15 @@ doc_model_loadmodelresult.py
     result = load_modelresult('gauss_modelresult.sav')
     print(result.fit_report())
 
-    plt.plot(x, y, 'bo')
-    plt.plot(x, result.best_fit, 'r-')
+    plt.plot(x, y, 'o')
+    plt.plot(x, result.best_fit, '-')
     plt.show()
     # <end examples/doc_model_loadmodelresult.py>
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.241 seconds)
+   **Total running time of the script:** ( 0 minutes  0.187 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodelresult.py:

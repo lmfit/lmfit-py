@@ -21,14 +21,13 @@
 Fit with Data in a pandas DataFrame
 ===================================
 
-Simple example demonstrating how to read in the data using pandas and supply
-the elements of the DataFrame from lmfit.
+Simple example demonstrating how to read in the data using ``pandas`` and
+supply the elements of the ``DataFrame`` to lmfit.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-14
+.. GENERATED FROM PYTHON SOURCE LINES 9-13
 
 .. code-block:: default
 
-    import matplotlib.pyplot as plt
     import pandas as pd
 
     from lmfit.models import LorentzianModel
@@ -40,11 +39,11 @@ the elements of the DataFrame from lmfit.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-16
+.. GENERATED FROM PYTHON SOURCE LINES 14-15
 
-read the data into a pandas DataFrame, and use the 'x' and 'y' columns:
+read the data into a pandas DataFrame, and use the ``x`` and ``y`` columns:
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-23
+.. GENERATED FROM PYTHON SOURCE LINES 15-22
 
 .. code-block:: default
 
@@ -62,24 +61,18 @@ read the data into a pandas DataFrame, and use the 'x' and 'y' columns:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-25
+.. GENERATED FROM PYTHON SOURCE LINES 23-24
 
-and gives the plot and fitting results below:
+and gives the fitting results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-29
+.. GENERATED FROM PYTHON SOURCE LINES 24-26
 
 .. code-block:: default
-
-    result.plot_fit()
-    plt.show()
 
     print(result.fit_report())
 
 
 
-.. image:: /examples/images/sphx_glr_example_use_pandas_001.png
-    :alt: Model(lorentzian)
-    :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -111,10 +104,31 @@ and gives the plot and fitting results below:
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 27-28
+
+and plot below:
+
+.. GENERATED FROM PYTHON SOURCE LINES 28-29
+
+.. code-block:: default
+
+    result.plot_fit()
+
+
+
+.. image-sg:: /examples/images/sphx_glr_example_use_pandas_001.png
+   :alt: Model(lorentzian)
+   :srcset: /examples/images/sphx_glr_example_use_pandas_001.png, /examples/images/sphx_glr_example_use_pandas_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
+
+
+
+
+
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.385 seconds)
+   **Total running time of the script:** ( 0 minutes  0.267 seconds)
 
 
 .. _sphx_glr_download_examples_example_use_pandas.py:

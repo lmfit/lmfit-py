@@ -21,7 +21,7 @@
 doc_confidence_advanced.py
 ==========================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-74
+.. GENERATED FROM PYTHON SOURCE LINES 7-75
 
 
 
@@ -30,21 +30,24 @@ doc_confidence_advanced.py
 
     *
 
-      .. image:: /examples/documentation/images/sphx_glr_confidence_advanced_001.png
-          :alt: confidence advanced
-          :class: sphx-glr-multi-img
+      .. image-sg:: /examples/documentation/images/sphx_glr_confidence_advanced_001.png
+         :alt: confidence advanced
+         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_001.png, /examples/documentation/images/sphx_glr_confidence_advanced_001_3_0x.png 3.0x
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /examples/documentation/images/sphx_glr_confidence_advanced_002.png
-          :alt: confidence advanced
-          :class: sphx-glr-multi-img
+      .. image-sg:: /examples/documentation/images/sphx_glr_confidence_advanced_002.png
+         :alt: confidence advanced
+         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_002.png, /examples/documentation/images/sphx_glr_confidence_advanced_002_3_0x.png 3.0x
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /examples/documentation/images/sphx_glr_confidence_advanced_003.png
-          :alt: confidence advanced
-          :class: sphx-glr-multi-img
+      .. image-sg:: /examples/documentation/images/sphx_glr_confidence_advanced_003.png
+         :alt: confidence advanced
+         :srcset: /examples/documentation/images/sphx_glr_confidence_advanced_003.png, /examples/documentation/images/sphx_glr_confidence_advanced_003_3_0x.png 3.0x
+         :class: sphx-glr-multi-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -55,9 +58,9 @@ doc_confidence_advanced.py
 
     [[Variables]]
         a1:  2.98622120 +/- 0.14867187 (4.98%) (init = 2.986237)
-        a2: -4.33526327 +/- 0.11527506 (2.66%) (init = -4.335256)
-        t1:  1.30994233 +/- 0.13121177 (10.02%) (init = 1.309932)
-        t2:  11.8240351 +/- 0.46316470 (3.92%) (init = 11.82408)
+        a2: -4.33526328 +/- 0.11527506 (2.66%) (init = -4.335256)
+        t1:  1.30994234 +/- 0.13121177 (10.02%) (init = 1.309932)
+        t2:  11.8240350 +/- 0.46316470 (3.92%) (init = 11.82408)
     [[Correlations]] (unreported correlations are < 0.500)
         C(a2, t2) =  0.987
         C(a2, t1) = -0.925
@@ -113,8 +116,9 @@ doc_confidence_advanced.py
 
     # plot data and best fit
     plt.figure()
-    plt.plot(x, y, 'b')
-    plt.plot(x, residual(out2.params) + y, 'r-')
+    plt.plot(x, y)
+    plt.plot(x, residual(out2.params) + y, '-')
+    plt.show()
 
     # plot confidence intervals (a1 vs t2 and a2 vs t2)
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
@@ -129,6 +133,7 @@ doc_confidence_advanced.py
     fig.colorbar(ctp, ax=axes[1])
     axes[1].set_xlabel('a2')
     axes[1].set_ylabel('t2')
+    plt.show()
 
     # plot dependence between two parameters
     fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
@@ -142,14 +147,13 @@ doc_confidence_advanced.py
     axes[1].scatter(cx2, cy2, c=prob2, s=30)
     axes[1].set_xlabel('t2')
     axes[1].set_ylabel('a1')
-
     plt.show()
     # <end examples/doc_confidence_advanced.py>
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.095 seconds)
+   **Total running time of the script:** ( 0 minutes  6.048 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_advanced.py:

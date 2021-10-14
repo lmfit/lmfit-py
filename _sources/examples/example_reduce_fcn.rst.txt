@@ -21,22 +21,91 @@
 Fit Specifying Different Reduce Function
 ========================================
 
-The reduce_fcn specifies how to convert a residual array to a scalar value for
-the scalar minimizers. The default value is None (i.e., "sum of squares of
-residual") - alternatives are: 'negentropy' and 'neglogcauchy' or a
-user-specified "callable". For more information please refer to:
+The ``reduce_fcn`` specifies how to convert a residual array to a scalar value
+for the scalar minimizers. The default value is None (i.e., "sum of squares of
+residual") - alternatives are: ``negentropy``, ``neglogcauchy``, or a
+user-specified ``callable``. For more information please refer to:
 https://lmfit.github.io/lmfit-py/fitting.html#using-the-minimizer-class
 
 Here, we use as an example the Student's t log-likelihood for robust fitting
 of data with outliers.
 
-.. GENERATED FROM PYTHON SOURCE LINES 15-73
+.. GENERATED FROM PYTHON SOURCE LINES 15-31
+
+.. code-block:: default
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    import lmfit
+
+
+    def resid(params, x, ydata):
+        decay = params['decay'].value
+        offset = params['offset'].value
+        omega = params['omega'].value
+        amp = params['amp'].value
+
+        y_model = offset + amp * np.sin(x*omega) * np.exp(-x/decay)
+        return y_model - ydata
 
 
 
-.. image:: /examples/images/sphx_glr_example_reduce_fcn_001.png
-    :alt: example reduce fcn
-    :class: sphx-glr-single-img
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 32-33
+
+Generate synthetic data with noise/outliers and initialize fitting Parameters:
+
+.. GENERATED FROM PYTHON SOURCE LINES 33-52
+
+.. code-block:: default
+
+    decay = 5
+    offset = 1.0
+    amp = 2.0
+    omega = 4.0
+
+    np.random.seed(2)
+    x = np.linspace(0, 10, 101)
+    y = offset + amp * np.sin(omega*x) * np.exp(-x/decay)
+    yn = y + np.random.normal(size=y.size, scale=0.250)
+
+    outliers = np.random.randint(int(len(x)/3.0), len(x), int(len(x)/12))
+    yn[outliers] += 5*np.random.random(len(outliers))
+
+    params = lmfit.Parameters()
+    params.add('offset', 2.0)
+    params.add('omega', 3.3)
+    params.add('amp', 2.5)
+    params.add('decay', 1.0, min=0)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 53-54
+
+Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
+
+.. GENERATED FROM PYTHON SOURCE LINES 54-59
+
+.. code-block:: default
+
+    method = 'L-BFGS-B'
+    o1 = lmfit.minimize(resid, params, args=(x, yn), method=method)
+    print("# Fit using sum of squares:\n")
+    lmfit.report_fit(o1)
+
+
+
 
 
 .. rst-class:: sphx-glr-script-out
@@ -59,28 +128,51 @@ of data with outliers.
     [[Variables]]
         offset:  1.10392445 +/- 0.05751441 (5.21%) (init = 2)
         omega:   3.97313428 +/- 0.02073920 (0.52%) (init = 3.3)
-        amp:     1.69977036 +/- 0.21587450 (12.70%) (init = 2.5)
-        decay:   7.65901704 +/- 1.87208973 (24.44%) (init = 1)
+        amp:     1.69977014 +/- 0.21587459 (12.70%) (init = 2.5)
+        decay:   7.65901933 +/- 1.87209218 (24.44%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.773
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 60-65
+
+.. code-block:: default
+
+    o2 = lmfit.minimize(resid, params, args=(x, yn), method=method,
+                        reduce_fcn='neglogcauchy')
+    print("\n\n# Robust Fit, using log-likelihood with Cauchy PDF:\n")
+    lmfit.report_fit(o2)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
 
 
     # Robust Fit, using log-likelihood with Cauchy PDF:
 
     [[Fit Statistics]]
         # fitting method   = L-BFGS-B
-        # function evals   = 130
+        # function evals   = 135
         # data points      = 101
         # variables        = 4
-        chi-square         = 33.5081438
-        reduced chi-square = 0.34544478
-        Akaike info crit   = -103.436533
-        Bayesian info crit = -92.9760507
+        chi-square         = 33.5081313
+        reduced chi-square = 0.34544465
+        Akaike info crit   = -103.436570
+        Bayesian info crit = -92.9760884
     [[Variables]]
-        offset:  1.02005947 +/- 0.06642640 (6.51%) (init = 2)
-        omega:   3.98224468 +/- 0.02898703 (0.73%) (init = 3.3)
-        amp:     1.83231389 +/- 0.27241853 (14.87%) (init = 2.5)
-        decay:   5.77327242 +/- 1.45140477 (25.14%) (init = 1)
+        offset:  1.02005968 +/- 0.06642640 (6.51%) (init = 2)
+        omega:   3.98224426 +/- 0.02898701 (0.73%) (init = 3.3)
+        amp:     1.83231397 +/- 0.27241887 (14.87%) (init = 2.5)
+        decay:   5.77327694 +/- 1.45140901 (25.14%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay)  = -0.758
         C(offset, amp) = -0.107
@@ -88,75 +180,31 @@ of data with outliers.
 
 
 
-
-
-|
+.. GENERATED FROM PYTHON SOURCE LINES 66-71
 
 .. code-block:: default
 
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    import lmfit
-
-    np.random.seed(2)
-    x = np.linspace(0, 10, 101)
-
-    # Setup example
-    decay = 5
-    offset = 1.0
-    amp = 2.0
-    omega = 4.0
-
-    y = offset + amp * np.sin(omega*x) * np.exp(-x/decay)
-    yn = y + np.random.normal(size=y.size, scale=0.250)
-
-    outliers = np.random.randint(int(len(x)/3.0), len(x), int(len(x)/12))
-    yn[outliers] += 5*np.random.random(len(outliers))
+    plt.plot(x, y, 'o', label='true function')
+    plt.plot(x, yn, '--*', label='with noise+outliers')
+    plt.plot(x, yn+o1.residual, '-', label='sum of squares fit')
+    plt.plot(x, yn+o2.residual, '-', label='robust fit')
+    plt.legend()
 
 
-    def resid(params, x, ydata):
-        decay = params['decay'].value
-        offset = params['offset'].value
-        omega = params['omega'].value
-        amp = params['amp'].value
 
-        y_model = offset + amp * np.sin(x*omega) * np.exp(-x/decay)
-        return y_model - ydata
+.. image-sg:: /examples/images/sphx_glr_example_reduce_fcn_001.png
+   :alt: example reduce fcn
+   :srcset: /examples/images/sphx_glr_example_reduce_fcn_001.png, /examples/images/sphx_glr_example_reduce_fcn_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
-    params = lmfit.Parameters()
 
-    params.add('offset', 2.0)
-    params.add('omega', 3.3)
-    params.add('amp', 2.5)
-    params.add('decay', 1.0, min=0)
 
-    method = 'L-BFGS-B'
-
-    o1 = lmfit.minimize(resid, params, args=(x, yn), method=method)
-    print("# Fit using sum of squares:\n")
-    lmfit.report_fit(o1)
-
-    o2 = lmfit.minimize(resid, params, args=(x, yn), method=method,
-                        reduce_fcn='neglogcauchy')
-    print("\n\n# Robust Fit, using log-likelihood with Cauchy PDF:\n")
-    lmfit.report_fit(o2)
-
-    plt.plot(x, y, 'ko', lw=2)
-    plt.plot(x, yn, 'k--*', lw=1)
-    plt.plot(x, yn+o1.residual, 'r-', lw=2)
-    plt.plot(x, yn+o2.residual, 'b-', lw=2)
-    plt.legend(['True function',
-                'with noise+outliers',
-                'sum of squares fit',
-                'robust fit'], loc='upper left')
-    plt.show()
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.478 seconds)
+   **Total running time of the script:** ( 0 minutes  0.252 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:

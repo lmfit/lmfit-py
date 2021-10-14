@@ -54,7 +54,7 @@ See also: https://lmfit.github.io/lmfit-py/constraints.html#using-inequality-con
 
 .. GENERATED FROM PYTHON SOURCE LINES 26-27
 
-Generate the simulated data using a Gaussian and Lorentzian line shape:
+Generate the simulated data using a Gaussian and Lorentzian lineshape:
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-33
 
@@ -150,20 +150,20 @@ fitting results:
 
 and figure:
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-62
+.. GENERATED FROM PYTHON SOURCE LINES 58-61
 
 .. code-block:: default
 
-    plt.plot(x, data, 'bo')
-    plt.plot(x, best_fit, 'r--', label='best fit')
-    plt.legend(loc='best')
-    plt.show()
+    plt.plot(x, data, 'o')
+    plt.plot(x, best_fit, '--', label='best fit')
+    plt.legend()
 
 
 
-.. image:: /examples/images/sphx_glr_example_fit_with_inequality_001.png
-    :alt: example fit with inequality
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_fit_with_inequality_001.png
+   :alt: example fit with inequality
+   :srcset: /examples/images/sphx_glr_example_fit_with_inequality_001.png, /examples/images/sphx_glr_example_fit_with_inequality_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
@@ -172,7 +172,7 @@ and figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.303 seconds)
+   **Total running time of the script:** ( 0 minutes  0.209 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_inequality.py:

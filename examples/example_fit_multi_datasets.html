@@ -4,27 +4,30 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Fit Multiple Data Sets &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/sphinx13.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Fit Specifying a Function to Compute the Jacobian" href="example_fit_with_derivfunc.html" />
+    <link rel="next" title="Fit using the Model interface" href="example_Model_interface.html" />
     <link rel="prev" title="Fit with Algebraic Constraint" href="example_fit_with_algebraic_constraint.html" />
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
           rel='stylesheet' type='text/css' />
@@ -86,7 +89,7 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
+          <a href="example_Model_interface.html" title="Fit using the Model interface"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="example_fit_with_algebraic_constraint.html" title="Fit with Algebraic Constraint"
@@ -108,13 +111,13 @@
   <p class="topless"><a href="example_fit_with_algebraic_constraint.html"
                         title="previous chapter">Fit with Algebraic Constraint</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="example_fit_with_derivfunc.html"
-                        title="next chapter">Fit Specifying a Function to Compute the Jacobian</a></p>
+  <p class="topless"><a href="example_Model_interface.html"
+                        title="next chapter">Fit using the Model interface</a></p>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -133,12 +136,12 @@
 <p>Click <a class="reference internal" href="#sphx-glr-download-examples-example-fit-multi-datasets-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="fit-multiple-data-sets">
+<section class="sphx-glr-example-title" id="fit-multiple-data-sets">
 <span id="sphx-glr-examples-example-fit-multi-datasets-py"></span><h1>Fit Multiple Data Sets<a class="headerlink" href="#fit-multiple-data-sets" title="Permalink to this headline">¶</a></h1>
 <p>Fitting multiple (simulated) Gaussian data sets simultaneously.</p>
 <p>All minimizers require the residual array to be one-dimensional. Therefore, in
-the <code class="docutils literal notranslate"><span class="pre">objective</span></code> we need to <code class="docutils literal notranslate"><span class="pre">`flatten`</span></code> the array before returning it.</p>
-<p>TODO: this should be using the Model interface / built-in models!</p>
+the <code class="docutils literal notranslate"><span class="pre">objective</span></code> function we need to <code class="docutils literal notranslate"><span class="pre">flatten</span></code> the array before returning it.</p>
+<p>TODO: this could/should be using the Model interface / built-in models!</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -152,9 +155,9 @@ the <code class="docutils literal notranslate"><span class="pre">objective</span
 
 <span class="k">def</span> <span class="nf">gauss_dataset</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Calculate Gaussian lineshape from parameters for data set.&quot;&quot;&quot;</span>
-    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;amp_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-    <span class="n">cen</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;cen_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
-    <span class="n">sig</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;sig_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    <span class="n">amp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;amp_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="n">cen</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;cen_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="n">sig</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;sig_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">gauss</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <span class="n">amp</span><span class="p">,</span> <span class="n">cen</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
 
 
@@ -172,7 +175,8 @@ the <code class="docutils literal notranslate"><span class="pre">objective</span
 </pre></div>
 </div>
 <p>Create five simulated Gaussian data sets</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="numpy.random.seed" class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span></a><span class="p">(</span><span class="mi">2021</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">151</span><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.int64" title="numpy.int64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">_</span></a> <span class="ow">in</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
     <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
@@ -187,15 +191,15 @@ the <code class="docutils literal notranslate"><span class="pre">objective</span
 <p>Create five sets of fitting parameters, one per data set</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fit_params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">iy</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">):</span>
-    <span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
-    <span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;cen_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
-    <span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;sig_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+    <span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;amp_</span><span class="si">{</span><span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;cen_</span><span class="si">{</span><span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">fit_params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;sig_</span><span class="si">{</span><span class="n">iy</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Constrain the values of sigma to be the same for all peaks by assigning
 sig_2, …, sig_5 to be equal to sig_1.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">iy</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
-    <span class="n">fit_params</span><span class="p">[</span><span class="s1">&#39;sig_</span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">iy</span><span class="p">]</span><span class="o">.</span><span class="n">expr</span> <span class="o">=</span> <span class="s1">&#39;sig_1&#39;</span>
+    <span class="n">fit_params</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;sig_</span><span class="si">{</span><span class="n">iy</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">expr</span> <span class="o">=</span> <span class="s1">&#39;sig_1&#39;</span>
 </pre></div>
 </div>
 <p>Run the global fit and show the fitting result</p>
@@ -205,32 +209,29 @@ sig_2, …, sig_5 to be equal to sig_1.</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
-    amp_1:  6.35769745 +/- 0.02471391 (0.39%) (init = 0.5)
-    cen_1: -0.06087255 +/- 0.00141148 (2.32%) (init = 0.4)
-    sig_1:  0.27096733 +/- 6.7335e-04 (0.25%) (init = 0.3)
-    amp_2:  6.23505243 +/- 0.02466565 (0.40%) (init = 0.5)
-    cen_2:  0.90331537 +/- 0.00143924 (0.16%) (init = 0.4)
-    sig_2:  0.27096733 +/- 6.7335e-04 (0.25%) == &#39;sig_1&#39;
-    amp_3:  6.74510330 +/- 0.02487197 (0.37%) (init = 0.5)
-    cen_3:  0.30698606 +/- 0.00133040 (0.43%) (init = 0.4)
-    sig_3:  0.27096733 +/- 6.7335e-04 (0.25%) == &#39;sig_1&#39;
-    amp_4:  3.62962270 +/- 0.02384778 (0.66%) (init = 0.5)
-    cen_4:  0.00271542 +/- 0.00247235 (91.05%) (init = 0.4)
-    sig_4:  0.27096733 +/- 6.7335e-04 (0.25%) == &#39;sig_1&#39;
-    amp_5:  6.29975266 +/- 0.02469084 (0.39%) (init = 0.5)
-    cen_5: -0.15885172 +/- 0.00142452 (0.90%) (init = 0.4)
-    sig_5:  0.27096733 +/- 6.7335e-04 (0.25%) == &#39;sig_1&#39;
+    amp_1:  6.32742014 +/- 0.02279128 (0.36%) (init = 0.5)
+    cen_1:  0.68049265 +/- 0.00126458 (0.19%) (init = 0.4)
+    sig_1:  0.25755569 +/- 4.9426e-04 (0.19%) (init = 0.3)
+    amp_2:  6.98604768 +/- 0.02296771 (0.33%) (init = 0.5)
+    cen_2:  0.50433701 +/- 0.00114536 (0.23%) (init = 0.4)
+    sig_2:  0.25755569 +/- 4.9426e-04 (0.19%) == &#39;sig_1&#39;
+    amp_3:  7.11643499 +/- 0.02300454 (0.32%) (init = 0.5)
+    cen_3: -0.08260255 +/- 0.00112438 (1.36%) (init = 0.4)
+    sig_3:  0.25755569 +/- 4.9426e-04 (0.19%) == &#39;sig_1&#39;
+    amp_4:  6.10197436 +/- 0.02273461 (0.37%) (init = 0.5)
+    cen_4:  0.07386098 +/- 0.00131130 (1.78%) (init = 0.4)
+    sig_4:  0.25755569 +/- 4.9426e-04 (0.19%) == &#39;sig_1&#39;
+    amp_5:  9.23910606 +/- 0.02368906 (0.26%) (init = 0.5)
+    cen_5:  0.34443079 +/- 8.6605e-04 (0.25%) (init = 0.4)
+    sig_5:  0.25755569 +/- 4.9426e-04 (0.19%) == &#39;sig_1&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(sig_1, amp_3) = -0.337
-    C(amp_1, sig_1) = -0.320
-    C(sig_1, amp_5) = -0.317
-    C(sig_1, amp_2) = -0.314
-    C(sig_1, amp_4) = -0.189
-    C(amp_1, amp_3) =  0.108
-    C(amp_3, amp_5) =  0.107
-    C(amp_2, amp_3) =  0.106
-    C(amp_1, amp_5) =  0.101
-    C(amp_1, amp_2) =  0.100
+    C(sig_1, amp_5) = -0.374
+    C(sig_1, amp_3) = -0.297
+    C(sig_1, amp_2) = -0.292
+    C(amp_1, sig_1) = -0.266
+    C(sig_1, amp_4) = -0.258
+    C(amp_3, amp_5) =  0.111
+    C(amp_2, amp_5) =  0.109
 </pre></div>
 </div>
 <p>Plot the data sets and fits</p>
@@ -238,11 +239,9 @@ sig_2, …, sig_5 to be equal to sig_1.</p>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
     <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y_fit</span></a> <span class="o">=</span> <span class="n">gauss_dataset</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">params</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">)</span>
     <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y_fit</span></a><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="example fit multi datasets" class="sphx-glr-single-img" src="../_images/sphx_glr_example_fit_multi_datasets_001.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.447 seconds)</p>
+<img src="../_images/sphx_glr_example_fit_multi_datasets_001.png" srcset="../_images/sphx_glr_example_fit_multi_datasets_001.png, ../_images/sphx_glr_example_fit_multi_datasets_001_3_0x.png 3.0x" alt="example fit multi datasets" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.245 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-fit-multi-datasets-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/5c7aecfc832cba8709209d4aee80c638/example_fit_multi_datasets.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_fit_multi_datasets.py</span></code></a></p>
@@ -252,7 +251,7 @@ sig_2, …, sig_5 to be equal to sig_1.</p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -268,7 +267,7 @@ sig_2, …, sig_5 to be equal to sig_1.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="example_fit_with_derivfunc.html" title="Fit Specifying a Function to Compute the Jacobian"
+          <a href="example_Model_interface.html" title="Fit using the Model interface"
              >next</a> |</li>
         <li class="right" >
           <a href="example_fit_with_algebraic_constraint.html" title="Fit with Algebraic Constraint"
@@ -286,7 +285,7 @@ sig_2, …, sig_5 to be equal to sig_1.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

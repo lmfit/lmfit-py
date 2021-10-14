@@ -44,7 +44,7 @@ Calculate Confidence Intervals
 Define the residual function, specify "true" parameter values, and generate
 a synthetic data set with some noise:
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-39
+.. GENERATED FROM PYTHON SOURCE LINES 16-40
 
 .. code-block:: default
 
@@ -68,6 +68,7 @@ a synthetic data set with some noise:
     p_true.add('decay', value=0.010)
 
     x = linspace(0.0, 250.0, 2500)
+    random.seed(2021)
     noise = random.normal(scale=0.7215, size=x.size)
     data = residual(p_true, x) + noise
 
@@ -78,11 +79,11 @@ a synthetic data set with some noise:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-41
+.. GENERATED FROM PYTHON SOURCE LINES 41-42
 
 Create fitting parameters and set initial values:
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-47
+.. GENERATED FROM PYTHON SOURCE LINES 42-48
 
 .. code-block:: default
 
@@ -99,12 +100,12 @@ Create fitting parameters and set initial values:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-50
+.. GENERATED FROM PYTHON SOURCE LINES 49-51
 
-Set-up the minimizer and perform the fit using leastsq algorithm, and show
-the report:
+Set-up the minimizer and perform the fit using ``leastsq`` algorithm, and
+show the report:
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-56
+.. GENERATED FROM PYTHON SOURCE LINES 51-57
 
 .. code-block:: default
 
@@ -129,15 +130,15 @@ the report:
         # function evals   = 90
         # data points      = 2500
         # variables        = 4
-        chi-square         = 1212.08286
-        reduced chi-square = 0.48561012
-        Akaike info crit   = -1801.87620
-        Bayesian info crit = -1778.58002
+        chi-square         = 1277.24638
+        reduced chi-square = 0.51171730
+        Akaike info crit   = -1670.96059
+        Bayesian info crit = -1647.66441
     [[Variables]]
-        amp:     13.9952862 +/- 0.04810194 (0.34%) (init = 13)
-        period:  5.32947061 +/- 0.00267669 (0.05%) (init = 2)
-        shift:   0.12201493 +/- 0.00472513 (3.87%) (init = 0)
-        decay:   0.01002913 +/- 3.9913e-05 (0.40%) (init = 0.02)
+        amp:     14.0708279 +/- 0.04936796 (0.35%) (init = 13)
+        period:  5.32980965 +/- 0.00273131 (0.05%) (init = 2)
+        shift:   0.12156326 +/- 0.00482311 (3.97%) (init = 0)
+        decay:   0.01002489 +/- 4.0724e-05 (0.41%) (init = 0.02)
     [[Correlations]] (unreported correlations are < 0.100)
         C(period, shift) =  0.800
         C(amp, decay)    =  0.576
@@ -145,11 +146,11 @@ the report:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-58
+.. GENERATED FROM PYTHON SOURCE LINES 58-59
 
 Calculate the confidence intervals for parameters and display the results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-103
+.. GENERATED FROM PYTHON SOURCE LINES 59-104
 
 .. code-block:: default
 
@@ -192,7 +193,7 @@ Calculate the confidence intervals for parameters and display the results:
             f = prob < 0.96
 
             x, y = res[free], res[fixed]
-            ax.scatter(x[f], y[f], c=1-prob[f], s=200*(1-prob[f]+0.5))
+            ax.scatter(x[f], y[f], c=1-prob[f], s=25*(1-prob[f]+0.5))
             ax.autoscale(1, 1)
             j += 1
         i += 1
@@ -201,9 +202,10 @@ Calculate the confidence intervals for parameters and display the results:
 
 
 
-.. image:: /examples/images/sphx_glr_example_confidence_interval_001.png
-    :alt: example confidence interval
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_confidence_interval_001.png
+   :alt: example confidence interval
+   :srcset: /examples/images/sphx_glr_example_confidence_interval_001.png, /examples/images/sphx_glr_example_confidence_interval_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -213,41 +215,54 @@ Calculate the confidence intervals for parameters and display the results:
  .. code-block:: none
 
                99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
-     amp   :  -0.14396  -0.09606  -0.04806  13.99529  +0.04794  +0.09637  +0.14466
-     period:  -0.00807  -0.00532  -0.00267   5.32947  +0.00267  +0.00534  +0.00811
-     shift :  -0.01420  -0.00947  -0.00473   0.12201  +0.00474  +0.00948  +0.01423
-     decay :  -0.00012  -0.00008  -0.00004   0.01003  +0.00004  +0.00008  +0.00012
+     amp   :  -0.14776  -0.09860  -0.04934  14.07083  +0.04956  +0.09893  +0.14850
+     period:  -0.00819  -0.00551  -0.00267   5.32981  +0.00272  +0.00543  +0.00825
+     shift :  -0.01446  -0.00964  -0.00482   0.12156  +0.00482  +0.00965  +0.01449
+     decay :  -0.00012  -0.00008  -0.00004   0.01002  +0.00004  +0.00008  +0.00012
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-106
+.. GENERATED FROM PYTHON SOURCE LINES 105-107
 
 It is also possible to calculate the confidence regions for two fixed
 parameters using the function ``conf_interval2d``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 106-136
+.. GENERATED FROM PYTHON SOURCE LINES 107-151
 
 .. code-block:: default
 
     names = list(out.params.keys())
 
     plt.figure()
-    cm = plt.cm.coolwarm
     for i in range(4):
         for j in range(4):
-            plt.subplot(4, 4, 16-j*4-i)
+            indx = 16-j*4-i
+            ax = plt.subplot(4, 4, indx)
+            ax.ticklabel_format(style='sci', scilimits=(-2, 2), axis='y')
+
+            # set-up labels and tick marks
+            ax.tick_params(labelleft=False, labelbottom=False)
+            if indx in (2, 5, 9, 13):
+                plt.ylabel(names[j])
+                ax.tick_params(labelleft=True)
+            if indx == 1:
+                ax.tick_params(labelleft=True)
+            if indx in (13, 14, 15, 16):
+                plt.xlabel(names[i])
+                ax.tick_params(labelbottom=True)
+                [label.set_rotation(45) for label in ax.get_xticklabels()]
+
             if i != j:
                 x, y, m = conf_interval2d(mini, out, names[i], names[j], 20, 20)
-                plt.contourf(x, y, m, linspace(0, 1, 10), cmap=cm)
-                plt.xlabel(names[i])
-                plt.ylabel(names[j])
+                plt.contourf(x, y, m, linspace(0, 1, 10))
 
                 x = tr[names[i]][names[i]]
                 y = tr[names[i]][names[j]]
                 pr = tr[names[i]]['prob']
                 s = argsort(x)
-                plt.scatter(x[s], y[s], c=pr[s], s=30, lw=1, cmap=cm)
+                plt.scatter(x[s], y[s], c=pr[s], s=30, lw=1)
+
             else:
                 x = tr[names[i]][names[i]]
                 y = tr[names[i]]['prob']
@@ -255,17 +270,19 @@ parameters using the function ``conf_interval2d``:
                 t, s = unique(x, True)
                 f = interp1d(t, y[s], 'slinear')
                 xn = linspace(x.min(), x.max(), 50)
-                plt.plot(xn, f(xn), 'g', lw=1)
-                plt.xlabel(names[i])
+                plt.plot(xn, f(xn), lw=1)
                 plt.ylabel('prob')
+                ax.tick_params(labelleft=True)
 
+    plt.tight_layout()
     plt.show()
 
 
 
-.. image:: /examples/images/sphx_glr_example_confidence_interval_002.png
-    :alt: example confidence interval
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_confidence_interval_002.png
+   :alt: example confidence interval
+   :srcset: /examples/images/sphx_glr_example_confidence_interval_002.png, /examples/images/sphx_glr_example_confidence_interval_002_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
@@ -274,7 +291,7 @@ parameters using the function ``conf_interval2d``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  51.867 seconds)
+   **Total running time of the script:** ( 0 minutes  16.478 seconds)
 
 
 .. _sphx_glr_download_examples_example_confidence_interval.py:

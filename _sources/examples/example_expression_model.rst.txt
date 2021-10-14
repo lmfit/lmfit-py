@@ -44,7 +44,7 @@ See: https://lmfit.github.io/lmfit-py/builtin_models.html#user-defined-models
 
 Generate synthetic data for the user-supplied model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-22
+.. GENERATED FROM PYTHON SOURCE LINES 16-23
 
 .. code-block:: default
 
@@ -52,6 +52,7 @@ Generate synthetic data for the user-supplied model:
     amp, cen, wid = 3.4, 1.8, 0.5
 
     y = amp * np.exp(-(x-cen)**2 / (2*wid**2)) / (np.sqrt(2*np.pi)*wid)
+    np.random.seed(2021)
     y = y + np.random.normal(size=x.size, scale=0.01)
 
 
@@ -61,11 +62,11 @@ Generate synthetic data for the user-supplied model:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-24
+.. GENERATED FROM PYTHON SOURCE LINES 24-25
 
-Define the ExpressionModel and perform the fit:
+Define the ``ExpressionModel`` and perform the fit:
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-27
+.. GENERATED FROM PYTHON SOURCE LINES 25-28
 
 .. code-block:: default
 
@@ -79,27 +80,18 @@ Define the ExpressionModel and perform the fit:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-29
+.. GENERATED FROM PYTHON SOURCE LINES 29-30
 
 this results in the following output:
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-36
+.. GENERATED FROM PYTHON SOURCE LINES 30-32
 
 .. code-block:: default
 
     print(result.fit_report())
 
-    plt.plot(x, y, 'bo')
-    plt.plot(x, result.init_fit, 'k--', label='initial fit')
-    plt.plot(x, result.best_fit, 'r-', label='best fit')
-    plt.legend(loc='best')
-    plt.show()
 
 
-
-.. image:: /examples/images/sphx_glr_example_expression_model_001.png
-    :alt: example expression model
-    :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -112,19 +104,39 @@ this results in the following output:
         Model(_eval)
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 56
+        # function evals   = 52
         # data points      = 201
         # variables        = 3
-        chi-square         = 0.01825874
-        reduced chi-square = 9.2216e-05
-        Akaike info crit   = -1864.58964
-        Bayesian info crit = -1854.67973
+        chi-square         = 0.01951689
+        reduced chi-square = 9.8570e-05
+        Akaike info crit   = -1851.19580
+        Bayesian info crit = -1841.28588
     [[Variables]]
-        amp:  3.40013669 +/- 0.00494962 (0.15%) (init = 5)
-        cen:  1.80087014 +/- 8.3982e-04 (0.05%) (init = 5)
-        wid:  0.49962144 +/- 8.3982e-04 (0.17%) (init = 1)
+        amp:  3.40625131 +/- 0.00512076 (0.15%) (init = 5)
+        cen:  1.80121155 +/- 8.6847e-04 (0.05%) (init = 5)
+        wid:  0.50029615 +/- 8.6847e-04 (0.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, wid) =  0.577
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 33-37
+
+.. code-block:: default
+
+    plt.plot(x, y, 'o')
+    plt.plot(x, result.init_fit, '--', label='initial fit')
+    plt.plot(x, result.best_fit, '-', label='best fit')
+    plt.legend()
+
+
+
+.. image-sg:: /examples/images/sphx_glr_example_expression_model_001.png
+   :alt: example expression model
+   :srcset: /examples/images/sphx_glr_example_expression_model_001.png, /examples/images/sphx_glr_example_expression_model_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
+
 
 
 
@@ -132,7 +144,7 @@ this results in the following output:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.283 seconds)
+   **Total running time of the script:** ( 0 minutes  0.233 seconds)
 
 
 .. _sphx_glr_download_examples_example_expression_model.py:

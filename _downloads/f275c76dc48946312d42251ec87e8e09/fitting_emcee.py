@@ -25,9 +25,6 @@ x = np.linspace(1, 10, 250)
 np.random.seed(0)
 y = (3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1) / 10.) +
      0.1*np.random.randn(x.size))
-if HASPYLAB:
-    plt.plot(x, y, 'b')
-    plt.show()
 
 p = lmfit.Parameters()
 p.add_many(('a1', 4), ('a2', 4), ('t1', 3), ('t2', 3., True))
@@ -42,9 +39,9 @@ mi = lmfit.minimize(residual, p, method='nelder', nan_policy='omit')
 lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
 if HASPYLAB:
     plt.figure()
-    plt.plot(x, y, 'b')
-    plt.plot(x, residual(mi.params) + y, 'r', label='best fit')
-    plt.legend(loc='best')
+    plt.plot(x, y, 'o')
+    plt.plot(x, residual(mi.params) + y, label='best fit')
+    plt.legend()
     plt.show()
 
 # Place bounds on the ln(sigma) parameter that emcee will automatically add
@@ -61,7 +58,7 @@ if HASPYLAB and HASCORNER:
     plt.show()
 
 if HASPYLAB:
-    plt.plot(res.acceptance_fraction)
+    plt.plot(res.acceptance_fraction, 'o')
     plt.xlabel('walker')
     plt.ylabel('acceptance fraction')
     plt.show()
@@ -94,9 +91,9 @@ for name, param in p.items():
 
 if HASPYLAB:
     plt.figure()
-    plt.plot(x, y, 'b')
-    plt.plot(x, residual(mi.params) + y, 'r', label='Nelder-Mead')
-    plt.plot(x, residual(res.params) + y, 'k--', label='emcee')
+    plt.plot(x, y, 'o')
+    plt.plot(x, residual(mi.params) + y, label='Nelder-Mead')
+    plt.plot(x, residual(res.params) + y, '--', label='emcee')
     plt.legend()
     plt.show()
 

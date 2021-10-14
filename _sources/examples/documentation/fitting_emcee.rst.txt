@@ -21,7 +21,7 @@
 doc_fitting_emcee.py
 ====================
 
-.. GENERATED FROM PYTHON SOURCE LINES 7-117
+.. GENERATED FROM PYTHON SOURCE LINES 7-114
 
 
 
@@ -30,27 +30,24 @@ doc_fitting_emcee.py
 
     *
 
-      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_001.png
-          :alt: fitting emcee
-          :class: sphx-glr-multi-img
+      .. image-sg:: /examples/documentation/images/sphx_glr_fitting_emcee_001.png
+         :alt: fitting emcee
+         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_001.png, /examples/documentation/images/sphx_glr_fitting_emcee_001_3_0x.png 3.0x
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_002.png
-          :alt: fitting emcee
-          :class: sphx-glr-multi-img
+      .. image-sg:: /examples/documentation/images/sphx_glr_fitting_emcee_002.png
+         :alt: fitting emcee
+         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_002.png, /examples/documentation/images/sphx_glr_fitting_emcee_002_3_0x.png 3.0x
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_003.png
-          :alt: fitting emcee
-          :class: sphx-glr-multi-img
-
-    *
-
-      .. image:: /examples/documentation/images/sphx_glr_fitting_emcee_004.png
-          :alt: fitting emcee
-          :class: sphx-glr-multi-img
+      .. image-sg:: /examples/documentation/images/sphx_glr_fitting_emcee_003.png
+         :alt: fitting emcee
+         :srcset: /examples/documentation/images/sphx_glr_fitting_emcee_003.png, /examples/documentation/images/sphx_glr_fitting_emcee_003_3_0x.png 3.0x
+         :class: sphx-glr-multi-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -61,9 +58,9 @@ doc_fitting_emcee.py
 
     [[Variables]]
         a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
-        a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
-        t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
-        t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
+        a2: -4.33525597 +/- 0.11765821 (2.71%) (init = 4)
+        t1:  1.30993186 +/- 0.13449653 (10.27%) (init = 3)
+        t2:  11.8240752 +/- 0.47172598 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.500)
         C(a2, t2) =  0.988
         C(a2, t1) = -0.928
@@ -135,9 +132,6 @@ doc_fitting_emcee.py
     np.random.seed(0)
     y = (3.0*np.exp(-x/2) - 5.0*np.exp(-(x-0.1) / 10.) +
          0.1*np.random.randn(x.size))
-    if HASPYLAB:
-        plt.plot(x, y, 'b')
-        plt.show()
 
     p = lmfit.Parameters()
     p.add_many(('a1', 4), ('a2', 4), ('t1', 3), ('t2', 3., True))
@@ -152,9 +146,9 @@ doc_fitting_emcee.py
     lmfit.printfuncs.report_fit(mi.params, min_correl=0.5)
     if HASPYLAB:
         plt.figure()
-        plt.plot(x, y, 'b')
-        plt.plot(x, residual(mi.params) + y, 'r', label='best fit')
-        plt.legend(loc='best')
+        plt.plot(x, y, 'o')
+        plt.plot(x, residual(mi.params) + y, label='best fit')
+        plt.legend()
         plt.show()
 
     # Place bounds on the ln(sigma) parameter that emcee will automatically add
@@ -171,7 +165,7 @@ doc_fitting_emcee.py
         plt.show()
 
     if HASPYLAB:
-        plt.plot(res.acceptance_fraction)
+        plt.plot(res.acceptance_fraction, 'o')
         plt.xlabel('walker')
         plt.ylabel('acceptance fraction')
         plt.show()
@@ -204,9 +198,9 @@ doc_fitting_emcee.py
 
     if HASPYLAB:
         plt.figure()
-        plt.plot(x, y, 'b')
-        plt.plot(x, residual(mi.params) + y, 'r', label='Nelder-Mead')
-        plt.plot(x, residual(res.params) + y, 'k--', label='emcee')
+        plt.plot(x, y, 'o')
+        plt.plot(x, residual(mi.params) + y, label='Nelder-Mead')
+        plt.plot(x, residual(res.params) + y, '--', label='emcee')
         plt.legend()
         plt.show()
 
@@ -228,7 +222,7 @@ doc_fitting_emcee.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  27.869 seconds)
+   **Total running time of the script:** ( 0 minutes  7.932 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_fitting_emcee.py:

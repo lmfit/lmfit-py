@@ -25,9 +25,10 @@ doc_model_composite.py
 
 
 
-.. image:: /examples/documentation/images/sphx_glr_model_composite_001.png
-    :alt: model composite
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/documentation/images/sphx_glr_model_composite_001.png
+   :alt: model composite
+   :srcset: /examples/documentation/images/sphx_glr_model_composite_001.png, /examples/documentation/images/sphx_glr_model_composite_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -37,7 +38,7 @@ doc_model_composite.py
  .. code-block:: none
 
     [[Model]]
-        (Model(jump) <function convolve at 0x1243149d0> Model(gaussian))
+        (Model(jump) <function convolve at 0x7fdfb98eaaf0> Model(gaussian))
     [[Fit Statistics]]
         # fitting method   = leastsq
         # function evals   = 25
@@ -119,12 +120,12 @@ doc_model_composite.py
     axes[0].plot(x, y, 'bo')
     axes[0].plot(x, result.init_fit, 'k--', label='initial fit')
     axes[0].plot(x, result.best_fit, 'r-', label='best fit')
-    axes[0].legend(loc='best')
+    axes[0].legend()
 
     axes[1].plot(x, y, 'bo')
     axes[1].plot(x, 10*comps['jump'], 'k--', label='Jump component')
     axes[1].plot(x, 10*comps['gaussian'], 'r-', label='Gaussian component')
-    axes[1].legend(loc='best')
+    axes[1].legend()
 
     plt.show()
     # <end examples/doc_model_composite.py>
@@ -132,7 +133,7 @@ doc_model_composite.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.497 seconds)
+   **Total running time of the script:** ( 0 minutes  0.392 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_composite.py:

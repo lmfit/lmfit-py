@@ -26,7 +26,7 @@ datapoint. To assess the influence of one point, we fit the dataset while the
 point and compare the result with the fit of the full dataset. The code below
 shows how to do this with lmfit. Note that the presented method is very basic.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-19
+.. GENERATED FROM PYTHON SOURCE LINES 10-17
 
 .. code-block:: default
 
@@ -37,8 +37,6 @@ shows how to do this with lmfit. Note that the presented method is very basic.
 
     import lmfit
 
-    plt.rcParams['figure.dpi'] = 130
-    plt.rcParams['figure.autolayout'] = True
 
 
 
@@ -46,11 +44,11 @@ shows how to do this with lmfit. Note that the presented method is very basic.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 20-21
+.. GENERATED FROM PYTHON SOURCE LINES 18-19
 
-Generate test data and model. Apply the model to the data
+Generate test data and model:
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-41
+.. GENERATED FROM PYTHON SOURCE LINES 19-31
 
 .. code-block:: default
 
@@ -66,11 +64,39 @@ Generate test data and model. Apply the model to the data
         return 1.0 / (a * x) + b
 
 
-    # Make 5 points outliers
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 32-33
+
+Make five points outliers:
+
+.. GENERATED FROM PYTHON SOURCE LINES 33-36
+
+.. code-block:: default
+
     idx = np.random.randint(0, x.size, 5)
     y[idx] += 10 * np.random.randn(idx.size)
 
-    # Fit the data
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 37-38
+
+Fit the data:
+
+.. GENERATED FROM PYTHON SOURCE LINES 38-41
+
+.. code-block:: default
+
     model = lmfit.Model(func, independent_vars=['x'])
     fit_result = model.fit(y, x=x, a=0.1, b=2)
 
@@ -85,22 +111,34 @@ Generate test data and model. Apply the model to the data
 
 and gives the plot and fitting results below:
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-49
+.. GENERATED FROM PYTHON SOURCE LINES 43-47
 
 .. code-block:: default
 
-
     fit_result.plot_fit()
-    plt.plot(x[idx], y[idx], 'o', color='r', label='outliers')
+    plt.plot(x[idx], y[idx], 'o', label='outliers')
     plt.show()
+
+
+
+
+.. image-sg:: /examples/images/sphx_glr_example_detect_outliers_001.png
+   :alt: Model(func)
+   :srcset: /examples/images/sphx_glr_example_detect_outliers_001.png, /examples/images/sphx_glr_example_detect_outliers_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 48-50
+
+.. code-block:: default
+
     print(fit_result.fit_report())
 
 
 
-
-.. image:: /examples/images/sphx_glr_example_detect_outliers_001.png
-    :alt: Model(func)
-    :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -129,14 +167,13 @@ and gives the plot and fitting results below:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-51
+.. GENERATED FROM PYTHON SOURCE LINES 51-52
 
-Fit the dataset while omitting one data point
+Fit the dataset while omitting one data point:
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-69
+.. GENERATED FROM PYTHON SOURCE LINES 52-67
 
 .. code-block:: default
-
 
     best_vals = defaultdict(lambda: np.zeros(x.size))
     stderrs = defaultdict(lambda: np.zeros(x.size))
@@ -145,9 +182,7 @@ Fit the dataset while omitting one data point
         idx2 = np.arange(0, x.size)
         idx2 = np.delete(idx2, i)
         tmp_x = x[idx2]
-        tmp = model.fit(y[idx2],
-                        x=tmp_x,
-                        a=fit_result.params['a'],
+        tmp = model.fit(y[idx2], x=tmp_x, a=fit_result.params['a'],
                         b=fit_result.params['b'])
         chi_sq[i] = tmp.chisqr
         for p in tmp.params:
@@ -162,20 +197,17 @@ Fit the dataset while omitting one data point
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-71
+.. GENERATED FROM PYTHON SOURCE LINES 68-69
 
-Plot the influence on the red. chisqr of each point
+Plot the influence on the red. chisqr of each point:
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-82
+.. GENERATED FROM PYTHON SOURCE LINES 69-77
 
 .. code-block:: default
 
-
     fig, ax = plt.subplots()
     ax.plot(x, (fit_result.chisqr - chi_sq) / chi_sq)
-    ax.scatter(x[idx],
-               fit_result.chisqr / chi_sq[idx] - 1,
-               color='r',
+    ax.scatter(x[idx], fit_result.chisqr / chi_sq[idx] - 1, color='r',
                label='outlier')
     ax.set_ylabel(r'Relative red. $\chi^2$ change')
     ax.set_xlabel('x')
@@ -184,22 +216,22 @@ Plot the influence on the red. chisqr of each point
 
 
 
-.. image:: /examples/images/sphx_glr_example_detect_outliers_002.png
-    :alt: example detect outliers
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_detect_outliers_002.png
+   :alt: example detect outliers
+   :srcset: /examples/images/sphx_glr_example_detect_outliers_002.png, /examples/images/sphx_glr_example_detect_outliers_002_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-84
+.. GENERATED FROM PYTHON SOURCE LINES 78-79
 
-Plot the influence on the parameter value and error of each point
+Plot the influence on the parameter value and error of each point:
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-103
+.. GENERATED FROM PYTHON SOURCE LINES 79-97
 
 .. code-block:: default
-
 
     fig, axs = plt.subplots(4, figsize=(4, 7), sharex='col')
     axs[0].plot(x, best_vals['a'])
@@ -222,9 +254,10 @@ Plot the influence on the parameter value and error of each point
 
 
 
-.. image:: /examples/images/sphx_glr_example_detect_outliers_003.png
-    :alt: example detect outliers
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_detect_outliers_003.png
+   :alt: example detect outliers
+   :srcset: /examples/images/sphx_glr_example_detect_outliers_003.png, /examples/images/sphx_glr_example_detect_outliers_003_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
@@ -233,7 +266,7 @@ Plot the influence on the parameter value and error of each point
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.777 seconds)
+   **Total running time of the script:** ( 0 minutes  1.093 seconds)
 
 
 .. _sphx_glr_download_examples_example_detect_outliers.py:

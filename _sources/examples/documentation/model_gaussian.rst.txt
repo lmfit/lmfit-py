@@ -25,9 +25,10 @@ doc_model_gaussian.py
 
 
 
-.. image:: /examples/documentation/images/sphx_glr_model_gaussian_001.png
-    :alt: model gaussian
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/documentation/images/sphx_glr_model_gaussian_001.png
+   :alt: model gaussian
+   :srcset: /examples/documentation/images/sphx_glr_model_gaussian_001.png, /examples/documentation/images/sphx_glr_model_gaussian_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -48,7 +49,7 @@ doc_model_gaussian.py
         Akaike info crit   = -336.263713
         Bayesian info crit = -328.418352
     [[Variables]]
-        amp:  8.88021830 +/- 0.11359492 (1.28%) (init = 5)
+        amp:  8.88021830 +/- 0.11359493 (1.28%) (init = 5)
         cen:  5.65866102 +/- 0.01030495 (0.18%) (init = 5)
         wid:  0.69765468 +/- 0.01030495 (1.48%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
@@ -84,17 +85,17 @@ doc_model_gaussian.py
 
     print(result.fit_report())
 
-    plt.plot(x, y, 'bo')
-    plt.plot(x, result.init_fit, 'k--', label='initial fit')
-    plt.plot(x, result.best_fit, 'r-', label='best fit')
-    plt.legend(loc='best')
+    plt.plot(x, y, 'o')
+    plt.plot(x, result.init_fit, '--', label='initial fit')
+    plt.plot(x, result.best_fit, '-', label='best fit')
+    plt.legend()
     plt.show()
     # <end examples/doc_model_gaussian.py>
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.262 seconds)
+   **Total running time of the script:** ( 0 minutes  0.204 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_gaussian.py:

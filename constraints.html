@@ -4,24 +4,28 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Using Mathematical Constraints &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/sphinx13.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="_static/thebelab.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Release Notes" href="whatsnew.html" />
@@ -125,7 +129,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -139,7 +143,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="using-mathematical-constraints">
+  <section id="using-mathematical-constraints">
 <span id="constraints-chapter"></span><h1>Using Mathematical Constraints<a class="headerlink" href="#using-mathematical-constraints" title="Permalink to this headline">¶</a></h1>
 <p>Being able to fix variables to a constant value or place upper and lower
 bounds on their values can greatly simplify modeling real data. These
@@ -161,7 +165,7 @@ separate model function for two Gaussians where the two <code class="docutils li
 forced to be equal, or where amplitudes are related. Instead, one can write a
 more general two Gaussian model (perhaps using <code class="xref py py-class docutils literal notranslate"><span class="pre">GaussianModel</span></code>) and
 impose such constraints on the Parameters for a particular fit.</p>
-<div class="section" id="overview">
+<section id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
 <p>Just as one can place bounds on a Parameter, or keep it fixed during the
 fit, so too can one place mathematical constraints on parameters. The way
@@ -189,8 +193,8 @@ the fitting function, but the use of such constraints allows the end-user
 to modify the model of a more general-purpose fitting function.</p>
 <p>Nearly any valid mathematical expression can be used, and a variety of
 built-in functions are available for flexible modeling.</p>
-</div>
-<div class="section" id="supported-operators-functions-and-constants">
+</section>
+<section id="supported-operators-functions-and-constants">
 <h2>Supported Operators, Functions, and Constants<a class="headerlink" href="#supported-operators-functions-and-constants" title="Permalink to this headline">¶</a></h2>
 <p>The mathematical expressions used to define constrained Parameters need to
 be valid Python expressions. As you would expect, the operators <code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code>,
@@ -263,8 +267,8 @@ is that Python’s 1-line <em>if expression</em> is supported:</p>
 <div class="cell_output docutils container">
 </div>
 </div>
-</div>
-<div class="section" id="using-inequality-constraints">
+</section>
+<section id="using-inequality-constraints">
 <h2>Using Inequality Constraints<a class="headerlink" href="#using-inequality-constraints" title="Permalink to this headline">¶</a></h2>
 <p>A rather common question about how to set up constraints
 that use an inequality, say, <span class="math notranslate nohighlight">\(x + y \le 10\)</span>. This
@@ -291,8 +295,8 @@ that a variable (here, <code class="docutils literal notranslate"><span class="p
 constraint. The secondary point is that upper and lower
 bounds can be used as part of the inequality to make the
 definitions more convenient.</p>
-</div>
-<div class="section" id="advanced-usage-of-expressions-in-lmfit">
+</section>
+<section id="advanced-usage-of-expressions-in-lmfit">
 <h2>Advanced usage of Expressions in lmfit<a class="headerlink" href="#advanced-usage-of-expressions-in-lmfit" title="Permalink to this headline">¶</a></h2>
 <p>The expression used in a constraint is converted to a
 Python <a class="reference external" href="https://docs.python.org/library/ast.html">Abstract Syntax Tree</a>, which is an
@@ -372,8 +376,8 @@ afterwards:</p>
 </div>
 <p>In both cases the user-defined <code class="xref py py-meth docutils literal notranslate"><span class="pre">lorentzian()</span></code> function can now be
 used in constraint expressions.</p>
-</div>
-</div>
+</section>
+</section>
 
 
             <div class="clearer"></div>
@@ -407,7 +411,7 @@ used in constraint expressions.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.4.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
     </div>
   </body>
 </html>

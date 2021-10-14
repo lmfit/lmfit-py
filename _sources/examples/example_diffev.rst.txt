@@ -21,16 +21,81 @@
 Fit Using differential_evolution Algorithm
 ==========================================
 
-This example compares the "leastsq" and "differential_evolution" algorithms on
-a fairly simple problem.
+This example compares the ``leastsq`` and ``differential_evolution`` algorithms
+on a fairly simple problem.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-56
+.. GENERATED FROM PYTHON SOURCE LINES 9-25
+
+.. code-block:: default
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    import lmfit
+
+
+    def resid(params, x, ydata):
+        decay = params['decay'].value
+        offset = params['offset'].value
+        omega = params['omega'].value
+        amp = params['amp'].value
+
+        y_model = offset + amp * np.sin(x*omega) * np.exp(-x/decay)
+        return y_model - ydata
 
 
 
-.. image:: /examples/images/sphx_glr_example_diffev_001.png
-    :alt: example diffev
-    :class: sphx-glr-single-img
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 26-27
+
+Generate synthetic data and set-up Parameters with initial values/boundaries:
+
+.. GENERATED FROM PYTHON SOURCE LINES 27-43
+
+.. code-block:: default
+
+    decay = 5
+    offset = 1.0
+    amp = 2.0
+    omega = 4.0
+
+    np.random.seed(2)
+    x = np.linspace(0, 10, 101)
+    y = offset + amp*np.sin(omega*x) * np.exp(-x/decay)
+    yn = y + np.random.normal(size=y.size, scale=0.450)
+
+    params = lmfit.Parameters()
+    params.add('offset', 2.0, min=0, max=10.0)
+    params.add('omega', 3.3, min=0, max=10.0)
+    params.add('amp', 2.5, min=0, max=10.0)
+    params.add('decay', 1.0, min=0, max=10.0)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 44-45
+
+Perform the fits and show fitting results and plot:
+
+.. GENERATED FROM PYTHON SOURCE LINES 45-49
+
+.. code-block:: default
+
+    o1 = lmfit.minimize(resid, params, args=(x, yn), method='leastsq')
+    print("# Fit using leastsq:")
+    lmfit.report_fit(o1)
+
+
+
 
 
 .. rst-class:: sphx-glr-script-out
@@ -52,10 +117,32 @@ a fairly simple problem.
     [[Variables]]
         offset:  0.96333090 +/- 0.04735921 (4.92%) (init = 2)
         omega:   3.98700821 +/- 0.02079710 (0.52%) (init = 3.3)
-        amp:     1.80253577 +/- 0.19401989 (10.76%) (init = 2.5)
-        decay:   5.76279825 +/- 1.04073303 (18.06%) (init = 1)
+        amp:     1.80253572 +/- 0.19401988 (10.76%) (init = 2.5)
+        decay:   5.76279857 +/- 1.04073320 (18.06%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.755
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 50-54
+
+.. code-block:: default
+
+    o2 = lmfit.minimize(resid, params, args=(x, yn), method='differential_evolution')
+    print("\n\n# Fit using differential_evolution:")
+    lmfit.report_fit(o2)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
 
 
     # Fit using differential_evolution:
@@ -71,72 +158,38 @@ a fairly simple problem.
     [[Variables]]
         offset:  0.96333133 +/- 0.04735903 (4.92%) (init = 2)
         omega:   3.98700854 +/- 0.02121810 (0.53%) (init = 3.3)
-        amp:     1.80252618 +/- 0.19022408 (10.55%) (init = 2.5)
-        decay:   5.76284502 +/- 1.00452606 (17.43%) (init = 1)
+        amp:     1.80252618 +/- 0.19022407 (10.55%) (init = 2.5)
+        decay:   5.76284481 +/- 1.00452594 (17.43%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.743
 
 
 
 
-
-
-|
+.. GENERATED FROM PYTHON SOURCE LINES 55-59
 
 .. code-block:: default
 
-    import matplotlib.pyplot as plt
-    import numpy as np
-
-    import lmfit
-
-    np.random.seed(2)
-    x = np.linspace(0, 10, 101)
-
-    # Setup example
-    decay = 5
-    offset = 1.0
-    amp = 2.0
-    omega = 4.0
-
-    y = offset + amp*np.sin(omega*x) * np.exp(-x/decay)
-    yn = y + np.random.normal(size=y.size, scale=0.450)
+    plt.plot(x, yn, 'o', label='data')
+    plt.plot(x, yn+o1.residual, '-', label='leastsq')
+    plt.plot(x, yn+o2.residual, '--', label='diffev')
+    plt.legend()
 
 
-    def resid(params, x, ydata):
-        decay = params['decay'].value
-        offset = params['offset'].value
-        omega = params['omega'].value
-        amp = params['amp'].value
 
-        y_model = offset + amp * np.sin(x*omega) * np.exp(-x/decay)
-        return y_model - ydata
+.. image-sg:: /examples/images/sphx_glr_example_diffev_001.png
+   :alt: example diffev
+   :srcset: /examples/images/sphx_glr_example_diffev_001.png, /examples/images/sphx_glr_example_diffev_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
-    params = lmfit.Parameters()
-    params.add('offset', 2.0, min=0, max=10.0)
-    params.add('omega', 3.3, min=0, max=10.0)
-    params.add('amp', 2.5, min=0, max=10.0)
-    params.add('decay', 1.0, min=0, max=10.0)
 
-    o1 = lmfit.minimize(resid, params, args=(x, yn), method='leastsq')
-    print("# Fit using leastsq:")
-    lmfit.report_fit(o1)
 
-    o2 = lmfit.minimize(resid, params, args=(x, yn), method='differential_evolution')
-    print("\n\n# Fit using differential_evolution:")
-    lmfit.report_fit(o2)
-
-    plt.plot(x, yn, 'ko', lw=2)
-    plt.plot(x, yn+o1.residual, 'r-', lw=2)
-    plt.plot(x, yn+o2.residual, 'b--', lw=2)
-    plt.legend(['data', 'leastsq', 'diffev'], loc='upper left')
-    plt.show()
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.878 seconds)
+   **Total running time of the script:** ( 0 minutes  0.339 seconds)
 
 
 .. _sphx_glr_download_examples_example_diffev.py:

@@ -25,9 +25,10 @@ doc_model_two_components.py
 
 
 
-.. image:: /examples/documentation/images/sphx_glr_model_two_components_001.png
-    :alt: model two components
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/documentation/images/sphx_glr_model_two_components_001.png
+   :alt: model two components
+   :srcset: /examples/documentation/images/sphx_glr_model_two_components_001.png, /examples/documentation/images/sphx_glr_model_two_components_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -100,17 +101,17 @@ doc_model_two_components.py
 
     print(result.fit_report())
 
-    plt.plot(x, y, 'bo')
-    plt.plot(x, result.init_fit, 'k--', label='initial fit')
-    plt.plot(x, result.best_fit, 'r-', label='best fit')
-    plt.legend(loc='best')
+    plt.plot(x, y, 'o')
+    plt.plot(x, result.init_fit, '--', label='initial fit')
+    plt.plot(x, result.best_fit, '-', label='best fit')
+    plt.legend()
     plt.show()
     # <end examples/doc_model_two_components.py>
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.294 seconds)
+   **Total running time of the script:** ( 0 minutes  0.203 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_two_components.py:

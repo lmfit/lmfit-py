@@ -79,21 +79,20 @@ Since ``scipy.optimize`` and ``lmfit`` require real parameters, we represent
 
 .. GENERATED FROM PYTHON SOURCE LINES 39-40
 
-The standard practice of defining an ``lmfit`` model is as follows:
+The standard practice of defining a ``lmfit`` model is as follows:
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-73
+.. GENERATED FROM PYTHON SOURCE LINES 40-72
 
 .. code-block:: default
 
-
     class ResonatorModel(lmfit.model.Model):
-        __doc__ = "resonator model" + lmfit.models.COMMON_DOC
+        __doc__ = "resonator model" + lmfit.models.COMMON_INIT_DOC
 
         def __init__(self, *args, **kwargs):
-            # pass in the defining equation so the user doesn't have to later.
+            # pass in the defining equation so the user doesn't have to later
             super().__init__(linear_resonator, *args, **kwargs)
 
-            self.set_param_hint('Q', min=0)  # Enforce Q is positive
+            self.set_param_hint('Q', min=0)  # enforce Q is positive
 
         def guess(self, data, f=None, **kwargs):
             verbose = kwargs.pop('verbose', None)
@@ -103,18 +102,18 @@ The standard practice of defining an ``lmfit`` model is as follows:
             fmin = f.min()
             fmax = f.max()
             f_0_guess = f[argmin_s21]  # guess that the resonance is the lowest point
-            Q_min = 0.1 * (f_0_guess/(fmax-fmin))  # assume the user isn't trying to fit just a small part of a resonance curve.
+            Q_min = 0.1 * (f_0_guess/(fmax-fmin))  # assume the user isn't trying to fit just a small part of a resonance curve
             delta_f = np.diff(f)  # assume f is sorted
             min_delta_f = delta_f[delta_f > 0].min()
             Q_max = f_0_guess/min_delta_f  # assume data actually samples the resonance reasonably
             Q_guess = np.sqrt(Q_min*Q_max)  # geometric mean, why not?
             Q_e_real_guess = Q_guess/(1-np.abs(data[argmin_s21]))
             if verbose:
-                print("fmin=", fmin, "fmax=", fmax, "f_0_guess=", f_0_guess)
-                print("Qmin=", Q_min, "Q_max=", Q_max, "Q_guess=", Q_guess, "Q_e_real_guess=", Q_e_real_guess)
+                print(f"fmin={fmin}, fmax={fmax}, f_0_guess={f_0_guess}")
+                print(f"Qmin={Q_min}, Q_max={Q_max}, Q_guess={Q_guess}, Q_e_real_guess={Q_e_real_guess}")
             params = self.make_params(Q=Q_guess, Q_e_real=Q_e_real_guess, Q_e_imag=0, f_0=f_0_guess)
-            params['%sQ' % self.prefix].set(min=Q_min, max=Q_max)
-            params['%sf_0' % self.prefix].set(min=fmin, max=fmax)
+            params[f'{self.prefix}Q'].set(min=Q_min, max=Q_max)
+            params[f'{self.prefix}f_0'].set(min=fmin, max=fmax)
             return lmfit.models.update_param_vals(params, self.prefix, **kwargs)
 
 
@@ -125,14 +124,13 @@ The standard practice of defining an ``lmfit`` model is as follows:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-75
+.. GENERATED FROM PYTHON SOURCE LINES 73-74
 
 Now let's use the model to generate some fake data:
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-91
+.. GENERATED FROM PYTHON SOURCE LINES 74-88
 
 .. code-block:: default
-
 
     resonator = ResonatorModel()
     true_params = resonator.make_params(f_0=100, Q=10000, Q_e_real=9000, Q_e_imag=-9000)
@@ -143,7 +141,6 @@ Now let's use the model to generate some fake data:
     np.random.seed(123)
     measured_s21 = true_s21 + noise_scale*(np.random.randn(100) + 1j*np.random.randn(100))
 
-    plt.figure()
     plt.plot(f, 20*np.log10(np.abs(measured_s21)))
     plt.ylabel('|S21| (dB)')
     plt.xlabel('MHz')
@@ -152,22 +149,22 @@ Now let's use the model to generate some fake data:
 
 
 
-.. image:: /examples/images/sphx_glr_example_complex_resonator_model_001.png
-    :alt: simulated measurement
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_complex_resonator_model_001.png
+   :alt: simulated measurement
+   :srcset: /examples/images/sphx_glr_example_complex_resonator_model_001.png, /examples/images/sphx_glr_example_complex_resonator_model_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-93
+.. GENERATED FROM PYTHON SOURCE LINES 89-90
 
-Try out the guess method we added:
+Try out the ``guess`` method we added:
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-96
+.. GENERATED FROM PYTHON SOURCE LINES 90-92
 
 .. code-block:: default
-
 
     guess = resonator.guess(measured_s21, f=f, verbose=True)
 
@@ -181,20 +178,19 @@ Try out the guess method we added:
 
  .. code-block:: none
 
-    fmin= 99.95 fmax= 100.05 f_0_guess= 100.00353535353536
-    Qmin= 100.00353535354105 Q_max= 99003.50000055433 Q_guess= 3146.537781821432 Q_e_real_guess= 5082.2474265369565
+    fmin=99.95, fmax=100.05, f_0_guess=100.00353535353536
+    Qmin=100.00353535354105, Q_max=99003.50000055433, Q_guess=3146.537781821432, Q_e_real_guess=5082.2474265369565
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 97-98
+.. GENERATED FROM PYTHON SOURCE LINES 93-94
 
-And now fit the data using the guess as a starting point:
+And now fit the data using the ``guess``-ed values as a starting point:
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-104
+.. GENERATED FROM PYTHON SOURCE LINES 94-99
 
 .. code-block:: default
-
 
     result = resonator.fit(measured_s21, params=guess, f=f, verbose=True)
 
@@ -224,9 +220,9 @@ And now fit the data using the guess as a starting point:
         Bayesian info crit = -1530.70099
     [[Variables]]
         f_0:       100.000096 +/- 7.0378e-05 (0.00%) (init = 100.0035)
-        Q:         10059.4926 +/- 142.294761 (1.41%) (init = 3146.538)
-        Q_e_real:  9180.61935 +/- 133.776862 (1.46%) (init = 5082.247)
-        Q_e_imag: -9137.03303 +/- 133.770211 (1.46%) (init = 0)
+        Q:         10059.4926 +/- 142.294763 (1.41%) (init = 3146.538)
+        Q_e_real:  9180.61941 +/- 133.776876 (1.46%) (init = 5082.247)
+        Q_e_imag: -9137.03297 +/- 133.770238 (1.46%) (init = 0)
     [[Correlations]] (unreported correlations are < 0.100)
         C(Q, Q_e_real)   =  0.518
         C(f_0, Q_e_imag) =  0.517
@@ -242,12 +238,12 @@ And now fit the data using the guess as a starting point:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-107
+.. GENERATED FROM PYTHON SOURCE LINES 100-102
 
 Now we'll make some plots of the data and fit. Define a convenience function
 for plotting complex quantities:
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-131
+.. GENERATED FROM PYTHON SOURCE LINES 102-126
 
 .. code-block:: default
 
@@ -262,17 +258,17 @@ for plotting complex quantities:
 
     plt.figure()
     plot_ri(measured_s21, '.')
-    plot_ri(fit_s21, 'r.-', label='best fit')
-    plot_ri(guess_s21, 'k--', label='inital fit')
-    plt.legend(loc='best')
+    plot_ri(fit_s21, '.-', label='best fit')
+    plot_ri(guess_s21, '--', label='initial fit')
+    plt.legend()
     plt.xlabel('Re(S21)')
     plt.ylabel('Im(S21)')
 
     plt.figure()
     plt.plot(f, 20*np.log10(np.abs(measured_s21)), '.')
-    plt.plot(f, 20*np.log10(np.abs(fit_s21)), 'r.-', label='best fit')
-    plt.plot(f, 20*np.log10(np.abs(guess_s21)), 'k--', label='initial fit')
-    plt.legend(loc='best')
+    plt.plot(f, 20*np.log10(np.abs(fit_s21)), '.-', label='best fit')
+    plt.plot(f, 20*np.log10(np.abs(guess_s21)), '--', label='initial fit')
+    plt.legend()
     plt.ylabel('|S21| (dB)')
     plt.xlabel('MHz')
 
@@ -283,15 +279,17 @@ for plotting complex quantities:
 
     *
 
-      .. image:: /examples/images/sphx_glr_example_complex_resonator_model_002.png
-          :alt: example complex resonator model
-          :class: sphx-glr-multi-img
+      .. image-sg:: /examples/images/sphx_glr_example_complex_resonator_model_002.png
+         :alt: example complex resonator model
+         :srcset: /examples/images/sphx_glr_example_complex_resonator_model_002.png, /examples/images/sphx_glr_example_complex_resonator_model_002_3_0x.png 3.0x
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /examples/images/sphx_glr_example_complex_resonator_model_003.png
-          :alt: example complex resonator model
-          :class: sphx-glr-multi-img
+      .. image-sg:: /examples/images/sphx_glr_example_complex_resonator_model_003.png
+         :alt: example complex resonator model
+         :srcset: /examples/images/sphx_glr_example_complex_resonator_model_003.png, /examples/images/sphx_glr_example_complex_resonator_model_003_3_0x.png 3.0x
+         :class: sphx-glr-multi-img
 
 
 
@@ -300,7 +298,7 @@ for plotting complex quantities:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.781 seconds)
+   **Total running time of the script:** ( 0 minutes  0.583 seconds)
 
 
 .. _sphx_glr_download_examples_example_complex_resonator_model.py:

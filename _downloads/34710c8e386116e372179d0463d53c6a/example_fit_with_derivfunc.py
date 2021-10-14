@@ -38,44 +38,39 @@ params.add('c', value=10)
 a, b, c = 2.5, 1.3, 0.8
 x = np.linspace(0, 4, 50)
 y = f([a, b, c], x)
+np.random.seed(2021)
 data = y + 0.15*np.random.normal(size=x.size)
 
-# fit without analytic derivative
+###############################################################################
+# Fit without analytic derivative:
 min1 = Minimizer(func, params, fcn_args=(x,), fcn_kws={'data': data})
 out1 = min1.leastsq()
 fit1 = func(out1.params, x)
 
-# fit with analytic derivative
+###############################################################################
+# Fit with analytic derivative:
 min2 = Minimizer(func, params, fcn_args=(x,), fcn_kws={'data': data})
 out2 = min2.leastsq(Dfun=dfunc, col_deriv=1)
 fit2 = func(out2.params, x)
 
 ###############################################################################
 # Comparison of fit to exponential decay with/without analytical derivatives
-# to model = a*exp(-b*x) + c
-print('''
-"true" parameters are: a = %.3f, b = %.3f, c = %.3f
-
-==============================================
-Statistic/Parameter|   Without   | With      |
-----------------------------------------------
-N Function Calls   |   %3i       |   %3i     |
-Chi-square         |   %.4f    |   %.4f  |
-   a               |   %.4f    |   %.4f  |
-   b               |   %.4f    |   %.4f  |
-   c               |   %.4f    |   %.4f  |
-----------------------------------------------
-''' % (a, b, c,
-       out1.nfev, out2.nfev,
-       out1.chisqr, out2.chisqr,
-       out1.params['a'], out2.params['a'],
-       out1.params['b'], out2.params['b'],
-       out1.params['c'], out2.params['c']))
+# to model = a*exp(-b*x) + c:
+print(f'"true" parameters are: a = {a:.3f}, b = {b:.3f}, c = {c:.3f}\n\n'
+      '|=========================================\n'
+      '| Statistic/Parameter | Without | With   |\n'
+      '|-----------------------------------------\n'
+      f'|  N Function Calls   | {out1.nfev:d}      | {out2.nfev:d}     |\n'
+      f'|     Chi-square      | {out1.chisqr:.4f}  | {out2.chisqr:.4f} |\n'
+      f"|         a           | {out1.params['a'].value:.4f}  | {out2.params['a'].value:.4f} |\n"
+      f"|         b           | {out1.params['b'].value:.4f}  | {out2.params['b'].value:.4f} |\n"
+      f"|         c           | {out1.params['c'].value:.4f}  | {out2.params['c'].value:.4f} |\n"
+      '------------------------------------------')
 
 ###############################################################################
 # and the best-fit to the synthetic data (with added noise) is the same for
 # both methods:
-plt.plot(x, data, 'ro')
-plt.plot(x, fit1, 'b')
-plt.plot(x, fit2, 'k')
-plt.show()
+plt.plot(x, data, 'o', label='data')
+plt.plot(x, fit1, label='with analytical derivative')
+plt.plot(x, fit2, '--', label='without analytical derivative')
+plt.legend()

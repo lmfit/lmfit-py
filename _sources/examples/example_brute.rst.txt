@@ -58,7 +58,7 @@ Let's start with the example given in the documentation of SciPy:
 "We illustrate the use of brute to seek the global minimum of a function of
 two variables that is given as the sum of a positive-definite quadratic and
 two deep “Gaussian-shaped” craters. Specifically, define the objective
-function f as the sum of three other functions, ``f = f1 + f2 + f3``. We
+function ``f`` as the sum of three other functions, ``f = f1 + f2 + f3``. We
 suppose each of these has a signature ``(z, *params), where z = (x, y)``,
 and params and the functions are as defined below."
 
@@ -182,7 +182,7 @@ Performing the actual grid search is done with:
 
 .. code-block:: default
 
-    grid_x, grid_y = [np.unique(par.ravel()) for par in result.brute_grid]
+    grid_x, grid_y = (np.unique(par.ravel()) for par in result.brute_grid)
     print(grid_x)
 
 
@@ -234,7 +234,7 @@ which the objective function had its minimum value.
 
 .. GENERATED FROM PYTHON SOURCE LINES 109-110
 
-``result.brute_fval`` -- Function value at the point x0.
+``result.brute_fval`` -- Function value at the point ``x0``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 110-112
 
@@ -260,7 +260,7 @@ which the objective function had its minimum value.
 .. GENERATED FROM PYTHON SOURCE LINES 113-115
 
 ``result.brute_grid`` -- Representation of the evaluation grid. It has the
-same length as x0.
+same length as ``x0``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 115-117
 
@@ -300,7 +300,7 @@ same length as x0.
 .. GENERATED FROM PYTHON SOURCE LINES 118-120
 
 ``result.brute_Jout`` -- Function values at each point of the evaluation
-grid, i.e., Jout = func(\*grid).
+grid, i.e., ``Jout = func(*grid)``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 120-122
 
@@ -346,10 +346,10 @@ Example 2: fit of a decaying sine wave
 
 In this example, we will explain some of the options of the algorithm.
 
-We start off by generating some synthetic data with noise for a decaying
-sine wave, define an objective function and create a Parameter set.
+We start off by generating some synthetic data with noise for a decaying sine
+wave, define an objective function, and create/initialize a Parameter set.
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-157
+.. GENERATED FROM PYTHON SOURCE LINES 133-158
 
 .. code-block:: default
 
@@ -357,7 +357,8 @@ sine wave, define an objective function and create a Parameter set.
     np.random.seed(7)
     noise = np.random.normal(size=x.size, scale=0.2)
     data = (5. * np.sin(2*x - 0.1) * np.exp(-x*x*0.025) + noise)
-    plt.plot(x, data, 'b')
+    plt.plot(x, data, 'o')
+    plt.show()
 
 
     def fcn2min(params, x, data):
@@ -380,22 +381,23 @@ sine wave, define an objective function and create a Parameter set.
 
 
 
-.. image:: /examples/images/sphx_glr_example_brute_001.png
-    :alt: example brute
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_brute_001.png
+   :alt: example brute
+   :srcset: /examples/images/sphx_glr_example_brute_001.png, /examples/images/sphx_glr_example_brute_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 158-162
+.. GENERATED FROM PYTHON SOURCE LINES 159-163
 
 In contrast to the implementation in SciPy (as shown in the first example),
 varying parameters do not need to have finite bounds in lmfit. However, in
 that case they **do** need the ``brute_step`` attribute specified, so let's
 do that:
 
-.. GENERATED FROM PYTHON SOURCE LINES 162-166
+.. GENERATED FROM PYTHON SOURCE LINES 163-167
 
 .. code-block:: default
 
@@ -410,12 +412,12 @@ do that:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 167-169
+.. GENERATED FROM PYTHON SOURCE LINES 168-170
 
 Our initial parameter set is now defined as shown below and this will
 determine how the grid is set-up.
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-171
+.. GENERATED FROM PYTHON SOURCE LINES 170-172
 
 .. code-block:: default
 
@@ -440,11 +442,11 @@ determine how the grid is set-up.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 172-173
+.. GENERATED FROM PYTHON SOURCE LINES 173-174
 
-First, we initialize a Minimizer and perform the grid search:
+First, we initialize a ``Minimizer`` and perform the grid search:
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-176
+.. GENERATED FROM PYTHON SOURCE LINES 174-177
 
 .. code-block:: default
 
@@ -458,7 +460,7 @@ First, we initialize a Minimizer and perform the grid search:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 177-186
+.. GENERATED FROM PYTHON SOURCE LINES 178-187
 
 We used two new parameters here: ``Ns`` and ``keep``. The parameter ``Ns``
 determines the \'number of grid points along the axes\' similarly to its usage
@@ -470,16 +472,14 @@ it will dictate how the grid is set-up:
 the grid. The latter scenario that interpolates ``Ns`` points from ``min``
 to ``max`` (inclusive), is here shown for the parameter ``shift``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 186-193
+.. GENERATED FROM PYTHON SOURCE LINES 187-192
 
 .. code-block:: default
 
     par_name = 'shift'
     indx_shift = result_brute.var_names.index(par_name)
     grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
-    print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name,
-                                                                   len(grid_shift),
-                                                                   grid_shift))
+    print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 
 
@@ -502,22 +502,22 @@ to ``max`` (inclusive), is here shown for the parameter ``shift``:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 194-199
+.. GENERATED FROM PYTHON SOURCE LINES 193-198
 
 If finite bounds are not set for a certain parameter then the user **must**
 specify ``brute_step`` - three more scenarios are considered here:
 
-**(2)** lower bound (min) and brute_step are specified:
-range = (min, min + Ns * brute_step, brute_step)
+**(2)** lower bound ``(min``) and ``brute_step`` are specified:
+``range = (min, min + Ns * brute_step, brute_step)``
 
-.. GENERATED FROM PYTHON SOURCE LINES 199-204
+.. GENERATED FROM PYTHON SOURCE LINES 198-203
 
 .. code-block:: default
 
     par_name = 'amp'
     indx_shift = result_brute.var_names.index(par_name)
     grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
-    print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name, len(grid_shift), grid_shift))
+    print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 
 
@@ -537,19 +537,19 @@ range = (min, min + Ns * brute_step, brute_step)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 205-207
+.. GENERATED FROM PYTHON SOURCE LINES 204-206
 
-**(3)** upper bound (max) and brute_step are specified:
-range = (max - Ns * brute_step, max, brute_step)
+**(3)** upper bound (``max``) and ``brute_step`` are specified:
+``range = (max - Ns * brute_step, max, brute_step)``
 
-.. GENERATED FROM PYTHON SOURCE LINES 207-212
+.. GENERATED FROM PYTHON SOURCE LINES 206-211
 
 .. code-block:: default
 
     par_name = 'omega'
     indx_shift = result_brute.var_names.index(par_name)
     grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
-    print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name, len(grid_shift), grid_shift))
+    print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 
 
@@ -570,19 +570,19 @@ range = (max - Ns * brute_step, max, brute_step)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 213-215
+.. GENERATED FROM PYTHON SOURCE LINES 212-214
 
-**(4)** numerical value (value) and brute_step are specified:
-range = (value - (Ns//2) * brute_step, value + (Ns//2) * brute_step, brute_step)
+**(4)** numerical value (``value``) and ``brute_step`` are specified:
+``range = (value - (Ns//2) * brute_step, value + (Ns//2) * brute_step, brute_step)``
 
-.. GENERATED FROM PYTHON SOURCE LINES 215-220
+.. GENERATED FROM PYTHON SOURCE LINES 214-219
 
 .. code-block:: default
 
     par_name = 'decay'
     indx_shift = result_brute.var_names.index(par_name)
     grid_shift = np.unique(result_brute.brute_grid[indx_shift].ravel())
-    print("parameter = {}\nnumber of steps = {}\ngrid = {}".format(par_name, len(grid_shift), grid_shift))
+    print(f"parameter = {par_name}\nnumber of steps = {len(grid_shift)}\ngrid = {grid_shift}")
 
 
 
@@ -606,26 +606,20 @@ range = (value - (Ns//2) * brute_step, value + (Ns//2) * brute_step, brute_step)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-224
+.. GENERATED FROM PYTHON SOURCE LINES 220-223
 
 The ``MinimizerResult`` contains all the usual best-fit parameters and
 fitting statistics. For example, the optimal solution from the grid search
 is given below together with a plot:
 
-.. GENERATED FROM PYTHON SOURCE LINES 224-228
+.. GENERATED FROM PYTHON SOURCE LINES 223-225
 
 .. code-block:: default
 
     print(fit_report(result_brute))
-    plt.plot(x, data, 'b')
-    plt.plot(x, data + fcn2min(result_brute.params, x, data), 'r--')
 
 
 
-
-.. image:: /examples/images/sphx_glr_example_brute_002.png
-    :alt: example brute
-    :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -650,11 +644,30 @@ is given below together with a plot:
         shift: -0.13089969 (init = 0)
         omega:  2.00000000 (init = 3)
 
-    [<matplotlib.lines.Line2D object at 0x1243d8070>]
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 229-251
+.. GENERATED FROM PYTHON SOURCE LINES 226-230
+
+.. code-block:: default
+
+    plt.plot(x, data, 'o')
+    plt.plot(x, data + fcn2min(result_brute.params, x, data), '--')
+    plt.show()
+
+
+
+
+.. image-sg:: /examples/images/sphx_glr_example_brute_002.png
+   :alt: example brute
+   :srcset: /examples/images/sphx_glr_example_brute_002.png, /examples/images/sphx_glr_example_brute_002_3_0x.png 3.0x
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 231-253
 
 We can see that this fit is already very good, which is what we should expect
 since our ``brute`` force grid is sampled rather finely and encompasses the
@@ -663,12 +676,12 @@ since our ``brute`` force grid is sampled rather finely and encompasses the
 In a more realistic, complicated example the ``brute`` method will be used
 to get reasonable values for the parameters and perform another minimization
 (e.g., using ``leastsq``) using those as starting values. That is where the
-`keep`` parameter comes into play: it determines the "number of best
+``keep`` parameter comes into play: it determines the "number of best
 candidates from the brute force method that are stored in the ``candidates``
 attribute". In the example above we store the best-ranking 25 solutions (the
 default value is ``50`` and storing all the grid points can be accomplished
 by choosing ``all``). The ``candidates`` attribute contains the parameters
-and ``chisqr`` from the brute force method as a namedtuple,
+and ``chisqr`` from the brute force method as a ``namedtuple``,
 ``(‘Candidate’, [‘params’, ‘score’])``, sorted on the (lowest) ``chisqr``
 value. To access the values for a particular candidate one can use
 ``result.candidate[#].params`` or ``result.candidate[#].score``, where a
@@ -679,7 +692,7 @@ when no number is specified.
 The optimal fit is, as usual, stored in the ``MinimizerResult.params``
 attribute and is, therefore, identical to ``result_brute.show_candidates(1)``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 251-253
+.. GENERATED FROM PYTHON SOURCE LINES 253-255
 
 .. code-block:: default
 
@@ -706,12 +719,12 @@ attribute and is, therefore, identical to ``result_brute.show_candidates(1)``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 254-256
+.. GENERATED FROM PYTHON SOURCE LINES 256-258
 
 In this case, the next-best scoring candidate has already a ``chisqr`` that
 increased quite a bit:
 
-.. GENERATED FROM PYTHON SOURCE LINES 256-258
+.. GENERATED FROM PYTHON SOURCE LINES 258-260
 
 .. code-block:: default
 
@@ -738,7 +751,7 @@ increased quite a bit:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 259-265
+.. GENERATED FROM PYTHON SOURCE LINES 261-267
 
 and is, therefore, probably not so likely... However, as said above, in most
 cases you'll want to do another minimization using the solutions from the
@@ -747,7 +760,7 @@ shown in the code below, where we now perform a ``leastsq`` minimization
 starting from the top-25 solutions and accept the solution if the ``chisqr``
 is lower than the previously 'optimal' solution:
 
-.. GENERATED FROM PYTHON SOURCE LINES 265-272
+.. GENERATED FROM PYTHON SOURCE LINES 267-274
 
 .. code-block:: default
 
@@ -765,12 +778,12 @@ is lower than the previously 'optimal' solution:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 273-275
+.. GENERATED FROM PYTHON SOURCE LINES 275-277
 
 From the ``leastsq`` minimization we obtain the following parameters for the
 most optimal result:
 
-.. GENERATED FROM PYTHON SOURCE LINES 275-277
+.. GENERATED FROM PYTHON SOURCE LINES 277-279
 
 .. code-block:: default
 
@@ -808,20 +821,20 @@ most optimal result:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 278-281
+.. GENERATED FROM PYTHON SOURCE LINES 280-283
 
 As expected the parameters have not changed significantly as they were
 already very close to the "real" values, which can also be appreciated from
 the plots below.
 
-.. GENERATED FROM PYTHON SOURCE LINES 281-289
+.. GENERATED FROM PYTHON SOURCE LINES 283-291
 
 .. code-block:: default
 
-    plt.plot(x, data, 'b')
-    plt.plot(x, data + fcn2min(result_brute.params, x, data), 'r--',
+    plt.plot(x, data, 'o')
+    plt.plot(x, data + fcn2min(result_brute.params, x, data), '-',
              label='brute')
-    plt.plot(x, data + fcn2min(best_result.params, x, data), 'g--',
+    plt.plot(x, data + fcn2min(best_result.params, x, data), '--',
              label='brute followed by leastsq')
     plt.legend()
 
@@ -829,21 +842,22 @@ the plots below.
 
 
 
-.. image:: /examples/images/sphx_glr_example_brute_003.png
-    :alt: example brute
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_brute_003.png
+   :alt: example brute
+   :srcset: /examples/images/sphx_glr_example_brute_003.png, /examples/images/sphx_glr_example_brute_003_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 290-293
+.. GENERATED FROM PYTHON SOURCE LINES 292-295
 
 Finally, the results from the ``brute`` force grid-search can be visualized
 using the rather lengthy Python function below (which might get incorporated
 in lmfit at some point).
 
-.. GENERATED FROM PYTHON SOURCE LINES 293-396
+.. GENERATED FROM PYTHON SOURCE LINES 295-398
 
 .. code-block:: default
 
@@ -895,7 +909,7 @@ in lmfit at some point).
                     if i == 0:
                         axes[0, 0].axis('off')
                     ax = axes[i, j+1]
-                    red_axis = tuple([a for a in range(npars) if a != i])
+                    red_axis = tuple(a for a in range(npars) if a != i)
                     ax.plot(np.unique(result.brute_grid[i]),
                             np.minimum.reduce(result.brute_Jout, axis=red_axis),
                             'o', ms=3)
@@ -909,7 +923,7 @@ in lmfit at some point).
                 # parameter vs chi2 profile on the left
                 elif j == 0 and i > 0:
                     ax = axes[i, j]
-                    red_axis = tuple([a for a in range(npars) if a != i])
+                    red_axis = tuple(a for a in range(npars) if a != i)
                     ax.plot(np.minimum.reduce(result.brute_Jout, axis=red_axis),
                             np.unique(result.brute_grid[i]), 'o', ms=3)
                     ax.invert_xaxis()
@@ -924,7 +938,7 @@ in lmfit at some point).
                 # contour plots for all combinations of two parameters
                 elif j > i:
                     ax = axes[j, i+1]
-                    red_axis = tuple([a for a in range(npars) if a not in (i, j)])
+                    red_axis = tuple(a for a in range(npars) if a not in (i, j))
                     X, Y = np.meshgrid(np.unique(result.brute_grid[i]),
                                        np.unique(result.brute_grid[j]))
                     lvls1 = np.linspace(result.brute_Jout.min(),
@@ -957,11 +971,11 @@ in lmfit at some point).
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 397-398
+.. GENERATED FROM PYTHON SOURCE LINES 399-400
 
 and finally, to generated the figure:
 
-.. GENERATED FROM PYTHON SOURCE LINES 398-399
+.. GENERATED FROM PYTHON SOURCE LINES 400-401
 
 .. code-block:: default
 
@@ -969,9 +983,10 @@ and finally, to generated the figure:
 
 
 
-.. image:: /examples/images/sphx_glr_example_brute_004.png
-    :alt: example brute
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_brute_004.png
+   :alt: example brute
+   :srcset: /examples/images/sphx_glr_example_brute_004.png, /examples/images/sphx_glr_example_brute_004_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
@@ -980,7 +995,7 @@ and finally, to generated the figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 1 minutes  8.961 seconds)
+   **Total running time of the script:** ( 0 minutes  22.732 seconds)
 
 
 .. _sphx_glr_download_examples_example_brute.py:

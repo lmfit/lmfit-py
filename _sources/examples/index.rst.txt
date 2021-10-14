@@ -82,7 +82,7 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the &quot;leastsq&quot; and &quot;differential_evolution&quot; algorithms on a fairly simple ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example compares the leastsq and differential_evolution algorithms on a fairly simple prob...">
 
 .. only:: html
 
@@ -208,27 +208,6 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Specifying an analytical function to calculate the Jacobian can speed-up the fitting procedure.">
-
-.. only:: html
-
- .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_derivfunc_thumb.png
-     :alt: Fit Specifying a Function to Compute the Jacobian
-
-     :ref:`sphx_glr_examples_example_fit_with_derivfunc.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/example_fit_with_derivfunc
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows a simple example of using the lmfit.Model class. For more information pleas...">
 
 .. only:: html
@@ -247,6 +226,27 @@ below currently do *not* follow these guidelines yet.
    :hidden:
 
    /examples/example_Model_interface
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Specifying an analytical function to calculate the Jacobian can speed-up the fitting procedure.">
+
+.. only:: html
+
+ .. figure:: /examples/images/thumb/sphx_glr_example_fit_with_derivfunc_thumb.png
+     :alt: Fit Specifying a Function to Compute the Jacobian
+
+     :ref:`sphx_glr_examples_example_fit_with_derivfunc.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_fit_with_derivfunc
 
 .. raw:: html
 
@@ -292,27 +292,6 @@ below currently do *not* follow these guidelines yet.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Calculate Confidence Intervals">
-
-.. only:: html
-
- .. figure:: /examples/images/thumb/sphx_glr_example_confidence_interval_thumb.png
-     :alt: Calculate Confidence Intervals
-
-     :ref:`sphx_glr_examples_example_confidence_interval.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /examples/example_confidence_interval
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="This notebook shows how to fit the parameters of a complex resonator, using lmfit.Model and def...">
 
 .. only:: html
@@ -352,6 +331,27 @@ below currently do *not* follow these guidelines yet.
    :hidden:
 
    /examples/lmfit_emcee_model_selection
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Calculate Confidence Intervals">
+
+.. only:: html
+
+ .. figure:: /examples/images/thumb/sphx_glr_example_confidence_interval_thumb.png
+     :alt: Calculate Confidence Intervals
+
+     :ref:`sphx_glr_examples_example_confidence_interval.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/example_confidence_interval
 
 .. raw:: html
 

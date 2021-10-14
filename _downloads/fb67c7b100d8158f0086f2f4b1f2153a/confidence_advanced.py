@@ -39,8 +39,9 @@ lmfit.printfuncs.report_ci(ci)
 
 # plot data and best fit
 plt.figure()
-plt.plot(x, y, 'b')
-plt.plot(x, residual(out2.params) + y, 'r-')
+plt.plot(x, y)
+plt.plot(x, residual(out2.params) + y, '-')
+plt.show()
 
 # plot confidence intervals (a1 vs t2 and a2 vs t2)
 fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
@@ -55,6 +56,7 @@ ctp = axes[1].contourf(cx, cy, grid, np.linspace(0, 1, 11))
 fig.colorbar(ctp, ax=axes[1])
 axes[1].set_xlabel('a2')
 axes[1].set_ylabel('t2')
+plt.show()
 
 # plot dependence between two parameters
 fig, axes = plt.subplots(1, 2, figsize=(12.8, 4.8))
@@ -68,6 +70,5 @@ axes[0].set_ylabel('t2')
 axes[1].scatter(cx2, cy2, c=prob2, s=30)
 axes[1].set_xlabel('t2')
 axes[1].set_ylabel('a1')
-
 plt.show()
 # <end examples/doc_confidence_advanced.py>

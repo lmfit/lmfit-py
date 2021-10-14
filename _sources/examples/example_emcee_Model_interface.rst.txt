@@ -41,7 +41,7 @@ Emcee and the Model Interface
 
 .. GENERATED FROM PYTHON SOURCE LINES 14-15
 
-Set up a double-exponential function and create a Model
+Set up a double-exponential function and create a Model:
 
 .. GENERATED FROM PYTHON SOURCE LINES 15-21
 
@@ -62,7 +62,7 @@ Set up a double-exponential function and create a Model
 
 .. GENERATED FROM PYTHON SOURCE LINES 22-23
 
-Generate some fake data from the model with added noise
+Generate some fake data from the model with added noise:
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-28
 
@@ -82,7 +82,7 @@ Generate some fake data from the model with added noise
 
 .. GENERATED FROM PYTHON SOURCE LINES 29-30
 
-Create model parameters and give them initial values
+Create model parameters and give them initial values:
 
 .. GENERATED FROM PYTHON SOURCE LINES 30-32
 
@@ -113,9 +113,10 @@ Fit the model using a traditional minimizer, and show the output:
 
 
 
-.. image:: /examples/images/sphx_glr_example_emcee_Model_interface_001.png
-    :alt: Model(double_exp)
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_emcee_Model_interface_001.png
+   :alt: Model(double_exp)
+   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_001.png, /examples/images/sphx_glr_example_emcee_Model_interface_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -135,9 +136,9 @@ Fit the model using a traditional minimizer, and show the output:
         Bayesian info crit = -1146.45423
     [[Variables]]
         a1:  2.98623689 +/- 0.15010519 (5.03%) (init = 4)
-        t1:  1.30993186 +/- 0.13449656 (10.27%) (init = 3)
-        a2: -4.33525597 +/- 0.11765824 (2.71%) (init = 4)
-        t2:  11.8240752 +/- 0.47172610 (3.99%) (init = 3)
+        t1:  1.30993186 +/- 0.13449653 (10.27%) (init = 3)
+        a2: -4.33525597 +/- 0.11765821 (2.71%) (init = 4)
+        t2:  11.8240752 +/- 0.47172598 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.100)
         C(a2, t2) =  0.988
         C(t1, a2) = -0.928
@@ -150,20 +151,20 @@ Fit the model using a traditional minimizer, and show the output:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-46
+.. GENERATED FROM PYTHON SOURCE LINES 40-45
 
-Calculate parameter covariance using emcee:
+Calculate parameter covariance using ``emcee``:
 
  - start the walkers out at the best-fit values
- - set is_weighted to False to estimate the noise weights
+ - set ``is_weighted`` to ``False`` to estimate the noise weights
  - set some sensible priors on the uncertainty to keep the MCMC in check
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 46-51
+.. GENERATED FROM PYTHON SOURCE LINES 45-51
 
 .. code-block:: default
 
-    emcee_kws = dict(steps=1000, burn=300, thin=20, is_weighted=False,
+
+    emcee_kws = dict(steps=5000, burn=500, thin=20, is_weighted=False,
                      progress=False)
     emcee_params = result.params.copy()
     emcee_params.add('__lnsigma', value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
@@ -179,25 +180,28 @@ Calculate parameter covariance using emcee:
 
 run the MCMC algorithm and show the results:
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-62
+.. GENERATED FROM PYTHON SOURCE LINES 53-56
 
 .. code-block:: default
 
     result_emcee = model.fit(data=y, x=x, params=emcee_params, method='emcee',
                              nan_policy='omit', fit_kws=emcee_kws)
 
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 57-59
+
+.. code-block:: default
+
     lmfit.report_fit(result_emcee)
 
-    ax = plt.plot(x, model.eval(params=result.params, x=x), label='Nelder', zorder=100)
-    result_emcee.plot_fit(ax=ax, data_kws=dict(color='gray', markersize=2))
-    plt.show()
 
 
-
-
-.. image:: /examples/images/sphx_glr_example_emcee_Model_interface_002.png
-    :alt: Model(double_exp)
-    :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -206,64 +210,81 @@ run the MCMC algorithm and show the results:
 
  .. code-block:: none
 
-    The chain is shorter than 50 times the integrated autocorrelation time for 5 parameter(s). Use this estimate with caution and run a longer chain!
-    N/50 = 20;
-    tau: [42.15512406 49.13844172 47.97313337 48.69759859 39.90675732]
     [[Fit Statistics]]
         # fitting method   = emcee
-        # function evals   = 100000
+        # function evals   = 500000
         # data points      = 250
         # variables        = 5
-        chi-square         = 245.611753
-        reduced chi-square = 1.00249695
-        Akaike info crit   = 5.57278242
-        Bayesian info crit = 23.1800870
+        chi-square         = 245.221790
+        reduced chi-square = 1.00090526
+        Akaike info crit   = 5.17553688
+        Bayesian info crit = 22.7828415
     [[Variables]]
-        a1:         2.99014520 +/- 0.15080185 (5.04%) (init = 2.986237)
-        t1:         1.32465508 +/- 0.14246577 (10.75%) (init = 1.309932)
-        a2:        -4.34626582 +/- 0.12518881 (2.88%) (init = -4.335256)
-        t2:         11.7839459 +/- 0.48230303 (4.09%) (init = 11.82408)
-        __lnsigma: -2.32797933 +/- 0.04489245 (1.93%) (init = -2.302585)
+        a1:         2.99546858 +/- 0.14834594 (4.95%) (init = 2.986237)
+        t1:         1.32127391 +/- 0.14079400 (10.66%) (init = 1.309932)
+        a2:        -4.34376940 +/- 0.12389335 (2.85%) (init = -4.335256)
+        t2:         11.7937607 +/- 0.48879633 (4.14%) (init = 11.82408)
+        __lnsigma: -2.32712371 +/- 0.04514314 (1.94%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
         C(a2, t2) =  0.981
-        C(t1, a2) = -0.939
-        C(t1, t2) = -0.898
-        C(a1, t1) = -0.540
-        C(a1, a2) =  0.257
-        C(a1, t2) =  0.225
+        C(t1, a2) = -0.937
+        C(t1, t2) = -0.895
+        C(a1, t1) = -0.515
+        C(a1, a2) =  0.220
+        C(a1, t2) =  0.187
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-64
-
-check the acceptance fraction to see whether emcee performed well
-
-.. GENERATED FROM PYTHON SOURCE LINES 64-69
+.. GENERATED FROM PYTHON SOURCE LINES 60-64
 
 .. code-block:: default
 
-    plt.plot(result_emcee.acceptance_fraction)
+    result_emcee.plot_fit()
+    plt.plot(x, model.eval(params=result.params, x=x), '--', label='Nelder')
+    plt.legend()
+
+
+
+
+.. image-sg:: /examples/images/sphx_glr_example_emcee_Model_interface_002.png
+   :alt: Model(double_exp)
+   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_002.png, /examples/images/sphx_glr_example_emcee_Model_interface_002_3_0x.png 3.0x
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 65-66
+
+Check the acceptance fraction to see whether ``emcee`` performed well:
+
+.. GENERATED FROM PYTHON SOURCE LINES 66-70
+
+.. code-block:: default
+
+    plt.plot(result_emcee.acceptance_fraction, 'o')
     plt.xlabel('walker')
     plt.ylabel('acceptance fraction')
-    plt.show()
 
 
 
 
-.. image:: /examples/images/sphx_glr_example_emcee_Model_interface_003.png
-    :alt: example emcee Model interface
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_emcee_Model_interface_003.png
+   :alt: example emcee Model interface
+   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_003.png, /examples/images/sphx_glr_example_emcee_Model_interface_003_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-71
+.. GENERATED FROM PYTHON SOURCE LINES 71-72
 
-try to compute the autocorrelation time
+Try to compute the autocorrelation time:
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-78
+.. GENERATED FROM PYTHON SOURCE LINES 72-78
 
 .. code-block:: default
 
@@ -271,19 +292,31 @@ try to compute the autocorrelation time
         print("Autocorrelation time for the parameters:")
         print("----------------------------------------")
         for i, p in enumerate(result.params):
-            print(p, result.acor[i])
+            print(f'{p} = {result_emcee.acor[i]:.3f}')
 
 
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    Autocorrelation time for the parameters:
+    ----------------------------------------
+    a1 = 61.334
+    t1 = 85.867
+    a2 = 86.046
+    t2 = 84.745
 
 
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 79-80
 
-Plot the parameter covariances returned by emcee using corner
+Plot the parameter covariances returned by ``emcee`` using ``corner``:
 
 .. GENERATED FROM PYTHON SOURCE LINES 80-83
 
@@ -295,15 +328,16 @@ Plot the parameter covariances returned by emcee using corner
 
 
 
-.. image:: /examples/images/sphx_glr_example_emcee_Model_interface_004.png
-    :alt: example emcee Model interface
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_emcee_Model_interface_004.png
+   :alt: example emcee Model interface
+   :srcset: /examples/images/sphx_glr_example_emcee_Model_interface_004.png, /examples/images/sphx_glr_example_emcee_Model_interface_004_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 85-101
+.. GENERATED FROM PYTHON SOURCE LINES 84-88
 
 .. code-block:: default
 
@@ -311,18 +345,6 @@ Plot the parameter covariances returned by emcee using corner
     print('--------------------------------------------')
     lmfit.report_fit(result_emcee.params)
 
-    # find the maximum likelihood solution
-    highest_prob = np.argmax(result_emcee.lnprob)
-    hp_loc = np.unravel_index(highest_prob, result_emcee.lnprob.shape)
-    mle_soln = result_emcee.chain[hp_loc]
-    print("\nMaximum likelihood Estimation")
-    print('-----------------------------')
-    for ix, param in enumerate(emcee_params):
-        print(param + ': ' + str(mle_soln[ix]))
-
-    quantiles = np.percentile(result_emcee.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
-    print("\n\n1 sigma spread", 0.5 * (quantiles[3] - quantiles[1]))
-    print("2 sigma spread", 0.5 * (quantiles[4] - quantiles[0]))
 
 
 
@@ -337,30 +359,63 @@ Plot the parameter covariances returned by emcee using corner
     median of posterior probability distribution
     --------------------------------------------
     [[Variables]]
-        a1:         2.99014520 +/- 0.15080185 (5.04%) (init = 2.986237)
-        t1:         1.32465508 +/- 0.14246577 (10.75%) (init = 1.309932)
-        a2:        -4.34626582 +/- 0.12518881 (2.88%) (init = -4.335256)
-        t2:         11.7839459 +/- 0.48230303 (4.09%) (init = 11.82408)
-        __lnsigma: -2.32797933 +/- 0.04489245 (1.93%) (init = -2.302585)
+        a1:         2.99546858 +/- 0.14834594 (4.95%) (init = 2.986237)
+        t1:         1.32127391 +/- 0.14079400 (10.66%) (init = 1.309932)
+        a2:        -4.34376940 +/- 0.12389335 (2.85%) (init = -4.335256)
+        t2:         11.7937607 +/- 0.48879633 (4.14%) (init = 11.82408)
+        __lnsigma: -2.32712371 +/- 0.04514314 (1.94%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
         C(a2, t2) =  0.981
-        C(t1, a2) = -0.939
-        C(t1, t2) = -0.898
-        C(a1, t1) = -0.540
-        C(a1, a2) =  0.257
-        C(a1, t2) =  0.225
-
-    Maximum likelihood Estimation
-    -----------------------------
-    a1: 2.9704980735108304
-    t1: 1.3209758260802968
-    a2: -4.338098241979906
-    t2: 11.838963811736026
-    __lnsigma: -2.3403986558500596
+        C(t1, a2) = -0.937
+        C(t1, t2) = -0.895
+        C(a1, t1) = -0.515
+        C(a1, a2) =  0.220
+        C(a1, t2) =  0.187
 
 
-    1 sigma spread 0.14233438845386792
-    2 sigma spread 0.2943016210688928
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 89-90
+
+Find the maximum likelihood solution:
+
+.. GENERATED FROM PYTHON SOURCE LINES 90-101
+
+.. code-block:: default
+
+    highest_prob = np.argmax(result_emcee.lnprob)
+    hp_loc = np.unravel_index(highest_prob, result_emcee.lnprob.shape)
+    mle_soln = result_emcee.chain[hp_loc]
+    print("\nMaximum Likelihood Estimation (MLE):")
+    print('----------------------------------')
+    for ix, param in enumerate(emcee_params):
+        print(f"{param}: {mle_soln[ix]:.3f}")
+
+    quantiles = np.percentile(result_emcee.flatchain['t1'], [2.28, 15.9, 50, 84.2, 97.7])
+    print(f"\n\n1 sigma spread = {0.5 * (quantiles[3] - quantiles[1]):.3f}")
+    print(f"2 sigma spread = {0.5 * (quantiles[4] - quantiles[0]):.3f}")
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    Maximum Likelihood Estimation (MLE):
+    ----------------------------------
+    a1: 2.971
+    t1: 1.317
+    a2: -4.336
+    t2: 11.815
+    __lnsigma: -2.336
+
+
+    1 sigma spread = 0.141
+    2 sigma spread = 0.291
 
 
 
@@ -368,7 +423,7 @@ Plot the parameter covariances returned by emcee using corner
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  26.500 seconds)
+   **Total running time of the script:** ( 0 minutes  34.517 seconds)
 
 
 .. _sphx_glr_download_examples_example_emcee_Model_interface.py:

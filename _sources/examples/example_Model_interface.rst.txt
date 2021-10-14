@@ -68,11 +68,12 @@ fitting example data to an exponential decay.
 The parameters are in no particular order. We'll need some example data. I
 will use ``N=7`` and ``tau=3``, and add a little noise.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-30
+.. GENERATED FROM PYTHON SOURCE LINES 27-31
 
 .. code-block:: default
 
     t = np.linspace(0, 5, num=1000)
+    np.random.seed(2021)
     data = decay(t, 7, 3) + np.random.randn(t.size)
 
 
@@ -82,11 +83,11 @@ will use ``N=7`` and ``tau=3``, and add a little noise.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 31-32
+.. GENERATED FROM PYTHON SOURCE LINES 32-33
 
 **Simplest Usage**
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-35
+.. GENERATED FROM PYTHON SOURCE LINES 33-36
 
 .. code-block:: default
 
@@ -100,7 +101,7 @@ will use ``N=7`` and ``tau=3``, and add a little noise.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 36-42
+.. GENERATED FROM PYTHON SOURCE LINES 37-43
 
 The Model infers the parameter names by inspecting the arguments of the
 function, ``decay``. Then I passed the independent variable, ``t``, and
@@ -109,7 +110,7 @@ defined, and a least-squared regression is performed.
 
 We can immediately see the best-fit values:
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-44
+.. GENERATED FROM PYTHON SOURCE LINES 43-45
 
 .. code-block:: default
 
@@ -125,16 +126,16 @@ We can immediately see the best-fit values:
 
  .. code-block:: none
 
-    {'N': 6.984064047700289, 'tau': 3.0113542953210715}
+    {'N': 7.146693290745707, 'tau': 2.8980288907359197}
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-46
+.. GENERATED FROM PYTHON SOURCE LINES 46-47
 
 and use these best-fit parameters for plotting with the ``plot`` function:
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-48
+.. GENERATED FROM PYTHON SOURCE LINES 47-49
 
 .. code-block:: default
 
@@ -143,9 +144,10 @@ and use these best-fit parameters for plotting with the ``plot`` function:
 
 
 
-.. image:: /examples/images/sphx_glr_example_Model_interface_001.png
-    :alt: Model(decay)
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_Model_interface_001.png
+   :alt: Model(decay)
+   :srcset: /examples/images/sphx_glr_example_Model_interface_001.png, /examples/images/sphx_glr_example_Model_interface_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
@@ -159,11 +161,11 @@ and use these best-fit parameters for plotting with the ``plot`` function:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-50
+.. GENERATED FROM PYTHON SOURCE LINES 50-51
 
 We can review the best-fit `Parameters` by accessing `result.params`:
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-52
+.. GENERATED FROM PYTHON SOURCE LINES 51-53
 
 .. code-block:: default
 
@@ -180,19 +182,19 @@ We can review the best-fit `Parameters` by accessing `result.params`:
  .. code-block:: none
 
     Name     Value      Min      Max   Stderr     Vary     Expr Brute_Step
-    N       6.984     -inf      inf  0.08845     True     None     None
-    tau     3.011     -inf      inf    0.066     True     None     None
+    N       7.147     -inf      inf   0.0913     True     None     None
+    tau     2.898     -inf      inf  0.06299     True     None     None
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-56
+.. GENERATED FROM PYTHON SOURCE LINES 54-57
 
 More information about the fit is stored in the result, which is an
 ``lmfit.MimimizerResult`` object (see:
 https://lmfit.github.io/lmfit-py/fitting.html#lmfit.minimizer.MinimizerResult)
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-63
+.. GENERATED FROM PYTHON SOURCE LINES 59-64
 
 **Specifying Bounds and Holding Parameters Constant**
 
@@ -200,7 +202,7 @@ Above, the ``Model`` class implicitly builds ``Parameter`` objects from
 keyword arguments of ``fit`` that match the arguments of ``decay``. You can
 build the ``Parameter`` objects explicitly; the following is equivalent.
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-68
+.. GENERATED FROM PYTHON SOURCE LINES 64-69
 
 .. code-block:: default
 
@@ -220,20 +222,20 @@ build the ``Parameter`` objects explicitly; the following is equivalent.
  .. code-block:: none
 
     [[Variables]]
-        N:    6.98406405 +/- 0.08844670 (1.27%) (init = 10)
-        tau:  3.01135430 +/- 0.06600023 (2.19%) (init = 1)
+        N:    7.14669329 +/- 0.09130442 (1.28%) (init = 10)
+        tau:  2.89802889 +/- 0.06299097 (2.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.756
+        C(N, tau) = -0.753
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 69-71
+.. GENERATED FROM PYTHON SOURCE LINES 70-72
 
 By building ``Parameter`` objects explicitly, you can specify bounds
 (``min``, ``max``) and set parameters constant (``vary=False``).
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-76
+.. GENERATED FROM PYTHON SOURCE LINES 72-77
 
 .. code-block:: default
 
@@ -254,12 +256,12 @@ By building ``Parameter`` objects explicitly, you can specify bounds
 
     [[Variables]]
         N:    7 (fixed)
-        tau:  3.00247383 +/- 0.04292226 (1.43%) (init = 1)
+        tau:  2.97663124 +/- 0.04347450 (1.46%) (init = 1)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-82
+.. GENERATED FROM PYTHON SOURCE LINES 78-83
 
 **Defining Parameters in Advance**
 
@@ -267,7 +269,7 @@ Passing parameters to ``fit`` can become unwieldy. As an alternative, you
 can extract the parameters from ``model`` like so, set them individually,
 and pass them to ``fit``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-91
+.. GENERATED FROM PYTHON SOURCE LINES 83-92
 
 .. code-block:: default
 
@@ -291,20 +293,20 @@ and pass them to ``fit``.
  .. code-block:: none
 
     [[Variables]]
-        N:    6.98406394 +/- 0.08844674 (1.27%) (init = 10)
-        tau:  3.01135441 +/- 0.06599962 (2.19%) (init = 1)
+        N:    7.14669328 +/- 0.09130441 (1.28%) (init = 10)
+        tau:  2.89802890 +/- 0.06299102 (2.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.756
+        C(N, tau) = -0.753
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-94
+.. GENERATED FROM PYTHON SOURCE LINES 93-95
 
 Keyword arguments override ``params``, resetting ``value`` and all other
 properties (``min``, ``max``, ``vary``).
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-97
+.. GENERATED FROM PYTHON SOURCE LINES 95-98
 
 .. code-block:: default
 
@@ -322,21 +324,21 @@ properties (``min``, ``max``, ``vary``).
  .. code-block:: none
 
     [[Variables]]
-        N:    6.98406394 +/- 0.08844674 (1.27%) (init = 10)
-        tau:  3.01135441 +/- 0.06599962 (2.19%) (init = 1)
+        N:    7.14669328 +/- 0.09130441 (1.28%) (init = 10)
+        tau:  2.89802890 +/- 0.06299102 (2.17%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.756
+        C(N, tau) = -0.753
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-101
+.. GENERATED FROM PYTHON SOURCE LINES 99-102
 
 The input parameters are not modified by ``fit``. They can be reused,
 retaining the same initial value. If you want to use the result of one fit
 as the initial guess for the next, simply pass ``params=result.params``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 103-110
+.. GENERATED FROM PYTHON SOURCE LINES 104-111
 
 #TODO/FIXME: not sure if there ever way a "helpful exception", but currently
 #it raises a ``ValueError: The input contains nan values``.
@@ -346,7 +348,7 @@ as the initial guess for the next, simply pass ``params=result.params``.
 #All this implicit magic makes it very easy for the user to neglect to set a
 #parameter. The ``fit`` function checks for this and raises a helpful exception.
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-113
+.. GENERATED FROM PYTHON SOURCE LINES 111-114
 
 .. code-block:: default
 
@@ -360,20 +362,20 @@ as the initial guess for the next, simply pass ``params=result.params``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-117
+.. GENERATED FROM PYTHON SOURCE LINES 115-118
 
 #An *extra* parameter that cannot be matched to the model function will
 #throw a ``UserWarning``, but it will not raise, leaving open the possibility
 #of unforeseen extensions calling for some parameters.
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-123
+.. GENERATED FROM PYTHON SOURCE LINES 120-124
 
 *Weighted Fits*
 
 Use the ``sigma`` argument to perform a weighted fit. If you prefer to think
 of the fit in term of ``weights``, ``sigma=1/weights``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 123-127
+.. GENERATED FROM PYTHON SOURCE LINES 124-128
 
 .. code-block:: default
 
@@ -392,15 +394,15 @@ of the fit in term of ``weights``, ``sigma=1/weights``.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.33054986 +/- 0.26968212 (3.68%) (init = 10)
-        tau:  2.84538079 +/- 0.09473421 (3.33%) (init = 1)
+        N:    6.98535246 +/- 0.28002506 (4.01%) (init = 10)
+        tau:  2.97268207 +/- 0.11134751 (3.75%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.929
+        C(N, tau) = -0.931
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 128-133
+.. GENERATED FROM PYTHON SOURCE LINES 129-134
 
 *Handling Missing Data*
 
@@ -408,7 +410,7 @@ By default, attempting to fit data that includes a ``NaN``, which
 conventionally indicates a "missing" observation, raises a lengthy exception.
 You can choose to ``omit`` (i.e., skip over) missing values instead.
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-140
+.. GENERATED FROM PYTHON SOURCE LINES 134-141
 
 .. code-block:: default
 
@@ -430,15 +432,15 @@ You can choose to ``omit`` (i.e., skip over) missing values instead.
  .. code-block:: none
 
     [[Variables]]
-        N:    6.99349787 +/- 0.08886695 (1.27%) (init = 10)
-        tau:  3.00311360 +/- 0.06590577 (2.19%) (init = 1)
+        N:    7.15448808 +/- 0.09181826 (1.28%) (init = 10)
+        tau:  2.89285076 +/- 0.06305979 (2.18%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(N, tau) = -0.757
+        C(N, tau) = -0.754
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-153
+.. GENERATED FROM PYTHON SOURCE LINES 142-154
 
 If you don't want to ignore missing values, you can set the model to raise
 proactively, checking for missing values before attempting the fit.
@@ -453,7 +455,7 @@ raises an exception when present.
 Null-checking  relies on ``pandas.isnull`` if it is available. If pandas
 cannot be imported, it silently falls back on ``numpy.isnan``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 155-166
+.. GENERATED FROM PYTHON SOURCE LINES 156-167
 
 *Data Alignment*
 
@@ -467,7 +469,7 @@ handle pandas objects out of the box, using its data alignment features.
 Here I take just a slice of the ``data`` and fit it to the full ``t``. It is
 automatically aligned to the correct section of ``t`` using Series' index.
 
-.. GENERATED FROM PYTHON SOURCE LINES 166-172
+.. GENERATED FROM PYTHON SOURCE LINES 167-173
 
 .. code-block:: default
 
@@ -488,19 +490,19 @@ automatically aligned to the correct section of ``t`` using Series' index.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.44820825 +/- 0.24899892 (3.34%) (init = 10)
-        tau:  2.80229162 +/- 0.12228516 (4.36%) (init = 1)
+        N:    7.10725874 +/- 0.24259174 (3.41%) (init = 10)
+        tau:  2.92503558 +/- 0.13481757 (4.61%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(N, tau) = -0.932
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-174
+.. GENERATED FROM PYTHON SOURCE LINES 174-175
 
 Data with missing entries and an unequal length still aligns properly.
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-178
+.. GENERATED FROM PYTHON SOURCE LINES 175-179
 
 .. code-block:: default
 
@@ -519,8 +521,8 @@ Data with missing entries and an unequal length still aligns properly.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.46253421 +/- 0.24975620 (3.35%) (init = 10)
-        tau:  2.79210670 +/- 0.12172740 (4.36%) (init = 1)
+        N:    7.11270203 +/- 0.24334999 (3.42%) (init = 10)
+        tau:  2.92065221 +/- 0.13488198 (4.62%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(N, tau) = -0.932
 
@@ -530,7 +532,7 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.700 seconds)
+   **Total running time of the script:** ( 0 minutes  0.384 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:

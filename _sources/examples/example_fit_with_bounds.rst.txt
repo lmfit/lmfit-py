@@ -29,7 +29,7 @@ https://lmfit.github.io/lmfit-py/bounds.html
 The example below shows how to set boundaries using the ``min`` and ``max``
 attributes to fitting parameters.
 
-.. GENERATED FROM PYTHON SOURCE LINES 14-52
+.. GENERATED FROM PYTHON SOURCE LINES 14-20
 
 .. code-block:: default
 
@@ -38,6 +38,21 @@ attributes to fitting parameters.
 
     from lmfit import Parameters, minimize
     from lmfit.printfuncs import report_fit
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 21-22
+
+Define the 'correct' Parameter values and residual function:
+
+.. GENERATED FROM PYTHON SOURCE LINES 22-40
+
+.. code-block:: default
 
     p_true = Parameters()
     p_true.add('amp', value=14.0)
@@ -57,16 +72,46 @@ attributes to fitting parameters.
         return model - data
 
 
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 41-42
+
+Generate synthetic data and initialize fitting Parameters:
+
+.. GENERATED FROM PYTHON SOURCE LINES 42-53
+
+.. code-block:: default
+
     random.seed(0)
     x = linspace(0, 250, 1500)
-    noise = random.normal(scale=2.80, size=x.size)
+    noise = random.normal(scale=2.8, size=x.size)
     data = residual(p_true, x) + noise
 
     fit_params = Parameters()
-    fit_params.add('amp', value=13.0, max=20, min=0.0)
+    fit_params.add('amp', value=13, max=20, min=0)
     fit_params.add('period', value=2, max=10)
-    fit_params.add('shift', value=0.0, max=pi/2., min=-pi/2.)
-    fit_params.add('decay', value=0.02, max=0.10, min=0.00)
+    fit_params.add('shift', value=0, max=pi/2., min=-pi/2.)
+    fit_params.add('decay', value=0.02, max=0.1, min=0)
+
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 54-55
+
+Perform the fit and show the results:
+
+.. GENERATED FROM PYTHON SOURCE LINES 55-58
+
+.. code-block:: default
 
     out = minimize(residual, fit_params, args=(x,), kws={'data': data})
     fit = residual(out.params, x)
@@ -78,16 +123,11 @@ attributes to fitting parameters.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-54
-
-This gives the following fitting results:
-
-.. GENERATED FROM PYTHON SOURCE LINES 54-57
+.. GENERATED FROM PYTHON SOURCE LINES 59-61
 
 .. code-block:: default
 
-
-    report_fit(out, show_correl=True, modelpars=p_true)
+    report_fit(out, modelpars=p_true)
 
 
 
@@ -110,8 +150,8 @@ This gives the following fitting results:
         Bayesian info crit = 3058.44044
     [[Variables]]
         amp:     13.8903938 +/- 0.24412383 (1.76%) (init = 13), model_value = 14
-        period:  5.44026442 +/- 0.01416175 (0.26%) (init = 2), model_value = 5.4321
-        shift:   0.12464470 +/- 0.02414209 (19.37%) (init = 0), model_value = 0.12345
+        period:  5.44026441 +/- 0.01416176 (0.26%) (init = 2), model_value = 5.4321
+        shift:   0.12464469 +/- 0.02414210 (19.37%) (init = 0), model_value = 0.12345
         decay:   0.00996351 +/- 2.0278e-04 (2.04%) (init = 0.02), model_value = 0.01
     [[Correlations]] (unreported correlations are < 0.100)
         C(period, shift) =  0.800
@@ -120,24 +160,20 @@ This gives the following fitting results:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-60
-
-and shows the plot below:
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 60-63
+.. GENERATED FROM PYTHON SOURCE LINES 62-65
 
 .. code-block:: default
 
-    plt.plot(x, data, 'ro')
-    plt.plot(x, fit, 'b')
-    plt.show()
+    plt.plot(x, data, 'o', label='data')
+    plt.plot(x, fit, label='best fit')
+    plt.legend()
 
 
 
-.. image:: /examples/images/sphx_glr_example_fit_with_bounds_001.png
-    :alt: example fit with bounds
-    :class: sphx-glr-single-img
+.. image-sg:: /examples/images/sphx_glr_example_fit_with_bounds_001.png
+   :alt: example fit with bounds
+   :srcset: /examples/images/sphx_glr_example_fit_with_bounds_001.png, /examples/images/sphx_glr_example_fit_with_bounds_001_3_0x.png 3.0x
+   :class: sphx-glr-single-img
 
 
 
@@ -146,7 +182,7 @@ and shows the plot below:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.277 seconds)
+   **Total running time of the script:** ( 0 minutes  0.218 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_bounds.py:
