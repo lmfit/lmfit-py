@@ -14,8 +14,8 @@ consult the `lmfit GitHub repository`_.
 
 .. _whatsnew_103_label:
 
-Version 1.0.3 Release Notes (unreleased)
-========================================
+Version 1.0.3 Release Notes (October 14, 2021)
+==============================================
 
 Potentially breaking change:
 
