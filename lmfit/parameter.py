@@ -2,7 +2,6 @@
 
 from copy import deepcopy
 import json
-import warnings
 
 from asteval import Interpreter, get_ast_names, valid_symbol_name
 from numpy import arcsin, array, cos, inf, isclose, sin, sqrt
@@ -45,14 +44,10 @@ class Parameters(dict):
 
     """
 
-    def __init__(self, asteval=None, usersyms=None):
+    def __init__(self, usersyms=None):
         """
         Arguments
         ---------
-        asteval : :class:`asteval.Interpreter`, optional
-            Instance of the `asteval.Interpreter` to use for constraint
-            expressions. If None (default), a new interpreter will be
-            created. **Warning: deprecated**, use `usersyms` if possible!
         usersyms : dict, optional
             Dictionary of symbols to add to the
             :class:`asteval.Interpreter` (default is None).
@@ -60,15 +55,7 @@ class Parameters(dict):
         """
         super().__init__(self)
 
-        self._asteval = asteval
-        if asteval is None:
-            self._asteval = Interpreter()
-        else:
-            msg = ("The use of the 'asteval' argument for the Parameters class"
-                   " was deprecated in lmfit v0.9.12 and will be removed in a "
-                   "later release. Please use the 'usersyms' argument instead!")
-            warnings.warn(FutureWarning(msg))
-            self._asteval = asteval
+        self._asteval = Interpreter()
 
         _syms = {}
         _syms.update(SCIPY_FUNCTIONS)
@@ -101,7 +88,7 @@ class Parameters(dict):
         all individual Parameter objects are copied.
 
         """
-        _pars = self.__class__(asteval=None)
+        _pars = self.__class__()
 
         # find the symbols that were added by users, not during construction
         unique_symbols = {key: self._asteval.symtable[key]

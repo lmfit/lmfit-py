@@ -4,7 +4,6 @@
 from copy import copy, deepcopy
 import pickle
 
-import asteval
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
@@ -45,21 +44,9 @@ def test_check_ast_errors():
         pars.add('par1', expr='2.0*par2')
 
 
-def test_parameters_init_with_asteval():
-    """Test for initialization of the Parameters class with asteval."""
-    ast_int = asteval.Interpreter()
-
-    msg = ("The use of the 'asteval' argument for the Parameters class was "
-           "deprecated in lmfit v0.9.12 and will be removed in a later "
-           "release. Please use the 'usersyms' argument instead!")
-    with pytest.warns(FutureWarning, match=msg):
-        pars = lmfit.Parameters(asteval=ast_int)
-    assert pars._asteval == ast_int
-
-
 def test_parameters_init_with_usersyms():
     """Test for initialization of the Parameters class with usersyms."""
-    pars = lmfit.Parameters(asteval=None, usersyms={'test': np.sin})
+    pars = lmfit.Parameters(usersyms={'test': np.sin})
     assert 'test' in pars._asteval.symtable
 
 

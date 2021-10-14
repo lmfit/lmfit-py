@@ -4,7 +4,7 @@ import pytest
 
 import lmfit
 from lmfit import (Minimizer, Parameters, ci_report, conf_interval, fit_report,
-                   report_ci, report_errors, report_fit)
+                   report_ci, report_fit)
 from lmfit.lineshapes import gaussian
 from lmfit.models import GaussianModel
 from lmfit.printfuncs import alphanumeric_sort, getfloat_attr, gformat
@@ -220,12 +220,6 @@ def test_report_fit(fitresult, capsys):
     captured = capsys.readouterr()
     for header in report_headers:
         assert header in captured.out
-
-
-def test_report_errors_deprecated(fitresult):
-    """Verify that a FutureWarning is shown when calling report_errors."""
-    with pytest.warns(FutureWarning):
-        report_errors(params=fitresult.params)
 
 
 def test_report_leastsq_no_errorbars(fitresult):

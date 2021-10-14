@@ -55,7 +55,7 @@ Roam, Alexander Stark, Alexandre Beelen, Andrey Aristov, Nicholas Zobrist,
 Ethan Welty, Julius Zimmermann, Mark Dean, Arun Persaud, Ray Osborn, @lneuhaus,
 Marcel Stimberg, Yoshiera Huang, Leon Foks, Sebastian Weigand, Florian LB,
 Michael Hudson-Doyle, Ruben Verweij, @jedzill4, @spalato, Jens Hedegaard Nielsen,
-Martin Majli, Kristian Meyer, and many others.
+Martin Majli, Kristian Meyer, @azelcer, Ivan Usov, and many others.
 
 The lmfit code obviously depends on, and owes a very large debt to the code
 in scipy.optimize. Several discussions on the SciPy-user and lmfit mailing
