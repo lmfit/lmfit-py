@@ -14,3 +14,7 @@ sandbox/
 *.sav
 .pytest*
 .pre-commit-config.yaml
+*.coverage*
+*htmlcov/*
+.eggs
+lmfit/version.py
