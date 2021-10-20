@@ -81,7 +81,7 @@ stages:
         - script: |
             python -m pip install --upgrade pip wheel
             pip install setuptools==57.5.0
-            pip install asteval==0.9.22 numpy==1.18 scipy==1.4.0 uncertainties==3.0.1 pytest coverage codecov flaky
+            pip install asteval==0.9.22 numpy==1.18 scipy==1.4.0 uncertainties==3.0.1 pytest pytest-cov coverage codecov flaky
           displayName: 'Install minimum required version of dependencies'
         - script: |
             python setup.py install
@@ -90,7 +90,7 @@ stages:
             pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines pytest-cov
+            pip install pytest-azurepipelines
             pytest
           displayName: 'Run test-suite and collect coverage'
         - script: |
@@ -145,7 +145,7 @@ stages:
             pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines pytest-cov
+            pip install pytest-azurepipelines
             pytest
           displayName: 'Run test-suite and collect coverage'
         - script: |
@@ -189,7 +189,7 @@ stages:
             pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines pytest-cov
+            pip install pytest-azurepipelines
             pytest
           displayName: 'Run test-suite'
         - powershell:
@@ -238,7 +238,7 @@ stages:
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             # remove numdifftools for now as it pulls in statsmodels, that wants to build with NumPy 1.14.5
-            pip3.10 install asteval uncertainties dill emcee flaky
+            pip3.10 install asteval uncertainties dill emcee flaky pytest pytest-cov
           displayName: 'Install latest available version of Python dependencies'
         - script: |
             python3.10 setup.py install --user
@@ -249,7 +249,7 @@ stages:
           displayName: 'List installed Python packages'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
-            pip3.10 install pytest pytest-azurepipelines pytest-cov
+            pip3.10 install pytest-azurepipelines
             cd $(Agent.BuildDirectory)/s/tests
             pytest || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Run test-suite'
