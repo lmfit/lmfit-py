@@ -1,3 +1,4 @@
+import sys
 import unittest
 
 import numpy as np
@@ -397,7 +398,9 @@ class CommonMinimizerTest(unittest.TestCase):
         self.data[0] = np.nan
 
         for method in SCALAR_METHODS:
-            if method == 'differential_evolution':
+            if method == 'cobyla' and sys.platform == 'darwin':
+                pytest.xfail("this aborts Python on macOS...")
+            elif method == 'differential_evolution':
                 pytest.raises(RuntimeError, self.mini.scalar_minimize,
                               SCALAR_METHODS[method])
             else:

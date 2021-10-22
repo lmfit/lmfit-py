@@ -1,7 +1,7 @@
 codecov:
   token: 11c28e95-6e64-4829-9887-04e4cd661bf6
   comment:
-    after_n_builds: 8
+    after_n_builds: 9
 
 coverage:
   status:
