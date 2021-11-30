@@ -7,7 +7,8 @@ from lmfit import (Minimizer, Parameters, ci_report, conf_interval, fit_report,
                    report_ci, report_fit)
 from lmfit.lineshapes import gaussian
 from lmfit.models import GaussianModel
-from lmfit.printfuncs import alphanumeric_sort, getfloat_attr, gformat
+from lmfit.printfuncs import (alphanumeric_sort, fitreport_html_table,
+                              getfloat_attr, gformat)
 
 np.random.seed(0)
 
@@ -325,6 +326,25 @@ def test_report_zero_value_spercent(fitresult):
     indx = [i for i, val in enumerate(html_params_split) if 'center' in val][0]
     assert '%' not in html_params_split[indx]
     assert '%' in html_params_split[indx+1]
+
+
+@pytest.mark.skipif(not lmfit.minimizer.HAS_EMCEE, reason="requires emcee v3")
+def test_spercent_html_table():
+    """Regression test for GitHub Issue #768."""
+    np.random.seed(2021)
+    x = np.random.uniform(size=100)
+    y = x + 0.1 * np.random.uniform(size=x.size)
+
+    def res(par, x, y):
+        return y - par['k'] * x + par['b']
+
+    params = lmfit.Parameters()
+    params.add('b', 0, vary=False)
+    params.add('k', 1)
+
+    fitter = lmfit.Minimizer(res, params, fcn_args=(x, y))
+    fit_res = fitter.minimize(method='emcee', steps=5)
+    fitreport_html_table(fit_res)
 
 
 def test_ci_report(confidence_interval):
