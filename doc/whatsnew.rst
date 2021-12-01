@@ -11,6 +11,15 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
+.. _whatsnew_104_label:
+
+Version 1.0.4 Release Notes (unreleased)
+========================================
+
+Bug fixes/enhancements:
+
+- make sure variable ``spercent`` is always defined in ``params_html_table`` functions (Issue #768, PR #770)
+
 
 .. _whatsnew_103_label:
 

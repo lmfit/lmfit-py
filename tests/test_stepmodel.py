@@ -4,6 +4,7 @@ from lmfit.models import ConstantModel, StepModel
 
 
 def get_data():
+    np.random.seed(2021)
     x = np.linspace(0, 10, 201)
     dat = np.ones_like(x)
     dat[:48] = 0.0

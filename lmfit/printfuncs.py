@@ -311,12 +311,13 @@ def params_html_table(params):
         rows = [par.name, gformat(par.value)]
         if has_err:
             serr = ''
+            spercent = ''
             if par.stderr is not None:
                 serr = gformat(par.stderr)
                 try:
                     spercent = f'({abs(par.stderr/par.value):.2%})'
                 except ZeroDivisionError:
-                    spercent = ''
+                    pass
             rows.extend([serr, spercent])
         rows.extend((par.init_value, gformat(par.min),
                      gformat(par.max), f'{par.vary}'))
@@ -325,7 +326,6 @@ def params_html_table(params):
             if par.expr is not None:
                 expr = par.expr
             rows.append(expr)
-
         if has_brute:
             brute_step = 'None'
             if par.brute_step is not None:
