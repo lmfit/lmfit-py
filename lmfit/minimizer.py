@@ -717,6 +717,9 @@ class Minimizer:
         result.call_kws = {}
         result.errorbars = False
         result.aborted = False
+        result.success = True
+        result.covar = None
+
         for name, par in self.result.params.items():
             par.stderr = None
             par.correl = None
