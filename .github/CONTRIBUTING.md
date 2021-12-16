@@ -6,7 +6,7 @@ the Python coding style conventions (i.e., [PEP 8](https://www.python.org/dev/pe
 closely. Additionally, we really want comprehensive docstrings that follow
 [PEP 257](https://www.python.org/dev/peps/pep-0257/) using the
 [numpydoc style](https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard),
-usable offline documentation, and good unit tests for the pytest framework. A
+usable offline documentation, and good unit tests for the ``pytest`` framework. A
 good contribution includes all of these. To ensure compliance with our coding
 style, we make use of the [pre-commit](https://pre-commit.com/) framework to run
 several *hooks* when committing code. Please follow the instructions below if
@@ -16,16 +16,16 @@ you intend to contribute to the lmfit repository:
 - clone your forked GitHub repository:
   ``git clone https://github.com/<your-name>/lmfit-py.git``
 - install all (optional) dependencies either using ``pip`` or ``conda``:
-  ``pip install -U -r requirements-dev.txt`` or
-  ``conda install <packages in requirements-dev.txt>``
+  ``pip install lmfit[all]`` or
+  ``conda install <all packages listed in setup.cfg>``
 - initialize ``pre-commit`` by running ``pre-commit install`` in the lmfit directory
 - create a new branch: ``git checkout -b <awesome_new_feature>``
 - start coding
-- install the latest version of your code using one of the usual ``python setup.py`` commands (e.g., ``python setup.py install --user``)
+- install the latest version of your code using the PEP517/PEP518 way (``python -m build && pip install .``)
 - make sure the test-suite passes locally: run ``pytest`` in the lmfit directory
 - make sure the documentation builds locally: run ``make`` in the doc directory
 - push to your fork: ``git push origin``
-- open a Pull Request on https://github.com/lmfit/lmfit-py/pulls
+- open a Pull Request on [the lmfit GitHub repository](https://github.com/lmfit/lmfit-py/pulls)
 
 If you need any additional help, please send a message to the
 [mailing list](https://groups.google.com/group/lmfit-py) or use the
@@ -54,7 +54,6 @@ better help others with similar questions. No posting about fitting data is
 inappropriate for the mailing list, but many questions are not Issues. We
 will try our best to engage in all discussions, but we may simply close
 GitHub Issues that are actually questions.
-
 
 ## Providing an Example with GitHub Issues
 
@@ -88,7 +87,6 @@ IPython Notebooks are very useful for showing code snippets and outcomes,
 and are a good way to demonstrate a question or raise an issue. Please
 see the above about providing examples. The notebook you provide will be
 *read*, but will probably not be run.
-
 
 ## Secret Code for First Time Issues
 
