@@ -2,7 +2,7 @@ exclude: 'doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.30.1
+    rev: v2.31.0
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]
@@ -48,6 +48,7 @@ repos:
     -   id: rst-backticks
     -   id: rst-directive-colons
     -   id: rst-inline-touching-normal
+    -   id: python-check-blanket-noqa
 
 -   repo: https://github.com/codespell-project/codespell
     rev: v2.1.0
