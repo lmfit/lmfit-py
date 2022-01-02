@@ -3,7 +3,6 @@
 # Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/python
 
-
 stages:
 
 - stage: check_codestyle
@@ -17,12 +16,21 @@ stages:
           inputs:
             versionSpec: '3.10'
         - script: |
-            python -m pip install --upgrade pip setuptools wheel
-            pip install pre-commit
-          displayName: 'Install Python dependencies'
+            python -m pip install --upgrade build pip setuptools wheel
+          displayName: 'Install Python build tools and dependencies'
+        - script: |
+            python -m build
+            python -m pip install '.[dev]'
+          displayName: 'Build wheel/sdist and install lmfit'
         - script: |
             pre-commit install ; pre-commit run --all-files
           displayName: 'Run pre-commit hooks'
+        - script: |
+            check-wheel-contents dist/*.whl
+          displayName: 'Run check-wheel-contents'
+        - script: |
+            twine check dist/*
+          displayName: "Run twine check"
 
 - stage: build_documentation
   dependsOn: check_codestyle
@@ -37,12 +45,12 @@ stages:
           inputs:
             versionSpec: '3.10'
         - script: |
-            python -m pip install --upgrade pip setuptools wheel
-            pip install -r requirements-dev.txt
-          displayName: 'Install Python dependencies'
+            python -m pip install --upgrade build pip setuptools wheel
+          displayName: 'Install Python build tools'
         - script: |
-            python setup.py install
-          displayName: 'Install lmfit'
+            python -m build
+            python -m pip install '.[doc]'
+          displayName: 'Build wheel/sdist and install lmfit'
         - script: |
             sudo apt-get update && sudo apt-get install -qq -y texlive-latex-extra latexmk
           displayName: 'Install TeX Live'
@@ -79,18 +87,18 @@ stages:
             swig libmpc-dev
           displayName: 'Install dependencies'
         - script: |
-            python -m pip install --upgrade pip wheel
-            pip install setuptools==57.5.0
-            pip install asteval==0.9.22 numpy==1.18 scipy==1.4.0 uncertainties==3.0.1 pytest pytest-cov coverage codecov flaky
+            python -m pip install --upgrade build pip wheel
+            python -m pip install asteval==0.9.22 numpy==1.18 scipy==1.4.0 uncertainties==3.1.4
           displayName: 'Install minimum required version of dependencies'
         - script: |
-            python setup.py install
-          displayName: 'Install lmfit'
+            python -m build
+            python -m pip install ".[test]"
+          displayName: 'Build wheel/sdist and install lmfit'
         - script: |
-            pip list
+            python -m pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
+            python -m pip install pytest-azurepipelines
             pytest
           displayName: 'Run test-suite and collect coverage'
         - script: |
@@ -137,17 +145,17 @@ stages:
             swig libmpc-dev
           displayName: 'Install dependencies'
         - script: |
-            python -m pip install --upgrade pip setuptools wheel
-            pip install -r requirements-dev.txt
+            python -m pip install --upgrade build pip setuptools wheel
           displayName: 'Install latest available version of Python dependencies'
         - script: |
-            python setup.py install
-          displayName: 'Install lmfit'
+            python -m build
+            python -m pip install '.[all]'
+          displayName: 'Build wheel/sdist and install lmfit'
         - script: |
-            pip list
+            python -m pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
+            python -m pip install pytest-azurepipelines
             pytest
           displayName: 'Run test-suite and collect coverage'
         - script: |
@@ -181,17 +189,17 @@ stages:
             versionSpec: '$(python.version)'
           displayName: 'Use Python $(python.version)'
         - script: |
-            python -m pip install --upgrade pip setuptools wheel
-            pip install -r requirements-dev.txt
+            python -m pip install --upgrade build pip setuptools wheel
           displayName: 'Install latest available version of Python dependencies'
         - script: |
-            python setup.py install
-          displayName: 'Install lmfit'
+            python -m build
+            python -m pip install .[all]
+          displayName: 'Build wheel/sdist and install lmfit'
         - script: |
-            pip list
+            python -m pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
+            python -m pip install pytest-azurepipelines
             pytest
           displayName: 'Run test-suite'
         - powershell:
@@ -216,17 +224,17 @@ stages:
             versionSpec: '$(python.version)'
           displayName: 'Use Python $(python.version)'
         - script: |
-            python -m pip install --upgrade pip setuptools wheel
-            pip install -r requirements-dev.txt
+            python -m pip install --upgrade build pip setuptools wheel
           displayName: 'Install latest available version of Python dependencies'
         - script: |
-            python setup.py install
-          displayName: 'Install lmfit'
+            python -m build
+            python -m pip install '.[all]'
+          displayName: 'Build wheel/sdist and install lmfit'
         - script: |
-            pip list
+            python -m pip list
           displayName: 'List installed Python packages'
         - script: |
-            pip install pytest-azurepipelines
+            python -m pip install pytest-azurepipelines
             pytest
           displayName: 'Run test-suite and collect coverage'
 
@@ -251,8 +259,8 @@ stages:
             export PATH=/home/vsts/.local/bin:$PATH
             curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
             python3.11 get-pip.py --user
-            pip3.11 install -U pip setuptools wheel pybind11 cython || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
-          displayName: 'Install pip, setuptools, wheel, pybind11, and cython'
+            pip3.11 install -U build pip setuptools wheel pybind11 cython || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+          displayName: 'Install build, pip, setuptools, wheel, pybind11, and cython'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             export numpy_version=1.22.0
@@ -279,8 +287,9 @@ stages:
             pip3.11 install asteval uncertainties dill emcee flaky pytest pytest-cov || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
           displayName: 'Install latest available version of Python dependencies'
         - script: |
-            python3.11 setup.py install --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
-          displayName: 'Install lmfit'
+            python3.11 -m build
+            python3.11 -m pip install '.[test]' --user || echo -e "\043#vso[task.logissue type=warning;] Allowed failure for development version!!"
+          displayName: 'Build wheel/sdist and install lmfit'
         - script: |
             export PATH=/home/vsts/.local/bin:$PATH
             pip3.11 list
