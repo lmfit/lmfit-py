@@ -30,7 +30,7 @@ useful enhancements, including:
   * Many built-in models for common lineshapes are included and ready
     to use.
 
-Copyright (c) 2021 Lmfit Developers ; BSD-3 license ; see LICENSE
+Copyright (c) 2022 Lmfit Developers ; BSD-3 license ; see LICENSE
 
 """
 from asteval import Interpreter
