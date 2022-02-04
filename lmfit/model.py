@@ -142,7 +142,7 @@ def propagate_err(z, dz, option):
     if option not in ['real', 'imag', 'abs', 'angle']:
         raise ValueError(f"Invalid option ('{option}') for function 'propagate_err'.")
 
-    if not z.shape == dz.shape:
+    if z.shape != dz.shape:
         raise ValueError(f"shape of z: {z.shape} != shape of dz: {dz.shape}")
 
     # Check the main vector for complex. Do nothing if real.
@@ -460,6 +460,8 @@ class Model:
         """Build parameters from function arguments."""
         if self.func is None:
             return
+        kw_args = {}
+        keywords_ = None
         # need to fetch the following from the function signature:
         #   pos_args: list of positional argument names
         #   kw_args: dict of keyword arguments with default values
@@ -467,15 +469,11 @@ class Model:
         # 1. limited support for asteval functions as the model functions:
         if hasattr(self.func, 'argnames') and hasattr(self.func, 'kwargs'):
             pos_args = self.func.argnames[:]
-            keywords_ = None
-            kw_args = {}
             for name, defval in self.func.kwargs:
                 kw_args[name] = defval
         # 2. modern, best-practice approach: use inspect.signature
         else:
             pos_args = []
-            kw_args = {}
-            keywords_ = None
             sig = inspect.signature(self.func)
             for fnam, fpar in sig.parameters.items():
                 if fpar.kind == fpar.VAR_KEYWORD:
@@ -527,12 +525,9 @@ class Model:
                 new_opts[opt] = val
         self.opts = new_opts
 
-        names = []
         if self._prefix is None:
             self._prefix = ''
-        for pname in self._param_root_names:
-            names.append(f"{self._prefix}{pname}")
-
+        names = [f"{self._prefix}{pname}" for pname in self._param_root_names]
         # check variables names for validity
         # The implicit magic in fit() requires us to disallow some
         fname = self.func.__name__

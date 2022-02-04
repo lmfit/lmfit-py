@@ -293,7 +293,7 @@ class ConfidenceInterval:
         max_prob = max(self.probs)
 
         while old_prob < max_prob:
-            i = i + 1
+            i += 1
             limit += step * direction
             if limit > para.max:
                 limit = para.max
@@ -310,12 +310,11 @@ class ConfidenceInterval:
                       f'max. prob={max_prob}')
 
             # check for convergence
-            if bound_reached:
-                if new_prob < max(self.probs):
-                    errmsg = (f'Bound reached with prob({para.name}={limit}) '
-                              f'= {new_prob} < max(sigmas)')
-                    warn(errmsg)
-                    break
+            if bound_reached and new_prob < max(self.probs):
+                errmsg = (f'Bound reached with prob({para.name}={limit}) '
+                          f'= {new_prob} < max(sigmas)')
+                warn(errmsg)
+                break
 
             if i > self.maxiter:
                 errmsg = (f'maxiter={self.maxiter} reached and prob('
