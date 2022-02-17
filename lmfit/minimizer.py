@@ -317,19 +317,18 @@ class MinimizerResult:
     @property
     def flatchain(self):
         """Show flatchain view of the sampling chain from `emcee` method."""
-        if hasattr(self, 'chain'):
-            if HAS_PANDAS:
-                if len(self.chain.shape) == 4:
-                    return pd.DataFrame(self.chain[0, ...].reshape((-1, self.nvarys)),
-                                        columns=self.var_names)
-                elif len(self.chain.shape) == 3:
-                    return pd.DataFrame(self.chain.reshape((-1, self.nvarys)),
-                                        columns=self.var_names)
-            else:
-                raise NotImplementedError('Please install Pandas to see the '
-                                          'flattened chain')
-        else:
+        if not hasattr(self, 'chain'):
             return None
+
+        if not HAS_PANDAS:
+            raise NotImplementedError('Please install Pandas to see the '
+                                      'flattened chain')
+        if len(self.chain.shape) == 4:
+            return pd.DataFrame(self.chain[0, ...].reshape((-1, self.nvarys)),
+                                columns=self.var_names)
+        elif len(self.chain.shape) == 3:
+            return pd.DataFrame(self.chain.reshape((-1, self.nvarys)),
+                                columns=self.var_names)
 
     def show_candidates(self, candidate_nmb='all'):
         """Show pretty_print() representation of candidates.
@@ -564,11 +563,10 @@ class Minimizer:
         if fvars.shape == ():
             fvars = fvars.reshape((1,))
 
-        if apply_bounds_transformation:
-            for name, val in zip(self.result.var_names, fvars):
+        for name, val in zip(self.result.var_names, fvars):
+            if apply_bounds_transformation:
                 params[name].value = params[name].from_internal(val)
-        else:
-            for name, val in zip(self.result.var_names, fvars):
+            else:
                 params[name].value = val
         params.update_constraints()
 
@@ -1346,16 +1344,14 @@ class Minimizer:
         # check if the userfcn returns a vector of residuals
         out = self.userfcn(params, *self.userargs, **self.userkws)
         out = np.asarray(out).ravel()
-        if out.size > 1 and is_weighted is False:
-            # we need to marginalise over a constant data uncertainty
-            if '__lnsigma' not in params:
-                # __lnsigma should already be in params if is_weighted was
-                # previously set to True.
-                params.add('__lnsigma', value=0.01, min=-np.inf, max=np.inf,
-                           vary=True)
-                # have to re-prepare the fit
-                result = self.prepare_fit(params)
-                params = result.params
+        if out.size > 1 and is_weighted is False and '__lnsigma' not in params:
+            # __lnsigma should already be in params if is_weighted was
+            # previously set to True.
+            params.add('__lnsigma', value=0.01, min=-np.inf, max=np.inf,
+                       vary=True)
+            # have to re-prepare the fit
+            result = self.prepare_fit(params)
+            params = result.params
 
         result.method = 'emcee'
 
@@ -1374,7 +1370,6 @@ class Minimizer:
             else:
                 # don't want to append bounds if they're not being varied.
                 continue
-
             param.from_internal = lambda val: val
             lb, ub = param.min, param.max
             if lb is None or lb is np.nan:
@@ -1500,9 +1495,8 @@ class Minimizer:
                                       handle_inf=False)
 
         # If uncertainty was automatically estimated, weight the residual properly
-        if (not is_weighted) and (result.residual.size > 1):
-            if '__lnsigma' in params:
-                result.residual = result.residual/np.exp(params['__lnsigma'].value)
+        if not is_weighted and result.residual.size > 1 and '__lnsigma' in params:
+            result.residual /= np.exp(params['__lnsigma'].value)
 
         # Calculate statistics for the two standard cases:
         if isinstance(result.residual, np.ndarray) or (float_behavior == 'chi2'):

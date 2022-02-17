@@ -118,9 +118,8 @@ class Parameters(dict):
 
     def __setitem__(self, key, par):
         """Set items of Parameters object."""
-        if key not in self:
-            if not valid_symbol_name(key):
-                raise KeyError(f"'{key}' is not a valid Parameters name")
+        if key not in self and not valid_symbol_name(key):
+            raise KeyError(f"'{key}' is not a valid Parameters name")
         if par is not None and not isinstance(par, Parameter):
             raise ValueError(f"'{par}' is not a Parameter")
         dict.__setitem__(self, key, par)
@@ -805,10 +804,9 @@ class Parameter:
         if self._expr is not None:
             if self._expr_ast is None:
                 self.__set_expression(self._expr)
-            if self._expr_eval is not None:
-                if not self._delay_asteval:
-                    self.value = self._expr_eval(self._expr_ast)
-                    check_ast_errors(self._expr_eval)
+            if self._expr_eval is not None and not self._delay_asteval:
+                self.value = self._expr_eval(self._expr_ast)
+                check_ast_errors(self._expr_eval)
         return self._val
 
     @property
