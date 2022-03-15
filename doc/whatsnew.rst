@@ -21,7 +21,7 @@ Bug fixes/enhancements:
 - make sure variable ``spercent`` is always defined in ``params_html_table`` functions (reported by @MySlientWind; Issue #768, PR #770)
 - always initialize the variables ``success`` and ``covar`` the ``MinimizerResult`` (reported by Marc W. Pound; PR #771)
 - build package following PEP517/PEP518; use pyproject.toml and setup.cfg; leave setup.py for now (PR #777)
-
+- improve speed of emcee fitting (PR #781)
 
 .. _whatsnew_103_label:
 

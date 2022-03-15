@@ -1072,7 +1072,7 @@ class Minimizer:
             The names of the parameters that are varying.
         bounds : numpy.ndarray
             Lower and upper bounds of parameters, with shape
-            ``(nvarys, 2)``.
+            ``(2, nvarys)``.
         userargs : tuple, optional
             Extra positional arguments required for user objective function.
         userkws : dict, optional
@@ -1099,7 +1099,7 @@ class Minimizer:
         # the comparison has to be done on theta and bounds. DO NOT inject theta
         # values into Parameters, then compare Parameters values to the bounds.
         # Parameters values are clipped to stay within bounds.
-        if np.any(theta > bounds[:, 1]) or np.any(theta < bounds[:, 0]):
+        if np.any(theta > bounds[1, :]) or np.any(theta < bounds[0, :]):
             return -np.inf
         for name, val in zip(var_names, theta):
             params[name].value = val
@@ -1131,7 +1131,7 @@ class Minimizer:
                 # marginalise over a constant data uncertainty
                 __lnsigma = params['__lnsigma'].value
                 c = np.log(2 * np.pi) + 2 * __lnsigma
-                lnprob = -0.5 * np.sum((lnprob / np.exp(__lnsigma)) ** 2 + c)
+                lnprob = -0.5 * (np.sum((lnprob / np.exp(__lnsigma)) ** 2) + c * lnprob.size)
             else:
                 lnprob = -0.5 * (lnprob * lnprob).sum()
         else:
@@ -1392,7 +1392,7 @@ class Minimizer:
 
         # function arguments for the log-probability functions
         # these values are sent to the log-probability functions by the sampler.
-        lnprob_args = (self.userfcn, params, result.var_names, bounds)
+        lnprob_args = (self.userfcn, params, result.var_names, np.ascontiguousarray(bounds.T))
         lnprob_kwargs = {'is_weighted': is_weighted,
                          'float_behavior': float_behavior,
                          'userargs': self.userargs,
