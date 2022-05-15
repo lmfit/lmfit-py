@@ -901,8 +901,9 @@ class Model:
         params : Parameters, optional
             Parameters to use in fit (default is None).
         weights : array_like, optional
-            Weights to use for the calculation of the fit residual
-            (default is None). Must have the same size as `data`.
+            Weights to use for the calculation of the fit residual [i.e.,
+            `weights*(data-fit)`]. Default is None; must have the same size as
+            `data`.
         method : str, optional
             Name of fitting method to use (default is `'leastsq'`).
         iter_cb : callable, optional
