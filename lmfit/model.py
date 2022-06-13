@@ -1094,7 +1094,7 @@ class CompositeModel(Model):
 
         Notes
         -----
-        The two models must use the same independent variable.
+        The two models can use different independent variables.
 
         """
         if not isinstance(left, Model):
@@ -1116,9 +1116,11 @@ class CompositeModel(Model):
                         "use distinct names.")
             raise NameError(msg)
 
-        # we assume that all the sub-models have the same independent vars
+        # the unique ``independent_vars`` of the left and right model are
+        # combined to ``independent_vars`` of the ``CompositeModel``
         if 'independent_vars' not in kws:
-            kws['independent_vars'] = self.left.independent_vars
+            ivars = self.left.independent_vars + self.right.independent_vars
+            kws['independent_vars'] = list(np.unique(ivars))
         if 'nan_policy' not in kws:
             kws['nan_policy'] = self.left.nan_policy
 
