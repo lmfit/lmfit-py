@@ -44,8 +44,8 @@ intersphinx_mapping = {'py': ('https://docs.python.org/3', None),
 
 # shpinx.ext.extlinks settings
 extlinks = {
-    'scipydoc': ('https://docs.scipy.org/doc/scipy/reference/generated/scipy.%s.html', 'scipy.'),
-    'numpydoc': ('https://docs.scipy.org/doc/numpy/reference/generated/numpy.%s.html', 'numpy.'),
+    'scipydoc': ('https://docs.scipy.org/doc/scipy/reference/generated/scipy.%s.html', 'scipy.%s'),
+    'numpydoc': ('https://docs.scipy.org/doc/numpy/reference/generated/numpy.%s.html', 'numpy.%s'),
     }
 
 # sphinx.ext.imgmath settings
