@@ -53,7 +53,7 @@ def test_bounded_parameters():
         [9.45395985e-06, 1.84110424e-07, -2.90588963e-07, 7.19107184e-08],
         [-4.33997922e-05, -2.90588963e-07, 9.53427031e-05, -2.37750362e-05],
         [1.07362106e-05, 7.19107184e-08, -2.37750362e-05, 9.60952336e-06]])
-    assert_allclose(result.covar, cov_x, rtol=1e-6)
+    assert_allclose(result.covar, cov_x, rtol=1.5e-6)
 
     # assert that stderr and correlations are correct [cf. lmfit v0.9.10]
     assert_almost_equal(result.params['amp'].stderr, 0.03773967, decimal=6)
