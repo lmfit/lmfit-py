@@ -1247,6 +1247,21 @@ class TestUserDefiniedModel(CommonTests, unittest.TestCase):
         self.assertTrue(abs(result.params['a'].value - 2.0) < 0.05)
         self.assertTrue(abs(result.params['b'].value - 3.0) < 0.41)
 
+    def test_different_independent_vars_composite_modeld(self):
+        """Regression test for different independent variables in CompositeModel.
+
+        See: https://github.com/lmfit/lmfit-py/discussions/787
+
+        """
+        def two_independent_vars(y, z, a):
+            return a * y + z
+
+        BackgroundModel = Model(two_independent_vars,
+                                independent_vars=["y", "z"], prefix="yz_")
+        PeakModel = Model(gaussian, independent_vars=["x"], prefix="x_")
+        CompModel = BackgroundModel + PeakModel
+        assert CompModel.independent_vars == ['x', 'y', 'z']
+
 
 class TestLinear(CommonTests, unittest.TestCase):
 
