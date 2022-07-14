@@ -396,7 +396,7 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     Starts at 0.0, ends at `amplitude`, with half-max at `center`, and
     rising with `form`:
 
-    - `'linear'` (default) = amplitude * min(1, max(0, arg))
+    - `'linear'` (default) = amplitude * min(1, max(0, arg + 0.5))
     - `'atan'`, `'arctan'` = amplitude * (0.5 + atan(arg)/pi)
     - `'erf'`              = amplitude * (1 + erf(arg))/2.0
     - `'logistic'`         = amplitude * [1 - 1/(1 + exp(arg))]
@@ -413,6 +413,7 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     elif form in ('atan', 'arctan'):
         out = 0.5 + arctan(out)/pi
     elif form == 'linear':
+        out = out + 0.5
         out[where(out < 0)] = 0.0
         out[where(out > 1)] = 1.0
     else:

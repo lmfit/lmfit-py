@@ -22,7 +22,7 @@ Bug fixes/enhancements:
 - always initialize the variables ``success`` and ``covar`` the ``MinimizerResult`` (reported by Marc W. Pound; PR #771)
 - build package following PEP517/PEP518; use ``pyproject.toml`` and ``setup.cfg``; leave ``setup.py`` for now (PR #777)
 - components used to create a ``CompositeModel`` can now have different independent variables (@Julian-Hochhaus; Discussion #787; PR #788))
-
+- fixed function definition for ``StepModel(form='linear')``, was not consistent with the other ones. (@matpompili; PR #794)
 
 Deprecations:
 
