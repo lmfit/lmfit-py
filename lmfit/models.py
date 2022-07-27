@@ -438,7 +438,7 @@ class Gaussian2dModel(Model):
     """
 
     fwhm_factor = 2*np.sqrt(2*np.log(2))
-    height_factor = 1./2*np.pi
+    height_factor = 1./(2*np.pi)
 
     def __init__(self, independent_vars=['x', 'y'], prefix='', nan_policy='raise',
                  **kwargs):
