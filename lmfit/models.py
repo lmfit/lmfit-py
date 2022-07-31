@@ -9,7 +9,7 @@ from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          expgaussian, exponential, gaussian, gaussian2d,
                          linear, lognormal, lorentzian, moffat, parabolic,
-                         pearson7, powerlaw, pvoigt, rectangle, sine,
+                         pearson4, pearson7, powerlaw, pvoigt, rectangle, sine,
                          skewed_gaussian, skewed_voigt, split_lorentzian, step,
                          students_t, thermal_distribution, tiny, voigt)
 from .model import Model
@@ -729,6 +729,61 @@ class MoffatModel(Model):
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5, sigscale=1.)
+        return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class Pearson4Model(Model):
+    r"""A model based on a Pearson IV distribution.
+
+    The model has five parameters: `height` (:math:`a`), `center`
+    (:math:`\mu`), `sigma` (:math:`\sigma`), `expon` (:math:`m`) and `skew` (:math:`\nu`).
+    In addition, parameters `fwhmapprox` and `amplitude` are included as
+    constraints to report estimates for the full width at half maximum and the
+    peak area, respectively. The fwhmapprox value has an error of about 20% in the
+    parameter range expon: (1E-3, 1E3), skew: [-1000, 1000].
+    The original Pearson IV function was relocated and scaled, so that the maximum of the peak
+    occurs at the 'center' parameter, and the 'height' parameter is the maximum y-value of the peak:
+
+    .. math::
+
+        f(x; a, \mu, \sigma, m, \nu) = a*\bigl[\frac{1+z^2}{1+z_0^2}\bigr]^{-m} \exp(-\nu [\arctan(z)-arctan(z_0)])
+
+    where :math:`z_0=\frac{-\nu}{2m}` and :math:`z=z_0 + \frac{x-\mu}{\sigma}`
+    The :meth:`guess` function always gives a starting value of 1.5 for `expon`,
+    and 0 for 'skew'. In addition, parameters `fwhmapprox` and `area` are included as
+    constraints to report full width at half maximum and peak area, respectively.
+
+    For more information, see:
+    https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_IV_distribution
+
+    """
+
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super().__init__(pearson4, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
+        self.set_param_hint('expon', value=1.5, max=100)
+        self.set_param_hint('skew', value=0.0, min=-1000, max=1000)
+        fmt = ("{prefix:s}sigma*sqrt(2**(1/{prefix:s}expon)-1)*pi/arctan2(exp(1)*{prefix:s}expon, {prefix:s}skew)")
+        self.set_param_hint('fwhmapprox', expr=fmt.format(prefix=self.prefix))
+        fmt = ("{prefix:s}height * {prefix:s}sigma * exp(real(2 * loggammafcn({prefix:s}expon) - loggammafcn({prefix:s}expon + {prefix:s}skew * 0.5j) - loggammafcn({prefix:s}expon -0.5j * {prefix:s}skew)) + "
+               "{prefix:s}skew * arctan(-{prefix:s}skew/(2 * {prefix:s}expon)) + {prefix:s}expon * log(1 + square({prefix:s}skew/(2*{prefix:s}expon))) +  betalnfnc({prefix:s}expon-0.5, 0.5))")
+        self.set_param_hint('amplitude', expr=fmt.format(tiny, prefix=self.prefix))
+
+    def guess(self, data, x, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        pars = guess_from_peak(self, data, x, negative)
+        maxy, miny = max(data), min(data)
+        pars[f'{self.prefix}height'].set(value=(maxy-miny))
+        pars[f'{self.prefix}expon'].set(value=1.5)
+        pars[f'{self.prefix}skew'].set(value=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -1531,6 +1586,7 @@ lmfit_models = {'Constant': ConstantModel,
                 'Voigt': VoigtModel,
                 'PseudoVoigt': PseudoVoigtModel,
                 'Moffat': MoffatModel,
+                'Pearson4': Pearson4Model,
                 'Pearson7': Pearson7Model,
                 'StudentsT': StudentsTModel,
                 'Breit-Wigner': BreitWignerModel,

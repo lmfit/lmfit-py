@@ -14,7 +14,7 @@ s2 = sqrt(2.0)
 tiny = 1.0e-15
 
 functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt', 'pvoigt',
-             'moffat', 'pearson7', 'breit_wigner', 'damped_oscillator',
+             'moffat', 'pearson4', 'pearson7', 'breit_wigner', 'damped_oscillator',
              'dho', 'logistic', 'lognormal', 'students_t', 'expgaussian',
              'doniach', 'skewed_gaussian', 'skewed_voigt',
              'thermal_distribution', 'step', 'rectangle', 'exponential',
@@ -143,6 +143,23 @@ def moffat(x, amplitude=1, center=0., sigma=1, beta=1.):
 
     """
     return amplitude / (((x - center)/max(tiny, sigma))**2 + 1)**beta
+
+
+def pearson4(x, height=1.0, center=0.0, sigma=1.0, expon=1.0, skew=0):
+    """Return a Pearson4 lineshape.
+
+    Using a modified version of PearsonIV, in which amplitude is the maximum y value of the function, and center is the location of the maximum of the function
+
+    pearson4(x, center, sigma, expon) =
+        amplitude*((1+arg**2)/(1+z0**2)**(-expon) * exp(-skew*(arctan(arg)) - arctan(z0)))
+
+    where ``z0 = -skew/(2*expon)`` and ``arg = z0 + (x-center)/sigma``
+
+    """
+    expon = max(tiny, expon)
+    z0 = -skew/(2*expon)
+    arg = (x-center)/max(tiny, sigma) + z0
+    return height * exp(-expon * log((1 + arg * arg) / (1 + z0 * z0)) - skew * (arctan(arg)-arctan(z0)))
 
 
 def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
