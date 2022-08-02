@@ -3,7 +3,7 @@
 from warnings import warn
 
 import numpy as np
-from scipy.optimize import brentq
+from scipy.optimize import root_scalar
 from scipy.special import erf
 from scipy.stats import f
 
@@ -233,7 +233,13 @@ class ConfidenceInterval:
             para = self.params[para]
 
         # function used to calculate the probability
-        calc_prob = lambda val, prob: self.calc_prob(para, val, prob)
+        cache = {}
+
+        def calc_prob(val, target_prob):
+            if val not in cache:
+                cache[val] = self.calc_prob(para, val, 0)
+            return cache[val] - target_prob
+
         if self.trace:
             x = [i.value for i in self.params.values()]
             self.trace_dict[para.name].append(x + [0])
@@ -249,17 +255,12 @@ class ConfidenceInterval:
                 ret.append((prob, direction*np.inf))
                 continue
 
-            try:
-                val = brentq(calc_prob, a_limit,
-                             limit, rtol=.5e-4, args=prob)
-            except ValueError:
-                self.reset_vals()
-                try:
-                    val = brentq(calc_prob, start_val,
-                                 limit, rtol=.5e-4, args=prob)
-                except ValueError:
-                    val = np.nan
-
+            sol = root_scalar(calc_prob, method='toms748', bracket=sorted([limit, a_limit]), rtol=.5e-4, args=(prob,))
+            if sol.converged:
+                val = sol.root
+            else:
+                val = np.nan
+                break
             a_limit = val
             ret.append((prob, val))
 
