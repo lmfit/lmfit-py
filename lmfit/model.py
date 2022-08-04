@@ -1552,8 +1552,7 @@ class ModelResult(Minimizer):
         recalculating them.
 
         """
-        if self.ci_out is None:
-            self.ci_out = conf_interval(self, self, **kwargs)
+        self.ci_out = conf_interval(self, self, **kwargs)
         return self.ci_out
 
     def ci_report(self, with_offset=True, ndigits=5, **kwargs):
