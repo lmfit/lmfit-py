@@ -9,7 +9,7 @@ from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
                          expgaussian, exponential, gaussian, gaussian2d,
                          linear, lognormal, lorentzian, moffat, parabolic,
-                         pearson7, powerlaw, pvoigt, rectangle, sine,
+                         pearson4, pearson7, powerlaw, pvoigt, rectangle, sine,
                          skewed_gaussian, skewed_voigt, split_lorentzian, step,
                          students_t, thermal_distribution, tiny, voigt)
 from .model import Model
@@ -729,6 +729,60 @@ class MoffatModel(Model):
     def guess(self, data, x, negative=False, **kwargs):
         """Estimate initial model parameter values from data."""
         pars = guess_from_peak(self, data, x, negative, ampscale=0.5, sigscale=1.)
+        return update_param_vals(pars, self.prefix, **kwargs)
+
+    __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+
+class Pearson4Model(Model):
+    r"""A model based on a Pearson IV distribution.
+
+    The model has five parameters: `amplitude` (:math:`A`), `center`
+    (:math:`\mu`), `sigma` (:math:`\sigma`), `expon` (:math:`m`) and `skew` (:math:`\nu`).
+    In addition, parameters `fwhmapprox`, `height` and `position` are included as
+    constraints to report estimates for the approximate full width at half maximum, the
+    peak height, and the peak position, respectively.
+    The fwhmapprox value has an error of about 20% in the
+    parameter range expon: (0.5, 1000], skew: [-1000, 1000].
+
+    .. math::
+
+        f(x;A,\mu,\sigma,m,\nu)=A \frac{\left|\frac{\Gamma(m+i\tfrac{\nu}{2})}{\Gamma(m)}\right|^2}{\sigma\beta(m-\tfrac{1}{2},\tfrac{1}{2})}\left[1+\frac{(x-\mu)^2}{\sigma^2}\right]^{-m}\exp\left(-\nu \arctan\left(\frac{x-\mu}{\sigma}\right)\right)
+
+    where :math:`\beta` is the beta function (see :scipydoc:`special.beta`).
+    The :meth:`guess` function always gives a starting value of 1.5 for `expon`,
+    and 0 for `skew`. In addition, parameters `fwhmapprox`, `height` and `position` are included as
+    constraints to report approximate full width at half maximum, peak height, and peak position, respectively.
+
+    For more information, see:
+    https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_IV_distribution
+
+    """
+
+    def __init__(self, independent_vars=['x'], prefix='', nan_policy='raise',
+                 **kwargs):
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+        super().__init__(pearson4, **kwargs)
+        self._set_paramhints_prefix()
+
+    def _set_paramhints_prefix(self):
+        self.set_param_hint('expon', value=1.5, min=0.5+tiny, max=1000)
+        self.set_param_hint('skew', value=0.0, min=-1000, max=1000)
+        fmt = ("{prefix:s}sigma*sqrt(2**(1/{prefix:s}expon)-1)*pi/arctan2(exp(1)*{prefix:s}expon, {prefix:s}skew)")
+        self.set_param_hint('fwhmapprox', expr=fmt.format(prefix=self.prefix))
+        fmt = ("({prefix:s}amplitude / {prefix:s}sigma) * exp(2 * (real(loggammafcn({prefix:s}expon + {prefix:s}skew * 0.5j)) - loggammafcn({prefix:s}expon)) - betalnfnc({prefix:s}expon-0.5, 0.5) - "
+               "{prefix:s}expon * log1p(square({prefix:s}skew/(2*{prefix:s}expon))) - {prefix:s}skew * arctan(-{prefix:s}skew/(2*{prefix:s}expon)))")
+        self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))
+        fmt = ("{prefix:s}center-{prefix:s}sigma*{prefix:s}skew/(2*{prefix:s}expon)")
+        self.set_param_hint('position', expr=fmt.format(prefix=self.prefix))
+
+    def guess(self, data, x, negative=False, **kwargs):
+        """Estimate initial model parameter values from data."""
+        pars = guess_from_peak(self, data, x, negative)
+        pars[f'{self.prefix}expon'].set(value=1.5)
+        pars[f'{self.prefix}skew'].set(value=0.0)
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
@@ -1531,6 +1585,7 @@ lmfit_models = {'Constant': ConstantModel,
                 'Voigt': VoigtModel,
                 'PseudoVoigt': PseudoVoigtModel,
                 'Moffat': MoffatModel,
+                'Pearson4': Pearson4Model,
                 'Pearson7': Pearson7Model,
                 'StudentsT': StudentsTModel,
                 'Breit-Wigner': BreitWignerModel,

@@ -1,9 +1,9 @@
 """Basic model lineshapes and distribution functions."""
 
-from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, pi, real,
+from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p, pi, real,
                    sin, sqrt, where)
 from scipy.special import erf, erfc
-from scipy.special import gamma as gamfcn
+from scipy.special import gamma as gamfcn, loggamma as loggammafcn, betaln as betalnfcn
 from scipy.special import wofz
 
 log2 = log(2)
@@ -14,7 +14,7 @@ s2 = sqrt(2.0)
 tiny = 1.0e-15
 
 functions = ('gaussian', 'gaussian2d', 'lorentzian', 'voigt', 'pvoigt',
-             'moffat', 'pearson7', 'breit_wigner', 'damped_oscillator',
+             'moffat', 'pearson4', 'pearson7', 'breit_wigner', 'damped_oscillator',
              'dho', 'logistic', 'lognormal', 'students_t', 'expgaussian',
              'doniach', 'skewed_gaussian', 'skewed_voigt',
              'thermal_distribution', 'step', 'rectangle', 'exponential',
@@ -143,6 +143,24 @@ def moffat(x, amplitude=1, center=0., sigma=1, beta=1.):
 
     """
     return amplitude / (((x - center)/max(tiny, sigma))**2 + 1)**beta
+
+
+def pearson4(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0, skew=0):
+    """Return a Pearson4 lineshape.
+
+    Using the Wikipedia definition:
+
+    pearson4(x, amplitude, center, sigma, expon, skew) =
+        amplitude*|gamma(expon + I skew/2)/gamma(m)|**2/(w*beta(expon-0.5, 0.5)) * (1+arg**2)**(-expon) * exp(-skew * arctan(arg))
+
+    where ``arg = (x-center)/sigma``, `gamma` is the gamma function and `beta` is the beta function.
+
+    """
+    expon = max(tiny, expon)
+    sigma = max(tiny, sigma)
+    arg = (x-center)/sigma
+    logprefactor = 2 * (real(loggammafcn(expon + skew * 0.5j)) - loggammafcn(expon)) - betalnfcn(expon - 0.5, 0.5)
+    return (amplitude / sigma) * exp(logprefactor - expon * log1p(arg * arg) - skew * arctan(arg))
 
 
 def pearson7(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0):
