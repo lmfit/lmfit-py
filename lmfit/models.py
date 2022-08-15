@@ -740,10 +740,10 @@ class Pearson4Model(Model):
 
     The model has five parameters: `amplitude` (:math:`A`), `center`
     (:math:`\mu`), `sigma` (:math:`\sigma`), `expon` (:math:`m`) and `skew` (:math:`\nu`).
-    In addition, parameters `fwhmapprox`, `height` and `position` are included as
-    constraints to report estimates for the approximate full width at half maximum, the
-    peak height, and the peak position, respectively.
-    The fwhmapprox value has an error of about 20% in the
+    In addition, parameters `fwhm`, `height` and `position` are included as
+    constraints to report estimates for the approximate full width at half maximum (20% error),
+    the peak height, and the peak position (the position of the maximal  function value), respectively.
+    The fwhm value has an error of about 20% in the
     parameter range expon: (0.5, 1000], skew: [-1000, 1000].
 
     .. math::
@@ -752,8 +752,9 @@ class Pearson4Model(Model):
 
     where :math:`\beta` is the beta function (see :scipydoc:`special.beta`).
     The :meth:`guess` function always gives a starting value of 1.5 for `expon`,
-    and 0 for `skew`. In addition, parameters `fwhmapprox`, `height` and `position` are included as
-    constraints to report approximate full width at half maximum, peak height, and peak position, respectively.
+    and 0 for `skew`. In addition, parameters `fwhm`, `height` and `position` are included as
+    constraints to report approximate full width at half maximum, peak height, and position
+    of the maximal function value, respectively.
 
     For more information, see:
     https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_IV_distribution
@@ -768,10 +769,10 @@ class Pearson4Model(Model):
         self._set_paramhints_prefix()
 
     def _set_paramhints_prefix(self):
-        self.set_param_hint('expon', value=1.5, min=0.5+tiny, max=1000)
+        self.set_param_hint('expon', value=1.5, min=0.5 + tiny, max=1000)
         self.set_param_hint('skew', value=0.0, min=-1000, max=1000)
         fmt = ("{prefix:s}sigma*sqrt(2**(1/{prefix:s}expon)-1)*pi/arctan2(exp(1)*{prefix:s}expon, {prefix:s}skew)")
-        self.set_param_hint('fwhmapprox', expr=fmt.format(prefix=self.prefix))
+        self.set_param_hint('fwhm', expr=fmt.format(prefix=self.prefix))
         fmt = ("({prefix:s}amplitude / {prefix:s}sigma) * exp(2 * (real(loggammafcn({prefix:s}expon + {prefix:s}skew * 0.5j)) - loggammafcn({prefix:s}expon)) - betalnfnc({prefix:s}expon-0.5, 0.5) - "
                "{prefix:s}expon * log1p(square({prefix:s}skew/(2*{prefix:s}expon))) - {prefix:s}skew * arctan(-{prefix:s}skew/(2*{prefix:s}expon)))")
         self.set_param_hint('height', expr=fmt.format(tiny, prefix=self.prefix))

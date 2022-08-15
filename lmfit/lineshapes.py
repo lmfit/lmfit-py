@@ -3,7 +3,9 @@
 from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p, pi, real,
                    sin, sqrt, where)
 from scipy.special import erf, erfc
-from scipy.special import gamma as gamfcn, loggamma as loggammafcn, betaln as betalnfcn
+from scipy.special import betaln as betalnfcn
+from scipy.special import gamma as gamfcn
+from scipy.special import loggamma as loggammafcn
 from scipy.special import wofz
 
 log2 = log(2)
@@ -145,7 +147,7 @@ def moffat(x, amplitude=1, center=0., sigma=1, beta=1.):
     return amplitude / (((x - center)/max(tiny, sigma))**2 + 1)**beta
 
 
-def pearson4(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0, skew=0):
+def pearson4(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0, skew=0.0):
     """Return a Pearson4 lineshape.
 
     Using the Wikipedia definition:
@@ -155,10 +157,12 @@ def pearson4(x, amplitude=1.0, center=0.0, sigma=1.0, expon=1.0, skew=0):
 
     where ``arg = (x-center)/sigma``, `gamma` is the gamma function and `beta` is the beta function.
 
+    For more information, see: https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_IV_distribution
+
     """
     expon = max(tiny, expon)
     sigma = max(tiny, sigma)
-    arg = (x-center)/sigma
+    arg = (x - center) / sigma
     logprefactor = 2 * (real(loggammafcn(expon + skew * 0.5j)) - loggammafcn(expon)) - betalnfcn(expon - 0.5, 0.5)
     return (amplitude / sigma) * exp(logprefactor - expon * log1p(arg * arg) - skew * arctan(arg))
 

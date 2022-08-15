@@ -20,6 +20,8 @@ def check_height_fwhm(x, y, lineshape, model):
     mu = out.params['center'].value
     if lineshape is lineshapes.lognormal:
         cen = np.exp(mu - out.params['sigma']**2)
+    elif lineshape is lineshapes.pearson4:
+        cen = out.params['position']
     else:
         cen = mu
 
@@ -66,6 +68,7 @@ def test_height_fwhm_calculation(peakdata):
     y = peakdata[1]
     check_height_fwhm(x, y, lineshapes.voigt, models.VoigtModel())
     check_height_fwhm(x, y, lineshapes.pvoigt, models.PseudoVoigtModel())
+    check_height_fwhm(x, y, lineshapes.pearson4, models.Pearson4Model())
     check_height_fwhm(x, y, lineshapes.pearson7, models.Pearson7Model())
     check_height_fwhm(x, y, lineshapes.moffat, models.MoffatModel())
     check_height_fwhm(x, y, lineshapes.students_t, models.StudentsTModel())
@@ -110,6 +113,10 @@ def test_height_and_fwhm_expression_evalution_in_builtin_models():
 
     mod = models.MoffatModel()
     params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, beta=0.0)
+    params.update_constraints()
+
+    mod = models.Pearson4Model()
+    params = mod.make_params(amplitude=1.0, center=0.0, sigma=0.9, expon=1.0, skew=5.0)
     params.update_constraints()
 
     mod = models.Pearson7Model()
@@ -214,6 +221,12 @@ def test_guess_modelparams():
     assert_allclose(pars['l_amplitude'].value, 3, rtol=2)
     assert_allclose(pars['l_center'].value, 0.25, rtol=1)
     assert_allclose(pars['l_sigma'].value, 1.3, rtol=1)
+
+    mod = models.Pearson4Model(prefix='g_')
+    pars = mod.guess(y, x=x)
+    assert_allclose(pars['g_amplitude'].value, 3, rtol=2)
+    assert_allclose(pars['g_center'].value, 0.25, rtol=1)
+    assert_allclose(pars['g_sigma'].value, 1.3, rtol=1)
 
     mod = models.SplitLorentzianModel(prefix='s_')
     pars = mod.guess(y, x=x)
