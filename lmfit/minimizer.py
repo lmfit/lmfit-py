@@ -869,8 +869,8 @@ class Minimizer:
                 for par in self.result.params.values():
                     eval_stderr(par, uvars, self.result.var_names, self.result.params)
                 # restore nominal values
-                for v, nam in zip(uvars, self.result.var_names):
-                    self.result.params[nam].value = v.nominal_value
+                for v, name in zip(uvars, self.result.var_names):
+                    self.result.params[name].value = v.nominal_value
 
     def scalar_minimize(self, method='Nelder-Mead', params=None, max_nfev=None,
                         **kws):
