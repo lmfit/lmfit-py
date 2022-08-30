@@ -4,6 +4,7 @@ import time
 
 from asteval import Interpreter, get_ast_names
 import numpy as np
+from scipy.interpolate import splrep, splev
 
 from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
@@ -315,6 +316,122 @@ class PolynomialModel(Model):
         return update_param_vals(pars, self.prefix, **kwargs)
 
     __init__.__doc__ = COMMON_INIT_DOC
+    guess.__doc__ = COMMON_GUESS_DOC
+
+class SplineModel(Model):
+    r"""A 1-D cubic spline model with a variable number of `knots` and
+    parameters `s0`, `s1`, ..., `sN`, for `N` knots.
+
+    The user must supply a list or ndarray `xknots`: the `x` values for the
+    'knots' which control the flexibility of the spline function.
+
+    The parameters `s0`, ..., `sN` (where `N` is the size of `xknots`) will
+    correspond to the `y` values for the spline knots at the `x=xknots`
+    positions where the highest order derivative will be discontinuous.
+    The resulting curve will not necessarily pass through these knot
+    points, but for finely-spaced knots, the spline parameter values will
+    be very close to the `y` values of the resulting curve.
+
+    The maximum number of knots supported is 100.
+
+    Using the `guess()` method to initialize parameter values is highly
+    recommended.
+
+    Parameters
+    ----------
+    xknots : :obj:`list` of floats or :obj:`ndarray`, required
+        x-values of knots for spline.
+    independent_vars : :obj:`list` of :obj:`str`, optional
+        Arguments to the model function that are independent variables
+        default is ['x']).
+    prefix : str, optional
+        String to prepend to parameter names, needed to add two Models
+        that have parameter names in common.
+    nan_policy : {'raise', 'propagate', 'omit'}, optional
+        How to handle NaN and missing values in data. See Notes below.
+
+    Notes
+    -----
+    1.  There must be at least 4 knot points, and not more than 100.
+
+    2. `nan_policy` sets what to do when a NaN or missing value is seen in
+          the data. Should be one of:
+
+        - `'raise'` : raise a `ValueError` (default)
+        - `'propagate'` : do nothing
+        - `'omit'` : drop missing data
+
+    """
+
+    MAX_KNOTS = 300
+    NKNOTS_MAX_ERR = f"SplineModel supports up to {MAX_KNOTS:d} knots"
+    NKNOTS_NDARRY_ERR = "SplineModel xknots must be 1-D array-like"
+    DIM_ERR = "SplineModel supports only 1-d spline interpolation"
+
+    def __init__(self, xknots, independent_vars=['x'], prefix='',
+                 nan_policy='raise', **kwargs):
+        """ """
+        kwargs.update({'prefix': prefix, 'nan_policy': nan_policy,
+                       'independent_vars': independent_vars})
+
+        if isinstance(xknots, (list, tuple)):
+            xknots = np.asarray(xknots, dtype=np.float64)
+        try:
+            xknots = xknots.flatten()
+
+        except:
+            raise TypeError(self.NKNOTS_NDARRAY_ERR)
+
+        if len(xknots) > self.MAX_KNOTS:
+            raise TypeError(self.NKNOTS_MAX_ERR)
+
+        if len(independent_vars) > 1:
+            raise TypeError(self.DIM_ERR)
+
+        self.xknots = xknots
+        self.nknots = len(xknots)
+        self.order = 3   # cubic splines only
+
+        def spline_model(x, s0=1, s1=1, s2=1, s3=1, s4=1, s5=1):
+            "used only for the initial parsing"
+            return x
+
+        super().__init__(spline_model, **kwargs)
+
+        if 'x' not in independent_vars:
+            self.independent_vars.pop('x')
+
+        self._param_root_names = [f's{d}' for d in range(self.nknots)]
+        self._param_names = [f'{prefix}{s}' for s in self._param_root_names]
+
+        self.knots, _c, _k = splrep(self.xknots, np.ones(self.nknots),
+                                    k=self.order)
+
+    def eval(self, params=None, **kwargs):
+        """note that we override `eval()` here for a variadic function,
+        as we will not know  the number of spline parameters until run time
+        """
+        self.make_funcargs(params, kwargs)
+
+        coefs = [params[f'{self.prefix}s{d}'].value for d in range(self.nknots)]
+        coefs.extend([coefs[-1]]*(self.order+1))
+        coefs = np.array(coefs)
+        x = kwargs[self.independent_vars[0]]
+        return splev(x, [self.knots, coefs, self.order])
+
+    def guess(self, data, x, **kwargs):
+        """Estimate initial model parameter values from data."""
+        pars = self.make_params()
+
+        for i, xk in enumerate(self.xknots):
+            ix = np.abs(x-xk).argmin()
+            this = data[ix]
+            pone = data[ix+1] if ix < len(x)-2 else this
+            mone = data[ix-1] if ix > 0 else this
+            pars[f'{self.prefix}s{i}'].value = (4.*this + pone + mone)/6.
+
+        return update_param_vals(pars, self.prefix, **kwargs)
+
     guess.__doc__ = COMMON_GUESS_DOC
 
 
