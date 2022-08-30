@@ -207,7 +207,7 @@ Step-like models
 Two models represent step-like functions, and share many characteristics.
 
 :class:`StepModel`
-!~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: StepModel
 
