@@ -719,7 +719,7 @@ To account for that changing background, we'll use a spline, but need to
 know where to put the "knots".  Picking points away from the peak makes
 sense -- we don't want to fit the peak -- but we want it to have some
 flexibility near the peak.  Let's try spacing knot points at ``x=1, 3, ...,
-13``, then skip over the peak at around `x=16` and then pick up knots points
+13``, then skip over the peak at around ``x=16`` and then pick up knots points
 at ``x=19, 21, 23, 25``.
 
 .. jupyter-execute::
