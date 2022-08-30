@@ -1,8 +1,8 @@
 .. _builtin_models_chapter:
 
-=======================================================
- Built-in Fitting Models in the :mod:`models` module
-=======================================================
+===================================================
+Built-in Fitting Models in the :mod:`models` module
+===================================================
 
 .. module:: lmfit.models
 
@@ -93,7 +93,7 @@ of 0 on the value of ``sigma``.
 .. autoclass:: PseudoVoigtModel
 
 :class:`MoffatModel`
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: MoffatModel
 
@@ -128,17 +128,17 @@ of 0 on the value of ``sigma``.
 .. autoclass:: DampedHarmonicOscillatorModel
 
 :class:`ExponentialGaussianModel`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: ExponentialGaussianModel
 
 :class:`SkewedGaussianModel`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SkewedGaussianModel
 
 :class:`SkewedVoigtModel`
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SkewedVoigtModel
 
@@ -148,7 +148,7 @@ of 0 on the value of ``sigma``.
 .. autoclass:: ThermalDistributionModel
 
 :class:`DoniachModel`
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: DoniachModel
 
@@ -159,10 +159,8 @@ Linear and Polynomial Models
 These models correspond to polynomials of some degree. Of course, lmfit is
 a very inefficient way to do linear regression (see :numpydoc:`polyfit`
 or :scipydoc:`stats.linregress`), but these models may be useful as one
-of many components of a composite model.
-
-
-The Spline model corresponds to a cubic spline.,
+of many components of a composite model.  The SplineModel below corresponds
+to a cubic spline.
 
 
 :class:`ConstantModel`
@@ -193,12 +191,12 @@ The Spline model corresponds to a cubic spline.,
 
 
 Periodic Models
-----------------
+---------------
 
 These models correspond to periodic functions.
 
 :class:`SineModel`
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SineModel
 
@@ -209,12 +207,12 @@ Step-like models
 Two models represent step-like functions, and share many characteristics.
 
 :class:`StepModel`
-~~~~~~~~~~~~~~~~~
+!~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: StepModel
 
 :class:`RectangleModel`
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RectangleModel
 
@@ -339,7 +337,7 @@ and ``wid``, and build a model that can be used to fit data.
 
 
 Example 1: Fit Peak data to Gaussian, Lorentzian, and Voigt profiles
-====================================================================
+--------------------------------------------------------------------
 
 Here, we will fit data to three similar lineshapes, in order to decide which
 might be the better model. We will start with a Gaussian profile, as in
@@ -505,7 +503,7 @@ of being the better model.
 
 
 Example 2: Fit data to a Composite Model with pre-defined models
-================================================================
+----------------------------------------------------------------
 
 Here, we repeat the point made at the end of the last chapter that
 instances of :class:`~lmfit.model.Model` class can be added together to make a
@@ -543,7 +541,7 @@ with a plot of
 
 
 Example 3: Fitting Multiple Peaks -- and using Prefixes
-=======================================================
+-------------------------------------------------------
 
 .. _NIST StRD: https://itl.nist.gov/div898/strd/nls/nls_main.shtml
 
