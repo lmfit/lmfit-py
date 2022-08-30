@@ -1,8 +1,8 @@
 .. _builtin_models_chapter:
 
-=====================================================
+=======================================================
  Built-in Fitting Models in the :mod:`models` module
-=====================================================
+=======================================================
 
 .. module:: lmfit.models
 
@@ -44,7 +44,7 @@ characteristic width.
 After a list of built-in models, a few examples of their use are given.
 
 Peak-like models
-================
+----------------
 
 There are many peak-like models available. These include
 :class:`GaussianModel`, :class:`LorentzianModel`, :class:`VoigtModel`,
@@ -68,93 +68,93 @@ value of ``amplitude``, ``center``, and ``sigma``, and sets a lower bound
 of 0 on the value of ``sigma``.
 
 :class:`GaussianModel`
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: GaussianModel
 
 :class:`LorentzianModel`
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: LorentzianModel
 
 :class:`SplitLorentzianModel`
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SplitLorentzianModel
 
 :class:`VoigtModel`
--------------------
+~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: VoigtModel
 
 :class:`PseudoVoigtModel`
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: PseudoVoigtModel
 
 :class:`MoffatModel`
---------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: MoffatModel
 
 :class:`Pearson7Model`
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: Pearson7Model
 
 :class:`StudentsTModel`
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: StudentsTModel
 
 :class:`BreitWignerModel`
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: BreitWignerModel
 
 :class:`LognormalModel`
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: LognormalModel
 
 :class:`DampedOscillatorModel`
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: DampedOscillatorModel
 
 :class:`DampedHarmonicOscillatorModel`
---------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: DampedHarmonicOscillatorModel
 
 :class:`ExponentialGaussianModel`
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: ExponentialGaussianModel
 
 :class:`SkewedGaussianModel`
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SkewedGaussianModel
 
 :class:`SkewedVoigtModel`
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SkewedVoigtModel
 
 :class:`ThermalDistributionModel`
----------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: ThermalDistributionModel
 
 :class:`DoniachModel`
----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: DoniachModel
 
 
 Linear and Polynomial Models
-============================
+----------------------------
 
 These models correspond to polynomials of some degree. Of course, lmfit is
 a very inefficient way to do linear regression (see :numpydoc:`polyfit`
@@ -166,85 +166,85 @@ The Spline model corresponds to a cubic spline.,
 
 
 :class:`ConstantModel`
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: ConstantModel
 
 :class:`LinearModel`
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: LinearModel
 
 :class:`QuadraticModel`
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: QuadraticModel
 
 :class:`PolynomialModel`
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: PolynomialModel
 
 :class:`SplinelModel`
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SplineModel
 
 
 
 Periodic Models
-===============
+----------------
 
 These models correspond to periodic functions.
 
 :class:`SineModel`
-------------------
+~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: SineModel
 
 
 Step-like models
-================
+----------------
 
 Two models represent step-like functions, and share many characteristics.
 
 :class:`StepModel`
-------------------
+~~~~~~~~~~~~~~~~~
 
 .. autoclass:: StepModel
 
 :class:`RectangleModel`
------------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: RectangleModel
 
 
 Exponential and Power law models
-================================
+--------------------------------
 
 :class:`ExponentialModel`
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: ExponentialModel
 
 :class:`PowerLawModel`
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: PowerLawModel
 
 
 Two dimensional Peak-like models
-================================
+--------------------------------
 
 The one example of a two-dimensional peak is a two-dimensional Gaussian.
 
 :class:`Gaussian2dModel`
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: Gaussian2dModel
 
 User-defined Models
-===================
+-------------------
 
 .. _asteval: https://newville.github.io/asteval/
 
@@ -264,7 +264,7 @@ mathematical constraints as discussed in :ref:`constraints_chapter`.
 
 
 :class:`ExpressionModel`
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. autoclass:: ExpressionModel
 
@@ -674,14 +674,13 @@ Sometimes a background is more complex or at least has a less obvious
 functional form.  In these cases, it can be useful to use a *spline* to
 model part of the curve.  Just for completeness, a spline is a piecewise
 continuous polynomial function (typically made of cubic polynomials) that
-has a series of `x` values known as "knots" at which the highest order
+has a series of ``x`` values known as "knots" at which the highest order
 derivative is allowed to be discontinuous.  By adding more knots, the
 spline function has more flexibility to follow a particular function.
 
-As an example (see `doc_builtinmodels_splinemodel.py`), we start with data
-with a single peak and a background that is hard to characterize clearly as
-a simple decay, oscillatory structure.
-
+As an example (see the example file "doc_builtinmodels_splinemodel.py"), we
+start with data with a single peak and a background that is hard to
+characterize clearly as a simple decay, oscillatory structure.
 
 .. jupyter-execute::
     :hide-output:
@@ -721,9 +720,9 @@ for a Gaussian peak, say with:
 To account for that changing background, we'll use a spline, but need to
 know where to put the "knots".  Picking points away from the peak makes
 sense -- we don't want to fit the peak -- but we want it to have some
-flexibility near the peak.  Let's try spacing knot points at `x=1, 3, ...,
-13`, then skip over the peak at around `x=16` and then pick up knots points
-at `x=19, 21, 23, 25`.
+flexibility near the peak.  Let's try spacing knot points at ``x=1, 3, ...,
+13``, then skip over the peak at around `x=16` and then pick up knots points
+at ``x=19, 21, 23, 25``.
 
 .. jupyter-execute::
     :hide-output:
@@ -734,10 +733,10 @@ at `x=19, 21, 23, 25`.
     params.update(bkg.guess(y, x))
 
 
-Note that we used `bkg.guess()` to guess the initial values of the spline
-parameters and then update the `params` Parameters object with these 11
-parameters to account for the spline.  These will be very close to the `y`
-values at the knot `x` values. The precise definition of the spline knot
+Note that we used ``bkg.guess()`` to guess the initial values of the spline
+parameters and then update the ``params`` Parameters object with these 11
+parameters to account for the spline.  These will be very close to the ``y``
+values at the knot ``x`` values. The precise definition of the spline knot
 parameters is not "the y-values through which the resulting spline curve
 goes", but these values are pretty good estimates for the resulting spline
 values.  You'll see below that these initial values are close.
@@ -856,7 +855,7 @@ are shown in the table below.
  | knot_xvals3       | 13   |  12.052 (0.872)                        |
  +-------------------+------+----------------------------------------+
 
-Adding more spline points, especially near the peak center around `x=16.4`,
+Adding more spline points, especially near the peak center around ``x=16.4``,
 can impact the measurement of the amplitude but the uncertainty increases
 dramatically enough to mostly cover the same range of values.  This is a
 interesting case of adding more parameters to a fit and having the
