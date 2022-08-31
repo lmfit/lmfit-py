@@ -4,7 +4,7 @@ import time
 
 from asteval import Interpreter, get_ast_names
 import numpy as np
-from scipy.interpolate import splrep, splev
+from scipy.interpolate import splev, splrep
 
 from . import lineshapes
 from .lineshapes import (breit_wigner, damped_oscillator, dho, doniach,
@@ -318,6 +318,7 @@ class PolynomialModel(Model):
     __init__.__doc__ = COMMON_INIT_DOC
     guess.__doc__ = COMMON_GUESS_DOC
 
+
 class SplineModel(Model):
     r"""A 1-D cubic spline model with a variable number of `knots` and
     parameters `s0`, `s1`, ..., `sN`, for `N` knots.
@@ -332,7 +333,7 @@ class SplineModel(Model):
     points, but for finely-spaced knots, the spline parameter values will
     be very close to the `y` values of the resulting curve.
 
-    The maximum number of knots supported is 100.
+    The maximum number of knots supported is 300.
 
     Using the `guess()` method to initialize parameter values is highly
     recommended.
@@ -352,7 +353,7 @@ class SplineModel(Model):
 
     Notes
     -----
-    1.  There must be at least 4 knot points, and not more than 100.
+    1.  There must be at least 4 knot points, and not more than 300.
 
     2. `nan_policy` sets what to do when a NaN or missing value is seen in
           the data. Should be one of:
@@ -378,8 +379,7 @@ class SplineModel(Model):
             xknots = np.asarray(xknots, dtype=np.float64)
         try:
             xknots = xknots.flatten()
-
-        except:
+        except Exception:
             raise TypeError(self.NKNOTS_NDARRAY_ERR)
 
         if len(xknots) > self.MAX_KNOTS:
@@ -1641,6 +1641,7 @@ lmfit_models = {'Constant': ConstantModel,
                 'Linear': LinearModel,
                 'Quadratic': QuadraticModel,
                 'Polynomial': PolynomialModel,
+                'Spline': SplineModel,
                 'Gaussian': GaussianModel,
                 'Gaussian-2D': Gaussian2dModel,
                 'Lorentzian': LorentzianModel,
