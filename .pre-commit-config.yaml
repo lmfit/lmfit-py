@@ -56,6 +56,7 @@ repos:
     -   id: codespell
         files: '.py|.rst'
         exclude: 'doc/doc_examples_to_gallery.py'
+        exclude: 'lmfit/models.py'
         # escaped characters currently do not work correctly
         # so \nnumber is considered a spelling error....
         args: [-L nnumber]
