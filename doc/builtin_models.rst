@@ -650,10 +650,8 @@ This script is in the file ``doc_builtinmodels_nistgauss2.py`` in the examples f
 and the figure above shows an improved initial estimate of the data.
 
 
-
 Example 4: Using a Spline Model
-===============================
-
+--------------------------------
 
 In the example above, the two peaks might represent the interesting part of
 the data, and the exponential decay could be viewed a "background" which
