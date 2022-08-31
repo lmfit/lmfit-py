@@ -1,7 +1,8 @@
 # <examples/doc_builtinmodels_splinemodel.py>
-import numpy as np
 import matplotlib.pyplot as plt
-from lmfit.models import SplineModel, GaussianModel
+import numpy as np
+
+from lmfit.models import GaussianModel, SplineModel
 
 data = np.loadtxt('test_splinepeak.dat')
 x = data[:, 0]
@@ -15,11 +16,10 @@ params = model.make_params(amplitude=8, center=16, sigma=1)
 # make a background spline with knots evenly spaced over the background,
 # but sort of skipping over where the peak is
 knot_xvals3 = np.array([1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25])
-knot_xvals2 = np.array([1, 3, 5, 7, 9, 11, 13,   16,   19, 21, 23, 25])
-knot_xvals  = np.array([1, 3, 5, 7, 9, 11, 13,         19, 21, 23, 25])
+knot_xvals2 = np.array([1, 3, 5, 7, 9, 11, 13,   16,   19, 21, 23, 25])  # noqa: E241
+knot_xvals1 = np.array([1, 3, 5, 7, 9, 11, 13,         19, 21, 23, 25])  # noqa: E241
 
-
-bkg  = SplineModel(prefix='bkg_',   xknots=knot_xvals)
+bkg = SplineModel(prefix='bkg_', xknots=knot_xvals1)
 params.update(bkg.guess(y, x))
 
 model = model + bkg
@@ -39,7 +39,7 @@ plt.plot(x, comps['bkg_'], label='background')
 plt.plot(x, comps['peak_'], label='peak')
 
 knot_yvals = np.array([o.value for o in out.params.values() if o.name.startswith('bkg')])
-plt.plot(knot_xvals, knot_yvals, 'o', color='black', label='spline knots values')
+plt.plot(knot_xvals1, knot_yvals, 'o', color='black', label='spline knots values')
 plt.legend()
 plt.show()
 
@@ -53,7 +53,7 @@ plt.show()
 plt.plot(x, y, 'o', label='data')
 
 for nknots in (10, 15, 20, 25, 30):
-    model = SplineModel(prefix='bkg_',   xknots=np.linspace(0, 25, nknots))
+    model = SplineModel(prefix='bkg_', xknots=np.linspace(0, 25, nknots))
     params = model.guess(y, x)
     out = model.fit(y, params, x=x)
     plt.plot(x, out.best_fit, label=f'best-fit ({nknots} knots)')
