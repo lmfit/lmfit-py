@@ -2,6 +2,8 @@ import numpy as np
 
 import lmfit
 from lmfit.lineshapes import gaussian
+from lmfit.models import GaussianModel, SplineModel
+
 
 def _isclose(name, expected_value, fit_value, atol, rtol):
     """isclose with error message"""
@@ -120,24 +122,18 @@ def testSineModel_guess():
 
 
 def testSplineModel():
-
-    from lmfit.lineshapes import gaussian
-    from lmfit.models import SplineModel, GaussianModel
-
-
     x = np.linspace(0, 25, 501)
     y = gaussian(x, amplitude=10, center=16.2, sigma=0.8) + 3 + 0.03*x + np.sin(x/4)
 
     model = GaussianModel(prefix='peak_')
     params = model.make_params(amplitude=8, center=16, sigma=1)
 
-    knot_xvals  = np.array([1, 3, 5, 7, 9, 11, 13,         19, 21, 23, 25])
+    knot_xvals = np.array([1, 3, 5, 7, 9, 11, 13, 19, 21, 23, 25])
 
-    bkg  = SplineModel(prefix='bkg_',   xknots=knot_xvals)
+    bkg = SplineModel(prefix='bkg_', xknots=knot_xvals)
     params.update(bkg.guess(y, x))
 
     model = model + bkg
 
     pars = dict(peak_amplitude=10, peak_center=16.2, peak_sigma=0.8)
-
     check_fit(model, params, x, y, pars, noise_scale=0.05)
