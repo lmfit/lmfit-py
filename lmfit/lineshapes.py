@@ -1,9 +1,9 @@
 """Basic model lineshapes and distribution functions."""
 
-from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p, pi, real,
-                   sin, sqrt, where)
-from scipy.special import erf, erfc
+from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p, pi,
+                   real, sin, sqrt, where)
 from scipy.special import betaln as betalnfcn
+from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
 from scipy.special import loggamma as loggammafcn
 from scipy.special import wofz
