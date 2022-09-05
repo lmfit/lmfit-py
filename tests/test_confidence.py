@@ -203,7 +203,7 @@ def test_confidence_warnings(data, pars):
 
 def test_confidence_with_trace(data, pars):
     """Test calculation of confidence intervals with trace."""
-    minimizer = lmfit.Minimizer(residual, pars, fcn_args=(data))
+    minimizer = lmfit.Minimizer(residual, pars, fcn_args=data)
     out = minimizer.leastsq()
 
     ci, tr = lmfit.conf_interval(minimizer, out, sigmas=[0.6827], trace=True)
@@ -253,7 +253,7 @@ def test_confidence_prob_func(data, pars):
         nonlocal called
         called += 1
         nfree = best_fit.nfree
-        nfix = best_fit.nfree - new_fit.nfree
+        nfix = best_fit.nvarys - new_fit.nvarys
         dchi = new_fit.chisqr / best_fit.chisqr - 1.0
         return f.cdf(dchi * nfree / nfix, nfix, nfree)
 
