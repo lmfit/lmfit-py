@@ -752,9 +752,7 @@ class Pearson4Model(Model):
 
     where :math:`\beta` is the beta function (see :scipydoc:`special.beta`).
     The :meth:`guess` function always gives a starting value of 1.5 for `expon`,
-    and 0 for `skew`. In addition, parameters `fwhm`, `height` and `position` are included as
-    constraints to report approximate full width at half maximum, peak height, and position
-    of the maximal function value, respectively.
+    and 0 for `skew`.
 
     For more information, see:
     https://en.wikipedia.org/wiki/Pearson_distribution#The_Pearson_type_IV_distribution
