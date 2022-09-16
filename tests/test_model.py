@@ -11,7 +11,7 @@ import pytest
 
 import lmfit
 from lmfit import Model, models
-from lmfit.lineshapes import gaussian
+from lmfit.lineshapes import gaussian, lorentzian
 from lmfit.model import get_reducer, propagate_err
 from lmfit.models import PseudoVoigtModel
 
@@ -19,7 +19,7 @@ from lmfit.models import PseudoVoigtModel
 @pytest.fixture()
 def gmodel():
     """Return a Gaussian model."""
-    return Model(lmfit.lineshapes.gaussian)
+    return Model(gaussian)
 
 
 def test_get_reducer_invalid_option():
@@ -127,7 +127,7 @@ def test_initialize_Model_class_default_arguments(gmodel):
 
 def test_initialize_Model_class_independent_vars():
     """Test for Model class initialized with independent_vars."""
-    model = Model(lmfit.lineshapes.gaussian, independent_vars=['amplitude'])
+    model = Model(gaussian, independent_vars=['amplitude'])
     assert model._param_root_names == ['x', 'center', 'sigma']
     assert model.param_names == ['x', 'center', 'sigma']
     assert model.independent_vars == ['amplitude']
@@ -135,7 +135,7 @@ def test_initialize_Model_class_independent_vars():
 
 def test_initialize_Model_class_param_names():
     """Test for Model class initialized with param_names."""
-    model = Model(lmfit.lineshapes.gaussian, param_names=['amplitude'])
+    model = Model(gaussian, param_names=['amplitude'])
 
     assert model._param_root_names == ['amplitude']
     assert model.param_names == ['amplitude']
@@ -144,28 +144,28 @@ def test_initialize_Model_class_param_names():
 @pytest.mark.parametrize("policy", ['raise', 'omit', 'propagate'])
 def test_initialize_Model_class_nan_policy(policy):
     """Test for Model class initialized with nan_policy."""
-    model = Model(lmfit.lineshapes.gaussian, nan_policy=policy)
+    model = Model(gaussian, nan_policy=policy)
 
     assert model.nan_policy == policy
 
 
 def test_initialize_Model_class_prefix():
     """Test for Model class initialized with prefix."""
-    model = Model(lmfit.lineshapes.gaussian, prefix='test_')
+    model = Model(gaussian, prefix='test_')
 
     assert model.prefix == 'test_'
     assert model._param_root_names == ['amplitude', 'center', 'sigma']
     assert model.param_names == ['test_amplitude', 'test_center', 'test_sigma']
     assert model.name == "Model(gaussian, prefix='test_')"
 
-    model = Model(lmfit.lineshapes.gaussian, prefix=None)
+    model = Model(gaussian, prefix=None)
 
     assert model.prefix == ''
 
 
 def test_initialize_Model_name():
     """Test for Model class initialized with name."""
-    model = Model(lmfit.lineshapes.gaussian, name='test_function')
+    model = Model(gaussian, name='test_function')
 
     assert model.name == 'Model(test_function)'
 
@@ -173,7 +173,7 @@ def test_initialize_Model_name():
 def test_initialize_Model_kws():
     """Test for Model class initialized with **kws."""
     kws = {'amplitude': 10.0}
-    model = Model(lmfit.lineshapes.gaussian,
+    model = Model(gaussian,
                   independent_vars=['x', 'amplitude'], **kws)
 
     assert model._param_root_names == ['center', 'sigma']
@@ -190,7 +190,7 @@ test_reprstring_data = [(False, 'Model(gaussian)'),
 def test_Model_reprstring(option, expected):
     """Test for Model class function _reprstring."""
     kws = {'amplitude': 10.0}
-    model = Model(lmfit.lineshapes.gaussian,
+    model = Model(gaussian,
                   independent_vars=['x', 'amplitude'], **kws)
 
     assert model._reprstring(option) == expected
@@ -218,7 +218,7 @@ def test_Model_set_state(gmodel):
     """
     out = gmodel._get_state()
 
-    new_model = Model(lmfit.lineshapes.lorentzian)
+    new_model = Model(lorentzian)
     new_model = new_model._set_state(out)
 
     assert new_model.prefix == gmodel.prefix
