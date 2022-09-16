@@ -11,7 +11,7 @@ from .jsonutils import decode4js, encode4js
 from .lineshapes import tiny
 from .printfuncs import params_html_table
 
-SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma}
+SCIPY_FUNCTIONS = {'gamfcn': scipy.special.gamma, 'loggammafcn': scipy.special.loggamma, 'betalnfnc': scipy.special.betaln}
 for fnc_name in ('erf', 'erfc', 'wofz'):
     SCIPY_FUNCTIONS[fnc_name] = getattr(scipy.special, fnc_name)
 

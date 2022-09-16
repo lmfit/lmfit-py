@@ -97,6 +97,11 @@ of 0 on the value of ``sigma``.
 
 .. autoclass:: MoffatModel
 
+:class:`Pearson4Model`
+~~~~~~~~~~~~~~~~~~~~~~
+
+.. autoclass:: Pearson4Model
+
 :class:`Pearson7Model`
 ~~~~~~~~~~~~~~~~~~~~~~
 
