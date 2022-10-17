@@ -137,6 +137,8 @@ def fit_report(inpars, modelpars=None, show_correl=True, min_correl=0.1,
         add(f"    reduced chi-square = {getfloat_attr(result, 'redchi')}")
         add(f"    Akaike info crit   = {getfloat_attr(result, 'aic')}")
         add(f"    Bayesian info crit = {getfloat_attr(result, 'bic')}")
+        if hasattr(result, 'rsquared'):
+            add(f"    R-squared          = {getfloat_attr(result, 'rsquared')}")
         if not result.errorbars:
             add("##  Warning: uncertainties could not be estimated:")
             if result.method in ('leastsq', 'least_squares') or HAS_NUMDIFFTOOLS:

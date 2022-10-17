@@ -789,6 +789,17 @@ and ``bic``.
 
    numpy.ndarray for residual.
 
+.. attribute:: rsquared
+
+   Floating point :math:`R^2` statisic, defined for data :math:`y` and best-fit model :math:`f` as
+
+.. math::
+   :nowrap:
+
+   \begin{eqnarray*}
+     R^2 &=&  1 - \frac{\sum_i (y_i - f_i)^2}{\sum_i (y_i - \bar{y})^2}
+    \end{eqnarray*}
+
 .. attribute::  scale_covar
 
    Boolean flag for whether to automatically scale covariance matrix.
