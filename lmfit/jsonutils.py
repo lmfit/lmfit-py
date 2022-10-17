@@ -2,6 +2,7 @@
 
 from base64 import b64decode, b64encode
 import sys
+import warnings
 
 import numpy as np
 
@@ -88,14 +89,10 @@ def encode4js(obj):
             out[encode4js(key)] = encode4js(val)
         return out
     if callable(obj):
-        val, importer = None, None
-        if HAS_DILL:
-            val = str(b64encode(dill.dumps(obj)), 'utf-8')
-        else:
-            val = None
-            importer = find_importer(obj)
+        value = str(b64encode(dill.dumps(obj)), 'utf-8') if HAS_DILL else None
         return dict(__class__='Callable', __name__=obj.__name__,
-                    pyversion=pyvers, value=val, importer=importer)
+                    pyversion=pyvers, value=value,
+                    importer=find_importer(obj))
     return obj
 
 
@@ -132,11 +129,19 @@ def decode4js(obj):
     elif classname == 'PSeries' and read_json is not None:
         out = read_json(obj['value'], typ='series')
     elif classname == 'Callable':
-        out = val = obj['__name__']
-        if pyvers == obj['pyversion'] and HAS_DILL:
-            out = dill.loads(b64decode(obj['value']))
-        elif obj['importer'] is not None:
-            out = import_from(obj['importer'], val)
+        out = obj['__name__']
+        try:
+            out = import_from(obj['importer'], out)
+            unpacked = True
+        except (ImportError, AttributeError):
+            unpacked = False
+        if not unpacked and HAS_DILL:
+            try:
+                out = dill.loads(b64decode(obj['value']))
+            except RuntimeError:
+                msg = "Could not unpack dill-encoded callable `{0}`, saved with Python version {1}"
+                warnings.warn(msg.format(obj['__name__'],
+                                         obj['pyversion']))
 
     elif classname in ('Dict', 'dict'):
         out = {}
