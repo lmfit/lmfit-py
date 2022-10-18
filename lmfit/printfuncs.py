@@ -245,6 +245,8 @@ def fitreport_html_table(result, show_correl=True, min_correl=0.1):
     stat_row('reduced chi-square', gformat(result.redchi))
     stat_row('Akaike info crit.', gformat(result.aic))
     stat_row('Bayesian info crit.', gformat(result.bic))
+    if hasattr(result, 'rsquared'):
+        stat_row('R-squared', gformat(result.rsquared))
     add('</table>')
     add('<h2>Variables</h2>')
     add(params_html_table(result.params))
