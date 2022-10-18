@@ -596,11 +596,11 @@ saving a model will always save the *name* of the model function. The
 contain a dictionary of function definitions with the function names as
 keys and function objects as values. If one of the dictionary keys matches
 the saved name, the corresponding function object will be used as the model
-function. If it is not found by ne=ame, and if ``dill`` was used to save
+function. If it is not found by name, and if ``dill`` was used to save
 the model, and if ``dill`` is available at run-time, the ``dill``-encoded
 function will try to be used.  Note that this approach will generally allow
-you to save a model that can be used by the same other installation of the
-same version of Python, but may not work across versions.  For preserving
+you to save a model that can be used by another installation of the
+same version of Python, but may not work across Python versions.  For preserving
 fits for extended periods of time (say, archiving for documentation of
 scientific results), we strongly encourage you to save the full Python code
 used for the model function and fit process.
