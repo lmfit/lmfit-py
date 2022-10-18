@@ -1412,9 +1412,9 @@ class ModelResult(Minimizer):
                     pass
 
         if self.data is not None and len(self.data) > 1:
-            sstot = max(tiny, ((self.data - self.data.mean())**2).sum())
+            sstot = ((self.data - self.data.mean())**2).sum()
             if isinstance(self.residual, np.ndarray) and len(self.residual) > 1:
-                self.rsquared = 1.0 - (self.residual**2).sum() / sstot
+                self.rsquared = 1.0 - (self.residual**2).sum()/max(tiny, sstot)
 
         self.init_values = self.model._make_all_args(self.init_params)
         self.best_values = self.model._make_all_args(_ret.params)
