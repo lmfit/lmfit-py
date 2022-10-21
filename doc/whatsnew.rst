@@ -25,6 +25,7 @@ Bug fixes/enhancements:
 - fixed function definition for ``StepModel(form='linear')``, was not consistent with the other ones. (@matpompili; PR #794)
 - fixed height factor for ``Gaussian2dModel``, was not correct. (@matpompili; PR #795)
 - added ``Pearson4`` fitting model
+- for covariances with negative diagonal elements, we set the covariance to ``None`` (PR #813)
 
 Deprecations:
 
