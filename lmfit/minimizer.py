@@ -789,9 +789,14 @@ class Minimizer:
             hessian_ndt = Hfun(fvars)
             cov_x = inv(hessian_ndt) * 2.0
         except (LinAlgError, ValueError):
-            return None
+            nvar = len(fvars)
+            cov_x = np.full((nvar, nvar), -1, dtype=np.float64)
         finally:
             self.result.nfev = nfev
+
+        if cov_x.diagonal().min() < 0:
+            # we know the calculated covariance is incorrect, so we set the covariance to None
+            cov_x = None
 
         # restore original values
         for name in self.result.var_names:
