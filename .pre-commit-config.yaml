@@ -2,7 +2,7 @@ exclude: 'doc/conf.py'
 
 repos:
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v2.38.0
+    rev: v3.1.0
     hooks:
     -   id: pyupgrade
         args: [--py37-plus]
@@ -51,7 +51,7 @@ repos:
     -   id: python-check-blanket-noqa
 
 -   repo: https://github.com/codespell-project/codespell
-    rev: v2.2.1
+    rev: v2.2.2
     hooks:
     -   id: codespell
         files: '.py|.rst'
