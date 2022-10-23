@@ -436,8 +436,8 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
         out = 0.5 + arctan(out)/pi
     elif form == 'linear':
         out = out + 0.5
-        out[where(out < 0)] = 0.0
-        out[where(out > 1)] = 1.0
+        out[out < 0] = 0.0
+        out[out > 1] = 1.0
     else:
         msg = (f"Invalid value ('{form}') for argument 'form'; should be one "
                "of 'erf', 'logistic', 'atan', 'arctan', or 'linear'.")
@@ -475,10 +475,10 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
     elif form in ('atan', 'arctan'):
         out = (arctan(arg1) + arctan(arg2))/pi
     elif form == 'linear':
-        arg1[where(arg1 < 0)] = 0.0
-        arg1[where(arg1 > 1)] = 1.0
-        arg2[where(arg2 > 0)] = 0.0
-        arg2[where(arg2 < -1)] = -1.0
+        arg1[arg1 < 0] = 0.0
+        arg1[arg1 > 1] = 1.0
+        arg2[arg2 > 0] = 0.0
+        arg2[arg2 < -1] = -1.0
         out = arg1 + arg2
     else:
         msg = (f"Invalid value ('{form}') for argument 'form'; should be one "
