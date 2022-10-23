@@ -19,6 +19,8 @@ from .jsonutils import HAS_DILL, decode4js, encode4js
 from .minimizer import MinimizerResult
 from .printfuncs import ci_report, fit_report, fitreport_html_table
 
+tiny = 1.e-15
+
 # Use pandas.isnull for aligning missing data if pandas is available.
 # otherwise use numpy.isnan
 try:
@@ -1409,6 +1411,11 @@ class ModelResult(Minimizer):
                 except AttributeError:
                     pass
 
+        if self.data is not None and len(self.data) > 1:
+            sstot = ((self.data - self.data.mean())**2).sum()
+            if isinstance(self.residual, np.ndarray) and len(self.residual) > 1:
+                self.rsquared = 1.0 - (self.residual**2).sum()/max(tiny, sstot)
+
         self.init_values = self.model._make_all_args(self.init_params)
         self.best_values = self.model._make_all_args(_ret.params)
         self.best_fit = self.model.eval(params=_ret.params, **self.userkws)
@@ -1646,12 +1653,13 @@ class ModelResult(Minimizer):
                                  for key in pasteval.user_defined_symbols()}
 
         for attr in ('aborted', 'aic', 'best_values', 'bic', 'chisqr',
-                     'ci_out', 'col_deriv', 'covar', 'errorbars',
-                     'flatchain', 'ier', 'init_values', 'lmdif_message',
-                     'message', 'method', 'nan_policy', 'ndata', 'nfev',
-                     'nfree', 'nvarys', 'redchi', 'scale_covar', 'calc_covar',
-                     'success', 'userargs', 'userkws', 'values', 'var_names',
-                     'weights', 'user_options'):
+                     'ci_out', 'col_deriv', 'covar', 'errorbars', 'flatchain',
+                     'ier', 'init_values', 'lmdif_message', 'message',
+                     'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
+                     'nvarys', 'redchi', 'rsquared', 'scale_covar',
+                     'calc_covar', 'success', 'userargs', 'userkws', 'values',
+                     'var_names', 'weights', 'user_options'):
+
             try:
                 val = getattr(self, attr)
             except AttributeError:
@@ -1744,7 +1752,7 @@ class ModelResult(Minimizer):
                      'errorbars', 'fjac', 'flatchain', 'ier', 'init_fit',
                      'init_values', 'kws', 'lmdif_message', 'message',
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
-                     'nvarys', 'redchi', 'residual', 'scale_covar',
+                     'nvarys', 'redchi', 'residual', 'rsquared', 'scale_covar',
                      'calc_covar', 'success', 'userargs', 'userkws',
                      'var_names', 'weights', 'user_options'):
             setattr(self, attr, decode4js(modres.get(attr, None)))
