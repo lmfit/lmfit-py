@@ -1480,7 +1480,7 @@ class StepModel(Model):
         & f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})  & = A \min{[1, \max{(0, \alpha + 1/2)}]} \\
         & f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})  & = A [1/2 + \arctan{(\alpha)}/{\pi}] \\
         & f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})     & = A [1 + {\operatorname{erf}}(\alpha)]/2 \\
-        & f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}})& = A [1 - \frac{1}{1 + e^{\alpha}} ]
+        & f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}})& = A \left[1 - \frac{1}{1 + e^{\alpha}} \right]
         \end{eqnarray*}
 
     where :math:`\alpha = (x - \mu)/{\sigma}`.
@@ -1535,10 +1535,10 @@ class RectangleModel(Model):
         :nowrap:
 
         \begin{eqnarray*}
-        &f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})   &= A \{ \min{[1, \max{(0, \alpha_1)}]} + \min{[-1, \max{(0, \alpha_2)}]} \} \\
+        &f(x; A, \mu, \sigma, {\mathrm{form={}'linear{}'}})   &= A \{ \min{[1, \max{(-1, \alpha_1)}]} + \min{[1, \max{(-1, \alpha_2)}]} \}/2 \\
         &f(x; A, \mu, \sigma, {\mathrm{form={}'arctan{}'}})   &= A [\arctan{(\alpha_1)} + \arctan{(\alpha_2)}]/{\pi} \\
-        &f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})      &= A [{\operatorname{erf}}(\alpha_1) + {\operatorname{erf}}(\alpha_2)]/2 \\
-        &f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}}) &= A [1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 + e^{\alpha_2}} ]
+        &f(x; A, \mu, \sigma, {\mathrm{form={}'erf{}'}})      &= A \left[{\operatorname{erf}}(\alpha_1) + {\operatorname{erf}}(\alpha_2)\right]/2 \\
+        &f(x; A, \mu, \sigma, {\mathrm{form={}'logistic{}'}}) &= A \left[1 - \frac{1}{1 + e^{\alpha_1}} - \frac{1}{1 + e^{\alpha_2}} \right]
         \end{eqnarray*}
 
 
