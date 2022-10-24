@@ -589,15 +589,22 @@ emphasized that if you are willing to save or reuse the definition of the
 model function as Python code, then saving the Parameters and rest of the
 components that make up a model presents no problem.
 
-If the ``dill`` package is installed, the model function will be saved using
-it. But because saving the model function is not always reliable, saving a
-model will always save the *name* of the model function. The :func:`load_model`
-takes an optional :attr:`funcdefs` argument that can contain a dictionary of
-function definitions with the function names as keys and function objects as
-values. If one of the dictionary keys matches the saved name, the
-corresponding function object will be used as the model function. With this
-approach, if you save a model and can provide the code used for the model
-function, the model can be saved and reliably reloaded and used.
+If the ``dill`` package is installed, the model function will also be saved
+using it. But because saving the model function is not always reliable,
+saving a model will always save the *name* of the model function. The
+:func:`load_model` takes an optional :attr:`funcdefs` argument that can
+contain a dictionary of function definitions with the function names as
+keys and function objects as values. If one of the dictionary keys matches
+the saved name, the corresponding function object will be used as the model
+function. If it is not found by name, and if ``dill`` was used to save
+the model, and if ``dill`` is available at run-time, the ``dill``-encoded
+function will try to be used.  Note that this approach will generally allow
+you to save a model that can be used by another installation of the
+same version of Python, but may not work across Python versions.  For preserving
+fits for extended periods of time (say, archiving for documentation of
+scientific results), we strongly encourage you to save the full Python code
+used for the model function and fit process.
+
 
 .. autofunction:: save_model
 
