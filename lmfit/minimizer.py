@@ -788,8 +788,12 @@ class Minimizer:
             Hfun = ndt.Hessian(self.penalty, step=1.e-4)
             hessian_ndt = Hfun(fvars)
             cov_x = inv(hessian_ndt) * 2.0
+
+            if cov_x.diagonal().min() < 0:
+                # we know the calculated covariance is incorrect, so we set the covariance to None
+                cov_x = None
         except (LinAlgError, ValueError):
-            return None
+            cov_x = None
         finally:
             self.result.nfev = nfev
 
