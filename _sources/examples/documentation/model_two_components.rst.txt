@@ -33,8 +33,6 @@ doc_model_two_components.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -56,12 +54,12 @@ doc_model_two_components.py
         intercept: -0.96860202 +/- 0.03352202 (3.46%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(slope, intercept) = -0.795
-        C(amp, wid)         =  0.666
+        C(amp, wid)         = 0.666
         C(amp, intercept)   = -0.222
         C(amp, slope)       = -0.169
         C(cen, slope)       = -0.162
         C(wid, intercept)   = -0.148
-        C(cen, intercept)   =  0.129
+        C(cen, intercept)   = 0.129
         C(wid, slope)       = -0.113
 
 
@@ -111,28 +109,23 @@ doc_model_two_components.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.203 seconds)
+   **Total running time of the script:** ( 0 minutes  0.232 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_two_components.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: model_two_components.py <model_two_components.py>`
 
-     :download:`Download Python source code: model_two_components.py <model_two_components.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: model_two_components.ipynb <model_two_components.ipynb>`
+      :download:`Download Jupyter notebook: model_two_components.ipynb <model_two_components.ipynb>`
 
 
 .. only:: html

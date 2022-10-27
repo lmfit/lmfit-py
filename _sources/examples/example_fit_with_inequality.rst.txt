@@ -121,8 +121,6 @@ fitting results:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
@@ -134,14 +132,14 @@ fitting results:
         wid_g:       1.21434950 +/- 0.00327315 (0.27%) (init = 1)
         wid_l:       1.21434950 +/- 0.00327315 (0.27%) == 'wid_g'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp_g, wid_g)      =  0.620
-        C(amp_g, peak_split) =  0.380
-        C(peak_split, wid_g) =  0.344
+        C(amp_g, wid_g)      = 0.620
+        C(amp_g, peak_split) = 0.380
+        C(peak_split, wid_g) = 0.344
         C(amp_g, amp_l)      = -0.295
         C(amp_l, cen_g)      = -0.276
-        C(amp_g, cen_g)      =  0.194
+        C(amp_g, cen_g)      = 0.194
         C(amp_l, wid_g)      = -0.165
-        C(cen_g, wid_g)      =  0.155
+        C(cen_g, wid_g)      = 0.155
 
 
 
@@ -172,28 +170,23 @@ and figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.209 seconds)
+   **Total running time of the script:** ( 0 minutes  0.330 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_inequality.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_fit_with_inequality.py <example_fit_with_inequality.py>`
 
-     :download:`Download Python source code: example_fit_with_inequality.py <example_fit_with_inequality.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_fit_with_inequality.ipynb <example_fit_with_inequality.ipynb>`
+      :download:`Download Jupyter notebook: example_fit_with_inequality.ipynb <example_fit_with_inequality.ipynb>`
 
 
 .. only:: html

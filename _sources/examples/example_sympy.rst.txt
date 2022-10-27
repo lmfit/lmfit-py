@@ -68,8 +68,6 @@ with them, we will use the SymPy parser.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     A1*exp(-(x - xc1)**2/(2*sigma1**2)) + A2*exp(-(x - xc2)**2/(2*sigma2**2)) + B*exp(-x/xw)
@@ -201,28 +199,23 @@ reason. Both can be expressed by just substituting the variables.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.625 seconds)
+   **Total running time of the script:** ( 0 minutes  2.150 seconds)
 
 
 .. _sphx_glr_download_examples_example_sympy.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_sympy.py <example_sympy.py>`
 
-     :download:`Download Python source code: example_sympy.py <example_sympy.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_sympy.ipynb <example_sympy.ipynb>`
+      :download:`Download Jupyter notebook: example_sympy.ipynb <example_sympy.ipynb>`
 
 
 .. only:: html

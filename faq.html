@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -108,8 +110,9 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Frequently Asked Questions</a><ul>
 <li><a class="reference internal" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">What’s the best way to ask for help or submit a bug report?</a></li>
 <li><a class="reference internal" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?</a></li>
@@ -130,12 +133,17 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="support.html"
-                        title="previous chapter">Getting Help</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="parameters.html"
-                        title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="support.html"
+                          title="previous chapter">Getting Help</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="parameters.html"
+                          title="next chapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -145,7 +153,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -155,18 +163,18 @@
           <div class="body" role="main">
             
   <section id="frequently-asked-questions">
-<span id="faq-chapter"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this headline">¶</a></h1>
+<span id="faq-chapter"></span><h1>Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this heading">¶</a></h1>
 <p>A list of common questions.</p>
 <section id="what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report">
-<h2>What’s the best way to ask for help or submit a bug report?<a class="headerlink" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report" title="Permalink to this headline">¶</a></h2>
+<h2>What’s the best way to ask for help or submit a bug report?<a class="headerlink" href="#what-s-the-best-way-to-ask-for-help-or-submit-a-bug-report" title="Permalink to this heading">¶</a></h2>
 <p>See <a class="reference internal" href="support.html#support-chapter"><span class="std std-ref">Getting Help</span></a>.</p>
 </section>
 <section id="why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0">
-<h2>Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?<a class="headerlink" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0" title="Permalink to this headline">¶</a></h2>
+<h2>Why did my script break when upgrading from lmfit 0.8.3 to 0.9.0?<a class="headerlink" href="#why-did-my-script-break-when-upgrading-from-lmfit-0-8-3-to-0-9-0" title="Permalink to this heading">¶</a></h2>
 <p>See <a class="reference internal" href="whatsnew.html#whatsnew-090-label"><span class="std std-ref">Version 0.9.0 Release Notes</span></a>.</p>
 </section>
 <section id="i-get-import-errors-from-ipython">
-<h2>I get import errors from IPython<a class="headerlink" href="#i-get-import-errors-from-ipython" title="Permalink to this headline">¶</a></h2>
+<h2>I get import errors from IPython<a class="headerlink" href="#i-get-import-errors-from-ipython" title="Permalink to this heading">¶</a></h2>
 <p>If you see something like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.html.widgets</span> <span class="kn">import</span> <span class="n">Dropdown</span>
 
@@ -176,7 +184,7 @@
 <p>then you need to install the <code class="docutils literal notranslate"><span class="pre">ipywidgets</span></code> package, try: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ipywidgets</span></code>.</p>
 </section>
 <section id="how-can-i-fit-multi-dimensional-data">
-<h2>How can I fit multi-dimensional data?<a class="headerlink" href="#how-can-i-fit-multi-dimensional-data" title="Permalink to this headline">¶</a></h2>
+<h2>How can I fit multi-dimensional data?<a class="headerlink" href="#how-can-i-fit-multi-dimensional-data" title="Permalink to this heading">¶</a></h2>
 <p>The fitting routines accept data arrays that are one-dimensional and double
 precision. So you need to convert the data and model (or the value
 returned by the objective function) to be one-dimensional. A simple way to
@@ -189,7 +197,7 @@ do this is to use <a class="reference external" href="https://docs.scipy.org/doc
 </div>
 </section>
 <section id="how-can-i-fit-multiple-data-sets">
-<h2>How can I fit multiple data sets?<a class="headerlink" href="#how-can-i-fit-multiple-data-sets" title="Permalink to this headline">¶</a></h2>
+<h2>How can I fit multiple data sets?<a class="headerlink" href="#how-can-i-fit-multiple-data-sets" title="Permalink to this heading">¶</a></h2>
 <p>As above, the fitting routines accept data arrays that are one-dimensional
 and double precision. So you need to convert the sets of data and models
 (or the value returned by the objective function) to be one-dimensional. A
@@ -210,7 +218,7 @@ different arrays. As a bonus, the two lines share the ‘offset’ parameter:</p
 </div>
 </section>
 <section id="how-can-i-fit-complex-data">
-<h2>How can I fit complex data?<a class="headerlink" href="#how-can-i-fit-complex-data" title="Permalink to this headline">¶</a></h2>
+<h2>How can I fit complex data?<a class="headerlink" href="#how-can-i-fit-complex-data" title="Permalink to this heading">¶</a></h2>
 <p>As with working with multi-dimensional data, you need to convert your data
 and model (or the value returned by the objective function) to be double
 precision, floating point numbers. The simplest approach is to use
@@ -231,11 +239,11 @@ is that you also get access to the plot routines from the ModelResult
 class, which are also complex-aware.</p>
 </section>
 <section id="how-should-i-cite-lmfit">
-<h2>How should I cite LMFIT?<a class="headerlink" href="#how-should-i-cite-lmfit" title="Permalink to this headline">¶</a></h2>
+<h2>How should I cite LMFIT?<a class="headerlink" href="#how-should-i-cite-lmfit" title="Permalink to this heading">¶</a></h2>
 <p>See <a class="reference external" href="https://dx.doi.org/10.5281/zenodo.11813">https://dx.doi.org/10.5281/zenodo.11813</a></p>
 </section>
 <section id="i-get-errors-from-nan-in-my-fit-what-can-i-do">
-<h2>I get errors from NaN in my fit. What can I do?<a class="headerlink" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do" title="Permalink to this headline">¶</a></h2>
+<h2>I get errors from NaN in my fit. What can I do?<a class="headerlink" href="#i-get-errors-from-nan-in-my-fit-what-can-i-do" title="Permalink to this heading">¶</a></h2>
 <p>The solvers used by lmfit use NaN (see
 <a class="reference external" href="https://en.wikipedia.org/wiki/NaN">https://en.wikipedia.org/wiki/NaN</a>) values as signals that the calculation
 cannot continue. If any value in the residual array (typically
@@ -249,7 +257,7 @@ function (if using <code class="docutils literal notranslate"><span class="pre">
 immediately. If your objective or model function generates a NaN, you
 really must handle that.</p>
 <section id="nan-policy">
-<h3><code class="docutils literal notranslate"><span class="pre">nan_policy</span></code><a class="headerlink" href="#nan-policy" title="Permalink to this headline">¶</a></h3>
+<h3><code class="docutils literal notranslate"><span class="pre">nan_policy</span></code><a class="headerlink" href="#nan-policy" title="Permalink to this heading">¶</a></h3>
 <p>If you are using <code class="xref py py-class docutils literal notranslate"><span class="pre">lmfit.Model</span></code> and the NaN values come from your
 data array and are meant to indicate missing values, or if you using
 <code class="xref py py-func docutils literal notranslate"><span class="pre">lmfit.minimize()</span></code> with the same basic intention, then it might be
@@ -262,7 +270,7 @@ change during the fit. If the NaN values come from the data and not the
 calculated model, that should be the case.</p>
 </section>
 <section id="common-sources-of-nan">
-<h3>Common sources of NaN<a class="headerlink" href="#common-sources-of-nan" title="Permalink to this headline">¶</a></h3>
+<h3>Common sources of NaN<a class="headerlink" href="#common-sources-of-nan" title="Permalink to this heading">¶</a></h3>
 <p>If you are seeing errors due to NaN values, you will need to figure out
 where they are coming from and eliminate them. It is sometimes difficult
 to tell what causes NaN values. Keep in mind that all values should be
@@ -293,7 +301,7 @@ about 700.</p>
 </section>
 </section>
 <section id="why-are-parameter-values-sometimes-stuck-at-initial-values">
-<span id="faq-params-stuck"></span><h2>Why are Parameter values sometimes stuck at initial values?<a class="headerlink" href="#why-are-parameter-values-sometimes-stuck-at-initial-values" title="Permalink to this headline">¶</a></h2>
+<span id="faq-params-stuck"></span><h2>Why are Parameter values sometimes stuck at initial values?<a class="headerlink" href="#why-are-parameter-values-sometimes-stuck-at-initial-values" title="Permalink to this heading">¶</a></h2>
 <p>In order for a Parameter to be optimized in a fit, changing its value must
 have an impact on the fit residual (<code class="docutils literal notranslate"><span class="pre">data-model</span></code> when curve fitting, for
 example).  If a fit has not changed one or more of the Parameters, it means
@@ -332,14 +340,14 @@ not at the boundary values.</p>
 used as discrete values.  This is discussed below in <a class="reference internal" href="#faq-discrete-params"><span class="std std-ref">Can Parameters be used for Array Indices or Discrete Values?</span></a>.</p>
 </section>
 <section id="why-are-uncertainties-in-parameters-sometimes-not-determined">
-<span id="faq-params-no-uncertainties"></span><h2>Why are uncertainties in Parameters sometimes not determined?<a class="headerlink" href="#why-are-uncertainties-in-parameters-sometimes-not-determined" title="Permalink to this headline">¶</a></h2>
+<span id="faq-params-no-uncertainties"></span><h2>Why are uncertainties in Parameters sometimes not determined?<a class="headerlink" href="#why-are-uncertainties-in-parameters-sometimes-not-determined" title="Permalink to this heading">¶</a></h2>
 <p>In order for Parameter uncertainties to be estimated, each variable
 Parameter must actually change the fit, and cannot be stuck at an initial
 value or at a boundary value.  See <a class="reference internal" href="#faq-params-stuck"><span class="std std-ref">Why are Parameter values sometimes stuck at initial values?</span></a> for why values may
 not change from their initial values.</p>
 </section>
 <section id="can-parameters-be-used-for-array-indices-or-discrete-values">
-<span id="faq-discrete-params"></span><h2>Can Parameters be used for Array Indices or Discrete Values?<a class="headerlink" href="#can-parameters-be-used-for-array-indices-or-discrete-values" title="Permalink to this headline">¶</a></h2>
+<span id="faq-discrete-params"></span><h2>Can Parameters be used for Array Indices or Discrete Values?<a class="headerlink" href="#can-parameters-be-used-for-array-indices-or-discrete-values" title="Permalink to this heading">¶</a></h2>
 <p>The short answer is “No”: variables in all of the fitting methods used in
 <code class="docutils literal notranslate"><span class="pre">lmfit</span></code> (and all of those available in <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>) are treated as
 continuous values, and represented as double precision floating point
@@ -358,7 +366,7 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
 <p>That you implement with a model function and use to fit data like this:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">lmfit</span>
 
@@ -393,17 +401,17 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     # function evals   = 11
     # data points      = 101
     # variables        = 4
-    chi-square         = 8.79693339
-    reduced chi-square = 0.09069003
-    Akaike info crit   = -238.512451
-    Bayesian info crit = -228.051969
+    chi-square         = 8.91298519
+    reduced chi-square = 0.09188645
+    Akaike info crit   = -237.188741
+    Bayesian info crit = -226.728259
 ##  Warning: uncertainties could not be estimated:
     x0:  at initial value
 [[Variables]]
     x0:  22.0000000 (init = 22)
-    a:   1.99347228 (init = 1)
-    b:   0.02000061 (init = 1)
-    c:   9.39397534 (init = 1)
+    a:   2.00762518 (init = 1)
+    b:   0.01999978 (init = 1)
+    c:   9.38692086 (init = 1)
 </pre></div>
 </div>
 </div>
@@ -423,7 +431,7 @@ The amount of leakage or width of the step can also be adjusted.</p>
 look like this and give better fit results:</p>
 <div class="jupyter_cell jupyter_container docutils container">
 <div class="cell_input code_cell docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">erf</span>
 
 <span class="kn">import</span> <span class="nn">lmfit</span>
@@ -459,22 +467,22 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 71
+    # function evals   = 46
     # data points      = 101
     # variables        = 4
-    chi-square         = 1.22205174
-    reduced chi-square = 0.01259847
-    Akaike info crit   = -437.873521
-    Bayesian info crit = -427.413039
+    chi-square         = 1.21600436
+    reduced chi-square = 0.01253613
+    Akaike info crit   = -438.374565
+    Bayesian info crit = -427.914083
 [[Variables]]
-    x0:  19.1687256 +/- 0.46240449 (2.41%) (init = 22)
-    a:   2.02976278 +/- 0.02236479 (1.10%) (init = 1)
-    b:   0.01999156 +/- 4.4215e-06 (0.02%) (init = 1)
-    c:   9.24584679 +/- 0.02565511 (0.28%) (init = 1)
+    x0:  19.4011286 +/- 0.34869448 (1.80%) (init = 22)
+    a:   2.01593621 +/- 0.02246450 (1.11%) (init = 1)
+    b:   0.01999925 +/- 4.4303e-06 (0.02%) (init = 1)
+    c:   9.22057174 +/- 0.02535674 (0.28%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.828
-    C(x0, a) = 0.166
-    C(x0, b) = -0.133
+    C(a, b)  = -0.830
+    C(x0, a) = 0.182
+    C(x0, b) = -0.146
 </pre></div>
 </div>
 </div>
@@ -516,8 +524,8 @@ transition for example.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

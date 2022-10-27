@@ -33,8 +33,6 @@ doc_model_with_iter_callback.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
      ITER  -1 ['peak_amplitude = 3.00000', 'peak_center = 6.00000', 'peak_sigma = 2.00000', 'bkg_slope = 0.00000', 'bkg_intercept = 0.00000', 'peak_fwhm = 4.70964', 'peak_height = 0.59841']
@@ -161,13 +159,13 @@ doc_model_with_iter_callback.py
         peak_height:     7.99214037 +/- 0.04318531 (0.54%) == '0.3989423*peak_amplitude/max(1e-15, peak_sigma)'
     [[Correlations]] (unreported correlations are < 0.100)
         C(bkg_slope, bkg_intercept)      = -0.857
-        C(peak_amplitude, peak_sigma)    =  0.668
+        C(peak_amplitude, peak_sigma)    = 0.668
         C(peak_amplitude, bkg_intercept) = -0.526
         C(peak_sigma, bkg_intercept)     = -0.351
-        C(peak_amplitude, bkg_slope)     =  0.286
-        C(peak_sigma, bkg_slope)         =  0.191
+        C(peak_amplitude, bkg_slope)     = 0.286
+        C(peak_sigma, bkg_slope)         = 0.191
         C(peak_center, bkg_slope)        = -0.145
-        C(peak_center, bkg_intercept)    =  0.124
+        C(peak_center, bkg_intercept)    = 0.124
 
 
 
@@ -219,28 +217,23 @@ doc_model_with_iter_callback.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.232 seconds)
+   **Total running time of the script:** ( 0 minutes  0.253 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_iter_callback.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: model_with_iter_callback.py <model_with_iter_callback.py>`
 
-     :download:`Download Python source code: model_with_iter_callback.py <model_with_iter_callback.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: model_with_iter_callback.ipynb <model_with_iter_callback.ipynb>`
+      :download:`Download Jupyter notebook: model_with_iter_callback.ipynb <model_with_iter_callback.ipynb>`
 
 
 .. only:: html

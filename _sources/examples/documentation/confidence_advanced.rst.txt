@@ -52,8 +52,6 @@ doc_confidence_advanced.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
@@ -62,7 +60,7 @@ doc_confidence_advanced.py
         t1:  1.30994234 +/- 0.13121177 (10.02%) (init = 1.309932)
         t2:  11.8240350 +/- 0.46316470 (3.92%) (init = 11.82408)
     [[Correlations]] (unreported correlations are < 0.500)
-        C(a2, t2) =  0.987
+        C(a2, t2) = 0.987
         C(a2, t1) = -0.925
         C(t1, t2) = -0.881
         C(a1, t1) = -0.599
@@ -153,28 +151,23 @@ doc_confidence_advanced.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.048 seconds)
+   **Total running time of the script:** ( 0 minutes  5.822 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_advanced.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: confidence_advanced.py <confidence_advanced.py>`
 
-     :download:`Download Python source code: confidence_advanced.py <confidence_advanced.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: confidence_advanced.ipynb <confidence_advanced.ipynb>`
+      :download:`Download Jupyter notebook: confidence_advanced.ipynb <confidence_advanced.ipynb>`
 
 
 .. only:: html

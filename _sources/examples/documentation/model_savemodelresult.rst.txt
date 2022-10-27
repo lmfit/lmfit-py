@@ -28,8 +28,6 @@ doc_model_savemodelresult.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -50,7 +48,7 @@ doc_model_savemodelresult.py
         fwhm:       1.64285285 +/- 0.02426649 (1.48%) == '2.3548200*sigma'
         height:     5.07800352 +/- 0.06495781 (1.28%) == '0.3989423*amplitude/max(1e-15, sigma)'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amplitude, sigma) =  0.577
+        C(amplitude, sigma) = 0.577
 
 
 
@@ -82,28 +80,23 @@ doc_model_savemodelresult.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.016 seconds)
+   **Total running time of the script:** ( 0 minutes  0.023 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_savemodelresult.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: model_savemodelresult.py <model_savemodelresult.py>`
 
-     :download:`Download Python source code: model_savemodelresult.py <model_savemodelresult.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: model_savemodelresult.ipynb <model_savemodelresult.ipynb>`
+      :download:`Download Jupyter notebook: model_savemodelresult.ipynb <model_savemodelresult.ipynb>`
 
 
 .. only:: html

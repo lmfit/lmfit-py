@@ -110,8 +110,6 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     # Fit using sum of squares:
@@ -127,9 +125,9 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
         Bayesian info crit = -97.1001440
     [[Variables]]
         offset:  1.10392445 +/- 0.05751441 (5.21%) (init = 2)
-        omega:   3.97313428 +/- 0.02073920 (0.52%) (init = 3.3)
-        amp:     1.69977014 +/- 0.21587459 (12.70%) (init = 2.5)
-        decay:   7.65901933 +/- 1.87209218 (24.44%) (init = 1)
+        omega:   3.97313427 +/- 0.02073920 (0.52%) (init = 3.3)
+        amp:     1.69977000 +/- 0.21587443 (12.70%) (init = 2.5)
+        decay:   7.65902087 +/- 1.87209059 (24.44%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.773
 
@@ -151,8 +149,6 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
@@ -164,15 +160,15 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
         # function evals   = 135
         # data points      = 101
         # variables        = 4
-        chi-square         = 33.5081313
-        reduced chi-square = 0.34544465
-        Akaike info crit   = -103.436570
-        Bayesian info crit = -92.9760884
+        chi-square         = 33.5081253
+        reduced chi-square = 0.34544459
+        Akaike info crit   = -103.436589
+        Bayesian info crit = -92.9761066
     [[Variables]]
-        offset:  1.02005968 +/- 0.06642640 (6.51%) (init = 2)
-        omega:   3.98224426 +/- 0.02898701 (0.73%) (init = 3.3)
-        amp:     1.83231397 +/- 0.27241887 (14.87%) (init = 2.5)
-        decay:   5.77327694 +/- 1.45140901 (25.14%) (init = 1)
+        offset:  1.02005974 +/- 0.06642639 (6.51%) (init = 2)
+        omega:   3.98224423 +/- 0.02898700 (0.73%) (init = 3.3)
+        amp:     1.83231269 +/- 0.27241896 (14.87%) (init = 2.5)
+        decay:   5.77328504 +/- 1.45141316 (25.14%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay)  = -0.758
         C(offset, amp) = -0.107
@@ -204,28 +200,23 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.252 seconds)
+   **Total running time of the script:** ( 0 minutes  0.345 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_reduce_fcn.py <example_reduce_fcn.py>`
 
-     :download:`Download Python source code: example_reduce_fcn.py <example_reduce_fcn.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_reduce_fcn.ipynb <example_reduce_fcn.ipynb>`
+      :download:`Download Jupyter notebook: example_reduce_fcn.ipynb <example_reduce_fcn.ipynb>`
 
 
 .. only:: html

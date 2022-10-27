@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Contents &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -108,7 +110,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -118,7 +120,7 @@
           <div class="body" role="main">
             
   <section id="contents">
-<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this heading">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Getting started with Non-Linear Least-Squares Fitting</a></li>
@@ -175,30 +177,47 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="parameters.html"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code></a><ul>
-<li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameter-class">The <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameters-class">The <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameter-class">The <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="parameters.html#lmfit.parameter.Parameter"><code class="docutils literal notranslate"><span class="pre">Parameter</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="parameters.html#the-parameters-class">The <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameters</span></code> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="parameters.html#lmfit.parameter.Parameters"><code class="docutils literal notranslate"><span class="pre">Parameters</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="parameters.html#simple-example">Simple Example</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="fitting.html">Performing Fits and Analyzing Outputs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="fitting.html#the-minimize-function">The <code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code> function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#the-minimize-function">The <code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code> function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.minimize"><code class="docutils literal notranslate"><span class="pre">minimize()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#writing-a-fitting-function">Writing a Fitting Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#choosing-different-fitting-methods">Choosing Different Fitting Methods</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#minimizerresult-the-optimization-result"><code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code> – the optimization result</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult"><code class="docutils literal notranslate"><span class="pre">MinimizerResult</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="fitting.html#goodness-of-fit-statistics">Goodness-of-Fit Statistics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fitting.html#akaike-and-bayesian-information-criteria">Akaike and Bayesian Information Criteria</a></li>
 <li class="toctree-l3"><a class="reference internal" href="fitting.html#uncertainties-in-variable-parameters-and-their-correlations">Uncertainties in Variable Parameters, and their Correlations</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="fitting.html#getting-and-printing-fit-reports">Getting and Printing Fit Reports</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#getting-and-printing-fit-reports">Getting and Printing Fit Reports</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.printfuncs.fit_report"><code class="docutils literal notranslate"><span class="pre">fit_report()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#using-a-iteration-callback-function">Using a Iteration Callback Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="fitting.html#using-the-minimizer-class">Using the <code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code> class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fitting.html#using-the-minimizer-class">Using the <code class="xref py py-class docutils literal notranslate"><span class="pre">Minimizer</span></code> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer"><code class="docutils literal notranslate"><span class="pre">Minimizer</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="fitting.html#minimizer-emcee-calculating-the-posterior-probability-distribution-of-parameters"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.emcee()</span></code> - calculating the posterior probability distribution of parameters</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="model.html">Modeling Data and Curve Fitting</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="model.html#motivation-and-simple-example-fit-data-to-gaussian-profile">Motivation and simple example: Fit data to Gaussian profile</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model.html#the-model-class">The <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model.html#lmfit.model.Model"><code class="docutils literal notranslate"><span class="pre">Model</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#model-class-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> class Methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#model-class-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code> class Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#determining-parameter-names-and-independent-variables-for-a-function">Determining parameter names and independent variables for a function</a></li>
@@ -211,13 +230,17 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="model.html#the-modelresult-class">The <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code> class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model.html#lmfit.model.ModelResult"><code class="docutils literal notranslate"><span class="pre">ModelResult</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#modelresult-methods"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code> methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#modelresult-attributes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ModelResult</span></code> attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#calculating-uncertainties-in-the-model-function">Calculating uncertainties in the model function</a></li>
 <li class="toctree-l3"><a class="reference internal" href="model.html#saving-and-loading-modelresults">Saving and Loading ModelResults</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="model.html#composite-models-adding-or-multiplying-models">Composite Models : adding (or multiplying) Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model.html#composite-models-adding-or-multiplying-models">Composite Models : adding (or multiplying) Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="model.html#lmfit.model.CompositeModel"><code class="docutils literal notranslate"><span class="pre">CompositeModel</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="builtin_models.html">Built-in Fitting Models in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">models</span></code> module</a><ul>
@@ -280,7 +303,12 @@
 <li class="toctree-l2"><a class="reference internal" href="confidence.html#a-basic-example">A basic example</a></li>
 <li class="toctree-l2"><a class="reference internal" href="confidence.html#working-without-standard-error-estimates">Working without standard error estimates</a></li>
 <li class="toctree-l2"><a class="reference internal" href="confidence.html#an-advanced-example-for-evaluating-confidence-intervals">An advanced example for evaluating confidence intervals</a></li>
-<li class="toctree-l2"><a class="reference internal" href="confidence.html#confidence-interval-functions">Confidence Interval Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="confidence.html#confidence-interval-functions">Confidence Interval Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="confidence.html#lmfit.conf_interval"><code class="docutils literal notranslate"><span class="pre">conf_interval()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="confidence.html#lmfit.conf_interval2d"><code class="docutils literal notranslate"><span class="pre">conf_interval2d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="confidence.html#lmfit.ci_report"><code class="docutils literal notranslate"><span class="pre">ci_report()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="bounds.html">Bounds Implementation</a></li>
@@ -291,12 +319,8 @@
 <li class="toctree-l2"><a class="reference internal" href="constraints.html#advanced-usage-of-expressions-in-lmfit">Advanced usage of Expressions in lmfit</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples gallery</a><ul>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples/index.html#examples-from-the-documentation">Examples from the documentation</a><ul>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">Examples gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html#examples-from-the-documentation">Examples from the documentation</a></li>
 </ul>
 </div>
 </section>
@@ -326,8 +350,8 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

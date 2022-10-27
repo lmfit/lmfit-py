@@ -121,8 +121,6 @@ Fit the model using a traditional minimizer, and show the output:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Fit Statistics]]
@@ -140,14 +138,13 @@ Fit the model using a traditional minimizer, and show the output:
         a2: -4.33525597 +/- 0.11765821 (2.71%) (init = 4)
         t2:  11.8240752 +/- 0.47172598 (3.99%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) =  0.988
+        C(a2, t2) = 0.988
         C(t1, a2) = -0.928
         C(t1, t2) = -0.885
         C(a1, t1) = -0.609
-        C(a1, a2) =  0.297
-        C(a1, t2) =  0.232
+        C(a1, a2) = 0.297
+        C(a1, t2) = 0.232
 
-    (<Figure size 640x640 with 2 Axes>, GridSpec(2, 1, height_ratios=[1, 4]))
 
 
 
@@ -206,8 +203,6 @@ run the MCMC algorithm and show the results:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Fit Statistics]]
@@ -226,12 +221,12 @@ run the MCMC algorithm and show the results:
         t2:         11.7937607 +/- 0.48879633 (4.14%) (init = 11.82408)
         __lnsigma: -2.32712371 +/- 0.04514314 (1.94%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) =  0.981
+        C(a2, t2) = 0.981
         C(t1, a2) = -0.937
         C(t1, t2) = -0.895
         C(a1, t1) = -0.515
-        C(a1, a2) =  0.220
-        C(a1, t2) =  0.187
+        C(a1, a2) = 0.220
+        C(a1, t2) = 0.187
 
 
 
@@ -300,8 +295,6 @@ Try to compute the autocorrelation time:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Autocorrelation time for the parameters:
@@ -351,8 +344,6 @@ Plot the parameter covariances returned by ``emcee`` using ``corner``:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
@@ -365,12 +356,12 @@ Plot the parameter covariances returned by ``emcee`` using ``corner``:
         t2:         11.7937607 +/- 0.48879633 (4.14%) (init = 11.82408)
         __lnsigma: -2.32712371 +/- 0.04514314 (1.94%) (init = -2.302585)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a2, t2) =  0.981
+        C(a2, t2) = 0.981
         C(t1, a2) = -0.937
         C(t1, t2) = -0.895
         C(a1, t1) = -0.515
-        C(a1, a2) =  0.220
-        C(a1, t2) =  0.187
+        C(a1, a2) = 0.220
+        C(a1, t2) = 0.187
 
 
 
@@ -400,8 +391,6 @@ Find the maximum likelihood solution:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
@@ -423,28 +412,23 @@ Find the maximum likelihood solution:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  34.517 seconds)
+   **Total running time of the script:** ( 0 minutes  36.163 seconds)
 
 
 .. _sphx_glr_download_examples_example_emcee_Model_interface.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_emcee_Model_interface.py <example_emcee_Model_interface.py>`
 
-     :download:`Download Python source code: example_emcee_Model_interface.py <example_emcee_Model_interface.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_emcee_Model_interface.ipynb <example_emcee_Model_interface.ipynb>`
+      :download:`Download Jupyter notebook: example_emcee_Model_interface.ipynb <example_emcee_Model_interface.ipynb>`
 
 
 .. only:: html

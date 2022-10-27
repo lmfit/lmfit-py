@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Fit with Data in a pandas DataFrame &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -105,11 +107,15 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-  <h4>Next topic</h4>
-  <p class="topless"><a href="example_expression_model.html"
-                        title="next chapter">Using an ExpressionModel</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="example_expression_model.html"
+                          title="next chapter">Using an ExpressionModel</a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -119,7 +125,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -134,7 +140,7 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="fit-with-data-in-a-pandas-dataframe">
-<span id="sphx-glr-examples-example-use-pandas-py"></span><h1>Fit with Data in a pandas DataFrame<a class="headerlink" href="#fit-with-data-in-a-pandas-dataframe" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-example-use-pandas-py"></span><h1>Fit with Data in a pandas DataFrame<a class="headerlink" href="#fit-with-data-in-a-pandas-dataframe" title="Permalink to this heading">¶</a></h1>
 <p>Simple example demonstrating how to read in the data using <code class="docutils literal notranslate"><span class="pre">pandas</span></code> and
 supply the elements of the <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code> to lmfit.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -155,7 +161,6 @@ supply the elements of the <code class="docutils literal notranslate"><span clas
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Model]]
     Model(lorentzian)
 [[Fit Statistics]]
@@ -174,15 +179,15 @@ supply the elements of the <code class="docutils literal notranslate"><span clas
     fwhm:       2.31007785 +/- 0.05207377 (2.25%) == &#39;2.0000000*sigma&#39;
     height:     10.7899514 +/- 0.17160472 (1.59%) == &#39;0.3183099*amplitude/max(1e-15, sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(amplitude, sigma) =  0.709
+    C(amplitude, sigma) = 0.709
 </pre></div>
 </div>
 <p>and plot below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">plot_fit</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_use_pandas_001.png" srcset="../_images/sphx_glr_example_use_pandas_001.png, ../_images/sphx_glr_example_use_pandas_001_3_0x.png 3.0x" alt="Model(lorentzian)" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.267 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-use-pandas-py">
+<img src="../_images/sphx_glr_example_use_pandas_001.png" srcset="../_images/sphx_glr_example_use_pandas_001.png, ../_images/sphx_glr_example_use_pandas_001_3_0x.png 3.0x" alt="Model(lorentzian)" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.335 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-use-pandas-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/67e6ee8d13b1ad43c31b4b2dc6d01d54/example_use_pandas.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_use_pandas.py</span></code></a></p>
 </div>
@@ -223,8 +228,8 @@ supply the elements of the <code class="docutils literal notranslate"><span clas
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

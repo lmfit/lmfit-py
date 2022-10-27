@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Bounds Implementation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -108,12 +110,16 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="confidence.html"
-                        title="previous chapter">Calculation of confidence intervals</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="constraints.html"
-                        title="next chapter">Using Mathematical Constraints</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="confidence.html"
+                          title="previous chapter">Calculation of confidence intervals</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="constraints.html"
+                          title="next chapter">Using Mathematical Constraints</a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -123,7 +129,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -133,7 +139,7 @@
           <div class="body" role="main">
             
   <section id="bounds-implementation">
-<span id="bounds-chapter"></span><h1>Bounds Implementation<a class="headerlink" href="#bounds-implementation" title="Permalink to this headline">¶</a></h1>
+<span id="bounds-chapter"></span><h1>Bounds Implementation<a class="headerlink" href="#bounds-implementation" title="Permalink to this heading">¶</a></h1>
 <p>This section describes the implementation of <code class="xref py py-class docutils literal notranslate"><span class="pre">Parameter</span></code> bounds.
 The <a class="reference external" href="https://en.wikipedia.org/wiki/MINPACK">MINPACK-1</a> implementation used in <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.leastsq.html">scipy.optimize.leastsq</a> for
 the Levenberg-Marquardt algorithm does not explicitly support bounds on
@@ -217,8 +223,8 @@ clearly outlandish bounds does not greatly affect performance or results.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

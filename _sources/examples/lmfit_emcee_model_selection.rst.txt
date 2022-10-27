@@ -293,23 +293,18 @@ possible. For example, you might expect the prior to be Gaussian.
 
 .. _sphx_glr_download_examples_lmfit_emcee_model_selection.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: lmfit_emcee_model_selection.py <lmfit_emcee_model_selection.py>`
 
-     :download:`Download Python source code: lmfit_emcee_model_selection.py <lmfit_emcee_model_selection.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: lmfit_emcee_model_selection.ipynb <lmfit_emcee_model_selection.ipynb>`
+      :download:`Download Jupyter notebook: lmfit_emcee_model_selection.ipynb <lmfit_emcee_model_selection.ipynb>`
 
 
 .. only:: html

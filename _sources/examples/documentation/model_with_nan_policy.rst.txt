@@ -33,8 +33,6 @@ doc_model_with_nan_policy.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -55,7 +53,7 @@ doc_model_with_nan_policy.py
         fwhm:       1.62871808 +/- 0.02497581 (1.53%) == '2.3548200*sigma'
         height:     5.08771012 +/- 0.06488211 (1.28%) == '0.3989423*amplitude/max(1e-15, sigma)'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amplitude, sigma) =  0.610
+        C(amplitude, sigma) = 0.610
 
 
 
@@ -103,28 +101,23 @@ doc_model_with_nan_policy.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.198 seconds)
+   **Total running time of the script:** ( 0 minutes  0.223 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_nan_policy.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: model_with_nan_policy.py <model_with_nan_policy.py>`
 
-     :download:`Download Python source code: model_with_nan_policy.py <model_with_nan_policy.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: model_with_nan_policy.ipynb <model_with_nan_policy.ipynb>`
+      :download:`Download Jupyter notebook: model_with_nan_policy.ipynb <model_with_nan_policy.ipynb>`
 
 
 .. only:: html

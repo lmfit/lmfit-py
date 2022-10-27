@@ -134,8 +134,6 @@ to model = a*exp(-b*x) + c:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     "true" parameters are: a = 2.500, b = 1.300, c = 0.800
@@ -181,28 +179,23 @@ both methods:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.213 seconds)
+   **Total running time of the script:** ( 0 minutes  0.267 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_derivfunc.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_fit_with_derivfunc.py <example_fit_with_derivfunc.py>`
 
-     :download:`Download Python source code: example_fit_with_derivfunc.py <example_fit_with_derivfunc.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_fit_with_derivfunc.ipynb <example_fit_with_derivfunc.ipynb>`
+      :download:`Download Jupyter notebook: example_fit_with_derivfunc.ipynb <example_fit_with_derivfunc.ipynb>`
 
 
 .. only:: html

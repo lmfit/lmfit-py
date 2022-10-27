@@ -83,8 +83,6 @@ Fit with Algebraic Constraint
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Fit Statistics]]
@@ -107,18 +105,18 @@ Fit with Algebraic Constraint
         line_slope:  0.49615728 +/- 0.00170178 (0.34%) (init = 0)
         line_off:    0.04128575 +/- 0.02448064 (59.30%) (init = 0)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp_g, wid_g)         =  0.866
-        C(amp_g, cen_g)         =  0.750
+        C(amp_g, wid_g)         = 0.866
+        C(amp_g, cen_g)         = 0.750
         C(line_slope, line_off) = -0.714
         C(cen_g, amp_tot)       = -0.695
-        C(cen_g, wid_g)         =  0.623
+        C(cen_g, wid_g)         = 0.623
         C(amp_g, amp_tot)       = -0.612
         C(amp_tot, line_off)    = -0.588
         C(wid_g, amp_tot)       = -0.412
-        C(cen_g, line_off)      =  0.387
-        C(amp_g, line_off)      =  0.183
-        C(amp_g, line_slope)    =  0.183
-        C(wid_g, line_slope)    =  0.174
+        C(cen_g, line_off)      = 0.387
+        C(amp_g, line_off)      = 0.183
+        C(amp_g, line_slope)    = 0.183
+        C(wid_g, line_slope)    = 0.174
 
 
 
@@ -146,28 +144,23 @@ Fit with Algebraic Constraint
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.223 seconds)
+   **Total running time of the script:** ( 0 minutes  0.256 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_algebraic_constraint.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_fit_with_algebraic_constraint.py <example_fit_with_algebraic_constraint.py>`
 
-     :download:`Download Python source code: example_fit_with_algebraic_constraint.py <example_fit_with_algebraic_constraint.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_fit_with_algebraic_constraint.ipynb <example_fit_with_algebraic_constraint.ipynb>`
+      :download:`Download Jupyter notebook: example_fit_with_algebraic_constraint.ipynb <example_fit_with_algebraic_constraint.ipynb>`
 
 
 .. only:: html

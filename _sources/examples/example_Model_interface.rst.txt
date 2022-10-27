@@ -122,8 +122,6 @@ We can immediately see the best-fit values:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     {'N': 7.146693290745707, 'tau': 2.8980288907359197}
@@ -150,14 +148,6 @@ and use these best-fit parameters for plotting with the ``plot`` function:
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-
-    (<Figure size 640x640 with 2 Axes>, GridSpec(2, 1, height_ratios=[1, 4]))
 
 
 
@@ -176,8 +166,6 @@ We can review the best-fit `Parameters` by accessing `result.params`:
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -217,8 +205,6 @@ build the ``Parameter`` objects explicitly; the following is equivalent.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
@@ -249,8 +235,6 @@ By building ``Parameter`` objects explicitly, you can specify bounds
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -288,8 +272,6 @@ and pass them to ``fit``.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
@@ -318,8 +300,6 @@ properties (``min``, ``max``, ``vary``).
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -389,8 +369,6 @@ of the fit in term of ``weights``, ``sigma=1/weights``.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
@@ -426,8 +404,6 @@ You can choose to ``omit`` (i.e., skip over) missing values instead.
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -485,8 +461,6 @@ automatically aligned to the correct section of ``t`` using Series' index.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
@@ -516,8 +490,6 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
@@ -532,28 +504,23 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.384 seconds)
+   **Total running time of the script:** ( 0 minutes  0.423 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_Model_interface.py <example_Model_interface.py>`
 
-     :download:`Download Python source code: example_Model_interface.py <example_Model_interface.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_Model_interface.ipynb <example_Model_interface.ipynb>`
+      :download:`Download Jupyter notebook: example_Model_interface.ipynb <example_Model_interface.ipynb>`
 
 
 .. only:: html

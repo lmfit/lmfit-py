@@ -55,23 +55,18 @@ doc_model_savemodel.py
 
 .. _sphx_glr_download_examples_documentation_model_savemodel.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: model_savemodel.py <model_savemodel.py>`
 
-     :download:`Download Python source code: model_savemodel.py <model_savemodel.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: model_savemodel.ipynb <model_savemodel.ipynb>`
+      :download:`Download Jupyter notebook: model_savemodel.ipynb <model_savemodel.ipynb>`
 
 
 .. only:: html

@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>doc_model_with_iter_callback.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -103,17 +105,22 @@
     <li><a href="../../bounds.html">bounds</a> |</li>
     <li><a href="../../constraints.html">constraints</a> ]</li>
 
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Examples from the documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="model_savemodelresult2.html"
-                        title="previous chapter">doc_model_savemodelresult2.py</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="builtinmodels_nistgauss2.html"
-                        title="next chapter">doc_builtinmodels_nistgauss2.py</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="model_savemodelresult2.html"
+                          title="previous chapter">doc_model_savemodelresult2.py</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="builtinmodels_nistgauss2.html"
+                          title="next chapter">doc_builtinmodels_nistgauss2.py</a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -123,7 +130,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -138,9 +145,8 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="doc-model-with-iter-callback-py">
-<span id="sphx-glr-examples-documentation-model-with-iter-callback-py"></span><h1>doc_model_with_iter_callback.py<a class="headerlink" href="#doc-model-with-iter-callback-py" title="Permalink to this headline">¶</a></h1>
-<img src="../../_images/sphx_glr_model_with_iter_callback_001.png" srcset="../../_images/sphx_glr_model_with_iter_callback_001.png, ../../_images/sphx_glr_model_with_iter_callback_001_3_0x.png 3.0x" alt="model with iter callback" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span> ITER  -1 [&#39;peak_amplitude = 3.00000&#39;, &#39;peak_center = 6.00000&#39;, &#39;peak_sigma = 2.00000&#39;, &#39;bkg_slope = 0.00000&#39;, &#39;bkg_intercept = 0.00000&#39;, &#39;peak_fwhm = 4.70964&#39;, &#39;peak_height = 0.59841&#39;]
+<span id="sphx-glr-examples-documentation-model-with-iter-callback-py"></span><h1>doc_model_with_iter_callback.py<a class="headerlink" href="#doc-model-with-iter-callback-py" title="Permalink to this heading">¶</a></h1>
+<img src="../../_images/sphx_glr_model_with_iter_callback_001.png" srcset="../../_images/sphx_glr_model_with_iter_callback_001.png, ../../_images/sphx_glr_model_with_iter_callback_001_3_0x.png 3.0x" alt="model with iter callback" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span> ITER  -1 [&#39;peak_amplitude = 3.00000&#39;, &#39;peak_center = 6.00000&#39;, &#39;peak_sigma = 2.00000&#39;, &#39;bkg_slope = 0.00000&#39;, &#39;bkg_intercept = 0.00000&#39;, &#39;peak_fwhm = 4.70964&#39;, &#39;peak_height = 0.59841&#39;]
  ITER  0 [&#39;peak_amplitude = 3.00000&#39;, &#39;peak_center = 6.00000&#39;, &#39;peak_sigma = 2.00000&#39;, &#39;bkg_slope = 0.00000&#39;, &#39;bkg_intercept = 0.00000&#39;, &#39;peak_fwhm = 4.70964&#39;, &#39;peak_height = 0.59841&#39;]
  ITER  1 [&#39;peak_amplitude = 3.00000&#39;, &#39;peak_center = 6.00000&#39;, &#39;peak_sigma = 2.00000&#39;, &#39;bkg_slope = 0.00000&#39;, &#39;bkg_intercept = 0.00000&#39;, &#39;peak_fwhm = 4.70964&#39;, &#39;peak_height = 0.59841&#39;]
  ITER  2 [&#39;peak_amplitude = 3.00000&#39;, &#39;peak_center = 6.00000&#39;, &#39;peak_sigma = 2.00000&#39;, &#39;bkg_slope = 0.00000&#39;, &#39;bkg_intercept = 0.00000&#39;, &#39;peak_fwhm = 4.70964&#39;, &#39;peak_height = 0.59841&#39;]
@@ -264,13 +270,13 @@ Nfev = 99
     peak_height:     7.99214037 +/- 0.04318531 (0.54%) == &#39;0.3989423*peak_amplitude/max(1e-15, peak_sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(bkg_slope, bkg_intercept)      = -0.857
-    C(peak_amplitude, peak_sigma)    =  0.668
+    C(peak_amplitude, peak_sigma)    = 0.668
     C(peak_amplitude, bkg_intercept) = -0.526
     C(peak_sigma, bkg_intercept)     = -0.351
-    C(peak_amplitude, bkg_slope)     =  0.286
-    C(peak_sigma, bkg_slope)         =  0.191
+    C(peak_amplitude, bkg_slope)     = 0.286
+    C(peak_sigma, bkg_slope)         = 0.191
     C(peak_center, bkg_slope)        = -0.145
-    C(peak_center, bkg_intercept)    =  0.124
+    C(peak_center, bkg_intercept)    = 0.124
 </pre></div>
 </div>
 <div class="line-block">
@@ -304,19 +310,19 @@ Nfev = 99
 
 <span class="n">out</span> <span class="o">=</span> <span class="n">mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">pars</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <span class="n">iter_cb</span><span class="o">=</span><span class="n">per_iteration</span><span class="p">)</span>
 
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Nfev = </span><span class="si">{</span><span class="n">out</span><span class="o">.</span><span class="n">nfev</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">fit_report</span><span class="p">())</span>
 
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">best_fit</span></a><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
-<a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="matplotlib.pyplot.plot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">out</span><span class="o">.</span><span class="n">best_fit</span></a><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;best fit&#39;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.legend.html#matplotlib.pyplot.legend" title="matplotlib.pyplot.legend" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">legend</span></a><span class="p">()</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 <span class="c1"># &lt;end examples/doc_with_itercb.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.232 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-model-with-iter-callback-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.253 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-model-with-iter-callback-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e3399e3d57fa9f443949e038071a89f1/model_with_iter_callback.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">model_with_iter_callback.py</span></code></a></p>
 </div>
@@ -355,12 +361,13 @@ Nfev = 99
     <li><a href="../../bounds.html">bounds</a> |</li>
     <li><a href="../../constraints.html">constraints</a> ]</li>
 
-          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Examples from the documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

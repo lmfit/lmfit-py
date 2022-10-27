@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Fit using the Model interface &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -107,12 +109,16 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="example_fit_multi_datasets.html"
-                        title="previous chapter">Fit Multiple Data Sets</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="example_fit_with_derivfunc.html"
-                        title="next chapter">Fit Specifying a Function to Compute the Jacobian</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="example_fit_multi_datasets.html"
+                          title="previous chapter">Fit Multiple Data Sets</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="example_fit_with_derivfunc.html"
+                          title="next chapter">Fit Specifying a Function to Compute the Jacobian</a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -122,7 +128,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -137,7 +143,7 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="fit-using-the-model-interface">
-<span id="sphx-glr-examples-example-model-interface-py"></span><h1>Fit using the Model interface<a class="headerlink" href="#fit-using-the-model-interface" title="Permalink to this headline">¶</a></h1>
+<span id="sphx-glr-examples-example-model-interface-py"></span><h1>Fit using the Model interface<a class="headerlink" href="#fit-using-the-model-interface" title="Permalink to this heading">¶</a></h1>
 <p>This notebook shows a simple example of using the <code class="docutils literal notranslate"><span class="pre">lmfit.Model</span></code> class. For
 more information please refer to:
 <a class="reference external" href="https://lmfit.github.io/lmfit-py/model.html#the-model-class">https://lmfit.github.io/lmfit-py/model.html#the-model-class</a>.</p>
@@ -173,7 +179,6 @@ defined, and a least-squared regression is performed.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;N&#39;: 7.146693290745707, &#39;tau&#39;: 2.8980288907359197}
 </pre></div>
 </div>
@@ -181,15 +186,10 @@ defined, and a least-squared regression is performed.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_Model_interface_001.png" srcset="../_images/sphx_glr_example_Model_interface_001.png, ../_images/sphx_glr_example_Model_interface_001_3_0x.png 3.0x" alt="Model(decay)" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 640x640 with 2 Axes&gt;, GridSpec(2, 1, height_ratios=[1, 4]))
-</pre></div>
-</div>
-<p>We can review the best-fit <cite>Parameters</cite> by accessing <cite>result.params</cite>:</p>
+<img src="../_images/sphx_glr_example_Model_interface_001.png" srcset="../_images/sphx_glr_example_Model_interface_001.png, ../_images/sphx_glr_example_Model_interface_001_3_0x.png 3.0x" alt="Model(decay)" class = "sphx-glr-single-img"/><p>We can review the best-fit <cite>Parameters</cite> by accessing <cite>result.params</cite>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">pretty_print</span><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Name     Value      Min      Max   Stderr     Vary     Expr Brute_Step
 N       7.147     -inf      inf   0.0913     True     None     None
 tau     2.898     -inf      inf  0.06299     True     None     None
@@ -208,7 +208,6 @@ build the <code class="docutils literal notranslate"><span class="pre">Parameter
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7.14669329 +/- 0.09130442 (1.28%) (init = 10)
     tau:  2.89802889 +/- 0.06299097 (2.17%) (init = 1)
@@ -224,7 +223,6 @@ build the <code class="docutils literal notranslate"><span class="pre">Parameter
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7 (fixed)
     tau:  2.97663124 +/- 0.04347450 (1.46%) (init = 1)
@@ -244,7 +242,6 @@ and pass them to <code class="docutils literal notranslate"><span class="pre">fi
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7.14669328 +/- 0.09130441 (1.28%) (init = 10)
     tau:  2.89802890 +/- 0.06299102 (2.17%) (init = 1)
@@ -258,7 +255,6 @@ properties (<code class="docutils literal notranslate"><span class="pre">min</sp
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7.14669328 +/- 0.09130441 (1.28%) (init = 10)
     tau:  2.89802890 +/- 0.06299102 (2.17%) (init = 1)
@@ -288,7 +284,6 @@ of the fit in term of <code class="docutils literal notranslate"><span class="pr
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    6.98535246 +/- 0.28002506 (4.01%) (init = 10)
     tau:  2.97268207 +/- 0.11134751 (3.75%) (init = 1)
@@ -308,7 +303,6 @@ You can choose to <code class="docutils literal notranslate"><span class="pre">o
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7.15448808 +/- 0.09181826 (1.28%) (init = 10)
     tau:  2.89285076 +/- 0.06305979 (2.18%) (init = 1)
@@ -341,7 +335,6 @@ automatically aligned to the correct section of <code class="docutils literal no
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7.10725874 +/- 0.24259174 (3.41%) (init = 10)
     tau:  2.92503558 +/- 0.13481757 (4.61%) (init = 1)
@@ -356,7 +349,6 @@ automatically aligned to the correct section of <code class="docutils literal no
 <span class="n">report_fit</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     N:    7.11270203 +/- 0.24334999 (3.42%) (init = 10)
     tau:  2.92065221 +/- 0.13488198 (4.62%) (init = 1)
@@ -364,8 +356,8 @@ automatically aligned to the correct section of <code class="docutils literal no
     C(N, tau) = -0.932
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.384 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-model-interface-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.423 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-model-interface-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/8b2fe0a32f4790de5b0465c00682a37b/example_Model_interface.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_Model_interface.py</span></code></a></p>
 </div>
@@ -407,8 +399,8 @@ automatically aligned to the correct section of <code class="docutils literal no
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

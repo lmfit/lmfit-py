@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Examples from the documentation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx13.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="doc_model_savemodel.py" href="model_savemodel.html" />
+    <link rel="prev" title="Global minimization using the brute method (a.k.a. grid search)" href="../example_brute.html" />
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+    </style>
+    <script>
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
+
+  </head><body>
+<div class="pageheader">
+  <ul>
+    <li><a href="../../contents.html">Contents</a></li>
+    <li><a href="../index.html">Examples</a></li>
+    <li><a href="../../installation.html">Installation</a></li>
+    <li><a href="../../faq.html">FAQ</a></li>
+    <li><a href="../../support.html">Support</a></li>
+    <li><a href="https://github.com/lmfit/lmfit-py">Develop</a></li>
+  </ul>
+  <div>
+    <a href="../../index.html">
+      <img src="../../_static/lmfitheader.png" alt="LMFIT" />
+    </a>
+  </div>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="model_savemodel.html" title="doc_model_savemodel.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../example_brute.html" title="Global minimization using the brute method (a.k.a. grid search)"
+             accesskey="P">previous</a> |</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="../example_brute.html"
+                          title="previous chapter">Global minimization using the <code class="docutils literal notranslate"><span class="pre">brute</span></code> method (a.k.a. grid search)</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="model_savemodel.html"
+                          title="next chapter">doc_model_savemodel.py</a></p>
+  </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="examples-from-the-documentation">
+<span id="sphx-glr-examples-documentation"></span><h1>Examples from the documentation<a class="headerlink" href="#examples-from-the-documentation" title="Permalink to this heading">¶</a></h1>
+<p>Below are all the examples that are part of the lmfit documentation.</p>
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodel.py"><img alt="doc_model_savemodel.py" src="../../_images/sphx_glr_model_savemodel_thumb.png" />
+<p><a class="reference internal" href="model_savemodel.html#sphx-glr-examples-documentation-model-savemodel-py"><span class="std std-ref">doc_model_savemodel.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_savemodel.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult.py"><img alt="doc_model_loadmodelresult.py" src="../../_images/sphx_glr_model_loadmodelresult_thumb.png" />
+<p><a class="reference internal" href="model_loadmodelresult.html#sphx-glr-examples-documentation-model-loadmodelresult-py"><span class="std std-ref">doc_model_loadmodelresult.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult2.py"><img alt="doc_model_loadmodelresult2.py" src="../../_images/sphx_glr_model_loadmodelresult2_thumb.png" />
+<p><a class="reference internal" href="model_loadmodelresult2.html#sphx-glr-examples-documentation-model-loadmodelresult2-py"><span class="std std-ref">doc_model_loadmodelresult2.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult2.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult.py"><img alt="doc_model_savemodelresult.py" src="../../_images/sphx_glr_model_savemodelresult_thumb.png" />
+<p><a class="reference internal" href="model_savemodelresult.html#sphx-glr-examples-documentation-model-savemodelresult-py"><span class="std std-ref">doc_model_savemodelresult.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_basic.py"><img alt="doc_confidence_basic.py" src="../../_images/sphx_glr_confidence_basic_thumb.png" />
+<p><a class="reference internal" href="confidence_basic.html#sphx-glr-examples-documentation-confidence-basic-py"><span class="std std-ref">doc_confidence_basic.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_confidence_basic.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodel.py"><img alt="doc_model_loadmodel.py" src="../../_images/sphx_glr_model_loadmodel_thumb.png" />
+<p><a class="reference internal" href="model_loadmodel.html#sphx-glr-examples-documentation-model-loadmodel-py"><span class="std std-ref">doc_model_loadmodel.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_loadmodel.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_gaussian.py"><img alt="doc_model_gaussian.py" src="../../_images/sphx_glr_model_gaussian_thumb.png" />
+<p><a class="reference internal" href="model_gaussian.html#sphx-glr-examples-documentation-model-gaussian-py"><span class="std std-ref">doc_model_gaussian.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_gaussian.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_nan_policy.py"><img alt="doc_model_with_nan_policy.py" src="../../_images/sphx_glr_model_with_nan_policy_thumb.png" />
+<p><a class="reference internal" href="model_with_nan_policy.html#sphx-glr-examples-documentation-model-with-nan-policy-py"><span class="std std-ref">doc_model_with_nan_policy.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_with_nan_policy.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_stepmodel.py"><img alt="doc_builtinmodels_stepmodel.py" src="../../_images/sphx_glr_builtinmodels_stepmodel_thumb.png" />
+<p><a class="reference internal" href="builtinmodels_stepmodel.html#sphx-glr-examples-documentation-builtinmodels-stepmodel-py"><span class="std std-ref">doc_builtinmodels_stepmodel.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_stepmodel.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_two_components.py"><img alt="doc_model_two_components.py" src="../../_images/sphx_glr_model_two_components_thumb.png" />
+<p><a class="reference internal" href="model_two_components.html#sphx-glr-examples-documentation-model-two-components-py"><span class="std std-ref">doc_model_two_components.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_two_components.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty.py"><img alt="doc_model_uncertainty.py" src="../../_images/sphx_glr_model_uncertainty_thumb.png" />
+<p><a class="reference internal" href="model_uncertainty.html#sphx-glr-examples-documentation-model-uncertainty-py"><span class="std std-ref">doc_model_uncertainty.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_uncertainty.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult2.py"><img alt="doc_model_savemodelresult2.py" src="../../_images/sphx_glr_model_savemodelresult2_thumb.png" />
+<p><a class="reference internal" href="model_savemodelresult2.html#sphx-glr-examples-documentation-model-savemodelresult2-py"><span class="std std-ref">doc_model_savemodelresult2.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult2.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_iter_callback.py"><img alt="doc_model_with_iter_callback.py" src="../../_images/sphx_glr_model_with_iter_callback_thumb.png" />
+<p><a class="reference internal" href="model_with_iter_callback.html#sphx-glr-examples-documentation-model-with-iter-callback-py"><span class="std std-ref">doc_model_with_iter_callback.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_with_iter_callback.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss2.py"><img alt="doc_builtinmodels_nistgauss2.py" src="../../_images/sphx_glr_builtinmodels_nistgauss2_thumb.png" />
+<p><a class="reference internal" href="builtinmodels_nistgauss2.html#sphx-glr-examples-documentation-builtinmodels-nistgauss2-py"><span class="std std-ref">doc_builtinmodels_nistgauss2.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss2.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_withreport.py"><img alt="doc_fitting_withreport.py" src="../../_images/sphx_glr_fitting_withreport_thumb.png" />
+<p><a class="reference internal" href="fitting_withreport.html#sphx-glr-examples-documentation-fitting-withreport-py"><span class="std std-ref">doc_fitting_withreport.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_fitting_withreport.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_valuesdict.py"><img alt="doc_parameters_valuesdict.py" src="../../_images/sphx_glr_parameters_valuesdict_thumb.png" />
+<p><a class="reference internal" href="parameters_valuesdict.html#sphx-glr-examples-documentation-parameters-valuesdict-py"><span class="std std-ref">doc_parameters_valuesdict.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_parameters_valuesdict.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_basic.py"><img alt="doc_parameters_basic.py" src="../../_images/sphx_glr_parameters_basic_thumb.png" />
+<p><a class="reference internal" href="parameters_basic.html#sphx-glr-examples-documentation-parameters-basic-py"><span class="std std-ref">doc_parameters_basic.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_parameters_basic.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_peakmodels.py"><img alt="doc_builtinmodels_peakmodels.py" src="../../_images/sphx_glr_builtinmodels_peakmodels_thumb.png" />
+<p><a class="reference internal" href="builtinmodels_peakmodels.html#sphx-glr-examples-documentation-builtinmodels-peakmodels-py"><span class="std std-ref">doc_builtinmodels_peakmodels.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_peakmodels.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss.py"><img alt="doc_builtinmodels_nistgauss.py" src="../../_images/sphx_glr_builtinmodels_nistgauss_thumb.png" />
+<p><a class="reference internal" href="builtinmodels_nistgauss.html#sphx-glr-examples-documentation-builtinmodels-nistgauss-py"><span class="std std-ref">doc_builtinmodels_nistgauss.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_model_composite.py"><img alt="doc_model_composite.py" src="../../_images/sphx_glr_model_composite_thumb.png" />
+<p><a class="reference internal" href="model_composite.html#sphx-glr-examples-documentation-model-composite-py"><span class="std std-ref">doc_model_composite.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_model_composite.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_advanced.py"><img alt="doc_confidence_advanced.py" src="../../_images/sphx_glr_confidence_advanced_thumb.png" />
+<p><a class="reference internal" href="confidence_advanced.html#sphx-glr-examples-documentation-confidence-advanced-py"><span class="std std-ref">doc_confidence_advanced.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_confidence_advanced.py</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_emcee.py"><img alt="doc_fitting_emcee.py" src="../../_images/sphx_glr_fitting_emcee_thumb.png" />
+<p><a class="reference internal" href="fitting_emcee.html#sphx-glr-examples-documentation-fitting-emcee-py"><span class="std std-ref">doc_fitting_emcee.py</span></a></p>
+  <div class="sphx-glr-thumbnail-title">doc_fitting_emcee.py</div>
+</div></div><div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="model_savemodel.html" title="doc_model_savemodel.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../example_brute.html" title="Global minimization using the brute method (a.k.a. grid search)"
+             >previous</a> |</li>
+    <li>[ <a href="../../intro.html">intro</a> |</li>
+    <li><a href="../../parameters.html">parameters</a> |</li>
+    <li><a href="../../fitting.html">minimize</a> |</li>
+    <li><a href="../../model.html">model</a> |</li>
+    <li><a href="../../builtin_models.html">built-in models</a> |</li>
+    <li><a href="../../confidence.html">confidence intervals</a> |</li>
+    <li><a href="../../bounds.html">bounds</a> |</li>
+    <li><a href="../../constraints.html">constraints</a> ]</li>
+
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

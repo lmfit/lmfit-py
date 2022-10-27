@@ -33,8 +33,6 @@ doc_parameters_valuesdict.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Fit Statistics]]
@@ -49,11 +47,11 @@ doc_parameters_valuesdict.py
     [[Variables]]
         amp:    5.03087926 +/- 0.04005805 (0.80%) (init = 10)
         decay:  0.02495454 +/- 4.5395e-04 (1.82%) (init = 0.1)
-        shift: -0.10264934 +/- 0.01022298 (9.96%) (init = 0)
-        omega:  2.00026304 +/- 0.00326184 (0.16%) (init = 3)
+        shift: -0.10264935 +/- 0.01022298 (9.96%) (init = 0)
+        omega:  2.00026305 +/- 0.00326184 (0.16%) (init = 3)
     [[Correlations]] (unreported correlations are < 0.100)
         C(shift, omega) = -0.785
-        C(amp, decay)   =  0.584
+        C(amp, decay)   = 0.584
         C(amp, shift)   = -0.118
 
 
@@ -116,28 +114,23 @@ doc_parameters_valuesdict.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.191 seconds)
+   **Total running time of the script:** ( 0 minutes  0.212 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_parameters_valuesdict.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: parameters_valuesdict.py <parameters_valuesdict.py>`
 
-     :download:`Download Python source code: parameters_valuesdict.py <parameters_valuesdict.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: parameters_valuesdict.ipynb <parameters_valuesdict.ipynb>`
+      :download:`Download Jupyter notebook: parameters_valuesdict.ipynb <parameters_valuesdict.ipynb>`
 
 
 .. only:: html

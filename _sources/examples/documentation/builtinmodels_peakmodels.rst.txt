@@ -52,8 +52,6 @@ doc_builtinmodels_peakmodels.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -74,7 +72,7 @@ doc_builtinmodels_peakmodels.py
         fwhm:       2.90157056 +/- 0.01736670 (0.60%) == '2.3548200*sigma'
         height:     9.81457817 +/- 0.05087283 (0.52%) == '0.3989423*amplitude/max(1e-15, sigma)'
     [[Correlations]] (unreported correlations are < 0.250)
-        C(amplitude, sigma) =  0.577
+        C(amplitude, sigma) = 0.577
     [[Model]]
         Model(lorentzian)
     [[Fit Statistics]]
@@ -93,7 +91,7 @@ doc_builtinmodels_peakmodels.py
         fwhm:       2.30967850 +/- 0.02631318 (1.14%) == '2.0000000*sigma'
         height:     10.7421156 +/- 0.08633945 (0.80%) == '0.3183099*amplitude/max(1e-15, sigma)'
     [[Correlations]] (unreported correlations are < 0.250)
-        C(amplitude, sigma) =  0.709
+        C(amplitude, sigma) = 0.709
     [[Model]]
         Model(voigt)
     [[Fit Statistics]]
@@ -113,7 +111,7 @@ doc_builtinmodels_peakmodels.py
         fwhm:       2.62950494 +/- 0.00806900 (0.31%) == '1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)'
         height:     10.2203969 +/- 0.03009415 (0.29%) == '(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))).real'
     [[Correlations]] (unreported correlations are < 0.250)
-        C(amplitude, sigma) =  0.651
+        C(amplitude, sigma) = 0.651
 
 
 
@@ -188,28 +186,23 @@ doc_builtinmodels_peakmodels.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.837 seconds)
+   **Total running time of the script:** ( 0 minutes  0.926 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_peakmodels.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: builtinmodels_peakmodels.py <builtinmodels_peakmodels.py>`
 
-     :download:`Download Python source code: builtinmodels_peakmodels.py <builtinmodels_peakmodels.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: builtinmodels_peakmodels.ipynb <builtinmodels_peakmodels.ipynb>`
+      :download:`Download Jupyter notebook: builtinmodels_peakmodels.ipynb <builtinmodels_peakmodels.ipynb>`
 
 
 .. only:: html

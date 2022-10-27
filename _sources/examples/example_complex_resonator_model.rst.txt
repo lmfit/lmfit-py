@@ -174,8 +174,6 @@ Try out the ``guess`` method we added:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     fmin=99.95, fmax=100.05, f_0_guess=100.00353535353536
@@ -203,8 +201,6 @@ And now fit the data using the ``guess``-ed values as a starting point:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -220,13 +216,13 @@ And now fit the data using the ``guess``-ed values as a starting point:
         Bayesian info crit = -1530.70099
     [[Variables]]
         f_0:       100.000096 +/- 7.0378e-05 (0.00%) (init = 100.0035)
-        Q:         10059.4926 +/- 142.294763 (1.41%) (init = 3146.538)
-        Q_e_real:  9180.61941 +/- 133.776876 (1.46%) (init = 5082.247)
-        Q_e_imag: -9137.03297 +/- 133.770238 (1.46%) (init = 0)
+        Q:         10059.4926 +/- 142.294761 (1.41%) (init = 3146.538)
+        Q_e_real:  9180.61935 +/- 133.776862 (1.46%) (init = 5082.247)
+        Q_e_imag: -9137.03303 +/- 133.770211 (1.46%) (init = 0)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(Q, Q_e_real)   =  0.518
-        C(f_0, Q_e_imag) =  0.517
-        C(f_0, Q_e_real) =  0.515
+        C(Q, Q_e_real)   = 0.518
+        C(f_0, Q_e_imag) = 0.517
+        C(f_0, Q_e_real) = 0.515
         C(Q, Q_e_imag)   = -0.515
 
     Name         Value      Min      Max   Stderr     Vary     Expr Brute_Step
@@ -298,28 +294,23 @@ for plotting complex quantities:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.583 seconds)
+   **Total running time of the script:** ( 0 minutes  0.678 seconds)
 
 
 .. _sphx_glr_download_examples_example_complex_resonator_model.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_complex_resonator_model.py <example_complex_resonator_model.py>`
 
-     :download:`Download Python source code: example_complex_resonator_model.py <example_complex_resonator_model.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_complex_resonator_model.ipynb <example_complex_resonator_model.ipynb>`
+      :download:`Download Jupyter notebook: example_complex_resonator_model.ipynb <example_complex_resonator_model.ipynb>`
 
 
 .. only:: html

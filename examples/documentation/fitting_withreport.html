@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>doc_fitting_withreport.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -103,17 +105,22 @@
     <li><a href="../../bounds.html">bounds</a> |</li>
     <li><a href="../../constraints.html">constraints</a> ]</li>
 
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Examples gallery</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">Examples from the documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="builtinmodels_nistgauss2.html"
-                        title="previous chapter">doc_builtinmodels_nistgauss2.py</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="parameters_valuesdict.html"
-                        title="next chapter">doc_parameters_valuesdict.py</a></p>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="builtinmodels_nistgauss2.html"
+                          title="previous chapter">doc_builtinmodels_nistgauss2.py</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="parameters_valuesdict.html"
+                          title="next chapter">doc_parameters_valuesdict.py</a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -123,7 +130,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -138,8 +145,7 @@
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="doc-fitting-withreport-py">
-<span id="sphx-glr-examples-documentation-fitting-withreport-py"></span><h1>doc_fitting_withreport.py<a class="headerlink" href="#doc-fitting-withreport-py" title="Permalink to this headline">¶</a></h1>
-<p class="sphx-glr-script-out">Out:</p>
+<span id="sphx-glr-examples-documentation-fitting-withreport-py"></span><h1>doc_fitting_withreport.py<a class="headerlink" href="#doc-fitting-withreport-py" title="Permalink to this heading">¶</a></h1>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[[Fit Statistics]]
     # fitting method   = leastsq
     # function evals   = 83
@@ -151,12 +157,12 @@ to download the full example code</p>
     Bayesian info crit = -669.587497
 [[Variables]]
     amp:     13.9121945 +/- 0.14120288 (1.01%) (init = 13)
-    period:  5.48507044 +/- 0.02666492 (0.49%) (init = 2)
+    period:  5.48507045 +/- 0.02666492 (0.49%) (init = 2)
     shift:   0.16203677 +/- 0.01405661 (8.67%) (init = 0)
     decay:   0.03264538 +/- 3.8014e-04 (1.16%) (init = 0.02)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(period, shift) =  0.797
-    C(amp, decay)    =  0.582
+    C(period, shift) = 0.797
+    C(amp, decay)    = 0.582
     C(amp, shift)    = -0.297
     C(amp, period)   = -0.243
     C(shift, decay)  = -0.182
@@ -211,8 +217,8 @@ to download the full example code</p>
 <span class="c1"># &lt;end examples/doc_fitting_withreport.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.010 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-fitting-withreport-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.009 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-fitting-withreport-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/7840a2161623f7ec530b68641292dd9c/fitting_withreport.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">fitting_withreport.py</span></code></a></p>
 </div>
@@ -251,12 +257,13 @@ to download the full example code</p>
     <li><a href="../../bounds.html">bounds</a> |</li>
     <li><a href="../../constraints.html">constraints</a> ]</li>
 
-          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li> 
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples gallery</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >Examples from the documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

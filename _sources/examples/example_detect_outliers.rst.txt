@@ -143,8 +143,6 @@ and gives the plot and fitting results below:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -162,7 +160,7 @@ and gives the plot and fitting results below:
         a:  0.08937623 +/- 0.00590168 (6.60%) (init = 0.1)
         b:  1.51298992 +/- 0.46229147 (30.55%) (init = 2)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a, b) =  0.601
+        C(a, b) = 0.601
 
 
 
@@ -266,28 +264,23 @@ Plot the influence on the parameter value and error of each point:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.093 seconds)
+   **Total running time of the script:** ( 0 minutes  1.432 seconds)
 
 
 .. _sphx_glr_download_examples_example_detect_outliers.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_detect_outliers.py <example_detect_outliers.py>`
 
-     :download:`Download Python source code: example_detect_outliers.py <example_detect_outliers.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_detect_outliers.ipynb <example_detect_outliers.ipynb>`
+      :download:`Download Jupyter notebook: example_detect_outliers.ipynb <example_detect_outliers.ipynb>`
 
 
 .. only:: html

@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Downloading and Installation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -107,8 +109,9 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Downloading and Installation</a><ul>
 <li><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li><a class="reference internal" href="#downloads">Downloads</a></li>
@@ -121,12 +124,17 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="intro.html"
-                        title="previous chapter">Getting started with Non-Linear Least-Squares Fitting</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="support.html"
-                        title="next chapter">Getting Help</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="intro.html"
+                          title="previous chapter">Getting started with Non-Linear Least-Squares Fitting</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="support.html"
+                          title="next chapter">Getting Help</a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -136,7 +144,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -146,9 +154,9 @@
           <div class="body" role="main">
             
   <section id="downloading-and-installation">
-<h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this headline">¶</a></h1>
+<h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this heading">¶</a></h1>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">¶</a></h2>
 <p>Lmfit works with <a class="reference external" href="https://python.org">Python</a> versions 3.6 and higher. Version
 0.9.15 is the final version to support Python 2.7.</p>
 <dl class="simple">
@@ -177,12 +185,12 @@ LaTex distributions).</p>
 are needed if you want to participate in the development of lmfit.</p>
 </section>
 <section id="downloads">
-<h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h2>
+<h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this heading">¶</a></h2>
 <p>The latest stable version of lmfit is 1.0.3 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPI</a>. Check the <a class="reference internal" href="whatsnew.html#whatsnew-chapter"><span class="std std-ref">Release Notes</span></a> for
 a list of changes compared to earlier releases.</p>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
 <p>The easiest way to install lmfit is with:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">lmfit</span>
 </pre></div>
@@ -194,7 +202,7 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 </div>
 </section>
 <section id="development-version">
-<h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
+<h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this heading">¶</a></h2>
 <p>To get the latest development version from the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>, use:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lmfit</span><span class="o">/</span><span class="n">lmfit</span><span class="o">-</span><span class="n">py</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
@@ -207,7 +215,7 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 purpose, please read <a class="reference external" href="https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md">CONTRIBUTING.md</a> for more detailed instructions.</p>
 </section>
 <section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">¶</a></h2>
 <p>A battery of tests scripts that can be run with the <a class="reference external" href="https://pytest.org/">pytest</a> testing framework
 is distributed with lmfit in the <code class="docutils literal notranslate"><span class="pre">tests</span></code> folder. These are automatically run
 as part of the development process.
@@ -218,7 +226,7 @@ should run all of these tests to completion without errors or failures.</p>
 that <a class="reference external" href="https://matplotlib.org/">matplotlib</a> has been installed and is working correctly.</p>
 </section>
 <section id="acknowledgements">
-<h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
+<h2>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Many people have contributed to lmfit. The attribution of credit in a
 project such as this is difficult to get perfect, and there are no doubt
 important contributions that are missing or under-represented here. Please
@@ -285,7 +293,7 @@ lists have also led to improvements in this code.
 </div>
 </section>
 <section id="copyright-licensing-and-re-distribution">
-<h2>Copyright, Licensing, and Re-distribution<a class="headerlink" href="#copyright-licensing-and-re-distribution" title="Permalink to this headline">¶</a></h2>
+<h2>Copyright, Licensing, and Re-distribution<a class="headerlink" href="#copyright-licensing-and-re-distribution" title="Permalink to this heading">¶</a></h2>
 <p>The LMFIT-py code is distributed under the following license:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BSD-3
 
@@ -395,8 +403,8 @@ released under a MIT license.
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

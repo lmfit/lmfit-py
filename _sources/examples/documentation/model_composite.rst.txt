@@ -33,12 +33,10 @@ doc_model_composite.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
-        (Model(jump) <function convolve at 0x7fdfb98eaaf0> Model(gaussian))
+        (Model(jump) <function convolve at 0x1275d2e60> Model(gaussian))
     [[Fit Statistics]]
         # fitting method   = leastsq
         # function evals   = 25
@@ -54,8 +52,8 @@ doc_model_composite.py
         center:     4.50853671 +/- 0.00973231 (0.22%) (init = 3.5)
         sigma:      0.59576118 +/- 0.01348582 (2.26%) (init = 1.5)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amplitude, center) =  0.329
-        C(amplitude, sigma)  =  0.268
+        C(amplitude, center) = 0.329
+        C(amplitude, sigma)  = 0.268
 
 
 
@@ -133,28 +131,23 @@ doc_model_composite.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.392 seconds)
+   **Total running time of the script:** ( 0 minutes  0.449 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_composite.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: model_composite.py <model_composite.py>`
 
-     :download:`Download Python source code: model_composite.py <model_composite.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: model_composite.ipynb <model_composite.ipynb>`
+      :download:`Download Jupyter notebook: model_composite.ipynb <model_composite.ipynb>`
 
 
 .. only:: html

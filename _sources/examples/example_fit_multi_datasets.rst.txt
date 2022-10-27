@@ -155,8 +155,6 @@ Run the global fit and show the fitting result
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
@@ -181,8 +179,8 @@ Run the global fit and show the fitting result
         C(sig_1, amp_2) = -0.292
         C(amp_1, sig_1) = -0.266
         C(sig_1, amp_4) = -0.258
-        C(amp_3, amp_5) =  0.111
-        C(amp_2, amp_5) =  0.109
+        C(amp_3, amp_5) = 0.111
+        C(amp_2, amp_5) = 0.109
 
 
 
@@ -214,28 +212,23 @@ Plot the data sets and fits
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.245 seconds)
+   **Total running time of the script:** ( 0 minutes  0.281 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_multi_datasets.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_fit_multi_datasets.py <example_fit_multi_datasets.py>`
 
-     :download:`Download Python source code: example_fit_multi_datasets.py <example_fit_multi_datasets.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_fit_multi_datasets.ipynb <example_fit_multi_datasets.ipynb>`
+      :download:`Download Jupyter notebook: example_fit_multi_datasets.ipynb <example_fit_multi_datasets.ipynb>`
 
 
 .. only:: html

@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Release Notes &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -21,7 +21,9 @@
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
@@ -107,8 +109,9 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Release Notes</a><ul>
 <li><a class="reference internal" href="#version-1-0-3-release-notes-october-14-2021">Version 1.0.3 Release Notes (October 14, 2021)</a></li>
 <li><a class="reference internal" href="#version-1-0-2-release-notes-february-7-2021">Version 1.0.2 Release Notes (February 7, 2021)</a></li>
@@ -134,12 +137,17 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="constraints.html"
-                        title="previous chapter">Using Mathematical Constraints</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="examples/index.html"
-                        title="next chapter">Examples gallery</a></p>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="constraints.html"
+                          title="previous chapter">Using Mathematical Constraints</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="examples/index.html"
+                          title="next chapter">Examples gallery</a></p>
+  </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -149,7 +157,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
 
@@ -159,13 +167,13 @@
           <div class="body" role="main">
             
   <section id="release-notes">
-<span id="whatsnew-chapter"></span><h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
+<span id="whatsnew-chapter"></span><h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this heading">¶</a></h1>
 <p>This section discusses changes between versions, especially changes
 significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the <a class="reference external" href="https://github.com/lmfit/lmfit-py">lmfit GitHub repository</a>.</p>
 <section id="version-1-0-3-release-notes-october-14-2021">
-<span id="whatsnew-103-label"></span><h2>Version 1.0.3 Release Notes (October 14, 2021)<a class="headerlink" href="#version-1-0-3-release-notes-october-14-2021" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-103-label"></span><h2>Version 1.0.3 Release Notes (October 14, 2021)<a class="headerlink" href="#version-1-0-3-release-notes-october-14-2021" title="Permalink to this heading">¶</a></h2>
 <p>Potentially breaking change:</p>
 <ul class="simple">
 <li><p>argument <code class="docutils literal notranslate"><span class="pre">x</span></code> is now required for the <code class="docutils literal notranslate"><span class="pre">guess</span></code> method of Models (Issue #747; PR #748)</p></li>
@@ -207,7 +215,7 @@ need to be updated to explicitly supply <code class="docutils literal notranslat
 </ul>
 </section>
 <section id="version-1-0-2-release-notes-february-7-2021">
-<span id="whatsnew-102-label"></span><h2>Version 1.0.2 Release Notes (February 7, 2021)<a class="headerlink" href="#version-1-0-2-release-notes-february-7-2021" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-102-label"></span><h2>Version 1.0.2 Release Notes (February 7, 2021)<a class="headerlink" href="#version-1-0-2-release-notes-february-7-2021" title="Permalink to this heading">¶</a></h2>
 <p>Version 1.0.2 officially supports Python 3.9 and has dropped support for Python 3.5. The minimum version
 of the following dependencies were updated: asteval&gt;=0.9.21, numpy&gt;=1.18, and scipy&gt;=1.3.</p>
 <p>New features:</p>
@@ -247,7 +255,7 @@ of the following dependencies were updated: asteval&gt;=0.9.21, numpy&gt;=1.18, 
 </ul>
 </section>
 <section id="version-1-0-1-release-notes">
-<span id="whatsnew-101-label"></span><h2>Version 1.0.1 Release Notes<a class="headerlink" href="#version-1-0-1-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-101-label"></span><h2>Version 1.0.1 Release Notes<a class="headerlink" href="#version-1-0-1-release-notes" title="Permalink to this heading">¶</a></h2>
 <p><strong>Version 1.0.1 is the last release that supports Python 3.5</strong>. All newer version will
 require 3.6+ so that we can use formatting-strings and rely on dictionaries being ordered.</p>
 <p>New features:</p>
@@ -278,7 +286,7 @@ pandas (PRs #627 and #629; &#64;mpmdean)</p></li>
 </ul>
 </section>
 <section id="version-1-0-0-release-notes">
-<span id="whatsnew-100-label"></span><h2>Version 1.0.0 Release Notes<a class="headerlink" href="#version-1-0-0-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-100-label"></span><h2>Version 1.0.0 Release Notes<a class="headerlink" href="#version-1-0-0-release-notes" title="Permalink to this heading">¶</a></h2>
 <p><strong>Version 1.0.0 supports Python 3.5, 3.6, 3.7, and 3.8</strong></p>
 <p>New features:</p>
 <ul class="simple">
@@ -294,7 +302,7 @@ pandas (PRs #627 and #629; &#64;mpmdean)</p></li>
 </ul>
 </section>
 <section id="version-0-9-15-release-notes">
-<span id="whatsnew-0915-label"></span><h2>Version 0.9.15 Release Notes<a class="headerlink" href="#version-0-9-15-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-0915-label"></span><h2>Version 0.9.15 Release Notes<a class="headerlink" href="#version-0-9-15-release-notes" title="Permalink to this heading">¶</a></h2>
 <p><strong>Version 0.9.15 is the last release that supports Python 2.7</strong>; it now also fully supports Python 3.8.</p>
 <p>New features, improvements, and bug fixes:</p>
 <ul class="simple">
@@ -319,7 +327,7 @@ pandas (PRs #627 and #629; &#64;mpmdean)</p></li>
 - function Parameter.isParameter and conversion from uncertainties.core.Variable to value in _getval (PR #595)</p>
 </section>
 <section id="version-0-9-14-release-notes">
-<span id="whatsnew-0914-label"></span><h2>Version 0.9.14 Release Notes<a class="headerlink" href="#version-0-9-14-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-0914-label"></span><h2>Version 0.9.14 Release Notes<a class="headerlink" href="#version-0-9-14-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>New features:</p>
 <ul class="simple">
 <li><p>the global optimizers <code class="docutils literal notranslate"><span class="pre">shgo</span></code> and <code class="docutils literal notranslate"><span class="pre">dual_annealing</span></code> (new in SciPy v1.2) are now supported (Issue #527; PRs #545 and #556)</p></li>
@@ -353,7 +361,7 @@ pandas (PRs #627 and #629; &#64;mpmdean)</p></li>
 </ul>
 </section>
 <section id="version-0-9-13-release-notes">
-<span id="whatsnew-0913-label"></span><h2>Version 0.9.13 Release Notes<a class="headerlink" href="#version-0-9-13-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-0913-label"></span><h2>Version 0.9.13 Release Notes<a class="headerlink" href="#version-0-9-13-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>New features:</p>
 <ul class="simple">
 <li><p>Clearer warning message in fit reports when uncertainties should but cannot be estimated, including guesses of which Parameters to examine (#521, #543)</p></li>
@@ -379,7 +387,7 @@ pandas (PRs #627 and #629; &#64;mpmdean)</p></li>
 </ul>
 </section>
 <section id="version-0-9-12-release-notes">
-<span id="whatsnew-0912-label"></span><h2>Version 0.9.12 Release Notes<a class="headerlink" href="#version-0-9-12-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-0912-label"></span><h2>Version 0.9.12 Release Notes<a class="headerlink" href="#version-0-9-12-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>Lmfit package is now licensed under BSD-3.</p>
 <p>New features:</p>
 <ul class="simple">
@@ -403,7 +411,7 @@ pandas (PRs #627 and #629; &#64;mpmdean)</p></li>
 </ul>
 </section>
 <section id="version-0-9-10-release-notes">
-<h2>Version 0.9.10 Release Notes<a class="headerlink" href="#version-0-9-10-release-notes" title="Permalink to this headline">¶</a></h2>
+<h2>Version 0.9.10 Release Notes<a class="headerlink" href="#version-0-9-10-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>Two new global algorithms were added: basinhopping and AMPGO.
 Basinhopping wraps the method present in <code class="docutils literal notranslate"><span class="pre">scipy</span></code>, and more information
 can be found in the documentation (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer.basinhopping" title="lmfit.minimizer.Minimizer.basinhopping"><code class="xref py py-func docutils literal notranslate"><span class="pre">basinhopping()</span></code></a>
@@ -423,14 +431,14 @@ using <code class="docutils literal notranslate"><span class="pre">iter_cb</span
 </ul>
 </section>
 <section id="version-0-9-9-release-notes">
-<span id="whatsnew-099-label"></span><h2>Version 0.9.9 Release Notes<a class="headerlink" href="#version-0-9-9-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-099-label"></span><h2>Version 0.9.9 Release Notes<a class="headerlink" href="#version-0-9-9-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>Lmfit now uses the asteval (<a class="reference external" href="https://github.com/newville/asteval">https://github.com/newville/asteval</a>) package
 instead of distributing its own copy. The minimum required asteval version
 is 0.9.12, which is available on PyPI. If you see import errors related to
 asteval, please make sure that you actually have the latest version installed.</p>
 </section>
 <section id="version-0-9-6-release-notes">
-<span id="whatsnew-096-label"></span><h2>Version 0.9.6 Release Notes<a class="headerlink" href="#version-0-9-6-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-096-label"></span><h2>Version 0.9.6 Release Notes<a class="headerlink" href="#version-0-9-6-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>Support for SciPy 0.14 has been dropped: SciPy 0.15 is now required. This
 is especially important for lmfit maintenance, as it means we can now rely
 on SciPy having code for differential evolution and do not need to keep a
@@ -456,11 +464,11 @@ be preserved on copy and pickling.</p>
 <p>Tests can now be run either with nose or pytest.</p>
 </section>
 <section id="version-0-9-5-release-notes">
-<span id="whatsnew-095-label"></span><h2>Version 0.9.5 Release Notes<a class="headerlink" href="#version-0-9-5-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-095-label"></span><h2>Version 0.9.5 Release Notes<a class="headerlink" href="#version-0-9-5-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>Support for Python 2.6 and SciPy 0.13 has been dropped.</p>
 </section>
 <section id="version-0-9-4-release-notes">
-<span id="whatsnew-094-label"></span><h2>Version 0.9.4 Release Notes<a class="headerlink" href="#version-0-9-4-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-094-label"></span><h2>Version 0.9.4 Release Notes<a class="headerlink" href="#version-0-9-4-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>Some support for the new <code class="docutils literal notranslate"><span class="pre">least_squares</span></code> routine from SciPy 0.17 has been
 added.</p>
 <p>Parameters can now be used directly in floating point or array expressions,
@@ -471,7 +479,7 @@ have been updated to use the simpler usage.</p>
 be dropped in version 0.9.5.</p>
 </section>
 <section id="version-0-9-3-release-notes">
-<span id="whatsnew-093-label"></span><h2>Version 0.9.3 Release Notes<a class="headerlink" href="#version-0-9-3-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-093-label"></span><h2>Version 0.9.3 Release Notes<a class="headerlink" href="#version-0-9-3-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>Models involving complex numbers have been improved.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">emcee</span></code> module can now be used for uncertainty estimation.</p>
 <p>Many bug fixes, and an important fix for performance slowdown on getting
@@ -479,7 +487,7 @@ parameter values.</p>
 <p>ASV benchmarking code added.</p>
 </section>
 <section id="version-0-9-0-release-notes">
-<span id="whatsnew-090-label"></span><h2>Version 0.9.0 Release Notes<a class="headerlink" href="#version-0-9-0-release-notes" title="Permalink to this headline">¶</a></h2>
+<span id="whatsnew-090-label"></span><h2>Version 0.9.0 Release Notes<a class="headerlink" href="#version-0-9-0-release-notes" title="Permalink to this heading">¶</a></h2>
 <p>This upgrade makes an important, non-backward-compatible change to the way
 many fitting scripts and programs will work. Scripts that work with
 version 0.8.3 will not work with version 0.9.0 and vice versa. The change
@@ -487,7 +495,7 @@ was not made lightly or without ample discussion, and is really an
 improvement. Modifying scripts that did work with 0.8.3 to work with 0.9.0
 is easy, but needs to be done.</p>
 <section id="summary">
-<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">¶</a></h3>
 <p>The upgrade from 0.8.3 to 0.9.0 introduced the <code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code>
 class (see <a class="reference internal" href="fitting.html#fit-results-label"><span class="std std-ref">MinimizerResult – the optimization result</span></a>) which is now used to hold the return
 value from <code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">Minimizer.minimize()</span></code>. This returned
@@ -499,7 +507,7 @@ changed and returns as the <code class="xref py py-attr docutils literal notrans
 <code class="xref py py-class docutils literal notranslate"><span class="pre">MinimizerResult</span></code>.</p>
 </section>
 <section id="impact">
-<h3>Impact<a class="headerlink" href="#impact" title="Permalink to this headline">¶</a></h3>
+<h3>Impact<a class="headerlink" href="#impact" title="Permalink to this heading">¶</a></h3>
 <p>This upgrade means that a script that does:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_pars</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>
 <span class="n">my_pars</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mf">300.0</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -527,7 +535,7 @@ a pre-fit, then refine that result different fitting method, such as:</p>
 first fit <code class="docutils literal notranslate"><span class="pre">result1</span></code>, and the result of the final fit <code class="docutils literal notranslate"><span class="pre">result2</span></code>.</p>
 </section>
 <section id="discussion">
-<h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h3>
+<h3>Discussion<a class="headerlink" href="#discussion" title="Permalink to this heading">¶</a></h3>
 <p>The main goal for making this change were to</p>
 <ol class="arabic simple">
 <li><p>give a better return value to <code class="xref py py-func docutils literal notranslate"><span class="pre">minimize()</span></code> and
@@ -583,8 +591,8 @@ track of changes made while adjusting parameters and re-running fits.</p></li>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2021, Matthew Newville, Till Stensitzki, Renee Otten, and others.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+        &#169; Copyright 2022, Matthew Newville, Till Stensitzki, Renee Otten, and others.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
     </div>
   </body>
 </html>

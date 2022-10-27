@@ -33,8 +33,6 @@ doc_model_uncertainty.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -53,7 +51,7 @@ doc_model_uncertainty.py
         cen:  5.65866102 +/- 0.01030495 (0.18%) (init = 5)
         wid:  0.69765468 +/- 0.01030495 (1.48%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amp, wid) =  0.577
+        C(amp, wid) = 0.577
 
 
 
@@ -99,28 +97,23 @@ doc_model_uncertainty.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.210 seconds)
+   **Total running time of the script:** ( 0 minutes  0.236 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_uncertainty.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: model_uncertainty.py <model_uncertainty.py>`
 
-     :download:`Download Python source code: model_uncertainty.py <model_uncertainty.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: model_uncertainty.ipynb <model_uncertainty.ipynb>`
+      :download:`Download Jupyter notebook: model_uncertainty.ipynb <model_uncertainty.ipynb>`
 
 
 .. only:: html

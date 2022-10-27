@@ -28,15 +28,13 @@ doc_confidence_basic.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Variables]]
         a:  0.09943896 +/- 1.9322e-04 (0.19%) (init = 0.1)
         b:  1.98476942 +/- 0.01222678 (0.62%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(a, b) =  0.601
+        C(a, b) = 0.601
           99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
      a:  -0.00059  -0.00039  -0.00019   0.09944  +0.00019  +0.00039  +0.00060
      b:  -0.03766  -0.02478  -0.01230   1.98477  +0.01230  +0.02478  +0.03761
@@ -79,28 +77,23 @@ doc_confidence_basic.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.207 seconds)
+   **Total running time of the script:** ( 0 minutes  0.181 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_confidence_basic.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: confidence_basic.py <confidence_basic.py>`
 
-     :download:`Download Python source code: confidence_basic.py <confidence_basic.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: confidence_basic.ipynb <confidence_basic.ipynb>`
+      :download:`Download Jupyter notebook: confidence_basic.ipynb <confidence_basic.ipynb>`
 
 
 .. only:: html

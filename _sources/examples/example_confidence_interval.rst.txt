@@ -121,8 +121,6 @@ show the report:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Fit Statistics]]
@@ -137,11 +135,11 @@ show the report:
     [[Variables]]
         amp:     14.0708279 +/- 0.04936796 (0.35%) (init = 13)
         period:  5.32980965 +/- 0.00273131 (0.05%) (init = 2)
-        shift:   0.12156326 +/- 0.00482311 (3.97%) (init = 0)
+        shift:   0.12156327 +/- 0.00482311 (3.97%) (init = 0)
         decay:   0.01002489 +/- 4.0724e-05 (0.41%) (init = 0.02)
     [[Correlations]] (unreported correlations are < 0.100)
-        C(period, shift) =  0.800
-        C(amp, decay)    =  0.576
+        C(period, shift) = 0.800
+        C(amp, decay)    = 0.576
 
 
 
@@ -209,8 +207,6 @@ Calculate the confidence intervals for parameters and display the results:
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -291,28 +287,23 @@ parameters using the function ``conf_interval2d``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  16.478 seconds)
+   **Total running time of the script:** ( 0 minutes  16.439 seconds)
 
 
 .. _sphx_glr_download_examples_example_confidence_interval.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_confidence_interval.py <example_confidence_interval.py>`
 
-     :download:`Download Python source code: example_confidence_interval.py <example_confidence_interval.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_confidence_interval.ipynb <example_confidence_interval.ipynb>`
+      :download:`Download Jupyter notebook: example_confidence_interval.ipynb <example_confidence_interval.ipynb>`
 
 
 .. only:: html

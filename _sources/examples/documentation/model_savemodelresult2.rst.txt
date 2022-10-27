@@ -28,8 +28,6 @@ doc_model_savemodelresult2.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -44,44 +42,44 @@ doc_model_savemodelresult2.py
         Akaike info crit   = 417.864631
         Bayesian info crit = 446.036318
     [[Variables]]
-        exp_amplitude:  99.0183283 +/- 0.53748735 (0.54%) (init = 162.2102)
-        exp_decay:      90.9508858 +/- 1.10310509 (1.21%) (init = 93.24905)
-        g1_amplitude:   4257.77320 +/- 42.3833643 (1.00%) (init = 2000)
-        g1_center:      107.030954 +/- 0.15006786 (0.14%) (init = 105)
-        g1_sigma:       16.6725754 +/- 0.16048160 (0.96%) (init = 15)
-        g1_fwhm:        39.2609139 +/- 0.37790529 (0.96%) == '2.3548200*g1_sigma'
-        g1_height:      101.880231 +/- 0.59217098 (0.58%) == '0.3989423*g1_amplitude/max(1e-15, g1_sigma)'
-        g2_amplitude:   2493.41770 +/- 36.1694745 (1.45%) (init = 2000)
-        g2_center:      153.270101 +/- 0.19466742 (0.13%) (init = 155)
-        g2_sigma:       13.8069484 +/- 0.18679415 (1.35%) (init = 15)
-        g2_fwhm:        32.5128783 +/- 0.43986659 (1.35%) == '2.3548200*g2_sigma'
-        g2_height:      72.0455934 +/- 0.61722095 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
+        exp_amplitude:  99.0183282 +/- 0.53748735 (0.54%) (init = 162.2102)
+        exp_decay:      90.9508860 +/- 1.10310509 (1.21%) (init = 93.24905)
+        g1_amplitude:   4257.77319 +/- 42.3833641 (1.00%) (init = 2000)
+        g1_center:      107.030954 +/- 0.15006784 (0.14%) (init = 105)
+        g1_sigma:       16.6725753 +/- 0.16048161 (0.96%) (init = 15)
+        g1_fwhm:        39.2609138 +/- 0.37790529 (0.96%) == '2.3548200*g1_sigma'
+        g1_height:      101.880231 +/- 0.59217099 (0.58%) == '0.3989423*g1_amplitude/max(1e-15, g1_sigma)'
+        g2_amplitude:   2493.41771 +/- 36.1694726 (1.45%) (init = 2000)
+        g2_center:      153.270100 +/- 0.19466742 (0.13%) (init = 155)
+        g2_sigma:       13.8069485 +/- 0.18679414 (1.35%) (init = 15)
+        g2_fwhm:        32.5128784 +/- 0.43986658 (1.35%) == '2.3548200*g2_sigma'
+        g2_height:      72.0455934 +/- 0.61722093 (0.86%) == '0.3989423*g2_amplitude/max(1e-15, g2_sigma)'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(g1_amplitude, g1_sigma)      =  0.824
-        C(g2_amplitude, g2_sigma)      =  0.815
+        C(g1_amplitude, g1_sigma)      = 0.824
+        C(g2_amplitude, g2_sigma)      = 0.815
         C(exp_amplitude, exp_decay)    = -0.695
-        C(g1_sigma, g2_center)         =  0.684
+        C(g1_sigma, g2_center)         = 0.684
         C(g1_center, g2_amplitude)     = -0.669
         C(g1_center, g2_sigma)         = -0.652
-        C(g1_amplitude, g2_center)     =  0.648
-        C(g1_center, g2_center)        =  0.621
-        C(g1_center, g1_sigma)         =  0.507
+        C(g1_amplitude, g2_center)     = 0.648
+        C(g1_center, g2_center)        = 0.621
+        C(g1_center, g1_sigma)         = 0.507
         C(exp_decay, g1_amplitude)     = -0.507
         C(g1_sigma, g2_amplitude)      = -0.491
         C(g2_center, g2_sigma)         = -0.489
         C(g1_sigma, g2_sigma)          = -0.483
         C(g2_amplitude, g2_center)     = -0.476
         C(exp_decay, g2_amplitude)     = -0.427
-        C(g1_amplitude, g1_center)     =  0.418
+        C(g1_amplitude, g1_center)     = 0.418
         C(g1_amplitude, g2_sigma)      = -0.401
         C(g1_amplitude, g2_amplitude)  = -0.307
-        C(exp_amplitude, g2_amplitude) =  0.282
+        C(exp_amplitude, g2_amplitude) = 0.282
         C(exp_decay, g1_sigma)         = -0.252
         C(exp_decay, g2_sigma)         = -0.233
-        C(exp_amplitude, g2_sigma)     =  0.171
+        C(exp_amplitude, g2_sigma)     = 0.171
         C(exp_decay, g2_center)        = -0.151
-        C(exp_amplitude, g1_amplitude) =  0.148
-        C(exp_decay, g1_center)        =  0.105
+        C(exp_amplitude, g1_amplitude) = 0.148
+        C(exp_decay, g1_center)        = 0.105
 
 
 
@@ -131,28 +129,23 @@ doc_model_savemodelresult2.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.032 seconds)
+   **Total running time of the script:** ( 0 minutes  0.034 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_savemodelresult2.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: model_savemodelresult2.py <model_savemodelresult2.py>`
 
-     :download:`Download Python source code: model_savemodelresult2.py <model_savemodelresult2.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: model_savemodelresult2.ipynb <model_savemodelresult2.ipynb>`
+      :download:`Download Jupyter notebook: model_savemodelresult2.ipynb <model_savemodelresult2.ipynb>`
 
 
 .. only:: html

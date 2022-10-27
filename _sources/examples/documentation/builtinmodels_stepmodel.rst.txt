@@ -33,8 +33,6 @@ doc_builtinmodels_stepmodel.py
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Model]]
@@ -56,14 +54,14 @@ doc_builtinmodels_stepmodel.py
         step_sigma:      0.67392841 +/- 0.01091168 (1.62%) (init = 1.428571)
     [[Correlations]] (unreported correlations are < 0.100)
         C(line_slope, step_amplitude)     = -0.879
-        C(step_amplitude, step_sigma)     =  0.564
+        C(step_amplitude, step_sigma)     = 0.564
         C(line_slope, step_sigma)         = -0.457
-        C(line_intercept, step_center)    =  0.427
+        C(line_intercept, step_center)    = 0.427
         C(line_slope, line_intercept)     = -0.309
         C(line_slope, step_center)        = -0.234
         C(line_intercept, step_sigma)     = -0.137
         C(line_intercept, step_amplitude) = -0.117
-        C(step_amplitude, step_center)    =  0.109
+        C(step_amplitude, step_center)    = 0.109
 
 
 
@@ -108,28 +106,23 @@ doc_builtinmodels_stepmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.204 seconds)
+   **Total running time of the script:** ( 0 minutes  0.211 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: builtinmodels_stepmodel.py <builtinmodels_stepmodel.py>`
 
-     :download:`Download Python source code: builtinmodels_stepmodel.py <builtinmodels_stepmodel.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: builtinmodels_stepmodel.ipynb <builtinmodels_stepmodel.ipynb>`
+      :download:`Download Jupyter notebook: builtinmodels_stepmodel.ipynb <builtinmodels_stepmodel.ipynb>`
 
 
 .. only:: html

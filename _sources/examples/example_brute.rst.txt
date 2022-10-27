@@ -191,8 +191,6 @@ Performing the actual grid search is done with:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [-4.   -3.75 -3.5  -3.25 -3.   -2.75 -2.5  -2.25 -2.   -1.75 -1.5  -1.25
@@ -223,8 +221,6 @@ which the objective function had its minimum value.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [-1.    1.75]
@@ -247,8 +243,6 @@ which the objective function had its minimum value.
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -273,8 +267,6 @@ same length as ``x0``.
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -313,8 +305,6 @@ grid, i.e., ``Jout = func(*grid)``.
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -429,8 +419,6 @@ determine how the grid is set-up.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Name      Value      Min      Max   Stderr     Vary     Expr Brute_Step
@@ -487,8 +475,6 @@ to ``max`` (inclusive), is here shown for the parameter ``shift``:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     parameter = shift
@@ -525,8 +511,6 @@ specify ``brute_step`` - three more scenarios are considered here:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     parameter = amp
@@ -556,8 +540,6 @@ specify ``brute_step`` - three more scenarios are considered here:
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -590,8 +572,6 @@ specify ``brute_step`` - three more scenarios are considered here:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     parameter = decay
@@ -623,8 +603,6 @@ is given below together with a plot:
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -704,8 +682,6 @@ attribute and is, therefore, identical to ``result_brute.show_candidates(1)``.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
@@ -735,8 +711,6 @@ increased quite a bit:
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -795,8 +769,6 @@ most optimal result:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     [[Fit Statistics]]
@@ -809,13 +781,13 @@ most optimal result:
         Akaike info crit   = -991.780924
         Bayesian info crit = -976.952483
     [[Variables]]
-        amp:    5.00323088 +/- 0.03805940 (0.76%) (init = 5.25)
+        amp:    5.00323089 +/- 0.03805940 (0.76%) (init = 5.25)
         decay:  0.02563850 +/- 4.4571e-04 (1.74%) (init = 0.025)
         shift: -0.09162988 +/- 0.00978382 (10.68%) (init = 0)
         omega:  1.99611629 +/- 0.00316225 (0.16%) (init = 2)
     [[Correlations]] (unreported correlations are < 0.100)
         C(shift, omega) = -0.785
-        C(amp, decay)   =  0.584
+        C(amp, decay)   = 0.584
         C(amp, shift)   = -0.121
 
 
@@ -995,28 +967,23 @@ and finally, to generated the figure:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  22.732 seconds)
+   **Total running time of the script:** ( 0 minutes  21.891 seconds)
 
 
 .. _sphx_glr_download_examples_example_brute.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: example_brute.py <example_brute.py>`
 
-     :download:`Download Python source code: example_brute.py <example_brute.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: example_brute.ipynb <example_brute.ipynb>`
+      :download:`Download Jupyter notebook: example_brute.ipynb <example_brute.ipynb>`
 
 
 .. only:: html

@@ -1,0 +1,420 @@
+
+
+.. _sphx_glr_examples_documentation:
+
+Examples from the documentation
+===============================
+
+Below are all the examples that are part of the lmfit documentation.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodel.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_savemodel_thumb.png
+    :alt: doc_model_savemodel.py
+
+  :ref:`sphx_glr_examples_documentation_model_savemodel.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_savemodel.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult_thumb.png
+    :alt: doc_model_loadmodelresult.py
+
+  :ref:`sphx_glr_examples_documentation_model_loadmodelresult.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodelresult2.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodelresult2_thumb.png
+    :alt: doc_model_loadmodelresult2.py
+
+  :ref:`sphx_glr_examples_documentation_model_loadmodelresult2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_loadmodelresult2.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult_thumb.png
+    :alt: doc_model_savemodelresult.py
+
+  :ref:`sphx_glr_examples_documentation_model_savemodelresult.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_basic.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_confidence_basic_thumb.png
+    :alt: doc_confidence_basic.py
+
+  :ref:`sphx_glr_examples_documentation_confidence_basic.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_confidence_basic.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_loadmodel.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_loadmodel_thumb.png
+    :alt: doc_model_loadmodel.py
+
+  :ref:`sphx_glr_examples_documentation_model_loadmodel.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_loadmodel.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_gaussian.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_gaussian_thumb.png
+    :alt: doc_model_gaussian.py
+
+  :ref:`sphx_glr_examples_documentation_model_gaussian.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_gaussian.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_nan_policy.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_with_nan_policy_thumb.png
+    :alt: doc_model_with_nan_policy.py
+
+  :ref:`sphx_glr_examples_documentation_model_with_nan_policy.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_with_nan_policy.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_stepmodel.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_stepmodel_thumb.png
+    :alt: doc_builtinmodels_stepmodel.py
+
+  :ref:`sphx_glr_examples_documentation_builtinmodels_stepmodel.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_stepmodel.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_two_components.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_two_components_thumb.png
+    :alt: doc_model_two_components.py
+
+  :ref:`sphx_glr_examples_documentation_model_two_components.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_two_components.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_uncertainty_thumb.png
+    :alt: doc_model_uncertainty.py
+
+  :ref:`sphx_glr_examples_documentation_model_uncertainty.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_uncertainty.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_savemodelresult2.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_savemodelresult2_thumb.png
+    :alt: doc_model_savemodelresult2.py
+
+  :ref:`sphx_glr_examples_documentation_model_savemodelresult2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_savemodelresult2.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_with_iter_callback.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_with_iter_callback_thumb.png
+    :alt: doc_model_with_iter_callback.py
+
+  :ref:`sphx_glr_examples_documentation_model_with_iter_callback.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_with_iter_callback.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss2.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss2_thumb.png
+    :alt: doc_builtinmodels_nistgauss2.py
+
+  :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss2.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_withreport.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_fitting_withreport_thumb.png
+    :alt: doc_fitting_withreport.py
+
+  :ref:`sphx_glr_examples_documentation_fitting_withreport.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_fitting_withreport.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_valuesdict.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_parameters_valuesdict_thumb.png
+    :alt: doc_parameters_valuesdict.py
+
+  :ref:`sphx_glr_examples_documentation_parameters_valuesdict.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_parameters_valuesdict.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_parameters_basic.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_parameters_basic_thumb.png
+    :alt: doc_parameters_basic.py
+
+  :ref:`sphx_glr_examples_documentation_parameters_basic.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_parameters_basic.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_peakmodels.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_peakmodels_thumb.png
+    :alt: doc_builtinmodels_peakmodels.py
+
+  :ref:`sphx_glr_examples_documentation_builtinmodels_peakmodels.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_peakmodels.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_nistgauss.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_nistgauss_thumb.png
+    :alt: doc_builtinmodels_nistgauss.py
+
+  :ref:`sphx_glr_examples_documentation_builtinmodels_nistgauss.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_nistgauss.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_composite.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_composite_thumb.png
+    :alt: doc_model_composite.py
+
+  :ref:`sphx_glr_examples_documentation_model_composite.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_composite.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_advanced.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_confidence_advanced_thumb.png
+    :alt: doc_confidence_advanced.py
+
+  :ref:`sphx_glr_examples_documentation_confidence_advanced.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_confidence_advanced.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_fitting_emcee.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_fitting_emcee_thumb.png
+    :alt: doc_fitting_emcee.py
+
+  :ref:`sphx_glr_examples_documentation_fitting_emcee.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_fitting_emcee.py</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/documentation/model_savemodel
+   /examples/documentation/model_loadmodelresult
+   /examples/documentation/model_loadmodelresult2
+   /examples/documentation/model_savemodelresult
+   /examples/documentation/confidence_basic
+   /examples/documentation/model_loadmodel
+   /examples/documentation/model_gaussian
+   /examples/documentation/model_with_nan_policy
+   /examples/documentation/builtinmodels_stepmodel
+   /examples/documentation/model_two_components
+   /examples/documentation/model_uncertainty
+   /examples/documentation/model_savemodelresult2
+   /examples/documentation/model_with_iter_callback
+   /examples/documentation/builtinmodels_nistgauss2
+   /examples/documentation/fitting_withreport
+   /examples/documentation/parameters_valuesdict
+   /examples/documentation/parameters_basic
+   /examples/documentation/builtinmodels_peakmodels
+   /examples/documentation/builtinmodels_nistgauss
+   /examples/documentation/model_composite
+   /examples/documentation/confidence_advanced
+   /examples/documentation/fitting_emcee
+
