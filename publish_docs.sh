@@ -31,7 +31,7 @@ rm -f .buildinfo
 echo '# Commit changes to gh-pages branch'
 export version=`git tag | sort | tail -1`
 git add *
-git commit -am "DOC: update documentation for ${version}" --no-verify
+PRE_COMMIT_ALLOW_NO_CONFIG=1 git commit -am "DOC: update documentation for ${version}" --no-verify
 
 if  [ $? -ne 0 ]  ; then
   echo ' failed.'
