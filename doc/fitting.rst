@@ -476,7 +476,7 @@ be used to abort a fit.
    :type  resid:  numpy.ndarray
    :param args:  Positional arguments. Must match ``args`` argument to :func:`minimize`
    :param kws:   Keyword arguments. Must match ``kws`` argument to :func:`minimize`
-   :return:      Residual array (generally ``data-model``) to be minimized in the least-squares sense.
+   :return:      Iteration abort flag.
    :rtype:    None for normal behavior, any value like ``True`` to abort the fit.
 
 
