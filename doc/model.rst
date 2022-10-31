@@ -378,7 +378,7 @@ Parameters if the supplied default value was a valid number (but not
 .. jupyter-execute::
 
     def decay2(t, tau, N=10, check_positive=False):
-        if check_small:
+        if check_positive:
             arg = abs(t)/max(1.e-9, abs(tau))
         else:
             arg = t/tau
