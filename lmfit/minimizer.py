@@ -710,6 +710,7 @@ class Minimizer:
         # and which are defined expressions.
         result.var_names = []  # note that this *does* belong to self...
         result.init_vals = []
+        result._init_vals_internal = []
         result.params.update_constraints()
         result.nfev = 0
         result.call_kws = {}
@@ -725,7 +726,8 @@ class Minimizer:
                 par.vary = False
             if par.vary:
                 result.var_names.append(name)
-                result.init_vals.append(par.setup_bounds())
+                result._init_vals_internal.append(par.setup_bounds())
+                result.init_vals.append(par.value)
 
             par.init_value = par.value
             if par.name is None:
@@ -953,11 +955,12 @@ class Minimizer:
         """
         result = self.prepare_fit(params=params)
         result.method = method
-        variables = result.init_vals
+        variables = result._init_vals_internal
         params = result.params
 
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
         fmin_kws = dict(method=method, options={'maxiter': 2*self.max_nfev})
+        # fmin_kws = dict(method=method, options={'maxfun': 2*self.max_nfev})
         fmin_kws.update(self.kws)
 
         if 'maxiter' in kws:
@@ -1661,7 +1664,7 @@ class Minimizer:
         result = self.prepare_fit(params=params)
         result.method = 'leastsq'
         result.nfev -= 2  # correct for "pre-fit" initialization/checks
-        variables = result.init_vals
+        variables = result._init_vals_internal
 
         # note we set the max number of function evaluations here, and send twice that
         # value to the solver so it essentially never stops on its own
@@ -1779,7 +1782,7 @@ class Minimizer:
         basinhopping_kws.update(self.kws)
         basinhopping_kws.update(kws)
 
-        x0 = result.init_vals
+        x0 = result._init_vals_internal
         result.call_kws = basinhopping_kws
         try:
             ret = scipy_basinhopping(self.penalty, x0, **basinhopping_kws)
@@ -2072,7 +2075,7 @@ class Minimizer:
         ampgo_kws.update(self.kws)
         ampgo_kws.update(kws)
 
-        values = result.init_vals
+        values = result._init_vals_internal
         result.method = f"ampgo, with {ampgo_kws['local']} as local solver"
         result.call_kws = ampgo_kws
         try:
