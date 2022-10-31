@@ -2215,8 +2215,7 @@ class Minimizer:
         result.method = 'dual_annealing'
         self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
-        da_kws = dict(maxiter=1000, local_search_options={},
-                      initial_temp=5230.0, restart_temp_ratio=2e-05,
+        da_kws = dict(initial_temp=5230.0, restart_temp_ratio=2e-05,
                       visit=2.62, accept=-5.0, maxfun=2*self.max_nfev,
                       seed=None, no_local_search=False, callback=None,
                       x0=None)
