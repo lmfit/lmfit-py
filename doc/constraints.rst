@@ -13,7 +13,7 @@ highly desirable to place mathematical constraints on parameter values.
 For example, one might want to require that two Gaussian peaks have the
 same width, or have amplitudes that are constrained to add to some value.
 Of course, one could rewrite the objective or model function to place such
-requirements, but this is somewhat error prone, and limits the flexibility
+requirements, but this is somewhat error-prone, and limits the flexibility
 so that exploring constraints becomes laborious.
 
 To simplify the setting of constraints, Parameters can be assigned a
