@@ -73,13 +73,8 @@ def test_x_float_value(lineshape):
                 if par_name != 'x']:
         fnc_args.append(sig.parameters[par].default)
 
-    if lineshape in ('step', 'rectangle'):
-        msg = r"'float' object does not support item assignment"
-        with pytest.raises(TypeError, match=msg):
-            fnc_output = func(*fnc_args)
-    else:
-        fnc_output = func(*fnc_args)
-        assert isinstance(fnc_output, float)
+    fnc_output = func(*fnc_args)
+    assert isinstance(fnc_output, float)
 
 
 rising_form = ['erf', 'logistic', 'atan', 'arctan', 'linear', 'unknown']
@@ -109,6 +104,18 @@ def test_form_argument_step_rectangle(form, lineshape):
     else:
         fnc_output = func(*fnc_args)
         assert len(fnc_output) == len(xvals)
+
+
+@pytest.mark.parametrize('form', rising_form)
+@pytest.mark.parametrize('lineshape', ['step', 'rectangle'])
+def test_value_step_rectangle(form, lineshape):
+    """Test values at mu1/mu2 for step- and rectangle-functions."""
+    func = getattr(lmfit.lineshapes, lineshape)
+    # at position mu1 we should be at A/2
+    assert_almost_equal(func(0), 0.5)
+    # for a rectangular shape we have the same at mu2
+    if lineshape == 'rectangle':
+        assert_almost_equal(func(1), 0.5)
 
 
 thermal_form = ['bose', 'maxwell', 'fermi', 'Bose-Einstein', 'unknown']

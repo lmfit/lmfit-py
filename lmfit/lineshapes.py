@@ -1,7 +1,7 @@
 """Basic model lineshapes and distribution functions."""
 
-from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p, pi,
-                   real, sin, sqrt, where)
+from numpy import (arctan, copysign, cos, exp, isclose, isnan, log, log1p,
+                   maximum, minimum, pi, real, sin, sqrt, where)
 from scipy.special import betaln as betalnfcn
 from scipy.special import erf, erfc
 from scipy.special import gamma as gamfcn
@@ -431,13 +431,11 @@ def step(x, amplitude=1.0, center=0.0, sigma=1.0, form='linear'):
     if form == 'erf':
         out = 0.5*(1 + erf(out))
     elif form == 'logistic':
-        out = (1. - 1./(1. + exp(out)))
+        out = 1. - 1./(1. + exp(out))
     elif form in ('atan', 'arctan'):
         out = 0.5 + arctan(out)/pi
     elif form == 'linear':
-        out = out + 0.5
-        out[out < 0] = 0.0
-        out[out > 1] = 1.0
+        out = minimum(1, maximum(0, out + 0.5))
     else:
         msg = (f"Invalid value ('{form}') for argument 'form'; should be one "
                "of 'erf', 'logistic', 'atan', 'arctan', or 'linear'.")
@@ -471,15 +469,11 @@ def rectangle(x, amplitude=1.0, center1=0.0, sigma1=1.0,
     if form == 'erf':
         out = 0.5*(erf(arg1) + erf(arg2))
     elif form == 'logistic':
-        out = (1. - 1./(1. + exp(arg1)) - 1./(1. + exp(arg2)))
+        out = 1. - 1./(1. + exp(arg1)) - 1./(1. + exp(arg2))
     elif form in ('atan', 'arctan'):
         out = (arctan(arg1) + arctan(arg2))/pi
     elif form == 'linear':
-        arg1[arg1 < 0] = 0.0
-        arg1[arg1 > 1] = 1.0
-        arg2[arg2 > 0] = 0.0
-        arg2[arg2 < -1] = -1.0
-        out = arg1 + arg2
+        out = 0.5*(minimum(1, maximum(-1, arg1)) + minimum(1, maximum(-1, arg2)))
     else:
         msg = (f"Invalid value ('{form}') for argument 'form'; should be one "
                "of 'erf', 'logistic', 'atan', 'arctan', or 'linear'.")
