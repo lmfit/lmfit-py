@@ -129,7 +129,7 @@ Choosing Different Fitting Methods
 By default, the `Levenberg-Marquardt
 <https://en.wikipedia.org/wiki/Levenberg-Marquardt_algorithm>`_ algorithm is
 used for fitting. While often criticized, including the fact it finds a
-*local* minima, this approach has some distinct advantages. These include
+*local* minimum, this approach has some distinct advantages. These include
 being fast, and well-behaved for most curve-fitting needs, and making it
 easy to estimate uncertainties for and correlations between pairs of fit
 variables, as discussed in :ref:`fit-results-label`.
@@ -476,7 +476,7 @@ be used to abort a fit.
    :type  resid:  numpy.ndarray
    :param args:  Positional arguments. Must match ``args`` argument to :func:`minimize`
    :param kws:   Keyword arguments. Must match ``kws`` argument to :func:`minimize`
-   :return:      Residual array (generally ``data-model``) to be minimized in the least-squares sense.
+   :return:      Iteration abort flag.
    :rtype:    None for normal behavior, any value like ``True`` to abort the fit.
 
 
