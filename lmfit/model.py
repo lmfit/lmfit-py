@@ -7,6 +7,7 @@ import json
 import operator
 import warnings
 
+from asteval import valid_symbol_name
 import numpy as np
 from scipy.special import erf
 from scipy.stats import t
@@ -266,6 +267,10 @@ class Model:
         """
         self.func = func
         self._prefix = prefix
+        if len(prefix) > 0:
+            if not valid_symbol_name(prefix + 'a'):
+                raise ValueError(f"'{prefix}' is not a valid Model prefix")
+
         self._param_root_names = param_names  # will not include prefixes
         self.independent_vars = independent_vars
         self._func_allargs = []
@@ -1497,6 +1502,9 @@ class ModelResult(Minimizer):
            < 1, it is interpreted as the probability itself. That is,
            ``sigma=1`` and ``sigma=0.6827`` will give the same results,
            within precision errors.
+        3. Also sets attributes of `dely` for uncertainty of the model (same as return value)
+           and `dely_comps`, a dictionary of `dely` for each component.
+
 
         Examples
         --------
@@ -1518,10 +1526,16 @@ class ModelResult(Minimizer):
         # ensure fjac and df2 are correct size if independent var updated by kwargs
         ndata = self.model.eval(params, **userkws).size
         covar = self.covar
-        fjac = np.zeros((nvarys, ndata))
-        df2 = np.zeros(ndata)
         if any(p.stderr is None for p in params.values()):
-            return df2
+            return np.zeros(ndata)
+
+        fjac = {'0': np.zeros((nvarys, ndata))}  # '0' signify 'Full', an invalid prefix
+        df2 = {'0': np.zeros(ndata)}
+
+        for comp in self.components:
+            label = comp.prefix if len(comp.prefix) > 1 else comp._name
+            fjac[label] = np.zeros((nvarys, ndata))
+            df2[label] = np.zeros(ndata)
 
         # find derivative by hand!
         pars = params.copy()
@@ -1529,25 +1543,35 @@ class ModelResult(Minimizer):
             pname = self.var_names[i]
             val0 = pars[pname].value
             dval = pars[pname].stderr/3.0
-
             pars[pname].value = val0 + dval
-            res1 = self.model.eval(pars, **userkws)
+            res1 = {'0': self.model.eval(pars, **userkws)}
+            res1.update(self.model.eval_components(params=pars, **userkws))
 
             pars[pname].value = val0 - dval
-            res2 = self.model.eval(pars, **userkws)
+            res2 = {'0': self.model.eval(pars, **userkws)}
+            res2.update(self.model.eval_components(params=pars, **userkws))
 
             pars[pname].value = val0
-            fjac[i] = (res1 - res2) / (2*dval)
+            for key in fjac:
+                fjac[key][i] = (res1[key] - res2[key]) / (2*dval)
 
         for i in range(nvarys):
             for j in range(nvarys):
-                df2 += fjac[i]*fjac[j]*covar[i, j]
+                for key in fjac:
+                    df2[key] += fjac[key][i] * fjac[key][j] * covar[i, j]
 
         if sigma < 1.0:
             prob = sigma
         else:
             prob = erf(sigma/np.sqrt(2))
-        return np.sqrt(df2) * t.ppf((prob+1)/2.0, self.ndata-nvarys)
+
+        scale = t.ppf((prob+1)/2.0, self.ndata-nvarys)
+        self.dely = scale * np.sqrt(df2.pop('0'))
+
+        self.dely_comps = {}
+        for key in df2:
+            self.dely_comps[key] = scale * np.sqrt(df2[key])
+        return self.dely
 
     def conf_interval(self, **kwargs):
         """Calculate the confidence intervals for the variable parameters.
