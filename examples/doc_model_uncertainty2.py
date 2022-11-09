@@ -9,7 +9,7 @@ x = dat[:, 1]
 y = dat[:, 0]
 
 model = (GaussianModel(prefix='g1_') +
-         GaussianModel(prefix='ag2_') +
+         GaussianModel(prefix='g2_') +
          ExponentialModel(prefix='bkg_'))
 
 params = model.make_params(bkg_amplitude=100, bkg_decay=80,
