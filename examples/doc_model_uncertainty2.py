@@ -34,45 +34,51 @@ fig, axes = plt.subplots(2, 2, figsize=(12.8, 9.6))
 axes[0][0].plot(x, y, 'o', color='#99002299', markersize=3, label='data')
 axes[0][0].plot(x, result.best_fit, '-', label='best fit')
 axes[0][0].plot(x, result.init_fit, '--', label='initial fit')
+axes[0][0].set_title('data, initial fit, and best-fit')
 axes[0][0].legend()
 
 axes[0][1].plot(x, y, 'o', color='#99002299', markersize=3, label='data')
 axes[0][1].plot(x, result.best_fit, '-', label='best fit')
 axes[0][1].fill_between(x, result.best_fit-dely, result.best_fit+dely,
                         color="#8A8A8A", label=r'3-$\sigma$ band')
+axes[0][1].set_title('data, best-fit, and uncertainty band')
 axes[0][1].legend()
 
-axes[1][0].plot(x, result.best_fit, '-', label='best fit')
-axes[1][0].plot(x, comps['bkg_'], label='background')
-axes[1][0].plot(x, comps['g1_'], label='Gaussian #1')
-axes[1][0].plot(x, comps['g2_'], label='Gaussian #2')
-axes[1][0].legend()
 
-axes[1][1].plot(x, result.best_fit, '-', label=r'best fit, 3-$\sigma$ band')
-axes[1][1].fill_between(x,
+axes[1][0].plot(x, result.best_fit, '-', label=r'best fit, 3-$\sigma$ band')
+axes[1][0].fill_between(x,
                         result.best_fit-result.dely,
                         result.best_fit+result.dely,
                         color="#8A8A8A")
 
-axes[1][1].plot(x, comps['bkg_'], label=r'background, 3-$\sigma$ band')
-axes[1][1].fill_between(x,
+axes[1][0].plot(x, comps['bkg_'], label=r'background, 3-$\sigma$ band')
+axes[1][0].fill_between(x,
                         comps['bkg_']-result.dely_comps['bkg_'],
                         comps['bkg_']+result.dely_comps['bkg_'],
                         color="#8A8A8A")
 
-axes[1][1].plot(x, comps['g1_'], label=r'Gaussian #1, 3-$\sigma$ band')
-axes[1][1].fill_between(x,
+axes[1][0].plot(x, comps['g1_'], label=r'Gaussian #1, 3-$\sigma$ band')
+axes[1][0].fill_between(x,
                         comps['g1_']-result.dely_comps['g1_'],
                         comps['g1_']+result.dely_comps['g1_'],
                         color="#8A8A8A")
 
-axes[1][1].plot(x, comps['g2_'], label=r'Gaussian #2, 3-$\sigma$ band')
-axes[1][1].fill_between(x,
+axes[1][0].plot(x, comps['g2_'], label=r'Gaussian #2, 3-$\sigma$ band')
+axes[1][0].fill_between(x,
                         comps['g2_']-result.dely_comps['g2_'],
                         comps['g2_']+result.dely_comps['g2_'],
                         color="#8A8A8A")
-axes[1][1].legend()
+axes[1][0].set_title('model components with uncertainty bands')
+axes[1][0].legend()
 #
+axes[1][1].plot(x, result.best_fit, '-', label='best fit')
+axes[1][1].plot(x, 10*result.dely, label=r'3-$\sigma$ total (x10)')
+axes[1][1].plot(x, 10*result.dely_comps['bkg_'], label=r'3-$\sigma$ background (x10)')
+axes[1][1].plot(x, 10*result.dely_comps['g1_'], label=r'3-$\sigma$ Gaussian #1 (x10)')
+axes[1][1].plot(x, 10*result.dely_comps['g2_'], label=r'3-$\sigma$ Gaussian #2 (x10)')
+axes[1][1].set_title('uncertainties for model components')
+axes[1][1].legend()
+
 plt.show()
 
 # <end examples/doc_model_uncertainty2.py>
