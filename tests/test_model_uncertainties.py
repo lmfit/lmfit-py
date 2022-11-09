@@ -101,7 +101,7 @@ def test_component_uncertainties():
     y, x = np.loadtxt(os.path.join(os.path.dirname(__file__), '..',
                                    'examples', 'NIST_Gauss2.dat')).T
     model = (GaussianModel(prefix='g1_') +
-             GaussianModel(prefix='ag2_') +
+             GaussianModel(prefix='g2_') +
              ExponentialModel(prefix='bkg_'))
 
     params = model.make_params(bkg_amplitude=100, bkg_decay=80,
