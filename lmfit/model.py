@@ -267,7 +267,7 @@ class Model:
         """
         self.func = func
         self._prefix = prefix
-        if len(prefix) > 0:
+        if prefix is not None and len(prefix) > 0:
             if not valid_symbol_name(prefix + 'a'):
                 raise ValueError(f"'{prefix}' is not a valid Model prefix")
 
