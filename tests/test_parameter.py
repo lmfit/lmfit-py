@@ -360,7 +360,7 @@ def test_value_setter(parameter):
     par.value = -200.0  # below minimum
     assert_allclose(par.value, -100.0)
 
-    del(par._expr_eval)
+    del par._expr_eval
     par.value = 10.0
     assert_allclose(par.value, 10.0)
     assert hasattr(par, '_expr_eval')

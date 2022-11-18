@@ -26,7 +26,7 @@ def linear_chisq(params, x, data, errs=None):
     if errs is not None:
         residuals = residuals/errs
 
-    return(residuals)
+    return residuals
 
 
 def test_1var():
