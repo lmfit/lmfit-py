@@ -182,7 +182,7 @@ def RunNIST_Model(model):
 
     out1 = NIST_Dataset(model, start='start1', plot=False, verbose=False)
     out2 = NIST_Dataset(model, start='start2', plot=False, verbose=False)
-    assert(out1 or out2)
+    assert (out1 or out2)
 
 
 def test_Bennett5():

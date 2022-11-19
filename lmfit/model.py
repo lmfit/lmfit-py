@@ -1656,7 +1656,7 @@ class ModelResult(Minimizer):
                      'ci_out', 'col_deriv', 'covar', 'errorbars', 'flatchain',
                      'ier', 'init_values', 'lmdif_message', 'message',
                      'method', 'nan_policy', 'ndata', 'nfev', 'nfree',
-                     'nvarys', 'redchi', 'rsquared', 'scale_covar',
+                     'nvarys', 'redchi', 'residual', 'rsquared', 'scale_covar',
                      'calc_covar', 'success', 'userargs', 'userkws', 'values',
                      'var_names', 'weights', 'user_options'):
 
