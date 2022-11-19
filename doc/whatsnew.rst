@@ -18,11 +18,10 @@ Version 1.0.4 Release Notes (unreleased)
 
 New features:
 
-- add calculation of ``dely`` for model components of composite models (Issue #761; PR #826)
-- add R^2 ``rsquared`` statistic to fit outputs and reports for Model fits (Issue #803; PR #810)
-- add ``SplineModel`` (PR #804)
 - add ``Pearson4Model`` (@lellid; PR #800)
-
+- add ``SplineModel`` (PR #804)
+- add R^2 ``rsquared`` statistic to fit outputs and reports for Model fits (Issue #803; PR #810)
+- add calculation of ``dely`` for model components of composite models (Issue #761; PR #826)
 
 Bug fixes/enhancements:
 
@@ -36,6 +35,8 @@ Bug fixes/enhancements:
 - fixed linear mode for ``RectangleModel`` (@arunpersaud; Issue #815; PR #816)
 - report correct initial values for parameters with bounds (Issue #820; PR #821)
 - allow recalculation of confidence intervals (@jagerber48; PR #798)
+- include 'residual' in JSON output of ModelResult.dumps (@mac01021; PR #830)
+- supports and is tested against Python 3.11; updated minimum required version of SciPy, NumPy, and asteval (PR #832)
 
 Deprecations:
 
