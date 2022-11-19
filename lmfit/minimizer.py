@@ -22,6 +22,7 @@ import numbers
 import warnings
 
 import numpy as np
+from scipy import __version__ as scipy_version
 from scipy.linalg import LinAlgError, inv
 from scipy.optimize import basinhopping as scipy_basinhopping
 from scipy.optimize import brute as scipy_brute
@@ -2215,13 +2216,18 @@ class Minimizer:
         result.method = 'dual_annealing'
         self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
 
-        da_kws = dict(initial_temp=5230.0, restart_temp_ratio=2e-05,
+        da_kws = dict(maxiter=1000, local_search_options={},
+                      initial_temp=5230.0, restart_temp_ratio=2e-05,
                       visit=2.62, accept=-5.0, maxfun=2*self.max_nfev,
-                      seed=None, no_local_search=False, callback=None,
-                      x0=None)
+                      seed=None, no_local_search=False, callback=None, x0=None)
 
         da_kws.update(self.kws)
         da_kws.update(kws)
+
+        # FIXME: update when SciPy requirement is >= 1.8
+        # ``local_search_options`` deprecated in favor of ``minimizer_kwargs``
+        if int(scipy_version.split('.')[1]) >= 8:
+            da_kws.update({'minimizer_kwargs': da_kws.pop('local_search_options')})
 
         varying = np.asarray([par.vary for par in self.params.values()])
         bounds = np.asarray([(par.min, par.max) for par in
