@@ -2,6 +2,7 @@
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
+from scipy import __version__ as scipy_version
 from scipy.optimize import basinhopping
 
 import lmfit
@@ -60,6 +61,11 @@ def test_basinhopping_2d_lmfit_vs_scipy():
     assert_allclose(out.residual, ret.fun)
     assert_allclose(out.params['x0'].value, ret.x[0], rtol=1e-5)
     assert_allclose(out.params['x1'].value, ret.x[1], rtol=1e-5)
+
+    # FIXME: update when SciPy requirement is >= 1.8
+    if int(scipy_version.split('.')[1]) >= 8:
+        assert 'target_accept_rate' in out.call_kws
+        assert 'stepwise_factor' in out.call_kws
 
 
 def test_basinhopping_Alpine02(minimizer_Alpine02):

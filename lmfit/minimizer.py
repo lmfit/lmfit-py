@@ -1776,9 +1776,14 @@ class Minimizer:
         result.method = 'basinhopping'
         self.set_max_nfev(max_nfev, 200000*(result.nvarys+1))
         basinhopping_kws = dict(niter=100, T=1.0, stepsize=0.5,
-                                minimizer_kwargs={}, take_step=None,
+                                minimizer_kwargs=None, take_step=None,
                                 accept_test=None, callback=None, interval=50,
                                 disp=False, niter_success=None, seed=None)
+
+        # FIXME: update when SciPy requirement is >= 1.8
+        if int(scipy_version.split('.')[1]) >= 8:
+            basinhopping_kws.update({'target_accept_rate': 0.5,
+                                     'stepwise_factor': 0.9})
 
         basinhopping_kws.update(self.kws)
         basinhopping_kws.update(kws)
