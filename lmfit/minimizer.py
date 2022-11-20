@@ -1623,22 +1623,7 @@ class Minimizer:
         from the covariance matrix.
 
         This method calls :scipydoc:`optimize.leastsq` and, by default,
-        numerical derivatives are used, and the following arguments are
-        set:
-
-        +------------------+----------------+------------------------+
-        | :meth:`leastsq`  |  Default Value | Description            |
-        | arg              |                |                        |
-        +==================+================+========================+
-        |  `xtol`          |  1.e-7         | Relative error in the  |
-        |                  |                | approximate solution   |
-        +------------------+----------------+------------------------+
-        |  `ftol`          |  1.e-7         | Relative error in the  |
-        |                  |                | desired sum-of-squares |
-        +------------------+----------------+------------------------+
-        |  `Dfun`          | None           | Function to call for   |
-        |                  |                | Jacobian calculation   |
-        +------------------+----------------+------------------------+
+        numerical derivatives are used.
 
         Parameters
         ----------
@@ -1667,12 +1652,14 @@ class Minimizer:
         result.nfev -= 2  # correct for "pre-fit" initialization/checks
         variables = result._init_vals_internal
 
-        # note we set the max number of function evaluations here, and send twice that
-        # value to the solver so it essentially never stops on its own
+        # Note: we set max number of function evaluations here, and send twice
+        # that value to the solver so it essentially never stops on its own
         self.set_max_nfev(max_nfev, 2000*(result.nvarys+1))
 
-        lskws = dict(full_output=1, xtol=1.e-7, ftol=1.e-7, col_deriv=False,
-                     gtol=1.e-7, maxfev=2*self.max_nfev, Dfun=None)
+        lskws = dict(Dfun=None, full_output=1, col_deriv=0, ftol=1.49012e-08,
+                     xtol=1.49012e-08, gtol=0.0, maxfev=2*self.max_nfev,
+                     epsfcn=None, factor=100, diag=None)
+
         if 'maxfev' in kws:
             warnings.warn(maxeval_warning.format('maxfev', thisfuncname()),
                           RuntimeWarning)
@@ -1681,6 +1668,7 @@ class Minimizer:
         lskws.update(self.kws)
         lskws.update(kws)
         self.col_deriv = False
+
         if lskws['Dfun'] is not None:
             self.jacfcn = lskws['Dfun']
             self.col_deriv = lskws['col_deriv']
