@@ -714,6 +714,17 @@ and ``bic``.
 
    numpy.ndarray of data to compare to model.
 
+.. attribute:: dely
+
+   numpy.ndarray of estimated uncertainties in the ``y`` values of the model
+   from :meth:`ModelResult.eval_uncertainty`  (see :ref:`eval_uncertainty_sec`).
+
+.. attribute:: dely_comps
+
+   a dictionary of estimated uncertainties in the ``y`` values of the model
+   components, from :meth:`ModelResult.eval_uncertainty` (see
+   :ref:`eval_uncertainty_sec`).
+
 .. attribute:: errorbars
 
    Boolean for whether error bars were estimated by fit.
@@ -822,6 +833,8 @@ and ``bic``.
    array, so that ``weights*(data - fit)`` is minimized in the
    least-squares sense.
 
+.. _eval_uncertainty_sec:
+
 Calculating uncertainties in the model function
 -----------------------------------------------
 
@@ -859,6 +872,21 @@ figure below.
                      label='3-$\sigma$ uncertainty band')
     plt.legend()
     plt.show()
+
+
+.. versionadded:: 1.0.4
+
+If the model is a composite built from multiple components, the
+:meth:`ModelResult.eval_uncertainty` method will evaluate the uncertainty of
+both the full model (often the sum of multiple components) as well as the
+uncertainty in each component.  The uncertainty of the full model will be held in
+``result.dely``, and the uncertainties for each component will be held in the dictionary
+``result.dely_comps``, with keys that are the component prefixes.
+
+An example script shows how the uncertainties in components of a composite
+model can be calculated and used:
+
+.. jupyter-execute:: ../examples/doc_model_uncertainty2.py
 
 
 .. _modelresult_saveload_sec:
