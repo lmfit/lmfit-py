@@ -1574,19 +1574,30 @@ class Minimizer:
             lower_bounds.append(replace_none(par.min, -1))
             upper_bounds.append(replace_none(par.max, 1))
 
-        result.call_kws = kws
+        least_squares_kws = dict(jac='2-point', method='trf', ftol=1e-08,
+                                 xtol=1e-08, gtol=1e-08, x_scale=1.0,
+                                 loss='linear', f_scale=1.0, diff_step=None,
+                                 tr_solver=None, tr_options={},
+                                 jac_sparsity=None, max_nfev=2*self.max_nfev,
+                                 verbose=0, kwargs={})
+
+        least_squares_kws.update(self.kws)
+        least_squares_kws.update(kws)
+
+        least_squares_kws['kwargs'].update({'apply_bounds_transformation': False})
+        result.call_kws = least_squares_kws
+
         try:
             ret = least_squares(self.__residual, start_vals,
                                 bounds=(lower_bounds, upper_bounds),
-                                kwargs=dict(apply_bounds_transformation=False),
-                                max_nfev=2*self.max_nfev, **kws)
+                                **least_squares_kws)
             result.residual = ret.fun
         except AbortFitException:
             pass
 
-        # note: upstream least_squares is actually returning
-        # "last evaluation", not "best result", do we do that
-        # here for consistency
+        # Note: scipy.optimize.least_squares is actually returning the
+        # "last evaluation", which is not necessarily the "best result"; so we
+        # do that here for consistency
         if not result.aborted:
             result.nfev -= 1
             result.residual = self.__residual(ret.x, False)
