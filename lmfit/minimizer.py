@@ -2149,6 +2149,10 @@ class Minimizer:
                         minimizer_kwargs=None, options=None,
                         sampling_method='simplicial')
 
+        # FIXME: update when SciPy requirement is >= 1.7
+        if int(scipy_version.split('.')[1]) >= 7:
+            shgo_kws['n'] = None
+
         shgo_kws.update(self.kws)
         shgo_kws.update(kws)
 

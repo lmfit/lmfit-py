@@ -96,6 +96,12 @@ def test_shgo_sobol_Alpine02(minimizer_Alpine02):
     assert_allclose(min(out_x), min(global_optimum), rtol=1e-3)
     assert_allclose(max(out_x), max(global_optimum), rtol=1e-3)
 
+    # FIXME: update when SciPy requirement is >= 1.7
+    if int(scipy_version.split('.')[1]) >= 7:
+        assert out.call_kws['n'] is None
+    else:
+        assert out.call_kws['n'] == 100
+
 
 def test_shgo_bounds(minimizer_Alpine02):
     """Test SHGO algorithm with bounds."""
