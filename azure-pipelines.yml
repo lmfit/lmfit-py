@@ -85,8 +85,9 @@ stages:
             swig libmpc-dev
           displayName: 'Install dependencies'
         - script: |
-            python -m pip install --upgrade build pip wheel
-            python -m pip install asteval==0.9.22 numpy==1.18 scipy==1.4.0 uncertainties==3.1.4
+            python -m pip install --upgrade pip wheel
+            pip install setuptools==57.5.0
+            python -m pip install asteval==0.9.22 numpy==1.18 scipy==1.4.0 uncertainties==3.1.4 pytest coverage codecov flaky
           displayName: 'Install minimum required version of dependencies'
         - script: |
             python -m build
