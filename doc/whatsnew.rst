@@ -16,6 +16,14 @@ consult the `lmfit GitHub repository`_.
 Version 1.0.4 Release Notes (unreleased)
 ========================================
 
+New features:
+
+- add calculation of ``dely`` for model components of composite models (Issue #761; PR #826)
+- add R^2 ``rsquared`` statistic to fit outputs and reports for Model fits (Issue #803; PR #810)
+- add ``SplineModel`` (PR #804)
+- add ``Pearson4Model`` (@lellid; PR #800)
+
+
 Bug fixes/enhancements:
 
 - make sure variable ``spercent`` is always defined in ``params_html_table`` functions (reported by @MySlientWind; Issue #768, PR #770)
@@ -24,8 +32,10 @@ Bug fixes/enhancements:
 - components used to create a ``CompositeModel`` can now have different independent variables (@Julian-Hochhaus; Discussion #787; PR #788))
 - fixed function definition for ``StepModel(form='linear')``, was not consistent with the other ones. (@matpompili; PR #794)
 - fixed height factor for ``Gaussian2dModel``, was not correct. (@matpompili; PR #795)
-- added ``Pearson4`` fitting model
 - for covariances with negative diagonal elements, we set the covariance to ``None`` (PR #813)
+- fixed linear mode for ``RectangleModel`` (@arunpersaud; Issue #815; PR #816)
+- report correct initial values for parameters with bounds (Issue #820; PR #821)
+- allow recalculation of confidence intervals (@jagerber48; PR #798)
 
 Deprecations:
 

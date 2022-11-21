@@ -71,8 +71,6 @@ stages:
             python.version: '3.7'
           Python38:
             python.version: '3.8'
-          Python39:
-            python.version: '3.9'
 
       steps:
         - task: UsePythonVersion@0
@@ -86,7 +84,7 @@ stages:
           displayName: 'Install dependencies'
         - script: |
             python -m pip install --upgrade build pip wheel
-            python -m pip install asteval==0.9.22 numpy==1.18 scipy==1.4.0 uncertainties==3.1.4
+            python -m pip install asteval==0.9.22 numpy==1.18 scipy==1.4.0 uncertainties==3.1.4 pytest coverage codecov flaky
           displayName: 'Install minimum required version of dependencies'
         - script: |
             python -m build
