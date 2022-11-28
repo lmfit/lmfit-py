@@ -11,9 +11,9 @@ significant to the use and behavior of the library. This is not meant
 to be a comprehensive list of changes. For such a complete record,
 consult the `lmfit GitHub repository`_.
 
-.. _whatsnew_104_label:
+.. _whatsnew_110_label:
 
-Version 1.0.4 Release Notes (unreleased)
+Version 1.1.0 Release Notes (unreleased)
 ========================================
 
 New features:
@@ -28,9 +28,9 @@ Bug fixes/enhancements:
 - make sure variable ``spercent`` is always defined in ``params_html_table`` functions (reported by @MySlientWind; Issue #768, PR #770)
 - always initialize the variables ``success`` and ``covar`` the ``MinimizerResult`` (reported by Marc W. Pound; PR #771)
 - build package following PEP517/PEP518; use ``pyproject.toml`` and ``setup.cfg``; leave ``setup.py`` for now (PR #777)
-- components used to create a ``CompositeModel`` can now have different independent variables (@Julian-Hochhaus; Discussion #787; PR #788))
-- fixed function definition for ``StepModel(form='linear')``, was not consistent with the other ones. (@matpompili; PR #794)
-- fixed height factor for ``Gaussian2dModel``, was not correct. (@matpompili; PR #795)
+- components used to create a ``CompositeModel`` can now have different independent variables (@Julian-Hochhaus; Discussion #787; PR #788)
+- fixed function definition for ``StepModel(form='linear')``, was not consistent with the other ones (@matpompili; PR #794)
+- fixed height factor for ``Gaussian2dModel``, was not correct (@matpompili; PR #795)
 - for covariances with negative diagonal elements, we set the covariance to ``None`` (PR #813)
 - fixed linear mode for ``RectangleModel`` (@arunpersaud; Issue #815; PR #816)
 - report correct initial values for parameters with bounds (Issue #820; PR #821)
