@@ -13,8 +13,8 @@ consult the `lmfit GitHub repository`_.
 
 .. _whatsnew_110_label:
 
-Version 1.1.0 Release Notes (unreleased)
-========================================
+Version 1.1.0 Release Notes (November 27, 2022)
+=================================================
 
 New features:
 
