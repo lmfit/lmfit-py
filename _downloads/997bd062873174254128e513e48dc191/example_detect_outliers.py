@@ -3,7 +3,7 @@ Outlier detection via leave-one-out
 ===================================
 
 Outliers can sometimes be identified by assessing the influence of each
-datapoint. To assess the influence of one point, we fit the dataset while the
+datapoint. To assess the influence of one point, we fit the dataset without the
 point and compare the result with the fit of the full dataset. The code below
 shows how to do this with lmfit. Note that the presented method is very basic.
 """

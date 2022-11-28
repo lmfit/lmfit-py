@@ -125,7 +125,7 @@ show the report:
 
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 90
+        # function evals   = 95
         # data points      = 2500
         # variables        = 4
         chi-square         = 1277.24638
@@ -133,10 +133,10 @@ show the report:
         Akaike info crit   = -1670.96059
         Bayesian info crit = -1647.66441
     [[Variables]]
-        amp:     14.0708279 +/- 0.04936796 (0.35%) (init = 13)
-        period:  5.32980965 +/- 0.00273131 (0.05%) (init = 2)
-        shift:   0.12156327 +/- 0.00482311 (3.97%) (init = 0)
-        decay:   0.01002489 +/- 4.0724e-05 (0.41%) (init = 0.02)
+        amp:     14.0708270 +/- 0.04936867 (0.35%) (init = 13)
+        period:  5.32980958 +/- 0.00273140 (0.05%) (init = 2)
+        shift:   0.12156317 +/- 0.00482312 (3.97%) (init = 0)
+        decay:   0.01002489 +/- 4.0726e-05 (0.41%) (init = 0.02)
     [[Correlations]] (unreported correlations are < 0.100)
         C(period, shift) = 0.800
         C(amp, decay)    = 0.576
@@ -211,8 +211,8 @@ Calculate the confidence intervals for parameters and display the results:
  .. code-block:: none
 
                99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
-     amp   :  -0.14776  -0.09860  -0.04934  14.07083  +0.04956  +0.09893  +0.14850
-     period:  -0.00819  -0.00551  -0.00267   5.32981  +0.00272  +0.00543  +0.00825
+     amp   :  -0.14795  -0.09863  -0.04934  14.07083  +0.04939  +0.09886  +0.14847
+     period:  -0.00818  -0.00546  -0.00273   5.32981  +0.00273  +0.00548  +0.00822
      shift :  -0.01446  -0.00964  -0.00482   0.12156  +0.00482  +0.00965  +0.01449
      decay :  -0.00012  -0.00008  -0.00004   0.01002  +0.00004  +0.00008  +0.00012
 
@@ -287,7 +287,7 @@ parameters using the function ``conf_interval2d``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  16.439 seconds)
+   **Total running time of the script:** ( 0 minutes  9.382 seconds)
 
 
 .. _sphx_glr_download_examples_example_confidence_interval.py:

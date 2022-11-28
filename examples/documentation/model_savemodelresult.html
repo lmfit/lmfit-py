@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>doc_model_savemodelresult.py &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx13.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx13.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
@@ -17,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
@@ -26,7 +23,7 @@
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="doc_confidence_basic.py" href="confidence_basic.html" />
@@ -150,19 +147,20 @@ to download the full example code</p>
     Model(gaussian)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 29
+    # function evals   = 33
     # data points      = 101
     # variables        = 3
     chi-square         = 3.40883599
     reduced chi-square = 0.03478404
     Akaike info crit   = -336.263713
     Bayesian info crit = -328.418352
+    R-squared          = 0.98533348
 [[Variables]]
-    amplitude:  8.88022277 +/- 0.11359552 (1.28%) (init = 5)
-    center:     5.65866081 +/- 0.01030506 (0.18%) (init = 5)
-    sigma:      0.69765538 +/- 0.01030503 (1.48%) (init = 1)
-    fwhm:       1.64285285 +/- 0.02426649 (1.48%) == &#39;2.3548200*sigma&#39;
-    height:     5.07800352 +/- 0.06495781 (1.28%) == &#39;0.3989423*amplitude/max(1e-15, sigma)&#39;
+    amplitude:  8.88021806 +/- 0.11359484 (1.28%) (init = 5)
+    center:     5.65866106 +/- 0.01030493 (0.18%) (init = 5)
+    sigma:      0.69765464 +/- 0.01030493 (1.48%) (init = 1)
+    fwhm:       1.64285111 +/- 0.02426625 (1.48%) == &#39;2.3548200*sigma&#39;
+    height:     5.07800621 +/- 0.06495735 (1.28%) == &#39;0.3989423*amplitude/max(1e-15, sigma)&#39;
 [[Correlations]] (unreported correlations are &lt; 0.100)
     C(amplitude, sigma) = 0.577
 </pre></div>
@@ -189,7 +187,7 @@ to download the full example code</p>
 <span class="c1"># &lt;end examples/doc_model_savemodelresult.py&gt;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.023 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.020 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-documentation-model-savemodelresult-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/248ce8c0bee37e42f5d6d08deaa46d51/model_savemodelresult.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">model_savemodelresult.py</span></code></a></p>

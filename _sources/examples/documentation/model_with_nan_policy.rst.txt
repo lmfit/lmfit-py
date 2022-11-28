@@ -46,6 +46,7 @@ doc_model_with_nan_policy.py
         reduced chi-square = 0.03416566
         Akaike info crit   = -331.323278
         Bayesian info crit = -323.537918
+        R-squared          = 0.98570688
     [[Variables]]
         amplitude:  8.82064765 +/- 0.11686065 (1.32%) (init = 5)
         center:     5.65906365 +/- 0.01055590 (0.19%) (init = 6)
@@ -101,7 +102,7 @@ doc_model_with_nan_policy.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.223 seconds)
+   **Total running time of the script:** ( 0 minutes  0.138 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_with_nan_policy.py:

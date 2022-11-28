@@ -81,6 +81,16 @@ The :class:`Parameters` class
     .. automethod:: load
 
 
+.. _dumpload_warning:
+
+.. warning::
+
+   Saving Parameters with user-added functions to the ``_asteval``
+   interpreter using :meth::`dump` and :meth:`dumps` may not be easily
+   recovered with the :meth:`load` and :meth:`loads`. See
+   :ref:`model_saveload_sec` for further discussion.
+
+
 Simple Example
 ==============
 

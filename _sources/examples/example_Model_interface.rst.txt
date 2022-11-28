@@ -124,7 +124,7 @@ We can immediately see the best-fit values:
 
  .. code-block:: none
 
-    {'N': 7.146693290745707, 'tau': 2.8980288907359197}
+    {'N': 7.146693291458741, 'tau': 2.8980288904274483}
 
 
 
@@ -464,8 +464,8 @@ automatically aligned to the correct section of ``t`` using Series' index.
  .. code-block:: none
 
     [[Variables]]
-        N:    7.10725874 +/- 0.24259174 (3.41%) (init = 10)
-        tau:  2.92503558 +/- 0.13481757 (4.61%) (init = 1)
+        N:    7.10725873 +/- 0.24259174 (3.41%) (init = 10)
+        tau:  2.92503558 +/- 0.13481756 (4.61%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(N, tau) = -0.932
 
@@ -504,7 +504,7 @@ Data with missing entries and an unequal length still aligns properly.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.423 seconds)
+   **Total running time of the script:** ( 0 minutes  0.242 seconds)
 
 
 .. _sphx_glr_download_examples_example_Model_interface.py:

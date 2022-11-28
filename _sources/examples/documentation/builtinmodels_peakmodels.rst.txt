@@ -65,6 +65,7 @@ doc_builtinmodels_peakmodels.py
         reduced chi-square = 0.07536260
         Akaike info crit   = -1033.77437
         Bayesian info crit = -1021.79248
+        R-squared          = 0.99045513
     [[Variables]]
         amplitude:  30.3135620 +/- 0.15712686 (0.52%) (init = 43.62238)
         center:     9.24277047 +/- 0.00737496 (0.08%) (init = 9.25)
@@ -77,39 +78,41 @@ doc_builtinmodels_peakmodels.py
         Model(lorentzian)
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 21
+        # function evals   = 25
         # data points      = 401
         # variables        = 3
         chi-square         = 53.7535387
         reduced chi-square = 0.13505914
-        Akaike info crit   = -799.830322
+        Akaike info crit   = -799.830323
         Bayesian info crit = -787.848438
+        R-squared          = 0.98289441
     [[Variables]]
-        amplitude:  38.9727645 +/- 0.31386183 (0.81%) (init = 54.52798)
-        center:     9.24438944 +/- 0.00927619 (0.10%) (init = 9.25)
-        sigma:      1.15483925 +/- 0.01315659 (1.14%) (init = 1.35)
-        fwhm:       2.30967850 +/- 0.02631318 (1.14%) == '2.0000000*sigma'
-        height:     10.7421156 +/- 0.08633945 (0.80%) == '0.3183099*amplitude/max(1e-15, sigma)'
+        amplitude:  38.9726601 +/- 0.31386655 (0.81%) (init = 54.52798)
+        center:     9.24438938 +/- 0.00927646 (0.10%) (init = 9.25)
+        sigma:      1.15483308 +/- 0.01315692 (1.14%) (init = 1.35)
+        fwhm:       2.30966615 +/- 0.02631383 (1.14%) == '2.0000000*sigma'
+        height:     10.7421443 +/- 0.08634226 (0.80%) == '0.3183099*amplitude/max(1e-15, sigma)'
     [[Correlations]] (unreported correlations are < 0.250)
         C(amplitude, sigma) = 0.709
     [[Model]]
         Model(voigt)
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 21
+        # function evals   = 25
         # data points      = 401
         # variables        = 3
         chi-square         = 14.5448627
         reduced chi-square = 0.03654488
         Akaike info crit   = -1324.00615
         Bayesian info crit = -1312.02427
+        R-squared          = 0.99537150
     [[Variables]]
-        amplitude:  35.7554146 +/- 0.13861321 (0.39%) (init = 65.43358)
-        center:     9.24411150 +/- 0.00505482 (0.05%) (init = 9.25)
-        sigma:      0.73015627 +/- 0.00368460 (0.50%) (init = 0.8775)
-        gamma:      0.73015627 +/- 0.00368460 (0.50%) == 'sigma'
-        fwhm:       2.62950494 +/- 0.00806900 (0.31%) == '1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)'
-        height:     10.2203969 +/- 0.03009415 (0.29%) == '(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))).real'
+        amplitude:  35.7553874 +/- 0.13861508 (0.39%) (init = 65.43358)
+        center:     9.24411135 +/- 0.00505496 (0.05%) (init = 9.25)
+        sigma:      0.73015516 +/- 0.00368468 (0.50%) (init = 0.8775)
+        gamma:      0.73015516 +/- 0.00368468 (0.50%) == 'sigma'
+        fwhm:       2.62950094 +/- 0.00806917 (0.31%) == '1.0692*gamma+sqrt(0.8664*gamma**2+5.545083*sigma**2)'
+        height:     10.2204046 +/- 0.03009459 (0.29%) == '(amplitude/(max(1e-15, sigma*sqrt(2*pi))))*wofz((1j*gamma)/(max(1e-15, sigma*sqrt(2)))).real'
     [[Correlations]] (unreported correlations are < 0.250)
         C(amplitude, sigma) = 0.651
 
@@ -186,7 +189,7 @@ doc_builtinmodels_peakmodels.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.926 seconds)
+   **Total running time of the script:** ( 0 minutes  0.575 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_peakmodels.py:

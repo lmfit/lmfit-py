@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Calculation of confidence intervals &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx13.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
@@ -17,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -26,7 +23,7 @@
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -241,10 +238,7 @@ intervals:</p>
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>      99.73%    95.45%    68.27%    _BEST_    68.27%    95.45%    99.73%
  a:  -0.00059  -0.00039  -0.00019   0.09944  +0.00019  +0.00039  +0.00060
- b:  -0.03766  -0.02478  -0.01230   1.98477  +0.01230  +0.02478  +0.03761
-</pre></div>
-</div>
-<div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>
+ b:  -0.03764  -0.02477  -0.01229   1.98477  +0.01229  +0.02477  +0.03764
 </pre></div>
 </div>
 </div>
@@ -254,7 +248,7 @@ and parameter values that are at the varying confidence levels given by
 steps in <span class="math notranslate nohighlight">\(\sigma\)</span>. As we can see, the estimated error is almost the
 same, and the uncertainties are well behaved: Going from 1-<span class="math notranslate nohighlight">\(\sigma\)</span>
 (68% confidence) to 3-<span class="math notranslate nohighlight">\(\sigma\)</span> (99.7% confidence) uncertainties is
-fairly linear. It can also be seen that the errors are fairy symmetric
+fairly linear. It can also be seen that the errors are fairly symmetric
 around the best fit value. For this problem, it is not necessary to
 calculate confidence intervals, and the estimates of the uncertainties from
 the covariance matrix are sufficient.</p>
@@ -374,9 +368,9 @@ solution. We can also compare to the results of using <code class="docutils lite
 <div class="cell_output docutils container">
 <div class="output stream highlight-none notranslate"><div class="highlight"><pre><span></span>[[Variables]]
     a1:  2.98622120 +/- 0.14867187 (4.98%) (init = 2.986237)
-    a2: -4.33526328 +/- 0.11527506 (2.66%) (init = -4.335256)
-    t1:  1.30994234 +/- 0.13121177 (10.02%) (init = 1.309932)
-    t2:  11.8240350 +/- 0.46316470 (3.92%) (init = 11.82408)
+    a2: -4.33526327 +/- 0.11527506 (2.66%) (init = -4.335256)
+    t1:  1.30994233 +/- 0.13121177 (10.02%) (init = 1.309932)
+    t2:  11.8240351 +/- 0.46316470 (3.92%) (init = 11.82408)
 [[Correlations]] (unreported correlations are &lt; 0.500)
     C(a2, t2) = 0.987
     C(a2, t1) = -0.925
@@ -384,10 +378,10 @@ solution. We can also compare to the results of using <code class="docutils lite
     C(a1, t1) = -0.599
 
        95.45%    68.27%    _BEST_    68.27%    95.45%
- a1:  -0.27286  -0.14165   2.98622  +0.16353  +0.36343
- a2:  -0.30444  -0.13219  -4.33526  +0.10688  +0.19683
+ a1:  -0.27285  -0.14165   2.98622  +0.16353  +0.36343
+ a2:  -0.30440  -0.13220  -4.33526  +0.10689  +0.19684
  t1:  -0.23392  -0.12494   1.30994  +0.14660  +0.32369
- t2:  -1.01943  -0.48820  11.82404  +0.46041  +0.90441
+ t2:  -1.01937  -0.48813  11.82404  +0.46045  +0.90439
 </pre></div>
 </div>
 </div>
@@ -477,14 +471,14 @@ to find the values resulting in the searched confidence region.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) – The minimizer to use, holding objective function.</p></li>
 <li><p><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) – The result of running minimize().</p></li>
-<li><p><strong>p_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) – Names of the parameters for which the CI is calculated. If None
+<li><p><strong>p_names</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – Names of the parameters for which the CI is calculated. If None
 (default), the CI is calculated for every parameter.</p></li>
-<li><p><strong>sigmas</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.10)"><em>list</em></a><em>, </em><em>optional</em>) – The sigma-levels to find (default is [1, 2, 3]). See Notes below.</p></li>
-<li><p><strong>trace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – Defaults to False; if True, each result of a probability
+<li><p><strong>sigmas</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)"><em>list</em></a><em>, </em><em>optional</em>) – The sigma-levels to find (default is [1, 2, 3]). See Notes below.</p></li>
+<li><p><strong>trace</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Defaults to False; if True, each result of a probability
 calculation is saved along with the parameter. This can be used to
 plot so-called “profile traces”.</p></li>
-<li><p><strong>maxiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum of iteration to find an upper limit (default is 200).</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – Print extra debugging information (default is False).</p></li>
+<li><p><strong>maxiter</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Maximum of iteration to find an upper limit (default is 200).</p></li>
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Print extra debugging information (default is False).</p></li>
 <li><p><strong>prob_func</strong> (<em>None</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
 Default is None and uses the built-in function <cite>f_compare</cite>
 (i.e., F-test).</p></li>
@@ -547,11 +541,11 @@ two parameters.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>minimizer</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.Minimizer" title="lmfit.minimizer.Minimizer"><em>Minimizer</em></a>) – The minimizer to use, holding objective function.</p></li>
 <li><p><strong>result</strong> (<a class="reference internal" href="fitting.html#lmfit.minimizer.MinimizerResult" title="lmfit.minimizer.MinimizerResult"><em>MinimizerResult</em></a>) – The result of running minimize().</p></li>
-<li><p><strong>x_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name of the parameter which will be the x direction.</p></li>
-<li><p><strong>y_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – The name of the parameter which will be the y direction.</p></li>
-<li><p><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the x direction.</p></li>
-<li><p><strong>ny</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the y direction.</p></li>
-<li><p><strong>limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.10)"><em>tuple</em></a><em>, </em><em>optional</em>) – Should have the form <code class="docutils literal notranslate"><span class="pre">((x_upper,</span> <span class="pre">x_lower),</span> <span class="pre">(y_upper,</span> <span class="pre">y_lower))</span></code>.
+<li><p><strong>x_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the parameter which will be the x direction.</p></li>
+<li><p><strong>y_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – The name of the parameter which will be the y direction.</p></li>
+<li><p><strong>nx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the x direction.</p></li>
+<li><p><strong>ny</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of points in the y direction.</p></li>
+<li><p><strong>limits</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)"><em>tuple</em></a><em>, </em><em>optional</em>) – Should have the form <code class="docutils literal notranslate"><span class="pre">((x_upper,</span> <span class="pre">x_lower),</span> <span class="pre">(y_upper,</span> <span class="pre">y_lower))</span></code>.
 If not given, the default is 5.0*std-errors in each direction.</p></li>
 <li><p><strong>prob_func</strong> (<em>None</em><em> or </em><em>callable</em><em>, </em><em>optional</em>) – Function to calculate the probability from the optimized chi-square.
 Default is None and uses the built-in function <cite>f_compare</cite>
@@ -588,18 +582,18 @@ Default is None and uses the built-in function <cite>f_compare</cite>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>ci</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – The result of <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>: a dictionary
+<li><p><strong>ci</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.11)"><em>dict</em></a>) – The result of <code class="xref py py-func docutils literal notranslate"><span class="pre">conf_interval()</span></code>: a dictionary
 containing a list of <code class="docutils literal notranslate"><span class="pre">(sigma,</span> <span class="pre">vals)</span></code>-tuples for each parameter.</p></li>
-<li><p><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.10)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is
+<li><p><strong>with_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to subtract best value from all other values (default is
 True).</p></li>
-<li><p><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</p></li>
+<li><p><strong>ndigits</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><em>int</em></a><em>, </em><em>optional</em>) – Number of significant digits to show (default is 5).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Text of formatted report on confidence intervals.</p>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)">str</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)">str</a></p>
 </dd>
 </dl>
 </dd></dl>

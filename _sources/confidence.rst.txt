@@ -83,7 +83,7 @@ and parameter values that are at the varying confidence levels given by
 steps in :math:`\sigma`. As we can see, the estimated error is almost the
 same, and the uncertainties are well behaved: Going from 1-:math:`\sigma`
 (68% confidence) to 3-:math:`\sigma` (99.7% confidence) uncertainties is
-fairly linear. It can also be seen that the errors are fairy symmetric
+fairly linear. It can also be seen that the errors are fairly symmetric
 around the best fit value. For this problem, it is not necessary to
 calculate confidence intervals, and the estimates of the uncertainties from
 the covariance matrix are sufficient.

@@ -39,17 +39,18 @@ doc_model_loadmodel.py
         Model(mysine)
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 21
+        # function evals   = 25
         # data points      = 101
         # variables        = 3
         chi-square         = 7.68903767
         reduced chi-square = 0.07845957
         Akaike info crit   = -254.107813
         Bayesian info crit = -246.262452
+        R-squared          = 0.97252133
     [[Variables]]
-        amp:    2.32733714 +/- 0.03950803 (1.70%) (init = 3)
-        freq:   0.50098755 +/- 5.7726e-04 (0.12%) (init = 0.52)
-        shift:  0.53604521 +/- 0.03383118 (6.31%) (init = 0)
+        amp:    2.32733714 +/- 0.03950804 (1.70%) (init = 3)
+        freq:   0.50098754 +/- 5.7726e-04 (0.12%) (init = 0.52)
+        shift:  0.53604527 +/- 0.03383093 (6.31%) (init = 0)
     [[Correlations]] (unreported correlations are < 0.100)
         C(freq, shift) = -0.866
 
@@ -94,7 +95,7 @@ doc_model_loadmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.223 seconds)
+   **Total running time of the script:** ( 0 minutes  0.134 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_loadmodel.py:

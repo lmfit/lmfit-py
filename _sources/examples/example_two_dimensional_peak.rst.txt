@@ -119,25 +119,26 @@ In this case, we can use a built-in model to fit
 
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 81
+        # function evals   = 87
         # data points      = 10000
         # variables        = 5
-        chi-square         = 20618.1775
-        reduced chi-square = 2.06284917
-        Akaike info crit   = 7245.87996
-        Bayesian info crit = 7281.93167
+        chi-square         = 20618.1774
+        reduced chi-square = 2.06284916
+        Akaike info crit   = 7245.87992
+        Bayesian info crit = 7281.93162
+        R-squared          = 0.28378389
     [[Variables]]
-        amplitude:  27.4214969 +/- 0.65058047 (2.37%) (init = 16.51399)
-        centerx:    1.99704509 +/- 0.01405468 (0.70%) (init = 1.940764)
-        centery:   -0.49516299 +/- 0.01907508 (3.85%) (init = -0.5178641)
-        sigmax:     0.54750210 +/- 0.01224908 (2.24%) (init = 1.666582)
-        sigmay:     0.73308419 +/- 0.01616930 (2.21%) (init = 0.8332836)
-        fwhmx:      1.28926890 +/- 0.02884438 (2.24%) == '2.3548200*sigmax'
-        fwhmy:      1.72628131 +/- 0.03807578 (2.21%) == '2.3548200*sigmay'
-        height:     107.317707 +/- 3.49279898 (3.25%) == '1.5707963*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
+        amplitude:  27.4195803 +/- 0.65062976 (2.37%) (init = 16.51399)
+        centerx:    1.99705424 +/- 0.01405862 (0.70%) (init = 1.940764)
+        centery:   -0.49516154 +/- 0.01907802 (3.85%) (init = -0.5178641)
+        sigmax:     0.54740650 +/- 0.01224971 (2.24%) (init = 1.666582)
+        sigmay:     0.73300716 +/- 0.01617033 (2.21%) (init = 0.8332836)
+        fwhmx:      1.28904376 +/- 0.02884586 (2.24%) == '2.3548200*sigmax'
+        fwhmy:      1.72609992 +/- 0.03807821 (2.21%) == '2.3548200*sigmay'
+        height:     10.8758361 +/- 0.35409545 (3.26%) == '0.1591549*amplitude/(max(1e-15, sigmax)*max(1e-15, sigmay))'
     [[Correlations]] (unreported correlations are < 0.100)
-        C(amplitude, sigmay) = 0.247
-        C(amplitude, sigmax) = 0.232
+        C(amplitude, sigmay) = 0.246
+        C(amplitude, sigmax) = 0.231
 
 
 
@@ -306,6 +307,7 @@ over a quarter circle.
         reduced chi-square = 1.12941588
         Akaike info crit   = 1223.00402
         Bayesian info crit = 1266.26606
+        R-squared          = 0.57742880
     [[Variables]]
         amplitude:  25.6418094 +/- 0.50569564 (1.97%) (init = 10)
         centerx:    2.00325828 +/- 0.01163398 (0.58%) (init = 2.051478)
@@ -370,7 +372,7 @@ The process of making plots to check it worked is the same as before.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.905 seconds)
+   **Total running time of the script:** ( 0 minutes  4.518 seconds)
 
 
 .. _sphx_glr_download_examples_example_two_dimensional_peak.py:

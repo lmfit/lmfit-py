@@ -36,7 +36,7 @@ doc_model_composite.py
  .. code-block:: none
 
     [[Model]]
-        (Model(jump) <function convolve at 0x1275d2e60> Model(gaussian))
+        (Model(jump) <function convolve at 0x17d27a5e0> Model(gaussian))
     [[Fit Statistics]]
         # fitting method   = leastsq
         # function evals   = 25
@@ -46,6 +46,7 @@ doc_model_composite.py
         reduced chi-square = 0.12503148
         Akaike info crit   = -414.939746
         Bayesian info crit = -405.029832
+        R-squared          = 0.99632577
     [[Variables]]
         mid:        5 (fixed)
         amplitude:  0.62508459 +/- 0.00189732 (0.30%) (init = 1)
@@ -131,7 +132,7 @@ doc_model_composite.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.449 seconds)
+   **Total running time of the script:** ( 0 minutes  0.273 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_composite.py:

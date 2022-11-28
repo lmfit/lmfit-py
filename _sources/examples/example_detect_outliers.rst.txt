@@ -22,7 +22,7 @@ Outlier detection via leave-one-out
 ===================================
 
 Outliers can sometimes be identified by assessing the influence of each
-datapoint. To assess the influence of one point, we fit the dataset while the
+datapoint. To assess the influence of one point, we fit the dataset without the
 point and compare the result with the fit of the full dataset. The code below
 shows how to do this with lmfit. Note that the presented method is very basic.
 
@@ -149,16 +149,17 @@ and gives the plot and fitting results below:
         Model(func)
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 12
+        # function evals   = 13
         # data points      = 100
         # variables        = 2
         chi-square         = 1338.34458
         reduced chi-square = 13.6565773
         Akaike info crit   = 263.401856
         Bayesian info crit = 268.612196
+        R-squared          = 0.70062332
     [[Variables]]
         a:  0.08937623 +/- 0.00590168 (6.60%) (init = 0.1)
-        b:  1.51298992 +/- 0.46229147 (30.55%) (init = 2)
+        b:  1.51298996 +/- 0.46229147 (30.55%) (init = 2)
     [[Correlations]] (unreported correlations are < 0.100)
         C(a, b) = 0.601
 
@@ -264,7 +265,7 @@ Plot the influence on the parameter value and error of each point:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.432 seconds)
+   **Total running time of the script:** ( 0 minutes  0.718 seconds)
 
 
 .. _sphx_glr_download_examples_example_detect_outliers.py:

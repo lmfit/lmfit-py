@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Downloading and Installation &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx13.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
@@ -17,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -26,7 +23,7 @@
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Getting Help" href="support.html" />
@@ -157,18 +154,18 @@
 <h1>Downloading and Installation<a class="headerlink" href="#downloading-and-installation" title="Permalink to this heading">¶</a></h1>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">¶</a></h2>
-<p>Lmfit works with <a class="reference external" href="https://python.org">Python</a> versions 3.6 and higher. Version
+<p>Lmfit works with <a class="reference external" href="https://python.org">Python</a> versions 3.7 and higher. Version
 0.9.15 is the final version to support Python 2.7.</p>
 <dl class="simple">
 <dt>Lmfit requires the following Python packages, with versions given:</dt><dd><ul class="simple">
-<li><p><a class="reference external" href="https://numpy.org/">NumPy</a> version 1.18 or higher.</p></li>
-<li><p><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 1.4 or higher.</p></li>
-<li><p><a class="reference external" href="https://github.com/newville/asteval">asteval</a> version 0.9.22 or higher.</p></li>
-<li><p><a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a> version 3.0.1 or higher.</p></li>
+<li><p><a class="reference external" href="https://numpy.org/">NumPy</a> version 1.19 or higher.</p></li>
+<li><p><a class="reference external" href="https://scipy.org/scipylib/index.html">SciPy</a> version 1.6 or higher.</p></li>
+<li><p><a class="reference external" href="https://github.com/newville/asteval">asteval</a> version 0.9.28 or higher.</p></li>
+<li><p><a class="reference external" href="https://github.com/lebigot/uncertainties">uncertainties</a> version 3.1.4 or higher.</p></li>
 </ul>
 </dd>
 </dl>
-<p>All of these are readily available on PyPI, and should be installed
+<p>All of these are readily available on PyPI, and are installed
 automatically if installing with <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lmfit</span></code>.</p>
 <p>In order to run the test suite, the <a class="reference external" href="https://pytest.org/">pytest</a>, <a class="reference external" href="https://github.com/pytest-dev/pytest-cov">pytest-cov</a>, and <a class="reference external" href="https://github.com/box/flaky">flaky</a>
 packages are required. Some functionality requires the <a class="reference external" href="https://emcee.readthedocs.io/">emcee</a> (version 3+),
@@ -181,12 +178,17 @@ of them.</p>
 packages <a class="reference external" href="https://github.com/missinglinkelectronics/sphinxcontrib-svg2pdfconverter">sphinxcontrib-svg2pdfconverter</a> and <a class="reference external" href="https://cairosvg.org/">cairosvg</a> are also required,
 as well as the LaTex package <a class="reference external" href="https://ctan.org/pkg/latexmk/">Latexmk</a> (which is included by default in some
 LaTex distributions).</p>
-<p>Please refer to <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code> for a list of all dependencies that
-are needed if you want to participate in the development of lmfit.</p>
+<p>Please refer to <code class="docutils literal notranslate"><span class="pre">setup.cfg</span></code> under <code class="docutils literal notranslate"><span class="pre">options.extras_require</span></code> for a list of all
+dependencies that are needed if you want to participate in the development of lmfit.
+You can install all these dependencies automatically by doing <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">lmfit[all]</span></code>,
+or select only a subset (e.g., <code class="docutils literal notranslate"><span class="pre">dev`</span></code>, <code class="docutils literal notranslate"><span class="pre">doc</span></code>, or <code class="docutils literal notranslate"><span class="pre">test</span></code>).</p>
+<p>Please note: the “original” <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code> is deprecated, but we will
+provide a shim <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> file for as long as <code class="docutils literal notranslate"><span class="pre">Python</span></code> and/or <code class="docutils literal notranslate"><span class="pre">setuptools</span></code>
+allow the use of this legacy command.</p>
 </section>
 <section id="downloads">
 <h2>Downloads<a class="headerlink" href="#downloads" title="Permalink to this heading">¶</a></h2>
-<p>The latest stable version of lmfit is 1.0.3 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPI</a>. Check the <a class="reference internal" href="whatsnew.html#whatsnew-chapter"><span class="std std-ref">Release Notes</span></a> for
+<p>The latest stable version of lmfit is 1.1.0 and is available from <a class="reference external" href="https://pypi.python.org/pypi/lmfit/">PyPI</a>. Check the <a class="reference internal" href="whatsnew.html#whatsnew-chapter"><span class="std std-ref">Release Notes</span></a> for
 a list of changes compared to earlier releases.</p>
 </section>
 <section id="installation">
@@ -208,9 +210,15 @@ Anaconda channels provide it, allowing installation with (for example):</p>
 </pre></div>
 </div>
 <p>and install using:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">build</span> <span class="n">pip</span> <span class="n">setuptools</span> <span class="n">wheel</span>
 </pre></div>
 </div>
+<p>to install the required build dependencies and then do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">build</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="s2">&quot;.[all]&#39;</span>
+</pre></div>
+</div>
+<p>to generate the wheel and install <code class="docutils literal notranslate"><span class="pre">lmfit</span></code> with all its dependencies.</p>
 <p>We welcome all contributions to lmfit! If you cloned the repository for this
 purpose, please read <a class="reference external" href="https://github.com/lmfit/lmfit-py/blob/master/.github/CONTRIBUTING.md">CONTRIBUTING.md</a> for more detailed instructions.</p>
 </section>
@@ -297,7 +305,7 @@ lists have also led to improvements in this code.
 <p>The LMFIT-py code is distributed under the following license:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>BSD-3
 
-Copyright 2021 Matthew Newville, The University of Chicago
+Copyright 2022 Matthew Newville, The University of Chicago
                Renee Otten, Brandeis University
                Till Stensitzki, Freie Universitat Berlin
                A. R. J. Nelson, Australian Nuclear Science and Technology Organisation

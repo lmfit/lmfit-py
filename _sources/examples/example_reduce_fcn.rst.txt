@@ -125,9 +125,9 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
         Bayesian info crit = -97.1001440
     [[Variables]]
         offset:  1.10392445 +/- 0.05751441 (5.21%) (init = 2)
-        omega:   3.97313427 +/- 0.02073920 (0.52%) (init = 3.3)
-        amp:     1.69977000 +/- 0.21587443 (12.70%) (init = 2.5)
-        decay:   7.65902087 +/- 1.87209059 (24.44%) (init = 1)
+        omega:   3.97313428 +/- 0.02073920 (0.52%) (init = 3.3)
+        amp:     1.69977024 +/- 0.21587469 (12.70%) (init = 2.5)
+        decay:   7.65901859 +/- 1.87209333 (24.44%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay) = -0.773
 
@@ -160,15 +160,15 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
         # function evals   = 135
         # data points      = 101
         # variables        = 4
-        chi-square         = 33.5081253
-        reduced chi-square = 0.34544459
-        Akaike info crit   = -103.436589
-        Bayesian info crit = -92.9761066
+        chi-square         = 33.5081285
+        reduced chi-square = 0.34544462
+        Akaike info crit   = -103.436579
+        Bayesian info crit = -92.9760969
     [[Variables]]
-        offset:  1.02005974 +/- 0.06642639 (6.51%) (init = 2)
-        omega:   3.98224423 +/- 0.02898700 (0.73%) (init = 3.3)
-        amp:     1.83231269 +/- 0.27241896 (14.87%) (init = 2.5)
-        decay:   5.77328504 +/- 1.45141316 (25.14%) (init = 1)
+        offset:  1.02005972 +/- 0.06642640 (6.51%) (init = 2)
+        omega:   3.98224425 +/- 0.02898701 (0.73%) (init = 3.3)
+        amp:     1.83231335 +/- 0.27241921 (14.87%) (init = 2.5)
+        decay:   5.77328069 +/- 1.45141325 (25.14%) (init = 1)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp, decay)  = -0.758
         C(offset, amp) = -0.107
@@ -200,7 +200,7 @@ Perform fits using the ``L-BFGS-B`` method with different ``reduce_fcn``:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.345 seconds)
+   **Total running time of the script:** ( 0 minutes  0.191 seconds)
 
 
 .. _sphx_glr_download_examples_example_reduce_fcn.py:

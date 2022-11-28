@@ -704,6 +704,23 @@ Below are all the examples that are part of the lmfit documentation.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_builtinmodels_splinemodel.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_builtinmodels_splinemodel_thumb.png
+    :alt: doc_builtinmodels_splinemodel.py
+
+  :ref:`sphx_glr_examples_documentation_builtinmodels_splinemodel.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_builtinmodels_splinemodel.py</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="doc_confidence_advanced.py">
 
 .. only:: html
@@ -716,6 +733,23 @@ Below are all the examples that are part of the lmfit documentation.
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">doc_confidence_advanced.py</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="doc_model_uncertainty2.py">
+
+.. only:: html
+
+  .. image:: /examples/documentation/images/thumb/sphx_glr_model_uncertainty2_thumb.png
+    :alt: doc_model_uncertainty2.py
+
+  :ref:`sphx_glr_examples_documentation_model_uncertainty2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">doc_model_uncertainty2.py</div>
     </div>
 
 

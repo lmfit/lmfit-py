@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Frequently Asked Questions &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/sphinx13.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx13.css" />
     <link rel="stylesheet" type="text/css" href="_static/jupyter-sphinx.css" />
@@ -17,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
@@ -26,7 +23,7 @@
     <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -401,17 +398,18 @@ a + bx^2  &amp; \quad \text{for} \&gt; x &gt; x_0
     # function evals   = 11
     # data points      = 101
     # variables        = 4
-    chi-square         = 8.91298519
-    reduced chi-square = 0.09188645
-    Akaike info crit   = -237.188741
-    Bayesian info crit = -226.728259
+    chi-square         = 8.45065092
+    reduced chi-square = 0.08712011
+    Akaike info crit   = -242.568582
+    Bayesian info crit = -232.108100
+    R-squared          = 0.99997618
 ##  Warning: uncertainties could not be estimated:
     x0:  at initial value
 [[Variables]]
     x0:  22.0000000 (init = 22)
-    a:   2.00762518 (init = 1)
-    b:   0.01999978 (init = 1)
-    c:   9.38692086 (init = 1)
+    a:   2.00113200 (init = 1)
+    b:   0.01999986 (init = 1)
+    c:   9.43653344 (init = 1)
 </pre></div>
 </div>
 </div>
@@ -467,22 +465,24 @@ look like this and give better fit results:</p>
     Model(quad_off)
 [[Fit Statistics]]
     # fitting method   = leastsq
-    # function evals   = 46
+    # function evals   = 106
     # data points      = 101
     # variables        = 4
-    chi-square         = 1.21600436
-    reduced chi-square = 0.01253613
-    Akaike info crit   = -438.374565
-    Bayesian info crit = -427.914083
+    chi-square         = 0.91475188
+    reduced chi-square = 0.00943043
+    Akaike info crit   = -467.126517
+    Bayesian info crit = -456.666035
+    R-squared          = 0.99999742
 [[Variables]]
-    x0:  19.4011286 +/- 0.34869448 (1.80%) (init = 22)
-    a:   2.01593621 +/- 0.02246450 (1.11%) (init = 1)
-    b:   0.01999925 +/- 4.4303e-06 (0.02%) (init = 1)
-    c:   9.22057174 +/- 0.02535674 (0.28%) (init = 1)
+    x0:  19.0963657 +/- 0.43170597 (2.26%) (init = 22)
+    a:   1.96946415 +/- 0.01923716 (0.98%) (init = 1)
+    b:   0.01999974 +/- 3.8111e-06 (0.02%) (init = 1)
+    c:   9.24228346 +/- 0.02237985 (0.24%) (init = 1)
 [[Correlations]] (unreported correlations are &lt; 0.100)
-    C(a, b)  = -0.830
-    C(x0, a) = 0.182
-    C(x0, b) = -0.146
+    C(a, b)  = -0.827
+    C(x0, c) = -0.138
+    C(x0, a) = 0.136
+    C(x0, b) = -0.108
 </pre></div>
 </div>
 </div>

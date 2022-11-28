@@ -46,6 +46,7 @@ doc_model_two_components.py
         reduced chi-square = 0.02685995
         Akaike info crit   = -360.457020
         Bayesian info crit = -347.381417
+        R-squared          = 0.99194643
     [[Variables]]
         amp:        8.45931062 +/- 0.12414515 (1.47%) (init = 5)
         cen:        5.65547873 +/- 0.00917678 (0.16%) (init = 5)
@@ -109,7 +110,7 @@ doc_model_two_components.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.232 seconds)
+   **Total running time of the script:** ( 0 minutes  0.145 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_model_two_components.py:

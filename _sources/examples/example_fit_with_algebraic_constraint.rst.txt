@@ -95,15 +95,15 @@ Fit with Algebraic Constraint
         Akaike info crit   = 2887.26503
         Bayesian info crit = 2913.65660
     [[Variables]]
-        amp_g:       21.1877700 +/- 0.32191821 (1.52%) (init = 10)
-        cen_g:       8.11125920 +/- 0.01162984 (0.14%) (init = 9)
+        amp_g:       21.1877704 +/- 0.32191824 (1.52%) (init = 10)
+        cen_g:       8.11125923 +/- 0.01162984 (0.14%) (init = 9)
         wid_g:       1.20925846 +/- 0.01170853 (0.97%) (init = 1)
-        amp_tot:     30.6003751 +/- 0.36481397 (1.19%) (init = 20)
-        amp_l:       9.41260515 +/- 0.61672681 (6.55%) == 'amp_tot - amp_g'
-        cen_l:       9.61125920 +/- 0.01162984 (0.12%) == '1.5+cen_g'
-        wid_l:       2.41851691 +/- 0.02341706 (0.97%) == '2*wid_g'
-        line_slope:  0.49615728 +/- 0.00170178 (0.34%) (init = 0)
-        line_off:    0.04128575 +/- 0.02448064 (59.30%) (init = 0)
+        amp_tot:     30.6003738 +/- 0.36481391 (1.19%) (init = 20)
+        amp_l:       9.41260340 +/- 0.61672681 (6.55%) == 'amp_tot - amp_g'
+        cen_l:       9.61125923 +/- 0.01162984 (0.12%) == '1.5+cen_g'
+        wid_l:       2.41851692 +/- 0.02341706 (0.97%) == '2*wid_g'
+        line_slope:  0.49615727 +/- 0.00170178 (0.34%) (init = 0)
+        line_off:    0.04128591 +/- 0.02448064 (59.30%) (init = 0)
     [[Correlations]] (unreported correlations are < 0.100)
         C(amp_g, wid_g)         = 0.866
         C(amp_g, cen_g)         = 0.750
@@ -144,7 +144,7 @@ Fit with Algebraic Constraint
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.256 seconds)
+   **Total running time of the script:** ( 0 minutes  0.156 seconds)
 
 
 .. _sphx_glr_download_examples_example_fit_with_algebraic_constraint.py:

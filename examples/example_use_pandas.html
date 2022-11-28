@@ -7,8 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Fit with Data in a pandas DataFrame &#8212; Non-Linear Least-Squares Minimization and Curve-Fitting for Python</title>
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx13.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx13.css" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
@@ -17,7 +15,6 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
@@ -26,7 +23,7 @@
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/thebelab-helper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.0/dist/embed-amd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using an ExpressionModel" href="example_expression_model.html" />
@@ -172,6 +169,7 @@ supply the elements of the <code class="docutils literal notranslate"><span clas
     reduced chi-square = 0.13340536
     Akaike info crit   = -200.496119
     Bayesian info crit = -192.650757
+    R-squared          = 0.98351484
 [[Variables]]
     amplitude:  39.1530829 +/- 0.62389698 (1.59%) (init = 50.7825)
     center:     9.22379520 +/- 0.01835869 (0.20%) (init = 9.3)
@@ -186,7 +184,7 @@ supply the elements of the <code class="docutils literal notranslate"><span clas
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">result</span><span class="o">.</span><span class="n">plot_fit</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_example_use_pandas_001.png" srcset="../_images/sphx_glr_example_use_pandas_001.png, ../_images/sphx_glr_example_use_pandas_001_3_0x.png 3.0x" alt="Model(lorentzian)" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.335 seconds)</p>
+<img src="../_images/sphx_glr_example_use_pandas_001.png" srcset="../_images/sphx_glr_example_use_pandas_001.png, ../_images/sphx_glr_example_use_pandas_001_3_0x.png 3.0x" alt="Model(lorentzian)" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.184 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-example-use-pandas-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/67e6ee8d13b1ad43c31b4b2dc6d01d54/example_use_pandas.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">example_use_pandas.py</span></code></a></p>

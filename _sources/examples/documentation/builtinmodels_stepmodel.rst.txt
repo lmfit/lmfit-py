@@ -39,19 +39,20 @@ doc_builtinmodels_stepmodel.py
         (Model(step, prefix='step_', form='erf') + Model(linear, prefix='line_'))
     [[Fit Statistics]]
         # fitting method   = leastsq
-        # function evals   = 49
+        # function evals   = 55
         # data points      = 201
         # variables        = 5
-        chi-square         = 593.709622
+        chi-square         = 593.709621
         reduced chi-square = 3.02913072
         Akaike info crit   = 227.700173
         Bayesian info crit = 244.216698
+        R-squared          = 0.99897798
     [[Variables]]
-        line_slope:      1.87164656 +/- 0.09318713 (4.98%) (init = 0)
-        line_intercept:  12.0964833 +/- 0.27606235 (2.28%) (init = 11.58574)
-        step_amplitude:  112.858376 +/- 0.65392947 (0.58%) (init = 134.7378)
-        step_center:     3.13494792 +/- 0.00516615 (0.16%) (init = 2.5)
-        step_sigma:      0.67392841 +/- 0.01091168 (1.62%) (init = 1.428571)
+        line_slope:      1.87162034 +/- 0.09318576 (4.98%) (init = 0)
+        line_intercept:  12.0964558 +/- 0.27606016 (2.28%) (init = 11.58574)
+        step_amplitude:  112.858606 +/- 0.65391554 (0.58%) (init = 134.7378)
+        step_center:     3.13494789 +/- 0.00516602 (0.16%) (init = 2.5)
+        step_sigma:      0.67393529 +/- 0.01091154 (1.62%) (init = 1.428571)
     [[Correlations]] (unreported correlations are < 0.100)
         C(line_slope, step_amplitude)     = -0.879
         C(step_amplitude, step_sigma)     = 0.564
@@ -106,7 +107,7 @@ doc_builtinmodels_stepmodel.py
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.211 seconds)
+   **Total running time of the script:** ( 0 minutes  0.142 seconds)
 
 
 .. _sphx_glr_download_examples_documentation_builtinmodels_stepmodel.py:
